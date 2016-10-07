@@ -812,6 +812,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 
 		if(type == 'UNSUBSCRIBED')
 			show_email_tracking_campaigns();
+		
 
 	});
 }
