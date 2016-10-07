@@ -934,7 +934,7 @@ public class CSVUtil
 		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
 	    }
-	    if(invalidName){
+	    if(!invalidName){
 	    	++failedCompany;
 	    	continue ;
 	    }
