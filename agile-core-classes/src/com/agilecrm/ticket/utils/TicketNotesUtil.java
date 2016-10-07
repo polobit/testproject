@@ -384,15 +384,24 @@ public class TicketNotesUtil
 				Long ticketfeedback_id = tn.ticket_id;		
 				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
 				jsonobject.append("ticket_subject", ticket.subject);
+				
 				jsonobject.append("contact_id", ticket.contactID);
 				
 				Contact contact = ContactUtil.getContact(ticket.contactID);
-				jsonobject.append("first_name",contact.first_name );
-				jsonobject.append("last_name",contact.last_name );
-			
-				String imageURL = contact.getContactFieldValue(Contact.IMAGE);
-
-				if (imageURL == null)
+				
+				String imageURL = null; 
+				
+				if(contact != null){
+					
+					jsonobject.append("first_name",contact.first_name );
+					jsonobject.append("last_name",contact.last_name );
+				
+				
+					imageURL = contact.getContactFieldValue(Contact.IMAGE);
+				
+				}
+				
+				if (imageURL == null)			
 					imageURL = Globals.GRAVATAR_SECURE_DEFAULT_IMAGE_URL;
 
 				jsonobject.append("img_url", imageURL);
