@@ -450,7 +450,9 @@ public class Subscription {
 		purchaseEmailCredits(quantity, 0);
 	}
 	public void purchaseEmailCredits(int quantity, int decrementCount) throws Exception {
-		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		boolean isPaid = getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		if(!isPaid)
+			throw new Exception("Payment failed. Please try again.");
 		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);
 		restriction.save();
