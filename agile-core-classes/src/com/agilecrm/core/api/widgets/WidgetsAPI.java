@@ -242,7 +242,7 @@ public class WidgetsAPI {
 				Widget fullWidget = WidgetUtil.getWidget(widget.id);
 				System.out.println(fullWidget);
 				fullWidget.position = widget.position;
-				fullWidget.save();
+				Widget.save(fullWidget);
 			}
 		}
 	}

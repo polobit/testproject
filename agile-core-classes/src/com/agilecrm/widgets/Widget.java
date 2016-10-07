@@ -283,7 +283,9 @@ public class Widget {
 							widget.integration_type = this.integration_type;
 							widget.add_by = agileUserID;
 							widget.script = this.script;
-							widget.script_type = this.script_type;
+							if(this.script_type != null){
+								widget.script_type = this.script_type;
+							}
 							widget.url = this.url;
 							dao.put(widget);
 						}
@@ -294,6 +296,10 @@ public class Widget {
 			this.add_by = agileUserID;
 			dao.put(this);
 		}		
+	}
+	
+	public static void save(Widget widget){		
+		dao.put(widget);
 	}
 	
 	public void saveByUserKey(Key<AgileUser> userKey, Widget widget){
