@@ -201,6 +201,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			else if(url && url == "#"){
 				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
 				var agile_form = document.forms["agile-form"];
+				if(typeof grecaptcha != "undefined") grecaptcha.reset();
 				agile_form.reset();
 			}
 		
@@ -210,6 +211,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			else if(url && url == "#"){
 				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
 				var agile_form = document.forms["agile-form"];
+				if(typeof grecaptcha != "undefined") grecaptcha.reset();
 				agile_form.reset();
 				
 			}
