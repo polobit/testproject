@@ -86,7 +86,7 @@ public class WebruleReportsAPI
 	    // Modified data required for graph of each webrule-stats.
 	    LinkedHashMap<String, LinkedHashMap<String, Integer>> webruleStatsData = WebruleReportsUtil.getEachWebruleStatsData(startTime, endTime, type, timeZone, logs);
 	    
-	    String replacedWebruleStats = JSONSerializer.toJSON(webruleStatsData).toString();
+	    String replacedWebruleStats = JSONSerializer.toJSON(webruleStatsData).toString().replace("TOTAL_VIEWS", "TOTAL VIEWS").replace("TOTAL_SUBMISSIONS", "TOTAL SUBMISSIONS");
 	    
 		System.out.println("stats JSON is " + replacedWebruleStats);
 
@@ -128,45 +128,18 @@ public class WebruleReportsAPI
 	    //int statsLength = stats.length();
 
 	    JSONObject statsJSON = new JSONObject();
-
+	    int views=0;int subs=0;
 	    // Add log_type as key and its count as value
 	    for (int i = 0, len = stats.length(); i < len; i++)
 	    {
 		JSONObject json = stats.getJSONObject(i);
-
-		/*if (json.getString("webrule_type").equals("MODAL_POPUP"))
-		    statsJSON.put("popup", json.getString("total"));
+		views=views+Integer.parseInt(json.getString("TOTAL_VIEWS"));
+		subs=subs+Integer.parseInt(json.getString("TOTAL_SUBMISSIONS"));		
 		
-		if (json.getString("webrule_type").equals("FORM_SUBMITTED"))
-		    statsJSON.put("submit", json.getString("total"));
-		
-		if (json.getString("webrule_type").equals("CORNER_NOTY"))
-		    statsJSON.put("noty", json.getString("total"));
-		
-		if (json.getString("webrule_type").equals("ADD_TAG"))
-		    statsJSON.put("addtag", json.getString("total"));
-		if (json.getString("webrule_type").equals("REMOVE_TAG"))
-		    statsJSON.put("addtag", json.getString("total"));
-		if (json.getString("webrule_type").equals("ASSIGN_CAMPAIGN"))
-		    statsJSON.put("addtocampaign", json.getString("total"));
-		if (json.getString("webrule_type").equals("UNSUBSCRIBE_CAMPAIGN"))
-		    statsJSON.put("unsubscribecampaign", json.getString("total"));
-		if (json.getString("webrule_type").equals("ADD_SCORE"))
-		    statsJSON.put("addscore", json.getString("total"));
-		if (json.getString("webrule_type").equals("SUBTRACT_SCORE"))
-		    statsJSON.put("substractcampaign", json.getString("total"));
-		if (json.getString("webrule_type").equals("SITE_BAR"))
-		    statsJSON.put("sitebar", json.getString("total"));
-		
-		if (json.getString("webrule_type").equals("CALL_POPUP"))
-		    statsJSON.put("callpopup", json.getString("total"));*/
-		statsJSON.put("views", json.getString("TOTAL_VIEWS"));
-		statsJSON.put("submissions", json.getString("TOTAL_SUBMISSIONS"));
-		
-		
-		statsJSON.put(stats.getJSONObject(i).getString("webrule_type"),stats.getJSONObject(i).getInt("total"));
+		//statsJSON.put(stats.getJSONObject(i).getString("webrule_type"),stats.getJSONObject(i).getInt("total"));
 	    }
-
+	    statsJSON.put("views", views);
+	    statsJSON.put("submissions",subs);
 	    System.out.println("stats JSON is " + statsJSON);
 
 	    return statsJSON.toString();

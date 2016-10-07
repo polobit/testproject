@@ -5,11 +5,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.Calendar;
+
 import org.apache.commons.lang.StringUtils;
+
 import java.util.LinkedHashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import com.webruleio.reports.AnalyticsDBConnectionFetcher;
+import com.campaignio.reports.CampaignReportsUtil;
 import com.campaignio.reports.DateUtil;
 
 /**
@@ -99,17 +104,19 @@ public class WebruleReportsUtil
 
 	try
 	{
-	    int view =0, sub=0;
+	  // int sub=0;
 	    // iterate the ResultSet object
 	    while (rs.next())
-	    {
+	    {    
+		int view =0;
 		// create JSONObject for each record
 		JSONObject eachAgentJSON = new JSONObject();
 
 		// Get the column names and put
 		// eachAgent record in agentJSONArray
 		for (int i = 1; i < numColumns + 1; i++)
-		{
+		{    
+		    int sub=0;
 		    // Get the column names
 		    columnName = resultMetadata.getColumnName(i);
 
@@ -146,15 +153,13 @@ public class WebruleReportsUtil
 			{
 			sub=sub+Integer.parseInt(rs.getString("total"));
 			System.out.println("the submission number"+sub);
-			}
-		    
-		    
-		    
-		    
+			eachAgentJSON.put("TOTAL_SUBMISSIONS", "" + sub);
+			}   
+		        
 		}
-		
 		eachAgentJSON.put("TOTAL_VIEWS", "" + view);
-		eachAgentJSON.put("TOTAL_SUBMISSIONS", "" + sub);
+		if (!eachAgentJSON.has("TOTAL_SUBMISSIONS") )
+			  eachAgentJSON.put("TOTAL_SUBMISSIONS", "" + 0);
 		// place result data in agentDetailsArray
 		agentDetailsArray.put(eachAgentJSON);
 	    }
@@ -248,18 +253,36 @@ public class WebruleReportsUtil
 	groupByMap = WebruleReportsUtil.getDefaultDateTable(startDate, endDate, type, timeZone, barTypes);
 
 	try
-	{
+	{   
+	    int views=0;int subs=0;
+	   //LinkedHashMap<String, Integer> test= new LinkedHashMap<String, Integer>();
+	    LinkedHashMap<String, Integer> countMap = WebruleReportsUtil.getDefaultCountTable(barTypes);
 	    // Arrange sqlData as required to Graph
 	    for (int index = 0; index < sqlData.length(); index++)
-	    {
-	    LinkedHashMap<String, Integer> countMap = WebruleReportsUtil.getDefaultCountTable(barTypes);
+	    {        	
 		JSONObject logJSON = sqlData.getJSONObject(index);
+		if (groupByMap.containsKey(logJSON.getString(groupBy))){
+		    countMap=groupByMap.get(logJSON.getString(groupBy));
+		    countMap.put("TOTAL_VIEWS", Integer.parseInt(logJSON.getString("TOTAL_VIEWS"))+countMap.get("TOTAL_VIEWS"));
+		    countMap.put("TOTAL_SUBMISSIONS", Integer.parseInt(logJSON.getString("TOTAL_SUBMISSIONS"))+countMap.get("TOTAL_SUBMISSIONS"));
+		    groupByMap.put(logJSON.getString(groupBy),countMap);
+		    
+		}
+        	else {
+        	    views=0;subs=0;
+        	    countMap = WebruleReportsUtil.getDefaultCountTable(barTypes);
+        	    views=views+Integer.parseInt(logJSON.getString("TOTAL_VIEWS"));
+        	    subs=subs+Integer.parseInt(logJSON.getString("TOTAL_SUBMISSIONS"));
+        	    countMap.put("TOTAL_VIEWS",views);
+        	    countMap.put("TOTAL_SUBMISSIONS",subs);
+        	    groupByMap.put(logJSON.getString(groupBy),countMap);
+        	}
+		
+		
+	    }	
 
-				
-		countMap.put("TOTAL_VIEWS", Integer.parseInt(logJSON.getString("TOTAL_VIEWS")));
-		countMap.put("TOTAL_SUBMISSIONS", Integer.parseInt(logJSON.getString("TOTAL_SUBMISSIONS")));
-		groupByMap.put(logJSON.getString(groupBy), countMap);
-			    }
+		
+	    
 	}
 	catch (Exception e)
 	{

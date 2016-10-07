@@ -102,7 +102,7 @@ public class WebruleReportsSQLUtil
 		"FROM webrule_reports "+
                 "WHERE DOMAIN="+GoogleSQLUtil.encodeSQLColumnValue(domain)+" AND webrule_id="+GoogleSQLUtil.encodeSQLColumnValue(id)+" AND webrule_type in( 'MODAL_POPUP','FORM_SUBMITTED','CALL_POPUP','SITE_BAR','REQUEST_PUSH_POPUP','CORNER_NOTY') "+
                 "AND log_time BETWEEN CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(startDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") " + 
-                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_date,webrule_type ";
+                "AND CONVERT_TZ("+GoogleSQLUtil.encodeSQLColumnValue(endDate)+","+GoogleSQLUtil.getConvertTZ2(timeZoneOffset)+") GROUP BY log_date,webrule_type order by log_date";
 		 	
 	System.out.println(query);
 	try
