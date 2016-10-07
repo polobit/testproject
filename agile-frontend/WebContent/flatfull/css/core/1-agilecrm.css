@@ -4716,3 +4716,14 @@ ul#recent-menu-model-list li:nth-child(even)
 {
   background-color: #f9f9f9;
 }
+
+#automation-video +  .tooltip > .tooltip-inner {
+    color: #58666e;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    
+}
+#automation-video + .tooltip.bottom > .tooltip-arrow {
+      border-bottom: 5px solid  #fff;
+      border-width: 0 10px 10px;
+}
