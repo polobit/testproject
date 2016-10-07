@@ -712,22 +712,23 @@ public class EventUtil
    			StringBuilder companiesList = new StringBuilder();
    					
    	    	if(contactsList != null){
-   	    		for (Contact contact : contactsList) {
+   	    		for (int i = 0; i < contactsList.size(); i++) {
+   	    			Contact contact = contactsList.get(i);
    	    			ContactField emailField = contact.getContactFieldByName(Contact.EMAIL);
    	    			if(emailField != null){
 	   	    			String contactEmail = emailField.value;
 	   	    			if(contactEmail != null){ 
-	   	    				if(contact.type.equals(ContactType.PERSON)){
+	   	    				if(contact.type.equals(Contact.Type.PERSON)){
 	   	    					String contactName = "";
-	   	    					if(contact.first_name != null){
+	   	    					if(contact.first_name != null){	   	    						
 	   	    						contactName += contact.first_name;
 	   	    					}
 	   	    					if(contact.last_name != null){
-	   	    						contactName += contact.last_name;
+	   	    						contactName += " "+contact.last_name;
 	   	    					}
-	   	    					contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ contactName+"</a>");
+	   	    					contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ contactName+"</a>, ");
 	   	    				}else if(contact.type.equals(ContactType.COMPANY)){
-	   	    					companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ contact.name +"</a>");
+	   	    					companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ contact.name +"</a>, ");
 	   	    				}
 	   	    				
 	   	    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
@@ -739,18 +740,24 @@ public class EventUtil
    	    	
    	    	if(domainUserEmail != null){	
    	    		StringBuilder domainMailTempalte = new StringBuilder("<p>Event has been scheduled with ");
-   	    		domainMailTempalte.append(contactList.toString());
-   	    		domainMailTempalte.append(companiesList.toString());
+   	    		int dataLength = companiesList.length();
+   	    		String contactDetails;
+   	    		if(dataLength > 0){
+   	    			contactList.append(companiesList);   	    			
+   	    		}
+   	    		contactDetails = contactList.substring(0, contactList.length() - 2);   	    		
+   	    		 
+   	    		domainMailTempalte.append(contactDetails);   	    		
    	    		domainMailTempalte.append("</p>");
-   	    		domainMailTempalte.append("<span>Title : '" + event.title +"</span><br/>");
-   	    		domainMailTempalte.append("<span>Duration : '" + minsInStr +"</span><br/>");
+   	    		domainMailTempalte.append("<span>Title: " + event.title +"</span><br/>");
+   	    		domainMailTempalte.append("<span>Duration: " + minsInStr +"</span><br/>");
    	    		if(event.description != null && event.description.length() > 0){
    	    			domainMailTempalte.append("<span>Description: "+ event.description + "</span><br/>");
    	    		}
    	    		domainMailTempalte.append("<p><a href=https://" + user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>");
    	    		
    				EmailGatewayUtil.sendEmail(null, user.email, user.name, domainUserEmail, null, null, "Appointment Scheduled",
-   						null, domainMailTempalte.toString(), null, null, null, null, attachments);		
+   						null, domainMailTempalte.toString(), null, null, null, null, null);		
    	    	} 
    		}
     	   	
