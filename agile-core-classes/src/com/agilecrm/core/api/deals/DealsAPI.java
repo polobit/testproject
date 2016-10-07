@@ -30,6 +30,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.UpdateRelatedEntitiesUtil;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
@@ -327,19 +328,9 @@ public class DealsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
-		List<String> contactIds = opportunity.getContact_ids();
-		for(String s : contactIds){
-			try{
-				Contact contact = ContactUtil.getContact(Long.parseLong(s));
-				contact.forceSearch = true;
-				contact.save();
-			}
-			catch(Exception e){
-				
-			}
-		}
-	}
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(opportunity.relatedContacts(), conIds);
+	
 	return opportunity;
     }
 
@@ -356,6 +347,7 @@ public class DealsAPI
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
     Opportunity oldOpportunity = null;
+    List<String> oldConIds = new ArrayList<String>();
     try 
     {
     	oldOpportunity = OpportunityUtil.getOpportunity(opportunity.id);
@@ -372,6 +364,7 @@ public class DealsAPI
     	{
     		throw new AccessDeniedException("Deal cannot be updated because you do not have permission to update associated contact(s).");
     	}
+    	oldConIds.addAll(conIds);
     }
 	List<String> conIds = opportunity.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -403,33 +396,27 @@ public class DealsAPI
 	Opportunity oldDeal = OpportunityUtil.getOpportunity(opportunity.id);
 	Opportunity oppr = new Opportunity();
 	oppr.updateDealTagsEntity(oldDeal, opportunity);
-	if(oldDeal != null &&(oldDeal.getContact_ids()!= null && oldDeal.getContact_ids().size() > 0)){
-        List<String> contactIds = oldDeal.getContact_ids();
-        for(String s : contactIds){
-            try{
-                Contact contact = ContactUtil.getContact(Long.parseLong(s));
-                contact.forceSearch = true ;
-                contact.save();
-            }
-            catch(Exception e){
-                
-            }
-        }
-    }
+	
 	opportunity.save();
-	if(opportunity != null &&(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0)){
-        List<String> contactIds = opportunity.getContact_ids();
-        for(String s : contactIds){
-            try{
-                Contact contact = ContactUtil.getContact(Long.parseLong(s));
-                contact.forceSearch = true;
-                contact.save();
-            }
-            catch(Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-    }
+	
+	List<Contact> relatedContactsOldList = oldOpportunity.relatedContacts();
+	List<Contact> relatedContactsList = opportunity.relatedContacts();
+	
+	if(relatedContactsOldList != null && relatedContactsOldList.size() > 0)
+	{
+		relatedContactsList.addAll(relatedContactsOldList);
+	}
+	List<String> conIdList = new ArrayList<String>();
+	if(oldConIds != null && oldConIds.size() > 0)
+	{
+		conIdList.addAll(oldConIds);
+	}
+	if(conIds != null && conIds.size() > 0)
+	{
+		conIdList.addAll(conIds);
+	}
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIdList);
 	
 	return opportunity;
     }
@@ -456,19 +443,8 @@ public class DealsAPI
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
 	if (opportunity != null)
 	{
-		if(opportunity.getContact_ids()!= null && opportunity.getContact_ids().size() > 0){
-			List<String> contactIds = opportunity.getContact_ids();
-			for(String s : contactIds){
-				try{
-					Contact contact = ContactUtil.getContact(Long.parseLong(s));
-					contact.forceSearch = true ; 
-					contact.save();
-				}
-				catch(Exception e){
-					
-				}
-			}
-		}
+		UpdateRelatedEntitiesUtil.updateRelatedContacts(opportunity.relatedContacts(), conIds);
+		
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());
@@ -504,17 +480,7 @@ public class DealsAPI
 			oppJSONArray.put(opp.id);
 			contactIdsList.addAll(modifiedConIds);
 		}
-		if(opp.relatedContacts() != null && opp.relatedContacts().size() > 0){ 
-		    try {                
-		        for(Contact c : opp.relatedContacts()){
-		            c.forceSearch = true;
-		            c.save();
-		        }            
-		    } catch (Exception e) {
-		            // TODO Auto-generated catch block
-		            e.printStackTrace();
-		    }
-		}
+		UpdateRelatedEntitiesUtil.updateRelatedContacts(opp.relatedContacts(), conIds);
 	}
 	
 	DealTriggerUtil.executeTriggerForDeleteDeal(oppJSONArray);
@@ -1635,5 +1601,24 @@ public class DealsAPI
 	}
 
 	return opportunity;
+    }
+    
+    /**
+     * fetches activities of a deal in deal details page
+     * 
+     * @param dealid
+     * @param cursor
+     * @param count
+     * @return
+     * @throws JSONException
+     */
+    @Path("/{dealid}/related-activities")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Activity> getRelatedActivitiesOfDeal(@PathParam("dealid") Long dealid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count) throws JSONException
+    {
+
+	return ActivityUtil.getDealRelatedActivities(dealid, Integer.parseInt(count), cursor);
     }
 }

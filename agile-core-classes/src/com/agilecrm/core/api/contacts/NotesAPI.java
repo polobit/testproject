@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.UpdateRelatedEntitiesUtil;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
@@ -30,6 +31,7 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
+import com.mysql.jdbc.UpdatableResultSet;
 
 /**
  * <code>NotesAPI</code> includes REST calls to interact with {@link Note} class
@@ -104,6 +106,7 @@ public class NotesAPI
     public Note updateNote(Note note)
     {
     Note oldNote = null;
+    List<String> oldConIds = new ArrayList<String>();
     try 
     {
 		oldNote = NoteUtil.getNote(note.id);
@@ -120,19 +123,7 @@ public class NotesAPI
     	{
     		throw new AccessDeniedException("Note cannot be updated because you do not have permission to update associated contact(s).");
     	}
-    	if(oldNote.getContact_ids() != null && oldNote.getContact_ids().size() > 0){
-			List<String> contactIds = oldNote.getContact_ids();
-			for(String s : contactIds){
-				try{			
-					Contact contact = ContactUtil.getContact(Long.parseLong(s));
-					contact.forceSearch = true;
-					contact.save();		
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-    	
+    	oldConIds.addAll(conIds);
     }
 	List<String> conIds = note.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -141,23 +132,26 @@ public class NotesAPI
 		throw new AccessDeniedException("Note cannot be updated because you do not have permission to update associated contact(s).");
 	}
 	note.save();
-	try {
-		if(note.getContact_ids() != null && note.getContact_ids().size() > 0){
-			List<String> contactIds = note.getContact_ids();
-			for(String s : contactIds){
-				try{			
-					Contact contact = ContactUtil.getContact(Long.parseLong(s));
-					contact.forceSearch = true ;
-					contact.save();		
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	
+	List<Contact> relatedContactsOldList = oldNote.relatedContacts();
+	List<Contact> relatedContactsList = note.relatedContacts();
+	
+	if(relatedContactsOldList != null && relatedContactsOldList.size() > 0 && relatedContactsList != null)
+	{
+		relatedContactsList.addAll(relatedContactsOldList);
 	}
+	List<String> conIdList = new ArrayList<String>();
+	if(oldConIds != null && oldConIds.size() > 0)
+	{
+		conIdList.addAll(oldConIds);
+	}
+	if(conIds != null && conIds.size() > 0)
+	{
+		conIdList.addAll(conIds);
+	}
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIdList);
+	
 	return note;
     }
 
@@ -269,29 +263,19 @@ public class NotesAPI
 					contactIdsList.addAll(modifiedConIds);
 				}
 				
-				try {
-					List<Opportunity>deals = OpportunityUtil.getOpportunitiesByNote(note.id);
-					for(Opportunity opp : deals){
-						opp.save();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				if(conIds != null && conIds.size() > 0 ){
-					try{
-						List <Long> contactArray = new ArrayList<Long>() ; 
-						for(String s : conIds){
-							contactArray.add(Long.parseLong(s));
-						}
-						List<Contact> contacts = ContactUtil.getContactsBulk(contactArray);
-						for(Contact contact :contacts){
-							contact.forceSearch = true ;
-							contact.save();
-						}
-					}catch(Exception e){
-						System.out.println(e.getMessage());
+				List<Opportunity> deals = OpportunityUtil.getOpportunitiesByNote(note.id);
+				List<String> dealIds = new ArrayList<String>();
+				if(deals != null && deals.size() > 0)
+				{
+					for (Opportunity opportunity : deals) 
+					{
+						dealIds.add(String.valueOf(opportunity.id));
 					}
 				}
+				
+				UpdateRelatedEntitiesUtil.updateRelatedDeals(deals, dealIds);
+				
+				UpdateRelatedEntitiesUtil.updateRelatedContacts(note.relatedContacts(), note.getContact_ids());
 			}
 		}
 		Note.dao.deleteBulkByIds(notesArray);

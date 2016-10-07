@@ -95,14 +95,17 @@ var deal_details_tab = {
 					builder.timeline(id, function(){
 						$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=100', function(data){
 							builder.addEntities(data);
-						})
+						});
+						$.getJSON('/core/api/opportunity/' + id + '/related-activities?page_size=100', function(data){
+							builder.addEntities(data);
+						});
 					});	
 				}
 			}
 			else{
 			    var id = App_Deal_Details.dealDetailView.model.id;
 			    $('#deal-tab-content').find('.change-deal-activity').remove();
-			    $('#deal-tab-content').prepend('<a class="btn btn-default btn-sm change-deal-activity" data="timeline" style="float:right;margin-right:20px;">Timeline Mode</a>');
+			    $('#deal-tab-content > #dealactivities').html('<div class="text-danger p-b-lg text-center"><span>{{agile_lng_translate "deals" "activity-mode-deprecated-message"}}</span><a class="btn btn-default btn-sm change-deal-activity" data="timeline" style="float:right;margin-right:20px;">Timeline Mode</a></div>');
 			    if(id){
 			    dealActivitiesView = new Base_Collection_View({
 		            url: '/core/api/opportunity/' + id + "/activities",
@@ -120,7 +123,7 @@ var deal_details_tab = {
 		            }
 		        });
 			    dealActivitiesView.collection.fetch();
-		        $('#dealactivities').html(dealActivitiesView.el);
+		        $('#dealactivities').append(dealActivitiesView.el);
 			    }
 			}
 		},

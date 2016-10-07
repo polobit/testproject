@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.UpdateRelatedEntitiesUtil;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -177,14 +178,11 @@ public class EventsAPI
     	    ActivitySave.createEventDeleteActivity(event);
     		if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
     		    GoogleCalendarUtil.deleteGoogleEvent(event);
-    		  if(!(event.getDeal_ids()).isEmpty())
-    	    	{
-    	    		for(String oppr : event.getDeal_ids())
-    	    		{
-    	    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr));
-    	    			opportuinty.save();
-    	    		}
-    	    	}
+    		
+    		List<Opportunity> relatedDealsList = event.relatedDeals();
+    		
+    		UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
+    		
     		event.delete();
     	}
     	catch (Exception e)
@@ -224,35 +222,19 @@ public class EventsAPI
 	try
 	{
 	    ActivitySave.createEventAddActivity(event);
-	    if(!(event.getDeal_ids()).isEmpty())
-    	{
-    		for(String oppr : event.getDeal_ids())
-    		{
-    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
-    			opportuinty.save();
-    		}
-    	}
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	try {
-		if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
-			for(Contact c : event.relatedContacts()){
-				try {
-					c.forceSearch = true;
-					c.save();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	
+	List<Contact> relatedContactsList = event.relatedContacts();
+	List<Opportunity> relatedDealsList = event.relatedDeals();
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+	
+	UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
+	
 	return event;
     }
 
@@ -269,6 +251,8 @@ public class EventsAPI
     public Event updateEvent(Event event)
     {
     Event oldEvent =EventUtil.getEvent(event.id);
+    List<String> oldConIds = new ArrayList<String>();
+    List<String> oldDealIds = new ArrayList<String>();
     if(oldEvent != null)
     {
     	List<ContactPartial> contactsList = oldEvent.getContacts();
@@ -289,6 +273,8 @@ public class EventsAPI
         {
         	throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated deal(s).");
         }
+        oldConIds.addAll(conIds);
+        oldDealIds.addAll(dealIds);
     }
 	List<String> conIds = event.contacts;
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -302,67 +288,49 @@ public class EventsAPI
     {
     	throw new AccessDeniedException("Event cannot be updated because you do not have permission to update associated deal(s).");
     }
-    try {
-		if(oldEvent != null &&!(oldEvent.getDeal_ids()).isEmpty())
-		{
-			for(String oppr : oldEvent.getDeal_ids())
-			{
-				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
-				opportuinty.save();
-			}
-		}
-	} catch (Exception e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
-    try {
-		if(oldEvent.relatedContacts() != null && oldEvent.relatedContacts().size() > 0){
-			for(Contact c : oldEvent.relatedContacts()){
-				try {
-					c.forceSearch = true;
-					c.save();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	} catch (Exception e2) {
-		// TODO Auto-generated catch block
-		e2.printStackTrace();
-	}
+    
     UserAccessControlUtil.check(Event.class.getSimpleName(), event, CRUDOperation.UPDATE, true);
-    event.save();
-    System.out.println(event.getDeal_ids());
-    try {
-		if(event != null &&!(event.getDeal_ids()).isEmpty())
-		{
-			for(String oppr : event.getDeal_ids())
-			{
-				Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr).longValue());
-				opportuinty.save();
-			}
-		}
-	} catch (Exception e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
-    try {
-		if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
-			for(Contact c : event.relatedContacts()){
-				try {
-					c.forceSearch = true;
-					c.save();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-	} catch (Exception e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
+    
+    List<Contact> relatedContactsOldList = oldEvent.relatedContacts();
+    List<Contact> relatedContactsList = event.relatedContacts();
+    
+    List<Opportunity> relatedDealsOldList = event.relatedDeals();
+    List<Opportunity> relatedDealsList = event.relatedDeals();
+    
+    if(relatedContactsOldList != null && relatedContactsOldList.size() > 0)
+    {
+    	relatedContactsList.addAll(relatedContactsOldList);
+    }
+    
+    if(relatedDealsOldList != null && relatedDealsOldList.size() > 0)
+    {
+    	relatedDealsList.addAll(relatedDealsOldList);
+    }
+    
+    List<String> conIdList = new ArrayList<String>();
+    if(oldConIds != null && oldConIds.size() > 0)
+    {
+    	conIdList.addAll(oldConIds);
+    }
+    if(conIds != null && conIds.size() > 0)
+    {
+    	conIdList.addAll(conIds);
+    }
+    List<String> dealIdList = new ArrayList<String>();
+    if(oldDealIds != null && oldDealIds.size() > 0)
+    {
+    	dealIdList.addAll(oldDealIds);
+    }
+    if(dealIds != null && dealIds.size() > 0)
+    {
+    	dealIdList.addAll(dealIds);
+    }
+    
+    UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIdList);
+    
+    UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIdList);
+    
+    
 	try
 	{
 	    ActivitySave.createEventEditActivity(event);
@@ -372,6 +340,7 @@ public class EventsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	event.save();
 	
 	return event;
     }
@@ -413,28 +382,13 @@ public class EventsAPI
 					contactIdsList.addAll(modifiedConIds);
 				}
 				
-				if(!event.getDeal_ids().isEmpty()){
-					for(String dealId : event.getDeal_ids()){
-						try {
-							Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
-							oppr.save();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				 }
-				if(event.relatedContacts() != null && event.relatedContacts().size() > 0){
-					for(Contact c : event.relatedContacts()){
-						try {
-							c.forceSearch = true;
-							c.save();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}			
+				List<Contact> relatedContactsList = event.relatedContacts();
+				List<Opportunity> relatedDealsList = event.relatedDeals();
+				
+				UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+				
+				UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, event.getDeal_ids());
+							
     			}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -613,14 +567,11 @@ public class EventsAPI
 	 	    	    ActivitySave.createEventDeleteActivity(event);
 	 	    		if (event.type.toString().equalsIgnoreCase("WEB_APPOINTMENT"))
 	 	    		    GoogleCalendarUtil.deleteGoogleEvent(event);
-	 	    		  if(!(event.getDeal_ids()).isEmpty())
-	 	    	    	{
-	 	    	    		for(String oppr : event.getDeal_ids())
-	 	    	    		{
-	 	    	    			Opportunity opportuinty = OpportunityUtil.getOpportunity(Long.valueOf(oppr));
-	 	    	    			opportuinty.save();
-	 	    	    		}
-	 	    	    	}
+	 	    		
+	 	    		List<Opportunity> relatedDealsList = event.relatedDeals();
+	 	    		
+	 	    		UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
+	 	    		
 	 	    		event.delete();
 	 	    	}
 	 	    	catch (Exception e)
