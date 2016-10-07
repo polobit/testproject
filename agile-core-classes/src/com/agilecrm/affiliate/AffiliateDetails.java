@@ -4,12 +4,8 @@
 package com.agilecrm.affiliate;
 
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -35,6 +31,16 @@ public class AffiliateDetails {
 	 */
 	@NotSaved(IfDefault.class)
 	private Long userId;
+	
+	/**
+	 * email
+	 */
+	private String email;
+	
+	/**
+	 * domain name
+	 */
+	private String domain;
 	
 	/**
 	 * paypal  Id of user
@@ -85,6 +91,12 @@ public class AffiliateDetails {
 	private Long updatedTime;
 	
 	/**
+	 * Last affiliate added time. If no affiliates then stores affiliateDetail created time 
+	 */
+	@NotSaved(IfDefault.class)
+	private Long lastAffiliateAddedTime;
+	
+	/**
 	 * @return the amountAdded
 	 */
 	public int getAmountAdded() {
@@ -106,6 +118,20 @@ public class AffiliateDetails {
 	}
 
 	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
 	 * @param paypalId the paypalId to set
 	 */
 	public void setPaypalId(String paypalId) {
@@ -116,28 +142,20 @@ public class AffiliateDetails {
 		
 	}
 	
+	
+
 	/**
-	 * Dao
+	 * @return the lastAffiliateAddedTime
 	 */
-	private static ObjectifyGenericDao<AffiliateDetails> dao = new ObjectifyGenericDao<AffiliateDetails>(AffiliateDetails.class);
-	
-	@PrePersist
-	public void prePersist(){
-		if(this.userId == null)
-			this.userId = DomainUserUtil.getCurrentDomainUser().id;
+	public Long getLastAffiliateAddedTime() {
+		return lastAffiliateAddedTime;
 	}
-	
-	public void save(){
-		String oldNamespace = NamespaceManager.get();
-		NamespaceManager.set("");
-		try{
-			this.setUpdatedTime(System.currentTimeMillis()/1000);
-			if(this.id == null)
-				this.setCreatedTime(System.currentTimeMillis()/1000);
-			dao.put(this);
-		}finally{
-			NamespaceManager.set(oldNamespace);
-		}
+
+	/**
+	 * @param lastAffiliateAddedTime the lastAffiliateAddedTime to set
+	 */
+	public void setLastAffiliateAddedTime(Long lastAffiliateAddedTime) {
+		this.lastAffiliateAddedTime = lastAffiliateAddedTime;
 	}
 
 	/**
@@ -264,5 +282,19 @@ public class AffiliateDetails {
 	 */
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	/**
+	 * @return the domain
+	 */
+	public String getDomain() {
+		return domain;
+	}
+
+	/**
+	 * @param domain the domain to set
+	 */
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 }
