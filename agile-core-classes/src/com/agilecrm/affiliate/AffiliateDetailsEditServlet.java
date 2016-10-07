@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.google.appengine.api.NamespaceManager;
 
 
 /**
@@ -42,7 +43,7 @@ public class AffiliateDetailsEditServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		NamespaceManager.set("");
 		List<AffiliateDetails> list = AffiliateDetailsUtil.getAllUsersAffiliateDetails();
 		System.out.println("list size is: "+list.size());
 		for(AffiliateDetails details : list){
