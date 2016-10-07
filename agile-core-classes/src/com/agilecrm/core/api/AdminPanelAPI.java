@@ -692,7 +692,7 @@ public class AdminPanelAPI
     	try {
     		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
     		details.setAmount(details.getAmount() + amount * 100);
-    		details.save();
+    		AffiliateDetailsUtil.save(details);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WebApplicationException(Response

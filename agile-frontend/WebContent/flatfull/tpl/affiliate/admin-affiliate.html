@@ -1,0 +1,96 @@
+<script id="admin-affiliate-details-template" type="text/html">
+  <div id="admin-affiliate-detail-container" class="bg-light lter b-b wrapper-md">
+    <h1 class="pull-left font-thin h3">Affiliates List</h1>
+    <div class="pull-right">
+      <div class="btn-group pull-left activity-log-button c-p m-r-sm">
+          <div class="btn btn-default btn-sm" id="affiliate_filter_btn" data="createdTime">Created Time</div>
+          <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu  pull-right" id="affiliate_filter_list" role="menu"><li><a data="createdTime" href="#">Created Time</a></li><li><a data="lastAffiliateAddedTime" href="#">Last Affiliate Added Time</a></li></ul>
+      </div>
+      <div id="admin-affiliate-detail-datepicker" class="pull-left"></div>
+      </div>
+    <div class="clearfix"></div>    
+  </div>
+  <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
+  	<div class="tab-content wrapper-md ">
+  	  <div class="tabs" id="admin-affiliate-detail-tabs-content"></div>
+  	</div>
+  </div>
+</script>
+
+<script id="affiliate-datepicker-template" type="text/html">
+  <div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);padding-top: 3px;padding-bottom: 3px;">
+       <i class="icon-calendar icon-large"></i>
+       <span id="range">{{date-range "today" "-6"}}</span>
+  </div>
+</script>
+
+<script id="admin-affiliate-detail-collection-template" type="text/html">
+{{#unless this.length}}
+  <div class="alert bg-white ">
+        <div class="slate-content p-md">
+            <div class="box-left pull-left m-r-md">
+                <img alt="Clipboard" src="/img/clipboard.png">
+            </div>
+            <div class="box-right pull-left">
+                <h4 class="text-lg" style="opacity:0.8;">No affiliates matches with your criteria.</h4>
+            </div>
+      <div class="clearfix">
+      </div>
+        </div>
+    </div>
+{{/unless}}
+{{#if this.length}}
+<div class="panel panel-default">
+ <div class="panel-heading">
+  <div class="pull-left  m-t-xs">Registered Affiliates List</div>
+  <div class="clearfix"></div>
+ </div>
+<div class="row">
+<div class="col-md-12 col-sm-12">
+      <div class=" table-responsive"> 
+      <table class="table table-striped agile-table panel table-layout-mob-view">
+          <thead>
+              <tr>
+                  <th style="width:20%" class="header">Email</th>
+                  <th style="width:15%" class="header">Domain</th>
+                  <th style="width:20%" class="header">Paypal id</th>
+                  <th style="width:15%" class="header">Created Time</th>  
+              </tr>
+           </thead>
+           <tbody id='admin-affiliate-detail-model-list'>
+           </tbody>
+      </table>
+      </div>
+    </div>
+</div>
+</div>
+{{/if}}
+</script>
+
+<script id="admin-affiliate-detail-model-template" type="text/html">
+  <td data="{{userId}}" domain="{{domain}}">
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{email}}</div>
+    </div>
+  </td>
+  <td>
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{domain}}</div>
+    </div>
+  </td>
+  <td>
+    <div class="table-resp">
+    <div class="text-base text-ellipsis">{{paypalId}}</div>
+    </div>
+  </td>
+  <td class="text-muted">
+    <div class="table-resp">
+      <i class="fa fa-clock-o m-r-xs"></i>
+      <time class="document-created-time b-b-dotted" value="{{createdTime}}" datetime="{{epochToHumanDate "" createdTime}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" createdTime}}</time>
+    </div>
+  </td>
+</script>
+
