@@ -969,7 +969,7 @@ public class CSVUtil
 			    "Error! Exception raise while saving contact"));
 		}
 		failedCompany++;
-
+		continue;
 	    }
 
 	    if (isMerged)
