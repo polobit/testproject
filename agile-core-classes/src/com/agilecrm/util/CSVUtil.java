@@ -922,6 +922,8 @@ public class CSVUtil
 			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company is merged"));
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
+		}else if (!ContactUtil.isValidName(companyName)){
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
 		}
 	    }
 	    else
