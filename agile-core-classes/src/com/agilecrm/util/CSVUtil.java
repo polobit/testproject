@@ -911,7 +911,7 @@ public class CSVUtil
 
 	    }
 
-	    boolean isMerged = false;
+	    boolean isMerged = false;boolean invalidName = false;
 
 	    // save contact as company
 	    if (companyName != null && !companyName.isEmpty())
@@ -925,8 +925,7 @@ public class CSVUtil
 		}
 		else if (!ContactUtil.isValidName(companyName)){
 			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
-			++failedCompany;
-			continue;
+			invalidName = true;
 		}
 	    }
 	    else
@@ -934,6 +933,10 @@ public class CSVUtil
 		++nameMissing;
 		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
+	    }
+	    if(invalidName){
+	    	++failedCompany;
+	    	continue ;
 	    }
 
 	    if (!canSave)
