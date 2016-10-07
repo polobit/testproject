@@ -578,6 +578,9 @@ public class NotificationPrefsUtil
     }
     
     private static String addOwnerInfo(JSONObject json) {
+    	if(true)
+    		return "";
+    	
     	String userName = "";
     	if(json.has("current_user_name"))
     		userName = JSONUtil.getJSONValue(json, "current_user_name");
@@ -678,7 +681,7 @@ public class NotificationPrefsUtil
 	    		break;
     	}
     	
-    	return title.replace("_", " ");
+    	return StringUtils.capitaliseAllWords(title.replace("_", " ").toLowerCase());
     }
     
     private static boolean conditionalCheckWithOptions(String condition, String raw_message, AgileUser agileUser){
@@ -705,6 +708,4 @@ public class NotificationPrefsUtil
 		}
     	return true;
     }
-    
-    
 }
