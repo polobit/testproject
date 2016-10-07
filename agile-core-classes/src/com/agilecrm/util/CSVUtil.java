@@ -936,6 +936,7 @@ public class CSVUtil
 	    }
 	    if (!invalidName)
 	    {
+	    	failedCompany++;
 	    	continue;
 	    }
 	    if (!canSave)
