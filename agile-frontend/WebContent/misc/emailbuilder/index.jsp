@@ -64,7 +64,7 @@ var localeJSON = <%=localeJSON%>;
     width: 638px !important;
 }
 .edit .demo:after {
-    content: ""!important;
+    content: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "body") %>'!important;
 }
 </style>
     </head>
