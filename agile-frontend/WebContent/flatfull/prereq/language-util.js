@@ -16,6 +16,5 @@ $(function(){
 	try{
 		var jScript = Handlebars.templates["agile-localization-template"]({});
       	$('body').append('<script type="text/javascript">' + jScript + '<\/script>');
-	}catch(e){}
-	 
+	}catch(e){} 
 });
