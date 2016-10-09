@@ -428,4 +428,36 @@ public class SocialPrefsAPI
 		}
 		return status;
     }
+    
+    /**
+     * to get mail content
+     * @param fromEmail
+     * @param pageSize
+     * @param cursor
+     * @param foldernames
+     * @return
+     */
+    @Path("getContent")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getMailContent(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	    // Gets GmailPrefs url
+	    String gmailURL = ContactGmailUtil.getGmailNewURL(normalisedFromEmail,"","", folder_name,"", flag, messageid);
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(gmailURL))
+		emails = ContactEmailUtil.getMailContentfromServer(gmailURL);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in SocialPrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
 }

@@ -984,7 +984,18 @@ public class ContactEmailUtil
 			return false;
 		}
 	}
-	
+	public static List<EmailWrapper> getMailContentfromServer(String url){
+		List<EmailWrapper> emailsList = null;
+		try{
+			String jsonResult = HTTPUtil.accessURL(url);
+			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+			JSONArray emailsArray = emails.getJSONArray("emails");
+			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return emailsList;
+	}
 	/**
 	 * Fetches emails from server, server can be either IMAP,Microsoft Exchange
 	 * Fetches emails based on pageSize and cursor

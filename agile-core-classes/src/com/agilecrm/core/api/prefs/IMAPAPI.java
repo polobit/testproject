@@ -394,4 +394,28 @@ public class IMAPAPI
 		}
 		return status;
     }
+    
+    /**
+     * for getting mail content
+     */
+    @Path("getContent")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getMailContent(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid){
+		List<EmailWrapper> emails = null;
+		try{
+		    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+	
+		    // Gets IMAPPrefs url
+		    String imapURL = ContactImapUtil.getNewIMAPURL(normalisedFromEmail,"","", folder_name,"", flag, messageid);
+	
+		    if (StringUtils.isNotBlank(imapURL))
+			emails = ContactEmailUtil.getMailContentfromServer(imapURL);
+		}catch (Exception e){
+		    System.out.println("Got an exception in IMAPAPI while fetching mails: " + e.getMessage());
+		    e.printStackTrace();
+		    return null;
+		}
+		return emails;
+    }
 }

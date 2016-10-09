@@ -264,9 +264,9 @@ public class ContactImapUtil
 
 	String url = null;
 
-	//String hostUrl = "https://agile-imap.appspot.com";
 	String hostUrl = "http://localhost:8080";
-
+	//String hostUrl = "https://agile-imap.appspot.com";
+	
 	String applicationId = SystemProperty.applicationId.get();
 
 	System.out.println("Application id is " + applicationId);
@@ -285,7 +285,6 @@ public class ContactImapUtil
 
 	if (StringUtils.equals(applicationId, "agilecrmbeta"))
 	    //hostUrl = "https://naresh-dot-imap-dot-agilecrmbeta.appspot.com";
-		hostUrl = "http://localhost:8080";
 
 	try
 	{
