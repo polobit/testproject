@@ -224,7 +224,7 @@ var id = <%=note_id%>
 
    	<%if(note_exists){%>
       <div class="agile-crm-logo p-t-80 p-t-40" style="margin: 0px auto;text-align: center;width: 125px;border-radius: 3px">
-      	<%if(logo_url != null){%>
+      	<%if(logo_url != null && logo_url != ""){%>
         <img class="logo" alt="AgileCRM" src=<%=logo_url%>>
       	<%}%>
       </div>
