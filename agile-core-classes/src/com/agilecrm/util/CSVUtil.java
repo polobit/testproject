@@ -1228,7 +1228,7 @@ public class CSVUtil
 			    list = MilestoneUtil.getMilestonesList(trackName);
 			    if (list.size() == 0)
 			    {
-				//trackMissing++;
+				trackMissing++;
 				break;
 			    }
 			    else
@@ -1248,27 +1248,24 @@ public class CSVUtil
 			    mileStoneValue = dealPropValues[i];
 			    milestoneFound = true;
 			    if(!trackFound){
-			    	String trkName = null ;
-			    	for(int m = i++;m < dealPropValues.length ;m++){
-			    		LinkedHashMap<String, String> pr = (LinkedHashMap<String, String>) schema.get(m);
-			    		String tName = pr.get("value"); String tType = pr.get("type");
-			    		if(tType.equals("SYSTEM") && tName.equalsIgnoreCase("track")){
-			    			trkName = dealPropValues[m];
-			 			    trackFound = true;
-			 			    list = MilestoneUtil.getMilestonesList(trkName);
-			 			    break;
-			    		}
-			    	}
-		    		if (list.size() == 0)
-				    {
-		    			trackMissing++;
-		    			break;
-				    }
-				    else
-				    {
-				    	opportunity.track = trkName;
-				    }
-			    	
+			    	try {
+						String trkName = null ;
+						innerForloop :
+						for(int m = i+1;m < dealPropValues.length ;m++){
+							LinkedHashMap<String, String> pr = (LinkedHashMap<String, String>) schema.get(m);
+							String tName = pr.get("value"); String tType = pr.get("type");
+							if(tType.equals("SYSTEM") && tName.equalsIgnoreCase("track")){
+								trkName = dealPropValues[m];
+							    trackFound = true;
+							    list = MilestoneUtil.getMilestonesList(trkName);
+							    opportunity.track = trkName;
+							    break innerForloop;
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("track missinc catch");
+						e.printStackTrace();
+					}			    	
 			    }
 			    if (trackFound)
 			    {
