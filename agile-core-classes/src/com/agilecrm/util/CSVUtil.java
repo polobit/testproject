@@ -776,7 +776,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-	    boolean canSave = true;boolean invalidName = true;
+	    boolean canSave = true;/*boolean invalidName = true;*/
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -923,10 +923,10 @@ public class CSVUtil
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
-		else if (!ContactUtil.isValidName(companyName)){
+		/*else if (!ContactUtil.isValidName(companyName)){
 			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
 			invalidName = false;
-		}
+		}*/
 	    }
 	    else
 	    {
@@ -934,11 +934,11 @@ public class CSVUtil
 		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
 	    }
-	    if (!invalidName)
+	   /* if (!invalidName)
 	    {
 	    	failedCompany++;
 	    	continue;
-	    }
+	    }*/
 	    if (!canSave)
 	    {
 		continue;

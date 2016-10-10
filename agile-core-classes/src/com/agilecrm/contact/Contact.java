@@ -506,7 +506,7 @@ public class Contact extends Cursor
     public void save(boolean... args)
     {
     	
-    	if (this.type == Type.COMPANY)
+    	/*if (this.type == Type.COMPANY)
     	{
     		if (this.properties.size() > 0)
     		{
@@ -516,7 +516,7 @@ public class Contact extends Cursor
     					    .entity(nameField.value+"::Invalid Company Name, contains special characters.").build());
     			}
     		}
-    	}
+    	}*/
 
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
