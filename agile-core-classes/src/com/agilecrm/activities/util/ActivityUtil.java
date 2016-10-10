@@ -2440,15 +2440,20 @@ public class ActivityUtil
 	 */
 	public static List<Activity> getDealRelatedActivities(String entity_id, Integer max, String cursor)
 	{
+		List<Activity> activities = null;
 		try
 		{
+			System.out.println("getDealRelatedActivities------entity_id-----------"+entity_id);
+			System.out.println("getDealRelatedActivities-------max-----------"+max);
 			Map<String, Object> searchMap = new HashMap<String, Object>();
 			searchMap.put("related_deal_ids", entity_id);
 
 			if (max != 0)
-				return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+				activities = dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
-			return dao.listByProperty(searchMap);
+			activities = dao.listByProperty(searchMap);
+			System.out.println("getDealRelatedActivities----activities--------"+activities);
+			return activities;
 		}
 		catch (Exception e)
 		{
