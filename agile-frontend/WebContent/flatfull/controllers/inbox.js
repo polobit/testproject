@@ -54,10 +54,15 @@ function syncContacts(){
 			});	
 		},
 		render:function(data){
-			var source = $('#account-types-template').html();
+			getTemplate("account-types", data.toJSON(), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				$("#filter-options").html(template_ui);
+			}, '#filter-options');
+			/*var source = $('#account-types-template').html();
 	        var template = Handlebars.compile(source);
 	        var html = template(data.toJSON());
-	        this.$el.html(html);
+	        this.$el.html(html);*/
 			var inbox_has_email_configured = $("#inbox_has_email_configured").attr( "data-val" );
 			if(inbox_has_email_configured === 'true'){
 				$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
