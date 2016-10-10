@@ -385,7 +385,7 @@ var emailVideoRecord = {
     },
 
     buildVideoPageURL : function(videoId) {
-        var videoURL = window.location.origin + "/video/" + videoId;
+        var videoURL = window.location.origin + "/video/" + videoId + "?n={{first_name}}&c={{owner.calendar_url}}";
         document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL);
         $("#videoRecordModal").modal("hide");
     }

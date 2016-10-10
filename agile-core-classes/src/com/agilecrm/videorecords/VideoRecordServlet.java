@@ -65,6 +65,18 @@ public class VideoRecordServlet extends HttpServlet {
         	defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template-embed.html");
         }else{
         	defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template.html");
+        	String name = request.getParameter("n");
+        	String calenderLink = request.getParameter("c");
+        	if(name != null && !name.isEmpty()) {
+        	  defaultTemplate = defaultTemplate.replace("{{NAME}}", name);
+        	} else {
+        	  defaultTemplate = defaultTemplate.replace("{{NAME}}", "");
+        	}
+        	if(calenderLink != null && !calenderLink.isEmpty()) {
+        	  defaultTemplate = defaultTemplate.replace("{{CALENDAR}}", calenderLink);
+        	} else {
+        	  defaultTemplate = defaultTemplate.replace("{{CALENDAR}}", ""); 
+        	}
         }
         defaultTemplate = defaultTemplate.replace("{{VIDEO_SOURCE}}", videoRecord.url);
         out.write(defaultTemplate);
