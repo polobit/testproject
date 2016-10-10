@@ -82,11 +82,87 @@ function initializeEmailBuilderListeners() {
         BRING_YOUR_CODE_BTN = true;
         window.location.hash = "#email-template-add";
     });
+
+    /**
+     * Script to show create a new category in bootstrap modal.
+     **/
+    $('#emailbuilder-listeners').on('change','select#emailTemplate-category-select',  function(e){
+        e.preventDefault();
+        var selectedVal = $(this).val();
+        if(selectedVal == "CREATE_NEW_CATEGORY") {
+            $('#emailbuilder-templates-category-modal').html(
+                getTemplate("emailbuilder-templates-category-modal", {})).modal('show');
+            $(".emailTemplCategoryFormMsgHolder").html("");
+        }
+    });
+
+    $('body').on('hidden.bs.modal','#emailbuilder-templates-category-modal', function (e) {
+        e.preventDefault();
+        getEmailTemplateCategories();
+    });
+
+    $('body').on('click','#emailTemplCtgySaveBtn', function(e){
+        e.preventDefault();
+        var isCtg = $(this).attr("data-id");
+        if(isCtg != undefined && isCtg == "new"){
+            $(".emailTemplCategoryFormMsgHolder").html("");
+            var ctgyName = $("#emailTemplate-category-name").val();
+            if(ctgyName != "" && ctgyName.trim() != "") {
+                $("#emailTemplCtgySaveBtn").text("Saving...");
+                $("#emailTemplCtgySaveBtn").prop('disabled', true);
+                $(this).removeAttr("data-id");
+                emailTemplateCtg.saveEmailTemplateCategory(ctgyName.trim());
+            } else {
+                $(".emailTemplCategoryFormMsgHolder").html("Name field is required.");
+            }
+        }
+    });
     
 }
 
+var emailTemplateCtg = {
+    saveEmailTemplateCategory : function(ctgyName){
+        var templateCategory = {
+            "name" : ctgyName
+        };
+        var requestType = "POST";
+
+        $.ajax({
+            type: requestType, 
+            url: 'core/api/emailTemplate-category',       
+            data: JSON.stringify(templateCategory),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $(".emailTemplCategoryFormMsgHolder").html("Saved Successfully").css("color","green");
+                $("#emailTemplCtgySaveBtn").text("Save");
+                $("#emailTemplCtgySaveBtn").prop('disabled', false);
+                $("#emailTemplCtgySaveBtn").attr("data-id", "new");
+                $("#emailbuilder-templates-category-modal").modal("hide");
+            },
+            error:function(response){
+                $("#emailTemplCtgySaveBtn").text("Save");
+                $("#emailTemplCtgySaveBtn").prop('disabled', false); 
+                $("#emailTemplCtgySaveBtn").attr("data-id", "new");
+
+                // Shows error alert of duplicate category name
+                if (response.status == 400){
+                    show_error('emailbuilder-templates-category-modal', 'emailTemplCategoryForm', 
+                        'duplicate-category', response.responseText);
+                }else{
+                    $(".emailTemplCategoryFormMsgHolder").html(response.responseText);
+                }
+
+            }
+        });
+    }
+};
+
 function saveEmailTemplateFromBuilder(fullSource,builderSource) {
-    
+    var emailTemp_ctg_id = $("select#emailTemplate-category-select").val();
+    if(emailTemp_ctg_id == "" || emailTemp_ctg_id == "CREATE_NEW_CATEGORY"){
+        emailTemp_ctg_id = 0;
+    }
     var template = {
     "name": $("#nameoftemplate").val(),
     "subject": $("#subject").val(),
@@ -94,7 +170,8 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     "text_email": $("#text_email").val(),
     "html_for_builder": builderSource,
     "is_template_built_using_builder": true,
-    "attachment_id": ($("#attachment_id").val()) ? $("#attachment_id").val() : ""
+    "attachment_id": ($("#attachment_id").val()) ? $("#attachment_id").val() : "",
+    "emailTemplate_category_id": emailTemp_ctg_id
     };
 
     var requestType = "post";

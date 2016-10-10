@@ -1,0 +1,46 @@
+<script type="text/html" id="emailbuilder-templates-category-modal-template">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form class="form-horizontal" id="emailTemplCategoryForm">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">
+                {{agile_lng_translate 'tickets' 'create'}} {{agile_lng_translate 'tickets' 'email-template'}} 
+                {{agile_lng_translate 'portlets' 'category'}}
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-offset-2 col-sm-8 p-l  duplicate-category"></div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:2px;">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8 text-center">
+                        <span generated="true" class="help-inline emailTemplCategoryFormMsgHolder"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label for="emailTemplate-category-name" class="col-sm-2 control-label">
+                            {{agile_lng_translate 'other' 'name'}} <span class="field_req">*</span>
+                        </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="emailTemplate-category-name" name="emailTemplate-category-name" placeholder="Please enter category name" maxlength="25">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">      
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+                    {{agile_lng_translate 'other' 'cancel'}}
+                </button>   
+                <button type="button" id="emailTemplCtgySaveBtn" class="btn btn-sm btn-primary" data-id="new">
+                    {{agile_lng_translate 'modals' 'save'}}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</script>

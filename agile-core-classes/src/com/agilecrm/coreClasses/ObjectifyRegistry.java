@@ -1,5 +1,6 @@
 package com.agilecrm.coreClasses;
 
+import com.agilecrm.account.EmailTemplateCategory;
 import com.agilecrm.affiliate.Affiliate;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.AffiliateDeal;
@@ -18,13 +19,13 @@ public class ObjectifyRegistry {
 	
 	public static void registerEntities(){
 		
-		//Add your entity clas here
+		//Add your entity class here
 		ObjectifyService.register(PushNotificationMessage.class);
 		ObjectifyService.register(NotificationTemplate.class);
 		ObjectifyService.register(Affiliate.class);
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
 		ObjectifyService.register(WorkflowBackup.class);
-		
+		ObjectifyService.register(EmailTemplateCategory.class);
 	}
 }

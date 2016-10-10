@@ -157,6 +157,9 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.affiliate.AffiliateDetailsApi.class);
 	s.add(com.agilecrm.core.api.affiliate.AffiliateApi.class);
 	s.add(com.agilecrm.core.api.RecaptchaGatewayAPI.class);
+	
+	//EmailTemplateCategory
+	s.add(com.agilecrm.core.api.prefs.EmailTemplateCategoryAPI.class);
 	return s;
     }
 }

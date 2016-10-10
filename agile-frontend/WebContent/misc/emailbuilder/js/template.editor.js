@@ -1432,6 +1432,9 @@ function loadSavedTemplate() {
                     if(data.attachment_id && data.attachment_id != "0") {
                         parent.setAttachmentInTemplateEdit(data.attachment_id);
                     }
+                    if(data.emailTemplate_category_id && data.emailTemplate_category_id != "0"){
+                        $("select#emailTemplate-category-select",parent.document).val(data.emailTemplate_category_id);
+                    }
                 }
 
                 $("#tosave").html(data.html_for_builder);

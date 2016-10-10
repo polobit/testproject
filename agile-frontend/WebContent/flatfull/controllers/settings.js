@@ -481,17 +481,48 @@ var SettingsRouter = Backbone.Router
 			/**
 			 * Shows list of email templates, with an option to add new template
 			 */
-			emailTemplates : function()
+			emailTemplates : function(selectedEmailTempCtg)
 			{
 				var that = this;
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
-					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
+					var currUrl = "/core/api/email/templates";
+					if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
+						currUrl = "/core/api/email/templates/category/"+selectedEmailTempCtg;
+					}
+					that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
+
+						/*if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
+						{
+							if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
+							{
+								window.location.href  = window.location.origin+"/#emailbuilder-templates";
+							}
+						}*/
+						
 						agileTimeAgoWithLngConversion($(".created_time", el));
+
+					    var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	        			fillSelect('emailTemplate-category-select','core/api/emailTemplate-category', 'emailTemplateCategory',  
+	        				function fillCategory(){
+								if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
+									$('select#emailTemplate-category-select').find('option[value='+selectedEmailTempCtg+']').attr("selected","selected");
+								}
+								el.on('change','select#emailTemplate-category-select',  function(e){
+									e.preventDefault();
+									var selectedCtg = $(this).val();
+									if(selectedCtg != ""){
+										that.emailTemplates(selectedCtg);
+									}else{
+										that.emailTemplates();
+									}
+								});
+								}, optionsTemplate, false, el,'Select Category');
+
 					} });
 
 					that.emailTemplatesListView.collection.fetch();
