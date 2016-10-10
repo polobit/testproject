@@ -14,20 +14,20 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'name'}} <span class="field_req">*</span></label> 
                     <div class="controls col-sm-7">
-                        <input name="name" type="text" field="pipeline" maxlength="400" class="required form-control" id="product_name" placeholder="{{agile_lng_translate 'products' 'product'}}" />
+                        <input name="name" type="text" field="pipeline" maxlength="400" class="required noSpecialChars form-control" id="product_name" placeholder="{{agile_lng_translate 'products' 'product'}}" />
                     </div>
                 </div>
                 
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'misc-keys' 'description'}} </label>
                     <div class="controls col-sm-7">
-                         <textarea id="pdescription" rows="3" maxlength="400" name="description" class="form-control" placeholder="{{agile_lng_translate 'misc-keys' 'description'}}"></textarea>
+                         <textarea id="pdescription" rows="3" maxlength="400" name="description" class="noSpecialChars form-control" placeholder="{{agile_lng_translate 'misc-keys' 'description'}}"></textarea>
                     </div>
                 </div>
                  <div class="control-group form-group" >
                     <label class="control-label col-sm-3">{{agile_lng_translate 'products' 'product-price'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-7">
-                       <input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price'}}" min="0" max="1000000000000"/> 
+                       <input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price'}}" min="0" max="2147483647"/> 
                     </div>
                 </div>
                 <div class="control-group form-group">
@@ -62,8 +62,7 @@
         </form>
     </div>
     <div class="modal-footer form-actions">
-        <span style="color:#B94A48;" id="duplicate-custom-field-err" class="hide text-base"></span>
-        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="products_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
     </div>
 </div>
 </div>

@@ -764,7 +764,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			
 
 			App_Admin_Settings.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
-			templateKey : "admin-settings-products",
+			templateKey : "admin-settings-products", sortKey : 'created_time', descending : true ,
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				console.log("loaded products : ", el);

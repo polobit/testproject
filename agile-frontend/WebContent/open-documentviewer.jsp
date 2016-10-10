@@ -314,7 +314,16 @@ function bodyLoad()
 							$(".doc-comment-error-status").html("Comments is required.")
 							return;
 						}
-						else
+						else if(sCommentsVal.indexOf("<")!=-1)
+						{
+							$(".doc-comment-error-status").html("Invliad character not allowed.")
+							return;	
+						}
+						else if(sCommentsVal.length>400)
+						{
+							$(".doc-comment-error-status").html("Maximum 400 characters allowed.")
+							return;	
+						}
 							$(".doc-comment-error-status").html("")
 						var doc_json={"description":$("#comments").val(),
 							"contact_id": contact_id,

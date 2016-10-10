@@ -30,16 +30,17 @@ var admin_products = {
 			saveCallback : function(model)
 			{
 				console.log(model);
-				$("#product-field-add-modal").modal('hide');
-				$("body").removeClass("modal-open").css("padding-right", "");
+				
 				var product_model_json = App_Admin_Settings.productsGridView.collection.get(model.id);
 				if(product_model_json)
 					product_model_json.set(model);	
 				else	
 					App_Admin_Settings.productsGridView.collection.add(model);
 				
-				if($("#admin-settings-products-model-list > tr").length >0)
-						$('.product-header').removeClass("hide")
+			//	if($("#admin-settings-products-model-list > tr").length >0)
+			//			$('.product-header').removeClass("hide")
+				$("#product-field-add-modal").modal('hide');
+				$("body").removeClass("modal-open").css("padding-right", "");	
 			},
 			errorCallback : function(response)
 			{

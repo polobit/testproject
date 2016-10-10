@@ -629,7 +629,7 @@ function initializeSendEmailListeners(){
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').hide();
 			}
-			else if(!model.attachment_id)
+			else if(!model.attachment_id && $("#eattachment_key","#emailForm").attr('name')!="edoc_key")
 			{
 				$('.add-attachment-cancel').trigger("click");
 				$('#eattachment_error').hide();
