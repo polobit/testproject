@@ -1,6 +1,7 @@
 var admin_products = {
 	showProductNew : function(data,el) 
 	{
+		var modelViewCount = 0;
 		var isNew = false;
 		isNew = !data.id;
 		var modelView = new Base_Model_View
@@ -16,9 +17,10 @@ var admin_products = {
 			{
 				console.log($("#product-field-add-modal", el));
 				//This code will scroll to top to see the modal.
-				
+				if(!modelViewCount){
+				modelViewCount++;	
 				$("#product-field-add-modal", el).modal('show');
-				
+				}
 				
 				//Customizing the style to display the custom field modal in center for screen.
 				var modalWidth = $('#product-field-add-modal').width();
@@ -30,17 +32,16 @@ var admin_products = {
 			saveCallback : function(model)
 			{
 				console.log(model);
-				
+				$("#product-field-add-modal").modal('hide');
+				$("body").removeClass("modal-open").css("padding-right", "");
 				var product_model_json = App_Admin_Settings.productsGridView.collection.get(model.id);
 				if(product_model_json)
 					product_model_json.set(model);	
 				else	
 					App_Admin_Settings.productsGridView.collection.add(model);
 				
-			//	if($("#admin-settings-products-model-list > tr").length >0)
-			//			$('.product-header').removeClass("hide")
-				$("#product-field-add-modal").modal('hide');
-				$("body").removeClass("modal-open").css("padding-right", "");	
+				if($("#admin-settings-products-model-list > tr").length >0)
+						$('.product-header').removeClass("hide")
 			},
 			errorCallback : function(response)
 			{

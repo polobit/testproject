@@ -723,6 +723,7 @@ function populate_deal_products(el, value,form_id){
 					{
 						//$(el).addClass("table-responsive");
 						console.log("loaded products : ", el);
+						 $(window).resize()
 						$(me._form_id).on("click",".dealproducts_td_checkbox",
 						function(e)
 						{
