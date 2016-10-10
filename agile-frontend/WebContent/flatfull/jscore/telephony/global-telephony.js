@@ -622,7 +622,7 @@ function handleCallRequest(message)
 			console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
 					var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
 				"status" : globalCallForActivity.callStatus, "duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
-			var num = globalCallForActivity.callNumber;
+			
 			console.log("last called : " + call);
 			saveCallNoteTelephony(call);
 

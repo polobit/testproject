@@ -103,11 +103,13 @@ function _getMessageAsterisk(message, callback){
 		globalCall.callStatus = "Failed";
 		globalCallForActivity.justCalledId = callId;
 		globalCallForActivity.duration = 0;
-
+		replicateglobalCallVariable();
+		resetglobalCallVariables();	
+		globalCall.lastReceived = "failed";
+		
 		var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
-				"status" : globalCallForActivity.callStatus, "duration" : globalCallForActivity.duration };
-		saveCallNoteTelephony();
-		saveCallActivityTelephony(call);
+				"status" : globalCallForActivity.callStatus, "duration" :  globalCallForActivity.duration, "contactId" : globalCallForActivity.contactedId };
+		saveCallNoteTelephony(call);
 
 	}else if(state == "ended"){
 		if(globalCall.lastReceived)	{
@@ -126,13 +128,7 @@ function _getMessageAsterisk(message, callback){
 		replicateglobalCallVariable();
 		resetglobalCallVariables();	
 		globalCall.lastReceived = "ended";	
-		
-		//this is called to save the call activity of the user after the call
-		if(!callId)
-			callId = "";
-/*				var action = {"command":  "getLastCallDetail", "number": number, "callId": callId};
-		sendActionToClient(action);*/
-		//sendMessageToBriaClient("getLastCallDetail",number,callId);
+
 		
 	}
 	
