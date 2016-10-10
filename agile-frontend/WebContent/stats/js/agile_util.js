@@ -157,7 +157,6 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 {
 	if (!error[0])
 	{
-	  document.getElementById("agile_inline_submit").innerHTML = document.getElementById("_agile_custome_submit").value;
 		if (contact_id)
 		{
 			var id_check;
@@ -200,13 +199,13 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 					window.location = url+"?"+"fwd=cd&data="+emailParam;
 			}	
 			else if(url && url == "#"){
-				if(document.getElementById("agile_inline_submit").innerHTML==""){
-				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				//condition for the checking custom templates
+				var confirmationMsgEl = document.getElementById("_agile_custome_submit");
+				var confirmationMsg = "Great! Thanks for filling out my form!";
+				if(confirmationMsgEl) {
+					confirmationMsg = confirmationMsgEl.value;
 				}
-				else
-			  {
-                 document.getElementById("agile_inline_submit").innerHTML = document.getElementById("_agile_custome_submit").value;
-			  }
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">' + confirmationMsg + '</span>';
 				var agile_form = document.forms["agile-form"];
 				agile_form.reset();
 			
