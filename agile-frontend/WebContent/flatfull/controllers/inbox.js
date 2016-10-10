@@ -15,8 +15,10 @@ var InboxRouter = Backbone.Router.extend({
 			if( !template_ui )	return;
 
 			$('#inbox-listners').html($(template_ui));
-			syncContacts();
-			initializeInboxListeners();
+			$( document ).ready(function() {
+			   	syncContacts();
+				initializeInboxListeners();
+			});
 		}, '#inbox-listners');
 		$("#agile-menu-navigation-container .nav li").removeClass("active");
 		$("#inboxmenu").addClass("active");
