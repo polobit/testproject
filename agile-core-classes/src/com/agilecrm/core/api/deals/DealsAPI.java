@@ -1615,7 +1615,7 @@ public class DealsAPI
     @Path("/{dealid}/related-activities")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Activity> getRelatedActivitiesOfDeal(@PathParam("dealid") String dealid, @QueryParam("cursor") String cursor,
+    public List<Activity> getRelatedActivitiesOfDeal(@PathParam("dealid") Long dealid, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count) throws JSONException
     {
 

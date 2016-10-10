@@ -652,6 +652,11 @@
         <property name="createdTime" direction="desc"/>
     </datastore-index>
     
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="related_deal_ids" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
+    
 </datastore-indexes>
 
 

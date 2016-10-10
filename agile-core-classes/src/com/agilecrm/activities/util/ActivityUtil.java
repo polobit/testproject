@@ -2398,13 +2398,13 @@ public class ActivityUtil
 				{
 					JSONObject obj = new JSONObject();
 					JSONArray arr = new JSONArray();
-					List<String> dealIdsList = new ArrayList<String>();
+					List<Long> dealIdsList = new ArrayList<Long>();
 					
 					for(OpportunityPartial opp : relatedDealsList)
 					{
 						if(!dealIdsList.contains(String.valueOf(opp.id)))
 						{
-							dealIdsList.add(String.valueOf(opp.id));
+							dealIdsList.add(opp.id);
 							
 							obj.put("dealid", opp.id);
 							obj.put("dealname", opp.name);
@@ -2438,22 +2438,17 @@ public class ActivityUtil
 	 * @param cursor
 	 * @return
 	 */
-	public static List<Activity> getDealRelatedActivities(String entity_id, Integer max, String cursor)
+	public static List<Activity> getDealRelatedActivities(Long entity_id, Integer max, String cursor)
 	{
-		List<Activity> activities = null;
 		try
 		{
-			System.out.println("getDealRelatedActivities------entity_id-----------"+entity_id);
-			System.out.println("getDealRelatedActivities-------max-----------"+max);
 			Map<String, Object> searchMap = new HashMap<String, Object>();
 			searchMap.put("related_deal_ids", entity_id);
 
 			if (max != 0)
-				activities = dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+				return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
-			activities = dao.listByProperty(searchMap);
-			System.out.println("getDealRelatedActivities----activities--------"+activities);
-			return activities;
+			return dao.listByProperty(searchMap);
 		}
 		catch (Exception e)
 		{
