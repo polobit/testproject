@@ -214,7 +214,7 @@ public class Activity extends Cursor
      * stores related deal ids for each activity
      */
     @NotSaved(IfDefault.class)
-    public List<Long> related_deal_ids;
+    public List<String> related_deal_ids;
     
     /**
      * stores related deal ids and name for each activity

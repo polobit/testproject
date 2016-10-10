@@ -2398,13 +2398,13 @@ public class ActivityUtil
 				{
 					JSONObject obj = new JSONObject();
 					JSONArray arr = new JSONArray();
-					List<Long> dealIdsList = new ArrayList<Long>();
+					List<String> dealIdsList = new ArrayList<String>();
 					
 					for(OpportunityPartial opp : relatedDealsList)
 					{
 						if(!dealIdsList.contains(String.valueOf(opp.id)))
 						{
-							dealIdsList.add(opp.id);
+							dealIdsList.add(String.valueOf(opp.id));
 							
 							obj.put("dealid", opp.id);
 							obj.put("dealname", opp.name);
@@ -2438,7 +2438,7 @@ public class ActivityUtil
 	 * @param cursor
 	 * @return
 	 */
-	public static List<Activity> getDealRelatedActivities(Long entity_id, Integer max, String cursor)
+	public static List<Activity> getDealRelatedActivities(String entity_id, Integer max, String cursor)
 	{
 		try
 		{
