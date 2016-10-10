@@ -115,10 +115,40 @@
 
 
 %>
-<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<style>
+	
+.note-published {
+	color: #bebebe;
+	float: right;
+}
+
+.notes-list .note-body {
+	margin-top: 8px;
+}
+.sectionfont{
+	font-size: 13px;
+	color:#0072EF;
+}
+.categoriefont{
+	font-size: 14px;
+}
+.search-box .fa-search { 
+  position: absolute;
+    margin-top: 16px;
+    margin-left: 18px;
+    font-size: 23px;
+}
+.search-box1{
+	background:url(https://s3.amazonaws.com/agilecrm/landing/landing-page/images/intro-bg.jpg) no-repeat center center;
+	padding: 56px;
+	background-size: cover;
+}
+
+
+	</style>
 	<%=headerContent%>
 	<title>Knowledgebase</title>
 </head>
