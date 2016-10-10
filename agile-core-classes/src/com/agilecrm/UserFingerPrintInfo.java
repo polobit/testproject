@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.user.DomainUser;
@@ -79,44 +80,50 @@ public class UserFingerPrintInfo implements Serializable{
 		
 	}
 	
-	public void generateOAuthToken(HttpServletRequest request){
+	private void generateOAuthToken(HttpServletRequest request, DomainUser domainUser){
 		/*int randomNumber = (int)( Math.random() * 10000 );
 		if(randomNumber < 1000)
 			randomNumber = randomNumber*10;*/
 		Random r = new Random();
 		int Low = 1000;
 		int High = 9999;
-		int Result = r.nextInt(High-Low) + Low;
-		this.verification_code = Result+"";
+		this.verification_code = (r.nextInt(High-Low) + Low) + "";
 			
-		System.out.println("verification_code = " + verification_code);
+		System.out.println(domainUser.email + " verification_code = " + verification_code);
 		// Resave
 		set(request);
 	}
 	
-	public void addUserBrowserInfo(HttpServletRequest request, DomainUser domainUser)throws Exception {
+	private void addUserBrowserInfo(HttpServletRequest request, DomainUser domainUser) {
 		
-		// Create info
-		Map<String, String> data = new HashMap<String, String>();
-		if(StringUtils.isBlank(this.verification_code)){
-			generateOAuthToken(request);
+		try {
+			
+			// Create info
+			Map<String, String> data = new HashMap<String, String>();
+			if(StringUtils.isBlank(this.verification_code)){
+				generateOAuthToken(request, domainUser);
+			}
+			
+			data.put("generatedOTP", this.verification_code);
+			data.put("browser_os", request.getParameter("browser_os"));
+			data.put("browser_name", request.getParameter("browser_Name"));
+			data.put("browser_version",request.getParameter("browser_version"));
+			data.put("email", domainUser.email);
+			data.put("domain", domainUser.domain);
+			data.put("IP_Address", request.getRemoteAddr());
+			data.put("name",domainUser.name );
+			data.put("city",request.getHeader("X-AppEngine-City"));	
+			System.out.println("data "+data);
+			
+			// Add to this ref
+			this.info = data;
+			
+			// Resave
+			set(request);
+		} catch (Exception e) {
+			ExceptionUtils.getFullStackTrace(e);
 		}
-		data.put("generatedOTP", this.verification_code);
-		data.put("browser_os", request.getParameter("browser_os"));
-		data.put("browser_name", request.getParameter("browser_Name"));
-		data.put("browser_version",request.getParameter("browser_version"));
-		data.put("email", domainUser.email);
-		data.put("domain", domainUser.domain);
-		data.put("IP_Address", request.getRemoteAddr());
-		data.put("name",domainUser.name );
-		data.put("city",request.getHeader("X-AppEngine-City"));	
-		System.out.println("data "+data);
 		
-		// Add to this ref
-		this.info = data;
-		
-		// Resave
-		set(request);
 	}
 
 	public static UserFingerPrintInfo getUserAuthCodeInfo(HttpServletRequest request){
@@ -128,5 +135,15 @@ public class UserFingerPrintInfo implements Serializable{
 		
 		return info;
 	}
+	
+	public void generateOTP(HttpServletRequest request, DomainUser domainUser){
+		
+		// Generate token
+		generateOAuthToken(request, domainUser);
+
+		// Set info in session for future usage 
+		addUserBrowserInfo(request, domainUser);
+	}
+	
 
 }
