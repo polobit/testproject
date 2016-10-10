@@ -2457,6 +2457,8 @@ public class ActivityUtil
 		}
 		catch (Exception e)
 		{
+			System.out.println("Exception occured while fetching deal related activities");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 			return null;
 		}
