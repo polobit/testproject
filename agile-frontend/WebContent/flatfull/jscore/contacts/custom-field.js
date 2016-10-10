@@ -431,27 +431,27 @@ function show_custom_fields_helper(custom_fields, properties){
 		var checkbox_style ="";
 		var max_len = 500;
 		if(field.scope == "CONTACT"){
-			label_style = "col-sm-3 word-break-all";
+			label_style = "col-sm-3 word-break";
 			field_style = "col-sm-10";
 			div_col9_style = "col-sm-9 company_input";
 			div_col3_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "COMPANY"){
-			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-3 word-break-all"; 
+			label_style = "control-label col-sm-3 word-break";
+			modal_label_style = "control-label col-sm-3 word-break"; 
 			modal_control_style = "col-sm-7";
 			div_col9_style = "company_input";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "DEAL"){
-			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-3 word-break-all";
+			label_style = "control-label col-sm-3 word-break";
+			modal_label_style = "control-label col-sm-3 word-break";
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "CASE"){
-			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-3 word-break-all";
+			label_style = "control-label col-sm-3 word-break";
+			modal_label_style = "control-label col-sm-3 word-break";
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3";
@@ -476,7 +476,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required){
 					
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 								+field.field_label
 								+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><span><select class="'
 								+field.field_type.toLowerCase()
@@ -503,7 +503,7 @@ function show_custom_fields_helper(custom_fields, properties){
 					
 				}else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 								+field.field_label
 								+'</label><div class="controls '+modal_control_style+'"><select class="'
 								+field.field_type.toLowerCase()
@@ -644,7 +644,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls agiletxexpander '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
@@ -666,7 +666,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group  "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group  "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'</label><div class="controls agiletxexpander '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
@@ -694,7 +694,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "number";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 						+field.field_label
 						+'<span class="field_req">*</span></label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
 						+field.field_type.toLowerCase()
@@ -716,7 +716,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 						+field.field_label
 						+'</label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
 						+field.field_type.toLowerCase()
@@ -750,7 +750,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "contact";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'<span class="field_req">*</span></label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
@@ -772,7 +772,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'</label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
@@ -803,7 +803,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "company";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'<span class="field_req">*</span></label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
@@ -825,7 +825,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'</label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
@@ -855,7 +855,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required){
 			if(isModal){
-				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
@@ -873,7 +873,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			}
 		}else{
 			if(isModal){
-				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'</label><div class="controls '+modal_control_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
