@@ -161,9 +161,15 @@ function getContent(url,dataVal){
 		url :url,
 		contentType: "application/json; charset=utf-8",
 		success : function(data){
-			var source = $('#mail-message-template').html();
+			var html = "";
+			getTemplate("mail-message", data, undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html = template_ui;
+			}, '#message'+dataVal);
+			/*var source = $('#mail-message-template').html();
 	        var template = Handlebars.compile(source);
-	        var html = template(data);
+	        var html = template(data);*/
 	        $("#message"+dataVal).html(html);
 	        $("#mails-list").hide();
 	        $("#mail-details-view").show();
@@ -373,15 +379,29 @@ function initializeInboxListeners(){
 				page_size = offset+9;
 			}
 			$(".inti-val").text(offset+" - "+page_size);
-			var source = $('#mail-template').html();
+			var html = "";
+			getTemplate("mail", globalMailCollectionInstance.toJSON().slice(offset-1,page_size), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html = template_ui;
+			}, '#mails-list');
+
+			/*var source = $('#mail-template').html();
 	        var template = Handlebars.compile(source);
-			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));*/
 			$("#mails-list").html(html);
 			$("#mails-list").append("<li style='display:none' class='get-counts' data-cursor='"+offset+"' data-count='"+tot_val+"'></li>");
 
-			var source_view = $('#mail-view-template').html();
+			var html_view = "";
+			getTemplate("mail-message", globalMailCollectionInstance.toJSON().slice(offset-1,page_size), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html_view = template_ui;
+			}, '#mail-details-view');
+
+			/*var source_view = $('#mail-view-template').html();
 	        var template_view = Handlebars.compile(source_view);
-			var html_view = template_view(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			var html_view = template_view(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));*/
 			$("#mail-details-view").html(html_view);
 
 			inboxFlagListners();
@@ -416,15 +436,27 @@ function initializeInboxListeners(){
 		}
 		if(globalMailCollectionInstance.length > page_size ||  globalMailCollectionInstance.length == page_size ){
 			$(".inti-val").text(offset+" - "+page_size);
-			var source = $('#mail-template').html();
+			var html = "";
+			getTemplate("mail", globalMailCollectionInstance.toJSON().slice(offset-1,page_size), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html = template_ui;
+			}, '#mails-list');
+			/*var source = $('#mail-template').html();
 	        var template = Handlebars.compile(source);
-			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			var html = template(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));*/
 			$("#mails-list").html(html);
 			$("#mails-list").append("<li style='display:none' class='get-counts' data-cursor='"+offset+"' data-count='"+tot_val+"'></li>");
 
-			var source_view = $('#mail-view-template').html();
+			var html_view = "";
+			getTemplate("mail-view", globalMailCollectionInstance.toJSON().slice(offset-1,page_size), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html_view = template_ui;
+			}, '#mail-details-view');
+			/*var source_view = $('#mail-view-template').html();
 	        var template_view = Handlebars.compile(source_view);
-			var html_view = template_view(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));
+			var html_view = template_view(globalMailCollectionInstance.toJSON().slice(offset-1,page_size));*/
 			$("#mail-details-view").html(html_view);
 
 			inboxFlagListners();

@@ -157,14 +157,26 @@ function renderToMailList(url,offset_val,page_size_val){
 			this.mailCollectionInstance.reset();
 	    },
 		render:function(data){
-			var source = $('#mail-template').html();
+			var html ="";
+			getTemplate("mail", data.toJSON(), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html = template_ui;
+				//$("#mails-list").html(template_ui);
+			}, '#mails-list');
+			/*var source = $('#mail-template').html();
 	        var template = Handlebars.compile(source);
-	        var html = template(data.toJSON());
+	        var html = template(data.toJSON());*/
 	        if(this.mailCollectionInstance.offset == 1){
 	        	if(data.length == 0){
-		        	source = $('#no-mail-template').html();
+	        		getTemplate("no-mail", data.toJSON(), undefined, function(template_ui) {
+						if( !template_ui )	return;
+
+						html = template_ui;
+					}, '#mails-list');
+		        	/*source = $('#no-mail-template').html();
 			        template = Handlebars.compile(source);
-			        html = template(data.toJSON());
+			        html = template(data.toJSON());*/
 		    	}
 	        	this.$el.html(html);
 	        }else{
@@ -203,9 +215,16 @@ function renderToMailView(data){
 			hideTransitionBar();
 		},
 		render:function(){
-			var source = $('#mail-view-template').html();
+			var html= "";
+			getTemplate("mail-view", data.toJSON(), undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html = template_ui;
+				//$("#mails-list").html(template_ui);
+			}, '#mail-details-view');
+			/*var source = $('#mail-view-template').html();
 	        var template = Handlebars.compile(source);
-	        var html = template(dataVal.toJSON());
+	        var html = template(dataVal.toJSON());*/
 	        this.$el.append(html);
 		},
 		displayReplyView:function(e){
