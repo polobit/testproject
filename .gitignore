@@ -11,7 +11,6 @@ agile-frontend/.classpath
 agile-normal-bulk/.classpath
 agile-campaigns-bulk/.classpath
 agile-campaigns-normal/.classpath
-agile-frontend/WebContent/locales/csv/i18n-final.csv
 agile-frontend/WebContent/misc/pagebuilder/node_modules/
 
 */.classpath
