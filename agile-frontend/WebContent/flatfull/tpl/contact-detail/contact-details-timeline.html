@@ -437,15 +437,15 @@
 
       {{#if_entity "event"}}
 			
-            <div class="timestamp">{{start}}</div>
+            <div class="timestamp">{{end}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Event Added</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon icon-calendar text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'event-completed'}}
 				</div>
 			</div>
-            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" start}}</div><div class="clearfix"></div>
-            <div class="date">{{epochToTaskDate start}}</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" end}}</div><div class="clearfix"></div>
+            <div class="date">{{epochToTaskDate end}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
                 <div class="text-xs ">{{agile_lng_translate 'contact-details' 'started-at'}} {{epochToHumanDate "h:MM TT" start}} on {{epochToHumanDate "ddd mmm dd yyyy" start}}</div>
