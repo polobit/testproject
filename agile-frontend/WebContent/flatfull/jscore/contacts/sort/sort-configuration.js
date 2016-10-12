@@ -51,15 +51,16 @@ var sort_configuration = {
  */
 var agile_company_sort_configuration = [
 
-	buildProperty(_agile_get_translated_val('contacts-view','created_date'), "created_time"),
+	buildProperty("{{agile_lng_translate 'misc-keys' 'created_date'}}", "created_time"),
 
 	// Star value
-	buildProperty(_agile_get_translated_val('contacts-view','star-value'), "star_value"),
+	buildProperty("{{agile_lng_translate 'contacts-view' 'star-value'}}", "star_value"),
 
 	// Name
-	buildProperty(_agile_get_translated_val('contacts-view','name'), "name"),
+	buildProperty("{{agile_lng_translate 'contacts-view' 'name'}}", "name"),
+
 	//Score
-	buildProperty(_agile_get_translated_val('contacts-view', 'score'), "lead_score")
+	buildProperty("{{agile_lng_translate 'contacts-view' 'score'}}", "lead_score")
 ];
 
 var sort_company_configuration = {
@@ -78,13 +79,15 @@ var sort_company_configuration = {
  */
 var agile_deal_sort_configuration = [
 
-	buildProperty(_agile_get_translated_val('contacts-view','created_date'), "created_time"),
+	buildProperty("{{agile_lng_translate 'misc-keys' 'created_date'}}", "created_time"),
 
-	buildProperty(_agile_get_translated_val('deal-view','close-date'), "closed_time"),
+	buildProperty("{{agile_lng_translate 'deal-view' 'close-date'}}", "closed_time"),
 
-	buildProperty(_agile_get_translated_val('deal-view','won-date'), "won_time"), 
 
-	buildProperty(_agile_get_translated_val('deal-view','value'), "expected_value")
+	buildProperty("{{agile_lng_translate 'deal-view' 'won-date'}}", "won_time"), 
+	
+
+	buildProperty("{{agile_lng_translate 'deal-view' 'won-date'}}", "expected_value")
 
 ];
 
