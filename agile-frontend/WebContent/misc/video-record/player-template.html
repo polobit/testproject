@@ -349,7 +349,7 @@ form.headerForm input {
         <div class="videoWrapper">
 
         <div id="videoHolder" style="display:none;">
-            <video id="myVideo" class="video-js" controls preload="auto" data-setup="{}">
+            <video id="myVideo" class="video-js" controls preload="auto" data-setup='{"fluid": true}'>
             <source src="{{VIDEO_SOURCE}}" type='video/webm'>
             <p class="vjs-no-js">
               To view this video please enable JavaScript, and consider upgrading to a web browser that
@@ -375,7 +375,7 @@ form.headerForm input {
       <div class="row"> 
        <div class="col-md-12"> 
         <div class="text-center margin-bottom-100">
-         <a id="js-schedule-appointment-btn" href="{{CALENDAR}}" class="btn btn-primary btn-hg btn-embossed" data-selector="a.btn, button.btn" style="border-radius: 40px; font-size: 16px; background-color: rgb(68, 68, 68); margin: 10px; outline: none; cursor: inherit;">Schedule Appointment</a> 
+         <a id="js-schedule-appointment-btn" href="{{CALENDAR}}" class="btn btn-primary btn-hg btn-embossed" data-selector="a.btn, button.btn" style="border-radius: 40px; font-size: 16px; background-color: rgb(68, 68, 68); margin: 10px; outline: none; cursor: inherit;border: rgb(68, 68, 68);padding: 13px 20px;">Schedule Appointment</a> 
         </div> 
        </div> 
       </div> 

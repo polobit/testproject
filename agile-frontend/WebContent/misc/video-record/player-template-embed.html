@@ -4,6 +4,9 @@
   <!-- If you'd like to support IE8 -->
   <script src="//vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
   <style>
+  body {
+    margin: 0;
+  }
   #myVideo {
     margin: 0 auto;
     width: 100%;
@@ -21,8 +24,8 @@
 </head>
 
 <body>
-<div id="videoHolder" style="display:none;">
-  <video id="myVideo" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}" autoplay ="true">
+<div id="videoHolder" style="display:none;" data-autoplay="{{AUTO_PLAY}}">
+  <video id="myVideo" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}">
     <source src="{{VIDEO_SOURCE}}" type='video/webm'>
     <p class="vjs-no-js">
       To view this video please enable JavaScript, and consider upgrading to a web browser that
@@ -34,10 +37,17 @@
   <script>
   window.onload = function() {
     if(window.parent.document.getElementById('loader') != undefined 
-        && window.parent.document.getElementById('loader').style.display != null){
+    && window.parent.document.getElementById('loader').style.display != null){
       window.parent.document.getElementById('loader').style.display='none';
     }
-	document.getElementById("videoHolder").style.display = "block";
+    document.getElementById("videoHolder").style.display = "block";
+
+    if(document.getElementById("videoHolder").getAttribute("data-autoplay") == "true"){
+      videojs("myVideo").ready(function(){
+        var myPlayer = this;
+        myPlayer.play();
+      });
+    }  
   };
   </script>
 </body>

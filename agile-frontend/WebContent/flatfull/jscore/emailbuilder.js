@@ -140,6 +140,7 @@ function initializeEmailBuilderListeners() {
         if(selectedVal !== ""){
             videoRecordPreview.showVideoPreviewModal(selectedVal);
         }
+        $("#videoRecordSaveBtn").prop('disabled', false);
     });
 
     $('#emailbuilder-listeners').on('click', '.videoRecordHiddenBtnNew', function(e){
@@ -151,6 +152,10 @@ function initializeEmailBuilderListeners() {
         $("#videoRecordSelectFields").hide();
         $("#videoRecordType").val("new");
         $("#videoRecordFields").show();
+    });
+
+    $('#videoRecordModal').on('hidden.bs.modal', function(){
+        $('#videoRecordModal').empty();
     });
 
 }

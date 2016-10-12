@@ -63,6 +63,11 @@ public class VideoRecordServlet extends HttpServlet {
         String defaultTemplate = "";
         if(embedFlag != null && embedFlag.equalsIgnoreCase("true")){
         	defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template-embed.html");
+        	String autoplay = request.getParameter("autoplay");
+            if(autoplay != null && autoplay.equals("1"))
+              defaultTemplate = defaultTemplate.replace("{{AUTO_PLAY}}", "true");
+            else
+              defaultTemplate = defaultTemplate.replace("{{AUTO_PLAY}}", "false");
         }else{
         	defaultTemplate = FileStreamUtil.readResource(dirPath + "/player-template.html");
         	String name = request.getParameter("n");
