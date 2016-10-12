@@ -819,7 +819,7 @@ function initializeTriggerListEventListners(id,trigger_type)
 		{
 			populate_sms_trigger_options($('form#addTriggerForm'));
 			$('form#addTriggerForm').find('#trigger-custom-keyword').closest('div.control-group').css('display', '');
-
+			$('form#addTriggerForm').find('#keyword-tooltip').css('display', '');
 		}
 		
 

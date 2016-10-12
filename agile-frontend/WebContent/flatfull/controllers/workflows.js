@@ -909,6 +909,7 @@ var WorkflowsRouter = Backbone.Router
 						{
 							populate_sms_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 							$('#trigger-custom-keyword', el).closest('div.control-group').css('display', '');
+							$('#keyword-tooltip', el).css('display', '');
 						}
 
 						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
