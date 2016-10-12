@@ -91,6 +91,14 @@ define([
 				}
 			}
 		}
+
+					if(!saveform[0].agileinlinesubmit){
+							var agileinlinesubmit = {};
+							agileinlinesubmit.label = "Confirmation Message";
+							agileinlinesubmit.type = "input";
+							agileinlinesubmit.value = "Great! Thanks for filling out my form!";
+							saveform[0].fields.agileinlinesubmit=agileinlinesubmit;
+					}
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
 				});
