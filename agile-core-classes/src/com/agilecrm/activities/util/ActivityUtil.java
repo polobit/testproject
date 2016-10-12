@@ -2446,7 +2446,7 @@ public class ActivityUtil
 			searchMap.put("related_deal_ids", entity_id);
 
 			if (max != 0)
-				return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
+				return dao.fetchAll(max, cursor, searchMap, true, false);
 
 			return dao.listByProperty(searchMap);
 		}
