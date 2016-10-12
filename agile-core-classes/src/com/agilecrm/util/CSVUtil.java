@@ -1251,15 +1251,20 @@ public class CSVUtil
 			    	try {
 						String trkName = null ;
 						innerForloop :
-						for(int m = i+1;m < dealPropValues.length ;m++){
+						for(int m = i+1;m < dealPropValues.length ;m++)
+						{
 							LinkedHashMap<String, String> pr = (LinkedHashMap<String, String>) schema.get(m);
-							String tName = pr.get("value"); String tType = pr.get("type");
-							if(tType.equals("SYSTEM") && tName.equalsIgnoreCase("track")){
-								trkName = dealPropValues[m];
-							    trackFound = true;
-							    list = MilestoneUtil.getMilestonesList(trkName);
-							    opportunity.track = trkName;
-							    break innerForloop;
+							if(!pr.equals(null) && pr.size() > 0)
+							{
+								String tName = pr.get("value"); String tType = pr.get("type");
+								if(!tType.equals(null)&& !tName.equals(null)&& tType.equals("SYSTEM") && tName.equalsIgnoreCase("track"))
+								{
+									trkName = dealPropValues[m];
+								    trackFound = true;
+								    list = MilestoneUtil.getMilestonesList(trkName);
+								    opportunity.track = trkName;
+								    break innerForloop;
+								}
 							}
 						}
 					} catch (Exception e) {
