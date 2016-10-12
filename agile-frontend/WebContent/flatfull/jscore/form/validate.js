@@ -413,6 +413,17 @@ function isAlphaNumeric(subdomain) {
   return true;
 }
 
+function isNotHackScript(str) {
+	str = str.toString();
+	
+ var regularExpression  = new RegExp(/[<>]/);
+  if(regularExpression.test(str)) {
+		return false;
+    }
+  return true;
+  
+}
+
 function isValidContactCustomField(id) {
     var name = $('#' + id).attr("name");
     if($('ul[name="'+name+'"]').find("li").length == 0) {

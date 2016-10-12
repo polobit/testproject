@@ -465,6 +465,11 @@ function initializeDocumentsListeners()
 							$(".doc-comment-error-status",'#uploadDocumentUpdateForm,#uploadDocumentForm').html("Comments is required.")
   							return;
 						}
+						else if(sCommentsVal.indexOf("<")!=-1)
+						{
+							$(".doc-comment-error-status").html("Invliad character not allowed.")
+							return;	
+						}
 						else
 							$(".doc-comment-error-status",'#uploadDocumentUpdateForm,#uploadDocumentForm').html("")
 						var doc_json={"description":sCommentsVal,
