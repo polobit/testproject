@@ -652,6 +652,46 @@ public class EventUtil
     }
     
     /**
+     * calls this method when end user want to cancel webevent from his mail
+     * 
+     * @param event
+     * @param cancel_reason
+     */
+    public static void sendEventCancelMail(Event event, Contact contact, String cancel_reason){
+		try
+		{
+		    DomainUser domain_user = event.eventOwner();		   
+		    String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		    if (StringUtils.isEmpty(timezone)){
+		    	timezone = domain_user.timezone;
+		    }
+		    
+		    String event_start_time = WebCalendarEventUtil.getGMTDateInMilliSecFromTimeZone(timezone,
+			    event.start * 1000, new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)"));
+		    String event_title = event.title;
+		    Long duration = (event.end - event.start) / 60;
+		    if(contact != null){
+			    String client_name = contact.getContactFieldValue("FIRST_NAME");
+			    if (StringUtils.isNotEmpty(contact.getContactFieldValue("LAST_NAME"))){
+			    	client_name.concat(contact.getContactFieldValue("LAST_NAME"));
+			    }
+			    String client_email = contact.getContactFieldValue("EMAIL");
+			    String subject = "<p>" + client_name + " (" + client_email
+					    + ") has cancelled the appointment</p><span>Title: " + event_title + " (" + duration
+					    + " mins)</span><br/><span>Start time: " + event_start_time + "</span>";
+				    if (StringUtils.isNotEmpty(cancel_reason))
+					subject += "<br/><span>Reason: " + cancel_reason + "</span>";
+			
+				    EmailGatewayUtil.sendEmail(null, client_email, client_name, domain_user.email, null, null,
+					    "Appointment Cancelled", null, subject, null, null, null, null);
+		    }		   	      
+		}catch (Exception e){
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+    }
+    
+    /**
      * Gets events related to a particular deal
      * 
      * @param dealId
@@ -699,14 +739,6 @@ public class EventUtil
    			int seconds = (int) (endTime - startTime);
    			int mins = seconds / 60;   			
    			String minsInStr = WebCalendarEventUtil.convertMinstoDateFormat(mins);
-   	    	
-   			StringBuilder usermail = new StringBuilder("<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>");
-   					usermail.append("<span>Duration: " + minsInStr + "</span><br/>");
-   					if(event.description != null && event.description.length() > 0){
-   						usermail.append("<span>Note: " + event.description + "</span><br/>");
-   					}
-   					usermail.append("<p><a href=" + cancel_link+ ">Cancel this appointment</a></p>");
-   					usermail.append("<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>");
    			
    			StringBuilder contactList = new StringBuilder();
    			StringBuilder companiesList = new StringBuilder();
@@ -731,6 +763,14 @@ public class EventUtil
 	   	    					companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ contact.name +"</a>, ");
 	   	    				}
 	   	    				
+	   	    				StringBuilder usermail = new StringBuilder("<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>");
+	   	   					usermail.append("<span>Duration: " + minsInStr + "</span><br/>");
+	   	   					if(event.description != null && event.description.length() > 0){
+	   	   						usermail.append("<span>Note: " + event.description + "</span><br/>");
+	   	   					}
+	   	   					usermail.append("<p><a href=" + cancel_link+"/c"+ contact.id +">Cancel this appointment</a></p>");
+	   	   					usermail.append("<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>");
+	   	   					
 	   	    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
 	   	    						null, usermail.toString(), null, null, null, null, attachments);
 	   	    			}
