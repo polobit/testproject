@@ -1257,7 +1257,7 @@ public class CSVUtil
 							if(!pr.equals(null) && pr.size() > 0)
 							{
 								String tName = pr.get("value"); String tType = pr.get("type");
-								if(!tType.equals(null)&& !tName.equals(null)&& tType.equals("SYSTEM") && tName.equalsIgnoreCase("track"))
+								if(tType != null && tName != null && tType.equals("SYSTEM") && tName.equalsIgnoreCase("track"))
 								{
 									trkName = dealPropValues[m];
 								    trackFound = true;
