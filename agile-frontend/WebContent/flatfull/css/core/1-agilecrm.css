@@ -4721,7 +4721,9 @@ ul#recent-menu-model-list li:nth-child(even)
     color: #58666e;
     background-color: #fff;
     border: 1px solid #dee5e7;
-    
+    white-space:nowrap;
+    max-width:none;
+      
 }
 #automation-video + .tooltip.bottom > .tooltip-arrow {
       border-bottom: 5px solid  #fff;
