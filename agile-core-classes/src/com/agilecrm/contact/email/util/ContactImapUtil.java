@@ -264,8 +264,8 @@ public class ContactImapUtil
 
 	String url = null;
 
-	String hostUrl = "http://localhost:8080";
-	//String hostUrl = "https://agile-imap.appspot.com";
+	//String hostUrl = "http://localhost:8080";
+	String hostUrl = "https://inbox-beta-dot-agile-imap.appspot.com/";
 	
 	String applicationId = SystemProperty.applicationId.get();
 
