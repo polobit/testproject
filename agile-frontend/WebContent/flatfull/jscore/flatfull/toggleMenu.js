@@ -63,8 +63,7 @@ $('body').on('click','#speechDectation',function(e){
 
 });
 $('body').on("click", ".menugridhelpclose", function () {
-       _agile_set_prefs("menuhelpPopover" , true);
-       $("#helpcontent_popover").addClass("hide");
+       closeHelpPopover();
     });
 $("#searchForm").on("submit",function(){
 
@@ -434,9 +433,13 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$inputs.filter("[value='']").closest("a").click();
 	}
 	function helpContentPopover(){
-	 /* if(!document.referrer || document.referrer.indexOf("register") == -1 ||  _agile_get_prefs("menuhelpPopover") == "true")
-	   return ;*/
+	  if(_agile_get_prefs("menuhelpPopover") == "true")
+	   return ;
 	 return $("#helpcontent_popover").removeClass("hide");
+	}
+	function closeHelpPopover() {
+		_agile_set_prefs("menuhelpPopover" , true);
+       $("#helpcontent_popover").addClass("hide");
 	}
 	// initializing need help popover for header page
    $(".need_help").popover({ 
@@ -445,7 +448,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 					container: 'body'
 				}).on("click", function(){
 						initRolehandlers();
-						$(".menugridhelpclose").trigger("click");
+						closeHelpPopover();
     			}).on("show.bs.popover", function(e){ 
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));

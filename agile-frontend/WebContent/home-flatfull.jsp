@@ -238,6 +238,62 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   margin: 0px auto;
   width: 280px;
 }
+.menuHelpPopover
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1060;
+    /* display: none; */
+    max-width: 276px;
+    padding: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: left;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: normal;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    line-break: auto;
+}
+
+.menuHelpPopover .arrow:after
+{
+    top: 35%;
+    bottom: -10px;
+    left: 1px;
+    content: " ";
+    border-right-color: #fff;
+    border-left-width: 0;
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    left: -31px;
+    margin-top: -12px;
+    border-right-color: #fff;
+    /* border-right-color: rgba(0,0,0,.25); */
+    border-left-width: 0;
+    border-width: 11px;
+}
 
 </style>
 <!--  responsive table js -->
@@ -325,12 +381,12 @@ function isIE() {
                    <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
 
-              <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);" id="helpcontent_popover" class="hide agile-feature-item-blink-new">
-                <div class="popover right block" >
-                  <div class="arrow" style="top:35%;">
+              <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
+                <div class="block menuHelpPopover" >
+                  <div class="arrow" style="top:27%;">
                   </div>
-                  <div class="popover-content ">
-                    <p style="width: 200px;"> Check our other feature sets by clicking this icon.
+                  <div class="content p-sm">
+                    <p style="width: 200px;margin-bottom:0px;"> Check our other feature sets by clicking this icon.
                     </p>
                     <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:5px;color:#6b6b6b !important;right:5px;font-size:20px;margin-right:5px;">×
                     </a>
