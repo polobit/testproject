@@ -88,10 +88,14 @@ public class ContactPrefsAPI {
 						.println("in update prefs and prefs id are same before saving ");
 				
 				if (Type.GOOGLE ==  prefs.type) {
-					if(myContacts==true){
+					if(currentPrefs.sync_to_group!=prefs.sync_to_group || myContacts==true)
+					{
 						updatedPrefs.last_synced_to_client=0L;
 						updatedPrefs.last_synced_updated_contacts_to_client=0L;
 					}
+					if(currentPrefs.sync_from_group!=prefs.sync_from_group)
+						updatedPrefs.last_synced_from_client=0L;
+					
 				}
 				
 				if (Type.SALESFORCE ==  prefs.type) {
