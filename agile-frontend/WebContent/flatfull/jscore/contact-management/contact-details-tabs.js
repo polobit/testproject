@@ -341,10 +341,10 @@ function activate_timeline_tab()
 function activate_company_contact_tab()
 {
 	$('#contactDetailsTab').find('li.active').removeClass('active');
-	$('#contactDetailsTab li:first-child').addClass('active');
+	$('#contactDetailsTab li:nth-child(2)').addClass('active');
 
 	$('div.tab-content').find('div.active').removeClass('active');
-	$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+	$('div.tab-content > div:nth-child(2)',App_Companies.companyDetailView.el).addClass('active');
 
 	// $('#time-line').addClass('active'); //old original code for flicking
 	// timeline
@@ -478,6 +478,12 @@ function load_company_tab(el, contactJSON)
 		$('#company-timeline').addClass('active');
 		company_detail_tab.openCompanyTimeLine(el);
 		return;
+	}
+	else if (position == "contacts")
+	{
+	  activate_company_contact_tab()
+	  company_detail_tab.load_fill_company_related_contacts
+	  return;
 	}
 
 	if (company_detail_tab["load_company_" + position])

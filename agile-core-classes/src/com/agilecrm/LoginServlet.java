@@ -372,18 +372,19 @@ public class LoginServlet extends HttpServlet {
 		try {
 			UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
 			Map data = info.info;
-			 
+			
+			// For some reason it goes wrong with empty data. Better check and regenerate otp
+			if(StringUtils.isBlank(info.verification_code)){
+				info.generateOTP(request, domainUser);
+				data = info.info;
+			}
+						
 			// Simulate template
 			String template = SendMail.ALLOW_IP_ACCESS;
 			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
 			if(!info.valid_finger_print){
 				template = SendMail.OTP_EMAIL_TO_USER;
 				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
-			}
-			
-			// For some reason it goes wrong with empty data. Better check and add regenerate otp
-			if(StringUtils.isBlank(info.verification_code)){
-				info.generateOTP(request, domainUser);
 			}
 			
 			String email = domainUser.email;

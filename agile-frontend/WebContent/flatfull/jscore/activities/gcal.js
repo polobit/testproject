@@ -233,13 +233,24 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 						
 						if (fc_event)
 						if(fc_event.allDay==false){	
-							var utcTime = new Date(fc_event.start).toUTCString();
-	    					var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-	      					fc_event.start = tz.format();
+							//var utcTime = new Date(fc_event.start).toUTCString();
+	    					//var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+	      					//fc_event.start = tz.format();
 	      					
-	      					utcTime = new Date(fc_event.end).toUTCString();
-	    					tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-	      					fc_event.end = tz.format();
+	      					
+							var startDate=new Date(fc_event.start)
+							var startEpochTime = startDate.getTime()
+							var tz = moment.tz(startEpochTime, CURRENT_USER_PREFS.timezone);
+							fc_event.start = tz.format();
+
+							var endDate=new Date(fc_event.end)
+							var endEpochTime = endDate.getTime();
+							tz = moment.tz(endEpochTime, CURRENT_USER_PREFS.timezone);
+							fc_event.end = tz.format();
+
+	      					//utcTime = new Date(fc_event.end).toUTCString();
+	    					//tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+	      					//fc_event.end = tz.format();
 	      				}	
 							google_events.push(fc_event);
 						renderEventBasedOnOwner(fc_event);

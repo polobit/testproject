@@ -328,7 +328,7 @@ function initializePortletsListeners() {
 							initExtensionHandlers(e);
 			    			}).on("shown.bs.popover", function(e){ 
 							if (document.getElementById('agilecrm_extension')) {
-							  $(".chromeExtension").css({"pointer-events": "none", "opacity": "0.4"});
+							  $(".chromeExtension").css({"cursor": "not-allowed", "opacity": "0.4"});
 							  //alert("Already installed");
 							}
 	    				
