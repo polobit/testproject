@@ -112,7 +112,7 @@ public class ContactSyncUtil
 	 */
 	public static ContactEntry createContactEntry(Contact contact, GoogleGroupDetails groupEntry, ContactPrefs prefs)
 	{
-		ContactField googleContactfield = contact.getContactFieldByName("Contact type");
+		ContactField googleContactfield = contact.getContactFieldByName("Google_Sync_Type");
 
 		// Does not create contact if it is already imported form google
 		if (googleContactfield != null && "Google".equals(googleContactfield.value))
