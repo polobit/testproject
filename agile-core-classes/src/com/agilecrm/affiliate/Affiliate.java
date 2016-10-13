@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class Affiliate {
+public class Affiliate extends  Cursor{
 
 	/**
 	 * Id
