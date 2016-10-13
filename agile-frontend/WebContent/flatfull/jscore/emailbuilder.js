@@ -88,17 +88,24 @@ function initializeEmailBuilderListeners() {
      **/
     $('#emailbuilder-listeners').on('change','select#emailTemplate-category-select',  function(e){
         e.preventDefault();
+        currentCtgObj = {};
         var selectedVal = $(this).val();
         if(selectedVal == "CREATE_NEW_CATEGORY") {
-            $('#emailbuilder-templates-category-modal').html(
-                getTemplate("emailbuilder-templates-category-modal", {})).modal('show');
-            $(".emailTemplCategoryFormMsgHolder").html("");
-        }
-    });
 
-    $('body').on('hidden.bs.modal','#emailbuilder-templates-category-modal', function (e) {
-        e.preventDefault();
-        getEmailTemplateCategories();
+            getTemplate('emailbuilder-templates-category-modal', {}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;           
+
+                $("#emailbuilder-templates-category-modal").html($(template_ui)).modal('show');
+
+                // refresh category list  on modal hide
+                $("#emailbuilder-templates-category-modal").on("hidden.bs.modal", function(e){
+                    e.preventDefault();
+                    getEmailTemplateCategories(currentCtgObj);
+                });
+
+            });
+        }
     });
 
     $('body').on('click','#emailTemplCtgySaveBtn', function(e){
@@ -120,6 +127,8 @@ function initializeEmailBuilderListeners() {
     
 }
 
+var currentCtgObj = {};
+
 var emailTemplateCtg = {
     saveEmailTemplateCategory : function(ctgyName){
         var templateCategory = {
@@ -134,6 +143,7 @@ var emailTemplateCtg = {
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
+                currentCtgObj = data;
                 $(".emailTemplCategoryFormMsgHolder").html("Saved Successfully").css("color","green");
                 $("#emailTemplCtgySaveBtn").text("Save");
                 $("#emailTemplCtgySaveBtn").prop('disabled', false);

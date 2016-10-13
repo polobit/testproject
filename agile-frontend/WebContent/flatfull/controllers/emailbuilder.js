@@ -116,13 +116,15 @@ function collapseLeftMenuInBuilder() {
     }
 }
 
-function getEmailTemplateCategories() {
-
+function getEmailTemplateCategories(data) {
+    var categoryObj = data;
     var el = $("#emailbuilder-listeners").closest("div");
     var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
     fillSelect('emailTemplate-category-select','core/api/emailTemplate-category', 'emailTemplateCategory',  
         function fillCategory(){
             el.find("#emailTemplate-category-select option:last").after("<option value='CREATE_NEW_CATEGORY'>"+_agile_get_translated_val('others','add-new')+"</option>");
-            /*$('#emailTemplate-category-select').find('option[value='+$('#attachment_id').val()+']').attr("selected","selected");*/
-            }, optionsTemplate, false, el);
+            if(categoryObj != undefined && categoryObj.id != undefined){
+                $('select#emailTemplate-category-select').find('option[value='+categoryObj.id+']').attr("selected","selected");
+            }
+        }, optionsTemplate, false, el);
 }
