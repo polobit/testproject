@@ -355,7 +355,7 @@ var timeline_entity_loader = {
 							} });
 						}
 					}
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contact['id']) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
 						timeline_collection_view.addItems(data.toJSON());
 
 					addTagAgile(CODE_SETUP_TAG);
