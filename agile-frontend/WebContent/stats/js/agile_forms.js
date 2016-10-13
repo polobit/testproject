@@ -62,7 +62,13 @@ var _agile_synch_form_v4 = function()
 			else if (field_name == "note")
 			{
 				var agile_note = {};
-				agile_note.subject = agile_form[i].parentNode.parentNode.getElementsByTagName("label")[0].innerHTML;
+				var labelTextForFieldEl = agile_form[i].parentNode.parentNode.getElementsByTagName("label")[0];
+				if(labelTextForFieldEl) {
+					agile_note.subject = labelTextForFieldEl.innerText || labelTextForFieldEl.textContent;
+				} else {
+					agile_note.subject = "Form Note";
+				}
+				agile_note.subject = agile_note.subject.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 				agile_note.description = field_value;
 				agile_notes.push(agile_note);
 			}
