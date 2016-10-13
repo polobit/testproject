@@ -415,7 +415,12 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone, updat
         var dealnewdata = {"dealTrack": dealTrack,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 		var dealNewDataString = JSON.stringify(dealnewdata); 
 		$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
-        
+        var modelsLength = dealPipelineModel[0].get('dealCollection').models.length ;
+        if(modelsLength ==10 && modelsLength <= old_deal_count)
+        {
+           dealPipelineModel[0]['isUpdateCollection'] = true ;
+           dealsFetch(dealPipelineModel[0]);
+        }
         }
 	} catch(err){
 		console.log(err);
@@ -425,7 +430,7 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone, updat
 
 	// Add the deal in to new milestone collection.
 	dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
-	if(!dealPipelineModel)
+	if(!dealPipelineModel || dealModel.archived)
 		return;
 
 	dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel, dealModel), { silent : true });
