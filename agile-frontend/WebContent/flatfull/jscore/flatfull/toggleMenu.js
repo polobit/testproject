@@ -450,9 +450,12 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	function closeHelpPopover() {
 		var arr = _agile_get_prefs("menuhelpPopover");
 	if(!arr)
-		arr = [];
-	
-		arr = arr.split(",");
+	{
+		$("#helpcontent_popover").addClass("hide");
+		arr = "";
+	}
+			
+			arr = arr.split(",");
 		for(var i in arr)
 				{
 					if( arr[i] == CURRENT_DOMAIN_USER.id)
@@ -462,6 +465,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		arr.push(CURRENT_DOMAIN_USER.id);
 		_agile_set_prefs("menuhelpPopover",arr.toString());
 		$("#helpcontent_popover").addClass("hide");
+	
 	}
 	// initializing need help popover for header page
    $(".need_help").popover({ 
