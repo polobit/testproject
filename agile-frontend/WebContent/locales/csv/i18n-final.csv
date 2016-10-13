@@ -6225,7 +6225,7 @@ builder.font,Font,Fuente
 builder.browse,Browse,Vistazo
 builder.font-size,Font Size,Tamaño de fuente
 builder.tablet,tablet,tableta
-builder.button,Button,Button
+builder.button,Button,Botón
 builder.bottom,bottom,fondo
 builder.you-cant-remove-all,you cannot remove all elements,no se puede eliminar todos los elementos
 builder.left,izquierda
@@ -6264,3 +6264,44 @@ builder.you-cant-remove,You can\'t remove this element,Puede \'t eliminar este e
 builder.name,Name,Nombre
 builder.social-links,Social Links,vínculos sociales
 builder.divider,Divider,Divisor
+
+others.no-results-found,No Results Foundcampaigns.all-campaigns-stats,All Campaign Emailsothers.no-results,No Resultsaffiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.affiliate.add,Register Dealother.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with easeadmin-settings-integrations.site-key,Site Keycampaigns.reply-yes,Yescampaigns.reply-sms,Inbound SMScampaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.campaigns.sms_trigger,SMScampaigns.reply-no,Nocampaigns.reply-number,Select a numbercampaigns.enter-keyword,Enter a keywordcampaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.campaigns.setuptwilio,Please enable your Twilio integration campaigns.here,here.Help-center.mark-as-public-cannedmessage,Mark as Publicportlets.Hours,Hoursportlets.Minutes,Minutesportlets.Seconds,Secondsdeal-view.detailed-notes,Detailed Notestickets.feedback-subject,Subjecttickets.feedback-created-time,Note Senttickets.feedback-ticket-details,Ticket Detailstickets.unacceptable,Unacceptabletickets.meets_expectations,Meets Expectationstickets.acceptable,Acceptabletickets.can_improve,Can Improvetickets.exceptional,Exceptionaltickets.feedback-view-note,View Notetickets.feedback-contact,Contacttickets.feedback-feedback,Feedbacktickets.feedback-feedback-comment,Commenttickets.feedback-feedback-modal,Feedback Commenttickets.feedback-nocomment,No comment available.tickets.feedback-ticket,Tickettickets.feedback-all,Alltickets.feedback-allgroups,All Groups
+campaigns.all-campaigns-stats,All Campaign Emailsothers.no-results,No Resultsaffiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.affiliate.add,Register Dealother.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with easeadmin-settings-integrations.site-key,Site Keycampaigns.reply-yes,Yescampaigns.reply-sms,Inbound SMScampaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.campaigns.sms_trigger,SMScampaigns.reply-no,Nocampaigns.reply-number,Select a numbercampaigns.enter-keyword,Enter a keywordcampaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.campaigns.setuptwilio,Please enable your Twilio integration campaigns.here,here.Help-center.mark-as-public-cannedmessage,Mark as Publicportlets.Hours,Hoursportlets.Minutes,Minutesportlets.Seconds,Secondsdeal-view.detailed-notes,Detailed Notestickets.feedback-subject,Subjecttickets.feedback-created-time,Note Senttickets.feedback-ticket-details,Ticket Detailstickets.unacceptable,Unacceptabletickets.meets_expectations,Meets Expectationstickets.acceptable,Acceptabletickets.can_improve,Can Improvetickets.exceptional,Exceptionaltickets.feedback-view-note,View Notetickets.feedback-contact,Contacttickets.feedback-feedback,Feedbacktickets.feedback-feedback-comment,Commenttickets.feedback-feedback-modal,Feedback Commenttickets.feedback-nocomment,No comment available.tickets.feedback-ticket,Tickettickets.feedback-all,Alltickets.feedback-allgroups,All Groups
+others.no-results,No Results
+affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.
+affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.
+affiliate.add,Register Deal
+other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
+admin-settings-integrations.site-key,Site Key
+campaigns.reply-yes,Yes
+campaigns.reply-sms,Inbound SMS
+campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
+campaigns.sms_trigger,SMS
+campaigns.reply-no,No
+campaigns.reply-number,Select a number
+campaigns.enter-keyword,Enter a keyword
+campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.
+campaigns.setuptwilio,Please enable your Twilio integration 
+campaigns.here,here.
+Help-center.mark-as-public-cannedmessage,Mark as Public
+portlets.Hours,Hours
+portlets.Minutes,Minutes
+portlets.Seconds,Seconds
+deal-view.detailed-notes,Detailed Notes
+tickets.feedback-subject,Subject
+tickets.feedback-created-time,Note Sent
+tickets.feedback-ticket-details,Ticket Details
+tickets.unacceptable,Unacceptable
+tickets.meets_expectations,Meets Expectations
+tickets.acceptable,Acceptable
+tickets.can_improve,Can Improve
+tickets.exceptional,Exceptional
+tickets.feedback-view-note,View Note
+tickets.feedback-contact,Contact
+tickets.feedback-feedback,Feedback
+tickets.feedback-feedback-comment,Comment
+tickets.feedback-feedback-modal,Feedback Comment
+tickets.feedback-nocomment,No comment available.
+tickets.feedback-ticket,Ticket
+tickets.feedback-all,All
+tickets.feedback-allgroups,All Groups
