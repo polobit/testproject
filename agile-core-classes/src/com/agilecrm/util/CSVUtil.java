@@ -123,7 +123,6 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-
 	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
@@ -777,7 +776,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-	    boolean canSave = true;
+	    boolean canSave = true;/*boolean invalidName = true;*/
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -924,6 +923,10 @@ public class CSVUtil
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
+		/*else if (!ContactUtil.isValidName(companyName)){
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
+			invalidName = false;
+		}*/
 	    }
 	    else
 	    {
@@ -931,7 +934,11 @@ public class CSVUtil
 		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
 	    }
-
+	   /* if (!invalidName)
+	    {
+	    	failedCompany++;
+	    	continue;
+	    }*/
 	    if (!canSave)
 	    {
 		continue;
@@ -970,7 +977,7 @@ public class CSVUtil
 			    "Error! Exception raise while saving company"));
 		}
 		failedCompany++;
-
+		continue;
 	    }
 
 	    if (isMerged)

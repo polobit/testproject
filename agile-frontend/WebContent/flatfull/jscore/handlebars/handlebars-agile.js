@@ -659,6 +659,22 @@ function getContactCustomProperties(items)
 
 	var position_arr = {};
 	var position_max = 0;
+	
+	/*if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		position_max = App_Contacts.customFieldsList.collection.models.length+1;
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Contacts.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				temp_position = App_Contacts.customFieldsList.collection.models[i].get("position");
+				if(!(temp_position==undefined || temp_position==0 || temp_position=="")){
+					if(temp_position>=position_max){
+						position_max = temp_position+1;
+					}
+				}
+			}
+		}
+	}*/
+
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
 		position_max = App_Contacts.customFieldsList.collection.models.length+1;
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
@@ -682,7 +698,13 @@ function getContactCustomProperties(items)
 			if(fieldName=='')
 				fieldName=items[i].name;
 			//fields.push(items[i]);
-			temp_fields[position_arr[items[i].name]] = items[i];
+			//temp_fields[position_arr[items[i].name]] = items[i];
+			if(position_arr[items[i].name]!=undefined && position_arr[items[i].name]!=""){
+				temp_fields[position_arr[items[i].name]] = items[i];
+			}else{
+				temp_fields[position_max] = items[i];
+				position_max++;
+			}
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
@@ -826,6 +848,22 @@ function getCompanyCustomProperties(items)
 
 	var position_arr = {};
 	var position_max = 0;
+	/*
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		position_max = App_Companies.customFieldsList.collection.models.length+1;
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				temp_position = App_Companies.customFieldsList.collection.models[i].get("position");
+				if(!(temp_position==undefined || temp_position==0 || temp_position=="")){
+					if(temp_position>=position_max){
+						position_max = temp_position+1;
+					}
+				}
+			}
+		}
+	}*/
+
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
 		position_max = App_Companies.customFieldsList.collection.models.length+1;
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
@@ -849,7 +887,13 @@ function getCompanyCustomProperties(items)
 			if(fieldName=='')
 				fieldName=items[i].name;
 			//fields.push(items[i]);
-			temp_fields[position_arr[items[i].name]] = items[i];
+			//temp_fields[position_arr[items[i].name]] = items[i];
+			if(position_arr[items[i].name]!=undefined && position_arr[items[i].name]!=""){
+				temp_fields[position_arr[items[i].name]] = items[i];
+			}else{
+				temp_fields[position_max] = items[i];
+				position_max++;
+			}
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}

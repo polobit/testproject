@@ -505,6 +505,19 @@ public class Contact extends Cursor
      */
     public void save(boolean... args)
     {
+    	
+    	/*if (this.type == Type.COMPANY)
+    	{
+    		if (this.properties.size() > 0)
+    		{
+    			ContactField nameField = this.getContactFieldByName(Contact.NAME);
+    			if(!ContactUtil.isValidName(nameField.value)){
+    				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+    					    .entity(nameField.value+"::Invalid Company Name, contains special characters.").build());
+    			}
+    		}
+    	}*/
+
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 
