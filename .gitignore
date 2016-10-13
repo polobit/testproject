@@ -11,6 +11,8 @@ agile-frontend/.classpath
 agile-normal-bulk/.classpath
 agile-campaigns-bulk/.classpath
 agile-campaigns-normal/.classpath
+agile-frontend/WebContent/flatfull/css/min/*.css
+agile-frontend/WebContent/stats/min/agile-min.js
 
 */.classpath
 
