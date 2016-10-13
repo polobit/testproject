@@ -427,7 +427,7 @@ function handleButtons(obj) {
                 btn.parent('td').detach();
                 $('#add-button').show();
             } else {
-                alert('You can\'t remove this element');
+                alert(localeJSON['you-cant-remove']);
             }
         });
 
@@ -503,7 +503,7 @@ function handleButtonsTxt(obj) {
                 $(this).parent('li').detach();
                 btn.parent('td').detach();
             } else {
-                alert('You can\'t remove this element');
+                alert(localeJSON['you-cant-remove']);
             }
         });
 
@@ -547,13 +547,13 @@ function configurationElm(e, t) {
 
 function removeElm() {
     $(".demo").delegate(".remove", "click", function (e) {
-        if(confirm('are you sure?')){
+        if(confirm(localeJSON['are-you-sure'] + '?')){
           //conta elem con lyrow
               if($('#tosave .lyrow').length>1){
                 e.preventDefault();
                 $(this).parent().remove();
                 showElements();
-              }else alert('you cannot remove all elements');
+              }else alert(localeJSON['you-cant-remove-all']);
         }
     })
 }
@@ -684,7 +684,7 @@ function handlePolls(obj){
                 poll.closest('td').detach();
                 $('#add-poll').show();
             } else {
-                alert('You can\'t remove this element');
+                alert(localeJSON['you-cant-remove']);
             }
         });
 
@@ -1399,7 +1399,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         } else {
             //$(this).hide();
-            alert("You have reached maximum limit");
+            alert(localeJSON['limit-reached']);
         }
         });
     
@@ -1452,6 +1452,7 @@ function loadSavedTemplate() {
 function initializeEditor() {
     
     tinymce.init({
+        language : parent.get_tinymce_supported_language(),
         menubar: false,
         force_br_newlines: false,
         force_p_newlines: true,
@@ -1464,7 +1465,7 @@ function initializeEditor() {
         convert_urls : false,
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
         setup: function (editor) {
-            editor.addButton('merge_fields', { type : 'menubutton', text : 'Merge Fields', icon : false, menu : parent.set_up_merge_fields(editor) });
+            editor.addButton('merge_fields', { type : 'menubutton', text : localeJSON["merge-fields"], icon : false, menu : parent.set_up_merge_fields(editor) });
 
             // editor.addButton('calltoaction', {
             //     text : 'Add Button',
@@ -1487,7 +1488,7 @@ function initializeEditor() {
 function uploadImageToS3ThroughBtn(file) {
     if(typeof file != "undefined") {
         $("#browseBtn").prop("disabled",true);
-        $("#browseBtn").text("uploading...");
+        $("#browseBtn").text(localeJSON['uploading'] + "...");
 
         var uploadedFileName = file.name;
         var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
@@ -1517,7 +1518,7 @@ function uploadImageToS3ThroughBtn(file) {
               $('#image-url').val(decodeURIComponent(url));
               $('#change-image').trigger('click');
               $("#browseBtn").prop("disabled",false);
-              $("#browseBtn").text("Browse");
+              $("#browseBtn").text(localeJSON['browse']);
             }
         });
     }
@@ -1529,7 +1530,7 @@ function isValidTag(tag, showAlert) {
     var regexString = '^['+r+']['+r+' 0-9_-]*$';
     var is_valid = new RegExp(regexString).test(tag);
     if (showAlert && !is_valid)
-        alert("Tag name should start with an alphabet and can not contain special characters other than underscore, space and hypen");
+        alert(localeJSON['tag-name-start-desc']);
     return is_valid;
 }
 

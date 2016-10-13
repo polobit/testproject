@@ -12,7 +12,7 @@ if(!$.fn.datepicker){
    $.fn.datepicker = {dates : {"en" : {}}};
 }
    
-
+// Override Default names of Date Days/Months
 $.fn.datepicker.dates['en'] = {
     days: ["{{agile_lng_translate 'prefs-settings' 'sunday'}}", "{{agile_lng_translate 'prefs-settings' 'monday'}}", "{{agile_lng_translate 'calendar' 'tuesday'}}", "{{agile_lng_translate 'calendar' 'wednesday'}}", "{{agile_lng_translate 'calendar' 'thursday'}}", "{{agile_lng_translate 'calendar' 'friday'}}", "{{agile_lng_translate 'calendar' 'saturday'}}", "{{agile_lng_translate 'prefs-settings' 'sunday'}}"],
     daysExact: ["{{agile_lng_translate 'prefs-settings' 'sunday'}}", "{{agile_lng_translate 'prefs-settings' 'monday'}}", "{{agile_lng_translate 'calendar' 'tuesday'}}", "{{agile_lng_translate 'calendar' 'wednesday'}}", "{{agile_lng_translate 'calendar' 'thursday'}}", "{{agile_lng_translate 'calendar' 'friday'}}", "{{agile_lng_translate 'calendar' 'saturday'}}"],
@@ -33,6 +33,7 @@ dateFormat.i18n = {
     monthNames: $.fn.datepicker.dates['en'].monthsShort.concat($.fn.datepicker.dates['en'].months)
 };
 
+// Agile date utility
 var _agile_date_utility = {
     get_date_from_string : function(string){
         if(!string)
