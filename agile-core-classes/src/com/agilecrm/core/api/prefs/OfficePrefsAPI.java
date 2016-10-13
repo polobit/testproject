@@ -253,4 +253,52 @@ public class OfficePrefsAPI
 	result = users.toString();
 	return result;
     }
+    
+    
+    /**
+     * Returns office365 emails . Emails json string are returned in the format
+     * {emails:[]}.
+     * 
+     * @param searchEmail
+     *            - to get all emails
+     * @param count
+     *            - required number of emails.
+     * @param offset
+     *            - offset.
+     * @return String
+     */
+    @Path("all-office365-emails")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<EmailWrapper> getAllOffice365Emails(@QueryParam("from_email") String fromEmail,
+	    @QueryParam("folder_name") String folder_name, @QueryParam("page_size") String pageSize,
+	    @QueryParam("cursor") String cursor)
+    {
+	List<EmailWrapper> emails = null;
+	try
+	{
+	    /*if (StringUtils.isBlank(cursor))
+		cursor = "0";*/
+	    // Removes unwanted spaces in between commas
+	    //String normalisedSearchEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
+	    // Removes unwanted spaces in between commas
+	    String normalisedFromEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', fromEmail);
+
+	    // Gets office365Prefs url if not null, otherwise imap url.
+	    String url = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail, folder_name, cursor, pageSize);
+
+	    // If both are not set, return Contact emails.
+	    if (StringUtils.isNotBlank(url))
+		emails = ContactEmailUtil.getEmailsfromServer(url, pageSize, cursor, normalisedFromEmail);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in OfficePrefsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	return emails;
+    }
+
 }
