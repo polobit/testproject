@@ -1,15 +1,12 @@
 #!/bin/sh
-
+sh sync-zip.sh
 if [ "$2" = true ] ; then
-	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/jscore/min/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/jscore/min/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/tpl/min/precompiled/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/tpl/min/precompiled/
+	scp -i $EC2_PERMISSIONS -r agile-ec2-sync-temp/sync.zip ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/app/$1/
+	ssh -i $EC2_PERMISSIONS ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com "unzip cdn/app/$1/sync.zip"
 	echo "Updated production version : $1"
 else
 	echo "Beta update - version: $1"
-	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/jscore/min/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/jscore/min/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/jscore/min/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/flatfull/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/tpl/min/precompiled/
-	scp -i $EC2_PERMISSIONS -r ../WebContent/tpl/min/precompiled/locales/ ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/tpl/min/precompiled/
+	scp -i $EC2_PERMISSIONS -r agile-ec2-sync-temp/sync.zip ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com:~/cdn/beta/$1/
+	ssh -i $EC2_PERMISSIONS ec2-user@ec2-54-210-171-176.compute-1.amazonaws.com "unzip cdn/beta/$1/sync.zip"
 fi;
+rm -r agile-ec2-sync-temp
