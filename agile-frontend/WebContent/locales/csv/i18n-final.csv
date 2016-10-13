@@ -3040,7 +3040,7 @@ contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a
 countries.FO,Faroe Islands,Islas Feore
 countries.GW,Guinea-Bissau,Guinea-Bissau
 modals.document-name,Document Name,nombre del documento
-logcall.edit-call-log,Edit call log,Editar el registro de llamadas
+logcall.edit-call-log,Edit Call Log,Editar el registro de llamadas
 report-view.calls-by-user,Calls by User,Llamadas por usuario
 countries.LI,Liechtenstein,Liechtenstein
 preferences.notifications,Notifications,Notificaciones
@@ -3235,7 +3235,7 @@ tickets.greater-than,Greater Than,Mayor a
 contact-edit.phone-number,Phone number,Número de teléfono
 report-add.updated-date,Updated Date,Fecha actualizada
 tickets.satisfaction,Satisfaction,Satisfacción
-contact-details.add-call-log,Add Call-log,Añadir registro de llamadas
+contact-details.add-call-log,Add Call Log,Añadir registro de llamadas
 modals.company-name,Company Name,nombre de empresa
 tasks.name-of-task,Name of Task,Nombre de la Tarea
 contacts-view.deleted-deal,Deleted Deal,Oferta eliminada
@@ -3518,7 +3518,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Log a call,Ingrese una llamada
+call-log.log-a-call,Call Log,Registro de llamadas
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -6264,9 +6264,6 @@ builder.you-cant-remove,You can\'t remove this element,Puede \'t eliminar este e
 builder.name,Name,Nombre
 builder.social-links,Social Links,vínculos sociales
 builder.divider,Divider,Divisor
-
-others.no-results-found,No Results Foundcampaigns.all-campaigns-stats,All Campaign Emailsothers.no-results,No Resultsaffiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.affiliate.add,Register Dealother.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with easeadmin-settings-integrations.site-key,Site Keycampaigns.reply-yes,Yescampaigns.reply-sms,Inbound SMScampaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.campaigns.sms_trigger,SMScampaigns.reply-no,Nocampaigns.reply-number,Select a numbercampaigns.enter-keyword,Enter a keywordcampaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.campaigns.setuptwilio,Please enable your Twilio integration campaigns.here,here.Help-center.mark-as-public-cannedmessage,Mark as Publicportlets.Hours,Hoursportlets.Minutes,Minutesportlets.Seconds,Secondsdeal-view.detailed-notes,Detailed Notestickets.feedback-subject,Subjecttickets.feedback-created-time,Note Senttickets.feedback-ticket-details,Ticket Detailstickets.unacceptable,Unacceptabletickets.meets_expectations,Meets Expectationstickets.acceptable,Acceptabletickets.can_improve,Can Improvetickets.exceptional,Exceptionaltickets.feedback-view-note,View Notetickets.feedback-contact,Contacttickets.feedback-feedback,Feedbacktickets.feedback-feedback-comment,Commenttickets.feedback-feedback-modal,Feedback Commenttickets.feedback-nocomment,No comment available.tickets.feedback-ticket,Tickettickets.feedback-all,Alltickets.feedback-allgroups,All Groups
-campaigns.all-campaigns-stats,All Campaign Emailsothers.no-results,No Resultsaffiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.affiliate.add,Register Dealother.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with easeadmin-settings-integrations.site-key,Site Keycampaigns.reply-yes,Yescampaigns.reply-sms,Inbound SMScampaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.campaigns.sms_trigger,SMScampaigns.reply-no,Nocampaigns.reply-number,Select a numbercampaigns.enter-keyword,Enter a keywordcampaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.campaigns.setuptwilio,Please enable your Twilio integration campaigns.here,here.Help-center.mark-as-public-cannedmessage,Mark as Publicportlets.Hours,Hoursportlets.Minutes,Minutesportlets.Seconds,Secondsdeal-view.detailed-notes,Detailed Notestickets.feedback-subject,Subjecttickets.feedback-created-time,Note Senttickets.feedback-ticket-details,Ticket Detailstickets.unacceptable,Unacceptabletickets.meets_expectations,Meets Expectationstickets.acceptable,Acceptabletickets.can_improve,Can Improvetickets.exceptional,Exceptionaltickets.feedback-view-note,View Notetickets.feedback-contact,Contacttickets.feedback-feedback,Feedbacktickets.feedback-feedback-comment,Commenttickets.feedback-feedback-modal,Feedback Commenttickets.feedback-nocomment,No comment available.tickets.feedback-ticket,Tickettickets.feedback-all,Alltickets.feedback-allgroups,All Groups
 others.no-results,No Results
 affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.
 affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.

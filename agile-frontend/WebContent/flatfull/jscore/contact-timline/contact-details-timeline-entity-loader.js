@@ -129,7 +129,7 @@ var timeline_entity_loader = {
 						
 						});
 
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact['id']) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
 						return;
 
 					var contact_emails = [];
@@ -210,7 +210,7 @@ var timeline_entity_loader = {
 												}
 
 											});
-							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
+							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
 								timeline_collection_view.addItems(log_models);
 						})
 	}, timline_fetch_data : function(url, callback)
@@ -317,7 +317,7 @@ var timeline_entity_loader = {
 			    catch(e){
 
 			     }
-            if(contact_updated_time<=web_stats_time){
+            
 				// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
 				// is_array_urls_fetched);
 
@@ -337,7 +337,8 @@ var timeline_entity_loader = {
 					{
 						var addressJSON = {};
 
-						if (data.toJSON()[0].city != "")
+
+						if (contact_updated_time<=web_stats_time && data.toJSON()[0].city != "" )
 						{
 							addressJSON.city = ucfirst(data.toJSON()[0].city);
 							addressJSON.state = ucfirst(data.toJSON()[0].region);
@@ -354,12 +355,12 @@ var timeline_entity_loader = {
 							} });
 						}
 					}
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contact['id']) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
 						timeline_collection_view.addItems(data.toJSON());
 
 					addTagAgile(CODE_SETUP_TAG);
 				}
-			}
+			
 			});
 
 		});
