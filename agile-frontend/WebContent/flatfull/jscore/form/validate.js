@@ -178,6 +178,16 @@ function isValidForm(form) {
 
 	},_agile_get_translated_val("validation-msgs",'value-validation'));
 
+	jQuery.validator.addMethod("isNotHackScript", function(value, element){
+		if(value=="")
+			return true;
+ 		
+		  if(value.indexOf("<")!=-1 || value.indexOf(">")!=-1) {
+				return false;
+		    }
+		  return true;
+	},_agile_get_translated_val("validation-msgs",'script-element-not-allowed'));
+
 
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;
@@ -413,16 +423,7 @@ function isAlphaNumeric(subdomain) {
   return true;
 }
 
-function isNotHackScript(str) {
-	str = str.toString();
-	
- var regularExpression  = new RegExp(/[<>]/);
-  if(regularExpression.test(str)) {
-		return false;
-    }
-  return true;
-  
-}
+
 
 function isValidContactCustomField(id) {
     var name = $('#' + id).attr("name");
