@@ -62,9 +62,6 @@ $('body').on('click','#speechDectation',function(e){
 	}, 6000);
 
 });
-$('body').on("click", ".menugridhelpclose", function () {
-       closeHelpPopover();
-    });
 $("#searchForm").on("submit",function(){
 
 	return false;
@@ -433,13 +430,38 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$inputs.filter("[value='']").closest("a").click();
 	}
 	function helpContentPopover(){
-	  if(_agile_get_prefs("menuhelpPopover") == "true")
-	   return ;
-	 return $("#helpcontent_popover").removeClass("hide");
+		var arr = _agile_get_prefs("menuhelpPopover");
+		
+		if(!arr)
+			return $("#helpcontent_popover").removeClass("hide");	
+		else
+		{
+			arr = arr.split(",");
+			for(var i in arr)
+				{
+					if( arr[i] == CURRENT_DOMAIN_USER.id)
+				   	return ;	
+				}
+			return $("#helpcontent_popover").removeClass("hide");
+		}
+		
+	
 	}
 	function closeHelpPopover() {
-		_agile_set_prefs("menuhelpPopover" , true);
-       $("#helpcontent_popover").addClass("hide");
+		var arr = _agile_get_prefs("menuhelpPopover");
+	if(!arr)
+		arr = [];
+	
+		arr = arr.split(",");
+		for(var i in arr)
+				{
+					if( arr[i] == CURRENT_DOMAIN_USER.id)
+				   	return ;	
+				}
+
+		arr.push(CURRENT_DOMAIN_USER.id);
+		_agile_set_prefs("menuhelpPopover",arr.toString());
+		$("#helpcontent_popover").addClass("hide");
 	}
 	// initializing need help popover for header page
    $(".need_help").popover({ 
