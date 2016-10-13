@@ -42,6 +42,7 @@ import com.thirdparty.mailgun.MailgunNew;
 import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.lib.SMTPAPI;
 import com.thirdparty.ses.util.AmazonSESUtil;
 
 /**
@@ -118,9 +119,10 @@ public class EmailGatewayUtil
 	    {
 		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
 	    }
+	    String emailSubject = SMTPAPI.escapeUnicode(mailDeferredTask.subject);
 
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
-		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + mailDeferredTask.subject,
+		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + emailSubject,
 		    LogType.EMAIL_SENT.toString() };
 
 	    queryList.add(newLog);

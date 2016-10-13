@@ -206,7 +206,7 @@ public class SMTPAPI {
   }
 
   // convert from string to code point array
-  private int[] toCodePointArray(String input) {
+  private static int[] toCodePointArray(String input) {
     int len = input.length();
     int[] codePointArray = new int[input.codePointCount(0, len)];
     for (int i = 0, j = 0; i < len; i = input.offsetByCodePoints(i, 1)) {
@@ -215,7 +215,7 @@ public class SMTPAPI {
     return codePointArray;
   }
 
-  private String escapeUnicode(String input) {
+  public static String escapeUnicode(String input) {
     StringBuilder sb = new StringBuilder();
     int[] codePointArray = toCodePointArray(input);
     int len = codePointArray.length;
@@ -231,6 +231,8 @@ public class SMTPAPI {
         sb.append(String.format("%c", codePointArray[i]));
       }
     }
+    System.out.println("Converting special symbol into unicode character");
+    
     return sb.toString();
   }
 
