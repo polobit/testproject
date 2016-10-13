@@ -94,7 +94,7 @@ public class ContactPrefsAPI {
 						updatedPrefs.last_synced_to_client=0L;
 						updatedPrefs.last_synced_updated_contacts_to_client=0L;
 					}
-					if(!(currentPrefs.sync_to_group!=null && 
+					if(!(currentPrefs.sync_from_group!=null && 
 							prefs.sync_from_group!=null && currentPrefs.sync_from_group.equalsIgnoreCase(prefs.sync_from_group)))
 						updatedPrefs.last_synced_from_client=0L;
 					
