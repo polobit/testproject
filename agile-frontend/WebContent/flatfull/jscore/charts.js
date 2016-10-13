@@ -336,10 +336,10 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			        borderColor: '#CCC',
 			        borderWidth: 1,
 			        labelFormatter : function() {
-						if (this.name.length > 12) {
+						if (this.name.length > 20) {
 							return this.name
 									.slice(0,
-											12)
+											20)
 									+ '...';
 						} else {
 							return this.name;
