@@ -118,16 +118,16 @@ public class EmailGatewayUtil
 	    }
 	    
 	    //getting name and email address together of sender(user) 
-	    String from_email_addr=mailDeferredTask.fromName+" <"+mailDeferredTask.fromEmail+">";
-	    String to_email_addr=mailDeferredTask.to;
+	    String fromEmailAddress = mailDeferredTask.fromName+" <"+mailDeferredTask.fromEmail+">";
+	    String toEmailAddress = mailDeferredTask.to;
 	    
 	    //converting special characters to html 
-	    from_email_addr=from_email_addr.replaceAll("<", "&lt;");
-	    from_email_addr=from_email_addr.replaceAll(">","&gt;");
-	    to_email_addr=to_email_addr.replaceAll("<","&lt;");
-	    to_email_addr=to_email_addr.replaceAll(">","&gt;");
+	    fromEmailAddress = fromEmailAddress.replaceAll("<", "&lt;");
+	    fromEmailAddress = fromEmailAddress.replaceAll(">","&gt;");
+	    toEmailAddress = toEmailAddress.replaceAll("<","&lt;");
+	    toEmailAddress = toEmailAddress.replaceAll(">","&gt;");
 	    	    
-	    String message = "Subject: "+mailDeferredTask.subject+" <br/> From: "+from_email_addr+" <br/> To: "+to_email_addr;
+	    String message = "Subject: "+mailDeferredTask.subject+" <br/> From: "+fromEmailAddress+" <br/> To: "+toEmailAddress;
 	    
 	    
 	    // For testing in Localhost
