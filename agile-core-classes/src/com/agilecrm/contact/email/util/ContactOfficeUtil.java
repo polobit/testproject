@@ -171,7 +171,7 @@ public class ContactOfficeUtil
 
 	try
 	{
-	    url = "http://54.87.153.50:8080/exchange-app/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+	    url = "http://localhost:9999/officeinbox?user_name=" + URLEncoder.encode(userName, "UTF-8")
 		    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
 		    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
 		    + "&domain=" + URLEncoder.encode(namespace, "UTF-8");

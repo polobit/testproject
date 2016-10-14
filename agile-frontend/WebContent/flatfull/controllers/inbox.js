@@ -59,10 +59,6 @@ function syncContacts(){
 
 				$("#filter-options").html(template_ui);
 			}, '#filter-options');
-			/*var source = $('#account-types-template').html();
-	        var template = Handlebars.compile(source);
-	        var html = template(data.toJSON());
-	        this.$el.html(html);*/
 			var inbox_has_email_configured = $("#inbox_has_email_configured").attr( "data-val" );
 			if(inbox_has_email_configured === 'true'){
 				$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
