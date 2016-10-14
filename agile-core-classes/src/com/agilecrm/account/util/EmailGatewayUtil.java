@@ -11,6 +11,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -42,7 +43,6 @@ import com.thirdparty.mailgun.MailgunNew;
 import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
-import com.thirdparty.sendgrid.lib.SMTPAPI;
 import com.thirdparty.ses.util.AmazonSESUtil;
 
 /**
@@ -119,7 +119,8 @@ public class EmailGatewayUtil
 	    {
 		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
 	    }
-	    String emailSubject = SMTPAPI.escapeUnicode(mailDeferredTask.subject);
+	    
+	    String emailSubject=StringEscapeUtils.escapeJava(StringEscapeUtils.escapeJava(mailDeferredTask.subject));
 
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
 		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + emailSubject,

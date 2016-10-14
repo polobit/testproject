@@ -206,7 +206,7 @@ public class SMTPAPI {
   }
 
   // convert from string to code point array
-  private static int[] toCodePointArray(String input) {
+  private int[] toCodePointArray(String input) {
     int len = input.length();
     int[] codePointArray = new int[input.codePointCount(0, len)];
     for (int i = 0, j = 0; i < len; i = input.offsetByCodePoints(i, 1)) {
@@ -215,7 +215,7 @@ public class SMTPAPI {
     return codePointArray;
   }
 
-  public static String escapeUnicode(String input) {
+  private String escapeUnicode(String input) {
     StringBuilder sb = new StringBuilder();
     int[] codePointArray = toCodePointArray(input);
     int len = codePointArray.length;
