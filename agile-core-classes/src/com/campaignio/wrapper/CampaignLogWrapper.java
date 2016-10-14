@@ -1,5 +1,7 @@
 package com.campaignio.wrapper;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.agilecrm.cursor.Cursor;
 
 public class CampaignLogWrapper extends Cursor
@@ -54,7 +56,7 @@ public class CampaignLogWrapper extends Cursor
     /**
      * Message
      */
-    public String message;
+    private String message;
 
     /**
      * Log epoch time(log_time converted) is sent along with other fields. Epoch
@@ -68,5 +70,13 @@ public class CampaignLogWrapper extends Cursor
     {
 
     }
+    
+    public String getMessage() {
+		return this.message;
+	}
+
+	public void setMessage(String message) {
+		this.message = StringEscapeUtils.unescapeJava(message);
+	}
 
 }
