@@ -201,11 +201,11 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			else if(url && url == "#"){
 				//condition for the checking custom templates
 				var confirmationMsgEl = document.getElementById("_agile_custome_submit");
-				var confirmationMsg = "Great! Thanks for filling out my form!";
+				var confirmationMsg = "Great! Thanks for filling out the form.";
 				if(confirmationMsgEl) {
 					confirmationMsg = confirmationMsgEl.value;
 				}
-				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">' + confirmationMsg + '</span>';
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:black;font-size: 16px;">' + confirmationMsg + '</span>';
 				var agile_form = document.forms["agile-form"];
 				agile_form.reset();
 			

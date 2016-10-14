@@ -92,7 +92,7 @@ define([
 			}
 		}
 
-					if(!saveform[0].agileinlinesubmit){
+					if(!saveform[0].fields.agileinlinesubmit){
 							var agileinlinesubmit = {};
 							agileinlinesubmit.label = "Confirmation Message";
 							agileinlinesubmit.type = "input";

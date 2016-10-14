@@ -61,6 +61,7 @@ public class FormsAPI
 	    String json = formJson.getString("formJson");
 	    boolean emailNotification=false;
 		boolean agileformcaptcha=false;
+		String agileinlinesubmit=null;
 		/*checking the condition for the when emailNotification is true
 		 * and user clicks on the submit button of the form  */
 		try{
@@ -87,6 +88,15 @@ public class FormsAPI
 		catch(Exception e){
 			System.out.println("Error occured while getting captcha value..."+e.getMessage());
 			
+		}
+		
+		//msg
+		try{
+			JSONArray jsn2=new JSONArray(json);
+			agileinlinesubmit=jsn2.getJSONObject(0).getJSONObject("fields").getJSONObject("agileinlinesubmit").getString("value");
+			
+		}catch(Exception e){
+			System.out.println("Error occured while getting custom value..."+e.getMessage());
 		}
 		 String html = null;
 	    
@@ -144,6 +154,7 @@ public class FormsAPI
 		//adding another for emailNotification
 		form.emailNotification=emailNotification;
 		form.agileformcaptcha=agileformcaptcha;
+		form.agileinlinesubmit=agileinlinesubmit;
 		//if(form.emailNotification)
 
 		form.save();

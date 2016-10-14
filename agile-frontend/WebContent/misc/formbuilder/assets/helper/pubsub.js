@@ -49,7 +49,7 @@ var addAgileApi = function(json, api, callback)
 	var agileinlinesubmit = {};
 	agileinlinesubmit.label = "Confirmation Message";
 	agileinlinesubmit.type = "input";
-	agileinlinesubmit.value = "Great! Thanks for filling out my form!";
+	agileinlinesubmit.value = "Great! Thanks for filling out the form.";
 
 
 	var agilepreloadfields = {};
