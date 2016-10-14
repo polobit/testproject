@@ -11,6 +11,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -118,9 +119,11 @@ public class EmailGatewayUtil
 	    {
 		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
 	    }
+	    
+	    String emailSubject = StringEscapeUtils.escapeJava(mailDeferredTask.subject);
 
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
-		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + mailDeferredTask.subject,
+		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + emailSubject,
 		    LogType.EMAIL_SENT.toString() };
 
 	    queryList.add(newLog);
