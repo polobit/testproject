@@ -409,7 +409,7 @@ var CompaniesRouter = Backbone.Router
 			} });
 
 		var el = this.companyDetailView.render(true).el;
-		if(CURRENT_DOMAIN_USER.id == this.companyDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
+		if(!this.companyDetailView.model.get('owner') || CURRENT_DOMAIN_USER.id == this.companyDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
 			$('#content').html(el);
 		}else{
 			$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> " +_agile_get_translated_val('companies', 'invalid-viewer')+ "</h4><div class='text'style='opacity:0.6'>" +_agile_get_translated_val('companies','enable-permission')+ "</div></div></div></div>");
