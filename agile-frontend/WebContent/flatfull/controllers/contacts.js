@@ -728,8 +728,8 @@ var ContactsRouter = Backbone.Router.extend({
 
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
-
-		if(CURRENT_DOMAIN_USER.id == this.contactDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
+		
+		if(!this.contactDetailView.model.get('owner') || CURRENT_DOMAIN_USER.id == this.contactDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
 			$('#content').html(el);
 			add_recent_view(contact);
 		}else{
