@@ -835,7 +835,7 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 		dealsLineChart();
 		// fetch deals if count is 10 
 		var modelsLength = dealPipelineModel[0].get('dealCollection').models.length ;
-        if(modelsLength == 10 && modelsLength <= old_deal_count)
+        if(modelsLength == 10 && modelsLength <= deal_count)
         {
            dealPipelineModel[0]['isUpdateCollection'] = true ;
            dealsFetch(dealPipelineModel[0]);
