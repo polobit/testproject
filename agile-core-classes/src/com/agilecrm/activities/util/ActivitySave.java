@@ -120,13 +120,13 @@ public class ActivitySave
 	    	String fromMileStone = milestone[1].toString();
 	    	String toMileStone = milestone[0].toString();	    		    		    
 	    	if(trackNames != null){
-	    		fromMileStone += "("+ trackNames[1] +")";
-    			toMileStone += "("+ trackNames[0] +")";	 
+	    		fromMileStone += " ("+ trackNames[1] +")";
+    			toMileStone += " ("+ trackNames[0] +")";	 
 	    	}else{	    		
 	    		String trackName = MilestoneUtil.getMilestone(opportunity.pipeline_id).name;
 	    		if(trackName != null){
-	    			fromMileStone += "("+ trackName +")";
-    				toMileStone += "("+ trackName +")";
+	    			fromMileStone += " ("+ trackName +")";
+    				toMileStone += " ("+ trackName +")";
 	    		}
 	    	}
 	    	
