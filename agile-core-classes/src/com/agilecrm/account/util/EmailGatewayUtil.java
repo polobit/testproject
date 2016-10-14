@@ -122,7 +122,7 @@ public class EmailGatewayUtil
 	    String to_email_addr=mailDeferredTask.to;
 	    
 	    //converting special characters to html 
-	    from_email_addr=from_email_addr.replaceAll("<", "&lt");
+	    from_email_addr=from_email_addr.replaceAll("<", "&lt;");
 	    from_email_addr=from_email_addr.replaceAll(">","&gt;");
 	    to_email_addr=to_email_addr.replaceAll("<","&lt;");
 	    to_email_addr=to_email_addr.replaceAll(">","&gt;");
