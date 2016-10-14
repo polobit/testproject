@@ -99,6 +99,14 @@ define([
 							agileinlinesubmit.value = "Great! Thanks for filling out my form!";
 							saveform[0].fields.agileinlinesubmit=agileinlinesubmit;
 					}
+
+					if(saveform[0].fields.agileapi){
+							saveform[0].fields.agileapi.label="";
+					}
+					if(saveform[0].fields.agiledomain){
+							saveform[0].fields.agiledomain.label="";
+					}
+
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
 				});
