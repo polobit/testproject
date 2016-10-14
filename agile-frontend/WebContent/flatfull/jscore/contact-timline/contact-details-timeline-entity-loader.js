@@ -14,7 +14,7 @@ var timeline_entity_loader = {
 		head.load(FLAT_FULL_PATH + "lib/isotope.pkgd.js", FLAT_FULL_PATH + "lib/jquery.event.resize.js", FLAT_FULL_PATH + "css/misc/agile-timline.css", function()
 		{
 			// customize_isotope()
-			if(Current_Route.includes('company') || Current_Route.includes('companies')){
+			if(contact.type == "COMPANY"){
 				configure_timeline(App_Companies.companyDetailView.el);
 				timeline_collection_view = new company_timeline_view();
 				console.log(_this);
@@ -129,7 +129,7 @@ var timeline_entity_loader = {
 						
 						});
 
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact['id']) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
 						return;
 
 					var contact_emails = [];
@@ -210,7 +210,7 @@ var timeline_entity_loader = {
 												}
 
 											});
-							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contact['id']))
+							if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
 								timeline_collection_view.addItems(log_models);
 						})
 	}, timline_fetch_data : function(url, callback)

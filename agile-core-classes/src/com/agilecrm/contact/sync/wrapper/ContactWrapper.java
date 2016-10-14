@@ -280,4 +280,6 @@ public abstract class ContactWrapper implements IContactWrapper
     {
     	this.contact=contact;
     }
+    
+ 
 }

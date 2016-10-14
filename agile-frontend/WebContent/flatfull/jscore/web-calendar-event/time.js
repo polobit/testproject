@@ -211,7 +211,58 @@ function getTimeInVisitorTimezone(time,timezone,firstTimeLoading)
 	return toTimeZone(m.valueOf());
 }
 
+/**
+ * gets the time
+ * @param time
+ * @param timezone
+ * @param firstTimeLoading if {true} then loading from jsp page
+ * @returns
+ */
+function getTimeInUserTimezone(time,timezone,firstTimeLoading)
+{
+	if(!timezone)
+		timezone=$("#timezone-"+User_Id).html();
+	var m = moment().tz(timezone);
+	var hour=null;
+	var min=null;
+	var result=null;
+	if(time){
+		result=time.split(":")
+		
+	}
+	if(result){
+		hour=result[0];
+		min=result[1];
+	}
+	m.set('hour', parseInt(hour));
+	m.set('minute', parseInt(min));
+	m.set('second', 00);
+	m.set('millisecond', 00);
+	/*if(firstTimeLoading==true){
+		return toTimeZoneFirstTimeLoading(m.valueOf());
+	}*/
+	return toUserTimeZone(m.valueOf(),timezone);
+}
 
+/**
+ * 
+ * @param time  while loading jsp time will be 09:00-18:00 format.
+ * @param timezone  we are change @agile user 09:00 to Visitor time @Us/eastrn 
+ * @returns {String}
+ */
+function getTimeInUserTimezoneWhileLoading(time,timezone){
+	var workhours=null;
+	var times=null;
+	if(time!="Today is holiday")
+		times=time.split("-");
+	if(times){
+		workhours=getTimeInUserTimezone(times[0],timezone,false)+" - "+getTimeInUserTimezone(times[1],timezone,false);
+	}
+	else{
+		workhours= LOCALES_JSON['holiday-today'];
+	}
+	return workhours;
+}
 
 /**
  * 
@@ -246,6 +297,16 @@ function toTimeZone(time, zone) {
 	return moment.tz(time, SELECTED_TIMEZONE).format('hh:mm a')
 }
 
+/**
+ * 
+ * @param time  after click on date picker we are changing time to visitor time
+ * @param zone
+ * @returns
+ */
+function toUserTimeZone(time, zone) {
+	
+	return moment.tz(time, zone).format('hh:mm a')
+}
 
 /**
  * converts the @agile user time to vistor time
