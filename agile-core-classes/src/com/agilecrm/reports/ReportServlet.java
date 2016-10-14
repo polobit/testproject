@@ -10,9 +10,11 @@ import com.agilecrm.reports.deferred.ActivityReportsDeferredTask;
 import com.agilecrm.reports.deferred.CampaignReportsCronDeferredTask;
 import com.agilecrm.reports.deferred.ReportsDeferredTask;
 import com.agilecrm.util.NamespaceUtil;
+import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TransientFailureException;
 
 /**
  * <code>ReportServlet</code> process reports, based on duration or report
@@ -44,25 +46,37 @@ public class ReportServlet extends HttpServlet
 	for (String namespace : domains)
 	{
 	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
-	    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created");
+	    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created"+namespace);
 	    // Add to queue
 	    Queue queue = QueueFactory.getQueue("reports-queue");
-	    queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
+	    addTaskToQueue(queue,reportsDeferredTask);
 	    
 	    // Created a deferred task for campaign report generation
 	 	CampaignReportsCronDeferredTask campaignReportsDeferredTask = new CampaignReportsCronDeferredTask(namespace, duration);
 
 	 	// Add to queue
-	 	queue.add(TaskOptions.Builder.withPayload(campaignReportsDeferredTask));
+	 	addTaskToQueue(queue,campaignReportsDeferredTask);
 	 	
 	 	// Created a deferred task for activity report generation
 	    ActivityReportsDeferredTask activityReportsDeferredTask = new ActivityReportsDeferredTask(namespace, duration);
 
 	    // Add to queue
-	    queue.add(TaskOptions.Builder.withPayload(activityReportsDeferredTask));
+	    addTaskToQueue(queue,activityReportsDeferredTask);
 		}
 	
 
     }
+    
+    public static void addTaskToQueue(Queue queue,DeferredTask dt)
+      {
+       	try{
+       	      queue.add(TaskOptions.Builder.withPayload(dt));
+       	}
+       	catch (TransientFailureException tfe)
+       	{
+       		System.out.println("In Transient failure exception");
+       		addTaskToQueue(queue,dt);
+       	}
+       }
 
 }
