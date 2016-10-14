@@ -647,7 +647,9 @@ function getContactCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
-
+	if(!Current_Route)
+		Current_Route = window.location.hash.split("#")[1]
+	
 	var curr_route = Current_Route;
 	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
 		curr_route = "CONTACT";
