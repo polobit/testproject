@@ -177,6 +177,8 @@ dataSync : function()
 
 	 google_contacts_sync: function() {
 	            var that = this;
+                if(DataSync_Event_Modal_View)
+                DataSync_Event_Modal_View.my_contacts_value=undefined;
 	            getTemplate('settings', {}, undefined, function(template_ui) {
 	                if (!template_ui)
 	                    return;
