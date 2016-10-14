@@ -516,7 +516,24 @@
 				// Showing updated owner
 				show_owner(); 
 				App_Companies.companyDetailView.model = model;
-				
+				COMPANIES_HARD_RELOAD = true;
+				if(!hasScope("VIEW_CONTACTS") && !CURRENT_DOMAIN_USER.is_admin)
+    				Backbone.history.navigate("companies",{trigger: true});
+
+    			if(!hasScope("VIEW_CONTACTS")){
+	    			var storageItems = JSON.parse(localStorage.recentItems);
+		            var arr = [];
+		            localStorage.removeItem("recentItems");
+		            for(var i=0;i<storageItems.length;i++){
+		              if(storageItems[i].id != App_Companies.companyDetailView.model.get('id')){
+		                arr.push(storageItems[i]);
+		              }else{
+		                recent_view.collection.remove(storageItems[i].id);
+		              }
+		            }
+	                localStorage.setItem("recentItems", JSON.stringify(arr));
+	                recent_view_update_required = true;
+            	}
 		    }});
    	};
 	
