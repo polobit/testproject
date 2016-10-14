@@ -3040,7 +3040,7 @@ contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a
 countries.FO,Faroe Islands,Islas Feore
 countries.GW,Guinea-Bissau,Guinea-Bissau
 modals.document-name,Document Name,nombre del documento
-logcall.edit-call-log,Edit Call Log,Editar el registro de llamadas
+logcall.edit-call-log,Edit call log,Editar el registro de llamadas
 report-view.calls-by-user,Calls by User,Llamadas por usuario
 countries.LI,Liechtenstein,Liechtenstein
 preferences.notifications,Notifications,Notificaciones
@@ -3235,7 +3235,7 @@ tickets.greater-than,Greater Than,Mayor a
 contact-edit.phone-number,Phone number,Número de teléfono
 report-add.updated-date,Updated Date,Fecha actualizada
 tickets.satisfaction,Satisfaction,Satisfacción
-contact-details.add-call-log,Add Call Log,Añadir registro de llamadas
+contact-details.add-call-log,Add Call-log,Añadir registro de llamadas
 modals.company-name,Company Name,nombre de empresa
 tasks.name-of-task,Name of Task,Nombre de la Tarea
 contacts-view.deleted-deal,Deleted Deal,Oferta eliminada
@@ -3518,7 +3518,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Call Log,Registro de llamadas
+call-log.log-a-call,Log a call,Ingrese una llamada
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -6225,7 +6225,7 @@ builder.font,Font,Fuente
 builder.browse,Browse,Vistazo
 builder.font-size,Font Size,Tamaño de fuente
 builder.tablet,tablet,tableta
-builder.button,Button,Botón
+builder.button,Button,Button
 builder.bottom,bottom,fondo
 builder.you-cant-remove-all,you cannot remove all elements,no se puede eliminar todos los elementos
 builder.left,izquierda
@@ -6264,41 +6264,3 @@ builder.you-cant-remove,You can\'t remove this element,Puede \'t eliminar este e
 builder.name,Name,Nombre
 builder.social-links,Social Links,vínculos sociales
 builder.divider,Divider,Divisor
-others.no-results,No Results
-affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.
-affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.
-affiliate.add,Register Deal
-other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
-admin-settings-integrations.site-key,Site Key
-campaigns.reply-yes,Yes
-campaigns.reply-sms,Inbound SMS
-campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
-campaigns.sms_trigger,SMS
-campaigns.reply-no,No
-campaigns.reply-number,Select a number
-campaigns.enter-keyword,Enter a keyword
-campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.
-campaigns.setuptwilio,Please enable your Twilio integration 
-campaigns.here,here.
-Help-center.mark-as-public-cannedmessage,Mark as Public
-portlets.Hours,Hours
-portlets.Minutes,Minutes
-portlets.Seconds,Seconds
-deal-view.detailed-notes,Detailed Notes
-tickets.feedback-subject,Subject
-tickets.feedback-created-time,Note Sent
-tickets.feedback-ticket-details,Ticket Details
-tickets.unacceptable,Unacceptable
-tickets.meets_expectations,Meets Expectations
-tickets.acceptable,Acceptable
-tickets.can_improve,Can Improve
-tickets.exceptional,Exceptional
-tickets.feedback-view-note,View Note
-tickets.feedback-contact,Contact
-tickets.feedback-feedback,Feedback
-tickets.feedback-feedback-comment,Comment
-tickets.feedback-feedback-modal,Feedback Comment
-tickets.feedback-nocomment,No comment available.
-tickets.feedback-ticket,Ticket
-tickets.feedback-all,All
-tickets.feedback-allgroups,All Groups
