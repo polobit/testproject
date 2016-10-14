@@ -120,7 +120,7 @@ public class EmailGatewayUtil
 		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
 	    }
 	    
-	    String emailSubject=StringEscapeUtils.escapeJava(StringEscapeUtils.escapeJava(mailDeferredTask.subject));
+	    String emailSubject = StringEscapeUtils.escapeJava(mailDeferredTask.subject);
 
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
 		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + emailSubject,
