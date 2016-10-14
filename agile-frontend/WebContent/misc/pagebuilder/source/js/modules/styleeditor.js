@@ -854,8 +854,8 @@
             } else { //Recorded video
 
                 matchResults = $(el).prev().attr('data-video').match(/video\/([0-9]*)/);
-
-                $('#video_Tab select[id=videoRecordId]').val( matchResults[1] ).attr('selected','selected');
+                if(matchResults)
+                    $('#video_Tab select[id=videoRecordId]').val( matchResults[1] ).attr('selected','selected');
                 $('#video_Tab input#youtubeID').val('');
                 $('#video_Tab input#vimeoID').val('');
             }
