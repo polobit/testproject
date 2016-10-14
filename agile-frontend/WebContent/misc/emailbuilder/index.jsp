@@ -78,6 +78,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <%@ include file="blocks/text.html" %>
                                 <!-- image -->
                                 <%@ include file="blocks/image.html" %>
+
+                                <%@ include file="blocks/video-record.html" %>
+                                
                                 <!-- button -->
                                 <%@ include file="blocks/button.html" %>
                                 <!--Image + Text -->
@@ -95,8 +98,6 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                                 <!-- SOCIAL LINKS -->
                                 <%@ include file="blocks/social-links.html" %>
-
-                                <%@ include file="blocks/video-record.html" %>
 
                             </li>
                         </ul>
