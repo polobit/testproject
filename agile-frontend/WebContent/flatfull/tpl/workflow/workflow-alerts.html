@@ -82,20 +82,30 @@
 		<div class="modal-body">
 				<form id="verify-email-form">
 					<fieldset>            
-                		<div class="control-group">
+                		<div class="control-group form-group">
 	                		<div class="row">
 	                			<div class="col-md-5">
-		                    		<label class="control-label"><b>{{agile_lng_translate 'modals' 'email'}}</b> <span class="field_req">*</span></label>
-		                    		<div class="controls">
-		                        		<span><input name="email" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'workflows' 'enter-from-email-address'}}" value="{{email}}" autofocus></span>
+		                    		<label class="control-label">
+			                    		<b>{{agile_lng_translate 'modals' 'email'}}</b> 
+			                    		<span class="field_req">*</span>
+		                    		</label>
+		                    	</div>
+		                    </div>
+		                    <div class="row">
+	                			<div class="col-md-12">
+		                    		<div class="controls col-md-5" style="padding:0;">
+		                        		<span>
+		                        		<input name="email" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'workflows' 'enter-from-email-address'}}" value="{{email}}" autofocus>
+		                        		</span>
 		                    		</div>
+		                    		<div class="controls col-md-7" style="padding-left:0;">
+			                    		<div style="float: left;line-height: 20px;">
+								            <i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" 
+								            data-original-title="{{agile_lng_translate 'verify-email' 'we-encourage-you-to-use-a-from-email-address-text-info'}}"></i>
+								        </div>
+							        </div>
 								</div>
 								<span id="alert-msg"></span>
-	                    	</div>
-	                    	<div class="row">
-	                    		<div class="col-md-12 m-t-sm">
-	                    		<span class="field_req">*</span> To improve deliverability, we encourage you to use a From email address at a domain owned by your organisation. Using free email providers like Gmail, Yahoo, AOL etc. emails may automatically get rejected.	
-	                    		</div>
 	                    	</div>
 						</div>
 					</fieldset>
