@@ -81,6 +81,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	String applicationId = SystemProperty.applicationId.get();
 	String domain = NamespaceManager.get();
 	
+	long start = System.currentTimeMillis();
+	
 	if (StringUtils.isNotBlank(applicationId))
 	{
 	    if (StringUtils.equals(applicationId, PRODUCTION_APP_ID))
@@ -94,6 +96,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	{
 	    // Get local mysql connection
 	}
+	System.out.println("Time taken for getting sql connection is " + (System.currentTimeMillis() - start));
+	
 	return conn;
     }
     
@@ -387,6 +391,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	cpds1.setAcquireIncrement(2);
 	cpds1.setMaxPoolSize(10);
 	cpds1.setMaxIdleTime(1200000); // In milli-seconds
+	cpds1.setTestConnectionOnCheckin(true);
+	cpds1.setTestConnectionOnCheckout(true);
 	System.out.println(cpds1.getMaxIdleTime());
 	System.out.println(cpds1.getMaxStatementsPerConnection());
 	System.out.println(cpds1.getMaxIdleTime());
@@ -426,6 +432,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	cpds2.setAcquireIncrement(2);
 	cpds2.setMaxPoolSize(10);
 	cpds2.setMaxIdleTime(1200000); // In milli-seconds
+	cpds2.setTestConnectionOnCheckin(true);
+	cpds2.setTestConnectionOnCheckout(true);
 	System.out.println(cpds2.getMaxIdleTime());
 	System.out.println(cpds2.getMaxStatementsPerConnection());
 	System.out.println(cpds2.getMaxIdleTime());
@@ -464,6 +472,8 @@ public class GoogleSqlConnectionFetcher // implements Cloneable
 	cpds3.setAcquireIncrement(2);
 	cpds3.setMaxPoolSize(10);
 	cpds3.setMaxIdleTime(1200000); // In milli-seconds
+	cpds3.setTestConnectionOnCheckin(true);
+	cpds3.setTestConnectionOnCheckout(true);
 	System.out.println(cpds3.getMaxIdleTime());
 	System.out.println(cpds3.getMaxStatementsPerConnection());
 	System.out.println(cpds3.getMaxIdleTime());
