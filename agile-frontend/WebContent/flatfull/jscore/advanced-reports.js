@@ -109,7 +109,7 @@ function initReportsForCalls(callback){
 function showFunnelGraphs(tags)
 {
 	console.log("Showing funnel logs");
-	showFunnel('core/api/reports/funnel/' + tags + getOptions(), 'funnel-chart', _agile_get_translated_val('report-add','funnel-reports') , true);
+	showFunnel('core/api/reports/funnel/' + tags + getOptions(), 'funnel-chart', "{{agile_lng_translate 'report-add' 'funnel-reports'}}" , true);
 }
 
 /**
@@ -125,7 +125,7 @@ function showGrowthGraphs(tags)
  */
 function showRatioGraphs(tag1, tag2)
 {
-	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', _agile_get_translated_val('reports','ratio-analysis'), tag1 + ' vs ' + tag2, true);
+	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', "{{agile_lng_translate 'reports' 'ratio-analysis'}}", tag1 + ' vs ' + tag2, true);
 }
 function initSalesCharts(callback){
 
@@ -172,8 +172,8 @@ function initSalesCharts(callback){
 		sources.collection.fetch({
 			success: function(data){
 				var jsonModel = data.toJSON();
-				var html =  '<option class="default-select" value="">'+_agile_get_translated_val('report-add','all-sources')+'</option>' + 
-							'<option class="default-select" value="1">'+_agile_get_translated_val('report-add','unknown')+'</option>';
+				var html =  '<option class="default-select" value="">{{agile_lng_translate "report-add" "all-sources"}}</option>' + 
+							'<option class="default-select" value="1">{{agile_lng_translate "report-add" "unknown"}}</option>';
 				
 				$.each(jsonModel,function(index,dealSource){
 					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';

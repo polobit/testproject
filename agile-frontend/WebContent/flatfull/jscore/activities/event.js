@@ -61,12 +61,12 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 			var event_id = $('#updateActivityForm input[name=id]').val();
 			$("#updateActivityModal").modal('hide');
 			$("#webEventCancelModel").modal('show');
-			$("#cancel_event_title").html(_agile_get_translated_val('events','delete-event') + " &#39" + web_event_title + "&#39?");
+			$("#cancel_event_title").html("{{agile_lng_translate 'events' 'delete-event'}} &#39" + web_event_title + "&#39?");
 			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
 		}
 		else
 		{
-			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+_agile_get_translated_val('tasks','you-do-not-have-permission-to-delete-this-event')+'</i></p></div>');
+			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>{{agile_lng_translate "tasks" "you-do-not-have-permission-to-delete-this-event"}}</i></p></div>');
 			setTimeout(function()
 			{
 				$("#updateActivityModal").find('span.error-status').html('');
@@ -909,7 +909,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>'+_agile_get_translated_val('events','start-date-error')+'</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-date-error"}}</div>');
 
 		return false;
 	}
@@ -918,7 +918,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>'+_agile_get_translated_val('events','start-time-error')+'</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-time-error"}}</div>');
 
 		return false;
 	}
@@ -927,7 +927,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>'+_agile_get_translated_val('events','start-time-equals-error')+'</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-time-equals-error"}}</div>');
 
 		return false;
 	}
