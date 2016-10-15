@@ -1674,6 +1674,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
+					    	$("#contact_type","#emailForm").val(model.contacts[0].type);
 					    	$("#doc_type","#emailForm").val(model.doc_type);
 					    	/*
 			               	first_name = getPropertyValue(model.contacts[0].properties, "first_name");

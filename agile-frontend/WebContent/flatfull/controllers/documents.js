@@ -682,7 +682,7 @@ function proc_add_document(model_json)
 					     {
 					      $("#content [name='contact_ids']")
 					        .html(
-					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></li>');
 					      		var url = '/core/api/contacts/'+ data;
 								$.ajax({
 									url : url,
@@ -702,7 +702,7 @@ function proc_add_document(model_json)
 					     {
 					      $("#content [name='deal_ids']")
 					        .html(
-					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></li>');
 					      		var url = '/core/api/opportunity/'+ data;
 								$.ajax({
 									url : url,
@@ -1071,7 +1071,7 @@ function load_document_from_edit_model(model)
 					     {
 					      $("#content [name='contact_ids']")
 					        .html(
-					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></li>');
 					      		var url = '/core/api/contacts/'+ data;
 								$.ajax({
 									url : url,
@@ -1092,7 +1092,7 @@ function load_document_from_edit_model(model)
 					     {
 					      $("#content [name='deal_ids']")
 					        .html(
-					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+					          '<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><a class="text-white m-r-xs" href="#deal/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></li>');
 					      		var url = '/core/api/opportunity/'+ data;
 								$.ajax({
 									url : url,
