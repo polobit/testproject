@@ -28,6 +28,11 @@ var LeadDetails = (function(){
 			return;
 		}
 
+		if($('#contactDetailsTab a[href="#leads-'+position+'"]', el).length == 0)
+		{
+			position = "time-line";
+		}
+		
 		$('#contactDetailsTab a[href="#leads-'+position+'"]', el).tab('show');
 		$(".tab-content", el).find("#"+position+"").addClass("active");
 
@@ -105,6 +110,9 @@ var LeadDetails = (function(){
             sortKey:"created_time",
             descending: true,
             postRenderCallback: function(el) {
+            	//Removing add call note button
+            	$(".show-logPhone", el).parents("ul").siblings("button").remove();
+            	$(".show-logPhone", el).parents("ul").remove();
             	agileTimeAgoWithLngConversion($(".note-created-time", el));
             	
               	contact_detail_page_infi_scroll($('#contact-dtl', App_Leads.leadDetailView.el), notesView);
@@ -383,6 +391,10 @@ var LeadDetails = (function(){
 	        		new_model.url = 'core/api/contacts';
 	        		new_model.save(lead_model, {
 	        			success: function(model){
+	        				if(App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.get(lead_model.id))
+	        				{
+	        					App_Leads.leadsListView.collection.get(lead_model.id).set(new BaseModel(model.toJSON()));
+	        				}
 	        			}
 	        		});
 
@@ -529,7 +541,7 @@ var LeadDetails = (function(){
 		// By default showing Agile emails
 		if(email_server === 'agile')
 		{
-			mail_server_url = 'core/api/emails/agile-emails?search_email='+encodeURIComponent(email);
+			mail_server_url = 'core/api/emails/agile-lead-emails?search_email='+encodeURIComponent(email);
 			email_server_type = "agilecrm";
 			cursor = false;
 		}

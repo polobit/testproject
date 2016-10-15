@@ -314,6 +314,7 @@ var LeadsBulkActions = (function(){
 			id_array = this.getLeadsBulkIds();
 		}
 		Backbone.history.navigate("lead-bulk-email", { trigger : true });
+		App_Leads.bulk_lead_ids_to_send_email = id_array;
 		this.fillEmails(id_array);
 	}
 

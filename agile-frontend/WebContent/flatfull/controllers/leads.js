@@ -13,7 +13,8 @@ var LeadsRouter = Backbone.Router.extend({
 		"lead-filter-add" : "leadFilterAdd",
 		"lead-filter-edit/:id" : "leadFilterEdit",
 		"lead/:id" : "leadsDetails",
-		"lead-edit" : "editLead"
+		"lead-edit" : "editLead",
+		"lead-add" : "addLead"
 	},
 
 	/*
@@ -214,11 +215,19 @@ var LeadsRouter = Backbone.Router.extend({
 
 				App_Leads.leadDetails.loadLeadTabs(el, lead.toJSON());
 
+				App_Contacts.contactDetailView = new Base_Model_View({ data : lead, isNew : true});
+
 				loadWidgets(el, lead, "widgets");
 
 				App_Leads.leadDetails.starify(el);
 
 				App_Leads.leadDetails.show_map(el);
+
+				// To navigate between contacts details
+				if (lead_collection != null)
+				{
+					contact_detail_view_navigation(id, App_Leads.leadsListView, el);
+				}
 			} 
 		});
 
@@ -233,14 +242,14 @@ var LeadsRouter = Backbone.Router.extend({
 	{
 		var lead = null;
 
-		// Takes back to companies if companies detailview is not defined
+		// Takes back to leads if lead detailview is not defined
 		if (!this.leadDetailView || !this.leadDetailView.model.id)
 		{
 			this.navigate("leads", { trigger : true });
 			return;
 		}
 
-		// If company detail view is defined the get current company
+		// If lead detail view is defined the get current lead
 		// model id
 		var id = this.leadDetailView.model.id;
 
@@ -249,14 +258,14 @@ var LeadsRouter = Backbone.Router.extend({
 			lead = this.leadDetailView.model.toJSON();
 		}
 
-		// If contact list is defined the get contact to edit from the
+		// If leads list is defined the get lead to edit from the
 		// list
 		else if (this.leadsListView && this.leadsListView.collection && this.leadsListView.collection.get(id))
 		{
 			lead = this.leadsListView.collection.get(id).toJSON();
 		}
 
-		// If contact list view and custom view list is not defined then
+		// If leads list view and custom view list is not defined then
 		// download contact
 		else if (!lead)
 		{
@@ -271,7 +280,7 @@ var LeadsRouter = Backbone.Router.extend({
 			model.fetch({ success : function(contact)
 			{
 
-				// Call Contact edit again with downloaded contact
+				// Call Lead edit again with downloaded lead
 				// details
 				App_Leads.editLead(lead.toJSON());
 			} });
@@ -279,10 +288,98 @@ var LeadsRouter = Backbone.Router.extend({
 			return;
 		}
 
-		// Contact Edit - take him to continue-contact form
+		// Lead Edit - take him to continue-lead form
 		add_custom_fields_to_form(lead, function(lead)
 		{
 				deserialize_contact(lead, 'update-lead');
 		}, lead.type);
-	}
+	},
+
+	addLead : function(){
+		$.getJSON("core/api/custom-fields/scope?scope=LEAD", function(data)
+		{
+			if(data.length > 0){
+				var json = {custom_fields:data,properties:[]};
+				getTemplate("update-lead", json, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$("#content").html($(template_ui));	
+					// Add placeholder and date picker to date custom fields
+					$('.date_input').attr("placeholder", _agile_get_translated_val("contacts", "select-date"));
+
+					$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
+					leadsViewLoader = new LeadsViewLoader();
+                	leadsViewLoader.setupSources($("#content"));
+                	leadsViewLoader.setupStatuses($("#content"));
+
+					// To set typeahead for tags
+					setup_tags_typeahead();
+
+					// Iterates through properties and ui clones
+					
+					var fxn_display_company = function(data, item)
+					{
+						$("#content [name='contact_company_id']")
+								.html(
+										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+						$("#content #contact_company").hide();
+						if(data){							
+							$.ajax({
+								url : "/core/api/contacts/"+data,
+								type: 'GET',
+								dataType: 'json',
+								success: function(company){
+									if(company){
+										console.log(company);
+										contact_company = company ;
+										var prop = null;
+										$.each(contact_company.properties , function(){
+											if(this.name == "address" && this.subtype == "office")
+												prop = JSON.parse(this.value);
+										});
+										if(prop){
+											$("#content .address-type").val("office");
+											if(prop.address)
+												$("#content #address").val(prop.address);
+											if(prop.city)
+												$("#content #city").val(prop.city);
+											if(prop.state)
+												$("#content #state").val(prop.state);
+											if(prop.zip)
+												$("#content #zip").val(prop.zip);
+											if(prop.country)
+												$("#content #country").val(prop.country);
+										}
+
+									}
+
+								}
+							});
+						}
+					}
+					agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
+
+					$('.contact_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=PERSON');
+					});
+
+					$('.company_input', $('#content')).each(function(){
+						agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), $('#content')), contacts_typeahead, undefined, 'type=COMPANY');
+					});
+
+					initializeEditContactListeners("updateLeadForm");
+
+				}, "#content"); 
+
+					
+			}else{
+				Backbone.history.navigate("leads" , {trigger: true});
+				$("#personModal").modal("show");
+			}		
+					
+		});
+
+	},
+
 });

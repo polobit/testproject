@@ -497,8 +497,16 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 			if (App_Leads.leadDetailView)
 				App_Leads.leadDetailView.model = data;
 
-			if(!CALL_CAMPAIGN.start && Current_Route != "lead/" + data.id)
-			App_Leads.navigate("lead/" + data.id, { trigger : true });
+			if(data && data.get("type") == "PERSON")
+			{
+				LEADS_HARD_RELOAD = true;
+				App_Contacts.navigate("contact/" + data.id, { trigger : true });
+			}
+
+			if(!CALL_CAMPAIGN.start && Current_Route != "lead/" + data.id && data.get("type") == "LEAD")
+			{
+				App_Leads.navigate("lead/" + data.id, { trigger : true });
+			}
 		}
 
 		$('#' + modal_id).modal('hide');
@@ -531,10 +539,10 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 		}
 		else if (response.status == 403)
 		{
-			if(form_id == 'companyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to create Companies.");
-			else if(form_id == 'continueCompanyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to update Companies.");
+			if(form_id == 'leadForm')
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to create Leads.");
+			else if(form_id == 'updateLeadForm')
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "You do not have permission to update Leads.");
 			else
 				show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 		}

@@ -25,7 +25,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("admin.js");
 	}
-	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
+	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0 || templateName.indexOf("leads-details") == 0)
 	{
 		template_relative_urls.push("contact-detail.js");
 		if (HANDLEBARS_PRECOMPILATION)

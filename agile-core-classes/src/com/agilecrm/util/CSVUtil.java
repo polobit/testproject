@@ -136,7 +136,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG, SOURCE_MISMATCHED, STATUS_MISMATCHED;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG, SOURCE_MISMATCHED, STATUS_MISMATCHED, CONVERTED_CONTACTS;
 
     }
 
@@ -1998,6 +1998,7 @@ public class CSVUtil
     	int accessDeniedToUpdate = 0;
     	int sourceMismatched = 0;
     	int statusMismatched = 0;
+    	int convertedContacts = 0;
     	Map<Object, Object> status = new HashMap<Object, Object>();
     	status.put("type", "Leads");
 
@@ -2057,6 +2058,7 @@ public class CSVUtil
     	    boolean is_status_added = false;
     	    boolean is_source_mismatch = false;
     	    boolean is_status_mismatch = false;
+    	    boolean is_lead_converted = false;
     	    try
     	    {
     		// create dummy contact
@@ -2193,6 +2195,12 @@ public class CSVUtil
 		    		if(status_id != null && status_id > 0)
 		    		{
 		    			tempContact.setLead_status_id(status_id);
+		    			if("converted".equalsIgnoreCase(csvValues[j]))
+		    			{
+		    				is_lead_converted = true;
+		    				tempContact.type = Type.PERSON;
+		    				tempContact.setIs_lead_converted(is_lead_converted);
+		    			}
 		    		}
 		    		else
 		    		{
@@ -2368,6 +2376,11 @@ public class CSVUtil
     		// Increase counter on each contact save
     		savedContacts++;
     	    }
+    	    
+    	    if(is_lead_converted)
+    	    {
+    	    convertedContacts++;
+    	    }
 
     	    try
     	    {
@@ -2420,6 +2433,10 @@ public class CSVUtil
 
     	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 
+    	}
+    	if (convertedContacts > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.CONVERTED_CONTACTS, convertedContacts);
     	}
     	if (limitExceeded > 0)
     	{

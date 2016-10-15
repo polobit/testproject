@@ -150,15 +150,7 @@ function checkContactUpdated(){
           }*/
           if(agile_crm_is_model_property_changed("first_name", firstName)){
         // Update first name
-              var model_id;
-              if(Current_Route && Current_Route.indexOf("lead/") == 0 && App_Leads.leadDetailView)
-              {
-                model_id = App_Leads.leadDetailView.model.toJSON().id;
-              }
-              else
-              {
-                model_id = App_Contacts.contactDetailView.model.toJSON().id;
-              }
+              var model_id = App_Contacts.contactDetailView.model.toJSON().id;
               agile_crm_update_contact("first_name", firstName, function(contact_model)
               {
                if(model_id != contact_model.id)
@@ -210,7 +202,10 @@ function fill_owners(el, data, callback){
 	var optionsTemplate = "<li><a href='javascript:void(0)' class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
 	if(company_util.isCompany())
 		optionsTemplate = "<li><a href='javascript:void(0)' class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
-	
+	else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+  {
+    optionsTemplate = "<li><a href='javascript:void(0)' class='lead-owner-list' data='{{id}}'>{{name}}</a></li>";
+  }
     fillSelect('contact-detail-owner','/core/api/users/partial', 'domainUsers', callback, optionsTemplate, true); 
 }
 
@@ -279,10 +274,16 @@ function contact_detail_view_navigation(id, contact_list_view, el){
     	previous_contact_id = contact_collection.at(current_index - 1).id
     }
 
+    var route = "contact";
+    if(Current_Route && Current_Route == "lead/" + id)
+    {
+      route = "lead";
+    }
+
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#'+route+'/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#'+route+'/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
 	
 }
 
@@ -422,7 +423,16 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
       'click #contactDetailsTab a[href="#leads-documents"]' : 'openLeadDocs',
       'click .remove-lead-tags' : 'removeLeadTags',
       'click #lead-actions-delete' : 'leadDelete',
-      'click #lead-add-tags' : 'onAddLeadTags', 
+      'click #lead-add-tags' : 'onAddLeadTags',
+      'click #lead-score-increase, #lead-score-decrease' : 'increaseOrDecreaseLeadScore',
+      'click #lead-leadscore' : 'onGetLeadScorebox',
+      'focusout #lead-scorebox' : 'getLeadScore',
+      'keyup  #lead-scorebox' : 'leadScoreValEnter',
+      'focusout #lead-input input' : 'leadInlineEdit',
+      'click #leadName'  : 'toggleLeadsInlineEditFields',
+      'keydown #lead-input-firstname' : 'leadNameChange',
+      'keydown  #lead-input-lastname' : 'leadNameChange',
+      'click .lead-owner-list' : 'onChangeLeadOwnerSelected',
     },
     
     
@@ -1517,7 +1527,7 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
       showAlertModal("number_validation", undefined, function(){
         scoreboxval=prvs;
         setleadScoreStyles(scoreboxval);
@@ -1552,7 +1562,7 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
       showAlertModal("number_validation", undefined, function(){
         scoreboxval=prvs;
         setleadScoreStyles(scoreboxval);
@@ -1725,7 +1735,11 @@ updateScoreValue :function(){
     showAlertModal("delete_lead", "confirm", function(){
         App_Leads.leadDetailView.model.url = "core/api/contacts/" + App_Leads.leadDetailView.model.id;
         App_Leads.leadDetailView.model.destroy({success: function(model, response) {
-            Backbone.history.navigate("leads",{trigger: true});
+          if(App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 1)
+          {
+            App_Leads.leadsListView.collection.remove(model.id);
+          }
+          Backbone.history.navigate("leads",{trigger: true});
         }});
     });
   },
@@ -1805,7 +1819,160 @@ updateScoreValue :function(){
             });
       });
     }
-   },
+  },
+
+  increaseOrDecreaseLeadScore :  function(e){
+    e.preventDefault();
+    
+    var score = parseInt($('#lead-leadscore').text());
+    
+    if($(e.currentTarget).attr("id") == "lead-score-increase")
+    {
+      score = score + 1;
+    }
+    else
+    {
+      score = score - 1;
+    }
+    
+    // Changes score in UI
+    $('#lead-leadscore').text(score);
+    $("#lead-leadscore").attr("title",score);
+    App_Leads.leadDetailView.model.set({'lead_score': score}, {silent: true});
+    var lead_model =  App_Leads.leadDetailView.model.toJSON();
+    
+    var new_model = new Backbone.Model();
+    new_model.url = 'core/api/contacts';
+    new_model.save(lead_model,{
+      success: function(model){
+
+      }
+    });        
+  },
+
+  onGetLeadScorebox:  function(e){
+    e.preventDefault();
+    $("#lead-scorebox").removeClass("hide");
+    $("#lead-leadscore").addClass("hide");
+    $("#lead-scorebox").val($("#lead-leadscore").text());
+    $("#lead-scorebox").focus();
+  },
+
+  getLeadScore : function(e)
+  {
+    e.preventDefault();
+    this.updateLeadScoreValue();
+  },
+
+  leadScoreValEnter : function(e)
+  {
+    e.preventDefault();
+    if(e.keyCode == 13)
+    {
+        this.updateLeadScoreValue();
+    }
+  },
+
+  updateLeadScoreValue : function()
+  {
+    var scoreboxval = parseInt($("#lead-scorebox").val());
+    var decimalcheck = $("#lead-scorebox").val();
+    var lead_model =  App_Leads.leadDetailView.model.toJSON();
+    var prvs = ((lead_model.lead_score) ? lead_model.lead_score : 0);
+    if ((scoreboxval != prvs && (decimalcheck % 1 == 0)) || $("#lead-scorebox").val() == "")
+    { 
+      if($("#lead-scorebox").val()=="")
+      {
+        scoreboxval = 0;
+      }         
+      App_Leads.leadDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
+      var lead_model =  App_Leads.leadDetailView.model.toJSON();     
+      var new_model = new Backbone.Model();
+      new_model.url = 'core/api/contacts';
+      new_model.save(lead_model,{
+      success: function(model){
+          }
+        });             
+    }
+    if(isNaN(scoreboxval)|| scoreboxval != decimalcheck)
+    {
+      showAlertModal("number_validation", undefined, function()
+      {
+        scoreboxval = prvs;
+        setStyleForLeadScore(scoreboxval);
+      });
+      return;
+    }
+    else
+    {
+      if(scoreboxval== prvs)
+      {
+        scoreboxval=prvs;
+      }
+    }
+    setStyleForLeadScore(scoreboxval);
+  },
+
+  leadInlineEdit : function(e)
+  {
+    inlineLeadNameChange(e);
+  },
+
+  toggleLeadsInlineEditFields :function(e)
+  { 
+    $("#leadName").toggleClass("hidden");
+    $("#lead-input").toggleClass("hidden");
+    console.log(this);
+    if(!$("#lead-input").hasClass("hidden"))
+    {
+      $("#Contact-input-lastname").focus(); 
+    }
+  },
+
+  leadNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+    {
+      inlineLeadNameChange(e);
+    }
+  },
+
+  onChangeLeadOwnerSelected : function(e){
+    e.preventDefault();
+    var targetEl = $(e.currentTarget);
+
+    $('#change-owner-ul').css('display', 'none');
+    
+    // Reads the owner id from the selected option
+    var new_owner_id = $(targetEl).attr('data');
+    var new_owner_name = $(targetEl).text();
+    var current_owner_id = $('#contact-owner').attr('data');
+    
+    // Returns, if same owner is selected again 
+    if(new_owner_id == current_owner_id)
+    {
+      // Showing updated owner
+      show_owner();
+      return;
+    }
+    
+    var contactModel = new BaseModel();
+    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Leads.leadDetailView.model.get('id');
+    contactModel.save(App_Leads.leadDetailView.model.toJSON(), 
+    {
+      success: function(model)
+      {
+        // Replaces old owner details with changed one
+        $('#contact-owner').text(new_owner_name);
+        $('#contact-owner').attr('data', new_owner_id);
+        
+        // Showing updated owner
+        show_owner(); 
+        App_Leads.leadDetailView.model = model;
+    
+    }});
+         
+  }, 
 
 });
 
@@ -1909,6 +2076,64 @@ function setleadScoreStyles(scoreboxval){
   $('#lead-score').text(scoreboxval).removeClass("hide");
   $("#scorebox").addClass("hide").val(scoreboxval);
   $("#lead-score").attr("title",scoreboxval);
+}
+
+function setStyleForLeadScore(scoreboxval){
+  $('#lead-leadscore').attr("data-original-title", scoreboxval);
+  $('#lead-leadscore').text(scoreboxval).removeClass("hide");
+  $("#lead-scorebox").addClass("hide").val(scoreboxval);
+  $("#lead-leadscore").attr("title",scoreboxval);
+}
+
+function inlineLeadNameChange(e,data)
+{
+  // Get actual name
+  var first = $("#lead-input-firstname").val();
+  var last  = $("#lead-input-lastname").val();
+  firstName =first.trim();
+  lastName =last.trim();
+  if(!firstName)
+  {
+    $("#lead-input-firstname").addClass("error-inputfield");
+    return;
+  }
+  if(agile_crm_is_model_property_changed("first_name", firstName)){
+    // Update first name
+    var model_id = App_Leads.leadDetailView.model.toJSON().id;
+    agile_crm_update_contact("first_name", firstName, function(contact_model)
+    {
+      if(model_id != contact_model.id) return;
+
+      $("#lead-input").addClass("hidden");
+      $("#leadName").text(firstName+" "+lastName ).removeClass("hidden");
+      $("#leadName").addClass("text-capitalize ");
+      $("#lead-input-firstname" ).removeClass("error-inputfield");
+      $("#lead-input-lastname" ).removeClass("error-inputfield");  
+      return;
+    });
+  }
+
+  if(agile_crm_is_model_property_changed("last_name", lastName)){
+      // Update last name
+      agile_crm_update_contact("last_name", lastName,function(contact_model)
+      {
+        if(model_id != contact_model.id) return;
+
+        $("#lead-input").addClass("hidden");
+        $("#leadName").text(firstName+" "+lastName ).removeClass("hidden");
+        $("#leadName").addClass("text-capitalize ");
+        $("#lead-input-firstname").removeClass("error-inputfield");
+        $("#lead-input-lastname").removeClass("error-inputfield");
+        return ;
+      });
+  }
+
+  // Toggle fields
+  $("#lead-input").addClass("hidden");
+  $("#leadName").text(firstName+" "+lastName).removeClass("hidden");
+  $("#leadName").addClass("text-capitalize ");
+  $("#lead-input-firstname").removeClass("error-inputfield");
+  $("#lead-input-lastname").removeClass("error-inputfield"); 
 }
 
 

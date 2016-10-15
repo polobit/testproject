@@ -125,7 +125,7 @@ var timeline_entity_loader = {
 					if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact.id)
 						return;
 
-					if(App_Leads.leadDetailView && App_Contacts.leadDetailView.model.get('id') !== contact.id)
+					if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') !== contact.id)
 						return;
 
 					var contact_emails = [];

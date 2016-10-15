@@ -343,7 +343,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Contact createContact(Contact contact)
     {
-	// Check if the email exists with the current email address
+	// Check if the email exists in contacts with the current email address
 	boolean isDuplicate = ContactUtil.isExists(StringUtils.lowerCase(contact.getContactFieldValue("EMAIL")));
 
 	// Throw non-200 if it exists
@@ -352,6 +352,17 @@ public class ContactsAPI
 	    System.out.println("Duplicate contact found");
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry, duplicate contact found with the same email address.").build());
+	}
+	
+	// Check if the email exists in leads with the current email address
+	isDuplicate = ContactUtil.isExistsByType(StringUtils.lowerCase(contact.getContactFieldValue("EMAIL")), Type.LEAD);
+
+	// Throw non-200 if it exists
+	if (isDuplicate)
+	{
+	    System.out.println("Duplicate lead found");
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, duplicate lead found with the same email address.").build());
 	}
 
 	contact.save();

@@ -406,6 +406,8 @@ public class ContactFilterResultFetcher
 
 		if (contact.type == Contact.Type.PERSON)
 		    number_of_contacts = contacts.size();
+		else if(contact.type == Contact.Type.LEAD)
+		    number_of_leads = contacts.size();
 		else
 		    number_of_companies = contacts.size();
 	    }

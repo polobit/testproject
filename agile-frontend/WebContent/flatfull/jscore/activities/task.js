@@ -498,16 +498,25 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							updateTask(isUpdate, data, json);
 						}
 						// Updates data to temeline
-						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+						else if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+							(App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id')))
 						{
-
+							var contactId;
+							if(App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+							{
+								contactId = App_Contacts.contactDetailView.model.get('id');
+							}
+							else
+							{
+								contactId = App_Leads.leadDetailView.model.get('id');
+							}
 							/*
 							 * Verifies whether the added task is related to the
 							 * contact in contact detail view or not
 							 */
 							$.each(task.contacts, function(index, contact)
 							{
-								if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+								if (contact.id == contactId)
 								{
 
 									// Add model to collection. Disabled sort

@@ -5,7 +5,8 @@
 var Leads_Filter_Events_View = Base_Model_View.extend({
     events: {
         'click .filter-leads-multiple-add' : 'leadsFilterMultipleAdd',
-        'click .filter-leads-multiple-add-or-rules' : 'leadsFilterAddOrRules'
+        'click .filter-leads-multiple-add-or-rules' : 'leadsFilterAddOrRules',
+        'click i.filter-leads-multiple-remove' : 'leadsFilterRemove'
     },
 
     leadsFilterMultipleAdd : function(e)
@@ -49,6 +50,12 @@ var Leads_Filter_Events_View = Base_Model_View.extend({
             $(that).prev('table').find("tbody").append(htmlContent);
         }, null);
         
+    },
+
+    leadsFilterRemove: function(e)
+    {
+        var targetEl = $(e.currentTarget);
+        $(targetEl).closest("tr").remove();
     }
 
 });

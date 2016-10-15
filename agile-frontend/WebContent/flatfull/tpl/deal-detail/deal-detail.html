@@ -224,6 +224,9 @@
           {{#if_contact_type "PERSON"}}
       <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
+          {{#if_contact_type "LEAD"}}
+            <a href="#lead/{{id}}" class="activate-link thumb-sm m-b-xs text-xs" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+          {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
             <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
@@ -480,6 +483,9 @@
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
          <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+          {{/if_contact_type}}
+          {{#if_contact_type "LEAD"}}
+            <a href="#lead/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
                 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>

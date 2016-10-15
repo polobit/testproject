@@ -722,9 +722,18 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		add_recent_view(new BaseModel(deal));
 
 		// Updates data to timeline
-		if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+		if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+			(App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id')))
 		{
-
+			var contactId;
+			if(App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+			{
+				contactId = App_Contacts.contactDetailView.model.get('id');
+			}
+			else
+			{
+				contactId = App_Leads.leadDetailView.model.get('id');
+			}
 			// Add model to collection. Disabled sort while adding and called
 			// sort explicitly, as sort is not working when it is called by add
 			// function
@@ -736,7 +745,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 			$.each(deal.contacts, function(index, contact)
 			{
 
-				if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+				if (contact.id == contactId)
 				{
 
 					if (dealsView && dealsView.collection)

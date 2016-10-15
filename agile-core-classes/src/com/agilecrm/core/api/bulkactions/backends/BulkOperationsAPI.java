@@ -148,6 +148,11 @@ public class BulkOperationsAPI
 	    message = idsFetcher.getCompanyCount() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "DELETE", "", "companies", "");
 	}
+	else if (idsFetcher.getLeadCount() > 0)
+	{
+	    message = idsFetcher.getCompanyCount() + " Leads deleted";
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "DELETE", "", "leads", "");
+	}
 	else
 	{
 	    message = idsFetcher.getTotalCount() + " Contacts/Companies deleted";
@@ -214,6 +219,13 @@ public class BulkOperationsAPI
 	    message = message + idsFetcher.getCompanyCount() + " Companies";
 	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
 	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "CHANGE_OWNER", user.name, "companies",
+		    "");
+	}
+	else if (idsFetcher.getLeadCount() > 0)
+	{
+	    message = message + idsFetcher.getCompanyCount() + " Leads";
+	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "CHANGE_OWNER", user.name, "leads",
 		    "");
 	}
 	else
@@ -813,7 +825,9 @@ public class BulkOperationsAPI
 	    @FormParam("data") String data) throws JSONException
     {
 
-	int count = 0;
+	int contactsCount = 0;
+	int companiesCount = 0;
+	int leadsCount = 0;
 
 	try
 	{
@@ -853,32 +867,46 @@ public class BulkOperationsAPI
 	    }
 	}
 
-	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
-	count = count - noEmailsCount;
+	/*count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies() > 0 ? fetcher.getAvailableCompanies() : fetcher.getAvailableLeads();
+	count = count - noEmailsCount;*/
 
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
-
+	
+	contactsCount = fetcher.getAvailableContacts();
+	companiesCount = fetcher.getAvailableCompanies();
+	leadsCount = fetcher.getAvailableLeads();
 	// String message = "";
-	if (fetcher.getAvailableContacts() > 0)
+	if (contactsCount > 0)
 	{
+		contactsCount = contactsCount - noEmailsCount;
 	    // message = fetcher.getAvailableContacts() + " Contacts deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "SEND_EMAIL",
 		    ActivitySave.html2text(emailData.getString("message")), "contacts",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (companiesCount > 0)
 	{
+		companiesCount = companiesCount - noEmailsCount;
 	    // message = fetcher.getAvailableCompanies() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "SEND_EMAIL",
 		    ActivitySave.html2text(emailData.getString("message")), "companies",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
+	else if (fetcher.getAvailableLeads() > 0)
+	{
+		leadsCount = leadsCount - noEmailsCount;
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableLeads(), "SEND_EMAIL",
+		    ActivitySave.html2text(emailData.getString("message")), "leads",
+		    ActivitySave.html2text(emailData.getString("subject")));
+	}
 
-	if (count > 0)
-	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
-	else if (count > 0)
-	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " companies");
+	if (contactsCount > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + contactsCount + " Contacts");
+	else if (companiesCount > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + companiesCount + " companies");
+	else if (leadsCount > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + leadsCount + " leads");
 	else
 	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");
 

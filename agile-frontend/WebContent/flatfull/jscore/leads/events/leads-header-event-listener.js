@@ -16,26 +16,14 @@ var Leads_Header_Events_View = Base_Model_View.extend({
         'click #bulk-export' : 'leadsExport',
         'click #bulk-email' : 'leadsBulkEmailSend',
         'click #bulk-status' : 'bulkStatusChange',
+        'click #select-all-available-leads' : 'selectAllLeads',
+        'click #select-all-revert' : 'selectChoosenLeads',
     },
 
     addLead : function(e)
     {
         e.preventDefault();
-    	var newLeadModalView = new Leads_Form_Events_View({ data : {}, template : "new-lead-modal", isNew : true,
-            postRenderCallback : function(el)
-            {
-                leadsViewLoader = new LeadsViewLoader();
-                leadsViewLoader.setupSources(el);
-                leadsViewLoader.setupStatuses(el);
-                setup_tags_typeahead(undefined, el);
-                var fxn_display_company = function(data, item)
-                {
-                    $("#new-lead-modal [name='lead_company_id']").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
-                }
-                agile_type_ahead("lead_company", $("#new-lead-modal"), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
-            }
-        });
-		$("#new-lead-modal").html(newLeadModalView.render().el).modal("show");
+    	addLeadBasedOnCustomfields();
     },
 
     toggleLeadsView : function(e)
@@ -51,10 +39,10 @@ var Leads_Header_Events_View = Base_Model_View.extend({
 			_agile_set_prefs("agile_lead_view","grid-view");
 			$("#leadTabelView").hide();
 		}
-		if(_agile_get_prefs("contacts_tag")){
+		/*if(_agile_get_prefs("contacts_tag")){
 			App_Leads.leadsViewLoader.getLeads(App_Leads.leadViewModel, $("#content"), _agile_get_prefs("contacts_tag"));
 			return;
-		}
+		}*/
 		$(".thead_check", $("#contacts-listener-container")).prop("checked", false);
 		App_Leads.leadsViewLoader.getLeads(App_Leads.leadViewModel, $("#content"));
     },
@@ -453,5 +441,64 @@ var Leads_Header_Events_View = Base_Model_View.extend({
             Backbone.history.navigate("lead-bulk-status", { trigger : true });
         }
     },
+
+    selectAllLeads : function(e)
+    {
+        e.preventDefault();
+        App_Leads.leadsBulkActions.SELECT_ALL_LEADS = true;
+        App_Leads.leadsBulkActions.BULK_LEADS = window.location.hash;
+        
+        var html = '';
+        
+        var resultCount = App_Leads.leadsBulkActions.getAvailableLeads();
+        var limitValue = 10000;
+
+        if(localStorage.getItem("dynamic_lead_filter") != null || localStorage.getItem("lead_filter") != null)
+        {               
+            if(resultCount > limitValue)
+            {
+                resultCount = limitValue + "+";
+            }
+        }
+        html = ' Selected All ' + resultCount + ' leads. <a hrer="#" id="select-all-revert" class="c-p text-info">Select chosen leads only</a>';
+        
+        $('body').find('#bulk-select').css('display', 'inline-block').html(html);
+
+        $.each($('.tbody_check'), function(index, element)
+        {
+            $(element).attr('checked', "checked");
+        });
+    },
+
+    selectChoosenLeads : function(e)
+    {
+        e.preventDefault();
+        App_Leads.leadsBulkActions.SELECT_ALL_LEADS = true;
+        App_Leads.leadsBulkActions.BULK_LEADS = undefined;
+        
+        var html = '';
+
+        var limitValue = 10000;     
+        var resultCount = App_Leads.leadsListView.collection.length;
+        var appCount = App_Leads.leadsBulkActions.getAvailableLeads();
+
+        if(localStorage.getItem("dynamic_lead_filter") != null || localStorage.getItem("lead_filter") != null) {              
+            
+            if(resultCount > limitValue)
+            {
+                resultCount = limitValue + "+";
+            }
+
+            if(appCount > limitValue)
+            {
+                appCount = limitValue + "+";
+            }
+
+        }
+
+        html = "Selected " + resultCount + " leads. <a href='#'  id='select-all-available-leads' class='c-p text-info'>Select all " + appCount + " leads</a>";
+
+        $('body').find('#bulk-select').html(html);
+    }
 
 });

@@ -3204,7 +3204,7 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
   display: none;
 }
-#scorebox{
+#scorebox, #lead-scorebox{
   text-align:center;
   right: 5px;
   width: 56px;

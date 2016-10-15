@@ -291,7 +291,8 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 			_agile_set_prefs("agile_contact_view","grid-view");
 			$("#contactTabelView").hide();
 		}
-		if(_agile_get_prefs("contacts_tag")){
+		var contactsTag = _agile_get_prefs("contacts_tag");
+		if(contactsTag && contactsTag != "undefined"){
 			contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"), _agile_get_prefs("contacts_tag"));
 			return;
 		}

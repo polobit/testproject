@@ -1315,4 +1315,15 @@ function initializeEditContactListeners(ele_id)
 	{
 		serialize_and_save_continue_lead(e, 'updateLeadForm', 'new-lead-modal', false, e.currentTarget, 'tags_source_continue_lead');
 	});
+
+	$("#"+ele_id).off('click', '#lead-close');
+	$("#"+ele_id).on('click', '#lead-close', function(e)
+	{
+		e.preventDefault();
+		var id = $('#updateLeadForm input[name=id]').val();
+		if (id)
+		{
+			Backbone.history.navigate("lead/" + id, { trigger : true });
+		}
+	});
 }

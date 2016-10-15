@@ -1570,6 +1570,11 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
 		}
+
+		if(Current_Route && App_Leads.leadDetailView && Current_Route == "lead/"+App_Leads.leadDetailView.model.get("id"))
+		{
+			model = App_Leads.leadDetailView.model.toJSON();
+		}
 	}
 	
 		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));

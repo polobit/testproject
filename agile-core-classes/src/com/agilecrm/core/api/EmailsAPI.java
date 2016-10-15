@@ -37,8 +37,6 @@ import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
@@ -717,4 +715,82 @@ public String getSendgridWhitelabelPermission() throws Exception
 	return restriction.toString();
 	
 }
+
+	/**
+	 * Returns emails sent through Agile. Emails json string are returned in the
+	 * format {emails:[]}.
+	 * 
+	 * @param searchEmail
+	 *            - to get emails related to search email
+	 * @param count
+	 *            - required number of emails.
+	 * @param offset
+	 *            - offset.
+	 * @return String
+	 */
+	   
+	@Path("agile-lead-emails")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<ContactEmailWrapper> getAgileLeadEmails(@QueryParam("search_email") String searchEmail,@QueryParam("count") String countString)
+	{
+	List<ContactEmailWrapper> emailsList = null;
+	try
+	{
+	    // Removes unwanted spaces in between commas
+	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+	
+	    searchEmail = StringUtils.split(normalisedEmail, ",")[0];
+	
+	    Contact contact = ContactUtil.searchLeadByEmail(searchEmail);
+	    
+	    List<ContactEmail> contactEmails = null;
+	    
+	    if(StringUtils.isNotBlank(countString))
+	    {
+	    	try
+	    	{
+	    		Integer count = Integer.parseInt(countString);
+	    		// Fetches latest contact emails
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,count);
+	    	}
+	    	catch(NumberFormatException e)
+	    	{
+	    		e.printStackTrace();
+	    		contactEmails = ContactEmailUtil.getContactEmails(contact.id,20);
+	    	}
+	    }
+	    else
+	    {
+	    	contactEmails = ContactEmailUtil.getContactEmails(contact.id);
+	    }
+	    
+	    if(contactEmails!= null)
+	    {
+		    JSONArray agileEmails = new JSONArray();
+		    // Merge Contact Emails with obtained imap emails
+		    for (ContactEmail contactEmail : contactEmails)
+		    {
+			// parse email body
+			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+	
+			ObjectMapper mapper = new ObjectMapper();
+			String emailString = mapper.writeValueAsString(contactEmail);
+			agileEmails.put(new JSONObject(emailString));
+		    }
+	
+		    emailsList = new ObjectMapper().readValue(agileEmails.toString(),
+			    new TypeReference<List<ContactEmailWrapper>>()
+			    {
+			    });
+	    }
+	    return emailsList;
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+	}
 }

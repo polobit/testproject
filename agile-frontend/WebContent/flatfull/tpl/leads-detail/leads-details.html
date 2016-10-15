@@ -113,10 +113,10 @@
 													</div>
                             					</div>
                             					<div class="w-full  m-t-xs  h3 font-thin custom-color p-r-sm" style="padding-bottom:1px;">
-													<div class="hidden" id="Contact-input"><input type="text"id="Contact-input-firstname" class=" m-l-xs pull-left inlineditor" style="height:28px;width:100px;" maxlength="100" value='{{getPropertyValue properties "first_name"}} '>
-														<input type="text"id="Contact-input-lastname" class="m-l-xs m-n pull-left inlineditor" style="height:28px;width:100px;" maxlength="100" value="{{getPropertyValue properties "last_name"}}">
+													<div class="hidden" id="lead-input"><input type="text"id="lead-input-firstname" class=" m-l-xs pull-left inlineditor" style="height:28px;width:100px;" maxlength="100" value='{{getPropertyValue properties "first_name"}} '>
+														<input type="text"id="lead-input-lastname" class="m-l-xs m-n pull-left inlineditor" style="height:28px;width:100px;" maxlength="100" value="{{getPropertyValue properties "last_name"}}">
 													</div>
-													<div class="text-ellipsis" id="contactName">
+													<div class="text-ellipsis" id="leadName">
 														{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
 													</div>
 													<div class="clearfix"></div>
@@ -254,18 +254,18 @@
 																  		{{#canEditContact owner.id}}
 																			<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
 																				{{#if lead_score}}
-																					<span title="{{lead_score}}" id="lead-contactscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+																					<span title="{{lead_score}}" id="lead-leadscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
 																				{{else}}
-																					<span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+																					<span title="0" id="lead-leadscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
 																				{{/if}}
 																			</span>
 																			<span class="inline-block v-middle">
-																				<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control scorebox" id="scorebox">
+																				<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control scorebox" id="lead-scorebox">
 																			</span>
 																			<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
 																				<ul class="inline-block list-none m-n p-n">
-																					<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
-																					<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+																					<li style="height: 12px"><i class="icon-sort-up c-p" id="lead-score-increase" style="height: 6px;"></i></li>
+																					<li><i class="icon-sort-down c-p" id="lead-score-decrease" style="height: 10px;"></i></li>
 																				 </ul>
 																			</span>
 																		{{else}}
@@ -273,7 +273,7 @@
 																				{{#if lead_score}}
 																					<span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
 																				{{else}}
-																					<span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+																					<span title="0" id="lead-leadscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
 																				{{/if}}		
 																			</span>
 																		{{/canEditContact}}
@@ -698,11 +698,11 @@
 													</ul>
 												</div>
 											</div>  
-											<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;height:28px;" id="Contact-input">
-												<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties "first_name"}} '>
-												<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties "last_name"}}">
+											<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;height:28px;" id="lead-input">
+												<input type="text"id="lead-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties "first_name"}} '>
+												<input type="text"id="lead-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties "last_name"}}">
 											</div>
-											<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
+											<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="leadName">
 												<span class="text-capitalize " id="contact_name">
 													{{getSystemPropertyValue properties "first_name"}}
 												</span>
@@ -851,18 +851,18 @@
 																{{#canEditContact owner.id}}
 																	<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
 																		{{#if lead_score}}
-																			<span title="{{lead_score}}" id="lead-contactscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+																			<span title="{{lead_score}}" id="lead-leadscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
 																		{{else}}
-																			<span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+																			<span title="0" id="lead-leadscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
 																		{{/if}}
 																	</span>
 																	<span class="inline-block v-middle">
-																		<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="scorebox">
+																		<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="lead-scorebox">
 																 	</span>
 																 	<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
 																		<ul class="inline-block list-none m-n p-n">
-																			<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
-																			<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+																			<li style="height: 12px"><i class="icon-sort-up c-p" id="lead-score-increase" style="height: 6px;"></i></li>
+																			<li><i class="icon-sort-down c-p" id="lead-score-decrease" style="height: 10px;"></i></li>
 																		</ul>
 																	</span>
 																{{else}}
@@ -870,7 +870,7 @@
 																		{{#if lead_score}}
 																			<span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
 																		{{else}}
-																			<span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+																			<span title="0" id="lead-leadscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
 																		{{/if}}		
 																	</span>
 																{{/canEditContact}}
@@ -1218,7 +1218,9 @@
 								<li class=""><a data-toggle="tab" role="tab" href="#leads-campaigns">{{agile_lng_translate 'contact-details' 'campaigns'}}</a></li>
 								<li class=""><a data-toggle="tab" role="tab" href="#leads-stats">{{agile_lng_translate 'contact-details' 'web-stats'}}</a></li> -->
 								<li class=""><a data-toggle="tab" role="tab" href="#leads-mail">{{agile_lng_translate 'contact-details' 'mail'}}</a></li>
-								<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#leads-documents">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
+								{{#hasMenuScope 'DOCUMENT'}}
+									<li id="custom-contact-document" class=""><a data-toggle="tab" role="tab" href="#leads-documents">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
+								{{/hasMenuScope}}
 								<!-- <li><a data-toggle="tab" role="tab" href="#leads-tickets">{{agile_lng_translate 'report-view' 'tickets'}}</a></li> -->
 							</ul>
 							<div class="pull-left p-sm bg-light text-xs text-muted hidden-xs" id="next">

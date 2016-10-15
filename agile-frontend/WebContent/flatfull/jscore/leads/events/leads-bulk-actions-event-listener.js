@@ -516,7 +516,7 @@ var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
         $('#attachment-select').closest("span").find('.attachment-status').find("span").fadeOut(0);
         $('#attachment-select').css({"border":"1px solid #bbb"});    
         $('#attachment-select').find('option:first').attr('selected', 'selected');
-        var el = $(this).closest("div");
+        var el = $(e.currentTarget).closest("div");
         $('#emailForm').find('.attachment-document-select').css('display','none');
         $('#emailForm').find('#eattachment').css('display','none');
         $('#emailForm').find(".add-attachment-select").css("display", "inline");
@@ -531,7 +531,7 @@ var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
     {
         e.preventDefault();
 
-        if ($(this).attr('disabled'))
+        if ($(e.currentTarget).attr('disabled'))
             return;
 
         var $form = $('#emailForm');
@@ -541,7 +541,7 @@ var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
             return;
 
         // Disables send button and change text to Sending...
-        disable_send_button($(this));
+        disable_send_button($(e.currentTarget));
 
         // Saves tinymce content to textarea
         save_content_to_textarea('email-body');
@@ -552,7 +552,7 @@ var Leads_Bulk_Action_Events_View = Base_Model_View.extend({
         var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 
         var json = {};
-        json.contact_ids = id_array;
+        json.contact_ids = App_Leads.bulk_lead_ids_to_send_email;
         json.data = JSON.stringify(form_json);
         
         var msg = _agile_get_translated_val('campaigns','emails-queued') + " " + count + " " +_agile_get_translated_val('contact-details','contacts')+ ". " + _agile_get_translated_val('campaigns','emails-sent-shortly');

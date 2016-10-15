@@ -11,6 +11,7 @@ var LeadsViewLoader = (function(){
 
 	LeadsViewLoader.prototype.LEADS_CUSTOM_SORT_VIEW = undefined;
 	LeadsViewLoader.prototype.LEAD_CUSTOM_FIELDS = undefined;
+	LeadsViewLoader.prototype.ALL_LEAD_CUSTOM_FIELDS = undefined;
 
 	/*
 	 * To fetch leads hedings like first name, last name etc...
@@ -292,7 +293,7 @@ var LeadsViewLoader = (function(){
 	{
 		$('#lead-static-fields-group', el).html(getTemplate("lead-custom-fields"));
 
-		get_custom_fields(function(data)
+		this.getLeadCustomFields(function(data)
 		{
 	 		for(i=0; i<data.length; i++)
 	 		{
@@ -318,6 +319,40 @@ var LeadsViewLoader = (function(){
 				}
 			});
 		});
+	}
+
+	/**
+	 * Returns custom fields data in JSON
+	 */
+	LeadsViewLoader.prototype.getLeadCustomFields = function(callback)
+	{
+		var that = this;
+		// If already fetched, return
+		if(this.ALL_LEAD_CUSTOM_FIELDS){
+			if(callback)
+			{
+				return callback(this.ALL_LEAD_CUSTOM_FIELDS);
+			}
+
+			return this.ALL_LEAD_CUSTOM_FIELDS;
+		}
+			
+		
+		// Sends GET request for customfields.
+		accessUrlUsingAjax('/core/api/custom-fields/scope?scope=LEAD', function(data){
+
+			// Parse stringify json
+			that.ALL_LEAD_CUSTOM_FIELDS = data;
+			
+			if(callback)
+			{
+				return callback(that.ALL_LEAD_CUSTOM_FIELDS)
+			}
+
+			return that.ALL_LEAD_CUSTOM_FIELDS;
+
+		});
+
 	}
 
 	/*

@@ -295,6 +295,12 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		
 	});
 
+	$("#lead").on("click", function(e){
+		e.preventDefault();
+		addLeadBasedOnCustomfields();
+		
+	});
+
 	$("#referrals_link").on("click", function(e){
 		e.preventDefault();
 		Agile_GA_Event_Tracker.track_event("Refer");
@@ -525,6 +531,45 @@ function addContactBasedOnCustomfields(){
 						$("#personModal").modal("show");
 				}
 			});
+ }
+
+/**
+ * checks if there are any custom fields and if present navigates to lead-add page 
+ * otherwise opens new lead modal
+ * 
+ */
+function addLeadBasedOnCustomfields(){
+ 	$.ajax(
+ 	{
+		url : 'core/api/custom-fields/required/scope?scope=LEAD',
+		type : 'GET',
+		dataType : 'json',
+		success : function(data){
+			if(data && data.length > 0)
+			{
+				Backbone.history.navigate("lead-add" , {trigger: true});
+				
+			}
+			else
+			{
+				var newLeadModalView = new Leads_Form_Events_View({ data : {}, template : "new-lead-modal", isNew : true,
+		            postRenderCallback : function(el)
+		            {
+		                leadsViewLoader = new LeadsViewLoader();
+		                leadsViewLoader.setupSources(el);
+		                leadsViewLoader.setupStatuses(el);
+		                setup_tags_typeahead(undefined, el);
+		                var fxn_display_company = function(data, item)
+		                {
+		                    $("#new-lead-modal [name='lead_company_id']").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+		                }
+		                agile_type_ahead("lead_company", $("#new-lead-modal"), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
+		            }
+		        });
+				$("#new-lead-modal").html(newLeadModalView.render().el).modal("show");
+			}
+		}
+	});
  }
 
 

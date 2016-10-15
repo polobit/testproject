@@ -650,6 +650,10 @@ public class ContactUtil
 
     public static int searchContactCountByEmailAndType(String email, Type type)
     {
+    if (StringUtils.isBlank(email))
+    {
+    	return 0;
+    }
 	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
 		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
 
@@ -2254,5 +2258,52 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	Contact.dao.putAll(contacts_list);
+    }
+    
+    /**
+     * Gets a lead based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchLeadByEmail(String email)
+    {
+	if (StringUtils.isBlank(email))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("properties.name", Contact.EMAIL);
+	q.filter("type", Type.LEAD);
+	q.filter("properties.value", email.toLowerCase());
+
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+    
+    /**
+     * Gets existence of a lead/contact with email and type
+     * 
+     * @param email
+     *            email value to get a contact/lead
+     * @param type
+     *            represents contact or lead
+     *            
+     * @return boolean
+     */
+    public static boolean isExistsByType(String email, Type type)
+    {
+
+	if (StringUtils.isBlank(email))
+	    return false;
+
+	return searchContactCountByEmailAndType(email, type) != 0 ? true : false;
     }
 }
