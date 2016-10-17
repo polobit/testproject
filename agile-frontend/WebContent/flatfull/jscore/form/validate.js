@@ -138,7 +138,6 @@ function isValidForm(form) {
 	
 	},"{{agile_lng_translate 'validation-msgs' 'ipaddress'}}");
 
-	
 	jQuery.validator.addMethod("formulaData", function(value, element){
 		var source = $(element).val();
 		var tpl;
@@ -336,6 +335,14 @@ function isValidForm(form) {
 			
 	}, "{{agile_lng_translate 'validation-msgs' 'date'}}");
 
+	//required validation for sendmail
+	jQuery.validator.addMethod("requiredEmail", function(value, element){
+              if(element.value!="" || element.parentElement.firstElementChild.firstElementChild.children.length!=0)
+                       return true;
+               else 
+                       return false;   
+    },_agile_get_translated_val("validation-msgs",'this-field-is-required'));
+    
 	$(form).validate({
 		ignoreTitle: true,
 		rules : {

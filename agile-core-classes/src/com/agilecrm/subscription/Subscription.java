@@ -18,7 +18,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -35,7 +34,6 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
-import com.stripe.model.InvoiceItem;
 
 /**
  * <code>Subscription</code> class represents subscription details of a domain.
@@ -158,6 +156,7 @@ public class Subscription {
 
 	@NotSaved
 	public BillingRestriction cachedData;
+	
 
 	private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(
 			Subscription.class);
@@ -447,8 +446,17 @@ public class Subscription {
 	 * 
 	 * @throws Exception
 	 */
-	public void purchaseEmailCredits(Integer quantity) throws Exception {
-		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+	public void purchaseEmailCredits(int quantity) throws Exception {
+		purchaseEmailCredits(quantity, 0);
+	}
+	public void purchaseEmailCredits(int quantity, int decrementCount) throws Exception {
+		boolean isPaid = getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+		if(!isPaid)
+			throw new Exception("Payment failed. Please try again.");
+		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);
+		restriction.save();
+		System.out.println("Credits purchased successfully ::"+System.currentTimeMillis());
 	}
 	
 	/**
@@ -507,6 +515,7 @@ public class Subscription {
 
 			if (billing_data_json_string != null)
 				billing_data = new JSONObject(billing_data_json_string);
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
