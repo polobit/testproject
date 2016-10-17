@@ -27,8 +27,6 @@ public class Form
     public boolean emailNotification=false;
     //enable captcha
     public boolean agileformcaptcha=false;
-    //for message 
-    public String agileinlinesubmit = null;
     @NotSaved(IfDefault.class)
     public String formHtml= null;
 
@@ -52,14 +50,13 @@ public class Form
     this.formHtml = html;
     }
     
-    public Form(String name, String json, String html, boolean emailnotification,boolean  agileformcaptcha,String agileinlinesubmit)
+    public Form(String name, String json, String html, boolean emailnotification,boolean  agileformcaptcha)
     {
     this.formName = name;
     this.formJson = json;
     this.formHtml = html;
     this.emailNotification=emailnotification;
     this.agileformcaptcha=agileformcaptcha;
-    this.agileinlinesubmit=agileinlinesubmit;
     }
 
     public void save()
