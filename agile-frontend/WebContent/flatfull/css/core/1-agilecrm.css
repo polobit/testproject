@@ -4807,3 +4807,12 @@ ul#recent-menu-model-list li:nth-child(even)
 #admin-affiliate-detail-model-list tr:hover{
   cursor: pointer;
 }
+
+
+.filter-dynamic-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.filter-dynamic-scrollbar::-webkit-scrollbar-thumb {
+  background:#ccc;
+  border-radius:10px;
+}
