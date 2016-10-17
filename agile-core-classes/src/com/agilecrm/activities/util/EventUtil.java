@@ -760,12 +760,12 @@ public class EventUtil
 	   	    						contactName.append(contact.last_name);
 	   	    					}
 	   	    					if(contactName.length() > 0){
-	   	    						contactName.append(contactName.substring(0, 1).toUpperCase() + contactName.substring(1));
-	   	    						contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ contactName+"</a>, ");
+	   	    						String modifiedContactName = (contactName.substring(0, 1).toUpperCase() + contactName.substring(1));
+	   	    						contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ modifiedContactName +"</a>, ");
 	   	    					}	   	    					
 	   	    				}else if(contact.type.equals(ContactType.COMPANY)){
 	   	    					if(contact.name != null){
-	   	    						String companyName = contact.name.substring(0, 1).toUpperCase() + contact.name.substring(1);
+	   	    						String companyName = (contact.name.substring(0, 1).toUpperCase() + contact.name.substring(1));
 	   	    						companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ companyName +"</a>, ");
 	   	    					}
 	   	    				}
