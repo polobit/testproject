@@ -397,7 +397,7 @@
         this.hide(); 
       }
       else {
-        if(!this.menuitemClicked) {
+        if(!this.menuitemClicked && !this.shown) {
           var $targetEle = $(e.target);
           if($targetEle.closest("ul.typeahead").length > 0)
               $targetEle.trigger("click");
