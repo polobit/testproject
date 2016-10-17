@@ -358,6 +358,10 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$('body').on("click",clickOutsideSearchDropdownEventHandler);
 	});
 
+	$(".search-close").on("click",function(e){
+		$('.searchicon-dropdown').removeClass('open');
+	});
+
 	$('#searchText').on('keydown', function(e){
 
 		if(e.keyCode == 13){
