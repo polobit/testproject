@@ -334,7 +334,7 @@ var emailVideoRecord = {
             filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
 
             formData = new FormData();
-            formData.append('key',  "videos/local/"+filename);
+            formData.append('key',  "videos/" + CURRENT_DOMAIN_USER.domain + "/" + filename);
             formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
             formData.append('acl', 'public-read');
             formData.append('content-type', 'video/webm');
