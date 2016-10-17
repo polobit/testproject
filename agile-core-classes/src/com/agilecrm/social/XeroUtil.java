@@ -17,10 +17,11 @@ import com.agilecrm.widgets.Widget;
 public class XeroUtil
 {
 
-	public String callbackUrl = "%s/XeroServlet?data=";
-	// http://integrations.clickdesk.com:8080/
-	//if use local use http://localhost:8080/
+	public String callbackUrl = "%s/XeroServlet?data=";	
+	// Live url setup. 
 	private String xeroPluginurl = "http://integrations.clickdesk.com:8080/ClickdeskPlugins/core/agile/xero";
+	// Local url setup.
+	//private String xeroPluginurl = "http://localhost:8585/clickdesk-plugins/core/agile/xero";
 
 	/**
 	 * Calls method in ClickDeskPlugins server using REST API to get invoices of

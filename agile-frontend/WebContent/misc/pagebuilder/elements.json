@@ -12,7 +12,7 @@
     	{"url":"elements/header4.html","height":660, "thumbnail":"elements/images/thumbs/header4.png"},
     	{"url":"elements/header7.html","height":715, "thumbnail":"elements/images/thumbs/header7.png"}
     ],
-    "Content Sections":[
+    "ContentSections":[
     	{"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/content_section1.png"},
     	{"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/content_section2.png"},
     	{"url":"elements/content_section3.html","height":774, "thumbnail":"elements/images/thumbs/content_section3.png"},

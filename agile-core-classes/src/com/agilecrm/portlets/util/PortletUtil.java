@@ -5,10 +5,12 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 import net.sf.json.JSONObject;
@@ -49,10 +51,8 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -758,25 +758,9 @@ public class PortletUtil {
 			domainUsersList=DomainUserUtil.getUsers(dUser.domain);
 		List<String> domainUserNamesList=new ArrayList<String>();
 		List<String> domainUserImgList=new ArrayList<String>();
-		
-		List<Integer> answeredCallsCountList=new ArrayList<Integer>();
-		List<Integer> busyCallsCountList=new ArrayList<Integer>();
-		List<Integer> failedCallsCountList=new ArrayList<Integer>();
-		List<Integer> voiceMailCallsCountList=new ArrayList<Integer>();
-		List<Integer> missedCallsCountList=new ArrayList<Integer>();
-		List<Integer> inquiryCallsCountList=new ArrayList<Integer>();
-		List<Integer> interestCallsCountList=new ArrayList<Integer>();
-		List<Integer> noInterestCallsCountList=new ArrayList<Integer>();
-		List<Integer> incorrectReferralCallsCountList=new ArrayList<Integer>();
-		List<Integer> newOpportunityCallsCountList=new ArrayList<Integer>();
-		List<Integer> meetingScheduledCallsCountList=new ArrayList<Integer>();
-		List<Integer> queuedCallsCountList=new ArrayList<Integer>();
-		
-		
 		List<Integer> totalCallsCountList=new ArrayList<Integer>();
-		
 		List<Long> callsDurationList=new ArrayList<Long>();
-		
+		List<Long> nonZeroDurationCountList=new ArrayList<Long>();
 		List<DomainUser> usersList = new ArrayList<DomainUser>();
 		
 		try {
@@ -801,107 +785,75 @@ public class PortletUtil {
 			e.printStackTrace();
 		}
 		int i=0;
+		//Map<String,Integer[]> finalCallStatusCount = new HashMap<>();
+		List<Map<String, Integer>> finalCallStatusCountMapList = new ArrayList<>();
+		Map<String,Integer> CallStatusCountMap = new LinkedHashMap<>();
+		
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+		CallStatusCountMap.put(Call.ANSWERED,0);
+		CallStatusCountMap.put(Call.BUSY,0);
+		CallStatusCountMap.put(Call.FAILED,0);
+		CallStatusCountMap.put(Call.VOICEMAIL,0);
+		CallStatusCountMap.put(Call.Missed,0);
+		for(Category category : categories){
+			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
+		}
+		CallStatusCountMap.put("others",0);
+		
 		for(DomainUser domainUser : usersList){
-			int answeredCallsCount=0;
-			int busyCallsCount=0;
-			int failedCallsCount=0;
-			int voiceMailCallsCount=0;
-			int missedCallsCount=0;
-			int inquiryCallsCount=0;
-			int interestCallsCount=0;
-			int noInterestCallsCount=0;
-			int incorrectReferralCallsCount=0;
-			int newOpportunityCallsCount=0;
-			int meetingScheduledCallsCount=0;
-			int queuedCallsCount=0;
-			
+			// loop all the status and generate the count for each .........
 			int totalCallsCount=0;
-			
 			long callsDuration=0;
-			
 			List<Activity> callActivitiesList = ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-			
-				for(Activity activity : callActivitiesList){
-					try{
-					if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.ANSWERED) || activity.custom3.equalsIgnoreCase("completed")))
-						answeredCallsCount++;
-					else if(activity.custom3!=null && (activity.custom3.equalsIgnoreCase(Call.BUSY) || activity.custom3.equalsIgnoreCase(Call.NO_ANSWER)))
-						busyCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
-						failedCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-						voiceMailCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-						missedCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-						inquiryCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-						interestCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-						noInterestCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-						incorrectReferralCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-						newOpportunityCallsCount++;
-					else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-						meetingScheduledCallsCount++;
-					else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
-						queuedCallsCount++;
-					totalCallsCount++;
-					if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
-							&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase(""))
-						callsDuration+=Long.valueOf(activity.custom4);
-					
+			Map<String,Integer> tempCallStatusCountMap = new LinkedHashMap<>(CallStatusCountMap);
+			Long nonZeroDurationCount = 0L;
+			for(Activity activity:callActivitiesList){
+				try{
+					String statusInActivity = activity.custom3;
+					if(statusInActivity != null && !statusInActivity.equals("")){
+						if(statusInActivity.equalsIgnoreCase(Call.ANSWERED) || statusInActivity.equalsIgnoreCase(Call.COMPLETED)){
+							statusInActivity = Call.ANSWERED;
+						}else if((statusInActivity.equalsIgnoreCase(Call.BUSY) || statusInActivity.equalsIgnoreCase(Call.NO_ANSWER))){
+							statusInActivity = Call.BUSY;
+						}else if(activity.custom3!=null){
+							if(tempCallStatusCountMap.containsKey(activity.custom3.toLowerCase())){
+								statusInActivity=activity.custom3.toLowerCase();
+							}else{
+								statusInActivity="others";
+							}
+						}
+						int count1=tempCallStatusCountMap.get(statusInActivity);
+                 		count1++;
+                 		tempCallStatusCountMap.put(statusInActivity,count1);
+		                    
+						totalCallsCount++;
+						if(activity.custom4!=null &&  !activity.custom4.equalsIgnoreCase(null) 
+								&& !activity.custom4.equalsIgnoreCase("null") && !activity.custom4.equalsIgnoreCase("")){
+							callsDuration+=Long.valueOf(activity.custom4);
+							if(Long.valueOf(activity.custom4) > 0){
+								nonZeroDurationCount ++;
+							}
+						}
+					}
+				}catch(Exception e){
+					e.printStackTrace();
 				}
-			catch(Exception e){
-				e.printStackTrace();
 			}
-				}
-			
-			answeredCallsCountList.add(answeredCallsCount);
-			busyCallsCountList.add(busyCallsCount);
-			failedCallsCountList.add(failedCallsCount);
-			voiceMailCallsCountList.add(voiceMailCallsCount);
-			missedCallsCountList.add(missedCallsCount);
-			inquiryCallsCountList.add(inquiryCallsCount);
-			interestCallsCountList.add(interestCallsCount);
-			noInterestCallsCountList.add(noInterestCallsCount);
-			incorrectReferralCallsCountList.add(incorrectReferralCallsCount);
-			newOpportunityCallsCountList.add(newOpportunityCallsCount);
-			meetingScheduledCallsCountList.add(meetingScheduledCallsCount);
-			queuedCallsCountList.add(queuedCallsCount);
-			
+			finalCallStatusCountMapList.add(tempCallStatusCountMap);
+			nonZeroDurationCountList.add(nonZeroDurationCount);
 			totalCallsCountList.add(totalCallsCount);
-			
 			callsDurationList.add(callsDuration);
-			
 			domainUserNamesList.add(domainUser.name);
-			
-			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-			
-			UserPrefs userPrefs = null;
-			
-			if(agileUser!=null)
-				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-			if(userPrefs!=null)
-				domainUserImgList.add(userPrefs.pic);
+			if(domainUser.pic != null)
+				domainUserImgList.add(domainUser.pic);
 			else
 				domainUserImgList.add("no image-"+i);
 			i++;
 		}
-		callsPerPersonJSON.put("answeredCallsCountList",answeredCallsCountList);
-		callsPerPersonJSON.put("busyCallsCountList",busyCallsCountList);
-		callsPerPersonJSON.put("failedCallsCountList",failedCallsCountList);
-		callsPerPersonJSON.put("voiceMailCallsCountList",voiceMailCallsCountList);
-		callsPerPersonJSON.put("missedCallsCountList",missedCallsCountList);
-		callsPerPersonJSON.put("inquiryCallsCountList",inquiryCallsCountList);
-		callsPerPersonJSON.put("interestCallsCountList",interestCallsCountList);
-		callsPerPersonJSON.put("noInterestCallsCountList",noInterestCallsCountList);
-		callsPerPersonJSON.put("incorrectReferralCallsCountList",incorrectReferralCallsCountList);
-		callsPerPersonJSON.put("newOpportunityCallsCountList",newOpportunityCallsCountList);
-		callsPerPersonJSON.put("meetingScheduledCallsCountList",meetingScheduledCallsCountList);
-		callsPerPersonJSON.put("queuedCallsCountList",queuedCallsCountList);
-
+		
+		callsPerPersonJSON.put("totalNonZeroDurationStatusCountList",nonZeroDurationCountList);
+		callsPerPersonJSON.put("finalCallStatusCountMapList", finalCallStatusCountMapList);	
 		callsPerPersonJSON.put("callsDurationList",callsDurationList);
 		callsPerPersonJSON.put("totalCallsCountList",totalCallsCountList);
 		callsPerPersonJSON.put("domainUsersList",domainUserNamesList);
@@ -1043,14 +995,8 @@ public class PortletUtil {
 						else
 							splitByMap.put(category.getLabel(),0);
 					}
-					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-					
-					UserPrefs userPrefs = null;
-					
-					if(agileUser!=null)
-						userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-					if(userPrefs!=null)
-						groupByList.add(userPrefs.pic);
+					if(domainUser.pic !=null)
+						groupByList.add(domainUser.pic);
 					else
 						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
@@ -1068,14 +1014,8 @@ public class PortletUtil {
 						else
 							splitByMap.put(status.name(),0);
 					}
-					AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-					
-					UserPrefs userPrefs = null;
-					
-					if(agileUser!=null)
-						userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-					if(userPrefs!=null)
-						groupByList.add(userPrefs.pic);
+					if(domainUser.pic !=null)
+						groupByList.add(domainUser.pic);
 					else
 						groupByList.add("no image-"+i);
 					splitByList.add(splitByMap);
@@ -1389,14 +1329,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1424,14 +1358,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1454,31 +1382,30 @@ public class PortletUtil {
 						//JSONObject cateJson_total = new JSONObject();
 						callsStatus(domainUser,minTime,maxTime,cateJson);
 						//cateJson.put("value", ActivityUtil.getCompletedCallsCountOfUser(domainUser.id, minTime, maxTime));
-						cateJson.put("name", "Deals Won");
+						cateJson.put("name", "Calls Won");
 						cateJson.put("userName", domainUser.name);
 						if(dUser.id.equals(domainUser.id))
 							cateJson.put("isDomainUser", true);
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
-						Collections.sort(cateList,new Comparator<JSONObject>(){
-							@Override  
-			                public int compare(JSONObject o1, JSONObject o2){
-								return Integer.valueOf(o2.getInt("answered")).compareTo(Integer.valueOf(o1.getInt("answered")));  
-			                }
-			            });
 					}
+					Collections.sort(cateList,new Comparator<JSONObject>(){
+						@Override  
+		                public int compare(JSONObject o1, JSONObject o2){
+							if(o1.get("eachCallStatus") instanceof Map<?, ?>){
+								Map<String,Integer> mapO1 = (Map<String, Integer>) o1.get("eachCallStatus");
+								Map<String,Integer> mapO2 = (Map<String, Integer>) o2.get("eachCallStatus");
+								return mapO2.get("answered").compareTo(mapO1.get("answered")); 
+							}
+							return 0;
+		                }
+		            });
 					dataJson.put("callsJson", cateList);
 					dataJson.put("calls", true);
 					categoryCount++;
@@ -1496,14 +1423,8 @@ public class PortletUtil {
 						else
 							cateJson.put("isDomainUser", false);
 						
-						AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-						
-						UserPrefs userPrefs = null;
-						
-						if(agileUser!=null)
-							userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-						if(userPrefs!=null)
-							cateJson.put("userPic",userPrefs.pic);
+						if(domainUser.pic!=null)
+							cateJson.put("userPic",domainUser.pic);
 						else
 							cateJson.put("userPic","");
 						cateList.add(cateJson);
@@ -1850,14 +1771,8 @@ public class PortletUtil {
 					}
 
 			}
-			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainUser.id);
-			
-			UserPrefs userPrefs = null;
-			
-			if(agileUser!=null)
-				userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
-			if(userPrefs!=null)
-				groupByList.add(userPrefs.pic);
+			if(domainUser.pic!=null)
+				groupByList.add(domainUser.pic);
 			else
 				groupByList.add("no image-"+i);
 			splitByList.add(splitByMap);
@@ -1942,95 +1857,80 @@ public class PortletUtil {
  
  public static JSONObject callsStatus(DomainUser domainUser,long minTime, long maxTime,JSONObject cateJson)
  {
-			int answeredCallsCount=0;
-		int busyCallsCount=0;
-		int failedCallsCount=0;
-		int voiceMailCallsCount=0;
-		int missedCallsCount=0;
-		int inquiryCallsCount=0;
-		int interestCallsCount=0;
-		int noInterestCallsCount=0;
-		int incorrectReferralCallsCount=0;
-		int newOpportunityCallsCount=0;
-		int meetingScheduledCallsCount=0;
-		int queuedCallsCount=0;
+	 
+		Map<String,Integer> CallStatusCountMap = new LinkedHashMap<>();
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+		Map<String,String> colors = new LinkedHashMap<>();
+		String[] lightColors = {"#FFCCCC","#E8E4E3","#F5E7A3","#C2D6C2","#00FF00","#B8BAAB","#C3E619","#5ea1d4","#1d104a","#19A1E6","#0066CC","#E566FF","#FFFF99","#D98026","#FFAA00","#E6FFCC","#BBFF33","#FFFF33","#FF2A00","#66FFE6","#FF0080"};
+		colors.put(Call.ANSWERED, "#27c24c");
+		colors.put(Call.BUSY, "#23b7e5");
+		colors.put(Call.Missed, "#fad733");
+		colors.put(Call.VOICEMAIL, "#7266ba");
+		colors.put(Call.FAILED, "#f05050");
 		
+		CallStatusCountMap.put(Call.ANSWERED,0);
+		CallStatusCountMap.put(Call.BUSY,0);
+		CallStatusCountMap.put(Call.FAILED,0);
+		CallStatusCountMap.put(Call.VOICEMAIL,0);
+		CallStatusCountMap.put(Call.Missed,0);
+		
+		int lc=0;
+		for(Category category : categories){
+			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
+			if(!colors.containsKey(category.getLabel().toLowerCase())){
+				String tempColor = "" ;
+				int loop = 0;
+				while(true){
+					if(lc >= lightColors.length-1 || loop > 1){
+						tempColor = "#" + Integer.toHexString(new Random().nextInt(0xFFFFFF)+ new Random().nextInt(0x16777));
+					}else{
+						loop = loop + 1;
+						tempColor = lightColors[lc];
+					}
+					
+					if(!colors.containsValue(tempColor)){
+						loop = 0;
+						lc = lc+1;
+						break;
+					}
+				}
+				colors.put(category.getLabel().toLowerCase(),tempColor);
+			}
+		}
+		colors.put("others", "#ff8080");
+		CallStatusCountMap.put("others",0);
+
 		int total_Calls=0;
-						List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
-						
-							for(Activity activity : callActivitiesList){
-								try{
-									
-									 	if(activity.custom3!=null)
-								{
-									switch(activity.custom3.toLowerCase()){
-										case Call.ANSWERED :
-										case "completed" :
-											answeredCallsCount++;
-											break;
-										case Call.BUSY :
-										case Call.NO_ANSWER:
-											busyCallsCount++;
-											break;
-										case Call.FAILED :
-											failedCallsCount++;
-											break;
-										case Call.VOICEMAIL :
-											voiceMailCallsCount++;
-											break;	
-										case Call.Missed :
-											missedCallsCount++;
-											break;	
-										case Call.Inquiry :
-											inquiryCallsCount++;
-											break;	
-										case Call.Interest :
-											interestCallsCount++;
-											break;	
-										case Call.NoInterest :
-											noInterestCallsCount++;
-											break;	
-										case Call.IncorrectReferral :
-											incorrectReferralCallsCount++;
-											break;	
-										case Call.NewOpportunity :
-											newOpportunityCallsCount++;
-											break;		
-										case Call.MeetingScheduled :
-											meetingScheduledCallsCount++;
-											break;
-										default :
-											queuedCallsCount++;
-											break;		
-									}
-
-								}
-							
-								total_Calls++;
-								
-								
-							}
-						catch(Exception e){
-							e.printStackTrace();
+		List<Activity> callActivitiesList=ActivityUtil.getActivitiesByActivityType("CALL",domainUser.id,minTime,maxTime);
+		for(Activity activity:callActivitiesList){
+			try{
+				String statusInActivity = activity.custom3;
+				if(statusInActivity != null && !statusInActivity.equals("")){
+					if(statusInActivity.equalsIgnoreCase(Call.ANSWERED) || statusInActivity.equalsIgnoreCase(Call.COMPLETED)){
+						statusInActivity = Call.ANSWERED;
+					}else if((statusInActivity.equalsIgnoreCase(Call.BUSY) || statusInActivity.equalsIgnoreCase(Call.NO_ANSWER))){
+						statusInActivity = Call.BUSY;
+					}else if(activity.custom3!=null){
+						if(CallStatusCountMap.containsKey(activity.custom3.toLowerCase())){
+							statusInActivity=activity.custom3.toLowerCase();
+						}else{
+							statusInActivity="others";
 						}
-							}
+					}
+					int count1=CallStatusCountMap.get(statusInActivity);
+             		count1++;
+             		CallStatusCountMap.put(statusInActivity,count1);
+             		total_Calls++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+						cateJson.put("eachCallStatus",CallStatusCountMap);
+						cateJson.put("colors",colors);
 						cateJson.put("total", total_Calls);
-						cateJson.put("answered", answeredCallsCount);
-						cateJson.put("busy", busyCallsCount);
-						cateJson.put("missed", missedCallsCount);
-						cateJson.put("failed", failedCallsCount);
-						cateJson.put("voiceMail", voiceMailCallsCount);
-						cateJson.put("missed", missedCallsCount);
-						cateJson.put("inquiry", inquiryCallsCount);
-						cateJson.put("interest", interestCallsCount);
-						cateJson.put("noInterest", noInterestCallsCount);
-						cateJson.put("incorrectReferral", incorrectReferralCallsCount);
-						cateJson.put("newOpportunity", newOpportunityCallsCount);
-						cateJson.put("meetingScheduled", meetingScheduledCallsCount);
-						cateJson.put("other", queuedCallsCount);
 						return cateJson;
-
-
  }
  
  public static void addDefaultMarketingPortlets(){
@@ -2039,8 +1939,8 @@ public class PortletUtil {
 	    Portlet dummyMarketiPortlet = new Portlet("Dummy Marketing Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignStatsMarketingPortlet = new Portlet("Campaign stats",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignGraphMarketingPortlet = new Portlet("Campaign graph",PortletType.USERACTIVITY,2,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
-	    Portlet webstatVisitsMarketingPortlet = new Portlet("Webstat Visits",PortletType.USERACTIVITY,1,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
-	    Portlet referralurlStatsMarketingPortlet = new Portlet("Referralurl stats",PortletType.USERACTIVITY,2,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    /*Portlet webstatVisitsMarketingPortlet = new Portlet("Webstat Visits",PortletType.USERACTIVITY,1,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet referralurlStatsMarketingPortlet = new Portlet("Referralurl stats",PortletType.USERACTIVITY,2,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());*/
 	    Portlet emailOpenedMarketingPortlet = new Portlet("Emails Opened",PortletType.USERACTIVITY,1,3,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    
 	    JSONObject campaignStatsMarketingPortletJSON = new JSONObject();
@@ -2053,13 +1953,13 @@ public class PortletUtil {
 	    campaignGraphMarketingPortletJSON.put("campaign_type", "All");
 	    campaignGraphMarketingPortlet.prefs = campaignGraphMarketingPortletJSON.toString();
 	    
-	    JSONObject webstatVisitsMarketingPortletJSON = new JSONObject();
+	   /* JSONObject webstatVisitsMarketingPortletJSON = new JSONObject();
 	    webstatVisitsMarketingPortletJSON.put("duration","today");
-	    webstatVisitsMarketingPortlet.prefs = webstatVisitsMarketingPortletJSON.toString();
+	    webstatVisitsMarketingPortlet.prefs = webstatVisitsMarketingPortletJSON.toString();*/
 	    
-	    JSONObject referralurlStatsMarketingPortletJSON = new JSONObject();
+	    /*JSONObject referralurlStatsMarketingPortletJSON = new JSONObject();
 	    referralurlStatsMarketingPortletJSON.put("duration","yesterday");
-	    referralurlStatsMarketingPortlet.prefs = referralurlStatsMarketingPortletJSON.toString();
+	    referralurlStatsMarketingPortlet.prefs = referralurlStatsMarketingPortletJSON.toString();*/
 	    
 	    JSONObject emailOpenedMarketingPortletJSON = new JSONObject();
 	    emailOpenedMarketingPortletJSON.put("duration","2-days");
@@ -2070,8 +1970,8 @@ public class PortletUtil {
 		campaignStatsMarketingPortlet.save();
 		campaignGraphMarketingPortlet.save();
 		emailOpenedMarketingPortlet.save();
-		webstatVisitsMarketingPortlet.save();
-		referralurlStatsMarketingPortlet.save();
+		//webstatVisitsMarketingPortlet.save();
+		//referralurlStatsMarketingPortlet.save();
 		dummyMarketiPortlet.save();		
 		onboardingMarketingPortlet.save();
 		

@@ -1,6 +1,6 @@
 (function () {
 
-/* globals siteUrl:false, baseUrl:false, agilePageId:false, s3BaseUrl:false */
+/* globals siteUrl:false, baseUrl:false, agilePageId:false, s3BaseUrl:false ,selectedTemplateId:false ,copyPagebuilderId:false */
     "use strict";
         
     var appUI = {
@@ -13,6 +13,8 @@
         baseUrl: baseUrl,
         agilePageId: agilePageId,
         s3BaseUrl: s3BaseUrl,
+        selectedTemplateId : selectedTemplateId, 
+        copyPagebuilderId : copyPagebuilderId,
         
         setup: function(){
             

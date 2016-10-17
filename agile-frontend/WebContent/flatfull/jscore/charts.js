@@ -191,12 +191,47 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			var categories = [];
 			var tempcategories = [];
 			var colors=[];
+			var colorForStatus = {};
 
 			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
-				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];
-			
+				{
+					colorForStatus = {"failed" : "#f05050", "busy" :"#23b7e5" , "voicemail" : "#7266ba", "answered" : "#27c24c", "missed" : "#fad733", "others": "#ff8080"}
+				};
+
+				var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+					var jsn = data[Object.keys(data)[0]];
+					var lc = 0;
+					if(jsn){
+						$.each(jsn, function(key, value){
+							if(colorForStatus[key]){
+								colors.push(colorForStatus[key]);
+								addedColor[colorForStatus[key]] = colorForStatus[key];
+							}else{
+								var colorCode;
+								var loop = 0;
+								while(true){
+									if(lc >= lightColors.length-1 || loop > 1){
+									colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+									}else{
+										loop = loop + 1;
+										colorCode = lightColors[lc];
+									}
+									
+									if(!addedColor[colorCode]){
+										loop = 0;
+										lc = lc+1;
+										break;
+									}
+								}
+								addedColor[colorCode] = colorCode;
+								colors.push(colorCode);
+							}
+						});
+					}else{
+						colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];	
+					}
 			colors = selected_colors || colors;
 			
 			var dataLength = 0;
@@ -300,6 +335,16 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			        backgroundColor: (Highcharts.theme&&Highcharts.theme.legendBackgroundColorSolid)||'white',
 			        borderColor: '#CCC',
 			        borderWidth: 1,
+			        labelFormatter : function() {
+						if (this.name.length > 12) {
+							return this.name
+									.slice(0,
+											12)
+									+ '...';
+						} else {
+							return this.name;
+						}
+					},
 			        shadow: false
 			    },
 			    tooltip: {

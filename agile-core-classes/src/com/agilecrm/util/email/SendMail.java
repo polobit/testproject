@@ -1,6 +1,5 @@
 package com.agilecrm.util.email;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
@@ -177,7 +176,7 @@ public class SendMail
     /**
      * Templates path where template files exist.
      */
-    public static final String TEMPLATES_PATH ="misc/email/";
+    public static final String TEMPLATES_PATH = "misc/email/";
 
     /**
      * Html body template extension.
@@ -190,6 +189,8 @@ public class SendMail
     public static final String TEMPLATE_BODY_EXT = "_body.html";
     
     public static final String CONTACT_UPDATE_STATUS = "Domainuser_updates";
+    
+    public static final String CSV_IMPORT_STATS_NOTIFICATION="Csv_import_stats";
 
     @SuppressWarnings("unused")
     private static Object String;
@@ -267,28 +268,9 @@ public class SendMail
 	    // Merge JSONObjects as a single JSONObject in order to get all
 	    // values in a single object
 	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
-	   // System.out.println("ekkkkkkk"+mergedJSON.getString("unsubscribe_body"));
-	    String emailHTML1 = "";
-	    String emailBody1 = "";
-	    
-	    if(mergedJSON.has("unsubscribe_subject")&& mergedJSON.has("unsubscribe_body")){
-	        emailHTML1 = mergedJSON.getString("unsubscribe_body");
-		    emailBody1 = mergedJSON.getString("unsubscribe_body");
-	    
 
-	    // Read template - HTML
-	    if(!(StringUtils.isBlank(emailHTML1) && StringUtils.isBlank(mergedJSON.getString("unsubcribe_subject"))))
-	    {
-	    	        String oldNamespace = NamespaceManager.get();
-	 	            NamespaceManager.set("");
-	    	SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML1, emailBody1, null, args);
-	    	        NamespaceManager.set(oldNamespace);
-	    	     
-	    	   return;
+	    System.out.println("mergedJson in sendemail" + mergedJSON);
 
-	  
-	    }
-	  }  
 	    // Read template - HTML
 	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON);
 

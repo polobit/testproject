@@ -349,23 +349,23 @@ public class ContactUtil
      */
     public static Contact searchContactByEmail(String email)
     {
-	if (StringUtils.isBlank(email))
-	    return null;
-
-	Query<Contact> q = dao.ofy().query(Contact.class);
-	q.filter("properties.name", Contact.EMAIL);
-	q.filter("type", Type.PERSON);
-	q.filter("properties.value", email.toLowerCase());
-
-	try
-	{
-	    return dao.get(q.getKey());
-	}
-	catch (Exception e)
-	{
-	    return null;
-	}
-
+		if (StringUtils.isBlank(email))
+		    return null;
+	
+		Query<Contact> q = dao.ofy().query(Contact.class);
+		q.filter("properties.name", Contact.EMAIL);
+		q.filter("type", Type.PERSON);
+		q.filter("properties.value", email.toLowerCase());
+	
+		try
+		{
+		    return dao.get(q.getKey());
+		}
+		catch (Exception e)
+		{
+		    return null;
+		}
+	
     }
     
     public static Contact searchContactByEmailID(String email)
@@ -639,9 +639,10 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
-
+    	
+    	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+    			.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
+		
     }
 
     /**
@@ -650,9 +651,8 @@ public class ContactUtil
 
     public static int searchContactCountByEmailAndType(String email, Type type)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
-
+		return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+				.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
     }
 
     /**
@@ -661,9 +661,8 @@ public class ContactUtil
 
     public static Contact searchContactByEmailAndType(String email, Type type)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
-
+    	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+    			.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
     }
 
     /**
@@ -1456,6 +1455,23 @@ public class ContactUtil
     {
 	String URL_PATTERN = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 	Pattern pattern = Pattern.compile(URL_PATTERN);
+
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
+    }
+
+    /**
+     * Validates name
+     * 
+     * @param hex
+     * @return
+     */
+    public static boolean isValidName(final String hex)
+    {
+    	///^\s*[_a-zA-Z0-9\s]+\s*$/;
+	String NAME_PATTERN = "^[_a-zA-Z0-9\\s]+\\s*$";
+	Pattern pattern = Pattern.compile(NAME_PATTERN);
 
 	Matcher matcher = pattern.matcher(hex);
 	return matcher.matches();

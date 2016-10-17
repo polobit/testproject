@@ -126,7 +126,7 @@ public class EventUtil
     {
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 	Map<String, Object> conditionsMap = new HashMap<String, Object>();
-	conditionsMap.put("start <", System.currentTimeMillis() / 1000);
+	conditionsMap.put("end <", System.currentTimeMillis() / 1000);
 	conditionsMap.put("related_contacts", contactKey);
 
 	// Get tasks before today's time and which are not completed

@@ -40,9 +40,10 @@ function populate_recent_menu()
 			}
 		});
 		
-	if(recent_view.collection.length==0)	// default text, when list is empty.
+	if(recent_view.collection.length==0){	// default text, when list is empty.
 		$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
-	else {recent_view.render(true);
+		hideTransitionBar();
+	}else {recent_view.render(true);
 	}			// populate elements if filled from localStorage
 }
 }
@@ -136,7 +137,15 @@ $(function(){
 			populate_recent_menu();
 		else if(recent_view_update_required)
 			{
-			recent_view.render(true);
+				if(recent_view.collection.length==0){
+					// default text, when list is empty.
+					$(".recent-menu-list").remove();
+					$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
+					hideTransitionBar();
+				}else{
+					$(".recent-menu-list").remove();
+					recent_view.render(true);
+				}
 			}
 		
 		recent_view_update_required=false;

@@ -245,6 +245,20 @@
 		<url-pattern>/helpcenterapi/*</url-pattern>
 	</servlet-mapping>
 
+<servlet>
+		<servlet-name>Jersey Feedback REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/feedbackapi</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Jersey Feedback REST Service</servlet-name>
+		<url-pattern>/feedbackapi/*</url-pattern>
+	</servlet-mapping>
+
 
 
 
@@ -505,6 +519,16 @@
     <servlet-mapping>
         <servlet-name>AffiliateReportServlet</servlet-name>
         <url-pattern>/backend/cron/affiliateReport</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
+        <servlet-class>com.agilecrm.affiliate.AffiliateDetailsEditServlet</servlet-class>
+    </servlet>   
+ 
+    <servlet-mapping>
+        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
+        <url-pattern>/editAffiliateDetails</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -1398,6 +1422,15 @@
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
 	<servlet>
+		<servlet-name>FeedBack</servlet-name>
+		<jsp-file>/feedback.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FeedBack</servlet-name>
+		<url-pattern>/feedback</url-pattern>
+	</servlet-mapping>
+	<servlet>
         <servlet-name>VoiceCallTwilioServlet</servlet-name>
         <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
     </servlet>  
@@ -1489,4 +1522,15 @@
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<url-pattern>/formtrigger</url-pattern>
 	</servlet-mapping>
+	<!-- message url for sendmessage node-->
+       <servlet>
+         <servlet-name>ReplySMSTwilioServlet</servlet-name>
+         <servlet-class>com.thirdparty.twilio.ReplySMSTwilioServlet</servlet-class>
+      </servlet>
+     
+      <servlet-mapping>
+         <servlet-name>ReplySMSTwilioServlet</servlet-name>
+         <url-pattern>/msgReplyActionUrl</url-pattern>
+      </servlet-mapping> 
+      
 </web-app>

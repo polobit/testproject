@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.TimeZoneUtil"%>
 {
     "name": "Add Task",
     "thumbnail": "json/nodes/images/common/addtask.png",
@@ -80,44 +81,7 @@
             "id": "timezone",
             "title": "Select the time zone of your location.",
             "options": {
-                <%@page import="com.agilecrm.user.AgileUser"%>
-				<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
-				<%@page import="com.agilecrm.session.UserInfo"%>
-				<%@page import="com.agilecrm.session.SessionManager"%>
-				<%@pageimport="java.util.Arrays"%>
-                <%@pageimport="java.util.TimeZone"%>
-                <%@pageimport="com.agilecrm.account.util.AccountPrefsUtil"%>
-                <%@pageimport="com.agilecrm.user.util.UserPrefsUtil"%>
-                <%@pageimport="com.agilecrm.user.UserPrefs"%>
-                <%@pageimport="com.agilecrm.user.AgileUser"%>
-                <%@pageimport="org.apache.commons.lang.StringUtils"%>
-                <%@pageimport="com.agilecrm.session.UserInfo"%>
-                
-                <%
-                
-                String[] allTimeZones = TimeZone.getAvailableIDs();    
-				Arrays.sort(allTimeZones);  
-				
-				UserInfo userInfo = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-					
-                AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(userInfo.getDomainId());
-                 
-                String timeZone = UserPrefsUtil.getUserPrefs(user).timezone;
-                
-                timeZone = (timeZone == null) ? "UTC" : timeZone;
-                
-                for(int i=0; i< allTimeZones.length; i++){
-                    
-                	String key = allTimeZones[i], value = allTimeZones[i];
-                    
-                    // To get prefs timezone selected
-                    key = (key.equals(timeZone)) ? "*"+key : key;
-                    
-                    if( i == allTimeZones.length-1)
-                    	out.println("\""+key+"\":\""+value+"\"");
-                    else
-                    	out.println("\""+key+"\":\""+value+"\",");
-                }%>
+                <%= TimeZoneUtil.getJavaTimeZones(request, null, true) %>
             },
             "fieldType": "timezone",
             "type": "select"

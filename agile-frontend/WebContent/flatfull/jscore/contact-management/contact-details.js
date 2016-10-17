@@ -122,13 +122,19 @@ function checkContactUpdated(){
 		});
 }
 
+function validateCompanyName(value){
+  var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
+    return custvals.test(value);
+}
+
    function inlineCompanyNameChange(el){
     
     console.log("inlineCompanyNameChange");
     var companyInlineName = $("#company-inline-input").val();
       companyname = companyInlineName.trim();
+          var isVaildCompanyName = validateCompanyName(companyname);
     console.log(companyname);
-    if(!companyname)
+    if(!companyname )
     {
       $("#company-inline-input").addClass("error-inputfield");
       return;
@@ -400,6 +406,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'blur #Contact-input' : 'contact_inline_edit' ,       /** End of inliner edits **/
 
     	/** Company events **/
+      'click #contactDetailsTab a[href="#company-timeline"]' : 'onCompanyTimelineOpen',
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
     	'click #contactDetailsTab a[href="#company-cases"]' : 'listCompanyCases',
@@ -768,16 +775,32 @@ show and hide the input for editing the contact name and saving that
 		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Contacts.contactDetailView.model.get('id');
 		    contactModel.save(App_Contacts.contactDetailView.model.toJSON(), {success: function(model){
 
-		    	// Replaces old owner details with changed one
-				$('#contact-owner').text(new_owner_name);
-				$('#contact-owner').attr('data', new_owner_id);
-				
-				// Showing updated owner
-				show_owner(); 
-				App_Contacts.contactDetailView.model = model;
-				
+    		    	// Replaces old owner details with changed one
+    				$('#contact-owner').text(new_owner_name);
+    				$('#contact-owner').attr('data', new_owner_id);
+    				
+    				// Showing updated owner
+    				show_owner(); 
+    				App_Contacts.contactDetailView.model = model;
+    				CONTACTS_HARD_RELOAD = true;
+            if(!hasScope("VIEW_CONTACTS") && !CURRENT_DOMAIN_USER.is_admin)
+              Backbone.history.navigate("contacts",{trigger: true});
+
+            if(!hasScope("VIEW_CONTACTS")){
+              var storageItems = JSON.parse(localStorage.recentItems);
+              var arr = [];
+              localStorage.removeItem("recentItems");
+              for(var i=0;i<storageItems.length;i++){
+                if(storageItems[i].id != App_Contacts.contactDetailView.model.get('id')){
+                  arr.push(storageItems[i]);
+                }else{
+                  recent_view.collection.remove(storageItems[i].id);
+                }
+              }
+              localStorage.setItem("recentItems", JSON.stringify(arr));
+              recent_view_update_required = true;
+            }
 		    }});
-    	   
     },
 
     // Deletes a contact from database
@@ -1303,7 +1326,11 @@ enterCompanyScore: function(e){
 	    var target = $("#contactDetailsTab");
 	    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
 	  },
-
+    onCompanyTimelineOpen : function(e){
+    e.preventDefault();
+    save_company_tab_position_in_cookie("timeline");
+    company_detail_tab.openCompanyTimeLine(e);
+    },
 	  listCompanyContacts :  function(e)
 	{
 		e.preventDefault();
@@ -1436,7 +1463,7 @@ enterCompanyScore: function(e){
 		var targetEl = $(e.currentTarget);
 
 		var tag = $(targetEl).attr("tag");
-		//removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
 		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
 		
      	var json = App_Companies.companyDetailView.model.toJSON();

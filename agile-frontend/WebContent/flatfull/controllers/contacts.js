@@ -641,7 +641,7 @@ var ContactsRouter = Backbone.Router.extend({
 		if(this.contactsListView && this.contactsListView.collection)
 			contact_collection = this.contactsListView.collection;
 
-		add_recent_view(contact);
+		
 
 		// If contact is of type company , go to company details page
 		if (contact.get('type') == 'COMPANY')
@@ -729,7 +729,12 @@ var ContactsRouter = Backbone.Router.extend({
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
 
-		$('#content').html(el);
+		if(CURRENT_DOMAIN_USER.id == this.contactDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
+			$('#content').html(el);
+			add_recent_view(contact);
+		}else{
+			$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> "+_agile_get_translated_val('contacts','invalid-viewer')+"</h4><div class='text'style='opacity:0.6;'>"+_agile_get_translated_val('companies','enable-permission')+"</div></div></div></div>");
+		}
 	/*	if($(".toggle-contact-image .contact-delete-option").length == 0) {
 			$(".toggle-contact-image .contact-edit-option").css("margin-left","10px");
 			}*/

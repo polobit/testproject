@@ -224,7 +224,7 @@ function deal_infi_scroll(element_id, targetCollection)
 		{
 			console.log('in success');
 
-			if (!colleciton.last().get("cursor"))
+			if (!colleciton.last().get("cursor") || colleciton.first().get("count")==colleciton.models.length)
 			{
 				this.strict = true;
 				targetCollection.infiniScroll.disableFetch();

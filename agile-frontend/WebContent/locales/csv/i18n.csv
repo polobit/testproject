@@ -545,7 +545,7 @@ Plan-and-upgrade.triggers-with-your-current-plan-and-are-trying-to-subscribe,tri
 campaigns.ticket-note-cust,Runs a Campaign on a contact When new note is added by customer.,Ejecuta una campaña en un contacto cuando se añade nueva nota por parte del cliente.
 contacts.merge-max,you can merge maximum of 2 records at a time with master record.,puede combinar máximo de 2 registros a la vez con el registro maestro.
 welcome.you-can-the-API-javascript,you can use the API JavaScript to your web pages and use the API,puede utilizar la API de JavaScript a sus páginas web y el uso de la API
-deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again. Restore this Deal?,La restauración de la Oferta la hará activa de nuevo. Restaurar este oferta?
+deal-view.restoring-the-deal-desc,Restoring the Deal will make it active again.,La restauración de la Oferta la hará activa de nuevo. 
 widgets.sip-desc,Make and receive calls from your contacts using any SIP account.,Haz y recibe llamadas de tus contactos utilizando cualquier cuenta SIP.
 prefs-data-sync.widget-sip-desc,Make and receive calls from your contacts using any SIP account.,Hacer y recibir llamadas de sus contactos utilizando cualquier cuenta SIP.
 prefs-email.office365-content,See all emails related to a contact from your Office365 account.,Ver todos los mensajes de correo electrónico relacionados con un contacto de su cuenta Office365.
@@ -1447,7 +1447,7 @@ admin-settings-custom-fields.delete-company-custom-field,Delete Company Custom F
 campaigns.email-will-be-sent-shortly,Email will be sent shortly.,Correo electrónico será enviado en breve.
 calls.avg-duration-secs,Average Call Duration (Sec),Promedio de duración de llamada (Sec)
 twill.enter-valid-details,Please enter valid details.,Por favor&#44; introduzca los datos válidos.
-Refer-friend.love-agile-crm,Hope you love Agile CRM&#48,Esperamos que el amor Agile CRM&#48
+Refer-friend.love-agile-crm,Hope you love Agile CRM&#44;,Esperamos que el amor Agile CRM&#44;
 contacts-view.of-the-following-conditions,of the following conditions,de las siguientes condiciones
 validation-msgs.deal_milestone_duplicated,'Milestone' already exists!,\'Milestone\' ya existe!
 widgets.enter-custom-widget-details,Enter custom widget details,Insera los detalles del widget personalizado
@@ -2356,7 +2356,7 @@ campaigns.customer-deleted,Customer deleted,cliente eliminado
 report-add.add-email-reports,Add Email Report,Añadir Informe de e-mail
 plan-and-upgrade.nicolas-woirhaye,Nicolas Woirhaye,Nicolas Woirhaye
 report-view.campaignreports,Campaign Reports,Informes de campaña
-others.no-reults-found,No Results Found,No se han encontrado resultados
+others.no-results-found,No Results Found,No se han encontrado resultados
 portlets.emails-per-month,emails per month,correos electrónicos por mes
 visitors.sync-new-signups,Sync new Signups,Sincronizar los nuevos registros
 emails.unsubscribing,Unsubscribing...,Darse de baja ...
@@ -2980,6 +2980,7 @@ portlets.revenue-graph,Revenue Graph,Gráfico de ingresos
 admin-settings-integrations.your-facebook,Your Facebook,Tu Facebook
 web-rules.times-to-show,Times to show,Veces para mostrar
 campaigns.all-campaigns,All Campaigns,todas las campañas
+campaigns.all-campaigns-stats,All Campaign Emails
 landingpages.invalid-path,Invalid path.,Ruta no válida.
 menu.menu-landing-pages,Landing Pages,Páginas de landing
 currency.Fijian Dollar,Fijian Dollar,Dólar fiyiano
@@ -3040,7 +3041,7 @@ contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a
 countries.FO,Faroe Islands,Islas Feore
 countries.GW,Guinea-Bissau,Guinea-Bissau
 modals.document-name,Document Name,nombre del documento
-logcall.edit-call-log,Edit call log,Editar el registro de llamadas
+logcall.edit-call-log,Edit Call Log,Editar el registro de llamadas
 report-view.calls-by-user,Calls by User,Llamadas por usuario
 countries.LI,Liechtenstein,Liechtenstein
 preferences.notifications,Notifications,Notificaciones
@@ -3235,7 +3236,7 @@ tickets.greater-than,Greater Than,Mayor a
 contact-edit.phone-number,Phone number,Número de teléfono
 report-add.updated-date,Updated Date,Fecha actualizada
 tickets.satisfaction,Satisfaction,Satisfacción
-contact-details.add-call-log,Add Call-log,Añadir registro de llamadas
+contact-details.add-call-log,Add Call Log,Añadir registro de llamadas
 modals.company-name,Company Name,nombre de empresa
 tasks.name-of-task,Name of Task,Nombre de la Tarea
 contacts-view.deleted-deal,Deleted Deal,Oferta eliminada
@@ -3518,7 +3519,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Log a call,Ingrese una llamada
+call-log.log-a-call,Call Log,Ingrese una llamada
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -3646,7 +3647,7 @@ admin-settings-custom-fields.DATE,Date Field,campo de fecha
 help.start-chat,Start chat,Comenzar chat
 admin-settings-users.last-login,Last login,Último acceso
 portlets.select-all,Select all,Seleccionar todo
-others.no-reults,No Results,No hay resultados
+others.no-results,No Results,No hay resultados
 portlets.last-month,Last Month,El mes pasado
 admin-settings-deals.new-source,New Source,Nueva fuente
 admin-settings-tags.lead-score,Lead Score,Puntuación de lead
@@ -3876,7 +3877,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Add new
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -4658,7 +4659,6 @@ contacts-view.Email,Email,Email
 deal-view.phone,Phone,Teléfono
 contacts-view.Owner,Owner,Propietario
 report-add.score,Score,Puntuación
-Key,Value,Value
 campaigns.timer,Timer,Minutero
 prefs-email.gmail,Gmail,Gmail
 portlets.tasks,Tasks,Tareas
@@ -4824,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+ Add new,+ Add new
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5255,7 +5255,7 @@ campaigns.delete-status,Delete Status,
 campaigns.confirm-delete-status,Are you sure you want to delete the Status,
 campaigns.help,Help,
 campaigns.telephony-help-text,Here you can add or remove call status and order them as needed. The status will help you to manage call logs better.,
-campaigns.telephony-status-invalid-text,Status should not start with numeric value,
+campaigns.telephony-status-invalid-text,Status should not start with numeric value and should not contain quotes.,
 contact-details.emails,Email,
 widgets.Klout-update-twitter-profile,Please update the twitter profile to get the Klout score.,
 widgets.Klout-content,Know your customers Klout score&#44; a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.,
@@ -5394,7 +5394,8 @@ affiliate.affiliate-program,Affiliate Program,
 affiliate.commission-details,Overview,
 affiliate.referrals,Referrals,
 affiliate.affiliate-tools,Creatives,
-affiliate.no-affiliates,There are no Referrals,
+affiliate.no-affiliates,You have no referrals yet.,
+affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.,
 affiliate.total-count,Total Referrals,
 affiliate.total-commission,Total Commission,
 affiliate.email,Email,
@@ -5428,12 +5429,14 @@ affiliate.p6,Gain access to real-time reports on paid subscriptions and commissi
 affiliate.p7-1,For any queries about Agile's affiliate program&#44; please contact:,
 affiliate.p7-2,affiliates@agilecrm.com,
 affiliate.earn_20,Get 20% on each sale!,
-affiliate.deal-registration,Add Deal,
-affiliate.registered-deals,Affiliate Deals,
-affiliate.no-registered-deals,There are no Affiliate Deals,
+affiliate.deal-registration,Deal Registration,
+affiliate.registered-deals,Registered Deals,
+affiliate.no-registered-deals,Sorry&#44; we were unable to find any registered deals here.,
+affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.,
 affiliate.personal-email,Personal Email,
 affiliate.office-email,Business Email,
 affiliate.website-url,Website URL,
+affiliate.add,Register Deal,
 webrules.push-popup,Request Push Popup,
 web-rules.Pushnoty,Push Notification,
 others.chat-with-us,Chat With Us,Habla con nosotros
@@ -5462,3 +5465,125 @@ upload-google-doc.select-doc,Select Document,Seleccionar documento
 upload-voicemail.upload-wav-file,Upload WAV File,Upload WAV FileDocument
 upload-voicemail.not-a-wav-file,File selected is not a WAV file,Archivo seleccionado no es un archivo WAV
 upload-voicemail.wav-file-info,You may upload a recorded voice (.wav) file here,Usted puede cargar una grabación de voz ( .wav) aquí
+landingpage-builder.drag-info,Build your page by dragging blocks onto the canvas,Construir su página arrastrando bloques en el lienzo
+landingpage-builder.builder-page-title,Page Builder,Creador de página
+landingpage-builder.back-modal-info,You've got pending changes&#44; if you leave this page your changes will be lost. Are you sure?,Tienes cambios pendientes&#44; si sale de esta página se perderán los cambios. ¿Estás seguro?
+landingpage-builder.are-you-sure,Are you sure,Estás seguro
+landingpage-builder.stay-on-the-page,Stay on this page!,Permanecer en esta página!
+landingpage-builder.leave-the-page,Leave the page,Salir de la página
+landingpage-builder.update-content,Update Content,actualización de contenido
+landingpage-builder.cancel-and-close,Cancel & Close,Cancelar y cerrar
+landingpage-builder.all-blocks,All Blocks,Todos los bloques
+landingpage-builder.blocks,Blocks,Bloques
+landingpage-builder.add-page,Add Page,Añadir página
+landingpage-builder.page-settings,Page Settings,Configuración de página
+landingpage-builder.nothing-to-save,Nothing to save,No hay nada que salvar
+landingpage-builder.detail-editor,Detail Editor,Editor detalle
+landingpage-builder.editing,editing,edición
+landingpage-builder.style,Style,Estilo
+landingpage-builder.link,Link,Enlazar
+landingpage-builder.icons,Icons,Iconos
+landingpage-builder.video,Video,Vídeo
+landingpage-builder.agile-form,Agile Form,Agile Forma
+landingpage-builder.link-text,Link text,Texto del enlace
+landingpage-builder.choose-a-page,Choose a page,Elija una página
+landingpage-builder.choose-a-block,Choose a block,Elija un bloque
+landingpage-builder.open-img-lib,Open image library,Abrir biblioteca de imágenes
+landingpage-builder.choose-a-icon,Choose an icon below,Elegir un icono de abajo
+landingpage-builder.youtube-video-id,Youtube Video ID,Youtube Video ID
+landingpage-builder.enter-youtube-video-id,Enter a Youtube video ID,Introduzca un ID de vídeo de Youtube
+others.or-cap,OR,O
+landingpage-builder.vimeo-video-id,Vimeo Video ID,Vimeo Video ID
+landingpage-builder.enter-vimeo-video-id,Enter a Vimeo video ID,Introduzca un ID de vídeo Vimeo
+landingpage-builder.changes-applied,The changes were applied successfully!,Los cambios se aplicaron correctamente!
+landingpage-builder.changes-apply,Apply changes,Aplicar cambios
+landingpage-builder.clone,Clone,Clon
+landingpage-builder.img-library,Image Library,Biblioteca de imágenes
+landingpage-builder.uploading-img,Uploading image,Carga de imágenes
+landingpage-builder.upload-img,Upload Image,Cargar imagen
+landingpage-builder.upload-img-info,You currently have no images uploaded. To upload images&#44; please use the upload panel on your left.,Actualmente no tiene imagenes actualizadas . Para subir imágenes&#44; por favor utilice el panel de subida en su izquierda .
+landingpage-builder.select-img,Select Image,Seleccionar imagen
+landingpage-builder.delete-block-confirm,Are you sure you want to delete this block?,¿Está seguro de que desea borrar este bloque ?
+landingpage-builder.reset-block-confirm,Are you sure you want to reset this block?,¿Está seguro de que desea restablecer este bloque ?
+landingpage-builder.all-changed-destroyed,All changes made to the content will be destroyed.,Todos los cambios realizados en el contenido serán destruidos .
+landingpage-builder.reset-block,Reset Block,Restaurar el bloque
+landingpage-builder.delete-page-confirm,Are you sure you want to delete this entire page?,¿Está seguro de que quiere borrar toda esta página ?
+landingpage-builder.delete-page,Delete Page,Eliminar página
+landingpage-builder.delete-element-info,Are you sure you want to delete this element? Once deleted&#44; it can not be restored.,¿Está seguro de que quiere eliminar este elemento ? Una vez eliminada&#44; no puede ser restaurado.
+landingpage-builder.delete-block,Delete Block,Eliminar Bloque
+landingpage-builder.saving-page-changes,Saving page settings,Ahorro de configuración de la página
+landingpage-builder.page-title,Page Title,Título de la Página
+landingpage-builder.page-title-sm,Page title,Título de la página
+landingpage-builder.page-meta-desc,Page Meta Description,La página de Meta Descripción
+landingpage-builder.page-meta-desc-sm,Page meta description,La página de descripción de la meta
+landingpage-builder.page-meta-keywords,Page Meta Keywords,Página Meta Keywords
+landingpage-builder.page-meta-keywords-sm,Page meta keywords,Palabras clave de la página meta
+landingpage-builder.page-header,Header Includes,Cabecera incluye
+landingpage-builder.page-header-info,Additional code you'd like to include in the,Código adicional que le gustaría incluir en el
+landingpage-builder.head-section,section,sección
+landingpage-builder.page-css,Page CSS,La página de CSS
+landingpage-builder.page-css-applied,CSS applied specifically to this page,CSS aplicado específicamente a esta página
+landingpage-builder.save-settings,Save Settings,Guardar ajustes
+landingpage-builder.page-name,Enter a name to the page,Introduzca un nombre para la página
+landingpage-builder.site-preview,Site Preview,Vista previa del sitio
+landingpage-builder.preview-saved-info,Please note that the preview will always show your latest saved version; changes which haven't been saved yet will not be visible in the preview.,Tenga en cuenta que la vista previa siempre mostrará su última versión guardada; cambios que no se han guardado aún no serán visibles en la vista previa .
+landingpage-builder.preview-changes,Preview Changes,Los cambios de previsualización
+landingpage-builder.headers,Headers,Encabezados
+landingpage-builder.save-now,Save now,Guardar ahora
+landingpage-builder.content-sections,Content Sections,Las secciones de contenido
+landingpage-builder.dividers,Dividers,Divisores
+landingpage-builder.portfolios,Portfolios,Carteras
+landingpage-builder.team,Team,Equipo
+landingpage-builder.pricing-tables,Pricing Tables,Las tablas de precios
+landingpage-builder.footers,Footers,Pies de página
+landingpage-builder.forms,Forms,Formas
+landingpage-builder.create-copy,Create a Copy,Crear una copia
+landingpage-builder.saved-successfully,Landing page have been saved successfully,La página de destino ha sido guardado con éxito
+landingpage-builder.publish-title,You can publish your page with a custom domain.,Puede publicar su página con un dominio personalizado .
+landingpage-builder.source,source,fuente
+landingpage-builder.Move,Move,Movimiento
+other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease,
+admin-settings-integrations.site-key,Site Key,
+campaigns.reply-yes,Yes,
+campaigns.reply-sms,Inbound SMS,
+campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.,
+campaigns.sms_trigger,SMS,
+campaigns.reply-no,No,
+campaigns.reply-number,Select a number,
+campaigns.enter-keyword,Enter a keyword,
+campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.,
+campaigns.setuptwilio,Please enable your Twilio integration ,
+campaigns.here,here.,
+Help-center.mark-as-public-cannedmessage,Mark as Public,
+portlets.Hours,Hours,
+portlets.Minutes,Minutes,
+portlets.Seconds,Seconds,
+deal-view.detailed-notes,Detailed Notes
+tickets.feedback-subject,Subject,
+tickets.feedback-created-time,Note Sent,
+tickets.feedback-ticket-details,Ticket Details,
+tickets.unacceptable,Unacceptable,
+tickets.meets_expectations,Meets Expectations,
+tickets.acceptable,Acceptable,
+tickets.can_improve,Can Improve,
+tickets.exceptional,Exceptional,
+tickets.feedback-view-note,View Note,
+tickets.feedback-contact,Contact,
+tickets.feedback-feedback,Feedback,
+tickets.feedback-feedback-comment,Comment,
+tickets.feedback-feedback-modal,Feedback Comment,
+tickets.feedback-nocomment,No comment available.,
+tickets.feedback-ticket,Ticket,
+tickets.feedback-all,All,
+tickets.feedback-allgroups,All Groups,
+calendar.double-quotes-not-allowed,Double quotes are not allowed in the message
+calendar.double-quotes-not-allowed	Double quotes are not allowed in the message
+sync.sync-all-continue	Syncing of all contacts of other users will be initiated and this is expected to take some time. Do you want to continue?
+contacts-view.edited-call-log-to, Edited call log to
+contacts-view.deleted-call-log-to, Deleted call log to
+contacts-view.deleted-note-to, Deleted note to
+prefs-notifications.Deal_won, Deal_Won
+prefs-notifications.All_Domain_users, All_Domain_users
+prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.
+prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification)
+sync.all-contacts,Sync All Contacts

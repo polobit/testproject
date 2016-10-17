@@ -191,6 +191,19 @@ $(function()
 		return options.fn(exclusive_fields)
 
 	});
+
+	/**
+	 * 
+	 */
+	Handlebars.registerHelper('getCompanyCustomProperties', function(items, options)
+	{
+		var fields = getCompanyCustomProperties(items);
+		if (fields.length == 0)
+			return options.inverse(fields);
+
+		return options.fn(fields);
+
+	});
 	
 	/**
 	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
@@ -1137,12 +1150,10 @@ $(function()
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
   		{
   			if (element == "basic_info" || element == "image")
-  			{
-					
+  			{	
 					if(_agile_get_prefs("contactTabelView"))
 					{
 						// if the compact view is present the remove th basic info heading and add the empty heading for the image
-
 						if(element == "basic_info")
 							return ;
 	
@@ -1150,8 +1161,7 @@ $(function()
 						{
 							element = "";
 							cls = "";
-						}
-							  
+						}			  
 					}
 					else
 					{
@@ -1162,9 +1172,9 @@ $(function()
 						}
 						if(element == "basic_info")
 							element = "Basic Info";
+						
 					}
 			}
-
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
   			element = element.split("_")[1];
@@ -1172,6 +1182,12 @@ $(function()
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
+
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
@@ -3135,6 +3151,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -3178,6 +3200,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			 if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -5147,6 +5175,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+		    if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -5190,6 +5224,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -6523,7 +6563,7 @@ $(function()
 		$.each(App_Companies.companyViewModel[item], function(index, element)
   		{
 
-  			if (element == "basic_info" || element == "image")
+  			if (element == "basic_info" || element == "image" || element == "url" || element == "name")
   			{
 					
 					if(_agile_get_prefs("companyTabelView"))
@@ -6549,6 +6589,8 @@ $(function()
 						}
 						if(element == "basic_info")
 							element = "Basic Info";
+						if(element == "url" || element == "name")
+							return;
 					}
 			}
 		else if(element == "url")
@@ -6566,7 +6608,6 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-
 	 	element = getTableLanguageConvertHeader(element);
 	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  
@@ -7585,6 +7626,11 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactCompanyTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
@@ -7766,4 +7812,64 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 	else
 		return options.inverse(this);
 	
+});
+
+
+/**
+ * 
+ */
+Handlebars.registerHelper('selectJsonValue', function(json, key)
+{
+	var jsonObject = json;
+	if(jsonObject[key]){
+		return jsonObject[key];
+	}
+	return "";
+});
+
+/**
+ * 
+ */
+Handlebars.registerHelper("convertToi18ForCall",function(value)
+{
+	var constantJson = {"answered":"{{agile_lng_translate 'campaigns' 'answered'}}",
+						"busy":"{{agile_lng_translate 'campaigns' 'busy'}}",
+						"failed" : "{{agile_lng_translate 'call_activity' 'fail'}}",
+						"voicemail" : "{{agile_lng_translate 'campaigns' 'voicemail'}}",
+						"missed":"{{agile_lng_translate 'campaigns' 'missed'}}",
+						"others" : "{{agile_lng_translate 'admin-settings-tasks' 'Other'}}"					
+						};
+	if(constantJson[value]){
+		return constantJson[value];
+	}
+	
+	if (value.length > 12) {
+		value = value
+				.slice(0,
+						12)
+				+ '...';
+	} 
+	return value;
+	
+});
+
+Handlebars.registerHelper('isExtensionInstalled', function(options)
+{
+	if (document.getElementById('agilecrm_extension')) 
+		return options.fn(this);
+
+	return options.inverse(this);
+ 		 
+});
+
+Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
+{
+	var track ; 
+	if(id)
+		track = trackListView.collection.get(id);
+	if(milestone && track && track.get('won_milestone') && milestone == track.get('won_milestone'))
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+
 });

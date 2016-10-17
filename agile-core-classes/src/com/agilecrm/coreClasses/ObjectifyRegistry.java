@@ -5,6 +5,7 @@ import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.AffiliateDeal;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.googlecode.objectify.ObjectifyService;
 /**
  * Register all entities used by Objectify in this module.
@@ -23,6 +24,7 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(Affiliate.class);
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
+		ObjectifyService.register(WorkflowBackup.class);
 		
 	}
 }

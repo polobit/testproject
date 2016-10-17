@@ -69,5 +69,17 @@ public class FormUtil
 					+ e.getMessage());
 		}
  }
-   
+   /**
+    * @method for the  replace the
+    * @param string
+    * @param from
+    * @param to
+    * @return
+    */
+    public static String replaceLast(String stringText, String findText, String replaceText) {
+	     int lastIndex = stringText.lastIndexOf(findText);
+	     if (lastIndex < 0) return stringText;
+	     String tail = stringText.substring(lastIndex).replaceFirst(findText, replaceText);
+	     return stringText.substring(0, lastIndex) + tail;
+	}
 }

@@ -402,6 +402,36 @@ public class ContactEmailUtil
 
 		return imapEmails;
 	}
+	public static JSONArray mergeCompanyEmails(String searchEmail, JSONArray imapEmails)
+	{
+		// if email preferences are not set.
+		if (imapEmails == null)
+			imapEmails = new JSONArray();
+
+		try
+		{
+			// Fetches contact emails
+			List<ContactEmail> contactEmails = getContactEmails(ContactUtil.searchCompanyByEmail(searchEmail).id);
+
+			// Merge Contact Emails with obtained imap emails
+			for (ContactEmail contactEmail : contactEmails)
+			{
+				// parse email body
+				contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+
+				ObjectMapper mapper = new ObjectMapper();
+				String emailString = mapper.writeValueAsString(contactEmail);
+				imapEmails.put(new JSONObject(emailString));
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception while merging emails " + e.getMessage());
+		}
+
+		return imapEmails;
+	}
 
 	/**
 	 * Converts obtained emails string to json.

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -102,6 +104,7 @@ public class CSVUtil
     private StatusSender statusSender = null;
 
     private StatusProcessor<?> statusProcessor = null;
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     private CSVUtil()
     {
@@ -120,7 +123,7 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-		    .acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
@@ -291,7 +294,10 @@ public class CSVUtil
     public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
-
+    	
+    	Map<Object, Object> stats = new HashMap<Object, Object>();
+    	Long time = System.currentTimeMillis();
+    	stats.put("start_time", dateTimeFormat.format(time));
 	// Creates domain user key, which is set as a contact owner
 	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
@@ -313,12 +319,13 @@ public class CSVUtil
 
 	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
 	reportStatus(csvData.size());
+	
 
 	if (csvData.isEmpty())
 	    return;
 	// extract csv heading from csv file
 	String[] headings = csvData.remove(0);
-
+	stats.put("count", csvData.size());
 	contact.type = Contact.Type.PERSON;
 
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
@@ -690,8 +697,8 @@ public class CSVUtil
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 	// create failed contact csv
-
-	buildFailedContacts(domainUser, failedContacts, headings, status);
+	
+	buildFailedContacts(domainUser, failedContacts, headings, status,stats);
 	if (savedContacts != 0 || mergedContacts != 0)
 	    ActivityUtil.createLogForImport(ActivityType.CONTACT_IMPORT, EntityType.CONTACT, savedContacts,
 		    mergedContacts);
@@ -716,6 +723,7 @@ public class CSVUtil
 	boolean limitCrossed = false;
 
 	List<String[]> companies = getCSVDataFromStream(blobStream, "UTF-8");
+	List<FailedContactBean> failedCompanies = new ArrayList<FailedContactBean>();
 
 	if (companies.isEmpty())
 	    return;
@@ -768,7 +776,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-	    boolean canSave = true;
+	    boolean canSave = true;/*boolean invalidName = true;*/
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -829,6 +837,7 @@ public class CSVUtil
 		    if (isInvalid)
 		    {
 			tagInvalid++;
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid tag added"));
 			break;
 		    }
 		    continue;
@@ -910,16 +919,26 @@ public class CSVUtil
 
 		if (ContactUtil.isCompanyExist(companyName))
 		{
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company is merged"));
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
+		/*else if (!ContactUtil.isValidName(companyName)){
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
+			invalidName = false;
+		}*/
 	    }
 	    else
 	    {
 		++nameMissing;
+		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
 	    }
-
+	   /* if (!invalidName)
+	    {
+	    	failedCompany++;
+	    	continue;
+	    }*/
 	    if (!canSave)
 	    {
 		continue;
@@ -935,6 +954,7 @@ public class CSVUtil
 	    if (limitCrossed)
 	    {
 		++limitExceeded;
+		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Error! limit is exceeded"));
 		continue;
 	    }
 
@@ -951,9 +971,13 @@ public class CSVUtil
 	    {
 		System.out.println("exception raised while saving company");
 		e.printStackTrace();
-
+		if (tempContact.id != null)
+		{
+		    failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues),
+			    "Error! Exception raise while saving company"));
+		}
 		failedCompany++;
-
+		continue;
 	    }
 
 	    if (isMerged)
@@ -1037,8 +1061,9 @@ public class CSVUtil
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 
-	SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
+	/*SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		new Object[] { domainUser, status });*/
+	buildFailedCompanies(domainUser, failedCompanies, headings, status);
 
 	if (savedCompany != 0 || mergedCompany != 0)
 	    ActivityUtil.createLogForImport(ActivityType.COMPANY_IMPORT, EntityType.CONTACT, savedCompany,
@@ -1247,6 +1272,31 @@ public class CSVUtil
 
 			    mileStoneValue = dealPropValues[i];
 			    milestoneFound = true;
+			    if(!trackFound){
+			    	try {
+						String trkName = null ;
+						innerForloop :
+						for(int m = i+1;m < dealPropValues.length ;m++)
+						{
+							LinkedHashMap<String, String> pr = (LinkedHashMap<String, String>) schema.get(m);
+							if(!pr.equals(null) && pr.size() > 0)
+							{
+								String tName = pr.get("value"); String tType = pr.get("type");
+								if(tType != null && tName != null && tType.equals("SYSTEM") && tName.equalsIgnoreCase("track"))
+								{
+									trkName = dealPropValues[m];
+								    trackFound = true;
+								    list = MilestoneUtil.getMilestonesList(trkName);
+								    opportunity.track = trkName;
+								    break innerForloop;
+								}
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("track missinc catch");
+						e.printStackTrace();
+					}			    	
+			    }
 			    if (trackFound)
 			    {
 				// check list of milestone if track is correct
@@ -1674,7 +1724,7 @@ public class CSVUtil
      * @param contact
      */
     private void buildFailedContacts(DomainUser domainUser, List<FailedContactBean> failedContacts, String[] headings,
-	    Map<Object, Object> status)
+	    Map<Object, Object> status,Map<Object, Object> stats)
     {
 	String path = null;
 	try
@@ -1684,7 +1734,7 @@ public class CSVUtil
 	    {
 		System.out.println("no failed conditions");
 		// Send every partition as separate email
-		sendFailedContactImportFile(domainUser, null, 0, status);
+		sendFailedContactImportFile(domainUser, null, 0, status,stats);
 		return;
 	    }
 
@@ -1717,11 +1767,11 @@ public class CSVUtil
 	    
 	    if(data==null)
 	    {
-	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status);
+	    	sendFailedContactImportFile(domainUser, "", failedContacts.size(), status,stats);
 	    }
 	    // Send every partition as separate email
 	    else
-	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
+	    sendFailedContactImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status,stats);
 
 	    service.deleteFile();
 
@@ -1732,6 +1782,66 @@ public class CSVUtil
 	}
 
     }
+    
+    private void buildFailedCompanies(DomainUser domainUser, List<FailedContactBean> failedCompanies, String[] headings,
+    	    Map<Object, Object> status)
+        {
+    	String path = null;
+    	try
+    	{
+    	    System.out.println("Export functionality email" + failedCompanies);
+    	    if (failedCompanies == null || failedCompanies.size() == 0)
+    	    {
+    		System.out.println("no failed conditions");
+    		// Send every partition as separate email
+    		sendFailedCompaniesImportFile(domainUser, null, 0, status);
+    		return;
+    	    }
+
+    	    System.out.println("writing file service");
+
+    	    // Builds Contact CSV
+    	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedCompanies, headings);
+
+    	    System.out.println("wrote files to CSV");
+    	    byte[] data=null;
+    	    
+    	    try{
+
+    	    service.getOutputchannel().close();
+
+    	    System.out.println("closing stream");
+
+    	    
+    	    data = service.getDataFromFile();
+
+    	    System.out.println("byte data");
+
+    	    System.out.println(data.length);
+    	    }
+    	    catch(Exception e)
+    	    {
+    	    	e.printStackTrace();
+    	    }
+    	    System.out.println(domainUser.email);
+    	    
+    	    if(data==null)
+    	    {
+    	    	sendFailedCompaniesImportFile(domainUser, "", failedCompanies.size(), status);
+    	    }
+    	    // Send every partition as separate email
+    	    else
+    	    	sendFailedCompaniesImportFile(domainUser, new String(data, "UTF-8"), failedCompanies.size(), status);
+
+    	    service.deleteFile();
+
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	}
+
+        }
 
     /**
      * write contacts in csv file
@@ -1831,17 +1941,18 @@ public class CSVUtil
      * 
      */
     public void sendFailedContactImportFile(DomainUser domainUser, String csvData, int totalRecords,
-	    Map<Object, Object> status)
+	    Map<Object, Object> status,Map<Object, Object> stats)
     {
 
 	/*
 	 * HashMap<String, String> map = new HashMap<String, String>();
 	 * map.put("count", totalRecords);
 	 */
-
+    	Long time = System.currentTimeMillis();
+    	stats.put("end_time", dateTimeFormat.format(time));
 	if (totalRecords >= 1)
 	{
-	    String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
+	    String[] strArr = { "text/csv", "Import_Contacts_Remarks.csv", csvData };
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
 	}
@@ -1850,8 +1961,33 @@ public class CSVUtil
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status });
 	}
+	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Import Status"+domainUser.domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
+		    new Object[] { stats});
 
     }
+  //send failed companies import file  
+    public void sendFailedCompaniesImportFile(DomainUser domainUser, String csvData, int totalRecords,
+    	    Map<Object, Object> status)
+        {
+
+    	/*
+    	 * HashMap<String, String> map = new HashMap<String, String>();
+    	 * map.put("count", totalRecords);
+    	 */
+
+    	if (totalRecords >= 1)
+    	{
+    	    String[] strArr = { "text/csv", "Import_Companies_Remarks.csv", csvData };
+    	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+    		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+    	}
+    	else
+    	{
+    	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+    		    new Object[] { domainUser, status });
+    	}
+
+        }
 
     /**
      * Helper function create dummy contact

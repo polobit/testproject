@@ -125,7 +125,8 @@
 	<input id="restored-deal-id" name="id" type="hidden"/>
 	<input id="restored-deal-milestone" name="milestone" type="hidden"/>
     <div id="deal-bulk-confirm">
-		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}}
+		{{agile_lng_translate 'deal-view' 'restoring-the-deal-desc'}} <br />
+		{{agile_lng_translate 'Deal-detail' 'restore-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
@@ -286,7 +287,7 @@
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
 
-	{{#if_equals pipeline.won_milestone milestone}}
+	{{#if_won_milestone pipeline_id milestone}}
 		{{#if won_date}}
 			<div style="cursor:default;" class="pull-left inline-block deal_won_date" id="deal_won_date_{{id}}" data-toggle="tooltip" title="{{agile_lng_translate 'deal-view' 'won-date'}}">
       			<small>{{epochToHumanDateInFormat won_date}}</small>
@@ -310,7 +311,7 @@
       		<small></small>
       	</div>
       	<div class="clearfix"></div>
-	{{/if_equals}}
+	{{/if_won_milestone}}
 
 	<div class="pull-left">
 		<small class="text-muted">

@@ -2,7 +2,7 @@
  * Checks if user loggedin in different instance or not.
  * @param pubnub_message
  */
- var IPCHECK = ["183.83.0.113","117.247.178.90","117.247.109.22","117.247.109.20"];
+ var IPCHECK = ["183.83.0.113","117.247.178.90","117.247.109.22","117.247.109.20","103.255.146.151","183.82.118.122"];
 function check_login_instance(pubnub_message)
 {
 	

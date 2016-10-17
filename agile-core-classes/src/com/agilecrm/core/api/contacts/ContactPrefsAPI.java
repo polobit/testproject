@@ -67,7 +67,7 @@ public class ContactPrefsAPI {
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void updateContactPrefs(@PathParam("type") String type,
-			ContactPrefs prefs, @QueryParam("sync") String sync) {
+			ContactPrefs prefs, @QueryParam("sync") String sync, @QueryParam("my_contacts_enable") boolean myContacts) {
 
 		System.out.println("in contact prefs api");
 
@@ -86,6 +86,13 @@ public class ContactPrefsAPI {
 			if (updatedPrefs.id == prefs.id) {
 				System.out
 						.println("in update prefs and prefs id are same before saving ");
+				
+				if (Type.GOOGLE ==  prefs.type) {
+					if(myContacts==true){
+						updatedPrefs.last_synced_to_client=0L;
+						updatedPrefs.last_synced_updated_contacts_to_client=0L;
+					}
+				}
 				
 				if (Type.SALESFORCE ==  prefs.type) {
 					

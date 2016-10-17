@@ -694,18 +694,28 @@ function renderGoogleEvents(events,fc_event,el)
 			else
 			{
 				console.log("Start : "+fc_event.start);
-				var utcTime = new Date(fc_event.start).toUTCString();
-				var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-				var changedDate	= tz.format('YYYY-MM-DD HH:mm:ss');
-				fc_event.startDate = new Date(changedDate);
+				//var utcTime = new Date(fc_event.start).toUTCString();
+				//var tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+				//var changedDate	= tz.format('YYYY-MM-DD HH:mm:ss');
+				//fc_event.startDate = new Date(changedDate);
 
-				console.log("Start Modified : "+ changedDate);
+				var startDate=new Date(fc_event.start)
+				var startEpochTime = startDate.getTime()
+				var tz = moment.tz(startEpochTime, CURRENT_USER_PREFS.timezone);
+				fc_event.start =new Date( tz.format());
+
+				//console.log("Start Modified : "+ changedDate);
+
+				var endDate=new Date(fc_event.end)
+				var endEpochTime = endDate.getTime();
+				tz = moment.tz(endEpochTime, CURRENT_USER_PREFS.timezone);
+				fc_event.end =new Date( tz.format());
 
 				console.log("End : "+fc_event.end);
-				utcTime = new Date(fc_event.end).toUTCString();
-				tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
-				changedDate	= tz.format('YYYY-MM-DD HH:mm:ss');
-				fc_event.end = new Date(changedDate);
+				//utcTime = new Date(fc_event.end).toUTCString();
+				//tz = moment.tz(utcTime, CURRENT_USER_PREFS.timezone);
+				//changedDate	= tz.format('YYYY-MM-DD HH:mm:ss');
+				//fc_event.end = new Date(changedDate);
 				console.log("End Modified : "+ fc_event.end);
 
 				var a;

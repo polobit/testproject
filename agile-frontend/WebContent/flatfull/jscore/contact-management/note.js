@@ -230,6 +230,16 @@ $(function()
 					notesView.collection.sort();
 				}
 			}
+			else if (App_Companies.companyDetailView && Current_Route == "company/" + App_Companies.companyDetailView.model.get('id'))
+			{
+				$.each(note.contacts, function(index, contact)
+				{
+					if (contact.id == App_Companies.companyDetailView.model.get('id'))
+					{
+						add_entity_to_timeline(data);
+					}
+				});
+			}
 		},
 		error : function(data, response){
 			if(response && response.status == 403)

@@ -27,43 +27,7 @@
 	<!-- Configure static files -->
 	<static-files>
 
-		<!-- Images -->
-		<include path="/**.png" expiration="7d" />
-		<include path="/**.gif" expiration="7d" />
-		<include path="/**.jpg" expiration="7d" />
-		<include path="/**.ico" expiration="7d" />
-		<!-- End of images -->
-
-		<!-- Fonts -->
-		<include path="/**.woff" expiration="7d" />
-		<!-- End of Fonts -->
-
-
-		<!-- Sounds -->
-		<include path="/**.mp3" expiration="7d" />
-		<!-- End of Sounds -->
-
-		<!-- CSS -->
-		<include path="/**.css" expiration="7d">
-			<http-header name="Access-Control-Allow-Origin" value="https://cdnapp.agilecrm.com/" />
-			<http-header name="Vary" value="Accept-Encoding" />
-		</include>
-
-
-		<!-- CSS -->
-
-		<!-- JS -->
-		<include path="/**.js" expiration="7d" />
-
-		<!-- End of JS -->
-
-		<!-- Error handlers -->
-		<include path="error/**.html" />
-
-		<!-- End of Error handlers -->
-      <exclude path="/css/misc/*.css" />
-	  <exclude path="/css/all.css" />
-	  <!-- <exclude path="/stats/min/agile-min.js" />  -->
+		
 
 	</static-files>
 

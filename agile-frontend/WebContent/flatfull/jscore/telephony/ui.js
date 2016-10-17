@@ -34,6 +34,7 @@ $(function()
 	$('body').on('click', '.make-call', function(e)
 	{
 		e.preventDefault();
+		
 
 		// SIP
 		/*
@@ -59,6 +60,7 @@ $(function()
 	$('body').on('click', '.contact-make-sip-call, .Sip_call', function(e)
 	{
 		e.preventDefault();
+		e.stopPropagation();
 
 		// Get details from UI
 		var userid = $(this).closest(".contact-make-call").attr('userid');

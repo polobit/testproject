@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
@@ -15,9 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
+import com.campaignio.tasklets.sms.SendMessage;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.gson.JsonObject;
@@ -708,8 +711,8 @@ public class TwilioUtil
 	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record,
 			String twimletUrl) throws Exception
 	{
-		// Get current logged in agile user
-		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+	    	    	
+	    	Long agileUserID = AgileUser.getCurrentAgileUser().id;
 		// Encode twimlet url
 		String twimletUrlToSend = URLEncoder.encode(twimletUrl, "UTF-8");
 		// Get Twilio client configured with account SID and authToken
@@ -729,7 +732,7 @@ public class TwilioUtil
 		// For Main
 		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
 				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
-
+		
 		// For Beta
 		/*
 		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
@@ -956,7 +959,7 @@ public class TwilioUtil
 			return logs;
 		}
 	}
-	
+
 	/**
 	 * join client to conference call.
 	 * 
@@ -1170,4 +1173,98 @@ public class TwilioUtil
 		return number;
 	}
 	
+	public static String createSMSAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
+	{
+            	
+        	// Get Twilio client configured with account SID and authToken
+        	TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
+        
+        	// parameters required to create application
+        	Map<String, String> params = new HashMap<String, String>();
+        	params.put("FriendlyName", "Agile CRM Twilio SMS");        
+        	params.put("SmsUrl", "https://"+  NamespaceManager.get()  +".agilecrm.com/msgReplyActionUrl");     
+        	params.put("SmsMethod", "POST");
+        
+        	// Make a POST request to create application
+        	TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
+        			+ "/Applications.json", "POST", params);
+        
+        	/*
+        	 * If error occurs, throw exception based on its status else return
+        	 * application SID
+        	 */
+        	if (response.isError()){
+        		throwProperException(response);
+        	}
+        
+        	String appSid = new JSONObject(response.getResponseText()).getString("sid");
+        
+        	/* ****** Add application to twilio number ***** */
+        	if (!numberSid.equalsIgnoreCase("None"))
+        	{
+        		// parameters required to create application
+        		params = new HashMap<String, String>();
+        		params.put("SmsApplicationSid", appSid);        
+        		// Make a POST request to add application to twilio number
+        		// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
+        		response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
+        				+ numberSid, "POST", params);
+        		if (response.isError()){
+        			throwProperException(response);
+        		}
+        	}
+        	return appSid;
+	}
+	
+	//checking smsapppsid and from number present in integration or not 
+	public static void checkSidAndFromNumber(Widget twilioObj,String num)
+	{
+ 	    try{
+ 		JSONObject jsonObj=new JSONObject(twilioObj.prefs);
+             	if(!jsonObj.has("replynumber") && !jsonObj.has("smsappSid"))              		
+              		setSmsSidAndFromNUmber(twilioObj,num);
+             	else if(jsonObj.get("replynumber")!=null || !jsonObj.get("replynumber").toString().isEmpty()){
+             	    if(!num.equalsIgnoreCase(jsonObj.get("replynumber").toString()))
+             		setSmsSidAndFromNUmber(twilioObj,num);
+             	}    	    	
+             	    
+ 	    }
+ 	   catch (Exception e)
+ 	    {
+ 		e.printStackTrace();
+ 		System.out.println(ExceptionUtils.getFullStackTrace(e));
+ 		
+ 	    }
+	}
+	//set smsappsid and from number if not present
+ 	public  static void setSmsSidAndFromNUmber(Widget twilioObj,String num)
+	{
+ 	  try
+ 	    {
+         	    String numberSid=null;
+              	    String applicationSid=null;   
+              	    String accId = TwilioUtil.getAccountSID(twilioObj);
+              	    String authToken= TwilioUtil.getAuthToken(twilioObj);
+              	    JSONObject jsonObj=new JSONObject(twilioObj.prefs);
+         	    TwilioRestClient client = new TwilioRestClient(accId, authToken, null);
+         	    TwilioRestResponse response = client.request(
+        				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers.xml?PhoneNumber="+URLEncoder.encode(num, "UTF-8"), "GET",
+        				null);	
+         	    JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse").getJSONObject("IncomingPhoneNumbers"); 
+         	    numberSid=result.getJSONObject("IncomingPhoneNumber").get("Sid").toString();             		
+        	   
+         	    applicationSid= TwilioUtil.createSMSAppSidTwilioIO(accId, authToken,numberSid);
+         	    jsonObj.put("smsappSid", applicationSid);
+         	    jsonObj.put("replynumber", num);
+         	    twilioObj.prefs=jsonObj.toString();
+         	    ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(Widget.class);
+         	    dao.put(twilioObj);
+ 	    }
+ 	  catch (Exception e)
+ 	    {
+ 		e.printStackTrace();
+ 		System.out.println(ExceptionUtils.getFullStackTrace(e));
+ 		
+ 	    }
+	}    
 }

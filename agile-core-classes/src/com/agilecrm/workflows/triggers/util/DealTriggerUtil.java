@@ -2,6 +2,7 @@ package com.agilecrm.workflows.triggers.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.deals.CustomFieldData;
@@ -16,14 +18,19 @@ import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.notification.NotificationPrefs;
+import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.reports.DateUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DealTriggerUtil</code> executes trigger for deals with conditions deal
@@ -108,11 +115,8 @@ public class DealTriggerUtil
 			
 			for (DomainUser user  : user_list) {
 				 System.out.println( " user s "+user.email);
-				 System.out.println( " user s "+user.id);
-				 
+				 System.out.println( " user s "+user.id);		 
 			}
-			
-			
 			if(updatedOpportunity.milestone.equals(wonMilestone))
 			{
 				String domain = NamespaceManager.get();	
@@ -122,13 +126,15 @@ public class DealTriggerUtil
 				System.out.println("Currrent domain ="+domain);
 				 HashMap<String, Object> map = new HashMap<String, Object>();
 				    map.put("deal", updatedOpportunity);
+				    	   
 			for (DomainUser user  : user_list)
 			{
 				 map.put("user", user);
-				//SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
-			
-			//PubNub.pubNubPush(user.id + "_Channel", messageJson);
-				}
+				 NotificationPrefs NotePref = NotificationPrefsUtil.getNotificationPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
+				 if(user.menu_scopes.contains(NavbarConstants.DEALS) && NotePref.deal_closed_email)
+					SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
+			}
+
 			}
 			// execute trigger for deal milestone change.
 			executeTriggerForDealsBasedOnCondition(updatedOpportunity.relatedContacts(), oldOpportunity, updatedOpportunity,

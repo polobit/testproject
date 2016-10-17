@@ -656,18 +656,10 @@ var portlet_graph_data_utility = {
 	 * To fetch calls per person portlet data to render as bar graph
 	 */
 	callsPerPersonGraphData : function(base_model, selector, url) {
-		var answeredCallsCountList = [];
-		var busyCallsCountList = [];
-		var failedCallsCountList = [];
-		var voiceMailCallsCountList = [];
-		var missedCallsCountList= [];
-		var inquiryCallsCountList= [];
-		var interestCallsCountList= [];
-		var noInterestCallsCountList= [];
-		var incorrectReferralCallsCountList= [];
-		var newOpportunityCallsCountList= [];
-		var meetingScheduledCallsCountList = [];
-		var queuedCallsCountList = [];
+		
+		var finalCallStatusCountMapList = []; // this contains the detail of status count in list where each entity is a map.
+		//var finalStatusCountMap = {}; // this map combines all the status from all the users to show in piechart.	
+		var totalNonZeroDurationStatusCountList  = []; 
 		var callsDurationList = [];
 		var totalCallsCountList = [];
 		var domainUsersList = [];
@@ -691,112 +683,78 @@ var portlet_graph_data_utility = {
 												"<div class='portlet-error-message'><i class='icon-warning-sign icon-1x'></i>&nbsp;&nbsp;{{agile_lng_translate 'report-add' 'sorry-you-do-not-have-privileges-access'}}</div>");
 								return;
 							}
-							answeredCallsCountList = data["answeredCallsCountList"];
-							busyCallsCountList = data["busyCallsCountList"];
-							failedCallsCountList = data["failedCallsCountList"];
-							voiceMailCallsCountList = data["voiceMailCallsCountList"];
-							missedCallsCountList = data["missedCallsCountList"];
-							inquiryCallsCountList = data["inquiryCallsCountList"];
-							interestCallsCountList = data["interestCallsCountList"];
-							noInterestCallsCountList = data["noInterestCallsCountList"];
-							incorrectReferralCallsCountList = data["incorrectReferralCallsCountList"];
-							meetingScheduledCallsCountList = data["meetingScheduledCallsCountList"];
-							newOpportunityCallsCountList = data["newOpportunityCallsCountList"];
-							queuedCallsCountList = data["queuedCallsCountList"];
+							
+							totalNonZeroDurationStatusCountList= data["totalNonZeroDurationStatusCountList"];  // this is total calls with non zero duration
 							callsDurationList = data["callsDurationList"];
 							totalCallsCountList = data["totalCallsCountList"];
 							domainUsersList = data["domainUsersList"];
 							domainUserImgList = data["domainUserImgList"];
-
+							finalStatusCountMapList = data["finalCallStatusCountMapList"];
 							var series = [];
 							var text = '';
 							var colors;
-
-							if (base_model.get('settings')["group-by"] == "number-of-calls") {
-								var tempData = {};
-								tempData.name = "Answered";
-								tempData.data = answeredCallsCountList;
-								series[0] = tempData;
-
-								tempData = {};
-								tempData.name = "Busy";
-								tempData.data = busyCallsCountList;
-								series[1] = tempData;
-
-								tempData = {};
-								tempData.name = "Failed";
-								tempData.data = failedCallsCountList;
-								series[2] = tempData;
-
-								tempData = {};
-								tempData.name = "Voicemail";
-								tempData.data = voiceMailCallsCountList;
-								series[3] = tempData;
-
-								tempData = {};
-								tempData.name = "Missed ";
-								tempData.data = missedCallsCountList;
-								series[4] = tempData;
-
-								tempData = {};
-								tempData.name = "Inquiry";
-								tempData.data = inquiryCallsCountList;
-								series[5] = tempData;
-
-								tempData = {};
-								tempData.name = "Interest";
-								tempData.data = interestCallsCountList;
-								series[6] = tempData;
-
-								tempData = {};
-								tempData.name = "No Interest";
-								tempData.data = noInterestCallsCountList;
-								series[7] = tempData;
-
-								tempData = {};
-								tempData.name = "Incorrect Referral";
-								tempData.data = incorrectReferralCallsCountList;
-								series[8] = tempData;
-
-								tempData = {};
-								tempData.name = "Meeting Scheduled";
-								tempData.data = meetingScheduledCallsCountList;
-								series[9] = tempData;
-
-								tempData = {};
-								tempData.name = "New Opportunity";
-								tempData.data = newOpportunityCallsCountList;
-								series[10] = tempData;
-
-								tempData = {};
-								tempData.name = "Other";
-								tempData.data = queuedCallsCountList;
-								series[11] = tempData;
-
-								text = "No. of Calls";
-								colors = [ 'green', 'blue', 'red', 'violet' ];
-							} else {
-								var tempData = {};
-								tempData.name = "Total Duration";
-								var callsDurationInMinsList = [];
-								$
-										.each(
-												callsDurationList,
-												function(index, duration) {
-													callsDurationInMinsList[index] = duration/60;
-												});
-								tempData.data = callsDurationInMinsList;
-								series[0] = tempData;
-								text = "{{agile_lng_translate 'calls' 'duration-secs'}}";
-								colors = [ 'green' ];
-							}
-
+							var tempExistStatus = [];
+								/**This executes for plotting the Bar graph*/ 
+							if(base_model.get('settings')["group-by"] == "number-of-calls"){
+								var tempData={};
+								
+								// Each map in list denotes one user at a time. We will keep the status count for each user in a single array..
+								$.each(finalStatusCountMapList, function(index,map){
+										$.each(map, function(key,value){
+											var statuscountList = [];
+											var tempInside ={};
+											var statusName = toTitleCase(key);
+											if(tempData[statusName]){
+												statuscountList = tempData[statusName].data;
+												statuscountList.push(value);
+											}else{
+												tempData[statusName] = tempInside;
+												tempData[statusName].name=statusName;
+												statuscountList.push(value);
+											}
+											tempData[statusName].data = statuscountList;
+										});
+								});
+								
+								// other data put the other option in last row of list
+								var othersData = {};
+								$.each(tempData, function(key,value){
+									if(key == "Others"){
+										othersData = value;
+									}else{
+										series.push(value);
+									}
+								});
+								if(!jQuery.isEmptyObject(othersData)){
+									series.push(othersData);
+								}
+									text = "No. of Calls";
+									colors = "";
+							}else
+								{
+									var tempData={};
+									tempData.name="Total Call Duration";
+									var callsDurationInMinsList = [];
+									$.each(callsDurationList,function(index,duration){
+										if(duration > 0){
+											callsDurationInMinsList[index] = duration/60;
+										}else{
+											callsDurationInMinsList[index] = 0;
+										}
+										
+									});
+									tempData.data=callsDurationInMinsList;
+									series[0]=tempData;
+									text="{{agile_lng_translate 'calls' 'duration-secs'}}";
+									colors=['green'];
+								}
 							portlet_graph_utility.callsPerPersonBarGraph(
-									selector, domainUsersList, series,
-									totalCallsCountList, callsDurationList,
-									text, colors, domainUserImgList,base_model);
-
+										selector, domainUsersList, series,
+										totalCallsCountList, callsDurationList,
+										text, colors, domainUserImgList,base_model);
 							portlet_utility.addWidgetToGridster(base_model);
+							
+
 						});
 	},
 
@@ -973,9 +931,14 @@ var portlet_graph_data_utility = {
 							emailsOpenedCount = data["emailsOpenedCount"];
 
 							var series = [];
-							series.push([ "Emails Sent",
-									emailsSentCount - emailsOpenedCount ]);
+							//pass dummy data to create graph
+							if(emailsSentCount==0 && emailsOpenedCount==0)
+								series.push([ "Emails Sent",1]);
+							else
+								series.push([ "Emails Sent",
+										emailsSentCount - emailsOpenedCount ]);
 							series.push([ "Emails Opened", emailsOpenedCount ]);
+							
 
 							portlet_graph_utility.emailsOpenedPieChart(
 									selector, series, emailsSentCount,

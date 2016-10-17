@@ -4337,7 +4337,7 @@ border-bottom-right-radius:3px;
 text-align:center;
 border: 1px solid #e5e5e5;
 }
-.extensionPopovers
+.extension-popover li
 {
 
   width:60px !important;
@@ -4350,7 +4350,7 @@ border: 1px solid #e5e5e5;
 
 }
 .grid-sub-nav li#betasuccess {
-    width: 213px;
+    width: 213px !important;
 }
 @-moz-document url-prefix(){
     .grid-sub-nav li{
@@ -4432,7 +4432,15 @@ border: 1px solid #e5e5e5;
 .update-drag-deal + .tooltip{
   width: auto!important;
 }
-
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-88{
+  width: 88% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
 @media (max-width: 767px){
   #affiliate-datepicker {
     ext-align: center;
@@ -4711,4 +4719,86 @@ div.list-tasks.panel-body:hover
   font-weight: 700;
   color: #58666e!important;
   background-color: #fff!important;
+}
+
+ul#recent-menu-model-list li:nth-child(even)
+{
+  background-color: #f9f9f9;
+}
+
+/*Start of Tags LHS Filters*/
+
+.condition_container ul.typeahead.dropdown-menu{
+  width: 100% !important;
+  min-height: 40px;
+  max-height: 250px;
+  overflow-y: auto;
+  height: auto;
+  z-index: 99 !important;
+}
+.condition_container ul.typeahead.dropdown-menu li a{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.condition_container ul.typeahead.dropdown-menu::-webkit-scrollbar {
+  width: 5px;
+}
+.condition_container ul.typeahead.dropdown-menu::-webkit-scrollbar-button {
+  width: 8px;
+  height:5px;
+}
+.condition_container ul.typeahead.dropdown-menu::-webkit-scrollbar-thumb {
+  background:#ccc;
+  border-radius:10px;
+}
+
+/*End of Tags LHS Filters*/
+
+.textarea{
+   min-height: 49px;
+    height: auto;
+    width: 100%;
+    text-indent: 0px;
+    resize: none;
+    padding: 8px 8px 1px;
+    overflow-y: hidden;
+
+}
+
+#affiliate-tabs-content .zeroclipboard-is-hover{
+  background-color: #fafafa !important;
+}
+
+.bg-light.dker .nav>li:hover>a, .bg-light.dker .nav>li:focus>a, .bg-light.dker .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-light .nav>li:hover>a, .bg-light .nav>li:focus>a, .bg-light .nav>li.active>a{ background-color: #f6f8f8;}
+.bg-white.b-r .nav>li:hover>a,.bg-white.b-r .nav>li:focus>a, .bg-white.b-r .nav>li.active>a{ background-color: #f6f8f8;}
+
+.right-pane-header{
+  font-size: 14px;
+  font-weight: 700;
+  color: #58666e!important;
+  background-color: #fff!important;
+}
+
+.disable-chrome-extenstion
+{
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-83{
+  width: 83% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
+.p-t-7{
+  padding-top: 7px;
+}
+
+#admin-affiliate-detail-model-list tr:hover{
+  cursor: pointer;
 }

@@ -516,7 +516,24 @@
 				// Showing updated owner
 				show_owner(); 
 				App_Companies.companyDetailView.model = model;
-				
+				COMPANIES_HARD_RELOAD = true;
+				if(!hasScope("VIEW_CONTACTS") && !CURRENT_DOMAIN_USER.is_admin)
+    				Backbone.history.navigate("companies",{trigger: true});
+
+    			if(!hasScope("VIEW_CONTACTS")){
+	    			var storageItems = JSON.parse(localStorage.recentItems);
+		            var arr = [];
+		            localStorage.removeItem("recentItems");
+		            for(var i=0;i<storageItems.length;i++){
+		              if(storageItems[i].id != App_Companies.companyDetailView.model.get('id')){
+		                arr.push(storageItems[i]);
+		              }else{
+		                recent_view.collection.remove(storageItems[i].id);
+		              }
+		            }
+	                localStorage.setItem("recentItems", JSON.stringify(arr));
+	                recent_view_update_required = true;
+            	}
 		    }});
    	};
 	
@@ -606,7 +623,18 @@
 			});
 		}
 	};
-	
+	company_detail_tab.openCompanyTimeLine = function(e){
+	  		
+			$('div.tab-content', App_Companies.companyDetailView.el).find('div.active').removeClass('active');
+			$("#timeline").append("<div id='line-container'><div id='line'></div></div>");
+			$('#company-timeline', App_Companies.companyDetailView.el).addClass('active');
+			if($("#timeline", App_Companies.companyDetailView.el).hasClass('isotope'))
+			{
+				$("#timeline", App_Companies.companyDetailView.el).isotope( 'reLayout', function(){} )
+				return;
+			}
+			load_company_timeline_details(App_Companies.companyDetailView.el, App_Companies.companyDetailView.model.get('id'));
+	};
 	company_detail_tab.load_company_deals = function ()
 	{
 		id = App_Companies.companyDetailView.model.id;
