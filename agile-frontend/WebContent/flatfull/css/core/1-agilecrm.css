@@ -4610,6 +4610,11 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
+#purchase_credits, #manage_auto_recharge{
+	background-color: #f6f6f6;
+  padding: 0px 5px 3px 5px;
+  border-radius: 3px;
+}
 
 /* start of dialler */
 
@@ -4801,4 +4806,13 @@ ul#recent-menu-model-list li:nth-child(even)
 
 #admin-affiliate-detail-model-list tr:hover{
   cursor: pointer;
+}
+
+
+.filter-dynamic-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.filter-dynamic-scrollbar::-webkit-scrollbar-thumb {
+  background:#ccc;
+  border-radius:10px;
 }

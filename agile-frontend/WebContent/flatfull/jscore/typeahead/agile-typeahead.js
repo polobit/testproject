@@ -379,7 +379,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											.closest("div.controls")
 											.find(".tags")
 											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp, "email")));
-
+									//for send mail validation
+									if($("#" + id, el).siblings("span")!=null){
+										var attr=$("#" + id, el).siblings("span").attr("for");
+										if(attr==="to" || attr==="email_cc" || attr==="email_bcc")
+											$("#" + id, el).siblings("span").css("display","none");
+									}
 
 								}
 
