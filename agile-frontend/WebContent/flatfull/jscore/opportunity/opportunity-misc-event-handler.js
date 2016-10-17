@@ -8,16 +8,16 @@ $(function()
 	});
 
 
-	$('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_archive');
-  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_archive', function(e)
+	$('#opportunityUpdateModal, #newDealModal').off('click', '#opportunity_archive');
+  $('#opportunityUpdateModal, #newDealModal').on('click', '#opportunity_archive', function(e)
   {
     e.preventDefault();
     $('#archived', $('#opportunityUpdateForm')).prop('checked', 'checked');
     $("#opportunityUpdateModal #opportunity_validate").trigger('click');
   });
 
-  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_unarchive');
-  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_unarchive', function(e)
+  $('#opportunityUpdateModal, #newDealModal').off('click', '#opportunity_unarchive');
+  $('#opportunityUpdateModal, #newDealModal').on('click', '#opportunity_unarchive', function(e)
   {
     e.preventDefault();
     $('#archived', $('#opportunityUpdateForm')).removeAttr('checked');
@@ -28,8 +28,8 @@ $(function()
   /**
    * Validates deal and saves
    */
-  $('#opportunityUpdateModal, #opportunityModal').off('click', '#opportunity_validate');
-  $('#opportunityUpdateModal, #opportunityModal').on('click', '#opportunity_validate', function(e)
+  $('#opportunityUpdateModal, #newDealModal').off('click', '#opportunity_validate');
+  $('#opportunityUpdateModal, #newDealModal').on('click', '#opportunity_validate', function(e)
   {
     e.preventDefault();
 
@@ -395,8 +395,8 @@ function initializeDealListners(el){
 	/**
 	 * Shows deal popup
 	 */
-	$('#opportunity-listners').off('click', '.deals-add');
-	$('#opportunity-listners').on('click', '.deals-add', function(e)
+	$('#opportunity-listners').off('click', '.deals-add-opportunity');
+	$('#opportunity-listners').on('click', '.deals-add-opportunity', function(e)
 	{
 		e.preventDefault();
 		show_deal();
@@ -537,18 +537,38 @@ function initializeDealListners(el){
 		var dealsCollection = DEALS_LIST_COLLECTION.collection.where({ heading : heading });
 		if(dealsCollection) {
 			var dealModel = dealsCollection[0].get("dealCollection").get(deal_id);
+			App_Deals.dealModel = dealModel;
 			if(dealModel) {
 				var old_milestone = dealModel.get("milestone");
 				dealModel.set({ "pipeline_id" : track }, { silent : true });
 				update_milestone(dealModel, deal_id, newMilestone, old_milestone, true, "", false);
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
+				var modelsLength = dealsCollection[0].get('dealCollection').models.length ;
+	        	if(modelsLength ==10 && modelsLength <= parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text()))
+	        	{
+	          		dealsCollection[0]['isUpdateCollection'] = true ;
+	          		dealsFetch(dealPipelineModel[0]);
+	        	}
 			}
 		}
-		setTimeout(function(){
-			$("#new-track-list-paging").hide();
-			$("#new-opportunity-list-paging").show();
-			$("#opportunities-header", $("#opportunity-listners")).show();
-		},800);
+		//If deal moves to lost milestone of other track, will ask reasons for lost the deal
+		if($(this).attr("data-lost-milestone") == "true")
+		{
+			App_Deals.newMilestone = newMilestone;
+			App_Deals.old_milestone = old_milestone;
+			App_Deals.lost_reason_milesone_id = deal_id;
+			populateLostReasons($('#dealLostReasonModal'), undefined);
+			$('#deal_lost_reason',$('#dealLostReasonModal')).removeClass("hidden");
+			$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').text("{{agile_lng_translate 'modals' 'save'}}");
+			$('#dealLostReasonModal > .modal-dialog > .modal-content > .modal-footer > a#deal_lost_reason_save').attr('disabled',false);
+		}
+		else{
+			setTimeout(function(){
+				$("#new-track-list-paging").hide();
+				$("#new-opportunity-list-paging").show();
+				$("#opportunities-header", $("#opportunity-listners")).show();
+			},800);
+		}
     });
 
 }
@@ -595,4 +615,63 @@ function initializeMilestoneListners(el){
     	});
     	
     });
+}
+function createtypeheadcontact(el){
+	var cname = el.closest('form').find('.typeahead_contacts').val();
+	var type = $(el).attr('type') ; 
+	var contact = {}; var url = '/core/api/contacts' ;
+	var properties = []; var json = {};
+	contact['source'] = 'manual' ;
+	if(type == "contact"){
+		contact['type'] = 'PERSON' ;
+		json.name = "first_name";
+		json.type = "SYSTEM";
+		json.value = cname ; 
+	}
+	else {
+		contact['type'] = 'COMPANY' ;
+		json.name = "name";
+		json.type = "SYSTEM";
+		json.value = cname ;
+	}
+	properties.push(json);
+	contact.properties = properties ;
+	$.ajax({
+	  type: "POST",
+	  url: url,contentType : "application/json; charset=utf-8",
+	  dataType : 'json',
+	  data: JSON.stringify(contact),
+	  success: function(data){
+	  	console.log(data);
+	  	var properties = [];var i ;var coname ;var cValue = 'first_name'; 
+	  	var cType = data.type ; 
+	  	properties = data['properties'];
+	  	if(cType == 'COMPANY')
+	  		cValue = 'name';
+	  	for(i=0 ; i<properties.length ; i++){
+	  		if(properties[i].name == cValue){
+	  			coname = properties[i].value;
+	  			break ; 
+	  		}
+	  	}
+	  	el.closest('form')
+			.find(".newtypeaheadcontact")
+			.append(
+					'<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data.id + '"><a class="text-white v-middle" href="#contact/' + data.id + '">' + coname + '</a><a class="close" id="remove_tag">&times</a></li>');
+	  },error : function(model, response)
+		{
+			if (model && model.responseText)
+			{
+				// Show cause of error in saving
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + model.responseText + '</i></p></small></div>');
+				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
+
+			}
+			else
+			{
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>Exception while saving the Contact/Company</i></p></small></div>');
+				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
+			}
+		}
+	});
 }
