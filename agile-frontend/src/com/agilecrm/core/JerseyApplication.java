@@ -145,6 +145,9 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.reports.CampaignReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TaskBulkActionsAPI.class);
 	
+	//webrule reports
+	s.add(com.agilecrm.core.api.webrule.WebruleReportsAPI.class);
+	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
 	// SSO feature

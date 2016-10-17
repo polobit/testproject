@@ -1,0 +1,36 @@
+<script id="webrule-analysis-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b" id="webrule-logs-list">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">Web Rule Analysis</h3>
+
+			<!--Shown only in Subscribers block-->
+			<div id="subscribers-block" class="pull-left" style="margin-top: 2px; margin-left: 11px;">
+				<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-webrule" style="display: none;">{{agile_lng_translate 'web-rules' 'remove-from-webrule'}}</div>
+            	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
+            	<div class="pull-left m-l-sm"  style="margin-top: 6px;" id="subscribers-bulk-select"></div>
+			</div>
+
+            <div class="right">
+        		<select id="webrule-reports-select" class="required form-control">
+        			<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+        		</select>
+			</div>
+            <div class="clearfix"></div>
+       
+    </div>
+</div>
+</div>
+<div id="webrule-analysis-tabs"></div>
+</script>
+
+<script id="webrule-analysis-tabs-template" type="text/html">
+
+	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">	
+		<div class="col overflow-visible">
+			<div class="tabs wrapper-md" id="webrule-analysis-tabs-content"></div>
+		</div>
+	</div>
+
+</script>
