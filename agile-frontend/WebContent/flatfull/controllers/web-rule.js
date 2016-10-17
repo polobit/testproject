@@ -15,7 +15,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				showTransitionBar();
 
 
-				this.render_email_reports_select_ui(id, function(){
+				render_email_reports_select_ui(id, function(){
 
 					getTemplate("webrule-analysis-tabs", { "id" : id }, undefined, function(template_ui)
 					{
@@ -24,8 +24,7 @@ var WebreportsRouter = Backbone.Router.extend({
 
 						// Render tabs with id
 						$('#webrule-analysis-tabs').html($(template_ui));
-						// Hide bulk subscribers block
-						$('#subscribers-block').hide();
+						
 
 						initReportLibs(function()
 						{
@@ -73,56 +72,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				});
 
 			},
-
-
-			render_email_reports_select_ui : function(id, callback){
-
-				 // Fetches webrules if not filled
-				if (!$('#webrule-reports-select').html())
-				{
-					getTemplate('webrule-analysis', {}, undefined, function(template_ui){
-				 		if(!template_ui)
-				    		return;
-
-						$('#content').html($(template_ui)); 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-
-						// fill webrules
-						fillSelect('webrule-reports-select', '/core/api/webrule', 'webrule', function fillwebrule()
-						{
-							if(id)
-							$('#webrule-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
-
-							if(callback)
-							  callback();
-
-							$('#content').on('change', '#webrule-reports-select', function (e) {
-								e.preventDefault();
-                                 var targetEl = $(e.currentTarget);
-                                 Backbone.history.navigate("webrule-report/"+$(targetEl).val() , 
-                                 {
-                                  trigger: true
-                                  });
-
-		                          //  get_webrule_table_reports($(this).val());
-		                            //showWebruleGraphs($(this).val());
-
-	                        });
-
-						}, optionsTemplate);
-
-						//initializeLogReportHandlers();
-						
-					}, "#content");
-
-					return;
-				}
-
-				if(callback)
-					callback(); 		
-
-			},
-
+			
 
 	webrules : function()
 	{

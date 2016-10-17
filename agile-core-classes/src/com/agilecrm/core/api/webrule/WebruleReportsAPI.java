@@ -1,8 +1,5 @@
 package com.agilecrm.core.api.webrule;
 
-
-
-
 import javax.ws.rs.GET;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.Path;
@@ -10,20 +7,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
-
 import java.util.LinkedHashMap;
-
 import net.sf.json.JSONSerializer;
-
 import javax.ws.rs.core.MediaType;
-
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.agilecrm.util.DateUtil;
 import com.webruleio.reports.WebruleReportsSQLUtil;
 import com.webruleio.reports.WebruleReportsUtil;
-
+import com.campaignio.reports.CampaignReportsUtil;
 
 /**
  * <code>WebruleReportsAPI</code> includes REST calls to interact with SQL to
@@ -35,17 +28,16 @@ import com.webruleio.reports.WebruleReportsUtil;
  * 
  */
 
-    
 @Path("/api/webrule-analytics")
 public class WebruleReportsAPI
 {
-	
-  /**
+
+    /**
      * WebruleReports based on each webrule. Returns json-array data required
      * for generating graphs.
      * 
-     * @param webrule-id
-     *            - Webrule Id.
+     * @param webrule
+     *            -id - Webrule Id.
      * @param startTime
      *            - Start Time.
      * @param endTime
@@ -58,37 +50,39 @@ public class WebruleReportsAPI
     @Path("/web/graphreports/{webrule-id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getEachWebruleStats(@PathParam("webrule-id") String webruleId, @QueryParam("start_time") String startTime,
-	    @QueryParam("end_time") String endTime, @QueryParam("type") String type,
-	    @QueryParam("time_zone") String timeZone)
+    public String getEachWebruleStats(@PathParam("webrule-id") String webruleId,
+	    @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+	    @QueryParam("type") String type, @QueryParam("time_zone") String timeZone)
     {
 	try
 	{
-		String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
-		if (current_timezone != null)
-		{
-			timeZone = ""+(Long.valueOf(current_timezone)*-1);
-		}
+	    String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	    if (current_timezone != null)
+	    {
+		timeZone = "" + (Long.valueOf(current_timezone) * -1);
+	    }
 	    // start date in mysql date format.
-	    String startDate = WebruleReportsUtil.getStartDate(startTime, endTime, type, timeZone);
+	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, type, timeZone);
 
 	    // end date in mysql date format.
-	    String endDate = WebruleReportsUtil.getEndDateForReports(endTime, timeZone);
+	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
 
 	    // SQL data for webrule stats for given duration.
-	    JSONArray logs = WebruleReportsSQLUtil.getEachWebruleStats(webruleId, startDate, endDate,timeZone,type);
+	    JSONArray logs = WebruleReportsSQLUtil.getWebruleStats4Graph(webruleId, startDate, endDate, timeZone, type);
 
-	    System.out.println("SQL Stats for graphs are..." + logs.toString());
+	    //System.out.println("SQL Stats for graphs are..." + logs.toString());
 
 	    if (logs == null)
 		return null;
 
 	    // Modified data required for graph of each webrule-stats.
-	    LinkedHashMap<String, LinkedHashMap<String, Integer>> webruleStatsData = WebruleReportsUtil.getEachWebruleStatsData(startTime, endTime, type, timeZone, logs);
-	    
-	    String replacedWebruleStats = JSONSerializer.toJSON(webruleStatsData).toString().replace("TOTAL_VIEWS", "TOTAL VIEWS").replace("TOTAL_SUBMISSIONS", "TOTAL SUBMISSIONS");
-	    
-		System.out.println("stats JSON is " + replacedWebruleStats);
+	    LinkedHashMap<String, LinkedHashMap<String, Integer>> webruleStatsData = WebruleReportsUtil
+		    .getEachWebruleStatsData(startTime, endTime, type, timeZone, logs);
+
+	    String replacedWebruleStats = JSONSerializer.toJSON(webruleStatsData).toString()
+		    .replace("TOTAL_VIEWS", "TOTAL VIEWS").replace("TOTAL_SUBMISSIONS", "TOTAL SUBMISSIONS");
+
+	   // System.out.println("stats JSON is " + replacedWebruleStats);
 
 	    return replacedWebruleStats;
 	}
@@ -110,40 +104,40 @@ public class WebruleReportsAPI
     {
 	try
 	{
-		String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
-		if (current_timezone != null)
-		{
-			timeZone = ""+(Long.valueOf(current_timezone)*-1);
-		}
+	    String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
+	    if (StringUtils.isNotBlank(current_timezone))
+	    {
+		timeZone = "" + (Long.valueOf(current_timezone) * -1);
+	    }
 	    // start date in mysql date format.
-	    String startDate = WebruleReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
 
 	    // end date in mysql date format.
-	    String endDate = WebruleReportsUtil.getEndDateForReports(endTime, timeZone);
+	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
 
-	    JSONArray stats = WebruleReportsSQLUtil.getEachWebruleStatsForTable(webruleId, startDate, endDate,timeZone, null);
-	    
-	    System.out.println("SQL Stats are..." + stats.toString());
+	    JSONArray stats = WebruleReportsSQLUtil.getWebruleStats4Table(webruleId, startDate, endDate, timeZone, null);
 
-	    //int statsLength = stats.length();
+	    // System.out.println("SQL Stats are..." + stats.toString());
+
+	    // int statsLength = stats.length();
 
 	    JSONObject statsJSON = new JSONObject();
-	    int views=0;int subs=0;
+	    int views = 0;
+	    int subs = 0;
 	    // Add log_type as key and its count as value
 	    for (int i = 0, len = stats.length(); i < len; i++)
 	    {
 		JSONObject json = stats.getJSONObject(i);
-		views=views+Integer.parseInt(json.getString("TOTAL_VIEWS"));
-		subs=subs+Integer.parseInt(json.getString("TOTAL_SUBMISSIONS"));		
-		
-		//statsJSON.put(stats.getJSONObject(i).getString("webrule_type"),stats.getJSONObject(i).getInt("total"));
+		views = views + Integer.parseInt(json.getString("TOTAL_VIEWS"));
+		subs = subs + Integer.parseInt(json.getString("TOTAL_SUBMISSIONS"));
+
 	    }
 	    statsJSON.put("views", views);
-	    statsJSON.put("submissions",subs);
-	    System.out.println("stats JSON is " + statsJSON);
+	    statsJSON.put("submissions", subs);
+	   // System.out.println("stats JSON is " + statsJSON);
 
 	    return statsJSON.toString();
-	   }
+	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occurred while getting Webrule stats... " + e.getMessage());
@@ -151,5 +145,5 @@ public class WebruleReportsAPI
 	    return null;
 	}
     }
-    
- }
+
+}

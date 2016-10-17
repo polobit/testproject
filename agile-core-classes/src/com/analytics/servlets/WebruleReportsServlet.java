@@ -6,12 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.webruleio.reports.WebruleReportsSQLUtil;
 
+/*@author Poulami */
+
 @SuppressWarnings("serial")
 public class WebruleReportsServlet extends HttpServlet
 {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-	String emailid=null;
+	String emailid = null;
 	if (req.getParameter("email") != null)
 	    emailid = req.getParameter("email").toLowerCase();
 	String domainname = req.getParameter("domain");
