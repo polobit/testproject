@@ -11,17 +11,23 @@ public class AnalyticsDBConnectionFetcher {
 
 	public static final String PRODUCTION_APP_ID = "agile-crm-cloud";
 	public static final String SANDBOX_APP_ID = "agilecrmbeta";
-	private static final String URL = "jdbc:google:mysql://agiledbs:campaign-logs-sandbox/stats2?user=root&password=sqlrocks123";
-	
-	public Connection getConnection() {
+    private static final String PRODUCTION_URL = "jdbc:google:mysql://agiledbs:us-central1:agile-web-logs/stats2?user=root&password=sqlrocks123";
+	private static final String SANDBOX_URL ="jdbc:google:mysql://agiledbs:campaign-logs-sandbox/stats2?user=root&password=sqlrocks123";
+	public Connection getConnection()
+	{
 		Connection conn = null;
 		String applicationId = VersioningUtil.getApplicationAPPId();
-		if (StringUtils.isNotBlank(applicationId)) {
-			/*if (StringUtils.equals(applicationId, PRODUCTION_APP_ID))
-				conn = getSQLConnection(URL);
-			else */
+		if (StringUtils.isNotBlank(applicationId))
+		{
+			if (StringUtils.equals(applicationId, PRODUCTION_APP_ID))
+				conn = getSQLConnection(PRODUCTION_URL);
+			else 
 			    if (StringUtils.equals(applicationId, SANDBOX_APP_ID))
-				conn = getSQLConnection(URL);
+				conn = getSQLConnection(SANDBOX_URL);
+		}
+		else 
+		{
+		    //mysql local connection
 		}
 		return conn;
 	}
