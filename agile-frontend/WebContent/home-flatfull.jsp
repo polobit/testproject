@@ -294,7 +294,13 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     border-left-width: 0;
     border-width: 11px;
 }
+@media all and (min-width: 768px) {
+  .menu_help_content
+  {
+    width:155px!important;
+  }
 
+}
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -386,7 +392,7 @@ function isIE() {
                   <div class="arrow" style="top:27%;">
                   </div>
                   <div class="content p-sm">
-                    <p style="width: 200px;margin-bottom:0px;"> Check our other feature sets by clicking this icon.
+                    <p style="width : 200px;margin-bottom:0px;" class="menu_help_content"> Check our other feature sets by clicking this icon.
                     </p>
                     <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:5px;color:#6b6b6b !important;right:5px;font-size:20px;margin-right:5px;">×
                     </a>
