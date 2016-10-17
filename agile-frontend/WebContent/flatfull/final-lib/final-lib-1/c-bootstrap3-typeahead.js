@@ -65,6 +65,7 @@
     },*/
     
     select: function () {
+      // console.log("select");
     	var val = this.$menu.find('.active').data('data-value');
         this.$element
           .val(this.updater(val))
@@ -376,6 +377,8 @@
     },
 
     click: function (e) {
+      // console.log("click");
+      this.menuitemClicked = true;
       e.stopPropagation();
       e.preventDefault();
       this.select();
@@ -390,7 +393,17 @@
 
     mouseleave: function (e) {
       this.mousedover = false;
-      if (!this.focused && this.shown) this.hide();
+      if (!this.focused && this.shown) {
+        this.hide(); 
+      }
+      else {
+        if(!this.menuitemClicked) {
+          var $targetEle = $(e.target);
+          if($targetEle.closest("ul.typeahead").length > 0)
+              $targetEle.trigger("click");
+        }
+      }
+      this.menuitemClicked = false;
     }
 
   };
