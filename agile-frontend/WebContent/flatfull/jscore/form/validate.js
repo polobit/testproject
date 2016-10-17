@@ -138,7 +138,6 @@ function isValidForm(form) {
 	
 	},"{{agile_lng_translate 'validation-msgs' 'ipaddress'}}");
 
-	
 	jQuery.validator.addMethod("formulaData", function(value, element){
 		var source = $(element).val();
 		var tpl;
@@ -336,6 +335,23 @@ function isValidForm(form) {
 			
 	}, "{{agile_lng_translate 'validation-msgs' 'date'}}");
 
+	//required validation for sendmail
+	jQuery.validator.addMethod("requiredEmail", function(value, element){
+              if(element.value!="" || element.parentElement.firstElementChild.firstElementChild.children.length!=0)
+                       return true;
+               else 
+                       return false;   
+    },_agile_get_translated_val("validation-msgs",'this-field-is-required'));
+    jQuery.validator.addMethod("validateWebsite", function(value, element){
+		if(value=="")
+			return true;
+		var substr = value.substring(0, 4);
+		if(substr == 'http' || substr == 'http' || value.substring(0, 3) == 'ftp')
+			return /^(?:(?:(?:https?|ftp?|):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);			
+		else
+			return /^(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
+	}, _agile_get_translated_val("validation-msgs",'url'));
+    
 	$(form).validate({
 		ignoreTitle: true,
 		rules : {

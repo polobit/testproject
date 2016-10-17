@@ -1213,7 +1213,8 @@ $(function()
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 			element = element.replace("_", " ")
-
+			if(element=='last campaign_emailed')
+				element = element.replace("_", " ")
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
 
 		});
@@ -7872,4 +7873,12 @@ Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
 	else
 		return options.inverse(this); 
 
+});
+
+Handlebars.registerHelper('isEmailCreditsExists', function(options)
+{
+	var credits = _billing_restriction.email_credits_count;
+	if (credits != undefined && credits > 0)
+		return options.fn(this);
+	return options.inverse(this);
 });

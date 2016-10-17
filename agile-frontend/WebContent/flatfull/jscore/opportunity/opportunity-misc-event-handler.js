@@ -610,3 +610,62 @@ function initializeMilestoneListners(el){
     	
     });
 }
+function createtypeheadcontact(el){
+	var cname = el.closest('form').find('.typeahead_contacts').val();
+	var type = $(el).attr('type') ; 
+	var contact = {}; var url = '/core/api/contacts' ;
+	var properties = []; var json = {};
+	contact['source'] = 'manual' ;
+	if(type == "contact"){
+		contact['type'] = 'PERSON' ;
+		json.name = "first_name";
+		json.type = "SYSTEM";
+		json.value = cname ; 
+	}
+	else {
+		contact['type'] = 'COMPANY' ;
+		json.name = "name";
+		json.type = "SYSTEM";
+		json.value = cname ;
+	}
+	properties.push(json);
+	contact.properties = properties ;
+	$.ajax({
+	  type: "POST",
+	  url: url,contentType : "application/json; charset=utf-8",
+	  dataType : 'json',
+	  data: JSON.stringify(contact),
+	  success: function(data){
+	  	console.log(data);
+	  	var properties = [];var i ;var coname ;var cValue = 'first_name'; 
+	  	var cType = data.type ; 
+	  	properties = data['properties'];
+	  	if(cType == 'COMPANY')
+	  		cValue = 'name';
+	  	for(i=0 ; i<properties.length ; i++){
+	  		if(properties[i].name == cValue){
+	  			coname = properties[i].value;
+	  			break ; 
+	  		}
+	  	}
+	  	el.closest('form')
+			.find(".newtypeaheadcontact")
+			.append(
+					'<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data.id + '"><a class="text-white v-middle" href="#contact/' + data.id + '">' + coname + '</a><a class="close" id="remove_tag">&times</a></li>');
+	  },error : function(model, response)
+		{
+			if (model && model.responseText)
+			{
+				// Show cause of error in saving
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + model.responseText + '</i></p></small></div>');
+				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
+
+			}
+			else
+			{
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>Exception while saving the Contact/Company</i></p></small></div>');
+				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
+			}
+		}
+	});
+}

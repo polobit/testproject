@@ -2980,7 +2980,7 @@ portlets.revenue-graph,Revenue Graph,Gráfico de ingresos
 admin-settings-integrations.your-facebook,Your Facebook,Tu Facebook
 web-rules.times-to-show,Times to show,Veces para mostrar
 campaigns.all-campaigns,All Campaigns,todas las campañas
-campaigns.all-campaigns-stats,All Campaign Emails
+campaigns.all-campaigns-stats,All Campaign Emails,
 landingpages.invalid-path,Invalid path.,Ruta no válida.
 menu.menu-landing-pages,Landing Pages,Páginas de landing
 currency.Fijian Dollar,Fijian Dollar,Dólar fiyiano
@@ -5558,7 +5558,7 @@ Help-center.mark-as-public-cannedmessage,Mark as Public,
 portlets.Hours,Hours,
 portlets.Minutes,Minutes,
 portlets.Seconds,Seconds,
-deal-view.detailed-notes,Detailed Notes
+deal-view.detailed-notes,Detailed Notes,
 tickets.feedback-subject,Subject,
 tickets.feedback-created-time,Note Sent,
 tickets.feedback-ticket-details,Ticket Details,
@@ -5587,3 +5587,5 @@ prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.,
 prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification),
 sync.all-contacts,Sync All Contacts,
 other.campaign-webhooks-will-not-be-triggered,*Campaigns and Webhooks will be paused during import process,
+typeahead.add-as-new-contact,Add as new Contact,
+typeahead.add-as-new-company,Add as new Company,

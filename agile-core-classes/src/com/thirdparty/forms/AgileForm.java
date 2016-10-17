@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.jsoup.helper.StringUtil;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.RecaptchaGateway;
@@ -81,7 +83,6 @@ public class AgileForm extends HttpServlet
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
         return;
         }
-        
         //Check whether Google has verified the user, when captcha is enabled
         if(form.agileformcaptcha) {
           RecaptchaGateway recaptcha = RecaptchaGatewayUtil.getRecaptchaGateway();
@@ -130,8 +131,9 @@ public class AgileForm extends HttpServlet
 
 	    try
 	    {
+	    	
 		request.setAttribute("url", getNormalizedRedirectURL(agileRedirectURL, contact, request));
-		request.getRequestDispatcher("/agileformredirect").forward(request, response);
+		request.getRequestDispatcher("/agileformredirect").forward(request, response);	
 	    }
 	    catch (ServletException e)
 	    {
@@ -407,11 +409,9 @@ public class AgileForm extends HttpServlet
     public String getNormalizedRedirectURL(String agileRedirectURL, Contact contact, HttpServletRequest request)
     {
 	Boolean externalRedirect = StringUtils.equals(agileRedirectURL, "#") ? false : true;
-
 	String normalizedRedirectURL = externalRedirect ? agileRedirectURL.trim().replaceAll("\r", "")
 	        .replaceAll("\n", "") : request.getRequestURL().toString()
 	        .replaceAll("formsubmit", "agileform_thankyou.jsp");
-
 	String params = "?fwd=cd";
 	if (StringUtils.contains(normalizedRedirectURL, "?"))
 	    params = "&fwd=cd";
