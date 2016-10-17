@@ -13,16 +13,20 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
+import com.agilecrm.subscription.deferred.RenewalCreditsDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -39,6 +43,8 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -142,6 +148,16 @@ public class BillingRestriction
     @Embedded
     @JsonIgnore
     public PlanLimits planDetails = PlanLimits.getPlanDetails(new Plan("FREE", 2));
+    
+  	//Auto recharge related fields
+  	@NotSaved(IfDefault.class)
+  	public Integer nextRechargeCount = null;
+  	
+  	@NotSaved(IfDefault.class)
+  	public Integer autoRenewalPoint = null;
+  	
+  	@NotSaved(IfDefault.class)
+  	public Boolean isAutoRenewalEnabled = false;
 
     public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
 	    BillingRestriction.class);
@@ -392,6 +408,7 @@ public class BillingRestriction
     @PrePersist
     private void prePersist()
     {
+    	
 	if (this.id == null)
 	    return;
 
@@ -465,6 +482,7 @@ public class BillingRestriction
     @PostLoad
     private void postLoad()
     {
+    
 	if (one_time_emails_count == null)
 	    one_time_emails_count = 0;
 
@@ -520,9 +538,72 @@ public class BillingRestriction
     
     public void decrementEmailCreditsCount(int count){
     	this.email_credits_count -= count;
+    	if(isAutoRenewalEnabled && email_credits_count <= autoRenewalPoint){
+    		String namespace = NamespaceManager.get();
+    		String syncKey = namespace + "_auto_renewal_lock";
+    		boolean lockAcquired = false;
+    		try
+    		{
+    			lockAcquired = acquireLock(syncKey);
+    			renewalCredits(nextRechargeCount, count);
+    		}catch (Exception e){
+    			System.out.println(ExceptionUtils.getFullStackTrace(e));
+    			e.printStackTrace();
+    		}finally{
+    			if (lockAcquired)
+    				decrement(syncKey);
+    		}
+    	}
     }
     
     public void incrementEmailCreditsCount(int count){
     	this.email_credits_count += count;
     }
+    
+    /**
+	 * Enabling lock on memcache key
+	 * 
+	 * Source:
+	 * http://stackoverflow.com/questions/14907908/google-app-engine-how-
+	 * to-make-synchronized-actions-using-memcache-or-datastore
+	 * 
+	 * @param syncKey
+	 * @return
+	 */
+	public boolean acquireLock(String syncKey)
+	{
+		MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+
+		while (true)
+		{
+			if (memcacheService.increment(syncKey, 1L, 0L) == 1L)
+				return true;
+
+			try
+			{
+				System.out.println("Waiting for acquiring lock.");
+				Thread.sleep(2000L);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
+	}
+	
+	public static void decrement(String syncKey)
+	{
+		MemcacheServiceFactory.getMemcacheService().put(syncKey, 0l);
+	}
+    
+    //
+    public void renewalCredits(int quantity, int decrementCount){
+    	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    	restriction.email_credits_count -= decrementCount;
+    	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
+			RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity, 0);			
+			task.run();
+    	}
+	}
 }
