@@ -41,7 +41,7 @@ var timeline_entity_loader = {
 		this.load_stats(contact);
 		this.load_campaign_logs(contactId);
 		
-		if(!email){
+		if(!getPropertyValue(contact.properties, "email")){
 			return;
 		}
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
@@ -55,7 +55,7 @@ var timeline_entity_loader = {
 		this.load_stats(contact);
 		this.load_campaign_logs(companyId);
 
-		if(!email){
+		if(!getPropertyValue(contact.properties, "email")){
 			return;
 		}
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Companies.companyDetailView.el);
