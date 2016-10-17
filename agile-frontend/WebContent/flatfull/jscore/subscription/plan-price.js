@@ -867,7 +867,7 @@ $(function(){
 			_billing_restriction.nextRechargeCount = json.nextRechargeCount;
 			_billing_restriction.autoRenewalPoint = json.autoRenewalPoint;
 			$that.html("save").removeAttr("disabled");
-			showNotyPopUp("information","Auto Recharge Enabled", "top");
+			showNotyPopUp("information","Auto recharge has been enabled successfully.", "top");
 		}).fail(function(data) {
 			$that.closest(".modal").modal("hide");
 		    showNotyPopUp("warning", data.responseText, "top");
@@ -886,7 +886,7 @@ $(function(){
 			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
 			_billing_restriction.nextRechargeCount = undefined;
 			_billing_restriction.autoRenewalPoint = undefined;
-			showNotyPopUp("information","Auto Recharge Disabled", "top");
+			showNotyPopUp("information","Auto recharge has been disabled successfully.", "top");
 		}).fail(function(data) {
 			$that.closest(".modal").modal("hide");
 		    showNotyPopUp("warning", data.responseText, "top");

@@ -1566,7 +1566,7 @@ prefs-data-sync.my-contacts-(Recommended),My Contacts (Recommended),Mis Contacto
 twilio.verify-an-outgoing-number,Verify an outgoing number,Verificar un número saliente
 prefs-settings.new-event-calendar-page,New Event (Calendar Page),Nuevo Evento (Página de calendario)
 web-rules.how-to-define-a-web-rule,How to define a Web Rule?,¿Cómo definir una regla Web?
-validation-msgs.digits,Please enter only digits.,Por favor ingrese solo dígitos.
+validation-msgs.digits,Please enter valid number.,
 countries.IR,Iran&#44; Islamic Republic Of,República islámica de Irán
 widgets.click-to-see-more-tickets,Click to see more tickets,Haz clic para ver más tickets
 campaigns.complete-list-is-provided,Complete list is provided,Se proporciona una lista completa
