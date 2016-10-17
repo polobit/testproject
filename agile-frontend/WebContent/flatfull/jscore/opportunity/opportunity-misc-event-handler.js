@@ -642,10 +642,10 @@ function createtypeheadcontact(el){
 					'<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data.id + '"><a class="text-white v-middle" href="#contact/' + data.id + '">' + coname + '</a><a class="close" id="remove_tag">&times</a></li>');
 	  },error : function(model, response)
 		{
-			if (response && response.status == 403)
+			if (model && model.responseText)
 			{
 				// Show cause of error in saving
-				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + model.responseText + '</i></p></small></div>');
 				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
 
 			}
