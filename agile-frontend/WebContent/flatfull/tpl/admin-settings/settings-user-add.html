@@ -212,23 +212,24 @@
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
-                                <input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
-                                    </small>
-                                    </div>
-                            </label>
-                            <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp" value="EDIT_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
                                     <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'update-contacts-owned-by-other-users'}}
                                     </small>
                                     </div>
                             </label>
+                           
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp" value="DELETE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
                                     <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small>
+                                    </div>
+                            </label>
+                            <label class="i-checks i-checks-sm checkbox">
+                                <input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
+                                    </small>
                                     </div>
                             </label>
                             <div>
@@ -306,11 +307,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'export-contacts'}}  <br/>
                                             <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'export-contacts-as-csv-file'}}</small></div>
                                        </label>
-                                        <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
-                                            <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
-                                        </label>
+                                       
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="EDIT_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             {{agile_lng_translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
@@ -321,6 +318,11 @@
                                             {{agile_lng_translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
                                             <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small></div>
                                        </label>
+                                        <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
+                                        </label>
                                      <div>
                                       <div class="pull-left" style="width:100%;">
                                        <label class="i-checks i-checks-sm checkbox">
@@ -392,12 +394,7 @@
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'export-contacts-as-csv-file'}} </small>
                                     </div>
                                 </label>
-                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
-                                    </small></div>
-                                </label>
+                                
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="EDIT_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
@@ -407,6 +404,12 @@
                                     <input type="checkbox" name="temp" value="DELETE_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
                                         <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small></div>
+                                </label>
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
+                                    </small></div>
                                 </label>
                                 <div>
                                     <div class="pull-left" style="width:100%;">
