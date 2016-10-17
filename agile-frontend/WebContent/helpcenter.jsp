@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <%@page import="com.agilecrm.session.KnowledgebaseUserInfo.Role"%>
 <%@page import="com.agilecrm.session.KnowledgebaseUserInfo"%>
 <%@page import="com.agilecrm.session.KnowledgebaseManager"%>
@@ -36,16 +35,17 @@
 <%@page	import="com.agilecrm.knowledgebase.entity.LandingPageKnowledgebase"%>
 <%@page	import="com.agilecrm.landingpages.LandingPage"%>
 <%@page	import="com.agilecrm.landingpages.LandingPageServlet"%>
+<%@page import="com.agilecrm.landingpages.LandingPageHelper"%>
 
 <%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%@page	import="com.agilecrm.db.ObjectifyGenericDao"%>
 <%@page	import="com.agilecrm.account.APIKey"%>
-<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>
-
-  
+<%@page	import="com.agilecrm.knowledgebase.util.KbLandingPageUtil"%>  
   <%
+  String headerContent = "";
+  String footerContent = "";
   LandingPageKnowledgebase  kbpage = KbLandingPageUtil.get(); 
 
 	if(kbpage == null ||kbpage.kb_landing_page_id == 0 || kbpage.kb_landing_page_id == 1
@@ -53,7 +53,7 @@
 	%>
 		<%@ include file="/knowledgebase.jsp"%>
 	<%
-	}%> 
+	}else{%> 
 	
 	<% 
   
@@ -70,31 +70,19 @@
 		try{
 	
 	if(kbpage !=null){
+	
 		Long landingpageid = kbpage.kb_landing_page_id;
-	LandingPageUtil lpUtil = new LandingPageUtil();
-	LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
-	if(landingPage == null)
-	throw new Exception("No landing page found.");
+		LandingPageUtil lpUtil = new LandingPageUtil();
+		LandingPage landingPage = lpUtil.getLandingPage(landingpageid);
+		if(landingPage == null)
+		throw new Exception("No landing page found.");
 
-	String fullXHtml = landingPage.html;
-	fullXHtml =  new LandingPageServlet().getResponsiveMediaIFrame(fullXHtml);
-
-	String domainHost = "http://localhost:8888";
-	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-		domainHost = "https://" + lpUtil.requestingDomain +  ".agilecrm.com";		
-		//domainHost = "https://" + lpUtil.requestingDomain + "-dot-sandbox-dot-agilecrmbeta.appspot.com";
-	}
-
-	String analyticsCode = "";
-			
-	if(landingPage.elements_css != null){
-		fullXHtml = fullXHtml.replace("</head>", "<style id=\"elements-css\">"+landingPage.elements_css+"</style></head>");	
-	}
-	fullXHtml = fullXHtml.replace("</head>", "<style>"+landingPage.css+"</style></head>");
-	fullXHtml = fullXHtml.replace("</body></html>", landingPage.js+"</script>");		
+		LandingPageHelper lpHelper = new LandingPageHelper(landingPage);
+		lpHelper.constructPageCode();
+		headerContent = lpHelper.getPageHeader();
+		footerContent = lpHelper.getPagefooter();
 		
-
-	out.write(fullXHtml);
+		
 		}
 	} catch (Exception e) {
 	} finally {
@@ -119,11 +107,53 @@
   
   if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
   {
+  
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
 	  CLOUDFRONT_TEMPLATE_LIB_PATH = "";	
 	  CSS_PATH = FLAT_FULL_PATH;
   }
+
+
 %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+	
+.note-published {
+	color: #bebebe;
+	float: right;
+}
+
+.notes-list .note-body {
+	margin-top: 8px;
+}
+.sectionfont{
+	font-size: 13px;
+	color:#0072EF;
+}
+.categoriefont{
+	font-size: 14px;
+}
+.search-box .fa-search { 
+  position: absolute;
+    margin-top: 16px;
+    margin-left: 18px;
+    font-size: 23px;
+}
+.search-box1{
+	background:url(https://s3.amazonaws.com/agilecrm/landing/landing-page/images/intro-bg.jpg) no-repeat center center;
+	padding: 56px;
+	background-size: cover;
+}
+
+
+	</style>
+	<%=headerContent%>
+	<title>Knowledgebase</title>
+</head>
+<body>
+	<%=footerContent%>
 <!-- Determine Console.logging - we log in local boxes -->
 <%
 
@@ -139,7 +169,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 }
 
 %>
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+
   <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 <script>
 
@@ -176,7 +206,6 @@ var LOCAL_SERVER = <%=debug%>;
 var IS_FLUID = <%=is_fluid %>
 
 
-
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
 
@@ -211,6 +240,7 @@ var en;
 var Agile_Contact = {};
 
 var _LANGUAGE = "en";
+var kbpagelpid;
 
 
 // head.ready('library', function() {
@@ -257,13 +287,6 @@ head.ready(["core"], function(){
 function load_globalize()
 {
 
-  /*if (typeof Globalize != "function") {
-    setTimeout(function() {
-      load_globalize();
-    }, 100);
-    return;
-  } */
-
   Globalize.load(Globalize_Main_Data);
   en = Globalize("en");
 
@@ -271,3 +294,4 @@ function load_globalize()
 </script>
 </body>
 </html>
+<%}%>
