@@ -205,7 +205,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 				if(confirmationMsgEl) {
 					confirmationMsg = confirmationMsgEl.value;
 				}
-				document.getElementById("agile-error-msg").innerHTML = '<span style="color:black;font-size: 16px;">' + confirmationMsg + '</span>';
+				document.getElementById("agile-error-msg").innerHTML = '<br><span style="color:green; font-size: 13px;">' + confirmationMsg + '</span>';
 				var agile_form = document.forms["agile-form"];
 				agile_form.reset();
 			
