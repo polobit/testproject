@@ -91,7 +91,7 @@ function bindAdminChangeAction(el, data)
 
 // Allow acls for specific domains
 function checkForACLExceptionalUsers(){
-	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi", "orcamortgages"];
+	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi", "orcamortgages", "nexusworkspace"];
 	if($.inArray(CURRENT_DOMAIN_USER.domain, specialUsers) != -1)
 		return true;
 	else
