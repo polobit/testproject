@@ -30,9 +30,9 @@
        <li class="p-none active">
        <a  href="#newsletters" class="b-l-none" data-toggle="tab" >Newsletters</a></li>
        <li class="p-none ">
-       <a  href="#conformation" class="b-l-none" data-toggle="tab" >Notifications</a></li>
+       <a  href="#notifications" class="b-l-none" data-toggle="tab" >Notifications</a></li>
        <li class="p-none ">
-       <a  href="#information" class="b-l-none" data-toggle="tab" >Celebrations</a></li>
+       <a  href="#celebrations" class="b-l-none" data-toggle="tab" >Celebrations</a></li>
        <li class="p-none ">
     </ul>
  </div>
@@ -40,35 +40,71 @@
 
 
 <div class="tab-content wrapper-md panel">
-    <div class="tab-pane" id="newsletters">
-        <div class="row">
-        </div>
+    <div class="tab-pane fade in active" id="newsletters"> 
+         <div class="row">
+            {{#each newsletters_list}}
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center border-color">
+                    <!-- Thumbnail and Title -->
+                    <div>
+                       <div class="p-b-sm p-l-none p-r-none">
+                        <a href="#emailbuilder-add/{{id}}"><img style="width:98%;" src="misc/emailbuilder/templates/{{id}}/thumbnail.png"/></a>
+                       </div>
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default" href="#emailbuilder-add/{{id}}">{{agile_lng_translate 'campaigns' 'go'}}</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}} 
+     </div>
+     </div>
+
+    <div class="tab-pane fade " id="notifications">
+    <div class="row">
+            {{#each notifications_list}}
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center border-color">
+                    <!-- Thumbnail and Title -->
+                    <div>
+                       <div class="p-b-sm p-l-none p-r-none">
+                        <a href="#emailbuilder-add/{{id}}"><img style="width:98%;" src="misc/emailbuilder/templates/{{id}}/thumbnail.png"/></a>
+                       </div>
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default" href="#emailbuilder-add/{{id}}">{{agile_lng_translate 'campaigns' 'go'}}</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}} 
+     </div>
     </div>
-</div>
 
-
-
-<div id="general" class="row">
-
-{{#each list}}
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none">
-            <a href="#emailbuilder-add/{{id}}"><img style="width:98%;" src="misc/emailbuilder/templates/{{id}}/thumbnail.png"/></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#emailbuilder-add/{{id}}">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
+    <div class="tab-pane fade " id="celebrations">
+    <div class="row">
+            {{#each celebrations_list}}
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center border-color">
+                    <!-- Thumbnail and Title -->
+                    <div>
+                       <div class="p-b-sm p-l-none p-r-none">
+                        <a href="#emailbuilder-add/{{id}}"><img style="width:98%;" src="misc/emailbuilder/templates/{{id}}/thumbnail.png"/></a>
+                       </div>
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default" href="#emailbuilder-add/{{id}}">{{agile_lng_translate 'campaigns' 'go'}}</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}} 
+     </div>
     </div>
-</div>
-{{/each}}
 
-    
-</div>
+
+
 
 </div>
 
