@@ -550,7 +550,9 @@ public class TwilioWidgetsAPI
 			System.out.println("contact id ==== " + contactId);
 			Contact contact = ContactUtil.getContact(contactId);
 			contact.setLastCalled(System.currentTimeMillis() / 1000);
+			System.out.println("Last called"+contact.getLastCalled());
 			contact.update();
+			System.out.println("After updation Last called"+contact.getLastCalled());
 			System.out.println("contact has been updated");
 			
 			return "sucess";
