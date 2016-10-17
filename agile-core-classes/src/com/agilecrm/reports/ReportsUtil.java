@@ -35,6 +35,7 @@ import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.deals.Opportunity;
@@ -434,7 +435,7 @@ public class ReportsUtil {
 	public static Collection customizeContactParameters(Collection contactList,
 			LinkedHashSet<String> fields_set,String timezone) {
 
-		List<CustomFieldDef> fields = CustomFieldDefUtil
+		/*List<CustomFieldDef> fields = CustomFieldDefUtil
 				.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
 						com.agilecrm.contact.CustomFieldDef.Type.DATE
 								.toString());
@@ -452,7 +453,28 @@ public class ReportsUtil {
 				if (def.field_label.equals(field_name))
 					dateFields.add(field_name);
 			}
-		}
+		}*/
+		 List<CustomFieldDef> customTypeFields = CustomFieldDefUtil.getAllCustomFields(SCOPE.CONTACT);
+		 List<String> typeSpecificFields = new ArrayList<String>();
+		 List<String> dateFields = new ArrayList<String>();
+		 for (CustomFieldDef customField : customTypeFields)
+		    {
+			 for (String field : fields_set) {
+				 if (!field.contains("custom"))
+						continue;
+				 String field_name = field.split("custom_")[1];
+				 if (customField.field_label.equals(field_name)){
+					 if(customField.field_type.equals(CustomFieldDef.Type.CONTACT) || customField.field_type.equals(CustomFieldDef.Type.COMPANY))
+					 {
+						 typeSpecificFields.add(field_name);
+					 }
+					 if(customField.field_type.equals(CustomFieldDef.Type.DATE))
+					 {
+						 dateFields.add(field_name);
+					 }
+				 }
+				 }
+			 }	
 
 		List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
 
@@ -500,7 +522,29 @@ public class ReportsUtil {
 								e.printStackTrace();
 							}
 						}
-
+						if(typeSpecificFields.contains(field_name))
+						{
+							try{
+							List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(contactField.value)) ;
+							if (contacts.size() > 0) {
+			    			 StringBuilder contactName = new StringBuilder("[");
+				    		for(Contact cont : contacts){
+				    			if(cont.type.equals(Contact.Type.PERSON)){
+				    				contactName.append(cont.first_name);
+					    			contactName.append(cont.last_name);
+				    			}else{
+				    				contactName.append(cont.name);
+				    			}
+				    			
+				    			contactName.append(",");
+				    		}
+				    		contactName.replace(contactName.length()-1, contactName.length(),"");
+				    		contactName.append("]");
+				    		contactField.value=contactName.toString();
+			    		}
+							}
+							catch(Exception e){}
+						}
 						customFieldJSON = new ObjectMapper()
 								.writeValueAsString(contactField);
 
@@ -541,13 +585,15 @@ public class ReportsUtil {
 											.equalsIgnoreCase("last_contacted")
 											|| field.equalsIgnoreCase("last_emailed") || field
 												.equalsIgnoreCase("last_called") || field
-												.equalsIgnoreCase("updated_time")))
+												.equalsIgnoreCase("updated_time") || field
+												.equalsIgnoreCase("last_campaign_emailed")))
 								fieldValue = " ";
 							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
-										.equalsIgnoreCase("last_called"))
+										.equalsIgnoreCase("last_called") || field
+										.equalsIgnoreCase("last_campaign_emailed"))
 									&& !fieldValue.equals(" "))
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long

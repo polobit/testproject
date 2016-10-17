@@ -769,3 +769,12 @@ function isCompanyTypeCustomField(customCompanyfields,property){
 	});
 	return count>0;
 }
+// Check whether the given fields list has the property name.
+function isReportDateCustomField(customDatefields,property){
+	var count = 0;
+	$.each(customDatefields,function(index,field){
+		if(field.field_label==property.name  && field.field_type == "DATE")
+			count++;
+	});
+	return count>0;
+}
