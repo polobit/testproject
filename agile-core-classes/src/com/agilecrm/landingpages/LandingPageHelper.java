@@ -167,8 +167,8 @@ public class LandingPageHelper {
     lpHeadSection.append(headerContent);    
     lpBodySection.append(footerContent);
     
-    pageHeader = lpHeadSection.toString();
-    pagefooter = lpBodySection.toString();
+    pageHeader = lpHeadSection.html();
+    pagefooter = lpBodySection.html();
     fullPage = lpDocument.toString();
     
   }
