@@ -9,6 +9,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -99,6 +100,10 @@ public class EmailGatewayUtil
     {
 	Map<String, String> campaignNameMap = new HashMap<String, String>();
 	List<Object[]> queryList = new ArrayList<Object[]>();
+	
+	String fromEmailAddress = "";
+	String message = "";
+	
 	for (MailDeferredTask mailDeferredTask : tasks)
 	{
 	    String campaignName = null;
@@ -117,18 +122,14 @@ public class EmailGatewayUtil
 		campaignName = campaignNameMap.get(mailDeferredTask.campaignId + "-" + mailDeferredTask.domain);
 	    }
 	    
-	    //getting name and email address together of sender(user) 
-	    String fromEmailAddress = mailDeferredTask.fromName+" <"+mailDeferredTask.fromEmail+">";
-	    String toEmailAddress = mailDeferredTask.to;
+	    //getting name and email address together of sender(user) 	    
+	    fromEmailAddress=mailDeferredTask.fromEmail;
 	    
-	    //converting special characters to html 
-	    fromEmailAddress = fromEmailAddress.replaceAll("<", "&lt;");
-	    fromEmailAddress = fromEmailAddress.replaceAll(">","&gt;");
-	    toEmailAddress = toEmailAddress.replaceAll("<","&lt;");
-	    toEmailAddress = toEmailAddress.replaceAll(">","&gt;");
-	    	    
-	    String message = "Subject: "+mailDeferredTask.subject+" <br/> From: "+fromEmailAddress+" <br/> To: "+toEmailAddress;
-	    
+	    if(StringUtils.isNotBlank(fromEmailAddress) && StringUtils.isNotBlank(mailDeferredTask.fromName))
+	    		fromEmailAddress = mailDeferredTask.fromName + " &lt;"+fromEmailAddress + "&gt;";
+
+	    message = "Subject: " + mailDeferredTask.subject + " <br/> From: " + fromEmailAddress
+	    		+" <br/> To: " + StringEscapeUtils.escapeHtml(mailDeferredTask.to);
 	    
 	    // For testing in Localhost
 	    if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development){
@@ -652,5 +653,5 @@ public class EmailGatewayUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-    }
+    }     
 }
