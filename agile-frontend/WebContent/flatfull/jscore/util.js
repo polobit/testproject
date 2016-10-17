@@ -445,7 +445,7 @@ function text_gravatar_initials(items, char_count)
 	{
 		/*name = first_name.substr(0, 1);
 		name += last_name.substr(0, 1);*/
-		name = (_agile_get_custom_contact_display_type() == "ftl")  ? first_name.substr(0, 1)+last_name.substr(0, 1)  : last_name.substr(0, 1)+first_name.substr(0, 1);
+		name = (_agile_get_custom_contact_display_type() == "FTL")  ? first_name.substr(0, 1)+last_name.substr(0, 1)  : last_name.substr(0, 1)+first_name.substr(0, 1);
 	}
 	else
 	{
