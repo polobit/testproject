@@ -9,7 +9,8 @@
 <div class="data-block">
     <div class="table-responsive {{#is_mobile}} b-n m-b-none {{/is_mobile}}">
 		<div class="panel panel-default">
-        <div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">                 
+        <div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">  
+            <label class="i-checks i-checks-sm m-b-none"><input type="checkbox" class="thead_check" value=""><i></i></label>   
             <button id="bulk-change-owner" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
             <button id="bulk-change-priority" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'bulk-task' 'priority'}}</button>
             <button id="bulk-change-status" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'bulk-task' 'status'}}</button>
@@ -18,7 +19,7 @@
             <span id="select_all_tasks"></span>
         </div>
         <div class="table-responsive">
-        <table class="table {{#is_mobile}} onlySorting tasklist-table noDelete {{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view" url="core/api/tasks/bulk" id="task-list">
+        <table class="table {{#is_mobile}} onlySorting tasklist-table noDelete {{else}} table-striped showCheckboxes agile-table{{/is_mobile}} no-sorting panel m-b-none table-layout-mob-view no-header-checkbox" url="core/api/tasks/bulk" id="task-list">
             
             {{#is_mobile}}
             
