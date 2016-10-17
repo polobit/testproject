@@ -742,17 +742,17 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    	try
 	    	{
 	    		// Fetches latest contact emails
-	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().id,count,cursor);
+	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor);
 	    	}
 	    	catch(NumberFormatException e)
 	    	{
 	    		e.printStackTrace();
-	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().id,count,cursor);
+	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor);
 	    	}
 	    }
 	    else
 	    {
-	    	contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().id);
+	    	contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id);
 	    }
 	    
 	    if(contactEmails!= null)
