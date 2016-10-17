@@ -751,19 +751,27 @@ public class EventUtil
 	   	    			String contactEmail = emailField.value;
 	   	    			if(contactEmail != null){ 
 	   	    				if(contact.type.equals(Contact.Type.PERSON)){
-	   	    					String contactName = "";
+	   	    					StringBuilder contactName = new StringBuilder();
 	   	    					if(contact.first_name != null){	   	    						
-	   	    						contactName += contact.first_name;
+	   	    						contactName.append(contact.first_name);
 	   	    					}
 	   	    					if(contact.last_name != null){
-	   	    						contactName += " "+contact.last_name;
+	   	    						contactName.append(" ");
+	   	    						contactName.append(contact.last_name);
 	   	    					}
-	   	    					contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ contactName+"</a>, ");
+	   	    					if(contactName.length() > 0){
+	   	    						contactName.append(contactName.substring(0, 1).toUpperCase() + contactName.substring(1));
+	   	    						contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ contactName+"</a>, ");
+	   	    					}	   	    					
 	   	    				}else if(contact.type.equals(ContactType.COMPANY)){
-	   	    					companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ contact.name +"</a>, ");
+	   	    					if(contact.name != null){
+	   	    						String companyName = contact.name.substring(0, 1).toUpperCase() + contact.name.substring(1);
+	   	    						companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ companyName +"</a>, ");
+	   	    					}
 	   	    				}
 	   	    				
 	   	    				StringBuilder usermail = new StringBuilder("<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>");
+	   	    				usermail.append("<span>Title: " + event.title +"</span><br/>");
 	   	   					usermail.append("<span>Duration: " + minsInStr + "</span><br/>");
 	   	   					if(event.description != null && event.description.length() > 0){
 	   	   						usermail.append("<span>Note: " + event.description + "</span><br/>");
@@ -779,16 +787,20 @@ public class EventUtil
    	    	}
    	    	
    	    	if(domainUserEmail != null){	
-   	    		StringBuilder domainMailTempalte = new StringBuilder("<p>Event has been scheduled with ");
+   	    		StringBuilder domainMailTempalte = new StringBuilder();
    	    		int dataLength = companiesList.length();
    	    		String contactDetails;
    	    		if(dataLength > 0){
    	    			contactList.append(companiesList);   	    			
    	    		}
-   	    		contactDetails = contactList.substring(0, contactList.length() - 2);   	    		
-   	    		 
-   	    		domainMailTempalte.append(contactDetails);   	    		
-   	    		domainMailTempalte.append("</p>");
+   	    		
+   	    		if(contactList.length() > 0){
+   	    			domainMailTempalte.append("<p>Event has been scheduled with ");
+   	    			contactDetails = contactList.substring(0, contactList.length() - 2);
+   	    			domainMailTempalte.append(contactDetails);
+   	    			domainMailTempalte.append("</p>");
+   	    		}   	    		   	    		
+   	    		
    	    		domainMailTempalte.append("<span>Title: " + event.title +"</span><br/>");
    	    		domainMailTempalte.append("<span>Duration: " + minsInStr +"</span><br/>");
    	    		if(event.description != null && event.description.length() > 0){
