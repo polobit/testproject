@@ -510,6 +510,8 @@
             //video URL
             if( $(styleeditor.activeElement.element).attr('data-type') === 'video' ) {
 
+                var videoRecord_Id = $('select[id=videoRecordId]').val();
+
                 if( $('input#youtubeID').val() !== '' ) {
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+$('#video_Tab input#youtubeID').val());
@@ -518,6 +520,9 @@
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
 
+                } else if ( videoRecord_Id !== '' ) {
+
+                    $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
                 }
 
                 /* SANDBOX */
@@ -534,7 +539,7 @@
 
                         $('#'+styleeditor.activeElement.sandbox).contents().find('#'+elementID).prev().attr('src', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
 
-                    }
+                    } 
 
                 }
 
@@ -827,7 +832,7 @@
             $('a#video_Link').click();
             $('a#default-tab1').css("display","none");
 
-            //inject current video ID,check if we're dealing with Youtube or Vimeo
+            //inject current video ID,check if we're dealing with Youtube or Vimeo or Recorded video
 
             if( $(el).prev().attr('data-video').indexOf("vimeo.com") > -1 ) {//vimeo
 
@@ -835,8 +840,9 @@
 
                 $('#video_Tab input#vimeoID').val( matchResults[matchResults.length-1] );
                 $('#video_Tab input#youtubeID').val('');
+                $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
-            } else {//youtube
+            } else if( $(el).prev().attr('data-video').indexOf("youtube.com") > -1 ) {//youtube
 
                 //temp = $(el).prev().attr('src').split('/');
                 var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
@@ -844,7 +850,17 @@
 
                 $('#video_Tab input#youtubeID').val( matchResults[1] );
                 $('#video_Tab input#vimeoID').val('');
+                $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
+            } else { //Recorded video
+
+                matchResults = $(el).prev().attr('data-video').match(/video\/([0-9]*)/);
+                if(matchResults)
+                    $('#video_Tab select[id=videoRecordId]').val( matchResults[1] ).attr('selected','selected');
+                else
+                    $("#video_Tab select[id=videoRecordId]").val("");
+                $('#video_Tab input#youtubeID').val('');
+                $('#video_Tab input#vimeoID').val('');
             }
 
         },
