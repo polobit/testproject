@@ -56,7 +56,7 @@
         {"url":"elements/agileform4.html","height":700, "thumbnail":"elements/images/thumbs/agileform4.png"},
         {"url":"elements/agileform5.html","height":700, "thumbnail":"elements/images/thumbs/agileform5.png"}
     ],
-    "{{agile_lng_translate 'landingpage-builder' 'knowledge-base'}}":[
+    "{{agile_lng_translate 'other' 'knowledge-base'}}":[
         {"url":"elements/knowledge-base.html","height":294, "thumbnail":"elements/images/thumbs/knowledge-base.png"}
     ],
     "{{agile_lng_translate 'landingpage-builder' 'footers'}}":[
