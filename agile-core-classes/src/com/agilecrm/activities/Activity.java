@@ -151,6 +151,7 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     public EntityType entity_type = null;
 
+    
     /**
      * Type of the activity.
      */
@@ -168,6 +169,10 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String label = null;
+    
+    
+    @NotSaved(IfDefault.class)
+    public String activityTypeArray = null;
 
     /**
      * Time of activity performed.

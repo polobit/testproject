@@ -11,9 +11,20 @@ function includeTimeAgo(element)
 
 function buildActivityFilters(name,valueid,clickedFrom){
    
+   		console.log("name = "+name);
 		if(clickedFrom=='entityDropDown'){
-		ACTIVITY_FILTER_JSON.entity=name;
-		ACTIVITY_FILTER_JSON.entityId=valueid;
+			var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+			var dashboard = dashboard_name;
+			var entities = {entity:name,entityId:valueid};
+			if(!ACTIVITY_FILTER_JSON.hasOwnProperty(dashboard_name)){
+
+				ACTIVITY_FILTER_JSON[dashboard] = entities;
+			}
+			if(ACTIVITY_FILTER_JSON[dashboard_name].entity != name){
+				ACTIVITY_FILTER_JSON[dashboard] = entities;
+			}
+		/*ACTIVITY_FILTER_JSON.entity=name;
+		ACTIVITY_FILTER_JSON.entityId=valueid;*/
 		}
 		else if(clickedFrom=='userDropDown'){
 		ACTIVITY_FILTER_JSON.user=name;
@@ -40,8 +51,8 @@ function buildActivityFilters(name,valueid,clickedFrom){
 function renderActivityView(params)
 {
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
-		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 20,
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params,sortKey : 'time',
+		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 10,
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
 			includeTimeAgo(el);
@@ -77,10 +88,12 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 	$("#activities_date_range").show();
 	var params = "?";
 
+
 	var user =null;
 	var entitytype=null;
 	// Get Date Range
 	var range = $('#activities_date_range #range').html().split("-");
+	var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
 
 	if (range)
 	{
@@ -110,10 +123,17 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		var activityFilters=JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 		if(activityFilters)
 		{
+			var entityId;
+			var entitytype_dashboard;
 			user=activityFilters.userId;
-			if(activityFilters.entityId)
+			if(activityFilters[dashboard_name] != undefined){
+				entityId = activityFilters[dashboard_name].entityId;
+				entitytype_dashboard = activityFilters[dashboard_name].entity;
+				console.log("saddfasda");
+			}
+			if(entityId)
 			{
-				entitytype=activityFilters.entityId;
+				entitytype=entityId;
 				if(campaignHistory)
 				{
 					entitytype='ALL';
@@ -140,6 +160,31 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		if(user)
 		params += ("&user_id=" + user);
 		params += ("&entity_type=" + entitytype);
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		 if(!dashboard_name || dashboard_name == undefined ){
+		    dashboard_name = "SalesDashboard";
+		 }
+		
+		var b =[];
+		var listItems= "";
+
+			if(entitytype == "ALL"){
+				$(".dashboard-activities li").each(function( index ) {
+					var eachLi = $(".dashboard-activities li");
+					b.push($(eachLi[index]).attr("data-type"));
+				});
+				var indexofall = b.indexOf("ALL");
+				b.splice(indexofall,1);	
+				listItems = b.join(',');
+			}
+			else{
+				b.push(entitytype);
+				listItems = b.join(',');
+			}
+
+
+		params += ("&activityTypeArray=" +listItems );
+
 		return params;
 	}
 
@@ -153,31 +198,64 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 
 	 //For change campaign activity url to activity url
 	 document.location.hash = "activities";
+	
+	 var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+     if(!dashboard_name || dashboard_name == undefined ){
+        dashboard_name = "SalesDashboard";
+     }
+    
+
+	var allListItemsinDropdown =  $(".dashboard-activities li");
+
+
+
+
 	if (user)
 		params += ("&user_id=" + user);
 	// Get owner name and append it to params
 
-	
+	var b= [];
+	var listItems= "";
 	if (entitytype == 'TASK')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 
 	else if (entitytype == 'DEAL')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'USER')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 
 	else if (entitytype == 'EVENT')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
+		return params;
+	}
+	else if (entitytype == 'EMAIL_SENT')
+	{
+		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
     else if (entitytype == 'EMAIL_SENT')
@@ -189,34 +267,58 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 	else if (entitytype == 'CONTACT')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'DOCUMENT')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'CALL')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'TICKET')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else if (entitytype == 'CAMPAIGN')
 	{
 		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
 	else
 	{
 		params += ("&entity_type=ALL");
+		$(".dashboard-activities li").each(function( index ) {
+			var eachLi = $(".dashboard-activities li");
+			b.push($(eachLi[index]).attr("data-type"));
+		});
+		var indexofall = b.indexOf("ALL");
+		b.splice(indexofall,1);	
+		listItems = b.join(',');
+		params += ("&activityTypeArray=" + listItems);
 		return params;
 	}
-
+	
+	
 	return params;
 }
 

@@ -1,6 +1,7 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -1900,9 +1901,19 @@ public class ActivityUtil
 	 * @return
 	 */
 	public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
-			String cursor, Long starttime, Long endtime, Long entityId)
+			String cursor, Long starttime, Long endtime, Long entityId,String activityTypeArray)
 	{
+		List<String> items = new ArrayList<String>();
+		
+		if(StringUtils.isNotEmpty(activityTypeArray)){
+			 items = Arrays.asList(activityTypeArray.split("\\s*,\\s*"));
+		}
+		
 		Map<String, Object> searchMap = new HashMap<String, Object>();
+		if(entitytype.equalsIgnoreCase("ALL") && items != null && items.size() != 0){
+			searchMap.put("entity_type in",items);
+		}
+
 		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("entity_type", entitytype);
 		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
