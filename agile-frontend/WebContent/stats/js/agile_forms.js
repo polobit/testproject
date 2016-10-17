@@ -28,7 +28,7 @@ var _agile_synch_form_v4 = function()
 	var agile_multiple_checkbox = "";
 	var agile_tags = undefined;
 	//declaring a variable for the 
-	var agile_custome_submit = "";
+	var agile_confirmation_msg = "";
 	var agile_notes = [];
 	var form_data = {};
 	var new_contact = true;
@@ -48,7 +48,7 @@ var _agile_synch_form_v4 = function()
 		if(field_id == "g-recaptcha-response")
 			continue;
 		//for the agile custome submit
-		if(field_value == "_agile_custome_submit")
+		if(field_value == "_agile_confirmation_msg")
 			continue;
 
 		if (field_name && field_value)

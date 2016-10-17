@@ -14,7 +14,7 @@ pageEncoding="UTF-8"%>
       String customeMessage ="";
 		
 		try{
-		customeMessage = request.getParameter("_agile_custome_submit").toString();
+		customeMessage = request.getParameter("_agile_confirmation_msg").toString();
 		}
 	catch (Exception e)
 	    {
@@ -26,7 +26,7 @@ pageEncoding="UTF-8"%>
 	   <h1><%=customeMessage %></h1>  
   <% }
    else {%>
-  <h1>Great! Thanks for filling out my form!</h1>
+  <h1>Great! Thanks for filling out the form.</h1>
   <%} %>
 </body>
 </html>

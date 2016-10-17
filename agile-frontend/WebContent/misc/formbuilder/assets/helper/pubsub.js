@@ -46,10 +46,10 @@ var addAgileApi = function(json, api, callback)
 	agileredirecturl.value = "#";
 
 	//adding for the inline submit
-	var agileinlinesubmit = {};
-	agileinlinesubmit.label = "Confirmation Message";
-	agileinlinesubmit.type = "input";
-	agileinlinesubmit.value = "Great! Thanks for filling out the form.";
+	var agileconfirmationmsg = {};
+	agileconfirmationmsg.label = "Confirmation Message";
+	agileconfirmationmsg.type = "input";
+	agileconfirmationmsg.value = "Great! Thanks for filling out the form.";
 
 
 	var agilepreloadfields = {};
@@ -89,7 +89,7 @@ var addAgileApi = function(json, api, callback)
 	for ( var b = 0; b < json.length; b++)
 	{
 		json[b].fields["agileredirecturl"] = agileredirecturl;
-        json[b].fields["agileinlinesubmit"] = agileinlinesubmit;
+        json[b].fields["agileconfirmationmsg"] = agileconfirmationmsg;
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;

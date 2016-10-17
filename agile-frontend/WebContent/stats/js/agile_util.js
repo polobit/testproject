@@ -200,7 +200,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			}	
 			else if(url && url == "#"){
 				//condition for the checking custom templates
-				var confirmationMsgEl = document.getElementById("_agile_custome_submit");
+				var confirmationMsgEl = document.getElementById("_agile_confirmation_msg");
 				var confirmationMsg = "Great! Thanks for filling out the form.";
 				if(confirmationMsgEl) {
 					confirmationMsg = confirmationMsgEl.value;
