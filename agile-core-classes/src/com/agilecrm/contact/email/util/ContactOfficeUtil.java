@@ -77,7 +77,7 @@ public class ContactOfficeUtil
      *            - count or limit to number of emails.
      * @return String
      */
-    public static String getNewOfficeURL(String fromEmail, String folder_name, String offset, String count)
+    public static String getNewOfficeURL(String fromEmail, String folder_name, String offset, String count,String search_content,String falg,String messageid)
     {
 	// Get Office Exchange Prefs
 	Objectify ofy = ObjectifyService.begin();
@@ -86,7 +86,7 @@ public class ContactOfficeUtil
 	if (officePrefs == null)
 	    return null;
 
-	return ContactOfficeUtil.geNewtOfficeURLForPrefs(officePrefs, folder_name, offset, count);
+	return ContactOfficeUtil.geNewtOfficeURLForPrefs(officePrefs, folder_name, offset, count, search_content, falg, messageid);
     }
 
     /**
@@ -103,8 +103,7 @@ public class ContactOfficeUtil
      * @return String
      */
 
-    public static String getOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String searchEmail, String offset,
-	    String count)
+    public static String getOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String searchEmail, String offset,String count)
     {
 
 	String userName = OfficePrefs.user_name;
@@ -152,7 +151,7 @@ public class ContactOfficeUtil
      * @return String
      */
 
-    public static String geNewtOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String foldername, String offset, String count){
+    public static String geNewtOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String foldername, String offset, String count,String search_content,String flag,  String messageid){
 
 	String userName = OfficePrefs.user_name;
 	String host = OfficePrefs.server_url;
@@ -171,10 +170,17 @@ public class ContactOfficeUtil
 
 	try
 	{
-	    url = "http://localhost:9999/officeinbox?user_name=" + URLEncoder.encode(userName, "UTF-8")
-		    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
-		    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
-		    + "&domain=" + URLEncoder.encode(namespace, "UTF-8");
+		if(flag != null && !flag.equals("") && flag != ""){
+			url = "http://localhost:9999/officeinbox?user_name=" + URLEncoder.encode(userName, "UTF-8")
+				    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8")+"&flag="+URLEncoder.encode(flag)+"&mesnum="+URLEncoder.encode(messageid);
+		}else{
+		    url = "http://localhost:9999/officeinbox?user_name=" + URLEncoder.encode(userName, "UTF-8")
+			    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+			    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+			    + "&domain=" + URLEncoder.encode(namespace, "UTF-8")+ "&search_content="+ URLEncoder.encode(search_content);
+		}
 	}
 	catch (Exception e)
 	{

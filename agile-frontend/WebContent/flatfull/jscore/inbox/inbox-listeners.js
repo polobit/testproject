@@ -77,6 +77,8 @@ function inboxFlagListners(){
 			url = "core/api/social-prefs/getContent?";
 		if(server == "imap")
 			url ="core/api/imap/getContent?";
+		if(server == "exchange")
+				url ="core/api/office/getContent?";
 
 		var folder_type = $('#inbox-email-type-select').attr("folder-type");
 		if(folder_type == "inbox")
@@ -105,6 +107,8 @@ function inboxFlagListners(){
 			url = "core/api/social-prefs/setFlags?";
 		if(server == "imap")
 			url ="core/api/imap/setFlags?";
+		if(server == "exchange")
+				url ="core/api/office/setFlags?";
 
 		var folder_type = $('#inbox-email-type-select').attr("folder-type");
 		if(folder_type == "inbox")
@@ -250,6 +254,8 @@ function initializeInboxListeners(){
 				url = "core/api/social-prefs/search-google-emails?";
 			if(server == "imap")
 				url ="core/api/imap/search-imap-emails?";
+			if(server == "exchange")
+				url ="core/api/office/search-office-emails?";
 
 			url = url+"from_email="+from_email+"&search_content="+search_val;
 			helperFunction();
@@ -491,6 +497,8 @@ function returnUrl(){
 				url = "core/api/social-prefs/setFlags?";
 			if(server == "imap")
 				url ="core/api/imap/setFlags?";
+			if(server == "exchange")
+				url ="core/api/office/setFlags?";
 
 			var folder_type = $('#inbox-email-type-select').attr("folder-type");
 			if(folder_type == "inbox")

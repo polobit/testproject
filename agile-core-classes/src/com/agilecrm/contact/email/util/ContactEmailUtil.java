@@ -1151,9 +1151,6 @@ public class ContactEmailUtil
 	    			}*/
 	    	    }
 	    	}
-	    	System.out.println(query+"++++++++");
-	    	System.out.println(results+"++++++++");
-	    	System.exit(0);
 	    	return results;
 		 }
 
