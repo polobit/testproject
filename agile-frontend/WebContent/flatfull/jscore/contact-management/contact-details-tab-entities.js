@@ -218,7 +218,7 @@ var contact_details_tab = {
 				// To avoid unnecessary JSAPI count, first verify in cookie
 				if(!(_agile_get_prefs('_agile_jsapi') != null && _agile_get_prefs('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && count == '0'))
 				{
-					$('#stats', App_Contacts.contactDetailView.el).html('<h4 class="webstats-msg space-normal  wrapper-sm font-normal m-none"><p>{{agile_lng_translate "contact-details" "you-have-not-yet-setup-the-javascript-api-on-your website"}}</p><p>{{agile_lng_translate "contact-details" "please"}} <a href="#analytics-code">{{agile_lng_translate "contact-details" "set-it-up"}}</a> {{agile_lng_translate "contact-details" "to-see-the-contacts-site-visits-here"}}</p></h4>');
+					$('#stats', App_Contacts.contactDetailView.el).html("<h4 class=\"webstats-msg space-normal  wrapper-sm font-normal m-none\"><p>{{agile_lng_translate "contact-details" "you-have-not-yet-setup-the-javascript-api-on-your website"}}</p><p>{{agile_lng_translate "contact-details" "please"}} <a href=\"#analytics-code\">{{agile_lng_translate "contact-details" "set-it-up"}}</a> {{agile_lng_translate "contact-details" "to-see-the-contacts-site-visits-here"}}</p></h4>");
 					return;
 				}
 

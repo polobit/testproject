@@ -19,6 +19,12 @@ public class FileStreamUtil
 	try
 	{
 	    // System.out.println(path);
+		if(VersioningUtil.isDevelopmentEnv())
+		{
+			path = "agile-frontend.war/" + path;
+			System.out.println("path = " + path);
+		}
+		
 	    File f = new File(path);
 	    System.out.println(f.getAbsolutePath());
 	    if (!f.exists())
@@ -26,7 +32,7 @@ public class FileStreamUtil
 		System.out.println("File does not exist");
 		return null;
 	    }
-
+	    	 
 	    InputStream is = new FileInputStream(f);
 
 	    return IOUtils.toString(is, "UTF-8");

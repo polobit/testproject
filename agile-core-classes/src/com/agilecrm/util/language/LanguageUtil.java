@@ -45,7 +45,7 @@ public class LanguageUtil {
 
 		try {
 			JSONObject localesJSON = new JSONObject();
-			String str = FileStreamUtil.readResource(application.getRealPath("/") + "/" + NON_APPLICATION_ROOT_PATH
+			String str = FileStreamUtil.readResource(NON_APPLICATION_ROOT_PATH
 					+ language + "/" + serviceName + ".json");
 			str = str.replace("var _Agile_Resources_Json =", "").trim();
 
