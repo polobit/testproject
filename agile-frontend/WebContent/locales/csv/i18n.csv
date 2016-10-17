@@ -5543,4 +5543,4 @@ landingpage-builder.publish-title,You can publish your page with a custom domain
 landingpage-builder.source,source,fuente
 landingpage-builder.Move,Move,Movimiento
 modals.phone-number-ext, Phone Number;Ext,
-
+validation-msgs.Pls-enter-a-valid-ext-no, Invalid extension. Extension can contain only numbers or * or #,
