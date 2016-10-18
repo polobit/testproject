@@ -145,6 +145,9 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.reports.CampaignReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TaskBulkActionsAPI.class);
 	
+	//webrule reports
+	s.add(com.agilecrm.core.api.webrule.WebruleReportsAPI.class);
+	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
 	// SSO feature
@@ -157,6 +160,12 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.affiliate.AffiliateDetailsApi.class);
 	s.add(com.agilecrm.core.api.affiliate.AffiliateApi.class);
 	s.add(com.agilecrm.core.api.RecaptchaGatewayAPI.class);
+	
+	//EmailTemplateCategory
+	s.add(com.agilecrm.core.api.prefs.EmailTemplateCategoryAPI.class);
+		
+	s.add(com.agilecrm.core.api.videorecords.VideoRecordAPI.class);
+
 	return s;
     }
 }

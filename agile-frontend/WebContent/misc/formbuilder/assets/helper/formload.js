@@ -96,7 +96,7 @@ define([
 							var agileconfirmationmsg = {};
 							agileconfirmationmsg.label = "Confirmation Message";
 							agileconfirmationmsg.type = "input";
-							agileconfirmationmsg.value = "Great! Thanks for filling out my form!";
+							agileconfirmationmsg.value = "Great! Thanks for filling out the form.";
 							saveform[0].fields.agileconfirmationmsg=agileconfirmationmsg;
 					}
 

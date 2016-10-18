@@ -414,6 +414,11 @@ public class Note extends Cursor
 	}
 
     }
+    
+    public List<Contact> relatedContacts()
+    {
+	 return Contact.dao.fetchAllByKeys(this.related_contacts);
+    }
 
     @Override
     public String toString()

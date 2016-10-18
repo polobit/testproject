@@ -760,6 +760,7 @@ var portlet_utility = {
 			if (base_model.get('settings').owner != undefined
 					&& base_model.get('settings').owner != "") 
 				options+='&user_id='+base_model.get('settings').owner;
+
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
 				url : '/core/api/portlets/customer-activity'+options
 				+ '&start_time='

@@ -1566,7 +1566,7 @@ prefs-data-sync.my-contacts-(Recommended),My Contacts (Recommended),Mis Contacto
 twilio.verify-an-outgoing-number,Verify an outgoing number,Verificar un número saliente
 prefs-settings.new-event-calendar-page,New Event (Calendar Page),Nuevo Evento (Página de calendario)
 web-rules.how-to-define-a-web-rule,How to define a Web Rule?,¿Cómo definir una regla Web?
-validation-msgs.digits,Please enter valid number.,Por favor&#44; introduzca un número válido.
+validation-msgs.digits,Please enter only digits.,Por favor ingrese solo dígitos.
 countries.IR,Iran&#44; Islamic Republic Of,República islámica de Irán
 widgets.click-to-see-more-tickets,Click to see more tickets,Haz clic para ver más tickets
 campaigns.complete-list-is-provided,Complete list is provided,Se proporciona una lista completa
@@ -2980,7 +2980,7 @@ portlets.revenue-graph,Revenue Graph,Gráfico de ingresos
 admin-settings-integrations.your-facebook,Your Facebook,Tu Facebook
 web-rules.times-to-show,Times to show,Veces para mostrar
 campaigns.all-campaigns,All Campaigns,todas las campañas
-campaigns.all-campaigns-stats,All Campaign Emails
+campaigns.all-campaigns-stats,All Campaign Emails,
 landingpages.invalid-path,Invalid path.,Ruta no válida.
 menu.menu-landing-pages,Landing Pages,Páginas de landing
 currency.Fijian Dollar,Fijian Dollar,Dólar fiyiano
@@ -5558,7 +5558,7 @@ Help-center.mark-as-public-cannedmessage,Mark as Public,
 portlets.Hours,Hours,
 portlets.Minutes,Minutes,
 portlets.Seconds,Seconds,
-deal-view.detailed-notes,Detailed Notes
+deal-view.detailed-notes,Detailed Notes,
 tickets.feedback-subject,Subject,
 tickets.feedback-created-time,Note Sent,
 tickets.feedback-ticket-details,Ticket Details,
@@ -5587,3 +5587,12 @@ prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.,
 prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification),
 sync.all-contacts,Sync All Contacts,
 other.campaign-webhooks-will-not-be-triggered,*Campaigns and Webhooks will be paused during import process,
+typeahead.add-as-new-contact,Add as new Contact,
+typeahead.add-as-new-company,Add as new Company,
+verify-email.we-encourage-you-to-use-a-from-email-address-text-info,We encourage you to use a From email address at a domain owned by your organisation. Using free email providers like Gmail&#44; Yahoo&#44; AOL etc. emails may automatically get rejected.,
+deals.activity-mode-deprecated-message,Note: Activity mode will be removed going forward.,
+admin-settings-users.create-events,Create Events,
+admin-settings-users.update-events,Update Events,
+admin-settings-users.delete-events,Delete Events,
+admin-settings-users.create-update-delete-events-content,Add and edit events owned by other users. Delete own and other user events,
+admin-settings-users.view-events-owned-by-others,View events owned by other users,

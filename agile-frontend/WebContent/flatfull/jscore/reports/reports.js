@@ -10,6 +10,7 @@ $(function()
       $(this).find('.highcharts-button').hide();
   });
   $('body').on('click','.maintab',function(e){
+
      if($(this).hasClass("reportsliElement"))
      	return ; 
      $(this).find(".sub-nav-tab>li:first").trigger('click')
