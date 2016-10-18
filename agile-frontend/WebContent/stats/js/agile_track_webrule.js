@@ -1,15 +1,7 @@
 
 function agile_track_webrule(json,domain,action)
 {
-	//var Track_Visitor_Server_URL = "https://stats3.agilecrm.com";
-
-
-	
-	//params="?domain="+json.domain+"&webruleid"+json.webtulrid+"&email"+json.email;
-
-	var agile_url_new =  "https://"+agile_id.getNamespace()+".agilecrm.com/savedata?callback=?&email=" + json.email+"&domain="+agile_id.getNamespace()+"&webruleid="+gbal_web_id+"&webruletype="+action;
-
-	// agile_json(agile_url, callback);
+	var agile_url_new =  "https://"+agile_id.getNamespace()+".agilecrm.com/savedata?callback=?&email=" + json.email+"&domain="+agile_id.getNamespace()+"&webruleid="+CURRENT_AGILE_WEB_RULE_ID+"&webruletype="+action;
 
 	agile_json(agile_url_new);
 
