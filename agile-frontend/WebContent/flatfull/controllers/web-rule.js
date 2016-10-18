@@ -219,7 +219,7 @@ var WebreportsRouter = Backbone.Router.extend({
                     'padding'       : 0,
                     'autoScale'     : true,
                     'overflow'		: 'visible'
-                 });f
+                 });
 
                 hideTransitionBar();
             });
