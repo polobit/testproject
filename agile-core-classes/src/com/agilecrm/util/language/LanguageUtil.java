@@ -15,6 +15,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.CookieUtil;
 import com.agilecrm.util.FileStreamUtil;
 
@@ -154,10 +155,19 @@ public class LanguageUtil {
 	 * Gets the User's defined language from Session Scope
 	 * @return
 	 */
-	public static String getUserLanguageFromSession(){
-		UserInfo userInfo =  SessionManager.get();
-		if(userInfo == null)
-			 return UserPrefs.DEFAULT_LANGUAGE;
+	public static String getUserLanguageFromSession() {
+		UserInfo info = SessionManager.get();
+		if(info == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
 		
+		AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(info.getDomainId());
+		if(agileUser == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		UserPrefs prefs = UserPrefsUtil.getUserPrefs(agileUser);
+		if(prefs == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		return prefs.language;
 	}
 }

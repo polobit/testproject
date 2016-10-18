@@ -11,7 +11,7 @@
 								style="padding: 0; color: white">{{HashMap.report.name}} ({{HashMap.count}})</td>
 							<td valign="right" height="32px"
 								style="padding: 0; color: white; text-align: right">{{HashMap.duration}}
-								Report</td>
+								{{agile_lng_translate 'other' 'report'}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -19,7 +19,7 @@
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
 				{{#HashMap.limit_message}}
-                <p>***Showing first 100 (of {{HashMap.count}}) contacts***</p>
+                <p>***{{agile_lng_translate 'reports-email' 'showing-first100'}} ({{agile_lng_translate 'tickets' 'of'}} {{HashMap.count}}) {{agile_lng_translate 'contact-details' 'contacts'}}***</p>
                 {{/HashMap.limit_message}}
 
 				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
@@ -196,15 +196,14 @@
 				</table>
 
 				<br />
-				<p>You are receiving this email as you have created a report 
+				<p>{{agile_lng_translate 'reports-email' 'email-for-created-report'}} 
 					<span>"{{HashMap.report.name}}"</span> at Agile CRM.
-				 	You can manage <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">reports</a> here.</p>
+				 	{{agile_lng_translate 'reports-email' 'you-can-manage'}} <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">{{agile_lng_translate 'reports-email' 'reports'}}</a> {{agile_lng_translate 'widgets' 'here'}}.</p>
 				<br/>
-				<p style="font-weight: bold;">Have questions or need help?</p>
-				<p>Our customer service and support team is here to help you any
-					way we can. Please email us at care@agilecrm.com</p>
-				<p>Thanks for being a valued customer.</p>
-				<br /> Best Wishes, <br /> AgileCRM Support. <br />
+				<p style="font-weight: bold;">{{agile_lng_translate 'verify-email' 'having-questions'}}</p>
+				<p>{{agile_lng_translate 'import-email' 'customer-service-help-text'}} care@agilecrm.com</p>
+				<p>{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}</p>
+				<br /> {{agile_lng_translate 'import-email' 'best-wishes'}}, <br /> AgileCRM {{agile_lng_translate 'menu' 'menu.support'}}. <br />
 				http://www.agilecrm.com
 				<div style="text-align: right">
 					<a href="{{HashMap.domain}}.agilecrm.com" target="_blank"> <img

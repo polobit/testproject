@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.util.FileStreamUtil;
+import com.agilecrm.util.language.EmailTemplateParseUtil;
+import com.agilecrm.util.language.LanguageUtil;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -62,7 +64,13 @@ public class MustacheUtil
 	String value = null;
 	if (emailTemplate == null)
 	    return null;
-
+	
+	// Localize template
+	String language = LanguageUtil.getUserLanguageFromSession();
+	System.out.println(language);
+	
+	emailTemplate = EmailTemplateParseUtil.constructEmailTemplate(emailTemplate, LanguageUtil.getLocaleJSON(language, null, "emails"));
+	
 	// Compile
 	return compile(emailTemplate, emailJson);
     }

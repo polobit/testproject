@@ -19,7 +19,7 @@
             </tr>
             <tr>
               <td style="padding: 15px 25px 25px 25px">
-				<div style="font-size: 14px;font-family:arial,sans-serif;padding-bottom:5px"><span style="font-weight:bold;color: #58666e">Report Name : </span>{{HashMap.report_name}} ({{HashMap.duration}} Report)</div>
+				<div style="font-size: 14px;font-family:arial,sans-serif;padding-bottom:5px"><span style="font-weight:bold;color: #58666e">{{agile_lng_translate 'reports-email' 'report-name'}} : </span>{{HashMap.report_name}} ({{HashMap.duration}} Report)</div>
                 <div style="font-size: 14px;font-family:arial,sans-serif;padding-bottom:15px">{{#HashMap.campaign_name}} {{{HashMap.campaign_name}}} {{/HashMap.campaign_name}}</div>
 					<div style="font-size: 14px; background-color: #fff;padding-bottom:15px">
 						<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#FFFFFF" style="border:1px solid #edf1f2;border-radius:2px">
@@ -67,15 +67,15 @@
 					<div style="font-size:14px;font-family:sans-serif">
 						<div style="padding-bottom:10px"><span style="font-weight:bold">Note : </span> Your remaining email credit is : <span style="font-weight:bold">{{HashMap.email_status}}</span></div>
 						 
-						<div style="padding-bottom:10px">You are receiving this email as you have created a report 
+						<div style="padding-bottom:10px">{{agile_lng_translate 'reports-email' 'email-for-created-report'}} 
 							<span>"{{HashMap.report_name}}"</span> at Agile CRM.
 							You can manage <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">reports</a> here.</div>
 					</div>
 					<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">
-						Should you have any questions or need assistance, don't hesitate to get in touch with us at any time by sending an email to <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
+						{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
 					</div>
 					<div style="font-weight: bold; font-size: 12px;">
-							The Crew at Agile CRM  <br />
+							{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
 					</div>
 					<div><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
               </td>
