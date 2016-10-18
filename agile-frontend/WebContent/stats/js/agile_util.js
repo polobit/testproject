@@ -477,3 +477,9 @@ function createXMLHTTPObject() {
     }
     return xmlhttp;
 }
+
+function agile_find_closest_element(el, condCallback) {
+    return el && (
+        condCallback(el) ? el : closest(el.parentNode, condCallback)
+    );
+}
