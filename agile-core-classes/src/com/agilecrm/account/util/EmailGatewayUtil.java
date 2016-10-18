@@ -39,6 +39,7 @@ import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.mailgun.MailgunNew;
 import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
@@ -102,6 +103,10 @@ public class EmailGatewayUtil
     {
 	Map<String, String> campaignNameMap = new HashMap<String, String>();
 	List<Object[]> queryList = new ArrayList<Object[]>();
+	
+	String fromEmailAddress = "";
+	String message = "";
+	
 	for (MailDeferredTask mailDeferredTask : tasks)
 	{
 	    String campaignName = null;
@@ -121,9 +126,27 @@ public class EmailGatewayUtil
 	    }
 	    
 	    String emailSubject = StringEscapeUtils.escapeJava(mailDeferredTask.subject);
+	    //getting name and email address together of sender(user) 	    
+	    fromEmailAddress=mailDeferredTask.fromEmail;
+	    
+	    if(StringUtils.isNotBlank(fromEmailAddress) && StringUtils.isNotBlank(mailDeferredTask.fromName))
+	    		fromEmailAddress = mailDeferredTask.fromName + " &lt;"+fromEmailAddress + "&gt;";
 
+	    message = "Subject: " + emailSubject + " <br/> From: " + fromEmailAddress
+	    		+" <br/> To: " + StringEscapeUtils.escapeHtml(mailDeferredTask.to);
+	    
+	    // For testing in Localhost
+	    if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development){
+	    	System.out.println("Development Server...");
+	    	
+	    	CampaignLogsSQLUtil.addToCampaignLogs("localhost", mailDeferredTask.campaignId, campaignName,
+			    mailDeferredTask.subscriberId, message, LogType.EMAIL_SENT.toString(),GoogleSQL.getCurrentDate());
+	    	
+	    	continue;
+	    }
+	    
 	    Object[] newLog = new Object[] { mailDeferredTask.domain, mailDeferredTask.campaignId, campaignName,
-		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), "Subject: " + emailSubject,
+		    mailDeferredTask.subscriberId, GoogleSQL.getCurrentDate(), message,
 		    LogType.EMAIL_SENT.toString() };
 
 	    queryList.add(newLog);
@@ -134,6 +157,7 @@ public class EmailGatewayUtil
 	{
 	    Long start_time = System.currentTimeMillis();
 	    CampaignLogsSQLUtil.addToCampaignLogs(queryList);
+	    
 //	    CampaignLogsSQLUtil.addCampaignLogsToNewInstance(queryList);
 	    System.out.println("batch request completed : " + (System.currentTimeMillis() - start_time));
 	    System.out.println("Logs size : " + queryList.size());
@@ -642,5 +666,5 @@ public class EmailGatewayUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-    }
+    }     
 }

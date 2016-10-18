@@ -426,6 +426,10 @@ public class CampaignLogsSQLUtil
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+	catch(Exception e){
+		System.out.println("Exception occured while adding campaign logs..." + e.getMessage());
+		e.printStackTrace();
+	}
 	finally
 	{
 	    
