@@ -261,13 +261,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     border-radius: 6px;
   }
 
-@media all and (max-width: 768px) {
-  .menu_help_content
-  {
-    width:140px!important;
-  }
-
-}
 .helpmenupopup:after {
     content: '';
     display: block;
@@ -368,8 +361,12 @@ function isIE() {
                   </div>">
                    <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
-
-              <div style="position: fixed;left: 52%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
+        <%
+          if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+       %>
+         <%
+              }else {
+           %>     <div style="position: fixed;left: 52%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
                 <div class="block menuHelpPopover" >
                   <div class="helpmenupopup">
                   </div>
@@ -381,8 +378,8 @@ function isIE() {
                   </div>
                 </div>
               </div> 
- 
-
+          
+          <% } %>
        
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
