@@ -429,41 +429,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 		$inputs.filter("[value='']").closest("a").click();
 	}
-	function helpContentPopover(){
-		var arr = _agile_get_prefs("menuhelpPopover");
-		
-		if(!arr)
-			return $("#helpcontent_popover").removeClass("hide");	
-		else
-		{
-			arr = arr.split(",");
-			for(var i in arr)
-				{
-					if( arr[i] == CURRENT_DOMAIN_USER.id)
-				   	return ;	
-				}
-			return $("#helpcontent_popover").removeClass("hide");
-		}
-		
-	
-	}
-	function closeHelpPopover() {
-		var arr = _agile_get_prefs("menuhelpPopover");
-	if(!arr)
+	function helpContentPopover()
 	{
-		$("#helpcontent_popover").addClass("hide");
-		arr = "";
+		if( _agile_get_prefs(CURRENT_DOMAIN_USER.id+"menupopover_close"))
+			$("#helpcontent_popover").addClass("hide");
+		else 
+			$("#helpcontent_popover").removeClass("hide");
 	}
-			
-			arr = arr.split(",");
-		for(var i in arr)
-				{
-					if( arr[i] == CURRENT_DOMAIN_USER.id)
-				   	return ;	
-				}
-
-		arr.push(CURRENT_DOMAIN_USER.id);
-		_agile_set_prefs("menuhelpPopover",arr.toString());
+	
+	function closeHelpPopover() {
+		var arr = _agile_set_prefs(CURRENT_DOMAIN_USER.id+"menupopover_close");
 		$("#helpcontent_popover").addClass("hide");
 	
 	}

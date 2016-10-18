@@ -242,7 +242,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 {
     position: absolute;
     top: 0;
-    left: -5px;
+    left: -15px;
     z-index: 1060;
     /* display: none; */
     max-width: 276px;
@@ -264,7 +264,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 @media all and (max-width: 768px) {
   .menu_help_content
   {
-    width:155px!important;
+    width:140px!important;
   }
 
 }
@@ -369,7 +369,7 @@ function isIE() {
                    <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
 
-              <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
+              <div style="position: fixed;left: 52%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
                 <div class="block menuHelpPopover" >
                   <div class="helpmenupopup">
                   </div>
