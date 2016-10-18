@@ -547,7 +547,7 @@ function initializeDealListners(el){
 	        	if(modelsLength ==10 && modelsLength <= parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text()))
 	        	{
 	          		dealsCollection[0]['isUpdateCollection'] = true ;
-	          		dealsFetch(dealPipelineModel[0]);
+	          		dealsFetch(dealsCollection[0]);
 	        	}
 			}
 		}
