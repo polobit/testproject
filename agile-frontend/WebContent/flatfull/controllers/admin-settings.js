@@ -386,14 +386,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					
 				
 			},prePersist : function(model){
-				
-			    /*$("#userForm").find(".addDealToMenuScopes").append($("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals"));
-			    $("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals").remove();*/
+				//Chage deals from newscopes to newMenuScopes
+				if(!model.toJSON() || !model.toJSON().newscopes)
+					return;
+
 			    var newscopes = model.toJSON().newscopes;
 			    $.each(newscopes, function(index, data) {
-				if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);}
+					if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);}
 				});
-				model.toJSON().newMenuScopes.push("DEALS");
+
+				if(model.toJSON().newMenuScopes)
+					model.toJSON().newMenuScopes.push("DEALS");
 
 			      
 			}, saveCallback : function(response)

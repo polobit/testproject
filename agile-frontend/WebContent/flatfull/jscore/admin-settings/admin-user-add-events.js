@@ -1,11 +1,10 @@
 function bindAdminChangeAction(el, data)
 {
+	//Remove deals from newscopes
 	var newscopesarray = $("input[type=checkbox]", $('div[name="newscopes"]', el));
 	var newMenuScopesArray = $("input[type=checkbox]", $('div[name="newMenuScopes"]', el));
-	var dealCheckbox;
 	$.each(newscopesarray, function(index, data) {
-				if($(newscopesarray[index]).attr("id") == "deals-privilege"){
-					dealCheckbox = newscopesarray[index];
+				if($(newscopesarray[index]).attr("id") == "deals-privilege"){	
 					newscopesarray.splice(index,1);}
 				});
 	$('input[name="is_admin"]', el).on('change', function(e){
