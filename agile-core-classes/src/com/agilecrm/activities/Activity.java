@@ -214,9 +214,21 @@ public class Activity extends Cursor
 	 */
 	@NotSaved
 	public Long domainUserID = null;
+	
+	/**
+     * stores related deal ids for each activity
+     */
+    @NotSaved(IfDefault.class)
+    public List<Long> related_deal_ids;
+    
+    /**
+     * stores related deal ids and name for each activity
+     */
+    @NotSaved(IfDefault.class)
+    public String related_deals;
 
     // Dao
-    private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
+    public static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
 
     public Activity()
     {

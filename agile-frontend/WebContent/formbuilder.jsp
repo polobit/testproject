@@ -10,7 +10,7 @@ String template = request.getParameter("template");
       <title>Form Builder</title>
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
       <link href="misc/formbuilder/builder-themes.css?v=3" rel="stylesheet">
-      <link href="misc/formbuilder/custom.css?v=3" rel="stylesheet">
+      <link href="misc/formbuilder/custom.css?v=3-1" rel="stylesheet">
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -65,6 +65,6 @@ String template = request.getParameter("template");
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-v2-1.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>

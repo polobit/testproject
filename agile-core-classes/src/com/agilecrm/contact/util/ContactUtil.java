@@ -2315,5 +2315,39 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	}
 
     }
+    
+    public static void updateContactsBulk(List<Contact> contacts_list)
+    {
+	if (contacts_list.size() == 0)
+	{
+	    return;
+	}
+
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+
+	ContactDocument contactDocuments = new ContactDocument();
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
+	for (Contact contact : contacts_list)
+	{
+		contact.forceSearch = true;
+		contact.updated_time = System.currentTimeMillis() / 1000;
+		builderObjects.add(contactDocuments.buildDocument(contact));
+		++i;
+
+	    if (i >= 50)
+	    {
+		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+		builderObjects.clear();
+		i = 0;
+	    }
+	}
+
+	if (builderObjects.size() >= 1)
+	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+
+	Contact.dao.putAll(contacts_list);
+    }
 
 }

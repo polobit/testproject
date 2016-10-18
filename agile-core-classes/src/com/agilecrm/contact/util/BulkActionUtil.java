@@ -51,7 +51,9 @@ public class BulkActionUtil
 		"/core/api/bulk-actions/contacts/send-email", AgileQueues.BULK_EMAILS_QUEUE), EXPORT_CONTACTS_CSV(
 		"/core/api/bulk-actions/contacts/export-contacts-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), EXPORT_COMPANIES_CSV(
 		"/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
-		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE);
+		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE), UPDATE(
+				"/core/api/bulk-actions/update", AgileQueues.BULK_ACTION_QUEUE),DEALS_UPDATE(
+						"/core/api/opportunity/backend/update", AgileQueues.BULK_ACTION_QUEUE);
 
 	String url, queue;
 
