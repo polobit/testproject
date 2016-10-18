@@ -7,7 +7,7 @@ function agile_track_webrule(json,domain,action)
 	
 	//params="?domain="+json.domain+"&webruleid"+json.webtulrid+"&email"+json.email;
 
-	var agile_url_new =  "http://localhost:8888/savedata?callback=?&email=" + json.email+"&domain="+agile_id.getNamespace()+"&webruleid="+gbal_web_id+"&webruletype="+action;
+	var agile_url_new =  "https://"+agile_id.getNamespace()+".agilecrm.com/savedata?callback=?&email=" + json.email+"&domain="+agile_id.getNamespace()+"&webruleid="+gbal_web_id+"&webruletype="+action;
 
 	// agile_json(agile_url, callback);
 
