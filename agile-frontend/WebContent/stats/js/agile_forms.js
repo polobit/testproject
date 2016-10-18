@@ -43,7 +43,32 @@ var _agile_synch_form_v4 = function()
             	form_data[field.id] = field.value;
             	if ('address, city, state, country, zip'.indexOf(field.name) != -1) {
             		agile_address[field.name] = field.value;
-            	} else if (field.name == "note") {
+            	} else if (field.type == 'select-multiple') {
+                    l = agile_form.elements[i].options.length; 
+                    for (var j = 0; j < l; j++) {
+                        if(field.options[j].selected) {
+                        	if(agile_contact.hasOwnProperty(field.name)) {
+                        		agile_contact[field.name] = agile_contact[field.name] + ", " + field.options[j].value;
+                        	} else {
+                        		agile_contact[field.name] = field.options[j].value;
+                        	}
+                        }
+                    }
+                } else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
+                    if(agile_contact.hasOwnProperty(field.name)) {
+                        agile_contact[field.name] = agile_contact[field.name] + "," + field.value;
+                    } else {
+                    	agile_contact[field.name] = field.value;
+                    }
+                }
+            
+                if(field.name == "tags" && agile_contact["tags"]) {
+	        		if(agile_tags)
+	        			agile_tags = agile_tags + ',' + agile_contact["tags"];
+	        		else
+	        			agile_tags = agile_contact["tags"];
+	        		delete agile_contact["tags"];
+        		} else if (field.name == "note" && agile_contact["note"]) {
 					var agile_note = {};
 					var closestParentLabelEl = agile_find_closest_element(field, function (el) {
 					if(el.getElementsByTagName("label")[0])
@@ -62,36 +87,12 @@ var _agile_synch_form_v4 = function()
 						agile_note.subject = "Form Note";
 					}
 					agile_note.subject = agile_note.subject.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-					agile_note.description = field.value;
+					agile_note.description = agile_contact["note"];
 					agile_notes.push(agile_note);
-				} else if (field.type == 'select-multiple') {
-                    l = agile_form.elements[i].options.length; 
-                    for (var j = 0; j < l; j++) {
-                        if(field.options[j].selected) {
-                        	if(agile_contact.hasOwnProperty(field.name)) {
-                        		agile_contact[field.name] = agile_contact[field.name] + ", " + field.options[j].value;
-                        	} else {
-                        		agile_contact[field.name] = field.options[j].value;
-                        	}
-                        }
-                    }
-                } else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
-                    if(agile_contact.hasOwnProperty(field.name)) {
-                        agile_contact[field.name] = agile_contact[field.name] + ", " + field.value;
-                    } else {
-                    	agile_contact[field.name] = field.value;
-                    }
-                }
-            
-                if(field.name == "tags") {
-                	if(agile_contact.hasOwnProperty(field.name) && agile_contact[field.name]) {
-                		if(agile_tags)
-                			agile_tags = agile_tags + ',' + agile_contact[field.name];
-                		else
-                			agile_tags = agile_contact[field.name];
-                	}
-        			delete agile_contact[field.name];
-        		}
+					delete agile_contact["note"];
+				}
+
+
             }
         }
     }
