@@ -480,6 +480,6 @@ function createXMLHTTPObject() {
 
 function agile_find_closest_element(el, condCallback) {
     return el && (
-        condCallback(el) ? el : closest(el.parentNode, condCallback)
+        condCallback(el) ? el : agile_find_closest_element(el.parentNode, condCallback)
     );
 }
