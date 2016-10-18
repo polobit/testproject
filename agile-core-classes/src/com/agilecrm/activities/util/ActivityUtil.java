@@ -29,6 +29,7 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -282,6 +283,8 @@ public class ActivityUtil
 					activity.related_contact_ids = arr.toString();
 				}
 			}
+			
+			addRelatedDealsToActivity(activity, task.getDeal_ids());
 		}
 		catch (JSONException e)
 		{
@@ -346,6 +349,8 @@ public class ActivityUtil
 				}
 
 			}
+			
+			addRelatedDealsToActivity(activity, event.getDeal_ids());
 		}
 		catch (JSONException e)
 		{
@@ -483,6 +488,8 @@ public class ActivityUtil
 					activity.related_contact_ids = arr.toString();
 				}
 			}
+			
+			addRelatedDealsToActivity(activity, document.getDeal_ids());
 		}
 		catch (JSONException e)
 		{
@@ -2382,5 +2389,84 @@ public class ActivityUtil
 			searchMap.put("custom3",note_id);
 
 		return dao.listByProperty(searchMap);
+	}
+	
+	private static void addRelatedDealsToActivity(Activity activity, List<String> relatedDealIdsList) 
+	{
+		try 
+		{
+			if(relatedDealIdsList != null && relatedDealIdsList.size() > 0)
+			{
+				List<Key<Opportunity>> dealKeys = new ArrayList<Key<Opportunity>>();
+				for(String str : relatedDealIdsList)
+				{
+					dealKeys.add(new Key<Opportunity>(Opportunity.class, Long.valueOf(str)));
+				}
+				
+				List<OpportunityPartial> relatedDealsList =  OpportunityUtil.getPartialOpportunities(dealKeys);
+				
+				if(relatedDealsList != null && relatedDealsList.size() > 0)
+				{
+					JSONObject obj = new JSONObject();
+					JSONArray arr = new JSONArray();
+					List<Long> dealIdsList = new ArrayList<Long>();
+					
+					for(OpportunityPartial opp : relatedDealsList)
+					{
+						if(!dealIdsList.contains(String.valueOf(opp.id)))
+						{
+							dealIdsList.add(opp.id);
+							
+							obj.put("dealid", opp.id);
+							obj.put("dealname", opp.name);
+
+							arr.put(obj);
+
+							obj = new JSONObject();
+						}
+					}
+					activity.related_deals = arr.toString();
+					
+					activity.related_deal_ids = dealIdsList;
+				}
+			}
+		} 
+		catch (JSONException e) 
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * gets list of deal related activities based on deal id
+	 * 
+	 * @param entity_id
+	 * @param max
+	 * @param cursor
+	 * @return
+	 */
+	public static List<Activity> getDealRelatedActivities(Long entity_id, Integer max, String cursor)
+	{
+		try
+		{
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			searchMap.put("related_deal_ids", entity_id);
+
+			if (max != 0)
+				return dao.fetchAll(max, cursor, searchMap, true, false);
+
+			return dao.listByProperty(searchMap);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured while fetching deal related activities");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

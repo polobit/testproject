@@ -511,5 +511,10 @@ public class Event extends Cursor
 
 	return deal_ids;
     }
+    
+    public List<Opportunity> relatedDeals()
+    {
+    	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    }
 
 }
