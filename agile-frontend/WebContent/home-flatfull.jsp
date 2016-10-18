@@ -242,16 +242,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 {
     position: absolute;
     top: 0;
-    left: 0;
+    left: -5px;
     z-index: 1060;
     /* display: none; */
     max-width: 276px;
-    padding: 1px;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1.42857143;
     text-align: left;
     text-align: start;
     text-decoration: none;
@@ -263,43 +257,31 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     word-wrap: normal;
     white-space: normal;
     background-color: #fff;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,.2);
+    border: 1px solid #c7d3d6;
     border-radius: 6px;
-    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    line-break: auto;
-}
+  }
 
-.menuHelpPopover .arrow:after
-{
-    top: 35%;
-    bottom: -10px;
-    left: 1px;
-    content: " ";
-    border-right-color: #fff;
-    border-left-width: 0;
-    position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
-    left: -31px;
-    margin-top: -12px;
-    border-right-color: #fff;
-    /* border-right-color: rgba(0,0,0,.25); */
-    border-left-width: 0;
-    border-width: 11px;
-}
-@media all and (min-width: 768px) {
+@media all and (max-width: 768px) {
   .menu_help_content
   {
     width:155px!important;
   }
 
+}
+.helpmenupopup:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 16px;
+    /* right: -9px; */
+    left: -8px;
+    width: 15px;
+    height: 15px;
+    background: #FFFFFF;
+    border-left: 1px solid #c7d3d6;
+    border-top: 1px solid #c7d3d6;
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
 </style>
 <!--  responsive table js -->
@@ -389,7 +371,7 @@ function isIE() {
 
               <div style="position: fixed;left: 51%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
                 <div class="block menuHelpPopover" >
-                  <div class="arrow" style="top:27%;">
+                  <div class="helpmenupopup">
                   </div>
                   <div class="content p-sm">
                     <p style="width : 200px;margin-bottom:0px;" class="menu_help_content"> Check our other feature sets by clicking this icon.

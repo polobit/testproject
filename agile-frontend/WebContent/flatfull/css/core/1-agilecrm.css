@@ -4603,8 +4603,8 @@ div.list-tasks.panel-body:hover
     pointer-events: none;
     background: orange;
     border-radius: 1000px;
-    right: 0px;
-    top: 20px;
+    right: 15px;
+    top: 19px;
 }
 .agile-feature-item-blink-new:after
 {
