@@ -192,16 +192,16 @@
 	   		{{#if cursor}}
 	    		<li style="display:none" class="get-counts" data-cursor="{{this.cursor}}" data-count="{{this.count}}"></li>
 	    	{{/if}}
-		    <li id="li{{this.id}}" class="list-group-item text-ellipsis clearfix b-l-3x ng-scope" style="height: 70px;overflow: hidden;">
+		    <li id="li{{removeSpecialCharacter this.id}}" class="list-group-item text-ellipsis clearfix b-l-3x ng-scope" style="height: 70px;overflow: hidden;">
 		      <!--<a ui-sref="app.page.profile" class="avatar thumb pull-left m-r" href="#/app/page/profile">
 		        <img ng-src="img/a10.jpg" src="img/a10.jpg">
 		      </a>-->
-		      <label class="i-checks i-checks-sm pull-left"><input type="checkbox" id="check-{{this.id}}" name="mailcheck" class="mail_check mail-{{this.flags}}" value="{{this.id}}"><i></i></label>
+		      <label class="i-checks i-checks-sm pull-left"><input type="checkbox" id="check-{{removeSpecialCharacter this.id}}" name="mailcheck" class="mail_check mail-{{this.flags}}" value="{{this.id}}"><i></i></label>
 		      <div class="pull-right text-sm text-muted">
 		        <span class="hidden-xs ng-binding"><time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time></span>
 		      </div>
-		      <div class="clear {{this.flags}}" id="flag{{this.id}}" data-val="{{this.id}}">
-		        <div><a class="text-md ng-binding" data-toggle="collapse" data-target="#{{this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-8">{{this.subject}}</span></a></div>
+		      <div class="clear {{this.flags}}" id="flag{{removeSpecialCharacter this.id}}" data-val="{{this.id}}">
+		        <div><a class="text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-8">{{this.subject}}</span></a></div>
 		        <div class="text-ellipsis m-t-xs ng-binding">{{{this.message}}}</div>
 		      </div>      
 	    	</li>
@@ -215,7 +215,7 @@
 	    	
 	    {{else}}	
 	    	<div id="inbox-reply-div">
-			<div class="collapse" id="{{this.id}}">
+			<div class="collapse" id="{{removeSpecialCharacter this.id}}">
 		    	<div ui-view="" class="ng-scope"><div ng-controller="MailDetailCtrl" class="ng-scope">
 			  <!-- header -->
 			  <div class="wrapper bg-light lter b-b">
@@ -234,7 +234,7 @@
 			    <img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">
 			    from <a href="" class="ng-binding">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
 			  </div>
-			  <div class="wrapper ng-binding to-emails" id="message{{this.id}}" data-to="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
+			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
 			    {{{this.message}}}
 			  </div>
 			  <div class="wrapper">

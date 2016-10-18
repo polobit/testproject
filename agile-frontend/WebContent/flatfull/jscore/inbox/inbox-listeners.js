@@ -131,7 +131,7 @@ function inboxFlagListners(){
 
 		url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name="+folder_name);
-
+		dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 		var tot_val = $(".totalcount").text();
 		$(".totalcount").text(parseInt(tot_val)-1);
 		$("#li"+dataVal).remove();
@@ -161,6 +161,7 @@ function setSeenFlag(url,dataVal, attrid){
 	});
 }
 function getContent(url,dataVal){
+	dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 	$.ajax({ 
 		url :url,
 		contentType: "application/json; charset=utf-8",
