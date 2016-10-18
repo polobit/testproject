@@ -424,16 +424,16 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 							
 							if (deal.id == App_Deal_Details.dealDetailView.model.get('id'))
 							{
-								if (documentsView && documentsView.collection)
+								if (dealDocsView && dealDocsView.collection)
 								{
-									if(documentsView.collection.get(document.id))
+									if(dealDocsView.collection.get(document.id))
 									{
-										documentsView.collection.get(document.id).set(new BaseModel(document));
+										dealDocsView.collection.get(document.id).set(new BaseModel(document));
 									}
 									else
 									{
-										documentsView.collection.add(new BaseModel(document), { sort : false });
-										documentsView.collection.sort();
+										dealDocsView.collection.add(new BaseModel(document), { sort : false });
+										dealDocsView.collection.sort();
 									}
 								}
 								return false;			

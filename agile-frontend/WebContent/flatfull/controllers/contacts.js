@@ -1588,6 +1588,13 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				}
 				
 			}
+			if(dealDocsView && dealDocsView.collection)
+			{
+				if(dealDocsView.collection.get(id))
+				{
+					model=dealDocsView.collection.get(id).toJSON();
+				}
+			}
 		}	
 	}
 	

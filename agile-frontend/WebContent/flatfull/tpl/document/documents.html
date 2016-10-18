@@ -16,7 +16,7 @@
                 <tr><td colspan='3' align='right' style='padding-right:4px;'><b>{{agile_lng_translate 'documents' 'deal-discount'}}</b></td><td align='right'  style='align:right;padding-right:4px;'>{{#currencySymbol}}{{/currencySymbol}}{{discount_amt}}</tr>
                  <tr><td colspan='3' align='right' style='padding-right:4px;'><b>{{agile_lng_translate 'products' 'grand-total'}}</b></td><td  align='right' style='align:right;padding-right:4px;'>{{#currencySymbol}}{{/currencySymbol}}{{#retrevie_Deal_Value this }}{{/retrevie_Deal_Value}}</tr>
                {{else}}
-                    <tr><td clspan='3' align='right' style='padding-right:4px;'><b>{{agile_lng_translate 'products' 'grand-total'}}</b></td><td  align='right' style='align:right;padding-right:4px;'>{{#currencySymbol}}{{/currencySymbol}}{{#retrevie_Deal_Value this }}{{/retrevie_Deal_Value}}</tr>
+                    <tr><td colspan='3' align='right' style='padding-right:4px;'><b>{{agile_lng_translate 'products' 'grand-total'}}</b></td><td  align='right' style='align:right;padding-right:4px;'>{{#currencySymbol}}{{/currencySymbol}}{{#retrevie_Deal_Value this }}{{/retrevie_Deal_Value}}</tr>
                {{/if}} 
         </tbody>
         </table>
@@ -134,14 +134,15 @@
         {{#if this.length}}
             <div class="panel panel-default  documents-collection">
                 <div class="panel-heading"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
-                <div class="table-responsive" style="overflow:hidden;">
-                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list"  style="table-layout:auto">
+                <div class="table-responsive" >
+                <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list"  >
                     <thead>
                         <tr>
-                            <th style="width:30%">{{agile_lng_translate 'report-add' 'title'}}</th>
-                            <th style="width:30%">{{agile_lng_translate 'documents' 'related-contacts'}}</th>
+                            <th style="width:35%">{{agile_lng_translate 'report-add' 'title'}}</th>
+                            <th style="width:20%">{{agile_lng_translate 'documents' 'related-contacts'}}</th>
                             <th style="width:20%">{{agile_lng_translate 'documents' 'uploaded-date'}}</th>
-                            <th style="width:20%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
+                            <th style="width:10%">{{agile_lng_translate 'contact-details' 'owner'}}</th>
+                            <th style="width:10%"></th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" class="c-p">
@@ -207,7 +208,7 @@
         <div class="bg-light lter b-b wrapper-md">
             <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
             </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
-            <a href="#document-template-add" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add Document Template</a>
+            <a href="#document-template-add" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add eDocument Template</a>
                         <div class="clearfix"></div>
         </div>
         <div class="alert bg-white">
