@@ -447,7 +447,7 @@ function localizeValidationMessages(){
 	    date: "{{agile_lng_translate 'validation-msgs' 'date'}}",
 	    dateISO: "{{agile_lng_translate 'validation-msgs' 'dateISO'}}",
 	    number: "{{agile_lng_translate 'validation-msgs' 'number'}}",
-	    digits: "{{agile_lng_translate 'validation-msgs' 'digits'}}",
+	    digits: "{{agile_lng_translate 'validation-msgs' 'number'}}",
 	    creditcard: "{{agile_lng_translate 'validation-msgs' 'creditcard'}}",
 	    equalTo: "{{agile_lng_translate 'validation-msgs' 'equalTo'}}",
 	    accept: "{{agile_lng_translate 'validation-msgs' 'accept'}}",
