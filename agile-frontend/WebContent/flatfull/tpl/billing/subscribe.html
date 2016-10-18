@@ -481,6 +481,9 @@ Proceed to Trial
         {{#if billingData}}
         <span class="m-l-xs">
         	<a href="#" id="purchase_credits" class="text-info text-xs">{{agile_lng_translate 'other' 'add'}}</a>
+        	{{#isEmailCreditsExists}}
+        	<a href="#" class="text-info text-xs p-l" id="manage_auto_recharge">Auto Recharge</a>
+        	{{/isEmailCreditsExists}}
         </span>
         {{#isEmailCreditsExists}}
 	        <div class="m-t-xs">
