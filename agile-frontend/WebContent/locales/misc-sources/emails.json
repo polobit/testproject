@@ -1,0 +1,128 @@
+{
+    "welcome-email.dear" : "{{agile_lng_translate 'welcome-email' 'dear'}}",
+    "welcome-email.info" : "{{agile_lng_translate 'welcome-email' 'info'}}",
+    "welcome-email.username" : "{{agile_lng_translate 'admin-settings-integrations' 'username'}}",
+	"welcome-email.password" : "{{agile_lng_translate 'prefs-settings' 'password'}}",
+	"welcome-email.url" : "{{agile_lng_translate 'widgets' 'url'}}",
+	"welcome-email.login-to-account" : "{{agile_lng_translate 'welcome-email' 'login-to-account'}}",
+	"welcome-email.support-assistance" : "{{agile_lng_translate 'welcome-email' 'support-assistance'}}",
+	"welcome-email.crew-at-agile" : "{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}",
+    
+    "verify-email.verity-account" : "{{agile_lng_translate 'verify-email' 'verity-account'}}",
+    "verify-email.click-link-to-verify" : "{{agile_lng_translate 'verify-email' 'click-link-to-verify'}}",
+    "verify-email.verify-email-now" : "{{agile_lng_translate 'verify-email' 'verify-email-now'}}",
+    "verify-email.unable-toclick-link" : "{{agile_lng_translate 'verify-email' 'unable-toclick-link'}}",
+    "verify-email.ingore-if-not-signed-up" : "{{agile_lng_translate 'verify-email' 'ingore-if-not-signed-up'}}",
+    "verify-email.having-questions" : "{{agile_lng_translate 'verify-email' 'having-questions'}}",
+    "verify-email.drop-us-an" : "{{agile_lng_translate 'verify-email' 'drop-us-an'}}",
+    "verify-email.email" : "{{agile_lng_translate 'verify-email' 'email'}}",
+    "verify-email.thx-for-being-a-valued-customer" : "{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}",
+    "verify-email.built-for-smbs" : "{{agile_lng_translate 'verify-email' 'built-for-smbs'}}",
+    
+    "user-enabled.access-restored" : "{{agile_lng_translate 'user-enabled' 'access-restored'}}",
+    "user-enabled.here" : "{{agile_lng_translate 'widgets' 'here'}}",
+    
+    "user-disabled.user-disabled-info" : "{{agile_lng_translate 'user-disabled' 'user-disabled-info'}}",
+    
+    "unsubscribe-email.unsubscribed-from-company" : "{{agile_lng_translate 'unsubscribe-email' 'unsubscribed-from-company'}}",
+    "unsubscribe-email.from" : "{{agile_lng_translate 'portlets' 'from'}}",
+    "unsubscribe-email.removed-from-campaign" : "{{agile_lng_translate 'unsubscribe-email' 'removed-from-campaign'}}",
+    "unsubscribe-email.unsubscribed-by-mistake" : "{{agile_lng_translate 'unsubscribe-email' 'unsubscribed-by-mistake'}}",
+    "unsubscribe-email.resubscribe" : "{{agile_lng_translate 'unsubscribe-email' 'resubscribe'}}",
+    
+    "ticket-reply-email.your-request" : "{{agile_lng_translate 'ticket-reply-email' 'your-request'}}",
+    "ticket-reply-email.reviewed-by-team" : "{{agile_lng_translate 'ticket-reply-email' 'reviewed-by-team'}}",
+    "ticket-reply-email.rate-for-ticket" : "{{agile_lng_translate 'ticket-reply-email' 'rate-for-ticket'}}",
+    "tickets.attachments" : "{{agile_lng_translate 'tickets' 'attachments'}}",
+    "ticket-reply-email.email-service-from" : "{{agile_lng_translate 'ticket-reply-email' 'email-service-from'}}",
+    "ticket-reply-email.delivered-by" : "{{agile_lng_translate 'ticket-reply-email' 'delivered-by'}}",
+    
+    "tickets.delivered-by" : "{{agile_lng_translate 'tickets' 'ticket-forwarded'}}",
+    
+    "prefs-settings.event-reminder" : "{{agile_lng_translate 'prefs-settings' 'event-reminder'}}",
+    "event-email.what" : "{{agile_lng_translate 'event-email' 'what'}}",
+    "event-email.when" : "{{agile_lng_translate 'event-email' 'when'}}",
+    "event-email.who" : "{{agile_lng_translate 'event-email' 'who'}}",
+    "event-email.open-agile-calendar" : "{{agile_lng_translate 'event-email' 'open-agile-calendar'}}",
+    
+    "campaign-email.shared-with-you" : "{{agile_lng_translate 'campaign-email' 'shared-with-you'}}",
+    "contact-details.please" : "{{agile_lng_translate 'contact-details' 'please'}}",
+    "others.click-here" : "{{agile_lng_translate 'others' 'click-here'}}",
+    "campaign-email.to-open-in-agile" : "{{agile_lng_translate 'campaign-email' 'to-open-in-agile'}}",
+    
+    "portlets.new-contacts" : "{{agile_lng_translate 'portlets' 'new-contacts'}}",
+    "import-email.total-contacts-found" : "{{agile_lng_translate 'import-email' 'total-contacts-found'}}",
+    "import-email.successfully-saved" : "{{agile_lng_translate 'import-email' 'successfully-saved'}}",
+    "admin-settings-integrations.accounts" : "{{agile_lng_translate 'admin-settings-integrations' 'accounts'}}",
+    "contact-details.tasks" : "{{agile_lng_translate 'contact-details' 'tasks'}}",
+    "menu.support" : "{{agile_lng_translate 'menu' 'menu.support'}}",
+    "import-email.merged-contacts" : "{{agile_lng_translate 'import-email' 'merged-contacts'}}",
+    "import-email.failed-contacts" : "{{agile_lng_translate 'import-email' 'failed-contacts'}}",
+    "import-email.emails-missing" : "{{agile_lng_translate 'import-email' 'emails-missing'}}",
+    "import-email.limit-exceeded" : "{{agile_lng_translate 'import-email' 'limit-exceeded'}}",
+    "import-email.acess-denied-to-create-update" : "{{agile_lng_translate 'import-email' 'acess-denied-to-create-update'}}",
+    "import-email.total-accounts-found" : "{{agile_lng_translate 'import-email' 'total-accounts-found'}}",
+    "import-email.merged-accounts" : "{{agile_lng_translate 'import-email' 'merged-accounts'}}",
+    "import-email.total-tasks-found" : "{{agile_lng_translate 'import-email' 'total-tasks-found'}}",
+    "import-email.customer-service-help-text" : "{{agile_lng_translate 'import-email' 'customer-service-help-text'}}",
+    "import-email.thx-for-being-valid-customer" : "{{agile_lng_translate 'import-email' 'thx-for-being-valid-customer'}}",
+    "import-email.best-wishes" : "{{agile_lng_translate 'import-email' 'best-wishes'}}",
+    
+    
+    "reports-email.chat-with-us-at" : "{{agile_lng_translate 'reports-email' 'chat-with-us-at'}}",
+    "reports-email.automated-email-dont-reply" : "{{agile_lng_translate 'reports-email' 'automated-email-dont-reply'}}",
+    "reports-email.account-holder-name" : "{{agile_lng_translate 'reports-email' 'account-holder-name'}}",
+    "reports-email.report-name" : "{{agile_lng_translate 'reports-email' 'report-name'}}",
+    
+    "deal-view.name" : "{{agile_lng_translate 'deal-view' 'name'}}",
+    "modals.email" : "{{agile_lng_translate 'modals' 'email'}}",
+    "contacts-view.Lead score" : "{{agile_lng_translate 'contacts-view' 'Lead score'}}",
+    "portlets.tags" : "{{agile_lng_translate 'portlets' 'tags'}}",
+    "other.report" : "{{agile_lng_translate 'other' 'report'}}",
+    "showing-first100" : "{{agile_lng_translate 'reports-email' 'showing-first100'}}",
+    "contact-details.contacts" : "{{agile_lng_translate 'contact-details' 'contacts'}}",
+    "tickets.of" : "{{agile_lng_translate 'tickets' 'of'}}",
+    "reports-email.email-for-created-report" : "{{agile_lng_translate 'reports-email' 'email-for-created-report'}}",
+    
+    "reports-email.you-can-manage" : "{{agile_lng_translate 'reports-email' 'you-can-manage'}}",
+    "reports-email.reports" : "{{agile_lng_translate 'reports-email' 'reports'}}",
+    "widgets.here" : "{{agile_lng_translate 'widgets' 'here'}}",
+    
+    "pwd-email.your-pwd-changed" : "{{agile_lng_translate 'pwd-email' 'your-pwd-changed'}}",
+    "pwd-email.you-can-login" : "{{agile_lng_translate 'pwd-email' 'you-can-login'}}",
+    "pwd-email.with-following-creds" : "{{agile_lng_translate 'pwd-email' 'with-following-creds'}}",
+    "contacts-view.email-address" : "{{agile_lng_translate 'contacts-view' 'email-address'}}",
+    "prefs-email.user-name" : "{{agile_lng_translate 'prefs-email' 'user-name'}}",
+    "prefs-settings.password" : "{{agile_lng_translate 'prefs-settings' 'password'}}",
+    
+    "otp-email.your-agile-account" : "{{agile_lng_translate 'otp-email' 'your-agile-account'}}",
+    "otp-email.just-sign-in" : "{{agile_lng_translate 'otp-email' 'just-sign-in'}}",
+    "contacts-view.on" : "{{agile_lng_translate 'contacts-view' 'on'}}",
+    "portlets.from" : "{{agile_lng_translate 'portlets' 'from'}}",
+    "otp-email.security-info" : "{{agile_lng_translate 'otp-email' 'security-info'}}",
+    "otp-email.verfification-entry-info" : "{{agile_lng_translate 'otp-email' 'verfification-entry-info'}}",
+    "otp-email.verfification-code" : "{{agile_lng_translate 'otp-email' 'verfification-code'}}",
+    
+    
+    
+    "verify-email.built-for-smbs" : "{{agile_lng_translate 'verify-email' 'built-for-smbs'}}",
+    "new-user-email.you-have-invited" : "{{agile_lng_translate 'new-user-email' 'you-have-invited'}}",
+    "new-user-email.pwd-to-login" : "{{agile_lng_translate 'new-user-email' 'pwd-to-login'}}",
+    "new-user-email.you-can-login" : "{{agile_lng_translate 'new-user-email' 'you-can-login'}}",
+    
+    "verify-email.link-to-verify-email" : "{{agile_lng_translate 'verify-email' 'link-to-verify-email'}}",
+    "verify-email.verfify-email-now" : "{{agile_lng_translate 'verify-email' 'verfify-email-now'}}",
+    "others.or" : "{{agile_lng_translate 'others' 'or'}}",
+    "pwd-email.reset-password-request" : "{{agile_lng_translate 'pwd-email' 'reset-password-request'}}",
+    
+    "pwd-email.your-login-details" : "{{agile_lng_translate 'pwd-email' 'your-login-details'}}",
+    "widgets.url" : "{{agile_lng_translate 'widgets' 'url'}}",
+    "admin-settings-integrations.username" : "{{agile_lng_translate 'admin-settings-integrations' 'username'}}",
+    "pwd-email.login-now" : "{{agile_lng_translate 'pwd-email' 'login-now'}}",
+    
+    "info" : "{{agile_lng_translate 'new-user-email' 'info'}}",
+    "info" : "{{agile_lng_translate 'new-user-email' 'info'}}",
+    "info" : "{{agile_lng_translate 'new-user-email' 'info'}}",
+
+}
+
