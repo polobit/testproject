@@ -45,14 +45,19 @@ var _agile_synch_form_v4 = function()
             		agile_address[field.name] = field.value;
             	} else if (field.name == "note") {
 					var agile_note = {};
-					var labelTextForFieldEl = agile_find_closest_element(field, function (el) {
+					var closestParentLabelEl = agile_find_closest_element(field, function (el) {
 					if(el.getElementsByTagName("label")[0])
 					    return (" " + el.getElementsByTagName("label")[0].className + " ").replace(/[\n\t]/g, " ").indexOf(" agile-label ") != -1;
 					return false;
 					});
 					
+					var labelTextForFieldEl = "";
+					if(closestParentLabelEl) {
+						labelTextForFieldEl = closestParentLabelEl.getElementsByTagName("label")[0];
+					}
+
 					if(labelTextForFieldEl) {
-						agile_note.subject = labelTextForFieldEl.innerText || labelTextForFieldEl.textContent;
+						agile_note.subject = labelTextForFieldEl.innerText || labelTextForFieldEl.textContent || "Form Note";
 					} else {
 						agile_note.subject = "Form Note";
 					}
