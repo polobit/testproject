@@ -1213,7 +1213,7 @@ $(function()
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 			element = element.replace("_", " ")
-			if(element=='last campaign_emailed')
+			if(element=='last campaign_emaild')
 				element = element.replace("_", " ")
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
 
