@@ -233,6 +233,25 @@
                                     </div>
                             </label>
                             
+                              <div  class="newMenuScopesDealsdiv">
+                            {{#if id}}
+                              <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                        </small></div>
+                               </label>
+                            {{else}}
+                                  <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                    </div>
+                                </label>
+                            {{/if}}
+                            </div>
+
+                           
                             <div>
                                 <div class="pull-left" style="width:35%;">
                                     <label class="i-checks i-checks-sm checkbox">
@@ -284,6 +303,23 @@
                                 </div>
                             </div>
                             </div>
+                            <!--<div name="newMenuScopes">
+                            {{#if id}}
+                              <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                        </small></div>
+                               </label>
+                            {{else}}
+                                  <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                    </div>
+                                </label>
+                            {{/if}}
+                            </div>-->
                         </div>
                     </div>
                         {{else}}
@@ -324,6 +360,26 @@
                                             {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
                                             <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
                                         </label>
+                                      
+                                      <div  class="newMenuScopesDealsdiv">
+                                        {{#if id}}
+                                          <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                                <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                                {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                                    </small></div>
+                                           </label>
+                                        {{else}}
+                                              <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                                <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                                {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                                <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                                </div>
+                                            </label>
+                                        {{/if}}
+                                      </div>
+
+
                                      
                                      <div>
                                        <div class="pull-left" style="width:35%;">
@@ -371,6 +427,7 @@
                                        <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'add-events-to-others'}}</small></div>
                                       </div>
                                 </div>
+                               
                             </div>
                         </div>
                     {{else}}
@@ -413,6 +470,26 @@
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
                                     </small></div>
                                 </label>
+                               
+                                  <div class="newMenuScopesDealsdiv">
+                                    {{#if id}}
+                                      <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                            <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                                <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                                </small></div>
+                                       </label>
+                                    {{else}}
+                                          <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                            <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                            <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                            </div>
+                                        </label>
+                                    {{/if}}
+                                    </div>
+
+                                
                                
                                 <div>
                                     <div class="pull-left" style="width:35%;">
@@ -461,13 +538,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--<div name="newMenuScopes">
+                            {{#if id}}
+                              <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                        </small></div>
+                               </label>
+                            {{else}}
+                                  <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                    </div>
+                                </label>
+                            {{/if}}
+                            </div>-->
                         </div>
                     </div>
                     {{/unless}}
                     {{/unless}}
                     <div class="control-group form-group" style="margin-top:-20px">
                         <div class="controls">
-                            <div class=""  name="newMenuScopes">
+                            <div class="addDealToMenuScopes"  name="newMenuScopes">
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox hide">
                                     <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -480,12 +574,12 @@
                                     {{agile_lng_translate 'portlets' 'calendar'}}<br/>
                                      <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
                                 </label> 
-                                <label class="i-checks i-checks-sm checkbox">
+                                <!--<label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'deal-view' 'deals'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
                                         </small></div>
-                               </label>
+                               </label>-->
                                {{#if_equals this.version "v1"}} {{else}} {{/if_equals}}
                                 <label class="i-checks i-checks-sm checkbox none">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -508,12 +602,12 @@
                                     <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'calendar'}}<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
                                 </label> 
-                                <label class="i-checks i-checks-sm checkbox">
+                                <!--<label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'deals'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
                                     </div>
-                                </label>
+                                </label>-->
 
                                 {{#if_equals this.version "v1"}} {{else}} {{/if_equals}}
                                 <label class="i-checks i-checks-sm checkbox none">

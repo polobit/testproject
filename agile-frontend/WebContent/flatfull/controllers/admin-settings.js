@@ -385,6 +385,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 					
 				
+			},prePersist : function(model){
+				
+			    /*$("#userForm").find(".addDealToMenuScopes").append($("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals"));
+			    $("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals").remove();*/
+			    var newscopes = model.toJSON().newscopes;
+			    $.each(newscopes, function(index, data) {
+				if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);}
+				});
+				model.toJSON().newMenuScopes.push("DEALS");
+
+			      
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -506,7 +517,18 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('a[href="#sales-previlages"]',el).tab('show');
 					$('a[href="#sales-previlages"]',el).trigger('click');
 				},500);
-			}, saveAuth : function(el){
+			}, prePersist : function(model){
+				
+			    /*$("#userForm").find(".addDealToMenuScopes").append($("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals"));
+			    $("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals").remove();*/
+			    var newscopes = model.toJSON().newscopes;
+			    $.each(newscopes, function(index, data) {
+				if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);}
+				});
+				model.toJSON().newMenuScopes.push("DEALS");
+
+			      
+			   },saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
 				{
 					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));
