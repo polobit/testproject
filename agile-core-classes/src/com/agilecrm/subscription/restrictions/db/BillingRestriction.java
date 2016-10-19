@@ -19,8 +19,13 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.util.MilestoneUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.PlanLimits;
@@ -34,6 +39,9 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.WidgetType;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -45,6 +53,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>BillingRestriction</code> class represents number of entities in
@@ -269,31 +278,110 @@ public class BillingRestriction
     }
 
     @JsonIgnore
-    public Map<String, Map<String, Integer>> getRestrictions()
+    public Map<String, Map<String, Object>> getRestrictions()
     {
-	Map<String, Map<String, Integer>> resrtictions = new HashMap<String, Map<String, Integer>>();
+	Map<String, Map<String, Object>> resrtictions = new HashMap<String, Map<String, Object>>();
 
 	refreshContacts();
-	Map<String, Integer> limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getContactLimit());
-	limits.put("count", contacts_count);
-	resrtictions.put("contacts", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getWebRuleLimit());
-	limits.put("count", WebRuleUtil.getCount());
-	resrtictions.put("webrules", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getWorkflowLimit());
-	limits.put("count", WorkflowUtil.get_enable_campaign_count());
-	resrtictions.put("workflows", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getTriggersLimit());
-	limits.put("count", TriggerUtil.getCount());
-	resrtictions.put("triggers", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getAllowedUsers());
-	limits.put("count", DomainUserUtil.count());
-	resrtictions.put("users", limits);
+	Map<String, Object> limits;
+	int contactsLimit = planDetails.getContactLimit();
+	if(contactsLimit < contacts_count){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", contactsLimit);
+		limits.put("count", contacts_count);
+		resrtictions.put("contacts", limits);
+	}
+	int webRuleLimit = planDetails.getWebRuleLimit();
+	int webRuleCount = WebRuleUtil.getCount();
+	if(webRuleLimit < webRuleCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", webRuleLimit);
+		limits.put("count", webRuleCount);
+		resrtictions.put("webrules", limits);
+	}
+	int workFlowsLimit = planDetails.getWorkflowLimit();
+	int workFlowsCount = WorkflowUtil.get_enable_campaign_count();
+	if(workFlowsLimit < workFlowsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", workFlowsLimit);
+		limits.put("count", workFlowsCount);
+		resrtictions.put("workflows", limits);
+	}
+	int triggersLimit = planDetails.getTriggersLimit();
+	int triggersCount = TriggerUtil.getCount();
+	if(triggersLimit < triggersCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", triggersLimit);
+		limits.put("count", triggersCount);
+		resrtictions.put("triggers", limits);
+	}
+	int usersLimit = planDetails.getAllowedUsers();
+	int usersCount = DomainUserUtil.count();
+	if(usersLimit < usersCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", usersLimit);
+		limits.put("count", usersCount);
+		resrtictions.put("users", limits);
+	}
+	int widgetsLimit = planDetails.getWebRuleLimit();
+	int widgetsCount = WidgetUtil.getTotalWidgetsCount();
+	if(widgetsLimit < widgetsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", widgetsLimit);
+		limits.put("count", widgetsCount);
+		resrtictions.put("widgets", limits);
+	}
+	int nodesLimit = planDetails.getCampaignNodesLimit();
+	int maxNodesCount = WorkflowUtil.getMaxWorkflowNodes();
+	if(nodesLimit < maxNodesCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", nodesLimit);
+		limits.put("count", maxNodesCount);
+		resrtictions.put("nodes", limits);
+	}
+	int emailAccountsLimit = planDetails.getEmailAccountLimit();
+	int emailAccountsCount = ContactEmailUtil.getEmailPrefs().getEmailAccountsCount();
+	if(emailAccountsLimit < emailAccountsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", emailAccountsLimit);
+		limits.put("count", emailAccountsCount);
+		resrtictions.put("emailAccounts", limits);
+	}
+	int reportsLimit = planDetails.getReportsLimit();
+	int reportsCount = ReportsUtil.count();
+	if(reportsLimit < reportsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", reportsLimit);
+		limits.put("count", reportsCount);
+		resrtictions.put("reports", limits);
+	}
+	Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+	if(!planDetails.getSMSGateway() && widget != null){
+		limits = new HashMap<String, Object>();
+		limits.put("isAllowed", planDetails.getSMSGateway());
+		resrtictions.put("smsGateway", limits);
+	}
+	boolean ecommerceSyncEnabled = ContactPrefsUtil.findPrefsByType(Type.SHOPIFY);
+	if(!planDetails.getEcommerceSync() && ecommerceSyncEnabled){
+		limits = new HashMap<String, Object>();
+		limits.put("isAllowed", planDetails.getEcommerceSync());
+		resrtictions.put("ecommerceSync", limits);
+	}
+	boolean accountingSyncEnabled = ContactPrefsUtil.findPrefsByType(Type.FRESHBOOKS) || ContactPrefsUtil.findPrefsByType(Type.QUICKBOOK);
+	if(!planDetails.getAccountingSync() && accountingSyncEnabled){
+		limits = new HashMap<String, Object>();
+		limits.put("isAllowed", planDetails.getAccountingSync());
+		resrtictions.put("accountingSync", limits);
+	}
+	int tracksCount = MilestoneUtil.getCount();
+	if(!planDetails.getAddTracks() && tracksCount > 1){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", 1);
+		limits.put("count", tracksCount);
+		resrtictions.put("tracks", limits);
+	}
+	
+	
 	return resrtictions;
     }
 
@@ -525,4 +613,5 @@ public class BillingRestriction
     public void incrementEmailCreditsCount(int count){
     	this.email_credits_count += count;
     }
+    
 }

@@ -540,21 +540,17 @@ function initializeSubscriptionListeners()
 							
 						}else{
 							var restrictions = data.restrictions;
-							restrictions.plan = data.plan;
-							restrictions.users.limit = parseInt(plan_json.quantity);
-							if(restrictions.contacts.count > restrictions.contacts.limit)
-								errorsCount++;
-							if(restrictions.webrules.count > restrictions.webrules.limit)
-								errorsCount++;
-							if(restrictions.users.count > restrictions.users.limit)
-								errorsCount++;
-							if(restrictions.workflows.count > restrictions.workflows.limit)
-								errorsCount++;
-							if(restrictions.triggers.count > restrictions.triggers.limit)
-								errorsCount++;
+							var usersLimit = parseInt(plan_json.quantity);
+							if(restrictions.users != undefined){
+								restrictions.users.limit = usersLimit;
+								if(restrictions.users.limit >= restrictions.users.count)
+									delete restrictions['users'];
+							}
+							errorsCount = (_.size(restrictions));
 							if(errorsCount >= 1)
 							{
 								restrictions.errorsCount = errorsCount;
+								restrictions.plan = data.plan;
 								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;

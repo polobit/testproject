@@ -471,7 +471,7 @@ public class SubscriptionApi {
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
-				Map<String, Map<String, Integer>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
+				Map<String, Map<String, Object>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
 				restrictionsJSONString = new Gson().toJson(restrictions);
 			}
 			Invoice invoice = subscription.getUpcomingInvoice(plan);
