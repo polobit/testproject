@@ -50,7 +50,7 @@ var _agile_synch_form_v4 = function()
             	} else if (field.type == 'select-multiple') {
                     l = agile_form.elements[i].options.length; 
                     for (var j = 0; j < l; j++) {
-                        if(field.options[j].selected) {
+                        if(field.options[j].selected && field.options[j].value) {
                         	if(agile_contact.hasOwnProperty(field.name)) {
                         		agile_contact[field.name] = agile_contact[field.name] + ", " + field.options[j].value;
                         	} else {
@@ -59,11 +59,13 @@ var _agile_synch_form_v4 = function()
                         }
                     }
                 } else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
-                    if(agile_contact.hasOwnProperty(field.name)) {
-                        agile_contact[field.name] = agile_contact[field.name] + "," + field.value;
-                    } else {
-                    	agile_contact[field.name] = field.value;
-                    }
+                	if(field.value) {
+                		if(agile_contact.hasOwnProperty(field.name)) {
+                        	agile_contact[field.name] = agile_contact[field.name] + "," + field.value;
+	                    } else {
+	                    	agile_contact[field.name] = field.value;
+	                    }
+                	}
                 }
             
                 if (field.name == "note" && agile_contact["note"]) {
