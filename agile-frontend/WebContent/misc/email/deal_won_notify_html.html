@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white"> Deal Won Alert </td>
+								style="padding: 0; color: white"> {{agile_lng_translate 'deals-email' 'won-deal-alert'}} </td>
 							
 						</tr>
 					</tbody>
@@ -22,7 +22,7 @@
 				<p>{{agile_lng_translate 'welcome-email' 'dear'}} {{user.name}} </p>
 				
 
-				<p>Hurray. {{deal.owner.name}} has won deal '{{deal.name}}' worth {{deal.expected_value}}. </p>
+				<p>{{agile_lng_translate 'deals-email' 'hurray'}}. {{deal.owner.name}} {{agile_lng_translate 'deals-email' 'has-won-deal'}} '{{deal.name}}' {{agile_lng_translate 'deals-email' 'worth'}} {{deal.expected_value}}. </p>
 				
 				<br>
 				<p>{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}</p>

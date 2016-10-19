@@ -19,12 +19,12 @@
             <tr>
               <td style="padding: 15px 25px 25px 25px;">
                 <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{agile_lng_translate 'welcome-email' 'dear'}} <span style="text-transform: capitalize;">{{user_name}}</span>,</div>
-                <div style="font-weight:bold">Plan Changed</div>
-				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">We would like to notify you of a change in your Agile CRM Subscription. You may have either changed the subscription yourself or this change has been done as per your request to our support team.</div>
-				<div style="font-weight:bold">Plan Details</div>
+                <div style="font-weight:bold">{{agile_lng_translate 'subscription-email' 'plan-changed'}}</div>
+				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{agile_lng_translate 'subscription-email' 'normal-plan-changed-done-by-you-or-support-team'}}</div>
+				<div style="font-weight:bold">{{agile_lng_translate 'subscription-email' 'plan-details'}}</div>
 				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">
-					   <div>Old Plan : {{#previous_attributes.plan.name}}{{previous_attributes.plan.name}}{{/previous_attributes.plan.name}} {{^previous_attributes.plan.name}} {{plan}} {{/previous_attributes.plan.name}} ({{previous_attributes.quantity}} users)</div>
-					   <div>New Plan : {{plan}}  ({{quantity}} users)</div>
+					   <div>{{agile_lng_translate 'subscription-email' 'old-plan'}} : {{#previous_attributes.plan.name}}{{previous_attributes.plan.name}}{{/previous_attributes.plan.name}} {{^previous_attributes.plan.name}} {{plan}} {{/previous_attributes.plan.name}} ({{previous_attributes.quantity}} {{agile_lng_translate 'portlets' 'users'}})</div>
+					   <div>{{agile_lng_translate 'subscription-email' 'new-plan'}} : {{plan}}  ({{quantity}} {{agile_lng_translate 'portlets' 'users'}})</div>
 				   </div>
 				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">
 					{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue">

@@ -38,7 +38,7 @@
 			  <tbody>
 				<tr>
 				 <td width="388" valign="bottom">
-		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Agile CRM chargeback resolution steps</h2>
+		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">{{agile_lng_translate 'subscription-email' 'charge-back-steps'}}</h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
 				<img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block"></img>
@@ -66,50 +66,50 @@
 		 {{agile_lng_translate 'welcome-email' 'dear'}}  {{name}},
          <br/>
          <br/>
-         <b>Chargebacks are bad for your credit history & company</b><br/>
-   We have received a chargeback on your AgileCRM subscription. We would like to get this chargeback dispute resolved quickly by processing your request. May we know the reasons for filing this chargeback?
+         <b>{{agile_lng_translate 'subscription-email' 'chargebacks-are-bad-for-company'}}</b><br/>
+  {{agile_lng_translate 'subscription-email' 'charback-received-info'}}
         <br/>
          <br/>
-         <b>Chargeback details</b><br/>
-         Date: {{date}}<br/>
-       Credit card on file (last four digits): <br/>
-       Card holder's name: <br/>
+         <b>{{agile_lng_translate 'subscription-email' 'charback-details'}}</b><br/>
+         {{agile_lng_translate 'contacts-view' 'date'}}: {{date}}<br/>
+       {{agile_lng_translate 'account-email' 'cc-on-file'}}: <br/>
+       {{agile_lng_translate 'subscription-email' 'card-holder-name'}}: <br/>
 <br/>
-       <b>Your Details as per our Records</b><br/>
-       Plan subscribed:<br/>
-Subscription amount:<br/>
-Signed up on: <br/>
+       <b>{{agile_lng_translate 'subscription-email' 'details-as-per-records'}}</b><br/>
+       {{agile_lng_translate 'subscription-email' 'plan-subscribed'}}:<br/>
+{{agile_lng_translate 'payment-fail-email' 'subscription-amount'}}:<br/>
+{{agile_lng_translate 'subscription-email' 'signed-up-on'}}: <br/>
 <br/>
-Email: <br/>
-Name: <br/>
-Address: <br/>
-Phone: <br/>
+{{agile_lng_translate 'modals' 'email'}}: <br/>
+{{agile_lng_translate 'deal-view' 'name'}}: <br/>
+{{agile_lng_translate 'contact-details' 'address'}}: <br/>
+{{agile_lng_translate 'other' 'phone'}}: <br/>
 <br/>
-        <b>Chargeback will be disputed</b><br/>
-        If you would like to proceed forward with the chargeback, we will dispute with the following proof.
+        <b>{{agile_lng_translate 'subscription-email' 'chargeback-will-disputed'}}</b><br/>
+        {{agile_lng_translate 'subscription-email' 'chargeback-disputed-proof'}}
         <br/>
         <br/>
-        - You have agreed to our terms and policies before you have signed up for Agile CRM paid plans<br/>
-        - Your Agile CRM account shows the users, website on which Agile CRM was installed and the contacts, deals, calendar usage, analytic reports and the recent operations carried out by your Agile CRM account users
+        - {{agile_lng_translate 'subscription-email' 'chargeback-terms'}}<br/>
+        - {{agile_lng_translate 'subscription-email' 'chargeback-notice-plan-info'}}
           <br/>
-        - Outbound Emails carried out in your account<br/>
-        - IP Address, location and usage logs, chat and email transcripts with our support associates
+        - {{agile_lng_translate 'subscription-email' 'chargeback-about-outbound-emails'}}<br/>
+        - {{agile_lng_translate 'subscription-email' 'chargeback-about-logs'}}
  <br/>
  <br/>
-          <b>Account Suspended</b><br/>
-          Your account has been suspended temporarily until this chargeback gets resolved. You will not be able to access your data during this duration.<br/>
+          <b>{{agile_lng_translate 'subscription-email' 'account-suspended'}}</b><br/>
+          {{agile_lng_translate 'subscription-email' 'account-suspended-info'}}<br/>
 <br/>
 <b>{{agile_lng_translate 'verify-email' 'having-questions'}}</b>
 <br/>
-Drop us an <a  href="mailto:care@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
+{{agile_lng_translate 'verify-email' 'drop-us-an'}} <a  href="mailto:care@agilecrm.com" target="_blank">{{agile_lng_translate 'verify-email' 'email'}}</a> or <b>{{agile_lng_translate 'account-email' 'CALL-TOLL-FREE'}}</b> 1-800-980-0729<br/>
 <br/>
 {{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}
 <br/>
 <br/>
-The crew at AgileCRM<br/>
+{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}<br/>
 <a href="https://www.agilecrm.com" target="_blank">https://www.agilecrm.com</a><br/>
 <br/>
-<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>Built with love for small businesses</i></span>
+<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>{{agile_lng_translate 'verify-email' 'built-for-smbs'}}</i></span>
 <br/>
 <br/>
         </td>

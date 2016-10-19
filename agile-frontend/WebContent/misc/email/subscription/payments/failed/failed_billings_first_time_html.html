@@ -38,7 +38,7 @@
 			  <tbody>
 				<tr>
 				 <td width="388" valign="bottom">
-		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Your Payment to Agile CRM has Declined </h2>
+		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">{{agile_lng_translate 'payment-fail-email' 'payment-toy-agile-declined'}} </h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
 				<img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block"></img>
@@ -66,14 +66,14 @@
 		 {{agile_lng_translate 'welcome-email' 'dear'}}  {{user_name}},
          <br/>
          <br/>
-         <b>We had a problem charging your account.</b><br/>
-      Your Agile CRM subscription payment towards your enrolled plan has failed.<br/>
+         <b>{{agile_lng_translate 'payment-fail-email' 'had-problem-with-charging'}}</b><br/>
+      {{agile_lng_translate 'payment-fail-email' 'enrolled-plan-payment-failed'}}<br/>
          <br/>
-         <b>Credit Card & Plan Details </b><br/>
-         Plan:<br/>
-        Subscription amount: <br/>
-        Credit card on file: last four digits {{last4}}<br/>
-        Reason given by bank:  <br/>
+         <b>{{agile_lng_translate 'payment-fail-email' 'cc-plan-details'}} </b><br/>
+         {{agile_lng_translate 'portlets' 'plan'}}:<br/>
+        {{agile_lng_translate 'payment-fail-email' 'subscription-amount'}}: <br/>
+        {{agile_lng_translate 'payment-fail-email' 'cc-on-file-last4'}}<br/>
+        {{agile_lng_translate 'payment-fail-email' 'reason-by-bank'}}:  <br/>
     <br/>
           <table width="540" cellpadding="0" cellspacing="0" border="0" align="center">
      <tbody>
@@ -84,7 +84,7 @@
             <tr>
     <td valign="middle" style="padding-top:15px;padding-bottom:15px;padding-right:45px;padding-left:45px;text-align:center">
     <a href="https://{{domain}}.agilecrm.com/#subscribe" style="font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:14px;color:#fff!important;text-decoration:none" target="_blank">
-                <strong>Update your Card Now</strong>
+                <strong>{{agile_lng_translate 'payment-fail-email' 'update-your-card-now'}}</strong>
     </a>
    </td>
       </tr>
@@ -95,20 +95,20 @@
       </tbody>
      </table>
 <br/>
-        <b>We will try again</b><br/>
-        We will try again after 6 days. Your account will be suspended till we receive a full payment.
+        <b>{{agile_lng_translate 'payment-fail-email' 'will-try-again'}}</b><br/>
+        {{agile_lng_translate 'payment-fail-email' 'will-try-again-after-6-days'}}
 <br/>
 <br/>
 <b>{{agile_lng_translate 'verify-email' 'having-questions'}}</b><br/>
-Drop us an <a  href="mailto:care@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
+{{agile_lng_translate 'verify-email' 'drop-us-an'}} <a  href="mailto:care@agilecrm.com" target="_blank">{{agile_lng_translate 'verify-email' 'email'}}</a> or <b>{{agile_lng_translate 'account-email' 'CALL-TOLL-FREE'}}</b> 1-800-980-0729<br/>
 <br/>
 {{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}
 <br/>
 <br/>
-The crew at AgileCRM<br/>
+{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}<br/>
 <a href="https://www.agilecrm.com" target="_blank">https://www.agilecrm.com</a><br/>
 <br/>
-<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>Built with love for small businesses</i></span>
+<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>{{agile_lng_translate 'verify-email' 'built-for-smbs'}}</i></span>
 <br/>
 <br/>
         </td>

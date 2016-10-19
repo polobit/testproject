@@ -17,9 +17,9 @@
             </tr>
             <tr>
               <td style="padding: 15px 25px 10px">
-				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{count}} {{contact_type}} exported to csv file. </div>
+				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{count}} {{contact_type}} {{agile_lng_translate 'export-email' 'exported-to-csv'}}. </div>
                 <div style="font-size:14px;font-family:sans-serif;">
-                  Please download the file by clicking on the button below. This link is valid for 24 hours only.
+                  {{agile_lng_translate 'export-email' 'download-button'}}
                 </div>
               </td>
             </tr>
@@ -29,7 +29,7 @@
 						<tr>
 							<td valign="middle" style="padding-top:8px;padding-bottom:8px;padding-right:10px;padding-left:10px;text-align:center">
 								<a href="{{download_url}}" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:14px;color:#fff!important;text-decoration:none" target="_blank">
-									<strong>Download CSV File</strong>
+									<strong>{{agile_lng_translate 'export-email' 'download-csv-file'}}</strong>
 								</a>
 							</td>
 						</tr>

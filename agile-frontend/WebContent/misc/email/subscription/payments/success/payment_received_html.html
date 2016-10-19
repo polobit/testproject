@@ -38,7 +38,7 @@
 			  <tbody>
 				<tr>
 				 <td width="388" valign="bottom">
-				 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Payment Received. Thank you.</h2>
+				 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">{{agile_lng_translate 'account-email' 'payment-received-thx'}}</h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
 				
@@ -67,31 +67,31 @@
 		 {{agile_lng_translate 'welcome-email' 'dear'}}  {{user_name}},
 		 <br/>
 		 <br/>
-		Thanks for using Agile CRM!
+		{{agile_lng_translate 'account-email' 'thanks-for-using-agile'}}
          <br/>
          <br/>
-         <b>Payment Received</b><br/>
-         We have received a payment of $ {{amount}} from you. Thank you! You can download the invoice <a href="https://{{domain}}.agilecrm.com/invoice?inv_id={{invoiceId}}&email={{email}}">here.</a><br/>
+         <b>{{agile_lng_translate 'account-email' 'payment-recieved'}}</b><br/>
+         {{agile_lng_translate 'account-email' 'we-have-received-payment'}} $ {{amount}} {{agile_lng_translate 'account-email' 'from-you'}}. {{agile_lng_translate 'other' 'thank-you'}}! {{agile_lng_translate 'account-email' 'you-can-download-invoice'}} <a href="https://{{domain}}.agilecrm.com/invoice?inv_id={{invoiceId}}&email={{email}}">{{agile_lng_translate 'widgets' 'here'}}.</a><br/>
          <br/>
-         <b>Payment Details</b><br/>
-         Plan Type: {{plan}}<br/>
-         Number of Users: {{quantity}}<br/>
-         Start : {{start_date}} <br/>
-         End : {{end_date}} <br/>
+         <b>{{agile_lng_translate 'account-email' 'payment-details'}}</b><br/>
+         {{agile_lng_translate 'portlets' 'plan'}}: {{plan}}<br/>
+         {{agile_lng_translate 'plan-and-upgrade' 'number-of-users'}}: {{quantity}}<br/>
+         {{agile_lng_translate 'campaign-node-start' 'start'}} : {{start_date}} <br/>
+         {{agile_lng_translate 'account-email' 'end'}} : {{end_date}} <br/>
 <br/>
-This charge will appear on your credit card statement as "AgileCRM.com".
+{{agile_lng_translate 'account-email' 'charge-appear-as-stmt'}} "AgileCRM.com".
 <br/>
 <br/>  
 <b>{{agile_lng_translate 'verify-email' 'having-questions'}}</b><br/>
-Drop us an <a  href="mailto:care@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
+{{agile_lng_translate 'verify-email' 'drop-us-an'}} <a  href="mailto:care@agilecrm.com" target="_blank">{{agile_lng_translate 'verify-email' 'email'}}</a> or <b>{{agile_lng_translate 'account-email' 'CALL-TOLL-FREE'}}</b> 1-800-980-0729<br/>
 <br/>
 {{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}
 <br/>
 <br/>
-The crew at AgileCRM<br/>
+{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}<br/>
 <a href="https://www.agilecrm.com" target="_blank">https://www.agilecrm.com</a><br/>
 <br/>
-<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>Built with love for small businesses</i></span>
+<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>{{agile_lng_translate 'verify-email' 'built-for-smbs'}}</i></span>
 <br/>
 <br/>
         </td>

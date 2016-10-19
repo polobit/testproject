@@ -19,7 +19,7 @@
             </tr>
             <tr>
               <td style="padding: 15px 25px 25px 25px">
-				<div style="font-size: 14px;font-family:arial,sans-serif;padding-bottom:5px"><span style="font-weight:bold;color: #58666e">{{agile_lng_translate 'reports-email' 'report-name'}} : </span>{{HashMap.report_name}} ({{HashMap.duration}} Report)</div>
+				<div style="font-size: 14px;font-family:arial,sans-serif;padding-bottom:5px"><span style="font-weight:bold;color: #58666e">{{agile_lng_translate 'reports-email' 'report-name'}} : </span>{{HashMap.report_name}} ({{HashMap.duration}} {{agile_lng_translate 'other' 'report'}})</div>
                 <div style="font-size: 14px;font-family:arial,sans-serif;padding-bottom:15px">{{#HashMap.campaign_name}} {{{HashMap.campaign_name}}} {{/HashMap.campaign_name}}</div>
 					<div style="font-size: 14px; background-color: #fff;padding-bottom:15px">
 						<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#FFFFFF" style="border:1px solid #edf1f2;border-radius:2px">
@@ -27,49 +27,49 @@
 							    <tr style="text-align:center;">
 								   <td style="border-right: 1px solid #edf1f2;width:125px;padding:5px">
 										<div style="color:#23B7E5;font-size:25px;font-weight:bold">{{HashMap.emailSent}}</div>
-										<div style="color: #58666e;font-size:12px">Emails Sent</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'portlets' 'emails-sent'}}</div> 
 								   </td>
 								   <td style="border-right: 1px solid #edf1f2;width:125px;padding:5px">			       
 										<div style="color:#FAD733;font-size:25px;font-weight:bold">{{HashMap.emailSkipped}}</div>
-										<div style="color: #58666e;font-size:12px">Emails Skipped</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'workflows' 'emails-skipped'}}</div> 
 								   </td>
 								   <td style="border-right: 1px solid #edf1f2;width:125px;padding:5px">			       
 										<div style="color:#08C;font-size:25px;font-weight:bold">{{HashMap.emailOpened}}</div>
-										<div style="color: #58666e;font-size:12px">Emails Opened</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'portlets' 'emails-opened'}}</div> 
 								   </td>
 									<td style="width:125px;padding:5px">
 										<div style="color:rgb(18, 209, 18);font-size:25px;font-weight:bold">{{HashMap.emailClicked}}</div>
-										<div style="color: #58666e;font-size:12px">Emails Clicked</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'campaigns' 'emails-clicked'}}</div> 
 								   </td>
 								</tr>
 
 							    <tr style="text-align:center;">
 								   <td style="border-right: 1px solid #edf1f2; border-top: 1px solid #edf1f2;width:125px;padding:5px">
 										<div style="color:#009688;font-size:25px;font-weight:bold">{{HashMap.hardBounce}}</div>
-										<div style="color: #58666e;font-size:12px">Hard Bounce</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'campaigns' 'hard-bounce'}}</div> 
 								   </td>
 								   <td style="border-right: 1px solid #edf1f2; border-top: 1px solid #edf1f2;width:125px;padding:5px">			       
 										<div style="color:#9C27B0;font-size:25px;font-weight:bold">{{HashMap.softBounce}}</div>
-										<div style="color: #58666e;font-size:12px">Soft Bounce</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'campaigns' 'soft-bounce'}}</div> 
 								   </td>
 								   <td style="border-right: 1px solid #edf1f2; border-top: 1px solid #edf1f2;width:125px;padding:5px">			       
 										<div style="color:rgb(205,15,0);font-size:25px;font-weight:bold">{{HashMap.emailUnsubscribed}}</div>
-										<div style="color: #58666e;font-size:12px">Unsubscribe</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'contacts-view' 'unsubscribe'}}</div> 
 								   </td>
 								   <td style=" border-top: 1px solid #edf1f2;width:125px;padding:5px">
 										<div style="color:#FF4343;font-size:25px;font-weight:bold">{{HashMap.emailSpam}}</div>
-										<div style="color: #58666e;font-size:12px">Spam</div> 
+										<div style="color: #58666e;font-size:12px">{{agile_lng_translate 'tickets' 'spam'}}</div> 
 								   </td>
 							    </tr>
 							</tbody>
 						 </table>
 					</div>
 					<div style="font-size:14px;font-family:sans-serif">
-						<div style="padding-bottom:10px"><span style="font-weight:bold">Note : </span> Your remaining email credit is : <span style="font-weight:bold">{{HashMap.email_status}}</span></div>
+						<div style="padding-bottom:10px"><span style="font-weight:bold">{{agile_lng_translate 'menu' 'note'}} : </span> {{agile_lng_translate 'campaign-email' 'remaining-credit-is'}} : <span style="font-weight:bold">{{HashMap.email_status}}</span></div>
 						 
 						<div style="padding-bottom:10px">{{agile_lng_translate 'reports-email' 'email-for-created-report'}} 
 							<span>"{{HashMap.report_name}}"</span> at Agile CRM.
-							You can manage <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">reports</a> here.</div>
+							{{agile_lng_translate 'reports-email' 'you-can-manage'}} <a href="https://{{HashMap.domain}}.agilecrm.com/#reports" target="_blank">{{agile_lng_translate 'reports-email' 'reports'}}</a> {{agile_lng_translate 'widgets' 'here'}}.</div>
 					</div>
 					<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">
 						{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>

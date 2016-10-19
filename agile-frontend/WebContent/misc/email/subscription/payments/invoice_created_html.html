@@ -18,8 +18,8 @@
 		          </td>
 		          <td style="padding:20px 10px 10px;font-size:12px;text-align:right" colspan="2" valign="top">
 		            <p>
-		              Billing Date: {{date}}<br>
-		                Invoice#: {{invoice_id}}
+		              {{agile_lng_translate 'subscription-email' 'billing-date'}}: {{date}}<br>
+		                {{agile_lng_translate 'plan-and-upgrade' 'invoice'}}#: {{invoice_id}}
 		            </p>
 		          </td>
 		        </tr>
@@ -36,7 +36,7 @@
 		          </td>
 		          <td style="padding:10px;font-size:12px;border-top:1px solid #ccc" colspan="2" valign="top">
 		            <p>
-		              <strong>Bill To</strong><br>
+		              <strong>{{agile_lng_translate 'subscription-email' 'bill-to'}}</strong><br>
 		                {{user_name}}<br>
 		                {{company}}
 		            </p>
@@ -45,13 +45,13 @@
 		        </tr>
 		        <tr>
 		          <td style="padding:20px 10px 5px 10px;border-bottom:1px solid #cccccc;font-size:12px;font-weight:bold" valign="top">
-		            <p>Duration</p>
+		            <p>{{agile_lng_translate 'portlets' 'duration'}}</p>
 		          </td>
 		          <td style="padding:20px 10px 5px 10px;border-bottom:1px solid #cccccc;font-size:12px;font-weight:bold" valign="top">
-		            <p>Description</p>
+		            <p>{{agile_lng_translate 'misc-keys' 'description'}}</p>
 		          </td>
 		          <td style="padding:20px 10px 5px 10px;border-bottom:1px solid #cccccc;font-size:12px;font-weight:bold" valign="top">
-		            <p>Price</p>
+		            <p>{{agile_lng_translate 'subscription-email' 'price'}}</p>
 		          </td>
 		        </tr>
 		          <tr>
@@ -72,12 +72,12 @@
 
 		        <tr>
 		          <td>&nbsp;</td>
-		          <td style="padding:10px 10px 5px 10px;font-size:12px;font-weight:bold">Amount due:</td>
+		          <td style="padding:10px 10px 5px 10px;font-size:12px;font-weight:bold">{{agile_lng_translate 'subscription-email' 'amount-due'}}:</td>
 		          <td style="padding:10px 10px 5px 10px;font-size:12px;font-weight:bold;text-align:right">${{amount}}</td>
 		        </tr>
 		          <tr>
 		            <td colspan="3" style="padding:20px 5px 20px 0;font-size:12px" valign="top">
-		              <p style="font-size:10px;">This charge will appear on your credit card statement as "AgileCRM.com"</p>
+		              <p style="font-size:10px;">{{agile_lng_translate 'account-email' 'charge-appear-as-stmt'}} "AgileCRM.com"</p>
 		            </td>
 		          </tr>
 		      </tbody></table>
