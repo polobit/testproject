@@ -9,24 +9,26 @@ var _agile_synch_form_v4 = function()
 	}
 
 	var agile_button = document.getElementsByClassName("agile-button")[0];
-	if (agile_button)
+	if(agile_button)
 		agile_button.setAttribute("disabled", "disabled");
 
 	var agile_error_msg = document.getElementById("agile-error-msg");
-	if (agile_error_msg)
-	{
+	if(agile_error_msg) {
 		var spin = document.createElement("img");
 		spin.src = "https://s3.amazonaws.com/PopupTemplates/form/spin.gif";
 		agile_error_msg.appendChild(spin);
 	}
 
 	var agile_form = document.forms["agile-form"];
-	var agile_redirect_url = agile_form["_agile_redirect_url"].value;
+	if(!agile_form) return;
+
+	var agile_redirect_url = "#";
+	if(agile_form["_agile_redirect_url"]) {
+		agile_redirect_url = agile_form["_agile_redirect_url"].value
+	}
 
 	var agile_contact = {};
 	var agile_address = {};
-	var agile_multiple_checkbox = "";
-	var agile_tags = "";
 	var agile_notes = [];
 	var form_data = {};
 	var new_contact = true;
@@ -40,7 +42,9 @@ var _agile_synch_form_v4 = function()
             if(field.id && field.id == "g-recaptcha-response") continue;
 
             if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+            	
             	form_data[field.id] = field.value;
+            	
             	if ('address, city, state, country, zip'.indexOf(field.name) != -1) {
             		agile_address[field.name] = field.value;
             	} else if (field.type == 'select-multiple') {
@@ -62,13 +66,7 @@ var _agile_synch_form_v4 = function()
                     }
                 }
             
-                if(field.name == "tags" && agile_contact["tags"]) {
-	        		if(agile_tags)
-	        			agile_tags = agile_tags + ',' + agile_contact["tags"];
-	        		else
-	        			agile_tags = agile_contact["tags"];
-	        		delete agile_contact["tags"];
-        		} else if (field.name == "note" && agile_contact["note"]) {
+                if (field.name == "note" && agile_contact["note"]) {
 					var agile_note = {};
 					var closestParentLabelEl = agile_find_closest_element(field, function (el) {
 					if(el.getElementsByTagName("label")[0])
@@ -88,10 +86,10 @@ var _agile_synch_form_v4 = function()
 					}
 					agile_note.subject = agile_note.subject.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 					agile_note.description = agile_contact["note"];
-					agile_notes.push(agile_note);
+					if(agile_note.description)
+						agile_notes.push(agile_note);
 					delete agile_contact["note"];
 				}
-
 
             }
         }
@@ -102,9 +100,6 @@ var _agile_synch_form_v4 = function()
 	agile_address = JSON.stringify(agile_address);
 	if (agile_address.length > 2)
 		agile_contact.address = agile_address;
-
-	if (agile_tags)
-		agile_contact.tags = agile_tags;
 
 	var agile_email = agile_contact.email;
 	if (agile_email)
