@@ -428,7 +428,6 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
       'click #lead-leadscore' : 'onGetLeadScorebox',
       'focusout #lead-scorebox' : 'getLeadScore',
       'keyup  #lead-scorebox' : 'leadScoreValEnter',
-      'focusout #lead-input input' : 'leadInlineEdit',
       'click #leadName'  : 'toggleLeadsInlineEditFields',
       'keydown #lead-input-firstname' : 'leadNameChange',
       'keydown  #lead-input-lastname' : 'leadNameChange',
@@ -1913,11 +1912,6 @@ updateScoreValue :function(){
     setStyleForLeadScore(scoreboxval);
   },
 
-  leadInlineEdit : function(e)
-  {
-    inlineLeadNameChange(e);
-  },
-
   toggleLeadsInlineEditFields :function(e)
   { 
     $("#leadName").toggleClass("hidden");
@@ -1925,7 +1919,7 @@ updateScoreValue :function(){
     console.log(this);
     if(!$("#lead-input").hasClass("hidden"))
     {
-      $("#Contact-input-lastname").focus(); 
+      $("#lead-input-lastname").focus(); 
     }
   },
 

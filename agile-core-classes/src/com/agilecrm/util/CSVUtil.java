@@ -2273,15 +2273,21 @@ public class CSVUtil
 
     		    continue;
 
-    		// If contact is duplicate, it fetches old contact and updates
-    		// data.
+    		// If lead is duplicate with existed contact, it will not save.
     		if (ContactUtil.isDuplicateContact(tempContact))
+    		{
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Duplicate Contact existed with same email."));
+    			continue;
+    		}
+    		// If lead is duplicate, it fetches old lead and updates
+    		// data.
+    		if (ContactUtil.isDuplicateLead(tempContact))
     		{
     		    // Checks if user can update the contact
 
     		    // Sets current object to check scope
 
-    		    tempContact = ContactUtil.mergeContactFields(tempContact);
+    		    tempContact = ContactUtil.mergeLeadFields(tempContact);
     		    accessControl.setObject(tempContact);
     		    if (!accessControl.canCreate())
     		    {

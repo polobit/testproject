@@ -86,14 +86,14 @@
 									{{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
 										<div class="btn-group">
 											<button id="add-lead" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> {{agile_lng_translate 'leads-view' 'add-lead'}}</button>
-											<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-											<ul class="dropdown-menu pull-right" role="menu">
-												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}}
-												{{else}}
+											{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}}
+											{{else}}
+												<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+												<ul class="dropdown-menu pull-right" role="menu">
 													<li><a href="#import">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
-												{{/hasRestrictedMenuScope}}
-												<!-- <li><a href="#add-dashlet">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li> -->
-											</ul>
+													<!-- <li><a href="#add-dashlet">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li> -->
+												</ul>
+											{{/hasRestrictedMenuScope}}
 	    								</div>
 	    							{{else}}
 	    								<div class="btn-group">

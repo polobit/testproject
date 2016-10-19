@@ -2306,4 +2306,93 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 
 	return searchContactCountByEmailAndType(email, type) != 0 ? true : false;
     }
+    
+    /**
+     * Checks if lead have any duplicate email addresses. It iterates though
+     * all the email property fields if any of that email exists already. If
+     * lead is old, then it fetches old lead check whether duplicate email
+     * is newly added in to current lead
+     * 
+     * @param contact
+     * @return
+     */
+    public static boolean isDuplicateLead(Contact contact)
+    {
+	// Hold old contact if contact is not new.
+	Contact oldContact = null;
+
+	// Iterates though all email fields
+	for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+	{
+	    // In case email field value is empty it removes property from
+	    // contact and continue
+
+	    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
+	    {
+		System.out.println(contact.properties.contains(emailField));
+		contact.properties.remove(emailField);
+		continue;
+	    }
+
+	    // If email is not available, then it iterates though other emails
+	    if (!isExistsByType(emailField.value.toLowerCase(), Type.LEAD))
+		continue;
+
+	    // If count is not 0 and lead is new, then lead is
+	    // duplicate and true is returned
+	    if (contact.id == null)
+		return true;
+
+	    // If lead is not new, then it checks if email exists in current
+	    // lead sent.
+	    if (contact.isEmailExists(emailField.value))
+	    {
+		if (oldContact == null)
+		    oldContact = ContactUtil.getContact(contact.id);
+
+		// If email exists in old lead, then it is not considered
+		// duplicate lead
+		if (oldContact.isEmailExists(emailField.value))
+		    continue;
+	    }
+
+	    return true;
+	}
+
+	return false;
+    }
+    
+    public static Contact mergeLeadFields(Contact contact)
+    {
+	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	if (emails.size() == 0)
+	    return contact;
+
+	Contact oldContact = getDuplicateLead(contact);
+
+	if (oldContact != null)
+	    return mergeContactFeilds(contact, oldContact);
+
+	return oldContact;
+
+    }
+    
+    public static Contact getDuplicateLead(Contact contact)
+    {
+	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	if (emails.size() == 0)
+	    return contact;
+
+	Contact oldContact = null;
+	for (ContactField field : emails)
+	{
+	    oldContact = searchContactByEmailAndType(field.value, Type.LEAD);
+	    if (oldContact != null)
+		break;
+	}
+
+	return oldContact;
+    }
 }

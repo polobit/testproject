@@ -122,10 +122,10 @@ var timeline_entity_loader = {
 						
 						});
 
-					if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact.id)
+					if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact.id && App_Contacts.contactDetailView.get('type') != 'LEAD')
 						return;
 
-					if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') !== contact.id)
+					if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') !== contact.id && App_Leads.leadDetailView.get('type') == 'LEAD')
 						return;
 
 					var contact_emails = [];

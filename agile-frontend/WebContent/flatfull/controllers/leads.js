@@ -211,6 +211,16 @@ var LeadsRouter = Backbone.Router.extend({
 		this.leadDetailView = new Contact_Details_Model_Events({ data : lead, isNew : true, template : "leads-details",
 			postRenderCallback : function(el)
 			{
+				$(el).on('click',function(el){
+					var newId = el.target.id;
+					if(newId == "leadName" || newId == 'lead-input-firstname' || newId == 'lead-input-lastname')
+					{
+						return;
+					}
+
+					inlineLeadNameChange(el,newId);
+				});
+				
 				App_Leads.leadDetails = new LeadDetails();
 
 				App_Leads.leadDetails.loadLeadTabs(el, lead.toJSON());
