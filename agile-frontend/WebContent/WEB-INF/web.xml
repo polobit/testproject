@@ -1558,7 +1558,7 @@
 
 	<servlet-mapping>
 		<servlet-name>SaveFormData</servlet-name>
-		<url-pattern>/savedformdata</url-pattern>
+		<url-pattern>/addformstats</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

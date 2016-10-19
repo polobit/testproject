@@ -224,7 +224,12 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			}
 		}	
 
-		
+		agile_track_form_action({
+			"id" : form_data._agile_form_id || null,
+			"name" : form_name,
+			"email" : emailVal
+		});
+
 	}, 1500);
 }
 
