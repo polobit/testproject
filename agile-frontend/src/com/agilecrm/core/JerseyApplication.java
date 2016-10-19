@@ -165,6 +165,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.prefs.EmailTemplateCategoryAPI.class);
 		
 	s.add(com.agilecrm.core.api.videorecords.VideoRecordAPI.class);
+	s.add(com.agilecrm.core.api.forms.FormReportsAPI.class);
 
 	return s;
     }
