@@ -411,7 +411,7 @@ function initializeInboxListeners(){
 			else if(folder_type == "trash")
 					url = url.concat("&folder_name=Trash");
 
-			if(server != "exchange"){
+			if(server_type != "exchange"){
 				renderToMailList(url,offset,page_size);
 			}
 		}		
