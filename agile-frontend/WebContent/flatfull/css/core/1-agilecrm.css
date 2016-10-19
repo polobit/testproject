@@ -4610,11 +4610,6 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
-#purchase_credits, #manage_auto_recharge{
-	background-color: #f6f6f6;
-  padding: 0px 5px 3px 5px;
-  border-radius: 3px;
-}
 
 /* start of dialler */
 
@@ -4816,3 +4811,22 @@ ul#recent-menu-model-list li:nth-child(even)
   background:#ccc;
   border-radius:10px;
 }
+
+.agile-feature-item-blink-new:before, .agile-feature-item-blink-new:after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    pointer-events: none;
+    background: orange;
+    border-radius: 1000px;
+    right: 22px;
+    top: 19px;
+}
+.agile-feature-item-blink-new:after
+{
+    animation:pulse-location 1s infinite;
+}
+@keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+@-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+

@@ -586,14 +586,14 @@ public class ReportsUtil {
 											|| field.equalsIgnoreCase("last_emailed") || field
 												.equalsIgnoreCase("last_called") || field
 												.equalsIgnoreCase("updated_time") || field
-												.equalsIgnoreCase("last_campaign_emailed")))
+												.equalsIgnoreCase("last_campaign_emaild")))
 								fieldValue = " ";
 							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
 										.equalsIgnoreCase("last_called") || field
-										.equalsIgnoreCase("last_campaign_emailed"))
+										.equalsIgnoreCase("last_campaign_emaild"))
 									&& !fieldValue.equals(" "))
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long

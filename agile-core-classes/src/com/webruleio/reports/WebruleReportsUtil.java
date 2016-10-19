@@ -68,7 +68,7 @@ public class WebruleReportsUtil
      * @return - json array
      * @throws Exception
      */
-    public static JSONArray getWebruleJSONQuery(String query, Connection conn) throws Exception
+    public static JSONArray getWebruleJSONQuery(String query) throws Exception
     {
 	System.out.println("Query " + query);
 

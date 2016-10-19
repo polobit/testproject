@@ -1177,7 +1177,7 @@ $(function()
 			}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -1213,7 +1213,7 @@ $(function()
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 			element = element.replace("_", " ")
-			if(element=='last campaign_emailed')
+			if(element=='last campaign_emaild')
 				element = element.replace("_", " ")
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
 
@@ -6601,7 +6601,7 @@ $(function()
 		}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -7622,7 +7622,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
