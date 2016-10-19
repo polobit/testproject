@@ -183,7 +183,7 @@ public class ContactsAPI
     
     JSONObject json  = new JSONObject();
 	try {
-		json.put("count", getContactsCount());
+		json.put("count", Contact.dao.getCountByProperty(new HashMap()));
 	} catch (JSONException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
