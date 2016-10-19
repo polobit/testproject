@@ -127,13 +127,13 @@ public class DealTriggerUtil
 				 HashMap<String, Object> map = new HashMap<String, Object>();
 				    map.put("deal", updatedOpportunity);
 				    	   
-			for (DomainUser user  : user_list)
+			/*for (DomainUser user  : user_list)
 			{
 				 map.put("user", user);
 				 NotificationPrefs NotePref = NotificationPrefsUtil.getNotificationPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 				 if(user.menu_scopes.contains(NavbarConstants.DEALS) && NotePref.deal_closed_email)
 					SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
-			}
+			}*/
 
 			}
 			// execute trigger for deal milestone change.
