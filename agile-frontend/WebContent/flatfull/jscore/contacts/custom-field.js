@@ -128,7 +128,7 @@ function showCustomFieldModel(data)
 		             	}
 		            }
 		            else if(typ == 'deals'){
-		            	if(App_Admin_Settings.dealCustomFieldsListView && App_Admin_Settings.dealCustomFieldsListViewcollection)
+		            	if(App_Admin_Settings.dealCustomFieldsListView && App_Admin_Settings.dealCustomFieldsListView.collection)
 		                {
 		                   	$.each(App_Admin_Settings.dealCustomFieldsListView.collection.models , function(i,m)
 							{
