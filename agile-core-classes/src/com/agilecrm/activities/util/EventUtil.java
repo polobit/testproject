@@ -19,6 +19,7 @@ import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -763,7 +764,7 @@ public class EventUtil
 	   	    						String modifiedContactName = (contactName.substring(0, 1).toUpperCase() + contactName.substring(1));
 	   	    						contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ modifiedContactName +"</a>, ");
 	   	    					}	   	    					
-	   	    				}else if(contact.type.equals(ContactType.COMPANY)){
+	   	    				}else if(contact.type.equals(Contact.Type.COMPANY)){
 	   	    					if(contact.name != null){
 	   	    						String companyName = (contact.name.substring(0, 1).toUpperCase() + contact.name.substring(1));
 	   	    						companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ companyName +"</a>, ");
