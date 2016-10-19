@@ -82,8 +82,8 @@ public class WebruleReportsSQLUtil
 	    String type)
     {
 	String domain = NamespaceManager.get();
-	AnalyticsDBConnectionFetcher fetch = new AnalyticsDBConnectionFetcher();
-	Connection cont = fetch.getConnection();
+	//AnalyticsDBConnectionFetcher fetch = new AnalyticsDBConnectionFetcher();
+	//Connection cont = fetch.getConnection();
 
 	// For develoment
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
@@ -118,7 +118,7 @@ public class WebruleReportsSQLUtil
 	System.out.println(query);
 	try
 	{
-	    return WebruleReportsUtil.getWebruleJSONQuery(query, cont);
+	    return WebruleReportsUtil.getWebruleJSONQuery(query);
 	}
 	catch (Exception e)
 	{
@@ -131,8 +131,8 @@ public class WebruleReportsSQLUtil
 	    String type)
     {
 	String domain = NamespaceManager.get();
-	AnalyticsDBConnectionFetcher fetch = new AnalyticsDBConnectionFetcher();
-	Connection cont = fetch.getConnection();
+	//AnalyticsDBConnectionFetcher fetch = new AnalyticsDBConnectionFetcher();
+	//Connection cont = fetch.getConnection();
 	// For development
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	    domain = "localhost";
@@ -161,7 +161,7 @@ public class WebruleReportsSQLUtil
 	System.out.println(query);
 	try
 	{
-	    return WebruleReportsUtil.getWebruleJSONQuery(query, cont);
+	    return WebruleReportsUtil.getWebruleJSONQuery(query);
 	}
 	catch (Exception e)
 	{
