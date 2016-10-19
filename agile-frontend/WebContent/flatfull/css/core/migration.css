@@ -2017,6 +2017,33 @@ display: block!important;
  .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
  .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
 
+ /*Marketing Modules Responsive Style Start*/
+
+  .add-landing-pages-btn,.add-form-btn,.add-push-notify-btn{
+    text-align: center !important;
+    float: none !important;
+  }
+  .manage-forms-btn{
+    text-align: center !important;
+    float: none !important;
+    margin-right: 0px !important;
+  }
+  #learn-workflows h4,#learn-forms h4,#learn-email-templates h4,#learn-push-notify h4{
+    font-size: 14px !important;
+  }
+  #learn-workflows p,#learn-forms p,#learn-email-templates p,#learn-push-notify p{
+    font-size: 12px !important;
+  }
+  .forms-title,.push-notification-title{
+    text-align: center !important;
+  }
+  .add-form-btn a,.add-push-notify-btn a{
+    text-align: center !important;
+    float: none !important;
+  }
+
+ /*Marketing Modules Responsive Style End*/
+
 }
 
 @media all and (min-width: 768px) {

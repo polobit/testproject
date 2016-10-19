@@ -42,10 +42,14 @@ var Form_Collection_Events = Base_Collection_View.extend({
 });
 
 $('body').on('mouseenter','#forms-model-list tr', function(e){
+		if(agile_is_mobile_browser())
+			return;
          $(this).find('#formcode_manager').removeClass('hide');
     });
 
 $('body').on('mouseleave','#forms-model-list tr', function(e){
+		if(agile_is_mobile_browser())
+			return;
          $(this).find('#formcode_manager').addClass('hide');
     });
 

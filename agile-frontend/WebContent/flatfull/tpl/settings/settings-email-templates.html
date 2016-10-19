@@ -1,8 +1,16 @@
 <script id="settings-email-templates-collection-template" type="text/html">
     <div class="col" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
-	<div class="hbox h-auto m-b-lg">
+	{{#is_mobile}}
+        <div class="hbox h-auto">
+    {{else}}
+        <div class="hbox h-auto m-b-lg">
+    {{/is_mobile}}
     <div class="panel panel-default">
-        <div class="panel-heading">
+        {{#is_mobile}}
+            <div class="panel-heading b-n">
+        {{else}}
+            <div class="panel-heading">
+        {{/is_mobile}}
             <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates'}}</div>
 			<div class="pull-right">
             	<a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
@@ -13,72 +21,97 @@
    
 	<div id="slate"></div>
 	{{#if this.length}}
-    <div class="table-responsive">
-        <table class="table table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
-           
-            <thead>
-                <tr>
-                    <th class="hide">Id</th>                    
-					<th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{agile_lng_translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
-                    {{#is_mobile}}
-                    {{else}}
-                    <th style="width:30%;">{{agile_lng_translate 'other' 'subject'}}</th>
-                    <th style="width:40%;"></th>
-                    {{/is_mobile}}
-                </tr>
-            </thead>
-            <tbody id="settings-email-templates-model-list" route="emailbuilder/">
-            </tbody>
-        </table>
-     </div>
+    {{#is_mobile}}
+        <div>
+            <table class="table panel m-b-none agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
+                <tbody id="settings-email-templates-model-list" route="emailbuilder/">
+                </tbody>
+            </table>
+        </div>
+    {{else}}
+        <div class="table-responsive">
+            <table class="table table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
+               
+                <thead>
+                    <tr>
+                        <th class="hide">Id</th>                    
+                        <th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{agile_lng_translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
+                        {{#is_mobile}}
+                        {{else}}
+                        <th style="width:30%;">{{agile_lng_translate 'other' 'subject'}}</th>
+                        <th style="width:40%;"></th>
+                        {{/is_mobile}}
+                    </tr>
+                </thead>
+                <tbody id="settings-email-templates-model-list" route="emailbuilder/">
+                </tbody>
+            </table>
+        </div>
+    {{/is_mobile}}
 	{{/if}}
 	
     </div>
 </div>
 </div>
-    <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
-        <div class="data-block">
-        <div class="p-l p-r">
-            <h4 class="m-t-none">
-                {{agile_lng_translate 'preferences' 'email-templates'}}
-            </h4>
-            
-            <p>
-                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
-            </p>
-            <p>
-                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
-            </p>
-           </div>
+    {{#is_mobile}}
+        <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
+            <div class="data-block">
+            <div class="{{#is_mobile}} p-l-none {{/is_mobile}} p-l p-r" id="learn-email-templates">
+                <h4 class="m-t-none">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                </h4>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                </p>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                </p>
+               </div>
+            </div>
         </div>
-    </div>
+    {{else}}
+        <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
+            <div class="data-block">
+            <div class="{{#is_mobile}} p-l-none {{/is_mobile}} p-l p-r">
+                <h4 class="m-t-none">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                </h4>
+                
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                </p>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                </p>
+               </div>
+            </div>
+        </div>
+    {{/is_mobile}}
 
 </script>
 
  <script id="settings-email-templates-model-template" type="text/html">
-    <td class='data hide' data='{{id}}'></td>
-    <td>
-		<div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
-    		{{name}}
-            {{#is_mobile}}
-            <br>
-            {{subject}}
-            {{/is_mobile}}
-    	</div>
-    </td>
     {{#is_mobile}}
+        <td class='data hide' data='{{id}}'></td>
+        <td>
+            <div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
+                <div class="text-base">{{name}}</div>
+                <div class="text-sm">{{subject}}</div>
+            </div>
+        </td>
     {{else}}
-    <td>
-    	<div class="table-resp">
-    		{{subject}}
-    	</div>
-    </td>   
-    <td class="text-muted" style="color: #b2b0b1;">
-       {{#if created_time}}
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{emailTemplateOwner.name}}
-          </div>
-       {{/if}}
-    </td>
+        <td class='data' data='{{id}}'></td>
+        <td>
+        	<div class="table-resp">
+        		{{subject}}
+        	</div>
+        </td>   
+        <td class="text-muted" style="color: #b2b0b1;">
+           {{#if created_time}}
+              <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
+        	       {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{emailTemplateOwner.name}}
+              </div>
+           {{/if}}
+        </td>
     {{/is_mobile}}
 </script>
