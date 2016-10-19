@@ -80,7 +80,7 @@ public class NotificationPrefs {
 	public boolean deal_closed = true;
 
 	@NotSaved(IfDefault.class)
-	public boolean deal_closed_email = true; // ad
+	public boolean deal_closed_email = false; // ad
 
 	/**
 	 * Tag created notification - default true.
