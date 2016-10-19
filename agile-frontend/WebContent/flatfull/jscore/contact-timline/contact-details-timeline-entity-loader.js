@@ -41,6 +41,9 @@ var timeline_entity_loader = {
 		this.load_stats(contact);
 		this.load_campaign_logs(contactId);
 		
+		if(!getPropertyValue(contact.properties, "email")){
+			return;
+		}
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
 		//setTimeout(this.load_reload_emails, 5000);
 	},
@@ -51,7 +54,10 @@ var timeline_entity_loader = {
 		this.load_related_entites(companyId);
 		this.load_stats(contact);
 		this.load_campaign_logs(companyId);
-		
+
+		if(!getPropertyValue(contact.properties, "email")){
+			return;
+		}
 		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Companies.companyDetailView.el);
 		//setTimeout(this.load_reload_emails, 5000);
 	},
