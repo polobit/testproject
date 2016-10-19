@@ -48,7 +48,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(invoiceJSON.getLong("period_start") * 1000);
 					cal.add(Calendar.YEAR, 2);
-					StripeUtil.addTrial(invoiceJSON.getString("customer"), data.getString("id"), cal.getTime().getTime());
+					StripeUtil.addTrial(invoiceJSON.getString("customer"), data.getString("id"), (cal.getTime().getTime())/1000);
 					StripeUtil.closeInvoice(invoiceJSON.getString("id"));
 					System.out.println("Added trial for biennial customer and invoice closed "+invoiceJSON.getString("id"));
 				}
