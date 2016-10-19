@@ -543,7 +543,7 @@ function initializeDealListners(el){
 				dealModel.set({ "pipeline_id" : track }, { silent : true });
 				update_milestone(dealModel, deal_id, newMilestone, old_milestone, true, "", false);
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
-				var modelsLength = dealsCollection[0].get('dealCollection').models.length ;
+				var modelsLength = $("#" + old_milestone.replace(/ +/g, "")).find('ul li.deal-color').size() ;
 	        	if(modelsLength ==10 && modelsLength <= parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text()))
 	        	{
 	          		dealsCollection[0]['isUpdateCollection'] = true ;
