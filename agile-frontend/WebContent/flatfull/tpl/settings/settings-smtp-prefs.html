@@ -1,0 +1,93 @@
+<script id="settings-smtp-prefs-template" type="text/html">
+<div class="row">
+<div class="col-md-4 col-sm-6">
+<div class="panel panel-default">
+<div class="panel-heading font-bold"><h4 class="h4">{{agile_lng_translate 'prefs-data-sync' 'smtp'}}</h4></div>
+    <div class="panel-body">
+    <form id="smtp-prefs-form">
+        
+        <fieldset>
+            {{#if id}}
+            {{add_tag "Email"}}
+            <input name="id" type="hidden" value="{{id}}" /> 
+            {{/if}}
+            <div class="control-group form-group">
+                <label class="control-label">
+                    {{agile_lng_translate 'prefs-email' 'server-host'}} 
+                    <span class="field_req">*</span>
+                </label>
+
+                <div class="controls">
+                    <select id="server_host" name="server_host" class="form-control">
+                        <!-- <option value="smtp.gmail.com">Gmail</option>
+                        <option value="smtp.mail.yahoo.com">Yahoo</option> -->
+                        <option value="smtp.live.com">Outlook</option>
+                        <option value="smtp.office365.com">Office 365</option>
+                        <option value="">Other</option>
+                    </select>
+                    &nbsp;
+                    <input id="server_url" name="server_url" type="text" class="required form-control" placeholder="{{agile_lng_translate 'prefs-email' 'server-url'}}" value="{{server_url}}" autocapitalize="off" readonly="readonly" />
+                </div>
+            </div>
+            <div class="control-group form-group">
+                <label class="control-label">{{agile_lng_translate 'prefs-email' 'user-name'}} <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="user_name" type="email" class="required form-control" placeholder="{{agile_lng_translate 'prefs-email' 'user-name'}}" value="{{user_name}}" autocapitalize="off" />
+                </div>
+            </div>
+            <div class="control-group form-group">
+                <label class="control-label">{{agile_lng_translate 'prefs-settings' 'password'}} <span class="field_req">*</span></label>
+                <div class="controls">
+                    <input name="password" id="smtp-password" type="password" class="required form-control" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" autocapitalize="off" />
+                </div>
+            </div>
+            
+                <div class="control-group form-group" id="useSSLCheckboxHolder">
+                    <div class="controls">
+                        <div class="checkbox">
+                            <label class="i-checks i-checks-sm">
+                                <input name="is_secure" type="checkbox" value="{{is_secure}}" checked/><i></i>
+                                {{agile_lng_translate 'prefs-email' 'use-ssl-secure-communication'}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="alert danger info-block alert-warning text-black">
+                <b>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</b><br>
+                {{agile_lng_translate 'prefs-email' 'smtp-note1'}} <br>
+                {{agile_lng_translate 'prefs-email' 'smtp-note2'}} <br>
+            </div>
+
+           <!--  <div class="control-group form-group m-t-sm" >
+                <div class="controls">
+                    <a href="#" class="smtp-share-settings-select text-info" oid={{id}}><i class='icon-plus-sign'/></i> {{agile_lng_translate 'prefs-email' 'sharing-settings'}}</a>
+                    <span class ="smtp-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
+                     <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'prefs-email' 'gmail-settings-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'prefs-email' 'email-account-sharing'}}">
+                    </span>
+                    <span class="smtp-share-select" style="display:none;">
+                    <a href="#" class="smtp-share-settings-cancel" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> {{agile_lng_translate 'prefs-email' 'sharing-settings'}}</a>
+                    <span style="vertical-align:text-top;margin-left:-3px">         
+                     <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'prefs-email' 'gmail-settings-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'prefs-email' 'email-account-sharing'}}">
+                    </span>
+                    <br>
+                    <label class="control-label" style="margin-top:10px">{{agile_lng_translate 'prefs-email' 'select-users-to-share-with'}}</label>
+                    <select name="shared_with_users_ids" multiple id="smtp-share-user-select" class = "multi-select form-control" style="margin-bottom: 5px; overflow: auto">
+                    </select>
+                    <span class="smtp-share-status"></span>
+                    </span>
+                </div>
+            </div> -->
+
+            
+            <div class="form-group form-actions"> 
+                <a href="#email" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+                <button type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}} </button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</script>
