@@ -417,7 +417,7 @@ Proceed to Trial
 				              		</div>
 				            	</div>
 				            	<div class="form-group m-b-sm">
-					             	<label class="col-sm-6 control-label p-t-none ">
+					             	<label class="col-sm-6 control-label p-t-none "  {{#is_mobile}}{{else}}style="white-space: nowrap;"{{/is_mobile}}>
 					             	 {{agile_lng_translate 'plan-and-upgrade' 'last-purchased-amount'}}
 					             	</label>
 					              	<div class="col-sm-6">
@@ -430,20 +430,6 @@ Proceed to Trial
 				              		</label>
 				              		<div class="col-sm-6">
 				               		{{epochToHumanDate "mmm dd, yyyy" currentPeriodStart}}
-				              		</div>
-				            	</div>
-				            	<div class="form-group m-b-sm">
-				              		<label class="col-sm-6 control-label p-t-none ">
-				              		{{#is_paid_emails}}
-				               			{{else}}
-				               			{{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
-				               			{{/is_paid_emails}}
-				              		</label>
-				              		<div class="col-sm-6" id="next_emails_renewal">
-				               		{{#is_paid_emails}}
-				               			{{else}}
-				               			{{emails_next_renewal_time}}
-				               			{{/is_paid_emails}}
 				              		</div>
 				            	</div>
 						</form>
@@ -473,7 +459,9 @@ Proceed to Trial
 			              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
 			              		</label>
 			              		<div class="col-sm-6">
-			               		{{getRemaininaEmails}}
+			               		{{getRemaininaEmails}}{{#brandedemailstatus}} {{#is_paid_emails}}
+                            (Branded){{else}}(Unbranded){{/is_paid_emails}} {{else}}
+                            {{/brandedemailstatus}}
 			              		</div>
 			           	</div>
 			           	<div class="form-group m-b-sm">

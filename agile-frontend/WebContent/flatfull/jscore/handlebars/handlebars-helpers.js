@@ -7729,3 +7729,11 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 		return options.inverse(this);
 	
 });
+Handlebars.registerHelper('brandedemailstatus', function(options)
+{
+	var count = getPendingEmails();
+	if(count == 0)
+		return options.inverse(this);
+	return options.fn(this);
+
+});
