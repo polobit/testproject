@@ -663,7 +663,10 @@
         <property name="feedback_flag" direction="asc"/>
         <property name="created_time" direction="asc"/>
     </datastore-index> 
-    
+     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="dealSource" direction="asc"/>
+        <property name="won_date" direction="asc"/>      
+    </datastore-index>
 </datastore-indexes>
 
 
