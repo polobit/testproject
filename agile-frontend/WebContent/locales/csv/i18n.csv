@@ -5603,3 +5603,4 @@ prefs-email.smtp-note1,1. SMTP email address needs to be verified for sending em
 prefs-email.smtp-note2,2. Emails with attachments will be sent through default gateway.,2. Mensajes de correo electrónico con archivos adjuntos serán enviados a través de puerta de enlace predeterminada.,,,,,,,,,,,,,
 report-view.won-deals-user, Won Deals Analysis,,,,,,,,,,,,,,
 report-view.won-deal-details,Get insights on deals won (count/revenue) by users over time,,,,,,,,,,,,,,
+prefs-notifications.for-ringcentral-only,For RingCentral Only,,,,,,,,,,,,,,
