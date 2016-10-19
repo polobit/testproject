@@ -1729,9 +1729,9 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-					initializeCustomRangeInModal(base_model,elData);
 			that.addPortletSettingsModalContent(base_model,
 					"portletsDealsWonSettingsModal");
+					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Deals Funnel": {
@@ -1884,7 +1884,6 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 				
-				initializeCustomRangeInModal(base_model,elData);
 			if (leaderboardCate && leaderboardCate.revenue)
 				$("#category-list", elData).find('option[value=revenue]').attr(
 						"selected", "selected");
@@ -1919,6 +1918,7 @@ var portlet_utility = {
 				$('#ms-category-list', elData).addClass(
 						'portlet-category-ms-container');
 			});
+				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Revenue Graph": {
