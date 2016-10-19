@@ -5596,3 +5596,8 @@ admin-settings-users.update-events,Update Events,
 admin-settings-users.delete-events,Delete Events,
 admin-settings-users.create-update-delete-events-content,Add and edit events owned by other users. Delete own and other user events,
 admin-settings-users.view-events-owned-by-others,View events owned by other users,
+prefs-email.smtp-content,Send emails from your email provider.,Enviar mensajes de correo electrónico de su proveedor de correo electrónico.
+prefs-data-sync.smtp,SMTP,SMTP
+prefs-email.smtp,SMTP,SMTP
+prefs-email.smtp-note1,1. SMTP email address needs to be verified for sending emails&#44; in the 'From' section of Send Email.,1. dirección de correo electrónico SMTP debe ser verificado para el envío de mensajes de correo electrónico&#44; en la sección "De" de Enviar correo electrónico.
+prefs-email.smtp-note2,2. Emails with attachments will be sent through default gateway.,2. Mensajes de correo electrónico con archivos adjuntos serán enviados a través de puerta de enlace predeterminada.
