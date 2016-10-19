@@ -54,6 +54,8 @@ function initializeOnlineCalendarListners(el){
 
 				if(textWithStyle && textWithStyle.indexOf('"') >= 0){
 					$(saveBtn).next().html("{{agile_lng_translate 'calendar' 'double-quotes-not-allowed'}}");
+					$(saveBtn).next().removeClass("text-success")
+				    $(saveBtn).next().addClass("text-danger");
 					enable_save_button($(saveBtn));
 					setTimeout(function(){
 					  $(saveBtn).next().empty();							
