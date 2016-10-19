@@ -170,13 +170,16 @@ public class ContactOfficeUtil
 
 	try
 	{
+		//http://54.87.153.50:8080/exchange-app-beta/inbox-exchange
+		//http://localhost:8080/DemoProject/inboxexchange
+		
 		if(flag != null && !flag.equals("") && flag != ""){
-			url = "http://54.87.153.50:8080/exchange-app-beta/inbox-exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+			url = "http://localhost:8080/DemoProject/inboxexchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
 				    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
 				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
 				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8")+"&flag="+URLEncoder.encode(flag)+"&mesnum="+URLEncoder.encode(messageid);
 		}else{
-		    url = "http://54.87.153.50:8080/exchange-app-beta/inbox-exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+		    url = "http://localhost:8080/DemoProject/inboxexchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
 			    + "&foldername=" + foldername + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
 			    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
 			    + "&domain=" + URLEncoder.encode(namespace, "UTF-8")+ "&search_content="+ URLEncoder.encode(search_content);

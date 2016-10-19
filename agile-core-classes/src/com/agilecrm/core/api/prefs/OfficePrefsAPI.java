@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -346,9 +347,10 @@ public class OfficePrefsAPI
      * @return
      */
     @Path("setFlags")
-    @GET
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.TEXT_HTML})
-    public String setFlags(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid){
+    public String setFlags(@FormParam("from_email") String fromEmail, @FormParam("folder_name") String folder_name,@FormParam("flag") String flag, @FormParam("messageid") String messageid){
     	
     	String status="";
 		try{
@@ -357,7 +359,7 @@ public class OfficePrefsAPI
 		    String gmailURL = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail,folder_name,"", "","", flag, messageid);
 		    // If both are not set, return Contact emails.
 		    if (StringUtils.isNotBlank(gmailURL)){
-		    	if(ContactEmailUtil.sendFlagstoServer(gmailURL)){
+		    	if(ContactEmailUtil.sendFlagstoExchangeServer(gmailURL)){
 		    		status = "success";
 		    	}else{
 		    		status = "failed";
@@ -380,9 +382,10 @@ public class OfficePrefsAPI
      * @return
      */
     @Path("getContent")
-    @GET
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<EmailWrapper> getMailContent(@QueryParam("from_email") String fromEmail, @QueryParam("folder_name") String folder_name,@QueryParam("flag") String flag, @QueryParam("messageid") String messageid)
+    public List<EmailWrapper> getMailContent(@FormParam("from_email") String fromEmail, @FormParam("folder_name") String folder_name,@FormParam("flag") String flag, @FormParam("messageid") String messageid)
     {
 	List<EmailWrapper> emails = null;
 	try
@@ -392,7 +395,7 @@ public class OfficePrefsAPI
 	    String gmailURL = ContactOfficeUtil.getNewOfficeURL(normalisedFromEmail,folder_name,"", "","", flag, messageid);
 	    // If both are not set, return Contact emails.
 	    if (StringUtils.isNotBlank(gmailURL))
-		emails = ContactEmailUtil.getMailContentfromServer(gmailURL);
+		emails = ContactEmailUtil.getMailContentfromExchangeServer(gmailURL);
 	}
 	catch (Exception e)
 	{

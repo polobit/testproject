@@ -78,7 +78,7 @@ function inboxFlagListners(){
 		if(server == "imap")
 			url ="core/api/imap/getContent?";
 		if(server == "exchange")
-				url ="core/api/office/getContent?";
+				url ="core/api/office/getContent";
 
 		var folder_type = $('#inbox-email-type-select').attr("folder-type");
 		if(folder_type == "inbox")
@@ -90,8 +90,13 @@ function inboxFlagListners(){
 		else if(folder_type == "trash")
 			folder_name = "Trash";
 
-		url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal,
-		getContent(url,dataVal);
+		if(server == "exchange"){
+			//url = url; //+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal,
+			getExchangeContent(url,from_email,folder_name,dataVal);
+		}else{
+			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal,
+			getContent(url,dataVal);
+		}
 		$(this).css({"font-weight":"normal"});
 		$(this).removeClass("unread");
 		$(this).addClass("read");
@@ -108,7 +113,7 @@ function inboxFlagListners(){
 		if(server == "imap")
 			url ="core/api/imap/setFlags?";
 		if(server == "exchange")
-				url ="core/api/office/setFlags?";
+				url ="core/api/office/setFlags";
 
 		var folder_type = $('#inbox-email-type-select').attr("folder-type");
 		if(folder_type == "inbox")
@@ -120,8 +125,12 @@ function inboxFlagListners(){
 		else if(folder_type == "trash")
 			folder_name = "Trash";
 
-		url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal,
-		setSeenFlag(url);
+		if(server == "exchange"){
+			setExchangeFlag(url,from_email,folder_name,'DELETED',dataVal);
+		}else{
+			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal,
+			setSeenFlag(url);
+		}
 
 		var curr_val = $(".inti-val").text();
 		var offset = curr_val.split(" - ")[0].trim();
@@ -131,13 +140,15 @@ function inboxFlagListners(){
 
 		url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name="+folder_name);
-		dataVal = dataVal.replace(/[^\w\s]/gi, '-');
+		var dataVal_new = dataVal.replace(/[^\w\s]/gi, '-');
 		var tot_val = $(".totalcount").text();
 		$(".totalcount").text(parseInt(tot_val)-1);
-		$("#li"+dataVal).remove();
-		$("#"+dataVal).remove();
+		$("#li"+dataVal_new).remove();
+		$("#"+dataVal_new).remove();
 		globalMailCollectionInstance.remove(dataVal); //.get(dataVal);
-		renderToMailList(url,offset,page_size);
+		if(server != "exchange"){
+			renderToMailList(url,offset,page_size);
+		}
 		$("#mails-list").show();
 		$("#mail-details-view").hide();
 		$(".inbox-reply-view").html("");
@@ -161,11 +172,11 @@ function setSeenFlag(url,dataVal, attrid){
 	});
 }
 function getContent(url,dataVal){
-	dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 	$.ajax({ 
 		url :url,
 		contentType: "application/json; charset=utf-8",
 		success : function(data){
+			dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 			var html = "";
 			getTemplate("mail-message", data, undefined, function(template_ui) {
 				if( !template_ui )	return;
@@ -178,6 +189,58 @@ function getContent(url,dataVal){
 	        $("#message"+dataVal).html(html);
 	        $("#mails-list").hide();
 	        $("#mail-details-view").show();
+		} 
+	});
+}
+
+function getExchangeContent(url,from_email,folder_name,messageid){
+	var requestesData = {"from_email":from_email,"folder_name":folder_name,"flag":"content","messageid":messageid};
+	$.ajax({ 
+		url :url,
+		method:"POST",
+		data:requestesData,
+		success : function(data){
+			var dataVal = messageid.replace(/[^\w\s]/gi, '-');
+			var html = "";
+			getTemplate("mail-message", data, undefined, function(template_ui) {
+				if( !template_ui )	return;
+
+				html = template_ui;
+			}, '#message'+dataVal);
+			
+	        $("#message"+dataVal).html(html);
+	        $("#mails-list").hide();
+	        $("#mail-details-view").show();
+		} 
+	});
+}
+function setExchangeFlag(url,from_email,folder_name,flag,messageid){
+	var requestesData = {"from_email":from_email,"folder_name":folder_name,"flag":flag,"messageid":messageid};
+	$.ajax({ 
+		url :url,
+		method:"POST",
+		data:requestesData,
+		success : function(data){
+			if(flag == "DELETED"){
+				var curr_val = $(".inti-val").text();
+				var offset = curr_val.split(" - ")[0].trim();
+				offset = parseInt(offset)+10;
+				var page_size = curr_val.split(" - ")[1].trim();
+				page_size = parseInt(page_size)+1;
+				var folder_type = $('#inbox-email-type-select').attr("folder-type");
+				if(folder_type == "inbox")
+					folder_name = "INBOX";
+				else if(folder_type == "sent")
+					folder_name = "Sent";
+				else if(folder_type == "draft")
+					folder_name = "Draft";
+				else if(folder_type == "trash")
+					folder_name = "Trash";
+		
+				url = $('#inbox-email-type-select').attr("data-url");
+				url = url.concat("&folder_name="+folder_name);
+				renderToMailList(url,offset,page_size);
+			}
 		} 
 	});
 }
@@ -292,10 +355,37 @@ function initializeInboxListeners(){
 		var urlval = returnUrl();
 		if(urlval){
 			urlval = urlval+"&flag=DELETED";
-			setSeenFlag(urlval);
+			var server_type = $("#inbox-email-type-select").attr("data-server");
+			if(server_type == "exchange"){
+				var url_exchange = "core/api/office/setFlags";
+				var folder_name_exchange = "";
+				var folder_type_exchange = $('#inbox-email-type-select').attr("folder-type");
+				if(folder_type_exchange == "inbox")
+					folder_name_exchange = "INBOX";
+				else if(folder_type_exchange == "sent")
+					folder_name_exchange = "Sent";
+				else if(folder_type_exchange == "draft")
+					folder_name_exchange = "Draft";
+				else if(folder_type_exchange == "trash")
+					folder_name_exchange = "Trash";
+
+				var meesageids_exchange  = null;
+		        $.each($("input[name='mailcheck']:checked"), function(){    
+			        if(meesageids_exchange == null){
+			            meesageids_exchange = $(this).val();
+			        }else{
+			        	meesageids_exchange = meesageids_exchange+','+$(this).val();
+			        }
+		        });
+				var from_email_exchange = $('#inbox-email-type-select').attr("from_email");
+				setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'DELETED',meesageids_exchange);
+			}else{
+				setSeenFlag(urlval);
+			}
 			for(var i=0;i<idcol.length;i++){
-				$("#li"+idcol[i]).remove();
-				$("#"+idcol[i]).remove();
+				var dataVal = idcol[i].replace(/[^\w\s]/gi, '-');
+				$("#li"+dataVal).remove();
+				$("#"+dataVal).remove();
 				globalMailCollectionInstance.remove(idcol[i]);
 			}
 			var tot_val = $(".totalcount").text();
@@ -321,7 +411,9 @@ function initializeInboxListeners(){
 			else if(folder_type == "trash")
 					url = url.concat("&folder_name=Trash");
 
-			renderToMailList(url,offset,page_size);
+			if(server != "exchange"){
+				renderToMailList(url,offset,page_size);
+			}
 		}		
 	});
 
@@ -330,13 +422,40 @@ function initializeInboxListeners(){
 		var urlval = returnUrl();
 		if(urlval){
 			urlval = urlval+"&flag=SEEN";
-			setSeenFlag(urlval);
+			var server_type = $("#inbox-email-type-select").attr("data-server");
+			if(server_type == "exchange"){
+				var url_exchange = "core/api/office/setFlags";
+				var folder_name_exchange = "";
+				var folder_type_exchange = $('#inbox-email-type-select').attr("folder-type");
+				if(folder_type_exchange == "inbox")
+					folder_name_exchange = "INBOX";
+				else if(folder_type_exchange == "sent")
+					folder_name_exchange = "Sent";
+				else if(folder_type_exchange == "draft")
+					folder_name_exchange = "Draft";
+				else if(folder_type_exchange == "trash")
+					folder_name_exchange = "Trash";
+
+				var meesageids_exchange  = null;
+		        $.each($("input[name='mailcheck']:checked"), function(){    
+			        if(meesageids_exchange == null){
+			            meesageids_exchange = $(this).val();
+			        }else{
+			        	meesageids_exchange = meesageids_exchange+','+$(this).val();
+			        }
+		        });
+				var from_email_exchange = $('#inbox-email-type-select').attr("from_email");
+				setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'SEEN',meesageids_exchange);
+			}else{
+				setSeenFlag(urlval);
+			}
 			for(var i=0;i<idcol.length;i++){
-				$("#flag"+idcol[i]).removeClass("unread");
-				$("#flag"+idcol[i]).addClass("read");
+				var dataVal = idcol[i].replace(/[^\w\s]/gi, '-');
+				$("#flag"+dataVal).removeClass("unread");
+				$("#flag"+dataVal).addClass("read");
 				$(".read").css({"font-weight":"normal"});
-				$("#check-"+idcol[i]).removeClass("mail-unread");
-				$("#check-"+idcol[i]).addClass("mail-read");
+				$("#check-"+dataVal).removeClass("mail-unread");
+				$("#check-"+dataVal).addClass("mail-read");
 			}
 		}		
 	});
@@ -346,13 +465,40 @@ function initializeInboxListeners(){
 		var urlval = returnUrl();
 		if(urlval){
 			urlval = urlval+"&flag=UNREAD";
-			setSeenFlag(urlval);
+			var server_type = $("#inbox-email-type-select").attr("data-server");
+			if(server_type == "exchange"){
+				var url_exchange = "core/api/office/setFlags";
+				var folder_name_exchange = "";
+				var folder_type_exchange = $('#inbox-email-type-select').attr("folder-type");
+				if(folder_type_exchange == "inbox")
+					folder_name_exchange = "INBOX";
+				else if(folder_type_exchange == "sent")
+					folder_name_exchange = "Sent";
+				else if(folder_type_exchange == "draft")
+					folder_name_exchange = "Draft";
+				else if(folder_type_exchange == "trash")
+					folder_name_exchange = "Trash";
+
+				var meesageids_exchange  = null;
+		        $.each($("input[name='mailcheck']:checked"), function(){    
+			        if(meesageids_exchange == null){
+			            meesageids_exchange = $(this).val();
+			        }else{
+			        	meesageids_exchange = meesageids_exchange+','+$(this).val();
+			        }
+		        });
+				var from_email_exchange = $('#inbox-email-type-select').attr("from_email");
+				setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'UNREAD',meesageids_exchange);
+			}else{
+				setSeenFlag(urlval);
+			}
 			for(var i=0;i<idcol.length;i++){
-				$("#flag"+idcol[i]).removeClass("read");
-				$("#flag"+idcol[i]).addClass("unread");
+				var dataVal = idcol[i].replace(/[^\w\s]/gi, '-');
+				$("#flag"+dataVal).removeClass("read");
+				$("#flag"+dataVal).addClass("unread");
 				$(".unread").css({"font-weight":"bold"});
-				$("#check-"+idcol[i]).removeClass("mail-read");
-				$("#check-"+idcol[i]).addClass("mail-unread");
+				$("#check-"+dataVal).removeClass("mail-read");
+				$("#check-"+dataVal).addClass("mail-unread");
 			}
 		}		
 	});

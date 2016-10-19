@@ -972,14 +972,15 @@ public class ContactEmailUtil
 	}
 	
 	/**
-	 * Rajesh Code
+	 * send flags to gmail and imap
 	 */
 	
 	public static Boolean sendFlagstoServer(String url){
 		try{
 			
 			HTTPUtil.accessURL(url);
-			
+			//String data[] = url.split("\\?");
+			//HTTPUtil.accessHTTPURL(url,data[1],"POST");
 			return true;
 			
 		}catch(Exception e){
@@ -987,12 +988,58 @@ public class ContactEmailUtil
 			return false;
 		}
 	}
+	/**
+	 * send falgs to exchange server
+	 * @param url
+	 * @return
+	 */
+	public static Boolean sendFlagstoExchangeServer(String url){
+		try{
+			
+			//HTTPUtil.accessURL(url);
+			String data[] = url.split("\\?");
+			HTTPUtil.accessHTTPURL(url,data[1],"POST");
+			return true;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	/**
+	 * get content from gmail and imap
+	 * @param url
+	 * @return
+	 */
 	public static List<EmailWrapper> getMailContentfromServer(String url){
 		List<EmailWrapper> emailsList = null;
 		try{
 			String jsonResult = HTTPUtil.accessURL(url);
+			//String data[] = url.split("\\?");
+			//String jsonResult = HTTPUtil.accessHTTPURL(url,data[1],"POST");
 			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
 			JSONArray emailsArray = emails.getJSONArray("emails");
+			
+			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return emailsList;
+	}
+	/**
+	 * get content from Exchange server
+	 * @param url
+	 * @return
+	 */
+	public static List<EmailWrapper> getMailContentfromExchangeServer(String url){
+		List<EmailWrapper> emailsList = null;
+		try{
+			//String jsonResult = HTTPUtil.accessURL(url);
+			String data[] = url.split("\\?");
+			String jsonResult = HTTPUtil.accessHTTPURL(url,data[1],"POST");
+			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
+			JSONArray emailsArray = emails.getJSONArray("emails");
+			
 			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
 		}catch(Exception e){
 			e.printStackTrace();
