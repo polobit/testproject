@@ -115,6 +115,11 @@ public class ContactsDeleteTask implements DeferredTask
 	    message = company_count + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(company_count, "DELETE", "", "companies", "");
 	}	
+	else if (fetcher.getLeadCount() > 0)
+	{
+	    message = fetcher.getCompanyCount() + " Leads deleted";
+	    ActivitySave.createBulkActionActivity(fetcher.getLeadCount(), "DELETE", "", "leads", "");
+	}
 	else
 	{
 	    message = fetcher.getTotalCount() + " Contacts/Companies deleted";

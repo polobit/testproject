@@ -35,6 +35,24 @@
 		<div class="clearfix"></div>
 {{/if_equals}}
 
+{{#if_equals entity_type "lead_entity"}}
+    	<div class="thumb-sm agile-img m-r-xs">
+        	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+    	</div>
+    	<div class="agile-thumb text-ellipsis">
+        	<div class="text-cap"> {{getPropertyValue properties "first_name"}}
+            {{getPropertyValue properties "last_name"}} 
+            <div class="text-ellipsis text-lowercase">
+            <small>{{getPropertyValue properties "email"}}</small>
+            </div>
+            <div class="text-ellipsis">
+            <small>{{getPropertyValue properties "company"}}</small>
+            </div>
+            </div>
+		</div>
+		<div class="clearfix"></div>
+{{/if_equals}}
+
 {{#if_equals entity_type "case"}}
 	<div class="thumb-sm agile-img m-r-xs">
 		<!--<i class="icon-folder-close icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->

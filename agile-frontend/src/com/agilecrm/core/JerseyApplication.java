@@ -166,6 +166,8 @@ public class JerseyApplication extends Application
 		
 	s.add(com.agilecrm.core.api.videorecords.VideoRecordAPI.class);
 
+	//Leads
+	s.add(com.agilecrm.core.api.leads.LeadsAPI.class);
 	return s;
     }
 }

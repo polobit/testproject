@@ -2,6 +2,7 @@ package com.agilecrm.export;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.util.email.SendMail;
 
@@ -13,7 +14,9 @@ public interface Exporter<T>
 
 	CONTACT("Agile CRM Contacts CSV", SendMail.EXPORT_CONTACTS_CSV, "Contact(s)"),
 
-	COMPANY("Agile CRM Companies CSV", SendMail.EXPORT_CONTACTS_CSV, "Companies");
+	COMPANY("Agile CRM Companies CSV", SendMail.EXPORT_CONTACTS_CSV, "Companies"),
+	
+	LEAD("Agile CRM Leads CSV", SendMail.EXPORT_CONTACTS_CSV, "Lead(s)");
 
 	String templateSubject;
 	String templaceTemplate;
@@ -29,6 +32,8 @@ public interface Exporter<T>
     }
 
     public void writeEntitesToCSV(List<T> entities);
+    
+    public void writeEntitesToCSV(List<T> entities, Map<Long, String> source_map, Map<Long, String> status_map);
 
     public void finalize();
 

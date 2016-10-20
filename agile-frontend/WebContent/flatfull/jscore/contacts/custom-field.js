@@ -73,6 +73,8 @@ function initializeCustomFieldsListeners(){
 						App_Admin_Settings.dealCustomFieldsListView.collection.remove(custom_field.id);
 					else if(custom_field.get("scope")=="CASE")
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
+					else if(custom_field.get("scope")=="LEAD")
+						App_Admin_Settings.leadCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
 					CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
 				}, dataType : 'json' });
@@ -149,6 +151,8 @@ function showCustomFieldModel(data)
 				custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(model.id);
 			else if(model.scope=="CASE")
 				custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(model.id);
+			else if(model.scope=="LEAD")
+				custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(model.id);
 			
 			
 			if(custom_field_model_json)
@@ -205,6 +209,11 @@ function showCustomFieldModel(data)
 					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.caseCustomFieldsListView.render(true);
 				}*/
+				}
+				else if(model.scope=="LEAD"){
+					App_Admin_Settings.leadCustomFieldsListView.collection.add(model);
+					App_Admin_Settings.leadCustomFieldsListView.render(true);
+				}
 				/*App_Admin_Settings.customFieldsListView.collection.add(model);
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
@@ -455,6 +464,12 @@ function show_custom_fields_helper(custom_fields, properties){
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3";
+		}else if(field.scope == "LEAD"){
+			label_style = "control-label col-sm-3 word-break-all";
+			modal_label_style = "control-label col-sm-3 word-break-all";
+			modal_control_style = "col-sm-7";
+			checkbox_style = "col-sm-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}
 		
 		// If field type is list create a select dropdown
@@ -1164,6 +1179,14 @@ function groupingCustomFields(base_model){
 			}});
 		App_Admin_Settings.caseCustomFieldsListView.collection.fetch();
 		$('#customfields-cases-accordion', this.el).append($(App_Admin_Settings.caseCustomFieldsListView.render().el));
+	}else if(base_model.get("scope")=="LEAD"){
+		App_Admin_Settings.leadCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
+			templateKey : templateKey, individual_tag_name : 'tr',
+			postRenderCallback : function(custom_el){
+				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+			}});
+		App_Admin_Settings.leadCustomFieldsListView.collection.fetch();
+		$('#customfields-leads-accordion', this.el).append($(App_Admin_Settings.leadCustomFieldsListView.render().el));
 	}
 }
 function enableCustomFieldsSorting(el,connClass,connId){

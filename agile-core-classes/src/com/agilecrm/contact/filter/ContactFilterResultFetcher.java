@@ -61,6 +61,7 @@ public class ContactFilterResultFetcher
 
     private Integer number_of_contacts;
     private Integer number_of_companies;
+    private Integer number_of_leads;
 
     private Long domainUserId = null;
 
@@ -192,6 +193,12 @@ public class ContactFilterResultFetcher
 
 	    // Set number of contacts
 	    number_of_companies = filter.queryContactsCount();
+	    
+	    rule.RHS = Contact.Type.LEAD.toString();
+	    filter.rules.add(rule);
+
+	    // Set number of leads
+	    number_of_leads = filter.queryContactsCount();
 
 	    rule.RHS = Contact.Type.PERSON.toString();
 	    filter.rules.add(rule);
@@ -211,9 +218,17 @@ public class ContactFilterResultFetcher
 		number_of_companies = Contact.dao.getCountByProperty(searchMap);
 		return;
 	    }
+	    
+	    if (searchMap.containsKey("type")
+			    && Contact.Type.LEAD.toString().equals(searchMap.get("type").toString()))
+	    {
+		number_of_leads = Contact.dao.getCountByProperty(searchMap);
+		return;
+	    }
 
 	    number_of_contacts = Contact.dao.getCountByProperty(searchMap);
 	    number_of_companies = 0;
+	    number_of_leads = 0;
 	}
 
 	System.out.println("total available contacts : " + number_of_contacts + " , total available companies : "
@@ -228,6 +243,11 @@ public class ContactFilterResultFetcher
     public int getAvailableCompanies()
     {
 	return number_of_companies == null ? 0 : number_of_companies;
+    }
+    
+    public int getAvailableLeads()
+    {
+	return number_of_leads == null ? 0 : number_of_leads;
     }
 
     public int getTotalFetchedCount()
@@ -312,6 +332,12 @@ public class ContactFilterResultFetcher
 	    searchMap.put("type", Type.COMPANY);
 	    return null;
 	}
+	
+	if ("Leads".equals(id))
+	{
+	    searchMap.put("type", Type.LEAD);
+	    return null;
+	}
 
 	return null;
 
@@ -390,6 +416,8 @@ public class ContactFilterResultFetcher
 
 		if (contact.type == Contact.Type.PERSON)
 		    number_of_contacts = contacts.size();
+		else if(contact.type == Contact.Type.LEAD)
+		    number_of_leads = contacts.size();
 		else
 		    number_of_companies = contacts.size();
 	    }
@@ -576,7 +604,7 @@ public class ContactFilterResultFetcher
 
     private void modifyDAOCondition()
     {
-	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.EDIT_CONTACT))
+	if ((!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.EDIT_CONTACT))|| !hasScope(UserAccessScopes.VIEW_CONTACTS))
 	{
 	    if (domainUserId == null)
 		return;
