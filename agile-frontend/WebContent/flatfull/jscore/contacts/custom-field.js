@@ -214,14 +214,18 @@ function showCustomFieldModel(data)
 			}
 			else
 			{
-				var custom_field_model_json;
-				if(models[0].scope=="CONTACT")
+				var custom_field_model_json;var cuModel;
+				if(models[0])
+					cuModel = models[0];
+				else
+					cuModel = models;
+				if(cuModel.scope=="CONTACT")
 					custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(models.id);
-				else if(models[0].scope=="COMPANY")
+				else if(cuModel.scope=="COMPANY")
 					custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(models.id);
-				else if(models[0].scope=="DEAL")
+				else if(cuModel.scope=="DEAL")
 					custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(models.id);
-				else if(models[0].scope=="CASE")
+				else if(cuModel.scope=="CASE")
 					custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(models.id);
 				if(custom_field_model_json)
 				{
@@ -229,17 +233,17 @@ function showCustomFieldModel(data)
 				}
 				else
 				{
-					if(models[0].scope=="CONTACT")
+					if(cuModel.scope=="CONTACT")
 					{
 						App_Admin_Settings.contactCustomFieldsListView.collection.add(models);
 						App_Admin_Settings.contactCustomFieldsListView.render(true);
 					}
-					if(models[0].scope=="COMPANY")
+					if(cuModel.scope=="COMPANY")
 					{
 						App_Admin_Settings.companyCustomFieldsListView.collection.add(models);
 						App_Admin_Settings.companyCustomFieldsListView.render(true);	
 					}	
-					if(models[0].scope=="DEAL")
+					if(cuModel.scope=="DEAL")
 					{
 						App_Admin_Settings.dealCustomFieldsListView.collection.add(models);
 						App_Admin_Settings.dealCustomFieldsListView.render(true);
