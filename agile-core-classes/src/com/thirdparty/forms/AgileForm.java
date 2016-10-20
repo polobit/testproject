@@ -126,7 +126,7 @@ public class AgileForm extends HttpServlet
 	    addNotesToContact(contact, owner, formJson);  
 
 	    FormReportsSQLUtil.insertData(reqFormJson.getString("email"),NamespaceManager.get(),(form.id).toString()); 
-	    
+	    System.out.println("permanent link"+NamespaceManager.get());
 	    //creating the emailNotification for the new contact  
 	    if(form.emailNotification && newContact)
 	    	 FormUtil.sendMailToContactOwner(contact, agileFormName);
