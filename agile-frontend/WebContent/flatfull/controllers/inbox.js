@@ -288,6 +288,9 @@ function renderToMailView(data){
 						rearrange_from_email_options($select, data);
 				});
 			}, "#"+attrid);
+			var from_email = $('#inbox-email-type-select').attr("from_email");
+			$("#from_name").val(CURRENT_AGILE_USER.domainUser.name);
+			$("#from_email").find('option[value ="'+from_email+'"]').attr("selected", "selected");
 			$(".ng-show").hide();
 		}
 	});
@@ -341,6 +344,8 @@ function composeView(){
 						$select.val($select.find('option')[0].value);
 					rearrange_from_email_options($select, data);
 				});
+			$("#from_name").val(CURRENT_AGILE_USER.domainUser.name);
+			$("#from_email").find('option[value ="'+CURRENT_AGILE_USER.domainUser.email+'"]').attr("selected", "selected");
 		}, "#mails-list"); 
 }
 function inboxEmailSend(ele,json){

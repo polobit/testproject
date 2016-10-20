@@ -234,7 +234,7 @@
 			    <img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">
 			    from <a href="" class="ng-binding">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
 			  </div>
-			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
+			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
 			    {{{this.message}}}
 			  </div>
 			  <div class="wrapper">
@@ -283,7 +283,7 @@
 				<div class="control-group form-group">
                     <label class="control-label col-sm-2 col-xs-12">{{agile_lng_translate 'other' 'from'}} <span class="field_req">*</span></label>
                     <div class="controls p-r-none col-sm-3 col-xs-6">
-                        <input type="text" placeholder="{{agile_lng_translate 'prefs-email' 'from-name'}}" class="form-control b-r-none" id="from_name" name="from_name"/>
+                        <input type="text" placeholder="{{agile_lng_translate 'prefs-email' 'from-name'}}" class="form-control b-r-none" id="from_name" name="from_name" />
                     </div>
                     <div class="controls p-l-none col-sm-5 col-xs-6">
                         <select class="email required form-control verified-email" id="from_email" 
@@ -320,7 +320,7 @@
                     <div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
-								<ul name="contact_cc_ids" class="contacts tagsinput tags"></ul>
+								<ul name="contact_cc_ids" class="contacts tagsinput tags" style="padding: 0px;"></ul>
 							</div>
                         	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="cc" id="email_cc" placeholder="{{agile_lng_translate 'other' 'cc'}}" data-provide="typeahead" data-mode="multiple"/>
                     	</div>
@@ -332,7 +332,7 @@
                     <div class="controls col-sm-8" class="contactTypeAhead">
 						<div>
 							<div>
-								<ul name="contact_bcc_ids" class="contacts tagsinput tags"></ul>
+								<ul name="contact_bcc_ids" class="contacts tagsinput tags" style="padding: 0px;"></ul>
 							</div>
                         	<input type="text" class="typeahead typeahead_contacts multipleEmails form-control" name="bcc" id="email_bcc" placeholder="{{agile_lng_translate 'other' 'bcc'}}" data-provide="typeahead" data-mode="multiple"/>
 						</div>
