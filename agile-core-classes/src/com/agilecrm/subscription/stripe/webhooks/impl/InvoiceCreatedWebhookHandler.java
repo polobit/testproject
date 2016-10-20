@@ -78,8 +78,8 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
     }
     
     public boolean checkTrialEligibility(Long start, Long end){
-    	//check if difference between 2 dates are more than 11 months
-    	if(end - start < 33696000)
+    	//check if difference between 2 dates are more than 11 months and less than 13 months
+    	if(end - start < 33696000 && end - start > 28512000)
     		return true;
     	return false;  	
     }
