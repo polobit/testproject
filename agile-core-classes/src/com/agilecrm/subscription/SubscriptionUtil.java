@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.RegistrationGlobals;
@@ -13,6 +14,7 @@ import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -29,16 +31,32 @@ public class SubscriptionUtil
      * */
     public static Subscription getSubscription()
     {
-	Objectify ofy = ObjectifyService.begin();
-	Subscription subscription = ofy.query(Subscription.class).get();
-	if (subscription == null)
-	{
-	    subscription = new Subscription();
-
-	    subscription.fillDefaultPlans();
-	}
-
-	return subscription;
+    	Subscription subscription;
+    	// Check if subscription is present in Cache.
+    	// If yes, serve it from cache.
+    	// If not, fetch from datastore, set in cache and return it.
+    	try {
+    		subscription = (Subscription) CacheUtil.getCache(Subscription.fetchCacheKey());
+    		if( subscription != null )	
+        		return subscription;
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	
+		Objectify ofy = ObjectifyService.begin();
+		subscription = ofy.query(Subscription.class).get();
+		if (subscription == null)
+		{
+		    subscription = new Subscription();
+		    subscription.fillDefaultPlans();
+		}
+		try {
+			CacheUtil.setCache(Subscription.fetchCacheKey(), subscription);
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return subscription;
     }
 
     public static boolean isFreePlan()
@@ -95,7 +113,7 @@ public class SubscriptionUtil
 	Subscription subscription = Subscription.getSubscriptionOfParticularDomain(namespace);
 	if (subscription != null)
 	{
-	    JSONObject billing = subscription.billing_data;
+	    JSONObject billing = subscription.fetchBillingDataJSONObject();
 	    System.out.println(billing + " in subscription.java");
 	    return getCustomer(billing);
 	}
@@ -122,11 +140,11 @@ public class SubscriptionUtil
     {
 	Subscription subscription = getSubscription();
 	// Creates customer and adds subscription
-	subscription.billing_data = subscription.getAgileBilling().addSubscriptionAddon(plan);
+	subscription.setBillingData(subscription.getAgileBilling().addSubscriptionAddon(plan));
 	subscription.emailPlan = plan;
 
 	// Saves new subscription information
-	if (subscription.billing_data != null)
+	if (subscription.fetchBillingDataJSONObject() != null)
 	    subscription.save();
 
 	return subscription;
