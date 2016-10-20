@@ -672,10 +672,17 @@ public class EventUtil
 		    String event_title = event.title;
 		    Long duration = (event.end - event.start) / 60;
 		    if(contact != null){
-			    String client_name = contact.getContactFieldValue("FIRST_NAME");
-			    if (StringUtils.isNotEmpty(contact.getContactFieldValue("LAST_NAME"))){
-			    	client_name.concat(contact.getContactFieldValue("LAST_NAME"));
-			    }
+		    	String client_name = "";
+		    	if(contact.type.equals(Contact.Type.PERSON)){
+		    		client_name = contact.getContactFieldValue("FIRST_NAME");
+				    if (StringUtils.isNotEmpty(contact.getContactFieldValue("LAST_NAME"))){
+				    	client_name.concat(contact.getContactFieldValue("LAST_NAME"));
+				    }				    
+				    client_name = (client_name.substring(0, 1).toUpperCase() + client_name.substring(1));
+		    	}else if(contact.type.equals(Contact.Type.COMPANY)){
+		    		client_name = (contact.name.substring(0, 1).toUpperCase() + contact.name.substring(1));		    		
+		    	}
+			   
 			    String client_email = contact.getContactFieldValue("EMAIL");
 			    String subject = "<p>" + client_name + " (" + client_email
 					    + ") has cancelled the appointment</p><span>Title: " + event_title + " (" + duration
