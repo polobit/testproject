@@ -500,6 +500,7 @@ function serialize_lead_properties_and_save(e, form_id, obj, properties, modal_i
 			if(data && data.get("type") == "PERSON")
 			{
 				LEADS_HARD_RELOAD = true;
+				App_Contacts.contactDetailView = undefined;
 				App_Contacts.navigate("contact/" + data.id, { trigger : true });
 			}
 

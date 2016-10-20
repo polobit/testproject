@@ -2007,6 +2007,13 @@ updateScoreValue :function(){
         // Showing updated owner
         show_owner(); 
         App_Leads.leadDetailView.model = model;
+
+        //If user doesn't have view contacts permissions and owner is not current user, navigate to leads page.
+        if(!hasScope("VIEW_CONTACTS") && model && model.get("owner") && model.get("owner").id != CURRENT_DOMAIN_USER.id)
+        {
+          LEADS_HARD_RELOAD = true;
+          Backbone.history.navigate( "leads", { trigger : true });
+        }
     
     }});
          
