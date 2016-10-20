@@ -2042,6 +2042,7 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 					initializeCustomRangeInModal(base_model,elData);
+
 					break;
 		}
 		case "Webstat Visits": {
@@ -2053,6 +2054,11 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 					initializeCustomRangeInModal(base_model,elData);
+
+					console.log("Blur things activites 1 ** ");
+					$('#start_date',elData).blur();
+					$('#end_date',elData).blur();
+					console.log("Blur things activites 2 ** ");
 			break;
 		}
 		case "Referralurl stats": {
