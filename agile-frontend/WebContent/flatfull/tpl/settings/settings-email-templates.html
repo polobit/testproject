@@ -97,10 +97,20 @@
             <div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
                 <div class="text-base">{{name}}</div>
                 <div class="text-sm">{{subject}}</div>
+                <div class="text-muted text-xs">
+                    {{#if created_time}}
+                      <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o"></i>
+                           {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{emailTemplateOwner.name}}
+                      </div>
+                    {{/if}}
+                </div>
             </div>
         </td>
     {{else}}
-        <td class='data' data='{{id}}'></td>
+        <td class='data hide' data='{{id}}'></td>
+        <td>
+            <div class="table-resp">{{name}}</div>
+        </td>
         <td>
         	<div class="table-resp">
         		{{subject}}
