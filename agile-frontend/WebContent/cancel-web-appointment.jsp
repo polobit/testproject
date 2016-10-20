@@ -361,8 +361,8 @@ a:link, a:active, a:visited, a {
 
 </style>
 <title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "online-appointment-cancellation")%> - <%=user_name %></title>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
-<script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/lib/web-calendar-event/jquery.js?_"></script>
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 </head>
 <body>
 		<%
