@@ -4825,3 +4825,7 @@ ul#recent-menu-model-list li:nth-child(even)
   background:#ccc;
   border-radius:10px;
 }
+
+.c-default {
+  cursor: default;
+}
