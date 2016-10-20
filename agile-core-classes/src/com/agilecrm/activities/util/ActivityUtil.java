@@ -2008,6 +2008,41 @@ public class ActivityUtil
 	 * @param label
 	 *            contacts,company,deal etc.
 	 */
+	public static void createLogForExport(ActivityType activity_type, EntityType entityType, int exported_contacts,
+			String url)
+	{
+
+		try
+		{
+
+			Activity activity = new Activity();
+			activity.activity_type = activity_type;
+			activity.entity_type = entityType;
+
+			activity.custom1 = String.valueOf(exported_contacts);
+			if (url != null)
+				activity.custom2 = url;
+			activity.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured in  import log " + e.getMessage());
+		}
+	}
+
+	/**
+	 * 
+	 * @param activity_type
+	 *            CONTACTS_IMPORT,CONTACT_EXPORT,COMPANY_IMPORT,COMPANY_EXPORT,
+	 *            DEALS_IMPORT
+	 * @param data
+	 *            saved contacts,merged ,failed status
+	 * @param entity_type
+	 *            CONTACTS,COMAPANY,DEAL
+	 * 
+	 * @param label
+	 *            contacts,company,deal etc.
+	 */
 	public static void createLogForExportImport(ActivityType activity_type, EntityType entity_type,
 			Map<Object, Object> status_map, int total)
 	{
