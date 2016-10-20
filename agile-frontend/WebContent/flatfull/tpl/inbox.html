@@ -77,7 +77,7 @@
       	</div>
     	<div class="form-group col-md-4" style="margin-bottom:0px;">
             <div class="input-group" style="z-index:0; float:none;">
-              <input type="text" class="form-control input-sm bg-light no-border rounded padder ng-pristine ng-valid ng-touched" id="search-mail" placeholder="Search Emails...">
+              <input type="text" name="email-search" class="form-control input-sm bg-light no-border rounded padder ng-pristine ng-valid ng-touched" id="search-mail" autocomplete="on" placeholder="Search Emails...">
               <span class="input-group-btn">
                 <button type="submit" class="btn btn-sm bg-light rounded" id="search_email"><i class="fa fa-search"></i></button>
               </span>
@@ -232,9 +232,9 @@
 			  </div>
 			  <div class="wrapper b-b ng-binding">
 			    <img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">
-			    from <a href="" class="ng-binding">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
+			    From <a href="" class="ng-binding">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
 			  </div>
-			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
+			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-from="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
 			    {{{this.message}}}
 			  </div>
 			  <div class="wrapper">

@@ -1,4 +1,5 @@
 var inboxMailListView;
+var SHOW_TOTALCOUNT = true;
 var InboxRouter = Backbone.Router.extend({
 
 	routes : {
@@ -158,11 +159,7 @@ function renderToMailList(url,offset_val,page_size_val){
 				if( !template_ui )	return;
 
 				html = template_ui;
-				//$("#mails-list").html(template_ui);
 			}, '#mails-list');
-			/*var source = $('#mail-template').html();
-	        var template = Handlebars.compile(source);
-	        var html = template(data.toJSON());*/
 	        if(this.mailCollectionInstance.offset == 1){
 	        	if(data.length == 0){
 	        		getTemplate("no-mail", data.toJSON(), undefined, function(template_ui) {
@@ -170,9 +167,6 @@ function renderToMailList(url,offset_val,page_size_val){
 
 						html = template_ui;
 					}, '#mails-list');
-		        	/*source = $('#no-mail-template').html();
-			        template = Handlebars.compile(source);
-			        html = template(data.toJSON());*/
 		    	}
 	        	this.$el.html(html);
 	        }else{
@@ -228,7 +222,19 @@ function renderToMailView(data){
 			var attrid = $(targetEl).attr('data-val');
 			
 			var $parent_element = $(targetEl).closest('#inbox-reply-div');
-			var to_emails = $parent_element.find('.to-emails').data('to');
+			var from_email = $('#inbox-email-type-select').attr("from_email");
+			var from_emails = $parent_element.find('.to-emails').data('from');
+			var to_emails = "";
+
+			if(from_emails && from_emails.indexOf("<") > -1)
+				from_emails = from_emails.split("<")[1].split(">")[0]
+
+			if(from_email == from_emails)
+				to_emails = $parent_element.find('.to-emails').data('to');
+			else
+				to_emails = $parent_element.find('.to-emails').data('from');
+
+			
 			var subject = $parent_element.find('.subject').html();
 			var body = '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+$parent_element.find('.to-emails').html()+'</blockquote>';
 			to_emails = to_emails.replace(/(, $)/g, "");
@@ -252,7 +258,7 @@ function renderToMailView(data){
 				agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 						
 
-				$("#emailForm", el).find('input[name="to"]').val(to_emails);
+				$("#emailForm", el).find('input[name="to"]').val(extractEmail(to_emails));
 				$("#emailForm",el).find('input[name="subject"]').val("Re: "+subject);
 				setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 
@@ -288,7 +294,7 @@ function renderToMailView(data){
 						rearrange_from_email_options($select, data);
 				});
 			}, "#"+attrid);
-			var from_email = $('#inbox-email-type-select').attr("from_email");
+			
 			$("#from_name").val(CURRENT_AGILE_USER.domainUser.name);
 			$("#from_email").find('option[value ="'+from_email+'"]').attr("selected", "selected");
 			$(".ng-show").hide();
@@ -413,4 +419,24 @@ function inboxreplySend(ele,json){
 				$save_info.show().delay(10000).hide(1);
 		} 
 	});
+}
+function extractEmail(toEmails){
+	var returnVal = "";
+	var emails = toEmails.split(",");
+	for(var i=0;i<emails.length;i++){
+		var email = "";
+
+		if(emails[i].indexOf("<") > -1)
+			email = emails[i].split("<")[1].split(">")[0];
+		else
+			email = emails[i];
+		
+		if(returnVal == null)
+			returnVal = email;
+		else
+			returnVal= returnVal+email;
+		
+	}
+
+	return returnVal;
 }
