@@ -1645,11 +1645,13 @@ width:75%;
 }
 .carousel-control.left
 {
- left: -55px; 
+ left: -68px; 
+ margin-top:0px;
 }
 .carousel-control.right {
   right: -55px!important;
   left: auto;
+  margin-top:0px;
 
 }
 
