@@ -392,12 +392,12 @@ Proceed to Trial
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
 
 <!-- Detailedinfo second dashlet -->
-			<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0">
+			<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0 ">
 				<div class="panel panel-default m-t-sm">
 					<div class="panel-heading ">
 						{{agile_lng_translate "portlets" "branded-emails-details"}}
 					</div>
-					<div class="panel-body p-md p-b-none">
+					<div class="panel-body p-md subscriptionDetail">
         				<form class="bs-example form-horizontal ">
 	        				<div class="form-group m-b-sm">
 				              		<label class="col-sm-6 control-label p-t-none ">
@@ -439,12 +439,12 @@ Proceed to Trial
 <!--end of second onfo dashlet -->
 {{else}}
 <!-- Detailedinfo first dashlet -->
-		<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0">
+		<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0 ">
 			<div class="panel panel-default m-t-sm">
 				<div class="panel-heading ">
 				Free Emails
 				</div>
-				<div class="panel-body p-md p-b-none">
+				<div class="panel-body p-md freePlanDetails">
 			    	<form class="bs-example form-horizontal">
 		           		<div class="form-group m-b-sm">
 		              		<label class="col-sm-6 control-label p-t-none">
@@ -488,7 +488,7 @@ Proceed to Trial
 <!-- End of detailed Info first dashlet-->
 {{/getSubscriptionBasedOnPlan}}
 <!-- start of email credits dashlet -->
-<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 pos-abs" >
+<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 pos-abs emailCreditsDetails" >
 <div class="panel panel-default m-t-sm m-b-sm">
 		<div class="panel-heading ">
 		{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}
@@ -496,10 +496,10 @@ Proceed to Trial
 		<div class="panel-body p-t-md">
         	<form class="bs-example form-horizontal p-b-md">
 				<div class="form-group m-b-sm">
-      				<label class="col-sm-6 control-label p-t-none ">
+      				<label class="col-sm-4 control-label p-t-none ">
       					{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}
       				</label>
-      				<div class="col-sm-6 ">
+      				<div class="col-sm-8">
         				{{getEmailCreditsCount}}
         				{{#if billingData}}
         				<span class="m-l-xs">
