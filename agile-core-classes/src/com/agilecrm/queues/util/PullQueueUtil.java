@@ -166,6 +166,9 @@ public class PullQueueUtil
 		|| StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE)
 		|| StringUtils.equals(queueName, AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE))
 	    return AgileQueues.BULK_CAMPAIGN_QUEUE;
+	
+	if(StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE_1))
+		return AgileQueues.BULK_CAMPAIGN_QUEUE_1;
 
 	// Runs NORMAL_PULL_QUEUE tasks in normal backend
 	if (StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
