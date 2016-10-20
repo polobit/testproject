@@ -551,7 +551,10 @@ function initializeSubscriptionListeners()
 							{
 								restrictions.errorsCount = errorsCount;
 								restrictions.plan = data.plan;
-								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
+								var template_name = "subscribe-error-modal";
+								if(errorsCount > 5)
+									template_name = "subscribe-error-more-modal";
+								getTemplate(template_name,restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$(template_ui).modal('show');
