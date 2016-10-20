@@ -19,15 +19,18 @@ import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Event.EventType;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.IcalendarUtil;
+import com.agilecrm.util.VersioningUtil;
+import com.amazonaws.services.route53domains.model.ContactType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -650,6 +653,46 @@ public class EventUtil
     }
     
     /**
+     * calls this method when end user want to cancel webevent from his mail
+     * 
+     * @param event
+     * @param cancel_reason
+     */
+    public static void sendEventCancelMail(Event event, Contact contact, String cancel_reason){
+		try
+		{
+		    DomainUser domain_user = event.eventOwner();		   
+		    String timezone = UserPrefsUtil.getUserTimezoneFromUserPrefs(domain_user.id);
+		    if (StringUtils.isEmpty(timezone)){
+		    	timezone = domain_user.timezone;
+		    }
+		    
+		    String event_start_time = WebCalendarEventUtil.getGMTDateInMilliSecFromTimeZone(timezone,
+			    event.start * 1000, new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a (z)"));
+		    String event_title = event.title;
+		    Long duration = (event.end - event.start) / 60;
+		    if(contact != null){
+			    String client_name = contact.getContactFieldValue("FIRST_NAME");
+			    if (StringUtils.isNotEmpty(contact.getContactFieldValue("LAST_NAME"))){
+			    	client_name.concat(contact.getContactFieldValue("LAST_NAME"));
+			    }
+			    String client_email = contact.getContactFieldValue("EMAIL");
+			    String subject = "<p>" + client_name + " (" + client_email
+					    + ") has cancelled the appointment</p><span>Title: " + event_title + " (" + duration
+					    + " mins)</span><br/><span>Start time: " + event_start_time + "</span>";
+				    if (StringUtils.isNotEmpty(cancel_reason))
+					subject += "<br/><span>Reason: " + cancel_reason + "</span>";
+			
+				    EmailGatewayUtil.sendEmail(null, client_email, client_name, domain_user.email, null, null,
+					    "Appointment Cancelled", null, subject, null, null, null, null);
+		    }		   	      
+		}catch (Exception e){
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+    }
+    
+    /**
      * Gets events related to a particular deal
      * 
      * @param dealId
@@ -677,5 +720,103 @@ public class EventUtil
     public static List<Contact> getEventsRelatedContacts(Long id){
     	Event event= getEvent(id);
     	return event.relatedContacts();
+    }
+    
+    public static void sendEmailForEventContacts(List<String> contactIds, Event event){
+    	List<Contact> contactsList =  ContactUtil.getContactsByIds(contactIds);
+    	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+    	DomainUser currentUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);
+    	String currentUserEmail = currentUser.email;
+    	
+    	long domainUserID = Long.parseLong(event.owner_id);    	
+    	DomainUser eventOwner = DomainUserUtil.getDomainUser(domainUserID);
+    	String eventOwnerEmail = eventOwner.email;
+    	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, eventOwner, eventOwnerEmail, eventOwner.name);
+    	String[] attachments = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
+    	
+    	String domain_url = VersioningUtil.getHostURLByApp(eventOwner.domain);
+    	String cancel_link = domain_url + "appointment/cancel/" + event.id;
+    	String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + eventOwner.domain;
+    	Long startTime = event.start;
+		Long endTime = event.end;
+    	
+   		if(startTime != null && endTime != null){
+   			int seconds = (int) (endTime - startTime);
+   			int mins = seconds / 60;   			
+   			String minsInStr = WebCalendarEventUtil.convertMinstoDateFormat(mins);
+   			
+   			StringBuilder contactList = new StringBuilder();
+   			StringBuilder companiesList = new StringBuilder();
+   					
+   	    	if(contactsList != null){
+   	    		for (int i = 0; i < contactsList.size(); i++) {
+   	    			Contact contact = contactsList.get(i);
+   	    			ContactField emailField = contact.getContactFieldByName(Contact.EMAIL);
+   	    			if(emailField != null){
+	   	    			String contactEmail = emailField.value;
+	   	    			if(contactEmail != null){ 
+	   	    				if(contact.type.equals(Contact.Type.PERSON)){
+	   	    					StringBuilder contactName = new StringBuilder();
+	   	    					if(contact.first_name != null){	   	    						
+	   	    						contactName.append(contact.first_name);
+	   	    					}
+	   	    					if(contact.last_name != null){
+	   	    						contactName.append(" ");
+	   	    						contactName.append(contact.last_name);
+	   	    					}
+	   	    					if(contactName.length() > 0){
+	   	    						String modifiedContactName = (contactName.substring(0, 1).toUpperCase() + contactName.substring(1));
+	   	    						contactList.append("<a href="+domain_url+"#contact/"+contact.id+">"+ modifiedContactName +"</a>, ");
+	   	    					}	   	    					
+	   	    				}else if(contact.type.equals(Contact.Type.COMPANY)){
+	   	    					if(contact.name != null){
+	   	    						String companyName = (contact.name.substring(0, 1).toUpperCase() + contact.name.substring(1));
+	   	    						companiesList.append("<a href="+domain_url+"#company/"+contact.id+">"+ companyName +"</a>, ");
+	   	    					}
+	   	    				}
+	   	    				
+	   	    				StringBuilder usermail = new StringBuilder("<p>You have a new appointment with <b>" + eventOwner.name + "</b> (" + eventOwnerEmail + ")</p>");
+	   	    				usermail.append("<span>Title: " + event.title +"</span><br/>");
+	   	   					usermail.append("<span>Duration: " + minsInStr + "</span><br/>");
+	   	   					if(event.description != null && event.description.length() > 0){
+	   	   						usermail.append("<span>Note: " + event.description + "</span><br/>");
+	   	   					}
+	   	   					usermail.append("<p><a href=" + cancel_link+"/c"+ contact.id +">Cancel this appointment</a></p>");
+	   	   					usermail.append("<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>");
+	   	   					
+	   	    				EmailGatewayUtil.sendEmail(null, eventOwnerEmail, eventOwner.name, contactEmail, null, null, "Appointment Scheduled",
+	   	    						null, usermail.toString(), null, null, null, null, attachments);
+	   	    			}
+   	    			}
+   	    		}
+   	    	}
+   	    	
+   	    	if(eventOwnerEmail != null){	
+   	    		StringBuilder domainMailTempalte = new StringBuilder();
+   	    		int dataLength = companiesList.length();
+   	    		String contactDetails;
+   	    		if(dataLength > 0){
+   	    			contactList.append(companiesList);   	    			
+   	    		}
+   	    		
+   	    		if(contactList.length() > 0){
+   	    			domainMailTempalte.append("<p>Event has been scheduled with ");
+   	    			contactDetails = contactList.substring(0, contactList.length() - 2);
+   	    			domainMailTempalte.append(contactDetails);
+   	    			domainMailTempalte.append("</p>");
+   	    		}   	    		   	    		
+   	    		
+   	    		domainMailTempalte.append("<span>Title: " + event.title +"</span><br/>");
+   	    		domainMailTempalte.append("<span>Duration: " + minsInStr +"</span><br/>");
+   	    		if(event.description != null && event.description.length() > 0){
+   	    			domainMailTempalte.append("<span>Description: "+ event.description + "</span><br/>");
+   	    		}
+   	    		domainMailTempalte.append("<p><a href=https://" + eventOwner.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>");
+   	    		
+   				EmailGatewayUtil.sendEmail(null, currentUserEmail, eventOwner.name, eventOwnerEmail, null, null, "Appointment Scheduled",
+   						null, domainMailTempalte.toString(), null, null, null, null, null);		
+   	    	} 
+   		}
+    	   	
     }
 }

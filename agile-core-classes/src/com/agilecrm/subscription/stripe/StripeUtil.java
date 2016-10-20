@@ -365,5 +365,27 @@ public class StripeUtil {
 		}
 		return null;
 	}
+	
+	public static void closeInvoice(String id) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException{
+		Invoice invoice = Invoice.retrieve(id);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("closed", true);
+		invoice.update(params);
+	}
+	
+	public static void addTrial(String cust_id, String sub_id, Long trialEnd) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException{
+		Customer customer = Customer.retrieve(cust_id);
+		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+		if(subscriptions.size() > 0){
+			for(com.stripe.model.Subscription subscription : subscriptions){
+				if(subscription.getId().equals(sub_id)){
+					Map<String, Object> params = new HashMap<String, Object>();
+					params.put("trial_end", trialEnd);
+					subscription.update(params);
+				}
+			}
+		}
+		
+	}
 
 }

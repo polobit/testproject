@@ -42,6 +42,14 @@ var Form_Collection_Events = Base_Collection_View.extend({
 });
 
 $('body').on('mouseenter','#forms-model-list tr', function(e){
+         $(this).find('#form_report').removeClass('hide');
+    });
+
+$('body').on('mouseleave','#forms-model-list tr', function(e){
+         $(this).find('#form_report').addClass('hide');
+    });
+
+$('body').on('mouseenter','#forms-model-list tr', function(e){
          $(this).find('#formcode_manager').removeClass('hide');
     });
 

@@ -1,34 +1,35 @@
+
 /**
- * Initializes the date-range-picker. Calls showWebruleGraphs based on the date
+ * Initializes the date-range-picker. Calls showFormGraphs based on the date
  * range seleted.
  * 
  * @param callback -
  *            callback method if any.
  */
-function initWebruleChartsUI(callback)
+function initFormChartsUI(callback)
 {
 	//Loads the date range 
 	initDateRangeforForm(callback);
 	callback();
 
 }
+
 /**
- * Shows date-wise, hourly and weekly reports of a webrule. Calls showBar
+ * Shows date-wise, hourly and weekly reports of a form. Calls showBar
  * function which uses HighCharts plugin to show bar charts.
  */
-function showWebruleGraphs(webruleid)
+function showFormGraphs(formid)
 {
 
 	// Daily
-	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=date", 'line-daily-chart', _agile_get_translated_val('reports','daily') , 'Count', null);
+	showBar('core/api/form-analytics/form/graphreports/' + formid + getOptions() + "&type=date", 'line-daily-chart','daily','Count', null);
 
 	// Hourly
-	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=hour", 'line-hourly-chart', _agile_get_translated_val('reports','hourly'), 'Count', null);
+	showBar('core/api/form-analytics/form/graphreports/' + formid + getOptions() + "&type=hour", 'line-hourly-chart','hourly','Count', null);
 
 	// Weekly
-	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=day", 'line-weekly-chart', _agile_get_translated_val('reports','weekly'), 'Count', null);
+	showBar('core/api/form-analytics/form/graphreports/' + formid + getOptions() + "&type=day", 'line-weekly-chart','weekly', 'Count', null);
 }
-
 
 /**
  * Returns start_time, end_time and time_zone (timezone offset like -330) as
@@ -96,62 +97,66 @@ function getOptions()
 /**
  * Returns data required for table
  */
-function get_webrule_table_reports(webruleid)
+function get_form_table_reports(formid)
 {
-	$("#web-table-reports").html(getRandomLoadingImg());
 
-	$.getJSON('core/api/webrule-analytics/web/table-reports/' + webruleid + getOptions(), function(data)
+	
+	$("#formbuilder-form-table-reports").html(getRandomLoadingImg());
+
+	$.getJSON('core/api/form-analytics/form/reports/' + formid + getOptions(), function(data)
 	{
 
 		console.log(data);
 
 		// Load Reports Template
-		getTemplate("webrule-table-reports", data, undefined, function(template_ui){
+		getTemplate("formbuilder-form-table-reports", data, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$("#web-table-reports").html($(template_ui));	
-		}, "#web-table-reports");
+			//$("#form-reports-all-count").html(data.totalcount);
+			$("#formbuilder-form-table-reports").html($(template_ui));	
+		}, "#formbuilder-form-table-reports");
+
 
 	});
 }
 
-function render_email_reports_select_ui(id, callback){
 
-				 // Fetches webrules if not filled
-				if (!$('#webrule-reports-select').html())
+function render_form_reports_select_ui (id, callback){
+
+				 // Fetches forms if not filled
+				if (!$('#formbuilder-form-reports-select').html())
 				{
-					getTemplate('webrule-analysis', {}, undefined, function(template_ui){
+					getTemplate('formbuilder-form-analysis', {}, undefined, function(template_ui){
 				 		if(!template_ui)
 				    		return;
 
 						$('#content').html($(template_ui)); 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						var optionsTemplate = "<option value='{{id}}'>{{formName}}</option>";
 
-						// fill webrules
-						fillSelect('webrule-reports-select', '/core/api/webrule', 'webrule', function fillwebrule()
+						// fill forms
+						fillSelect('formbuilder-form-reports-select', '/core/api/forms', 'form', function fillwebrule()
 						{
 							if(id)
-							$('#webrule-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+							$('#formbuilder-form-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
 
 							if(callback)
 							  callback();
 
-							$('#content').on('change', '#webrule-reports-select', function (e) {
-								e.preventDefault();
-					             var targetEl = $(e.currentTarget);
-					             Backbone.history.navigate("webrule-report/"+$(targetEl).val() , 
-					             {
-					              trigger: true
-					              });
+							$('#content').on('change', '#formbuilder-form-reports-select', function (e) {
+		                            //get_form_table_reports($(this).val());
+		                            e.preventDefault();
+                                    var targetEl = $(e.currentTarget);
+                                    Backbone.history.navigate("form-reports/"+$(targetEl).val() , {
+                                    trigger: true
+                                     });
 
-					              //  get_webrule_table_reports($(this).val());
-					                //showWebruleGraphs($(this).val());
 
-					        });
+	                        });
 
 						}, optionsTemplate);
 
 						//initializeLogReportHandlers();
+
 						
 					}, "#content");
 
@@ -161,7 +166,5 @@ function render_email_reports_select_ui(id, callback){
 				if(callback)
 					callback(); 		
 
-}
-
-
+			}
 
