@@ -5633,4 +5633,4 @@ plan-and-upgrade.unplug-auth,Dublin City&#44;  Ireland&#44;  www.unplug.ie,
 plan-and-upgrade.deean-harper,Deeann Harper,
 plan-and-upgrade.deean-harper-auth,Orlando&#44;  FL&#44;  www.harperadministrativeservices.com,
 plan-and-upgrade.deean-harper-desc,I love when I find a product that is perfect for small businesses and @agilecrm is my new favorite! #smallbusiness #harperadmin,
-
+other.campaign-webhooks-will-not-be-triggered-new,*Webhooks & Triggers (Contact Added & Tag Added) will not be automatically run during contacts import. Triggers need to be run manually.,,,,,,,,,,,,,,
