@@ -8,7 +8,7 @@
 function initWebruleChartsUI(callback)
 {
 	//Loads the date range 
-	initDateRange(callback);
+	initDateRangeforForm(callback);
 	callback();
 
 }
