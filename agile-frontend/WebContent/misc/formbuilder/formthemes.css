@@ -17,12 +17,12 @@
 .innerFontWeightDiv{
 	margin-top: 20px;
 }
-ul{
+.ulDiv ul{
 	list-style-type: none;
 	margin-left: -34px;
 	margin-top: 4px;
 }
-li{
+.ulDiv li{
 	margin:5px;
 	/*border-bottom: 1px solid lightgray;*/
 }
@@ -127,5 +127,5 @@ themeEleDelete:hover{
 	/*padding-right: 28px;*/
 }
 #form-preview:hover,#form-save:hover{
-	background-color: #ccc;
+	background-color: #e6e6e6!important;
 }

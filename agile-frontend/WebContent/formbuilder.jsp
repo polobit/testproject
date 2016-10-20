@@ -46,32 +46,16 @@ String template = request.getParameter("template");
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
-                  <div class="btn-group open" style="margin-top: -40px;margin-left: 210px;padding-right: 10px;">
+                  <div class="btn-group open" style="margin-top: -40px;margin-left: 270px;padding-right: 10px;">
                     <a href="#" onclick="createCustTheme()" class="btn btn-default btn-sm" data-toggle="modal" data-target="#customThemeModal"><i class="fa fa-plus-circle"></i> Add Theme</a>
                     <button class="btn btn-default btn-sm dropdown-toggle" onclick="chooseThemeFunc()" data-toggle="dropdown" aria-expanded="true" style="padding-bottom: 13px;padding-top: 11px;"><span class="caret"></span>
                     </button>
          
                     <div class="dropdown-content">
-                      <div class="themeDiv">
-                        <i class="fa fa-check"></i>
-                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">default</a>
+                      <div id="defaultThmLbl" class="themeDiv">
+                        <i style="width:10%;color: #337ab7;" class="fa fa-check"></i>
+                        <a href="#" style="background-color: transparent;text-decoration: none;" class="themeEle" onclick="selectedThemeFunc(this)">default</a>
                       </div>
-                      <div class="themeDiv">
-                        <i class="ipadding"></i>
-                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme1</a>
-                      </div>
-                      <div class="themeDiv">
-                        <i class="ipadding"></i>
-                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme2</a>
-                      </div>
-                      <div class="themeDiv">
-                        <i class="ipadding"></i>
-                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme3</a>
-                      </div>
-                      <div id="lable4" class="themeDiv">
-                        <i class="ipadding"></i>
-                        <a href="#" class="themeEle" onclick="selectedThemeFunc(this)">theme4</a>
-                      </div>  
                     </div>
                   </div>
             <div class="modal fade" id="customThemeModal" role="dialog">
@@ -284,8 +268,8 @@ String template = request.getParameter("template");
             <select>
               <option>Form</option>
               <option>Header</option>
-              <!-- <option>Body</option> -->
-              <option>Footer</option>
+              <!-- <option>Body</option> 
+              <option>Footer</option>-->
               <option>Button</option>
             </select>
           </div>
@@ -351,30 +335,9 @@ String template = request.getParameter("template");
                   </div>
 
                  
-                  <input id="form-preview" type="button"  onclick="formView()" class="btn btn-info" data-toggle="modal" data-target="#myModal" style="margin-top: -40px;margin-left: 340px;padding-right: 17px;background-color: #fff;color: #000;border-color: #ccc;height: 31px;font-size: 12px;"value="Preview Form">
-                  <input id="form-save" type="button" class="btn btn-info" style="background-color: #fff;color: #000;border-color: #ccc;height: 31px;font-size: 12px;padding-left: 22px;" value="Save Form">
+                
+                  <input id="form-save" type="button" class="btn btn-info" style="background-color: #fff;color: #000;border-color: #ccc;height: 31px;font-size: 12px;padding-left: 20px;padding-right: 20px;margin-right: 30px;" value="Save Form">
                   <hr style="margin-top: 30px;">
-                  <!--Adding content for formPreview-->
-                   <div class="modal fade" id="myModal" role="dialog">
-                      <div class="modal-dialog" style="left:0px;">
-    
-                         <!-- Modal content-->
-                        <div class="modal-content">
-                        <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">This is how your Form looks:</h4>
-                        </div>
-                        <div class="modal-body">
-                        <p  id="formContent" style="overflow: scroll;overflow-x: hidden;border: 1px solid #ccc;height: 450px;"></p>
-                         </div>
-                         <div class="modal-footer">
-                         <button type="button" class="btn btn-default" data-dismiss="modal" style="color:#fff;background-color:#7266ba">Close</button>
-                        </div>
-                        </div>
-      
-                     </div>
-                  </div>
-                  <!--Adding content for formPreview-->
                   <div id="build">
                      <form id="target" class="form-horizontal">
                      </form>
@@ -409,19 +372,25 @@ String template = request.getParameter("template");
                   var chooseThemeFuncHitCount=0;
                   var customthemes=null;
                   var formClasses=null;
-                  var themesListAsArr=["default","theme1","theme2","theme3","theme4"];
-                  function chooseThemeFunc(){
-                    <%
+                  var themesListAsArr=["default"];
+                  <%
                     List<CustomTheme> custThmList=CustomThemesUtil.fetchAllCustomThemes();
                     System.out.println("hi..........."+custThmList);
                     %>
-                    chooseThemeFuncHitCount++;
-                   /* $("#lable4").nextAll().remove();*/
+                    customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
+                  function chooseThemeFunc(){
+                    if($(".dropdown-content").css("display") == "none"){
+                      $(".dropdown-content").css("display","block");
+                    }
+                    else if($(".dropdown-content").css("display") == "block"){
+                      $(".dropdown-content").css("display","none");
+                    }
+                   chooseThemeFuncHitCount++;
                     if(chooseThemeFuncHitCount==1){
-                      customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
+                      
 
                     /*Edit Form CustTheme Class Fetching*/
-                    console.log("hi.........."+customthemes);
+                    console.log("Custom Themes::"+customthemes);
                     if(customthemes!=null){
                       for(i=0;i<customthemes.length;i++){
                         var custId=customthemes[i].id;
@@ -429,39 +398,24 @@ String template = request.getParameter("template");
                         themesListAsArr.push(custName);
                         var custCss=customthemes[i].themeCss;
                         var custIdName=custName+":"+custId;
-                        var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+custIdName+'"  onclick="selectedThemeFunc(this)">'+custName+'</a><a href="#" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
+                        var inputTheme='<div class="themeDiv"><i style="width:10%;color: #337ab7;" class="ipadding"></i><a href="#" style="background-color: transparent;text-decoration: none;" class="themeEle'+"\t"+custIdName+'"  onclick="selectedThemeFunc(this)">'+custName+'</a><a href="#" style="text-decoration:none;" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
                               
-                         $(inputTheme).insertAfter("#lable4");
-                        }
-                        if(formClasses!=null){
+                         $(inputTheme).insertAfter("#defaultThmLbl");
+                         if(formClasses!=null){
                           var formClassesList=formClasses.split(" ");
-                          $.each(themesListAsArr,function(index1,value1){
-                         
-                            $.each(formClassesList,function(index2,value2){
-                              if(value1==value2){
-                                formtheme=value2;
-                                var themeElem=$(".themeEle");
-                                $.each(themeElem,function(index,value){
-                                  if($(this).text()==formtheme){
-                                    var firstDiv=$(".themeDiv")[0];
+                          if(formClassesList.indexOf(custName)>-1){
+                                    var firstDiv = $(".themeDiv")[0];
                                     $(firstDiv).find("i").removeClass("fa");
                                     $(firstDiv).find("i").removeClass("fa-check");
                                     $(firstDiv).find("i").addClass("ipadding");
-                                    var parentDiv=$(this).parent();
-                                    $(parentDiv).find("i").addClass("fa");
-                                    $(parentDiv).find("i").addClass("fa-check");
-                                    $(parentDiv).find(i).removeClass("ipadding");
-                                  }
-                                });
-                              }
-                            });
-                         });
+                                    
+                                    $("#defaultThmLbl").next().find("i").addClass("fa fa-check");
+                                    $("#defaultThmLbl").next().find("i").removeClass("ipadding");
+                            }
+                         }
                         }
                       }
-                       /*customthemes=null;*/
-                     }
-                 
-                    $(".dropdown-content").css("display","block");
+                    }
                   }
                   
                   function selectedThemeFunc(identifier){
@@ -476,7 +430,7 @@ String template = request.getParameter("template");
                     $(identifier).parent().find("i").addClass("fa-check");
                     $(identifier).find("i").removeClass("ipadding");
 
-                    console.log(themeVal);
+                    console.log("Selected Theme Value:"+themeVal);
                     if(themeVal=="default"){
                       formtheme="default";
                     }
@@ -484,55 +438,65 @@ String template = request.getParameter("template");
                       formtheme=themeVal;
                       }
                      $(".dropdown-content").css("display","none");
-                  }
-
-                  function formView(){
-                           if(document.getElementById("render")!=null){
-                            var pContent=document.getElementById("render").value; 
-                           document.getElementById("formContent").innerHTML = "<div id='formContentDiv' style='margin:25px 50px;align:center;'>"+pContent+"</div>";
-                           }
-                           if(formtheme!=null && formtheme!="default"){
-                              if(formtheme=="theme1"||formtheme=="theme2"||formtheme=="theme3"||formtheme=="theme4"){
-                                  $(".form-view").addClass(formtheme);
-                                  $(".form-view fieldset").css("border","1px solid #ccc");
-                              }
-                              else {
-                                $(".form-view").addClass(formtheme);
-                                $.ajax({
+                     if(formtheme != null && formtheme != "default" ){
+                              $.each( customthemes, function( index, value ) {
+                                        $(document.getElementById("target")).removeClass(value.name);
+                                         $(document.getElementById("agileCustTheme")).empty();
+                              });
+                               $.ajax({
                                       type : 'POST',
                                       url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
                                       async : false,
                                       contentType : 'application/json',
                                       data : formtheme,
                                       success: function(data){
-                                        console.log("DATA COMING!!!"+data);
-                                        var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';
-                                        $("#formContentDiv").append(style);
+
+                                        $(document.getElementById("target")).addClass(formtheme);
+                                        $(document.getElementById("agileCustTheme")).text(data.themeCss);
+                                        
                                       },
                                       error: function(){
                                         alert("Theme style not been appended!!");
-                                        
                                       }});
-                              }
-                            
-                           }
-                         }
+                         
+                     }
+                    
+                  }
                   function saveCustTheme(){
                     var custTheme="";
                     var themeName=$("#themeName").val();
                     var isThemeNameExist=false;
+                    if($("#errorSpan").text().length>0){
+                        themeName = null;
+                     }
+                      $("#errorSpan").text("");
+                      $("#themeName").val("");
                     if(themeName!=null && (themeName.length>0)){
                       if(!isThemeNameExist){
                        for(i=0;i<themeArray.length;i++){
                           for(j=0;j<themeArray[i].form_element.length;j++){
                             var ele=themeArray[i].form_element[j].ele;
                             var elecss=themeArray[i].form_element[j].css;
+                            if(ele.includes("Field Label")){
+                              var eleProp = elecss.substring(0,elecss.indexOf("{"));
+                              var elepropArr = eleProp.split(",");
+                              var finalEleProp = "";
+                              $.each(elepropArr,function(index,value){
+                                if(index == elepropArr.length-1){
+                                  finalEleProp = finalEleProp+"."+themeName+"\t"+value;
+                                }
+                                else{
+                                  finalEleProp = finalEleProp+"."+themeName+"\t"+value+",";
+                              }
+                              });
+                              custTheme=custTheme+finalEleProp+"\t"+elecss.substring(elecss.indexOf("{"),elecss.length);
+                            }
+                            else{
                             custTheme=custTheme+"."+themeName+"\t"+elecss;
-                            console.log("output coming!!!"+ele);
-                            console.log("output coming!!!"+elecss);
+                            }
                           }
                         }
-                        console.log("Final CustomTheme::::"+custTheme);
+                        console.log("Final CustomTheme:"+custTheme);
                         var customTheme = {};
                         customTheme.name=themeName;
                         customTheme.themecss=custTheme;
@@ -542,21 +506,24 @@ String template = request.getParameter("template");
                           async : false,
                           contentType : 'application/json',
                           data : JSON.stringify(customTheme),
-                          success: function(data){
-                            console.log(data);
-                            if(data!=undefined && data!=""){
-                              customthemes.push(data);
-                              $("#themeName").val("");
-                              var inputTheme='<div class="themeDiv"><i class="ipadding"></i><a href="#" class="themeEle'+"\t"+data.name+data.id+'"  onclick="selectedThemeFunc(this)">'+data.name+'</a><a href="#" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
-                              
-                              $(inputTheme).insertAfter("#lable4");
-                            }
-                            
-                          },
-                          error: function(){
-                            alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
-                            $("#themeName").val("");
-                          }});
+                          });
+                        $.ajax({
+                              type : 'POST',
+                              url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
+                              async : false,
+                              contentType : 'application/json',
+                              data : themeName,
+                              success: function(data){
+                                if(data!=undefined && data!=""){
+                                customthemes.push(data);
+                                var inputTheme='<div class="themeDiv"><i style="width:10%;color: #337ab7;" class="ipadding"></i><a href="#" style="background-color: transparent;text-decoration: none;" class="themeEle'+"\t"+data.name+data.id+'"  onclick="selectedThemeFunc(this)">'+data.name+'</a><a href="#" style="text-decoration:none;" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
+                                  $(inputTheme).insertAfter("#defaultThmLbl");
+                               }
+                              },
+                              error: function(){
+                                alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
+                               $("#themeName").val("");
+                              }});
                       }
                     }
                   }
@@ -604,12 +571,12 @@ String template = request.getParameter("template");
                       $(themeElem[0]).find("i").removeClass("ipadding");
                     }
                   var parentDiv=$(identifier).parent();
-                     console.log("Requsted deleteThemeVal is:"+deleteThemeVal+"\t"+parentDiv);
+                     console.log("Requsted deleteThemeVal is:"+deleteThemeVal);
                      $.ajax({
                                 type : 'GET',
                                 url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/deleteTheme?themeName='+deleteThemeVal,
                                 success: function(data){
-                                  console.log("DATA COMING!!!"+data);
+                                  console.log("DELETED THEME?"+data);
                                   
                                     $(parentDiv).remove();
                                     $.each( themesListAsArr, function( index, value ){
@@ -620,7 +587,9 @@ String template = request.getParameter("template");
                                     $.each( customthemes, function( index, value ) {
                                         if(this.name==deleteThemeVal){
                                          customthemes.splice(index,1); 
-                                        }  
+                                         $(document.getElementById("target")).removeClass(deleteThemeVal);
+                                         $(document.getElementById("agileCustTheme")).empty();
+                                       }  
                                     });
                                   
                                 },
@@ -635,8 +604,8 @@ String template = request.getParameter("template");
                            $(".createCustomFormContent").html(pContent);
                       }
                   }
-                  
-                </script>
+      </script>
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <style id="agileCustTheme" type="text/css"></style>
    </body>
 </html>

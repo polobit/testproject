@@ -21,7 +21,10 @@ define([
                       }
                       
                      });
-		
+		 var custThmDiv = document.createElement("div");
+		 custThmDiv.setAttribute("id","formContent");
+		 $("body").append(custThmDiv);
+		 $("#formContent").css("display","none");
 		 $("#formContent").html($("#render").val());
 		 $("#formContent .form-view").addClass(themeVal);
 		 console.log("Before::::"+$("#formContent .form-view"));

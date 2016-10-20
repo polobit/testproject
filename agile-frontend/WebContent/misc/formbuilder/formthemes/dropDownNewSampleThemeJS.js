@@ -19,7 +19,7 @@ $(document).ready(function(){
 			themeArray=[alignmentCss,borderCss,fontCss,bckgroundCss];
 			
 			<!--DEFAULT SELECTSPAN VALUE AND DISPLAYING--> 
-			<!--IT'S CORRESPONDING COMPONENTS -->
+			<!--ITS CORRESPONDING COMPONENTS -->
 
 			var selectedSelectThemeEle=$(".selectDiv select option:selected").text();
 			if(selectedSelectThemeEle=="Alignment"){
@@ -28,9 +28,9 @@ $(document).ready(function(){
 					$(".createCustomFormContent legend").css(" width","432px");
 					$(".createCustomFormContent legend").css("padding-top","15px");
 					$(".createCustomFormContent legend").css("padding-right","26px");*/
-					$(".createCustomFormContent legend").css("text-align","-webkit-center");
+					$(".createCustomFormContent legend").css("text-align","center");
 
-					var css="legend{text-align:-webkit-center;}";
+					var css="legend{text-align:center;}";
 
 					var eleThemeCss=new EleThemeCss("Form Title/legend",css);
 					alignmentCss.form_element.push(eleThemeCss);
@@ -97,7 +97,7 @@ $(document).ready(function(){
 					$(".createCustomFormContent legend").css(" width","432px");
 					$(".createCustomFormContent legend").css("padding-top","15px");
 					$(".createCustomFormContent legend").css("padding-right","26px");*/
-					$(".createCustomFormContent legend").css("text-align","-webkit-"+alignTypeEle);
+					$(".createCustomFormContent legend").css("text-align",alignTypeEle);
 					
 					for(i=0;i<alignmentCss.form_element.length;i++){
 						if(alignmentCss.form_element[i].ele=="Form Title/legend"){
@@ -106,7 +106,7 @@ $(document).ready(function(){
 						}
 					}
 
-					var css="legend{text-align:-webkit-"+alignTypeEle+";}";
+					var css="legend{text-align:"+alignTypeEle+";}";
 
 					var eleThemeCss=new EleThemeCss("Form Title/legend",css);
 					alignmentCss.form_element.push(eleThemeCss);
@@ -124,16 +124,16 @@ $(document).ready(function(){
 						$(".createCustomFormContent form button").parent().css("margin-left","0px");
 						$(".createCustomFormContent form button").parent().css("float",alignTypeEle);
 
-						var css="button{margin-left:0px;float"+alignTypeEle+"}";
+						var css=".agile-group button{margin-left:0px;float"+alignTypeEle+"}";
 						if(alignTypeEle=="right"){
-							var css="button{margin-left:340px;}";
+							var css=".agile-group button{margin-left:340px;}";
 						}
 					}
 					else{
 						$(".createCustomFormContent form button").parent().css("margin-left","140px");
 						$(".createCustomFormContent form button").parent().css("float","none");
 
-						var css="button{margin-left:165px;float:none;}";
+						var css=".agile-group button{margin-left:165px;float:none;}";
 					}
 						var eleThemeCss=new EleThemeCss("Submit Button/button",css);
 						alignmentCss.form_element.push(eleThemeCss);
@@ -151,7 +151,7 @@ $(document).ready(function(){
 					$(".createCustomFormContent legend").css(" width","432px");
 					$(".createCustomFormContent legend").css("padding-top","15px");
 					$(".createCustomFormContent legend").css("padding-right","26px");*/
-					$(".createCustomFormContent legend").css("text-align","-webkit-"+alignTypeEle);
+					$(".createCustomFormContent legend").css("text-align",alignTypeEle);
 
 					for(i=0;i<alignmentCss.form_element.length;i++){
 						if(alignmentCss.form_element[i].ele=="Form Title/legend"){
@@ -160,7 +160,7 @@ $(document).ready(function(){
 						}
 					}
 
-					var css="legend{text-align:-webkit-"+alignTypeEle+"}";
+					var css="legend{text-align:"+alignTypeEle+"}";
 
 					var eleThemeCss=new EleThemeCss("Form Title/legend",css);
 					alignmentCss.form_element[0]=eleThemeCss;
@@ -178,19 +178,18 @@ $(document).ready(function(){
 					if(alignTypeEle=="left" || alignTypeEle=="right"){
 						$(".createCustomFormContent form button").parent().css("margin-left","0px");	
 						$(".createCustomFormContent form button").parent().css("float",alignTypeEle);	
-						var css="button{margin-left:0px;float:"+alignTypeEle+";}";
+						var css=".agile-group button{margin-left:0px;float:"+alignTypeEle+";}";
 						if(alignTypeEle=="right"){
-							var css="button{margin-left:340px;}";
+							var css=".agile-group button{margin-left:340px;}";
 						}
 					}
 					else{
 						$(".createCustomFormContent form button").parent().css("margin-left","140px");
 						$(".createCustomFormContent form button").parent().css("float","none");
-						var css="button{margin-left:165px;float:none;}";
+						var css=".agile-group button{margin-left:165px;float:none;}";
 					}
 						var eleThemeCss=new EleThemeCss("Submit Button/button",css);
 						alignmentCss.form_element.push(eleThemeCss);
-						console.log(themeArray);	
 				}
 			});
 			
@@ -199,7 +198,6 @@ $(document).ready(function(){
 			<!--BACKGROUND COMPONENT FORM ELEMENTS CLICK LOGIC START -->
 			$(".innerBackgroundFormEle select").change(function(){
 				var themeEle="Background";
-				console.log($(".innerBackgroundFormEle select option:selected").text());
 				var backgroundFormEle=$(".innerBackgroundFormEle select option:selected").text();
 				var backgroundImgEle=null;
 				var backgroundColorVal=null;
@@ -214,7 +212,7 @@ $(document).ready(function(){
 					/*$("form").css("background-color",backgroundColorVal);
 					$("form").css("background","url("+backgroundImgEle+")");*/
 					$(".createCustomFormContent form").css("background",backgroundColorVal+"\t"+"url("+backgroundImgEle+")");
-					var css="form{background:"+backgroundColorVal+"\t"+"url("+backgroundImgEle+");}";
+					var css="{background:"+backgroundColorVal+"\t"+"url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Form/form",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Form/form"){
@@ -227,7 +225,7 @@ $(document).ready(function(){
 				else if(backgroundFormEle=="Header"){
 					$(".createCustomFormContent form legend").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form legend").css("background-image","url("+backgroundImgEle+")");
-					var css="form legend{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css="legend{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Header/form legend",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Header/form legend"){
@@ -256,7 +254,7 @@ $(document).ready(function(){
 					$(".createCustomFormContent form button").parent().parent().css("margin-bottom","0px");
 					$(".createCustomFormContent form button").parent().parent().css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").parent().parent().css("background-image","url("+backgroundImgEle+")");
-					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css=".agile-group button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Footer/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Footer/button"){
@@ -269,7 +267,7 @@ $(document).ready(function(){
 				else if(backgroundFormEle=="Button"){
 					$(".createCustomFormContent form button").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").css("background","url("+backgroundImgEle+")");
-					var css="button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css=".agile-group button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Button/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Button/button"){
@@ -281,11 +279,9 @@ $(document).ready(function(){
 				}
 				bckgroundCss.form_element.push(eleThemeCss);
 				console.log(themeArray);
-				console.log("form ele:"+backgroundFormEle+"backgroundImgEle:"+backgroundImgEle+"backgroundColorVal:"+backgroundColorVal);		
 			});
 			$(".innerBackgroundImageTheme li").click(function(e){
 				var themeEle="Background";
-				console.log(e);
 				var backgroundFormEle=$(".innerBackgroundFormEle select option:selected").text();
 				var backgroundImgEle=null;
 				var backgroundColorVal=null;
@@ -347,7 +343,7 @@ $(document).ready(function(){
 					$(".createCustomFormContent form button").parent().parent().css("margin-bottom","0px");
 					$(".createCustomFormContent form button").parent().parent().css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").parent().parent().css("background-image","url("+backgroundImgEle+")");
-					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css=".agile-group button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Footer/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Footer/button"){
@@ -359,7 +355,7 @@ $(document).ready(function(){
 				else if(backgroundFormEle=="Button"){
 					$(".createCustomFormContent form button").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").css("background-image","url("+backgroundImgEle+")");
-					var css="button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css=".agile-group button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Button/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Button/button"){
@@ -373,7 +369,6 @@ $(document).ready(function(){
 			});
 			$(".innerBackgroundTheme input").change(function(e){
 				var themeEle="Background";
-				console.log(e);
 				var backgroundFormEle=$(".innerBackgroundFormEle select option:selected").text();
 				var backgroundImgEle=null;
 				var backgroundColorVal="#"+$(".innerBackgroundTheme input").val();
@@ -435,7 +430,7 @@ $(document).ready(function(){
 					$(".createCustomFormContent form button").parent().parent().css("margin-bottom","0px");
 					$(".createCustomFormContent form button").parent().parent().css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").parent().parent().css("background-image","url("+backgroundImgEle+")");
-					var css="button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css=".agile-group button{height:63px;margin-bottom:0px;background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Footer/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Footer/button"){
@@ -447,7 +442,7 @@ $(document).ready(function(){
 				else if(backgroundFormEle=="Button"){
 					$(".createCustomFormContent form button").css("background-color",backgroundColorVal);
 					$(".createCustomFormContent form button").css("background-image","url("+backgroundImgEle+")");
-					var css="button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
+					var css=".agile-group button{background-color:"+backgroundColorVal+";background-image:url("+backgroundImgEle+");}";
 					var eleThemeCss=new EleThemeCss("Button/button",css);
 					for(i=0;i<bckgroundCss.form_element.length;i++){
 						if(bckgroundCss.form_element[i].ele=="Button/button"){
@@ -706,7 +701,7 @@ $(document).ready(function(){
 					}
 					else if(formEle=="Field Label"){
 						var multipleFormEleFinal="";
-						var multipleFormEle=".agile-label,form input[type=text],form input[type=hidden],.agile-group-addon,form select,form input[type=checkbox],form input[type=radio]";
+						var multipleFormEle=".agile-group .agile-label,.agile-group input[type=text],.agile-group input[type=hidden],.agile-group .agile-group-addon,.agile-group select,.agile-group input[type=checkbox],.agile-group input[type=radio]";
 						var multipleFormEleArr=multipleFormEle.split(",");
 						for(i=0;i<multipleFormEleArr.length;i++){
 							multipleFormEleFinal=multipleFormEleFinal+".createCustomFormContent"+"\t"+multipleFormEleArr[0]+",";
@@ -732,7 +727,7 @@ $(document).ready(function(){
 						$(".createCustomFormContent form button").css("font-weight",fontWeightEle);
 						$(".createCustomFormContent form button").css("font-size",fontSizeEle);
 						$(".createCustomFormContent form button").css("color",fontThemeColor);
-						var css="button{font-family:"+fontFamilyEle+";font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";color:"+fontThemeColor+";}";
+						var css=".agile-group button{font-family:"+fontFamilyEle+";font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";color:"+fontThemeColor+";}";
 						var eleThemeCss=new EleThemeCss("Button Text/button",css);
 						for(i=0;i<fontCss.form_element.length;i++){
 							if(fontCss.form_element[i].ele=="Button Text/button"){

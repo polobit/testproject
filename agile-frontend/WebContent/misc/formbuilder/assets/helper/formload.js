@@ -4,7 +4,7 @@ define([
 	return { agile_form_load : function()
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
-		
+		console.log("customthemes in formload page::"+customthemes);
 		$.ajax({
 			url : url,
 			type: 'GET',
@@ -24,11 +24,22 @@ define([
 					}
 				}
 				
-				
-				$("#formContent").html(data.formHtml);
+				 var custThmDiv = document.createElement("div");
+				 custThmDiv.setAttribute("id","formContent");
+				 $("body").append(custThmDiv);
+				 $("#formContent").html(data.formHtml);
+				 formClasses=$("#formContent .form-view").attr("class");
+				 $("#formContent").remove();
+				 $.each(customthemes,function(index,value){
+                      if(formClasses.indexOf(value.name)>-1){
+                      	$(document.getElementById("target")).addClass(value.name);
+                                         $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                      }
+                     });
+				/*$("#formContent").html(data.formHtml);
 				formClasses=$("#formContent .form-view").attr("class");
 				console.log("formClassesList:::"+formClasses);
-				$("#formContent .form-view").remove();
+				$("#formContent .form-view").remove();*/
 
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
