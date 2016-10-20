@@ -1,8 +1,11 @@
 package com.campaignio.tasklets.agile;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.status.CampaignStatus;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -68,17 +71,27 @@ public class CheckCampaign extends TaskletAdapter
 		// Campaign ID and status
 		String campaignID = getStringValue(nodeJSON, subscriberJSON, data, CAMPAIGN_ID);
 		String campaignStatus = getStringValue(nodeJSON, subscriberJSON, data, CAMPAIGN_STATUS);
-
+		List<CampaignStatus> campaignStatusList = null;
 		try
-		{
+		{	
 			// Checks if there are any campaigns in the given status
-			if (ContactUtil.workflowListOfAContact(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
-					campaignID.equals(ANY_CAMPAIGN) ? null : Long.parseLong(campaignID), campaignStatus).size() > 0)
+			if(campaignID.equals(ANY_CAMPAIGN)){	
+				// getting list of Campaigns of the Contact
+				campaignStatusList = ContactUtil.workflowListOfAContact(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
+						null, campaignStatus);
+				// getting current Campaign object
+				CampaignStatus currentCampaignStatus = new CampaignStatus(0l, 0l, AgileTaskletUtil.getId(campaignJSON), null, AgileTaskletUtil.getId(campaignJSON) + "-"+ STATUS_ACTIVE.toString());
+				// delete current Campaign object from campaignStatusList
+				campaignStatusList.remove(currentCampaignStatus);
+			}else{				
+				campaignStatusList = ContactUtil.workflowListOfAContact(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
+						Long.parseLong(campaignID), campaignStatus);
+			}
+			if (campaignStatusList.size() > 0)
 			{
 				TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
 				return;
 			}
-
 		}
 		catch (Exception e)
 		{
