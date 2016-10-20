@@ -91,6 +91,7 @@ public class ContactsDeleteTask implements DeferredTask
     {
     	int contact_count= fetcher.getContactCount();
     	int company_count = fetcher.getCompanyCount();
+    	int lead_count = fetcher.getLeadCount();
 	System.out.println("contacts : " + contact_count);
 	System.out.println("companies : " + company_count);
 
@@ -115,10 +116,15 @@ public class ContactsDeleteTask implements DeferredTask
 	    message = company_count + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(company_count, "DELETE", "", "companies", "");
 	}	
-	else if (fetcher.getLeadCount() > 0)
+	else if (lead_count == 1)
 	{
-	    message = fetcher.getCompanyCount() + " Leads deleted";
-	    ActivitySave.createBulkActionActivity(fetcher.getLeadCount(), "DELETE", "", "leads", "");
+	    message = lead_count + " Lead deleted";
+	    ActivitySave.createBulkActionActivity(lead_count, "DELETE", "", "leads", "");
+	}
+	else if (lead_count > 1)
+	{
+	    message = lead_count + " Leads deleted";
+	    ActivitySave.createBulkActionActivity(lead_count, "DELETE", "", "leads", "");
 	}
 	else
 	{
