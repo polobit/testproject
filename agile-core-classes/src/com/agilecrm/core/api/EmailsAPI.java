@@ -199,30 +199,7 @@ public class EmailsAPI
 
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
 			null);
-		JSONObject res = new JSONObject();
-
-		// return in the same format {emails:[]}
-		EmailPrefs emailPrefs = null;
-		List<String> mailUrls = new ArrayList<>();
-		
-		try
-		{
-		    emailPrefs = ContactEmailUtil.getEmailPrefs();
-		    mailUrls = emailPrefs.getFetchUrls();
-		    String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
-		    for(int i=0; i< mailUrls.size();i++){
-		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
-		    		mailUrls.remove(i);
-		    	}
-		    }
-		}
-		catch (Exception e)
-		{
-		    e.printStackTrace();
-		}
-		res.put("emails", contactEmails);
-		res.put("emailPrefs", mailUrls);
-		return res.toString();
+		return EmailUtil.getEmails(contactEmails);
 		
 	  //  }
 
@@ -793,4 +770,36 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    return null;
 	}
 	}
+	
+	/**
+     * Returns imap emails merging with contact emails, when imap preferences
+     * are set. Otherwise simply returns contact emails. Emails json string are
+     * returned in the format {emails:[]}.
+     * 
+     * @param searchEmail
+     *            - to get emails related to search email
+     * @param count
+     *            - required number of emails.
+     * @param offset
+     *            - offset.
+     * @return String
+     */
+    @Path("imap-lead-email")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8" })
+    public String getLeadEmails(@QueryParam("e") String searchEmail, @QueryParam("o") String offset,
+	    @QueryParam("c") String count)
+    {
+	try
+	{
+		JSONArray contactEmails = ContactEmailUtil.mergeLeadEmails(StringUtils.split(searchEmail, ",")[0], null);
+		return EmailUtil.getEmails(contactEmails);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }

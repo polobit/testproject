@@ -104,7 +104,14 @@ var timeline_entity_loader = {
 		// Go for mails when only the contact has an email
 		if (email)
 		{
-			this.timline_fetch_data('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', function(stats)
+			var fetch_url = 'core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0';
+
+			//If passed object type is lead, change the fetch url to fetch lead emails
+			if(contact && contact.type == "LEAD")
+			{
+				fetch_url = 'core/api/emails/imap-lead-email?e=' + encodeURIComponent(email) + '&c=10&o=0';
+			}
+			this.timline_fetch_data(fetch_url, function(stats)
 			{
 				console.log(stats);
 				
@@ -122,10 +129,10 @@ var timeline_entity_loader = {
 						
 						});
 
-					if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact.id && App_Contacts.contactDetailView.get('type') != 'LEAD')
+					if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact.id && Current_Route && Current_Route.indexOf("contact") == 0)
 						return;
 
-					if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') !== contact.id && App_Leads.leadDetailView.get('type') == 'LEAD')
+					if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') !== contact.id && Current_Route && Current_Route.indexOf("lead") == 0)
 						return;
 
 					var contact_emails = [];

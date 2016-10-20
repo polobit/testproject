@@ -223,9 +223,9 @@ public class BulkOperationsAPI
 	}
 	else if (idsFetcher.getLeadCount() > 0)
 	{
-	    message = message + idsFetcher.getCompanyCount() + " Leads";
+	    message = message + idsFetcher.getLeadCount() + " Leads";
 	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
-	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "CHANGE_OWNER", user.name, "leads",
+	    ActivitySave.createBulkActionActivity(idsFetcher.getLeadCount(), "CHANGE_OWNER", user.name, "leads",
 		    "");
 	}
 	else

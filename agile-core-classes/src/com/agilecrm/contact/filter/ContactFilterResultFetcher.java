@@ -594,7 +594,7 @@ public class ContactFilterResultFetcher
 
     private void modifyDAOCondition()
     {
-	if (!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.EDIT_CONTACT))
+	if ((!hasScope(UserAccessScopes.UPDATE_CONTACT) && !hasScope(UserAccessScopes.EDIT_CONTACT))|| !hasScope(UserAccessScopes.VIEW_CONTACTS))
 	{
 	    if (domainUserId == null)
 		return;
