@@ -119,7 +119,9 @@ function showCustomFieldModel(data)
 			else if(scope=="COMPANY")
 				$('#textModalForm',el).find("#companies").prop('checked', true); 
 			else if(scope =="DEAL")
-				$('#textModalForm',el).find("#deals").prop('checked', true); 
+				$('#textModalForm',el).find("#deals").prop('checked', true);
+			else if(scope =="LEAD")
+				$('#textModalForm',el).find("#leads").prop('checked', true);  
 			
 			//This code will scroll to top to see the modal.
 			
@@ -188,6 +190,11 @@ function showCustomFieldModel(data)
 							App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
 							App_Admin_Settings.dealCustomFieldsListView.render(true);
 						}
+						if(scopeDetails[i]== "leads")
+						{
+							App_Admin_Settings.leadCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.leadCustomFieldsListView.render(true);
+						}
 					}
 
 					if(model.scope=="CASE"){
@@ -209,11 +216,6 @@ function showCustomFieldModel(data)
 					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
 					App_Admin_Settings.caseCustomFieldsListView.render(true);
 				}*/
-				}
-				else if(model.scope=="LEAD"){
-					App_Admin_Settings.leadCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.leadCustomFieldsListView.render(true);
-				}
 				/*App_Admin_Settings.customFieldsListView.collection.add(model);
 				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
 					App_Admin_Settings.customFieldsListView.render(true);*/
