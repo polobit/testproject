@@ -4,6 +4,7 @@ var FormsRouter = Backbone.Router.extend({
 		"forms" : "formSettings",
 		"form-builder-templates" : "getListOfTemplates",
 		"formbuilder?template=:id" : "buildForm",
+		"form-reports/:id":"formReports",
 	},
 	buildForm : function(){
        var loc = window.location.href.replace("#", "");
@@ -48,8 +49,116 @@ var FormsRouter = Backbone.Router.extend({
         
         $(".active").removeClass("active");
 	
-	} 
+	},
+	formReports : function(id)
+			{
+				showTransitionBar();
 
 
+				this.render_form_reports_select_ui(id, function(){
+
+					getTemplate("formbuilder-form-analysis-tabs", { "id" : id }, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+
+						// Render tabs with id
+						$('#formbuilder-form-analysis-tabs').html($(template_ui));
+						
+						initReportLibs(function()
+						{
+							// Load Reports Template
+							getTemplate('formbuilder-form-reports', {}, undefined, function(template_ui1)
+							{
+								if (!template_ui1)
+									return;
+								
+								$('#formbuilder-form-analysis-tabs-content').html($(template_ui1));
+
+								if(id == "all") {
+									var formreportId = $("#formbuilder-form-reports-select option")[1].value;
+									$("#formbuilder-form-reports-select").val(formreportId);
+									id = formreportId;
+
+								}
+								
+								// Set the name
+								// $('#reports-webrule-name').text(workflowName);
+								initFormChartsUI(function()
+								{
+									// Updates table data
+									get_form_table_reports(id);
+
+									// shows graphs by default week date range.
+									showFormGraphs(id);
+								});
+
+						
+
+							}, "#formbuilder-form-analysis-tabs-content");
+
+						});
+
+						$(".active").removeClass("actionve");
+						$("#formsmenu").addClass("active");
+
+						$('#formbuilder-form-tabs .select').removeClass('select');
+						$('.formbuilder-form-stats-tab').addClass('select');
+
+						hideTransitionBar();
+
+					}, "#formbuilder-form-analysis-tabs");
+				
+				});
+
+			},
+
+
+			render_form_reports_select_ui : function(id, callback){
+
+				 // Fetches forms if not filled
+				if (!$('#formbuilder-form-reports-select').html())
+				{
+					getTemplate('formbuilder-form-analysis', {}, undefined, function(template_ui){
+				 		if(!template_ui)
+				    		return;
+
+						$('#content').html($(template_ui)); 
+						var optionsTemplate = "<option value='{{id}}'>{{formName}}</option>";
+
+						// fill forms
+						fillSelect('formbuilder-form-reports-select', '/core/api/forms', 'form', function fillwebrule()
+						{
+							if(id)
+							$('#formbuilder-form-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
+
+							if(callback)
+							  callback();
+
+							$('#content').on('change', '#formbuilder-form-reports-select', function (e) {
+		                            //get_form_table_reports($(this).val());
+		                            e.preventDefault();
+                                    var targetEl = $(e.currentTarget);
+                                    Backbone.history.navigate("form-reports/"+$(targetEl).val() , {
+                                    trigger: true
+                                     });
+
+
+	                        });
+
+						}, optionsTemplate);
+
+						//initializeLogReportHandlers();
+
+						
+					}, "#content");
+
+					return;
+				}
+
+				if(callback)
+					callback(); 		
+
+			}
 
 });
