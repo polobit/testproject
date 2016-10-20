@@ -6,6 +6,9 @@ function bindAdminChangeAction(el, data)
 	$.each(newscopesarray, function(index, data) {
 				if($(newscopesarray[index]).attr("id") == "deals-privilege"){	
 					newscopesarray.splice(index,1);}
+				else if($(newscopesarray[index]).attr("id") == "calendar-privilege"){
+					newscopesarray.splice(index,1);
+				}
 				});
 	$('input[name="is_admin"]', el).on('change', function(e){
 

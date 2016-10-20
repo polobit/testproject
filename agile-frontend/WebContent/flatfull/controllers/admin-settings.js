@@ -389,15 +389,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				//Chage deals from newscopes to newMenuScopes
 				if(!model.toJSON() || !model.toJSON().newscopes)
 					return;
+				if(!model.toJSON().newMenuScopes){
+					return;		
+				}
 
 			    var newscopes = model.toJSON().newscopes;
 			    $.each(newscopes, function(index, data) {
-					if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);}
+					if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);model.toJSON().newMenuScopes.push("DEALS");}
+					else if(newscopes[index] == "CALENDAR"){newscopes.splice(index, 1);model.toJSON().newMenuScopes.push("CALENDAR");}
 				});
 
-				if(model.toJSON().newMenuScopes)
-					model.toJSON().newMenuScopes.push("DEALS");
-
+				
 			      
 			}, saveCallback : function(response)
 			{
@@ -522,14 +524,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				},500);
 			}, prePersist : function(model){
 				
-			    /*$("#userForm").find(".addDealToMenuScopes").append($("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals"));
-			    $("#userForm").find('[name="newscopes"]').find(".newMenuScopesDeals").remove();*/
+			   if(!model.toJSON() || !model.toJSON().newscopes)
+					return;
+				if(!model.toJSON().newMenuScopes){
+					return;		
+				}
+
 			    var newscopes = model.toJSON().newscopes;
 			    $.each(newscopes, function(index, data) {
-				if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);}
+					if(newscopes[index] == "DEALS"){newscopes.splice(index, 1);model.toJSON().newMenuScopes.push("DEALS");}
+					else if(newscopes[index] == "CALENDAR"){newscopes.splice(index, 1);model.toJSON().newMenuScopes.push("CALENDAR");}
 				});
-				model.toJSON().newMenuScopes.push("DEALS");
-
 			      
 			   },saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
