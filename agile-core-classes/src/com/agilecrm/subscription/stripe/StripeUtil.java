@@ -19,6 +19,8 @@ import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
@@ -55,8 +57,29 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
  */
 public class StripeUtil {
 	static {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		Stripe.apiVersion = "2012-09-24";
+	}
+	
+	public static String getStripeApiKey(){
+		if(isDevelopmentEnv())
+			return Globals.STRIPE_TEST_API_KEY;
+		return getStripeApiKey();
+	}
+	private static boolean isDevelopmentEnv(){
+		if(VersioningUtil.isDevelopmentEnv() || VersioningUtil.getApplicationAPPId().equals("agilecrmbeta")){
+			return true;
+		}
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try{
+			String versionNumber = (String)CacheUtil.getCache("stripe_version_test");
+			if(versionNumber != null && versionNumber.equals(VersioningUtil.getVersion()))
+				return true;
+			return false;
+		}finally{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**
@@ -152,7 +175,7 @@ public class StripeUtil {
 	 */
 	public static Customer getCustomerFromJson(JSONObject customerJSON)
 			throws StripeException {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		// Converts Customer JSON to customer object
 		Customer customer = new Gson().fromJson(customerJSON.toString(),
 				Customer.class);
@@ -160,7 +183,7 @@ public class StripeUtil {
 		if (customer != null && !customer.getLivemode()) {
 			RequestOptionsBuilder builder = new RequestOptionsBuilder()
 					.setApiKey(Globals.STRIPE_TEST_API_KEY);
-			// builder.setApiKey(Globals.STRIPE_API_KEY);
+			// builder.setApiKey(getStripeApiKey());
 			// builder.setStripeVersion("2014-12-08");
 			RequestOptions options = builder.build();
 
@@ -211,7 +234,7 @@ public class StripeUtil {
 	public static List<Charge> getCharges(String customerid, Integer limit)
 			throws StripeException {
 
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
 
@@ -233,7 +256,7 @@ public class StripeUtil {
 	// based on charge id, that charge will be refunded
 	public static Charge createRefund(String chargeid) throws StripeException {
 
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 
 		Charge ch = Charge.retrieve(chargeid);
 
@@ -244,7 +267,7 @@ public class StripeUtil {
 	public static Refund createPartialRefund(String chargeId, Integer amount)
 			throws StripeException {
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
-		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setApiKey(getStripeApiKey());
 		builder.setStripeVersion("2014-12-08");
 		RequestOptions options = builder.build();
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -316,7 +339,7 @@ public class StripeUtil {
 	}
 
 	public static void deleteSubscription(String sub_id, String cus_id) {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		Customer cu;
 
 		try {
@@ -347,10 +370,10 @@ public class StripeUtil {
 	}
 
 	public static Invoice getInvoice(String invoice_id) {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		try {
 			RequestOptionsBuilder builder = new RequestOptionsBuilder();
-			builder.setApiKey(Globals.STRIPE_API_KEY);
+			builder.setApiKey(getStripeApiKey());
 			builder.setStripeVersion("2014-12-08");
 			RequestOptions options = builder.build();
 
