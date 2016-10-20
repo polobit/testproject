@@ -40,19 +40,18 @@
                     <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}</label>
                     <div class="controls col-sm-9" id="contactTypeAhead">
                       <div>
-                       <div >
-                          <ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
-                        </div>
-                        <div class="clearfix"></div>
-                        <input type="text" id="document_relates_to_contacts" name="related_contacts"
+                          <input type="text" id="document_relates_to_contacts" name="related_contacts"
                           placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" class="typeahead typeahead_contacts form-control"
                           data-provide="typeahead" data-mode="multiple" />
-                        <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'documents' 'please-relate-the-document-to-contact'}}</span>   
+                           <div >
+                            <ul name="contact_ids" class="contacts tagsinput tags p-n"></ul>
+                          </div>
                       </div>
-                    </div>
+                      <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'documents' 'please-relate-the-document-to-contact'}}</span>   
+                      </div>
                   </div>
                   <div class="control-group form-group">
-                    <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'related-deals'}}
+                    <label class="control-label col-sm-3"  style="margin-top:10px;">{{agile_lng_translate 'tasks' 'related-deals'}}
                     </label>
                     <div class="controls col-sm-9" id="dealTypeAhead">
                       <div>
