@@ -412,7 +412,7 @@ public class EmailsAPI
 			emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
-		    textEmail, null, new ArrayList<Long>(),new ArrayList<BlobKey>());
+		    textEmail, null, null, null);
 
 	}
 	catch (Exception e)

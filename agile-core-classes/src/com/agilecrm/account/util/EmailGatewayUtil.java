@@ -417,7 +417,8 @@ public class EmailGatewayUtil
 	    	if((documentIds != null && documentIds.size() == 0) 
 	    			&& (blobKeys != null && blobKeys.size() == 0)
 	    			&& (attachments != null && attachments.length == 0)) {
-		    	//Fetch the email options from user's social preferences 
+		    	
+	    		//Fetch the email options from user's SMTP preferences 
 		    	List<SMTPPrefs> userPrefs = SMTPPrefsUtil.getSMTPPrefsList(AgileUser.getCurrentAgileUser());
 		    	for(SMTPPrefs smtpPrefs : userPrefs) {
 		    		if(smtpPrefs != null && smtpPrefs.user_name.equals(fromEmail)) {
@@ -438,15 +439,10 @@ public class EmailGatewayUtil
 			
 		    /* If no gateway setup or Amazon SES gateway having attachments or documents, 
 			sends email through Agile's default (Sendgrid) */
-			if(SEND_GRID.equals(preferredGateway) 
-					|| (SES.equals(preferredGateway) 
-							&& ((documentIds != null && documentIds.size() != 0) 
-		    				|| (blobKeys != null && blobKeys.size() != 0)
-		    				|| (attachments != null && attachments.length != 0)))) {
+			if(SEND_GRID.equals(preferredGateway) ) {
 	
 				SendGrid.sendMail(user, key, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
 		    			html, text, null, documentIds, blobKeys, attachments);
-		    	return;
 		    }
 		    else if(MANDRILL.equals(preferredGateway)) {
 		    	
@@ -454,7 +450,15 @@ public class EmailGatewayUtil
 		    			html, text, mandrillMetadata, documentIds, blobKeys, attachments);
 		    }
 		    else if(SES.equals(preferredGateway)) {
-	    	
+
+				if ((documentIds != null && documentIds.size() != 0) 
+	    				|| (blobKeys != null && blobKeys.size() != 0)
+	    				|| (attachments != null && attachments.length != 0)) {
+
+					SendGrid.sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
+			    			html, text, null, documentIds, blobKeys, attachments);
+			    	return;
+	    		}
 		    	MailDeferredTask mailDeferredTask = new MailDeferredTask(preferredGateway.toString(), 
 		    			user, key, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
 		    			html, text, null, null, null);

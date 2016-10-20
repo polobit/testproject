@@ -4835,3 +4835,11 @@ ul#recent-menu-model-list li:nth-child(even)
 @keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 @-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
 
+.app-aside-folded #email-content .freePlanDetails
+{
+  padding-bottom:35px;
+}
+#email-content .subscriptionDetail
+{
+  padding-bottom:35px;
+}

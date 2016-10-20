@@ -415,7 +415,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	   //$( event.target ).blur();
 	   var checkedlist = $allitems.not("[value='']");
 	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
-	   console.log(list);
+	   // console.log(list);
 	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
 	   return false;
 	});
