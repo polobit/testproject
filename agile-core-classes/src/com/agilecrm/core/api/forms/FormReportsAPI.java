@@ -86,7 +86,7 @@ public class FormReportsAPI
 	}
 	catch (Exception e)
 	{
-	    System.err.println("Exception occured in each WebruleStats " + e.getMessage());
+	    System.err.println("Exception occured in each form graph stats " + e.getMessage());
 	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
 		    .entity(e.getMessage()).build());
 	}
@@ -133,7 +133,7 @@ public class FormReportsAPI
 	}
 	catch (Exception e)
 	{
-	    System.err.println("Exception occurred while getting Webrule stats... " + e.getMessage());
+	    System.err.println("Exception occurred while getting form table stats... " + e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}

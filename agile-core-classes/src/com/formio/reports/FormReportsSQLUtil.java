@@ -72,10 +72,7 @@ public class FormReportsSQLUtil
     public static JSONArray getFormStats4Graph(String id, String startDate, String endDate, String timeZone, String type)
     {
 	String domain = NamespaceManager.get();
-	// AnalyticsDBConnectionFetcher fetch = new
-	// AnalyticsDBConnectionFetcher();
-	// Connection cont =fetch.getConnection();
-
+	
 	// For develoment
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	    domain = "localhost";
@@ -85,9 +82,6 @@ public class FormReportsSQLUtil
 
 	// Returns (sign)HH:mm from total minutes.
 	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
-
-	// NOTE::For optimal use of index , doing union all instead of using
-	// IN/OR conditions
 
 	String query = "SELECT DATE_FORMAT(" + GoogleSQLUtil.addConvertTZ(timeZoneOffset) + ","
 		+ GoogleSQLUtil.getDateFormatBasedOnType(type) + ") AS log_date,"
@@ -113,9 +107,6 @@ public class FormReportsSQLUtil
     public static JSONArray getFormStats4Table(String id, String startDate, String endDate, String timeZone)
     {
 	String domain = NamespaceManager.get();
-	// AnalyticsDBConnectionFetcher fetch = new
-	// AnalyticsDBConnectionFetcher();
-	// Connection cont =fetch.getConnection();
 	// For development
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 	    domain = "localhost";
@@ -126,9 +117,7 @@ public class FormReportsSQLUtil
 	// Returns (sign)HH:mm from total minutes.
 	String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
 
-	// NOTE::For optimal use of index , doing union all instead of using
-	// IN/OR conditions
-
+	
 	String query = "SELECT count(form_id) AS total  " + "FROM form_reports " + "WHERE DOMAIN="
 		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND form_id=" + GoogleSQLUtil.encodeSQLColumnValue(id)
 		+ "AND log_time BETWEEN CONVERT_TZ(" + GoogleSQLUtil.encodeSQLColumnValue(startDate) + ","
