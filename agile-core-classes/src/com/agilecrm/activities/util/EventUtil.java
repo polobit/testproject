@@ -724,15 +724,19 @@ public class EventUtil
     
     public static void sendEmailForEventContacts(List<String> contactIds, Event event){
     	List<Contact> contactsList =  ContactUtil.getContactsByIds(contactIds);
-    	long domainUserID = Long.parseLong(event.owner_id);
-    	DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
-    	String domainUserEmail = user.email;
-    	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, user, user.email, user.name);
+    	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+    	DomainUser currentUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);
+    	String currentUserEmail = currentUser.email;
+    	
+    	long domainUserID = Long.parseLong(event.owner_id);    	
+    	DomainUser eventOwner = DomainUserUtil.getDomainUser(domainUserID);
+    	String eventOwnerEmail = eventOwner.email;
+    	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, eventOwner, eventOwnerEmail, eventOwner.name);
     	String[] attachments = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
     	
-    	String domain_url = VersioningUtil.getHostURLByApp(user.domain);
+    	String domain_url = VersioningUtil.getHostURLByApp(eventOwner.domain);
     	String cancel_link = domain_url + "appointment/cancel/" + event.id;
-    	String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + user.domain;
+    	String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + eventOwner.domain;
     	Long startTime = event.start;
 		Long endTime = event.end;
     	
@@ -771,7 +775,7 @@ public class EventUtil
 	   	    					}
 	   	    				}
 	   	    				
-	   	    				StringBuilder usermail = new StringBuilder("<p>You have a new appointment with <b>" + user.name + "</b> (" + user.email+ ")</p>");
+	   	    				StringBuilder usermail = new StringBuilder("<p>You have a new appointment with <b>" + eventOwner.name + "</b> (" + eventOwnerEmail + ")</p>");
 	   	    				usermail.append("<span>Title: " + event.title +"</span><br/>");
 	   	   					usermail.append("<span>Duration: " + minsInStr + "</span><br/>");
 	   	   					if(event.description != null && event.description.length() > 0){
@@ -780,14 +784,14 @@ public class EventUtil
 	   	   					usermail.append("<p><a href=" + cancel_link+"/c"+ contact.id +">Cancel this appointment</a></p>");
 	   	   					usermail.append("<p>This event has been scheduled using <a href=" + link +">Agile CRM</a></p>");
 	   	   					
-	   	    				EmailGatewayUtil.sendEmail(null, user.email, user.name, contactEmail, null, null, "Appointment Scheduled",
+	   	    				EmailGatewayUtil.sendEmail(null, eventOwnerEmail, eventOwner.name, contactEmail, null, null, "Appointment Scheduled",
 	   	    						null, usermail.toString(), null, null, null, null, attachments);
 	   	    			}
    	    			}
    	    		}
    	    	}
    	    	
-   	    	if(domainUserEmail != null){	
+   	    	if(eventOwnerEmail != null){	
    	    		StringBuilder domainMailTempalte = new StringBuilder();
    	    		int dataLength = companiesList.length();
    	    		String contactDetails;
@@ -807,9 +811,9 @@ public class EventUtil
    	    		if(event.description != null && event.description.length() > 0){
    	    			domainMailTempalte.append("<span>Description: "+ event.description + "</span><br/>");
    	    		}
-   	    		domainMailTempalte.append("<p><a href=https://" + user.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>");
+   	    		domainMailTempalte.append("<p><a href=https://" + eventOwner.domain + ".agilecrm.com/#calendar>View this new event in Agile Calendar</a></p>");
    	    		
-   				EmailGatewayUtil.sendEmail(null, user.email, user.name, domainUserEmail, null, null, "Appointment Scheduled",
+   				EmailGatewayUtil.sendEmail(null, currentUserEmail, eventOwner.name, eventOwnerEmail, null, null, "Appointment Scheduled",
    						null, domainMailTempalte.toString(), null, null, null, null, null);		
    	    	} 
    		}
