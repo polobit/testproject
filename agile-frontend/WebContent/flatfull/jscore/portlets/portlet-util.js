@@ -2041,9 +2041,16 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-					initializeCustomRangeInModal(base_model,elData);
+				initializeCustomRangeInModal(base_model,elData);
+				
+				console.log("Blur things activites 1 ** ");
+				$('#start_date',elData).blur();
+				$('#end_date',elData).blur();
+				$('.p-date-picker',elData).blur();
+				$('.p-date-picker').blur();					
+				console.log("Blur things activites 2 ** ");
 
-					break;
+				break;
 		}
 		case "Webstat Visits": {
 			that.addPortletSettingsModalContent(base_model,
@@ -2053,12 +2060,7 @@ var portlet_utility = {
 				               'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-					initializeCustomRangeInModal(base_model,elData);
-
-					console.log("Blur things activites 1 ** ");
-					$('#start_date',elData).blur();
-					$('#end_date',elData).blur();
-					console.log("Blur things activites 2 ** ");
+					initializeCustomRangeInModal(base_model,elData);					
 			break;
 		}
 		case "Referralurl stats": {
