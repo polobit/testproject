@@ -22,23 +22,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.UpdateRelatedEntitiesUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
-import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.GoogleCalendarUtil;
-import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
-import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
-import com.googlecode.objectify.Key;
+import com.agilecrm.user.util.DomainUserUtil;
 
 /**
  * <code>EventsAPI</code> includes REST calls to interact with {@link Event}
@@ -234,6 +234,8 @@ public class EventsAPI
 	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
 	
 	UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
+	
+	EventUtil.sendEmailForEventContacts(modifiedConIds, event);
 	
 	return event;
     }
