@@ -1,6 +1,5 @@
-$(document).ready(function(){
 
-			
+	function custThemePopUpCode(){
 			<!--DropDownSampleTheme JS -->
 			function CustomThemeCss(selectedCssType,formEle){
 				this.selectedCssType=selectedCssType;
@@ -741,7 +740,8 @@ $(document).ready(function(){
 				}
 
 			<!--FONT COMPONENT FORM ELEMENTS CLICK LOGIC START -->
-		});	
+			}
+		
 
 
 		

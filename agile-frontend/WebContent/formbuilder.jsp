@@ -599,6 +599,7 @@ String template = request.getParameter("template");
                       });
                   }
                   function createCustTheme(){
+                    custThemePopUpCode();
                     if($("#render")!=null){
                         var pContent=document.getElementById("render").value;
                            $(".createCustomFormContent").html(pContent);
