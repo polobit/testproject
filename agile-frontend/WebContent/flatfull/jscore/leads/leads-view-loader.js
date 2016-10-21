@@ -422,7 +422,7 @@ var LeadsViewLoader = (function(){
 					{
 						loadCustomFiledsFilters(that.LEAD_CUSTOM_FIELDS, cel, false, true);
 					}
-				}, optionsTemplate, false, $('#lhs_filters_conatiner', cel));
+				}, optionsTemplate, false, el);
 
 				//To set lead sources
 				fillSelect('lead_source_select', '/core/api/categories?entity_type=LEAD_SOURCE', undefined, function()

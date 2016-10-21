@@ -152,7 +152,7 @@ function setup_tags_typeahead(callback, el) {
                         App_Leads.leadDetailView.model.set(data.toJSON(), {silent : true});
                         // Append to the list, when no match is found 
                         if ($.inArray(tag, old_tags) == -1) {
-                            var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}"><span><a class="anchor m-r-xs" href="#tags/{{name}}" >{{name}}</a><a class="close remove-lead-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                            var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block c-default" data="{{name}}"><span><span class="m-r-xs">{{name}}</span><a class="close remove-lead-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
                             // Adds lead name to tags ul as li element
                             $('#added-tags-ul').append(template({name : tag}));
                             $.each(data.get("tagsWithTime"), function(e, d) 

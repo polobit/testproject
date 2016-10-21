@@ -110,6 +110,12 @@ function modelAction(elem)
 		$('#companiesmenu').parent().find('.active').removeClass('active');
 		$('#companiesmenu').addClass('active');
 	}	
+	else if(type=='lead_entity')
+	{
+		App_Contacts.navigate("lead/"+id,{trigger:true});
+		$('#leadsmenu').parent().find('.active').removeClass('active');
+		$('#leadsmenu').addClass('active');
+	}
 	else if(type=='deal')
 	{
 		App_Deal_Details.navigate("deal/"+id,{trigger:true});

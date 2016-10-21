@@ -1840,7 +1840,7 @@ updateScoreValue :function(){
                 
                 // Append to the list, when no match is found 
                 if ($.inArray(new_tags, old_tags) == -1) {
-                  var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" style="color:#363f44" data="{{name}}"><span><a class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{name}}" >{{name}}</a><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+                  var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs c-default" style="color:#363f44" data="{{name}}"><span><span class="m-r-xs custom-color" style="color:#363f44">{{name}}</span><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
 
                   // Adds contact name to tags ul as li element
                   $('#added-tags-ul').append(template({name : new_tags}));

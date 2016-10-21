@@ -125,7 +125,7 @@ public class CSVUtil
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
 	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
-	    service = new GCSServiceAgile("local" + "_failed_contacts_" + GoogleSQL.getFutureDate()
+	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
 	//}
 
