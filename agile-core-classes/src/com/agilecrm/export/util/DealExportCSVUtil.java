@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.export.DealCSVExport;
@@ -84,6 +85,16 @@ public class DealExportCSVUtil
     {
 	// Can't append elements directly in java, so convert to ArrayList
 	List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
+	headersList.add("Note1");
+	headersList.add("Note2");
+	headersList.add("Note3");
+	headersList.add("Note4");
+	headersList.add("Note5");
+	headersList.add("Note6");
+	headersList.add("Note7");
+	headersList.add("Note8");
+	headersList.add("Note9");
+	headersList.add("Note10");
 
 	try
 	{
@@ -130,5 +141,27 @@ public class DealExportCSVUtil
 	    indexMap.put(headers[i], i);
 
 	return indexMap;
+    }
+    
+    /**
+     * helper function will append note in deal entity
+     */
+    public static String[] addNotes(String[] dealData, List<Note> notes)
+    {
+	int count = 0;
+	for (Note note : notes)
+	{
+	    StringBuilder sb = new StringBuilder();
+	    if (note.subject != null)
+		sb.append(note.subject.trim());
+	    if (note.description != null)
+		sb.append("\n" + note.description);
+	    // ten notes are already added in header use that index.
+	    dealData[dealData.length - 10 + count] = sb.toString();
+	    count++;
+	    if (count == 10)
+		break;
+	}
+	return dealData;
     }
 }
