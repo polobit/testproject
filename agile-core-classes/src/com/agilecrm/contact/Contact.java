@@ -1380,7 +1380,7 @@ public class Contact extends Cursor
 	{
 		try
 		{
-			System.out.println("Checking Owner Change id :"+ id +"  Owner_Key : " + owner_key + "owner_updated" + owner_updated);
+			System.out.println("Checking Owner Change id :"+ id +"  Owner_Key : " + owner_key + "  owner_updated : " + owner_updated);
 			// Set old owner only if owner_updated is false
 			if(id == null || owner_key == null || owner_updated)
 				return;
