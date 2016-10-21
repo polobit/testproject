@@ -33,6 +33,7 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
+import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.session.SessionManager;
@@ -719,7 +720,7 @@ public String getSendgridWhitelabelPermission() throws Exception
 	
 }
 /**
- * Rajesh Code
+ * Get all agile emails
  * @param searchEmail
  * @param countString
  * @return
@@ -732,12 +733,13 @@ public String getSendgridWhitelabelPermission() throws Exception
 	List<ContactEmailWrapper> emailsList = null;
 	try
 	{
+		Integer count = Integer.parseInt(countString);
+		String cursor = offset;
+		
 	    List<ContactEmail> contactEmails = null;
 	    
 	    if(StringUtils.isNotBlank(countString))
 	    {
-	    	Integer count = Integer.parseInt(countString);
-    		String cursor = offset;
     		
 	    	try
 	    	{
@@ -763,7 +765,6 @@ public String getSendgridWhitelabelPermission() throws Exception
 		    {
 			// parse email body
 			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
-	
 			ObjectMapper mapper = new ObjectMapper();
 			String emailString = mapper.writeValueAsString(contactEmail);
 			agileEmails.put(new JSONObject(emailString));
@@ -773,6 +774,9 @@ public String getSendgridWhitelabelPermission() throws Exception
 			    new TypeReference<List<ContactEmailWrapper>>()
 			    {
 			    });
+		    
+		    ContactEmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
+			lastEmail.cursor = Integer.parseInt(cursor)+ "";
 	    }
 	    return emailsList;
 	}

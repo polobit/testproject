@@ -1,5 +1,6 @@
 var inboxMailListView;
 var SHOW_TOTALCOUNT = true;
+var IS_LOADING = false;
 var InboxRouter = Backbone.Router.extend({
 
 	routes : {
@@ -64,10 +65,20 @@ function syncContacts(){
 			if(inbox_has_email_configured === 'true'){
 				$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 				//$("#mail-view").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll"});
-
-				url = "core/api/emails/all-agile-emails?";
+				if(_agile_get_prefs("inbox_url")){
+					url = _agile_get_prefs('inbox_url');
+					$('#inbox-email-type-select').attr("data-url",url);
+					url = url+"&folder_name=INBOX";
+			        $('#inbox-email-type-select').attr("from_email",_agile_get_prefs('inbox_email_server_type'));
+			        $('#inbox-email-type-select').attr("data-server",_agile_get_prefs('inbox_email_server'));
+			        $('#inbox-email-type-select').attr("folder-type","inbox");
+			        $('#inbox-email-type-select').html(_agile_get_prefs('inbox_from_email'));
+				}else{
+					url = "core/api/emails/all-agile-emails?";
+					$('#inbox-email-type-select').attr("data-url",url);
+				}
 				$('#inbox-email-type-select').attr("folder-type","inbox");
-				$('#inbox-email-type-select').attr("data-url",url);
+				globalMailCollectionInstance = new globalMailCollection();
 				renderToMailList(url,1,10);
 	        }else{
 	        	$("#inbox-prefs-verification").css({"display":"block"});
@@ -80,16 +91,19 @@ function syncContacts(){
 			var email_server = $(targetEl).attr('email-server');
 			var url = $(targetEl).attr('data-url');
 			$('#inbox-email-type-select').html($(targetEl).html());
+			 _agile_set_prefs('inbox_from_email', $(targetEl).html());
 			// Here email_server_type means email/username of mail account
 			email_server_type = $(targetEl).attr('email-server-type');
 			if (email_server && url && (email_server != 'agile')){
 				url = url.concat(email_server_type);
+				_agile_set_prefs('inbox_url', url);
 				$('#inbox-email-type-select').attr("data-url",url);
 				$('#inbox-email-type-select').attr("from_email",email_server_type);
 				$('#inbox-email-type-select').attr("data-server",email_server);
 				url = url+"&folder_name=INBOX";
 			}else{
 				url = url.concat(email_server_type);
+				_agile_set_prefs('inbox_url', url);
 				$('#inbox-email-type-select').attr("data-server",email_server);
 				$('#inbox-email-type-select').attr("data-url",url);
 			}
@@ -97,6 +111,11 @@ function syncContacts(){
 			$('.inbox-menu li').removeClass('active');
 	        $(".inbox-menu li").first().addClass("active");
 	        $('#inbox-email-type-select').attr("folder-type","inbox");
+
+	        _agile_set_prefs('inbox_email_server_type', email_server_type);
+	        _agile_set_prefs('inbox_email_server', email_server);
+	        _agile_set_prefs('inbox_folder_type', "inbox");
+
 	        globalMailCollectionInstance = new globalMailCollection();
 			renderToMailList(url,1,10);
 		}
@@ -125,6 +144,7 @@ function renderToMailList(url,offset_val,page_size_val){
 			//_.bindAll(this,'cleanUp')
 			//var self = this;
 			this.isLoading = false;
+			IS_LOADING = true;
 			this.mailCollectionInstance = new mailCollection();
 			this.loadResults();
 		},
@@ -135,6 +155,7 @@ function renderToMailList(url,offset_val,page_size_val){
 	        var that = this;
 	        // we are starting a new load of results so set isLoading to true
 	        this.isLoading = true;
+	        IS_LOADING = true;
 	        // fetch is Backbone.js native function for calling and parsing the collection url
 	        this.mailCollectionInstance.fetch({
 				success: function(data,response,xhr) {
@@ -146,6 +167,7 @@ function renderToMailList(url,offset_val,page_size_val){
 					inboxFlagListners();
 					hideTransitionBar();
 					$(".loading").hide();
+					IS_LOADING = false;
 				},
 				error: function (errorResponse) {
 					console.log(errorResponse)
@@ -173,6 +195,7 @@ function renderToMailList(url,offset_val,page_size_val){
 	    		this.$el.append(html);
 	    	}
 	    	this.isLoading = false;
+	    	//IS_LOADING = false;
 		},
 	    checkScroll: function () {
 	        var triggerPoint = 100; // 100px from the bottom

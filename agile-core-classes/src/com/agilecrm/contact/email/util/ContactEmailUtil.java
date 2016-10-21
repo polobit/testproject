@@ -1119,86 +1119,24 @@ public class ContactEmailUtil
 	    }
 
 	    public static List<ContactEmail> fetchAllAgileMailsWithCursor(int max, String cursor, Query<ContactEmail> query, boolean forceLoad, boolean cache){
+	    	int toalcount = query.count();
+	    	if(max > toalcount)
+	    		max = toalcount+1;
 	    	
-	        final String[] countRestrictedClassNames = new String[] { "contact", "activity", "opportunity" };
-	        
-	    	System.out.println("check read query");
-	    	//UserAccessControlUtil.checkReadAccessAndModifyQuery(ContactEmail.class.getSimpleName(), query);
-	    	int page_index_for_cursor = 0;
+    		int cursor1 = Integer.parseInt(cursor);
+			query.offset(cursor1-1).limit(max);
 
-	    	if (cursor != null){
-				query.offset(0);
-	    	}
-	    	    
-	    	int index = 0;
-	    	
-	    	String newCursor = null;
 	    	List<ContactEmail> results = new ArrayList<>();
 	    	QueryResultIterator<ContactEmail> iterator = query.iterator();
 	    	while (iterator.hasNext()){
 	    		ContactEmail result = iterator.next();
-	    	    // Add to list
+	    		result.flags ="read";
+	    		//System.out.println(++(Integer.parseInt(cursor)-1) +"====="+ max);
+	    		if(++cursor1-1 == max){
+	    			result.count = String.valueOf(toalcount);
+	    		}
 	    	    results.add(result);
-	    	    // Check if we have reached the limit
-	    	    if (++index == max){
-		    		// Sets cursor for client
-		    		if (iterator.hasNext()){
-		    		    Cursor cursorDb = iterator.getCursor();
-		    		    try {
-		    		    	 newCursor = cursorDb.toWebSafeString();
-		    			} catch (NullPointerException e) {
-		    				/**
-		    				 * GAE Query not support cursor with inequality filters in the query.
-		    				 */
-		    				System.out.println(ExceptionUtils.getFullStackTrace(e));
-		    				page_index_for_cursor++;
-		    				
-		    				newCursor = "agile_cursor_" + page_index_for_cursor + "-" + max;
-		    			}
-		    		   
-		    		    //iterator.
-		    		    // Store the cursor in the last element
-		    		    /*if (result instanceof com.agilecrm.cursor.Cursor)
-		    		    {
-			    			com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-			    			agileCursor.cursor = newCursor;
-		    		    }*/
-		    		}
-		    		break;
-	    	    }
 	    	}
-	    	// Add count for the first time if next cursor is null
-	    	if(results != null && results.size() > 0 && cursor == null){
-	    		ContactEmail result = results.get(0);
-	    		// Send totalCount if first time
-	    	    if (result != null){
-	    		// First time query - let's get the count
-	    		/*if (result instanceof com.agilecrm.cursor.Cursor){
-
-	    		    String className = ContactEmail.class.getSimpleName().toLowerCase();
-
-	    		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-	    		    Object object = forceLoad ? null : CacheUtil.getCache(ContactEmail.class.getSimpleName() + "_"
-	    			    + NamespaceManager.get() + "_count");
-
-	    		    if (object != null){
-		    			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-		    			    agileCursor.count = (Integer) object;
-	    		    }else{
-		    			long startTime = System.currentTimeMillis();
-		    			if (!Arrays.asList(countRestrictedClassNames).contains(className))
-		    			    agileCursor.count = (newCursor == null ? results.size() : query.count());
-		
-		    			long endTime = System.currentTimeMillis();
-		    			if ((endTime - startTime) > 15 * 1000 && cache)
-		    			    CacheUtil.setCache(ContactEmail.class.getSimpleName() + "_" + NamespaceManager.get() + "_count",
-		    				    agileCursor.count, 1 * 60 * 60 * 1000);
-	    		    }
-	    		    
-	    			}*/
-	    	    }
-	    	}
-	    	System.out.println(results+"==========");
 	    	return results;
 		 }
 

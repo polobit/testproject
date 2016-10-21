@@ -51,6 +51,7 @@ function inboxFlagListners(){
 	});
 	$(document).on('click','.back-to-inbox',function(e) {
 		$(".collapse").removeClass("in");
+		$(".collapse").attr("aria-expanded","false");
 		$("#mails-list").show();
 		$("#mail-details-view").hide();
 		$("#compose").hide();
@@ -93,10 +94,13 @@ function inboxFlagListners(){
 
 		if(server == "exchange"){
 			//url = url; //+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal,
-			getExchangeContent(url,from_email,folder_name,dataVal);
+			if(!IS_LOADING)
+				getExchangeContent(url,from_email,folder_name,dataVal);
 		}else{
-			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal,
-			getContent(url,dataVal);
+			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal;
+			console.log(IS_LOADING);
+			if(!IS_LOADING)
+				getContent(url,dataVal);
 		}
 		$(this).css({"font-weight":"normal"});
 		$(this).removeClass("unread");
@@ -129,10 +133,12 @@ function inboxFlagListners(){
 				folder_name = "Trash";
 
 			if(server == "exchange"){
-				setExchangeFlag(url,from_email,folder_name,'DELETED',dataVal);
+				if(!IS_LOADING)
+					setExchangeFlag(url,from_email,folder_name,'DELETED',dataVal);
 			}else{
-				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal,
-				setSeenFlag(url);
+				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal;
+				if(!IS_LOADING)
+					setSeenFlag(url);
 			}
 
 			var curr_val = $(".inti-val").text();
@@ -152,7 +158,8 @@ function inboxFlagListners(){
 			globalMailCollectionInstance.remove(dataVal); //.get(dataVal);
 			if(server != "exchange"){
 				SHOW_TOTALCOUNT = false;
-				renderToMailList(url,offset,page_size);
+				if(!IS_LOADING)
+					renderToMailList(url,offset,page_size);
 			}
 			$("#mails-list").show();
 			$("#mail-details-view").hide();
@@ -178,21 +185,34 @@ function setSeenFlag(url,dataVal, attrid){
 	});
 }
 function getContent(url,dataVal){
-	$.ajax({ 
-		url :url,
-		success : function(data){
-			dataVal = dataVal.replace(/[^\w\s]/gi, '-');
-			var html = "";
-			getTemplate("mail-message", data, undefined, function(template_ui) {
-				if( !template_ui )	return;
+	var server = $("#inbox-email-type-select").attr("data-server");
+	if(server != "agile"){
+		$.ajax({ 
+			url :url,
+			success : function(data){
+				dataVal = dataVal.replace(/[^\w\s]/gi, '-');
+				var html = "";
+				getTemplate("mail-message", data, undefined, function(template_ui) {
+					if( !template_ui )	return;
 
-				html = template_ui;
-			}, '#message'+dataVal);
-	        $("#message"+dataVal).html(html);
-	        $("#mails-list").hide();
-	        $("#mail-details-view").show();
-		} 
-	});
+					html = template_ui;
+				}, '#message'+dataVal);
+		        $("#mails-list").hide();
+		        $("#"+dataVal).addClass("in");
+		        $("#message"+dataVal).html(html);
+		        $("#"+dataVal).attr("aria-expanded","true");
+		        $("#"+dataVal).css({"display":"block"});
+		        $("#mail-details-view").show();
+			} 
+		});
+	}else{
+		dataVal = dataVal.replace(/[^\w\s]/gi, '-');
+		$("#mails-list").hide();
+        //$("#"+dataVal).addClass("in");
+        //$("#"+dataVal).attr("aria-expanded","true");
+        //$("#"+dataVal).css({"display":"block"});
+        $("#mail-details-view").show();
+	}
 }
 
 function getExchangeContent(url,from_email,folder_name,messageid){
@@ -242,7 +262,8 @@ function setExchangeFlag(url,from_email,folder_name,flag,messageid){
 				url = $('#inbox-email-type-select').attr("data-url");
 				url = url.concat("&folder_name="+folder_name);
 				SHOW_TOTALCOUNT = false;
-				renderToMailList(url,offset,page_size);
+				if(!IS_LOADING)
+					renderToMailList(url,offset,page_size);
 			}
 		} 
 	});
@@ -269,7 +290,8 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(!IS_LOADING)
+			renderToMailList(url,1,10);
 	});
 
 	$('#inbox-listners').on('click', '#mail-sent', function(e){
@@ -281,7 +303,8 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(!IS_LOADING)
+			renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '#mail-draft', function(e){
 		e.preventDefault();
@@ -292,7 +315,8 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(!IS_LOADING)
+			renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '#mail-trash', function(e){
 		e.preventDefault();
@@ -304,7 +328,8 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(!IS_LOADING)
+			renderToMailList(url,1,10);
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
 		e.preventDefault();
@@ -335,7 +360,8 @@ function initializeInboxListeners(){
 			url = url+"from_email="+from_email+"&search_content="+search_val;
 			globalMailCollectionInstance = new globalMailCollection();
 			helperFunction();
-			renderToMailList(url,offset,count);
+			if(!IS_LOADING)
+				renderToMailList(url,offset,count);
 		}
 	}
 
@@ -391,9 +417,11 @@ function initializeInboxListeners(){
 				        }
 			        });
 					var from_email_exchange = $('#inbox-email-type-select').attr("from_email");
-					setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'DELETED',meesageids_exchange);
+					if(!IS_LOADING)
+						setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'DELETED',meesageids_exchange);
 				}else{
-					setSeenFlag(urlval);
+					if(!IS_LOADING)
+						setSeenFlag(urlval);
 				}
 				for(var i=0;i<idcol.length;i++){
 					var dataVal = idcol[i].replace(/[^\w\s]/gi, '-');
@@ -425,7 +453,8 @@ function initializeInboxListeners(){
 
 				if(server_type != "exchange"){
 					SHOW_TOTALCOUNT = false;
-					renderToMailList(url,offset,page_size);
+					if(!IS_LOADING)
+						renderToMailList(url,offset,page_size);
 				}
 			}	
 		});	
@@ -459,9 +488,11 @@ function initializeInboxListeners(){
 			        }
 		        });
 				var from_email_exchange = $('#inbox-email-type-select').attr("from_email");
-				setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'SEEN',meesageids_exchange);
+				if(!IS_LOADING)
+					setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'SEEN',meesageids_exchange);
 			}else{
-				setSeenFlag(urlval);
+				if(!IS_LOADING)
+					setSeenFlag(urlval);
 			}
 			for(var i=0;i<idcol.length;i++){
 				var model = globalMailCollectionInstance.get(idcol[i]);
@@ -505,9 +536,11 @@ function initializeInboxListeners(){
 			        }
 		        });
 				var from_email_exchange = $('#inbox-email-type-select').attr("from_email");
-				setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'UNREAD',meesageids_exchange);
+				if(!IS_LOADING)
+					setExchangeFlag(url_exchange,from_email_exchange,folder_name_exchange,'UNREAD',meesageids_exchange);
 			}else{
-				setSeenFlag(urlval);
+				if(!IS_LOADING)
+					setSeenFlag(urlval);
 			}
 			for(var i=0;i<idcol.length;i++){
 				var model = globalMailCollectionInstance.get(idcol[i]);
@@ -524,6 +557,7 @@ function initializeInboxListeners(){
 	});
 
 	$(".previous").unbind().click(function(e) {
+		$("#mails-list").show();
 		var curr_val = $(".inti-val").text();
 		var tot_val = $(".totalcount").text();
 		var offset = curr_val.split(" - ")[0].trim();
@@ -563,7 +597,7 @@ function initializeInboxListeners(){
 			$("#mails-list").append("<li style='display:none' class='get-counts' data-cursor='"+offset+"' data-count='"+tot_val+"'></li>");
 
 			var html_view = "";
-			getTemplate("mail-message", globalMailCollectionInstance.toJSON().slice(offset-1,page_size), undefined, function(template_ui) {
+			getTemplate("mail-view", globalMailCollectionInstance.toJSON().slice(offset-1,page_size), undefined, function(template_ui) {
 				if( !template_ui )	return;
 
 				html_view = template_ui;
@@ -576,14 +610,17 @@ function initializeInboxListeners(){
 			SHOW_TOTALCOUNT = true;
 			helperFunction();
 			var search_val = document.getElementById('search-mail').value;
-			if(search_val)
+			if(search_val){
 				searchEmails(offset,page_size)
-			else
-				renderToMailList(url,offset,page_size);
+			}else{
+				if(!IS_LOADING)
+					renderToMailList(url,offset,page_size);
+			}
 		}
 	});
 
 	$(".next").unbind().click(function(e) {
+		$("#mails-list").show();
 		var curr_val = $(".inti-val").text();
 		var tot_val = $(".totalcount").text();
 		var offset = curr_val.split(" - ")[0].trim();
@@ -629,10 +666,12 @@ function initializeInboxListeners(){
 			helperFunction();
 			SHOW_TOTALCOUNT = true;
 			var search_val = document.getElementById('search-mail').value;
-			if(search_val)
+			if(search_val){
 				searchEmails(offset,page_size)
-			else
-				renderToMailList(url,offset,page_size);
+			}else{
+				if(!IS_LOADING)
+					renderToMailList(url,offset,page_size);
+			}
 		}
 
 	});
@@ -813,7 +852,8 @@ function initializeComposeEmailListeners(){
 		url = url.concat("&folder_name=INBOX");
 		$('#inbox-email-type-select').attr("folder-type","inbox");
 		helperFunction();
-		renderToMailList(url,1,10);
+		if(!IS_LOADING)
+			renderToMailList(url,1,10);
 	});
 
 	$('#send-email-listener-container').on('click', '#sendEmailInbox', function(e){
