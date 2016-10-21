@@ -146,6 +146,15 @@ public class AddOn implements Serializable{
 		}
 	}
 
+	public void delete(){
+		dao.delete(this);
+		try{
+			CacheUtil.deleteCache(getCacheKey());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Cachee key for addOn
 	 * @return

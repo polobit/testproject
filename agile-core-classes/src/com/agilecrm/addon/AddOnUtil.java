@@ -120,5 +120,11 @@ public class AddOnUtil {
 			throw new Exception("Sorry. Only users with admin privileges can change the addons. Please contact your administrator for further assistance.");
 		}
 	}
+	
+	public static void deleteAddOn(){
+		AddOn addOn = getAddOn();
+		if(addOn != null)
+			addOn.delete();
+	}
 
 }

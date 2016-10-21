@@ -11,6 +11,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.AgileBilling;
@@ -184,16 +185,10 @@ public class StripeImpl implements AgileBilling {
 				.getData();
 
 		// Fetches all subscriptions and check if there is an account plan
-		Iterator<com.stripe.model.Subscription> iterator = subscriptionList
-				.iterator();
 		com.stripe.model.Subscription oldSubscription = null;
-		boolean is_EmailSubs = false;
-		while (iterator.hasNext()) {
-			com.stripe.model.Subscription s = iterator.next();
-			com.stripe.model.Plan p = s.getPlan();
-			if (!StringUtils.containsIgnoreCase(p.getId(), "email")) {
-				oldSubscription = s;
-				is_EmailSubs = true;
+		for(com.stripe.model.Subscription subscription : subscriptionList){
+			if(!StringUtils.containsIgnoreCase(subscription.getPlan().getId(), "email") && !StringUtils.containsIgnoreCase(subscription.getPlan().getId(), "addon")){
+				oldSubscription = subscription;
 				break;
 			}
 		}
@@ -466,6 +461,7 @@ public class StripeImpl implements AgileBilling {
 
 		SubscriptionUtil.deleteEmailSubscription();
 		SubscriptionUtil.deleteUserSubscription();
+		AddOnUtil.deleteAddOn();
 
 		// Fetches all subscriptions and cancels from stripe
 		for (com.stripe.model.Subscription s : subscriptions.getData()) {
@@ -645,7 +641,7 @@ public class StripeImpl implements AgileBilling {
 		System.out.println("cust id:: "+customer.getId());
 		List<com.stripe.model.Subscription> subs = customer.getSubscriptions().getData();
 		for(com.stripe.model.Subscription sub : subs){
-			if(!sub.getPlan().getId().contains("email")){
+			if(!StringUtils.containsIgnoreCase(sub.getPlan().getId(), "email") && !StringUtils.containsIgnoreCase(sub.getPlan().getId(), "addon")){
 				invoiceParams.put("subscription", sub.getId());
 				System.out.println("sub id:: "+sub.getId());
 			}

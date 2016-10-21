@@ -14,6 +14,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.json.JSONException;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
@@ -324,8 +325,14 @@ public class StripeUtil {
 
 			com.stripe.model.Subscription subscription = cu.getSubscriptions().retrieve(sub_id);
 			subscription.cancel(null);
-			if(subscription.getPlan().getId().contains("email"))
+			String planId = subscription.getPlan().getId();
+			if(StringUtils.containsIgnoreCase(planId, "email"))
 				SubscriptionUtil.deleteEmailSubscription();
+			else if(StringUtils.containsIgnoreCase(planId, "addon")){
+				
+			}else{
+				SubscriptionUtil.deleteUserSubscription();
+			}
 			System.out.println("subscription successfully deleted");
 		} catch (AuthenticationException e) {
 			// TODO Auto-generated catch block
