@@ -133,6 +133,7 @@ var _agile_synch_form_v4 = function()
 		}
 		agile_contact=arr_obj[0];
 	}	
+	 agile_contact['agile_source'] = "form";
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
 		var contact_id = data.id;
