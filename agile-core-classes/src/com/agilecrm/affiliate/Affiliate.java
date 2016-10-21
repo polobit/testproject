@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class Affiliate {
+public class Affiliate extends  Cursor{
 
 	/**
 	 * Id
@@ -92,20 +93,6 @@ public class Affiliate {
 	
 	public Affiliate() {
 		
-	}
-	
-	/**
-	 * Dao
-	 */
-	static ObjectifyGenericDao<Affiliate> dao = new ObjectifyGenericDao<Affiliate>(Affiliate.class);
-	
-	@PrePersist
-	private void prePersist() {
-		this.createdTime = System.currentTimeMillis()/1000;
-	}
-	
-	public void save(){
-		dao.put(this);
 	}
 
 	/**
@@ -193,13 +180,6 @@ public class Affiliate {
 	}
 
 	/**
-	 * @return the dao
-	 */
-	public static ObjectifyGenericDao<Affiliate> getDao() {
-		return dao;
-	}
-
-	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
@@ -225,13 +205,6 @@ public class Affiliate {
 	 */
 	public void setCreatedTime(Long createdTime) {
 		this.createdTime = createdTime;
-	}
-
-	/**
-	 * @param dao the dao to set
-	 */
-	public static void setDao(ObjectifyGenericDao<Affiliate> dao) {
-		Affiliate.dao = dao;
 	}
 	
 }

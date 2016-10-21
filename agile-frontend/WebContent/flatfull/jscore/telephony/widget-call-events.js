@@ -12,6 +12,7 @@ $(function()
 	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
 	{
 	  	e.preventDefault();
+	  	e.stopPropagation();
 		if(checkForActiveCall()){
 			$('#briaInfoModal').html(getTemplate("briaCallStatusModal"));
 			$('#briaInfoModal').modal('show');
@@ -43,6 +44,7 @@ $(function()
 	$('body').on('click', '.Skype_call', function(e)
 			{
 			  	e.preventDefault();
+			  	e.stopPropagation();
 				var action ={};
 			  	action['command'] = "startCall";
 			  	action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
@@ -108,6 +110,7 @@ $(function()
 			e.preventDefault();
 			var json = {"command" : "ignoreCall"};
 		  	var action = makeCallAction(json);
+		  	//globalCall.callStatus = "Missed";
 		  	sendActionToClient(action);
 		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
@@ -140,7 +143,7 @@ $(function()
 		
 		e.preventDefault();
 		if(globalCall.lastSent){
-			if(globalCall.lastSent == "endCall"){
+			if(globalCall.lastSent == "cancelCall"){
 				console.log("duplicate command recived endCall");
 				closeCallNoty(true);
 				return;

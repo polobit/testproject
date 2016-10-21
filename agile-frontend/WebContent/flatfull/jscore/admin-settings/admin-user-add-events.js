@@ -76,12 +76,16 @@ function bindAdminChangeAction(el, data)
 		{
 			if(!$(this).is(':checked')){
 				$('input[value="VIEW_CALENDAR"]', el).attr("disabled", "disabled");
-				$('input[value="MANAGE_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="CREATE_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="UPDATE_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="DELETE_CALENDAR"]', el).attr("disabled", "disabled");
 			}
 			else{
 				if(_plan_restrictions.is_ACL_allowed[0]()){
 					$('input[value="VIEW_CALENDAR"]', el).removeAttr("disabled");
-					$('input[value="MANAGE_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="CREATE_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="UPDATE_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="DELETE_CALENDAR"]', el).removeAttr("disabled");
 				}
 			}
 		}
@@ -91,7 +95,7 @@ function bindAdminChangeAction(el, data)
 
 // Allow acls for specific domains
 function checkForACLExceptionalUsers(){
-	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi"];
+	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi", "orcamortgages", "nexusworkspace", "gaspumptv"];
 	if($.inArray(CURRENT_DOMAIN_USER.domain, specialUsers) != -1)
 		return true;
 	else

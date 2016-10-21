@@ -323,13 +323,18 @@ function initializePortletsListeners() {
 					content: function() {
       				return getTemplate("extensions-download-model");
     }
-	}).on("show.bs.popover", function(e){ 
-				setTimeout(function(event){
-    				var $target = $(e.target);
-    				console.log("$target = "+ $target);
-    				$('[data-toggle="tooltip"]').tooltip();
-    			},100);	
-    			});
+
+	}).on("click", function(e){
+							initExtensionHandlers(e);
+			    			}).on("shown.bs.popover", function(e){ 
+							if (document.getElementById('agilecrm_extension')) {
+							  $(".chromeExtension").css({"cursor": "not-allowed", "opacity": "0.4"});
+							  //alert("Already installed");
+							}
+	    				
+	    				$('[data-toggle="tooltip"]').tooltip();	
+	});
+
 
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
@@ -1433,4 +1438,62 @@ if (endDate - startDate >= 0)
 				.find(".invalid-range").parents('.form-group').show();
 		return false;
 	}
+}
+
+function initExtensionHandlers(e){
+
+	$(".extension-popover li a").unbind("click").click(function(e){
+	var extensionName = $(this).attr("data-extension-name");
+	if(!extensionName)
+	  return;
+	switch(extensionName){
+		case "ios-extension": 
+				iosExtensionRequest();
+				break;
+		
+		case "chrome-extension" :
+			installChromeExtension(e);
+			break;
+		
+	}
+});
+	//$("#chrome-extensions").popover("hide");
+}
+
+function iosExtensionRequest(){
+		$(".extension-popover li").addClass("hide");
+	  	var json = {};
+		json.from=CURRENT_DOMAIN_USER.email;
+		json.to = "kiran@agilecrm.com";
+		json.cc = "narmada@invox.com" ;
+		json.subject = "Request for getting the Beta Access";	
+		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
+		sendEmail(json);
+		$("#betasuccess").removeClass("hide");
+}
+
+function installChromeExtension(e){
+		if (document.getElementById('agilecrm_extension')) {
+			e.preventDefault();
+			return;
+		}
+			
+
+	  	// e.stopImmediatePropagation();
+	  	$(this).parents(".popover").popover('hide');
+	  	e.stopPropagation();
+	  	console.log("before the chrome installation");
+	  	try{
+	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
+		        function(d){
+		          console.log("installed");
+		          
+		        },function(e){
+		          console.log("not installed: "+ e)
+		        });
+	  	}catch(e){
+	  		console.log(e);
+	  	}
+      	
+      	console.log("after the chrome installation")
 }

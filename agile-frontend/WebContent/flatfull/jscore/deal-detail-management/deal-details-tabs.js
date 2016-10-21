@@ -730,13 +730,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		{
 			var id = $(targetEl).attr('data');
 			var that = targetEl;
-			complete_task(id, dealTasksView.collection, undefined, function(data)
+			showAlertModal("complete_task", "confirm", function() 
 			{
-				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
-				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
-				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
-				dealTasksView.collection.add(data, { silent : true });
-			});
+				complete_task(id, dealTasksView.collection, undefined, function(data)
+				{
+					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
+					console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+					dealTasksView.collection.add(data, { silent : true });
+				});
+			 });
 		}
 	},
 
@@ -830,7 +833,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	  		owner = model.get("owner").id;
 	  	}
 
-		if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+		if(!hasScope("DELETE_CALENDAR") && model.get("entity_type") && model.get("entity_type") == "event"){
 			$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 			return;
 		}
@@ -870,6 +873,13 @@ function load_deal_tab(el, dealJSON)
 	var position = _agile_get_prefs(deal_tab_position_cookie_name);
 	if (position)
 	{
+		//Any tab is saved as cookie and if that tab doesn't have permissions,
+		//change the tab position to contacts
+		if($('#deal-details-tab a[href="#'+position+'"]', el).length == 0)
+		{
+			position = "dealactivities";
+		}
+
 		if (position == "dealactivities")
 		{
 			$('#deal-details-tab a[href="#dealactivities"]', el).tab('show');

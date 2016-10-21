@@ -28,7 +28,7 @@ public class ContactSavePreprocessor
 
     public ContactSavePreprocessor(Contact contact, Contact oldContact)
     {
-	this.newContact = newContact;
+	this.newContact = contact;
 	this.oldContact = oldContact;
     }
 
@@ -61,7 +61,7 @@ public class ContactSavePreprocessor
      */
     public void preProcess(boolean... saveArgs)
     {
-	if (getOldContact() != null || newContact.id != null)
+	if (getOldContact() != null)
 	{
 		System.out.println("-----Before calling updateOldOwner-------");
 	    updateOldOwner();
@@ -89,6 +89,7 @@ public class ContactSavePreprocessor
 	updateUpdatedTime();
 
 	newContact.convertEmailToLower();
+	newContact.checkOwnerChange();
 
 	updateTagsEntity();
 	checkBounceStatus();

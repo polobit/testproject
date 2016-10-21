@@ -5,7 +5,7 @@ $(function()
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#opportunityModal, #opportunityUpdateModal').on('show.bs.modal', function()
+	$('#opportunityModal, #opportunityUpdateModal, #newDealModal').on('show.bs.modal', function()
 	{
 
 		// Removes alert message of error related date and time.
@@ -15,9 +15,8 @@ $(function()
 		$('#' + this.id).find('.error').removeClass('error');
 	});
 
-	$('#opportunityModal, #opportunityUpdateModal').on("shown.bs.modal", function()
+	$('#opportunityModal, #opportunityUpdateModal, #newDealModal').on("shown.bs.modal", function()
 	{
-
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder",_agile_get_translated_val("contacts", "select-date"));
     
@@ -32,7 +31,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityModal').on('hidden.bs.modal', function()
+	$('#opportunityModal, #newDealModal').on('hidden.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -72,6 +71,17 @@ $(function()
 		// Hide the Note label.
 		$("#deal-note-label").hide();
 
+	});
+
+	/**
+	 * Hide lost reasons popup, if deal moves to lost milestone from other track, 
+	 * hide the tracks list and show milestone view
+	 */
+	$('#dealLostReasonModal').on('hidden.bs.modal', function()
+	{
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
 	});
 
 	
@@ -503,6 +513,8 @@ function updateDeal(ele, editFromMilestoneView)
 		]);
 		// if(!value["custom_data"]) value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
+		$('.date_input',dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
 
 		$('.contact_input', dealForm).each(function(){
 			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=PERSON');
@@ -586,6 +598,8 @@ function show_deal()
 			"modal"
 		]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+		$('.date_input',$("#opportunityModal")).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
 
 		$('.contact_input', e).each(function(){
 			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=PERSON');
@@ -791,6 +805,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				&& Current_Route == "company/"
 					+ App_Companies.companyDetailView.model.get('id')){
 			company_util.updateDealsList(deal,true, isUpdate);
+			add_entity_to_timeline(data);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')

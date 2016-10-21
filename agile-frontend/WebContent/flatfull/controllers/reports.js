@@ -13,7 +13,7 @@ var ReportsRouter = Backbone.Router
 				"activity-report-edit/:id" : "activityReportEdit", "campaign-reports" : "campaignReports","contact-reports" : "emailReports", 
 				"report-add" : "reportAdd","campaign-report-add" : "campaignReportAdd", "campaign-report-edit/:id" : "campaignReportEdit",
 				"report-campaign-results/:id" : "campaignReportInstantResults","report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
-				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
+				"report-funnel/:tags" : "showFunnelReport", "report-growth/:tags" : "showGrowthReport", "report-ratio/:tag1/:tag2" : "showRatioReport","report-sales":"showrevenuegraph","report-deals":"showIncomingDeals","report-won-deals":"showDealsWonByUser","report-calls/:type" : "showCallsReport","user-reports": "showUserReports",
 				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart","rep-reports":"showRepPerformance","report-comparison":"showComparisonReport" },
 
 
@@ -489,7 +489,7 @@ var ReportsRouter = Backbone.Router
 					templateKey : "report-search", individual_tag_name : 'tr', cursor : true, sort_collection : false, page_size : 15, });// Collection
 				var _that = this;
 				
-				$.getJSON("core/api/custom-fields/type/scope?type=DATE&scope=CONTACT", function(customDatefields)
+				$.getJSON("core/api/custom-fields/scope?scope=CONTACT", function(customDatefields)
 				{
 					// Report built with custom table, as reports should be
 					// shown with
@@ -840,6 +840,29 @@ var ReportsRouter = Backbone.Router
 			});
 			},
 
+			showDealsWonByUser : function(){
+				hideTransitionBar();
+				report_utility.loadReportsTemplate(function(){
+				initReportLibs(function()
+						{
+
+							// Load Reports Template
+						getTemplate("report-won-deals", {}, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$('.reports-Container').html($(template_ui));	
+
+
+							initFunnelCharts(function()
+							{
+								showWonDealsReport();
+							});
+						}, ".reports-Container");
+					});
+			});
+			},
+
+
 			showDealsLossReason : function()
 			{
 				hideTransitionBar();
@@ -848,7 +871,7 @@ var ReportsRouter = Backbone.Router
 				{
 
 					// Load Reports Template
-				getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
+				   getTemplate("report-DealsLoss", {}, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
 						$('.reports-Container').html($(template_ui));	

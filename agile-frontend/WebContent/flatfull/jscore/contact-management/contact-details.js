@@ -122,13 +122,19 @@ function checkContactUpdated(){
 		});
 }
 
+function validateCompanyName(value){
+  var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
+    return custvals.test(value);
+}
+
    function inlineCompanyNameChange(el){
     
     console.log("inlineCompanyNameChange");
     var companyInlineName = $("#company-inline-input").val();
       companyname = companyInlineName.trim();
+          var isVaildCompanyName = validateCompanyName(companyname);
     console.log(companyname);
-    if(!companyname)
+    if(!companyname )
     {
       $("#company-inline-input").addClass("error-inputfield");
       return;
@@ -406,6 +412,7 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'blur #Contact-input' : 'contact_inline_edit' ,       /** End of inliner edits **/
 
     	/** Company events **/
+      'click #contactDetailsTab a[href="#company-timeline"]' : 'onCompanyTimelineOpen',
     	'click #contactDetailsTab a[href="#company-contacts"]' : 'listCompanyContacts',
     	'click #contactDetailsTab a[href="#company-deals"]' : 'listCompanyDeals',
     	'click #contactDetailsTab a[href="#company-cases"]' : 'listCompanyCases',
@@ -720,10 +727,10 @@ show and hide the input for editing the contact name and saving that
     onChangeOwner : function(e){
          e.preventDefault();
          	var contact_owner = $(e.currentTarget).attr("data");
-         	var error_msg = _agile_get_translated_val('contact-details','no-perm-to-update');
+         	var error_msg = "{{agile_lng_translate 'contact-details' 'no-perm-to-update'}}";
     			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
     			{
-    				showModalConfirmation(_agile_get_translated_val('contact-details','owner-changed'), 
+    				showModalConfirmation("{{agile_lng_translate 'contact-details' 'owner-changed'}}", 
     						error_msg, 
     						function (){
     							return;
@@ -734,7 +741,7 @@ show and hide the input for editing the contact name and saving that
     						function() {
     							
     						},
-    						_agile_get_translated_val('contact-details', 'cancel'), "");
+    						"{{agile_lng_translate 'contact-details' 'cancel'}}", "");
     				return;
     			}
          fill_owners(undefined, undefined, function(){
@@ -774,16 +781,32 @@ show and hide the input for editing the contact name and saving that
 		    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Contacts.contactDetailView.model.get('id');
 		    contactModel.save(App_Contacts.contactDetailView.model.toJSON(), {success: function(model){
 
-		    	// Replaces old owner details with changed one
-				$('#contact-owner').text(new_owner_name);
-				$('#contact-owner').attr('data', new_owner_id);
-				
-				// Showing updated owner
-				show_owner(); 
-				App_Contacts.contactDetailView.model = model;
-				
+    		    	// Replaces old owner details with changed one
+    				$('#contact-owner').text(new_owner_name);
+    				$('#contact-owner').attr('data', new_owner_id);
+    				
+    				// Showing updated owner
+    				show_owner(); 
+    				App_Contacts.contactDetailView.model = model;
+    				CONTACTS_HARD_RELOAD = true;
+            if(!hasScope("VIEW_CONTACTS") && !CURRENT_DOMAIN_USER.is_admin)
+              Backbone.history.navigate("contacts",{trigger: true});
+
+            if(!hasScope("VIEW_CONTACTS")){
+              var storageItems = JSON.parse(localStorage.recentItems);
+              var arr = [];
+              localStorage.removeItem("recentItems");
+              for(var i=0;i<storageItems.length;i++){
+                if(storageItems[i].id != App_Contacts.contactDetailView.model.get('id')){
+                  arr.push(storageItems[i]);
+                }else{
+                  recent_view.collection.remove(storageItems[i].id);
+                }
+              }
+              localStorage.setItem("recentItems", JSON.stringify(arr));
+              recent_view_update_required = true;
+            }
 		    }});
-    	   
     },
 
     // Deletes a contact from database
@@ -974,7 +997,7 @@ show and hide the input for editing the contact name and saving that
 		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='{{agile_lng_translate 'contact-details' 'show-map'}}' id='enable_map_view'></i>");
 		
     },
 
@@ -1351,7 +1374,11 @@ enterCompanyScore: function(e){
 	    var target = $("#contactDetailsTab");
 	    target.animate({ scrollLeft : (target.scrollLeft() - 270)},1000);
 	  },
-
+    onCompanyTimelineOpen : function(e){
+    e.preventDefault();
+    save_company_tab_position_in_cookie("timeline");
+    company_detail_tab.openCompanyTimeLine(e);
+    },
 	  listCompanyContacts :  function(e)
 	{
 		e.preventDefault();
@@ -1484,7 +1511,7 @@ enterCompanyScore: function(e){
 		var targetEl = $(e.currentTarget);
 
 		var tag = $(targetEl).attr("tag");
-		//removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
 		console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
 		
      	var json = App_Companies.companyDetailView.model.toJSON();

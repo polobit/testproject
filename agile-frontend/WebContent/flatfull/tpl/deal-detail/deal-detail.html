@@ -578,9 +578,11 @@
 <div id="deal-details">
 	<div class="tab-container">
            <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
-             <li><a href="#dealactivities" data-toggle="tab" >{{agile_lng_translate 'deal-view' 'activity'}}</a></li>
+             <li><a href="#dealactivities" data-toggle="tab" >{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
              <li><a href="#dealnotes" data-toggle="tab" >{{agile_lng_translate 'deal-view' 'notes'}}</a></li>
-			 <li><a href="#dealdocs" data-toggle="tab">{{agile_lng_translate 'deal-view' 'documents'}}</a></li>
+			       {{#hasMenuScope "DOCUMENT"}}
+              <li><a href="#dealdocs" data-toggle="tab">{{agile_lng_translate 'deal-view' 'documents'}}</a></li>
+              {{/hasMenuScope}}
              <li><a href="#dealrelated" data-toggle="tab">{{agile_lng_translate 'deal-view' 'related'}}</a></li>
 			 <li><a href="#dealtasks" data-toggle="tab">{{agile_lng_translate 'deal-view' 'tasks'}}</a></li>
 			 <li><a href="#dealevents" data-toggle="tab">{{agile_lng_translate 'deal-view' 'events'}}</a></li> 

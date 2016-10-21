@@ -255,10 +255,15 @@ var WidgetsRouter = Backbone.Router
              */
             Xero : function(id) {
                 if (!id) {
+                    // For live use.
+                    var URL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins";
+                    // For local use.
+                    //var URL = "http://localhost:8585/clickdesk-plugins";
+
                     addOAuthWidget(
                             "Xero",
                             "xero-login",
-                            ("http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol
+                            (URL + "/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol
                                     + "//"
                                     + window.location.host
                                     + "/XeroServlet?isForAll="

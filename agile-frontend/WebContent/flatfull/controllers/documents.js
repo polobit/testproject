@@ -237,8 +237,11 @@ addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompany
 	 */
 	documents : function()
 	{
+		if(tight_acl.isRestrictedScope('DOCUMENT'))
+			return;
+
 		getTemplate('documents-static-container', {}, undefined, function(template_ui) {
-					$("#content").html(getTemplate("documents-static-container"));
+					$("#content").html(template_ui);
 
 					// Add top view
 					var sortKey = _agile_get_prefs("Documentssort_Key");

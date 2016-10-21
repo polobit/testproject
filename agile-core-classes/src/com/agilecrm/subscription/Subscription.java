@@ -1,5 +1,6 @@
 package com.agilecrm.subscription;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -10,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -18,7 +20,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -27,6 +28,7 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
@@ -35,7 +37,6 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
-import com.stripe.model.InvoiceItem;
 
 /**
  * <code>Subscription</code> class represents subscription details of a domain.
@@ -69,7 +70,7 @@ import com.stripe.model.InvoiceItem;
  */
 @XmlRootElement
 @Cached
-public class Subscription {
+public class Subscription implements Serializable{
 	@Id
 	public Long id;
 
@@ -149,15 +150,16 @@ public class Subscription {
 	 * the form of string converted in prepersit temporary variable used to keep
 	 * {@link Customer} as {@link JSONObject}
 	 */
-	@NotSaved
+	/*@NotSaved
 	@JsonIgnore
-	public JSONObject billing_data;
+	public JSONObject billing_data; */
 
 	@NotSaved
 	public PlanLimits planLimits;
 
 	@NotSaved
 	public BillingRestriction cachedData;
+	
 
 	private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(
 			Subscription.class);
@@ -231,6 +233,8 @@ public class Subscription {
 			this.id = subscription.id;
 
 		dao.put(this);
+		
+		try { CacheUtil.deleteCache(fetchCacheKey()); } catch (Exception e) {}
 	}
 
 	/**
@@ -255,7 +259,7 @@ public class Subscription {
 
 	private Subscription createNewSubscription(Plan plan) throws Exception {
 		// Creates customer and adds subscription
-		billing_data = getAgileBilling().createCustomer(card_details, plan);
+		setBillingData(getAgileBilling().createCustomer(card_details, plan));
 
 		// Saves new subscription information
 		save();
@@ -323,8 +327,8 @@ public class Subscription {
 			return subscription;
 
 		// Updates the plan in related gateway
-		subscription.billing_data = subscription.getAgileBilling().updatePlan(
-				subscription.billing_data, plan);
+		subscription.setBillingData(subscription.getAgileBilling().updatePlan(
+				subscription.fetchBillingDataJSONObject(), plan));
 		// Updates plan of current domain subscription object
 		subscription.plan = plan;
 		// Saves updated subcription object
@@ -351,12 +355,12 @@ public class Subscription {
 
 		AgileBilling billing = subscription.getAgileBilling();
 
-		if (subscription.billing_data != null)
+		if (subscription.fetchBillingDataJSONObject() != null)
 			// Updates credit card details in related gateway
-			subscription.billing_data = billing.updateCreditCard(
-					subscription.billing_data, cardDetails);
+			subscription.setBillingData(billing.updateCreditCard(
+					subscription.fetchBillingDataJSONObject(), cardDetails));
 		else
-			subscription.billing_data = billing.addCreditCard(cardDetails);
+			subscription.setBillingData(billing.addCreditCard(cardDetails));
 
 		// Assigns details which will be encrypted before saving
 		// subscription entity
@@ -383,7 +387,7 @@ public class Subscription {
 			return null;
 
 		return subscription.getAgileBilling().getInvoices(
-				subscription.billing_data);
+				subscription.fetchBillingDataJSONObject());
 	}
 
 	/**
@@ -401,7 +405,17 @@ public class Subscription {
 		if (subscription == null)
 			return null;
 		return subscription.getAgileBilling().getInvoices(
-				subscription.billing_data);
+				subscription.fetchBillingDataJSONObject());
+	}
+	
+	/**
+	 * Fetch the key for saving this subscription in the cache
+	 * @return
+	 */
+	public static String fetchCacheKey()
+	{
+		if( NamespaceManager.get() != null )	return "__agile_subscription_cache_key_" + NamespaceManager.get();
+		return "__agile_subscription_cache_key_[default]";
 	}
 	
 	public Invoice getUpcomingInvoice(Plan plan)
@@ -412,7 +426,7 @@ public class Subscription {
 		// domain
 		if (subscription == null)
 			return null;
-		return subscription.getAgileBilling().getUpcomingInvoice(subscription.billing_data, plan);
+		return subscription.getAgileBilling().getUpcomingInvoice(subscription.fetchBillingDataJSONObject(), plan);
 	}
 
 	/**
@@ -421,7 +435,7 @@ public class Subscription {
 	 * @throws Exception
 	 */
 	public void cancelSubscription() throws Exception {
-		getAgileBilling().cancelSubscription(billing_data);
+		getAgileBilling().cancelSubscription(fetchBillingDataJSONObject());
 	}
 	
 	/**
@@ -430,7 +444,7 @@ public class Subscription {
 	 * @throws Exception
 	 */
 	public void cancelEmailSubscription() throws Exception {
-		getAgileBilling().cancelEmailSubscription(billing_data);
+		getAgileBilling().cancelEmailSubscription(fetchBillingDataJSONObject());
 	}
 
 	/**
@@ -439,7 +453,7 @@ public class Subscription {
 	 * @throws Exception
 	 */
 	public void deleteCustomer() throws Exception {
-		getAgileBilling().deleteCustomer(billing_data);
+		getAgileBilling().deleteCustomer(fetchBillingDataJSONObject());
 	}
 	
 	/**
@@ -447,8 +461,17 @@ public class Subscription {
 	 * 
 	 * @throws Exception
 	 */
-	public void purchaseEmailCredits(Integer quantity) throws Exception {
-		getAgileBilling().purchaseEmailCredits(billing_data, quantity);
+	public void purchaseEmailCredits(int quantity) throws Exception {
+		purchaseEmailCredits(quantity, 0);
+	}
+	public void purchaseEmailCredits(int quantity, int decrementCount) throws Exception {
+		boolean isPaid = getAgileBilling().purchaseEmailCredits(fetchBillingDataJSONObject(), quantity);
+		if(!isPaid)
+			throw new Exception("Payment failed. Please try again.");
+		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);
+		restriction.save();
+		System.out.println("Credits purchased successfully ::"+System.currentTimeMillis());
 	}
 	
 	/**
@@ -475,6 +498,8 @@ public class Subscription {
 			// If customer object is not found in stripe still subscription
 			// needs to be deleted
 			dao.delete(this);
+			
+			try { CacheUtil.deleteCache(fetchCacheKey()); } catch (Exception e) {}
 		}
 	}
 
@@ -487,10 +512,9 @@ public class Subscription {
 	@XmlElement
 	@Produces("application/json")
 	public String getBillingData() {
-		if (billing_data == null)
-			return null;
-
-		return billing_data.toString();
+		if (StringUtils.isEmpty(billing_data_json_string) )
+			return null;		
+		return billing_data_json_string;
 	}
 
 	@PostLoad
@@ -505,8 +529,9 @@ public class Subscription {
 			// sets domain name in subscription obj before returning
 			this.domain_name = NamespaceManager.get();
 
-			if (billing_data_json_string != null)
-				billing_data = new JSONObject(billing_data_json_string);
+			/*if (billing_data_json_string != null)
+				billing_data = new JSONObject(billing_data_json_string); */
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -514,8 +539,8 @@ public class Subscription {
 	}
 
 	public void refreshCustomer() throws Exception {
-		Customer customer = SubscriptionUtil.getCustomer(billing_data);
-		billing_data = StripeUtil.getJSONFromCustomer(customer);
+		Customer customer = SubscriptionUtil.getCustomer(fetchBillingDataJSONObject());
+		setBillingData(StripeUtil.getJSONFromCustomer(customer));
 	}
 
 	/**
@@ -540,7 +565,8 @@ public class Subscription {
 
 	@PrePersist
 	private void PrePersist() {
-		billing_data_json_string = billing_data.toString();
+		// billing_data_json_string = billing_data.toString();
+		
 		// Store Created Time
 		if (created_time == 0L)
 			created_time = System.currentTimeMillis() / 1000;
@@ -570,6 +596,32 @@ public class Subscription {
 		return false;
 	}
 
+	/**
+	 * Fetch the Billing Data as a JSON Object
+	 * @return
+	 */
+	public JSONObject fetchBillingDataJSONObject()
+	{
+		if( billing_data_json_string == null )	return null;
+		
+		try {
+			return new JSONObject(billing_data_json_string);
+		} catch (org.codehaus.jettison.json.JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Set the Billing Data from a JSON Object
+	 * @param billing_data
+	 */
+	public void setBillingData(JSONObject billing_data)
+	{
+		if( billing_data == null )	this.billing_data_json_string = null;
+		this.billing_data_json_string = billing_data.toString();
+	}
+	
 	@Override
 	public String toString() {
 		return "Subscription: {id: " + id + ", plan: " + plan
@@ -577,7 +629,7 @@ public class Subscription {
 				+ ", enripted_card_details: " + encrypted_card_details
 				+ ", status: " + status + ", created_time: " + created_time
 				+ ", updated_time: " + updated_time + ", billing_data: "
-				+ billing_data + ", billing_data_json_string: "
+				+ fetchBillingDataJSONObject() + ", billing_data_json_string: "
 				+ billing_data_json_string + ", gateway: " + gateway + "}";
 	}
 }

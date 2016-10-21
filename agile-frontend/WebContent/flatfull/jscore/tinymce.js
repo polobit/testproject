@@ -562,7 +562,7 @@ function get_contact_json_for_merge_fields(contact_json)
 function add_square_brackets_to_merge_fields(text)
 {
 	// Matches all strings within {{}}. e.g., {{first_name}}, {{New Note}}
-	var t = text.match(/{{[a-zA-Z0-9 ]*[a-zA-Z0-9 ]}}/g);
+	var t = text.match(/{{[a-zA-Z0-9 _]*[a-zA-Z0-9 _]}}/g);
 	
 	if(t)
 	{

@@ -39,6 +39,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.deals.MilestoneAPI.class);
 	s.add(com.agilecrm.core.api.prefs.IMAPAPI.class);
 	s.add(com.agilecrm.core.api.prefs.OfficePrefsAPI.class);
+	s.add(com.agilecrm.core.api.prefs.SMTPAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.CampaignReportsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.EmailTemplatesPrefsAPI.class);
 	s.add(com.agilecrm.core.api.search.SearchAPI.class);
@@ -106,9 +107,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
 	s.add(com.agilecrm.core.api.widgets.BriaWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.SkypeWidgetAPI.class);
-
 	s.add(com.agilecrm.core.api.widgets.KloutWidgetsAPI.class);
-
 	// Email Unsubscription
 	s.add(com.agilecrm.core.api.campaigns.UnsubscribeEmailAPI.class);
 	s.add(com.agilecrm.core.api.landingpages.LandingPagesAPI.class);
@@ -147,6 +146,12 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.reports.CampaignReportsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.TaskBulkActionsAPI.class);
 	
+	//webrule reports
+	s.add(com.agilecrm.core.api.webrule.WebruleReportsAPI.class);
+	
+	//Form reports
+	s.add(com.agilecrm.core.api.forms.FormReportsAPI.class);
+	
 	// JS Permission
 	s.add(com.agilecrm.core.api.JavaScriptPermissionAPI.class);
 	// SSO feature
@@ -158,11 +163,18 @@ public class JerseyApplication extends Application
 	//Affiliate
 	s.add(com.agilecrm.core.api.affiliate.AffiliateDetailsApi.class);
 	s.add(com.agilecrm.core.api.affiliate.AffiliateApi.class);
+	s.add(com.agilecrm.core.api.RecaptchaGatewayAPI.class);
 	
+	//EmailTemplateCategory
+	s.add(com.agilecrm.core.api.prefs.EmailTemplateCategoryAPI.class);
+		
+	s.add(com.agilecrm.core.api.videorecords.VideoRecordAPI.class);
+	s.add(com.agilecrm.core.api.forms.FormReportsAPI.class);
+	
+	//Products and eDocs
 	s.add(com.agilecrm.core.api.products.ProductsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.DocumentTemplatesPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.DocumentViewerAPI.class);
-
 	return s;
     }
 }

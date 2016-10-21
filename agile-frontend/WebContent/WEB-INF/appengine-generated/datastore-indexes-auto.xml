@@ -651,7 +651,21 @@
         <property name="relatedUserId" direction="asc"/>
         <property name="createdTime" direction="desc"/>
     </datastore-index>
-
+	<datastore-index kind="TicketNotes" ancestor="false" source="manual">
+        <property name="feed_back" direction="asc"/>
+        <property name="feedback_flag" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="TicketNotes" ancestor="false" source="manual">
+        <property name="created_by" direction="asc"/>
+        <property name="feedback_flag" direction="asc"/>
+        <property name="created_time" direction="asc"/>
+    </datastore-index> 
+     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="dealSource" direction="asc"/>
+        <property name="won_date" direction="asc"/>      
+    </datastore-index>
     <datastore-index kind="DocumentNote" ancestor="false" source="manual">
         <property name="document_id" direction="asc"/>
         <property name="created_time" direction="desc"/>

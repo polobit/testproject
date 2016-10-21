@@ -3,7 +3,7 @@
 var Nagger_Noty;
 function showUpgradeNoty()
 {
-	if(!_billing_restriction.currentLimits.freePlan || agile_is_mobile_browser()){
+	if(!_billing_restriction.currentLimits.freePlan || agile_is_mobile_browser() || CURRENT_DOMAIN_USER.domain == "wirelessincome"){
 		$("#free_plan_alert_info").hide();
 		return;
 	}

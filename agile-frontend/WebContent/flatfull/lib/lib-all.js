@@ -935,6 +935,7 @@ if (typeof jQuery === 'undefined') {
         .find('.modal-content')
         .load(this.options.remote, $.proxy(function () {
           this.$element.trigger('loaded.bs.modal')
+          console.log(" MODAL CLASS DEFINITION in the test");
         }, this))
     }
   }
@@ -945,8 +946,8 @@ if (typeof jQuery === 'undefined') {
   Modal.BACKDROP_TRANSITION_DURATION = 150
 
   Modal.DEFAULTS = {
-    backdrop: true,
-    keyboard: true,
+    backdrop: "static",
+    keyboard: false,
     show: true
   }
 

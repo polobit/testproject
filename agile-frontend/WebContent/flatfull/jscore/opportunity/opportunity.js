@@ -1409,8 +1409,15 @@ function setupTracksAndMilestones(el){
 						span_html = "";
 						border_right_html = "border-right:none!important;"
 					}
+
+					//Checking each milestone, is it lost or not
+					var is_lost_milestone = false;
+					if(track.lost_milestone == milestone_name){
+						is_lost_milestone = true;
+					}
+					
 					var milestone_html = 	'<div class="milestone-column panel m-b-none b-n r-n panel-default" style="width: '+milestone_width+'%;min-width:0px;'+border_right_html+'">'+
-											'<div class="dealtitle-angular panel-heading c-p b-n update-drag-deal" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{milestone_name}}">'+
+											'<div class="dealtitle-angular panel-heading c-p b-n update-drag-deal" data-lost-milestone="'+is_lost_milestone+'" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{milestone_name}}">'+
 											'<div class="'+milestone_heading_class+' text-left text-ellipsis" data-track="{{track_id}}">'+
 											'<span class="miltstone-title text-base text-ellipsis inline-block v-bottom pull-left">{{milestone_name}}</span></div>'+
 											''+span_html+'</div></div>';

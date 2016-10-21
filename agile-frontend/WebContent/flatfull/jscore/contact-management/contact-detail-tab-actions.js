@@ -71,13 +71,13 @@ var contact_details_documentandtasks_actions = {
 			}
 			if (value.description)
 			{
-				var description = '<label class="control-label"><b>'+_agile_get_translated_val("misc-keys", "description")+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
+				var description = '<label class="control-label"><b>{{agile_lng_translate "misc-keys" "description"}} </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="{{agile_lng_translate "misc-keys" "add-description"}}"></textarea></div>'
 				$("#event_desc").html(description);
 				$("textarea#description").val(value.description);
 			}
 			else
 			{
-				var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' +_agile_get_translated_val('misc-keys','add-description')+ ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea>' + '</div></div></div>'
+				var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> {{agile_lng_translate "misc-keys" "add-description"}} </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="{{agile_lng_translate "misc-keys" "add-description"}}"></textarea>' + '</div></div></div>'
 				$("#event_desc").html(desc);
 			}
 			// Fills owner select element
@@ -91,6 +91,7 @@ var contact_details_documentandtasks_actions = {
 			{
 				var id = $(targetEl).attr('data');
 				var that = targetEl;
+				showAlertModal("complete_task", "confirm", function() {
 				complete_task(id, tasksView.collection, undefined, function(data)
 				{
 					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
@@ -98,6 +99,7 @@ var contact_details_documentandtasks_actions = {
 					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
 					tasksView.collection.add(data, { silent : true });
 				});
+			});
 			}
         },
 
@@ -344,7 +346,7 @@ var contact_details_documentandtasks_actions = {
 			{
 				if(response && response.status == 403)
 				{
-					showModalConfirmation(_agile_get_translated_val('documents','detach-document'), 
+					showModalConfirmation("{{agile_lng_translate 'documents' 'detach-document'}}", 
 						DOC_ACL_DETACH_ERROR, 
 						function (){
 							return;
@@ -355,7 +357,7 @@ var contact_details_documentandtasks_actions = {
 						function(){
 							return;
 						},
-						_agile_get_translated_val('contact-details','cancel')
+						"{{agile_lng_translate 'contact-details' 'cancel'}}"
 					);
 				}
 			} });
@@ -405,14 +407,14 @@ var contact_details_documentandtasks_actions = {
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 			{
-				var text = _agile_get_translated_val("misc-keys", "add-new-doc");
+				var text = "{{agile_lng_translate 'misc-keys' 'add-new-doc'}}";
 				el.find("#document-select > option:first").after("<option value='new'>" + text + "</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
 				el.find("#document-select > option:first").remove();
 
 			}, optionsTemplate, false, el);
 	    },
 
-       add_selected_document : function(e){
+       add_selected_document : function(e,type){
        		var targetEl = $(e.currentTarget);
 
        		var document_id = $(targetEl).closest(".contact-document-select").find("#document-select").val();
@@ -422,7 +424,7 @@ var contact_details_documentandtasks_actions = {
 			// To check whether the document is selected or not
 			if (document_id == "")
 			{
-				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>"+_agile_get_translated_val('validation-msgs','required')+"</span>");
+				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>{{agile_lng_translate 'validation-msgs' 'required'}}</span>");
 				saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 				return;
 			}
@@ -579,7 +581,7 @@ function existing_document_attach(document_id, saveBtn)
 	}
 	else
 	{
-		var linkedtext = _agile_get_translated_val("misc-keys", "link-already");
+		var linkedtext = "{{agile_lng_translate 'misc-keys' 'link-already'}}";
 		saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>" + linkedtext + "</span>");
 		saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 		hideTransitionBar();

@@ -26,6 +26,15 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
 
+Handlebars.registerHelper('get_feedback', function(feedback_rating,value,options) {
+			
+			parseInt(feedback_rating);
+			if(feedback_rating >= value )
+				return "/img/star-on.png";		
+			return "/img/star-off.png";	
+	
+});
+
 Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	var currentEpoch = new Date().getTime();
 
@@ -438,6 +447,10 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 	if(!str)
 		return "";
 
+	str = str.replace(/<script.*?>.*?<\/script>/igm, '');
+	str = str.replace(/ action="[^"]*"/igm, '');
+	str = str.replace(/value="[^"]*"/igm, '');
+	str = str.replace(/ on\w+="[^"]*"/igm, '');
 	str = str.trim();
 
 	//str = str.replace(/(?:\r\n)/g, '<br/>');
@@ -453,8 +466,24 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	return str;
 });
-Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
+Handlebars.registerHelper('replace_newline_with_ticket_br', function(str, options) {
 
+	if(!str)
+		return "";
+
+	str = str.trim();
+	
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+	str = str.replace(/ on\w+="[^"]*"/igm, '');
+	str = str.replace(/action="[^"]*"/igm, '');
+	str = str.replace(/value="[^"]*"/igm, '');
+    str = str.replace(/<script.*?>.*?<\/script>/igm, '')
+    return str;
+});
+
+Handlebars.registerHelper('replace_newline_with_br_feedback', function(object, options) {
+
+	var str = object.toString();
 	if(!str)
 		return "";
 
@@ -462,6 +491,17 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 
 	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return str;
+});
+Handlebars.registerHelper('replace_br_with_space_feedback', function(object, options)
+{
+	var text = object.toString();
+
+	if(!text)
+		return;
+	
+	var regex = /<br\s*[\/]?>/gi;
+
+	return text.replace(regex, " ");
 });
 
 Handlebars.registerHelper('get_ticket_uri', function(str, options) {
@@ -614,6 +654,31 @@ Handlebars.registerHelper('helpcenter_url_section', function(options)
 Handlebars.registerHelper('get_ticket_translated_text', function(module, key, options)
 {
 	return get_ticket_translated_text(module, key);
+	
+});
+
+Handlebars.registerHelper('return_feedback_title', function(feedback,options) {
+
+	var feedback_title= ""
+	
+	switch (feedback[0]) {
+	    case "1":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'unacceptable'}}";
+	        break;
+	    case "2":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'can_improve'}}";
+	        break;
+	    case "3":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'acceptable'}}";
+	        break;
+	    case "4":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'meets_expectations'}}";
+	        break;
+	    case "5":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'exceptional'}}";
+	}
+
+	return feedback_title;        
 	
 });
 /** End of ticketing handlebars* */

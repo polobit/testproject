@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.TimeZoneUtil"%>
 {
     "name": "Wait",
     "thumbnail": "json/nodes/images/common/wait.png",
@@ -47,33 +48,7 @@
             "id": "timezone",
             "title": "Select the time zone of your location.",
             "options": {
-                <%@pageimport="java.util.Arrays"%>
-                <%@pageimport="java.util.TimeZone"%>
-                <%@pageimport="com.agilecrm.account.util.AccountPrefsUtil"%>
-                <%@pageimport="org.apache.commons.lang.StringUtils"%>
-                <%
-                
-                String[] allTimeZones = TimeZone.getAvailableIDs();    
-				Arrays.sort(allTimeZones);  
-				
-                String timeZone = AccountPrefsUtil.getAccountPrefs().timezone;
-                
-                if(StringUtils.isEmpty(timeZone))
-                	
-                	out.println("\""+"*Select time zone"+"\":\""+"empty_timezone"+"\",");
-                
-                for(int i=0; i< allTimeZones.length; i++){
-                    String option= allTimeZones[i];
-                    
-                    if( !StringUtils.isEmpty(timeZone) && timeZone.equals(option))
-                    	option = "*" + option;
-                    
-                    if( i == allTimeZones.length-1)
-                    	out.println("\""+option+"\":\""+option+"\"");
-                    else
-                    	out.println("\""+option+"\":\""+option+"\",");
-                }%>
-            },
+                <%= TimeZoneUtil.getJavaTimeZones(null, TimeZoneUtil.ACCOUNT_PREFS, true) %>            },
             "fieldType": "timezone",
             "type": "select"
         },

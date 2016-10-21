@@ -70,6 +70,29 @@ var ContactSearchRouter = Backbone.Router.extend({
 									$("#search-query-heading", el).html('{{agile_lng_translate "contact-details" "no-matches-found-for"}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
 								else
 									$("#search-query-heading", el).html('{{agile_lng_translate "contact-details" "search-results-for"}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
+
+								agileTimeAgoWithLngConversion($("time", el));
+							},
+							appendItemCallback: function(el) 
+							{
+                            	agileTimeAgoWithLngConversion($("time", el));
+                        	},
+							infini_scroll_cbk : function(ele)
+							{
+								//This will update the table sorting functionality with added new rows
+								$("table", ele).trigger("update");
+
+								$("table > thead > tr > th", ele).each(function(){
+									//If any table header contians "headerSortDown" or "headerSortUp", 
+									//sort is performed on that header
+									if($(this).hasClass("headerSortDown") || $(this).hasClass("headerSortUp"))
+									{
+										//Trigger table header click action twice to set the correct sort order
+										//and don't use dbclick to perform this
+										$(this).trigger("click");
+										$(this).trigger("click");
+									}
+								});
 							} });
 						
 							// If in case results in different page is clicked before

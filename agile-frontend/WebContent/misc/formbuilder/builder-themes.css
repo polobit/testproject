@@ -8,7 +8,7 @@ border-top-left-radius: 20px!important;
 border-bottom-left-radius: 20px!important;
 height: 43px;
 }
-.theme1 .agile-field>input[type=text],.theme1 .agile-field>input[type=email],.theme1 .agile-field>input[type=password],.theme1 .agile-group select:not([multiple]) {
+.theme1 .agile-field>input[type=text],.theme1 .agile-field>input[type=email],.theme1 .agile-field>input[type=password],.theme1 .agile-field>input[type=url],.theme1 .agile-group select:not([multiple]) {
 border: 1px solid #cfdadd;
 -webkit-border-radius: 50px;
 -moz-border-radius: 50px;
@@ -190,7 +190,7 @@ margin: auto
 border: 0px solid #ccc!important;
 }
 
-.theme2 input[type=text],.theme2 input[type=email],.theme2 input[type=password],.theme2 select {
+.theme2 input[type=text],.theme2 input[type=email],.theme2 input[type=password],.theme2 input[type=url],.theme2 select {
 border: 1px solid #cfdadd;
 -webkit-border-radius: 4px;
 -moz-border-radius: 4px;
@@ -338,11 +338,11 @@ background-color: #23b7e5;
     -webkit-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);}
 .theme2 fieldset{margin: 0; padding: 0;}
-.theme2 input[type=text], .theme2 input[type=email],.theme2 input[type=password], .theme2 select, .theme2 textarea{
+.theme2 input[type=text], .theme2 input[type=email],.theme2 input[type=password],.theme2 input[type=url],.theme2 select, .theme2 textarea{
     background-color: #fff; box-shadow: inherit; border:3px solid #f3f3f3!important;
 }
 .theme2 input[type=email]:focus,.theme2 input[type=url]:focus,.theme2 input[type=password]:focus,.theme2 input[type=text]:focus,.theme2 textarea:focus,.theme2 select:focus{border:3px solid #66afe9}
-.theme3 input[type=text],.theme3 input[type=email],.theme3 input[type=password],.theme3 select {
+.theme3 input[type=text],.theme3 input[type=email],.theme3 input[type=password],.theme3 input[type=url],.theme3 select {
 border: 1px solid #cfdadd;
 -webkit-border-radius: 4px;
 -moz-border-radius: 4px;
@@ -487,12 +487,12 @@ margin-bottom: 5px;
 .theme3 button{margin-left: 0;}
 .theme3{overflow-x: hidden; width: 100%; border-radius: 5px;}
 .theme3 fieldset{margin: 0; padding: 0;}
-.theme3 input[type=text],.theme3 input[type=password], .theme3 input[type=email], .theme3 select, .theme3 textarea{
+.theme3 input[type=text],.theme3 input[type=password],.theme3 input[type=email],.theme3 input[type=url],.theme3 select, .theme3 textarea{
     background-color: #fff; border: 0px; box-shadow: inherit;
   }
 .theme3 .agile-group-addon{border: 0px; background-color:#00ada7; color: #fff;}
 .theme3 input[type=email]:focus,.theme3 input[type=url]:focus,.theme3 input[type=password]:focus,.theme3 input[type=text]:focus,.theme3 textarea:focus,.theme3 select:focus{border:0px solid #66afe9 !important;}
-.theme4 input[type=text],.theme4 input[type=email],.theme4 input[type=password],.theme4 select {
+.theme4 input[type=text],.theme4 input[type=email],.theme4 input[type=password],.theme4 input[type=url],.theme4 select {
 border: 1px solid #cfdadd;
 -webkit-border-radius: 4px;
 -moz-border-radius: 4px;
@@ -601,7 +601,7 @@ border-bottom-right-radius: 0px;
     -webkit-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);}
 .theme4 fieldset{margin: 0; padding: 0;}
-.theme4 input[type=text],.theme4 input[type=password], .theme4 input[type=email], .theme4 select{
+.theme4 input[type=text],.theme4 input[type=password], .theme4 input[type=email],.theme4 input[type=url],.theme4 select{
     background-color: #fff!important; box-shadow: inherit!important; border:0px!important; border-bottom:1px solid #eee!important;
     border-radius: 0px!important;
 }
@@ -615,4 +615,7 @@ border-bottom-right-radius: 0px;
 }
 .theme2 .component:last-child,.theme3 .component:last-child,.theme4 .component:last-child {
     padding-bottom: 20px;
+}
+ul li>a[href="#bsourcecodeb"] {
+    display: none;
 }

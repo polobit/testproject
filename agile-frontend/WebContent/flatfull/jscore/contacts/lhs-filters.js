@@ -363,7 +363,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 $('#' + container_id).off('custom_blur keyup', '#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)');
 $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS input.filters-tags-typeahead:not(.date)', function(e)
 {
-	console.log("I am in blur " + $(this).val());
+	console.log("I am in blur custom_blur " + $(this).val());
 	if (e.type == 'custom_blur' || e.type == 'focusout' || e.keyCode == '13')
 	{
 		var prevVal = $(this).attr('prev-val');
@@ -785,23 +785,36 @@ function addTagsTypeaheadLhsFilters(tagsJSON, element)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	$("input", element).typeahead({ "source" : tags_array, updater : function(item)
-	{
-		console.log("I am in updater " + item);
-		this.$element.val(item);
-		this.$element.trigger('custom_blur');
-		this.hide();
-		return item;
-	} }).attr('placeholder', "{{agile_lng_translate 'contacts-view' 'Enter Tag'}}");
+	$("input", element).typeahead({
+		minLength: 0, highlight:true,hint:true,showHintOnFocus:true,items: 'all',
+		"source" : tags_array, updater : function(item)
+		{
+			console.log("I am in updater " + item);
+			this.$element.val(item);
+			this.$element.trigger('custom_blur');
+			this.hide();
+
+			setTimeout(function(ele){
+				ele.$menu.hide();
+			},20, this);
+
+			return item;
+		} }).attr('placeholder', "{{agile_lng_translate 'contacts-view' 'Enter Tag'}}");
+}
+
+function hideTypeaheadMenu(ele){
+	$(ele).closest('div').find('.typeahead').hide();
 }
 
 function bindChangeEvent(ele){
 
-	console.log("I am in change " + $(ele).val());
+	console.log("I am in change updated " + $(ele).val());
 	var prevVal = $(ele).attr('prev-val');
 	var currVal = $(ele).val().trim();
 	if (prevVal == currVal)
 	{
+		hideTypeaheadMenu(ele);
+		$(ele).blur();
 		return;
 	}
 	else

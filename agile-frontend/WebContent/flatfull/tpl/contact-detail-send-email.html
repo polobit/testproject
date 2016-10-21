@@ -41,16 +41,17 @@
                 
                 <div class="control-group form-group m-b-sm">
                     <label class="control-label col-sm-2 p-t">{{agile_lng_translate 'other' 'to'}} <span class="field_req">*</span></label>
-                    <div class="controls col-sm-8" class="contactTypeAhead">
-                        <div>
-                            <div>
-                                <ul name="contact_to_ids" class="contacts tagsinput tags p-n"></ul>
-                            </div>
-                            <input type="text" id="to" name="to"
-                                placeholder="{{agile_lng_translate 'other' 'contact-email'}}" class="typeahead typeahead_contacts multipleEmails form-control"
-                                data-provide="typeahead" data-mode="multiple" /><!--  {{#if properties}} value="{{getPropertyValue properties "email"}}" {{/if}} -->
-                        </div>
-                    </div>
+
+					<div class="controls col-sm-8" class="contactTypeAhead">
+						<div>
+							<div>
+								<ul name="contact_to_ids" id="contact_to_ids" class="contacts tagsinput tags p-n"></ul>
+							</div>
+							<input type="text" id="to" name="to"
+								placeholder="{{agile_lng_translate 'other' 'contact-email'}}" class="typeahead typeahead_contacts requiredEmail multipleEmails form-control"
+								data-provide="typeahead" data-mode="multiple" /><!--  {{#if properties}} value="{{getPropertyValue properties "email"}}" {{/if}} -->
+						</div>
+					</div>
                 </div>
                
                 <div class="control-group form-group" style="display: none;">

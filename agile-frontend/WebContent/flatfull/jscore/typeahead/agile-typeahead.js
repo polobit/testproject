@@ -14,7 +14,8 @@ var TYPEHEAD_TYPE = {};
 
 // Saves map of key: name and value: related contacts of a deal
 var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
-
+//query and url params for validation
+var searchUrl ; var searchParams ;
 /**
  * This script file defines simple search keywords entered in input fields are
  * sent to back end as query through bootstrap typeahead. Methods render,
@@ -79,14 +80,16 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 							// Get data on query
 
-							var type_url = "";
+							var type_url = "";searchUrl = url ;
 
 							if(urlParamsCallback){
 								urlParams = urlParamsCallback();
 							}
 
-							if (urlParams && urlParams.length)
+							if (urlParams && urlParams.length){
 								type_url = '&' + urlParams;
+								searchParams = urlParams ;
+							}
 
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
@@ -124,7 +127,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (data.length == 0)
 								{
-									var txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>';
+									var txt ;
+									if(!searchParams && searchUrl != "core/api/search/deals")
+										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
+									else
+										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>' ; 
+									searchParams = "";searchUrl = "";
 
 									if (noResultText && noResultText.length)
 										txt = noResultText;
@@ -371,7 +379,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											.closest("div.controls")
 											.find(".tags")
 											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp, "email")));
-
+									//for send mail validation
+									if($("#" + id, el).siblings("span")!=null){
+										var attr=$("#" + id, el).siblings("span").attr("for");
+										if(attr==="to" || attr==="email_cc" || attr==="email_bcc")
+											$("#" + id, el).siblings("span").css("display","none");
+									}
 
 								}
 
@@ -811,7 +824,11 @@ function getContactName(contact)
 
 function buildcategorizedResultDropdown(items, options)
 {
-	var contact_custom_view = new Base_Collection_View({ data : items, templateKey : "typeahead-contacts", individual_tag_name : 'li',
+	var contact_custom_view = new Base_Collection_View({ 
+		data : items, 
+		templateKey : "typeahead-contacts", 
+		individual_tag_name : 'li',
+		sort_collection: false,
 		typeahead_options : options });
 
 	contact_custom_view.appendItem = appendItemInResult;

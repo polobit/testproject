@@ -135,9 +135,9 @@ deleteConfirm : function(e)
                  {
                   var message;
                   if(count > 1)
-                   message = _agile_get_translated_val("users", "deleted-users");
+                   message = "{{agile_lng_translate 'users' 'deleted-users'}}";
                   else
-                   message = _agile_get_translated_val("users", "deleted-user");
+                   message = "{{agile_lng_translate 'users' 'deleted-user'}}";
                   showNotyPopUp('information', message, "top", 10000);
                  }
 
@@ -146,7 +146,7 @@ deleteConfirm : function(e)
                 error : function(response)
             {
               console.log("error");
-              confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">' + _agile_get_translated_val("users", "delete-user-error") + '</small>');
+              confirmModal.find(".modal-footer").find("#delete-user").html('<small class="text-danger" style="font-size:15px;margin-right:172px;">{{agile_lng_translate "users" "delete-user-error"}}</small>');
               console.log(response);
 
             }
@@ -384,7 +384,7 @@ var Base_Collection_View = Backbone.View
              *callback to be fired when next set is fetched. Added by Sasi on Jan/18/2016.
              */
             if (that.options.infini_scroll_cbk)
-              that.options.infini_scroll_cbk();
+              that.options.infini_scroll_cbk(that.el);
 
             // Remove More option when there is no cursor
             if(!that.collection.last().get("cursor") || that.collection.first().get("count") == that.collection.models.length){

@@ -10,12 +10,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -1417,6 +1415,35 @@ public class WebCalendarEventUtil
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static String convertMinstoDateFormat(int mins) {
+		StringBuilder formatedString = new StringBuilder();
+		if (mins > 0) {
+			int timeHours = Math.round((mins / 60));
+			int timeMins = Math.round((mins % 60));
+			if (timeHours > 0) {
+				formatedString.append(timeHours);
+				if (timeHours > 1) {
+					formatedString.append("hrs");
+				} else {
+					formatedString.append("hr");
+				}
+			}
+
+			formatedString.append(" ");
+
+			if (timeMins > 0) {
+				formatedString.append(timeMins);
+				if (timeMins > 1) {
+					formatedString.append("mins");
+				} else {
+					formatedString.append("min");
+				}
+			}
+
+		}
+		return formatedString.toString();
 	}
 	
 }

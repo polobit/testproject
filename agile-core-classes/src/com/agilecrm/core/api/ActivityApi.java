@@ -63,9 +63,10 @@ public class ActivityApi
     public List<Activity> getActivityBesedOnSelection(@QueryParam("entity_type") String entitytype,
 	    @QueryParam("user_id") Long userid, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count, @QueryParam("start_time") Long starttime,
-	    @QueryParam("end_time") Long endtime,@QueryParam("campaign-id") String id)
+	    @QueryParam("end_time") Long endtime,@QueryParam("campaign-id") String id,@QueryParam("activityTypeArray") String activityType)
     {
     
+    	System.out.println("acitivity type = "+ activityType);
     //filter on campaign id
     	Long campignId=null;
     	if(StringUtils.isNumeric(id))
@@ -85,7 +86,7 @@ public class ActivityApi
 	}
 
 	return ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, Integer.parseInt(count), cursor,
-	        starttime, endtime, campignId);
+	        starttime, endtime, campignId,activityType);
     }
 
     /**

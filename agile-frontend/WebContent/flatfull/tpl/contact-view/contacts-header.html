@@ -155,7 +155,7 @@
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 								<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
 									<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
-	                				<ul class="pull-right dropdown-menu  p-l"  role="menu">
+	                				<ul class="pull-right dropdown-menu  p-l filter-dynamic-scrollbar"  role="menu" style="overflow-y:auto;max-height:500px">
 	                					<form id="contact-static-fields" class="">
 	                						<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group"></div>
 	                					</form>

@@ -41,7 +41,7 @@ function getTimeFromDatePicker(){
 }
 
 function showCommission(userId, time, el){
-	getCommission(CURRENT_DOMAIN_USER.id, time, function(data){
+	getCommission(userId, time, function(data){
 		$("#aff-count", el).html(data.count);
 		$("#aff-commission", el).html((data.commission/100).toFixed(2));
 	});
@@ -49,6 +49,9 @@ function showCommission(userId, time, el){
 
 function getCommission(userId, time, callback){
 	var url = 'core/api/affiliate/total?startTime='+time.start+'&endTime='+time.end;
+	if(CURRENT_DOMAIN_USER.domain == "admin"){
+		url = url + '&domain='+admin_affiliate_domain;
+	}
 	if(userId)
 		url = url + '&userId='+userId;
 	$.ajax({ url : url, type : 'GET', success : function(data)
@@ -117,6 +120,41 @@ function registerDeal(formId, modalId, saveBtn, json)
 		enable_save_button($(saveBtn));
 	} });
 }
+
+function loadAdminAffiliateDetailListeners(){
+	$("#admin-affiliate-detail-container").on("click", "ul#affiliate_filter_list li a", function(e)
+	{
+		e.preventDefault();
+		var name = $(this).html();
+		var data = $(this).attr("data");
+		$(this).closest(".btn-group").find("#affiliate_filter_btn").text(name);
+		$(this).closest(".btn-group").find("#affiliate_filter_btn").attr("data", data);
+		var data = getAdminAffiliateFilterParameters();
+		App_Affiliate.showAffiliateDetailCollection(data);
+	});
+}
+
+function getAdminAffiliateFilterParameters(){
+	var time = getTimeFromDatePicker();
+	var filter_by = $("#affiliate_filter_btn").attr("data");
+	var data={"startTime":time.start,"endTime":time.end,"filter_by":filter_by};
+	return data;
+}
+
+var admin_affiliate_id;
+var admin_affiliate_domain;
+var Admin_Affiliate_Detail_Collection_View = Base_Collection_View.extend({
+    events: {
+    	'click #admin-affiliate-detail-model-list > tr' : 'listAffiliatesInAdminPanel'
+    },
+    
+    listAffiliatesInAdminPanel : function(e){
+		var targetEle= $(e.currentTarget);
+		admin_affiliate_id = $(targetEle).find("td:first").attr("data");
+		admin_affiliate_domain = $(targetEle).find("td:first").attr("domain");
+		window.location.href='#admin-affiliate-referrals';
+    }
+});
 
 
 

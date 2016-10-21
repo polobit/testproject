@@ -206,6 +206,7 @@ public class TicketGroupRest
 			dbGroup.group_name = ticketGroup.group_name;
 			dbGroup.setAgents_key_list(agents_key_list);
 			dbGroup.send_as = ticketGroup.send_as;
+			dbGroup.feedback_flag = ticketGroup.feedback_flag;
 
 			dbGroup.email_template_key = (ticketGroup.template_id != null) ? new Key<>(EmailTemplates.class,
 					ticketGroup.template_id) : null;

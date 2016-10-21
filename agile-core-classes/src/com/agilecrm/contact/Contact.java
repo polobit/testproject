@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -319,6 +320,20 @@ public class Contact extends Cursor
     @Indexed
     public String guid = null;
 
+    /* 
+     *  To check Owner updated or not 
+     */
+    @JsonIgnore
+    @NotSaved
+    private boolean owner_updated = false;
+    
+    /**
+     * To check with old Contact. Transient because to avoid this object to be serialized
+     */
+    @JsonIgnore
+    @NotSaved
+    private transient ContactSavePreprocessor preProcessor = null;
+
     /**
      * Default constructor
      */
@@ -490,10 +505,23 @@ public class Contact extends Cursor
      */
     public void save(boolean... args)
     {
+    	
+    	/*if (this.type == Type.COMPANY)
+    	{
+    		if (this.properties.size() > 0)
+    		{
+    			ContactField nameField = this.getContactFieldByName(Contact.NAME);
+    			if(!ContactUtil.isValidName(nameField.value)){
+    				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+    					    .entity(nameField.value+"::Invalid Company Name, contains special characters.").build());
+    			}
+    		}
+    	}*/
+
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 
-	ContactSavePreprocessor preProcessor = new ContactSavePreprocessor(this);
+    preProcessor = new ContactSavePreprocessor(this);
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
@@ -515,25 +543,30 @@ public class Contact extends Cursor
 	{
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
-
-	// Execute trigger for contacts
-	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
-
-	// Update Email Bounce status
-	EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
-
-	// Boolean value to check whether to avoid notification on each contact.
-	boolean notification_condition = true;
-
-	// Reads arguments from method. If it is not null and then reading first
-	// parameter will judge whether to send notification or not
-	if (args != null && (args.length > 0))
-	    notification_condition = args[0];
-
-	if (notification_condition)
-	    // Execute notification for contacts
-	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
-
+	if(!(("import").equals(this.source)))
+	{
+		// Execute trigger for contacts
+		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+	
+		// Update Email Bounce status
+		EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
+	
+		// Boolean value to check whether to avoid notification on each contact.
+		boolean notification_condition = true;
+	
+		// Reads arguments from method. If it is not null and then reading first
+		// parameter will judge whether to send notification or not
+		if (args != null && (args.length > 0))
+		    notification_condition = args[0];
+	
+		if (notification_condition)
+		    // Execute notification for contacts
+		    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
+		System.out.println("trigger ran for non import source" );
+	}
+	else
+		System.out.println("trigger didnot run for import" );
+	
 	System.out.println("Time taken to process post save on contact : " + this.id + " time is : "
 		+ (System.currentTimeMillis() - time));
     }
@@ -543,6 +576,9 @@ public class Contact extends Cursor
 	if (this.id == null || this.id == 0l)
 	    return;
 
+	// Checks Owner change
+	checkOwnerChange();
+			
 	dao.put(this);
 
 	System.out.println("Before add to text search "+NamespaceManager.get());
@@ -1029,6 +1065,9 @@ public class Contact extends Cursor
     public void setContactOwner(Key<DomainUser> owner_key)
     {
 	this.owner_key = owner_key;
+	
+	if(this.type == Contact.Type.PERSON)
+		this.owner_updated = true;
     }
 
     @JsonIgnore
@@ -1248,6 +1287,7 @@ public class Contact extends Cursor
 
 	if (this.type == Type.PERSON)
 	{
+
 	    System.out.println("type of contact is person");
 	    if (this.properties.size() > 0)
 	    {
@@ -1335,6 +1375,37 @@ public class Contact extends Cursor
 	}
 	
     }
+
+	public void checkOwnerChange()
+	{
+		try
+		{
+			// Set old owner only if owner_updated is false
+			if(id == null || owner_key == null || owner_updated)
+				return;
+				
+			Contact oldContact = null;
+			
+			if(preProcessor != null)
+			    oldContact = preProcessor.getOldContact();
+			else
+				oldContact = ContactUtil.getContact(id);
+			
+			if(oldContact == null || oldContact.getContactOwnerKey() == null)
+				return;
+			
+			// If updated owner key doesn't match with old owner key
+			if(!oldContact.getContactOwnerKey().equals(owner_key))
+			{
+				System.out.println("Setting owner back to old...");
+				setContactOwner(oldContact.getContactOwnerKey());
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
 
     /**
      * A person must have contact_company_key, if not all company info is

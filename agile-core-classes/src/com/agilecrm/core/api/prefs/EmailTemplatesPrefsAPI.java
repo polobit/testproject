@@ -136,4 +136,20 @@ public class EmailTemplatesPrefsAPI
 	{
 		return EmailTemplatesUtil.getCount();
 	}
+	
+	/**
+	 * Gets EmailTemplates with respect to emailTemplate_category_id.
+	 * 
+	 * @param category_id
+	 *            - EmailTemplateCategory id.
+	 * @return EmailTemplates List
+	 */
+	@Path("/category/{category-id}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<EmailTemplates> getEmailTemplatesBasedOnCategory(@PathParam("category-id") Long category_id)
+	{
+		return EmailTemplatesUtil.getEmailTemplatesBasedOnCategory(category_id);
+	}
+	
 }

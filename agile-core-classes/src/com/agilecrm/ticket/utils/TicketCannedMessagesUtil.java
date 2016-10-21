@@ -52,6 +52,21 @@ public class TicketCannedMessagesUtil
 	 * @param domainUserKey
 	 * @return List of {@link TicketCannedMessages}
 	 */
+	public static List<TicketCannedMessages> getPublicCannedMessages(Key<DomainUser> domainUserKey)
+	{
+		List<TicketCannedMessages> publicCannedMessagesList = TicketCannedMessages.dao.listByProperty("owner_key",
+				domainUserKey);
+
+		publicCannedMessagesList.addAll(TicketCannedMessages.dao.listByProperty("is_public", true));
+
+		return publicCannedMessagesList;
+	}
+
+	/**
+	 * 
+	 * @param domainUserKey
+	 * @return List of {@link TicketCannedMessages}
+	 */
 	public static List<TicketCannedMessages> getCannedMessages(Key<DomainUser> domainUserKey)
 	{
 		return TicketCannedMessages.dao.listByProperty("owner_key", domainUserKey);

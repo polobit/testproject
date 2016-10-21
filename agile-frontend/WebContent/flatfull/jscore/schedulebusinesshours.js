@@ -47,7 +47,18 @@ function initializeOnlineCalendarListners(el){
 				json['schedule_id'] = scheduling_id;
 				json['bufferTime'] = $("#bufferTime").val();
 				json['bufferTimeUnit'] = $("#bufferTimeUnit").val();
-				json['user_calendar_title']=$(".online_summer_note").code();
+
+               var calendarNotes = $(".online_summer_note").code();				
+				if(calendarNotes && calendarNotes.indexOf('"') >= 0){
+					$(saveBtn).next().html("{{agile_lng_translate 'calendar' 'double-quotes-not-allowed'}}");
+					enable_save_button($(saveBtn));
+					setTimeout(function(){
+					  $(saveBtn).next().empty();							
+				    }, 5000);
+					return;
+				}else{
+					json['user_calendar_title'] = calendarNotes;
+				}
 				console.log(business_hours);
 
 			// $("#schedule-preferences").html(getRandomLoadingImg());

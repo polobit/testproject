@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.UpdateRelatedEntitiesUtil;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
@@ -169,32 +170,10 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	try {
-		if(!(document.relatedDealKeys()).isEmpty())
-		{
-			for(Key<Opportunity> key : document.relatedDealKeys())
-			{
-				Opportunity opp = Opportunity.dao.get(key);
-				opp.save();			
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	try {
-		if(!(document.getrelatedContacts()).isEmpty() && document.getrelatedContacts().size() > 0 )
-		{
-			for(Contact c : document.getrelatedContacts())
-			{
-				c.forceSearch = true ; 
-				c.save();		
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	UpdateRelatedEntitiesUtil.updateRelatedDeals(document.relatedDeals(), dealIds);
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(document.relatedContacts(), conIds);
+	
 	return document;
     }
 
@@ -211,6 +190,8 @@ public class DocumentsAPI
     public Document updateDocument(Document document)
     {
     Document oldDocument = null;
+    List<String> oldConIds = new ArrayList<String>();
+    List<String> oldDealIds = new ArrayList<String>();
     try 
     {
     	oldDocument = DocumentUtil.getDocument(document.id);
@@ -234,6 +215,8 @@ public class DocumentsAPI
     	{
     		throw new AccessDeniedException("Document cannot be attached because you do not have permission to update associated deal(s).");
     	}
+    	oldConIds.addAll(conIds);
+    	oldDealIds.addAll(dealIds);
     }
 	List<String> conIds = document.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -258,61 +241,48 @@ public class DocumentsAPI
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
-	try {
-		if(oldDocument != null && !(oldDocument.relatedDealKeys()).isEmpty())
-		{
-			for(Key<Opportunity> key : oldDocument.relatedDealKeys())
-			{
-				Opportunity opp = Opportunity.dao.get(key);
-				opp.save();
-			}
-		}
-	} catch (Exception e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
-	try {
-		if(!(oldDocument.getrelatedContacts()).isEmpty() && oldDocument.getrelatedContacts().size() > 0 )
-		{
-			for(Contact c : oldDocument.getrelatedContacts())
-			{
-				c.forceSearch = true;
-				c.save();		
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	
 	if(document.network_type.equals("GOOGLE"))
 		document.size = 0L;
 	document.save();
-	try {
-		if(!(document.relatedDealKeys()).isEmpty())
-		{
-			for(Key<Opportunity> key : document.relatedDealKeys())
-			{
-				Opportunity opp = Opportunity.dao.get(key);
-				opp.save();			
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	
+	List<Contact> relatedContactsOldList = oldDocument.relatedContacts();
+	List<Contact> relatedContactsList = document.relatedContacts();
+	
+	List<Opportunity> relatedDealsOldList = oldDocument.relatedDeals();
+	List<Opportunity> relatedDealsList = document.relatedDeals();
+	
+	if(relatedContactsOldList != null && relatedContactsOldList.size() > 0 && relatedContactsList != null)
+	{
+		relatedContactsList.addAll(relatedContactsOldList);
 	}
-	try {
-		if(!(document.getrelatedContacts()).isEmpty() && document.getrelatedContacts().size() > 0 )
-		{
-			for(Contact c : document.getrelatedContacts())
-			{
-				c.forceSearch = true;
-				c.save();		
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	if(relatedDealsOldList != null && relatedDealsOldList.size() > 0 && relatedDealsList != null)
+	{
+		relatedDealsList.addAll(relatedDealsOldList);
 	}
+	List<String> conIdList = new ArrayList<String>();
+	if(oldConIds != null && oldConIds.size() > 0)
+	{
+		conIdList.addAll(oldConIds);
+	}
+	if(conIds != null && conIds.size() > 0)
+	{
+		conIdList.addAll(conIds);
+	}
+	List<String> dealIdList = new ArrayList<String>();
+	if(oldDealIds != null && oldDealIds.size() > 0)
+	{
+		dealIdList.addAll(oldDealIds);
+	}
+	if(dealIds != null && dealIds.size() > 0)
+	{
+		dealIdList.addAll(dealIds);
+	}
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIdList);
+	
+	UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIdList);
+	
 	return document;
     }
 
@@ -356,20 +326,10 @@ public class DocumentsAPI
 		    		contactIdsList.addAll(modifiedConIds);
 		    	}
 				
-		    	if(!doc.getDeal_ids().isEmpty()){
-					for(String dealId : doc.getDeal_ids()){
-						Opportunity oppr = OpportunityUtil.getOpportunity(Long.parseLong(dealId));
-						oppr.save();
-					 }	
-				 }
-		    	if(!(doc.getrelatedContacts()).isEmpty() && doc.getrelatedContacts().size() > 0 )
-                {
-                    for(Contact c : doc.getrelatedContacts())
-                    {
-                        c.forceSearch = true ; 
-                        c.save();       
-                    }
-                }
+		    	UpdateRelatedEntitiesUtil.updateRelatedDeals(doc.relatedDeals(), doc.getDeal_ids());
+		    	
+		    	UpdateRelatedEntitiesUtil.updateRelatedContacts(doc.relatedContacts(), doc.getContact_ids());
+		    	
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

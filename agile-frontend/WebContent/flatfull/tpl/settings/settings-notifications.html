@@ -75,23 +75,39 @@
                         </div>
                         
                     </div>
+                   
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'deal'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                            <input type="checkbox" id="deal_created" name="deal_created" value="true" /><i></i> 
+                            <input type="checkbox" id="deal_created" name="deal_created" value="true" 
+                            {{#hasMenuScope "DEALS"}}   
+
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
+                            
                             {{agile_lng_translate 'prefs-notifications' 'deal-is-created'}}
                             </label>
-</div>
+                            </div>
+                         
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                            <input type="checkbox" id="deal_closed" name="deal_closed" value="true" /><i></i> 
+                            <input type="checkbox" id="deal_closed" name="deal_closed"  
+                            {{#hasMenuScope "DEALS"}}        
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
                            {{agile_lng_translate 'prefs-notifications' 'deal-is-closed'}}
                             </label>
-</div>
+                            </div>
+
+                                            
                         </div>
                     </div>
+
+
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'contact-edit' 'tag'}}</label>
                         <div class="controls col-sm-8">
@@ -128,7 +144,8 @@
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="call" name="call" value="true"/><i></i> 
-                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}}
+                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}} 
+                            ({{agile_lng_translate 'prefs-notifications' 'for-ringcentral-only'}})
                             </label>
 </div>
                         </div>
@@ -170,8 +187,7 @@
                             </select>
 <p class="help-block m-b-none">{{agile_lng_translate 'prefs-notifications' 'get-notified-when-a-contact-clicks-link-in-email'}}</p>
                         </div>
-                        
-                    </div>
+                   
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'deal'}}
                         </label>
@@ -224,8 +240,8 @@
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="call" name="call" value="true" disabled="disabled"/><i></i> 
-                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}}
-                            </label>
+                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}} 
+                            ({{agile_lng_translate 'prefs-notifications' 'for-ringcentral-only'}})</label>
 </div>
                         </div>
                     </div>

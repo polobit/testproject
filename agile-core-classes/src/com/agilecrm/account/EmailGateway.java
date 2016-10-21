@@ -33,7 +33,7 @@ public class EmailGateway implements Serializable
 	SEND_GRID, MANDRILL, SES, MAILGUN
     };
 
-    public EMAIL_API email_api = EMAIL_API.MANDRILL;
+    public EMAIL_API email_api = EMAIL_API.SEND_GRID;
 
     /**
      * Constructs default {@link EmailGateway}

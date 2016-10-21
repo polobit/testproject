@@ -331,6 +331,16 @@ public class Document extends Cursor
     }
     return null;
     }
+    
+    public List<Contact> relatedContacts()
+    {
+    	return Contact.dao.fetchAllByKeys(this.related_contacts);
+    }
+    
+    public List<Opportunity> relatedDeals()
+    {
+    	return Opportunity.dao.fetchAllByKeys(this.related_deals);
+    }
 
     /**
      * Saves Document in dao.

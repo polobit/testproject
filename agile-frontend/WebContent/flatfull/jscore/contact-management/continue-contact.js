@@ -177,7 +177,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			{
 				if ($(this).parent().find("ul").find("li").length == 0)
 				{
-					$(this).parent().append('<span for="fname" generated="true" class="help-inline">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
+					$(this).parent().append('<span for="fname" generated="true" class="help-inline">{{agile_lng_translate "validation-msgs" "required"}}</span>');
 					var that = this;
 					setTimeout(function(){
 						$(that).parent().find('span').remove();
@@ -245,7 +245,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		{
 			if ($form.find('#contact_company').prop('value').length > 100)
 			{
-				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
+				show_error(modal_id, form_id, 'duplicate-email', "{{agile_lng_translate 'companies' 'name-length-error'}}");
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
 			}
@@ -367,7 +367,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			if (companyName.length > 100)
 			{
 				// Company name too long, show error and return;
-				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
+				show_error(modal_id, form_id, 'duplicate-email', "{{agile_lng_translate 'companies' 'name-length-error'}}");
 
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
@@ -378,7 +378,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-exists'));
+						show_error(modal_id, form_id, 'duplicate-email', "{{agile_lng_translate 'companies' 'name-exists'}}");
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -540,6 +540,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				.each(obj.properties,
 						function(contact_property_index, contact_property)
 						{
+							if(contact_property.name=='Google_Sync_Type' ||
+								contact_property.name=='quickbookSyncId' || contact_property.name=='shopifySyncId')
+								properties.push(contact_property);
 							$
 									.each(properties_temp,
 											function(new_property_index, new_property)
@@ -789,9 +792,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		else if (response.status == 403)
 		{
 			if(form_id == 'companyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-add'));
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "{{agile_lng_translate 'companies' 'no-perm-to-add'}}");
 			else if(form_id == 'continueCompanyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-update'));
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "{{agile_lng_translate 'companies' 'no-perm-to-update'}}");
 			else
 				show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 		}
@@ -822,7 +825,7 @@ function deserialize_contact(contact, template, callback)
 			
 		var form = $('#content').html($(template_ui));	
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder", _agile_get_translated_val("contacts", "select-date"));
+		$('.date_input').attr("placeholder", "{{agile_lng_translate 'contacts-view' 'select-date'}}");
 
 		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
@@ -884,7 +887,7 @@ function deserialize_contact(contact, template, callback)
 				});
 			}
 		}
-		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
+		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>{{agile_lng_translate "others" "no-results"}}</b> <br/> {{agile_lng_translate "others" "add-new-one"}}');
 
 		if (contact.contact_company_id && contact.contact_company_id.length > 0)
 		{

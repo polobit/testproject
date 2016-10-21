@@ -296,15 +296,11 @@ public class LoginServlet extends HttpServlet {
 			// Send email with code
 			if(!browser_auth.valid_finger_print || !browser_auth.valid_ip ){
 				
-				// Generate one finger print
-				browser_auth.generateOAuthToken(request);
-
-				// Set info in session for future usage 
-				browser_auth.addUserBrowserInfo(request, domainUser);
+				// Generate token
+				browser_auth.generateOTP(request, domainUser);
 				
 				// Send Sendgrid Email
-				sendOTPEmail(request, domainUser.email, false);
-				
+				sendOTPEmail(request, domainUser, false);
 			}
 		}
 		
@@ -359,7 +355,8 @@ public class LoginServlet extends HttpServlet {
 		String email = ((UserInfo)request.getSession().getAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME)).getEmail();
 		
-		sendOTPEmail(request, email, true);
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+		sendOTPEmail(request, domainUser, true);
 		
 	}
 	
@@ -370,12 +367,18 @@ public class LoginServlet extends HttpServlet {
 
 	}
 
-	private void sendOTPEmail(HttpServletRequest request, String email, boolean resend) {
+	private void sendOTPEmail(HttpServletRequest request, DomainUser domainUser, boolean resend) {
 
 		try {
 			UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
 			Map data = info.info;
-			 
+			
+			// For some reason it goes wrong with empty data. Better check and regenerate otp
+			if(StringUtils.isBlank(info.verification_code)){
+				info.generateOTP(request, domainUser);
+				data = info.info;
+			}
+						
 			// Simulate template
 			String template = SendMail.ALLOW_IP_ACCESS;
 			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
@@ -383,6 +386,8 @@ public class LoginServlet extends HttpServlet {
 				template = SendMail.OTP_EMAIL_TO_USER;
 				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
 			}
+			
+			String email = domainUser.email;
 			
 			if(resend)
 				SendMail.sendMail(email, subject, template, data);
