@@ -85,16 +85,6 @@ public class DealExportCSVUtil
     {
 	// Can't append elements directly in java, so convert to ArrayList
 	List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
-	headersList.add("Note1");
-	headersList.add("Note2");
-	headersList.add("Note3");
-	headersList.add("Note4");
-	headersList.add("Note5");
-	headersList.add("Note6");
-	headersList.add("Note7");
-	headersList.add("Note8");
-	headersList.add("Note9");
-	headersList.add("Note10");
 
 	try
 	{
@@ -112,7 +102,19 @@ public class DealExportCSVUtil
 	    		headersList.add(customField.field_label+ " Name");
 	    	}
 	    }
-
+	    
+	    /** Adding headers for notes **/
+	    
+		headersList.add("Note1");
+		headersList.add("Note2");
+		headersList.add("Note3");
+		headersList.add("Note4");
+		headersList.add("Note5");
+		headersList.add("Note6");
+		headersList.add("Note7");
+		headersList.add("Note8");
+		headersList.add("Note9");
+		headersList.add("Note10");
 	    // Converts ArrayList to String array before return
 	    return headersList.toArray(new String[headersList.size()]);
 	}
