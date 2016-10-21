@@ -2018,7 +2018,9 @@ display: block!important;
  .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
 
  /*Marketing Modules Responsive Style Start*/
-
+  .landing-pages-title,.forms-title,.prefs-title,.social-suite-title,.push-notification-title{
+    font-size: 18px !important;
+  }
   .add-landing-pages-btn,.add-form-btn,.add-push-notify-btn{
     text-align: center !important;
     float: none !important;
@@ -2041,7 +2043,10 @@ display: block!important;
     text-align: center !important;
     float: none !important;
   }
-
+  .add-stream-btn{
+    display: block !important;
+  }
+  
  /*Marketing Modules Responsive Style End*/
 
 }
