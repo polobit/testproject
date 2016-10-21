@@ -2042,14 +2042,6 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 				initializeCustomRangeInModal(base_model,elData);
-				
-				console.log("Blur things activites 1 ** ");
-				$('#start_date',elData).blur();
-				$('#end_date',elData).blur();
-				$('.p-date-picker',elData).blur();
-				$('.p-date-picker').blur();					
-				console.log("Blur things activites 2 ** ");
-
 				break;
 		}
 		case "Webstat Visits": {
@@ -2092,14 +2084,17 @@ var portlet_utility = {
 	 */
 	addPortletSettingsModalContent : function(base_model, modal_id) {
 		$('#' + modal_id).modal('show');
+		$('#' + modal_id).on('shown.bs.modal', function(){		   
+		   if($("#start_date", $('#' + modal_id)).is(":focus")){		    
+		    $("#start_date", $('#' + modal_id)).datepicker("hide");
+		    $("#start_date", $('#' + modal_id)).blur();		    
+		   }
+		});
+
 		$('.datepicker').hide();
-		$(
-				'#'
-						+ modal_id
-						+ ' > .modal-dialog > .modal-content > .modal-footer > .save-modal')
+		$('#'+ modal_id+ ' > .modal-dialog > .modal-content > .modal-footer > .save-modal')
 				.attr('id', base_model.get("id") + '-save-modal');
-		$("#portlet-type", $('#' + modal_id)).val(
-				base_model.get('portlet_type'));
+		$("#portlet-type", $('#' + modal_id)).val(base_model.get('portlet_type'));
 		$("#portlet-name", $('#' + modal_id)).val(base_model.get('name'));
 	},
 
@@ -2646,7 +2641,7 @@ var portlet_utility = {
 function initializeCustomRangeInModal(base_model,elData){
 	if(base_model.get("settings").duration=='Custom'){
 		$('.daterange',elData).removeClass('hide');					
-		if(base_model.get('name')=='Deal Goals'){
+		if(base_model.get('name')=='Deal Goals'){			
 			$("#start_date", elData).val(stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
 			$("#end_date", elData).val(stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
 			$('#start_date',elData).datepicker('remove');
@@ -2684,6 +2679,7 @@ function initializeCustomRangeInModal(base_model,elData){
 				if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1){
 					eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
 				}else{
+					console.log('New');
 				 	eventDate2 = new Date($('#end_date',elData).val());
 				}
 				
