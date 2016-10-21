@@ -5596,3 +5596,42 @@ admin-settings-users.update-events,Update Events,
 admin-settings-users.delete-events,Delete Events,
 admin-settings-users.create-update-delete-events-content,Add and edit events owned by other users. Delete own and other user events,
 admin-settings-users.view-events-owned-by-others,View events owned by other users,
+prefs-email.smtp-content,Send emails from your email provider.,Enviar mensajes de correo electrónico de su proveedor de correo electrónico.
+prefs-data-sync.smtp,SMTP,SMTP
+prefs-email.smtp,SMTP,SMTP
+prefs-email.smtp-note1,1. SMTP email address needs to be verified for sending emails&#44; in the 'From' section of Send Email.,1. dirección de correo electrónico SMTP debe ser verificado para el envío de mensajes de correo electrónico&#44; en la sección "De" de Enviar correo electrónico.
+prefs-email.smtp-note2,2. Emails with attachments will be sent through default gateway.,2. Mensajes de correo electrónico con archivos adjuntos serán enviados a través de puerta de enlace predeterminada.
+prefs-email.smtp-note3,3. SMTP will not work for Campaign and Bulk Emails.,3. SMTP no funcionará para Campaña y correos electrónicos masivos.
+report-view.won-deals-user, Won Deals Analysis
+report-view.won-deal-details,Get insights on deals won (count/revenue) by users over time
+prefs-notifications.for-ringcentral-only,For RingCentral Only
+portlets.email-subscription,Email Subscription
+portlets.branded-emails-details,Email Subscription Details
+plan-and-upgrade.andymailwain,Andy McIlwain
+plan-and-upgrade.content-community,Content & Community
+plan-and-upgrade.andymailwain-desc,Agile CRM has delivered significant improvements in efficiency and reliability for us. In the first month of integration&#44;  our business grew 270 percent.,
+plan-and-upgrade.brenton-brien,Brenton O'Brien
+plan-and-upgrade.managing-director-microbric,Managing Director-Microbric
+plan-and-upgrade.brenton-brien-desc,I’m really impressed with the way Agile CRM works. I LOVE the contact timeline!!! This is a killer feature. It means that in one place anyone on the team can see all the communications with a contact&#44;  even if an email was sent (IMAP) from outlook or web mail..,
+plan-and-upgrade.brian-juhl,Brian Juhl
+plan-and-upgrade.founder-aqivera,Founder – Aquivera
+plan-and-upgrade.founder-aqivera-desc,You guys are seriously the bomb friggin diggity. Keep the mail coming&#44;  I am impressed by your product. True disruption!,
+plan-and-upgrade.joão-camacho,João Camacho
+plan-and-upgrade.joão-camacho-coordenador,Coordenador – Ião.positivo
+plan-and-upgrade.joão-camacho-coordenador-desc,Very good application. I think for me it's the best one till now&#44;  and I know thousands of them. You are in the good road! Great!
+plan-and-upgrade.jeri-murphy,Jeri Murphy
+plan-and-upgrade.jeri-murphy-co-founder,Co Founder – WhichAddOn
+plan-and-upgrade.jeri-murphy-desc,We absolutely love Agile CRM. We recently upgraded to Enterprise and just working through to make sure we are using it the best of our ability. We will be in touch with further questions I'm sure. ,
+plan-and-upgrade.free-emails,Free Email
+plan-and-upgrade.free-emails-first-text,Please note that once you have purchased the email subscription&#44;  all the branded emails will be removed from your account.&#44;
+plan-and-upgrade.free-emails-branded,Free Emails
+plan-and-upgrade.sebastian-desc,One week testing #agilecrm and I think that I've finally found THE crm I was looking for. Thanks @agilecrm !
+plan-and-upgrade.sebastian-madrid,Madrid&#44;  www.panalespingo.es
+plan-and-upgrade.sebastian,Sébastien F
+plan-and-upgrade.unplug,UnPlug
+plan-and-upgrade.unplug-desc,After using @salesforce for years in big corps I've run a trial for it @unplughq vs @agilecrm - AgileCrm won by a mile #startup #SME #CRM
+plan-and-upgrade.unplug-auth,Dublin City&#44;  Ireland&#44;  www.unplug.ie
+plan-and-upgrade.deean-harper,Deeann Harper
+plan-and-upgrade.deean-harper-auth,Orlando&#44;  FL&#44;  www.harperadministrativeservices.com
+plan-and-upgrade.deean-harper-desc,I love when I find a product that is perfect for small businesses and @agilecrm is my new favorite! #smallbusiness #harperadmin,
+other.campaign-webhooks-will-not-be-triggered-new,*Webhooks & Triggers (Contact Added & Tag Added) will not be automatically run during contacts import. Triggers need to be run manually.

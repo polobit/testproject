@@ -2344,10 +2344,21 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	    }
 	}
 
-	if (builderObjects.size() >= 1)
+		if (builderObjects.size() >= 1)
 	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
-	Contact.dao.putAll(contacts_list);
+		Contact.dao.putAll(contacts_list);
+    }
+
+    public static List<Contact> getContactsByIds(List<String> contactsArray){
+		List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
+		for (String id : contactsArray){
+			Long contactID = Long.parseLong(id);
+		    contactKeys.add(new Key<Contact>(Contact.class, contactID));
+		}
+		System.out.println(dao.fetchAllByKeys(contactKeys));
+	
+		return dao.fetchAllByKeys(contactKeys);
     }
 
 }

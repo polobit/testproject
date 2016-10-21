@@ -42,6 +42,8 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
+import com.formio.reports.FormReportsSQLUtil;
+import com.google.appengine.api.NamespaceManager;
 
 @SuppressWarnings("serial")
 public class AgileForm extends HttpServlet
@@ -122,7 +124,9 @@ public class AgileForm extends HttpServlet
 		 
 	    updateContactWithOldTag(contact, tags);
 	    addNotesToContact(contact, owner, formJson);  
-	    
+
+	    FormReportsSQLUtil.insertData(reqFormJson.getString("email"),NamespaceManager.get(),(form.id).toString()); 
+	    System.out.println("permanent link"+NamespaceManager.get());
 	    //creating the emailNotification for the new contact  
 	    if(form.emailNotification && newContact)
 	    	 FormUtil.sendMailToContactOwner(contact, agileFormName);

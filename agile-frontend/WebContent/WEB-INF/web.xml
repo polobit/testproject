@@ -1550,5 +1550,15 @@
 		<servlet-name>VideoServingServlet</servlet-name>
 		<url-pattern>/video/*</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SaveFormData</servlet-name>
+		<servlet-class>com.analytics.servlets.FormReportsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SaveFormData</servlet-name>
+		<url-pattern>/addformstats</url-pattern>
+	</servlet-mapping>
 	
 </web-app>

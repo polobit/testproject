@@ -118,6 +118,22 @@
 
 
     </div>
+<div class="tab-pane" id="WonDealsByUser">
+ 
+                   <a class="report-go" href="#report-won-deals">
+                   <div class="text-center show_screenshot">
+                   <!-- Description -->
+        <div class="m-b-sm" rel="tooltip" title="{{description}}">
+            {{agile_lng_translate 'report-view' 'won-deal-details'}}
+        </div>
+               <img src='flatfull/img/reports_images/won-deal-analysis.png'></img>
+        <br />
+    </div>
+     </a>
+    </div>
+
+
+
 
     <div class="tab-pane" id="LostDeal">
      <a class="report-go" href="#report-lossReason">
@@ -585,15 +601,15 @@
 <script id="upgradeModal-template" type="text/html">
 <div class="modal-dialog">
     <div class="modal-content">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3 class="modal-title">Upgrade</h3>
-	</div>
-	<div class="modal-body">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title">Upgrade</h3>
+    </div>
+    <div class="modal-body">
                </div>  
-	<div class="modal-footer">
-		<a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
-	</div>
+    <div class="modal-footer">
+        <a id="portlet-delete-cancel-modal" href="#" class="btn btn-sm btn-default" data-dismiss="modal">{{agile_lng_translate 'reputation' 'Ok'}}</a>
+    </div>
 </div>
 </div>
 </script>
@@ -610,6 +626,8 @@
     <a href="#deals-tab" role="tab" data-toggle="tab">{{agile_lng_translate 'report-view' 'deals'}}</a>
      <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
      <li><a href="#IncomingDeals" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>{{agile_lng_translate 'report-view' 'incoming-deals'}}</a></li>
+<li><a href="#WonDealsByUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i>{{agile_lng_translate 'report-view' 'won-deals-user'}}</a></li>
+
      <li><a href="#LostDeal" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_lng_translate 'portlets' 'deals-lost-reason'}}</a></li>
      <li><a href="#RevenuebySource" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_lng_translate 'report-view' 'revenue-by-source'}}</a></li>
      <li><a href="#SalesForecast" role="tab" data-toggle="tab"><i class="m-r-sm icon-graph v-middle"></i> {{agile_lng_translate 'report-view' 'sales-forecast'}}</a></li>
@@ -676,8 +694,7 @@
 
 <li><a href="#webrule-report/all">{{agile_lng_translate 'menu' 'menu-web-rules'}}</a></li>
                                                 
-<!-- <li><a href="#form-reports/all">{{agile_lng_translate 'form-builder' 'forms'}}</a></li> -->
-
+<li><a href="#form-reports/all">{{agile_lng_translate 'form-builder' 'forms'}}</a></li>
 {{#hasMenuScope 'ACTIVITY'}}
 <li role="presentation" data-tab="4" class="maintab reports-tab-none reportsliElement">
 <a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'activities'}}</a>
@@ -710,7 +727,7 @@
   <li><a href="#PriorityReport" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-star v-middle" style="float:left;margin-top: 4px;"></i><div style="display:table-cell">{{agile_lng_translate 'report-view' 'ticket-priority-and-status-reports'}}</div></a></li>
  <li><a href="#FirstResponse" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle"></i>{{agile_lng_translate 'report-view' 'first-response-time'}}</a></li>
  <li><a href="#Feedback" role="tab" data-toggle="tab"><i class="m-r-sm fa fa-thumbs-up v-middle" style="margin-bottom: 4px;"></i>Feedback</a></li>
-	</ul>
+    </ul>
 </li>
 {{#hasMenuScope 'ACTIVITY'}}
 <li role="presentation" data-tab="4" class="maintab reportsliElement reports-tab-none">
@@ -732,4 +749,3 @@
 </li>
 
 </script>
-

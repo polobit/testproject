@@ -1,6 +1,10 @@
 package com.agilecrm.account.util;
 
 import static com.agilecrm.AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE;
+import static com.agilecrm.account.EmailGateway.EMAIL_API.MAILGUN;
+import static com.agilecrm.account.EmailGateway.EMAIL_API.MANDRILL;
+import static com.agilecrm.account.EmailGateway.EMAIL_API.SEND_GRID;
+import static com.agilecrm.account.EmailGateway.EMAIL_API.SES;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +22,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
@@ -28,6 +31,10 @@ import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.thirdparty.gmail.GMail;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.SMTPPrefs;
+import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
@@ -395,64 +402,83 @@ public class EmailGatewayUtil
      *            - attachment files like contacts export csv file
      */
     public static void sendEmail(EmailGateway emailGateway, String domain, String fromEmail, String fromName,
-	    String to, String cc, String bcc, String subject, String replyTo, String html, String text,
-	    String mandrillMetadata, List<Long> documentIds, List<BlobKey> blobKeys, String... attachments)
+		    String to, String cc, String bcc, String subject, String replyTo, String html, String text,
+		    String mandrillMetadata, List<Long> documentIds, List<BlobKey> blobKeys, String... attachments)
     {
-	try
-	{
-		to = ContactEmailUtil.normalizeEmailIds(to);
-    	if(StringUtils.isBlank(to)) return;
-    	
-    	cc = ContactEmailUtil.normalizeEmailIds(cc);
-    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
-    	
-	    // If no gateway setup, sends email through Agile's default
-	    if (emailGateway == null || (EMAIL_API.SES.equals(emailGateway.email_api))
-	    		&& ((documentIds != null && documentIds.size() != 0) 
-	    		|| (blobKeys != null && blobKeys.size() != 0)) 
-	    		|| (EMAIL_API.SES.equals(emailGateway.email_api) && attachments!=null && attachments.length !=0))
-	    {
-			//Mandrill.sendMail(null, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-			//		mandrillMetadata, documentIds, blobKeys, attachments);
+		try
+		{
+			to = ContactEmailUtil.normalizeEmailIds(to);
+	    	if(StringUtils.isBlank(to)) return;
 	    	
-	    	SendGrid.sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
-	    	return;
-	    }
+	    	cc = ContactEmailUtil.normalizeEmailIds(cc);
+	    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
+	    	
+	    	//As of now SMTP doesn't support attachments
+	    	if((documentIds != null && documentIds.size() == 0) 
+	    			&& (blobKeys != null && blobKeys.size() == 0)
+	    			&& (attachments != null && attachments.length == 0)) {
+		    	
+	    		//Fetch the email options from user's SMTP preferences 
+		    	List<SMTPPrefs> userPrefs = SMTPPrefsUtil.getSMTPPrefsList(AgileUser.getCurrentAgileUser());
+		    	for(SMTPPrefs smtpPrefs : userPrefs) {
+		    		if(smtpPrefs != null && smtpPrefs.user_name.equals(fromEmail)) {
+		    			System.out.println("smtpPrefs.email:"+smtpPrefs.user_name);
+		        		GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, 
+		        				html, text, documentIds, blobKeys, attachments);
+		        		return;
+		    		}
+				}
+			}
+	
+	    	//Fetch the preferred emailgateway from account preferences
+	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
+	    			emailGateway.email_api : EMAIL_API.SEND_GRID;	//AccountPrefsUtil.getAccountPrefs().emailGateway;
+			
+			String user = (emailGateway != null) ? emailGateway.api_user : null;
+			String key = (emailGateway != null) ? emailGateway.api_key : null;
+			
+		    /* If no gateway setup or Amazon SES gateway having attachments or documents, 
+			sends email through Agile's default (Sendgrid) */
+			if(SEND_GRID.equals(preferredGateway) ) {
+	
+				SendGrid.sendMail(user, key, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
+		    			html, text, null, documentIds, blobKeys, attachments);
+		    }
+		    else if(MANDRILL.equals(preferredGateway)) {
+		    	
+		    	Mandrill.sendMail(key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
+		    			html, text, mandrillMetadata, documentIds, blobKeys, attachments);
+		    }
+		    else if(SES.equals(preferredGateway)) {
 
-	    // If Mandrill
-	    else if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
-		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-			text, mandrillMetadata, documentIds, blobKeys, attachments);
+				if ((documentIds != null && documentIds.size() != 0) 
+	    				|| (blobKeys != null && blobKeys.size() != 0)
+	    				|| (attachments != null && attachments.length != 0)) {
 
-	    // If SendGrid
-	    else if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
-		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, documentIds, blobKeys, attachments);
-	    
-	    // If SES
-	    else if (EMAIL_API.SES.equals(emailGateway.email_api))
-	    {
-	    	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain, fromEmail,
-	    	        fromName, to, cc, bcc, subject, replyTo, html, text, null, null, null);
-
-	    	// Add to pull queue with from email as Tag
-	    	PullQueueUtil.addToPullQueue(AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
-	    }
-	    // If Mailgun
-	    else if (EMAIL_API.MAILGUN.equals(emailGateway.email_api))
-	    	MailgunNew.sendMail(emailGateway.api_key, emailGateway.api_user, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-	    			text, mandrillMetadata, documentIds, blobKeys, attachments);
-	    
-
-	}
-	catch (Exception e)
-	{
-		System.out.println(ExceptionUtils.getFullStackTrace(e));
-	    System.err.println("Exception occured while sending emails through thirdparty email apis..."
-		    + e.getMessage());
-
-	    e.printStackTrace();
-	}
+					SendGrid.sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
+			    			html, text, null, documentIds, blobKeys, attachments);
+			    	return;
+	    		}
+		    	MailDeferredTask mailDeferredTask = new MailDeferredTask(preferredGateway.toString(), 
+		    			user, key, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
+		    			html, text, null, null, null);
+	
+		    	// Add to pull queue with from email as Tag
+		    	PullQueueUtil.addToPullQueue(AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
+		    }
+		    else if(MAILGUN.equals(preferredGateway)) {
+		    	
+		    	MailgunNew.sendMail(key, user, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
+		    			html, text, mandrillMetadata, documentIds, blobKeys, attachments);
+		    }
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		    System.err.println("Exception occured while sending emails through thirdparty email apis..."
+			    + e.getMessage());
+		    e.printStackTrace();
+		}
     }
 
     /**
@@ -628,19 +654,20 @@ public class EmailGatewayUtil
 
 	    if (emailSender.canSend())
 	    {
-	    	// If No Gateway or SendGrid
-	    	if (emailGateway == null || emailGateway.email_api == EMAIL_API.SEND_GRID)
+	    	//Fetch the preferred emailgateway from account preferences
+	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
+	    			emailGateway.email_api : EMAIL_API.SEND_GRID;	//AccountPrefsUtil.getAccountPrefs().emailGateway;
+	    	
+	    	if(preferredGateway == SEND_GRID)
 			    SendGridUtil.sendSendGridMails(tasks, emailSender);
 
-	    	// If Mandrill
-	    	else if (emailGateway.email_api == EmailGateway.EMAIL_API.MANDRILL)
+	    	else if(preferredGateway == MANDRILL)
 	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
 		
-	    	else if (emailGateway.email_api == EMAIL_API.SES)
+	    	else if(preferredGateway == SES)
 				AmazonSESUtil.sendSESMails(tasks, emailSender);
-
-			//If Mailgun
-			else if(emailGateway.email_api == EMAIL_API.MAILGUN)
+	    	
+			else if(preferredGateway == MAILGUN)
 				 MailgunUtil.sendMailgunMails(tasks, emailSender);
 	
 			addEmailLogs(tasks);
