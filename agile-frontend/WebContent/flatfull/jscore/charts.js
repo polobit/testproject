@@ -1748,8 +1748,8 @@ chart = new Highcharts.Chart({
                              else
                         {
                         return '<div>' + 
-                                '<div class="p-n">'+this.x+'</div>' + 
-                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '<div class="p-ntext-cap"><font color='+this.series.color+'>'+this.series.name+'</font></div>' + 
+                                 '<div class="p-n text-cap">'+this.x+' : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
                                  '<div class="p-n">Total : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.series._i])+'</div>';;
                             }
