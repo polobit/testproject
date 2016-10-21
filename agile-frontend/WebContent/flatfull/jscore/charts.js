@@ -1629,6 +1629,14 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
           else{
             
             if(selector == "won-deals-chart"){
+            	   var won_total= {};
+            	  $.each(series,function(index,user){
+            	  	var sum=0;
+            	  	$.each(user.data,function(i,value){
+            	  		sum+=value;
+            	  	});
+            	  	won_total[index]=sum;
+            	  });
             	$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
                 success: function(data){
                    $.each(data,function(index,user){
@@ -1639,7 +1647,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                             
                     }
                   });
-                chartRenderforWonDeals(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
+                chartRenderforWonDeals(selector,categories,name,yaxis_name,min_tick_interval,type,series,won_total);
 
                 }
                });
@@ -1732,18 +1740,18 @@ chart = new Highcharts.Chart({
                         if(type=="deals")
                                 {
                         return '<div>' + 
-                                '<div class="p-n">'+this.x+'</div>' + 
-                                '<div class="p-n text-cap"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '<div class="p-ntext-cap"><font color='+this.series.color+'>'+this.series.name+'</font></div>' + 
+                                '<div class="p-n text-cap">'+this.x+' : '+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
-                                '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';
+                                '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.series._i])+'</div>';
                             }
                              else
                         {
                         return '<div>' + 
-                                '<div class="p-n">'+this.x+'</div>' + 
-                                '<div class="p-n"><font color='+this.series.color+'>'+this.series.name+'</font> : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '<div class="p-ntext-cap"><font color='+this.series.color+'>'+this.series.name+'</font></div>' + 
+                                 '<div class="p-n text-cap">'+this.x+' : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
                                 '</div>'+
-                                 '<div class="p-n">Total : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.point.x][1])+'</div>';;
+                                 '<div class="p-n">Total : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.series._i])+'</div>';;
                             }
                         },
                         useHTML: true
