@@ -418,16 +418,24 @@ public class EmailGatewayUtil
 	    			&& (blobKeys != null && blobKeys.size() == 0)
 	    			&& (attachments != null && attachments.length == 0)) {
 		    	
-	    		//Fetch the email options from user's SMTP preferences 
-		    	List<SMTPPrefs> userPrefs = SMTPPrefsUtil.getSMTPPrefsList(AgileUser.getCurrentAgileUser());
-		    	for(SMTPPrefs smtpPrefs : userPrefs) {
-		    		if(smtpPrefs != null && smtpPrefs.user_name.equals(fromEmail)) {
-		    			System.out.println("smtpPrefs.email:"+smtpPrefs.user_name);
-		        		GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, 
-		        				html, text, documentIds, blobKeys, attachments);
-		        		return;
-		    		}
-				}
+	    		try
+	    		{
+	    			//Fetch the email options from user's SMTP preferences 
+	    			List<SMTPPrefs> userPrefs = SMTPPrefsUtil.getSMTPPrefsList(AgileUser.getCurrentAgileUser());
+	    			for(SMTPPrefs smtpPrefs : userPrefs) {
+	    				if(smtpPrefs != null && smtpPrefs.user_name.equals(fromEmail)) {
+	    					System.out.println("smtpPrefs.email:"+smtpPrefs.user_name);
+	    					GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, 
+	    							html, text, documentIds, blobKeys, attachments);
+	    					return;
+	    				}
+	    			}
+	    		}
+	    		catch(Exception ex)
+	    		{
+	    			System.err.println("Exception occured while getting smtp prefs...");
+	    			System.out.println(ExceptionUtils.getFullStackTrace(ex));
+	    		}
 			}
 	
 	    	//Fetch the preferred emailgateway from account preferences
