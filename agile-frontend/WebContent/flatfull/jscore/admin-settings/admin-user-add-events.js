@@ -5,9 +5,16 @@ function bindAdminChangeAction(el, data)
 	if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
 	{
 		if(is_admin == false)
-			$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
+			{
+				$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
+				$("input[type=checkbox]", $('div[name="adminscopes"]', el)).removeAttr("disabled");
+			}
+			
 		else
+		{
 			$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
+			$("input[type=checkbox]", $('div[name="adminscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
+		}
 		
 		$('#calendar-privilege', el).trigger("change");
 		$('#deals-privilege', el).trigger("change");
