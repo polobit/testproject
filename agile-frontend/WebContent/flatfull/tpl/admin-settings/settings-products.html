@@ -1,0 +1,138 @@
+<script id="admin-settings-products-collection-template" type="text/html">
+
+<div class="panel">
+ <div class="panel-heading">
+    
+    <div class="pull-right p-t ">
+        <a href="#product-add" role="button" data-toggle="modal" type="submit"  class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'products' 'add-product'}}</a>
+    </div>
+    <div class="clearfix"></div>
+ </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+                    <div class=" table-responsive" style="overflow:hidden;"> 
+                    <table class="table table-striped noDelete no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url1="core/api/products/bulk?action_type=DELETE">
+                        <thead>
+                            <tr class="hide product-header">
+                                <th style="width:22%" class1="header">{{agile_lng_translate 'deal-view' 'name'}}</th>
+        						<th style="width:22%" class1="header">{{agile_lng_translate 'other' 'description'}}</th>
+        						<th style="width:22%" class1="header">{{agile_lng_translate 'products' 'product-price'}}</th>
+                                <th style="width:22%" class1="header">{{agile_lng_translate 'report-add' 'image'}}</th>
+                                <th style="width:8%" class="">&nbsp;</th>
+                            </tr>
+                         </thead>
+                         <tbody id='admin-settings-products-model-list' route1='product-edit/'>
+                         </tbody>
+                    </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="admin-settings-products-model-template" type="text/html">
+    <td class='data' data='{{id}}' title="{{name}}">
+        <div class="table-resp">
+            {{name}}
+        </div>
+	</td>
+	<td class='data'>
+        <div class="table-resp" title="{{description}}">
+            {{description}}
+        </div>
+	</td>
+	<td class='data'>
+        {{currencySymbol}}{{price}}
+	</td>
+    <td class='data'>
+        {{#if image}}
+            <div class="imgholder  thumb-wrapper thumb">
+                <img class="w-full" src="{{image}}"  align="center" />
+            </div>
+        {{else}}
+            &nbsp;
+        {{/if}}    
+    </td>
+   <td align="right" class="b-r-none p-l-none" style="width:10%;">
+        <div style="visibility:hidden;">
+            <a id="edit-product-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+                <i title="Edit Product" class="task-action icon icon-edit"></i>
+            </a>
+            <a id="delete-product-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+                <i title="Delete Product" class="task-action icon icon-trash"></i>
+            </a>
+        </div>
+    </td>
+</script>
+<script id="admin-settings-product-add-template" type="text/html">
+<div class="wrapper">
+    <div class="row">
+    	<div class="col-md-12">
+    	   <div class="panel panel-default">
+                 <div class="panel-heading">
+                    {{#if id}}
+                       {{agile_lng_translate 'products' 'edit-product-details'}}
+                    {{else}}
+                        {{agile_lng_translate 'products' 'new-product-details'}}
+                    {{/if}}
+                </div>
+        		<form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+        			<fieldset class="wrapper">
+        				{{#if id}}
+                            <input name="id" type="hidden" value="{{id}}" />
+                        {{/if}}
+        				<br/>
+                       	<div class="control-group form-group">
+        					<label class="control-label col-md-3" for="pname">{{agile_lng_translate 'deal-view' 'name'}} <span class="field_req">*</span></label> 
+                            <div class="col-md-9">
+                           		<div class="controls">
+            						<input type="text" id="pname" name="name" maxlength="50" class="required form-control" placeholder="{{agile_lng_translate 'deal-view' 'name'}}" autocapitalize="off"/>
+            					</div>
+                            </div>
+        				</div> 
+        			  	<div class="control-group form-group">
+        					<label class="control-label col-md-3" for="pdescription">{{agile_lng_translate 'other' 'description'}} </label> 
+                            <div class="col-md-9">
+                           		<div class="controls">
+            						<textarea id="pdescription" rows="3" maxlength="400" name="description" class="form-control" placeholder="{{agile_lng_translate 'other' 'description'}}"></textarea>
+            					</div>
+                            </div>
+        				</div>
+        				<div class="control-group form-group">
+        					<label class="control-label col-md-3" for="pprice">{{agile_lng_translate 'products' 'product-price'}} <span class="field_req ">*</span></label> 
+                            <div class="col-md-9">
+                           		<div class="controls">
+                                	<input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price'}}" min="0" max="1000000000000"/> 
+            					</div>
+                            </div>
+        				</div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3">Logo</label> 
+                            <div class="col-md-9">
+                                <div class="controls">
+                                     <input class="upload_prefs_s3 submit btn btn-sm  btn-default " type="submit" id="product_image" value="{{agile_lng_translate 'products' 'product-upload-image'}}"/>
+                                     <p class="help-block text-sm text-muted">{{agile_lng_translate 'products' 'product-recommended-image-size'}}: 50px*50px.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12"><hr>
+                            </div>
+                        </div>    
+
+        			    <div class="form-group">
+                             <div class="form-actions col-sm-offset-3 col-md-12">
+                       			
+                       			<a type="reset" href='#products' class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+                                <button type="submit" class="save btn btn-sm  btn-primary">{{#if id}}{{agile_lng_translate 'prefs-settings' 'save-changes'}} {{else}}{{agile_lng_translate 'modals' 'save'}} {{/if}}</button>
+                             </div>   
+                 		</div>
+
+        			</fieldset>
+        		</form>
+            </div>
+    	</div>
+    </div>
+</div>
+
+</script>
+

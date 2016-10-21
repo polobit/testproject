@@ -1561,4 +1561,12 @@
 		<url-pattern>/addformstats</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+        <servlet-name>OpenDocumentViewer</servlet-name>
+        <jsp-file>/open-documentviewer.jsp</jsp-file>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>OpenDocumentViewer</servlet-name>
+        <url-pattern>/sendemail/*</url-pattern>
+ </servlet-mapping>
 </web-app>

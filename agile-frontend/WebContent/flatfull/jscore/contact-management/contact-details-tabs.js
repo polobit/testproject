@@ -653,7 +653,7 @@ function initializeSendEmailListeners(){
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').hide();
 			}
-			else if(!model.attachment_id)
+			else if(!model.attachment_id && $("#eattachment_key","#emailForm").attr('name')!="edoc_key")
 			{
 				$('.add-attachment-cancel').trigger("click");
 				$('#eattachment_error').hide();
@@ -719,6 +719,23 @@ function initializeSendEmailListeners(){
 						if (!isValidForm($('#emailForm')))
 							return;
 
+						if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
+						{
+							var sMessage=json.message.match(/<body[^>]*>[\s\S]*<\/body>/gi)[0].replace("<body>","").replace("</body>","");
+
+							var email_json={"domain_user_name":CURRENT_DOMAIN_USER.name,
+							"attachment_name": $("#agile_attachment_name","#emailForm").attr("value"),
+							"message": sMessage,
+							"domain": CURRENT_DOMAIN_USER.domain,
+							"document_id":json.document_id,
+							"contact_id":json.edoc_contact_id
+							};
+							var sCompleteMessage=getTemplate("documents-send-mail",email_json);
+							console.log(sCompleteMessage)
+							sCompleteMessage="<!DOCTYPE html><html><head></head><body>" + sCompleteMessage + "</body></html>";
+
+							json.message=sCompleteMessage;
+						}
 						try
 						{
 							var emails_length = json.to.split(',').length;
@@ -833,8 +850,12 @@ function emailSend(ele,json)
 
 			// Enables Send Email button.
 			enable_send_button($('#sendEmail'));
+			if(Current_Route.indexOf("/documents/")>0 && Current_Route.indexOf("/send")>0){
 
-			window.history.back();
+				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
+			}
+			else
+				window.history.back();
 
 		},
 		error : function(response)

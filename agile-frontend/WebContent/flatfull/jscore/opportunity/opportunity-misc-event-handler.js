@@ -107,12 +107,15 @@ $(function()
                     return false;
             }
         }
-    console.log(json);
-    if (form_id == "opportunityForm")
-      saveDeal(form_id, modal_id, this, json, false);
-    else
-      saveDeal(form_id, modal_id, this, json, true);
-  });
+
+        json["products"] = serialize_deal_products(form_id);
+        
+		console.log(json);
+		if (form_id == "opportunityForm")
+			saveDeal(form_id, modal_id, this, json, false);
+		else
+			saveDeal(form_id, modal_id, this, json, true);
+	});
 
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown

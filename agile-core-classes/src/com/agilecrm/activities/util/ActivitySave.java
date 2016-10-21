@@ -32,7 +32,7 @@ import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
-
+import com.agilecrm.contact.DocumentNote;
 /**
  * <code>ActivitySave</code> class is interacts with ActivityUtil to create activities.
  * ActivitySave interacts all other classes to create log for action performed
@@ -558,6 +558,31 @@ public class ActivitySave
 		}
 
 	    }
+	}
+
+    }
+
+    
+    public static void createDocumentNoteAddActivity(DocumentNote note) throws JSONException
+    {
+
+	JSONObject js = new JSONObject(new Gson().toJson(note));
+	System.out.println(js);
+
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
+	
+	String custom4 = "";
+	if (jsn != null && jsn.length() > 0)
+	{
+
+	    for (int i = 0; i <= jsn.length() - 1; i++)
+	    {
+
+			Contact contact = ContactUtil.getContact(jsn.getLong(i));
+				ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+				        note.id.toString());
+	    }
+
 	}
 
     }
