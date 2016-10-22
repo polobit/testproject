@@ -126,7 +126,7 @@ public abstract class ContactSyncService implements IContactSyncService
     {
 	if (total_synced_contact >= MAX_SYNC_LIMIT)
 	{
-	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	    //sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	    return true;
 	}
 
