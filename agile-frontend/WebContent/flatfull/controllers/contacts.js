@@ -963,6 +963,11 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		//this.sendEmail(id,null,null,null,null,null,"documents");
 		var that=this;
 		sendMail(id,null,null,null,null,that,null,"documents");
+
+			var options = {};
+		options[_agile_get_translated_val('others','add-new')] = "verify_email";
+		
+		confirmandVerifyEmail()
 	},
 
 	/**
@@ -1000,34 +1005,9 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
 
-		var options = {};
-		options[_agile_get_translated_val('others','add-new')] = "verify_email";
 		
-		fetchAndFillSelect(
-			'core/api/account-prefs/verified-emails/all',
-			"email",
-			"email",
-			undefined,
-			options,
-			$('#from_email'),
-			"prepend",
-			function($select, data) {
-				
-				if($select.find('option').size()===1){
-					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
-					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
-				}
-				else {
-					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
-					if(typeof(ownerEmail) !== "undefined")
-						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
-					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
-						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
-					}
-				}
-				rearrange_from_email_options($select, data);
-			});
+		confirmandVerifyEmail()
+	
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
@@ -1827,4 +1807,35 @@ function addTypeCustomData(contactId, el){
 	});
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 	
+}
+function confirmandVerifyEmail()
+{
+	var options = {};
+	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+				
+				if($select.find('option').size()===1){
+					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
+					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
+				}
+				else {
+					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+					if(typeof(ownerEmail) !== "undefined")
+						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
+					else{
+						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
+					}
+				}
+				rearrange_from_email_options($select, data);
+			});
 }

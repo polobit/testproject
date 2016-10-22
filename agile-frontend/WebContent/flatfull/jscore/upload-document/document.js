@@ -250,6 +250,20 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				enable_save_button($(saveBtn));
 				return;
 			}
+			var model_json=$("#documents-listener-container").data("contact_model_json")
+			var emailid="";
+			if(model_json)
+			{				
+				emailid= getPropertyValue(model_json.properties, "email")	
+			}
+			if(!emailid || emailid=="")
+			{
+				$(".contacts_noemail_error",'#uploadDocumentForm,#uploadDocumentUpdateForm').show().delay(5000).hide(1);
+				enable_save_button($(saveBtn));
+				return;
+				
+			}
+
 		}	
 	}
 	
