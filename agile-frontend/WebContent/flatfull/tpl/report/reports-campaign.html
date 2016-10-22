@@ -62,15 +62,19 @@
     </td>
     <td>
         <div class="table-resp" style="text-transform:capitalize;">{{#field_Element fields_set}}{{/field_Element}}</div></td>
-    <td>
-        <div class="table-resp">
-            <a href="#report-campaign-results/{{id}}" class="text-info" data={{id}} id="report-instant-results">{{agile_lng_translate 'report-view' 'show-results'}} </a>             
-        </div>
+    <td id="report-instant-results" class="p-n">
+        <a href="#report-campaign-results/{{id}}" class="text-info" data={{id}}>
+            <div class="table-resp p-sm">
+                {{agile_lng_translate 'report-view' 'show-results'}}
+            </div>
+        </a>
     </td>
-    <td>
-        <div class="table-resp">
-            <a  data={{id}} class="text-info" id="reports-campaign-email-now" >{{agile_lng_translate 'report-view' 'send-now'}}</a>
-        </div>
+    <td id="reports-campaign-email-now" class="p-n">
+        <a data={{id}} class="text-info">
+            <div class="table-resp p-sm">
+                {{agile_lng_translate 'report-view' 'send-now'}}
+            </div>
+        </a>
     </td>
 <br />
 </script>

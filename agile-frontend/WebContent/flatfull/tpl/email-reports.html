@@ -121,8 +121,12 @@
 	<td>
 		{{namesFromObject usersList 'name'}}
 	</td>
-	<td>
-	 	<a  data={{id}} class="text-info" id="activity-reports-email-now" >{{agile_lng_translate 'report-view' 'send-now'}}</a>
+	<td id="activity-reports-email-now" class="p-n">
+		<a data={{id}} class="text-info">
+			<div class="table-resp p-sm">
+	 			{{agile_lng_translate 'report-view' 'send-now'}}
+	 		</div>
+	 	</a>
 	</td>
 <br />
 </script>
