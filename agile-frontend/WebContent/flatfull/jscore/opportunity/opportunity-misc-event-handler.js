@@ -24,7 +24,9 @@ $(function()
     $('#opportunityUpdateModal #opportunity_validate').trigger('click');
   });
 
-
+  	$('#opportunityUpdateModal, #newDealModal').on('hidden.bs.modal', function (e) {
+    	$("#timeline","#deal-details").css("zIndex","1");		
+  	});
   /**
    * Validates deal and saves
    */

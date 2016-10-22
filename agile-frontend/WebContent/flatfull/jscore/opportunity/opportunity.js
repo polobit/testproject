@@ -723,7 +723,7 @@ function populate_deal_products(el, value,form_id){
 					{
 						//$(el).addClass("table-responsive");
 						console.log("loaded products : ", el);
-						 $(window).resize()
+						
 						$(me._form_id).on("click",".dealproducts_td_checkbox",
 						function(e)
 						{
@@ -775,6 +775,13 @@ function populate_deal_products(el, value,form_id){
 								{
 									me.toggleAllProducts(e);
 								});
+						try{
+						 $(window).resize()
+						}catch(e){console.log(e)}
+						if($("#timeline","#deal-details"))
+						{
+							$("#timeline","#deal-details").css("zIndex","-9999");		
+						}
 						
 					}});
 					App_Deal_Details.deal_products_collection_view.collection.fetch({
