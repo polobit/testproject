@@ -56,6 +56,11 @@ function navigateToDetailsPage(data, name)
 			Backbone.history.navigate("contact/" + data, { trigger : true });
 		return;
 	}
+	if (model.entity_type == "lead_entity")
+	{
+		Backbone.history.navigate("lead/" + data, { trigger : true });
+		return;
+	}
 	if(model.entity_type == "deal")
 	{
 		if(!tight_acl.checkPermission('DEALS')){

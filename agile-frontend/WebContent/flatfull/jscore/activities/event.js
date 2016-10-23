@@ -144,7 +144,8 @@ $("#updateActivityModal").on(
 													}
 												}
 											}
-											else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+											else if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+												App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id'))
 											{
 												if (eventsView && eventsView.collection)
 												{

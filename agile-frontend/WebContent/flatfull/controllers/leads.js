@@ -227,7 +227,7 @@ var LeadsRouter = Backbone.Router.extend({
 
 				App_Contacts.contactDetailView = new Base_Model_View({ data : lead, isNew : true});
 
-				loadWidgets(el, lead, "widgets");
+				//loadWidgets(el, lead, "widgets");
 
 				App_Leads.leadDetails.starify(el);
 

@@ -100,11 +100,13 @@ function serialize_and_save_continue_lead(e, form_id, modal_id, continueLead, sa
 	// Stores person's continue editing form template key
 	template = 'update-lead';
 	obj.type = 'LEAD';
+	obj.entity_type = 'lead_entity';
 
 	//If lead status equals to converted, we are updating the lead as contact
 	if($("#lead_conversion_status", $("#"+form_id)).val() == $("#lead_status_id", $("#"+form_id)).val())
 	{
 		obj.type = 'PERSON';
+		obj.entity_type = 'contact_entity';
 		obj.is_lead_converted = true;
 	}
 
