@@ -846,6 +846,7 @@
 {{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'contacts-view' 'contacts-were-updated-during-the-import'}}{{/if}} 
 </small>  
 {{/if_equals}}
+
  {{#if_equals "COMPANY_IMPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'imported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'companies'}} 
 <br/>	
@@ -855,6 +856,9 @@
 {{/if_equals}}
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a href="{{custom2}}">Click here to download CSV File.</a>This link is valid for 24 hours only.</span>{{/if}} 
+</small> 
 {{/if_equals}}
 {{#if_equals "COMPANY_EXPORT" activity_type}}
 {{#if_equals "1" custom1}}
@@ -863,6 +867,9 @@
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'companies'}} 
 <br/>
 {{/if_equals}}	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a href="{{custom2}}" target="blank">Click here to download CSV File.</a>This link is valid for 24 hours only.</span>{{/if}} 
+</small> 
 {{/if_equals}}
 {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
 {{#if_equals "PERSON" type}}

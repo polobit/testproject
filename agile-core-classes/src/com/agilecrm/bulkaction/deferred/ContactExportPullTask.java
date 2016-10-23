@@ -78,7 +78,8 @@ public class ContactExportPullTask implements DeferredTask
 	getExporter().sendEmail(user.email);
 	getExporter().sendEmail("nidhi@agilecrm.com",stats,user.domain);
 	
-	ActivityUtil.createLogForExport(ActivityType.CONTACT_EXPORT, EntityType.CONTACT, 0,null);
+	getExporter().addToActivity(ActivityType.CONTACT_EXPORT,EntityType.CONTACT);
+	//ActivityUtil.createLogForExport(ActivityType.CONTACT_EXPORT, EntityType.CONTACT, 0,null);
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
 
 	NamespaceManager.set(null);

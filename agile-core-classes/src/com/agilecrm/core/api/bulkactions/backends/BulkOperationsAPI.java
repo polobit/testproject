@@ -1115,7 +1115,8 @@ public class BulkOperationsAPI
 	}
 	companyExporter.finalize();
 	companyExporter.sendEmail(user.email);
-	ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
+	companyExporter.addToActivity(ActivityType.COMPANY_EXPORT, EntityType.CONTACT);
+	//ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
 
 	// creates a log for company export
 
