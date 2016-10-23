@@ -320,12 +320,16 @@ public class ContactCSVExport
 
 	for (Tag tag : contact.tagsWithTime)
 	{
-	    tags += tag.tag + ",";
-	    tagTimes += tag.createdTime + ",";
-	    
-	    Date date = new Date();
-		date.setTime(tag.createdTime);	
-	    tagTimesNew += dateTimeFormat.format(date) + ",";
+		 tags += tag.tag + ",";
+ 	    if(tag.createdTime!=0)
+ 	    {
+ 	    	tagTimes += tag.createdTime;
+ 	    	Date date = new Date();
+     		date.setTime(tag.createdTime);	
+     	    tagTimesNew += dateTimeFormat.format(date);
+ 	    }
+ 	    tagTimes +=",";
+ 	    tagTimesNew += ",";
 	}
 
 	// Return array having tags and tagTimes without trailing commas
