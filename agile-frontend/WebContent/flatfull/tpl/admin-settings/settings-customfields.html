@@ -31,13 +31,27 @@
 	
          {{#if this.length}}
         	<div class="panel panel-default">
+			<div id="LEAD-custom-fields">
+				<div class="panel-heading" role="tab" id="headingLeads">
+					<div class="panel-title">
+						<a class="accordion-toggle" data-toggle="collapse"  aria-controls="collapseLeads" aria-expanded="true" data-parent="#accordion" href="#collapseLeads">Leads</a>
+					</div>
+				</div>
+				<div class="panel-collapse collapse in" role="tabpanel"  aria-labelledby="headingLeads" id="collapseLeads" >
+				<div class="panel-body p-n" id="customfields-leads-accordion"></div>
+				</div>
+				</div>
+			
+			</div>
+
+        	<div class="panel panel-default">
 			<div id="CONTACT-custom-fields">
 				<div class="panel-heading" role="tab" id="headingOne">
 					<div class="panel-title">
 						<a class="accordion-toggle" data-toggle="collapse"  aria-controls="collapseOne" aria-expanded="true"  data-parent="#accordion" href="#collapseOne">{{agile_lng_translate 'contact-details' 'Contacts'}}</a>
 					</div>
 				</div>
-				<div class="panel-collapse collapse in" role="tabpanel"  aria-labelledby="headingOne" id="collapseOne" >
+				<div class="panel-collapse collapse" role="tabpanel"  aria-labelledby="headingOne" id="collapseOne" >
 				<div class="panel-body p-n" id="customfields-contacts-accordion"></div>
 				</div>
 				</div>
@@ -296,6 +310,51 @@
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-case-custom-field'}}" class="task-action icon icon-trash"></i>
+			</a>
+		</div>
+	</td>
+	<br/>
+</script>
+
+<script id="admin-settings-customfields-lead-collection-template" type="text/html">
+        <table class="table table-hover onlySorting custom-fields-table table-hover m-b-none agile-table" url="core/api/custom-fields/bulk">
+				<!-- <colgroup><col width="40%"><col width="12%"><col width="1%"></colgroup> -->
+                    <tbody id="admin-settings-customfields-lead-model-list" class="custom-fields-lead-tbody">
+                    </tbody>
+                </table> 
+		<div class="p-l p-t p-b">
+			<a href="#leadCustomFModal" class="fieldmodal text-info" data-toggle="modal" type="LEAD" ><i class="icon-plus-sign" /> Add </a>
+		</div>
+</script>
+
+<script id="admin-settings-customfields-lead-model-template" type="text/html">
+	<td class="b-r-none" style="width:60%;">
+		<div class="inline-block v-top text-ellipsis w-full table-resp">
+			{{field_label}}
+			{{#if_equals is_required true}}
+				<span class="field_req">*</span>
+			{{/if_equals}}
+		</div>
+		<div class="inline-block v-top text-ellipsi w-full table-resp"><small>{{field_description}}</small></div> 
+	</td>
+    <td class="p-r-none b-r-none" style="width:20%;">
+		<div class="text-right">
+			{{#if_equals searchable true}}
+				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
+			{{/if_equals}}
+			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
+		</div>
+	</td>
+	<td align="right" class="b-r-none p-l-none" style="width:10%;">
+		<div class="m-l" style="visibility:hidden;">
+			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
+		</div>
+		<div style="visibility:hidden;">
+			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+				<i title="Edit Lead Custom Field" class="task-action icon icon-edit"></i>
+			</a>
+			<a id="delete-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
+				<i title="Delete Lead Custom Field" class="task-action icon icon-trash"></i>
 			</a>
 		</div>
 	</td>

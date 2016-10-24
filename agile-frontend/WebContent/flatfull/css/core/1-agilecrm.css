@@ -3210,7 +3210,7 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
   display: none;
 }
-#scorebox{
+#scorebox, #lead-scorebox{
   text-align:center;
   right: 5px;
   width: 56px;
@@ -4059,6 +4059,15 @@ padding-left:0px;
     margin-top: 0; 
  }
 
+ div#lead-custom-coloumns:hover.compact .dropdown-menu{
+    display: block;
+    margin-top: 0; 
+ }
+ div#lead-custom-coloumns .dropdown-menu{
+    display: none;
+    margin-top: 0; 
+ }
+
 .delete-checked-contacts .bulk-delete-loading
 {
   padding-right: 5px;
@@ -4842,4 +4851,7 @@ ul#recent-menu-model-list li:nth-child(even)
 #email-content .subscriptionDetail
 {
   padding-bottom:35px;
+}
+.c-default {
+  cursor: default;
 }

@@ -5,7 +5,7 @@
 var timeline_entity_loader = {
 
 
-	init : function(contact)
+	init : function(contact, el)
 	{
 		this.active_connections = 0;
 		MONTH_YEARS = [];
@@ -21,12 +21,19 @@ var timeline_entity_loader = {
 				_this.load_other_company_timeline_entities(contact);
 				timeline_collection_view.render(true);
 			}
+			else if(contact && contact.type == "LEAD")
+			{
+				configure_timeline(el);
+				timeline_collection_view = new lead_timeline_view();
+				console.log(_this);
+				_this.load_other_timline_entities(contact);
+				timeline_collection_view.render(true);
+			}
 			else{
 				configure_timeline();
 				timeline_collection_view = new timeline_view();
 				console.log(_this);
 				_this.load_other_timline_entities(contact);
-
 				timeline_collection_view.render(true);
 			// timeline_collection_view.render();
 			}
@@ -39,12 +46,15 @@ var timeline_entity_loader = {
 
 		this.load_related_entites(contactId);
 		this.load_stats(contact);
-		this.load_campaign_logs(contactId);
+		if((contact && contact.type != "LEAD"))
+		{
+			this.load_campaign_logs(contactId);
 		
-		if(!getPropertyValue(contact.properties, "email")){
-			return;
+			if(!getPropertyValue(contact.properties, "email")){
+				return;
+			}
+			this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
 		}
-		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
 		//setTimeout(this.load_reload_emails, 5000);
 	},
 	load_other_company_timeline_entities : function(contact)
@@ -99,7 +109,13 @@ var timeline_entity_loader = {
 			}
 			
 			if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') == contactId) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') == contactId))
+			{
 				timeline_collection_view.addItems(entities);
+			}
+			else if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') == contactId)
+			{
+				timeline_collection_view.addItems(entities);
+			}
 		});
 	},
 	load_stats : function(contact)
@@ -117,6 +133,12 @@ var timeline_entity_loader = {
 		// Go for mails when only the contact has an email
 		if (email)
 		{
+			//If passed object type is lead, change the fetch url to fetch lead emails
+			if(contact && contact.type == "LEAD")
+			{
+				url = 'core/api/emails/imap-lead-email';
+			}
+
 			this.timline_fetch_data(url + '?e=' + encodeURIComponent(email) + '&c=10&o=0', function(stats)
 			{
 				console.log(stats);
@@ -135,7 +157,10 @@ var timeline_entity_loader = {
 						
 						});
 
-					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact['id']) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
+					if((App_Contacts.contactDetailView && App_Contacts.contactDetailView.model.get('id') !== contact['id'] && Current_Route && Current_Route.indexOf("contact") == 0) || (App_Companies.companyDetailView && App_Companies.companyDetailView.model.get('id') !== contact['id']))
+						return;
+
+					if(App_Leads.leadDetailView && App_Leads.leadDetailView.model.get('id') !== contact.id && Current_Route && Current_Route.indexOf("lead") == 0)
 						return;
 
 					var contact_emails = [];

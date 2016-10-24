@@ -73,6 +73,8 @@ function initializeCustomFieldsListeners(){
 						App_Admin_Settings.dealCustomFieldsListView.collection.remove(custom_field.id);
 					else if(custom_field.get("scope")=="CASE")
 						App_Admin_Settings.caseCustomFieldsListView.collection.remove(custom_field.id);
+					else if(custom_field.get("scope")=="LEAD")
+						App_Admin_Settings.leadCustomFieldsListView.collection.remove(custom_field.id);
 					currentElement.closest('tr').remove();
 					CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
 				}, dataType : 'json' });
@@ -138,6 +140,17 @@ function showCustomFieldModel(data)
 		                    positionList.push(typ+'-'+ position);
 		             	}
 		            }
+		            else if(typ == 'leads'){
+		            	if(App_Admin_Settings.leadCustomFieldsListView && App_Admin_Settings.leadCustomFieldsListView.collection)
+		                {
+		                   	$.each(App_Admin_Settings.leadCustomFieldsListView.collection.models , function(i,m)
+							{
+								if(m.get('position') && m.get('position') > position)
+									position = m.get('position') ;
+							});
+		                    positionList.push(typ+'-'+ position);
+		             	}
+		            }
 		        }
 		    });
 			model.attributes['scopeExtension'] = scopeExtension.toString();
@@ -153,7 +166,9 @@ function showCustomFieldModel(data)
 			else if(scope=="COMPANY")
 				$('#textModalForm',el).find("#companies").prop('checked', true); 
 			else if(scope =="DEAL")
-				$('#textModalForm',el).find("#deals").prop('checked', true); 
+				$('#textModalForm',el).find("#deals").prop('checked', true);
+			else if(scope =="LEAD")
+				$('#textModalForm',el).find("#leads").prop('checked', true);  
 			
 			//This code will scroll to top to see the modal.
 			
@@ -186,6 +201,8 @@ function showCustomFieldModel(data)
 						custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(value.id);
 					else if(value.scope=="CASE")
 						custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(value.id);
+					else if(value.scope=="LEAD")
+						custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(value.id);
 
 					if(custom_field_model_json)
 					{
@@ -208,6 +225,11 @@ function showCustomFieldModel(data)
 							App_Admin_Settings.dealCustomFieldsListView.collection.add(value);
 							App_Admin_Settings.dealCustomFieldsListView.render(true);
 						}
+						if(value.scope=="LEAD")
+						{
+							App_Admin_Settings.leadCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.leadCustomFieldsListView.render(true);
+						}
 					}
 
 				});
@@ -227,6 +249,8 @@ function showCustomFieldModel(data)
 					custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(models.id);
 				else if(cuModel.scope=="CASE")
 					custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(models.id);
+				else if(cuModel.scope=="LEAD")
+					custom_field_model_json = App_Admin_Settings.leadCustomFieldsListView.collection.get(models.id);
 				if(custom_field_model_json)
 				{
 					custom_field_model_json.set(models);
@@ -247,6 +271,11 @@ function showCustomFieldModel(data)
 					{
 						App_Admin_Settings.dealCustomFieldsListView.collection.add(models);
 						App_Admin_Settings.dealCustomFieldsListView.render(true);
+					}
+					if(cuModel.scope=="LEAD")
+					{
+						App_Admin_Settings.leadCustomFieldsListView.collection.add(models);
+						App_Admin_Settings.leadCustomFieldsListView.render(true);
 					}	
 				}
 
@@ -495,6 +524,12 @@ function show_custom_fields_helper(custom_fields, properties){
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3";
+		}else if(field.scope == "LEAD"){
+			label_style = "control-label col-sm-3 word-break-all";
+			modal_label_style = "control-label col-sm-3 word-break-all";
+			modal_control_style = "col-sm-7";
+			checkbox_style = "col-sm-3";
+			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}
 		
 		// If field type is list create a select dropdown
@@ -1204,6 +1239,14 @@ function groupingCustomFields(base_model){
 			}});
 		App_Admin_Settings.caseCustomFieldsListView.collection.fetch();
 		$('#customfields-cases-accordion', this.el).append($(App_Admin_Settings.caseCustomFieldsListView.render().el));
+	}else if(base_model.get("scope")=="LEAD"){
+		App_Admin_Settings.leadCustomFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields/scope/position?scope='+base_model.get("scope"), sortKey : "position", restKey : "customFieldDefs",
+			templateKey : templateKey, individual_tag_name : 'tr',
+			postRenderCallback : function(custom_el){
+				enableCustomFieldsSorting(custom_el,'custom-fields-'+base_model.get("scope").toLowerCase()+'-tbody','admin-settings-customfields-'+base_model.get("scope").toLowerCase()+'-model-list');
+			}});
+		App_Admin_Settings.leadCustomFieldsListView.collection.fetch();
+		$('#customfields-leads-accordion', this.el).append($(App_Admin_Settings.leadCustomFieldsListView.render().el));
 	}
 }
 function enableCustomFieldsSorting(el,connClass,connId){

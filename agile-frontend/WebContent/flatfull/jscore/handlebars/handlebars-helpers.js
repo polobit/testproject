@@ -513,7 +513,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany() && Current_Route.indexOf("lead") != 0)
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
@@ -544,7 +544,7 @@ $(function()
 				}
 				return "{{agile_lng_translate 'menu' 'company'}}";
 			}
-		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("lead") != 0)
 		{
 			var contact_properties = App_Companies.companyDetailView.model.get('properties');
 
@@ -554,6 +554,37 @@ $(function()
 					return contact_properties[i].value;
 			}
 			return "{{agile_lng_translate 'menu' 'company'}}";
+		} 
+		else if (App_Leads.leadDetailView && App_Leads.leadDetailView.model && !company_util.isCompany() && Current_Route.indexOf("lead") == 0)
+		{
+			var lead_properties = App_Leads.leadDetailView.model.get('properties');
+
+			if (App_Leads.leadDetailView.model.get('type') == 'LEAD')
+			{
+				var last_name;
+				for (var i = 0; i < lead_properties.length; i++)
+				{
+
+					if (lead_properties[i].name == "last_name")
+						last_name = lead_properties[i].value;
+					else if (lead_properties[i].name == "first_name")
+						return lead_properties[i].value;
+				}
+				if (last_name && last_name != null)
+				{
+					return last_name;
+				}
+				return "{{agile_lng_translate 'menu' 'lead'}}";
+			}
+			else
+			{
+				for (var i = 0; i < lead_properties.length; i++)
+				{
+					if (lead_properties[i].name == "name")
+						return lead_properties[i].value;
+				}
+				return "{{agile_lng_translate 'menu' 'company'}}";
+			}
 		}
 	});
 	
@@ -1120,7 +1151,7 @@ $(function()
 			window.location.hash.split("#")[1] == "company/" + App_Companies.companyDetailView.model.get('id'))
  		setCompactView=_agile_get_prefs("contactCompanyTabelView");
  		else
-		 setCompactView=(type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+		 setCompactView = (type == "COMPANY") ? _agile_get_prefs("companyTabelView") : (type == "LEAD") ? _agile_get_prefs("leadTabelView") : _agile_get_prefs("contactTabelView");
 
 		if(setCompactView)
 				return options.fn(this);
@@ -2281,6 +2312,10 @@ $(function()
 		else if (type == "deals")
 		{
 			template = $(getTemplate('csv_deals_options', context));
+		}
+		else if (type == "leads")
+		{
+			template = $(getTemplate('leads_csv_upload_options', context));
 		}
 
 		// Replaces _ with spaces
@@ -3999,6 +4034,14 @@ $(function()
 
 	Handlebars.registerHelper('getCurrentContactProperty', function(value)
 	{
+		if(App_Leads.leadDetailView && App_Leads.leadDetailView.model 
+			&& Current_Route && Current_Route.indexOf("lead/") == 0)
+		{
+			var lead_properties = App_Leads.leadDetailView.model.get('properties')
+			console.log(App_Leads.leadDetailView.model.toJSON());
+			return getPropertyValue(lead_properties, value);
+		}
+		
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
@@ -4325,107 +4368,6 @@ $(function()
 			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
-	});
-
-	/**
-	 * Builds options to be shown in the table heading of CSV import. Also tries
-	 * to match headings in select field
-	 */
-	Handlebars.registerHelper('setupCSVUploadOptions', function(type, key, context)
-	{
-		// console.log(context.toJSON());
-		var template;
-		if (type == "contacts")
-		{
-			getTemplate('csv_upload_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-
-		}
-		else if (type == "company")
-		{
-			getTemplate('csv_companies_upload_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-		}
-		else if (type == "deals")
-		{
-			getTemplate('csv_deals_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-		}
-
-		// Replaces _ with spaces
-		key = key.replace("_", " ");
-
-		var isFound = false;
-
-		var match_weight = 0;
-
-		var key_length = key.length;
-		var key = key.toLowerCase();
-		var matched_value;
-
-		var selected_element;
-		template.find('option').each(function(index, element)
-		{
-			if ($(element).text().toLowerCase().indexOf(key) != -1)
-			{
-
-				var current_match_weight = key_length / $(element).text().length;
-				if (match_weight >= current_match_weight)
-					return;
-
-				selected_element = $(element);
-				matched_value = $(element).text();
-				match_weight = current_match_weight;
-			}
-		})
-
-		console.log(matched_value + ", " + key + " : " + match_weight);
-
-		for (var i = 0; i < key.length - 3; i++)
-		{
-			template.find('option').each(function(index, element)
-			{
-				if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
-				{
-					console.log(key.substr(0, key.length - i) + " , " + $(element).text());
-					var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
-					console.log(current_match_weight);
-					if (match_weight >= current_match_weight)
-						return;
-					selected_element = $(element);
-					matched_value = $(element).text();
-					match_weight = current_match_weight;
-				}
-			})
-		}
-
-		$(selected_element).attr("selected", true);
-
-		/*
-		 * // Iterates to create various combinations and check with the header
-		 * for ( var i = 0; i < key.length - 3; i++) {
-		 * template.find('option').each(function(index, element) { if
-		 * ($(element).val().toLowerCase().indexOf(key) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; } else if
-		 * ($(element).val().toLowerCase().indexOf(key.substr(0, key.length -
-		 * i).toLowerCase()) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; }
-		 * 
-		 * }); if (isFound) break; }
-		 */
-		return new Handlebars.SafeString($('<div>').html(template).html());
 	});
 
 	/**
@@ -7667,6 +7609,56 @@ Handlebars.registerHelper('affiliateCommission', function(amount, commission)
 		return 0;
 	return (((amount/100)*commission)/100).toFixed(2);
 });
+
+/**
+ * Returns table headings for custom contacts list view
+ */
+Handlebars.registerHelper('leadTableHeadings', function(item)
+{
+	var el = "", cls = ""; 
+	$.each(App_Leads.leadViewModel[item], function(index, element)
+	{
+		if (element == "basic_info" || element == "image")
+		{
+			
+			if(_agile_get_prefs("leadTabelView"))
+			{
+				// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+				if(element == "basic_info")
+					return ;
+
+				if(element == "image")
+				{
+					element = "";
+					cls = "";
+				}
+					  
+			}
+			else
+			{
+				if(element == "image")
+				{
+					return;
+				}
+				if(element == "basic_info")
+					element = "Basic Info";
+			}
+		}
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+				element = element.split("_")[1];
+				cls = "text-muted";
+			}
+			else 
+			{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+ 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+ 	});
+	return new Handlebars.SafeString(el);
+});
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
 	var i18nKeyPrefix = "admin-settings-tasks";
@@ -7904,4 +7896,141 @@ Handlebars.registerHelper('retrevie_Deal_Value', function(element)
 	if(!$.isNumeric(iDealAmt))
 		iDealAmt=element.expected_value;
 	return iDealAmt;
+});
+
+/*
+ * Helper to get lead status name based on id
+ */
+Handlebars.registerHelper('getLeadStatus', function(leadStatusId, options)
+{
+	if(App_Leads.leadStatusesListView && App_Leads.leadStatusesListView.collection)
+	{
+		var leadStatusModel = App_Leads.leadStatusesListView.collection.get(leadStatusId);
+
+		if(leadStatusModel)
+		{
+			return leadStatusModel.get("label");
+		}
+	}
+	return "";
+});
+
+/**
+ * Displays multiple times occurred properties of a lead in its detail
+ * view in single entity
+ */
+Handlebars.registerHelper('multiple_Lead_Property_Element', function(name, properties, options)
+{
+	// Reads current contact model form the contactDetailView
+	var lead_model = App_Leads.leadDetailView.model;
+
+	// Gets properties list field from contact
+	var properties = lead_model.get('properties');
+	var property_list = [];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and retrieves value of the
+	 * property if it matches
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == name)
+		{
+			property_list.push(property);
+		}
+	});
+	if (property_list.length > 0)
+		return options.fn(property_list);
+});
+
+/**
+ * Returns custom fields without few fields like LINKEDIN or TWITTER or
+ * title fields
+ */
+Handlebars.registerHelper('getLeadCustomPropertiesExclusively', function(items, options)
+{
+
+	var exclude_by_subtype = [
+			"LINKEDIN", "TWITTER"
+	];
+	var exclude_by_name = [
+		"title"
+	];
+
+	var fields = getLeadCustomProperties(items);
+
+	var exclusive_fields = [];
+	for (var i = 0; i < fields.length; i++)
+	{
+		if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+		{
+			continue;
+		}
+
+		exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+	}
+	if (exclusive_fields.length == 0)
+		return options.inverse(exclusive_fields);
+
+	$.getJSON("core/api/custom-fields/type/DATE", function(data)
+	{
+
+		if (data.length == 0)
+			return;
+
+		for (var j = 0; j < data.length; j++)
+		{
+			for (var i = 0; i < exclusive_fields.length; i++)
+			{
+				if (exclusive_fields[i].name == data[j].field_label)
+					try
+					{
+						var value = exclusive_fields[i].value;
+
+						if (!isNaN(value))
+						{
+							exclusive_fields[i].value = value;
+							exclusive_fields[i]["subtype"] = data[j].field_type;
+						}
+
+					}
+					catch (err)
+					{
+						exclusive_fields[i].value = exclusive_fields[i].value;
+					}
+			}
+		}
+		updateLeadCustomData(options.fn(exclusive_fields));
+	});
+
+	return options.fn(exclusive_fields)
+
+});
+
+Handlebars.registerHelper('getLeadCustomProperties', function(items, options)
+{
+	var fields = getLeadCustomProperties(items);
+	if (fields.length == 0)
+		return options.inverse(fields);
+
+	return options.fn(fields);
+
+});
+
+/*
+ * Helper to get lead source name based on id
+ */
+Handlebars.registerHelper('getLeadSource', function(leadSourceId, options)
+{
+	if(App_Leads.leadSourcesListView && App_Leads.leadSourcesListView.collection)
+	{
+		var leadSourceModel = App_Leads.leadSourcesListView.collection.get(leadSourceId);
+
+		if(leadSourceModel)
+		{
+			return leadSourceModel.get("label");
+		}
+	}
+	return "";
 });

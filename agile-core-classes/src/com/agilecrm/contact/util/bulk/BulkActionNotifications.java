@@ -62,7 +62,16 @@ public class BulkActionNotifications
 	 * Companies tag operation
 	 */
 	COMPANY_ADD_TAGS("Tag(s) %s added to %s companies"), COMPANY_REMOVE_TAGS(
-			"Tag(s) %s removed from %s companies");
+			"Tag(s) %s removed from %s leads"),
+			
+	LEAD_ADD_TAGS("Tag(s) %s added to %s leads"), LEAD_REMOVE_TAGS(
+					"Tag(s) %s removed from %s leads"),
+	/**
+	 * Import leads bulk action notification
+	 */
+	LEADS_CSV_IMPORT("%s leads imported"), EXPORT_LEADS_CSV(
+			"Leads export operation is complete. Email is sent to you with the CSV file.");
+	
 	String message;
 
 	BulkAction(String message)

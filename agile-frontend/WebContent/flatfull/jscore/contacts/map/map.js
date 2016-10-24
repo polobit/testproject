@@ -78,8 +78,15 @@ function load_gmap_script() {
  * 
  */
 function display_google_map() {
-
-	var contact = App_Contacts.contactDetailView.model.toJSON();
+	var contact = {};
+	if(Current_Route && Current_Route.indexOf("lead/") == 0)
+	{
+		contact = App_Leads.leadDetailView.model.toJSON();
+	}
+	else
+	{
+		contact = App_Contacts.contactDetailView.model.toJSON();
+	}
 	var address = JSON.parse(getPropertyValue(contact.properties, "address"));
 
 	// Gets the location (latitude and longitude) from the address

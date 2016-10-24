@@ -653,6 +653,13 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		// If contact is of type lead , go to lead details page
+		if (contact.get('type') == 'LEAD')
+		{			
+			Backbone.history.navigate( "lead/"+id, { trigger : true });
+			return;
+		}
+
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
@@ -902,6 +909,9 @@ var ContactsRouter = Backbone.Router.extend({
 			template : "import-contacts",
 			postRenderCallback: function(el)
 			{
+				var leadsViewLoader = new LeadsViewLoader();
+				leadsViewLoader.setupImportView(el);
+				
 				initializeImportEvents("import-contacts-event-listener");
 
 				if(import_tab_Id) {
@@ -916,6 +926,7 @@ var ContactsRouter = Backbone.Router.extend({
 		});
 
 		$('#content').html(App_Contacts.importContacts.render().el);
+
 		
 /*
 $('#content').html('<div id="import-contacts-event-listener"></div>');
@@ -1461,6 +1472,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
+    	else if(type == "leads")
+    		countURL = App_Leads.leadsListView.options.url + "/count";
      	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
@@ -1479,6 +1492,10 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
 					if(type == "workflows")
 						  $("span.badge.bg-primary", el).html(data);
+					else if(type == "leads")
+					{
+						$('#leads-count').html(count_message);
+					}
 
 					// Reset collection
 					if(type == "contacts-company")
@@ -1488,6 +1505,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
 							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
+					}else if(type == "leads" && App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 0){
+						App_Leads.leadsListView.collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
@@ -1581,6 +1600,11 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				}
 			}
 		}	
+
+		if(Current_Route && App_Leads.leadDetailView && Current_Route == "lead/"+App_Leads.leadDetailView.model.get("id"))
+		{
+			model = App_Leads.leadDetailView.model.toJSON();
+		}
 	}
 	
 //		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));

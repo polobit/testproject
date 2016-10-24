@@ -273,4 +273,8 @@ var MODAL_MESSAGES = {
 		"title": "{{agile_lng_translate 'sync' 'all-contacts'}}",
 		"message" : "{{agile_lng_translate 'sync' 'sync-all-continue'}}"
 	},
+	"delete_lead" : {
+		"title": "{{agile_lng_translate 'leads-view' 'delete-lead'}}",
+		"message" : GLOBAL_MODAL_MESSAGES.global_delete
+	},
 };
