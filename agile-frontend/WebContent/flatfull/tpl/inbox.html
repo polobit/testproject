@@ -11,6 +11,9 @@
     <div class="wrapper b-b bg">
       <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
       <a class="btn btn-sm btn-danger w-xs font-bold  mail-compose" href="#compose">Compose</a>
+      <a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="javascript:refreshInbox()" style="float: right;">
+		<i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="Refresh" style="vertical-align: text-top;"></i>
+	 </a>
     </div>
     <div class="wrapper hidden-sm hidden-xs" id="email-menu">
       <ul class="nav nav-pills nav-stacked nav-sm inbox-menu">
@@ -201,7 +204,7 @@
 		        <span class="hidden-xs ng-binding"><time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time></span>
 		      </div>
 		      <div class="clear {{this.flags}}" id="flag{{removeSpecialCharacter this.id}}" data-val="{{this.id}}">
-		        <div><a class="text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-8">{{this.subject}}</span></a></div>
+		        <div><a class="toggle-class text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-7" style="overflow: hidden;">{{this.subject}}</span></a></div>
 		        <div class="text-ellipsis m-t-xs ng-binding">{{{this.message}}}</div>
 		      </div>      
 	    	</li>
@@ -232,8 +235,10 @@
 			  </div>
 			  <div class="wrapper b-b ng-binding">
 			    <img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">
-			    From <a href="" class="ng-binding">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
+			    From <a class="ng-binding showtoaddress">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
+			    &nbsp;&nbsp;&nbsp;&nbsp;<div class="toaddress" style="display:none;margin-left: 45px;">To <a class="ng-binding">{{this.to}}</a></div>
 			  </div>
+			  
 			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-from="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
 			    {{{this.message}}}
 			  </div>
@@ -267,7 +272,7 @@
 </script>
 <script type="text/html" id="mail-message-template">
 	{{#each []}}
-		<div style="white-space: pre-line;">{{{this.message}}}</div>
+		<div>{{{this.message}}}</div>
 	{{/each}}
 </script>
 <script type="text/html" id="inbox-compose-template">

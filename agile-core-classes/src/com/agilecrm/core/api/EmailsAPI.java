@@ -744,11 +744,13 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    	try
 	    	{
 	    		// Fetches latest contact emails
+	    		System.out.println("Domain User ID :"+AgileUser.getCurrentAgileUser().domain_user_id);
 	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor);
 	    	}
 	    	catch(NumberFormatException e)
 	    	{
 	    		e.printStackTrace();
+	    		System.out.println(AgileUser.getCurrentAgileUser().domain_user_id);
 	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor);
 	    	}
 	    }

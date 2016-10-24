@@ -1,6 +1,5 @@
 var inboxMailListView;
 var SHOW_TOTALCOUNT = true;
-var IS_LOADING = false;
 var InboxRouter = Backbone.Router.extend({
 
 	routes : {
@@ -144,7 +143,6 @@ function renderToMailList(url,offset_val,page_size_val){
 			//_.bindAll(this,'cleanUp')
 			//var self = this;
 			this.isLoading = false;
-			IS_LOADING = true;
 			this.mailCollectionInstance = new mailCollection();
 			this.loadResults();
 		},
@@ -155,19 +153,17 @@ function renderToMailList(url,offset_val,page_size_val){
 	        var that = this;
 	        // we are starting a new load of results so set isLoading to true
 	        this.isLoading = true;
-	        IS_LOADING = true;
 	        // fetch is Backbone.js native function for calling and parsing the collection url
 	        this.mailCollectionInstance.fetch({
 				success: function(data,response,xhr) {
 					that.render(data);
 					renderToMailView(data);
-					if(data.toJSON().indexOf("errormssg") < 0){
+					if(data.toJSON().indexOf("errormssg") < 0 && data.toJSON().indexOf("error")){
 						globalMailCollectionInstance.add(data.toJSON());
 					}
 					inboxFlagListners();
 					hideTransitionBar();
 					$(".loading").hide();
-					IS_LOADING = false;
 				},
 				error: function (errorResponse) {
 					console.log(errorResponse)
@@ -195,7 +191,6 @@ function renderToMailList(url,offset_val,page_size_val){
 	    		this.$el.append(html);
 	    	}
 	    	this.isLoading = false;
-	    	//IS_LOADING = false;
 		},
 	    checkScroll: function () {
 	        var triggerPoint = 100; // 100px from the bottom
@@ -317,9 +312,9 @@ function renderToMailView(data){
 						rearrange_from_email_options($select, data);
 				});
 			}, "#"+attrid);
-			
+			var sync_email = $('#inbox-email-type-select').attr("from_email");
 			$("#from_name").val(CURRENT_AGILE_USER.domainUser.name);
-			$("#from_email").find('option[value ="'+from_email+'"]').attr("selected", "selected");
+			$("#from_email").find('option[value ="'+sync_email+'"]').attr("selected", "selected");
 			$(".ng-show").hide();
 		}
 	});
@@ -373,8 +368,9 @@ function composeView(){
 						$select.val($select.find('option')[0].value);
 					rearrange_from_email_options($select, data);
 				});
+			var sync_email = $('#inbox-email-type-select').attr("from_email");
 			$("#from_name").val(CURRENT_AGILE_USER.domainUser.name);
-			$("#from_email").find('option[value ="'+CURRENT_AGILE_USER.domainUser.email+'"]').attr("selected", "selected");
+			$("#from_email").find('option[value ="'+sync_email+'"]').attr("selected", "selected");
 		}, "#mails-list"); 
 }
 function inboxEmailSend(ele,json){
@@ -396,6 +392,9 @@ function inboxEmailSend(ele,json){
 			url = url.concat("&folder_name=INBOX");
 			helperFunction();
 			$("#message_sent_alert_info").show();
+			setTimeout(function(){
+			 $("#message_sent_alert_info").hide();
+			}, 5000);
 			renderToMailList(url,1,10);
 		},
 		error : function(response){
@@ -431,6 +430,9 @@ function inboxreplySend(ele,json){
 		error : function(response){
 			enable_send_button($('#sendEmailInbox'));
 			$("#message_sent_alert_info").show();
+			setTimeout(function(){
+			 $("#message_sent_alert_info").hide();
+			}, 5000);
 			// Show cause of error in saving
 			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
 			// Appends error info to form actions
@@ -462,4 +464,22 @@ function extractEmail(toEmails){
 	}
 
 	return returnVal;
+}
+function refreshInbox(){
+	$("#search-mail").val("");
+	var url = $('#inbox-email-type-select').attr("data-url");
+	var folder_type = $('#inbox-email-type-select').attr("folder-type");
+	if(folder_type == "inbox")
+		url = url.concat("&folder_name=INBOX");
+	else if(folder_type == "sent")
+			url = url.concat("&folder_name=Sent");
+	else if(folder_type == "draft")
+			url = url.concat("&folder_name=Draft");
+	else if(folder_type == "trash")
+			url = url.concat("&folder_name=Trash");
+
+	//globalMailCollectionInstance = new globalMailCollection();
+	helperFunction();
+	SHOW_TOTALCOUNT = true;
+	renderToMailList(url,1,10);
 }

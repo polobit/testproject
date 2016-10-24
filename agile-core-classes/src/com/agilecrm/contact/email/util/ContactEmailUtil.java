@@ -482,6 +482,30 @@ public class ContactEmailUtil
 		}
 		return emailsArray;
 	}
+	public static JSONArray ParseEmailBody(JSONArray emailsArray){
+		try
+		{
+			// inserts owner email to each and parse each email body
+			for (int i = 0; i < emailsArray.length(); i++)
+			{
+				// parse email body.
+				JSONObject email = emailsArray.getJSONObject(i);
+
+				if (email.has("message"))
+				{
+					String parsedHTML = EmailUtil.parseEmailData(emailsArray.getJSONObject(i).getString("message"));
+					email.put("message", parsedHTML);
+				}
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception occurred " + e.getMessage());
+		}
+		return emailsArray;
+	}
 
 	/**
 	 * Returns parsed signature without body tags
@@ -1019,6 +1043,7 @@ public class ContactEmailUtil
 			//String jsonResult = HTTPUtil.accessHTTPURL(url,data[1],"POST");
 			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
 			JSONArray emailsArray = emails.getJSONArray("emails");
+			emailsArray = ContactEmailUtil.ParseEmailBody(emailsArray);
 			
 			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
 		}catch(Exception e){
@@ -1039,6 +1064,7 @@ public class ContactEmailUtil
 			String jsonResult = HTTPUtil.accessHTTPURL(url,data[1],"POST");
 			JSONObject emails = ContactEmailUtil.convertEmailsToJSON(jsonResult);
 			JSONArray emailsArray = emails.getJSONArray("emails");
+			emailsArray = ContactEmailUtil.ParseEmailBody(emailsArray);
 			
 			emailsList = new ObjectMapper().readValue(emailsArray.toString(), new TypeReference<List<EmailWrapper>>(){});
 		}catch(Exception e){
