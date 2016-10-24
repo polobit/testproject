@@ -59,7 +59,7 @@ var WebreportsRouter = Backbone.Router.extend({
 
 						});
 
-						$(".active").removeClass("actionve");
+						$(".active").removeClass("active");
 						$("#web-rules-menu").addClass("active");
 
 						$('#webrule-tabs .select').removeClass('select');

@@ -1380,6 +1380,7 @@ public class Contact extends Cursor
 	{
 		try
 		{
+			System.out.println("Checking Owner Change id :"+ id +"  Owner_Key : " + owner_key + "  owner_updated : " + owner_updated);
 			// Set old owner only if owner_updated is false
 			if(id == null || owner_key == null || owner_updated)
 				return;
@@ -1391,9 +1392,14 @@ public class Contact extends Cursor
 			else
 				oldContact = ContactUtil.getContact(id);
 			
-			if(oldContact == null || oldContact.getContactOwnerKey() == null)
-				return;
+			System.out.println("OldContact " + oldContact);
 			
+			if(oldContact == null || oldContact.getContactOwnerKey() == null){
+				System.out.println("Old Contact Owner Key is null");
+				return;
+			}
+			
+			System.out.println("OldContact " + oldContact);
 			// If updated owner key doesn't match with old owner key
 			if(!oldContact.getContactOwnerKey().equals(owner_key))
 			{

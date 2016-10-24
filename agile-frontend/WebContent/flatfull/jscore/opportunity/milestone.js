@@ -505,9 +505,9 @@ function fill_ordered_milestone(formId){
    		{
    			// To capitalize the string
    	   		if(values != undefined)
-   	   			values = values + "," + capitalize_string(($(data).attr("data")).toString());
+   	   			values = values + "," + ($(data).attr("data")).toString();
    	   		else 
-   	   			values = capitalize_string(($(data).attr("data")).toString());
+   	   			values = ($(data).attr("data")).toString();
    		}
 	});
    	
