@@ -344,7 +344,6 @@ public class Contact extends Cursor
     /**
      * Key object of Lead source
      */
-    @NotSaved(IfDefault.class)
     private Key<Category> leadSource = null;
 
     /**

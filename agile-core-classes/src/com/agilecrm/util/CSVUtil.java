@@ -2311,9 +2311,9 @@ public class CSVUtil
 		    			sourceMismatched++;
 		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
 		        				"source mismatched"));
+		    			continue;
 		    		}
 		    	}
-    			continue;
     		    }
     		    
     		    if ("lead_status".equals(field.name))
@@ -2343,9 +2343,9 @@ public class CSVUtil
 		    			statusMismatched++;
 		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
 		        				"status mismatched"));
+		    			continue;
 		    		}
 		    	}
-    			continue;
     		    }
 
     		    // To avoid saving ignore field value/ and avoid fields with
