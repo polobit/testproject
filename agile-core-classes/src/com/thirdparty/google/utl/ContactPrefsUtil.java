@@ -231,7 +231,7 @@ public class ContactPrefsUtil
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("type", type);
 	for(AgileUser agileUser : users){
-		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, agileUser.getDomainUser().id));
+		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, agileUser.domain_user_id));
 		if(ContactPrefs.dao.getByProperty(searchMap)!=null){
 			return true;
 		}
