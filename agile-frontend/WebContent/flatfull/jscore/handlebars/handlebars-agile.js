@@ -822,7 +822,11 @@ function getContactCustomProperties(items)
 				finalFields.push(formulaFields[k]);	
 		}
 	}
-	
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
+
 	return finalFields;
 }
 
@@ -1010,6 +1014,10 @@ function getCompanyCustomProperties(items)
 				finalFields.push(formulaFields[k]);	
 		}
 	}
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
 	
 	return finalFields;
 }
@@ -1263,6 +1271,10 @@ function getDealCustomProperties(items)
 			finalFields.push(formulaFields[k]);	
 		}
 	}
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
 	
 	return finalFields;
 }
