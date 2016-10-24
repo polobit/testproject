@@ -26,8 +26,7 @@ define([
 		 $("body").append(custThmDiv);
 		 $("#formContent").css("display","none");
 		 $("#formContent").html($("#render").val());
-		 $("#formContent .form-view").addClass(themeVal);
-		 console.log("Before::::"+$("#formContent .form-view"));
+		 /*$("#formContent .form-view").addClass(themeVal);*/
 		 $.ajax({
 			type : 'POST',
 			url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
@@ -37,7 +36,9 @@ define([
 			success: function(data){
 				console.log("DATA COMING!!!"+data);
 				if(!(data==""||data==undefined)){
-				var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';
+				/*var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';*/
+				var style='<style id="custTheme'+data.id+'" type="text/css">'+data.themeCss+'</style>';
+				$("#formContent .form-view").addClass("form"+data.id);
 				$("#formContent").append(style);
 				}
 			},

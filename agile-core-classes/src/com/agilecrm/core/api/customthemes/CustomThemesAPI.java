@@ -40,7 +40,7 @@ public class CustomThemesAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public CustomTheme getCustomThemeByName(String themeName) throws JSONException{
 		System.out.println("THEMENAME COMING::::"+themeName);
-	   CustomTheme ct1=CustomThemesUtil.fetchThmsByProperty("name",themeName);
+		CustomTheme ct1=CustomThemesUtil.fetchThmsByProperty("name",themeName);
 	   System.out.println("OUTPUT OF getCustomThemeByName::::::"+ct1);
 		return ct1;
 	    
@@ -61,5 +61,31 @@ public class CustomThemesAPI {
 		return CustomThemesUtil.deleteCustomThemeByName("name",themeName);
 	 }
 	
+	@Path("/updateTheme")
+	@POST
+	@Produces({ MediaType.APPLICATION_JSON})
+	public void updateCustomTheme(String themeData) throws JSONException{
+		JSONObject themeJson = new JSONObject(themeData);
+		String id = themeJson.getString("id");
+		String css = themeJson.getString("themecss");
+		
+		CustomTheme ct = CustomThemesUtil.fetchThmsByKey(id);
+		if(ct!=null){
+			ct.setThemeCss(css);
+		    ct.saveTheme();
+	    }
+	}
+	
+	@Path("/saveThemeOnlyWithName")
+	@POST
+	@Produces({ MediaType.APPLICATION_JSON})
+	public CustomTheme saveCustomTheme(String themeName) throws JSONException{
+		
+		CustomTheme ct=new CustomTheme();
+		ct.setName(themeName);
+	    ct.saveTheme();
+	    return ct;
+	    
+	}
 	
 }

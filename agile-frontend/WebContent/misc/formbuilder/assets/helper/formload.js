@@ -31,9 +31,11 @@ define([
 				 formClasses=$("#formContent .form-view").attr("class");
 				 $("#formContent").remove();
 				 $.each(customthemes,function(index,value){
-                      if(formClasses.indexOf(value.name)>-1){
-                      	$(document.getElementById("target")).addClass(value.name);
-                                         $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                      /*if(formClasses.indexOf(value.name)>-1){*/
+                      	if(formClasses.indexOf("form"+value.id)>-1){
+                      	/*$(document.getElementById("target")).addClass(value.name);*/
+                      		$(document.getElementById("target")).addClass("form"+value.id);
+                            $(document.getElementById("agileCustTheme")).text(value.themeCss);
                       }
                      });
 				/*$("#formContent").html(data.formHtml);

@@ -1,21 +1,22 @@
-.innerBackgroundTheme,.innerFontTheme,.innerBorderTheme,.innerAlignmentTheme,.selectDiv{
+.innerBackgroundTheme,.innerFontTheme,.innerBorderTheme,.innerAlignmentTheme,.selectDiv,.innerColorThemeEle{
 	margin-left: 30px;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 .outerSelectTheme{
 	display: inline;
 	width: 250px;
 }
-.outerBackgroundTheme,.outerFontTheme,.outerBorderTheme,.outerAlignmentTheme{
+.outerBackgroundTheme,.outerFontTheme,.outerBorderTheme,.outerAlignmentTheme,.outerFontTheme,.outerColorThemeEle{
 	display:none;
 	 margin: 25px;
 }
 .innerAlignmentAlignStart
 {
-	margin-left: 40px;
+	/*margin-left: 40px;*/
 }
 .innerFontWeightDiv{
-	margin-top: 20px;
+	/*margin-top:20px;*/
+	margin-top: -20px!important;
 }
 .ulDiv ul{
 	list-style-type: none;
@@ -29,7 +30,7 @@
 .ulDiv{
 overflow-y: scroll;
 border: 1px solid #ccc;
-width: 156px;
+/*width: 156px;*/
 height: 61px;
 }
 .selectSpan{
@@ -37,24 +38,28 @@ height: 61px;
 }
 .solidBorder{
 	border:1px solid #444444;
+	height: 8px;
 }
 .dottedBorder{
-	border:1px dotted #444444;	
+	border:1px dotted #444444;
+	height: 8px;	
 }
 .dashedBorder{
 	border:1px dashed #444444;
+	height: 8px;
 }
 .doubledBorder{
 	border:1px doubled #444444;
+	height: 8px;
 }
 .outerArrow{
 	    margin-left: -12px;
 }
-.innerColorTheme{
+/*.innerColorTheme{
 	border: 1px solid #ccc;
     padding: 6px;
 
-}
+}*/
 .innerBackgroundImageTheme{
 	overflow:none;
 	margin-left: 10px;
@@ -70,7 +75,7 @@ height: 61px;
 	width: 160px;
 }
 .innerFontUlDiv{
-	width: 72px;
+	/*width: 72px;*/
     height: 75px;
     overflow-y: hidden;
 }
@@ -85,15 +90,15 @@ height: 61px;
 background-color:#3E8AD8;	
 }
 .outerSelectTheme select{
-	height:25px;
+	/*height:22px;*/
 }
 .ulDiv p{
 	height: 4px;
 }
 .outerSelectTheme{
 	display: inline;
-	border-right: 1px solid #9E9E9E;
-    border-left: 1px solid #9E9E9E;
+	/*border-right: 1px solid #9E9E9E;
+    border-left: 1px solid #9E9E9E;*/
 }
 .dropdown-content{
 	display:none;

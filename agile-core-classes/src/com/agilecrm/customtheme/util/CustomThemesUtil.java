@@ -6,9 +6,11 @@ import org.mortbay.util.ajax.JSON;
 
 import com.agilecrm.customthemes.CustomTheme;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.googlecode.objectify.Key;
 
 
 public class CustomThemesUtil {
@@ -27,7 +29,17 @@ public class CustomThemesUtil {
 		CustomTheme ct=dao.getByProperty(propertyName,propertyVal);
 		return ct;
 	}
-	
+	public static CustomTheme fetchThmsByKey(String key){
+		CustomTheme ct = null;;
+		try {
+			/*ct = dao.get(new Key<CustomTheme>(CustomTheme.class,key));*/
+			ct = dao.get(Long.parseLong(key));
+		} catch (EntityNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ct;
+	}
 	public static List<CustomTheme> fetchAllCustomThemes(){
 		
 		List<CustomTheme> custThemelist=dao.fetchAll();

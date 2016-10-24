@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -63,9 +64,9 @@ public class CustomTheme {
 	}
 
 
-	public void saveTheme(){
-		dao.put(this);
-		
+	public Key<CustomTheme> saveTheme(){
+		Key<CustomTheme> key = dao.put(this);
+		return key;
 	}
 
 	public List<CustomTheme> fetchAllThemes(){
@@ -75,6 +76,5 @@ public class CustomTheme {
 	public void deleteTheme(){
 		dao.delete(this);
 	}
-	
 	
 }
