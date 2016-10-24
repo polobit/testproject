@@ -70,7 +70,7 @@
                                  <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
                                     {{#is_mobile}}
                                         <div>
-                                        <h3 class="font-thin h3 pull-left landing-pages-title">
+                                        <h3 class="font-thin h4 pull-left landing-pages-title">
                                             {{agile_lng_translate 'landing-pages' 'landing-pages'}} <small>
                                             <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span>
                                             </small></h3>
@@ -232,12 +232,12 @@
         <div class="text-muted text-xs table-resp">
             <i class="fa fa-clock-o"></i>
             {{#if updated_time}}
-                &nbsp;<span><em>{{agile_lng_translate 'campaigns' 'modified'}}</em>&nbsp;
+                <span><em> {{agile_lng_translate 'campaigns' 'modified'}}</em>
                 </span>
-                <time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+                <time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}" style="margin-left: 2px">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
             {{else}}
-                &nbsp;<span><em>{{agile_lng_translate 'campaigns' 'created'}}</em>&nbsp;</span>
-                <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+                <span><em> {{agile_lng_translate 'campaigns' 'created'}}</em></span>
+                <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="margin-left: 2px">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
             {{/if}} 
         </div>
     </td>

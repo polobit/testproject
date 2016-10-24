@@ -3,7 +3,7 @@
 		<div class="row">
     		<div class="col-md-12">
         		{{#is_mobile}}
-	        		<h3 class="font-thin h3 pull-left push-notification-title">Push Notifications <small> <span class="label label-sm bg-danger">Beta</span></small></h3>
+	        		<h3 class="font-thin h4 pull-left push-notification-title">Push Notifications <small> <span class="label label-sm bg-danger">Beta</span></small></h3>
 	        		<div class="add-push-notify-btn add-btn-mobile">
 						<a href="#push-notification-add" class="btn btn-xs btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
 					</div>
@@ -125,14 +125,25 @@
 <script id="push-notification-add-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 		<div class="row">
-    		<div class="col-md-12">
-				{{#if id}}
-					<h3 class="h3 font-thin"> Edit Push Notification</h3>
-				{{else}}
-					<h3 class="h3 font-thin"> Add Push Notification	</h3>
-				{{/if}}
-				<div class="clearfix"></div> 
-    		</div>
+    		{{#is_mobile}}
+    			<div class="col-md-12">
+					{{#if id}}
+						<h3 class="h4 font-thin"> Edit Push Notification</h3>
+					{{else}}
+						<h3 class="h4 font-thin edit-add-push-notify-title"> Add Push Notification	</h3>
+					{{/if}}
+					<div class="clearfix"></div> 
+    			</div>
+    		{{else}}
+    			<div class="col-md-12">
+					{{#if id}}
+						<h3 class="h3 font-thin"> Edit Push Notification</h3>
+					{{else}}
+						<h3 class="h3 font-thin"> Add Push Notification	</h3>
+					{{/if}}
+					<div class="clearfix"></div> 
+    			</div>
+    		{{/is_mobile}}
 		</div>
 	</div>
 
@@ -173,8 +184,8 @@
                 </div>
 
                 <div class="control-group form-group">
-                      <label class="control-label col-sm-4 col-xs-12">Image URL</label>
-                	 <div class="controls col-sm-6 col-xs-12">
+                    <label class="control-label col-sm-4 col-xs-12">Image URL</label>
+                	<div class="controls col-sm-6 col-xs-12">
                     	 <input type="url" placeholder="Image url" class="form-control" id="notification-icon" name="notificationIcon"/>
                     	 <p class="help-block m-b-none">Image address url (Recommended 200*200 px)</p>
                 	</div>
@@ -183,13 +194,13 @@
                 </div>
 
                <div class="control-group form-group">
-			   <div class="control-label col-sm-4 col-xs-5">Tracking</div>
-			        <div class="controls col-sm-4 col-xs-5">
-			              <select name="push_param" class="form-control">
-			                   <option value="YES">Yes</option>
-			                   <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes &amp; Push (Email only)</option>
-			                   <option value="YES_AND_PUSH">Yes &amp; Push</option>
-			               </select>
+			   		<label class="control-label col-sm-4 col-xs-12">Tracking</label>
+			        <div class="controls col-sm-6 col-xs-12">
+		             	<select name="push_param" class="form-control">
+		                   <option value="YES">Yes</option>
+		                   <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes &amp; Push (Email only)</option>
+		                   <option value="YES_AND_PUSH">Yes &amp; Push</option>
+		               	</select>
 			         </div>
 			 </div>
 			 

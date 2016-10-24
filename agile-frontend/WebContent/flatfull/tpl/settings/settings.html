@@ -1,7 +1,11 @@
  <script id="settings-template" type="text/html"> 
 <div class="">
 <div class="bg-light lter b-b wrapper-md">
-<h1 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h1>
+{{#is_mobile}}
+	<h3 class="m-n font-thin h4 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h3>
+{{else}}
+	<h1 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h1>
+{{/is_mobile}}
 </div>
    
     <!-- <div class="app-content-full  h-full enable-full-height"> -->  

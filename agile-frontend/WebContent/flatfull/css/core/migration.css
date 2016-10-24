@@ -2046,6 +2046,10 @@ display: block!important;
   .add-stream-btn{
     display: block !important;
   }
+  #browseBtn {
+    margin-left: 15px !important;
+  }
+  .
   
  /*Marketing Modules Responsive Style End*/
 

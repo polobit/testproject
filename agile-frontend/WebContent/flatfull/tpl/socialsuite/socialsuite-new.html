@@ -4,8 +4,11 @@
 <div class="wrapper-md bg-light lter b-b">
 <div class="row">
     <div class="col-md-12">
-        
+        {{#is_mobile}}
+            <h3 class="pull-left font-thin h4 social-suite-title">{{agile_lng_translate 'social' 'social-suite'}}</h3>
+        {{else}}
             <h3 class="pull-left font-thin h3 social-suite-title">{{agile_lng_translate 'social' 'social-suite'}}</h3>
+        {{/is_mobile}}
 <div class="pull-right">
     <div class="m-r-xs inline-block add-stream-btn">       
       <a href="#scheduledmessages" id="show_scheduled_updates" class="btn btn-default  btn-sm" style="display:none;"><i class="icon-time icon"></i></a>
