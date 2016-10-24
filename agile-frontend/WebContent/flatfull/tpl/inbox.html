@@ -204,7 +204,7 @@
 		        <span class="hidden-xs ng-binding"><time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time></span>
 		      </div>
 		      <div class="clear {{this.flags}}" id="flag{{removeSpecialCharacter this.id}}" data-val="{{this.id}}">
-		        <div><a class="toggle-class text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-7" style="overflow: hidden;">{{this.subject}}</span></a></div>
+		        <div><a class="toggle-class text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-7" style="overflow: hidden;">{{this.subject}}</span><span class="col-md-1" style="width: 100%;"></span></a></div>
 		        <div class="text-ellipsis m-t-xs ng-binding">{{{this.message}}}</div>
 		      </div>      
 	    	</li>
