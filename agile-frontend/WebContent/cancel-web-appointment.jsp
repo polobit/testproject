@@ -413,28 +413,32 @@ a:link, a:active, a:visited, a {
 	
 <script type="text/javascript">
 var domain_user_name=<%=mapper.writeValueAsString(user_name)%>;
-$("body").on("click","#cancel_appointment_confirmation",function(e)
-{
+$("body").on("click","#cancel_appointment_confirmation",function(e){
 	e.preventDefault();
-	  var event_id=<%=event_id%>
-	 var cancel_reason=$("#cancel_web_appointment_reason").val();
-	 
-	 $.ajax({ url : '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>+'&cancel_reason='+cancel_reason, type : 'GET', success : function(data)
-			{
-		 var appointment_success_img2 = "/img/appointment_confirmation.png";
-		 var ser='<div class="wrapper rounded6" id="templateContainer">'
-		         +'<div id="templateBody" class="bodyContent rounded6">'
-		         +'<h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;">'
-		         +'<img style="float: left" src='+appointment_success_img2+'><b style="margin-top: -2px;display: inline-block;margin-left: 9px;"><h3><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancelled-appointment")%></h3></b></h3>'
-		         +'<div id="appointment"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "your-appointment-with")%> <b>'+domain_user_name+'</b> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "is-cancelled")%>.</div><br/>'
-		         +'<a  class="button" href="<%=calendar_url %>"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "schedule-new")%></a></div></div><br />';
-		 $("#templateContainer").html(ser);	
-		 
-			}, error : function(response)
-			{
+	var event_id = <%=event_id%>;
+	var cancel_reason = $("#cancel_web_appointment_reason").val();
+	
+	$(this).val('Please wait');
+	$('#templateContainer').find('input, textarea, button, select').attr('disabled','disabled');
 
-				alert('<%=LanguageUtil.getLocaleJSONValue(localeJSON, "something-wrong")%>');
-			} });
+	$.ajax({ 
+		url : '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>+'&cancel_reason='+cancel_reason, 
+		type : 'GET', 
+		success : function(data){
+			 var appointment_success_img2 = "/img/appointment_confirmation.png";
+			 var ser='<div class="wrapper rounded6" id="templateContainer">'
+			         +'<div id="templateBody" class="bodyContent rounded6">'
+			         +'<h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;">'
+			         +'<img style="float: left" src='+appointment_success_img2+'><b style="margin-top: -2px;display: inline-block;margin-left: 9px;"><h3><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancelled-appointment")%></h3></b></h3>'
+			         +'<div id="appointment"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "your-appointment-with")%> <b>'+domain_user_name+'</b> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "is-cancelled")%>.</div><br/>'
+			         +'<a  class="button" href="<%=calendar_url %>"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "schedule-new")%></a></div></div><br />';
+			 $("#templateContainer").html(ser);	
+		}, error : function(response){
+			$(this).val('Cancel Appointment');
+			$('#templateContainer').find('input, textarea, button, select').removeAttr('disabled');
+			alert('<%=LanguageUtil.getLocaleJSONValue(localeJSON, "something-wrong")%>');
+		} 
+	});
 });
 </script>
 <script type="text/javascript" src="https://mctest.agilecrm.com/stats/min/agile-min.js"></script>

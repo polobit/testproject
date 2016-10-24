@@ -346,10 +346,14 @@ function save_web_event(formId, confirmBtn)
 		alert("Please select appointment time.");
 		return false;
 	}
+
 	$('#confirm').attr('disabled', 'disabled');
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
+
+	$(confirmBtn).val('Please wait');
+	$(confirmBtn.form).find('input, textarea, button, select').attr('disabled','disabled');
 
 	// Send request to save slot, if new then contact, event
 	$
@@ -378,6 +382,8 @@ function save_web_event(formId, confirmBtn)
 				},
 				error : function(res){
 					console.log(res);
+					$(confirmBtn).val('Confirm');
+					$(confirmBtn.form).find('input, textarea, button, select').removeAttr('disabled');
 					
 					if(res.responseText == "slot booked")
 					{
