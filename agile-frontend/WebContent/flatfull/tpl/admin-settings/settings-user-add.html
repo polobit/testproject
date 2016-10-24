@@ -329,7 +329,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="pull-left" style="width:40%;">
+                                <div class="pull-lefts" style="width:40%;">
                                     <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                         {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
@@ -476,7 +476,7 @@
                                        <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small></div>
                                       </div>
                                       <div>
-                                      <div class="pull-left" style="width:40%;">
+                                      <div class="pull-lefta" style="width:40%;">
                                        <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
@@ -600,16 +600,7 @@
 
 
 
-                                <div>
-                                    <div class="pull-left" style="width:100%;">
-                                        <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                                {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
-                                        </label>
-                                    </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
-                                    </div>
-                                </div>
+                                
                                 <div>
                                     <div class="pull-left" style="width:35%;">
                                         <label class="i-checks i-checks-sm checkbox">
@@ -632,24 +623,18 @@
                                     <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small>
                                     </div>
                                 </div>
-                            </div>
-                            <!--<div name="newMenuScopes">
-                            {{#if id}}
-                              <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'deal-view' 'deals'}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
-                                        </small></div>
-                               </label>
-                            {{else}}
-                                  <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'portlets' 'deals'}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                <div>
+                                    <div class="pull-lefts" style="width:100%;">
+                                        <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="VIEW_CALENDAR" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                                {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
+                                        </label>
                                     </div>
-                                </label>
-                            {{/if}}
-                            </div>-->
+                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                           
                         </div>
                     </div>
                     {{/unless}}
