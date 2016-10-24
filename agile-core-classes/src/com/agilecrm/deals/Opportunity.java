@@ -799,7 +799,7 @@ public class Opportunity extends Cursor implements Serializable
 				}
 			}
 		}
-		else if(oldtags == null && newtags != null){
+		else if(oldtags.size()==0 && newtags != null){
 			for (Tag newtag : newtags){
 				newtag.createdTime = System.currentTimeMillis();
 			}
