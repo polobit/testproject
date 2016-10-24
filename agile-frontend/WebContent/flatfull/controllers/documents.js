@@ -963,7 +963,9 @@ function cancel_document()
 			}
 			else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
 			{
+				try{
 				company_util.updateDocumentsList(document,true);
+				}catch(e){}
 				var sURL="company/" + App_Companies.companyDetailView.model.get('id');
 				Backbone.history.navigate(sURL, { trigger : true });
 				return;
