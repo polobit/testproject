@@ -619,10 +619,10 @@ public class WidgetUtil {
 	 * and check limits
 	 * @return
 	 */
-	public static boolean isAllowedForDowngrade(int limit){
+	public static boolean isAllowedForDowngrade(int limit, List<AgileUser> users){
 		int widgetCount = 0;
 		ObjectifyGenericDao<Widget> widgetDao = new ObjectifyGenericDao<Widget>(Widget.class);
-		for(AgileUser agileUser : AgileUser.getUsers()){
+		for(AgileUser agileUser : users){
 			widgetCount = widgetDao.ofy().query(Widget.class).ancestor(new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("widget_type !=", WidgetType.INTEGRATIONS).filter("widget_type !=", WidgetType.CUSTOM).count();
 			if(widgetCount > limit)
 				return false;

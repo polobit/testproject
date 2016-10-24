@@ -3,6 +3,7 @@ package com.agilecrm.subscription.restrictions.db;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,6 +35,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
@@ -283,6 +285,7 @@ public class BillingRestriction
 	Map<String, Map<String, Object>> resrtictions = new HashMap<String, Map<String, Object>>();
 
 	refreshContacts();
+	List<AgileUser> agileUsers = AgileUser.getUsers();
 	Map<String, Object> limits;
 	int contactsLimit = planDetails.getContactLimit();
 	if(contactsLimit < contacts_count){
@@ -323,7 +326,7 @@ public class BillingRestriction
 		limits.put("count", usersCount);
 		resrtictions.put("users", limits);
 	}
-	if(!WidgetUtil.isAllowedForDowngrade(planDetails.getWidgetsLimit())){
+	if(!WidgetUtil.isAllowedForDowngrade(planDetails.getWidgetsLimit(), agileUsers)){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", false);
 		resrtictions.put("widgets", limits);
@@ -336,7 +339,7 @@ public class BillingRestriction
 		limits.put("count", maxNodesCount);
 		resrtictions.put("nodes", limits);
 	}
-	if(ContactEmailUtil.isEmailAccountsLimitReachedForDowngrade(planDetails.getEmailAccountLimit())){
+	if(ContactEmailUtil.isEmailAccountsLimitReachedForDowngrade(planDetails.getEmailAccountLimit(), usersLimit)){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", false);
 		resrtictions.put("emailAccounts", limits);
@@ -355,13 +358,13 @@ public class BillingRestriction
 		limits.put("isAllowed", planDetails.getSMSGateway());
 		resrtictions.put("smsGateway", limits);
 	}
-	boolean ecommerceSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.SHOPIFY);
+	boolean ecommerceSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.SHOPIFY, agileUsers);
 	if(!planDetails.getEcommerceSync() && ecommerceSyncEnabled){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", planDetails.getEcommerceSync());
 		resrtictions.put("ecommerceSync", limits);
 	}
-	boolean accountingSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.FRESHBOOKS) || ContactPrefsUtil.checkWidgetExists(Type.QUICKBOOK);
+	boolean accountingSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.FRESHBOOKS, agileUsers) || ContactPrefsUtil.checkWidgetExists(Type.QUICKBOOK, agileUsers);
 	if(!planDetails.getAccountingSync() && accountingSyncEnabled){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", planDetails.getAccountingSync());

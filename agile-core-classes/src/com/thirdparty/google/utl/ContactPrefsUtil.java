@@ -226,11 +226,11 @@ public class ContactPrefsUtil
      * @param type
      * @return
      */
-    public static boolean checkWidgetExists(Type type)
+    public static boolean checkWidgetExists(Type type, List<AgileUser> users)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("type", type);
-	for(AgileUser agileUser : AgileUser.getUsers()){
+	for(AgileUser agileUser : users){
 		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, agileUser.getDomainUser().id));
 		if(ContactPrefs.dao.getByProperty(searchMap)!=null){
 			return true;

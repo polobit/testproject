@@ -668,8 +668,8 @@ public class ContactEmailUtil
 	 * 
 	 * @return
 	 */
-    public static boolean isEmailAccountsLimitReachedForDowngrade(int limit){
-    	for(AgileUser agileUser : AgileUser.getUsers()){
+    public static boolean isEmailAccountsLimitReachedForDowngrade(int limit, List<AgileUser> users){
+    	for(AgileUser agileUser : users){
     		int count = getEmailPrefsByAgileUser(agileUser).getEmailAccountsCount();
     		if(count > limit)
     			return true;

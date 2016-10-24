@@ -483,7 +483,7 @@ public class SubscriptionApi {
 			String invoiceJSONString = new Gson().toJson(invoice);
 			return invoiceJSONString;
 		} catch (Exception e) {
-			System.out.println(ExceptionUtils.getMessage(e));
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
