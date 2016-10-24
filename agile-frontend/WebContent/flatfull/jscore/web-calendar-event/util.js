@@ -4,7 +4,7 @@ function change_availability_date(selected_date)
 
 	var date = new Date(selected_date);
 
-	$('.availability').html(LOCALES_JSON['on-availability'] + " " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html(LOCALES_JSON['on-availability'] + " " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 }
 
 // Get slot details time n description
@@ -194,7 +194,7 @@ function displayNoSlotsMsg()
 
 	var date = new Date(selecteddate);
 
-	$('.availability').html(LOCALES_JSON['no-valid-slot'] + " " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html(LOCALES_JSON['no-valid-slot'] + " " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
 	// $('.checkbox-main-grid').append('<label for="no-slots"
@@ -343,7 +343,7 @@ function save_web_event(formId, confirmBtn)
 
 	if (web_calendar_event["selectedSlotsString"].length == 0)
 	{
-		alert("Please select appointment time.");
+		showAlertModal("appointment_time");		
 		return false;
 	}
 
@@ -385,18 +385,16 @@ function save_web_event(formId, confirmBtn)
 					$(confirmBtn).val('Confirm');
 					$(confirmBtn.form).find('input, textarea, button, select').removeAttr('disabled');
 					
-					if(res.responseText == "slot booked")
-					{
-						alert(LOCALES_JSON['solt-book-error']);
-						get_slots(selecteddate, Selected_Time);
-						$('#confirm').attr('disabled', false);
-					}
-
-					else
-					{
-						alert(LOCALES_JSON['slot-exists'] + "Error: " + res.statusText);
-						resetAll();
-						location.reload(true);
+					if(res.responseText == "slot booked"){
+						showAlertModal("slot_booking", undefined, function(){
+							get_slots(selecteddate, Selected_Time);
+							$('#confirm').attr('disabled', false);
+						});						
+					}else{
+						showAlertModal(LOCALES_JSON['slot-exists'] + "Error: " + res.statusText, undefined, function(){						
+							resetAll();
+							location.reload(true);
+						},undefined, "Appointment Schedule");
 					}		
 				}
 				/*
