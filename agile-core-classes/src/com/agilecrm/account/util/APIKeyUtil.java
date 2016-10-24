@@ -269,7 +269,7 @@ public class APIKeyUtil
   public static String validateWebTrackingCode(String websiteURL)
    	{
    		try {
-   			String domain = "";//NamespaceManager.get();
+   			String domain = NamespaceManager.get();
    			
    			URL url = new URL(websiteURL);
    			URLConnection conn = url.openConnection();
