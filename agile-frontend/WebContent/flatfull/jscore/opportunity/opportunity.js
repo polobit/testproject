@@ -1357,6 +1357,13 @@ function deleteDeal(id, milestone, dealPipelineModel, el){
 
 		// Shows deals chart
 		dealsLineChart();
+		// fetch deals if count is 10 
+		var modelsLength = dealPipelineModel[0].get('dealCollection').models.length ;
+        if(modelsLength == 10 && modelsLength <= deal_count)
+        {
+           dealPipelineModel[0]['isUpdateCollection'] = true ;
+           dealsFetch(dealPipelineModel[0]);
+        }
 	}, error : function(err)
 	{
 		if(err && err.status == 403)
