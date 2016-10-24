@@ -789,7 +789,7 @@ public class Opportunity extends Cursor implements Serializable
 	{
 		List <Tag> oldtags = new ArrayList<Tag>(oldDeal.tagsWithTime);
 		List <Tag> newtags = new ArrayList<Tag>(updatedDeal.tagsWithTime);
-		if(oldtags != null && newtags != null){
+		if(oldtags != null && newtags != null && oldtags.size()>0 &&  newtags.size()>0){
 			for(Tag newTag : newtags){
 				for(Tag oldTag: oldtags){
 					if(newTag.equals(oldTag))
