@@ -343,7 +343,7 @@ function save_web_event(formId, confirmBtn)
 
 	if (web_calendar_event["selectedSlotsString"].length == 0)
 	{
-		showAlertModal("appointment_time");		
+		alert("Please select appointment time.");		
 		return false;
 	}
 
@@ -386,15 +386,13 @@ function save_web_event(formId, confirmBtn)
 					$(confirmBtn.form).find('input, textarea, button, select').removeAttr('disabled');
 					
 					if(res.responseText == "slot booked"){
-						showAlertModal("slot_booking", undefined, function(){
-							get_slots(selecteddate, Selected_Time);
-							$('#confirm').attr('disabled', false);
-						});						
+						alert(LOCALES_JSON['solt-book-error']);
+						get_slots(selecteddate, Selected_Time);
+						$('#confirm').attr('disabled', false);											
 					}else{
-						showAlertModal(LOCALES_JSON['slot-exists'] + "Error: " + res.statusText, undefined, function(){						
-							resetAll();
-							location.reload(true);
-						},undefined, "Appointment Schedule");
+						alert(LOCALES_JSON['slot-exists'] + "Error: " + res.statusText);
+						resetAll();
+						location.reload(true);
 					}		
 				}
 				/*
