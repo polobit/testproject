@@ -52,7 +52,7 @@ function showTrailAlertMessage(){
 	
 $(document).ready(function(){
 
-
+helpContentPopover();
 $('body').on('click','#speechDectation',function(e){
 	e.preventDefault();
     startDictation(this);
@@ -62,7 +62,6 @@ $('body').on('click','#speechDectation',function(e){
 	}, 6000);
 
 });
-
 $("#searchForm").on("submit",function(){
 
 	return false;
@@ -416,7 +415,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	   //$( event.target ).blur();
 	   var checkedlist = $allitems.not("[value='']");
 	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
-	   console.log(list);
+	   // console.log(list);
 	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
 	   return false;
 	});
@@ -439,8 +438,19 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 		$inputs.filter("[value='']").closest("a").click();
 	}
-
+	function helpContentPopover()
+	{
+		if( _agile_get_prefs(CURRENT_DOMAIN_USER.id+"menupopover_close"))
+			$("#helpcontent_popover").addClass("hide");
+		else 
+			$("#helpcontent_popover").removeClass("hide");
+	}
 	
+	function closeHelpPopover() {
+		var arr = _agile_set_prefs(CURRENT_DOMAIN_USER.id+"menupopover_close");
+		$("#helpcontent_popover").addClass("hide");
+	
+	}
 	// initializing need help popover for header page
    $(".need_help").popover({ 
    					placement : $(this).attr("data-placement"),
@@ -448,6 +458,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 					container: 'body'
 				}).on("click", function(){
 						initRolehandlers();
+						closeHelpPopover();
     			}).on("show.bs.popover", function(e){ 
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));

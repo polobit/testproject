@@ -47,6 +47,9 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"send-email" : "sendEmail",
 		
+		"send-email/documents/:id" : "sendDocumentEmail",
+		"send-email/documents/:id/send" : "sendDocumentEmail",
+
 		"send-email/:id" : "sendEmail",
 
 		"send-emails/:id" : "sendEmailCustom",
@@ -955,13 +958,25 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		
 	},
 
+	sendDocumentEmail:function(id) 
+	{
+		//this.sendEmail(id,null,null,null,null,null,"documents");
+		var that=this;
+		sendMail(id,null,null,null,null,that,null,"documents");
+
+			var options = {};
+		options[_agile_get_translated_val('others','add-new')] = "verify_email";
+		
+		confirmandVerifyEmail()
+	},
+
 	/**
 	 * Shows a send email form with some prefilled values (email - from,
 	 * to and templates etc..). To prefill the fields the function
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id, subject, body, cc, bcc, force_reload)
+	sendEmail : function(id, subject, body, cc, bcc, force_reload,id_type)
 	{
 
 		// Check old hash and call same function
@@ -984,40 +999,15 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					});
 			   }
               
-              this.sendEmail(email, subject, body, cc, bcc, true);
+              this.sendEmail(email, subject, body, cc, bcc, true,id_type);
               return;
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
 
-		var options = {};
-		options[_agile_get_translated_val('others','add-new')] = "verify_email";
 		
-		fetchAndFillSelect(
-			'core/api/account-prefs/verified-emails/all',
-			"email",
-			"email",
-			undefined,
-			options,
-			$('#from_email'),
-			"prepend",
-			function($select, data) {
-				
-				if($select.find('option').size()===1){
-					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
-					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
-				}
-				else {
-					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
-					if(typeof(ownerEmail) !== "undefined")
-						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
-					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
-						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
-					}
-				}
-				rearrange_from_email_options($select, data);
-			});
+		confirmandVerifyEmail()
+	
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
@@ -1513,7 +1503,7 @@ function abortCountQueryCall(){
 	}catch(e){}
 }
 
-function sendMail(id,subject,body,cc,bcc,that,custom_view)
+function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 {
 	var model = {};
 		
@@ -1547,6 +1537,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			model=that.toJSON();
 		}
 		else{
+
+		var documentId=null;
 		// Takes back to contacts if contacts detail view is not defined
 		if (that.contactDetailView && !that.contactDetailView.model.get(id))
 		{
@@ -1560,12 +1552,41 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
 		}
+		if(id_type=="documents" )
+		{
+			if(App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+			{
+				$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
+				{
+					if(id && document_model.id==id	)
+					{
+						model=document_model.toJSON();	
+						return false;
+					}	
+				});
+			}
+			if (documentsView && documentsView.collection)
+			{
+				if(documentsView.collection.get(id))
+				{
+					model=documentsView.collection.get(id).toJSON();
+				}
+				
+			}
+			if(dealDocsView && dealDocsView.collection)
+			{
+				if(dealDocsView.collection.get(id))
+				{
+					model=dealDocsView.collection.get(id).toJSON();
+				}
+			}
+		}	
 	}
 	
-		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+//		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+//		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');
@@ -1591,7 +1612,75 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 				// For Reply all, id may contains multiple emails. If contains multiple, skip
 				if (model && id.indexOf(',') == -1)
 				{
-					if (model.type == "PERSON")
+					if(id_type=="documents" && model.id!=null)
+					{
+						
+						$('#emailForm').find('.add-attachment-select').addClass('hide');
+						$('#emailForm').find('#eattachment').css('display','block');
+						$('#emailForm').find('#attachment_id').css("display",'block');
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").attr("href","#documents/" + model.id)
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").css( 'cursor', 'pointer' );
+				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag" style="display:inline;">' + model.name +'</div>');
+				    	$('#emailForm').find(".attachment-document-select").css('display','none');
+				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
+				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);
+				    	$("#emailForm").find("#agile_attachment_name").attr("value", model.name);
+				    	$("#emailForm").find(".add-attachment-cancel").addClass("hide");
+				    	$("#emailForm").find(".attach-file").addClass("hide");
+				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
+				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
+				    	var first_name ="",last_name="";
+				    	if(model.contacts && model.contacts.length>0)
+				    	{
+
+				    		var url = '/core/api/contacts/'+ model.contacts[0].id;
+							$.ajax({
+								url : url,
+								type: 'GET',
+								dataType: 'json',
+								success: function(data){
+									model_json=data;
+									var email=getPropertyValue(model_json.properties, "email");
+									var first_name = getPropertyValue(model_json.properties, "first_name");
+									if(model_json.type=="COMPANY")
+									{
+										first_name = getPropertyValue(model_json.properties, "name");
+									}
+									var last_name = getPropertyValue(model_json.properties, "last_name");
+									var name="";
+									if (first_name || last_name)
+									{
+										name = first_name ? first_name : "";
+										name = (name + " " + (last_name ? last_name : "")).trim();
+									}
+									// If already appended with name, skip
+									if(email && email.indexOf('<') == -1 && email.indexOf('>') == -1)
+										email = name + ' <' + email.trim() + '>';
+
+									$('#to', el)
+											.closest("div.controls")
+											.find(".tags")
+											.append(
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+												}
+							});
+					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
+					    	$("#contact_type","#emailForm").val(model.contacts[0].type);
+					    	$("#doc_type","#emailForm").val(model.doc_type);
+					    	/*
+			               	first_name = getPropertyValue(model.contacts[0].properties, "first_name");
+							last_name = getPropertyValue(model.contacts[0].properties, "last_name");
+							id=getPropertyValue(model.contacts[0].properties, "email");*/
+						}
+						if (first_name || last_name)
+						{
+							name = first_name ? first_name : "";
+							name = (name + " " + (last_name ? last_name : "")).trim();
+						}
+						
+					}
+					else if (model.type == "PERSON")
 					{
 
 						var first_name = getPropertyValue(model.properties, "first_name");
@@ -1615,7 +1704,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 					var data = id;
 
 					// If already appended with name, skip
-					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+					if(id && id.indexOf('<') == -1 && id.indexOf('>') == -1)
 						data = name + ' <' + id.trim() + '>';
 
 					$('#to', el)
@@ -1624,7 +1713,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 							.append(
 									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
 				}
-				else
+				else  if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);
 			}
 			else
@@ -1718,4 +1807,35 @@ function addTypeCustomData(contactId, el){
 	});
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 	
+}
+function confirmandVerifyEmail()
+{
+	var options = {};
+	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+				
+				if($select.find('option').size()===1){
+					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
+					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
+				}
+				else {
+					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+					if(typeof(ownerEmail) !== "undefined")
+						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
+					else{
+						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
+					}
+				}
+				rearrange_from_email_options($select, data);
+			});
 }

@@ -1,6 +1,7 @@
 package com.agilecrm.subscription.restrictions.db;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -67,9 +68,9 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @Cached
-public class BillingRestriction
+public class BillingRestriction implements Serializable
 {
-    @Id
+	@Id
     public Long id;
 
     public Integer contacts_count;

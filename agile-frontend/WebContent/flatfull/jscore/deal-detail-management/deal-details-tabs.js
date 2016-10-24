@@ -73,6 +73,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .document-edit-deal-tab' : 'dealDocumentEdit',
     	'click .document-unlink-deal-tab' : 'dealUnlinkDocument',
     	'click .add-deal-document-select' : 'dealDocumentsList',
+    	'click .add-deal-edocument-select' : 'navigateToeDocument',
     	'click .add-deal-document-confirm' : 'dealAddDocumentConfirm',
     	'click .add-deal-document-cancel' : 'dealAddDocumentCancel',
     	'click .deal-add-task' : 'dealAddtask',
@@ -484,8 +485,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
-		var id = $(targetEl).attr('data');
-		updateDocument(dealDocsView.collection.get(id));
+		var document_id = $(targetEl).attr('data');
+		var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
+		
+		Backbone.history.navigate("documents/"+document_id+"/" + currentDeal.id,{trigger: true});	
+		//updateDocument(dealDocsView.collection.get(id));
 	},
 
 	// For unlinking document from contact-details
@@ -532,12 +536,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	/**
 	 * For showing new/existing documents
 	 */
+	navigateToeDocument:function(e)
+	{
+		e.preventDefault();
+		var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+		Backbone.history.navigate("documents/deal/" + deal_json.id+ "/edoc",{trigger: true});	        
+	},
 	dealDocumentsList: function(e){
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
 		var el = $(targetEl).closest("div");
 		$(targetEl).css("display", "none");
+		$(".add-deal-edocument-select,.dropdown-toggle",el).css("display", "none");
 		el.find(".deal-document-select").css("display", "block");
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
@@ -568,7 +579,9 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	    }	    	
 	    else if(document_id == "new")
 	    {
-	    	
+	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+	    	Backbone.history.navigate("documents/deal/" + deal_json.id+ "/attachment",{trigger: true});	        
+	    	return;
 	    	$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 			
 			var el = $("#uploadDocumentForm");
@@ -615,7 +628,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var el = $(targetEl).closest("div");
 		el.find(".deal-document-select").css("display", "none");
-		el.find(".add-deal-document-select").css("display", "inline");
+		el.find(".add-deal-document-select,.add-deal-edocument-select,.dropdown-toggle").css("display", "inline");
+		
 	},
 
 	
@@ -716,13 +730,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		{
 			var id = $(targetEl).attr('data');
 			var that = targetEl;
-			complete_task(id, dealTasksView.collection, undefined, function(data)
+			showAlertModal("complete_task", "confirm", function() 
 			{
-				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
-				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
-				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
-				dealTasksView.collection.add(data, { silent : true });
-			});
+				complete_task(id, dealTasksView.collection, undefined, function(data)
+				{
+					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
+					console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+					dealTasksView.collection.add(data, { silent : true });
+				});
+			 });
 		}
 	},
 

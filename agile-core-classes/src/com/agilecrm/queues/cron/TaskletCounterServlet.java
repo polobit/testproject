@@ -79,7 +79,7 @@ public class TaskletCounterServlet extends HttpServlet {
 			
 	        StringBuilder html = new StringBuilder();
 	        html.append(EmailUtil.templateHeader("Tasks count in queue is high."));
-	        html.append("<p>This is an AUTO-GENERATED ALERT MAIL.</p> <br> The Task count in the Queue(s) (");
+	        html.append("This is an AUTO-GENERATED ALERT MAIL.</p> <br> The Task count in the Queue(s) (");
 	        html.append(alertQueues.toString());
 	        html.append(") has exceeded the safe limit (10,000), while the leased count is 0 for more than a minute. ");
 	        html.append(EmailUtil.templateFooter());

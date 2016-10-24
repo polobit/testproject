@@ -42,7 +42,6 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.CustomFieldData;
@@ -1207,6 +1206,27 @@ public class DealsAPI
     {
 	ReportsUtil.check(min * 1000, max * 1000);
 	return OpportunityUtil.getIncomingDealsList(ownerId, min, max, frequency, type).toString();
+    }
+    
+    /*
+     * fetches all deals won by user
+     * 
+     * @param min
+     * 
+     * @param max
+     * 
+     * @return deals
+     * 
+     * @throws JSONException
+     */
+    @Path("/won_deals/{owner-Id}/{pipeline-id}/{source-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getWonDealsByUser(@PathParam("owner-Id") Long ownerId, @PathParam("pipeline-id") Long pipelineId,
+    @PathParam("source-id") Long sourceId, @QueryParam("min") Long min, @QueryParam("max") Long max, @QueryParam("frequency") String frequency, @QueryParam("type") String type)
+    {
+	ReportsUtil.check(min * 1000, max * 1000);
+	return OpportunityUtil.getWonDealsByUser(ownerId, pipelineId, sourceId, min, max, frequency, type).toString();
     }
 
     /**

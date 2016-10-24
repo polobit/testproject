@@ -25,6 +25,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
@@ -814,6 +815,29 @@ public class ActivityUtil
 				mapvalue[2] = "expected_value";
 				dealmap.put("expected_value", mapvalue);
 			}
+			
+			Long oldID = oldobj.getPipeline_id();
+    		Long newID = obj.pipeline_id;
+    		
+    		if(!oldID.equals(newID)){
+    			Object[] mapvalue = new Object[3];
+    			String oldTrackName = MilestoneUtil.getMilestone(oldID).name;
+	    		String newTrackName = MilestoneUtil.getMilestone(newID).name;
+	    		if(!oldTrackName.equals(newTrackName)){
+					mapvalue[0] = newTrackName;
+					mapvalue[1] = oldTrackName;
+					mapvalue[2] = "track_names";
+					dealmap.put("track_names", mapvalue);
+					
+					if(oldobj.milestone.equalsIgnoreCase(obj.milestone)){
+						Object[] mileStoneMapValue = new Object[5];
+						mileStoneMapValue[0] = obj.milestone;
+						mileStoneMapValue[1] = oldobj.milestone;
+						mileStoneMapValue[2] = "milestone";
+						dealmap.put("milestone", mileStoneMapValue);
+					}
+	    		}
+    		}
 
 			if (compareDoubleValues(oldobj.probability, obj.probability) != 0)
 			{

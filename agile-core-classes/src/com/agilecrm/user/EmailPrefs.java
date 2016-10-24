@@ -109,9 +109,11 @@ public class EmailPrefs
     private List<String> imapUserNames;
     private List<String> exchangeUserNames;
     private List<String> gmailUserNames;
+    private List<String> smtpUserNames;
     private List<String> sharedImapUserNames;
     private List<String> sharedGmailUserNames;
     private List<String> sharedExchangeUserNames;
+    private List<String> sharedSMTPUserNames;
     private List<String> fetchUrls;
 
     public List<String> getFetchUrls()
@@ -159,4 +161,22 @@ public class EmailPrefs
 	this.sharedExchangeUserNames = sharedExchangeUserNames;
     }
 
+	public List<String> getSmtpUserNames() {
+		return smtpUserNames;
+	}
+
+	public void setSmtpUserNames(List<String> smtpUserNames) {
+		this.smtpUserNames = smtpUserNames;
+	}
+
+	public List<String> getSharedSMTPUserNames() {
+		return sharedSMTPUserNames;
+	}
+
+	public void setSharedSMTPUserNames(List<String> sharedSMTPUserNames) {
+		this.sharedSMTPUserNames = sharedSMTPUserNames;
+	}
+
+	
+	
 }

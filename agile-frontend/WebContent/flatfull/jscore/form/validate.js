@@ -177,6 +177,16 @@ function isValidForm(form) {
 
 	},"{{agile_lng_translate 'validation-msgs' 'value-validation'}}");
 
+	jQuery.validator.addMethod("isNotHackScript", function(value, element){
+		if(value=="")
+			return true;
+ 		
+		  if(value.indexOf("<")!=-1 || value.indexOf(">")!=-1) {
+				return false;
+		    }
+		  return true;
+	},_agile_get_translated_val("validation-msgs",'script-element-not-allowed'));
+
 
 	jQuery.validator.addMethod("multi-select", function(value, element){
 		var counter = 0;
@@ -429,6 +439,8 @@ function isAlphaNumeric(subdomain) {
   return true;
 }
 
+
+
 function isValidContactCustomField(id) {
     var name = $('#' + id).attr("name");
     if($('ul[name="'+name+'"]').find("li").length == 0) {
@@ -447,7 +459,7 @@ function localizeValidationMessages(){
 	    date: "{{agile_lng_translate 'validation-msgs' 'date'}}",
 	    dateISO: "{{agile_lng_translate 'validation-msgs' 'dateISO'}}",
 	    number: "{{agile_lng_translate 'validation-msgs' 'number'}}",
-	    digits: "{{agile_lng_translate 'validation-msgs' 'digits'}}",
+	    digits: "{{agile_lng_translate 'validation-msgs' 'number'}}",
 	    creditcard: "{{agile_lng_translate 'validation-msgs' 'creditcard'}}",
 	    equalTo: "{{agile_lng_translate 'validation-msgs' 'equalTo'}}",
 	    accept: "{{agile_lng_translate 'validation-msgs' 'accept'}}",

@@ -5,6 +5,7 @@ var existingDealDocumentsView;
 var dealTasksView;
 var dealEventsView;
 var dealDetailMode = 'timeline' ;
+var dealDocsView;
 
 var deal_details_tab = {
 		

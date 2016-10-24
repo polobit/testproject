@@ -224,7 +224,12 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			}
 		}	
 
-		
+		agile_track_form_action({
+			"id" : form_data._agile_form_id || null,
+			"name" : form_name,
+			"email" : emailVal
+		});
+
 	}, 1500);
 }
 
@@ -476,4 +481,10 @@ function createXMLHTTPObject() {
         break;
     }
     return xmlhttp;
+}
+
+function agile_find_closest_element(el, condCallback) {
+    return el && (
+        condCallback(el) ? el : agile_find_closest_element(el.parentNode, condCallback)
+    );
 }

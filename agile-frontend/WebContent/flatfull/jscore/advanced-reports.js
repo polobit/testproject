@@ -41,6 +41,15 @@ function initFunnelCharts(callback)
 
 	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'portlets' 'all-contacts'}}");
 
+    fillSelect("track", "/core/api/milestone/pipelines", undefined, function()
+		{
+			$('#track').change(function()
+			{
+				callback();
+			});
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-tracks'}}");
+
+
 	if ($('#type').length > 0)
 	{
 		// Get Frequency
@@ -59,7 +68,29 @@ function initFunnelCharts(callback)
 				});
 
 	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "{{agile_lng_translate 'report-add' 'all-owners'}}");
+    
+    var sources = new Base_Collection_View({url : '/core/api/categories?entity_type=DEAL_SOURCE', sort_collection: false});
+		sources.collection.fetch({
+			success: function(data){
+				var jsonModel = data.toJSON();
+				var html =  '<option class="default-select" value="">'+_agile_get_translated_val('report-add','all-sources')+'</option>' + 
+							'<option class="default-select" value="1">'+_agile_get_translated_val('report-add','unknown')+'</option>';
+				
+				$.each(jsonModel,function(index,dealSource){
+					html+='<option class="default-select" value="'+dealSource.id+'">'+dealSource.label+'</option>';
+				});
+				$('#source', $('#content')).html(html);
 
+				// Hide loading bar
+				hideTransitionBar();
+
+				$('#source').change(function()
+				{
+					callback();
+				});
+			}
+		});
+	
 	callback();
 }
 
@@ -254,6 +285,82 @@ function showDealsGrowthReport()
     showDealsGrowthgraph('core/api/opportunity/details/' + options, 'deals-chart', '', '',true);
 
 }
+
+function showWonDealsReport()
+{
+// Options
+    var options = "";
+
+    // Get Date Range January 22, 2015 - January 28, 2015
+    var range = $('#range').html().split("-");
+    
+    // Returns milliseconds from start date. For e.g., August 6, 2013 converts
+    // to 1375727400000
+    //var start_time = Date.parse($.trim(range[0])).valueOf();
+    //Get the GMT start time
+    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+    var d = new Date();
+    start_time=start_time+(d.getTimezoneOffset()*60*1000);
+    start_time=start_time/1000;
+    var end_value = $.trim(range[1]);
+
+    // To make end value as end time of day
+    if (end_value)
+        end_value = end_value + " 23:59:59";
+
+    // Returns milliseconds from end date.
+    //var end_time = Date.parse(end_value).valueOf();
+    //Get the GMT end time
+    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+    end_time += (((23*60*60)+(59*60)+59)*1000);
+    end_time=end_time+(d.getTimezoneOffset()*60*1000);
+    end_time=end_time/1000;
+
+    if ($('#owner').length > 0)
+	{
+    var owner_id=0;
+        if ($("#owner").val() != "" && $("#owner").val() != "All Owners")
+            owner_id=$("#owner").val();
+            options += owner_id;
+    }
+
+    if ($('#track').length > 0)
+	{
+		// Get track
+		var track = 0;
+		if($("#track").val() != "" &&  $("#track").val() != "All Tracks")
+			track=$("#track").val();
+			options +=('/'+ track);
+
+	}
+	if ($('#source').length > 0)
+	{
+		// Get source
+		var source = 0;
+		if($("#source").val() != "" &&  $("#source").val() != "All Sources")
+		source=$("#source").val();
+		options += ("/" + source);
+	}
+
+    // Adds start_time, end_time to params.
+    options += ("?min=" + start_time + "&max=" + end_time);
+        if ($('#frequency').length > 0)
+    {
+        // Get Frequency
+        var frequency = $("#frequency").val();
+        options += ("&frequency=" + frequency);
+    }
+        if ($('#type').length > 0)
+        {
+            // Get Frequency
+            var type = $("#type").val();
+            options += ("&type=" + type);
+        }
+    showDealsGrowthgraph('core/api/opportunity/won_deals/'+options, 'won-deals-chart', '', '',true);
+
+}
+
 /**
  * Highlight the default option in date picker
  */
