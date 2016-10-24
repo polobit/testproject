@@ -4128,6 +4128,7 @@ background-color : #522E2E;
     -ms-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     -o-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    top: calc(100vh - 150px);
 }
 
 #dealActions.open {

@@ -20,7 +20,11 @@ function setup_deals_in_milestones(id){
 		      scroll : false,
 		      tolerance: "intersect",
 		      start : function(event, ui) {
-		      	$("#dealActions").css("top", (($(window).height() + window.scrollY) - $("#dealActions").height() - 70) + "px");
+		      	//If browser is not chrome, set top position of delete, archive and other track icons
+		      	if(window && !window.chrome)
+		      	{
+		      		$("#dealActions").css("top", (($(window).height() + window.scrollY) - $("#dealActions").height() - 70) + "px");
+		      	}
 		      	if($("#deals-tracks").is(":visible"))
 		      	{
 		      		$(".move-deal-action").show();
