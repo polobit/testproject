@@ -94,7 +94,7 @@ $("#online-cal-listners").on("click","#edit-schedule-id", function(e){
 					$("#scheduleurl").removeAttr("href");
 					$('#scheduleurl')
 							.html(
-									url + "<input class='input-sm inline-block form-control' style='width:140px' type='text'  name='url' id='url' value='" + scheduling_id + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>{{agile_lng_translate 'modals' 'save'}}</button>");
+									url + "<input class='input-sm inline-block form-control url-textbox w-140' type='text'  name='url' id='url' value='" + scheduling_id + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>{{agile_lng_translate 'modals' 'save'}}</button>");
 
 					$("#scheduleurl").addClass("nounderline");
 					$('#scheduleModal').data('modal', null);

@@ -40,8 +40,8 @@
             dayTmpl: '<div class="dayContainer">' +
                 '<div data-original-title="" class="colorBox"><div class="weekday text-center" style="padding-top: 3px;color:#fff;"></div><input type="checkbox" class="invisible operationState"/></div>' +
                 '<div class="operationDayTimeContainer business-hours-margin">' +
-                '<div class="operationTime input-group"><span class="input-group-addon" style="padding: 6px 5px !important;"><i class="fa fa-sun-o"></i></span><input type="text" name="startTime" class="mini-time operationTimeFrom" value=""/></div>' +
-                '<div class="operationTime input-group"><span class="input-group-addon" style="padding: 6px 5px !important;"><i class="fa fa-moon-o"></i></span><input type="text" name="endTime" class="mini-time operationTimeTill" value=""/></div>' +
+                '<div class="operationTime input-group"><span class="input-group-addon icon-sun-p business-hours-padding"><i class="fa fa-sun-o"></i></span><input type="text" name="startTime" class="mini-time operationTimeFrom" value=""/></div>' +
+                '<div class="operationTime input-group"><span class="input-group-addon icon-sun-p business-hours-padding"><i class="fa fa-moon-o"></i></span><input type="text" name="endTime" class="mini-time operationTimeTill" value=""/></div>' +
                 '</div></div>'
         };
 
