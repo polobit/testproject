@@ -2203,15 +2203,17 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{/if_equals}}
 
 {{#if_equals "CONTACT_EXPORT" activity_type}}
-{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'Contacts'}} <br/>	
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span> target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+</small> 
 {{/if_equals}}
-
 {{#if_equals "COMPANY_EXPORT" activity_type}}
-{{#if_equals "1" custom1}}
-{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'Company'}} <br/>
-{{else}}
-{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'companies'}}  <br/>
-{{/if_equals}}	
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'companies'}} 
+<br/>
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+</small> 
 {{/if_equals}}
 
 {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}

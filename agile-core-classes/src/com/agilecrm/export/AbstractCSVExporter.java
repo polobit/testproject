@@ -45,9 +45,11 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	try
 	{
+		 csvWriter = new CSVWriterAgile(NamespaceManager.get() + "_" + export_type + "_" + GoogleSQL.getFutureDate()
+				 + ".csv");
 
-	    csvWriter = new CSVWriterAgile("local"+ "_" + export_type + "_" + GoogleSQL.getFutureDate()
-		    + ".csv");
+	   // csvWriter = new CSVWriterAgile("local"+ "_" + export_type + "_" + GoogleSQL.getFutureDate()
+	   //	    + ".csv");
 	}
 	catch (IOException e)
 	{
