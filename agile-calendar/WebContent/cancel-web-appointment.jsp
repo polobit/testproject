@@ -418,7 +418,7 @@ $("body").on("click","#cancel_appointment_confirmation",function(e){
 	var event_id = <%=event_id%>;
 	var cancel_reason = $("#cancel_web_appointment_reason").val();
 	
-	$(this).val('Please wait');
+	$(this).text('Please wait');
 	$('#templateContainer').find('input, textarea, button, select').attr('disabled','disabled');
 
 	$.ajax({ 
@@ -434,7 +434,7 @@ $("body").on("click","#cancel_appointment_confirmation",function(e){
 			         +'<a  class="button" href="<%=calendar_url %>"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "schedule-new")%></a></div></div><br />';
 			 $("#templateContainer").html(ser);	
 		}, error : function(response){
-			$(this).val('Cancel Appointment');
+			$(this).text('Cancel Appointment');
 			$('#templateContainer').find('input, textarea, button, select').removeAttr('disabled');
 			alert('<%=LanguageUtil.getLocaleJSONValue(localeJSON, "something-wrong")%>');
 		} 
