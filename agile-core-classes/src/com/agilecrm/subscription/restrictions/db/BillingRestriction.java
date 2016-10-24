@@ -323,12 +323,9 @@ public class BillingRestriction
 		limits.put("count", usersCount);
 		resrtictions.put("users", limits);
 	}
-	int widgetsLimit = planDetails.getWebRuleLimit();
-	int widgetsCount = WidgetUtil.getTotalWidgetsCount();
-	if(widgetsLimit < widgetsCount){
+	if(!WidgetUtil.isAllowedForDowngrade(planDetails.getWidgetsLimit())){
 		limits = new HashMap<String, Object>();
-		limits.put("limit", widgetsLimit);
-		limits.put("count", widgetsCount);
+		limits.put("isAllowed", false);
 		resrtictions.put("widgets", limits);
 	}
 	int nodesLimit = planDetails.getCampaignNodesLimit();
@@ -339,12 +336,9 @@ public class BillingRestriction
 		limits.put("count", maxNodesCount);
 		resrtictions.put("nodes", limits);
 	}
-	int emailAccountsLimit = planDetails.getEmailAccountLimit();
-	int emailAccountsCount = ContactEmailUtil.getEmailPrefs().getEmailAccountsCount();
-	if(emailAccountsLimit < emailAccountsCount){
+	if(ContactEmailUtil.isEmailAccountsLimitReachedForDowngrade(planDetails.getEmailAccountLimit())){
 		limits = new HashMap<String, Object>();
-		limits.put("limit", emailAccountsLimit);
-		limits.put("count", emailAccountsCount);
+		limits.put("isAllowed", false);
 		resrtictions.put("emailAccounts", limits);
 	}
 	int reportsLimit = planDetails.getReportsLimit();
@@ -361,13 +355,13 @@ public class BillingRestriction
 		limits.put("isAllowed", planDetails.getSMSGateway());
 		resrtictions.put("smsGateway", limits);
 	}
-	boolean ecommerceSyncEnabled = ContactPrefsUtil.findPrefsByType(Type.SHOPIFY);
+	boolean ecommerceSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.SHOPIFY);
 	if(!planDetails.getEcommerceSync() && ecommerceSyncEnabled){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", planDetails.getEcommerceSync());
 		resrtictions.put("ecommerceSync", limits);
 	}
-	boolean accountingSyncEnabled = ContactPrefsUtil.findPrefsByType(Type.FRESHBOOKS) || ContactPrefsUtil.findPrefsByType(Type.QUICKBOOK);
+	boolean accountingSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.FRESHBOOKS) || ContactPrefsUtil.checkWidgetExists(Type.QUICKBOOK);
 	if(!planDetails.getAccountingSync() && accountingSyncEnabled){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", planDetails.getAccountingSync());

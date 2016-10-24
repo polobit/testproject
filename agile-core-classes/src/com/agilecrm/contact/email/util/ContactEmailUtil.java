@@ -36,6 +36,7 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
+import com.agilecrm.user.service.impl.AgileUserServiceImpl;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
@@ -45,6 +46,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.repackaged.com.google.common.base.CharMatcher;
 import com.google.appengine.repackaged.com.google.common.base.Splitter;
+import com.google.apphosting.client.serviceapp.ServiceRegistry;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -650,15 +652,39 @@ public class ContactEmailUtil
 	}
 
 	/**
-	     * Gets the list of synced email account names of this Agile user
-	     * 
-	     * @return
-	     */
-	    public static EmailPrefs getEmailPrefs()
-	    {
-		EmailPrefs emailPrefs = new EmailPrefs();
-		AgileUser agileUser = AgileUser.getCurrentAgileUser();
-		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	 * Gets the list of synced email account names of this Agile user
+	 * 
+	 * @return
+	 */
+    public static EmailPrefs getEmailPrefs(){
+    	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+    	EmailPrefs emaillPrefs = getEmailPrefsByAgileUser(agileUser);
+    	return emaillPrefs;
+	}
+    
+    /**
+	 * Gets the list of synced email account names of this Agile user
+	 * and if limit of any user reached then return true;
+	 * 
+	 * @return
+	 */
+    public static boolean isEmailAccountsLimitReachedForDowngrade(int limit){
+    	for(AgileUser agileUser : AgileUser.getUsers()){
+    		int count = getEmailPrefsByAgileUser(agileUser).getEmailAccountsCount();
+    		if(count > limit)
+    			return true;
+    	}
+    	return false;
+	}
+	
+	/**
+	 * Gets the list of synced email account names of provided Agile user
+	 * @param agileUser
+	 * @return
+	 */
+    public static EmailPrefs getEmailPrefsByAgileUser(AgileUser agileUser){
+    	EmailPrefs emailPrefs = new EmailPrefs();
+    	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		boolean hasEmailAccountsConfigured = false;
 		boolean hasSharedEmailAccounts = false;
 		int emailAccountsCount = 0;
@@ -743,7 +769,7 @@ public class ContactEmailUtil
 		    System.out.println(e.getMessage());
 		}
 		return emailPrefs;
-	 }
+    }
 
 	/**
 	 * Returns the total count of email prefs of the current user

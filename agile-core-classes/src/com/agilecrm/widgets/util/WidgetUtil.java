@@ -616,12 +616,18 @@ public class WidgetUtil {
 	/**
 	 * get the total widgets count
 	 * exclude INTEGRATION and CUSTOM widget_type
+	 * and check limits
 	 * @return
 	 */
-	public static int getTotalWidgetsCount(){
+	public static boolean isAllowedForDowngrade(int limit){
+		int widgetCount = 0;
 		ObjectifyGenericDao<Widget> widgetDao = new ObjectifyGenericDao<Widget>(Widget.class);
-		int count = widgetDao.ofy().query(Widget.class).filter("widget_type !=", WidgetType.INTEGRATIONS).filter("widget_type !=", WidgetType.CUSTOM).count();
-		return count;
+		for(AgileUser agileUser : AgileUser.getUsers()){
+			widgetCount = widgetDao.ofy().query(Widget.class).ancestor(new Key<AgileUser>(AgileUser.class, agileUser.id)).filter("widget_type !=", WidgetType.INTEGRATIONS).filter("widget_type !=", WidgetType.CUSTOM).count();
+			if(widgetCount > limit)
+				return false;
+		}
+		return true;
 	}
 	
 }
