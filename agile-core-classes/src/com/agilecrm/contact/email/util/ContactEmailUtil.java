@@ -668,13 +668,14 @@ public class ContactEmailUtil
 	 * 
 	 * @return
 	 */
-    public static boolean isEmailAccountsLimitReachedForDowngrade(int limit, List<AgileUser> users){
+    public static boolean canDowngrade(int limit, List<AgileUser> users){
     	for(AgileUser agileUser : users){
-    		int count = getEmailPrefsByAgileUser(agileUser).getEmailAccountsCount();
+    		EmailPrefs emailPrefs = getEmailPrefsByAgileUser(agileUser);
+    		int count = emailPrefs.getEmailAccountsCount();
     		if(count > limit)
-    			return true;
+    			return false;
     	}
-    	return false;
+    	return true;
 	}
 	
 	/**
@@ -759,6 +760,7 @@ public class ContactEmailUtil
 			emailPrefs.setEmailAccountsLimitReached(true);
 		    else
 			emailPrefs.setEmailAccountsLimitReached(false);
+		    emailPrefs.setEmailAccountsCount(emailAccountsCount);
 		    emailPrefs.setEmailAccountsLimit(emailAccountLimitCount);
 		    emailPrefs.setHasEmailAccountsConfigured(hasEmailAccountsConfigured);
 		    emailPrefs.setHasSharedEmailAccounts(hasSharedEmailAccounts);
