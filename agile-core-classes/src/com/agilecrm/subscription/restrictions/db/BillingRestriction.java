@@ -339,7 +339,7 @@ public class BillingRestriction
 		limits.put("count", maxNodesCount);
 		resrtictions.put("nodes", limits);
 	}
-	if(ContactEmailUtil.isEmailAccountsLimitReachedForDowngrade(planDetails.getEmailAccountLimit(), usersLimit)){
+	if(ContactEmailUtil.isEmailAccountsLimitReachedForDowngrade(planDetails.getEmailAccountLimit(), agileUsers)){
 		limits = new HashMap<String, Object>();
 		limits.put("isAllowed", false);
 		resrtictions.put("emailAccounts", limits);
