@@ -640,7 +640,7 @@ var WorkflowsRouter = Backbone.Router
 									RHS = $("#RHS", el);
 
 									CALL = $('#CALL', el);
-
+									SMS= $('#SMS', el);
 									// Chaining dependencies of input
 									// fields
 									// with jquery.chained.js
@@ -648,6 +648,7 @@ var WorkflowsRouter = Backbone.Router
 
 									// Chain Call trigger options
 									CALL.chained(LHS);
+									SMS.chained(LHS);
 
 								});
 
@@ -738,6 +739,7 @@ var WorkflowsRouter = Backbone.Router
 							RHS = $("#RHS", el);
 
 							CALL = $('#CALL', el);
+							SMS=$('#SMS', el);
 
 							// Chaining dependencies of input
 							// fields
@@ -746,6 +748,7 @@ var WorkflowsRouter = Backbone.Router
 
 							// Chain Call Trigger options
 							CALL.chained(LHS);
+							SMS.chained(LHS);
 
 						});
 
@@ -902,7 +905,14 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
+						if (type == 'REPLY_SMS' )
+						{
+							populate_sms_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
+							$('#trigger-custom-keyword', el).closest('div.control-group').css('display', '');
+							$('#keyword-tooltip', el).css('display', '');
+						}
+
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing

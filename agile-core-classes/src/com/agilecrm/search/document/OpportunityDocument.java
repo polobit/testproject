@@ -52,7 +52,9 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
     public Builder buildOpportunityDoc(Opportunity opportunity)
     {
-    	Document.Builder doc = Document.newBuilder();    	
+    	
+    	Document.Builder doc = Document.newBuilder();  
+    	try{
 		Set<String> fields = new HashSet<String>();
 
 		fields.add(opportunity.name);
@@ -290,7 +292,12 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		
 		doc.setId(opportunity.id.toString()).build();
 		
-		return doc;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("Text search failed:"+e.getMessage());
+    	}
+    	return doc;
     }
 
     @Override

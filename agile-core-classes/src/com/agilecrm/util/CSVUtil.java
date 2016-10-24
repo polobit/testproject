@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -123,7 +124,6 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-
 	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
 
 	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
@@ -777,7 +777,7 @@ public class CSVUtil
 
 	    tempContact.properties = new ArrayList<ContactField>();
 	    String companyName = null;
-	    boolean canSave = true;
+	    boolean canSave = true;/*boolean invalidName = true;*/
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
 
@@ -924,6 +924,10 @@ public class CSVUtil
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
+		/*else if (!ContactUtil.isValidName(companyName)){
+			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
+			invalidName = false;
+		}*/
 	    }
 	    else
 	    {
@@ -931,7 +935,11 @@ public class CSVUtil
 		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Company name is missing"));
 		continue;
 	    }
-
+	   /* if (!invalidName)
+	    {
+	    	failedCompany++;
+	    	continue;
+	    }*/
 	    if (!canSave)
 	    {
 		continue;
@@ -970,7 +978,7 @@ public class CSVUtil
 			    "Error! Exception raise while saving company"));
 		}
 		failedCompany++;
-
+		continue;
 	    }
 
 	    if (isMerged)
@@ -1265,6 +1273,31 @@ public class CSVUtil
 
 			    mileStoneValue = dealPropValues[i];
 			    milestoneFound = true;
+			    if(!trackFound){
+			    	try {
+						String trkName = null ;
+						innerForloop :
+						for(int m = i+1;m < dealPropValues.length ;m++)
+						{
+							LinkedHashMap<String, String> pr = (LinkedHashMap<String, String>) schema.get(m);
+							if(!pr.equals(null) && pr.size() > 0)
+							{
+								String tName = pr.get("value"); String tType = pr.get("type");
+								if(tType != null && tName != null && tType.equals("SYSTEM") && tName.equalsIgnoreCase("track"))
+								{
+									trkName = dealPropValues[m];
+								    trackFound = true;
+								    list = MilestoneUtil.getMilestonesList(trkName);
+								    opportunity.track = trkName;
+								    break innerForloop;
+								}
+							}
+						}
+					} catch (Exception e) {
+						System.out.println("track missinc catch");
+						e.printStackTrace();
+					}			    	
+			    }
 			    if (trackFound)
 			    {
 				// check list of milestone if track is correct
@@ -1616,6 +1649,7 @@ public class CSVUtil
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
+		System.out.println("StackTrace_of_deal_import"+ExceptionUtils.getFullStackTrace(e));
 		failedDeals++;
 	    }
 	}

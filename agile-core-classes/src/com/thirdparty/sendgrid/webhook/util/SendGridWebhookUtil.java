@@ -47,8 +47,8 @@ public class SendGridWebhookUtil
 			String webhookURL = "https://agile-crm-cloud.appspot.com/backend/sendgridwebhook";
 
 			// If Application is beta, add beta url
-			if (StringUtils.equals(SystemProperty.applicationId.get(), "agilecrmbeta"))
-				webhookURL = "https://agilecrmbeta.appspot.com/backend/sendgridwebhook";
+			/*if (StringUtils.equals(SystemProperty.applicationId.get(), "agilecrmbeta"))
+				webhookURL = "https://agilecrmbeta.appspot.com/backend/sendgridwebhook";*/
 
 			String queryString = "";
 			try

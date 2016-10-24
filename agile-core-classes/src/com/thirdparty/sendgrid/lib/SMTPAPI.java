@@ -231,6 +231,8 @@ public class SMTPAPI {
         sb.append(String.format("%c", codePointArray[i]));
       }
     }
+    System.out.println("Converting special symbol into unicode character");
+    
     return sb.toString();
   }
 

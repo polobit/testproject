@@ -252,7 +252,44 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   margin: 0px auto;
   width: 280px;
 }
+.menuHelpPopover
+{
+    position: absolute;
+    top: 0;
+    left: -15px;
+    z-index: 1060;
+    /* display: none; */
+    max-width: 276px;
+    text-align: left;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: normal;
+    background-color: #fff;
+    border: 1px solid #c7d3d6;
+    border-radius: 6px;
+  }
 
+.helpmenupopup:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 16px;
+    /* right: -9px; */
+    left: -8px;
+    width: 15px;
+    height: 15px;
+    background: #FFFFFF;
+    border-left: 1px solid #c7d3d6;
+    border-top: 1px solid #c7d3d6;
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -288,7 +325,6 @@ function isIE() {
   <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
-
 <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
             case 1:  out.print("bg-white-only ");
@@ -337,9 +373,28 @@ function isIE() {
                 </div>
                 
                   </div>">
-                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>    
-               </div>
-
+                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                             </div>
+        <%
+          if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+       %>
+         <%
+              }else {
+           %>     <div style="position: fixed;left: 52%;z-index: 1029;-webkit-transform: translateX(-50%);transform: translateX(-50%);margin-left: 8px;" id="helpcontent_popover" class="hide need_help agile-feature-item-blink-new">
+                <div class="block menuHelpPopover" >
+                  <div class="helpmenupopup">
+                  </div>
+                  <div class="content p-sm">
+                    <p style="width : 200px;margin-bottom:0px;" class="menu_help_content"> Check our other feature sets by clicking this icon.
+                    </p>
+                    <a href="#" class="menugridhelpclose" data-dismiss="alert" aria-label="close"  style="position: absolute;top:5px;color:#6b6b6b !important;right:5px;font-size:20px;margin-right:5px;">×
+                    </a>
+                  </div>
+                </div>
+              </div> 
+          
+          <% } %>
+       
 <div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
@@ -770,7 +825,20 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
    <%
       }
-  %> 
+  %>
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+    %>
+    <li id="feedbackactivitiesmenu">
+    <a  href="#ticket-feedback">
+      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <span>Feedback</span>
+    </a>
+  </li>
+    <%
+          }
+    %>  
 
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
@@ -795,7 +863,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li> 
     <%
           }
-    %> 
+    %>
+
+
  
   <!-- End of Service menu -->
   <%} %>
@@ -1099,6 +1169,7 @@ head.load(	"https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
 			LIB_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _agile_get_file_hash('lib-all-new-2.js'),  
 			function(){
         showVideoForRegisteredUser();
+        
 		});
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
@@ -1203,12 +1274,14 @@ function showVideoForRegisteredUser(){
     localStorage.setItem(domainuser_video_cookie,true);
     
 }
+
 function closeVideo(){
    $('#dashboard_video').on("click", ".close", function () {
        $('#dashboard_video').modal("hide");
         $('#dashboard_video iframe').removeAttr("src");
     });
 }
+
 </script>
 
 

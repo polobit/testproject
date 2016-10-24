@@ -6,6 +6,7 @@ package com.agilecrm.affiliate;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.cursor.Cursor;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -17,7 +18,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class AffiliateDeal {
+public class AffiliateDeal extends Cursor {
 
 	/**
 	 * Id

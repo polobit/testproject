@@ -269,4 +269,8 @@ var MODAL_MESSAGES = {
 		"title": "{{agile_lng_translate 'tasks' 'completed'}}",
 		"message" : "{{agile_lng_translate 'tasks' 'confirm-delete'}}"
 	},
+	"sync_contacts" : {
+		"title": "{{agile_lng_translate 'sync' 'all-contacts'}}",
+		"message" : "{{agile_lng_translate 'sync' 'sync-all-continue'}}"
+	},
 };

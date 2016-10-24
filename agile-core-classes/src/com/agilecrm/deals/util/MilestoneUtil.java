@@ -126,9 +126,11 @@ public class MilestoneUtil
     {
 	try
 	{
-	    if (id == 0L)
-		return getMilestones();
-	    return dao.get(id);
+	    if (id.equals(0L)){
+	    	return getMilestones();
+	    }else{
+	    	return dao.get(id);
+	    }
 	}
 	catch (EntityNotFoundException e)
 	{

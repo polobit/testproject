@@ -330,36 +330,35 @@ function enableWidgetSoring(el)
 		 * widgets
 		 */
         $('.widget-sortable', el).off("sortstop");
-		$('.widget-sortable', el).on(
-				"sortstop",
-				function(event, ui)
-				{
-					var models = [];
+		$('.widget-sortable', el).on("sortstop", function(event, ui){
+			var models = [];
 
-					/*
-					 * Iterate through each all the widgets and set each widget
-					 * position and store it in array
-					 */
-					$('.widget-sortable > li', el).each(function(index, element)
-					{
-						var model_name = $(element).find('.collapse').attr('id');
+			/*
+			 * Iterate through each all the widgets and set each widget
+			 * position and store it in array
+			 */
+			$('.widget-sortable > li', el).each(function(index, element){
+				var model_name = $(element).find('.collapse').attr('id');
 
-						if(!model_name)
-						model_name = $(element).find('.widgets').attr('id');
-						
-						
-						// Get Model, model is set as data to widget element
-						var model = $('#' + model_name).data('model');
+				if(!model_name)
+				model_name = $(element).find('.widgets').attr('id');			
+				
+				// Get Model, model is set as data to widget element
+				var model = $('#' + model_name).data('model');
 
-						model.set({ 'position' : index }, { silent : true });
+				model.set({ 'position' : index }, { silent : true });
 
-						models.push({ id : model.get("id"), position : index });
-					});
+				models.push({ id : model.get("id"), position : index });
+			});
 
-					// Saves new positions in server
-					$.ajax({ type : 'POST', url : '/core/api/widgets/positions', data : JSON.stringify(models),
-						contentType : "application/json; charset=utf-8", dataType : 'json' });
-				});
+			// Saves new positions in server
+			$.ajax({ 
+				type : 'POST', 
+				url : '/core/api/widgets/positions', 
+				data : JSON.stringify(models),
+				contentType : "application/json; charset=utf-8"				
+			});
+		});
 	});
 }
 

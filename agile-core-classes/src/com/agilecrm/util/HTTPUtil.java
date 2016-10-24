@@ -191,7 +191,7 @@ public class HTTPUtil
 	HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	conn.setDoOutput(true);
 
-	// Set Connection Timeout as Google AppEngine has 5 secs timeout
+	// Set Connection Timeout to 10 mins, because, by default Google AppEngine has 5 secs timeout
 	conn.setConnectTimeout(600000);
 	conn.setReadTimeout(600000);
 	
@@ -211,6 +211,7 @@ public class HTTPUtil
     catch(IOException ie)
     {
     	System.err.println("IOException occured, getting error stream.");
+    	ie.printStackTrace();
     	is = conn.getErrorStream();
     }
 	

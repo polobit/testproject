@@ -264,6 +264,444 @@
     </div>
   </div>
 {{/if_equals}}
+
+{{#if_equals "TASK_ADD" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'report-view' 'created-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}}
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div> 
+    <div class="activities_second_line m-t-none">
+        <small>
+            {{#if custom2}}
+                <i class="icon-tasks"></i>  {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{/unless}}{{agile_lng_translate 'campaigns' 'task-assigned-to'}} {{custom1}} due <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" custom2}}</span>. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'task-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+            {{else}}
+                <i class="icon-tasks"></i> {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{/unless}}{{agile_lng_translate 'campaigns' 'task-assigned-to'}} {{entityObject.taskOwner.name}} {{agile_lng_translate 'contacts-view' 'due'}} <span class="time-ago" datetime="{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}">{{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}}</span>. {{#if related_contact_ids}}Task related to {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+            {{/if}}
+        </small>
+    </div>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "TASK_COMPLETED" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'contacts-view' 'completed-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}} '{{safe_string label}}'{{/if}}
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div> 
+    <div class="activities_second_line m-t-none">
+        <small>
+            <i class="icon-tasks"></i>{{#if this.entityObject}} {{agile_lng_translate 'contacts-view' 'task-due'}} {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" entityObject.due}} {{agile_lng_translate 'contacts-view' 'was-completed'}}{{else}} {{agile_lng_translate 'campaigns' 'task-deleted-later'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'task-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+        </small>
+    </div>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "TASK_DELETE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'contacts-view' 'deleted-task'}} '{{safe_string label}}'
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div> 
+    <div class="activities_second_line m-t-none">
+        <small>
+            {{#if related_contact_ids}}<i class="icon-tasks"></i> {{agile_lng_translate 'contacts-view' 'task-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}. {{/if}} 
+        </small>
+    </div>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "TASK_EDIT" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{#if this.entityObject}}   
+        {{#get_event_rescheduled custom3}} 
+            {{agile_lng_translate 'contacts-view' 'changed-due-date-of-task'}} <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <span class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks icon-white"></i> {{agile_lng_translate 'contacts-view' 'task-due-time-changed-to'}} {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.due}}.
+                </small>
+            </span> 
+        {{else}}
+            {{agile_lng_translate 'contacts-view' 'modified-task'}} <a href="#task/{{../entity_id}}" >{{safe_string ../label}}</a>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <span class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks icon-white"></i> {{agile_lng_translate 'menu' 'task'}} {{displayActivityFieldText ../custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}
+                </small>
+            </span>
+        {{/get_event_rescheduled}}
+    {{else}}
+        {{#get_event_rescheduled custom3}} 
+            {{agile_lng_translate 'contacts-view' 'changed-due-date-of-task'}} '{{safe_string ../label}}'
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <span class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks icon-white"></i> {{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{agile_lng_translate 'contacts-view' 'task-due-time-changed-to'}} {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.
+                </small>
+            </span> 
+        {{else}}
+            {{agile_lng_translate 'contacts-view' 'modified-task'}} '{{safe_string ../label}}'
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <span class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks icon-white"></i> {{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{agile_lng_translate 'menu' 'task'}} {{displayActivityFieldText ../custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}
+                </small>
+            </span>
+        {{/get_event_rescheduled}}
+    {{/if}}
+    <span class="activities_second_line m-t-none">
+        <small>
+            {{#if related_contact_ids}}
+                {{agile_lng_translate 'contacts-view' 'task-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.
+            {{/if}}  
+        </small>
+    </span>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "TASK_OWNER_CHANGE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'contacts-view' 'reassigned-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <div class="activities_second_line m-t-none">
+        <small>
+            <i class="icon-tasks"></i> {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}}{{/unless}} {{agile_lng_translate 'contacts-view' 'task-owner-changed-to'}} {{custom1}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'task-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+        </small>
+    </div>
+  </div>  
+{{/if_equals}}
+
+{{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{#if related_contact_ids}}
+        {{#if_equals "removed_all_relatedcontacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'removed-contacts-from-task'}}{{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <div class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks"></i> {{#unless this.entityObject}}Task deleted later. {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-task'}}
+                </small>
+            </div>
+        {{/if_equals}} 
+        {{#if_equals "removed_relatedcontacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'removed-contacts-from-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <div class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks"></i> {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-task'}}
+                </small>
+            </div>
+        {{/if_equals}} 
+        {{#if_equals "added_relatedcontacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'added-contacts-to-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <div class="activities_second_line m-t-none">
+                <small>
+                    <i class="icon-tasks"></i> {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'added-to-task'}}
+                </small>
+        {{/if_equals}}
+    {{else}}
+        {{agile_lng_translate 'contacts-view' 'modified-task'}}
+        <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+          {{epochToHumanDate "hh:MM tt" time}}
+        </div>
+        <div class="clearfix"></div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+        <div class="activities_second_line m-t-none">
+            <small>
+                <i class="icon-tasks"></i> <a href="" data="{{entity_id}}" class="activity-task-edit">{{label}}</a> {{agile_lng_translate 'contacts-view' 'modified'}}  
+            </small>
+        </div>
+    {{/if}}
+  </div>
+{{/if_equals}}
+
+
+{{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'contacts-view' 'changed-progress-of-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>    
+    <div class="activities_second_line m-t-none">
+        <small>
+            <i class="icon-tasks"></i> {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{/unless}}{{agile_lng_translate 'contacts-view' 'task-progress-changed-from'}} {{custom2}}% to {{custom1}}%. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'task-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}     
+        </small>
+    </div>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "TASK_STATUS_CHANGE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'contacts-view' 'changed-status-of-task'}} {{#if this.entityObject}}<a href="#task/{{entity_id}}">{{safe_string label}}</a>{{else}}'{{safe_string label}}'{{/if}}
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>   
+    <div class="activities_second_line m-t-none">
+        <small> 
+            <i class="icon-tasks"></i> {{#unless this.entityObject}}{{agile_lng_translate 'campaigns' 'task-deleted-later'}} {{/unless}}{{agile_lng_translate 'contacts-view' 'task-status-changed-from'}}  {{get_normal_name custom2}} {{agile_lng_translate 'contacts-view' 'to'}} {{get_normal_name custom1}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'task-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}  
+        </small>
+    </div>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "EVENT_ADD" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'report-view' 'created-event'}} {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <small class="activities_second_line m-t-none text-sm">
+        {{#if custom2}}
+            <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'event-deleted-later'}} {{/unless}}{{agile_lng_translate 'contacts-view' 'event-starts-at'}} {{epochToHumanDate "h:MM TT" custom2}} {{agile_lng_translate 'contact-details' 'on'}} {{epochToHumanDate "ddd mmm dd yyyy" custom2}}.{{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'event-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+        {{else}}
+            <i class="icon-calendar icon-white"></i> {{#if this.entityObject}} {{agile_lng_translate 'contacts-view' 'event-starts-at'}} {{epochToHumanDate "h:MM TT" entityObject.start}} {{agile_lng_translate 'contact-details' 'on'}} {{epochToHumanDate "ddd mmm dd yyyy" entityObject.start}}.{{else}} {{agile_lng_translate 'contacts-view' 'event-deleted-later'}}{{/if}}{{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'event-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}   
+        {{/if}}
+    </small>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "EVENT_EDIT" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{#if this.entityObject}}   
+        {{#get_event_rescheduled custom3}} 
+            {{agile_lng_translate 'contacts-view' 'rescheduled-event'}} <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{agile_lng_translate 'contacts-view' 'event-start-time-changed-to'}} {{epochToHumanDate "ddd mmm dd yyyy h:MM TT" ../entityObject.start}}.
+            </small> 
+        {{else}}
+            {{agile_lng_translate 'contacts-view' 'modified-event'}} <a href="" data={{../entity_id}} class='activity-event-edit'">{{../label}}</a>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{agile_lng_translate 'menu' 'event'}} {{displayActivityFieldText ../custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}
+        {{/get_event_rescheduled}}
+    {{else}}
+        {{#get_event_rescheduled custom3}} 
+            {{agile_lng_translate 'contacts-view' 'rescheduled-event'}} '{{../label}}'
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{agile_lng_translate 'contacts-view' 'event-deleted-later-desc'}} {{#getDueDateOfTask ../custom3  ../custom1}}{{/getDueDateOfTask}}.
+            </small> 
+        {{else}}
+            {{agile_lng_translate 'contacts-view' 'modified-event'}} '{{../label}}'
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" ../time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate ../time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{agile_lng_translate 'contacts-view' 'event-deleted-later-desc-1'}} {{displayActivityFieldText ../custom3}} {{agile_lng_translate 'contacts-view' 'modified'}}
+            </small>
+        {{/get_event_rescheduled}}
+    {{/if}}
+    <small class="activities_second_line m-t-none text-sm">
+        {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'event-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}  
+    </small>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "EVENT_DELETE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{agile_lng_translate 'contacts-view' 'deleted-event'}} '{{label}}'
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <small class="activities_second_line m-t-none text-sm">
+        {{#if related_contact_ids}} <i class="icon-calendar icon-white"></i> {{agile_lng_translate 'contacts-view' 'event-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+    </small>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "EVENT_RELATED_CONTACTS" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{#if related_contact_ids}}
+        {{#if_equals "removed_all_relatedcontacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'removed-contacts-from-event'}} {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'event-deleted-later'}} {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-event'}} 
+            </small>
+        {{/if_equals}} 
+        {{#if_equals "removed_relatedcontacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'removed-contacts-from-event'}} {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div> 
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'event-deleted-later'}} {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-event'}}
+            </small>
+        {{/if_equals}} 
+        {{#if_equals "added_relatedcontacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'added-contacts-to-event'}} {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-calendar icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'event-deleted-later'}} {{/unless}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'added-to-event.'}}
+            </small>
+        {{/if_equals}}
+    {{else}}
+        {{agile_lng_translate 'contacts-view' 'modified-event'}} {{#if entityObject}}<a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>{{else}}'{{label}}'{{/if}}
+        <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+          {{epochToHumanDate "hh:MM tt" time}}
+        </div>
+        <div class="clearfix"></div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+        <small class="activities_second_line m-t-none text-sm">
+            {{#if related_contact_ids}}
+                <i class="icon-calendar icon-white"></i>{{agile_lng_translate 'contacts-view' 'event-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}}<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+            {{/if}} 
+        </small>
+  </div>
+{{/if_equals}}
+
+{{#if_equals "DOCUMENT_ADD" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{#if_equals "1" custom2}}
+        {{agile_lng_translate 'contacts-view' 'added-contact-to-document'}} {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}
+        <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+          {{epochToHumanDate "hh:MM tt" time}}
+        </div>
+        <div class="clearfix"></div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+        <small class="activities_second_line m-t-none text-sm">   
+            <i class="icon-file icon-white"></i> {{#unless entityObject}}{{agile_lng_translate 'contacts-view' 'document-deleted-later'}} {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'added-to-document'}}{{/if}}
+        </small>
+    {{else}} 
+        {{#if_equals "no related contacts" custom3}}
+            {{agile_lng_translate 'contacts-view' 'added-document'}} {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <small class="activities_second_line m-t-none text-sm">   
+                <i class="icon-file icon-white"></i> {{#unless entityObject}}{{agile_lng_translate 'contacts-view' 'document-deleted-later'}} {{/unless}}{{#if entityObject}}{{agile_lng_translate 'contacts-view' 'document-type'}} - {{network entityObject.network_type}}{{/if}}
+            </small>
+        {{else}}
+            {{agile_lng_translate 'contacts-view' 'added-contacts-to-document'}} {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+              {{epochToHumanDate "hh:MM tt" time}}
+            </div>
+            <div class="clearfix"></div>
+            <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+            <small class="activities_second_line m-t-none text-sm">
+                <i class="icon-file icon-white"></i> {{#unless entityObject}}{{agile_lng_translate 'contacts-view' 'document-deleted-later'}} {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'added-to-document'}}{{/if}}
+            </small>
+        {{/if_equals}}
+    {{/if_equals}}
+  </div> 
+{{/if_equals}}
+
+{{#if_equals "DOCUMENT_REMOVE" activity_type}}
+  <div class="inner">
+    <div class="timestamp">{{time}}</div>
+    {{#if_equals "1" custom2}}
+        {{agile_lng_translate 'contacts-view' 'removed-contact-from-document'}} {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}
+        <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+          {{epochToHumanDate "hh:MM tt" time}}
+        </div>
+        <div class="clearfix"></div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+        <small class="activities_second_line m-t-none text-sm"> 
+            <i class="icon-file"></i> {{#unless entityObject}}{{agile_lng_translate 'contacts-view' 'document-deleted-later'}}{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>
+                {{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-document'}}{{/if}} 
+        </small>
+    {{else}} 
+        {{agile_lng_translate 'contacts-view' 'removed-contacts-from-document'}} {{#if entityObject}}<a href="{{custom1}}" target="_blank">{{label}}</a>{{else}}'{{label}}'{{/if}}
+        <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+          {{epochToHumanDate "hh:MM tt" time}}
+        </div>
+        <div class="clearfix"></div>
+        <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+        <small class="activities_second_line m-t-none text-sm">
+            <i class="icon-file"></i> {{#unless entityObject}}{{agile_lng_translate 'contacts-view' 'document-deleted-later'}} {{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-document'}}{{/if}}
+        </small>
+    {{/if_equals}}
+  </div>  
+{{/if_equals}}
+
 </div>
 {{/each}}
 </script>

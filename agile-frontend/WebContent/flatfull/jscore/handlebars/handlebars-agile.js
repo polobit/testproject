@@ -247,9 +247,13 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("notification.js");
 	}
-	if (templateName.indexOf("affiliate") == 0)
+	if (templateName.indexOf("affiliate") != -1)
 	{
 		template_relative_urls.push("affiliate.js");
+	}
+	if (templateName.indexOf("video-record") == 0)
+	{
+		template_relative_urls.push("video-record.js");
 	}
 	
 	return template_relative_urls;
@@ -647,7 +651,9 @@ function getContactCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
-
+	if(!Current_Route)
+		Current_Route = window.location.hash.split("#")[1]
+	
 	var curr_route = Current_Route;
 	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
 		curr_route = "CONTACT";
@@ -659,6 +665,22 @@ function getContactCustomProperties(items)
 
 	var position_arr = {};
 	var position_max = 0;
+	
+	/*if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
+		position_max = App_Contacts.customFieldsList.collection.models.length+1;
+		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Contacts.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				temp_position = App_Contacts.customFieldsList.collection.models[i].get("position");
+				if(!(temp_position==undefined || temp_position==0 || temp_position=="")){
+					if(temp_position>=position_max){
+						position_max = temp_position+1;
+					}
+				}
+			}
+		}
+	}*/
+
 	if(App_Contacts.customFieldsList!=undefined && App_Contacts.customFieldsList!=null){
 		position_max = App_Contacts.customFieldsList.collection.models.length+1;
 		for(var i=0;i<App_Contacts.customFieldsList.collection.models.length;i++){
@@ -681,15 +703,21 @@ function getContactCustomProperties(items)
 		{
 			if(fieldName=='')
 				fieldName=items[i].name;
-			fields.push(items[i]);
+			//fields.push(items[i]);
 			//temp_fields[position_arr[items[i].name]] = items[i];
+			if(position_arr[items[i].name]!=undefined && position_arr[items[i].name]!=""){
+				temp_fields[position_arr[items[i].name]] = items[i];
+			}else{
+				temp_fields[position_max] = items[i];
+				position_max++;
+			}
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
 	
 	for (var i = 0; i < temp_fields.length; i++){
 		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
-			//fields.push(temp_fields[i]);
+			fields.push(temp_fields[i]);
 		}
 	}
 
@@ -794,7 +822,11 @@ function getContactCustomProperties(items)
 				finalFields.push(formulaFields[k]);	
 		}
 	}
-	
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
+
 	return finalFields;
 }
 
@@ -826,6 +858,22 @@ function getCompanyCustomProperties(items)
 
 	var position_arr = {};
 	var position_max = 0;
+	/*
+	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
+		position_max = App_Companies.customFieldsList.collection.models.length+1;
+		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
+			curr_scope = App_Companies.customFieldsList.collection.models[i].get("scope");
+			if(curr_route==curr_scope){
+				temp_position = App_Companies.customFieldsList.collection.models[i].get("position");
+				if(!(temp_position==undefined || temp_position==0 || temp_position=="")){
+					if(temp_position>=position_max){
+						position_max = temp_position+1;
+					}
+				}
+			}
+		}
+	}*/
+
 	if(App_Companies.customFieldsList!=undefined && App_Companies.customFieldsList!=null){
 		position_max = App_Companies.customFieldsList.collection.models.length+1;
 		for(var i=0;i<App_Companies.customFieldsList.collection.models.length;i++){
@@ -848,15 +896,21 @@ function getCompanyCustomProperties(items)
 		{
 			if(fieldName=='')
 				fieldName=items[i].name;
-			fields.push(items[i]);
+			//fields.push(items[i]);
 			//temp_fields[position_arr[items[i].name]] = items[i];
+			if(position_arr[items[i].name]!=undefined && position_arr[items[i].name]!=""){
+				temp_fields[position_arr[items[i].name]] = items[i];
+			}else{
+				temp_fields[position_max] = items[i];
+				position_max++;
+			}
 			datajson[''+items[i].name]=items[i].value;
 		}
 	}
 	
 	for (var i = 0; i < temp_fields.length; i++){
 		if(temp_fields[i]!=undefined && temp_fields[i]!=""){
-			//fields.push(temp_fields[i]);
+			fields.push(temp_fields[i]);
 		}
 	}
 
@@ -960,6 +1014,10 @@ function getCompanyCustomProperties(items)
 				finalFields.push(formulaFields[k]);	
 		}
 	}
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
 	
 	return finalFields;
 }
@@ -1213,6 +1271,10 @@ function getDealCustomProperties(items)
 			finalFields.push(formulaFields[k]);	
 		}
 	}
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
 	
 	return finalFields;
 }

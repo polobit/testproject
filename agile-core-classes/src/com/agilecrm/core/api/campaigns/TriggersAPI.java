@@ -22,6 +22,7 @@ import org.json.JSONException;
 import com.agilecrm.AllDomainStats;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 
 /**
@@ -63,6 +64,11 @@ public class TriggersAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Trigger createTrigger(Trigger trigger)
     {
+	if(trigger.type==Type.REPLY_SMS)
+	{
+	    TriggerUtil.setSmsAppSidForSmsTrigger(trigger);
+	}
+	    
 	trigger.save();
 	
 	//Increase count of Trigger for AllDomainstats report in database
@@ -84,6 +90,11 @@ public class TriggersAPI
     public Trigger updateTrigger(Trigger trigger)
     {
 	try {
+
+		if(trigger.type==Type.REPLY_SMS)
+		{
+		    TriggerUtil.setSmsAppSidForSmsTrigger(trigger);
+		}
 		trigger.save();
 		return trigger;
 	} catch (Exception e) {

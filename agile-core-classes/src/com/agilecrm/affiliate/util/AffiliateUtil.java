@@ -103,7 +103,8 @@ public class AffiliateUtil {
 				affiliate.setRelatedUserId(accPrefs.affiliatedBy);
 				affiliate.setAmount(amount);
 				affiliate.setCommission(Globals.AFFILIATE_COMMISION);
-				affiliate.save();
+				save(affiliate);
+				AffiliateDetailsUtil.setLastAffiliateAddedTime(accPrefs.affiliatedBy);
 				return affiliate;
 			}
 		}finally{
@@ -111,4 +112,14 @@ public class AffiliateUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * save affiliate
+	 * @param affiliatte
+	 */
+	public static void save(Affiliate affiliatte){
+		affiliatte.setCreatedTime(System.currentTimeMillis()/1000);
+		dao.put(affiliatte);
+	}
+	
 }

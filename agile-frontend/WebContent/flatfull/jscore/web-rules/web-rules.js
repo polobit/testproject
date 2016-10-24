@@ -29,6 +29,8 @@ function chainWebRules(el, data, isNew, actions)
 			addTagsDefaultTypeahead(self);
 		
 	});
+
+	
 	$("#campaign", el).chained($("#action", el));
 	
 	$("#possition", el).chained($("#action", el));
@@ -83,6 +85,13 @@ function chainWebRules(el, data, isNew, actions)
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
+
+$("body").on("mouseenter", "#webrule-model-list tr", function(b) {
+    $(this).find("#web_report").removeClass("hide");
+});
+$("body").on("mouseleave", "#webrule-model-list tr", function(b) {
+    $(this).find("#web_report").addClass("hide");
+});
 
 /**
 *  WebRules event view

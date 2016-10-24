@@ -80,7 +80,7 @@
 	</div>
 </td>
 <td>{{titleFromEnums log_type}}</td>
-<td class="ellipsis-multi-line" id="autoellipsis" ">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'other' 'subject'}}: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</td>
+<td class="ellipsis-multi-line" id="autoellipsis" ">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'other' 'subject'}}: {{{Subject}}} {{else}} {{{message}}} {{/if_email_sent}}</td>
 <td class="text-muted"><small class="edit-hover"> 
 		<i class="fa fa-clock-o m-r-xs"></i>
 		<time class="log-created-time b-b-dotted" datetime="{{epochToHumanDate "" time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>

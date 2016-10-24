@@ -64,6 +64,29 @@ public class TicketCannedMessagesRest
 					.build());
 		}
 	}
+	
+	@GET
+	@Path("/user")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<TicketCannedMessages> getCannedMessagesByUser()
+	{
+		try
+		{
+			List<TicketCannedMessages> list = TicketCannedMessagesUtil.getPublicCannedMessages(DomainUserUtil
+					.getCurentUserKey());
+
+			if (list == null || list.size() == 0)
+				list = TicketCannedMessagesUtil.createDefault();
+
+			return list;
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 
 	/**
 	 * 

@@ -58,3 +58,74 @@
 {{/hasMenuScope}}
 </div>
 </script>
+
+<script id="report-won-deals-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+{{#hasMenuScope 'DEALS'}}
+<div class="wrapper-md b-b lter bg-light">
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+              <div class="col-md-3 col-sm-6" style="padding-left:0px;padding-bottom:8px">
+            <h3 class="font-thin h3"> {{agile_lng_translate 'report-view' 'won-deals-user'}}</h3>
+                
+            </div>
+            <div id="plan-limit-error" class="pull-left p-t-4" style="display:none"></div> 
+             <div class="clearfix"></div>            
+             <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
+            border:1px solid #cfdadd;height:34px;padding:5px">
+            <i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+              </div>
+
+            <div class="pull-right" style="padding:0px 8px 10px">
+                <select name="frequency" id="frequency" class="required form-control" style="width:100px">
+                    <option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
+                    <option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+                    <option value="monthly">{{agile_lng_translate 'report-add' 'monthly'}}</option>
+                </select>
+            </div>
+            
+            <div class="pull-right" style="padding:0px 8px 10px">
+                <select name="owner" id="owner" class="required form-control"  style="width:140px">
+                    <option value="All Owners">{{agile_lng_translate 'report-add' 'all-owners'}}</option>
+                </select>
+            </div> 
+            <div class="pull-right" style="padding:0px 8px 10px">
+                <select name="track" id="track" class="required form-control" style="width: 120px">
+                    <option value="All Tracks">{{agile_lng_translate 'report-add' 'all-tracks'}}</option>
+                </select>
+            </div>
+            <div class="pull-right" style="padding:0px 8px 10px">
+                <select name="source" id="source" class="required form-control" style="width: 120px">
+                    <option value="All Sources">{{agile_lng_translate 'report-add' 'all-sources'}}</option>
+                </select>
+            </div>
+
+            <div class="pull-right" style="padding:0px 8px 10px">
+                <select name="type" id="type" class="required form-control">
+                    <option value="deals">{{agile_lng_translate 'report-add' 'total-deals'}}</option>
+                    <option value="Revenue">{{agile_lng_translate 'report-add' 'total-revenue'}}</option>
+                </select>
+            </div>  
+        </div>
+
+</div>
+</div>
+<div>   
+    <!-- Deal Reports -->
+    <div id="deal-graph" class="wrapper-md">    
+        <div class="row">
+            <div class="col-md-12">
+                <div id="won-deals-chart" class="panel"></div>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <!-- End of Deal Reports -->  
+   </div>
+{{else}}
+
+<h2><strong><i class="fa-exclamation-triangle icon-white"></i>&nbsp;&nbsp; {{agile_lng_translate 'report-view' 'sorry-you-do-not-have-privileges-access'}} </strong></h2>
+{{/hasMenuScope}}
+</div>
+</script>

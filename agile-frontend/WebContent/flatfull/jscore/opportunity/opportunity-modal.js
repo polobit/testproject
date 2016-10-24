@@ -513,6 +513,8 @@ function updateDeal(ele, editFromMilestoneView)
 		]);
 		// if(!value["custom_data"]) value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
+		$('.date_input',dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
 
 		$('.contact_input', dealForm).each(function(){
 			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=PERSON');
@@ -564,6 +566,8 @@ function updateDeal(ele, editFromMilestoneView)
 
 	}, "DEAL")
 
+	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
+
 	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
@@ -594,6 +598,8 @@ function show_deal()
 			"modal"
 		]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+		$('.date_input',$("#opportunityModal")).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
 
 		$('.contact_input', e).each(function(){
 			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=PERSON');
@@ -616,6 +622,8 @@ function show_deal()
 	// Contacts type-ahead
 	agile_type_ahead("relates_to", e, contacts_typeahead);
 
+	populate_deal_products(e, undefined,"#opportunityForm");
+	
 	// Fills the pipelines list in select box.
 	populateTrackMilestones(e, undefined, undefined, function(pipelinesList)
 	{
@@ -698,6 +706,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
 		return false;
 	}
+	if(!ValidateDealDiscountAmt('#' + formId))
+	{
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+		return false;
+	}	
 
 	// Shows loading symbol until model get saved
 	// $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
@@ -792,6 +805,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				&& Current_Route == "company/"
 					+ App_Companies.companyDetailView.model.get('id')){
 			company_util.updateDealsList(deal,true, isUpdate);
+			add_entity_to_timeline(data);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')

@@ -505,6 +505,19 @@ public class Contact extends Cursor
      */
     public void save(boolean... args)
     {
+    	
+    	/*if (this.type == Type.COMPANY)
+    	{
+    		if (this.properties.size() > 0)
+    		{
+    			ContactField nameField = this.getContactFieldByName(Contact.NAME);
+    			if(!ContactUtil.isValidName(nameField.value)){
+    				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+    					    .entity(nameField.value+"::Invalid Company Name, contains special characters.").build());
+    			}
+    		}
+    	}*/
+
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 
@@ -530,25 +543,30 @@ public class Contact extends Cursor
 	{
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
-
-	// Execute trigger for contacts
-	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
-
-	// Update Email Bounce status
-	EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
-
-	// Boolean value to check whether to avoid notification on each contact.
-	boolean notification_condition = true;
-
-	// Reads arguments from method. If it is not null and then reading first
-	// parameter will judge whether to send notification or not
-	if (args != null && (args.length > 0))
-	    notification_condition = args[0];
-
-	if (notification_condition)
-	    // Execute notification for contacts
-	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
-
+	if(!(("import").equals(this.source)))
+	{
+		// Execute trigger for contacts
+		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+	
+		// Update Email Bounce status
+		EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
+	
+		// Boolean value to check whether to avoid notification on each contact.
+		boolean notification_condition = true;
+	
+		// Reads arguments from method. If it is not null and then reading first
+		// parameter will judge whether to send notification or not
+		if (args != null && (args.length > 0))
+		    notification_condition = args[0];
+	
+		if (notification_condition)
+		    // Execute notification for contacts
+		    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
+		System.out.println("trigger ran for non import source" );
+	}
+	else
+		System.out.println("trigger didnot run for import" );
+	
 	System.out.println("Time taken to process post save on contact : " + this.id + " time is : "
 		+ (System.currentTimeMillis() - time));
     }
