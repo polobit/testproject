@@ -2308,11 +2308,8 @@ public class CSVUtil
 		    		else
 		    		{
 		    			is_source_mismatch = true;
-		    			sourceMismatched++;
-		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-		        				"source mismatched"));
-		    			continue;
 		    		}
+		    		continue;
 		    	}
     		    }
     		    
@@ -2340,11 +2337,8 @@ public class CSVUtil
 		    		else
 		    		{
 		    			is_status_mismatch = true;
-		    			statusMismatched++;
-		    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-		        				"status mismatched"));
-		    			continue;
 		    		}
+		    		continue;
 		    	}
     		    }
 
@@ -2462,10 +2456,29 @@ public class CSVUtil
     		}
 
     		tempContact.bulkActionTracker = bulk_action_tracker;
-    		if(is_source_mismatch || is_status_mismatch)
+    		if(is_source_mismatch && is_status_mismatch)
     		{
+    			sourceMismatched++;
+    			statusMismatched++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+        				"source and status mismatched"));
     			continue;
     		}
+    		else if(is_source_mismatch)
+    		{
+    			sourceMismatched++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+        				"source mismatched"));
+    			continue;
+    		}
+    		else if(is_status_mismatch)
+    		{
+    			statusMismatched++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+        				"status mismatched"));
+    			continue;
+    		}
+    		
     		//If no source added, set Other as source
     		if(!is_source_added)
     		{
