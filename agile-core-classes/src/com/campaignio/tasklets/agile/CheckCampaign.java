@@ -80,7 +80,7 @@ public class CheckCampaign extends TaskletAdapter
 				campaignStatusList = ContactUtil.workflowListOfAContact(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
 						null, campaignStatus);
 				// getting current Campaign object
-				CampaignStatus currentCampaignStatus = new CampaignStatus(0l, 0l, AgileTaskletUtil.getId(campaignJSON), null, AgileTaskletUtil.getId(campaignJSON) + "-"+ STATUS_ACTIVE.toString());
+				CampaignStatus currentCampaignStatus = new CampaignStatus(0l, 0l, AgileTaskletUtil.getId(campaignJSON), null, AgileTaskletUtil.getId(campaignJSON) + "-"+ STATUS_ACTIVE);
 				// delete current Campaign object from campaignStatusList
 				campaignStatusList.remove(currentCampaignStatus);
 			}else{				
