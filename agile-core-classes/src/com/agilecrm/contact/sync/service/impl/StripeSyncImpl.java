@@ -118,6 +118,10 @@ public class StripeSyncImpl extends OneWaySyncService
 		else{
 		for (Customer customer : customers)
 		{
+			if(isLimitExceeded())
+			{
+				break;
+			}
 		    	//If email or first name not existed, we didn't sync that contact
 		    	String email = null;
 			    String name = null;
