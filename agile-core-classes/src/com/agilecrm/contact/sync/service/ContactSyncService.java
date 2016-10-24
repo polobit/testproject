@@ -311,6 +311,9 @@ public abstract class ContactSyncService implements IContactSyncService
 			syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
 	    	SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, 
 		    		new Object[] { user, syncStatus },SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	    	
+	    	SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
+	    		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
 		}
 	    service.deleteFile();
 	 }
