@@ -224,6 +224,12 @@ $(function()
 											// Shows deals chart
 											dealsLineChart();
 											update_deal_collection(model.toJSON(), id, milestone, milestone);
+											var modelsLength = dealPipelineModel[0].get('dealCollection').models.length ;
+                                            if(modelsLength ==10 && modelsLength <= deal_count)
+                                            {
+                                                dealPipelineModel[0]['isUpdateCollection'] = true ;
+                                                dealsFetch(dealPipelineModel[0]);
+                                            }
 
 										},error : function(model, err)
 										{
