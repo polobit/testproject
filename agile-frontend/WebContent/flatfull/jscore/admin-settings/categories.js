@@ -26,9 +26,9 @@
 			var html = '';
 			$.each(cats, function(index,cat){
 				var catLabel = cat.label;
-				if(catLabel){
+				/*if(catLabel){
 					catLabel = getTranslatedPortletName(catLabel.toUpperCase());
-				}
+				}*/
 				
 				if(type == cat.name)
 					html += '<option value="'+cat.name+'" selected="selected">'+catLabel+'</option>';
