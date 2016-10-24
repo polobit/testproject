@@ -126,7 +126,7 @@ public abstract class ContactSyncService implements IContactSyncService
     {
 	if (total_synced_contact >= MAX_SYNC_LIMIT)
 	{
-	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	    //sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	    return true;
 	}
 
@@ -311,6 +311,9 @@ public abstract class ContactSyncService implements IContactSyncService
 			syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
 	    	SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, 
 		    		new Object[] { user, syncStatus },SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	    	
+	    	SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
+	    		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
 		}
 	    service.deleteFile();
 	 }
