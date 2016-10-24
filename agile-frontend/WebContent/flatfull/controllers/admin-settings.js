@@ -388,6 +388,30 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 					
 				
+			},prePersist : function(model){
+				//Chage deals from newscopes to newMenuScopes
+				if(!model.toJSON() || !model.toJSON().newscopes)
+					return;
+				if(!model.toJSON().newMenuScopes){
+					return;		
+				}
+
+			    var newscopes = model.toJSON().newscopes;
+			    $.each(newscopes, function(index, data) {
+					if(newscopes[index] == "DEALS"){model.toJSON().newMenuScopes.push("DEALS");}
+					if(newscopes[index] == "CALENDAR"){model.toJSON().newMenuScopes.push("CALENDAR");}
+				});
+				var new_newscopes = _.without(newscopes,"DEALS","CALENDAR");
+				model.toJSON().newscopes =  new_newscopes;
+				model.set({ 
+			       'newscopes' : new_newscopes
+			      }, 
+			      { 
+			       silent : true 
+			      });
+
+				
+			      
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -509,7 +533,29 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('a[href="#sales-previlages"]',el).tab('show');
 					$('a[href="#sales-previlages"]',el).trigger('click');
 				},500);
-			}, saveAuth : function(el){
+			}, prePersist : function(model){
+				
+			   if(!model.toJSON() || !model.toJSON().newscopes)
+					return;
+				if(!model.toJSON().newMenuScopes){
+					return;		
+				}
+
+			   var newscopes = model.toJSON().newscopes;
+			    $.each(newscopes, function(index, data) {
+					if(newscopes[index] == "DEALS"){model.toJSON().newMenuScopes.push("DEALS");}
+					if(newscopes[index] == "CALENDAR"){model.toJSON().newMenuScopes.push("CALENDAR");}
+				});
+				var new_newscopes = _.without(newscopes,"DEALS","CALENDAR");
+				model.toJSON().newscopes =  new_newscopes;
+				model.set({ 
+			       'newscopes' : new_newscopes
+			      }, 
+			      { 
+			       silent : true 
+			      });
+			      
+			   },saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
 				{
 					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));

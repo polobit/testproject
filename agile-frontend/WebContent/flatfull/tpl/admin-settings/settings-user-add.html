@@ -212,36 +212,46 @@
                                     </div>
                             </label>
                             <label class="i-checks i-checks-sm checkbox">
-                                <input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
-                                    </small>
-                                    </div>
-                            </label>
-                            <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp" value="EDIT_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
                                     <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'update-contacts-owned-by-other-users'}}
                                     </small>
                                     </div>
                             </label>
+                           
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp" value="DELETE_CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
                                     <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small>
                                     </div>
                             </label>
-                            <div>
-                                <div class="pull-left" style="width:100%;">
-                                    <label class="i-checks i-checks-sm checkbox">
-                                        <input type="checkbox" name="temp" value="VIEW_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                        {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
-                                    
-                                    </label>
-                                </div>
-                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small>
-                                </div>
+                            <label class="i-checks i-checks-sm checkbox">
+                                <input type="checkbox" name="temp"  value="VIEW_CONTACTS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
+                                    </small>
+                                    </div>
+                            </label>
+                            
+                              <div  class="newMenuScopesDealsdiv">
+                            {{#if id}}
+                              <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                        </small></div>
+                               </label>
+                            {{else}}
+                                  <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                    </div>
+                                </label>
+                            {{/if}}
                             </div>
+
+                           
                             <div>
                                 <div class="pull-left" style="width:35%;">
                                     <label class="i-checks i-checks-sm checkbox">
@@ -267,14 +277,35 @@
                             <div>
                                 <div class="pull-left" style="width:100%;">
                                     <label class="i-checks i-checks-sm checkbox">
-                                        <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                        {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
+                                        <input type="checkbox" name="temp" value="VIEW_DEALS" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                        {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
                                     
                                     </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
+                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small>
                                 </div>
                             </div>
+                              <div  class="newMenuScopesCalendardiv">
+                                {{#if id}}
+                                <label class="i-checks i-checks-sm checkbox">
+                                  <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                  {{agile_lng_translate 'portlets' 'calendar'}}<br/>
+                                   <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
+                                </label> 
+                                {{else}}
+
+                                  <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'portlets' 'calendar'}}<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
+                                  </label> 
+
+                                {{/if}}
+                              </div>
+
+
+
+
+                            
                             <div>
                                 <div class="pull-left" style="width:35%;">
                                     <label class="i-checks i-checks-sm checkbox">
@@ -297,7 +328,19 @@
                                 <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small>
                                 </div>
                             </div>
+                            <div>
+                                <div class="pull-left" style="width:40%;">
+                                    <label class="i-checks i-checks-sm checkbox">
+                                        <input type="checkbox" name="temp" value="VIEW_CALENDAR" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                        {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
+                                    
+                                    </label>
+                                </div>
+                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
+                                </div>
                             </div>
+                            </div>
+                            
                         </div>
                     </div>
                         {{else}}
@@ -322,11 +365,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'export-contacts'}}  <br/>
                                             <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'export-contacts-as-csv-file'}}</small></div>
                                        </label>
-                                        <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
-                                            <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
-                                        </label>
+                                       
                                         <label class="i-checks i-checks-sm checkbox">
                                             <input type="checkbox" name="temp" value="EDIT_CONTACT" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             {{agile_lng_translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
@@ -337,15 +376,32 @@
                                             {{agile_lng_translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
                                             <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small></div>
                                        </label>
-                                     <div>
-                                      <div class="pull-left" style="width:100%;">
-                                       <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="VIEW_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
-                                       </label>
-                                       </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
-                                     </div>
+                                        <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp"  value="VIEW_CONTACTS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                            <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
+                                        </label>
+                                      
+                                      <div  class="newMenuScopesDealsdiv">
+                                        {{#if id}}
+                                          <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                                <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                                {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                                    </small></div>
+                                           </label>
+                                        {{else}}
+                                              <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                                <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                                {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                                <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                                </div>
+                                            </label>
+                                        {{/if}}
+                                      </div>
+
+
+                                     
                                      <div>
                                        <div class="pull-left" style="width:35%;">
                                        <label class="i-checks i-checks-sm checkbox">
@@ -369,13 +425,35 @@
                                       </div>
                                       <div>
                                       <div class="pull-left" style="width:100%;">
+
                                        <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                            {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
+                                            <input type="checkbox" name="temp" value="VIEW_DEALS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
                                        </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small></div>
-                                       </div>
+                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
+                                     </div>
+
+                                      <div  class="newMenuScopesCalendardiv">
+                                      {{#if id}}
+                                       <label class="i-checks i-checks-sm checkbox">
+                                        <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                        {{agile_lng_translate 'portlets' 'calendar'}}<br/>
+                                         <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
+                                      </label> 
+                                      {{else}}
+
+                                      <label class="i-checks i-checks-sm checkbox">
+                                      <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                      {{agile_lng_translate 'portlets' 'calendar'}}<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
+                                      </label> 
+
+                                      {{/if}}
+                                      </div>
+
+
+
+                                      
                                       <div>
                                        <div class="pull-left" style="width:35%;">
                                        <label class="i-checks i-checks-sm checkbox">
@@ -397,7 +475,17 @@
                                        </div>
                                        <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small></div>
                                       </div>
+                                      <div>
+                                      <div class="pull-left" style="width:40%;">
+                                       <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="VIEW_CALENDAR" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
+                                       </label>
+                                       </div>
+                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small></div>
+                                       </div>
                                 </div>
+                               
                             </div>
                         </div>
                     {{else}}
@@ -423,12 +511,7 @@
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'export-contacts-as-csv-file'}} </small>
                                     </div>
                                 </label>
-                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
-                                    </small></div>
-                                </label>
+                                
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="temp" value="EDIT_CONTACT" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'admin-settings-users' 'update-all-contacts'}}  <br/>
@@ -439,15 +522,33 @@
                                     {{agile_lng_translate 'admin-settings-users' 'delete-all-contacts'}}  <br/>
                                         <div style="margin-left:6px;"><small>  {{agile_lng_translate 'admin-settings-users' 'delete-own-contacts-and-other-user-contacts'}}</small></div>
                                 </label>
-                                <div>
-                                    <div class="pull-left" style="width:100%;">
-                                        <label class="i-checks i-checks-sm checkbox">
-                                            <input type="checkbox" name="temp" value="VIEW_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                                {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="temp"  value="VIEW_CONTACTS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'admin-settings-users' 'view-all-contacts'}}  <br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}}
+                                    </small></div>
+                                </label>
+                               
+                                  <div class="newMenuScopesDealsdiv">
+                                    {{#if id}}
+                                      <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                            <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                                <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                                </small></div>
+                                       </label>
+                                    {{else}}
+                                          <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                            <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                            {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                            <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                            </div>
                                         </label>
+                                    {{/if}}
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
-                                </div>
+
+                                
+                               
                                 <div>
                                     <div class="pull-left" style="width:35%;">
                                         <label class="i-checks i-checks-sm checkbox">
@@ -469,6 +570,36 @@
                                     </div>
                                     <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small></div>
                                 </div>
+                                 <div>
+                                    <div class="pull-left" style="width:100%;">
+                                        <label class="i-checks i-checks-sm checkbox">
+                                            <input type="checkbox" name="temp" value="VIEW_DEALS" disabled {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                                {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
+                                        </label>
+                                    </div>
+                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
+                                </div>
+                                
+                                      <div  class="newMenuScopesCalendardiv">
+                                      {{#if id}}
+                                       <label class="i-checks i-checks-sm checkbox">
+                                        <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                        {{agile_lng_translate 'portlets' 'calendar'}}<br/>
+                                         <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
+                                      </label> 
+                                      {{else}}
+
+                                      <label class="i-checks i-checks-sm checkbox">
+                                      <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                      {{agile_lng_translate 'portlets' 'calendar'}}<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
+                                      </label> 
+
+                                      {{/if}}
+                                      </div>
+
+
+
+
                                 <div>
                                     <div class="pull-left" style="width:100%;">
                                         <label class="i-checks i-checks-sm checkbox">
@@ -502,13 +633,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--<div name="newMenuScopes">
+                            {{#if id}}
+                              <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'deal-view' 'deals'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
+                                        </small></div>
+                               </label>
+                            {{else}}
+                                  <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'portlets' 'deals'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
+                                    </div>
+                                </label>
+                            {{/if}}
+                            </div>-->
                         </div>
                     </div>
                     {{/unless}}
                     {{/unless}}
                     <div class="control-group form-group" style="margin-top:-20px">
                         <div class="controls">
-                            <div class=""  name="newMenuScopes">
+                            <div class="addDealToMenuScopes"  name="newMenuScopes">
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox hide">
                                     <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -516,17 +664,17 @@
                                         <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-contacts'}}</small>
                                         </div>
                                 </label> 
-                                <label class="i-checks i-checks-sm checkbox">
+                                <!--<label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'calendar'}}<br/>
                                      <div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
-                                </label> 
-                                <label class="i-checks i-checks-sm checkbox">
+                                </label>--> 
+                                <!--<label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'deal-view' 'deals'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}
                                         </small></div>
-                               </label>
+                               </label>-->
                                {{#if_equals this.version "v1"}} {{else}} {{/if_equals}}
                                 <label class="i-checks i-checks-sm checkbox none">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CASES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -541,20 +689,20 @@
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'upload-and-attach-documents-to-contacts'}}</small></div>
                                 </label>
                         {{else}}
-                                <label class="i-checks i-checks-sm checkbox"  >
+                                <label class="i-checks i-checks-sm checkbox hide">
                                     <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'contacts'}}<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-contacts'}}</small></div>
                                 </label>
-                                <label class="i-checks i-checks-sm checkbox">
+                                <!--<label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'calendar'}}<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'admin-settings-users' 'manage-your-tasks-and-events'}}</small></div>
-                                </label> 
-                                <label class="i-checks i-checks-sm checkbox">
+                                </label>-->
+                                <!--<label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'deals'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
                                     </div>
-                                </label>
+                                </label>-->
 
                                 {{#if_equals this.version "v1"}} {{else}} {{/if_equals}}
                                 <label class="i-checks i-checks-sm checkbox none">
@@ -586,27 +734,32 @@
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'automate-marketing'}}</small></div>
                                 </label>
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'social' 'social-suite'}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'monitor-your-brand-on-social-media'}}
-                                    </small></div>
-                                </label>
-                                </label><label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'admin-settings-users' 'web-rule'}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
-                                </label>
-                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="LANDINGPAGES" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Landing Pages<br/>
                                     <div style="margin-left:6px;"><small>  A web page created to gather leads online. 
                                       </small></div>
                                 </label>
-                                </label><label class="i-checks i-checks-sm checkbox">
+                                 </label><label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'admin-settings-users' 'web-rule'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
+                                </label>
+
+                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="VISITORS" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     Visitors<br/>
                                     <div style="margin-left:6px;"><small> View contacts visited your  website</small></div>
                                 </label>
+
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'social' 'social-suite'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'monitor-your-brand-on-social-media'}}
+                                    </small></div>
+                                </label>
+                               
+                                 
+                               
                                 </label><label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'activities'}}<br/>
@@ -627,27 +780,34 @@
                                     {{agile_lng_translate 'contact-details' 'campaigns'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'automate-marketing'}}</small></div>
                                 </label>
+
+                                 <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="LANDINGPAGES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Landing Pages<br/>
+                                    <div style="margin-left:6px;"><small> A web page created to gather leads online.</small></div>
+                                </label>
+
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'admin-settings-users' 'web-rule'}}<br/>
+                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
+                                </label>
+
+                                </label><label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp"  class="required" value="VISITORS" checked{{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    Visitors<br/>
+                                    <div style="margin-left:6px;"><small> View contacts visited your  website</small></div>
+                                </label>
+
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'social' 'social-suite'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'monitor-your-brand-on-social-media'}}
                                     </small></div>
                                 </label>
-                               <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    {{agile_lng_translate 'admin-settings-users' 'web-rule'}}<br/>
-                                    <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'enagage-your-website-visitors'}} </small></div>
-                                </label>
-                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp"  class="required" value="LANDINGPAGES" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    Landing Pages<br/>
-                                    <div style="margin-left:6px;"><small> A web page created to gather leads online.</small></div>
-                                </label>
-                                </label><label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp"  class="required" value="VISITORS" checked{{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
-                                    Visitors<br/>
-                                    <div style="margin-left:6px;"><small> View contacts visited your  website</small></div>
-                                </label>
+                               
+                               
+                                
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked {{#is_acl_allowed}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'activities'}}<br/>
