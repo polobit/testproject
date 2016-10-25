@@ -1666,12 +1666,13 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 
 						//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
 							if(TWILIO_DIRECTION == "outbound-dial") {
-								twilioIOSaveContactedTime();	
-							//code to be written to save tag to cotacts for call campaign...
-							if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign){
-								updateTotalTime(callRespJson.duration);
-								saveTagForCampaign();
-							}
+								twilioIOSaveContactedTime(undefined, function(){
+									//code to be written to save tag to cotacts for call campaign...
+									if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign){
+										updateTotalTime(callRespJson.duration);
+										saveTagForCampaign();
+									}
+								});	
 							}
 											
 					} else {
