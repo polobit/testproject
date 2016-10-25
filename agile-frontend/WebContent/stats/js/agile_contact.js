@@ -116,6 +116,10 @@ function agile_createContact(data, callback)
 	{
 		model.lead_score = parseInt(data["lead_score"]);
 	}
+	if(data["agile_source"])
+	{
+		model.source = data["agile_source"];
+	}
 	if(score_from_cookie)
 	{
 		agile_delete_cookie(agile_guid.cookie_score);
