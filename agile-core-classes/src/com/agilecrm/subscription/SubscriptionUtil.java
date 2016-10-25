@@ -36,9 +36,9 @@ public class SubscriptionUtil
     	// If yes, serve it from cache.
     	// If not, fetch from datastore, set in cache and return it.
     	try {
-    		/*subscription = (Subscription) CacheUtil.getCache(Subscription.fetchCacheKey());
+    		subscription = (Subscription) CacheUtil.getCache(Subscription.fetchCacheKey());
     		if( subscription != null )	
-        		return subscription; */
+        		return subscription; 
 		} catch (Exception e) {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
@@ -51,7 +51,7 @@ public class SubscriptionUtil
 		    subscription.fillDefaultPlans();
 		}
 		try {
-			// CacheUtil.setCache(Subscription.fetchCacheKey(), subscription);
+			CacheUtil.setCache(Subscription.fetchCacheKey(), subscription);
 		} catch (Exception e) {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
