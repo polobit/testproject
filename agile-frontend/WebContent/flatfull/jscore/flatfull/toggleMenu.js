@@ -52,7 +52,7 @@ function showTrailAlertMessage(){
 	
 $(document).ready(function(){
 
-helpContentPopover();
+//helpContentPopover();
 $('body').on('click','#speechDectation',function(e){
 	e.preventDefault();
     startDictation(this);
@@ -458,7 +458,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 					container: 'body'
 				}).on("click", function(){
 						initRolehandlers();
-						closeHelpPopover();
+						//closeHelpPopover();
     			}).on("show.bs.popover", function(e){ 
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));

@@ -47,6 +47,7 @@ public class Defaults
 		TicketFiltersUtil.saveDefaultFilters();
 		//saveDefaultWorkflowsAndTriggers();
 		//TicketsUtil.createDefaultTicket();
+		saveInvitedUsers();
     }
 
 	/**
