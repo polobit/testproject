@@ -163,6 +163,10 @@ public class SendMail
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
    	
+   	//For invited user form email
+  	public static final String INVITED_USER = "inviteduser_authentication";
+  	public static final String INVITED_USER_SUBJECT = "Welcome to Agile CRM";
+   	
     /**
      * From Name of email.
      */

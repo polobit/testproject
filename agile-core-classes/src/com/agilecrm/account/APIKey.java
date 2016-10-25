@@ -94,7 +94,7 @@ public class APIKey
     }
 
     // Generate Random Number
-    private static String generateRandom()
+    public static String generateRandom()
     {
 	SecureRandom random = new SecureRandom();
 	return new BigInteger(130, random).toString(32);

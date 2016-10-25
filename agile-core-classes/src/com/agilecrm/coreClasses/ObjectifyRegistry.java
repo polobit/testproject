@@ -7,6 +7,7 @@ import com.agilecrm.affiliate.AffiliateDeal;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.workflows.WorkflowBackup;
+import com.agilecrm.user.InvitedUser;
 import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.videorecords.VideoRecord;
 import com.googlecode.objectify.ObjectifyService;
@@ -39,6 +40,7 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(DocumentTemplates.class);
 		ObjectifyService.register(Product.class);
 		ObjectifyService.register(DocumentNote.class);
+		ObjectifyService.register(InvitedUser.class);
 
 
 	}

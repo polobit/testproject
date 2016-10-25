@@ -1,0 +1,549 @@
+<%@page import="java.util.HashSet"%>
+<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.agilecrm.util.RegisterUtil"%>
+<%@page import="com.agilecrm.user.RegisterVerificationServlet"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
+<%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@page contentType="text/html; charset=UTF-8"%>
+<%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
+<%@page import="com.agilecrm.user.DomainUser"%>
+<%@page import="com.agilecrm.RegistrationGlobals"%>
+<%@page import="com.agilecrm.core.api.UsersAPI"%>
+<%@page import="com.agilecrm.user.DomainUser" %>
+<%@page import="java.util.ArrayList" %>
+
+<%
+	String _AGILE_VERSION = SystemProperty.applicationVersion.get();
+
+	System.out.println("In new JSP file");
+
+	String CSS_PATH = "/";
+	String FLAT_FULL_PATH = "flatfull/";
+	String CLOUDFRONT_TEMPLATE_LIB_PATH = VersioningUtil.getCloudFrontBaseURL();
+	System.out.println(CLOUDFRONT_TEMPLATE_LIB_PATH);
+
+	String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+	CSS_PATH = CLOUDFRONT_STATIC_FILES_PATH;
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {
+		CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
+		CLOUDFRONT_TEMPLATE_LIB_PATH = "";
+		CSS_PATH = FLAT_FULL_PATH;
+	}
+
+	//String redirectHomeURL = (String) request.getAttribute("redirectionurl");
+	//String redirectHomeURL = request.getParameter("redirectionurl");
+	String redirectHomeURL = (String)request.getSession().getAttribute("RedirectionHomeURL");
+	System.out.println("After JSP code in new file");
+	//List<String> restrictedDomains = new List<String>();
+	//restrictedDomains.add("zoho").add("yandex").add("hotmail").add("yahoo").add("");
+	String[] restrictedDomains = {"zoho","yandex","hotmail","yahoo","aol","outlook","rossbergercom","fastmail","usa.gov","gmail"};
+	String email = (String)request.getSession().getAttribute("Email");
+	//String email="hi@yopmail.com";
+	boolean is_restricted= false;
+	String email_domain="";
+	if(email != null){
+	  email_domain = (email.split("@")[1]).split("\\.")[0];
+	}
+	
+	for(int k =0;k<restrictedDomains.length;k++){
+		if(StringUtils.equalsIgnoreCase(restrictedDomains[k], email_domain)){
+			  is_restricted = true;
+			  break;
+		}
+	}
+	
+	
+
+%>
+<!DOCTYPE html>
+<html lang="en" style="background-color: white !important;">
+<head>
+<style>
+* {
+	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.well {
+	border-radius: 0px !important;
+	border-radius: 4px;
+	background-color: #FDFBFB !important;
+	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.05) !important;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0
+		rgba(0, 0, 0, 0.19) !important;
+}
+
+.error-top-view {
+  position: fixed;
+    background-color: rgb(199, 73, 73);
+    width: 100%;
+    top: 0;
+    height: 50px;
+    color: #fff;
+    text-align: center;
+    padding-top: 15px;
+    display: none;
+    padding-bottom: 15px;
+}
+
+.line-dashed {
+	background-color: transparent;
+	border-style: dashed !important;
+	border-width: 0;
+}
+
+.line-lg {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+.line {
+	width: 100%;
+	height: 2px;
+	margin: 10px 0;
+	overflow: hidden;
+	font-size: 0;
+}
+
+.alert {
+	margin-bottom: 0px !important;
+}
+
+.alert-warning {
+	background-color: #F7F4F4 !important;
+	border-color: #DCDCDC !important;
+	color: black !important;
+}
+
+.label-opacity {
+	opacity: 0.75;
+}
+
+.text-muted {
+	color: #98a6ad;
+}
+/*@media screen and (min-width:768px) {
+	#settings_help {
+  		margin-left:295px !important;
+	}
+	}*/
+.btn-block {
+	display: block !important;
+	width: 100% !important;
+	font-weight: bold !important;
+	padding-bottom: 10px !important;
+	opacity: .78 !important;
+	padding-top: 10px !important;
+}
+
+.p {
+	margin: 18px 0 10px !important;
+}
+
+.body-style{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+ }
+.body-style {
+    content: "";
+    position: absolute;
+   /* background-image: url('flatfull/img/add-user-bg.png');*/
+   background-color: #fdfbfb;
+    background-repeat: repeat-x;
+    background-size: 100%;
+   
+    filter: alpha(opacity=75);
+    height: 100%;
+    width: 100%;
+}
+/*.imageheight:before{
+	 content: "";
+    position: absolute;
+    background-image: url('flatfull/img/add-user-bg.png');
+    background-color: #fdfbfb;
+    background-repeat: repeat-x;
+    background-size: 100%;
+    opacity: 0.75;
+    filter: alpha(opacity=75);
+    width: 100%;
+    height: 100%
+}*/
+.modal-content{
+	-webkit-box-shadow: none !important;
+	 box-shadow: none !important;
+}
+.input-style{
+	background-color: #fff !important;
+    border: 1px solid #cdcfd2 !important;
+    border-radius: 3px !important;
+    color: #1b2432 !important;
+    font-size: .875em !important;
+    height:34px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-left: 10px !important;
+    transition: .15s !important;
+    width: 100% !important;
+}
+.modal-header{
+	border-bottom: none !important;
+	text-align: center;
+}
+.help-inline{
+	color: red;
+}
+.text-11{
+font-size : 11px;
+}
+.field_req {
+    color: red;
+}
+.align-center{
+	text-align: center;
+}
+a{
+	color: #428bca !important;
+}
+@media all and (max-width: 768px) {
+	.add-user{
+		padding-right: 0px !important;
+	}
+}
+.removeUser .remove-user{
+	 visibility:hidden;
+}
+.removeUser:hover .remove-user{
+	visibility:visible;
+}
+
+
+</style>
+
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+<script src="/flatfull/lib/bootstrap.v3.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="<%=CSS_PATH%>css/bootstrap.v3.min.css" />
+<link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+</head>
+
+<body class="body-style" >
+	<div class="imageheight" style="position:relative;">
+	<div id="error-area" class="error-top-view"></div>
+	<div class='container' >
+		<div class="row"></div><br/>
+		<div class="row" >
+			<div class="align-center m-b-xs"style="font-size:18px;"> Congratulations, you have signed up successfully!</div>
+			<div class="align-center"style="margin-bottom:15px;font-size: 16px;">
+			  Invite your colleagues and enjoy Agile CRM's extensive features.
+			</div>
+		<div class="col-sm-5" style="float: none !important;margin: 0 auto;">
+			<div class='well'>
+				 <div class=" m-b-none" style="text-align:center;margin-top:-15px">			 
+					<img src='flatfull/img/agile-crm-logo.png' style="margin-bottom:-5px;width:130px">			
+				</div>
+				<div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
+				<div  class="email-add">
+			<form role="form" id='agile-useradd-form' class="form-horizontal newuserform" onsubmit="return false;">
+					<div id="Sales_Team">
+					<div class="control-group align-center">
+					<label style="font-weight: 600;color: #736f6f;">Sales Team</label>
+					<div class="control-group"> 
+									      
+					</div>
+					</div>
+					
+					<div class="control-group form-group" >
+					<label class="control-label col-sm-3">User <span>1</span></label>
+					<div class="control-group col-sm-8 removeUser" id="sales-form-group"> 
+									         <span class="controls" > 
+									         	<input  name="email" type="email" class="form-control input-style"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" id="email" placeholder="Email Address"> </span> 
+									        
+					</div>
+					</div>
+					
+					<div class="control-group form-group ">
+					<label class="control-label col-sm-3">User <span class="number">2</span></label>
+					<div class="control-group col-sm-8 removeUser"> 
+									         <span class="controls"> <input name="email"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" type="email" class=" form-control input-style "  id="email" placeholder="Email Address"> </span> 
+									        
+					</div>
+					</div>
+					<div id="newuser_sales"></div>
+					<a id="another-user-add-sales" class=" add-user text-info text-11 text-right block m-t-n-sm " style="padding-right: 38px;"><img src='flatfull/img/addInviteUser.svg' style="height:12px;margin-top:-4px;"> <span>Add User</span>
+	            	</a>
+	            	</div>
+
+	            	<div id="support_team">
+
+	            	<div class="control-group align-center m-b-xs">
+					<label class="control-label " style="font-weight: 600;color: #736f6f;">Support Team</label>
+					<div class="control-group"> 
+									      
+					</div>
+					</div>
+
+					
+					<div class="control-group form-group">
+					<label class="control-label col-sm-3">User <span>1</span></label>
+					<div class="control-group col-sm-8 removeUser" id="support-form-group"> 
+									         <span class="controls"> <input name="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  type="email" class=" form-control input-style "  id="email" placeholder="Email Address"> </span> 
+									        
+					</div>
+					</div>
+					<div class="control-group form-group ">
+					<label class="control-label col-sm-3">User <span>2</span></label>
+					<div class="control-group col-sm-8 removeUser"> 
+									         <span class="controls"> <input name="email"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" id="email" placeholder="Email Address"> </span> 
+									         
+					</div>
+					</div>
+					<div id="newuser_support"></div>
+					<a id="another-user-add-support" class="add-user text-info text-11 text-right block m-t-n-sm" style="padding-right: 38px;"><img style="height:12px;margin-top:-4px;" src='flatfull/img/addInviteUser.svg'> <span>Add User</span>
+	            	</a>
+	            	</div>
+	            	<div id="marketing_team">
+	            	<div class="control-group align-center m-b-xs">
+					<label class="control-label" style="font-weight: 600;color: #736f6f;">Marketing Team</label>
+					<div class="control-group "> 
+									      
+					</div>
+					</div>
+					
+					<div class="control-group form-group">
+					<label class="control-label col-sm-3">User <span>1</span></label>
+					<div class="control-group col-sm-8 removeUser" id="marketing-form-group"> 
+									         <span class="controls"> <input name="email" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  id="email" placeholder="Email Address"> </span> 
+									        
+					</div>
+					</div>
+					<div class="control-group form-group ">
+					<label class="control-label col-sm-3">User <span>2</span></label>
+					<div class="control-group col-sm-8 removeUser"> 
+									         <span class="controls"> <input name="email" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" id="email" placeholder="Email Address"> </span> 
+									        
+					</div>
+					</div>
+
+					<div id="newuser_marketing">
+					</div>
+					<a id="another-user-add-marketing" class="add-user  text-info text-11 text-right block m-t-n-sm " style="padding-right: 38px;"><img style="height:12px;margin-top:-4px;" src='flatfull/img/addInviteUser.svg' > <span>Add User</span>
+	            	</a>
+					</div>
+					<div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
+									
+		            <div style="margin-top:8px;display:table;width:75%;margin:15px auto;">                      
+		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" type="submit">Invite Users</button>
+		            
+		            <a href="<%=redirectHomeURL%>" style="padding: 10px 0px 10px 0px;" class="inline-block  text-info text-11 pull-right m-r" id="skip">Skip</a>
+
+	            	</div>
+
+					</form>
+					
+					
+
+				</div>
+
+				
+
+
+			</div>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+function isValidForm(form) {
+	 $(form).validate({
+        rules : {
+          atleastThreeMonths : true,
+          multipleEmails: true,
+          email: true,
+          checkedMultiSelect: true,
+          phone: true
+        },
+        debug : true,
+        errorElement : 'span',
+        errorClass : 'help-inline',
+        ignore: ':hidden:not(.checkedMultiSelect)',
+        // Higlights the field and addsClass error if validation failed
+        highlight : function(element, errorClass) {
+          $(element).closest('.controls').addClass('single-error');
+        },
+        // Unhiglights and remove error field if validation check passes
+        unhighlight : function(element, errorClass) {
+          $(element).closest('.controls').removeClass('single-error');
+        },
+        invalidHandler : function(form, validator) {
+          var errors = validator.numberOfInvalids();
+        },
+        errorPlacement: function(error, element) {
+            if (element.hasClass('checkedMultiSelect')) {
+               error.appendTo($(element).parent());
+              
+              } else {
+                  error.insertAfter(element);
+                 
+              }
+        }
+      });
+	  return $(form).valid();
+}
+</script>
+<script type="text/javascript">
+var redirectHomeURL = '<%=redirectHomeURL%>';
+var restricted = '<%=is_restricted%>';
+var emailDomain = '<%=email_domain%>';
+
+	$(document).ready(function(e) {
+
+		if(restricted == 'false'){
+			console.log($("#sales-form-group"));
+			$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
+			$("#support-form-group").find('input').val("support@"+emailDomain+".com");
+			$("#marketing-form-group").find('input').val("info@"+emailDomain+".com");
+		}
+
+
+		$("#send-user-request").on('click', function(e) {
+			//e.preventDefault();
+			
+			var list = [];
+			console.log(restricted);
+			console.log(emailDomain);
+			/*if(!isValidForm("#agile-useradd-form"))
+				return;*/
+			var duplicate=false;
+    
+		    $('input[name^=email]').each(function(){
+		        var $this = $(this);
+		        if ($this.val()===''){ return;}
+		        $('input[name^=email]').not($this).each(function(){
+		            if ( $(this).val()==$this.val()) {duplicate=true;}
+		        });
+		    });
+		    if(duplicate){
+			
+		    	$("#error-area").slideDown("slow").html("Duplicate emails found.");
+		    	setTimeout(function(){
+	   					$("#error-area").hide();
+	   				},5000);
+		    	return;
+		    }
+	
+			$("#agile-useradd-form input").each(function(index, ele){
+                   if(!$(ele).val())
+                   	    return;
+
+                   	list.push({email : $(ele).val()});
+			});
+			var JSONdata = JSON.stringify(list);
+
+			if(JSONdata.length == 2){
+				
+				$("#error-area").slideDown("slow").html("Please enter atleast one email address");
+				setTimeout(function(){
+	   					$("#error-area").hide();
+	   				},5000);
+				return;
+			}
+
+			if(list.length > 9){
+				$("#error-area").slideDown("slow").html("Sorry, you can invite upto 9 users only.");
+				setTimeout(function(){
+	   					$("#error-area").hide();
+	   				},5000);
+				return;
+			}
+
+			
+
+			
+			$.ajax({
+				  url:'core/api/invited-user-emails',
+				  type:"POST",
+				  data:JSONdata,
+				  contentType:"application/json; charset=utf-8",
+				  dataType:"json",
+				  success: function(){
+				    console.log("success");
+				    $("#send-user-request").addClass("disabled");
+				    window.location.href = redirectHomeURL;
+				    
+				  },
+				  error: function(error){
+				  	console.log("error");
+				  	$("#error-area").slideDown("slow").slideDown().html(error.responseText);
+				  	setTimeout(function(){
+	   					$("#error-area").hide();
+	   				},5000);
+				  }
+			});
+			
+		});
+
+		/*function getFormData($form) {
+			var unindexed_array = $form.serializeArray();
+			var indexed_array = {};
+
+			$.map(unindexed_array, function(n, i) {
+				indexed_array[n['name']] = n['value'];
+			});
+
+			return indexed_array;
+		}*/
+	});
+
+	$(".add-user").on('click',function(){
+		var c =  $("#agile-useradd-form").find(".form-group");
+		var id = $(this).prop("id");
+			var g = c[1];
+			switch(id){
+			case "another-user-add-sales" :
+			    var number = $(this).closest("div").find(".form-group").length;
+				$("#newuser_sales").append(g.outerHTML.replace("2" , ((number+1))));
+				if(number+1 == 9){
+					$("#another-user-add-sales").remove();
+				}
+				break;
+			case "another-user-add-support" :
+			    var number = $(this).closest("div").find(".form-group").length;
+				$("#newuser_support").append(g.outerHTML.replace("2" , ((number+1))));
+				if(number+1 == 9){
+					$("#another-user-add-support").remove();
+				}
+				break;
+
+			case "another-user-add-marketing":
+			    var number = $(this).closest("div").find(".form-group").length;
+				$("#newuser_marketing").append(g.outerHTML.replace("2" , ((number+1))));
+				if(number+1 == 9){
+					$("#another-user-add-marketing").remove();
+				}
+				break;
+			}
+		
+
+	});
+
+
+	/*$(".remove-user").on("click",function(e){
+		console.log("sfasda");
+	var length = $(this).closest("div").closest("div").closest(".form-group").parent().find(".form-group").length;
+	if(length == 1){
+			$(this).closest("div").closest("div").closest(".form-group").parent().remove();
+		}
+			
+		$(this).closest("div").closest("div").closest(".form-group").remove();
+	});*/
+
+	
+		
+</script>
+</html>
