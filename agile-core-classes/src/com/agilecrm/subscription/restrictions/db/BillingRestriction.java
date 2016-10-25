@@ -326,9 +326,12 @@ public class BillingRestriction
 		limits.put("count", usersCount);
 		resrtictions.put("users", limits);
 	}
-	if(!WidgetUtil.isAllowedForDowngrade(planDetails.getWidgetsLimit(), agileUsers)){
+	int widgetsLimit = planDetails.getCampaignNodesLimit();
+	int widgetsCount = WorkflowUtil.getMaxWorkflowNodes();
+	if(widgetsLimit < widgetsCount){
 		limits = new HashMap<String, Object>();
-		limits.put("isAllowed", false);
+		limits.put("limit", widgetsLimit);
+		limits.put("count", widgetsCount);
 		resrtictions.put("widgets", limits);
 	}
 	int nodesLimit = planDetails.getCampaignNodesLimit();
@@ -339,9 +342,12 @@ public class BillingRestriction
 		limits.put("count", maxNodesCount);
 		resrtictions.put("nodes", limits);
 	}
-	if(!ContactEmailUtil.canDowngrade(planDetails.getEmailAccountLimit(), agileUsers)){
+	int emailAccountsLimit = planDetails.getEmailAccountLimit();
+	int emailAccountsCount = ContactEmailUtil.checkForDowngrade(planDetails.getEmailAccountLimit(), agileUsers);
+	if(emailAccountsLimit < emailAccountsCount){
 		limits = new HashMap<String, Object>();
-		limits.put("isAllowed", false);
+		limits.put("limit", emailAccountsLimit);
+		limits.put("count", emailAccountsCount);
 		resrtictions.put("emailAccounts", limits);
 	}
 	int reportsLimit = planDetails.getReportsLimit();

@@ -664,18 +664,19 @@ public class ContactEmailUtil
     
     /**
 	 * Gets the list of synced email account names of this Agile user
-	 * and if limit of any user reached then return true;
+	 * and if limit of any user reached then return count;
 	 * 
 	 * @return
 	 */
-    public static boolean canDowngrade(int limit, List<AgileUser> users){
+    public static int checkForDowngrade(int limit, List<AgileUser> users){
+    	int count = 0;
     	for(AgileUser agileUser : users){
     		EmailPrefs emailPrefs = getEmailPrefsByAgileUser(agileUser);
-    		int count = emailPrefs.getEmailAccountsCount();
+    		count = emailPrefs.getEmailAccountsCount();
     		if(count > limit)
-    			return false;
+    			return count;
     	}
-    	return true;
+    	return count;
 	}
 	
 	/**
