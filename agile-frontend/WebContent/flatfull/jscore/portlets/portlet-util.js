@@ -2112,14 +2112,17 @@ var portlet_utility = {
 	addPortletSettingsModalContent : function(base_model, modal_id) {
 		$('#' + modal_id).find('form')[0].reset();
 		$('#' + modal_id).modal('show');
+		$('#' + modal_id).on('shown.bs.modal', function(){		   
+		   if($("#start_date", $('#' + modal_id)).is(":focus")){		    
+		    $("#start_date", $('#' + modal_id)).datepicker("hide");
+		    $("#start_date", $('#' + modal_id)).blur();		    
+		   }
+		});
+
 		$('.datepicker').hide();
-		$(
-				'#'
-						+ modal_id
-						+ ' > .modal-dialog > .modal-content > .modal-footer > .save-modal')
+		$('#'+ modal_id+ ' > .modal-dialog > .modal-content > .modal-footer > .save-modal')
 				.attr('id', base_model.get("id") + '-save-modal');
-		$("#portlet-type", $('#' + modal_id)).val(
-				base_model.get('portlet_type'));
+		$("#portlet-type", $('#' + modal_id)).val(base_model.get('portlet_type'));
 		$("#portlet-name", $('#' + modal_id)).val(base_model.get('name'));
 	},
 
@@ -2663,64 +2666,68 @@ var portlet_utility = {
 	}
 };
 
-function initializeCustomRangeInModal(base_model,elData)
-{
+function initializeCustomRangeInModal(base_model,elData){
 	if(base_model.get("settings").duration=='Custom'){
-					$('.daterange',elData).removeClass('hide');
-					
-	if(base_model.get('name')=='Deal Goals')
-			{
-				$("#start_date", elData)
-					.val(
-							
-									stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
-					$("#end_date", elData)
-					.val(
-							
-									stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
-				$('#start_date',elData).datepicker('remove');
-				$('#end_date',elData).datepicker('remove');
-				$('#start_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
-				$('#end_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
-	
-			}
-			else{
-				$("#start_date", elData)
-					.val(
-							
-									getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
-					$("#end_date", elData)
-					.val(
-							
-									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
-					$('#start_date',elData).datepicker('remove');
-				$('#end_date',elData).datepicker('remove');
+		$('.daterange',elData).removeClass('hide');					
+		if(base_model.get('name')=='Deal Goals'){			
+			$("#start_date", elData).val(stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
+			$("#end_date", elData).val(stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
+			$('#start_date',elData).datepicker('remove');
+			$('#end_date',elData).datepicker('remove');
 
-var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
-		{
-			// If event start date is changed and end date is less than start date,
-			// change the value of the end date to start date.
-			var eventDate2;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
-			else
-			 	eventDate2 = new Date($('#end_date',elData).val());
-			if (ev.date.valueOf() > eventDate2.valueOf())
-			{
-				//var en_value=ev.date.valueOf();
-				$('#end_date',elData).val($('#start_date',elData).val());
-			}
+			$('#start_date',elData).datepicker({ 
+				format :"MM yyyy", minViewMode:"months", 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose : true,
+				focusOnShow: false
+			});
 
-		});
+			$('#end_date',elData).datepicker({ 
+				format :"MM yyyy", 
+				minViewMode:"months", 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose : true,
+				focusOnShow: false 
+			});
+		}else{
+			$("#start_date", elData).val(getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
+			$("#end_date", elData).val(getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
+			$('#start_date',elData).datepicker('remove');
+			$('#end_date',elData).datepicker('remove');
 
+			var eventDate = $('#start_date',elData).datepicker({ 
+				format : CURRENT_USER_PREFS.dateFormat, 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose: true,
+				focusOnShow: false
+			}).on('changeDate', function(ev){
+				// If event start date is changed and end date is less than start date,
+				// change the value of the end date to start date.
+				var eventDate2;
+				if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1){
+					eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
+				}else{
+					console.log('New');
+				 	eventDate2 = new Date($('#end_date',elData).val());
+				}
+				
+				if (ev.date.valueOf() > eventDate2.valueOf()){
+					//var en_value=ev.date.valueOf();
+					$('#end_date',elData).val($('#start_date', elData).val());
+				}
+			});
 
-		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true},'hide');
+			$('#end_date',elData).datepicker({ 
+				format : CURRENT_USER_PREFS.dateFormat, 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose: true,
+				focusOnShow: false
+			},'hide');
 		}
+	}else{
+		$(elData).find('.daterange').addClass('hide');
+		$(elData).find(".invalid-range").parents('.form-group').hide();
 	}
-		else
-			$(elData).find('.daterange').addClass('hide');
-			$(elData).find(".invalid-range").parents('.form-group').hide();
-
 }
 
 function stringToDate(date,format)
