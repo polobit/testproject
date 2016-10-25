@@ -351,7 +351,7 @@ function initializeSubscriptionListeners()
 				}
 				plan_json = {};
 				var buttonText = $(this).html();
-				$(this).text("{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
+				$(this).html("<img style='padding-bottom: 2px;width: 17px;' src='img/21-0.gif'>{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
 				$(this).attr("disabled","disabled");
 				/*
 				 * var quantity = $("#users_quantity").text(); var cost =
