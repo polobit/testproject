@@ -20,7 +20,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.account.util.SMSGatewayUtil;
@@ -32,7 +31,6 @@ import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
 import com.agilecrm.subscription.deferred.RenewalCreditsDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
@@ -47,7 +45,6 @@ import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -343,8 +340,8 @@ public class BillingRestriction implements Serializable
 		limits.put("count", usersCount);
 		resrtictions.put("users", limits);
 	}
-	int widgetsLimit = planDetails.getCampaignNodesLimit();
-	int widgetsCount = WorkflowUtil.getMaxWorkflowNodes();
+	int widgetsLimit = planDetails.getWidgetsLimit();
+	int widgetsCount = WidgetUtil.checkForDowngrade(widgetsLimit, agileUsers);
 	if(widgetsLimit < widgetsCount){
 		limits = new HashMap<String, Object>();
 		limits.put("limit", widgetsLimit);
