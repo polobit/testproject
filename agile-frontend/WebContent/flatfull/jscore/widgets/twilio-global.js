@@ -28,7 +28,7 @@ $(function(){
 		// after DOM ready.
 		if (document.readyState === "complete")
 		{
-			globalTwilioIOSetup();
+			//globalTwilioIOSetup();
 		}
 	}, 10000); // 15 sec
     
@@ -985,17 +985,18 @@ function fill_twilioio_numbers()
 	});
 }
 
-function setUpGlobalTwilio()
+function loadTwilioMin()
 {
-/*	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
-			{
-				console.log("i18PhoneFormat  loaded for validating numbers");
-			});*/
-	// Loads twilio min.js to intiliaze twilio call events
-	//head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
-	
 	{
+		if(Twilio.Device!=null && Twilio.Device!=undefined)
+			initTwilioListeners()
+		else
+			loadTwilioMin();			
+	});	
+}
+function initTwilioListeners()
+{
 		Twilio.Device.setup(Twilio_Token, {debug: true});
 
 		if (Twilio_Start)
@@ -1428,7 +1429,18 @@ Twilio.Device.disconnect(function(conn){
 			// true or false
 			console.log(presenceEvent.available);
 		});
-	});
+}
+function setUpGlobalTwilio()
+{
+
+	loadTwilioMin();
+/*	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
+			{
+				console.log("i18PhoneFormat  loaded for validating numbers");
+			});*/
+	// Loads twilio min.js to intiliaze twilio call events
+	//head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
+	
 }
 function twiliocall(phoneNumber, toName,conferenceName, contact)
 {

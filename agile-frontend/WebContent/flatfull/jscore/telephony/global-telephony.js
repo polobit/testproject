@@ -9,7 +9,7 @@ var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId
 
 $(function()
 {
-	initToPubNub();
+//	initToPubNub();
 	globalCallWidgetSet();
 });
 
