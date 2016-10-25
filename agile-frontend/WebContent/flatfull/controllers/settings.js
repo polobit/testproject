@@ -659,7 +659,7 @@ var SettingsRouter = Backbone.Router
 					$('#prefs-tabs-content').html(view.render().el);
 
 					// set up TinyMCE Editor
-					setupTinyMCEEditorsetupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
+					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
 					{
 
 						// Reset tinymce
