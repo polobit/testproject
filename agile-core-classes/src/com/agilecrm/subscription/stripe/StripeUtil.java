@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -73,9 +74,13 @@ public class StripeUtil {
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 		try{
-			String versionNumber = (String)CacheUtil.getCache("stripe_test_key");
+			String versionNumber = CacheUtil.getCache("stripe_test_key").toString();
 			if(versionNumber != null && versionNumber.equals(VersioningUtil.getVersion()))
 				return true;
+			return false;
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
 			return false;
 		}finally{
 			NamespaceManager.set(oldNamespace);
