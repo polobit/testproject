@@ -32,7 +32,6 @@ public class CustomThemesUtil {
 	public static CustomTheme fetchThmsByKey(String key){
 		CustomTheme ct = null;;
 		try {
-			/*ct = dao.get(new Key<CustomTheme>(CustomTheme.class,key));*/
 			ct = dao.get(Long.parseLong(key));
 		} catch (EntityNotFoundException e) {
 			// TODO Auto-generated catch block

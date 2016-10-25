@@ -815,7 +815,9 @@
 					}
 					else if(formEle=="Field Label"){
 						var multipleFormEleFinal="";
-						var multipleFormEle=".agile-group .agile-label,.agile-group input[type=text],.agile-group input[type=hidden],.agile-group .agile-group-addon,.agile-group select,.agile-group input[type=checkbox],.agile-group input[type=radio]";
+						/*var multipleFormEle=".agile-group .agile-label,.agile-group input[type=text],.agile-group input[type=hidden],.agile-group .agile-group-addon,.agile-group select,.agile-group input[type=checkbox],.agile-group input[type=radio]";
+						*/
+						var multipleFormEle=".agile-group .agile-label,.agile-group input,.agile-group .agile-group-addon,.agile-group select";
 						var multipleFormEleArr=multipleFormEle.split(",");
 						for(i=0;i<multipleFormEleArr.length;i++){
 							multipleFormEleFinal=multipleFormEleFinal+".createCustomFormContent"+"\t"+multipleFormEleArr[0]+",";
@@ -826,7 +828,7 @@
 						$(multipleFormEleFinal).css("font-weight",fontWeightEle);
 						$(multipleFormEleFinal).css("font-size",fontSizeEle);
 						/*$(multipleFormEleFinal).css("color",fontThemeColor);*/
-						var css=multipleFormEle+"{font-family:"+fontFamilyEle+";font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
+						var css=multipleFormEle+"{font-family:"+fontFamilyEle+"!important;font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
 						var eleThemeCss=new EleThemeCss("Field Label/"+multipleFormEle,css);
 						for(i=0;i<fontCss.form_element.length;i++){
 							if(fontCss.form_element[i].ele=="Field Label/"+multipleFormEle){

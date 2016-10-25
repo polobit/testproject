@@ -24,24 +24,26 @@ public class CustomThemesAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public CustomTheme createCustomTheme(String themeData) throws JSONException{
+		
 		System.out.println("COMING!!!!!!!!!!!"+themeData);
 		JSONObject themeJson = new JSONObject(themeData);
 	    String name = themeJson.getString("name");
 	    String css = themeJson.getString("themecss");
 	    CustomTheme ct=new CustomTheme(name,css);
 	    ct.saveTheme();
-	    CustomTheme ct1=CustomThemesUtil.fetchThmsByProperty("name",name);
-		return ct1;
+	    return ct;
 	    
 	}
+	
 	@Path("/getCustomThemeByName")
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public CustomTheme getCustomThemeByName(String themeName) throws JSONException{
+		
 		System.out.println("THEMENAME COMING::::"+themeName);
 		CustomTheme ct1=CustomThemesUtil.fetchThmsByProperty("name",themeName);
-	   System.out.println("OUTPUT OF getCustomThemeByName::::::"+ct1);
+		System.out.println("OUTPUT OF getCustomThemeByName::::::"+ct1);
 		return ct1;
 	    
 	}
@@ -49,7 +51,8 @@ public class CustomThemesAPI {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<CustomTheme> fetchAllCustomThemes(){
-		System.out.println("hi..............."+CustomThemesUtil.fetchAllCustomThemes());
+		
+		System.out.println("fetchAllCustomThemes():::"+CustomThemesUtil.fetchAllCustomThemes());
 		return CustomThemesUtil.fetchAllCustomThemes();
 	}
 	
@@ -64,7 +67,9 @@ public class CustomThemesAPI {
 	@Path("/updateTheme")
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON})
-	public void updateCustomTheme(String themeData) throws JSONException{
+	public CustomTheme updateCustomTheme(String themeData) throws JSONException{
+		
+		System.out.println("Start of updateCustomTheme()");
 		JSONObject themeJson = new JSONObject(themeData);
 		String id = themeJson.getString("id");
 		String css = themeJson.getString("themecss");
@@ -74,6 +79,9 @@ public class CustomThemesAPI {
 			ct.setThemeCss(css);
 		    ct.saveTheme();
 	    }
+		System.out.println("End of updateCustomTheme()");
+		return ct;
+		
 	}
 	
 	@Path("/saveThemeOnlyWithName")

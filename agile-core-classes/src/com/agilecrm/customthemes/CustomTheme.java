@@ -64,9 +64,8 @@ public class CustomTheme {
 	}
 
 
-	public Key<CustomTheme> saveTheme(){
-		Key<CustomTheme> key = dao.put(this);
-		return key;
+	public void saveTheme(){
+		 dao.put(this);
 	}
 
 	public List<CustomTheme> fetchAllThemes(){

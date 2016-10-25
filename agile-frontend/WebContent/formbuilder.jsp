@@ -64,7 +64,7 @@ String template = request.getParameter("template");
                          <!-- Modal content-->
                         <div class="modal-content">
                         <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
                         <!-- <label>Custom Theme:</label> <div style="display:-webkit-box;padding-bottom: 10px;">-->
                         <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="15"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
@@ -505,20 +505,10 @@ String template = request.getParameter("template");
                         $.ajax({
                           type : 'POST',
                           url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/saveThemeOnlyWithName',
-                          async : false,
                           contentType : 'application/json',
                           data : themeName,
                           success:function(data){
                             console.log("DATA ID COMING!!!"+data.id);
-                          }
-                          });
-                        $.ajax({
-                          type : 'POST',
-                          url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
-                          async : false,
-                          contentType : 'application/json',
-                          data : themeName,
-                          success : function(data){
                             if(data!=null && data!=""){
                               themeclass = "form"+data.id;
                               for(i=0;i<themeArray.length;i++){
@@ -551,18 +541,9 @@ String template = request.getParameter("template");
                               $.ajax({
                                 type : 'POST',
                                 url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/updateTheme',
-                                async : false,
                                 contentType : 'application/json',
                                 data : JSON.stringify(customTheme),
-                                });
-
-                               $.ajax({
-                                  type : 'POST',
-                                  url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
-                                  async : false,
-                                  contentType : 'application/json',
-                                  data : themeName,
-                                  success: function(data){
+                                success: function(data){
                                      console.log("Final CustomTheme:"+data);
                                     if(data!=undefined && data!=""){
                                     customthemes.push(data);
@@ -573,15 +554,14 @@ String template = request.getParameter("template");
                                   error: function(){
                                     alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
                                    $("#themeName").val("");
-                              }});
+                                  }
+                              });
                           }
-                        },
-                          error : function(data){
-                            console.log("In error block");
+                          },
+                          error: function(){
                           }
                           });
-                       
-                       }
+                        }
                     }
                   }
                   function validThemeNameFunc(){
@@ -662,6 +642,12 @@ String template = request.getParameter("template");
                           $(".createCustomFormContent").html(pContent);
                       
                     }
+                  }
+                  function closeAddTheme(){
+                     $(".createCustomFormContent").empty();
+                     $("#themeName").val("");
+                     $("#errorSpan").text("");
+
                   }
       </script>
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
