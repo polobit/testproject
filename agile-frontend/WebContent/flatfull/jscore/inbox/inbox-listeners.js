@@ -287,13 +287,17 @@ function initializeInboxListeners(){
 	$('#inbox-listners').on('click', '#mail-inbox', function(e){
 		e.preventDefault();
 		$("#search-mail").val("");
+		var server = $("#inbox-email-type-select").attr("data-server");
 		$('#inbox-email-type-select').attr("folder-type","inbox");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=INBOX");
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(server != "agile")
+			renderToMailList(url,1,10);
+		else
+			displayNoEmailTemplate();
 	});
 
 	$('#inbox-listners').on('click', '#mail-sent', function(e){
@@ -310,25 +314,32 @@ function initializeInboxListeners(){
 	$('#inbox-listners').on('click', '#mail-draft', function(e){
 		e.preventDefault();
 		$("#search-mail").val("");
+		var server = $("#inbox-email-type-select").attr("data-server");
 		$('#inbox-email-type-select').attr("folder-type","draft");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Draft");
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(server != "agile")
+			renderToMailList(url,1,10);
+		else
+			displayNoEmailTemplate();
 	});
 	$('#inbox-listners').on('click', '#mail-trash', function(e){
 		e.preventDefault();
 		$("#search-mail").val("");
-		
+		var server = $("#inbox-email-type-select").attr("data-server");
 		$('#inbox-email-type-select').attr("folder-type","trash");
 		var url = $('#inbox-email-type-select').attr("data-url");
 		url = url.concat("&folder_name=Trash");
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(server != "agile")
+			renderToMailList(url,1,10);
+		else
+			displayNoEmailTemplate();
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
 		e.preventDefault();

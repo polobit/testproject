@@ -72,13 +72,17 @@ function syncContacts(){
 			        $('#inbox-email-type-select').attr("data-server",_agile_get_prefs('inbox_email_server'));
 			        $('#inbox-email-type-select').attr("folder-type","inbox");
 			        $('#inbox-email-type-select').html(_agile_get_prefs('inbox_from_email'));
+			        $('#inbox-email-type-select').attr("folder-type","inbox");
+			        globalMailCollectionInstance = new globalMailCollection();
+			        if(_agile_get_prefs('inbox_email_server') != 'agile')
+						renderToMailList(url,1,10);
+					else
+						displayNoEmailTemplate();
 				}else{
 					url = "core/api/emails/all-agile-emails?";
 					$('#inbox-email-type-select').attr("data-url",url);
+					displayNoEmailTemplate();
 				}
-				$('#inbox-email-type-select').attr("folder-type","inbox");
-				globalMailCollectionInstance = new globalMailCollection();
-				renderToMailList(url,1,10);
 	        }else{
 	        	$("#inbox-prefs-verification").css({"display":"block"});
 	        	hideTransitionBar();
@@ -116,7 +120,12 @@ function syncContacts(){
 	        _agile_set_prefs('inbox_folder_type', "inbox");
 
 	        globalMailCollectionInstance = new globalMailCollection();
-			renderToMailList(url,1,10);
+	        if(email_server != 'agile'){
+				renderToMailList(url,1,10);
+			}else{
+				displayNoEmailTemplate();
+			}
+
 		}
 	});
 	var syncedcontactitem = new syncedContactItem();
@@ -477,8 +486,18 @@ function refreshInbox(){
 	else if(folder_type == "trash")
 			url = url.concat("&folder_name=Trash");
 
-	//globalMailCollectionInstance = new globalMailCollection();
+	globalMailCollectionInstance = new globalMailCollection();
 	helperFunction();
 	SHOW_TOTALCOUNT = true;
 	renderToMailList(url,1,10);
+}
+function displayNoEmailTemplate(){
+	var html ="";
+	getTemplate("no-mail", null, undefined, function(template_ui) {
+		if( !template_ui )	return;
+
+		html = template_ui;
+	}, '#mails-list');
+	$("#mails-list").html(html);
+	hideTransitionBar();
 }
