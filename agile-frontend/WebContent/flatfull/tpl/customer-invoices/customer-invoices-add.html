@@ -1,0 +1,128 @@
+<script id="customer-invoices-add-template" type="text/html">
+<div class="bg-light lter b-b wrapper-md">
+ 			{{#if id}} 
+                        <h3  class="formheading h3 font-thin m-n"> View Invoice<span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px;" rel="popover"
+							data-placement="bottom"
+							data-content=""
+							id="element" data-trigger="hover">
+					</span></h3>
+            {{else}}
+                        <h3 class="formheading h3 font-thin m-n"><i class="icon-plus-sign"></i> Send Invoice<span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="/img/help.png"
+							style="height: 6px;" rel="popover"
+							data-placement="bottom"
+							data-content=""
+							id="element" data-trigger="hover">
+					</span>
+				</h3>
+            {{/if}}
+</div>
+
+<div class="panel panel-default">
+ <form id="personForm" name="personForm" method="post">
+            <fieldset>            
+				<div class="panel-body wrapper-md">
+                	<div class="control-group form-group">
+	                
+	                	<div class="row">
+		                	 <div class="control-group col-md-5">
+                            	 <label class="control-label"><b>Invoice #</b></label>
+		                    	<span class="controls">
+		                     	<input name="invoice_no" class="form-control field_length" max_len="500" type="text" id="invoice_no" placeholder="Invoice No" />
+		                     	</span>
+		                 	</div>
+		                 	<div class="control-group col-md-6">
+                            	 <label class="control-label"><b>Contact</b></label>
+		                     	<span class="controls">
+		                     	<input name="contact" class="form-control field_length" max_len="500" type="text" id="contact" placeholder="Customer" />
+		                     	</span>
+		                 	</div>
+	                	</div>
+                	</div>
+				</div>                
+				<div class="panel-heading font-bold">Select Products</div>
+				<div class="" id="customer_invoices_products_div"></div>
+				<div class="panel-body wrapper-md">
+                	<div class="control-group form-group">
+	                	<div class="row">
+		        			<div class="control-group  col-md-7">
+								<label class="control-label"><b>Discount</b></label>
+								<div class="input-group">
+									<span class="input-group-addon">
+                						<input type="checkbox" class="discountcheck" name="apply_discount" id="apply_discount">
+              						</span>
+              						<input name="discount_value" type="text" class="form-control discountvalue" id="discount_value">
+						            <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
+                						    <button type="button" name="discount_type" id="discount_type" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span>Value</span><span class="caret"></span></button>
+                							<ul class="dropdown-menu pull-right">
+                  								<li><a >Percent</a></li>
+                  								<li><a >Value</a></li>
+                							</ul>
+              						</div><!-- /btn-group -->
+            					</div>
+							</div>
+						<div class="control-group col-md-4">
+                             <label class="control-label"><b>Total</b></label>
+		                     <input name="final_total" class="form-control field_length" max_len="500" type="text" id="final_total" placeholder="Total" />
+		             	</div>	
+	                	</div>	                
+	                <div class="row">
+						<div class="control-group col-md-11">
+                             <label class="control-label"><b>Notes</b></label>
+		                     <span class="controls">
+		                     <textarea name="notes" type="text" class="form-control field_length" rows="5" max_len="500" id="notes" placeholder="Notes"></textarea>
+		                     </span>
+		                 </div>
+	                </div>
+                </div>
+				<div class="form-actions">
+               			<button type="submit" class="save btn btn-primary">Send</button>
+               			<a type="reset" href='#customer-invoices' class="btn">Cancel</a>
+            	</div>
+</div>
+</fieldset>
+</div>
+        </form>
+
+
+</script>
+<script id="customer-invoices-products-collection-template" type="text/html">
+<table id="" class="  table table-bordered checkbox customerinvoiceproducts_table noDelete agile-table panel table-layout-mob-view" url="core/api/products">  
+            <thead>
+                <tr>
+					<th style="width:5%;"><label class="i-checks i-checks-sm m-b-none customerinvoiceproducts_th_checkbox"><input type="checkbox" class="thead_check" value=""><i></i></label></th>	   
+                    <th  style="width:25%" class="header">Name</th>
+					<th  style="width:25%" class="header">Description</th>
+					<th  style="width:25%" class="header">Qty</th>
+                    <th  style="width:25%" class="header">Price</th>
+					<th style="width:25%" class="header">Total</th>
+                </tr>
+            </thead>
+			<tbody id='customer-invoices-products-model-list' ></tbody>            
+        </table>
+</script>
+
+<script id="customer-invoices-products-model-template" type="text/html">
+	<td class="v-middle checkbox customerinvoiceproducts_td" style="cursor:default;" data='{{id}}' >
+		<label class="i-checks i-checks-sm"><input data='{{id}}' type="checkbox" {{#if isChecked}}checked{{/if}} class="customerinvoiceproducts_td_checkbox" value=""><i></i></label>
+	</td>
+	<td class='data' data='{{id}}' >
+    	{{name}}
+	</td>
+	<td class='data'>
+    	{{description}}
+	</td>
+	<td class='data customerinvoiceproducts_td_qty'>
+    	<span class="customerinvoiceproducts_td_qty_span">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide customerinvoiceproducts_qty_input"  type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
+	</td>
+	<td class='data'>
+    	{{price}}
+	</td>
+	<td  class='data'>
+		{{total}}
+	</td>
+</script>

@@ -52,6 +52,8 @@ var SettingsRouter = Backbone.Router
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
 			"email-template/:id" : "emailTemplateEdit",
 
+			"document-templates" : "documentTemplates", "document-template-add" : "documentTemplateAdd", "document-template/:id" : "documentTemplateEdit",
+
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 
@@ -657,7 +659,7 @@ var SettingsRouter = Backbone.Router
 					$('#prefs-tabs-content').html(view.render().el);
 
 					// set up TinyMCE Editor
-					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
+					setupTinyMCEEditorsetupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
 					{
 
 						// Reset tinymce
@@ -747,6 +749,165 @@ var SettingsRouter = Backbone.Router
 						$('#tpl-attachment-name').show();
 					}, optionsTemplate, false, el);
 				}
+			},
+
+			documentTemplates : function()
+			{
+				
+
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', 
+					templateKey : "settings-document-templates",
+					individual_tag_name : 'tr', postRenderCallback : function(el)
+					{
+						console.log("loaded document template : ", el);
+								head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+								{
+									
+									$(".created_time", el).timeago();
+								});
+						
+					} });
+					that.documentTemplatesListView.collection.fetch();
+
+					$('#content').find('#prefs-tabs-content').html(that.documentTemplatesListView.render().el);
+					$('#content').find('#PrefsTab .active').removeClass('select');
+					$('#content').find('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+			},
+
+			/**
+			 * Loads a form to add new document-template. Sets HTMLEditor for the
+			 * form. Navigates to list of document templates on save success.
+			 */
+			documentTemplateAdd : function()
+			{
+
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",change:false,
+					saveAuth:function (el)
+					{
+						trigger_tinymce_save('document-template-html')
+						var sVal1=$("#document-template-html").val()
+						if(sVal1.length<=61)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return false;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						if($("#id","#userForm").length==0){
+							$("#userForm").append('<input id="id" name="id" type="hidden" value="' + data.id + '" />')	
+						}
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', '');
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
+
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+			},
+
+			/**
+			 * Updates existing document-template. On updation navigates the page
+			 * to document-templates list
+			 * 
+			 * @param id
+			 *            DocumentTemplate Id
+			 */
+			documentTemplateEdit : function(id)
+			{
+
+				if (!this.documentTemplatesListView || this.documentTemplatesListView.collection.length == 0)
+				{
+					this.navigate("document-templates", { trigger : true });
+					return;
+				}
+				var that = this;
+				that.currentTemplate = that.documentTemplatesListView.collection.get(id);
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",reload : false,change:false,
+					saveAuth:function (el)
+					{
+						
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+						}
+						catch(err){}
+
+						if(plain_content.trim().length==0)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return true;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', that.currentTemplate.toJSON().text);
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+
+								$('.save-doc-template').on('click', function(e) {
+									e.preventDefault();
+									
+								
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
+
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+
+				
 			},
 
 			/**

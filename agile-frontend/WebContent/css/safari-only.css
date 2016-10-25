@@ -1,0 +1,34 @@
+
+/*This file will be loaded only in mac safari browser*/
+
+.googleBox{
+	height: 270px;
+}
+.m-t-60{
+	margin-top: 60px !important;
+}
+.url-textbox{
+	width: 130px;
+}
+.dayContainer{
+	width: 53px !important;
+	margin-right: 3px !important;
+}
+.colorBox{
+	width: 54px !important;
+}
+.business-hours-padding{
+	padding: 3px 3px !important;
+}
+#define-business-hours .operationTime .mini-time{
+	width: 100% !important;
+}
+.icon-sun-p{
+  padding: 6px 3px;
+}
+#define-business-hours .input-group-addon{
+	padding: 6px 2px !important;
+}
+#define-business-hours .input-group-addon i{
+	font-size: 12px !important;
+}

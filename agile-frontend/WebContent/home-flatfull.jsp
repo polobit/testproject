@@ -1237,6 +1237,18 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 
 	});
 
+
+// Safari Browser Specific CSS
+
+function isSafari() {
+  return !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+}
+
+if(isSafari()){
+  head.load("/css/safari-only.css?_=<%=_AGILE_VERSION%>");
+}
+
+
 // head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATH%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 
 }); //End of head.ready() function. Check above.
@@ -1260,7 +1272,7 @@ function load_globalize()
 function showVideoForRegisteredUser(){
     // console.log("Ref = " + document.referrer);
 
-    if(!document.referrer || document.referrer.indexOf("register") == -1)
+    if(!document.referrer || document.referrer.indexOf("invite-users") == -1)
          return;
     var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
     if(!localStorage.getItem(domainuser_video_cookie))

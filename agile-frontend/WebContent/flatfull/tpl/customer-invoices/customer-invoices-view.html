@@ -1,0 +1,61 @@
+<script id="customer-invoicesview-collection-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">Invoices</h3>
+            <a href="#customer-invoices-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  Send Invoice</a>
+            <div class="clearfix"></div>
+           
+        </div>
+</div>
+</div>
+<div class="wrapper-md">
+<div class="row">
+    <div class="col-md-9"> 
+		<div id="slate">
+         </div>
+       
+<div class="table-responsive">
+        <table class="table table-bordered agile-table panel table-layout-mob-view" url="core/api/customerinvoices">  
+            <thead>
+                <tr>   
+                    <th  style="width:25%" class="header">Invoice No</th>
+                    <th  style="width:25%" class="header">Contact</th>
+					<th  style="width:25%" class="header">Total</th>
+					<th style="width:25%" class="header">Created On</th>
+                </tr>
+            </thead>
+            <tbody id='customer-invoicesview-model-list' route='customer-invoices-edit/'/>
+            </tbody>
+        </table>
+</div>
+    </div>
+    <div class='col-md-3'>
+        <div class="wrapper" id='addview'>
+             <h4 class="m-t-none m-b-sm">
+              What are Invoices?
+             </h4>
+            <p>Invoices can be raised to different customers.</p>
+        </div>
+    </div>
+</div>
+</div>
+</script>
+
+<script id="customer-invoicesview-model-template" type="text/html">
+	<td data='{{id}}' class='data c-p'>
+    	{{invoice_no}} 
+	</td>
+	<td class='data c-p'>
+    	{{contact}} 
+	</td>
+	<td class='data c-p'>
+    	{{final_total}} 
+	</td>
+	<td> 
+  		{{#if created_time}}
+        	 Created <i class="fa fa-clock-o m-r-xs text-muted"></i><time class="created_time time-ago border-highlight text-muted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{filterOwner.name}}
+  		{{/if}}
+	</td>
+</script>

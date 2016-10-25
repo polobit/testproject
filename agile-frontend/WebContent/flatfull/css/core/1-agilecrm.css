@@ -4128,6 +4128,7 @@ background-color : #522E2E;
     -ms-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     -o-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    top: calc(100vh - 150px);
 }
 
 #dealActions.open {
@@ -4615,7 +4616,15 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
-
+.h-230{
+  height: 230px;
+}
+.w-140{
+  width: 140px;
+}
+.icon-sun-p{
+  padding: 6px 5px;
+}
 /* start of dialler */
 
 	.keyPad:hover{
@@ -4842,4 +4851,16 @@ ul#recent-menu-model-list li:nth-child(even)
 #email-content .subscriptionDetail
 {
   padding-bottom:35px;
+}
+#automation-video +  .tooltip > .tooltip-inner {
+    color: #58666e;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    white-space:nowrap;
+    max-width:none;
+      
+}
+#automation-video + .tooltip.bottom > .tooltip-arrow {
+      border-bottom: 5px solid  #fff;
+      border-width: 0 10px 10px;
 }

@@ -390,11 +390,17 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click .cases-edit-contact-tab' : 'editCase',
     	'click .contact-add-contact' : 'addContact',
     	'click .contact-add-document' : 'addDocument',
-    	'click .document-edit-contact-tab' : 'editDocument',
+    	//'click .document-edit-contact-tab' : 'editDocument',
+    	'click .document-edit-contact-tab' : 'navigateToContacteditDocument',
+    	'click .document-edit-company-tab' : 'navigateToCompanyeditDocument',
     	'click .document-unlink-contact-tab' : 'unlinkDocument',
     	'click .add-document-select' : 'listDocuments',
+      
+    	'click .add-company-edocument-select' : 'navigateToCompanyeDocument',
+    	'click .add-contact-edocument-select' : 'navigateToContacteDocument',
     	'click .add-document-cancel' : 'cancelDocuments',
-    	'click .add-document-confirm' : 'addSelectedDocument',
+    	'click .add-company-document-confirm' : 'addCompanySelectedDocument',
+    	'click .add-contact-document-confirm' : 'addContactSelectedDocument',
 
     	'click #contacts-inner-tabs #next' : 'tabViewNext',
     	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
@@ -1283,7 +1289,41 @@ enterCompanyScore: function(e){
 		contact_details_documentandtasks_actions.document_unlink(e);
 		
 	},
+	navigateToContacteDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edocument(e,"contact");
 
+		        
+	},
+	navigateToCompanyeDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edocument(e,"company");
+
+		        
+	},
+	navigateToContacteditDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edit_document(e,"contact");
+
+		        
+	},
+	navigateToCompanyeditDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edit_document(e,"company");
+
+		        
+	},
+	navigateToeDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edocument(e);
+
+		        
+	},
 	/**
 	 * For showing new/existing documents
 	 */
@@ -1301,16 +1341,24 @@ enterCompanyScore: function(e){
 		e.preventDefault();
 		var el = $("#documents");
 		el.find(".contact-document-select").css("display", "none");
+
 		el.find(".add-document-select").css("display", "inline-block");
+		el.find(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle").css("display", "inline-block");
 	},
 
 	/**
 	 * For adding existing document to current contact
 	 */
-	addSelectedDocument : function(e)
+	addContactSelectedDocument : function(e)
 	{
 		e.preventDefault();
-		contact_details_documentandtasks_actions.add_selected_document(e);
+		contact_details_documentandtasks_actions.add_selected_document(e,"contact");
+
+	}, 
+	addCompanySelectedDocument : function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_selected_document(e,"company");
 
 	},
 

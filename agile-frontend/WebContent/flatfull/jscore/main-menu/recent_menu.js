@@ -120,10 +120,13 @@ function modelAction(elem)
 	{
 		updatecases(entity);
 	}
-	else if(type == 'document' || entity.attributes.network_type)
+	else if(type=='document')
 	{
-		updateDocument(entity);
+		App_Documents.navigate("documents/"+id,{trigger:true});
+		$('#contactsmenu').parent().find('.active').removeClass('active');
+		$('#contactsmenu').addClass('active');
 	}
+	
 	
 	recent_view_update_required=true;
 }

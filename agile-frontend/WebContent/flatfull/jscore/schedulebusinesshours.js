@@ -48,9 +48,14 @@ function initializeOnlineCalendarListners(el){
 				json['bufferTime'] = $("#bufferTime").val();
 				json['bufferTimeUnit'] = $("#bufferTimeUnit").val();
 
-               var calendarNotes = $(".online_summer_note").code();				
-				if(calendarNotes && calendarNotes.indexOf('"') >= 0){
+               var calendarNotes = $(".online_summer_note").code();
+               var textWithStyle = $('<span />').html(calendarNotes);
+                   textWithStyle = $(textWithStyle).text();
+
+				if(textWithStyle && textWithStyle.indexOf('"') >= 0){
 					$(saveBtn).next().html("{{agile_lng_translate 'calendar' 'double-quotes-not-allowed'}}");
+					$(saveBtn).next().removeClass("text-success")
+				    $(saveBtn).next().addClass("text-danger");
 					enable_save_button($(saveBtn));
 					setTimeout(function(){
 					  $(saveBtn).next().empty();							
@@ -89,7 +94,7 @@ $("#online-cal-listners").on("click","#edit-schedule-id", function(e){
 					$("#scheduleurl").removeAttr("href");
 					$('#scheduleurl')
 							.html(
-									url + "<input class='input-sm inline-block form-control' style='width:140px' type='text'  name='url' id='url' value='" + scheduling_id + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>{{agile_lng_translate 'modals' 'save'}}</button>");
+									url + "<input class='input-sm inline-block form-control url-textbox w-140' type='text'  name='url' id='url' value='" + scheduling_id + "'/><buttion class='btn btn-primary btn-sm inline-block m-l-sm' id='save-scheduleurl'>{{agile_lng_translate 'modals' 'save'}}</button>");
 
 					$("#scheduleurl").addClass("nounderline");
 					$('#scheduleModal').data('modal', null);

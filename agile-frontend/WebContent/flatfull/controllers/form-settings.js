@@ -99,7 +99,7 @@ var FormsRouter = Backbone.Router.extend({
 
 						});
 
-						$(".active").removeClass("actionve");
+						$(".active").removeClass("active");
 						$("#formsmenu").addClass("active");
 
 						$('#formbuilder-form-tabs .select').removeClass('select');

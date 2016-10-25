@@ -142,6 +142,20 @@ function showCustomFieldModel(data)
 		    });
 			model.attributes['scopeExtension'] = scopeExtension.toString();
 			model.attributes['positionsList'] = positionList.toString();
+			if(model.get('field_type') && model.get('field_type') == 'LIST' && model.get('field_data'))
+			{
+				var data = model.get('field_data').split(';');
+				var dataTrim='' ;
+				$.each(data , function(a,b)
+				{
+					if(b)
+					{
+						dataTrim = dataTrim + b.trim() ;
+						dataTrim = dataTrim + ';' ;
+					}
+				});
+				model.attributes.field_data = dataTrim ;
+			}
 		},
 		postRenderCallback : function(el) {
 			

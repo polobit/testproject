@@ -24,7 +24,9 @@ $(function()
     $('#opportunityUpdateModal #opportunity_validate').trigger('click');
   });
 
-
+  	$('#opportunityUpdateModal, #newDealModal').on('hidden.bs.modal', function (e) {
+    	$("#timeline","#deal-details").css("zIndex","1");		
+  	});
   /**
    * Validates deal and saves
    */
@@ -107,12 +109,15 @@ $(function()
                     return false;
             }
         }
-    console.log(json);
-    if (form_id == "opportunityForm")
-      saveDeal(form_id, modal_id, this, json, false);
-    else
-      saveDeal(form_id, modal_id, this, json, true);
-  });
+
+        json["products"] = serialize_deal_products(form_id);
+        
+		console.log(json);
+		if (form_id == "opportunityForm")
+			saveDeal(form_id, modal_id, this, json, false);
+		else
+			saveDeal(form_id, modal_id, this, json, true);
+	});
 
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
@@ -543,6 +548,12 @@ function initializeDealListners(el){
 				dealModel.set({ "pipeline_id" : track }, { silent : true });
 				update_milestone(dealModel, deal_id, newMilestone, old_milestone, true, "", false);
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
+				var modelsLength = $("#" + old_milestone.replace(/ +/g, "")).find('ul li.deal-color').size() ;
+	        	if(modelsLength ==10 && modelsLength <= parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text()))
+	        	{
+	          		dealsCollection[0]['isUpdateCollection'] = true ;
+	          		dealsFetch(dealsCollection[0]);
+	        	}
 			}
 		}
 		//If deal moves to lost milestone of other track, will ask reasons for lost the deal
