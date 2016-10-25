@@ -411,7 +411,7 @@ var emailDomain = '<%=email_domain%>';
 			console.log($("#sales-form-group"));
 			$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
 			$("#support-form-group").find('input').val("support@"+emailDomain+".com");
-			$("#marketing-form-group").find('input').val("info@"+emailDomain+".com");
+			$("#marketing-form-group").find('input').val("marketing@"+emailDomain+".com");
 		}
 		}
 
