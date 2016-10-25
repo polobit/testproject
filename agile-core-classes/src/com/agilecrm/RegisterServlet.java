@@ -324,8 +324,6 @@ public class RegisterServlet extends HttpServlet
 	else{
 		response.sendRedirect("/invite-users?redirectionurl="+redirectionURL);
 	}
-	// Redirect to home page
-	//response.sendRedirect(redirectionURL);
 	
     }
 
