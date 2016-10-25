@@ -1272,7 +1272,7 @@ function load_globalize()
 function showVideoForRegisteredUser(){
     // console.log("Ref = " + document.referrer);
 
-  if(!document.referrer || document.referrer.indexOf("invite-users") == -1 || document.referrer.indexOf("register") == -1)
+  if(!document.referrer || document.referrer.indexOf("invite-users") == -1)
          return;
 
       
