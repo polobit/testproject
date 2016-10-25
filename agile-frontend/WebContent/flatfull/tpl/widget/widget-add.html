@@ -160,6 +160,9 @@
 		               	 {{#if_equals name "Skype"}}
 		               	  <a></a>
 		               	  {{else}}
+						{{#if_equals name "Asterisk"}}
+		               	  <a></a>
+		               	  {{else}}
 		               	 {{#if_equals name "Sip"}}
 		               	  <a></a>
 		                {{else}}
@@ -168,6 +171,7 @@
   									<i class="fa fa-users"></i>
   				   		   		</a>
   				   		    {{/isAdmin}}
+							{{/if_equals}}
   				   		   {{/if_equals}}
   				   		     {{/if_equals}}
                 {{/if_equals}}
