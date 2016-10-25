@@ -116,20 +116,22 @@ function setCost(price)
 	return $("#users_total_cost").text(($("#users_quantity").text() * price).toFixed(2));
 }
 
-function update_price()
+function update_price(text)
 {
 	// Get the selected plan cost
 	var plan_name = $("#plan_type").val();
-	if(_billing_restriction.currentLimits.planName == "FREE")
-	{
-		if(plan_name == "starter")
+	if(!text){
+		if(_billing_restriction.currentLimits.planName == "FREE")
+		{
+			if(plan_name == "starter")
+				$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
+			else if(IS_TRIAL && IS_ALLOWED_TRIAL)
+				$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-trial'}}");
+			else
+				$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
+		}else
 			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
-		else if(IS_TRIAL && IS_ALLOWED_TRIAL)
-			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-trial'}}");
-		else
-			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
-	}else
-		$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
+	}
 	return $("#" + plan_name + "_plan_price").text();
 }
 
@@ -349,7 +351,7 @@ function initializeSubscriptionListeners()
 				}
 				plan_json = {};
 				var buttonText = $(this).html();
-				$(this).text("{{agile_lng_translate 'tickets' 'loading'}}");
+				$(this).text("{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
 				$(this).attr("disabled","disabled");
 				/*
 				 * var quantity = $("#users_quantity").text(); var cost =
@@ -441,7 +443,7 @@ function initializeSubscriptionListeners()
 
 				
 				plan_json.new_signup = is_new_signup_payment();
-				plan_json.price = update_price();
+				plan_json.price = update_price(true);
 				plan_json.cost = (cost * months).toFixed(2);
 				if(credit > 0){
 					plan_json.costWithCredit = plan_json.cost;
@@ -540,22 +542,21 @@ function initializeSubscriptionListeners()
 							
 						}else{
 							var restrictions = data.restrictions;
-							restrictions.plan = data.plan;
-							restrictions.users.limit = parseInt(plan_json.quantity);
-							if(restrictions.contacts.count > restrictions.contacts.limit)
-								errorsCount++;
-							if(restrictions.webrules.count > restrictions.webrules.limit)
-								errorsCount++;
-							if(restrictions.users.count > restrictions.users.limit)
-								errorsCount++;
-							if(restrictions.workflows.count > restrictions.workflows.limit)
-								errorsCount++;
-							if(restrictions.triggers.count > restrictions.triggers.limit)
-								errorsCount++;
+							var usersLimit = parseInt(plan_json.quantity);
+							if(restrictions.users != undefined){
+								restrictions.users.limit = usersLimit;
+								if(restrictions.users.limit >= restrictions.users.count)
+									delete restrictions['users'];
+							}
+							errorsCount = (_.size(restrictions));
 							if(errorsCount >= 1)
 							{
 								restrictions.errorsCount = errorsCount;
-								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
+								restrictions.plan = data.plan;
+								var template_name = "subscribe-error-modal";
+								if(errorsCount > 5)
+									template_name = "subscribe-error-more-modal";
+								getTemplate(template_name,restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$(template_ui).modal('show');

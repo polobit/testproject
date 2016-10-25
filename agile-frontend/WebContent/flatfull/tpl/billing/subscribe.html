@@ -801,7 +801,7 @@ Proceed to Trial
 <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-header">
-            <button class="close" data-dismiss="modal">x</button>
+            <button class="close" data-dismiss="modal">&times;</button>
 			<h3 class="modal-title">{{agile_lng_translate 'Plan-and-upgrade' 'plan-restrictions'}}</h3>
 		</div>
 		<div class="modal-body help-text">
@@ -810,24 +810,108 @@ Proceed to Trial
 			{{#if is_more_users}}
 				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{../count}}  {{agile_lng_translate 'Plan-and-upgrade' 'users-with-your-current-plan-and-are-trying-to-subscribe'}} {{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
 			{{else}}
-				{{#if_greater users.count users.limit}}
+				{{#if users}}
 					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{users.count}} {{agile_lng_translate 'Plan-and-upgrade' 'users-with-your-current-plan-and-are-trying-to-subscribe'}} {{users.limit}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater contacts.count contacts.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'portlets' 'contacts'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater workflows.count workflows.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{workflows.count}} {{agile_lng_translate 'Plan-and-upgrade' 'campaigns-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{workflows.count}} {{agile_lng_translate 'portlets' 'campaigns'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater webrules.count webrules.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{webrules.count}} {{agile_lng_translate 'Plan-and-upgrade' 'webrules-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{webrules.count}} {{agile_lng_translate 'portlets' 'webrules'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater triggers.count triggers.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{triggers.count}} {{agile_lng_translate 'Plan-and-upgrade' 'triggers-with-your-current-plan-and-are-trying-to-subscribe'}}({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{triggers.count}} {{agile_lng_translate 'portlets' 'triggers'}}</div></div>
-				{{/if_greater}}
+				{{/if}}
+				{{#if contacts}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-with-your-current-plan-and-are-trying-to-subscribe'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'portlets' 'contacts'}}</div></div>
+				{{/if}}
+				{{#if workflows}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{workflows.count}} {{agile_lng_translate 'Plan-and-upgrade' 'campaigns-with-your-current-plan-and-are-trying-to-subscribe'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{workflows.count}} {{agile_lng_translate 'portlets' 'campaigns'}}</div></div>
+				{{/if}}
+				{{#if webrules}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{webrules.count}} {{agile_lng_translate 'Plan-and-upgrade' 'webrules-with-your-current-plan-and-are-trying-to-subscribe'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{webrules.count}} {{agile_lng_translate 'portlets' 'webrules'}}</div></div>
+				{{/if}}
+				{{#if triggers}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{triggers.count}} {{agile_lng_translate 'Plan-and-upgrade' 'triggers-with-your-current-plan-and-are-trying-to-subscribe'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{triggers.count}} {{agile_lng_translate 'portlets' 'triggers'}}</div></div>
+				{{/if}}
+				{{#if widgets}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{widgets.count}} {{agile_lng_translate 'Plan-and-upgrade' 'widgets-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{widgets.count}} {{agile_lng_translate 'Plan-and-upgrade' 'widgets'}}</div></div>
+				{{/if}}
+				{{#if nodes}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{nodes.count}} {{agile_lng_translate 'Plan-and-upgrade' 'nodes-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{nodes.count}} {{agile_lng_translate 'Plan-and-upgrade' 'nodes'}}</div></div>
+				{{/if}}
+				{{#if emailAccounts}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{emailAccounts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'emailAccounts-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{emailAccounts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'emailAccounts'}}</div></div>
+				{{/if}}
+				{{#if reports}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{reports.count}} {{agile_lng_translate 'Plan-and-upgrade' 'reports-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{reports.count}} {{agile_lng_translate 'Plan-and-upgrade' 'reports'}}</div></div>
+				{{/if}}
+				{{#if tracks}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{tracks.count}} {{agile_lng_translate 'Plan-and-upgrade' 'tracks-limit-msg'}} {{../plan}}{{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{tracks.count}} {{agile_lng_translate 'Plan-and-upgrade' 'tracks'}}</div></div>
+				{{/if}}
+				{{#if smsGateway}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'smsGateway-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{agile_lng_translate 'Plan-and-upgrade' 'smsGateway'}}</div></div>
+				{{/if}}
+				{{#if ecommerceSync}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'ecommerceSync-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{agile_lng_translate 'Plan-and-upgrade' 'ecommerceSync'}}</div></div>
+				{{/if}}
+				{{#if accountingSync}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'accountingSync-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{agile_lng_translate 'Plan-and-upgrade' 'accountingSync'}}</div></div>
+				{{/if}}
 			{{/if}}
 			<br/>
 			<div class="text-danger">{{agile_lng_translate 'portlets' 'please-adjust-your-current-plan-accordingly-and-proceed'}}</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="subscribe-error-more-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>
+			<h3 class="modal-title">{{agile_lng_translate 'Plan-and-upgrade' 'plan-restrictions'}}</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>{{agile_lng_translate 'Plan-and-upgrade' 'below-features-in-plan'}} {{plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}:</strong><br/><br/>
+				{{#if users}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Users'}} - {{users.count}}; 
+				{{/if}}
+				{{#if contacts}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Contacts'}} - {{contacts.count}}; 
+				{{/if}}
+				{{#if workflows}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Campaigns'}} - {{workflows.count}}; 
+				{{/if}}
+				{{#if webrules}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Webrules'}} - {{webrules.count}}; 
+				{{/if}}
+				{{#if triggers}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Triggers'}} - {{triggers.count}}; 
+				{{/if}}
+				{{#if widgets}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Widgets'}} - {{widgets.count}}; 
+				{{/if}}
+				{{#if nodes}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Nodes'}} - {{nodes.count}}; 
+				{{/if}}
+				{{#if emailAccounts}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'EmailAccounts'}} - {{emailAccounts.count}}; 
+				{{/if}}
+				{{#if reports}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Reports'}} - {{reports.count}}; 
+				{{/if}}
+				{{#if tracks}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Tracks'}} - {{tracks.count}}; 
+				{{/if}}
+				{{#if smsGateway}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'SmsGateway'}}; 
+				{{/if}}
+				{{#if ecommerceSync}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'EcommerceSync'}}; 
+				{{/if}}
+				{{#if accountingSync}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'AccountingSync'}}; 
+				{{/if}}
+			<div class="text-danger p-t">{{agile_lng_translate 'portlets' 'please-adjust-your-current-plan-accordingly-and-proceed'}}</div>
 			
 		</div>
 		<div class="modal-footer">
