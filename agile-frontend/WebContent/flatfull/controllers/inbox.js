@@ -240,14 +240,13 @@ function renderToMailView(data){
 			var attrid = $(targetEl).attr('data-val');
 			
 			var $parent_element = $(targetEl).closest('#inbox-reply-div');
-			var from_email = $('#inbox-email-type-select').attr("from_email");
+			//var from_email = $('#inbox-email-type-select').attr("from_email");
 			var from_emails = $parent_element.find('.to-emails').data('from');
 			var to_emails = "";
 
-			if(from_emails && from_emails.indexOf("<") > -1)
-				from_emails = from_emails.split("<")[1].split(">")[0]
+			var folder_type = $('#inbox-email-type-select').attr("folder-type");
 
-			if(from_email == from_emails)
+			if(folder_type == "sent")
 				to_emails = $parent_element.find('.to-emails').data('to');
 			else
 				to_emails = $parent_element.find('.to-emails').data('from');
@@ -446,7 +445,7 @@ function inboxreplySend(ele,json){
 	});
 }
 function extractEmail(toEmails){
-	var returnVal = "";
+	var returnVal = null;
 	var emails = toEmails.split(",");
 	for(var i=0;i<emails.length;i++){
 		var email = "";
@@ -459,7 +458,7 @@ function extractEmail(toEmails){
 		if(returnVal == null)
 			returnVal = email;
 		else
-			returnVal= returnVal+email;
+			returnVal= returnVal+','+email;
 		
 	}
 
