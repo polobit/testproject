@@ -254,13 +254,13 @@ function validateAnalyticalCode(websiteUrl)
             if(data=="Tracking code is valid")
             {
              $("#validate-tracking-code").removeClass("hide");
-             $("#validate-tracking-code").html("<i class='fa fa-check icon-1x' style='color:green;'>"+data+"</i>");
+             $("#validate-tracking-code").html("<span style='color:green;font-size: 13px;margin-left: -18px;'>"+data+"</span>");
           }
 
            else
            {
             $("#invalidate-tracking-code").removeClass("hide");
-             $("#invalidate-tracking-code").html("<i class='fa fa-times icon-1x' style='color:red;'>"+data+"</i>");
+             $("#invalidate-tracking-code").html("<span style='color: #f05050;font-size: 13px;margin-left: -18px;'>"+data+"</span>");
         
           }
         },

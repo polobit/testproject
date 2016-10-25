@@ -296,13 +296,13 @@ public class APIKeyUtil
    			String whiteListTrackingCode = "https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js";
    			//if Agile CRM tracking code is not there then this msg will be returns
    			 if(!websiteString.contains(trackingCodeURL) && ! websiteString.contains(whiteListTrackingCode))
-   				return "Tracking code is invalid or not exist!";
+   				return "Tracking code is invalid or not exist.";
    			
    			if(!websiteString.contains(domainAPIKey))
-   				return "Domain name or API key is Invalid!";
+   				return "Domain name or API key is Invalid.";
    			
    			if(StringUtils.indexOf(websiteString, domainAPIKey) != StringUtils.lastIndexOf(websiteString, domainAPIKey))
-   				return "Tracking code exist more than one time!";
+   				return "Tracking code exist more than one time.";
    			} catch (IOException e) {
    				e.printStackTrace();
    				return "Tracking code is not exist";
