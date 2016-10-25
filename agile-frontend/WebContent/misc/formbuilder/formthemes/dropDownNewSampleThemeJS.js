@@ -470,7 +470,7 @@
 					var themecolor ="#"+$(".colorTheme input").val();
 					var borderWidth=$(".innerBorderWidthTheme select option:selected").text();
 					var borderStyle= null;
-					if(themeEle == "FormBorder"){
+					if(themeEle == "Form Border"){
 
 						if(borderWidth != "None"){
 							$(".innerBorderStyleTheme li").each(function(){
@@ -492,7 +492,7 @@
 
 						
 					}
-					else if(themeEle == "FormBackground"){
+					else if(themeEle == "Form Background"){
 						$(".createCustomFormContent form").css("background-color",themecolor);
 						var css="{background-color:"+themecolor+"}";
 						var eleThemeCss=new EleThemeCss("FormBackground/FormBackground",css);
@@ -514,7 +514,7 @@
 							}
 						}	
 					}
-					else if(themeEle == "FieldLabel"){
+					else if(themeEle == "Field Label"){
 						$(".createCustomFormContent .agile-group .agile-label").css("color",themecolor);	
 					    var css=".agile-group .agile-label{border-color:"+themecolor+"}";
 						var eleThemeCss=new EleThemeCss("FieldLabel/fieldLabel",css);
@@ -525,7 +525,7 @@
 							}
 						}
 					}
-					else if(themeEle == "ButtonText"){
+					else if(themeEle == "Button Text"){
 						$(".createCustomFormContent .agile-group .agile-field button").css("color",themecolor);	
 					    var css=".agile-group .agile-field button{color:"+themecolor+"}";
 						var eleThemeCss=new EleThemeCss("ButtonText/buttonText",css);
@@ -536,7 +536,7 @@
 							}
 						}
 					}
-					else if(themeEle == "ButtonBackground"){
+					else if(themeEle == "Button Background"){
 						$(".createCustomFormContent .agile-group .agile-field button").css("background-color",themecolor);
 					    var css=".agile-group .agile-field button{background-color:"+themecolor+"}";
 						var eleThemeCss=new EleThemeCss("ButtonBackground/buttonBackground",css);
@@ -793,7 +793,7 @@
 					var fontFamilyEle=$(".innerFontFamilyTheme select").val();
 					var fontStyleEle=$(".innerFontStyleDiv select").val();
 					var fontWeightEle=$(".innerFontWeightDiv select").val();
-					var fontSizeEle=$(".innerFontSizeUlDiv select").val()+"px";
+					var fontSizeEle=$(".innerFontSizeDiv select").val()+"px";
 					/*var fontThemeColor="#"+$(".innerFontTheme input").val();*/
 					/*var fontThemeColor=$(e.currentTarget).val();*/
 					console.log(formEle+"\t"+fontFamilyEle+"\t"+fontStyleEle+"\t"+fontWeightEle+"\t"+fontSizeEle);

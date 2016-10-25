@@ -59,6 +59,7 @@ define(
 									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });
 								}	
 							}
+							chooseThemeFunc();
 						});
 					});
 				});

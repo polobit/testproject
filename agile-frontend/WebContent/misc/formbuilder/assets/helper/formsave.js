@@ -12,7 +12,7 @@ define([
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
 		/*var themeVal= $( "input:checked" ).val()*/;
-		var themeVal=null;
+		/*var themeVal=null;
 		var themeDivArr=$(".themeDiv");
                     $.each(themeDivArr,function(index,value){
                       if($(this).find("i").hasClass("fa") &&
@@ -20,7 +20,9 @@ define([
                       	themeVal=$(this).find(".themeEle").text();
                       }
                       
-                     });
+                     });*/
+         var themeVal =$(".themesSelectEle option:selected").text();
+    
 		 var custThmDiv = document.createElement("div");
 		 custThmDiv.setAttribute("id","formContent");
 		 $("body").append(custThmDiv);

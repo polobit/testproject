@@ -34,15 +34,12 @@ define([
                       /*if(formClasses.indexOf(value.name)>-1){*/
                       	if(formClasses.indexOf("form"+value.id)>-1){
                       	/*$(document.getElementById("target")).addClass(value.name);*/
+                      		currApplThm=value.name;
                       		$(document.getElementById("target")).addClass("form"+value.id);
                             $(document.getElementById("agileCustTheme")).text(value.themeCss);
                       }
                      });
-				/*$("#formContent").html(data.formHtml);
-				formClasses=$("#formContent .form-view").attr("class");
-				console.log("formClassesList:::"+formClasses);
-				$("#formContent .form-view").remove();*/
-
+				 
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
 					$('#form-label').text('Edit Form');
