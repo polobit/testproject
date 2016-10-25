@@ -308,6 +308,12 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			
 			add_recent_view(new BaseModel(document));
 			
+			var contactcompanydealtype=$("#documents-listener-container").attr("contactcompanydealtype")
+			if(contactcompanydealtype=="email-template")
+			{
+				Backbone.history.navigate("email-templates",{trigger: true});  
+			}
+			
 			if (App_Contacts.contactDetailView)
 			{
 					if(Current_Route.indexOf( "contact")>-1)	
@@ -372,6 +378,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 					
 			
 			} 
+			
 			if (App_Companies.companyDetailView)
 			{
 					if(Current_Route.indexOf( "company")>-1)	

@@ -48,8 +48,9 @@ function initializeEmailBuilderListeners() {
         e.preventDefault();
         var selectedVal = $('#attachmentSelectBox').val();
         if(selectedVal == "new"){
-            $('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
-            $('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
+            //$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+            Backbone.history.navigate("documents/email-template",{trigger: true});         
+            //$('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
         }else if(selectedVal != ""){
             $('#attachmentSelectBoxHolder').hide();
             $('#attachmentHolder').show();
