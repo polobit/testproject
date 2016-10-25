@@ -79,7 +79,7 @@ public class InviteUserServlet extends HttpServlet {
 			// Update domain user
 			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 			if (domainUser == null)
-				throw new Exception("We have not been able to locate any user"+email);
+				throw new Exception("We have not been able to locate any user "+email);
 
 			System.out.println("domainuser with that email address = " + domainUser);
 			domainUser.password = password;
