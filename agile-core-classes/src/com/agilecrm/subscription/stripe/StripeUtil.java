@@ -64,7 +64,7 @@ public class StripeUtil {
 	public static String getStripeApiKey(){
 		if(isDevelopmentEnv())
 			return Globals.STRIPE_TEST_API_KEY;
-		return getStripeApiKey();
+		return Globals.STRIPE_LIVE_API_KEY;
 	}
 	private static boolean isDevelopmentEnv(){
 		if(VersioningUtil.isDevelopmentEnv() || VersioningUtil.getApplicationAPPId().equals("agilecrmbeta")){
@@ -73,7 +73,7 @@ public class StripeUtil {
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 		try{
-			String versionNumber = (String)CacheUtil.getCache("stripe_version_test");
+			String versionNumber = (String)CacheUtil.getCache("stripe_test_key");
 			if(versionNumber != null && versionNumber.equals(VersioningUtil.getVersion()))
 				return true;
 			return false;
