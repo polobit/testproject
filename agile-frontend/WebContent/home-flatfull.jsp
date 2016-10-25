@@ -1272,8 +1272,10 @@ function load_globalize()
 function showVideoForRegisteredUser(){
     // console.log("Ref = " + document.referrer);
 
-    if(!document.referrer || document.referrer.indexOf("invite-users") == -1)
+  if(!document.referrer || document.referrer.indexOf("invite-users") == -1 || document.referrer.indexOf("register") == -1)
          return;
+
+      
     var domainuser_video_cookie = CURRENT_DOMAIN_USER.domain+'_video_cookie';
     if(!localStorage.getItem(domainuser_video_cookie))
     {     

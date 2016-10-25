@@ -31,12 +31,11 @@
 	}
 
 	//String redirectHomeURL = (String) request.getAttribute("redirectionurl");
-	//String redirectHomeURL = request.getParameter("redirectionurl");
-	String redirectHomeURL = (String)request.getSession().getAttribute("RedirectionHomeURL");
+	String redirectHomeURL = request.getParameter("redirectionurl");
 	System.out.println("After JSP code in new file");
 	//List<String> restrictedDomains = new List<String>();
 	//restrictedDomains.add("zoho").add("yandex").add("hotmail").add("yahoo").add("");
-	String[] restrictedDomains = {"zoho","yandex","hotmail","yahoo","aol","outlook","rossbergercom","fastmail","usa.gov","gmail"};
+	String[] restrictedDomains = {"zoho","yandex","hotmail","yahoo","aol","outlook","rossbergercom","fastmail","usa.gov","yopmail"};
 	String email = (String)request.getSession().getAttribute("Email");
 	//String email="hi@yopmail.com";
 	boolean is_restricted= false;
@@ -222,8 +221,8 @@ a{
 </style>
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
-<script src="/flatfull/lib/bootstrap.v3.min.js"></script>
+<script type="text/javascript" src="flatfull/lib/jquery.validate.min.js"></script>
+<script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
@@ -237,7 +236,7 @@ a{
 		<div class="row" >
 			<div class="align-center m-b-xs"style="font-size:18px;"> Congratulations, you have signed up successfully!</div>
 			<div class="align-center"style="margin-bottom:15px;font-size: 16px;">
-			  Invite your colleagues and enjoy Agile CRM's extensive features.
+			  Invite your team for seamless collaboration.
 			</div>
 		<div class="col-sm-5" style="float: none !important;margin: 0 auto;">
 			<div class='well'>
@@ -249,7 +248,7 @@ a{
 			<form role="form" id='agile-useradd-form' class="form-horizontal newuserform" onsubmit="return false;">
 					<div id="Sales_Team">
 					<div class="control-group align-center">
-					<label style="font-weight: 600;color: #736f6f;">Sales Team</label>
+					<label style="font-weight: 600;color: #736f6f;">Sales</label>
 					<div class="control-group"> 
 									      
 					</div>
@@ -259,7 +258,7 @@ a{
 					<label class="control-label col-sm-3">User <span>1</span></label>
 					<div class="control-group col-sm-8 removeUser" id="sales-form-group"> 
 									         <span class="controls" > 
-									         	<input  name="email" type="email" class="form-control input-style"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" id="email" placeholder="Email Address"> </span> 
+									         	<input  name="temp1" type="email" class="form-control input-style"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span> 
 									        
 					</div>
 					</div>
@@ -267,7 +266,7 @@ a{
 					<div class="control-group form-group ">
 					<label class="control-label col-sm-3">User <span class="number">2</span></label>
 					<div class="control-group col-sm-8 removeUser"> 
-									         <span class="controls"> <input name="email"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" type="email" class=" form-control input-style "  id="email" placeholder="Email Address"> </span> 
+									         <span class="controls"> <input name="temp2"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" type="email" class=" form-control input-style "   placeholder="Email Address"> </span> 
 									        
 					</div>
 					</div>
@@ -279,7 +278,7 @@ a{
 	            	<div id="support_team">
 
 	            	<div class="control-group align-center m-b-xs">
-					<label class="control-label " style="font-weight: 600;color: #736f6f;">Support Team</label>
+					<label class="control-label " style="font-weight: 600;color: #736f6f;">Support</label>
 					<div class="control-group"> 
 									      
 					</div>
@@ -289,14 +288,14 @@ a{
 					<div class="control-group form-group">
 					<label class="control-label col-sm-3">User <span>1</span></label>
 					<div class="control-group col-sm-8 removeUser" id="support-form-group"> 
-									         <span class="controls"> <input name="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  type="email" class=" form-control input-style "  id="email" placeholder="Email Address"> </span> 
+									         <span class="controls"> <input name="temp3" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  type="email" class=" form-control input-style "   placeholder="Email Address"> </span> 
 									        
 					</div>
 					</div>
 					<div class="control-group form-group ">
 					<label class="control-label col-sm-3">User <span>2</span></label>
 					<div class="control-group col-sm-8 removeUser"> 
-									         <span class="controls"> <input name="email"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" id="email" placeholder="Email Address"> </span> 
+									         <span class="controls"> <input name="temp4"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span> 
 									         
 					</div>
 					</div>
@@ -306,7 +305,7 @@ a{
 	            	</div>
 	            	<div id="marketing_team">
 	            	<div class="control-group align-center m-b-xs">
-					<label class="control-label" style="font-weight: 600;color: #736f6f;">Marketing Team</label>
+					<label class="control-label" style="font-weight: 600;color: #736f6f;">Marketing</label>
 					<div class="control-group "> 
 									      
 					</div>
@@ -315,14 +314,14 @@ a{
 					<div class="control-group form-group">
 					<label class="control-label col-sm-3">User <span>1</span></label>
 					<div class="control-group col-sm-8 removeUser" id="marketing-form-group"> 
-									         <span class="controls"> <input name="email" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  id="email" placeholder="Email Address"> </span> 
+									         <span class="controls"> <input name="temp5" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"   placeholder="Email Address"> </span> 
 									        
 					</div>
 					</div>
 					<div class="control-group form-group ">
 					<label class="control-label col-sm-3">User <span>2</span></label>
 					<div class="control-group col-sm-8 removeUser"> 
-									         <span class="controls"> <input name="email" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" id="email" placeholder="Email Address"> </span> 
+									         <span class="controls"> <input name="temp6" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span> 
 									        
 					</div>
 					</div>
@@ -333,15 +332,20 @@ a{
 	            	</a>
 					</div>
 					<div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
-									
-		            <div style="margin-top:8px;display:table;width:75%;margin:15px auto;">                      
-		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" type="submit">Invite Users</button>
-		            
-		            <a href="<%=redirectHomeURL%>" style="padding: 10px 0px 10px 0px;" class="inline-block  text-info text-11 pull-right m-r" id="skip">Skip</a>
+					
+					 <button id="send-user-request-enter" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs hide" tabindex="2" type="submit">Invite Users</button> 
+						
+
+					</form>
+
+					 <div style="margin-top:8px;display:table;width:75%;margin:15px auto;">
+		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" tabindex="2" type="submit">Invite Users</button> 
+		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  text-info text-11 pull-right  m-r" id="skip">Skip</a>
+
 
 	            	</div>
 
-					</form>
+					 
 					
 					
 
@@ -404,32 +408,37 @@ var emailDomain = '<%=email_domain%>';
 	$(document).ready(function(e) {
 
 		if(restricted == 'false'){
+			if(emailDomain != ''){
 			console.log($("#sales-form-group"));
 			$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
 			$("#support-form-group").find('input').val("support@"+emailDomain+".com");
 			$("#marketing-form-group").find('input').val("info@"+emailDomain+".com");
 		}
+		}
 
+		$("#send-user-request").on("click",function(e){
+			$("#send-user-request-enter").trigger("click");
+		});
 
-		$("#send-user-request").on('click', function(e) {
-			//e.preventDefault();
-			
+		$("#send-user-request-enter").on('click', function(e) {
+
 			var list = [];
 			console.log(restricted);
 			console.log(emailDomain);
-			/*if(!isValidForm("#agile-useradd-form"))
-				return;*/
+
+			if(!isValidForm("#agile-useradd-form"))
+				return;
+
 			var duplicate=false;
     
-		    $('input[name^=email]').each(function(){
+		    $('input[type^=email]').each(function(){
 		        var $this = $(this);
 		        if ($this.val()===''){ return;}
-		        $('input[name^=email]').not($this).each(function(){
+		        $('input[type^=email]').not($this).each(function(){
 		            if ( $(this).val()==$this.val()) {duplicate=true;}
 		        });
 		    });
 		    if(duplicate){
-			
 		    	$("#error-area").slideDown("slow").html("Duplicate emails found.");
 		    	setTimeout(function(){
 	   					$("#error-area").hide();
@@ -446,8 +455,7 @@ var emailDomain = '<%=email_domain%>';
 			var JSONdata = JSON.stringify(list);
 
 			if(JSONdata.length == 2){
-				
-				$("#error-area").slideDown("slow").html("Please enter atleast one email address");
+				$("#error-area").slideDown("slow").html("Please enter at least one email address of a team member you wish to invite.");
 				setTimeout(function(){
 	   					$("#error-area").hide();
 	   				},5000);
@@ -507,23 +515,32 @@ var emailDomain = '<%=email_domain%>';
 			switch(id){
 			case "another-user-add-sales" :
 			    var number = $(this).closest("div").find(".form-group").length;
-				$("#newuser_sales").append(g.outerHTML.replace("2" , ((number+1))));
-				if(number+1 == 9){
+			    number++;
+			    var $el = $(g.outerHTML.replace("2" , number));
+			   	$el.find("input").attr('name','sales'+number);
+				$("#newuser_sales").append($el);
+				if(number == 9){
 					$("#another-user-add-sales").remove();
 				}
 				break;
 			case "another-user-add-support" :
 			    var number = $(this).closest("div").find(".form-group").length;
-				$("#newuser_support").append(g.outerHTML.replace("2" , ((number+1))));
-				if(number+1 == 9){
+			    number++;
+			    var $el = $(g.outerHTML.replace("2" , number));
+			   $el.find("input").attr('name','support'+number);
+				$("#newuser_support").append($el);
+				if(number == 9){
 					$("#another-user-add-support").remove();
 				}
 				break;
 
 			case "another-user-add-marketing":
 			    var number = $(this).closest("div").find(".form-group").length;
-				$("#newuser_marketing").append(g.outerHTML.replace("2" , ((number+1))));
-				if(number+1 == 9){
+			    number++;
+			    var $el = $(g.outerHTML.replace("2" , number));
+			    $el.find("input").attr('name','marketing'+number);
+				$("#newuser_marketing").append($el);
+				if(number == 9){
 					$("#another-user-add-marketing").remove();
 				}
 				break;
