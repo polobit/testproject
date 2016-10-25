@@ -175,6 +175,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.products.ProductsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.DocumentTemplatesPrefsAPI.class);
 	s.add(com.agilecrm.core.api.contacts.DocumentViewerAPI.class);
+	s.add(com.agilecrm.core.api.InvitedUsersAPI.class);
+
 	return s;
     }
 }

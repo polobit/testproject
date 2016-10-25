@@ -312,9 +312,14 @@ public class RegisterServlet extends HttpServlet
 		request.getRequestDispatcher("register_success_callback.jsp").forward(request, response);
 		return;
 	}
+	request.getSession().setAttribute("Email", email);
 	
+	request.getSession().setAttribute("RedirectionHomeURL", redirectionURL);
+
+	request.setAttribute("redirectionurl", redirectionURL);
+	response.sendRedirect("/invite-users?redirectionurl="+redirectionURL);
 	// Redirect to home page
-	response.sendRedirect(redirectionURL);
+	//response.sendRedirect(redirectionURL);
 	
     }
 

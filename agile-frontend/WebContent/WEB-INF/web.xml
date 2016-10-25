@@ -30,6 +30,16 @@
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
 	
+	
+	<servlet>
+		<servlet-name>Inviteusers</servlet-name>
+		<jsp-file>/invited-users-mails.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Inviteusers</servlet-name>
+		<url-pattern>/invite-users</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>PaypalScribe</servlet-name>
 		<servlet-class>com.agilecrm.scribe.PaypalScribeServlet</servlet-class>
@@ -158,6 +168,15 @@
 	<servlet-mapping>
 		<servlet-name>register</servlet-name>
 		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>inviteuser</servlet-name>
+		<servlet-class>com.agilecrm.InviteUserServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>inviteuser</servlet-name>
+		<url-pattern>/inviteuser</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
