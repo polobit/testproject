@@ -7897,3 +7897,11 @@ Handlebars.registerHelper('is_admin_domain', function(options)
 	return options.inverse(this);
 
 });
+
+Handlebars.registerHelper('adminpanel_restrictions', function(restriction,options)
+{
+	if(CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf(restriction) != -1)
+		return options.fn(this);
+	return options.inverse(this);
+
+});

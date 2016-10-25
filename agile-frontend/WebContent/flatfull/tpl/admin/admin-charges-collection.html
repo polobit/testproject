@@ -36,9 +36,11 @@
 			{{else}}
 				failed
 {{/if}}</td>
-	<td>{{#unless refunded}}
+	<td>{{#adminpanel_restrictions "REFUND_AMOUNT"}}
+    {{#unless refunded}}
 		{{#if paid}}
-		<a href="#" id="refundpopup" totalamount={{numeric_operation amount 100 "/"}} refundedAmount={{numeric_operation amountRefunded 100 "/"}} chargeid={{id}} role="button" class="btn btn-default btn-sm refundpopup" data-toggle="modal">Refund</a>{{/if}}{{/unless}}</td>
+		<a href="#" id="refundpopup" totalamount={{numeric_operation amount 100 "/"}} refundedAmount={{numeric_operation amountRefunded 100 "/"}} chargeid={{id}} role="button" class="btn btn-default btn-sm refundpopup" data-toggle="modal">Refund</a>{{/if}}{{/unless}}
+        {{else}}{{/adminpanel_restrictions}}</td>
 
 
 

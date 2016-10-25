@@ -167,9 +167,9 @@
         </label>
             <div class="control-group form-group">
               <div class="controls" >
-                <div class="multiple-checkbox" name="adminscopes" style="margin-top: 10px;">
+                <div class="multiple-checkbox" name="adminPanelAccessScopes" style="margin-top: 10px;">
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="ADD_AFFILIATE_AMOUNT" checked>
+                    <input type="checkbox" name="ADD_AFFILIATE_AMOUNT"  value="ADD_AFFILIATE_AMOUNT" >
                       <i></i>Add Affiliate amount<br/>
                       <div style="margin-left:6px;">
                         <small> 
@@ -178,7 +178,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="LOGIN_INTO_DOMAIN" checked >
+                    <input type="checkbox" name="LOGIN_INTO_DOMAIN"  value="LOGIN_INTO_DOMAIN"  >
                       <i></i>Login into the customer domain<br/>
                       <div style="margin-left:6px;">
                         <small> log in into customer domain
@@ -186,7 +186,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="REFUND_AMOUNT" checked >
+                    <input type="checkbox" name="REFUND_AMOUNT"  value="REFUND_AMOUNT"  >
                       <i></i>Refund The amount<br/>
                       <div style="margin-left:6px;">
                         <small> refund the amount to customer
@@ -194,7 +194,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="DELETE_USER" checked>
+                    <input type="checkbox" name="DELETE_USER"  value="DELETE_USER" >
                       <i></i>Delete User<br/>
                       <div style="margin-left:6px;">
                         <small> Delete users 
@@ -202,7 +202,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="CHANGE_PLAN" checked>
+                    <input type="checkbox" name="CHANGE_PLAN"  value="CHANGE_PLAN" >
                       <i></i>Change Plan<br/>
                       <div style="margin-left:6px;">
                         <small> Change User Plan 
@@ -210,7 +210,8 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="CANCEL_SUBSCRIPTION" checked>
+                    <input type="checkbox" name="CANCEL_SUBSCRIPTION"
+                    value="CANCEL_SUBSCRIPTION">
                       <i></i>Cancel Subscription<br/>
                       <div style="margin-left:6px;">
                         <small> Cancel Subscription
@@ -218,15 +219,15 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="DELETE_ACCOUNT" checked>
-                      <i></i>Delete Account<br/>
+                    <input type="checkbox" name="DELETE_ACCOUNT"  value="DELETE_ACCOUNT" >
+                      <i></i>Delete Account perminantly<br/>
                       <div style="margin-left:6px;">
                         <small> Delete Account
                         </small>
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="ADD_USER" checked>
+                    <input type="checkbox" name="ADD_USER"  value="ADD_USER" >
                       <i></i>Add User<br/>
                       <div style="margin-left:6px;">
                         <small> Add users 
@@ -234,7 +235,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="SHOW_USERS" checked>
+                    <input type="checkbox" name="SHOW_USERS"  value="SHOW_USERS" >
                       <i></i>View all domain users<br/>
                       <div style="margin-left:6px;">
                         <small> View all domain users 
@@ -242,7 +243,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="AFFILIATES" checked>
+                    <input type="checkbox" name="AFFILIATES"  value="AFFILIATES" >
                       <i></i>View Affiliates<br/>
                       <div style="margin-left:6px;">
                         <small> view affiliates
@@ -250,7 +251,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="ACCOUNT_RELEASE" checked>
+                    <input type="checkbox" name="ACCOUNT_RELEASE"  value="ACCOUNT_RELEASE" >
                       <i></i>Release Account<br/>
                       <div style="margin-left:6px;">
                         <small> Release Account
@@ -258,7 +259,7 @@
                       </div>
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
-                    <input type="checkbox" name="temp"  value="VIEW_LOGS" checked>
+                    <input type="checkbox" name="VIEW_LOGS"  value="VIEW_LOGS" >
                       <i></i>View Admin Panel logs<br/>
                       <div style="margin-left:6px;">
                         <small> view panel logs
@@ -269,8 +270,8 @@
         </div>
       </div>
     </div>
-{{else}}
-  <div class="tab-container m-b-none">
+{{/is_admin_domain}}   
+  <div class="tab-container m-b-none {{#is_admin_domain}} hide {{else}}{{/is_admin_domain}}">
     <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
       </label>
         <ul class="nav nav-tabs b-b-none">
@@ -288,8 +289,8 @@
           </li>  
         </ul>
   </div>
-  <div class="tab-pane multiple-checkbox-adminprefs" name="newMenuScopes">
-    <div class="col panel wrapper b-t" style="box-shadow: inherit;">
+  <div class="tab-pane multiple-checkbox-adminprefs " name="newMenuScopes">
+    <div class="col panel wrapper b-t {{#is_admin_domain}} hide {{else}}{{/is_admin_domain}}" style="box-shadow: inherit;">
       {{#is_acl_allowed}}
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
           {{else}}
@@ -814,7 +815,7 @@
                 </div>  
             </div>
 
-             {{/is_admin_domain}}         
+                   
           </div>
           </div>
           </div>
