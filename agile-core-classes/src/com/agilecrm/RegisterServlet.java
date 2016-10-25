@@ -39,6 +39,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.CookieUtil;
+import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -317,7 +318,12 @@ public class RegisterServlet extends HttpServlet
 	request.getSession().setAttribute("RedirectionHomeURL", redirectionURL);
 
 	request.setAttribute("redirectionurl", redirectionURL);
-	response.sendRedirect("/invite-users?redirectionurl="+redirectionURL);
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+		response.sendRedirect(redirectionURL);
+	}
+	else{
+		response.sendRedirect("/invite-users?redirectionurl="+redirectionURL);
+	}
 	// Redirect to home page
 	//response.sendRedirect(redirectionURL);
 	

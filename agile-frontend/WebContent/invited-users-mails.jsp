@@ -236,7 +236,7 @@ a{
 		<div class="row" >
 			<div class="align-center m-b-xs"style="font-size:18px;"> Congratulations, you have signed up successfully!</div>
 			<div class="align-center"style="margin-bottom:15px;font-size: 16px;">
-			  Invite your colleagues and enjoy Agile CRM's extensive features.
+			  Invite your team for seamless collaboration.
 			</div>
 		<div class="col-sm-5" style="float: none !important;margin: 0 auto;">
 			<div class='well'>
@@ -455,7 +455,7 @@ var emailDomain = '<%=email_domain%>';
 			var JSONdata = JSON.stringify(list);
 
 			if(JSONdata.length == 2){
-				$("#error-area").slideDown("slow").html("Please enter atleast one email address.");
+				$("#error-area").slideDown("slow").html("Please enter at least one email address of a team member you wish to invite.");
 				setTimeout(function(){
 	   					$("#error-area").hide();
 	   				},5000);
