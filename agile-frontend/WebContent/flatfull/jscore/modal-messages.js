@@ -185,6 +185,10 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : "{{agile_lng_translate 'billing' 'plan-change-select'}}"
 	},
+	"change_addon" : {
+		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
+		"message" : "{{agile_lng_translate 'billing' 'addon-change-select'}}"
+	},
 	"social_access" : {
 		"title": "{{agile_lng_translate 'social' 'access'}}",
 		"message" : "{{agile_lng_translate 'social' 'give-access'}}"

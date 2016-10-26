@@ -751,6 +751,7 @@ function initializeSubscriptionListeners()
 			return;
 		$("#total_credits_cost").html(quantity*4);
 	});
+	$("#subscribe_plan_change #addontab").off("click");
 	$("#subscribe_plan_change").on("click", "#addontab",function(e){
 		App_Subscription.aclAddon();
 		App_Subscription.campaignAddon();

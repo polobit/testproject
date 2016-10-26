@@ -696,12 +696,14 @@ var SubscribeRouter = Backbone.Router
 							$(".save", el).attr("disabled", "disabled");
 						else
 							updatePriceAndQuantity(quantity, el);
-					},
+					}, noLoading : true,
 					saveCallback : function(data){
 						ADDON_INFO = data;
 						showNotyPopUp("information", "Addon saved successfully.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
+					}, form_custom_validate : function(){
+						return true;
 					}
 				});
 				$("#acl-addon-content").html(acl_addon_model_view.render().el);
@@ -717,12 +719,18 @@ var SubscribeRouter = Backbone.Router
 							$(".save", el).attr("disabled", "disabled");
 						else
 							updatePriceAndQuantity(quantity, el);
-					},
+					}, noLoading : true,
 					saveCallback : function(data){
 						ADDON_INFO = data;
 						showNotyPopUp("information", "Addon saved successfully.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
+					}, form_custom_validate : function(){
+						if(ADDON_INFO && ADDON_INFO.campaignInfo && ADDON_INFO.campaignInfo.quantity && ADDON_INFO.campaignInfo.quantity == $('.campaign_quantity').val()){
+							showAlertModal("change_addon");
+							return false;
+						}
+						return true;
 					}
 				});
 				$("#campaign-addon-content").html(campaign_addon_model_view.render().el);
@@ -738,12 +746,18 @@ var SubscribeRouter = Backbone.Router
 							$(".save", el).attr("disabled", "disabled");
 						else
 							updatePriceAndQuantity(quantity, el);
-					},
+					}, noLoading : true,
 					saveCallback : function(data){
 						ADDON_INFO = data;
 						showNotyPopUp("information", "Addon saved successfully.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
+					}, form_custom_validate : function(){
+						if(ADDON_INFO && ADDON_INFO.triggerInfo && ADDON_INFO.triggerInfo.quantity && ADDON_INFO.triggerInfo.quantity == $('.campaign_quantity').val()){
+							showAlertModal("change_addon");
+							return false;
+						}
+						return true;
 					}
 				});
 				$("#trigger-addon-content").html(trigger_addon_model_view.render().el);

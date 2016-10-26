@@ -44,8 +44,10 @@ var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
  * 
  * @returns
  */
-function getRandomLoadingImg()
+function getRandomLoadingImg(noLoading)
 {
+	if(noLoading)
+		return "";
 	var length = LOADING_HTML_IMAGES.length;
 	return LOADING_HTML_IMAGES[Math.round(Math.random() * (LOADING_HTML_IMAGES.length - 1))]
 }
