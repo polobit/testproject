@@ -13,6 +13,7 @@ var ACL_Addon_Events_Model_View = Base_Model_View.extend({
         var target_el = $(e.currentTarget);
         var quantity = $(target_el).closest(".multiple-checkbox").find("input:checked").length;
         updatePriceAndQuantity(quantity, $("#acl-addon-content"));
+        changeSaveBtnStatus(target_el, quantity);
     },
     cancelAclAddOn :  function(e)
     {
@@ -40,6 +41,7 @@ var Campaign_Addon_Events_Model_View = Base_Model_View.extend({
         var target_el = $(e.currentTarget);
         var quantity = $(target_el).val();
         updatePriceAndQuantity(quantity, $("#campaign-addon-content"));
+        changeSaveBtnStatus(target_el, quantity);
     },
     cancelCampaignAddOn :  function(e)
     {
@@ -67,6 +69,7 @@ var Trigger_Addon_Events_Model_View = Base_Model_View.extend({
         var target_el = $(e.currentTarget);
         var quantity = $(target_el).val();
         updatePriceAndQuantity(quantity, $("#trigger-addon-content"));
+        changeSaveBtnStatus(target_el, quantity);
     },
     cancelTriggerAddOn :  function(e)
     {
@@ -122,4 +125,12 @@ function hasAddonDues(){
 	if(ADDON_INFO.triggerInfo.quantity > 0 && $.inArray(ADDON_INFO.triggerInfo.subscriptionId, ADDON_BLOCK_REASONS) != -1)
 		return true;
 	return false;
+}
+
+function changeSaveBtnStatus(target, quantity){
+    var btn = $(target).closest("form").find(".save");
+    if(quantity == 0)
+        $(btn).attr("disabled", "disabled");
+    else
+        $(btn).removeAttr("disabled");
 }

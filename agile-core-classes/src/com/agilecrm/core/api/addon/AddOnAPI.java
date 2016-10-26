@@ -66,7 +66,7 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForCreditCard();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(addOn.getAclUsers().size() == 0)
-				deleteAclAddOn();
+				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(dbAddOn.getAclUsers().size() != addOn.getAclUsers().size()){
 				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-acl", addOn.getAclUsers().size(), dbAddOn.aclInfo.subscriptionId);
 				dbAddOn.aclInfo.subscriptionId = subscription.getId();
@@ -99,8 +99,8 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForCreditCard();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(addOn.campaignInfo.quantity == 0)
-				deleteCampaignAddOn();
-			if(!AddOnUtil.canDowngradeCampaigns(addOn.triggerInfo.quantity))
+				throw new Exception("Sorry, Can not process your request with 0 quantity");
+			if(!AddOnUtil.canDowngradeCampaigns(addOn.campaignInfo.quantity))
 				throw new Exception("you cannot do this action until you delete the extra campaigns");
 			if(dbAddOn.campaignInfo.quantity != addOn.campaignInfo.quantity){
 				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-campaign", addOn.campaignInfo.quantity, dbAddOn.campaignInfo.subscriptionId);
@@ -128,7 +128,7 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForCreditCard();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(addOn.triggerInfo.quantity == 0)
-				deleteTriggerAddOn();
+				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(!AddOnUtil.canDowngradeCampaigns(addOn.triggerInfo.quantity))
 				throw new Exception("you cannot do this action until you delete the extra triggers");
 			if(dbAddOn.triggerInfo.quantity != addOn.triggerInfo.quantity){

@@ -48,8 +48,10 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    DomainUser user = getUser();
 
 	    System.out.println(user);
-	    if(isAddonPlan())
+	    if(isAddonPlan()){
 	    	updateAddOnStatus(getAddonPlan(), AddOnStatus.SUCCESS);
+	    	return;
+	    }
 	    if (isEmailAddonPlan())
 	    {
 		setEmailsCountBillingRestriction();
@@ -142,6 +144,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 			updateAddOnStatus(addOntype, AddOnStatus.FAILED2);
 		else if(attemptCount == 3)
 			updateAddOnStatus(addOntype, AddOnStatus.FAILED3);
+		return;
 	}
 	if (attemptCount == 0 || attemptCount == 1)
 	{

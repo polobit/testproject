@@ -95,7 +95,7 @@ function checkForACLExceptionalUsers(id){
 	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi"];
 	if($.inArray(CURRENT_DOMAIN_USER.domain, specialUsers) != -1)
 		return true;
-	else if (id && ADDON_INFO.aclUsers && $.inArray(id, ADDON_INFO.aclUsers) != -1)
+	else if (id && ADDON_INFO.aclUsers && $.inArray(parseInt(id), ADDON_INFO.aclUsers) != -1)
 		return true;
 	return false;
 }

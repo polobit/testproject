@@ -692,7 +692,9 @@ var SubscribeRouter = Backbone.Router
 					postRenderCallback: function(el){
 						var addOn = acl_addon_model_view.model.toJSON();
 						var quantity = addOn.aclUsers.length;
-						if(quantity > 0)
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
 							updatePriceAndQuantity(quantity, el);
 					},
 					saveCallback : function(data){
@@ -711,7 +713,9 @@ var SubscribeRouter = Backbone.Router
 					postRenderCallback: function(el){
 						var addOn = campaign_addon_model_view.model.toJSON();
 						var quantity = addOn.campaignInfo.quantity;
-						if(quantity > 0)
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
 							updatePriceAndQuantity(quantity, el);
 					},
 					saveCallback : function(data){
@@ -730,7 +734,9 @@ var SubscribeRouter = Backbone.Router
 					postRenderCallback: function(el){
 						var addOn = trigger_addon_model_view.model.toJSON();
 						var quantity = addOn.triggerInfo.quantity;
-						if(quantity > 0)
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
 							updatePriceAndQuantity(quantity, el);
 					},
 					saveCallback : function(data){
