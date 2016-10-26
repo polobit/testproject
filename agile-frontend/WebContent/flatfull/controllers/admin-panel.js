@@ -139,7 +139,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",postRenderCallback : function(el)
 		{
 			$("tabel",el).attr("domain",domainname);
-		}
+		},
 		individual_tag_name : 'tr', sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
 
