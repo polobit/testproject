@@ -139,3 +139,7 @@ themeEleDelete:hover{
 	overflow-y: scroll;
     height: 350px;
 }
+.createCustomFormContent .theme1 .i-checks input:checked+i:before {
+    width: 11px;
+    height: 11px;
+}

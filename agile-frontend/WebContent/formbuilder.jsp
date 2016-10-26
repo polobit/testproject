@@ -18,7 +18,7 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/builder-themes.css?v=3" rel="stylesheet">
       <link href="misc/formbuilder/custom.css?v=3" rel="stylesheet">
       <link href="flatfull/css/min/lib-all-new.css" rel="stylesheet">
-      <link href="misc/formbuilder/formthemes.css?t=1" rel="stylesheet">
+      <link href="misc/formbuilder/formthemes.css?t=2" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
       <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
       <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
