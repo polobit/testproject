@@ -3,13 +3,23 @@
 
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
-    <div class="col-md-12">
-       <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'templates'}}</h3>
-	   <div class="pull-right"> 
-           <a target="_blank" href="formbuilder" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'landing-pages' 'start-with-an-empty-landing-page'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
-	   </div>
-	   <div class="clearfix"></div>
+    {{#is_mobile}}
+      <div class="col-md-12">
+        <h3 class="pull-left font-thin h4 templates-title">{{agile_lng_translate 'web-rules' 'templates'}}</h3>
+      <div class="pull-right add-btn-mobile"> 
+          <a target="_blank" href="formbuilder" class="btn btn-default btn-xs btn-addon" title="{{agile_lng_translate 'landing-pages' 'start-with-an-empty-landing-page'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
      </div>
+     <div class="clearfix"></div>
+     </div>
+    {{else}}
+      <div class="col-md-12">
+        <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'templates'}}</h3>
+      <div class="pull-right"> 
+          <a target="_blank" href="formbuilder" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'landing-pages' 'start-with-an-empty-landing-page'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+     </div>
+     <div class="clearfix"></div>
+     </div>
+    {{/is_mobile}}
 </div>
 </div>
 
