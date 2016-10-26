@@ -2493,4 +2493,22 @@ public class ActivityUtil
 			return null;
 		}
 	}
+	/*create admin panel activities*/
+	
+	public static void createAdminPanelActivity(DomainUser domainuser , ActivityType activityType , String CustName)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.name;
+			activity.custom2 = CustName ;
+			activity.custom3 = domainuser.email ; 
+			activity.custom4 = domainuser.IP_ADDRESS ; 
+			activity.save();
+		}
+	}
+	
 }
+

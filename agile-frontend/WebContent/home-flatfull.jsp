@@ -890,10 +890,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <ul class="nav navbar-nav agile-menu">
               <li id="homemenu" class="active"></li>
               <%
-                  if (!"admin".equals(domainUser.domain)) 
+                  if ("admin".equals(domainUser.domain)) 
                   {
                 	  
                 	out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");  
+               
                     out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li>");
                     if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.ADD_USER))
                   	{

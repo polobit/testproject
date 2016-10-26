@@ -21,6 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -148,8 +150,8 @@ public class AdminPanelAPI
     public void deleteDomainUser(@PathParam("namespace") String namespace)
     {
 	System.out.println("delete request for deletion of account from admin panel " + namespace);
+	DomainUser domainuser = DomainUserUtil.getCurrentDomainUser();
 	String domain = NamespaceManager.get();
-
 	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -159,6 +161,7 @@ public class AdminPanelAPI
 	try
 	{
 	    AccountDeleteUtil.deleteNamespace(namespace);
+	    ActivityUtil.createAdminPanelActivity( domainuser , Activity.ActivityType.ADMIN_PANEL_DELETE_ACCOUNT , namespace);
 	}
 	catch (Exception e)
 	{
@@ -396,7 +399,7 @@ public class AdminPanelAPI
     {
 	try
 	{
-	    // Return updated subscription object
+			    // Return updated subscription object
 	    return Subscription.updatePlan(plan);
 	}
 	catch (PlanRestrictedException e)
@@ -410,6 +413,8 @@ public class AdminPanelAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
+	
+	
 
     }
 
@@ -503,6 +508,7 @@ public class AdminPanelAPI
 	{
 
 	    Charge chrge = StripeUtil.createRefund(chargeid);
+	    
 	    return chrge;
 	}
 	catch (Exception e)
@@ -519,9 +525,11 @@ public class AdminPanelAPI
     @Path("/applypartialrefund")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount)
+    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount , @QueryParam("domain") String custDomain)
 	    throws StripeException
     {
+    	
+    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	String domain = NamespaceManager.get();
 	System.out.println(chargeId);
 	System.out.println(amount);
@@ -535,6 +543,7 @@ public class AdminPanelAPI
 	{
 
 	    Refund refund = StripeUtil.createPartialRefund(chargeId, amount);
+	    ActivityUtil.createAdminPanelActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT , custDomain);
 	    return refund;
 
 	}
@@ -551,7 +560,7 @@ public class AdminPanelAPI
     // delete Subscription
     @Path("/deletesubscription")
     @DELETE
-    public void deleteSubscription(@QueryParam("subscription_id") String sub_id, @QueryParam("cus_id") String cus_id)
+    public void deleteSubscription(@QueryParam("subscription_id") String sub_id, @QueryParam("cus_id") String cus_id , @QueryParam("e") String email)
     {
 	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
 	{
@@ -657,6 +666,7 @@ public class AdminPanelAPI
     	Subscription subscription = SubscriptionUtil.getSubscription();
     	subscription.status = BillingStatus.BILLING_SUCCESS;
     	subscription.save();
+    	ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_RELEASE_DOMAIN);
     	}catch(Exception e){
     		throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
@@ -688,11 +698,12 @@ public class AdminPanelAPI
     
     @Path("affiliate/addAmount")
     @POST
-	public void addAffiliateAmountAmount(@QueryParam("id") Long userId, @QueryParam("amount") int amount){
+	public void addAffiliateAmountAmount(@QueryParam("d") String userdomain,@QueryParam("id") Long userId, @QueryParam("amount") int amount){
     	try {
     		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
     		details.setAmount(details.getAmount() + amount * 100);
     		AffiliateDetailsUtil.save(details);
+    		ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT,userdomain);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WebApplicationException(Response

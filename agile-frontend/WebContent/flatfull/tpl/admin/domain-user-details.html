@@ -5,7 +5,8 @@
 {{email}}
 {{#if is_account_owner}}
             <span class="label bg-light m-l-xs dk text-tiny">Owner</span>
-            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">{{agile_lng_translate 'other' 'login-to-domain'}}</a>{{/check_admin_ip}}	
+            {{#adminpanel_restrictions "LOGIN_INTO_DOMAIN"}}
+            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">{{agile_lng_translate 'other' 'login-to-domain'}}</a>{{/check_admin_ip}}{{else}}{{/adminpanel_restrictions}}	
     {{/if}}
 </td>
 <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
@@ -115,7 +116,7 @@
 	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> {{agile_lng_translate 'plan-and-upgrade' 'change-plan'}}</strong></u> </a> </span>
     {{else}}{{/adminpanel_restrictions}}
 	{{#adminpanel_restrictions "CANCEL_SUBSCRIPTION"}}<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
-	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}</u></strong> </a></span>{{else}}{{/adminpanel_restrictions}}
+	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}} email="{{email}}"> <strong><u>{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}</u></strong> </a></span>{{else}}{{/adminpanel_restrictions}}
 </p><br/><br/>
 </div>
 {{/is_userPlan}}
@@ -156,7 +157,7 @@
 </p>
 <p>
 	<span class="pull-right" id="deleteEmailPlanSpan">
-	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
+	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}} email='{{email}}'> <strong><u>Cancel Subscription</u></strong> </a></span>
 </p>
 <br/><br/>
 </div>

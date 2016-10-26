@@ -41,6 +41,8 @@ function initializeAdminpanelListner(el){
 		var $that = $(this);
 		showAlertModal("delete_user", "confirm", function(){
 			var id = $that.closest('a').attr("data");
+			var domain = $that.closest('a').attr("domain");
+			var email = $that.closest('a').attr("email");
 			$.ajax({
 				url: '/core/api/admin_panel/deleteuser?id='+id, 
 				type : 'DELETE',
@@ -133,6 +135,7 @@ function initializeAdminpanelListner(el){
 			var amount = $("#amount").val();
 			var totalamount = $(".totamount").val();
 			var chargeid=$("#hchargeid").val();
+			var domain = $("table.refund").attr("domain");
 			if(parseFloat(amount) <= 0)
 			{
 				
@@ -151,7 +154,7 @@ function initializeAdminpanelListner(el){
 			amount = 100*amount;
 			amount = parseInt(amount.toPrecision(12));	
 			$.ajax({
-				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount, 
+				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount+'&domain='+domain, 
 				type : 'GET',
 				success : function(data)
 				{	
@@ -205,7 +208,8 @@ function initializeAdminpanelListner(el){
 			showAlertModal("delete_subscription", "confirm", function(){
 				var sub_id = $("#delete_userplan").attr("sub_id");
 				var cus_id = $("#delete_userplan").attr("cus_id");
-				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+				var email = $("#delete_userplan").attr("email");
+				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id+'&e='+email,
 					type : 'DELETE',
 					
 					success: function()
