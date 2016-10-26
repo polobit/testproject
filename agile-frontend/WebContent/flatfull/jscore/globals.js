@@ -30,3 +30,6 @@ var TASKS_CONTACTS_BULK_DELETE_ERROR = "{{agile_lng_translate 'bulk-actions' 'no
 var CONTACTS_ACTIVITY_ACL_DELETE_ERROR = "{{agile_lng_translate 'bulk-actions' 'no-pem-to-delete-ass-contacts'}}";
 
 var DOC_ACL_DETACH_ERROR = "{{agile_lng_translate 'bulk-actions' 'no-pem-to-delete-ass-documents'}}";
+
+// Google Maps URL
+var Google_Maps_URL = "https://maps.googleapis.com/maps/api/js";
