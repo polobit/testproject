@@ -62,6 +62,15 @@ public class FormReportsUtil
 
 	return rs;
     }
+	
+   public static String getStartDate(String startTime, String endTime, String type, String timeZone)
+    {
+	
+
+	// Converts epoch time to "yyyy-MM-dd HH:mm:ss" and set timezone
+	return DateUtil.getMySQLNowDateFormat(Long.parseLong(startTime), timeZone);
+    }
+
 
     /**
      * Returns Form stats data required for graph. It groups data based on
