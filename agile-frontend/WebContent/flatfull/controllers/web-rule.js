@@ -82,7 +82,8 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if (that.webrules.collection && that.webrules.collection.length == 0)
 				{
-					head.js(LIB_PATH + 'lib/prettify-min.js', function()
+					window.location.href  = window.location.origin+"/#webrules-templates";
+					/*head.js(LIB_PATH + 'lib/prettify-min.js', function()
 					{
 						$.ajax({ url : 'core/api/api-key', type : 'GET', dataType : 'json', success : function(data)
 						{
@@ -102,7 +103,7 @@ var WebreportsRouter = Backbone.Router.extend({
 							
 						} });
 
-					});
+					});*/
 				}
 				else
 				{
