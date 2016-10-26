@@ -18,7 +18,7 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/builder-themes.css?v=3" rel="stylesheet">
       <link href="misc/formbuilder/custom.css?v=3" rel="stylesheet">
       <link href="flatfull/css/min/lib-all-new.css" rel="stylesheet">
-      <link href="misc/formbuilder/formthemes.css" rel="stylesheet">
+      <link href="misc/formbuilder/formthemes.css?t=1" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
       <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
       <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
@@ -78,7 +78,7 @@ String template = request.getParameter("template");
                       </div>
                         </div>
                         
-                        <div class="modal-body" style="height: 400px;overflow-y: auto;">
+                        <div class="modal-body" style="height: 400px;">
                  <!-- <div style="display:-webkit-box;border-bottom: 1px solid #9E9E9E;padding-bottom: 10px;"><label>Theme Name:</label><input type="text" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="15"><span id="errorSpan" style="display: table-cell;color:red;"></span></div> -->
     
         <!--ThemeBuilder Div-->

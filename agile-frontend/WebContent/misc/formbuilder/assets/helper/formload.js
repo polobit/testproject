@@ -37,6 +37,7 @@ define([
                       		currApplThm=value.name;
                       		$(document.getElementById("target")).addClass("form"+value.id);
                             $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                      		$(".themesSelectEle").val(currApplThm);
                       }
                      });
 				 
