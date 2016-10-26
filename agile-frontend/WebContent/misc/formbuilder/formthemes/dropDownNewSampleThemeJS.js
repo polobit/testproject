@@ -820,14 +820,14 @@
 						var multipleFormEle=".agile-group .agile-label,.agile-group input,.agile-group .agile-group-addon,.agile-group select,.agile-group .agile-field";
 						var multipleFormEleArr=multipleFormEle.split(",");
 						for(i=0;i<multipleFormEleArr.length;i++){
-							$(multipleFormEleArr[i]).css("font-family",fontFamilyEle);
-							$(multipleFormEleArr[i]).css("font-style",fontStyleEle);
-							$(multipleFormEleArr[i]).css("font-weight",fontWeightEle);
-							$(multipleFormEleArr[i]).css("font-size",fontSizeEle);
-							multipleFormEleFinal=multipleFormEleFinal+".createCustomFormContent"+"\t"+multipleFormEleArr[0]+",";
+							$(".createCustomFormContent form"+"\t"+multipleFormEleArr[i]).css("font-family",fontFamilyEle);
+							$(".createCustomFormContent form"+"\t"+multipleFormEleArr[i]).css("font-style",fontStyleEle);
+							$(".createCustomFormContent form"+"\t"+multipleFormEleArr[i]).css("font-weight",fontWeightEle);
+							$(".createCustomFormContent form"+"\t"+multipleFormEleArr[i]).css("font-size",fontSizeEle);
+							//multipleFormEleFinal=multipleFormEleFinal+".createCustomFormContent"+"\t"+multipleFormEleArr[0]+",";
 						}
-						multipleFormEleFinal=multipleFormEleFinal.substring(0,multipleFormEleFinal.lastIndexOf(","));
-						/*$(multipleFormEleFinal).css("font-family",fontFamilyEle);
+						/*multipleFormEleFinal=multipleFormEleFinal.substring(0,multipleFormEleFinal.lastIndexOf(","));
+						$(multipleFormEleFinal).css("font-family",fontFamilyEle);
 						$(multipleFormEleFinal).css("font-style",fontStyleEle);
 						$(multipleFormEleFinal).css("font-weight",fontWeightEle);
 						$(multipleFormEleFinal).css("font-size",fontSizeEle);*/

@@ -73,12 +73,13 @@ String template = request.getParameter("template");
                         <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
                         <!-- <label>Custom Theme:</label> <div style="display:-webkit-box;padding-bottom: 10px;">-->
-                        <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="15"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
+                        <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="15"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
 
                       </div>
                         </div>
                         
                         <div class="modal-body" style="height: 400px;">
+                        <!-- onblur="validThemeNameFunc()" -->
                  <!-- <div style="display:-webkit-box;border-bottom: 1px solid #9E9E9E;padding-bottom: 10px;"><label>Theme Name:</label><input type="text" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="15"><span id="errorSpan" style="display: table-cell;color:red;"></span></div> -->
     
         <!--ThemeBuilder Div-->
@@ -359,7 +360,7 @@ String template = request.getParameter("template");
               <div class="modal-footer">
               
                 <button type="button" class="btn btn-sm btn-default" onclick="closeAddTheme()" data-dismiss="modal" >Close</button>
-                <button type="button" class="btn btn-sm btn-primary save" data-dismiss="modal" style="color: #fff;background-color: #7266ba;/*margin-right: 44px;float: right;*/text-align: center;" onclick="saveCustTheme()">Save</button>
+                <button type="button" class="btn btn-sm btn-primary save" style="color: #fff;background-color: #7266ba;/*margin-right: 44px;float: right;*/text-align: center;" onclick="saveCustTheme()">Save</button>
               </div>
              </div>
       
@@ -494,18 +495,13 @@ String template = request.getParameter("template");
                       }
                   }
                   function saveCustTheme(){
+                    var thmExist=validThemeNameFunc();
                     console.log(themeArray);
                     var custTheme="";
                     var themeName=$("#themeName").val();
-                    var isThemeNameExist=false;
-                    if($("#errorSpan").text().length>0){
-                        themeName = null;
-                     }
-                      $("#errorSpan").text("");
-                      $("#themeName").val("");
+                    
                     if(themeName!=null && (themeName.length>0)){
-                      if(!isThemeNameExist){
-
+                      if(thmExist!=undefined && !thmExist){
                         $.ajax({
                           type : 'POST',
                           url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/saveThemeOnlyWithName',
@@ -559,24 +555,28 @@ String template = request.getParameter("template");
                                   },
                                   error: function(){
                                     alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
-                                   $("#themeName").val("");
-                                  }
+                                   }
                               });
                           }
                           },
                         });
+
+                          $(".themesSelectEle").val(currApplThm);
+                          $(".createCustomFormContent").empty();
+                          $('#customThemeModal').modal('hide');
+                          $("#errorSpan").text("");
+                          $("#themeName").val("");
                         }
+                        
+                      }
+                      
                     }
-                    $(".themesSelectEle").val(currApplThm);
-                    $(".createCustomFormContent").empty();
-                  }
                   function validThemeNameFunc(){
                     var themeName=$("#themeName").val();
                     var themeNamePattern=/^[a-z][a-zA-Z0-9]+/;
                     var isThemeNameExist=false;
                     if(themeName==null || themeName.length<=0){
                       $("#errorSpan").text("Please provide valid theme name ");
-                      $("#themeName").val("");
                     }
                     /*if(themeName.split(" ").length>1){
                       $("#errorSpan").text("Space not allowed");
@@ -594,14 +594,14 @@ String template = request.getParameter("template");
                                   if(value==themeName){
                                     isThemeNameExist=true;
                                     $("#errorSpan").text("Provided theme name matches with existing themes.Please provide valid theme name.");
-                                    $("#themeName").val("");
-                                   }
+                                  }
                               });
                               if(!isThemeNameExist){
                                 $("#errorSpan").text("");
                               }
                         }
                      /* }*/
+                     return isThemeNameExist;
                   }
 
                   function deleteTheme(identifier){
@@ -659,23 +659,20 @@ String template = request.getParameter("template");
                      $("#errorSpan").text("");
                      $(".themesSelectEle").val(currApplThm);
                      $(".createCustomFormContent").empty();
-
-
-
                   }
+
                   $(".themesSelectEle").change(function(identifier){
                         chooseThemeFunc();
                         var themeId=$(".themesSelectEle option:selected").attr("id");
                         console.log(themeId);
                         if(themeId == "addNewTheme"){
                           createCustTheme();
-                          $("#customThemeModal").modal("show");
+                          $('#customThemeModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                         }
                         else{
                           selectedThemeFunc(identifier);
                         }
                   });
-                        
                   
       </script>
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
