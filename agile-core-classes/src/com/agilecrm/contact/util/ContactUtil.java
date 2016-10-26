@@ -2362,6 +2362,13 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 			if (is_conversion_status)
 			{
 				contact.type = Contact.Type.PERSON;
+				
+				//If duplicate contact exist, it will merge both converted lead and existed contact
+				if(isDuplicateContact(contact))
+				{
+					contact = ContactUtil.mergeContactFields(contact);
+				}
+				
 				contact.setIs_lead_converted(is_conversion_status);
 			}
 			builderObjects.add(contactDocuments.buildDocument(contact));
