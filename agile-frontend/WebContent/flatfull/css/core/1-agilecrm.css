@@ -4852,7 +4852,7 @@ ul#recent-menu-model-list li:nth-child(even)
 {
   padding-bottom:35px;
 }
-#automation-video +  .tooltip > .tooltip-inner {
+#automation-video +  .tooltip > .tooltip-inner ,.help-video +  .tooltip > .tooltip-inner {
     color: #58666e;
     background-color: #fff;
     border: 1px solid #dee5e7;
@@ -4860,7 +4860,7 @@ ul#recent-menu-model-list li:nth-child(even)
     max-width:none;
       
 }
-#automation-video + .tooltip.bottom > .tooltip-arrow {
+#automation-video + .tooltip.bottom > .tooltip-arrow ,.help-video + .tooltip.bottom > .tooltip-arrow  {
       border-bottom: 5px solid  #fff;
       border-width: 0 10px 10px;
 }
