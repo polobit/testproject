@@ -52,6 +52,8 @@
                                     <li class="tracking-tab"><a data-toggle="tab" href="#tracking">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code'}}</a></li>
                                     <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-enabled'}}</a></li>
                                     <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-whitelist-enabled'}}</a></li>
+                                     <!-- tab name field-->
+                                  <li class="verification-website-tab"><a data-toggle="tab" href="#verification-website">{{agile_lng_translate 'admin-settings-api-analytics' 'Tracking Code Verification'}}</a></li>
                                  </ul>
                                  <div class="tab-content p-t-sm">
                                     <!--  Tracking code templete -->
@@ -69,6 +71,28 @@
                                           {{{get_template_type 'agile-api-script-track-webrule-code'}}}
                                        </div>
                                     </div>
+                              <!--creating the new tab for verification of the analitical code of the user website -->   
+                                  <div class="tab-pane" id="verification-website">
+                                           <div class="clearfix"></div>
+                                           <div>
+                                                  <div class="control-group form-group">
+                                                 <label class="control-label col-sm-3 col-xs-3" style="margin-top: 2px;">Enter Website URL<span class="field_req">*</span>
+                                                 </label> 
+                                                 <div class="controls col-sm-5 col-xs-5">
+                                                         <input name="verification-anaytical-code" id="verification_anaytical_code" class="input-medium required form-control" type="url" placeholder="Enter the URL" style="height: 31px;" title=" ex:http://www.example.com">
+                                                          <span id="empty_url" class="hide text-danger text-sm" style="
+                                                          margin-left: 0px;">Please enter valid url.</span>
+                                                          <span class="hide" id="invalidate-tracking-code"> 
+                                                          </span>
+                                                          <span class="hide" id="validate-tracking-code"> 
+                                                          </span>
+                                                        </div>
+                                         <div style="margin-left: -30px;">
+                                     <a href="#analytics-code" class="btn btn-sm btn-success" id="validate_anaytical_code">Verify</a>
+                                 </div>
+                             </div>
+                              </div>
+                                    </div>
                                     <!-- Tracking code with Web Rules templete -->
                                     <!--  Tracking code with Web Rules whitelist enabled -->
                                     <div class="tab-pane active" id="tracking-webrules-whitelist">
@@ -77,16 +101,17 @@
                                           {{{get_template_type 'agile-api-script-track-webrule-whitelist-code'}}}
                                        </div>
                                     </div>
+
                                     <!-- / Tracking code with Web Rules whitelist enabled -->
 
                                      <!--  Tracking code with Web Rules whitelist enabled -->
-                                    <div class="tab-pane" id="push-notification">
+                                   <!-- <div class="tab-pane" id="push-notification">
                                        <b>Note : </b> Downloads both file from given link, create one folder name <b>notification</b> and put both files and put  <b>notification</b> folder into your web hosting directory.<br> <code>Ex: https://www.agilecrm/notification/manifest.json<br> https://www.agilecrm/notification/agile-service-workers.js</code><br><br>
                                      <div>
                                <a href="/downloadpush?q=json" style="color: blue">Click here to dowhload manifest.json</a><br>
                                <a href="/downloadpush?q=js" style="color: blue">Click here to download agile-servise-workers.js</a>
                            </div>  </div>
-                                    </div>
+                                    </div>-->
                                     <!-- / Tracking code with Web Rules whitelist enabled -->
                                  </div>
                               </div>
