@@ -103,12 +103,14 @@ function cancelAddOn(url, el, callback){
 			},error : function(data)
 			{
 				$(el).removeAttr("disabled");
-				showNotyPopUp("information", data.responseText, "top");
+				showNotyPopUp("warning", data.responseText, "top");
 				console.log(response);
 			}
 		
 		});
-	});
+	}, function(){
+        $(el).removeAttr("disabled");
+    });
 }
 
 function addonsExists(){
