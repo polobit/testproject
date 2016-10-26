@@ -279,6 +279,20 @@
             //open side panel
             this.toggleSidePanel('open');
 
+            var $currentClickedEl = $(this.activeElement.element);
+            if($currentClickedEl.hasClass("agile-dynamic-text")){
+                $('[name="dynamic-text"]').val("yes");
+                $('[name="dynamic-text"]').trigger("change");
+            }
+            if($currentClickedEl.hasClass("agile-dynamic-button")){
+                $('[name="dynamic-button"]').val("yes");
+                $('[name="dynamic-button"]').trigger("change");
+            }
+            if($currentClickedEl.hasClass("agile-dynamic-image")){
+                $('[name="dynamic-image"]').val("yes");
+                $('[name="dynamic-image"]').trigger("change");
+            }
+
             return false;
 
         },
@@ -404,7 +418,17 @@
                         var nodeName=styleeditor.activeElement.element.nodeName;
                         if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
                             $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
-                    }                     
+                    }
+
+                    var nameAttrOfEl = $(this).attr("name");
+                    if( nameAttrOfEl === "dynamic-text" || nameAttrOfEl === "dynamic-button" || nameAttrOfEl === "dynamic-image") {
+                        if($(this).val() === "yes") {
+                            $(styleeditor.activeElement.element).addClass("agile-" + nameAttrOfEl);
+                        } else {
+                            $(styleeditor.activeElement.element).removeClass("agile-" + nameAttrOfEl);
+                        }
+                    }
+
                 }
 
                 /* SANDBOX */

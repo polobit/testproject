@@ -7,8 +7,8 @@
         'div#agileform_div' : [],
         'span.fa': ['color', 'font-size'],
         '.bg.bg1': ['background-color'],
-        'nav a': ['color', 'font-weight', 'text-transform'],
-        'img': ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width'],
+        'nav a': ['color', 'font-weight', 'text-transform', 'dynamic-button'],
+        'img': ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
         'hr.dashed': ['border-color', 'border-width'],
         '.divider > span': ['color', 'font-size'],
         'hr.shadowDown': ['margin-top', 'margin-bottom'],
@@ -16,16 +16,20 @@
         '.social a': ['color'],
         '.bg.bg1, .bg.bg2, .header10, .header11, .search-box1': ['background-image', 'background-color'],
         '.frameCover': [],
-        '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family'],
-        'a.btn, button.btn': ['border-radius', 'font-size', 'background-color'],
+        '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family', 'dynamic-text'],
+        'a.btn, button.btn': ['border-radius', 'font-size', 'background-color','dynamic-button'],
         '#pricing_table2 .pricing2 .bottom li': ['content']
     };
     
     module.exports.editableItemOptions = {
         'nav a : font-weight': ['400', '700'],
+        'nav a : dynamic-button': ['no', 'yes'],
+        'a.btn, button.btn : dynamic-button': ['no', 'yes'],
         'a.btn : border-radius': ['0px', '4px', '10px'],
         'img : border-style': ['none', 'dotted', 'dashed', 'solid'],
         'img : border-width': ['1px', '2px', '3px', '4px'],
+        'img : dynamic-image': ['no', 'yes'],
+        '.editContent : dynamic-text': ['no', 'yes'],
         'h1, h2, h3, h4, h5, p : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h2 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h3 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
