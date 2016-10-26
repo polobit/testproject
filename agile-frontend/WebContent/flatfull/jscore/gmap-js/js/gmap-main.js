@@ -50,7 +50,7 @@ function gmap_load_script(el)
 {
 	var script = document.createElement("script");
 	script.type = "text/javascript";
-	script.src = "https://maps.googleapis.com/maps/api/js?v=3&sensor=false&callback=gmap_initialize";
+	script.src = get_agile_gmap_url_with_key() + "&callback=gmap_initialize";
 	document.body.appendChild(script);
 }
 	
