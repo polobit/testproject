@@ -4,12 +4,23 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         
+            {{#is_mobile}}
+            <h3 class="pull-left font-thin h4 m-t-xs">{{agile_lng_translate 'web-rules' 'web-rules'}}</h3>
+
+             <div class="pull-right add-btn-mobile">
+   <a href="#webrules-templates" class="btn btn-xs btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a>
+            </div>
+            <div class="clearfix"></div>
+
+            {{else}}
+
             <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'web-rules'}}</h3>
+
             <div class="pull-right">
    <a href="#webrules-templates" class="btn btn-sm btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a>
             </div>
 			<div class="clearfix"></div>
-        
+        {{/is_mobile}}
     </div>
 </div>
 </div>
@@ -19,6 +30,21 @@
     <div class="col-md-9">
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
+
+        {{#is_mobile}}
+        <div class="panel panel-default">
+            <div class="panel-heading b-n">{{agile_lng_translate 'web-rules' 'web-rules-list'}}</div>
+            <div class="table-responsive">
+            <table class="table no-sorting m-b-none panel agile-table" url="core/api/webrule/bulk">
+                
+                <tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
+                </tbody>
+            </table>
+            </div>
+            </div>
+
+        {{else}}
+
 		<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'web-rules' 'web-rules-list'}}</div>
             <div class="table-responsive">
@@ -36,6 +62,8 @@
        		</table>
             </div>
 			</div>
+            {{/is_mobile}}
+
 		{{else}}
 			<div class="panel wrapper">
    				<div class="slate-content">
@@ -78,45 +106,41 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 					</div>
     			</div>
 			</div>
+            <div class="col-sm-6 p-none" style="margin:0 auto 20px; float:none;">
             <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/kVg39upuT1s?rel=0&amp;" frameborder="0" style="
-                width: 58%;
-                position: absolute;
-                left: 37%;
-                top: 15%;
-                margin: -75px 0 0 -135px;
-                height: 304px;
-                " allowfullscreen=""></iframe>
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/kVg39upuT1s?rel=0&amp;" frameborder="0" allowfullscreen="">
+        </iframe>
             </div>
-            <br>
+            </div>
+             
 		{{/if}}
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 webrules-right-body">
         
             <h4 class="m-t-none h4 m-b-sm">
                 {{agile_lng_translate 'web-rules' 'setup-tracking-code'}}
             </h4>
-			<div>{{agile_lng_translate 'web-rules' 'to-start-using-web-rules'}} <a href="#analytics-code/analytics">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code'}}</a>.</div>
-            <br>
+			<p>{{agile_lng_translate 'web-rules' 'to-start-using-web-rules'}} 
+            <a class="text-info" href="#analytics-code/analytics">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code'}}</a>.</p>
+            
             {{#if this.length}}
-			<p>
+            <p>
 
-<a href="https://www.youtube.com/watch?v=kVg39upuT1s" target="_blank">
-<img src="{{getS3ImagePath '../../img/web-rule-info.png'}}" class="img-responsive w-full">
-</a>
-</p>
+            <a href="https://www.youtube.com/watch?v=kVg39upuT1s" target="_blank">
+            <img src="{{getS3ImagePath '../../img/web-rule-info.png'}}" class="img-responsive w-full">
+            </a>
+            </p>
 
-		<br>
         {{/if}}
             <h4 class="m-t-none h4 m-b-sm">
                 {{agile_lng_translate 'web-rules' 'what-are-web-rules'}}
             </h4>
            
-            <p>
-{{agile_lng_translate 'web-rules' 'web-rules-desc-1'}} <br><br>
-{{agile_lng_translate 'web-rules' 'web-rules-desc-2'}}</p>
+    <p>{{agile_lng_translate 'web-rules' 'web-rules-desc-1'}}</p>
+    <p>{{agile_lng_translate 'web-rules' 'web-rules-desc-2'}}</p>
+
 <p></p>
-<img src="{{getS3ImagePath '/img/web-rules/web-grabbers-demo.png'}}" class="img-responsive">
+<img src="{{getS3ImagePath '/img/web-rules/web-grabbers-demo.png'}}" class="img-responsive w-full">
 <div class="p-t-sm"><center><a href="https://github.com/agilecrm/agile-popups" target="_blank" class="text-info">{{agile_lng_translate 'web-rules' 'get-started'}}</a></center></div>
         </div>
     </div>
@@ -125,6 +149,24 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 </div>
 </script>
 <script id="webrule-model-template" type="text/html">
+{{#is_mobile}}
+<td class="hide"></td>
+<td  data="{{id}}" class="data c-p">
+<div class="table-resp">
+    {{name}}
+</div>
+
+<div class="text-muted text-sm">{{#actionTemplate actions}}{{/actionTemplate}}</div>
+<div>
+{{#if disabled}} 
+    <label class="label label-danger m-b-none">{{agile_lng_translate 'campaigns' 'disabled'}}</label>
+{{/if}}
+</div>
+
+</td>
+
+{{else}}
+
 <td  data="{{id}}" class="data c-p">
 <div class="table-resp">
 	{{name}}
@@ -143,5 +185,5 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 <td>
 <div style="display:none;"><i class="icon-move"></i></div>
 </td>
-
+{{/is_mobile}}
 </script>

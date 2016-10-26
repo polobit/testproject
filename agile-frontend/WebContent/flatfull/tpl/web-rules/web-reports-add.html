@@ -6,13 +6,25 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
 <div class="col-md-12">
-{{#if id}}
+			{{#is_mobile}}
+				{{#if id}}
+				<h3 class="formheading h4 font-thin">{{agile_lng_translate 'web-rules' 'edit-web-rule'}}</h3>
+				{{else}}
+				<h3 class="formheading h4 font-thin">
+					<i class="fa fa-plus-circle"></i> {{agile_lng_translate 'web-rules' 'add-web-rule'}}
+				</h3>
+				{{/if}}
+
+			{{else}}
+
+				{{#if id}}
 				<h3 class="formheading h3 font-thin">{{agile_lng_translate 'web-rules' 'edit-web-rule'}}</h3>
 				{{else}}
 				<h3 class="formheading h3 font-thin">
 					<i class="fa fa-plus-circle"></i> {{agile_lng_translate 'web-rules' 'add-web-rule'}}
 				</h3>
 				{{/if}}
+			{{/is_mobile}}
 
 </div>
 </div>
@@ -32,9 +44,9 @@
 						</div>
 					</div>
 					{{#if id}}<input type="hidden" name="position" class="required" />{{/if}}
-					<div class="control-group form-group" id="report-settings">
+					<div class="control-group form-group m-b-xs" id="report-settings">
 						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'condition'}}</label>
-						<div class="controls col-sm-9  table-responsive" >
+						<div class="controls col-sm-9  table-responsive b-n m-none" >
 							<table
 								class="bg-transparent web-rule-contact-condition-table chained-table">
 								<tbody>
@@ -447,19 +459,19 @@
 											</div>
 										</td>
 
-										<td class="v-top">
+										<td class="v-top" style="display:flex;">
 											<i
-											class="filter-contacts-web-rule-multiple-remove filter-contacts-multiple-remove icon-remove-circle c-p text-md"
+											class="filter-contacts-web-rule-multiple-remove filter-contacts-multiple-remove icon-close c-p m-t-sm m-l-xs"
 											style="display: none;"></i>
 											<i
-											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-l-xs c-p"></i></td>
+											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-t-sm m-l-xs c-p"></i></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 			</div>
-			<div class="control-group form-group p-t-md">
+			<div class="control-group form-group">
 						<label class="control-label col-sm-2">{{agile_lng_translate 'web-rules' 'action'}}</label>
 						<div class="controls col-sm-10">
 								<div class="webrule-actions chained-table"> 
