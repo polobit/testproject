@@ -562,13 +562,14 @@ public class AdminPanelAPI
     @DELETE
     public void deleteSubscription(@QueryParam("subscription_id") String sub_id, @QueryParam("cus_id") String cus_id , @QueryParam("e") String email)
     {
+    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry you don't have privileges to access this page.").build());
 	}
 	StripeUtil.deleteSubscription(sub_id, cus_id);
-
+	ActivityUtil.createAdminPanelActivity(domainUser, Activity.ActivityType.ADMIN_PANEL_SUBSCRIPTION_CANCEL, email);
     }
    
     @Path("/resumeMandrill")
@@ -666,7 +667,7 @@ public class AdminPanelAPI
     	Subscription subscription = SubscriptionUtil.getSubscription();
     	subscription.status = BillingStatus.BILLING_SUCCESS;
     	subscription.save();
-    	ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_RELEASE_DOMAIN);
+    	ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_RELEASE_DOMAIN  , domainname);
     	}catch(Exception e){
     		throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
