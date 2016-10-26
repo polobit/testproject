@@ -305,9 +305,9 @@ public class APIKeyUtil
    				return "Tracking code exist more than one time.";
    			} catch (IOException e) {
    				e.printStackTrace();
-   				return "Tracking code is not exist";
+   				return "Tracking code is not exist.";
    			}
    		
-   	  return "Tracking code is valid";
+   	  return "Tracking code is valid.";
    	}
 }

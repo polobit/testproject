@@ -244,6 +244,7 @@ function validateSendgridWhitelabel(domainName)
 //validate the web analytical code callback function
 function validateAnalyticalCode(websiteUrl)
  {   
+    $("#validate_anaytical_code").text("Verifying...");
     $.ajax({
         url : 'core/api/api-key/validate?website_url='+websiteUrl,
         type : 'POST',
@@ -254,15 +255,17 @@ function validateAnalyticalCode(websiteUrl)
             if(data=="Tracking code is valid")
             {
              $("#validate-tracking-code").removeClass("hide");
-             $("#validate-tracking-code").html("<span style='color:green;font-size: 13px;margin-left: -18px;'>"+data+"</span>");
+             $("#validate-tracking-code").html("<span style='color:green;font-size: 13px;margin-left: 0px;'>"+data+"</span>");
           }
 
            else
            {
             $("#invalidate-tracking-code").removeClass("hide");
-             $("#invalidate-tracking-code").html("<span style='color: #f05050;font-size: 13px;margin-left: -18px;'>"+data+"</span>");
+             $("#invalidate-tracking-code").html("<span style='color: #f05050;font-size: 13px;margin-left: 0px;'>"+data+"</span>");
         
           }
+
+          $("#validate_anaytical_code").text("Verify");
         },
         error: function (data) {
         console.log(data);
