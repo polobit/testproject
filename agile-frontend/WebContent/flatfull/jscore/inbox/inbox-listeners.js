@@ -53,8 +53,6 @@ function inboxFlagListners(){
 	  e.preventDefault();
 	})
 	$(document).on('click','.back-to-inbox',function(e) {
-		/*$(".collapse").removeClass("in");
-		$(".collapse").attr("aria-expanded","false");*/
 		$("#mails-list").show();
 		$("#mail-details-view").hide();
 		$("#compose").hide();
@@ -95,11 +93,14 @@ function inboxFlagListners(){
 		else if(folder_type == "trash")
 			folder_name = "Trash";
 
-		if(server == "exchange"){
-			getExchangeContent(url,from_email,folder_name,dataVal);
-		}else{
-			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal;
-			getContent(url,dataVal);
+   		if(!$(this).hasClass( "pending" ) ) {
+   			$(this).addClass("pending");
+			if(server == "exchange"){
+				getExchangeContent(url,from_email,folder_name,dataVal);
+			}else{
+				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal;
+				getContent(url,dataVal);
+			}
 		}
 		var model = globalMailCollectionInstance.get(dataVal);
 		model.set({flags: 'read'});
@@ -109,13 +110,22 @@ function inboxFlagListners(){
 	});
 	$(".delete").unbind().click(function() {
 		var dataVal = $(this).attr("data-id");
-		showAlertModal("delete_mail", "confirm", function(){
+		var msg_ele = "";
+		var folder_type = $('#inbox-email-type-select').attr("folder-type");
+		if(folder_type == "trash"){
+			msg_ele = "delete_trash_mail"
+		}else{
+			msg_ele = "delete_mail"
+		}
+		showAlertModal(msg_ele, "confirm", function(){
 			
 			var from_email = $('#inbox-email-type-select').attr("from_email");
 			var server = $("#inbox-email-type-select").attr("data-server");
 			var url ="";
 			var folder_name = "";
 
+			if(server == "agile")
+				url = "core/api/emails/setFlags?";
 			if(server == "google")
 				url = "core/api/social-prefs/setFlags?";
 			if(server == "imap")
@@ -123,7 +133,7 @@ function inboxFlagListners(){
 			if(server == "exchange")
 					url ="core/api/office/setFlags";
 
-			var folder_type = $('#inbox-email-type-select').attr("folder-type");
+			
 			if(folder_type == "inbox")
 				folder_name = "INBOX";
 			else if(folder_type == "sent")
@@ -136,7 +146,11 @@ function inboxFlagListners(){
 			if(server == "exchange"){
 				setExchangeFlag(url,from_email,folder_name,'DELETED',dataVal);
 			}else{
-				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal;
+				if(server =! "agile"){
+					url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal;
+				}else{
+					url = url+"messageid="+dataVal;
+				}
 				setSeenFlag(url);
 			}
 
@@ -196,6 +210,7 @@ function getContent(url,dataVal){
 		$.ajax({ 
 			url :url,
 			success : function(data){
+				$("#flag"+dataVal).removeClass("pending");
 				dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 				var html = "";
 				getTemplate("mail-message", data, undefined, function(template_ui) {
@@ -210,11 +225,9 @@ function getContent(url,dataVal){
 			} 
 		});
 	}else{
+		$("#flag"+dataVal).removeClass("pending");
 		dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 		$("#mails-list").hide();
-        //$("#"+dataVal).addClass("in");
-        //$("#"+dataVal).attr("aria-expanded","true");
-        //$("#"+dataVal).css({"display":"block"});
         $("#mail-details-view").show();
 	}
 }
@@ -226,6 +239,7 @@ function getExchangeContent(url,from_email,folder_name,messageid){
 		method:"POST",
 		data:requestesData,
 		success : function(data){
+			$("#flag"+dataVal).removeClass("pending");
 			var dataVal = messageid.replace(/[^\w\s]/gi, '-');
 			var html = "";
 			getTemplate("mail-message", data, undefined, function(template_ui) {
@@ -294,10 +308,14 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		if(server != "agile")
-			renderToMailList(url,1,10);
-		else
+		if(server != "agile"){
+			if(!$(this).hasClass( "pending" ) ) {
+	   			$(this).addClass("pending");
+				renderToMailList(url,1,10);
+			}
+		}else{
 			displayNoEmailTemplate();
+		}
 	});
 
 	$('#inbox-listners').on('click', '#mail-sent', function(e){
@@ -309,7 +327,10 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		renderToMailList(url,1,10);
+		if(!$(this).hasClass( "pending" ) ) {
+   			$(this).addClass("pending");
+			renderToMailList(url,1,10);
+		}
 	});
 	$('#inbox-listners').on('click', '#mail-draft', function(e){
 		e.preventDefault();
@@ -321,10 +342,14 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		if(server != "agile")
-			renderToMailList(url,1,10);
-		else
+		if(server != "agile"){
+			if(!$(this).hasClass( "pending" ) ) {
+	   			$(this).addClass("pending");
+				renderToMailList(url,1,10);
+			}
+		}else{
 			displayNoEmailTemplate();
+		}
 	});
 	$('#inbox-listners').on('click', '#mail-trash', function(e){
 		e.preventDefault();
@@ -336,10 +361,13 @@ function initializeInboxListeners(){
 		globalMailCollectionInstance = new globalMailCollection();
 		helperFunction();
 		SHOW_TOTALCOUNT = true;
-		if(server != "agile")
+		//if(server != "agile")
+		if(!$(this).hasClass( "pending" )) {
+   			$(this).addClass("pending");
 			renderToMailList(url,1,10);
-		else
-			displayNoEmailTemplate();
+		}
+		//else
+			//displayNoEmailTemplate();
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
 		e.preventDefault();
@@ -357,6 +385,7 @@ function initializeInboxListeners(){
 	function searchEmails(offset,count){
 		var search_val = document.getElementById('search-mail').value;
 		if(search_val){
+			$(".ng-scope").removeClass("active");
 			var from_email = $('#inbox-email-type-select').text();
 			var server = $("#inbox-email-type-select").attr("data-server");
 			var url ="";
@@ -399,7 +428,14 @@ function initializeInboxListeners(){
 	});
 	$(".bulk-delete").unbind().click(function(e) {
 		idcol = [];
-		showAlertModal("delete_mail", "confirm", function(){
+		var msg_ele = "";
+		var folder_type = $('#inbox-email-type-select').attr("folder-type");
+		if(folder_type == "trash"){
+			msg_ele = "delete_trash_mail"
+		}else{
+			msg_ele = "delete_mail"
+		}
+		showAlertModal(msg_ele, "confirm", function(){
 			var urlval = returnUrl();
 			if(urlval){
 				urlval = urlval+"&flag=DELETED";
@@ -407,14 +443,14 @@ function initializeInboxListeners(){
 				if(server_type == "exchange"){
 					var url_exchange = "core/api/office/setFlags";
 					var folder_name_exchange = "";
-					var folder_type_exchange = $('#inbox-email-type-select').attr("folder-type");
-					if(folder_type_exchange == "inbox")
+					
+					if(folder_type == "inbox")
 						folder_name_exchange = "INBOX";
-					else if(folder_type_exchange == "sent")
+					else if(folder_type == "sent")
 						folder_name_exchange = "Sent";
-					else if(folder_type_exchange == "draft")
+					else if(folder_type == "draft")
 						folder_name_exchange = "Draft";
-					else if(folder_type_exchange == "trash")
+					else if(folder_type == "trash")
 						folder_name_exchange = "Trash";
 
 					var meesageids_exchange  = null;
@@ -454,7 +490,7 @@ function initializeInboxListeners(){
 				page_size = parseInt(page_size)+idcol.length;
 
 				var url = $('#inbox-email-type-select').attr("data-url");
-				var folder_type = $('#inbox-email-type-select').attr("folder-type");
+				
 				if(folder_type == "inbox")
 					url = url.concat("&folder_name=INBOX");
 				else if(folder_type == "sent")
@@ -628,6 +664,7 @@ function initializeInboxListeners(){
 	});
 
 	$(".next").unbind().click(function(e) {
+		$(".next").prop("disabled",true);
 		$("#mails-list").show();
 		var curr_val = $(".inti-val").text();
 		var tot_val = $(".totalcount").text();
@@ -705,6 +742,8 @@ function returnUrl(){
 			var from_email = $('#inbox-email-type-select').attr("from_email");
 			var server = $("#inbox-email-type-select").attr("data-server");
 
+			if(server == "agile")
+				url = "core/api/emails/setFlags?";
 			if(server == "google")
 				url = "core/api/social-prefs/setFlags?";
 			if(server == "imap")
@@ -722,7 +761,11 @@ function returnUrl(){
 			else if(folder_type == "trash")
 				folder_name = "Trash";
 
-			url = url+"from_email="+from_email+"&folder_name="+folder_name+"&messageid="+meesageids;
+			if(server != "agile"){
+				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&messageid="+meesageids;
+			}else{
+				url = url+"messageid="+meesageids;
+			}
 			return url;
 		}else{
 			return null;
@@ -964,9 +1007,9 @@ function initializeComposeEmailListeners(){
 }
 function helperFunction(){
 	$("#mails-list").remove();
-	$("#mails-list-view").append("<ul class='portlet_body list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
+	$("#mails-list-view").append("<ul class='portlet_body portlet_width list-group list-group-lg no-radius m-b-none m-t-n-xxs' id='mails-list'></ul>");
 	$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 	$("#mail-details-view").remove();
-	$("#mail-detail-view").append("<div class='portlet_body' id='mail-details-view' style='display:none;'></div>");
+	$("#mail-detail-view").append("<div class='portlet_body portlet_width' id='mail-details-view' style='display:none;'></div>");
 }
 

@@ -296,7 +296,7 @@ public class ContactEmailUtil
 		contactEmail.trackerId = trackerId;
 
 		contactEmail.attachment_ids = documentIds;
-
+		contactEmail.is_deleted = false;
 		contactEmail.save();
 	}
 
@@ -974,14 +974,14 @@ public class ContactEmailUtil
 	}
 	
 	/**
-	 * Rajesh Code
+	 * To get all agile emails
 	 * 
 	 */
-	public static List<ContactEmail> getAgileEmails(Long userid,int count,String offset)
+	public static List<ContactEmail> getAgileEmails(Long userid,int count,String offset, String folder_name)
 	{
 		Map<String, Object> conditionsMap = new HashMap<String, Object>();
 		conditionsMap.put("user_id_from_email", userid);
-		return fetchAllAgileMailsByOrder(count,offset,conditionsMap, false, false, "-date_secs");
+		return fetchAllAgileMailsByOrder(count,offset,conditionsMap, false, false, "-date_secs",folder_name);
 	}
 	/**
 	 * Retrieves the ContactEmails based on contactId.
@@ -1129,7 +1129,7 @@ public class ContactEmailUtil
 	    * For getting mails
 	    */
 	    
-	    public static List<ContactEmail> fetchAllAgileMailsByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,String orderBy){
+	    public static List<ContactEmail> fetchAllAgileMailsByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,String orderBy,String folder_name){
 	    	Query<ContactEmail> query = dao.ofy().query(ContactEmail.class);
 	    	if (map != null)
 	    	    for (String propName : map.keySet())
@@ -1141,28 +1141,46 @@ public class ContactEmailUtil
 	    	if (!StringUtils.isEmpty(orderBy))
 	    	    query.order(orderBy);
 	    	
-	    	return fetchAllAgileMailsWithCursor(max, cursor, query, forceLoad, cache);
+	    	return fetchAllAgileMailsWithCursor(max, cursor, query, forceLoad, cache, folder_name);
 	    }
 
-	    public static List<ContactEmail> fetchAllAgileMailsWithCursor(int max, String cursor, Query<ContactEmail> query, boolean forceLoad, boolean cache){
-	    	int toalcount = query.count();
-	    	if(max > toalcount)
-	    		max = toalcount+1;
+	    public static List<ContactEmail> fetchAllAgileMailsWithCursor(int max, String cursor, Query<ContactEmail> query, boolean forceLoad, boolean cache, String folder_name){
+	    	int toalcount = 0;
+	    	int count = 0;
+	    	
+	    	if(StringUtils.equals("Sent", folder_name)){
+	    		toalcount = query.filter("is_deleted", false).count();
+	    	}else{
+	    		toalcount = query.filter("is_deleted", true).count();
+	    	}
+	    	if(max > toalcount){
+	    		max = toalcount;
+	    		count = toalcount+1;
+	    	}else{
+	    		count = max;
+	    	}
 	    	
     		int cursor1 = Integer.parseInt(cursor);
-			query.offset(cursor1-1).limit(max);
-
-	    	List<ContactEmail> results = new ArrayList<>();
-	    	QueryResultIterator<ContactEmail> iterator = query.iterator();
-	    	while (iterator.hasNext()){
-	    		ContactEmail result = iterator.next();
-	    		result.flags ="read";
-	    		//System.out.println(++(Integer.parseInt(cursor)-1) +"====="+ max);
-	    		if(++cursor1-1 == max){
-	    			result.count = String.valueOf(toalcount);
+    		List<ContactEmail> results = new ArrayList<>();
+    		if(toalcount > 0){
+	    		if(StringUtils.equals("Sent", folder_name)){
+	    			query.offset(cursor1-1).limit(count);
+	    		}else{
+	    			query.offset(cursor1-1).limit(count);
 	    		}
-	    	    results.add(result);
-	    	}
+		    	QueryResultIterator<ContactEmail> iterator = query.iterator();
+		    	while (iterator.hasNext()){
+		    		ContactEmail result = iterator.next();
+		    		result.flags ="read";
+		    		
+		    		int inc_cur = cursor1++;
+		    		System.out.println(inc_cur+"========"+max);
+		    		if(inc_cur == max){
+		    			result.count = String.valueOf(toalcount);
+		    		}
+		    	    results.add(result);
+		    	}
+    		}
 	    	return results;
 		 }
 

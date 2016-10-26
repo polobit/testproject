@@ -120,6 +120,9 @@ public class ContactEmail
 	@NotSaved(IfDefault.class)
 	public long email_opened_at = 0L;
 	
+	
+	public Boolean is_deleted = false;
+	
 	@NotSaved
 	public String flags = null;
 	

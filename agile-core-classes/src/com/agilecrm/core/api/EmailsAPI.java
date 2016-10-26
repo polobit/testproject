@@ -32,6 +32,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.mandrill.util.MandrillUtil;
@@ -48,6 +49,7 @@ import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
+import com.googlecode.objectify.Key;
 import com.thirdparty.mandrill.EmailContentLengthLimitExceededException;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 import com.thirdparty.sendgrid.subusers.SendGridSubUser;
@@ -719,6 +721,38 @@ public String getSendgridWhitelabelPermission() throws Exception
 	return restriction.toString();
 	
 }
+
+/**
+ * Sends Email and saves the email sent from contact.
+ * 
+ * @param fromEmail
+ *            - from email
+ * @param to
+ *            - to email
+ * @param subject
+ *            - subject
+ * @param body
+ *            - body
+ */
+/*@Path("inbox/send-email")
+@POST
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+public void sendEmailFromInbox(ContactEmailWrapper contactEmail)throws Exception{
+	try{
+		if (MandrillUtil.isEmailContentSizeValid(contactEmail.getMessage(), contactEmail.getDocument_key())){
+			ContactEmailUtil.buildInboxEmailAndSend(contactEmail);
+	
+	    }
+	
+	}catch (EmailContentLengthLimitExceededException e){
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
+	}catch(Exception e)
+	{
+		System.out.println("Error occured while sending email in EmailsAPI...");
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+	}
+}*/
 /**
  * Get all agile emails
  * @param searchEmail
@@ -728,7 +762,7 @@ public String getSendgridWhitelabelPermission() throws Exception
 	@Path("all-agile-emails")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<ContactEmailWrapper> getAllAgileEmails(@QueryParam("page_size") String countString, @QueryParam("cursor") String offset)
+	public List<ContactEmailWrapper> getAllAgileEmails(@QueryParam("folder_name") String folder_name,@QueryParam("page_size") String countString, @QueryParam("cursor") String offset)
 	{
 	List<ContactEmailWrapper> emailsList = null;
 	try
@@ -745,13 +779,13 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    	{
 	    		// Fetches latest contact emails
 	    		System.out.println("Domain User ID :"+AgileUser.getCurrentAgileUser().domain_user_id);
-	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor);
+	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor,folder_name);
 	    	}
 	    	catch(NumberFormatException e)
 	    	{
 	    		e.printStackTrace();
 	    		System.out.println(AgileUser.getCurrentAgileUser().domain_user_id);
-	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor);
+	    		contactEmails = ContactEmailUtil.getAgileEmails(AgileUser.getCurrentAgileUser().domain_user_id,count,cursor,folder_name);
 	    	}
 	    }
 	    else
@@ -776,9 +810,10 @@ public String getSendgridWhitelabelPermission() throws Exception
 			    new TypeReference<List<ContactEmailWrapper>>()
 			    {
 			    });
-		    
-		    ContactEmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
-			lastEmail.cursor = Integer.parseInt(cursor)+ "";
+		    if(emailsList.size() > 0){
+			    ContactEmailWrapper lastEmail = emailsList.get(emailsList.size() - 1);
+				lastEmail.cursor = Integer.parseInt(cursor)+ "";
+		    }
 	    }
 	    return emailsList;
 	}
@@ -788,5 +823,31 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    e.printStackTrace();
 	    return null;
 	}
+	}
+	/**
+	 * to set the flags for contact email
+	 * @param messageid
+	 * @return
+	 */
+	@Path("setFlags")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String setFlags(@QueryParam("messageid") String messageid){
+		try{
+			ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
+			if(StringUtils.isNotBlank(messageid)){
+			    String msgData[]= messageid.split(",");
+			    for(int i=0;i<msgData.length;i++){
+			    	long id = Long.parseLong(msgData[i]);
+			    	Key<ContactEmail> key = new Key<ContactEmail>(ContactEmail.class, id);
+			    	ContactEmail cemail= dao.ofy().get(key);
+			    	cemail.is_deleted = true;
+			    	cemail.save();
+			    }
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "Success";
 	}
 }

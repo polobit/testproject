@@ -3,7 +3,8 @@ var GLOBAL_MODAL_MESSAGES = {
 	"global_delete": "{{agile_lng_translate 'others' 'delete-warn'}}",
 	"global_error_title" : "{{agile_lng_translate 'contact-details' 'error'}}",
 	"global_validation_title" : "{{agile_lng_translate 'admin-settings-custom-fields' 'validation'}}",
-	"global_error_message" : "{{agile_lng_translate 'others' 'error-occured'}}"
+	"global_error_message" : "{{agile_lng_translate 'others' 'error-occured'}}",
+	"global_mail_delete": "{{agile_lng_translate 'inbox' 'perminanet-delete'}}",
 }
 var MODAL_MESSAGES = {
 
@@ -264,5 +265,9 @@ var MODAL_MESSAGES = {
 	"delete_mail" : {
 		"title": _agile_get_translated_val('events','delete-mail'),
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
+	},
+	"delete_trash_mail" : {
+		"title": _agile_get_translated_val('events','delete-mail'),
+		"message" : GLOBAL_MODAL_MESSAGES.global_mail_delete
 	}
 };

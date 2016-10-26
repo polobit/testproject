@@ -1,14 +1,10 @@
 var inboxMailListView;
 var SHOW_TOTALCOUNT = true;
 var InboxRouter = Backbone.Router.extend({
-
 	routes : {
 		/* inbox*/
 		"inbox" : "inbox"
-		//"sent" : "sent",
-		//"compose":"compose"
 	},
-
 	inbox: function(){
 		$('#content').html("<div id='inbox-listners'>&nbsp;</div>");
 		showTransitionBar();
@@ -172,6 +168,7 @@ function renderToMailList(url,offset_val,page_size_val){
 					}
 					inboxFlagListners();
 					hideTransitionBar();
+					$(".pending").removeClass("pending");
 					$(".loading").hide();
 				},
 				error: function (errorResponse) {
@@ -239,9 +236,6 @@ function renderToMailView(data){
 				html = template_ui;
 				//$("#mails-list").html(template_ui);
 			}, '#mail-details-view');
-			/*var source = $('#mail-view-template').html();
-	        var template = Handlebars.compile(source);
-	        var html = template(dataVal.toJSON());*/
 	        this.$el.append(html);
 		},
 		displayReplyView:function(e){
@@ -284,7 +278,7 @@ function renderToMailView(data){
 				agile_type_ahead("email_bcc", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 						
 
-				$("#emailForm", el).find('input[name="to"]').val(extractEmail(to_emails));
+				$("#emailForm", el).find('input[name="to"]').val(extractEmails(to_emails));
 				$("#emailForm",el).find('input[name="subject"]').val("Re: "+subject);
 				setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 
@@ -453,7 +447,7 @@ function inboxreplySend(ele,json){
 		} 
 	});
 }
-function extractEmail(toEmails){
+function extractEmails(toEmails){
 	var returnVal = null;
 	var emails = toEmails.split(",");
 	for(var i=0;i<emails.length;i++){
