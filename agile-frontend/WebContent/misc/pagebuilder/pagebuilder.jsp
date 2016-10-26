@@ -1970,6 +1970,16 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-id")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-id")%>'' value="">
+
+                    <p class="text-center or">
+                        <span>OR</span>
+                    </p>
+
+                    <label>Your Video:</label>
+                    
+                    <select id="videoRecordId" name="videoRecordlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                        <option value="">Select Video</option>
+                    </select>
                     
                 </div><!-- /.tab-pane -->
             

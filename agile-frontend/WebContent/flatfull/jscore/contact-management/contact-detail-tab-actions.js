@@ -71,13 +71,13 @@ var contact_details_documentandtasks_actions = {
 			}
 			if (value.description)
 			{
-				var description = '<label class="control-label"><b>'+_agile_get_translated_val("misc-keys", "description")+' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
+				var description = '<label class="control-label"><b>{{agile_lng_translate "misc-keys" "description"}} </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="{{agile_lng_translate "misc-keys" "add-description"}}"></textarea></div>'
 				$("#event_desc").html(description);
 				$("textarea#description").val(value.description);
 			}
 			else
 			{
-				var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' +_agile_get_translated_val('misc-keys','add-description')+ ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea>' + '</div></div></div>'
+				var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> {{agile_lng_translate "misc-keys" "add-description"}} </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="{{agile_lng_translate "misc-keys" "add-description"}}"></textarea>' + '</div></div></div>'
 				$("#event_desc").html(desc);
 			}
 			// Fills owner select element
@@ -91,6 +91,7 @@ var contact_details_documentandtasks_actions = {
 			{
 				var id = $(targetEl).attr('data');
 				var that = targetEl;
+				showAlertModal("complete_task", "confirm", function() {
 				complete_task(id, tasksView.collection, undefined, function(data)
 				{
 					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
@@ -98,6 +99,7 @@ var contact_details_documentandtasks_actions = {
 					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
 					tasksView.collection.add(data, { silent : true });
 				});
+			});
 			}
         },
 
@@ -145,6 +147,9 @@ var contact_details_documentandtasks_actions = {
 					$("#owners-list", $("#opportunityForm")).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 					$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 				});
+
+				//Populate products
+				populate_deal_products(e, undefined,"#opportunityForm");
 				
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", e, contacts_typeahead);
@@ -341,7 +346,7 @@ var contact_details_documentandtasks_actions = {
 			{
 				if(response && response.status == 403)
 				{
-					showModalConfirmation(_agile_get_translated_val('documents','detach-document'), 
+					showModalConfirmation("{{agile_lng_translate 'documents' 'detach-document'}}", 
 						DOC_ACL_DETACH_ERROR, 
 						function (){
 							return;
@@ -352,17 +357,47 @@ var contact_details_documentandtasks_actions = {
 						function(){
 							return;
 						},
-						_agile_get_translated_val('contact-details','cancel')
+						"{{agile_lng_translate 'contact-details' 'cancel'}}"
 					);
 				}
 			} });
        },
+	    navigate_to_edocument:function(e,type)
+	    {
+	    	var id="";
+	    	if(type=="company")
+	    	{
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else 
+			{
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
+			
+			
+			Backbone.history.navigate("documents/"+type+"/" + json.id+ "/edoc",{trigger: true});	
+	    },
+	    navigate_to_edit_document:function(e,type)
+	    {
+	    	
+	    	var document_id=$(e.currentTarget).attr("data");
 
+	    	if(type=="company")
+	    	{
+				json = App_Companies.companyDetailView.model.toJSON();
+			} else 
+			{
+				json = App_Contacts.contactDetailView.model.toJSON();
+			}
+			
+			
+			Backbone.history.navigate("documents/"+document_id+"/" + json.id,{trigger: true});	
+	    },
        show_document_list : function(e){
 
        		var targetEl = $(e.currentTarget);
        		var el = $(targetEl).closest("div");
 			$(targetEl).css("display", "none");
+			$(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle",el).css("display", "none");
 			if(agile_is_mobile_browser()){
 			el.find(".contact-document-select").css("display", "block");
 			}
@@ -372,14 +407,14 @@ var contact_details_documentandtasks_actions = {
 			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 			fillSelect('document-select', 'core/api/documents', 'documents', function fillNew()
 			{
-				var text = _agile_get_translated_val("misc-keys", "add-new-doc");
+				var text = "{{agile_lng_translate 'misc-keys' 'add-new-doc'}}";
 				el.find("#document-select > option:first").after("<option value='new'>" + text + "</option><option style='font-size: 1pt; background-color: #EDF1F2;'disabled>&nbsp;</option>");
 				el.find("#document-select > option:first").remove();
 
 			}, optionsTemplate, false, el);
 	    },
 
-       add_selected_document : function(e){
+       add_selected_document : function(e,type){
        		var targetEl = $(e.currentTarget);
 
        		var document_id = $(targetEl).closest(".contact-document-select").find("#document-select").val();
@@ -389,13 +424,25 @@ var contact_details_documentandtasks_actions = {
 			// To check whether the document is selected or not
 			if (document_id == "")
 			{
-				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>"+_agile_get_translated_val('validation-msgs','required')+"</span>");
+				saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>{{agile_lng_translate 'validation-msgs' 'required'}}</span>");
 				saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 				return;
 			}
 			else if (document_id == "new")
 			{
+		
+				var id="";
+		    	if(type=="company")
+		    	{
+					json = App_Companies.companyDetailView.model.toJSON();
+				} else 
+				{
+					json = App_Contacts.contactDetailView.model.toJSON();
+				}
+				Backbone.history.navigate("documents/"+type+"/" + json.id + "/attachment",{trigger: true});	        
 				
+				return;
+		
 				$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 				var el = $("#uploadDocumentForm");
 
@@ -431,6 +478,79 @@ var contact_details_documentandtasks_actions = {
 				else
 					existing_document_attach(document_id, saveBtn);
 			}
+			$('#doc_type','#uploadDocumentUpdateModal,#uploadDocumentModal').attr("editor-loaded","no")	
+			$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('change', '#doc_type', function(e)
+			{
+				if($(this).val()=="SENDDOC")
+				{
+
+					if($(this).attr("editor-loaded")!="yes")
+					{	
+						$(this).attr("editor-loaded","yes"	)
+						setupTinyMCEEditor('textarea#signdoc-template-html', false, undefined, function()
+						{
+							set_tinymce_content('signdoc-template-html', "");
+							// Register focus
+							register_focus_on_tinymce('signdoc-template-html');
+							// Reset tinymce
+						});		
+						var optionsTemplate = "<option doc_type='SENDDOC' value='{{id}}'>{{name}}</option>";
+						fillSelect('template_type', '/core/api/document/templates', 'documents', function fillNew(coll)
+						{
+						
+						$('#template_type','#uploadDocumentUpdateModal,#uploadDocumentModal').get(0).document_templates=coll;
+						
+						//console.log(coll);
+
+						}, optionsTemplate, false, el);
+					
+						$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('change', '#template_type', function(e)
+						{
+								var template_id = $("#template_type option:selected").val();
+								var sTemplateText="";
+								$.each($(this).get(0).document_templates.toJSON(), function(index, model)
+								{
+									if(model.id==template_id)
+									{
+										var template;
+										sTemplateText=model.text;
+										var json = get_contact_json_for_merge_fields();
+										try
+										{
+											template = Handlebars.compile(sTemplateText);
+											sTemplateText = template(json);
+										}
+										catch (err)
+										{
+											sTemplateText = add_square_brackets_to_merge_fields(sTemplateText);
+
+											template = Handlebars.compile(sTemplateText);
+											sTemplateText = template(json);
+										}
+										return false;
+									}
+								});
+								set_tinymce_content('signdoc-template-html', sTemplateText);
+						});			
+						$('#uploadDocumentUpdateModal,#uploadDocumentModal').on('click', '#document_send', function(e)
+						{
+								$("#signDocSendEmailModal").html(getTemplate("send-email-template")).modal('show');
+						});			
+					}
+
+					$(".senddoc",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide ");
+					$(".send-doc-button",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide ");
+					$(".attachment",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide");
+					
+
+				}	
+				else
+				{
+					$(".senddoc",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide ");
+					$(".send-doc-button",'#uploadDocumentUpdateModal,#uploadDocumentModal').addClass("hide ");
+					$(".attachment",'#uploadDocumentUpdateModal,#uploadDocumentModal').removeClass("hide");	
+				}
+			});
 		},
 };
 
@@ -461,7 +581,7 @@ function existing_document_attach(document_id, saveBtn)
 	}
 	else
 	{
-		var linkedtext = _agile_get_translated_val("misc-keys", "link-already");
+		var linkedtext = "{{agile_lng_translate 'misc-keys' 'link-already'}}";
 		saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>" + linkedtext + "</span>");
 		saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
 		hideTransitionBar();

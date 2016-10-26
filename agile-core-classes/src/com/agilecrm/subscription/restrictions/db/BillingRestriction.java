@@ -1,8 +1,10 @@
 package com.agilecrm.subscription.restrictions.db;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,38 +15,51 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.util.MilestoneUtil;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.deferred.RenewalCreditsDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>BillingRestriction</code> class represents number of entities in
@@ -61,9 +76,9 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @Cached
-public class BillingRestriction
+public class BillingRestriction implements Serializable
 {
-    @Id
+	@Id
     public Long id;
 
     public Integer contacts_count;
@@ -142,6 +157,16 @@ public class BillingRestriction
     @Embedded
     @JsonIgnore
     public PlanLimits planDetails = PlanLimits.getPlanDetails(new Plan("FREE", 2));
+    
+  	//Auto recharge related fields
+  	@NotSaved(IfDefault.class)
+  	public Integer nextRechargeCount = null;
+  	
+  	@NotSaved(IfDefault.class)
+  	public Integer autoRenewalPoint = null;
+  	
+  	@NotSaved(IfDefault.class)
+  	public Boolean isAutoRenewalEnabled = false;
 
     public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
 	    BillingRestriction.class);
@@ -269,31 +294,111 @@ public class BillingRestriction
     }
 
     @JsonIgnore
-    public Map<String, Map<String, Integer>> getRestrictions()
+    public Map<String, Map<String, Object>> getRestrictions()
     {
-	Map<String, Map<String, Integer>> resrtictions = new HashMap<String, Map<String, Integer>>();
+	Map<String, Map<String, Object>> resrtictions = new HashMap<String, Map<String, Object>>();
 
 	refreshContacts();
-	Map<String, Integer> limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getContactLimit());
-	limits.put("count", contacts_count);
-	resrtictions.put("contacts", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getWebRuleLimit());
-	limits.put("count", WebRuleUtil.getCount());
-	resrtictions.put("webrules", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getWorkflowLimit());
-	limits.put("count", WorkflowUtil.get_enable_campaign_count());
-	resrtictions.put("workflows", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getTriggersLimit());
-	limits.put("count", TriggerUtil.getCount());
-	resrtictions.put("triggers", limits);
-	limits = new HashMap<String, Integer>();
-	limits.put("limit", planDetails.getAllowedUsers());
-	limits.put("count", DomainUserUtil.count());
-	resrtictions.put("users", limits);
+	List<AgileUser> agileUsers = AgileUser.getUsers();
+	Map<String, Object> limits;
+	int contactsLimit = planDetails.getContactLimit();
+	if(contactsLimit < contacts_count){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", contactsLimit);
+		limits.put("count", contacts_count);
+		resrtictions.put("contacts", limits);
+	}
+	int webRuleLimit = planDetails.getWebRuleLimit();
+	int webRuleCount = WebRuleUtil.getCount();
+	if(webRuleLimit < webRuleCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", webRuleLimit);
+		limits.put("count", webRuleCount);
+		resrtictions.put("webrules", limits);
+	}
+	int workFlowsLimit = planDetails.getWorkflowLimit();
+	int workFlowsCount = WorkflowUtil.get_enable_campaign_count();
+	if(workFlowsLimit < workFlowsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", workFlowsLimit);
+		limits.put("count", workFlowsCount);
+		resrtictions.put("workflows", limits);
+	}
+	int triggersLimit = planDetails.getTriggersLimit();
+	int triggersCount = TriggerUtil.getCount();
+	if(triggersLimit < triggersCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", triggersLimit);
+		limits.put("count", triggersCount);
+		resrtictions.put("triggers", limits);
+	}
+	int usersLimit = planDetails.getAllowedUsers();
+	int usersCount = DomainUserUtil.count();
+	if(usersLimit < usersCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", usersLimit);
+		limits.put("count", usersCount);
+		resrtictions.put("users", limits);
+	}
+	int widgetsLimit = planDetails.getWidgetsLimit();
+	int widgetsCount = WidgetUtil.checkForDowngrade(widgetsLimit, agileUsers);
+	if(widgetsLimit < widgetsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", widgetsLimit);
+		limits.put("count", widgetsCount);
+		resrtictions.put("widgets", limits);
+	}
+	int nodesLimit = planDetails.getCampaignNodesLimit();
+	int maxNodesCount = WorkflowUtil.getMaxWorkflowNodes();
+	if(nodesLimit < maxNodesCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", nodesLimit);
+		limits.put("count", maxNodesCount);
+		resrtictions.put("nodes", limits);
+	}
+	int emailAccountsLimit = planDetails.getEmailAccountLimit();
+	int emailAccountsCount = ContactEmailUtil.checkForDowngrade(planDetails.getEmailAccountLimit(), agileUsers);
+	if(emailAccountsLimit < emailAccountsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", emailAccountsLimit);
+		limits.put("count", emailAccountsCount);
+		resrtictions.put("emailAccounts", limits);
+	}
+	int reportsLimit = planDetails.getReportsLimit();
+	int reportsCount = ReportsUtil.count();
+	if(reportsLimit < reportsCount){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", reportsLimit);
+		limits.put("count", reportsCount);
+		resrtictions.put("reports", limits);
+	}
+	Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+	if(!planDetails.getSMSGateway() && widget != null){
+		limits = new HashMap<String, Object>();
+		limits.put("isAllowed", planDetails.getSMSGateway());
+		resrtictions.put("smsGateway", limits);
+	}
+	boolean ecommerceSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.SHOPIFY, agileUsers);
+	if(!planDetails.getEcommerceSync() && ecommerceSyncEnabled){
+		limits = new HashMap<String, Object>();
+		limits.put("isAllowed", planDetails.getEcommerceSync());
+		resrtictions.put("ecommerceSync", limits);
+	}
+	boolean accountingSyncEnabled = ContactPrefsUtil.checkWidgetExists(Type.FRESHBOOKS, agileUsers) || ContactPrefsUtil.checkWidgetExists(Type.QUICKBOOK, agileUsers);
+	if(!planDetails.getAccountingSync() && accountingSyncEnabled){
+		limits = new HashMap<String, Object>();
+		limits.put("isAllowed", planDetails.getAccountingSync());
+		resrtictions.put("accountingSync", limits);
+	}
+	int tracksCount = MilestoneUtil.getCount();
+	if(!planDetails.getAddTracks() && tracksCount > 1){
+		limits = new HashMap<String, Object>();
+		limits.put("limit", 1);
+		limits.put("count", tracksCount);
+		resrtictions.put("tracks", limits);
+	}
+	
+	
 	return resrtictions;
     }
 
@@ -392,6 +497,7 @@ public class BillingRestriction
     @PrePersist
     private void prePersist()
     {
+    	
 	if (this.id == null)
 	    return;
 
@@ -465,6 +571,7 @@ public class BillingRestriction
     @PostLoad
     private void postLoad()
     {
+    
 	if (one_time_emails_count == null)
 	    one_time_emails_count = 0;
 
@@ -520,9 +627,72 @@ public class BillingRestriction
     
     public void decrementEmailCreditsCount(int count){
     	this.email_credits_count -= count;
+    	if(isAutoRenewalEnabled && email_credits_count <= autoRenewalPoint){
+    		String namespace = NamespaceManager.get();
+    		String syncKey = namespace + "_auto_renewal_lock";
+    		boolean lockAcquired = false;
+    		try
+    		{
+    			lockAcquired = acquireLock(syncKey);
+    			renewalCredits(nextRechargeCount, count);
+    		}catch (Exception e){
+    			System.out.println(ExceptionUtils.getFullStackTrace(e));
+    			e.printStackTrace();
+    		}finally{
+    			if (lockAcquired)
+    				decrement(syncKey);
+    		}
+    	}
     }
     
     public void incrementEmailCreditsCount(int count){
     	this.email_credits_count += count;
     }
+    
+    /**
+	 * Enabling lock on memcache key
+	 * 
+	 * Source:
+	 * http://stackoverflow.com/questions/14907908/google-app-engine-how-
+	 * to-make-synchronized-actions-using-memcache-or-datastore
+	 * 
+	 * @param syncKey
+	 * @return
+	 */
+	public boolean acquireLock(String syncKey)
+	{
+		MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
+
+		while (true)
+		{
+			if (memcacheService.increment(syncKey, 1L, 0L) == 1L)
+				return true;
+
+			try
+			{
+				System.out.println("Waiting for acquiring lock.");
+				Thread.sleep(2000L);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		}
+	}
+	
+	public static void decrement(String syncKey)
+	{
+		MemcacheServiceFactory.getMemcacheService().put(syncKey, 0l);
+	}
+    
+    //
+    public void renewalCredits(int quantity, int decrementCount){
+    	BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
+    	restriction.email_credits_count -= decrementCount;
+    	if(restriction.email_credits_count <= restriction.autoRenewalPoint){	
+			RenewalCreditsDeferredTask task = new RenewalCreditsDeferredTask(NamespaceManager.get(), quantity, 0);			
+			task.run();
+    	}
+	}
 }

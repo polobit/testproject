@@ -28,18 +28,30 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "onli
             String url = request.getRequestURL().toString();
 			System.out.println(url);
 			String[] ar = url.split("/");
-			String event_id = ar[ar.length - 1];
+			int urlArrayLenth = ar.length;
+			String event_id = null;		
+			String contact_id = null;
+			
+			String data = ar[urlArrayLenth - 1];
+			if(data.indexOf('c') == 0){						
+				contact_id = data.split("c")[1];
+				event_id = ar[urlArrayLenth - 2];
+			}else{
+				event_id = data;
+				contact_id = "0";
+			}
+			
 			String event_title=null;
 			boolean appointment_cancel_info = false;
 
 			String user_name = null;
 			String timezone = null;
 			String event_start = null;
-			 URL ur = new URL(url);
-			 String namespace = NamespaceUtil.getNamespaceFromURL(ur);
+			URL ur = new URL(url);
+			String namespace = NamespaceUtil.getNamespaceFromURL(ur);
 			String calendar_url=null;
 			String domain_url=VersioningUtil.getHostURLByApp(namespace);
-			 Long eventid=Long.parseLong(event_id);
+			Long eventid=Long.parseLong(event_id);
 			Event event = EventUtil.getEvent(eventid);
 
 			DomainUser dom_user = null;
@@ -57,7 +69,16 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "onli
 				}
 				calendar_url=dom_user.getCalendarURL();
 				appointment_cancel_info = true;
-				event_title=event_title.substring(0,event_title.indexOf("with")).trim();
+				System.out.println("event_title before : "+event_title);
+				int index = event_title.indexOf("with");				
+				if(index >= 0){
+					event_title = event_title.substring(0, index).trim();
+				}	
+				System.out.println("event_title after : "+event_title);			
+				System.out.println("timezone : "+timezone);
+				System.out.println("event : "+event);
+				System.out.println("event : "+event.toString());
+				
 				event_start = WebCalendarEventUtil
 						.getGMTDateInMilliSecFromTimeZone(timezone,
 								event.start * 1000, new SimpleDateFormat(
@@ -340,8 +361,8 @@ a:link, a:active, a:visited, a {
 
 </style>
 <title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "online-appointment-cancellation")%> - <%=user_name %></title>
-<script type="text/javascript" src="../../lib/web-calendar-event/jquery.js?_"></script>
-<script type="text/javascript" src="../../lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/lib/web-calendar-event/jquery.js?_"></script>
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 </head>
 <body>
 		<%
@@ -416,10 +437,14 @@ var domain_user_name=<%=mapper.writeValueAsString(user_name)%>;
 $("body").on("click","#cancel_appointment_confirmation",function(e)
 {
 	e.preventDefault();
-	  var event_id=<%=event_id%>
-	 var cancel_reason=$("#cancel_web_appointment_reason").val();
-	 
-	 $.ajax({ url : '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>+'&cancel_reason='+cancel_reason, type : 'GET', success : function(data)
+	 var event_id = <%=event_id%>
+	 var contact_id = <%=contact_id%>
+	 var cancel_reason = $("#cancel_web_appointment_reason").val();
+	 var eventURL = '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>
+	 				+'&cancel_reason='+cancel_reason
+	 				+'&contact_id='+contact_id;
+	 				
+	 $.ajax({ url : eventURL, type : 'GET', success : function(data)
 			{
 		 var appointment_success_img2 = "/img/appointment_confirmation.png";
 		 var ser='<div class="wrapper rounded6" id="templateContainer">'

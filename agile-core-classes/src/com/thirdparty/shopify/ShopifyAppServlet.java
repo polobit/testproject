@@ -14,6 +14,8 @@ import com.google.appengine.api.NamespaceManager;
 @SuppressWarnings("serial")
 public class ShopifyAppServlet extends HttpServlet
 {
+	public static final String SHOPIFY_HOST_URL = "https://widgets.agilecrm.com/shopify/index.php";
+	
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
 	String shopUrl = request.getParameter("shop");
@@ -28,11 +30,11 @@ public class ShopifyAppServlet extends HttpServlet
 	    String shopFromDb = ShopifyAppUtil.getShopFromDomain(domainFromURL);
 	    if (StringUtils.isBlank(shopFromDb))
 	    {
-		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=");
+		redirectURL = new String(SHOPIFY_HOST_URL + "?" + request.getQueryString() + "&error=");
 	    }
 	    else
 	    {
-		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=true");
+		redirectURL = new String(SHOPIFY_HOST_URL + "?" + request.getQueryString() + "&error=true");
 	    }
 	}
 	else if (StringUtils.equals(fromAppPreferences, "yes"))
@@ -42,7 +44,7 @@ public class ShopifyAppServlet extends HttpServlet
 	else
 	{
 	    if (StringUtils.isBlank(agileDomain))
-		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString());
+		redirectURL = new String(SHOPIFY_HOST_URL + "?" + request.getQueryString());
 	    else
 	    {
 		NamespaceManager.set(agileDomain);
@@ -51,7 +53,15 @@ public class ShopifyAppServlet extends HttpServlet
 	}
 	response.setContentType("text/html");
 	response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-	response.sendRedirect(response.encodeRedirectURL(redirectURL));
+	
+	String encodedURL = response.encodeRedirectURL(redirectURL);
+	try {
+		encodedURL = encodedURL.replaceAll("([;&]jsessionid=\\w+)", "");
+		System.out.println("encodedURL = " + encodedURL);
+	} catch (Exception e) {
+	}
+	
+	response.sendRedirect(encodedURL);
 	return;
     }
 }

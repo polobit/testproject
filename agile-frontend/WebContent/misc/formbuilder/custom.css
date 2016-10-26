@@ -312,7 +312,7 @@ fieldset {
 #target .popover form{
 	font-family:sans-serif!important;
 }
-#agiletheme{
+#agiletheme,#agileapi,#agiledomain{
 	display: none!important;
 }
 form .popover form .form-control,form .popover form .form-control:focus{

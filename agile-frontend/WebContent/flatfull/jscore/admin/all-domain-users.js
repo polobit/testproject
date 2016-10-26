@@ -161,7 +161,7 @@ function initializeAdminpanelListner(el){
 				error : function(response)
 				{
 					$("#partialrefund").button('reset');
-					showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
+					showNotyPopUp("information", "{{agile_lng_translate 'billing' 'error-occured'}}", "top");
 				}
 			});
 		
@@ -259,7 +259,7 @@ function initializeAdminpanelListner(el){
 					},
 					error : function(response){
 						console.log(response);
-						showNotyPopUp("information", _agile_get_translated_val('billing','error-occured'), "top");
+						showNotyPopUp("information", "{{agile_lng_translate 'billing' 'error-occured'}}", "top");
 					}
 				});
 			});

@@ -39,6 +39,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.CookieUtil;
+import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -312,9 +313,17 @@ public class RegisterServlet extends HttpServlet
 		request.getRequestDispatcher("register_success_callback.jsp").forward(request, response);
 		return;
 	}
+	request.getSession().setAttribute("Email", email);
 	
-	// Redirect to home page
-	response.sendRedirect(redirectionURL);
+	request.getSession().setAttribute("RedirectionHomeURL", redirectionURL);
+
+	request.setAttribute("redirectionurl", redirectionURL);
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+		response.sendRedirect(redirectionURL);
+	}
+	else{
+		response.sendRedirect("/invite-users?redirectionurl="+redirectionURL);
+	}
 	
     }
 

@@ -31,6 +31,41 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     $('#activities-listners').html($(template_ui));
 
+                    var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+                    var activities_list;
+                    if(!dashboard_name){
+                        var role = CURRENT_DOMAIN_USER.role;
+                        switch(role){
+                            case "SALES" :
+                                dashboard_name = "SalesDashboard";
+                                break;
+                            case "MARKETING" :
+                                dashboard_name = "MarketingDashboard";
+                                break;
+                            case "SERVICE" :
+                                dashboard_name = "dashboard";
+                                break;
+                        }
+                        
+                    }
+                    switch(dashboard_name){
+                         case "SalesDashboard" :
+                             activities_list = "sales-activity-list-header"
+                             break;
+                         case "MarketingDashboard" :
+                             activities_list = "marketing-activity-list-header"
+                             break;
+                         case "dashboard" :
+                             activities_list = "service-activity-list-header"
+                             break;
+                     }
+                     getTemplate(activities_list, {}, undefined, function(template) {
+ 
+                         if (!template)
+                             return;
+                         $(".dashboard-activities").append(template);
+                     });
+
                     initActivitiesDateRange();
 
                     //comaign  history
@@ -50,14 +85,24 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     var activityFilters = JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 
+                    var entityId;
+                    var entitytype_dashboard;
+                    if(activityFilters){
+                        if(activityFilters[dashboard_name] != undefined){
+                                entityId = activityFilters[dashboard_name].entityId;
+                                entitytype_dashboard = activityFilters[dashboard_name].entity;
+                                console.log("saddfasda");
+                        }
+                    }
+
                     var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
                     // fill workflows
                     fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities() {
                         $('#activities-listners').find("#user-select").append("<li><a href=''>" + _agile_get_translated_val('report-view', 'all-users') + "</a></li>");
-                        if (activityFilters && (activityFilters.user || activityFilters.entity)) {
+                        if (activityFilters &&  (activityFilters.user || entitytype_dashboard)) {
                             $('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userId);
-                            $('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityId);
+                            $('ul#entity_type li a').closest("ul").data("selected_item", entityId);
                             $('#selectedusername').html(activityFilters.user);
 
                                     //Campaing History
@@ -67,8 +112,8 @@ var ActivitylogRouter = Backbone.Router.extend({
                                    activityFilters.entity = _agile_get_translated_val("menu", "menu-campaigns");
                             }
                             
-                                $('#selectedentity_type').html(activityFilters.entity);
-                                $('.activity-sub-heading').html(activityFilters.entity);
+                                $('#selectedentity_type').html(entitytype_dashboard);
+                                $('.activity-sub-heading').html(entitytype_dashboard);
 
                         }
 

@@ -61,7 +61,7 @@ public class FormsAPI
 	    String json = formJson.getString("formJson");
 	    boolean emailNotification=false;
 		boolean agileformcaptcha=false;
-		/*checking the condition for the when emailNotification is true
+		/*checking the condition for the whn emailNotification is true
 		 * and user clicks on the submit button of the form  */
 		try{
 			JSONArray jsn=new JSONArray(json);

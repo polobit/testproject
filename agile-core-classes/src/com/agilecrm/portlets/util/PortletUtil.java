@@ -1660,7 +1660,7 @@ public class PortletUtil {
 			String cursor, Long starttime, Long endtime) {
 		
 		List<Activity> list = ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, max, cursor,
-	        starttime, endtime, null);
+	        starttime, endtime,null,"");
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;

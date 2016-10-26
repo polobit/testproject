@@ -760,6 +760,7 @@ var portlet_utility = {
 			if (base_model.get('settings').owner != undefined
 					&& base_model.get('settings').owner != "") 
 				options+='&user_id='+base_model.get('settings').owner;
+
 			App_Portlets.activity[parseInt(pos)] = new Base_Collection_View({
 				url : '/core/api/portlets/customer-activity'+options
 				+ '&start_time='
@@ -1452,14 +1453,13 @@ var portlet_utility = {
 
 		// Hide previous error messages
 		$('.help-inline').hide();
-
 		switch (portlet_name) {
 		case "Filter Based": {
 			$('#filter', elData).find('option').remove();
 			$('.loading-img', elData).show();
-			that.addPortletSettingsModalContent(base_model,
-					"portletsContactsFilterBasedSettingsModal");
+			
 			elData = $('#portletsContactsFilterBasedSettingsForm');
+			removeSelectedData(elData);
 			var existed_filter = base_model.get("settings").filter;
 			var options = '<option value="">{{agile_lng_translate "contact-details" "select"}}</option>';
 			if (existed_filter == "contacts") {
@@ -1494,38 +1494,41 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
+			that.addPortletSettingsModalContent(base_model,
+					"portletsContactsFilterBasedSettingsModal");
 			break;
 		}
 		case "Emails Opened": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsContactsEmailsOpenedSettingsModal");
 			elData = $('#portletsContactsEmailsOpenedSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,
+					"portletsContactsEmailsOpenedSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Emails Sent": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsContactsEmailsSentSettingsModal");
 			elData = $('#portletsContactsEmailsSentSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				that.addPortletSettingsModalContent(base_model,
+					"portletsContactsEmailsSentSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Growth Graph": {
 			$('#portlet-ul-tags > li').remove();
 			$('#cancel-modal').attr('disabled', false);
-			that.addPortletSettingsModalContent(base_model,
-					"portletsContactsGrowthGraphSettingsModal");
 			elData = $('#portletsContactsGrowthGraphSettingsModal');
+			removeSelectedData(elData);
 			// Saved tags are appended
 			var tags = base_model.get('settings').tags.split(",");
 			var li = '';
@@ -1553,14 +1556,15 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+								that.addPortletSettingsModalContent(base_model,
+					"portletsContactsGrowthGraphSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 
 			break;
 		}
 		case "Pending Deals": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsPendingDealsSettingsModal");
 			elData = $('#portletsPendingDealsSettingsModal');
+			removeSelectedData(elData);
 			$("#deals", elData).find(
 					'option[value=' + base_model.get("settings").deals + ']')
 					.attr("selected", "selected");
@@ -1638,13 +1642,14 @@ var portlet_utility = {
 			$("#milestone", elData).find(
 					'option[value=' + base_model.get("settings").milestone + ']')
 					.attr("selected", "selected");*/
+								that.addPortletSettingsModalContent(base_model,
+					"portletsPendingDealsSettingsModal");
 			break;
 		}
 		//campaign pie chart
 		case "Campaign graph": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsCampaignGraphSettingsModal");
 			elData = $('#portletsCampaignGraphSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
@@ -1668,13 +1673,14 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
+						that.addPortletSettingsModalContent(base_model,
+					"portletsCampaignGraphSettingsModal");
 			break;
 		}
 
 		case "Deals By Milestone": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsDealsByMilestoneSettingsModal");
 			elData = $('#portletsDealsByMilestoneSettingsModal');
+			removeSelectedData(elData);
 			var that = this;
 			var url = '/core/api/portlets/deals-by-milestone?deals='
 					+ base_model.get('settings').deals + '&track='
@@ -1704,36 +1710,39 @@ var portlet_utility = {
 				return;
 			}
 			that.addTracks(tracks, base_model, elData);
+			that.addPortletSettingsModalContent(base_model,
+					"portletsDealsByMilestoneSettingsModal");
 			break;
 		}
 		case "Closures Per Person": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsDealsClosuresPerPersonSettingsModal");
 			elData = $('#portletsDealsClosuresPerPersonSettingsModal');
+			removeSelectedData(elData);
 			$("#group-by", elData).find(
 					'option[value=' + base_model.get("settings")["group-by"]
 							+ ']').attr("selected", "selected");
 			$("#due-date", elData)
 					.val(
 							getDateInFormatFromEpoc(base_model.get("settings")["due-date"]));
+			that.addPortletSettingsModalContent(base_model,
+					"portletsDealsClosuresPerPersonSettingsModal");
 			break;
 		}
 		case "Deals Won": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsDealsWonSettingsModal");
 			elData = $('#portletsDealsWonSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,
+					"portletsDealsWonSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Deals Funnel": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsDealsFunnelSettingsModal");
 			elData = $('#portletsDealsFunnelSettingsModal');
+			removeSelectedData(elData);
 			var that = this;
 			var url = '/core/api/portlets/deals-funnel?deals='
 					+ base_model.get('settings').deals + '&track='
@@ -1763,23 +1772,27 @@ var portlet_utility = {
 
 				return;
 			}
+			that.addPortletSettingsModalContent(base_model,
+					"portletsDealsFunnelSettingsModal");
 			that.addTracks(tracks, base_model, elData);
 			break;
 		}
 		case "Deals Assigned": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsDealsAssignedSettingsModal");
 			elData = $('#portletsDealsAssignedSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,
+					"portletsDealsAssignedSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Calls Per Person": {
 			elData = $('#portletsCallsPerPersonSettingsModal');
+			removeSelectedData(elData);
 			$("#group-by", elData).find(
 					'option[value=' + base_model.get("settings")["group-by"]
 							+ ']').attr("selected", "selected");
@@ -1798,6 +1811,7 @@ var portlet_utility = {
 		}
 		case "Task Report": {
 			elData = $('#portletsTaskReportSettingsModal');
+			removeSelectedData(elData);
 			$("#group-by-task-report", elData).find(
 					'option[value=' + base_model.get("settings")["group-by"]
 							+ ']').attr("selected", "selected");
@@ -1828,43 +1842,47 @@ var portlet_utility = {
 			break;
 		}
 		case "Stats Report": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsStatsReportSettingsModal");
 			elData = $('#portletsStatsReportSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				that.addPortletSettingsModalContent(base_model,
+					"portletsStatsReportSettingsModal");
 				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Agenda": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsAgendaSettingsModal");
 			elData = $('#portletsAgendaSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				that.addPortletSettingsModalContent(base_model,
+					"portletsAgendaSettingsModal");
 				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Today Tasks": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsTodayTasksSettingsModal");
 			elData = $('#portletsTodayTasksSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				that.addPortletSettingsModalContent(base_model,
+					"portletsTodayTasksSettingsModal");				
 				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Leaderboard": {
 			elData = $('#portletsLeaderboardSettingsModal');
+			removeSelectedData(elData);
 			var leaderboardCate = base_model.get("settings").category;
 			$("#duration", elData)
 					.find(
@@ -1872,7 +1890,6 @@ var portlet_utility = {
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
 				
-				initializeCustomRangeInModal(base_model,elData);
 			if (leaderboardCate && leaderboardCate.revenue)
 				$("#category-list", elData).find('option[value=revenue]').attr(
 						"selected", "selected");
@@ -1907,12 +1924,12 @@ var portlet_utility = {
 				$('#ms-category-list', elData).addClass(
 						'portlet-category-ms-container');
 			});
+				initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Revenue Graph": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsDealsRevenueGraphSettingsModal");
 			elData = $('#portletsDealsRevenueGraphSettingsModal');
+			removeSelectedData(elData);
 			var options = '';
 			if (base_model.get('settings').track == "anyTrack") {
 				options += '<option value="anyTrack" selected="selected">{{agile_lng_translate "portlets" "any"}}</option>';
@@ -1942,13 +1959,14 @@ var portlet_utility = {
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+				that.addPortletSettingsModalContent(base_model,
+					"portletsDealsRevenueGraphSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Campaign stats": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsCampaignStatsSettingsModal");
 			elData = $('#portletsCampaignStatsSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
@@ -1972,27 +1990,28 @@ var portlet_utility = {
 					$('.loading-img').hide();
 				}
 			});
+			that.addPortletSettingsModalContent(base_model,
+					"portletsCampaignStatsSettingsModal");
 			initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 
 		case "Deal Goals": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsGoalsSettingsModal");
 			elData = $('#portletsGoalsSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
-
+			that.addPortletSettingsModalContent(base_model,
+					"portletsGoalsSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Incoming Deals": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsIncomingDealsSettingsModal");
 			elData = $('#portletsIncomingDealsSettingsModal');
+			removeSelectedData(elData);
 			$("#duration-incoming-deals", elData)
 					.find(
 							'option[value='
@@ -2000,14 +2019,16 @@ var portlet_utility = {
 					.attr("selected", "selected");
 			$("#split-by-incoming-deals", elData).find('option[value='+ base_model.get("settings")["type"] + ']').attr("selected", "selected");
 			$("#frequency-incoming-deals", elData).find('option[value='+ base_model.get("settings")["frequency"] + ']').attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,
+					"portletsIncomingDealsSettingsModal");
 			portlet_utility.setOwners("owner", base_model, elData);
 			initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Lost Deal Analysis": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsLostDealAnalysisSettingsModal");
 			elData = $('#portletsLostDealAnalysisSettingsModal');
+			removeSelectedData(elData);
+
 			$("#duration-lost-deal-analysis", elData)
 					.find(
 							'option[value='
@@ -2016,52 +2037,58 @@ var portlet_utility = {
 			portlet_utility.setOwners("owner-lost-deal-analysis", base_model, elData);
 			portlet_utility.setTracks("track-lost-deal-analysis", base_model, elData);
 			portlet_utility.setSources("source-lost-deal-analysis", base_model, elData);
+			that.addPortletSettingsModalContent(base_model,
+					"portletsLostDealAnalysisSettingsModal");
 			initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 
 		case "Average Deviation": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsTaskClosureSettingsModal");
 			elData = $('#portletsTaskClosureSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData).find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,
+					"portletsTaskClosureSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 						break;
 		}
 
 		case "User Activities" : {
-			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
 			elData = $("#portletsUserActivitiesSettingsModal");
+			removeSelectedData(elData);
 			portlet_utility.setOwners("owner-user-activities", base_model, elData);
 			$("#duration-user-activities", elData)
 					.find(
 							'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,"portletsUserActivitiesSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 					break;
 		}
 		case "Webstat Visits": {
-			that.addPortletSettingsModalContent(base_model,
-					"portletsWebstatVisitsSettingsModal");
 			elData = $('#portletsWebstatVisitsSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData).find(
 				               'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,
+					"portletsWebstatVisitsSettingsModal");		
 					initializeCustomRangeInModal(base_model,elData);
 			break;
 		}
 		case "Referralurl stats": {
-			that.addPortletSettingsModalContent(base_model,"portletsReferralurlStatsSettingsModal");
 			elData = $('#portletsReferralurlStatsSettingsModal');
+			removeSelectedData(elData);
 			$("#duration", elData).find(
 				               'option[value='
 									+ base_model.get("settings").duration + ']')
 					.attr("selected", "selected");
+			that.addPortletSettingsModalContent(base_model,"portletsReferralurlStatsSettingsModal");
 					initializeCustomRangeInModal(base_model,elData);
 			break;		
 			
@@ -2083,15 +2110,19 @@ var portlet_utility = {
 	 * should be open.
 	 */
 	addPortletSettingsModalContent : function(base_model, modal_id) {
+		$('#' + modal_id).find('form')[0].reset();
 		$('#' + modal_id).modal('show');
+		$('#' + modal_id).on('shown.bs.modal', function(){		   
+		   if($("#start_date", $('#' + modal_id)).is(":focus")){		    
+		    $("#start_date", $('#' + modal_id)).datepicker("hide");
+		    $("#start_date", $('#' + modal_id)).blur();		    
+		   }
+		});
+
 		$('.datepicker').hide();
-		$(
-				'#'
-						+ modal_id
-						+ ' > .modal-dialog > .modal-content > .modal-footer > .save-modal')
+		$('#'+ modal_id+ ' > .modal-dialog > .modal-content > .modal-footer > .save-modal')
 				.attr('id', base_model.get("id") + '-save-modal');
-		$("#portlet-type", $('#' + modal_id)).val(
-				base_model.get('portlet_type'));
+		$("#portlet-type", $('#' + modal_id)).val(base_model.get('portlet_type'));
 		$("#portlet-name", $('#' + modal_id)).val(base_model.get('name'));
 	},
 
@@ -2635,64 +2666,68 @@ var portlet_utility = {
 	}
 };
 
-function initializeCustomRangeInModal(base_model,elData)
-{
+function initializeCustomRangeInModal(base_model,elData){
 	if(base_model.get("settings").duration=='Custom'){
-					$('.daterange',elData).removeClass('hide');
-					
-	if(base_model.get('name')=='Deal Goals')
-			{
-				$("#start_date", elData)
-					.val(
-							
-									stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
-					$("#end_date", elData)
-					.val(
-							
-									stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
-				$('#start_date',elData).datepicker('remove');
-				$('#end_date',elData).datepicker('remove');
-				$('#start_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
-				$('#end_date',elData).datepicker({ format :"MM yyyy", minViewMode:"months",weekStart : CALENDAR_WEEK_START_DAY, autoclose : true });
-	
-			}
-			else{
-				$("#start_date", elData)
-					.val(
-							
-									getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
-					$("#end_date", elData)
-					.val(
-							
-									getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
-					$('#start_date',elData).datepicker('remove');
-				$('#end_date',elData).datepicker('remove');
+		$('.daterange',elData).removeClass('hide');					
+		if(base_model.get('name')=='Deal Goals'){			
+			$("#start_date", elData).val(stringToDate(base_model.get("settings")["start-date"]*1000,'mmm yyyy')).blur();
+			$("#end_date", elData).val(stringToDate(base_model.get("settings")["end-date"]*1000,'mmm yyyy')).blur();
+			$('#start_date',elData).datepicker('remove');
+			$('#end_date',elData).datepicker('remove');
 
-var eventDate = $('#start_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true }).on('changeDate', function(ev)
-		{
-			// If event start date is changed and end date is less than start date,
-			// change the value of the end date to start date.
-			var eventDate2;
-			if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1)
-				eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
-			else
-			 	eventDate2 = new Date($('#end_date',elData).val());
-			if (ev.date.valueOf() > eventDate2.valueOf())
-			{
-				//var en_value=ev.date.valueOf();
-				$('#end_date',elData).val($('#start_date',elData).val());
-			}
+			$('#start_date',elData).datepicker({ 
+				format :"MM yyyy", minViewMode:"months", 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose : true,
+				focusOnShow: false
+			});
 
-		});
+			$('#end_date',elData).datepicker({ 
+				format :"MM yyyy", 
+				minViewMode:"months", 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose : true,
+				focusOnShow: false 
+			});
+		}else{
+			$("#start_date", elData).val(getDateInFormatFromEpoc(base_model.get("settings")["start-date"]));
+			$("#end_date", elData).val(getDateInFormatFromEpoc(base_model.get("settings")["end-date"]));
+			$('#start_date',elData).datepicker('remove');
+			$('#end_date',elData).datepicker('remove');
 
+			var eventDate = $('#start_date',elData).datepicker({ 
+				format : CURRENT_USER_PREFS.dateFormat, 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose: true,
+				focusOnShow: false
+			}).on('changeDate', function(ev){
+				// If event start date is changed and end date is less than start date,
+				// change the value of the end date to start date.
+				var eventDate2;
+				if(CURRENT_USER_PREFS.dateFormat.indexOf("dd/mm/yy") != -1 || CURRENT_USER_PREFS.dateFormat.indexOf("dd.mm.yy") != -1){
+					eventDate2 = new Date(convertDateFromUKtoUS($('#end_date',elData).val()));
+				}else{
+					console.log('New');
+				 	eventDate2 = new Date($('#end_date',elData).val());
+				}
+				
+				if (ev.date.valueOf() > eventDate2.valueOf()){
+					//var en_value=ev.date.valueOf();
+					$('#end_date',elData).val($('#start_date', elData).val());
+				}
+			});
 
-		$('#end_date',elData).datepicker({ format : CURRENT_USER_PREFS.dateFormat , weekStart : CALENDAR_WEEK_START_DAY, autoclose: true},'hide');
+			$('#end_date',elData).datepicker({ 
+				format : CURRENT_USER_PREFS.dateFormat, 
+				weekStart : CALENDAR_WEEK_START_DAY, 
+				autoclose: true,
+				focusOnShow: false
+			},'hide');
 		}
+	}else{
+		$(elData).find('.daterange').addClass('hide');
+		$(elData).find(".invalid-range").parents('.form-group').hide();
 	}
-		else
-			$(elData).find('.daterange').addClass('hide');
-			$(elData).find(".invalid-range").parents('.form-group').hide();
-
 }
 
 function stringToDate(date,format)
@@ -2725,4 +2760,12 @@ function getTranslatedPortletName(name){
 
 	name = name.trim();
 	return (name_json[name] ? name_json[name] : ucfirst(name));
+}
+
+function removeSelectedData(elData)
+{
+	$('select option',elData).each(function(){
+				if($(this).attr('selected'))
+					$(this).removeAttr('selected');
+			});
 }

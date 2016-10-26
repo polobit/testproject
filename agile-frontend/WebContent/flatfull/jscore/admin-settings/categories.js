@@ -26,9 +26,9 @@
 			var html = '';
 			$.each(cats, function(index,cat){
 				var catLabel = cat.label;
-				if(catLabel){
+				/*if(catLabel){
 					catLabel = getTranslatedPortletName(catLabel.toUpperCase());
-				}
+				}*/
 				
 				if(type == cat.name)
 					html += '<option value="'+cat.name+'" selected="selected">'+catLabel+'</option>';
@@ -113,9 +113,9 @@
     	
     	if (!categories.isValid(label)) {
     		if(label.length === 0)
-    			$(that).parent().find('.save-status').html('<span style="color:red;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
+    			$(that).parent().find('.save-status').html('<span style="color:red;">{{agile_lng_translate "validation-msgs" "required"}}</span>');
     		else
-    			$(that).parent().find('.save-status').html('<span style="color:red;">'+_agile_get_translated_val('category','name-error')+'</span>');
+    			$(that).parent().find('.save-status').html('<span style="color:red;">{{agile_lng_translate "category" "name-error"}}</span>');
     		setTimeout(function(){ 
     			$(that).parent().find('.save-status').html();
     			}, 3000);

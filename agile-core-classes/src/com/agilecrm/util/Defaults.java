@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
@@ -24,8 +27,12 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.InvitedUser;
+import com.agilecrm.user.util.InvitedUsersUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.google.appengine.api.NamespaceManager;
 
 public class Defaults
 {
@@ -40,6 +47,7 @@ public class Defaults
 		TicketFiltersUtil.saveDefaultFilters();
 		//saveDefaultWorkflowsAndTriggers();
 		//TicketsUtil.createDefaultTicket();
+		saveInvitedUsers();
     }
 
 	/**
@@ -500,4 +508,26 @@ public class Defaults
     	newTicketTrigger.is_disabled = true;
     	newTicketTrigger.save();
    	}
+    private void saveInvitedUsers(){
+    	List<InvitedUser> list = InvitedUsersUtil.dao.fetchAll();
+
+		for (InvitedUser invitedUser : list) {
+			if (invitedUser == null || StringUtils.isBlank(invitedUser.email))
+				continue;
+
+			String emailName = invitedUser.email;
+			String name = emailName.split("@")[0];
+
+			DomainUser domainUser = new DomainUser(NamespaceManager.get(), emailName, name, APIKey.generateRandom(),
+					false, false, name);
+			try {
+				Long user_id = invitedUser.id;
+				domainUser.invitedUser_id = user_id;
+				domainUser.save();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
 }

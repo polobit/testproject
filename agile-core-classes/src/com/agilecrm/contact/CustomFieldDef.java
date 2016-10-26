@@ -90,7 +90,9 @@ public class CustomFieldDef
     
     @NotSaved
     public String scopeExtension;
-
+    
+    @NotSaved
+    public String positionsList;
     /**
      * Specifies the scope of the custom field should be added
      */
@@ -144,7 +146,16 @@ public class CustomFieldDef
 	this.field_label = fieldLabel;
 	this.is_required = is_required;
     }
-
+    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData,boolean is_required,boolean searchable)
+    {
+    	this.field_data = fieldData;
+    	this.field_description = fieldDescription;
+    	this.field_type = fieldType;
+    	this.field_label = fieldLabel;
+    	this.is_required = is_required;
+    	this.searchable = searchable;
+    }
+    
     /**
      * Saves the custom field by validating its field_label value. Throws an
      * exception if any duplicate is found. Id of the custom field is also

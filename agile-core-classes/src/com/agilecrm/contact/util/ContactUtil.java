@@ -359,13 +359,22 @@ public class ContactUtil
 	
 		try
 		{
-		    return dao.get(q.getKey());
+			List<Contact> contacts= dao.fetchAll(q);
+			for(Contact contact : contacts)
+			{
+				for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+				{
+					if(email.equalsIgnoreCase(emailField.value))
+						return contact;
+				}
+			}
+		    //return dao.get(q.getKey());
 		}
 		catch (Exception e)
 		{
 		    return null;
 		}
-	
+		return null;
     }
     
     public static Contact searchContactByEmailID(String email)
@@ -639,10 +648,24 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
+    	if(email==null) return 0;
+    	Query<Contact> q = dao.ofy().query(Contact.class);
+    	q.filter("properties.name", Contact.EMAIL);
+    	q.filter("type", Type.PERSON).filter("properties.value = ", email);
+    	int count=0;
     	
-    	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-    			.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
-		
+    	List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					count++;
+			}
+		}
+	//return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	//	.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
+		return count;
     }
 
     /**
@@ -651,8 +674,24 @@ public class ContactUtil
 
     public static int searchContactCountByEmailAndType(String email, Type type)
     {
-		return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-				.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
+    	if(email==null) return 0;
+    	int count=0;
+    	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+    			.filter("properties.value = ", email.toLowerCase()).filter("type", type);
+    	
+    	List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					count++;
+			}
+		}
+		return count;
+		//return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		//.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
+
     }
 
     /**
@@ -661,8 +700,23 @@ public class ContactUtil
 
     public static Contact searchContactByEmailAndType(String email, Type type)
     {
-    	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-    			.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
+    	
+    	if(email==null) return null;
+    	Query<Contact> q = dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+    				.filter("properties.value = ", email.toLowerCase()).filter("type", type);
+    	
+    	List<Contact> contacts= dao.fetchAll(q);
+		for(Contact contact : contacts)
+		{
+			for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+			{
+				if(email.equalsIgnoreCase(emailField.value))
+					return contact;
+			}
+		}
+	//return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	//	.filter("properties.value = ", email.toLowerCase()).filter("type", type).get();
+		return null;
     }
 
     /**
@@ -2260,6 +2314,51 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	    return null;
 	}
 
+    }
+    
+    public static void updateContactsBulk(List<Contact> contacts_list)
+    {
+	if (contacts_list.size() == 0)
+	{
+	    return;
+	}
+
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+
+	ContactDocument contactDocuments = new ContactDocument();
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
+	for (Contact contact : contacts_list)
+	{
+		contact.forceSearch = true;
+		contact.updated_time = System.currentTimeMillis() / 1000;
+		builderObjects.add(contactDocuments.buildDocument(contact));
+		++i;
+
+	    if (i >= 50)
+	    {
+		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+		builderObjects.clear();
+		i = 0;
+	    }
+	}
+
+		if (builderObjects.size() >= 1)
+	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+
+		Contact.dao.putAll(contacts_list);
+    }
+
+    public static List<Contact> getContactsByIds(List<String> contactsArray){
+		List<Key<Contact>> contactKeys = new ArrayList<Key<Contact>>();
+		for (String id : contactsArray){
+			Long contactID = Long.parseLong(id);
+		    contactKeys.add(new Key<Contact>(Contact.class, contactID));
+		}
+		System.out.println(dao.fetchAllByKeys(contactKeys));
+	
+		return dao.fetchAllByKeys(contactKeys);
     }
 
 }

@@ -22,7 +22,9 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
@@ -30,7 +32,7 @@ import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
-
+import com.agilecrm.contact.DocumentNote;
 /**
  * <code>ActivitySave</code> class is interacts with ActivityUtil to create activities.
  * ActivitySave interacts all other classes to create log for action performed
@@ -93,16 +95,17 @@ public class ActivitySave
 	System.out.println(deals.size());
 	System.out.println("in deals api");
 	Object close_date[] = deals.get("close_date");
-	Object name[] = deals.get("name");
+	Object name[] = deals.get("name");	
 	Object ownername[] = deals.get("owner_name");
 	Object expectedvalue[] = deals.get("expected_value");
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
 	Object description[] = deals.get("description");
 	Object tags[] = deals.get("tags");
+	Object trackNames[] = deals.get("track_names");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
-
+	
 	if (deals.size() > 0)
 	{
 	    if (ownername != null)
@@ -112,16 +115,30 @@ public class ActivitySave
 
 	    }
 	    if (milestone != null)
-	    {
-		if (milestone[0].toString().equalsIgnoreCase("Won"))
-		    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, milestone[0].toString(),
-			    milestone[1].toString(), milestone[2].toString(), jsn);
-		else if (milestone[0].toString().equalsIgnoreCase("Lost"))
-		    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, milestone[0].toString(),
-			    milestone[1].toString(), milestone[2].toString(), jsn);
-		else
-		    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
-			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString(), jsn);
+	    {	    	
+	    	
+	    	String fromMileStone = milestone[1].toString();
+	    	String toMileStone = milestone[0].toString();	    		    		    
+	    	if(trackNames != null){
+	    		fromMileStone += " ("+ trackNames[1] +")";
+    			toMileStone += " ("+ trackNames[0] +")";	 
+	    	}else{	    		
+	    		String trackName = MilestoneUtil.getMilestone(opportunity.pipeline_id).name;
+	    		if(trackName != null){
+	    			fromMileStone += " ("+ trackName +")";
+    				toMileStone += " ("+ trackName +")";
+	    		}
+	    	}
+	    	
+			if (milestone[0].toString().equalsIgnoreCase("Won"))
+			    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, toMileStone,
+			    		fromMileStone, milestone[2].toString(), jsn);
+			else if (milestone[0].toString().equalsIgnoreCase("Lost"))
+			    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, toMileStone,
+			    		fromMileStone, milestone[2].toString(), jsn);
+			else
+			    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
+			    		toMileStone, fromMileStone, milestone[2].toString(), jsn);
 	    }
 
 	    if (name != null || expectedvalue != null || probablity != null || close_date != null || description != null)
@@ -131,7 +148,7 @@ public class ActivitySave
 		ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, opportunity, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
 	    }
-	    if(tags.length > 0){
+	    if(tags != null && tags.length > 0){
 	    	if(tags[0] != null && tags[1] != null)
 	    		ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_CHANGE, opportunity, tags[0].toString(), tags[1].toString(), tags[2].toString(), jsn);
 	    	else if(tags[0] == null && tags[1] != null)
@@ -541,6 +558,31 @@ public class ActivitySave
 		}
 
 	    }
+	}
+
+    }
+
+    
+    public static void createDocumentNoteAddActivity(DocumentNote note) throws JSONException
+    {
+
+	JSONObject js = new JSONObject(new Gson().toJson(note));
+	System.out.println(js);
+
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
+	
+	String custom4 = "";
+	if (jsn != null && jsn.length() > 0)
+	{
+
+	    for (int i = 0; i <= jsn.length() - 1; i++)
+	    {
+
+			Contact contact = ContactUtil.getContact(jsn.getLong(i));
+				ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+				        note.id.toString());
+	    }
+
 	}
 
     }

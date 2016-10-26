@@ -251,6 +251,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("affiliate.js");
 	}
+	if (templateName.indexOf("video-record") == 0)
+	{
+		template_relative_urls.push("video-record.js");
+	}
 	
 	return template_relative_urls;
 }
@@ -647,7 +651,9 @@ function getContactCustomProperties(items)
 	var fields = [];
 	var fieldName='';
 	var datajson={};
-
+	if(!Current_Route)
+		Current_Route = window.location.hash.split("#")[1]
+	
 	var curr_route = Current_Route;
 	if(curr_route == "contacts" || curr_route.indexOf("contact")>=0){
 		curr_route = "CONTACT";
@@ -816,7 +822,11 @@ function getContactCustomProperties(items)
 				finalFields.push(formulaFields[k]);	
 		}
 	}
-	
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
+
 	return finalFields;
 }
 
@@ -1004,6 +1014,10 @@ function getCompanyCustomProperties(items)
 				finalFields.push(formulaFields[k]);	
 		}
 	}
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
 	
 	return finalFields;
 }
@@ -1257,6 +1271,10 @@ function getDealCustomProperties(items)
 			finalFields.push(formulaFields[k]);	
 		}
 	}
+	for(var x=0;x<fields.length;x++){
+ 		if($.inArray(fields[x], finalFields) == -1)
+ 			finalFields.push(fields[x]);	
+ 	}
 	
 	return finalFields;
 }

@@ -14,7 +14,7 @@
         'hr.shadowDown': ['margin-top', 'margin-bottom'],
         '.footer a': ['color'],
         '.social a': ['color'],
-        '.bg.bg1, .bg.bg2, .header10, .header11': ['background-image', 'background-color'],
+        '.bg.bg1, .bg.bg2, .header10, .header11, .search-box1': ['background-image', 'background-color'],
         '.frameCover': [],
         '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family'],
         'a.btn, button.btn': ['border-radius', 'font-size', 'background-color'],

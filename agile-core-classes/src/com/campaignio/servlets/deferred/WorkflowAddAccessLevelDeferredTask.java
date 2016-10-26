@@ -45,7 +45,7 @@ public class WorkflowAddAccessLevelDeferredTask implements DeferredTask {
 				workflow.updated_time_update = false;
 
 				List<Activity> activities = ActivityUtil.getActivititesBasedOnSelectedConditon(
-						ActivityType.CAMPAIGN.toString(), null, 5, null, null, null, workflow.id);
+						ActivityType.CAMPAIGN.toString(), null, 5, null, null, null, workflow.id,null);
 
 				if (activities != null) {
 					System.out.println("activities = " + activities.size());

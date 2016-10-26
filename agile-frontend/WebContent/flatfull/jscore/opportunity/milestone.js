@@ -20,7 +20,11 @@ function setup_deals_in_milestones(id){
 		      scroll : false,
 		      tolerance: "intersect",
 		      start : function(event, ui) {
-		      	$("#dealActions").css("top", (($(window).height() + window.scrollY) - $("#dealActions").height() - 70) + "px");
+		      	//If browser is not chrome, set top position of delete, archive and other track icons
+		      	if(window && !window.chrome)
+		      	{
+		      		$("#dealActions").css("top", (($(window).height() + window.scrollY) - $("#dealActions").height() - 70) + "px");
+		      	}
 		      	if($("#deals-tracks").is(":visible"))
 		      	{
 		      		$(".move-deal-action").show();
@@ -415,7 +419,12 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone, updat
         var dealnewdata = {"dealTrack": dealTrack,"heading": newheading ,"dealcount":newdealvalue ,"avgDeal" : avg_new_deal_size,"symbol":symbol,"dealNumber":new_deal_count};
 		var dealNewDataString = JSON.stringify(dealnewdata); 
 		$("#"+newheading+" .dealtitle-angular").attr("data" , dealNewDataString);
-        
+        var modelsLength = dealPipelineModel[0].get('dealCollection').models.length ;
+        if(modelsLength ==10 && modelsLength <= old_deal_count)
+        {
+           dealPipelineModel[0]['isUpdateCollection'] = true ;
+           dealsFetch(dealPipelineModel[0]);
+        }
         }
 	} catch(err){
 		console.log(err);
@@ -425,7 +434,7 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone, updat
 
 	// Add the deal in to new milestone collection.
 	dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
-	if(!dealPipelineModel)
+	if(!dealPipelineModel || dealModel.archived)
 		return;
 
 	dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel, dealModel), { silent : true });
@@ -500,9 +509,9 @@ function fill_ordered_milestone(formId){
    		{
    			// To capitalize the string
    	   		if(values != undefined)
-   	   			values = values + "," + capitalize_string(($(data).attr("data")).toString());
+   	   			values = values + "," + ($(data).attr("data")).toString();
    	   		else 
-   	   			values = capitalize_string(($(data).attr("data")).toString());
+   	   			values = ($(data).attr("data")).toString();
    		}
 	});
    	

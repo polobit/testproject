@@ -1,0 +1,141 @@
+<fieldset>
+	↵
+	<div class="panel-heading font-bold">Invoice Information</div>
+	↵
+	<div class="panel-body wrapper-md">
+		↵↵
+		<div class="control-group form-group">
+			↵ ↵
+			<div class="row">
+				↵
+				<div class="control-group col-md-5">
+					↵
+					<label class="control-label">
+						<b>Invoice #</b>
+						<span class="field_req">*</span>
+					</label>
+					↵
+					<span class="controls">
+						↵
+						<input name="first_name" type="text"
+							class="required form-control field_length" max_len="500" id="fname"
+							placeholder="Subject">↵
+					</span>
+					↵
+				</div>
+				↵
+				<div class="control-group col-md-6">
+					↵
+					<label class="control-label">
+						<b>Customer</b>
+					</label>
+					↵
+					<span class="controls">
+						↵
+						<input name="last_name" class="form-control field_length"
+							max_len="500" type="text" id="lname" placeholder="Sales Order">↵
+					</span>
+					↵
+				</div>
+				↵
+			</div>
+			↵
+		</div>
+		↵
+	</div>
+	↵
+	<div class="panel-heading font-bold">Product Details</div>
+	↵
+	<div class="table-responsive">
+		↵
+		<table id="customer_invoices_products_table"
+			class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view"
+			url="core/api/products">
+			↵
+			<thead>
+				↵
+				<tr>
+					↵
+					<th style="width:25%" class="header">Name</th>
+					↵
+					<th style="width:25%" class="header">Price</th>
+					↵
+					<th style="width:25%" class="header">Qty</th>
+					↵
+					<th style="width:25%" class="header">Total</th>
+					↵
+				</tr>
+				↵
+			</thead>
+			↵ ↵
+			<div>
+				↵
+				<tbody id="customer-invoices-products-model-list">
+					↵
+					<tr>
+						↵
+						<td class="data" data="6122080743456768">↵ ss↵	</td>
+						↵
+						<td class="data">↵ ↵	</td>
+						↵↵
+						<td class="data">↵ 1↵	</td>
+						↵
+					</tr>
+				</tbody>
+				↵
+			</div>
+		</table>
+		↵
+	</div>
+	↵↵
+	<div class="panel-heading font-bold">Terms and Conditions</div>
+	↵
+	<div class="panel-body wrapper-md">
+		↵↵
+		<div class="control-group form-group">
+			↵ ↵
+			<div class="row">
+				↵
+				<div class="control-group col-md-11">
+					↵
+					<label class="control-label">
+						<b>Terms and Conditions</b>
+					</label>
+					↵
+					<span class="controls">
+						↵
+						<textarea name="first_name" type="text"
+							class="required form-control field_length" rows="5" max_len="500"
+							id="fname" placeholder="Terms and Conditions"></textarea>
+						↵
+					</span>
+					↵
+				</div>
+				↵ ↵
+			</div>
+			↵
+			<div class="row">
+				↵
+				<div class="control-group col-md-11">
+					↵
+					<label class="control-label">
+						<b>Description</b>
+					</label>
+					↵
+					<span class="controls">
+						↵
+						<textarea name="first_name" type="text"
+							class="required form-control field_length" rows="3" max_len="500"
+							id="fname" placeholder="Description"></textarea>
+						↵
+					</span>
+					↵
+				</div>
+				↵ ↵
+			</div>
+			↵
+		</div>
+		↵
+	</div>
+	↵ ↵↵
+</fieldset>
