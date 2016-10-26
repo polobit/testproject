@@ -423,6 +423,8 @@ public class Opportunity extends Cursor implements Serializable
     {
 	if (pipeline != null)
 	    return pipeline.getId();
+	if(pipeline_id!=null)
+		return pipeline_id;
 	return 0L;
     }
 
@@ -562,7 +564,7 @@ public class Opportunity extends Cursor implements Serializable
 	    if (this.milestone_changed_time == 0 && oldOpportunity.milestone_changed_time > 0)
 		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
 
-	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+	    if (!this.getPipeline_id().equals(oldOpportunity.getPipeline_id())
 		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
@@ -582,7 +584,7 @@ public class Opportunity extends Cursor implements Serializable
 	    System.out.println("New Opportunity-----" + this);
 	    // If old deal, new deal are same and lost reason is there,
 	    // can update milestone changed time with old milestone changed time
-	    if (this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+	    if (this.getPipeline_id().equals(oldOpportunity.getPipeline_id())
 		    && this.milestone.equals(oldOpportunity.milestone)
 		    && this.lost_reason_id != null
 		    && ((oldOpportunity.lost_reason_id != null && oldOpportunity.lost_reason_id == 0L) || oldOpportunity.lost_reason_id == null))
