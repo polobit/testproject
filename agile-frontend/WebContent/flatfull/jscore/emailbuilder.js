@@ -49,7 +49,8 @@ function initializeEmailBuilderListeners() {
         var selectedVal = $('#attachmentSelectBox').val();
         if(selectedVal == "new"){
             //$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
-            Backbone.history.navigate("documents/email-template",{trigger: true});         
+            var sCurrentRoute=window.location.hash.split("#")[1]
+            Backbone.history.navigate("documents/email-template/" + sCurrentRoute,{trigger: true});         
             //$('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
         }else if(selectedVal != ""){
             $('#attachmentSelectBoxHolder').hide();

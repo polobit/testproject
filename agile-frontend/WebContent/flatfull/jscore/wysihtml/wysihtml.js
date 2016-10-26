@@ -155,7 +155,8 @@ var Email_Template_Events = Base_Model_View.extend({
 		if($(target_ele).parent().find('select').val()=="new"){
 
 			//$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
-			Backbone.history.navigate("documents/email-template",{trigger: true});  
+			var sCurrentRoute=window.location.hash.split("#")[1]
+			Backbone.history.navigate("documents/email-template/" + sCurrentRoute,{trigger: true});  
 			//$('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
 
 		}else if($(target_ele).parent().find('select').val()!=""){

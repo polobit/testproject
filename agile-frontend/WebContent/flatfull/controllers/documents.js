@@ -949,7 +949,18 @@ function cancel_document()
 	var contactcompanydealtype=$("#documents-listener-container").attr("contactcompanydealtype")
 	if(contactcompanydealtype=="email-template")
 	{
-		Backbone.history.navigate("email-templates",{trigger: true});  
+		
+		var sRoute=window.location.hash.split("#")[1];
+		var sRedirectRoute="email-templates"
+		if(sRoute!="")
+		{
+			try{
+			var arrRoutes=sRoute.split("/")
+			sRedirectRoute=arrRoutes.splice(2).join("/")
+			}catch(e){}	
+		}
+		Backbone.history.navigate(sRedirectRoute,{trigger: true});  
+		return;
 	}
 	if (App_Contacts.contactDetailView)
 		{
