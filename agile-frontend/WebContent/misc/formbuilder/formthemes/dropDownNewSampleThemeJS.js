@@ -817,16 +817,20 @@
 						var multipleFormEleFinal="";
 						/*var multipleFormEle=".agile-group .agile-label,.agile-group input[type=text],.agile-group input[type=hidden],.agile-group .agile-group-addon,.agile-group select,.agile-group input[type=checkbox],.agile-group input[type=radio]";
 						*/
-						var multipleFormEle=".agile-group .agile-label,.agile-group input,.agile-group .agile-group-addon,.agile-group select";
+						var multipleFormEle=".agile-group .agile-label,.agile-group input,.agile-group .agile-group-addon,.agile-group select,.agile-group .agile-field";
 						var multipleFormEleArr=multipleFormEle.split(",");
 						for(i=0;i<multipleFormEleArr.length;i++){
+							$(multipleFormEleArr[i]).css("font-family",fontFamilyEle);
+							$(multipleFormEleArr[i]).css("font-style",fontStyleEle);
+							$(multipleFormEleArr[i]).css("font-weight",fontWeightEle);
+							$(multipleFormEleArr[i]).css("font-size",fontSizeEle);
 							multipleFormEleFinal=multipleFormEleFinal+".createCustomFormContent"+"\t"+multipleFormEleArr[0]+",";
 						}
 						multipleFormEleFinal=multipleFormEleFinal.substring(0,multipleFormEleFinal.lastIndexOf(","));
-						$(multipleFormEleFinal).css("font-family",fontFamilyEle);
+						/*$(multipleFormEleFinal).css("font-family",fontFamilyEle);
 						$(multipleFormEleFinal).css("font-style",fontStyleEle);
 						$(multipleFormEleFinal).css("font-weight",fontWeightEle);
-						$(multipleFormEleFinal).css("font-size",fontSizeEle);
+						$(multipleFormEleFinal).css("font-size",fontSizeEle);*/
 						/*$(multipleFormEleFinal).css("color",fontThemeColor);*/
 						var css=multipleFormEle+"{font-family:"+fontFamilyEle+"!important;font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
 						var eleThemeCss=new EleThemeCss("Field Label/"+multipleFormEle,css);

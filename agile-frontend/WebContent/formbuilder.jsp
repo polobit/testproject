@@ -568,6 +568,7 @@ String template = request.getParameter("template");
                         }
                     }
                     $(".themesSelectEle").val(currApplThm);
+                    $(".createCustomFormContent").empty();
                   }
                   function validThemeNameFunc(){
                     var themeName=$("#themeName").val();
@@ -657,6 +658,8 @@ String template = request.getParameter("template");
                      $("#themeName").val("");
                      $("#errorSpan").text("");
                      $(".themesSelectEle").val(currApplThm);
+                     $(".createCustomFormContent").empty();
+
 
 
                   }
