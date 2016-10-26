@@ -25,7 +25,7 @@ function agile_createContact(data, callback)
 
 	for ( var key in data)
 	{
-		if (data.hasOwnProperty(key) && key != "tags" && key != "lead_score")
+		if (data.hasOwnProperty(key) && key != "tags" && key != "lead_score" && key != "agile_source")
 		{
 			// Add tags to properties array
 			properties.push(agile_propertyJSON(key, data[key]));
@@ -115,6 +115,10 @@ function agile_createContact(data, callback)
 	if(data["lead_score"])
 	{
 		model.lead_score = parseInt(data["lead_score"]);
+	}
+	if(data["agile_source"])
+	{
+		model.source = data["agile_source"];
 	}
 	if(score_from_cookie)
 	{
