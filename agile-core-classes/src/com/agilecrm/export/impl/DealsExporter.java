@@ -2,8 +2,12 @@ package com.agilecrm.export.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import net.sf.json.JSONObject;
 
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
@@ -42,7 +46,13 @@ public class DealsExporter extends AbstractCSVExporter<Opportunity>
 	    notes = opportinuty.getNotes();
 	    System.out.println("Notes Fetch Time :" + (System.currentTimeMillis() - start) + " , Notes fetched : "
 		    + notes.size());
-
+	    
+	    Collections.sort(notes,new Comparator<Note>(){
+			@Override  
+            public int compare(Note o1, Note o2){
+				return o2.created_time.compareTo(o1.created_time);  
+            }
+        });
 	    return DealExportCSVUtil.addNotes(str, notes);
 	}
 	catch (Exception e)
