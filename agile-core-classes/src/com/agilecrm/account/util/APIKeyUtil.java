@@ -288,9 +288,9 @@ public class APIKeyUtil
    			bufferedReader.close();
 
    			String JSAPIKey = APIKey.getAPIKey().js_api_key;
-   			//String trackingCodeURL = "src=\"https://"+domain+".agilecrm.com/stats/min/agile-min.js\"";
+   			String trackingCodeURL = "src=\"https://"+domain+".agilecrm.com/stats/min/agile-min.js\"";
    			//beta URL
-   			String trackingCodeURL = "src=\"https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/stats/min/agile-min.js\"";
+   			//String trackingCodeURL = "src=\"https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/stats/min/agile-min.js\"";
    			String domainAPIKey = "_agile.set_account('" + JSAPIKey + "', '" + domain + "');";               
    			//String trackingCodeURL = "src=\"https://"+domain+".agilecrm.com/stats/min/agile-min.js\""; 
    			String whiteListTrackingCode = "https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js";
