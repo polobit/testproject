@@ -288,7 +288,7 @@ public class Opportunity extends Cursor implements Serializable
 	/**
      * ObjectifyDao of Opportunity.
      */
-
+  
     public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
     
     /**
