@@ -235,7 +235,9 @@ public class EventsAPI
 	
 	UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
 	
-	EventUtil.sendEmailForEventContacts(modifiedConIds, event);
+	if(event.sendInvite){
+		EventUtil.sendEmailForEventContacts(modifiedConIds, event);
+	}
 	
 	return event;
     }

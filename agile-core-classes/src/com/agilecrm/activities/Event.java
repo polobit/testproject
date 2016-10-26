@@ -231,6 +231,8 @@ public class Event extends Cursor
      */
     @NotSaved
     public String owner_id = null;
+    
+    public boolean sendInvite = false;
     /***************************************************************/
 
     // Dao
