@@ -17,6 +17,7 @@ import com.agilecrm.util.DateUtil;
 import com.webruleio.reports.WebruleReportsSQLUtil;
 import com.webruleio.reports.WebruleReportsUtil;
 import com.campaignio.reports.CampaignReportsUtil;
+import com.formio.reports.FormReportsUtil;
 
 /**
  * <code>WebruleReportsAPI</code> includes REST calls to interact with SQL to
@@ -62,7 +63,7 @@ public class WebruleReportsAPI
 		timeZone = "" + (Long.valueOf(current_timezone) * -1);
 	    }
 	    // start date in mysql date format.
-	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, type, timeZone);
+	    String startDate = FormReportsUtil.getStartDate(startTime, endTime, type, timeZone);
 
 	    // end date in mysql date format.
 	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
@@ -110,7 +111,7 @@ public class WebruleReportsAPI
 		timeZone = "" + (Long.valueOf(current_timezone) * -1);
 	    }
 	    // start date in mysql date format.
-	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+	    String startDate = FormReportsUtil.getStartDate(startTime, endTime, null, timeZone);
 
 	    // end date in mysql date format.
 	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);

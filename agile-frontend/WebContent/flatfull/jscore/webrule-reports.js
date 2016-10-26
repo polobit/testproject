@@ -125,7 +125,7 @@ function render_email_reports_select_ui(id, callback){
 				    		return;
 
 						$('#content').html($(template_ui)); 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if disabled}} style='color:grey;'{{/if}}>{{name}}</option>";
 
 						// fill webrules
 						fillSelect('webrule-reports-select', '/core/api/webrule', 'webrule', function fillwebrule()
