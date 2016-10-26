@@ -79,6 +79,7 @@ cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
 cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
 cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
+cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 ## End of widgets
 
 cd ../util
