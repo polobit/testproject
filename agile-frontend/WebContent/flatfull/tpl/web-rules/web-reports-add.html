@@ -498,6 +498,11 @@
 												<option value="SUBTRACT_SCORE" class="campaign" 
 													related="WEB_RULE_RHS">{{agile_lng_translate 'web-rules' 'substract-score'}}</option>
 											</optgroup>
+											<optgroup label="Dynamic Content">
+												<option value="DYNAMIC_TEXT" related="WEB_RULE_RHS">Text</option>
+												<option value="DYNAMIC_BUTTON" related="WEB_RULE_RHS">Button</option>
+												<option value="DYNAMIC_IMAGE" related="WEB_RULE_RHS">Image</option>
+											</optgroup>
 											<optgroup label="{{agile_lng_translate 'web-rules' 'execute-code'}}">
 												<option value="JAVA_SCRIPT">{{agile_lng_translate 'web-rules' 'java-script'}}</option>
 											</optgroup>
@@ -553,9 +558,23 @@
 
 }()</textarea>
 
+<textarea class="DYNAMIC_TEXT form-control w-full required" rows="10" placeholder="Enter text"></textarea>
+
+<input type="text" name="dynamic-button-link" class="DYNAMIC_BUTTON form-control required url" placeholder="Enter link">
+
+<div class="form-group">
+<div class="col-xs-10" name="popup_text">
+<input type="text" name="dynamic-image-source-url" id="dynamic-image-source-url" class="DYNAMIC_IMAGE form-control required url" placeholder="Enter source URL">
+</div>
+<div class="col-xs-2 dynamic-image-browse" style="display:none;">
+<a class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+<input type="file" id="uploadImageToS3Btn" class="hidden DYNAMIC_IMAGE">
+</div>
+</div>
+
 <textarea  cols="" name="webrule-custom-html" id="agile-bar-code"  class="custom_html required SITE_BAR w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
 
-									<input type="text" name="temp-title class="FORM input form-control required w-xs" placeholder="{{agile_lng_translate 'web-rules' 'form-id'}}">
+									<input type="text" name="temp-title" class="FORM input form-control required w-xs" placeholder="{{agile_lng_translate 'web-rules' 'form-id'}}">
 													<div style="float:right;display:none" class="web-rule-preview"><a href="#" class="text-info">{{agile_lng_translate 'web-rules' 'preview'}}</a></div> 
 												</div>
 
@@ -607,6 +626,13 @@
 											<div name="timer" id="timer" style="margin-top:3px;">
 												<input type="number" class="AFTER_SECS form-control" placeholder="{{agile_lng_translate 'web-rules' 'enter-seconds'}}"></input>
 											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="controls v-top">
+											<div name="title" id="dynamic-button-title">
+												<input type="text" name="dynamic-button-title" class="DYNAMIC_BUTTON form-control" placeholder="Enter label"></input>
 											</div>
 										</td>
 									</tr>
