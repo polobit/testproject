@@ -5733,3 +5733,5 @@ Plan-and-upgrade.contacts-limit-msg,Contacts with your current plan and are tryi
 Plan-and-upgrade.campaigns-limit-msg,Campaigns with your current plan and are trying to subscribe with,
 Plan-and-upgrade.webrules-limit-msg,Web rules with your current plan and are trying to subscribe with,
 Plan-and-upgrade.triggers-limit-msg,Triggers with your current plan and are trying to subscribe with,
+contacts-view.download-csv-file,Download CSV File,
+contacts-view.this-link-is-valid,This link is valid for 24 hours only.,
