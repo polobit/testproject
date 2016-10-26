@@ -252,7 +252,7 @@ function validateAnalyticalCode(websiteUrl)
         async: true,
         success : function(data){
 
-            if(data=="Tracking code is valid")
+            if(data=="Tracking code is valid.")
             {
              $("#validate-tracking-code").removeClass("hide");
              $("#validate-tracking-code").html("<span style='color:green;font-size: 13px;margin-left: 0px;'>"+data+"</span>");
