@@ -519,8 +519,7 @@ $(function()
 	 * start time, when they have no values by the time the modal is shown.
 	 */
 	$('#activityModal, #activityTaskModal').on('shown.bs.modal', function()
-	{
-		console.log("prem **** ");
+	{		
 		// Show related to contacts list
 		var el = $("#activityForm");
 		loadModalsDateandTimepickers(el);
