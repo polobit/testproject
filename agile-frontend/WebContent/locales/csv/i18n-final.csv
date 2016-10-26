@@ -6264,3 +6264,65 @@ builder.you-cant-remove,You can\'t remove this element,Puede \'t eliminar este e
 builder.name,Name,Nombre
 builder.social-links,Social Links,vínculos sociales
 builder.divider,Divider,Divisor
+others.no-results-found,No Results Found
+campaigns.all-campaigns-stats,All Campaign Emails
+others.no-results,No Results
+affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.
+affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.
+affiliate.add,Register Deal
+other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
+admin-settings-integrations.site-key,Site Key
+campaigns.reply-yes,Yes
+campaigns.reply-sms,Inbound SMS
+campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
+campaigns.sms_trigger,SMS
+campaigns.reply-no,No
+campaigns.reply-number,Select a number
+campaigns.enter-keyword,Enter a keyword
+campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.
+campaigns.setuptwilio,Please enable your Twilio integration 
+campaigns.here,here.
+Help-center.mark-as-public-cannedmessage,Mark as Public
+portlets.Hours,Hours
+portlets.Minutes,Minutes
+portlets.Seconds,Seconds
+deal-view.detailed-notes,Detailed Notes
+tickets.feedback-subject,Subject
+tickets.feedback-created-time,Note Sent
+tickets.feedback-ticket-details,Ticket Details
+tickets.unacceptable,Unacceptable
+tickets.meets_expectations,Meets Expectations
+tickets.acceptable,Acceptable
+tickets.can_improve,Can Improve
+tickets.exceptional,Exceptional
+tickets.feedback-view-note,View Note
+tickets.feedback-contact,Contact
+tickets.feedback-feedback,Feedback
+tickets.feedback-feedback-comment,Comment
+tickets.feedback-feedback-modal,Feedback Comment
+tickets.feedback-nocomment,No comment available.
+tickets.feedback-ticket,Ticket
+tickets.feedback-all,All
+tickets.feedback-allgroups,All Groups
+calendar.double-quotes-not-allowed,Double quotes are not allowed in the message
+sync.sync-all-continue,Syncing of all contacts of other users will be initiated and this is expected to take some time. Do you want to continue?
+contacts-view.edited-call-log-to, Edited call log to
+contacts-view.deleted-call-log-to, Deleted call log to
+contacts-view.deleted-note-to, Deleted note to
+prefs-notifications.Deal_won, Deal_Won
+prefs-notifications.All_Domain_users, All_Domain_users
+prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.
+prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification)
+sync.all-contacts,Sync All Contacts
+other.campaign-webhooks-will-not-be-triggered,*Campaigns and Webhooks will be paused during import process
+typeahead.add-as-new-contact,Add as new Contact
+typeahead.add-as-new-company,Add as new Company
+verify-email.we-encourage-you-to-use-a-from-email-address-text-info,We encourage you to use a From email address at a domain owned by your organisation. Using free email providers like Gmail&#44; Yahoo&#44; AOL etc. emails may automatically get rejected.
+deals.activity-mode-deprecated-message,Note: Activity mode will be removed going forward.
+admin-settings-users.create-events,Create Events
+admin-settings-users.update-events,Update Events
+admin-settings-users.delete-events,Delete Events
+admin-settings-users.create-update-delete-events-content,Add and edit events owned by other users. Delete own and other user events
+admin-settings-users.view-events-owned-by-others,View events owned by other users
+contacts-view.download-csv-file,Download CSV File
+contacts-view.this-link-is-valid,This link is valid for 24 hours only.

@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -74,7 +77,9 @@ public class ContactExportPullTask implements DeferredTask
 
 	getExporter().sendEmail(user.email);
 	getExporter().sendEmail("nidhi@agilecrm.com",stats,user.domain);
-
+	
+	getExporter().addToActivity(ActivityType.CONTACT_EXPORT,EntityType.CONTACT);
+	//ActivityUtil.createLogForExport(ActivityType.CONTACT_EXPORT, EntityType.CONTACT, 0,null);
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
 
 	NamespaceManager.set(null);
