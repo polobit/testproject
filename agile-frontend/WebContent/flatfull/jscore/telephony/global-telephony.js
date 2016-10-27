@@ -635,8 +635,13 @@ function handleCallRequest(message)
 			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
-			showCallNotyMessage(message.message);
 			console.log("error message received...");
+			return;
+		}
+		else if (message.state == "error-message")
+		{
+			closeCallNoty(true);
+			showCallNotyMessage(message.message);
 			return;
 		}
 		else if (message.state == "logs")
