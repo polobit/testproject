@@ -556,7 +556,7 @@ function saveCallNoteTelephony(call){
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
 		    		var jsonObj = {};
-					jsonObj['phoneNumber'] = phoneNumber;
+					jsonObj['phoneNumber'] = number;
 					return showContactMergeOption(jsonObj);
 	    		
 	    	}
@@ -654,7 +654,7 @@ function saveCallNoteTelephony(call){
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
     			var jsonObj = {};
-				jsonObj['phoneNumber'] = phoneNumber;
+				jsonObj['phoneNumber'] = number;
 				return showContactMergeOption(jsonObj);
 	}
 	}
