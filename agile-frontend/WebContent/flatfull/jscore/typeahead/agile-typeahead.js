@@ -390,7 +390,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 							}
 							else if (isDealSearch)
-							{
+							{								
 								// If tag already exists returns
 								$.each($('.deal_tags', el).children('li'), function(index, tag)
 								{
@@ -435,6 +435,13 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											$('ul.tags', el).append(getTemplate("tag-item-li", tplJSON));
 										}
 									});
+
+									if(relatedContactsJOSN.length > 0){
+										var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+	                     				sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+										$('#sendEmailInviteBlock').html(sendInviteHtml);
+									}
+
 									dealJSON.related_contact_ids = related_contact_ids;
 									$('.deal_tags', el)
 											.append(getTemplate("tag-deal-item-li", dealJSON));
@@ -675,6 +682,7 @@ $("body").on("click", '#remove_tag', function(event)
 			$("li[data="+contact_id+"]", el).remove();
 		});
 	}
+
 	if($(this).hasClass("companyAddress") && contact_company){
 		$.each(contact_company.properties , function(){
 			if(this.name == "address" && this.subtype == "office")
@@ -697,12 +705,13 @@ $("body").on("click", '#remove_tag', function(event)
         }
     }	
 
-    var size = $(this).parent().parent().children().length;		
-	if(size && (size-1)  == 0){										
+    $(this).parent().remove();
+
+    var size = $('.newtypeaheadcontact').children().length;	    	
+
+	if(size == 0){					
 		$('#sendEmailInviteBlock').html('');
 	}
-
-	$(this).parent().remove();
 });
 
 /* Customization of Type-Ahead data */
