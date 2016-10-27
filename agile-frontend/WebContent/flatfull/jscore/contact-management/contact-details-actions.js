@@ -56,6 +56,10 @@
             fill_relation(el);
             agile_type_ahead("event_related_to", el, contacts_typeahead);
             agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+            var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+                sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+            $('#sendEmailInviteBlock').html(sendInviteHtml);
       },
 
       /**

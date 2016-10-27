@@ -695,14 +695,14 @@ $("body").on("click", '#remove_tag', function(event)
 				$("#content .address-type,#address,#city,#state,#zip,#country").val('');
 			}
         }
-    }
-	$(this).parent().remove();
+    }	
 
-	var contactULElement = $(this).parent().parent();
-	if(contactULElement && contactULElement.size()  == 0){											
+    var size = $(this).parent().parent().children().length;		
+	if(size && (size-1)  == 0){										
 		$('#sendEmailInviteBlock').html('');
 	}
 
+	$(this).parent().remove();
 });
 
 /* Customization of Type-Ahead data */
