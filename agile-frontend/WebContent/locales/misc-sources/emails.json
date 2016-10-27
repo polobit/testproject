@@ -55,7 +55,7 @@
     "import-email.successfully-saved" : "{{agile_lng_translate 'import-email' 'successfully-saved'}}",
     "admin-settings-integrations.accounts" : "{{agile_lng_translate 'admin-settings-integrations' 'accounts'}}",
     "contact-details.tasks" : "{{agile_lng_translate 'contact-details' 'tasks'}}",
-    "menu.support" : "{{agile_lng_translate 'menu' 'menu.support'}}",
+    "menu.support" : "{{agile_lng_translate 'menu' 'support'}}",
     "import-email.merged-contacts" : "{{agile_lng_translate 'import-email' 'merged-contacts'}}",
     "import-email.failed-contacts" : "{{agile_lng_translate 'import-email' 'failed-contacts'}}",
     "import-email.emails-missing" : "{{agile_lng_translate 'import-email' 'emails-missing'}}",
@@ -157,7 +157,7 @@
     "import-email.wrong-milestone" : "{{agile_lng_translate 'import-email' 'wrong-milestone'}}",
     
     "contact-form-email.contact-with-email-id" : "{{agile_lng_translate 'contact-form-email' 'contact-with-email-id'}}",
-    "contact-form-email.has-submitted-form" : "{{agile_lng_translate 'contact-form-email' ' has-submitted-form'}}",
+    "contact-form-email.has-submitted-form" : "{{agile_lng_translate 'contact-form-email' 'has-submitted-form'}}",
     "others.successfully" : "{{agile_lng_translate 'others' 'successfully'}}",
     
     "campaign-email.remaining-credit-is" : "{{agile_lng_translate 'campaign-email' 'remaining-credit-is'}}",
@@ -204,7 +204,7 @@
     "widgets.incoming" : "{{agile_lng_translate 'widgets' 'incoming'}}",
     "campaigns.no-answer" : "{{agile_lng_translate 'campaigns' 'no-answer'}}",
     "info" : "{{agile_lng_translate 'tasks-email' 'info'}}",
-    "contact-notes" : "{{agile_lng_translate 'tasks-email' 'contact-notes'}}",
+    "reports-email.contact-notes" : "{{agile_lng_translate 'reports-email' 'contact-notes'}}",
     
     "account-email.account-cancelled" : "{{agile_lng_translate 'account-email' 'account-cancelled'}}",
     "account-email.sorry-to-go" : "{{agile_lng_translate 'account-email' 'sorry-to-go'}}",
