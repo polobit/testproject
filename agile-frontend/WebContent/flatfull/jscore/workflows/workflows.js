@@ -1088,24 +1088,3 @@ function get_modified_value(modified_field_ui_obj, field_name, field_value)
 
     return value;
 }
-function workflowVideoPopup(){
-    var data={};
-    data.title="Workflow Tutorial";
-    data.videourl="//www.youtube.com/embed/fPFS3w0GSyw?enablejsapi=10&amp;autoplay=1";
-    showHelpVideoModal(data);
-}
-
-function showHelpVideoModal(data){
-    getTemplate('help_video_tutorial_modal', data, undefined, function(template_ui){
-                if(!template_ui)
-                      return;           
-
-                $("#help_video_tutorial_modal").html($(template_ui)).modal('show');
-
-                // Stops video on modal hide
-                $("#help_video_tutorial_modal").on("hide.bs.modal", function(){
-                    $(this).html("");
-                });
-
-    }, null);
-}
