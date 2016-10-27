@@ -149,7 +149,7 @@ function inboxFlagListners(){
 				if(server =! "agile"){
 					url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal;
 				}else{
-					url = url+"messageid="+dataVal;
+					url = url+"folder_name="+folder_name+"&messageid="+dataVal;
 				}
 				setSeenFlag(url);
 			}
@@ -225,6 +225,12 @@ function getContent(url,dataVal){
 			} 
 		});
 	}else{
+		$.ajax({ 
+			url :"core/api/emails/setFlags?flag=READ&messageid="+dataVal,
+			success : function(data){
+				
+		    }
+		});
 		$("#flag"+dataVal).removeClass("pending");
 		dataVal = dataVal.replace(/[^\w\s]/gi, '-');
 		$("#mails-list").hide();
@@ -390,6 +396,7 @@ function initializeInboxListeners(){
 			var server = $("#inbox-email-type-select").attr("data-server");
 			var url ="";
 
+			
 			if(server == "google")
 				url = "core/api/social-prefs/search-google-emails?";
 			if(server == "imap")
@@ -764,7 +771,7 @@ function returnUrl(){
 			if(server != "agile"){
 				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&messageid="+meesageids;
 			}else{
-				url = url+"messageid="+meesageids;
+				url = url+"folder_name="+folder_name+"&messageid="+meesageids;
 			}
 			return url;
 		}else{

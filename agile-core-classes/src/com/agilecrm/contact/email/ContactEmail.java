@@ -123,6 +123,8 @@ public class ContactEmail
 	
 	public Boolean is_deleted = false;
 	
+	public Boolean is_read = false;
+	
 	@NotSaved
 	public String flags = null;
 	

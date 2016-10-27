@@ -186,6 +186,7 @@ public class ContactEmailWrapper extends Cursor
     private String flags;
     private String count;
     private boolean is_deleted;
+    private boolean is_read;
     private boolean track_clicks;
 
     public enum PushParams
@@ -328,7 +329,13 @@ public class ContactEmailWrapper extends Cursor
 
 	public void setIs_deleted(boolean is_deleted)
 	{
-		this.track_clicks = is_deleted;
+		this.is_deleted = is_deleted;
+	}
+	public boolean isIs_read(){
+		return is_read;
+	}
+	public void setIs_read(boolean is_read){
+		this.is_read = is_read;
 	}
     
 }

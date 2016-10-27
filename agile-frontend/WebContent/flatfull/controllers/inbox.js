@@ -86,6 +86,7 @@ function syncContacts(){
 		},
 		getEmails: function(e){
 			e.preventDefault();
+			$("#pagination").hide();
 			var targetEl = $(e.currentTarget);
 			var email_server = $(targetEl).attr('email-server');
 			var url = $(targetEl).attr('data-url');

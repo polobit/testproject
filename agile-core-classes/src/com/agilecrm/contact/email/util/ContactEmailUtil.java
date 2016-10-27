@@ -297,6 +297,7 @@ public class ContactEmailUtil
 
 		contactEmail.attachment_ids = documentIds;
 		contactEmail.is_deleted = false;
+		contactEmail.is_read = true;
 		contactEmail.save();
 	}
 
@@ -1171,7 +1172,7 @@ public class ContactEmailUtil
 		    	QueryResultIterator<ContactEmail> iterator = query.iterator();
 		    	while (iterator.hasNext()){
 		    		ContactEmail result = iterator.next();
-		    		result.flags ="read";
+		    		//result.flags ="read";
 		    		
 		    		int inc_cur = cursor1++;
 		    		System.out.println(inc_cur+"========"+max);

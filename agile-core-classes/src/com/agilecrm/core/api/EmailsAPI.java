@@ -801,6 +801,11 @@ public void sendEmailFromInbox(ContactEmailWrapper contactEmail)throws Exception
 		    {
 			// parse email body
 			contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+			if(contactEmail.is_read){
+				contactEmail.flags = "read";
+			}else{
+				contactEmail.flags = "unread";
+			}
 			ObjectMapper mapper = new ObjectMapper();
 			String emailString = mapper.writeValueAsString(contactEmail);
 			agileEmails.put(new JSONObject(emailString));
@@ -832,7 +837,7 @@ public void sendEmailFromInbox(ContactEmailWrapper contactEmail)throws Exception
 	@Path("setFlags")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public String setFlags(@QueryParam("messageid") String messageid){
+	public String setFlags(@QueryParam("folder_name") String folder_name,@QueryParam("messageid") String messageid, @QueryParam("flag") String flag){
 		try{
 			ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
 			if(StringUtils.isNotBlank(messageid)){
@@ -841,8 +846,20 @@ public void sendEmailFromInbox(ContactEmailWrapper contactEmail)throws Exception
 			    	long id = Long.parseLong(msgData[i]);
 			    	Key<ContactEmail> key = new Key<ContactEmail>(ContactEmail.class, id);
 			    	ContactEmail cemail= dao.ofy().get(key);
-			    	cemail.is_deleted = true;
-			    	cemail.save();
+			    	if(!StringUtils.equals(folder_name, "Trash") && StringUtils.equals(flag, "DELETED")){
+				    	cemail.is_deleted = true;
+				    	cemail.save();
+			    	}else{
+			    		if(StringUtils.equals(flag, "DELETED")){
+			    			dao.ofy().delete(ContactEmail.class, id);
+			    		}else if(StringUtils.equals(flag, "UNREAD")){
+			    			cemail.is_read = false;
+					    	cemail.save();
+			    		}else if(StringUtils.equals(flag, "READ")){
+			    			cemail.is_read = true;
+					    	cemail.save();
+			    		}
+			    	}
 			    }
 			}
 		}catch(Exception e){
