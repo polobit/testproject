@@ -211,8 +211,8 @@ public class ContactGmailUtil
 	String oauth_secret = gmailPrefs.secret;
 
 	String command = "oauth_email";
-    String hostUrl = "http://localhost:8080";
-    //String hostUrl = "https://inbox-beta-dot-agile-imap.appspot.com/";
+    //String hostUrl = "http://localhost:8080";
+    String hostUrl = "https://inbox-beta-dot-agile-imap.appspot.com/";
 	// Gmail Prefs has been updated from oauth1 (deprecated) to oauth2. For
 	// oauth2, we store secret as v2
 	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
