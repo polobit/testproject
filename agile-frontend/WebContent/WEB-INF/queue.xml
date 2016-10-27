@@ -23,8 +23,8 @@
   <queue>
     <name>bulk-campaign-queue</name>
     <rate>100/s</rate>
-    <bucket-size>150</bucket-size>
-    <max-concurrent-requests>100</max-concurrent-requests>
+    <bucket-size>100</bucket-size>
+    <!-- <max-concurrent-requests>100</max-concurrent-requests> -->
     <retry-parameters>
     <task-retry-limit>0</task-retry-limit>
   </retry-parameters>
@@ -33,8 +33,8 @@
   <queue>
     <name>bulk-campaign-queue-1</name>
     <rate>100/s</rate>
-    <bucket-size>150</bucket-size>
-    <max-concurrent-requests>100</max-concurrent-requests>
+    <bucket-size>100</bucket-size>
+    <!-- <max-concurrent-requests>100</max-concurrent-requests> -->
     <retry-parameters>
     <task-retry-limit>0</task-retry-limit>
   </retry-parameters>
@@ -43,8 +43,8 @@
   <queue>
     <name>normal-campaign-queue</name>
     <rate>100/s</rate>
-    <bucket-size>150</bucket-size>
-    <max-concurrent-requests>100</max-concurrent-requests>
+    <bucket-size>100</bucket-size>
+    <!--<max-concurrent-requests>100</max-concurrent-requests>-->
     <retry-parameters>
     <task-retry-limit>0</task-retry-limit>
   </retry-parameters>

@@ -45,32 +45,10 @@ public class CronPullServlet extends HttpServlet
     	if (StringUtils.isBlank(queueName))
     	    return;
     	
-    	addTaskToQueue(queueName);
+    	checkQueueTasks(queueName);
     }
     
-    private void addTaskToQueue(String queueName)
-    {
-    	Queue queue = QueueFactory.getQueue(AgileQueues.CRON_PULL_TASK_QUEUE);
-    	CronPullDeferredTask task = new CronPullDeferredTask(queueName);
-    	queue.add(TaskOptions.Builder.withPayload(task));
-    }
-}
-
-class CronPullDeferredTask implements DeferredTask
-{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3130745982138904157L;
-	private String queueName = null;
-	
-	public CronPullDeferredTask(String queueName)
-	{
-		this.queueName = queueName;
-	}
-
-	public void run()
+    public void checkQueueTasks(String queueName)
 	{
 		   long startTime = System.currentTimeMillis();
 		   long maxTime =  startTime + 8 * 60 * 1000; // 8 mins
@@ -81,7 +59,7 @@ class CronPullDeferredTask implements DeferredTask
 		   while(currentTime <= maxTime){
    	 			try
    	 			{
-   	 				runTasks();
+   	 				runTasks(queueName);
 
    	 				// Resetting timeout
    	 				timeout_ms = 1000;
@@ -91,7 +69,12 @@ class CronPullDeferredTask implements DeferredTask
    	 					try {
    	 					// exponential backoff
    	 					Thread.sleep(timeout_ms);
-   	 					timeout_ms *= 2;
+   	 					
+   	 					if(timeout_ms >= 50000) // Apply exponential upto 50 secs
+   	 						timeout_ms = 1000;
+   	 					
+   	 						timeout_ms *= 2;
+   	 					
    	 					System.out.println("waiting for " + timeout_ms + " milliseconds");
 						} catch (InterruptedException e) {
 							e.printStackTrace();
@@ -115,15 +98,16 @@ class CronPullDeferredTask implements DeferredTask
 	/**
 	 * 
 	 */
-	public void runTasks() throws TasksCountZeroException{
+	public void runTasks(String queueName) throws TasksCountZeroException{
 		Queue queue = QueueFactory.getQueue(queueName);
 
     	System.out.println("campaign queue | Queue name :" + queueName);
 
+    	long startTime = System.currentTimeMillis();
     	// Get statistics
     	QueueStatistics qs = queue.fetchStatistics();
-
     	int tasksCount = qs.getNumTasks();
+    	System.out.println("Time taken to get queue statistics is " + (System.currentTimeMillis() - startTime));
 
     	System.out.println("Statistics in queue : " + queue.getQueueName() + ", task count : " + tasksCount
     		+ "Fetch limit : " + CronPullServlet.FETCH_LIMIT);
@@ -145,32 +129,58 @@ class CronPullDeferredTask implements DeferredTask
     	// Process tasks in backend
     	if (tasksCount > CronPullServlet.FETCH_LIMIT)
     	{
-    	    System.out.println("Running " + queueName + " tasks in backend...");
-
-    	    int count = tasksCount/1000 + 1;
-    	    
-    	    while(count > 0){
     	    	try
     	    	{
-    	    		long startTime = System.currentTimeMillis();
+    	    		if(StringUtils.equals(AgileQueues.BULK_CAMPAIGN_PULL_QUEUE, queueName) 
+    	    				|| StringUtils.equalsIgnoreCase(AgileQueues.BULK_CAMPAIGN_PULL_QUEUE_1, queueName))
+    	    		{
+    	    			    // If backend push queue already has more than 10K tasks then skipping further requests to Backend to reduce load
+    	    				if(PullQueueUtil.getTasksCountofQueue(PullQueueUtil.getCampaignQueueName(queueName)) > 10000)
+    	    					return;
+    	    		}
+    	    		
     	    		PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
-    	    		System.out.println("Took" +(System.currentTimeMillis()-startTime)+" milliseconds to process backendpullqueue ");
     	    	}
     	    	catch (Exception e)
     	    	{
-    	    		System.out.println("exception raised to process task");
+    	    		System.out.println("exception raised while sending request to backend");
     	    		e.printStackTrace();
     	    	}
-    	    	
-        	count--;
-    	    }
     	}
     	else
     	{
     	    // If from cron Process tasks in frontend
-    	    PullScheduler pullScheduler = new PullScheduler(queueName, true);
-    	    pullScheduler.run();
+    	    addTaskToQueue(queueName);
     	}
+	}
+	
+	 private void addTaskToQueue(String queueName)
+    {
+    	Queue queue = QueueFactory.getQueue(AgileQueues.CRON_PULL_TASK_QUEUE);
+    	CronPullDeferredTask task = new CronPullDeferredTask(queueName);
+    	queue.add(TaskOptions.Builder.withPayload(task));
+    }	
+}
+
+
+class CronPullDeferredTask implements DeferredTask
+{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3130745982138904157L;
+	private String queueName = null;
+	
+	public CronPullDeferredTask(String queueName)
+	{
+		this.queueName = queueName;
+	}
+
+	public void run()
+	{
+		 PullScheduler pullScheduler = new PullScheduler(queueName, true);
+		 pullScheduler.run();
 	}
 }
 
