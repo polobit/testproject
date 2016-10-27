@@ -74,6 +74,7 @@ var WorkflowsRouter = Backbone.Router
 							// Add collection view
 							console.log("Load collection");
 							App_Workflows.loadworkflows($("#content"));
+							el.find('[data-toggle="tooltip"]').tooltip();
 						}
 					});
 
@@ -128,6 +129,7 @@ var WorkflowsRouter = Backbone.Router
 						}
 						else
 						{
+							window.location.href  = window.location.origin+"/#workflow-templates";
 							el.find('#campaign_logs').attr('href','#workflows');
 							return;
 						}
