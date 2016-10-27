@@ -549,12 +549,16 @@ function saveCallNoteTelephony(call){
 	    			data.widget = client;
 	    			CallLogVariables.dynamicData = data;
 	    		}
+	    			CallLogVariables.subject = noteSub;
 		    		CallLogVariables.callWidget = client;
 		    		CallLogVariables.callType = "inbound";
 		    		CallLogVariables.phone = number;
 		    		CallLogVariables.duration = duration;
 		    		CallLogVariables.status = callStatus;
-	    		return showNewContactModal(number);;
+		    		var jsonObj = {};
+					jsonObj['phoneNumber'] = phoneNumber;
+					return showContactMergeOption(jsonObj);
+	    		
 	    	}
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
@@ -643,13 +647,15 @@ function saveCallNoteTelephony(call){
     			data.widget = client;
     			CallLogVariables.dynamicData = data;
     		}
+    			CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = client;
 	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = number;
 	    		CallLogVariables.duration = duration;
 	    		CallLogVariables.status = callStatus;
-    		
-    		return showNewContactModal(number);
+    			var jsonObj = {};
+				jsonObj['phoneNumber'] = phoneNumber;
+				return showContactMergeOption(jsonObj);
 	}
 	}
 }

@@ -614,7 +614,7 @@ function handleCallRequest(message)
 			}
 
 			if(message.duration == 0){
-				globalCallForActivity.callStatus = "no-answer";
+				globalCallForActivity.callStatus = "Failed";
 			}
 
 			closeCallNoty(true);

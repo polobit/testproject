@@ -121,6 +121,7 @@ function _getMessageAsterisk(message, callback){
 			globalCall.callStatus = "Answered"; //change form completed
 		}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
 			globalCall.callStatus = "Missed";
+			globalCallForActivity.duration = 0;
 		}
 		if(!globalCall.callNumber){
 			globalCall.callNumber = number;
