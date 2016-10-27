@@ -543,7 +543,7 @@ public class Contact extends Cursor
 	{
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
-	if(!(("import").equals(this.source)))
+	if(!(("importing").equals(this.source)))
 	{
 		// Execute trigger for contacts
 		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
@@ -565,7 +565,10 @@ public class Contact extends Cursor
 		System.out.println("trigger ran for non import source" );
 	}
 	else
+	{
 		System.out.println("trigger didnot run for import" );
+		this.source = "import" ;
+	}	
 	
 	System.out.println("Time taken to process post save on contact : " + this.id + " time is : "
 		+ (System.currentTimeMillis() - time));

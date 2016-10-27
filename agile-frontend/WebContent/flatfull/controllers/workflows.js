@@ -74,7 +74,6 @@ var WorkflowsRouter = Backbone.Router
 							// Add collection view
 							console.log("Load collection");
 							App_Workflows.loadworkflows($("#content"));
-							el.find('[data-toggle="tooltip"]').tooltip();
 						}
 					});
 
@@ -129,7 +128,6 @@ var WorkflowsRouter = Backbone.Router
 						}
 						else
 						{
-							window.location.href  = window.location.origin+"/#workflow-templates";
 							el.find('#campaign_logs').attr('href','#workflows');
 							return;
 						}
@@ -251,15 +249,12 @@ var WorkflowsRouter = Backbone.Router
 					postRenderCallback : function(el){
 						head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js');
 						
-
-
 						// Set the name
 						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
 						var unsubscribe = that.workflow_model.get("unsubscribe");
+						
 						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
-						resetAndFillFromSelect(unsubscribe.unsubscribe_email,el);
-						$('#from_email', el).val(unsubscribe.unsubscribe_email);
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
