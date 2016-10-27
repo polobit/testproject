@@ -142,6 +142,12 @@ public class EmailWrapper extends Cursor
     {
 	this.messagecount = messagecount;
     }
+    public String getFolder_name(){
+    	return folder_name;
+    }
+    public void setFolder_name(String folder_name){
+    	this.folder_name = folder_name;
+    }
 
     private String mime_type;
     private String from;
@@ -149,4 +155,5 @@ public class EmailWrapper extends Cursor
     private String message;
     private String flags;
     private String messagecount;
+    private String folder_name;
 }

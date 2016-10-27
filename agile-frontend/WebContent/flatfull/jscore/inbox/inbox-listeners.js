@@ -98,6 +98,10 @@ function inboxFlagListners(){
 			if(server == "exchange"){
 				getExchangeContent(url,from_email,folder_name,dataVal);
 			}else{
+				var getfoldername = $(this).attr("data-folder");
+				if(getfoldername)
+					folder_name = getfoldername;
+
 				url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=content&messageid="+dataVal;
 				getContent(url,dataVal);
 			}
@@ -182,9 +186,15 @@ function inboxFlagListners(){
 	$('input[name="mailcheck"]').on('change', function(e) {
 		var len = $('input[name="mailcheck"]:checked').length
 		if(len == 0){
+			$('.inbox-all').prop('checked', false);
 			$("#operation-menu").hide();
 			$("#mark-dropdown").hide();
 		}else{
+			if(len < 10){
+				$('.inbox-all').prop('checked', false);
+			}else{
+				$('.inbox-all').prop('checked', true);
+			}
 			$("#operation-menu").show();
 			$("#mark-dropdown").show();
 		}
@@ -409,26 +419,49 @@ function initializeInboxListeners(){
 			renderToMailList(url,offset,count);
 		}
 	}
-
+	$('#inbox-listners').on('click', '.button-check', function(e){
+		var $ele = $(e.currentTarget).parents("button").parent();
+		if($ele.hasClass("open")){
+			$ele.removeClass("open");
+		}
+		$ele.toggleClass("open");
+		if($ele.find("input").is(":checked")){
+			$ele.find("input").prop("checked", false);
+			$(".mark-read").hide();
+			$(".mark-unread").hide();
+			$('.mail_check').prop('checked', true);
+			deSelectCheckBoxes("mail_check");
+		}else{
+			$ele.find("input").prop("checked", true);
+			$(".mark-read").show();
+			$(".mark-unread").show();
+			$('.mail_check').prop('checked', false);
+			selectCheckBoxes("mail_check");
+		}
+	});
 	$(".select-mails").unbind().click(function(e) {
 		var dataVal = $(this).attr("data-val");
 		if(dataVal == "All"){
 			$(".mark-read").show();
 			$(".mark-unread").show();
+			$('.inbox-all').prop('checked', true);
 			$('.mail_check').prop('checked', false);
 			selectCheckBoxes("mail_check")
 		}else if(dataVal == "None"){
 			$("#operation-menu").hide();
 			$("#mark-dropdown").hide();
+			$('.inbox-all').prop('checked', false);
 			$('.mail_check').prop('checked', false);
 		}else if(dataVal == "Read"){
 			$(".mark-read").hide();
 			$(".mark-unread").show();
+			$('.inbox-all').prop('checked', false);
 			$('.mail-unread').prop('checked', false);
 			selectCheckBoxes("mail-read")
 		}else if(dataVal == "Unread"){
 			$(".mark-unread").hide();
 			$(".mark-read").show();
+			$('.inbox-all').prop('checked', false);
 			$('.mail-read').prop('checked', false);
 			selectCheckBoxes("mail-unread")
 		}
@@ -1018,5 +1051,24 @@ function helperFunction(){
 	$("#mails-list").css({"max-height":$(window).height()-128,"height":$(window).height()-128, "overflow-y":"scroll", "padding":"0px"});
 	$("#mail-details-view").remove();
 	$("#mail-detail-view").append("<div class='portlet_body portlet_width' id='mail-details-view' style='display:none;'></div>");
+}
+function deSelectCheckBoxes(classname){
+	if($('.'+classname).is(':visible')) {
+		$("#operation-menu").hide();
+		$("#mark-dropdown").hide();
+	}
+	checkboxes = document.getElementsByClassName(classname)
+	var checkboxeslength = checkboxes.length;
+	if(checkboxeslength > 0){
+		if(checkboxeslength > 20){
+			checkboxeslength = 20;
+		}
+	    for (var i = 0; i < checkboxeslength; i++) {
+	       checkboxes[i].checked = false;
+	    }
+	}else{
+		$("#operation-menu").hide();
+		$("#mark-dropdown").hide();
+	}
 }
 

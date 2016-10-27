@@ -51,7 +51,7 @@
     <div class="btn-toolbar">
         <div class="btn-group dropdown">
 	        <button class="btn btn-default btn-sm btn-bg dropdown-toggle" data-toggle="dropdown">
-	          <span class="dropdown-label"><label class="i-checks i-checks-sm" style="margin-bottom: 0px;"><input type="checkbox" class="inbox-all"><i></i></label></span>                    
+	          <span class="dropdown-label"><label class="i-checks i-checks-sm button-check" style="margin-bottom: 0px;"><input type="checkbox" class="inbox-all"><i></i></label></span>                    
 	          <span class="caret"></span>
 	        </button>
 	        <ul class="dropdown-menu text-left text-sm">
@@ -201,7 +201,7 @@
 		      <div class="pull-right text-sm text-muted">
 		        <span class="hidden-xs ng-binding"><time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time></span>
 		      </div>
-		      <div class="clear {{this.flags}}" id="flag{{removeSpecialCharacter this.id}}" data-val="{{this.id}}">
+		      <div class="clear {{this.flags}}" data-folder="{{this.folder_name}}" id="flag{{removeSpecialCharacter this.id}}" data-val="{{this.id}}">
 		        <div><a class="toggle-class text-md ng-binding" data-toggle="collapse" data-target="#{{removeSpecialCharacter this.id}}"><span class="col-md-4" style="overflow: hidden;">{{getFromName this.from}}</span> <span class="col-md-7" style="overflow: hidden;">{{this.subject}}</span><span class="col-md-1" style="width: 100%;"></span></a></div>
 		        <!--<div class="text-ellipsis m-t-xs ng-binding">{{{this.message}}}</div>-->
 		      </div>      
