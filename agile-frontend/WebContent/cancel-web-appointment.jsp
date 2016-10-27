@@ -434,11 +434,15 @@ a:link, a:active, a:visited, a {
 	
 <script type="text/javascript">
 var domain_user_name=<%=mapper.writeValueAsString(user_name)%>;
-$("body").on("click","#cancel_appointment_confirmation",function(e)
-{
+$("body").on("click","#cancel_appointment_confirmation",function(e){
 	e.preventDefault();
+
 	 var event_id = <%=event_id%>
 	 var contact_id = <%=contact_id%>
+	
+	$(this).text('Please wait');
+	$('#templateContainer').find('input, textarea, button, select').attr('disabled','disabled');
+
 	 var cancel_reason = $("#cancel_web_appointment_reason").val();
 	 var eventURL = '/core/api/webevents/calendar/deletewebevent?event_id=' + <%=event_id%>
 	 				+'&cancel_reason='+cancel_reason
@@ -457,7 +461,8 @@ $("body").on("click","#cancel_appointment_confirmation",function(e)
 		 
 			}, error : function(response)
 			{
-
+				$(this).text('Cancel Appointment');
+				$('#templateContainer').find('input, textarea, button, select').removeAttr('disabled');
 				alert('<%=LanguageUtil.getLocaleJSONValue(localeJSON, "something-wrong")%>');
 			} });
 });

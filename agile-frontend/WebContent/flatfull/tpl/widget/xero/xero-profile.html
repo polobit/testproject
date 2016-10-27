@@ -3,8 +3,9 @@
 <div class="wrapper-sm">
 	<div style="display:inline-block;">
 		<div class="title_txt" style="display:inline-block;">
-			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank">
-			<h4 class="h4 m-t-none text-cap text-base">{{Contact.Name}}</h4></a>
+			<a href="https://go.xero.com{{#unless xeroOrganisationShortCode}}/organisationlogin/default.aspx?shortcode={{xeroOrganisationShortCode}}&redirecturl={{/unless}}/Contacts/View/{{Contact.ContactID}}" target="-_blank">		
+				<h4 class="h4 m-t-none text-cap text-base">{{Contact.Name}}</h4>
+			</a>
 		</div>
 	</div>
 	<div>

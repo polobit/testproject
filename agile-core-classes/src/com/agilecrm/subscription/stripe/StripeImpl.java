@@ -63,7 +63,7 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 public class StripeImpl implements AgileBilling {
 
 	static {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = StripeUtil.getStripeApiKey();
 		Stripe.apiVersion = "2012-09-24";
 	}
 
@@ -656,7 +656,7 @@ public class StripeImpl implements AgileBilling {
 		invoiceParams.put("subscription_prorate", true);
 		invoiceParams.put("subscription_plan", plan.plan_id);
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
-		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setApiKey(StripeUtil.getStripeApiKey());
 		builder.setStripeVersion("2015-10-16");
 		RequestOptions options = builder.build();
 		Invoice invoice = Invoice.upcoming(invoiceParams, options);

@@ -74,6 +74,7 @@ var WorkflowsRouter = Backbone.Router
 							// Add collection view
 							console.log("Load collection");
 							App_Workflows.loadworkflows($("#content"));
+							el.find('[data-toggle="tooltip"]').tooltip();
 						}
 					});
 

@@ -373,7 +373,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										// Don't append email
 										if (name.trim() != data.trim())
 											data = name.trim() + ' <' + data.trim() + '>';
-									}
+									}									
 
 									$('#' + id, el)
 											.closest("div.controls")
@@ -458,13 +458,20 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										tag_not_exist = false;
 										return;
 									}
-								});
+								});						
 
 								// add tag
 								if (tag_not_exist)
 									targetContainer
 											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp)));
 
+								console.log("Agile type head contact html ***** ");								
+
+								if(targetContainer && targetContainer.size() == 1){																		
+                    				var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+                     				sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+									$('#sendEmailInviteBlock').html(sendInviteHtml);									
+								}
 											
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
@@ -657,6 +664,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 // Removes tags ("Related to" field contacts)
 $("body").on("click", '#remove_tag', function(event)
 {
+	console.log("contact removed from agile type head ****** ");		
+	
 	event.preventDefault();var company_name ;var prop = null;var flag = false;
 	if($(this).parent().attr("data-deal-related-contacts"))
 	{
@@ -686,7 +695,13 @@ $("body").on("click", '#remove_tag', function(event)
 				$("#content .address-type,#address,#city,#state,#zip,#country").val('');
 			}
         }
-    }
+    }	
+
+    var size = $(this).parent().parent().children().length;		
+	if(size && (size-1)  == 0){										
+		$('#sendEmailInviteBlock').html('');
+	}
+
 	$(this).parent().remove();
 });
 
