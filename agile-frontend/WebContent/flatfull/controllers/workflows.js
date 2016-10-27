@@ -258,8 +258,7 @@ var WorkflowsRouter = Backbone.Router
 
 						var unsubscribe = that.workflow_model.get("unsubscribe");
 						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
-						resetAndFillFromSelect(unsubscribe.unsubscribe_email,el);
-						$('#from_email', el).val(unsubscribe.unsubscribe_email);
+						//$('#from_email', el).val(unsubscribe.unsubscribe_email);
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);

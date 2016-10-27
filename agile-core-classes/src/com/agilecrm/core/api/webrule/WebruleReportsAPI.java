@@ -63,8 +63,9 @@ public class WebruleReportsAPI
 		timeZone = "" + (Long.valueOf(current_timezone) * -1);
 	    }
 	    // start date in mysql date format.
-	    String startDate = FormReportsUtil.getStartDate(startTime, endTime, type, timeZone);
-
+	    //String startDate = FormReportsUtil.getStartDate(startTime, endTime, type, timeZone);
+             String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, type, timeZone);
+		
 	    // end date in mysql date format.
 	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
 
@@ -111,7 +112,8 @@ public class WebruleReportsAPI
 		timeZone = "" + (Long.valueOf(current_timezone) * -1);
 	    }
 	    // start date in mysql date format.
-	    String startDate = FormReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+	    //String startDate = FormReportsUtil.getStartDate(startTime, endTime, null, timeZone);
 
 	    // end date in mysql date format.
 	    String endDate = CampaignReportsUtil.getEndDateForReports(endTime, timeZone);
