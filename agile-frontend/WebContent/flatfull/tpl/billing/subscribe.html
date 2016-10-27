@@ -515,7 +515,7 @@ Proceed to Trial
     			</div>
     			
     			</form>
-    			<p class="text-xs "> {{agile_lng_translate 'plan-and-upgrade' 'email-credits-tooltip'}}</p>
+    			<p class="text-xs "> {{agile_lng_translate 'plan-and-upgrade' 'email-credits-tooltip-msg'}}</p>
 		</div>
 		</div>
 		</div>
@@ -793,7 +793,7 @@ Proceed to Trial
 </script>
 
 <script id="latest-invoice-template" type="text/html">
- {{agile_lng_translate 'Plan-and-upgrade' 'thank-for-paying'}} ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" date}}.
+ {{agile_lng_translate 'Plan-and-upgrade' 'thank-for-business'}} ${{numeric_operation this.total 100 "/"}} {{agile_lng_translate 'Plan-and-upgrade' 'on'}} {{epochToHumanDate "mmm dd, yyyy" date}} {{agile_lng_translate 'Plan-and-upgrade' 'has-been-generated'}}
 </script>
 
 <script id="subscribe-error-modal-template" type="text/html">
