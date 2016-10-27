@@ -346,7 +346,7 @@ String template = request.getParameter("template");
         <div class="innerColorThemeEle">
           <div class="colorTheme">
             <label>Choose Color</label>
-             <input class="jscolor innerColorTheme form-control" style="color: rgb(0, 0, 0);" size="11" value="FFFFFF
+             <input class="jscolor innerColorTheme form-control" style="color: rgb(0, 0, 0);" size="11" value="000000
              ">
           </div>
         </div>
@@ -427,7 +427,7 @@ String template = request.getParameter("template");
                       
 
                     /*Edit Form CustTheme Class Fetching*/
-                    console.log("Custom Themes::"+customthemes);
+                    console.log("No of Custom Themes::"+customthemes.length);
                     if(customthemes!=null){
                       for(i=0;i<customthemes.length;i++){
                         var custId=customthemes[i].id;
@@ -508,7 +508,7 @@ String template = request.getParameter("template");
                           contentType : 'application/json',
                           data : themeName,
                           success:function(data){
-                            console.log("DATA ID COMING!!!"+data.id);
+                            console.log("SAVED CUSTOM DATA ID COMING!!!"+data.id);
                             if(data!=null && data!=""){
                               themeclass = "form"+data.id;
                               for(i=0;i<themeArray.length;i++){
@@ -646,12 +646,14 @@ String template = request.getParameter("template");
                       });
                   }
                   function createCustTheme(){
-                    custThemePopUpCode();
+
                     if($("#render")!=undefined && $("#render")!=null){
                           var pContent=document.getElementById("render").value;
                           $(".createCustomFormContent").html(pContent);
                       
                     }
+                    defaultFormEleFun();
+                    custThemePopUpCode();
                   }
                   function closeAddTheme(){
                      $(".createCustomFormContent").empty();

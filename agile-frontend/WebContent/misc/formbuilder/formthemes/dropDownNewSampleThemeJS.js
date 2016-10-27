@@ -83,6 +83,7 @@
 						$(".outerFontTheme").css("display","inline");
 						$(".outerBackgroundTheme").css("display","none");
 						$(".outerColorThemeEle").css("display","none");
+						fontChangeEventHandler();
 					}
 					else if(selectedSelectThemeEle=="color"){
 						$(".outerAlignmentTheme").css("display","none");
@@ -796,7 +797,6 @@
 					var fontSizeEle=$(".innerFontSizeDiv select").val()+"px";
 					/*var fontThemeColor="#"+$(".innerFontTheme input").val();*/
 					/*var fontThemeColor=$(e.currentTarget).val();*/
-					console.log(formEle+"\t"+fontFamilyEle+"\t"+fontStyleEle+"\t"+fontWeightEle+"\t"+fontSizeEle);
 					if(formEle=="Title"){
 						$(".createCustomFormContent form legend").css("font-family",fontFamilyEle);
 						$(".createCustomFormContent form legend").css("font-style",fontStyleEle);
@@ -863,6 +863,27 @@
 			<!--FONT COMPONENT FORM ELEMENTS CLICK LOGIC START -->
 			}
 		
+function defaultFormEleFun(){
+	$(".selectDiv  select").val("Alignment");
 
+	$(".outerAlignmentTheme").css("display","inline");
+	$(".outerBorderTheme").css("display","none");
+	$(".outerFontTheme").css("display","none");
+	$(".outerColorThemeEle").css("display","none");
+
+
+	$(".innerAlignmentFormEle select").val("Form Title");
+	$(".innerAlignmentAlignStart select").val("Center");
+	$(".innerBorderThemeFormEle select").val("Form");
+	$(".innerBorderWidthTheme select").val("None");
+	$(".innerBorderStyleTheme").css("display","none");
+	$(".innerFontEleTheme select").val("Title");
+	$(".innerFontFamilyTheme select").val("Arial");
+	$(".innerFontStyleDiv select").val("Normal");
+	$(".innerFontWeightDiv select").val("Normal");
+	$(".innerFontSizeDiv select").val("14");
+	$(".innerColorThemeEle select").val("Form Border");
+	$(".innerColorTheme").val("000000");
+}
 
 		
