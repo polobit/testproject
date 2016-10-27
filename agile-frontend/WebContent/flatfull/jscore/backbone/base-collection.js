@@ -354,11 +354,14 @@ var Base_Collection_View = Backbone.View
            * If page size is not defined then sets page size to 20.
            */
           this.page_size = this.options.page_size;
+          if(this.page_size != CURRENT_USER_PREFS.page_size){
+            this.page_size = CURRENT_USER_PREFS.page_size;
+          }
           this.global_sort_key = this.options.global_sort_key;
           this.request_method = this.options.request_method;
           this.post_data = this.options.post_data;
           if (!this.page_size)
-            this.page_size = 20;
+            this.page_size = getMaximumPageSize();
 
           /*
            * stores current view object in temp variable, can be used
