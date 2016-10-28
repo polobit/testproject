@@ -336,7 +336,7 @@ public class WorkflowUtil
 	    			try{
 	    			JSONObject json = new JSONObject(workflow.rules);
 	    			JSONArray nodes = json.getJSONArray("nodes");
-	    			if((nodes.length() - 1) > maxNodes)
+	    			if(nodes.length() > maxNodes)
 	    				maxNodes = nodes.length();
 	    			}catch(JSONException e){
 	    				e.printStackTrace();
