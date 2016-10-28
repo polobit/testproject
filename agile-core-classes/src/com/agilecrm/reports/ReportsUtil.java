@@ -55,6 +55,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
@@ -367,7 +368,7 @@ public class ReportsUtil {
 				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
-			statsJSON.put("domain", NamespaceManager.get());
+			statsJSON.put("domain", AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()));
 			statsJSON.put("email_status", getTotalEmailCredit());
 
 			return statsJSON;

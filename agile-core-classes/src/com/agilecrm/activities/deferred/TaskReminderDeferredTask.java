@@ -21,6 +21,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.MD5Util;
@@ -144,7 +145,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("tasks", taskList);
 		map.put("tasksCount", taskList.size());
-		map.put("domain", domain);
+		map.put("domain", AliasDomainUtil.getCachedAliasDomainName(domain));
 
 		// Sends mail to the domain user.
 		SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
@@ -189,7 +190,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    HashMap<String, Object> map = new HashMap<String, Object>();
 	    map.put("tasks", taskListMap);
 	    map.put("tasksCount", taskList.size());
-	    map.put("domain", domain);
+	    map.put("domain", AliasDomainUtil.getCachedAliasDomainName(domain));
 
 	    // Sends mail to the domain user.
 	    SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);

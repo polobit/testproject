@@ -16,6 +16,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -212,7 +213,7 @@ public abstract class StripeWebhookHandler
 		e.printStackTrace();
 	    }
 
-	    return domain;
+	    return AliasDomainUtil.getCachedAliasDomainName(domain);
 	}
 
 	customer = getCustomerFromStripe();
@@ -223,7 +224,7 @@ public abstract class StripeWebhookHandler
 	// Description is set to namespace while saving
 	domain = customer.getDescription();
 
-	return domain;
+	return AliasDomainUtil.getCachedAliasDomainName(domain);
     }
 
     protected void sendMail(String emailSubject, String template)
