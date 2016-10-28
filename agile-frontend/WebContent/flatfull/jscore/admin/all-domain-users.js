@@ -135,7 +135,7 @@ function initializeAdminpanelListner(el){
 			var amount = $("#amount").val();
 			var totalamount = $(".totamount").val();
 			var chargeid=$("#hchargeid").val();
-			var domain = $("table.refund").attr("domain");
+			var domain = $("#refundpopup").attr("domain");
 			if(parseFloat(amount) <= 0)
 			{
 				

@@ -3,7 +3,7 @@
             <h2>{{agile_lng_translate 'plan-and-upgrade' 'past-transactions'}}</h2> 
         </div>
     <div class="panel">
-        <table class="table table-striped refund" id="sort-table" domain=''>
+        <table class="table table-striped refund" id="sort-table" domain="{{domain}}">
             <thead>
                 <tr>
                     <th>{{agile_lng_translate 'plan-and-upgrade' 'amount-in-usd'}}</th>
@@ -18,30 +18,28 @@
     </div>
 
 </script>
-<script id="admin-charge-model-template" type="text/html">	
+<script id="admin-charge-model-template" type="text/html">  
 
 
-	
-	<td >
-    	${{numeric_operation amount 100 "/"}}&nbsp;&nbsp;&nbsp;--{{id}} {{#if_not_equals amountRefunded 0}}<strong>(${{numeric_operation amountRefunded 100 "/"}}-Refunded)</strong>{{/if_not_equals}}
-	</td>
-	<td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
-	<td>
-			{{#if paid}}
-				{{#if refunded}}
-      				refunded ({{numeric_operation amount 100 "/"}} {{toUpperCase currency}})
-				{{else}}
-					paid
-				{{/if}}
-			{{else}}
-				failed
+    
+    <td >
+        ${{numeric_operation amount 100 "/"}}&nbsp;&nbsp;&nbsp;--{{id}} {{#if_not_equals amountRefunded 0}}<strong>(${{numeric_operation amountRefunded 100 "/"}}-Refunded)</strong>{{/if_not_equals}}
+    </td>
+    <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
+    <td>
+            {{#if paid}}
+                {{#if refunded}}
+                    refunded ({{numeric_operation amount 100 "/"}} {{toUpperCase currency}})
+                {{else}}
+                    paid
+                {{/if}}
+            {{else}}
+                failed
 {{/if}}</td>
-	<td>{{#adminpanel_restrictions "REFUND_AMOUNT"}}
+    <td>
+{{#adminpanel_restrictions "REFUND_AMOUNT"}}
     {{#unless refunded}}
-		{{#if paid}}
-		<a href="#" id="refundpopup" totalamount={{numeric_operation amount 100 "/"}} refundedAmount={{numeric_operation amountRefunded 100 "/"}} chargeid={{id}} role="button" class="btn btn-default btn-sm refundpopup" data-toggle="modal">Refund</a>{{/if}}{{/unless}}
-        {{else}}{{/adminpanel_restrictions}}</td>
-
-
-
+        {{#if paid}}
+        <a href="#" id="refundpopup" totalamount={{numeric_operation amount 100 "/"}} refundedAmount={{numeric_operation amountRefunded 100 "/"}} chargeid={{id}} role="button" class="btn btn-default btn-sm refundpopup" data-toggle="modal">Refund</a>{{/if}}{{/unless}}</td>
+{{/adminpanel_restrictions}}
 </script>

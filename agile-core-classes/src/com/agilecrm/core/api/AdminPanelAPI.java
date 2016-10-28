@@ -525,7 +525,7 @@ public class AdminPanelAPI
     @Path("/applypartialrefund")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount , @QueryParam("domain") String custDomain)
+    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount ,@QueryParam("d") String cust_domain  )
 	    throws StripeException
     {
     	
@@ -543,7 +543,7 @@ public class AdminPanelAPI
 	{
 
 	    Refund refund = StripeUtil.createPartialRefund(chargeId, amount);
-	    ActivityUtil.createAdminPanelActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT , custDomain);
+	    ActivityUtil.createAdminPanelActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT , "");
 	    return refund;
 
 	}

@@ -805,6 +805,57 @@
 {{else}}
 {{/if_equals}}
 <!-- end of user owner change -->
+<!-- start of delete domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_DELETE_ACCOUNT" activity_type}}
+ {{custom1}} ({{custom3}}) had Deleted the Domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom2}} was deleted on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ <!-- end of admin panel activities -->
+ <!-- start of release domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_SUBSCRIPTION_CANCEL" activity_type}}
+ {{custom1}} ({{custom3}}) has cancelled the subscritpion for the domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+   The Subscription was cancelled on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- end of admin panel activities -->
+ <!-- start of release domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_RELEASE_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) had released the Domain {{custom2}}  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom2}} was released on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_DELETED_USER" activity_type}}
+ {{custom1}} ({{custom3}}) had deleted the user {{custom2}} ({{custom4}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom3}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_REFUND_AMOUNT" activity_type}}
+ {{custom1}} ({{custom3}}) has  Applied the refund  the Domain 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom2}} was refunded  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}} with the amount {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+  <!-- end of admin panel activities -->
+
 <!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
 {{#if_equals "CONTACT_CREATE" activity_type}}
@@ -1637,6 +1688,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  <li data-type="TASK"><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
 
 	<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
+	{{#is_admin_domain}}
+ 	<li data-type="ADMINPANEL"><a href="ADMINPANEL">admin panel</a></li>
+ {{/is_admin_domain}}
+
 </script>
 
 
@@ -1646,6 +1701,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  <li data-type="CAMPAIGN"><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
                     </li>
  <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li>
+ {{#is_admin_domain}}
+ 	<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+ {{/is_admin_domain}}
+
 </script>
 
 <script id="service-activity-list-header-template" type="text/html">
@@ -1654,7 +1713,11 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 	<li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
  <li data-type="TICKET"><a href="TICKET">Tickets</a></li>
     
-					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>                 
+					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li> 
+{{#is_admin_domain}}
+ 	<li data-type="ADMINPANEL"><a href="ADMINPANEL">Admin panel</a></li>
+ {{/is_admin_domain}}
+
 
 </script>
 
