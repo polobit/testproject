@@ -114,6 +114,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	
 	if(isAddonPlan()){
 		updateAddOnStatus(getAddonPlan(), AddOnStatus.DELETED);
+		return;
 	}
 
 	if (isEmailAddonPlan())
