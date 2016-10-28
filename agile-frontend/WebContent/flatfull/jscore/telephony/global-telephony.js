@@ -618,9 +618,11 @@ function handleCallRequest(message)
 			}
 
 			closeCallNoty(true);
-			if(globalCall.callStatus != "Missed"){
-				globalCallForActivity.duration = message.duration;
+			if(globalCall.callStatus == "Missed" || globalCallForActivity.callStatus == "Missed"){
+				message.duration = 0;
 			}
+
+			globalCallForActivity.duration = message.duration;
 			
 			console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
 					var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
