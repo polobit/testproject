@@ -81,6 +81,7 @@ function syncContacts(){
 				}
 	        }else{
 	        	$("#inbox-prefs-verification").css({"display":"block"});
+	        	displayNoEmailTemplate();
 	        	hideTransitionBar();
 	        }
 		},

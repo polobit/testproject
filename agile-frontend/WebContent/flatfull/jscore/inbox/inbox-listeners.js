@@ -220,8 +220,8 @@ function getContent(url,dataVal){
 		$.ajax({ 
 			url :url,
 			success : function(data){
-				$("#flag"+dataVal).removeClass("pending");
 				dataVal = dataVal.replace(/[^\w\s]/gi, '-');
+				$("#flag"+dataVal).removeClass("pending");
 				var html = "";
 				getTemplate("mail-message", data, undefined, function(template_ui) {
 					if( !template_ui )	return;
@@ -232,6 +232,9 @@ function getContent(url,dataVal){
 		        $("#mails-list").hide();
 		        $("#mail-details-view").show();
 		        $(".toaddress").hide();
+		        $("#message"+dataVal).find("a").attr("target", "_blank");
+		        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
+		        $("#message"+dataVal).css({"background-color":"white"});
 			} 
 		});
 	}else{
