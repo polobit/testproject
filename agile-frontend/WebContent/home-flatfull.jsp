@@ -1225,6 +1225,9 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
 				sig = sig.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 				CURRENT_USER_PREFS.signature = sig;
 
+        // Dont sanitize domain name
+        CURRENT_DOMAIN_USER.domain = CURRENT_DOMAIN_USER.domain.replace(/&#x73;/g, "s");
+
         //Turn off all animations if this is mobile
         if( agile_is_mobile_browser() )
         {
