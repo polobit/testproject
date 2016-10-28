@@ -161,7 +161,7 @@ function globalCallWidgetSet()
 							if(!alreadySetPrefs){
 								if(widgetCallName[obj.name] == "Twilio"){
 									nameToStore = "Twilio";
-								}else if(nameToStore != "Twilio" && obj.name != "CallScript"){
+								}else if(nameToStore != "Twilio" && obj.name != "CallScript" && obj.name != "Asterisk"){
 									nameToStore = widgetCallName[obj.name];
 								}
 							}
@@ -695,7 +695,8 @@ $('body').on('click', '#downloadCallJar_widget', function(e)
 {
 	e.preventDefault();
 	var widget_name = $(this).getAttr("widget-name");
-	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/widgetCall.jar';
+	var version = 1.0;
+	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/'+widget_name+version+'.jar';
 });
 
 function checkForActiveCall()
