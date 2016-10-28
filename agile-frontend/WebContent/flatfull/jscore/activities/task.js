@@ -224,19 +224,26 @@ function initializeTasksListeners(){
 			$(this).closest(".task-content-view").find(".taskComplete").attr("checked", false);
 				return;
 		}*/
-		showAlertModal("complete_task", "confirm", function() {
 		if(!getTaskListId(that)  && $(that).parent().attr('data')){
-			completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
-		}
-		else
-			completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
-		},
-		function() {
-								$(that).closest(".task-content-view").find(".taskComplete").attr("checked", false);
-				
-							}
-						);
+					completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
+				}
+				else
+					completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
+		
 
+		/*showAlertModal("complete_task", "confirm", 
+			function() {
+				if(!getTaskListId(that)  && $(that).parent().attr('data')){
+					completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
+				}
+				else
+					completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
+			},
+			function() {
+				$(that).closest(".task-content-view").find(".taskComplete").attr("checked", false);
+					
+			});
+*/
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
