@@ -1121,10 +1121,12 @@
 	                         	<img class="preview-avatar  m-b-none thumb-avatar-wrapper" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}" />
                           	</a>  
                           	<div class="m-l-xs inline-block pull-left">
+                          	{{#is_mobile}} {{else}}
                           	<div>
                                   <input class="upload_prefs_s3 submit btn btn-sm  btn-primary m-t-xs" type="submit" id="user_prefs_image" value="{{agile_lng_translate 'others' 'upload'}}"/>
                                   <p class="help-block text-sm text-muted">{{agile_lng_translate 'settings' 'recomended-image-size'}}: 50px*50px.</p>
                                   </div>
+                             {{/is_mobile}}
                      </div>
                      <div class="clearfix"></div>
                          </div>

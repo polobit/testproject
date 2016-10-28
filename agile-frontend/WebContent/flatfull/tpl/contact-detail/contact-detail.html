@@ -35,6 +35,7 @@
 									<a class="contact-image-view"> 
 									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a>
+									{{#is_mobile}} {{else}}
 									<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
 										<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
 										</div>
@@ -42,6 +43,7 @@
 										|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
 										</div>{{/property_is_exists}}
 									</div>
+									{{/is_mobile}}
 									<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit"> {{agile_lng_translate 'modals' 'save'}}</a>
 							</form>
@@ -738,6 +740,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 									<a class="contact-image-view"> 
 									<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
 									src="{{gravatarurl properties 80}}" /></a>
+									{{#is_mobile}} {{else}}
 									<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
 										<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
 										</div>
@@ -745,6 +748,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 										|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
 										</div>{{/property_is_exists}}
 									</div>
+									{{/is_mobile}}
 									<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">{{agile_lng_translate 'report-add' 'save'}}</a>
 							</form>
