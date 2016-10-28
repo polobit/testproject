@@ -39,7 +39,7 @@
             <div class="text-ellipsis ticket-name">
               <a class="custom-link subject-row text-ellipsis text-xs" style="color: #697073;">
                 {{#if contact.properties}}
-                  {{getPropertyValue contact.properties "first_name"}}&nbsp;{{getPropertyValue contact.properties "last_name"}}
+                  {{contact_name_necessary contact}}
                 {{else}}
                   {{requester_name}}
                 {{/if}}
