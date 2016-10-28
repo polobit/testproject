@@ -270,6 +270,9 @@ function getExchangeContent(url,from_email,folder_name,messageid){
 	        $("#message"+dataVal).html(html);
 	        $("#mails-list").hide();
 	        $("#mail-details-view").show();
+	        $("#message"+dataVal).find("a").attr("target", "_blank");
+	        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
+	        $("#message"+dataVal).css({"background-color":"white"});
 		} 
 	});
 }

@@ -494,6 +494,7 @@ function displayNoEmailTemplate(){
 
 		html = template_ui;
 	}, '#mails-list');
+	$("#mails-list").css({"overflow-y":"hidden"});
 	$("#mails-list").html(html);
 	hideTransitionBar();
 }
