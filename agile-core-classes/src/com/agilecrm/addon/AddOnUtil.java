@@ -31,7 +31,11 @@ public class AddOnUtil {
 	 */
 	private static ObjectifyGenericDao<AddOn> dao = new ObjectifyGenericDao<AddOn>(AddOn.class);
 	
-	
+	/**
+	 * Get addon from cache. If not available fetches from DB
+	 * If no addons exists returns default Addon with 0 quantity
+	 * @return Addon
+	 */
 	public static AddOn getAddOn(){
 		AddOn addOn;
 		addOn = (AddOn) CacheUtil.getCache(AddOn.getCacheKey());
@@ -45,6 +49,11 @@ public class AddOnUtil {
 		return addOn;
 	}
 	
+	/**
+	 * Forcefully fetch Addon from DB
+	 * @param force
+	 * @return Addon
+	 */
 	public static AddOn getAddOn(boolean force){
 		AddOn addOn =  dao.ofy().query(AddOn.class).get();
 		if(addOn == null){
@@ -65,6 +74,10 @@ public class AddOnUtil {
 		return true;
 	}
 	
+	/**
+	 * Set acl scopes to the defaults.
+	 * @param domainIdList
+	 */
 	public static void setDefaultAcls(Set<Long> domainIdList){
 		for(Long id : domainIdList){
 			System.out.println("Setting ACLs to defaults for: "+id);
@@ -86,12 +99,20 @@ public class AddOnUtil {
 			}
 		}
 	}
-	
+	/**
+	 * Checks if credit card exists
+	 * @throws Exception
+	 */
 	public static void checkForCreditCard() throws Exception{
 		if(!AddOnUtil.isCreditCardExist())
 			throw new Exception("This feature is only for paid users.");
 	}
 	
+	/**
+	 * Checks if can downgrade his campaigns or not
+	 * @param count
+	 * @return
+	 */
 	public static boolean canDowngradeCampaigns(int count){
 		int workflowsCount = WorkflowUtil.getCount();
 		Subscription subscription = SubscriptionUtil.getSubscription();
@@ -102,16 +123,26 @@ public class AddOnUtil {
 		return true;
 	}
 	
+	/**
+	 * Checks if can downgrade his triggers or not
+	 * @param count
+	 * @return
+	 */
 	public static boolean canDowngradeTriggers(int count){
 		int triggersCount = TriggerUtil.getCount();
 		Subscription subscription = SubscriptionUtil.getSubscription();
-		int limit = subscription.planLimits.getWorkflowLimit();
+		int limit = subscription.planLimits.getTriggersLimit();
 		int totalLimit = limit + count;
 		if(totalLimit < triggersCount)
 			return false;
 		return true;
 	}
 	
+	 /**
+	 * Checks is admin or not
+	 * @param count
+	 * @return
+	 */
 	public static void checkForPriviliges() throws Exception{
 		//If uesr is not admin throw exception
 		DomainUser user = DomainUserUtil.getCurrentDomainUser();
@@ -121,6 +152,9 @@ public class AddOnUtil {
 		}
 	}
 	
+	/**
+	 * Delete addon from DB
+	 */
 	public static void deleteAddOn(){
 		AddOn addOn = getAddOn();
 		if(addOn != null)

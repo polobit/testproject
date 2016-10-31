@@ -404,7 +404,7 @@ public class StripeUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static com.stripe.model.Subscription updateAddOnSubscription(String planId, int quantity, String subscriptionId) throws Exception{
+	public static com.stripe.model.Subscription updateAddOnSubscription(String planId, int quantity, String subscriptionId, boolean proration) throws Exception{
 		if(planId == null || quantity == 0)
 			throw new Exception("Please provide valid details");
 		Customer cust = getStripeCustomer();
@@ -412,7 +412,7 @@ public class StripeUtil {
 			throw new Exception("Please upgrade your plan to do this action");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("plan", planId);
-		params.put("prorate", true);
+		params.put("prorate", proration);
 		params.put("quantity", quantity);
 		com.stripe.model.Subscription subscription = null;;
 		if(subscriptionId != null)

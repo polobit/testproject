@@ -23,7 +23,7 @@ import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 
 /**
- * Extra addons for users
+ * Extra payment addons for users
  * @author Santhosh
  *
  */
@@ -31,10 +31,14 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 public class AddOnAPI implements Serializable{
 	
 	/**
-	 * 
+	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+	 * Get acl addon from cache if not available fetch from DB
+	 * @return
+	 */
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/acl")
@@ -42,6 +46,9 @@ public class AddOnAPI implements Serializable{
 		return AddOnUtil.getAddOn();
 	}
 	
+	/**
+	 * Get campaign addon from cache if not available fetch from DB
+	 */
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/campaign")
@@ -49,6 +56,10 @@ public class AddOnAPI implements Serializable{
 		return AddOnUtil.getAddOn();
 	}
 	
+	/**
+	 * Get trigger addon from cache if not available fetch from DB
+	 * @return
+	 */
 	@GET
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@Path("/trigger")
@@ -56,6 +67,11 @@ public class AddOnAPI implements Serializable{
 		return AddOnUtil.getAddOn();
 	}
 	
+	/**
+	 * Create or Edit the acl addon
+	 * @param addOn
+	 * @return
+	 */
 	@POST
 	@Path("/acl")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -68,7 +84,10 @@ public class AddOnAPI implements Serializable{
 			if(addOn.getAclUsers().size() == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(dbAddOn.getAclUsers().size() != addOn.getAclUsers().size()){
-				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-acl", addOn.getAclUsers().size(), dbAddOn.aclInfo.subscriptionId);
+				boolean proration = true;
+				if(addOn.aclInfo.quantity < dbAddOn.aclInfo.quantity)
+					proration = false;
+				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-acl", addOn.getAclUsers().size(), dbAddOn.aclInfo.subscriptionId, proration);
 				dbAddOn.aclInfo.subscriptionId = subscription.getId();
 			}
 			Set<Long> modifiedUsers = new HashSet<Long>();
@@ -89,6 +108,11 @@ public class AddOnAPI implements Serializable{
 		}
 	}
 	
+	/**
+	 * Create or edit campaign addon
+	 * @param addOn
+	 * @return
+	 */
 	@POST
 	@Path("/campaign")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -103,7 +127,10 @@ public class AddOnAPI implements Serializable{
 			if(!AddOnUtil.canDowngradeCampaigns(addOn.campaignInfo.quantity))
 				throw new Exception("you cannot do this action until you delete the extra campaigns");
 			if(dbAddOn.campaignInfo.quantity != addOn.campaignInfo.quantity){
-				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-campaign", addOn.campaignInfo.quantity, dbAddOn.campaignInfo.subscriptionId);
+				boolean proration = true;
+				if(addOn.campaignInfo.quantity < dbAddOn.campaignInfo.quantity)
+					proration = false;
+				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-campaign", addOn.campaignInfo.quantity, dbAddOn.campaignInfo.subscriptionId, proration);
 				dbAddOn.campaignInfo.subscriptionId = subscription.getId();
 			}
 			dbAddOn.campaignInfo.quantity = addOn.campaignInfo.quantity;
@@ -118,6 +145,11 @@ public class AddOnAPI implements Serializable{
 		}
 	}
 	
+	/**
+	 * Create or edit trigger addon
+	 * @param addOn
+	 * @return
+	 */
 	@POST
 	@Path("/trigger")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -132,7 +164,10 @@ public class AddOnAPI implements Serializable{
 			if(!AddOnUtil.canDowngradeCampaigns(addOn.triggerInfo.quantity))
 				throw new Exception("you cannot do this action until you delete the extra triggers");
 			if(dbAddOn.triggerInfo.quantity != addOn.triggerInfo.quantity){
-				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-trigger", addOn.triggerInfo.quantity, dbAddOn.triggerInfo.subscriptionId);
+				boolean proration = true;
+				if(addOn.triggerInfo.quantity < dbAddOn.triggerInfo.quantity)
+					proration = false;
+				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-trigger", addOn.triggerInfo.quantity, dbAddOn.triggerInfo.subscriptionId,proration);
 				dbAddOn.triggerInfo.subscriptionId = subscription.getId();
 			}
 			dbAddOn.triggerInfo.quantity = addOn.triggerInfo.quantity;
