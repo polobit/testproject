@@ -112,9 +112,9 @@
 <p>
 	{{agile_lng_translate 'admin-settings' 'users'}}: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/><p>
-{{#adminpanel_restrictions "CHANGE_PLAN"}}
+
 	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> {{agile_lng_translate 'plan-and-upgrade' 'change-plan'}}</strong></u> </a> </span>
-    {{else}}{{/adminpanel_restrictions}}
+    
 	{{#adminpanel_restrictions "CANCEL_SUBSCRIPTION"}}<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
 	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}} email="{{email}}"> <strong><u>{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}</u></strong> </a></span>{{else}}{{/adminpanel_restrictions}}
 </p><br/><br/>
