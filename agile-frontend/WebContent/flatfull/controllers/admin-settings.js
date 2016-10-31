@@ -1371,15 +1371,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		// Creata a global view
 		this.contactsLimitview = new Base_Model_View({ 
 			url : '/core/api/contacts/list/count/jsonformat', 
-			template : "contactslimit", 
+			template : "contactslimitouter", 
 			postRenderCallback : function(el){
+					var template = "";
 					var maxContactLimit = App_Admin_Settings.contactsLimitview.model.toJSON().count;
-					if (maxContactLimit < parseInt(USER_BILLING_PREFS.planLimits.contactLimit*0.8))
+					var planLimit = parseInt(USER_BILLING_PREFS.planLimits.contactLimit*0.8);
+					if (maxContactLimit > planLimit &&  maxContactLimit<100)
 					{
-						
+						template = "contactslimitwarning";
 							$("#contacts_limit_alert_info").removeClass("hide");
 					}
-						
+					if (maxContactLimit > planLimit &&  maxContactLimit>100)
+					{
+						template = "contactslimitalert";
+							$("#contacts_limit_alert_info").removeClass("hide");
+					}
+						getTemplate(template, {}, undefined, function(template_ui)
+							{
+								if(!template_ui)
+									return;
+
+								$("#contactlimitouterdiv",el).html($(template_ui));
+							});
 			},});
 		$('#contacts_limit_alert_info').html(this.contactsLimitview.render().el);
 	}
