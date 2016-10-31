@@ -169,13 +169,23 @@ function inboxFlagListners(){
 			
 			var dataVal_new = dataVal.replace(/[^\w\s]/gi, '-');
 			var tot_val = $(".totalcount").text();
+			var remain_count = parseInt(tot_val)-1;
+			if(remain_count <= 10){
+				$(".inti-val").text("1 - "+remain_count);
+			}
+			if(remain_count == 0){
+				$("#pagination").hide();
+				displayNoEmailTemplate();
+			}
 			$(".totalcount").text(parseInt(tot_val)-1);
 			$("#li"+dataVal_new).remove();
 			$("#"+dataVal_new).remove();
 			globalMailCollectionInstance.remove(dataVal); //.get(dataVal);
 			if(server != "exchange"){
 				SHOW_TOTALCOUNT = false;
-				renderToMailList(url,offset,page_size);
+				if(tot_val > 10){
+					renderToMailList(url,offset,page_size);
+				}
 			}
 			$("#mails-list").show();
 			$("#mail-details-view").hide();
@@ -520,6 +530,14 @@ function initializeInboxListeners(){
 				}
 				
 				var tot_val = $(".totalcount").text();
+				var remain_count = parseInt(tot_val)-idcol.length;
+				if(remain_count <= 10){
+					$(".inti-val").text("1 - "+remain_count);
+				}
+				if(remain_count == 0){
+					$("#pagination").hide();
+					displayNoEmailTemplate();
+				}
 				$(".totalcount").text(parseInt(tot_val)-idcol.length);
 				$("#operation-menu").hide();
 				$("#mark-dropdown").hide();
@@ -548,7 +566,9 @@ function initializeInboxListeners(){
 
 				if(server_type != "exchange"){
 					SHOW_TOTALCOUNT = false;
-					renderToMailList(url,offset,page_size);
+					if(tot_val > 10){
+						renderToMailList(url,offset,page_size);
+					}
 				}
 			}	
 		});	
