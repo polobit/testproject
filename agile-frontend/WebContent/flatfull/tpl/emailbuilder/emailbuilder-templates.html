@@ -26,14 +26,24 @@
     <div class="tabs" id="webrules-tabs-content">
     <div class="tab-container m-b-none">
     <ul class="nav nav-tabs ">
-
-       <li class="p-none active">
-       <a  href="#newsletters" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Newsletters'}}</a></li>
-       <li class="p-none ">
-       <a  href="#notifications" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Notifications'}}</a></li>
-       <li class="p-none ">
-       <a  href="#celebrations" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Celebrations'}}</a></li>
-       <li class="p-none ">
+       {{#is_mobile}}
+           <li class="p-none active">
+           <a  href="#newsletters" class="b-l-none" data-toggle="tab" >
+           <i class="icon icon-doc"></i></a></li>
+           <li class="p-none ">
+           <a  href="#notifications" class="b-l-none" data-toggle="tab" ><i class="icon icon-bell"></i></a></li>
+           <li class="p-none ">
+           <a  href="#celebrations" class="b-l-none" data-toggle="tab" ><i class="icon icon-playlist"></i></a></li>
+           <li class="p-none ">
+       {{else}}
+           <li class="p-none active">
+           <a  href="#newsletters" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Newsletters'}}</a></li>
+           <li class="p-none ">
+           <a  href="#notifications" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Notifications'}}</a></li>
+           <li class="p-none ">
+           <a  href="#celebrations" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Celebrations'}}</a></li>
+           <li class="p-none ">
+       {{/is_mobile}}
     </ul>
  </div>
 </div>
