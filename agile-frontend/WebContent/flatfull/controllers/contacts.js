@@ -1585,14 +1585,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 					if (model.type == "PERSON")
 					{
 
-						var first_name = getPropertyValue(model.properties, "first_name");
-						var last_name = getPropertyValue(model.properties, "last_name");
-
-						if (first_name || last_name)
-						{
-							name = first_name ? first_name : "";
-							name = (name + " " + (last_name ? last_name : "")).trim();
-						}
+						name  = getContactName(model);
 					}
 					else
 					{
