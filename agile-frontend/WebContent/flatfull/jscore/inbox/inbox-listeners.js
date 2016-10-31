@@ -191,6 +191,7 @@ function inboxFlagListners(){
 			$("#mail-details-view").hide();
 			$(".inbox-reply-view").html("");
 			$(".ng-show").show();
+			$('.inbox-all').prop('checked', false);
 		},"Delete Mail");
 	});
 	$('input[name="mailcheck"]').on('change', function(e) {
@@ -209,13 +210,13 @@ function inboxFlagListners(){
 			$("#mark-dropdown").show();
 		}
 	});
-	$(".showtoaddress").unbind().click(function() {
+	/*$(".showtoaddress").unbind().click(function() {
 		if($(".toaddress").is(":visible")){
 			$(".toaddress").hide();
 		}else{
 			$(".toaddress").show();
 		}
-	});
+	});*/
 	
 }
 function setSeenFlag(url,dataVal, attrid){
@@ -241,7 +242,7 @@ function getContent(url,dataVal){
 				$("#message"+dataVal).html(html);
 		        $("#mails-list").hide();
 		        $("#mail-details-view").show();
-		        $(".toaddress").hide();
+		        //$(".toaddress").hide();
 		        $("#message"+dataVal).find("a").attr("target", "_blank");
 		        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
 		        $("#message"+dataVal).css({"background-color":"white"});
@@ -435,7 +436,8 @@ function initializeInboxListeners(){
 			renderToMailList(url,offset,count);
 		}
 	}
-	$('#inbox-listners').on('click', '.button-check', function(e){
+	//$('#inbox-listners').on('click', '.button-check', function(e){
+	$(".button-check").unbind().click(function(e) {
 		var $ele = $(e.currentTarget).parents("button").parent();
 		if($ele.hasClass("open")){
 			$ele.removeClass("open");
@@ -541,6 +543,7 @@ function initializeInboxListeners(){
 				$(".totalcount").text(parseInt(tot_val)-idcol.length);
 				$("#operation-menu").hide();
 				$("#mark-dropdown").hide();
+				$('.inbox-all').prop('checked', false);
 				var updateCount = parseInt(tot_val)-idcol.length;
 				for(var i=0;i<globalMailCollectionInstance.length;i++){
 					var model = globalMailCollectionInstance.at(globalMailCollectionInstance.length-1-i);
@@ -727,6 +730,7 @@ function initializeInboxListeners(){
 				renderToMailList(url,offset,page_size);
 			}
 		}
+		$('.inbox-all').prop('checked', false);
 	});
 
 	$(".next").unbind().click(function(e) {
@@ -785,6 +789,7 @@ function initializeInboxListeners(){
 				renderToMailList(url,offset,page_size);
 			}
 		}
+		$('.inbox-all').prop('checked', false);
 
 	});
 	$(".message_sent_strip_close").unbind().click(function(e) {

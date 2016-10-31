@@ -255,7 +255,6 @@ function renderToMailView(data){
 				to_emails = $parent_element.find('.to-emails').data('to');
 			else
 				to_emails = $parent_element.find('.to-emails').data('from');
-
 			
 			var subject = $parent_element.find('.subject').html();
 			var body = '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+$parent_element.find('.to-emails').html()+'</blockquote>';
@@ -317,6 +316,9 @@ function renderToMailView(data){
 				});
 			}, "#"+attrid);
 			var sync_email = $('#inbox-email-type-select').attr("from_email");
+			if(!sync_email){
+				sync_email = CURRENT_AGILE_USER.domainUser.email;
+			}
 			$("#from_name").val(CURRENT_AGILE_USER.domainUser.name);
 			$("#from_email").find('option[value ="'+sync_email+'"]').attr("selected", "selected");
 			$(".ng-show").hide();
@@ -430,13 +432,13 @@ function inboxreplySend(ele,json){
 			enable_send_button($('#sendEmailInbox'));
 			$(".ng-show").show();
 			$(".ng-hide").html("");
-		},
-		error : function(response){
-			enable_send_button($('#sendEmailInbox'));
 			$("#message_sent_alert_info").show();
 			setTimeout(function(){
 			 $("#message_sent_alert_info").hide();
 			}, 5000);
+		},
+		error : function(response){
+			enable_send_button($('#sendEmailInbox'));
 			// Show cause of error in saving
 			$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
 			// Appends error info to form actions
@@ -455,10 +457,12 @@ function extractEmails(toEmails){
 	for(var i=0;i<emails.length;i++){
 		var email = "";
 
-		if(emails[i].indexOf("<") > -1)
+		if(emails[i].indexOf("<") > -1){
 			email = emails[i].split("<")[1].split(">")[0];
-		else
-			email = emails[i];
+		}else{
+			if(emails[i].indexOf("@") > -1)
+				email = emails[i];
+		}
 		
 		if(returnVal == null)
 			returnVal = email;
