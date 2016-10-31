@@ -16,6 +16,54 @@
 <div class="row">
 <br>
 
+{{#is_mobile}}
+
+<div class="col-md-9">
+<form id="landingPageSettingForm">
+<div class="panel panel-default">
+  <div class="panel-heading">{{agile_lng_translate 'landing-pages' 'custom-domain-setup'}}</div>
+  <div class="panel-body">
+    <a id="cname" href="{{cname}}" class="text-info" style="display:none;">{{cname}}</a>
+    <input type="hidden" id="cname_id" value="{{#if id}}{{id}}{{/if}}">
+    <div>
+      <div id="cnameSettingsFields">
+      <p class="text-sm">{{agile_lng_translate 'landing-pages' 'enter-the-domain-setup'}}</p>
+        <div class="col-md-12">
+          <div class="form-group row m-b-xs">
+              <div class="input-group">
+                <span class="input-group-addon">http://</span>
+                <input type="text" value="" class="form-control" id="sub_domain" name="sub_domain" placeholder="{{agile_lng_translate 'landing-pages' 'sub-domain'}}">
+              </div> 
+              <label for="sub_domain" generated="true" class="error m-b-none" style="display: none;color: #d9534f;"></label>
+              <div class="input-group m-t-sm">
+                <span class="input-group-addon">.</span>
+                <input type="text" value="" class="form-control" id="domain" name="domain" placeholder="{{agile_lng_translate 'landing-pages' 'domain-eg'}}">
+              </div>
+              <label for="domain" generated="true" class="error m-b-none" style="display: none;color: #d9534f;"></label>
+              <div class="input-group m-t-sm m-b-sm">
+                <span class="input-group-addon">/</span>
+                <input type="text" value="" class="form-control" id="directory_path" name="directory_path" placeholder="{{agile_lng_translate 'landing-pages' 'optional-directory'}}">
+              </div>
+              <label for="directory_path" generated="true" class="error" style="display:none;color: #d9534f;"></label>
+          </div>
+        </div>
+      <p id="cnameInstructionMessage" class="text-sm" style="display:none;">{{agile_lng_translate 'landing-pages' 'create-a-cname-record'}} &quot;<strong id="cnameHostVal"></strong>&quot; {{agile_lng_translate 'landing-pages' 'and-DESTINATION-as'}} &quot;<strong>landing.agilecrm.com.</strong>&quot;</p>
+    </div>
+    <div class="row">
+      <div class="col-md-12" id="statusMessageHolder"></div>
+      <div class="col-md-12 text-center">
+        <button class="btn btn-sm btn-primary" id="landingPageSettingBtn" data-pageid="{{pageid}}" data-loading-text="Saving...">{{agile_lng_translate 'modals' 'save'}}</button>
+        &nbsp;<a href="#" class="text-info" id="landingPageVerifyBtn" {{#unless cname}} style="display:none;" {{/unless}}>{{agile_lng_translate 'landing-pages' 'verify'}}</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</form>
+</div>
+
+{{else}}
+
 <div class="col-md-9">
 <form id="landingPageSettingForm">
 <div class="panel panel-default">
@@ -69,10 +117,12 @@
 </form>
 </div>
 
+{{/is_mobile}}
+
 
 <div class="col-md-3">
 <div class="data-block">
-         <div class="p-l p-r">
+         <div class="p-l p-r" id="setup-instructions">
             <h4 class="m-t-none">
                {{agile_lng_translate 'landing-pages' 'setup-instructions'}}
             </h4>

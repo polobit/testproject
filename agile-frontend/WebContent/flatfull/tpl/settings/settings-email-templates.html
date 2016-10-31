@@ -116,7 +116,6 @@
         <td>
             <div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
                 <div class="text-base">{{name}}</div>
-                <div class="text-sm">{{subject}}</div>
                 <div class="text-muted text-xs">
                     {{#if created_time}}
                       <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o"></i>
@@ -124,6 +123,7 @@
                       </div>
                     {{/if}}
                 </div>
+                <div class="text-sm">{{subject}}</div>
             </div>
         </td>
     {{else}}

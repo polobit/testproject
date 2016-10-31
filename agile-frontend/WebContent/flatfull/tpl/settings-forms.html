@@ -4,8 +4,8 @@
     <div class="col-md-12">
         {{#is_mobile}}
         	<h3 class="font-thin h4 pull-left forms-title">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
-        	<div class="add-form-btn add-btn-mobile">
-        		<a href="#form-builder-templates" class="btn btn-xs btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+        	<div class="add-form-btn">
+        		<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
         	</div>
         	<div class="clearfix"></div>
         {{else}}
@@ -81,14 +81,14 @@
 	        	{{agile_lng_translate 'form-builder' 'what-are-forms'}}
 	    	</h4>
 			<p>
-				{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
+				{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
 			</p>
     	{{else}}
 	    	<h4 class="h4 m-t-none m-b-sm">
 	        	{{agile_lng_translate 'form-builder' 'what-are-forms'}}
 	    	</h4>
 			<p>
-				{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
+				{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
 			</p>
     	{{/is_mobile}}
 	</div>
@@ -101,21 +101,34 @@
 {{#is_mobile}}
 	<td class="hide"></td>
 	<td>
-		<div class="text-base table-resp">
-			<a target="_blank" href="formbuilder?form={{id}}"><span  style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a>
-		</div>
-		<div class="table-resp text-sm" id="formcode_manager">
-			<a class="codeshare text-info" data-formid="{{id}}">Source Code<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
-		</div>
+		<div class="text-base table-resp"><a target="_blank" href="formbuilder?form={{id}}">{{formName}}</a></div>
 		<div class="text-xs table-resp">
-			<a target="_blank" href="formbuilder?form={{id}}">
-				<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
-					<small class="edit-hover text-muted">
-						<i class="fa fa-clock-o"></i>
-						<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
-					</small>
-				</span>
-			</a>
+			<span class="pull-left">
+				<a target="_blank" href="formbuilder?form={{id}}">
+					<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
+						<small class="edit-hover text-muted">
+							<i class="fa fa-clock-o"></i>
+							<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+						</small>
+					</span>
+				</a>
+			</span>
+			<span class="pull-right">
+				<div class="table-resp" id="form_report">
+					<div class="pull-left text-ellipsis">
+						<a href="#form-reports/{{id}}" class="stop-propagation">
+							<i class="icon-bar-chart"></i>
+						</a>
+					</div>
+				</div>
+	        </span>
+	        <span class="pull-right m-r">
+				<div class="table-resp" id="formcode_manager">
+					<a class="codeshare" data-formid="{{id}}">
+						<i class="fa icon-code" ></i>
+					</a>
+				</div>
+	        </span>
 		</div>
 	</td>
 {{else}}

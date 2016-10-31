@@ -70,10 +70,10 @@
                                  <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
                                     {{#is_mobile}}
                                         <div>
-                                        <h3 class="font-thin h4 pull-left landing-pages-title">
-                                            {{agile_lng_translate 'landing-pages' 'landing-pages'}} <small>
-                                            <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span>
-                                            </small></h3>
+                                            <h3 class="font-thin h4 pull-left landing-pages-title">
+                                                {{agile_lng_translate 'landing-pages' 'landing-pages'}} 
+                                                <span class="label label-sm bg-danger landingpages-beta-tag">{{agile_lng_translate 'deal-view' 'beta'}}</span>
+                                            </h3>
                                         </div>
                                     {{else}}
                                         <div class="">
@@ -131,12 +131,12 @@
                                 </div>
                                 {{#is_mobile}} 
                                     <div class="pull-right add-landing-pages-btn">
-                                        <div class="btn-group right pos-rlt pull-right add-btn-mobile">
-                                            <a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-xs" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                        <div class="btn-group right pos-rlt pull-right">
+                                            <a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
                                         </div>  
                                      </div> 
-                                     <div class="m-r-sm pull-right manage-forms-btn add-btn-mobile">
-                                        <a href="#forms" class="btn btn-default btn-xs btn-addon"><i class="icon-cog"></i>{{agile_lng_translate 'landingpages' 'manage-forms'}}</a>
+                                     <div class="m-r-sm pull-right manage-forms-btn">
+                                        <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>{{agile_lng_translate 'landingpages' 'manage-forms'}}</a>
                                     </div>
                                     <div class="clearfix"></div>
                                 {{else}}
@@ -220,15 +220,6 @@
     <td class="hide"></td>
     <td data="{{id}}" class="data">
         <div class="text-base table-resp">{{name}}</div>
-        <div class="table-resp text-sm">
-            <span>
-                <a href="/landing/{{id}}" class="stop-propagation" target="_blank">{{agile_lng_translate 'landing-pages' 'view'}}</a>
-            </span>
-            <span class="text-xs">|</span>
-            <span>
-                <a href="#landing-page-settings/{{id}}" class="stop-propagation">{{agile_lng_translate 'landing-pages' 'publish'}}</a>
-            </span>
-        </div>
         <div class="text-muted text-xs table-resp">
             <i class="fa fa-clock-o"></i>
             {{#if updated_time}}
@@ -239,6 +230,14 @@
                 <span><em> {{agile_lng_translate 'campaigns' 'created'}}</em></span>
                 <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="margin-left: 2px">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
             {{/if}} 
+        </div>
+        <div class="table-resp">
+            <span class="label bg-light m-r-xs l-h-sm">
+                <a href="/landing/{{id}}" class="stop-propagation" target="_blank">{{agile_lng_translate 'landing-pages' 'view'}}</a>
+            </span>
+            <span class="label bg-light l-h-sm">
+                <a href="#landing-page-settings/{{id}}" class="stop-propagation">{{agile_lng_translate 'landing-pages' 'publish'}}</a>
+            </span>
         </div>
     </td>
 {{else}}

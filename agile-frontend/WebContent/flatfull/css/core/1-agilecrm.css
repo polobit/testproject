@@ -4865,3 +4865,9 @@ ul#recent-menu-model-list li:nth-child(even)
       border-bottom: 5px solid  #fff;
       border-width: 0 10px 10px;
 }
+.b-t-none{
+  border-top: none;
+}
+.m-l-32{
+  margin-left: 32.6%;
+}
