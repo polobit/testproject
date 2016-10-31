@@ -1031,7 +1031,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 <!-- starting of campaign status-->
 {{#if_equals "CAMPAIGN" entity_type}}
 {{#if_equals "CAMPAIGN_CREATE" activity_type}}
-{{agile_lng_translate 'contacts-view' 'created-a-campaign'}} {{#if this.entityObject}} <a class="text-info" href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
+{{agile_lng_translate 'contacts-view' 'created-a-campaign'}} {{#if this.entityObject}} <a href="#workflow/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>	
 <small class="activities_second_line m-t-none text-sm">
  {{#unless this.entityObject}}<i class="icon-sitemap icon-white"></i> {{agile_lng_translate 'contacts-view' 'campaign-deleted-later'}} {{/unless}}
 </span>  
@@ -1039,10 +1039,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{#if_equals "CAMPAIGN_EDIT" activity_type}}
 	{{agile_lng_translate 'contacts-view' 'modified-a-campaign'}} 
 	{{#if this.entityObject}}
-		<a class="text-info" href="#workflow/{{entity_id}}">{{label}}</a>
+		<a href="#workflow/{{entity_id}}">{{label}}</a>
 
 		{{#if this.entityObject.backupExists}}
-			<a href="#" id="campaign-modify-history" class="campaign-history-block text-info" data-entity="{{bindData entityObject}}" data-entity-id='{{entity_id}}' 
+			<a href="#" id="campaign-modify-history" class="campaign-history-block" data-entity="{{bindData entityObject}}" data-entity-id='{{entity_id}}' 
 				style='display: none;position: relative;top: 1px;margin-left: 2px;' title = "More details">
 				<i class="icon-plus text-info"></i></a>
 		{{/if}}
@@ -1395,70 +1395,6 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 <div class="row">
     <div class="col-md-12" id="activity_header">
 
-         <!-- activity_header mobile view start -->
-            {{#is_mobile}}
-
-            <h3 class="activity-heading font-thin h4 m-t-xs pull-left"><span>{{agile_lng_translate 'report-view' 'user-activities'}}</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
-            
-		<div class="pull-right" id="activity-log-header-div" style="margin-bottom:0px !important;">
-		<div class="btn-group pull-left" role="group">
-                <a href="#activities" class="btn btn-default btn-xs bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
-                <a href="#contact-activities" class="btn btn-default btn-xs" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
-            </div>
-            <div class="pull-left" style=" margin-bottom:0px !important;">
-            <div id="activities_date_range" style="line-height:normal; height:22px;" 
-            class="btn-group pull-right activity-date-filter c-p m-t-none">
-            <span class="inline-block btn btn-xs" style="padding: 0px 5px;">
-               <i class="icon-calendar text-xs m-r-xs pos-rlt" style="top:1px;"></i>
-                <span id="range" class="text-xs">{{date-range "today" "-6"}}</span>
-             </span>
-             <span class="inline-block btn btn-xs" style="height:20px; border-left: 1px solid #eee;">
-                <span class="caret  inline-block p-t-xs"></span>
-              </span>
-            </div>
-            </div>
-            <div class="btn-group pull-left activity-log-button c-p m-r-sm">
-                <div class="btn btn-default btn-xs selected_name" id="selectedusername">{{agile_lng_translate 'report-view' 'all-users'}}</div>
-                <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
-                <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu  pull-right" id="user-select" role="menu"></ul>
-            </div>
-		<div class="btn-group pull-left type-task-button c-p">
-                <div class="btn btn-default btn-xs selected_name" id="selectedentity_type">{{agile_lng_translate 'report-view' 'all-activities'}}</div>
-                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" href="#">
-                <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu pull-right" id="entity_type" role="menu">
-					 <li><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
-					 </li>
-                     <li><a href="CALL">{{agile_lng_translate 'portlets' 'calls'}}</a></li>
-                    <li><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
-                    </li>  
-                     <li><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
-                     
-                     
-					{{#hasMenuScope 'DEALS'}}
-                     	<li><a href="DEAL">{{agile_lng_translate 'report-view' 'deals'}}</a></li>
-					{{/hasMenuScope}}
-                    {{#hasMenuScope 'DOCUMENT'}}
-                        <li><a href="DOCUMENT">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
-                    {{/hasMenuScope}}
-					 <li><a href="EVENT">{{agile_lng_translate 'contact-details' 'events'}}</a></li>
-					 <li><a href="EMAIL_SENT">{{agile_lng_translate 'contact-details' 'emails'}}</a></li>
-					 <li><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
-					 <li><a href="TICKET">Tickets</a></li>
-					<li><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
-                </ul>
-            </div>            
-        </div>
-        
-        <div class="clearfix"></div>
-
-        <!-- activity_header mobile view end -->
-
-            {{else}}
-
             <h3 class="activity-heading font-thin h3  pull-left"><span>{{agile_lng_translate 'report-view' 'user-activities'}}</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h3>
             
 		<div class="pull-right" id="activity-log-header-div">
@@ -1515,8 +1451,6 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
         </div>
         
         <div class="clearfix"></div>
-
-        {{/is_mobile}}
    
     
 </div>

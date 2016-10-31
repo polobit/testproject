@@ -30,10 +30,11 @@
 
         <div class="table-resp text-xs text-muted l-h-xs">
         <div class="text-ellipsis">{{campaign}}</div>
+        </div>
+
         {{#if is_disabled}}
         <div><label class="label label-danger m-b-none">{{agile_lng_translate 'campaigns' 'disabled'}}</label></div>
         {{/if}}
-        </div>
 
     </td>        
 
@@ -55,27 +56,14 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
 			
-            	 {{#is_mobile}}
-                    <h3 class="pull-left font-thin h4 m-t-xs">{{agile_lng_translate 'campaigns' 'list-of-triggers'}}</h3>
-
-                    <div class="pull-right add-btn-mobile">
-                    <a href="#trigger-add" class="btn right btn-default btn-xs btn-addon" id="addTrigger">
-                    <i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}
-                    </a>
-                    </div>
-                    <div class="clearfix"></div>
-
-                 {{else}}
-
                     <h3 class="pull-left font-thin h3">{{agile_lng_translate 'campaigns' 'list-of-triggers'}}</h3>
 
-                    <div class="pull-right">
+                    <div class="pull-right add-campaign-btn">
                     <a href="#trigger-add" class="btn right btn-default btn-sm btn-addon" id="addTrigger">
                     <i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}
                     </a>
                     </div>
                     <div class="clearfix"></div>
-                {{/is_mobile}}
 
     </div>
 </div>

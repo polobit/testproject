@@ -2,26 +2,10 @@
     {{#is_mobile}}
     <td class="hide data" data="{{id}}">{{id}}</td>
     <td>
-    <div class="table-resp l-h-xs"><a class="text-cap">{{name}}</a></div>
+    <div class="table-resp"><a class="text-cap">{{name}}</a></div>
 
-    <div class="workflow-triggers text-sm" workflow-id={{id}}>
-    <div class="table-resp l-h-sm">
-            <a href="#trigger-add/{{id}}" class="stop-propagation text-info">
-                <i class="icon-plus txt-11"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}
-            </a>
-        </div>
-        </div>
-            
-            <div class="table-resp l-h-xs">
-            <div class="pull-left text-ellipsis m-r-sm">
-            <a href="#email-reports/{{id}}" class="stop-propagation"><i class="icon icon-bar-chart text-xs"></i></a>
-            </div>
-
-            <div class="pull-left m-r-sm">
-            <a href="#activities/campaign/{{id}}" class="stop-propagation" ><i class=" icon icon-cogs inline-block m-t-xxs text-xs"></i></a>
-            </div>
-
-        {{#if updated_time}}
+    <div class="table-resp">
+    {{#if updated_time}}
         <div class="text-ellipsis">
             <small class="edit-hover text-muted"> 
                 <i class="fa fa-clock-o"></i>
@@ -39,6 +23,25 @@
             </small>
         </div>
         {{/if}}
+        </div>
+            
+            <div class="table-resp">
+
+             <div class="workflow-triggers text-sm pull-left agile-thumb"
+              workflow-id={{id}}>
+    <div class="table-resp">
+            <a href="#trigger-add/{{id}}" class="stop-propagation label bg-light" style="padding:3px 6px; color: #58666e;">
+                 {{agile_lng_translate 'campaigns' 'add-trigger'}}
+            </a>
+        </div>
+        </div>
+
+            <div class="pull-right text-ellipsis">
+            <a href="#email-reports/{{id}}" class="stop-propagation m-r-sm"><i class="icon icon-bar-chart text-xs"></i></a>
+
+             <a href="#activities/campaign/{{id}}" class="stop-propagation" ><i class=" icon icon-cogs inline-block m-t-xxs text-xs"></i></a>
+            </div>
+        
         </div>
 
         <div>
@@ -184,7 +187,7 @@
         <div class="panel panel-default">
             <div class="panel-heading b-n">{{agile_lng_translate 'campaigns' 'campaigns-list'}} </div>
             <div class="table-responsive">
-            <table class="table m-b-none agile-table panel no-sorting" url="core/api/workflows/bulk" id="workflows-tour-step">
+            <table class="table m-b-none agile-table panel onlySorting" url="core/api/workflows/bulk" id="workflows-tour-step">
                 
                 <tbody id="workflows-model-list" route="workflow/" class="c-p"> </tbody>
             </table>
@@ -259,25 +262,8 @@
             </div>
          </div>
       </div>
-      
-      {{#is_mobile}}
 
-      <div class="pull-right add-campaign-btn">
-         <div>
-            <div class="btn-group right pos-rlt pull-left">
-               <a href="#workflow-templates" class="btn btn-default btn-xs" id="addWorkflow"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-campaign'}}</a>
-               <a id="campaign-stats" class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></a>
-               <ul class="dropdown-menu pull-right p-none" style="min-width:100%;">
-                  <li><a href="#campaign-stats" id="campaign-stats" style="    padding: 2px 10px;" class="text-xs"><i class="icon-bar-chart"></i> {{agile_lng_translate 'campaigns' 'compare-campaigns'}}</a></li>
-               </ul>
-            </div>
-         </div>
-      </div>
-      <div class="clearfix"></div>
-
-      {{else}}
-
-      <div class="pull-right m-t-xs">
+      <div class="pull-right m-t-xs add-campaign-btn">
          <div>
             <!-- <a id="campaign_logs" class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left" href="#">{{agile_lng_translate 'report-view' 'reports'}}</a>
             <a href="#email-templates" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon"><i class="icon-cog"></i> {{agile_lng_translate 'campaigns' 'manage-email-templates'}}</a>
@@ -293,8 +279,6 @@
          </div>
       </div>
       <div class="clearfix"></div>
-
-      {{/is_mobile}}
 
    </div>
 </div>

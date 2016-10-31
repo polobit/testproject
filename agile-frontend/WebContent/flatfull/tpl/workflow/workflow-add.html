@@ -17,7 +17,7 @@
 <!-- End of IE conditional check-->
 
     <div class="col-md-12">
-        <div class="panel wrapper campaign-new-add">
+        <div class="panel wrapper {{#is_mobile}}p-b-none{{/is_mobile}} campaign-new-add">
             <form id="workflowform" >
                 <fieldset>
                     {{#is_mobile}}
@@ -33,7 +33,7 @@
 								<div class="col-md-3 col-sm-3 col-xs-12">
 									<span id="workflow-msg" class="text-center"></span>
 								</div>
-								<div class="col-md-4 col-sm-5 col-xs-12">
+								<div class="col-md-4 col-sm-5 need-help-video">
 
 									<div><a data-toggle="modal" id="workflow-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">{{agile_lng_translate 'campaigns' 'need-help-watch-our-tutorial'}}</a></div>
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
@@ -186,12 +186,12 @@
 					<div id="designer-tour">
                     <IFRAME SRC="designer.html" id="designer" frameBorder="0" name="designer" WIDTH="100%" HEIGHT="900px"></IFRAME>
                     </div>
-                    <div class="m-t m-b">
+                    <div class="m-t {{#is_mobile}}{{else}}m-b{{/is_mobile}}">
 						<a href="#" class="text-info" id="workflow-unsubscribe-option">
 							<i class="icon-plus"></i> {{agile_lng_translate 'campaigns' 'manage-unsubscription'}}
 						</a>
 					</div>
-					<div id="workflow-unsubscribe-block" style="display:none">
+					<div id="workflow-unsubscribe-block" class="m-t-sm" style="display:none">
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -208,7 +208,6 @@
                         </div>
 						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agilecan-unsubscribe-desc'}}</div>
                         <br/>
-                        <br>
                     	<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -221,7 +220,6 @@
                         </div>
 						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}</div>
                         <br/>
-                        <br>
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -236,7 +234,6 @@
 						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc'}}</div>
 						
 
-						<br/>
 						<br/>
 						<div class="row">
 							<div class="control-group form-group">
@@ -285,7 +282,6 @@
                         </div>
 						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'when-a-contact-unsubscribes-from-your-campaign'}}</div>
 						<br/>
-						<br/>
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
@@ -298,10 +294,8 @@
                         </div>
                         <div class="text-sm text-light"> {{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc1'}}</div>
 						<br/>
-						<br/>
                         <small>{{agile_lng_translate 'campaigns' 'unsubscribed-contacts-are-not-sent'}}</small>
                         <br/>
-						<br/>
 					</div>
 
 					<div class="row">
@@ -317,6 +311,10 @@
 						</div>
                 	</div>
                     </div>
+
+                    {{#is_mobile}}
+
+                    {{else}}
 
                     {{#if is_new}}
 						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
@@ -340,6 +338,8 @@
 							</ul>
            				</div>
                     {{/if}}
+                    {{/is_mobile}}
+
                     <div class="save-workflow-img inline-block"></div>
                     <br />
                 </fieldset>
