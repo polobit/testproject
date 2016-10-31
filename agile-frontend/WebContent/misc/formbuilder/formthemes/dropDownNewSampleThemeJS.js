@@ -636,6 +636,8 @@
 							}
 					    }
 						$(".createCustomFormContent .agile-group .agile-field button").css("background-color",themecolor);
+						$(".createCustomFormContent .agile-group .agile-field button").css("border-color",themecolor);
+						
 					    var css=".agile-group .agile-field button{background-color:"+themecolor+";border-color:"+themecolor+"}";
 						var eleThemeCss=new EleThemeCss("ButtonBackground/buttonBackground",css);
 					}
