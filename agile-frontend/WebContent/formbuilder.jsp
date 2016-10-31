@@ -46,18 +46,6 @@ String template = request.getParameter("template");
             <div class="col-md-6">
                <div class="clearfix">
                   <h2 id="form-label">Your Form</h2>
-                  <!-- <div class="btn-group open" style="margin-top: -40px;margin-left: 270px;padding-right: 10px;">
-                    <a href="#" onclick="createCustTheme()" class="btn btn-default btn-sm" data-toggle="modal" data-target="#customThemeModal"><i class="fa fa-plus-circle"></i> Add Theme</a>
-                    <button class="btn btn-default btn-sm dropdown-toggle" onclick="chooseThemeFunc()" data-toggle="dropdown" aria-expanded="true" style="padding-bottom: 13px;padding-top: 11px;"><span class="caret"></span>
-                    </button>
-         
-                    <div class="dropdown-content">
-                      <div id="defaultThmLbl" class="themeDiv">
-                        <i style="width:10%;color: #337ab7;" class="fa fa-check"></i>
-                        <a href="#" style="background-color: transparent;text-decoration: none;" class="themeEle" onclick="selectedThemeFunc(this)">default</a>
-                      </div>
-                    </div>
-                  </div> -->
                   <div class="form-group themesSelectEleDiv col-md-4" style="margin-top: -35px;margin-left: 230px;padding-right: 10px;">
                     <select class="form-control themesSelectEle">
                       <option id="chooseTheme">Choose Theme</option>
@@ -72,17 +60,14 @@ String template = request.getParameter("template");
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
-                        <!-- <label>Custom Theme:</label> <div style="display:-webkit-box;padding-bottom: 10px;">-->
                         <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="15"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
 
                       </div>
                         </div>
                         
                         <div class="modal-body" style="height: 400px;">
-                        <!-- onblur="validThemeNameFunc()" -->
-                 <!-- <div style="display:-webkit-box;border-bottom: 1px solid #9E9E9E;padding-bottom: 10px;"><label>Theme Name:</label><input type="text" name="themeName" id="themeName" onblur="validThemeNameFunc()" maxlength="15"><span id="errorSpan" style="display: table-cell;color:red;"></span></div> -->
-    
-        <!--ThemeBuilder Div-->
+                        
+    <!--ThemeBuilder Div-->
     <div class ="col-sm-6 outerSelectTheme" >
       <!--Select Div Start-->
       <div class="selectDiv">
@@ -231,9 +216,9 @@ String template = request.getParameter("template");
           <div class="innerFontSizeUlDiv">
             <select class="form-control" style="padding:0px;">
               <option value="normal">Normal</option>
-              <option value="lighter">Lighter</option>
+              <!-- <option value="lighter">Lighter</option> -->
               <option value="bold">Bold</option>
-              <option value="bolder">Bolder</option>
+              <!-- <option value="bolder">Bolder</option> -->
             </select>
           </div>
         </div>
@@ -367,9 +352,25 @@ String template = request.getParameter("template");
                      </div>
                   </div>
 
-                 
-                
-                  <input id="form-save" type="button" class="btn btn-info" style="background-color: #fff;color: #000;border-color: #ccc;font-size: 13px;padding-left: 19px;padding-right: 19px;padding-bottom: 8px;padding-top: 10px;margin-right: 35px;margin-top: -36px;" value="Save Form">
+                <!-- Apply or delete theme popup--> 
+                <div class="modal fade" id="customThemeAppyDelModal" role="dialog">
+                    <div class="modal-dialog" style="    left: 0;position: static;margin-top: 107px;margin-left: 504px;height: 68px;width: 250px;">
+                      
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" id="closetheme" class="close" data-dismiss="modal" onclick="closeApplyTheme(this)">&times;</button>
+                          <div class="modal-title">Choose the option</div>
+                        </div>
+                        <div class="modal-body">
+                         <button type="button" id="applytheme" class="btn btn-sm btn-default" onclick="closeApplyTheme(this)" data-dismiss="modal">Apply Theme</button>
+                         <button type="button" id="deltheme" class="btn btn-sm btn-default" onclick="closeApplyTheme(this)" data-dismiss="modal">Delete Theme</button>
+                        </div>
+                        <!-- <div class="modal-footer"></div> -->
+                      </div>
+                    </div>
+                  </div>      
+                <!-- Apply or delete theme popup--> 
+                  <input id="form-save" type="button" class="btn btn-info" style="/*background-color: #fff;color: #000;border-color: #ccc;*/font-size: 13px;padding-left: 19px;padding-right: 19px;padding-bottom: 8px;padding-top: 10px;margin-right: 35px;margin-top: -36px;" value="Save Form">
                   <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
@@ -449,16 +450,6 @@ String template = request.getParameter("template");
                   }
                   
                   function selectedThemeFunc(identifier){
-                    /*var themeDivArr=$(".themeDiv");
-                    $.each(themeDivArr,function(index,value){
-                      $(this).find("i").removeClass("fa");
-                      $(this).find("i").removeClass("fa-check");
-                      $(this).find("i").addClass("ipadding");
-                     });
-                    var themeVal= $(identifier).text();
-                    $(identifier).parent().find("i").addClass("fa");
-                    $(identifier).parent().find("i").addClass("fa-check");
-                    $(identifier).find("i").removeClass("ipadding");*/
                     var themeId=$(".themesSelectEle option:selected").attr("id");
                     var themeVal=$(".themesSelectEle option:selected").text();
                     console.log("Selected Theme Value:"+themeVal);
@@ -468,32 +459,25 @@ String template = request.getParameter("template");
                     }
                     else{
                       formtheme=themeVal;
-                      }
-                     /*$(".dropdown-content").css("display","none");*/
-                     if(formtheme != null){
-                              $.each( customthemes, function( index, value ) {
-                                        $(document.getElementById("target")).removeClass("form"+value.id);
-                                         $(document.getElementById("agileCustTheme")).empty();
-                              });
-                              if(formtheme != "Choose Theme"){
-                               $.ajax({
-                                      type : 'POST',
-                                      url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
-                                      async : false,
-                                      contentType : 'application/json',
-                                      data : formtheme,
-                                      success: function(data){
-                                        currApplThm=data.name;
-                                        $(document.getElementById("target")).addClass("form"+data.id);
-                                        $(document.getElementById("agileCustTheme")).text(data.themeCss);
-                                        
-                                      },
-                                      error: function(){
-                                        alert("Theme style not been appended!!");
-                                }});
-                             }
-                      }
+                    }
+                    if(formtheme != null){
+                        $.each( customthemes, function( index, value ) {
+                            $(document.getElementById("target")).removeClass("form"+value.id);
+                            $(document.getElementById("agileCustTheme")).empty();
+                        });
+                        if(formtheme != "Choose Theme"){
+                            $.each( customthemes, function( index, value ) {
+                              if(value.name==formtheme){
+                                  currApplThm=value.name;
+                                  $(document.getElementById("target")).addClass("form"+value.id);
+                                  $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                              }
+                            }); 
+                        }
+                    }
+                  
                   }
+                  
                   function saveCustTheme(){
                     var thmExist=validThemeNameFunc();
                     console.log(themeArray);
@@ -547,15 +531,13 @@ String template = request.getParameter("template");
                                      console.log("Final CustomTheme:"+data);
                                     if(data!=undefined && data!=""){
                                     customthemes.push(data);
-                                    /*var inputTheme='<div class="themeDiv"><i style="width:10%;color: #337ab7;" class="ipadding"></i><a id="form'+data.id+'" href="#" style="background-color: transparent;text-decoration: none;" class="themeEle"  onclick="selectedThemeFunc(this)">'+data.name+'</a><a href="#" style="text-decoration:none;" class="themeEleDelete fa fa-times-circle-o" onclick="deleteTheme(this)"></a></div>';
-                                      $(inputTheme).insertAfter("#defaultThmLbl");*/
-                                      var inputTheme='<option id="form'+data.id+'">'+data.name+'</option>';
-                                      $(inputTheme).insertAfter("#chooseTheme");
+                                    var inputTheme='<option id="form'+data.id+'">'+data.name+'</option>';
+                                    $(inputTheme).insertAfter("#chooseTheme");
                                    }
                                   },
                                   error: function(){
                                     alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
-                                   }
+                                  }
                               });
                           }
                           },
@@ -578,51 +560,33 @@ String template = request.getParameter("template");
                     if(themeName==null || themeName.length<=0){
                       $("#errorSpan").text("Please provide valid theme name ");
                     }
-                    /*if(themeName.split(" ").length>1){
-                      $("#errorSpan").text("Space not allowed");
-                      $("#themeName").val("");
-                    }*/
-                    /*else {
-                        if(!themeNamePattern.test(themeName)){
-                       
-                          $("#errorSpan").text("Provided theme name should starts with a letter and should contain atleast two characters and not contain special characters");
-                          $("#themeName").val("");
-                       }*/
-                        else{
-                          
-                              $.each( themesListAsArr, function( index, value ) {
-                                  if(value==themeName){
-                                    isThemeNameExist=true;
-                                    $("#errorSpan").text("Provided theme name matches with existing themes.Please provide valid theme name.");
-                                  }
-                              });
-                              if(!isThemeNameExist){
-                                $("#errorSpan").text("");
+                    else{
+                          $.each( themesListAsArr, function( index, value ) {
+                              if(value==themeName){
+                                isThemeNameExist=true;
+                                $("#errorSpan").text("Provided theme name matches with existing themes.Please provide valid theme name.");
                               }
-                        }
-                     /* }*/
+                          });
+                          if(!isThemeNameExist){
+                            $("#errorSpan").text("");
+                          }
+                    }
+                    
                      return isThemeNameExist;
                   }
 
-                  function deleteTheme(identifier){
-                    var deleteThemeVal=$(identifier).prev().text();
-                    var deleteThemeId =$(identifier).prev().attr("id");
-                    var isDeleteSelectTheme=$(identifier).prev().prev().hasClass("fa-check");
-                    if(isDeleteSelectTheme==true){
-                      var themeElem=$(".themeDiv");
-                      $(themeElem[0]).find("i").addClass("fa");
-                      $(themeElem[0]).find("i").addClass("fa-check");
-                      $(themeElem[0]).find("i").removeClass("ipadding");
-                    }
-                  var parentDiv=$(identifier).parent();
-                     console.log("Requsted deleteThemeVal is:"+deleteThemeVal);
-                     $.ajax({
+                function deleteTheme(themeName){
+                  var deleteThemeVal = themeName;
+                  var deleteThemeId = $(".themesSelectEle option:selected").attr("id");
+                    
+                  console.log("Requsted deleteThemeVal is:"+deleteThemeVal);
+                  $.ajax({
                                 type : 'GET',
                                 url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/deleteTheme?themeName='+deleteThemeVal,
                                 success: function(data){
                                   console.log("DELETED THEME?"+data);
                                   
-                                    $(parentDiv).remove();
+                                    /*$(parentDiv).remove();*/
                                     $.each( themesListAsArr, function( index, value ){
                                       if(value==deleteThemeVal)
                                       themesListAsArr.splice(index,1);
@@ -638,13 +602,19 @@ String template = request.getParameter("template");
                                             } 
                                         }  
                                     });
-                                  
+                                    if(currApplThm==themeName){
+                                      currApplThm="Choose Theme";
+                                      selectedThemeFunc();
+                                    }
+                                    $(".themesSelectEle option:selected").remove();
+                                    $(".themesSelectEle").val(currApplThm);
                                 },
                                 error: function(err){
                                   alert("Theme is not getting deleted AJAX ERROR is::"+JSON.stringify(err, null, 2));
                                 }
                       });
                   }
+
                   function createCustTheme(){
 
                     if($("#render")!=undefined && $("#render")!=null){
@@ -655,6 +625,7 @@ String template = request.getParameter("template");
                     defaultFormEleFun();
                     custThemePopUpCode();
                   }
+
                   function closeAddTheme(){
                      $(".createCustomFormContent").empty();
                      $("#themeName").val("");
@@ -666,15 +637,34 @@ String template = request.getParameter("template");
                   $(".themesSelectEle").change(function(identifier){
                         chooseThemeFunc();
                         var themeId=$(".themesSelectEle option:selected").attr("id");
-                        console.log(themeId);
+                        /*console.log(themeId);*/
                         if(themeId == "addNewTheme"){
+                          
                           createCustTheme();
                           $('#customThemeModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                         }
-                        else{
+                        else if(themeId=="chooseTheme"){
                           selectedThemeFunc(identifier);
                         }
+                        else{
+                          $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+                          }
                   });
+                  function closeApplyTheme(identifier){
+
+                    /*console.log(identifier);*/
+                    var selectedVal = identifier.id;
+                    if(selectedVal == "applytheme"){
+                      selectedThemeFunc(identifier);
+                    }
+                    else if(selectedVal == "deltheme"){
+                      var currThm=$(".themesSelectEle").val();
+                      deleteTheme(currThm);
+                    }
+                    else if(selectedVal == "closetheme"){
+                      $(".themesSelectEle").val(currApplThm);
+                    }
+                  }
                   
       </script>
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>

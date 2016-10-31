@@ -11,25 +11,11 @@ define([
 		var form = {};
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
-		/*var themeVal= $( "input:checked" ).val()*/;
-		/*var themeVal=null;
-		var themeDivArr=$(".themeDiv");
-                    $.each(themeDivArr,function(index,value){
-                      if($(this).find("i").hasClass("fa") &&
-                      $(this).find("i").hasClass("fa-check")){
-                      	themeVal=$(this).find(".themeEle").text();
-                      }
-                      
-                     });*/
-         var themeVal =$(".themesSelectEle option:selected").text();
+		
+        var themeVal =$(".themesSelectEle option:selected").text();
     
-		 var custThmDiv = document.createElement("div");
-		 custThmDiv.setAttribute("id","formContent");
-		 $("body").append(custThmDiv);
-		 $("#formContent").css("display","none");
-		 $("#formContent").html($("#render").val());
-		 /*$("#formContent .form-view").addClass(themeVal);*/
-		 $.ajax({
+		 
+		 /*$.ajax({
 			type : 'POST',
 			url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
 			async : false,
@@ -38,7 +24,6 @@ define([
 			success: function(data){
 				console.log("DATA COMING!!!"+data);
 				if(!(data==""||data==undefined)){
-				/*var style='<style id="'+data.name+data.id+'" type="text/css">'+data.themeCss+'</style>';*/
 				var style='<style id="custTheme'+data.id+'" type="text/css">'+data.themeCss+'</style>';
 				$("#formContent .form-view").addClass("form"+data.id);
 				$("#formContent").append(style);
@@ -47,11 +32,26 @@ define([
 			error: function(e){
 				console.log("Theme not found!!"+e);
 			}
-		});
+		});*/
 
-		$("#render").val($("#formContent").html());
+		if(themeVal!="Choose Theme"){
+			 var custThmDiv = document.createElement("div");
+			 custThmDiv.setAttribute("id","formContent");
+			 $("body").append(custThmDiv);
+			 $("#formContent").css("display","none");
+			 $("#formContent").html($("#render").val());
+			$.each( customthemes, function( index, value ) {
+			if(value.name==themeVal){
+				var style='<style id="custTheme'+value.id+'" type="text/css">'+value.themeCss+'</style>';
+				$("#formContent .form-view").addClass("form"+value.id);
+				$("#formContent").append(style);
+				$("#render").val($("#formContent").html());
+			}
+		}); 
+		}
+		
 		form.formHtml = $("#render").val();
-		console.log("render val:::"+form.formHtml);
+		/*console.log("render val:::"+form.formHtml);*/
 		if(formNumber){
 			form.id = formNumber;
 		}

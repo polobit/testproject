@@ -126,13 +126,13 @@ background-color:#3E8AD8;
 	background-color:#9E9E9E;
 	text-decoration:none;
 }
-themeEleDelete:hover{
+.themeEleDelete:hover{
 	text-decoration:none;
 }
 .ipadding{
-	/*padding-right: 28px;*/
+	/*padding-right: 28px;,#form-save:hover*/
 }
-#form-preview:hover,#form-save:hover{
+#form-preview:hover{
 	background-color: #e6e6e6!important;
 }
 .createCustomFormContent{
@@ -142,4 +142,7 @@ themeEleDelete:hover{
 .createCustomFormContent .theme1 .i-checks input:checked+i:before {
     width: 11px;
     height: 11px;
+}
+.createCustomFormContent .agile-group button {
+    pointer-events: none;
 }
