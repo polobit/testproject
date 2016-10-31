@@ -1016,8 +1016,8 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 	{
 		var that=this.contact_popover;
 		insidePopover=false;
-		confirmandVerifyEmail()
 		sendMail(id,subject,body,cc,bcc,that,true);
+		confirmandVerifyEmail();
 	
 	},
 	
