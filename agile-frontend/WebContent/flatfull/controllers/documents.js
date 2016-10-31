@@ -627,7 +627,7 @@ function initializeDocumentsListeners()
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
-	$('#uploadDocumentUpdateModalForm,#uploadDocumentForm').on('click', '.link', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
