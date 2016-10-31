@@ -70,6 +70,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.validator.TagValidator;
@@ -1952,17 +1953,21 @@ public class CSVUtil
 	 */
     	Long time = System.currentTimeMillis();
     	stats.put("end_time", dateTimeFormat.format(time));
+    	String domain = domainUser.domain;
+		domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domain);
 	if (totalRecords >= 1)
 	{
 	    String[] strArr = { "text/csv", "Import_Contacts_Remarks.csv", csvData };
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	    
 	}
 	else
 	{
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		    new Object[] { domainUser, status });
 	}
+	domainUser.domain = domain;
 	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Import Status"+domainUser.domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
 		    new Object[] { stats});
 
@@ -1976,7 +1981,7 @@ public class CSVUtil
     	 * HashMap<String, String> map = new HashMap<String, String>();
     	 * map.put("count", totalRecords);
     	 */
-
+		domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
     	if (totalRecords >= 1)
     	{
     	    String[] strArr = { "text/csv", "Import_Companies_Remarks.csv", csvData };

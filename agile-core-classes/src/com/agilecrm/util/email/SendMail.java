@@ -123,7 +123,7 @@ public class SendMail
     public static final String CSV_IMPORT_DELAY_NOTIFICATION = "csv_delay_notifier";
     public static final String CSV_IMPORT_DELAY_NOTIFICATION_SUBJECT = "CSV Import Delay";
 
-    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
+    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";	
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
     public static final String EXPORT_DEALS_CSV = "export_csv";
     public static final String EXPORT_DEALS_CSV_SUBJECT = "Agile CRM Deals CSV";

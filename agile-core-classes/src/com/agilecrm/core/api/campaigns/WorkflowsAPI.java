@@ -33,6 +33,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
@@ -575,7 +576,7 @@ public class WorkflowsAPI {
 			map.put("type", "Workflow");
 			map.put("senderName", domainUser.name);
 			map.put("senderId", domainUser.id.toString());
-			map.put("senderDomain", domainUser.domain);
+			map.put("senderDomain", AliasDomainUtil.getCachedAliasDomainName(domainUser.domain));
 
 			SendMail.sendMail(recEmail, SendMail.SHARE_CAMPAIGN_SUBJECT,
 					SendMail.SHARE_CAMPAIGN_CONFIRMATION, map,
