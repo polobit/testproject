@@ -601,13 +601,13 @@ var SettingsRouter = Backbone.Router
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
 
-						/*if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
+						if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
 						{
 							if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
 							{
 								window.location.href  = window.location.origin+"/#emailbuilder-templates";
 							}
-						}*/
+						}
 						
 						agileTimeAgoWithLngConversion($(".created_time", el));
 

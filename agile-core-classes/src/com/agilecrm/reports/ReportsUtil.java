@@ -443,7 +443,7 @@ public class ReportsUtil {
 		// Store date fields for easy verification. It is used to convert epoch
 		// times into date values
 		List<String> dateFields = new ArrayList<String>();
-
+		
 		for (CustomFieldDef def : fields) {
 			for (String field : fields_set) {
 				if (!field.contains("custom"))
@@ -477,10 +477,11 @@ public class ReportsUtil {
 			 }	
 
 		List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
-
+		int index = 0;
 		for (Object contactObject : contactList) {
 			List<Map<String, Object>> customProperties = new ArrayList<Map<String, Object>>();
 			List<Map<String, Object>> contactProperties = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> contactTagNames = new ArrayList<Map<String, Object>>();
 			Contact contact = (Contact) contactObject;
 
 			Map<String, List<Map<String, Object>>> details = new HashMap<String, List<Map<String, Object>>>();
@@ -563,11 +564,29 @@ public class ReportsUtil {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				} else {
+				} else if (field.contains("tags")) {
+					// Map for tags
+					Map<String, Object> tagsMap = new HashMap<String, Object>();
+					
+					LinkedHashSet<String> tags = contact.getContactTags();
+					if(tags != null){
+						Iterator<String> itr = tags.iterator();
+						while (itr.hasNext()) {
+							Map<String, Object> tagMap = new HashMap<String, Object>();
+							tagMap.put("tag", itr.next());
+							
+							contactTagNames.add(tagMap);
+						}
+						
+						tagsMap.put("tags", contactTagNames);
+						contactProperties.add(tagsMap);
+					}
+				}
+				else {
 
 					ObjectMapper mapper = new ObjectMapper();
 					JSONObject contactJSON = new JSONObject();
-					String fieldValue = null;
+					String fieldValue = "";
 
 					try {
 						contactJSON = new JSONObject(
@@ -613,6 +632,8 @@ public class ReportsUtil {
 
 					if (fieldValue == null)
 						fieldsMap.put(field, new ContactField());
+					else if(fieldValue.trim().length() == 0)
+						fieldsMap.put(field, "-");
 					else
 						fieldsMap.put(field, fieldValue);
 
@@ -624,7 +645,11 @@ public class ReportsUtil {
 
 			details.put("details", contactProperties);
 			details.put("custom_fields", customProperties);
-
+			
+			if(++index == contactList.size())
+			    details.put("last", contactProperties);
+			
+			System.out.println("Details :"+details);
 			newProperties.add(details);
 		}
 

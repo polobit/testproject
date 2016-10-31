@@ -327,7 +327,7 @@ var portlet_utility = {
 	/**
 	 * To get outer view of each portlet, it is calling from set_p_portlets()
 	 */
-	getOuterViewOfPortlet : function(base_model, el, callback) {
+	getOuterViewOfPortlet : function(base_model, el, model_list_element_fragment_portlets,callback) {
 		var templates_json = {
 			"Filter Based" : "portlets-contacts-filterbased",
 			"Emails Opened" : "portlets-contacts-emails-opened",
@@ -381,9 +381,8 @@ var portlet_utility = {
 		var size_x = base_model.get("size_x");
 		var size_y = base_model.get("size_y");
 
-		if ($('.gridster > div:visible > div', el).length == 0)
-			$('.gridster > div:visible', el).html(
-					$(App_Portlets.portletOuterView.render().el).attr(
+		if ($('.gridster > div:visible > div', el).length == 0){
+			model_list_element_fragment_portlets.appendChild($(App_Portlets.portletOuterView.render().el).attr(
 							"id",
 							"ui-id-" + column_position + "-"
 									+ row_position).attr(
@@ -391,10 +390,13 @@ var portlet_utility = {
 							"data-sizex", size_x).attr(
 							"data-col", column_position)
 							.attr("data-row", row_position)
-							.addClass('gs-w panel panel-default'));
+							.addClass('gs-w panel panel-default')[0]);
+			
+		}
 		else
-			$('.gridster > div:visible > div:last', el).after(
-					$(App_Portlets.portletOuterView.render().el).attr(
+		{
+			
+				model_list_element_fragment_portlets.appendChild($(App_Portlets.portletOuterView.render().el).attr(
 							"id",
 							"ui-id-" + column_position + "-"
 									+ row_position).attr(
@@ -402,7 +404,9 @@ var portlet_utility = {
 							"data-sizex", size_x).attr(
 							"data-col", column_position)
 							.attr("data-row", row_position)
-							.addClass('gs-w panel panel-default'));
+							.addClass('gs-w panel panel-default')[0]);
+				//$('.gridster > div:visible > div:last', el).after(model_list_element_fragment);
+			}
 
 		return callback();
 
@@ -471,12 +475,17 @@ var portlet_utility = {
 	/**
 	 * To get inner view of each portlet, it is calling from set_p_portlets()
 	 */
-	getInnerViewOfPortlet : function(base_model, el) {
+	getInnerViewOfPortlet : function(base_model, el,model_list_element_fragment_portlets) {
 		var column_position = base_model.get('column_position'), row_position = base_model
 				.get('row_position');
 		var pos = '' + column_position + '' + row_position;
-		var portlet_name = base_model.get('name'), portlet_ele = $(
-				'#ui-id-' + column_position + '-' + row_position, el).find(
+		var portlet_name = base_model.get('name');
+		var portlet_ele;
+		if(model_list_element_fragment_portlets)
+		 portlet_ele= $(model_list_element_fragment_portlets.querySelector('#ui-id-' + column_position + '-' + row_position)).find(
+				'.portlet_body');
+		else
+			 portlet_ele=$('#ui-id-' + column_position + '-' + row_position,el).find(
 				'.portlet_body');
 		portlet_ele
 				.attr('id', 'p-body-' + column_position + '-' + row_position);
@@ -1069,8 +1078,12 @@ var portlet_utility = {
 			break;
 		}
 		case "Stats Report": {
-			portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
-					el).find('.stats_report_portlet_body');
+			if(model_list_element_fragment_portlets)
+					portlet_ele = $(model_list_element_fragment_portlets.querySelector('#ui-id-' + column_position + '-' + row_position))
+					.find('.stats_report_portlet_body');
+					else
+						portlet_ele =('#ui-id-' + column_position + '-' + row_position,el)
+					.find('.stats_report_portlet_body');
 			var that = portlet_ele;
 			var newContactsurl = '/core/api/portlets/activity-overview-report?reportType=newContacts&duration='
 					+ base_model.get('settings').duration
@@ -1225,6 +1238,9 @@ var portlet_utility = {
 		}
 		case "Mini Calendar": {
 
+						$('.gridster-portlets').load(".portlet_body_calendar",function() {
+                console.log("hi")
+           
 								$('.portlet_body_calendar', $("#ui-id-"+column_position+"-"+row_position))
 										.attr(
 												'id',
@@ -1252,6 +1268,8 @@ var portlet_utility = {
 					});
 
 							});
+ }
+            );
 			break;
 		}
 		case "Onboarding" : {
@@ -1265,9 +1283,12 @@ var portlet_utility = {
 		}
 
 		case "Deal Goals" : {
-
-					portlet_ele = $('#ui-id-' + column_position + '-' + row_position,
-					el).find('.goals_portlet_body');
+					if(model_list_element_fragment_portlets)
+					portlet_ele = $(model_list_element_fragment_portlets.querySelector('#ui-id-' + column_position + '-' + row_position))
+					.find('.goals_portlet_body');
+					else
+						portlet_ele =('#ui-id-' + column_position + '-' + row_position,el)
+					.find('.goals_portlet_body');
 					portlet_ele
 						.attr('id', 'p-body-' + column_position + '-' + row_position);
 					var that=portlet_ele;
@@ -2546,6 +2567,13 @@ var portlet_utility = {
 		if (!add_flag)
 			return;
 
+		if(Portlets_View.model_list_element_fragment.childElementCount>0)
+		{
+			gridster.add_widget($(Portlets_View.model_list_element_fragment.querySelector('[id="'+portletId+'"]'))
+			, base_model.get("size_x"),
+				base_model.get("size_y"), base_model.get("column_position"),
+				base_model.get("row_position"));
+		}
 		gridster.add_widget($('#' + portletId), base_model.get("size_x"),
 				base_model.get("size_y"), base_model.get("column_position"),
 				base_model.get("row_position"));

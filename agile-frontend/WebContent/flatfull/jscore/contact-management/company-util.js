@@ -260,7 +260,7 @@
 	
 			var script = document.createElement("script");
 			script.type = "text/javascript";
-			script.src = "https://maps.googleapis.com/maps/api/js?&sensor=false&callback=company_util.displayGoogleMap";
+			script.src = get_agile_gmap_url_with_key() + "&callback=company_util.displayGoogleMap";
 			document.body.appendChild(script);
 		}
 	

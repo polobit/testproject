@@ -20,7 +20,12 @@
 <div class="row">
  <div class="col-md-9">
 	{{#unless this.length}}
-	<div style="height: 245px;">
+
+	<!-- redirect to template page -->
+
+	<img id="loader" src="img/loader.gif" class="img-responsive " alt="loading gif" style="position: absolute;top: 35%;left: 42%;" />
+
+	<!-- <div style="height: 245px;">
 	<div class="alert bg-white">
 		<div class="slate-content  p-md">
 			<div class="box-left pull-left m-r-md">
@@ -37,7 +42,7 @@
 			</div>
 		</div>
 	</div>
-	</div>
+	</div> -->
 	{{/unless}}
 	{{#if this.length}}
 	{{#is_mobile}}
@@ -62,7 +67,8 @@
 						<th class="text-ellipsis">{{agile_lng_translate 'form-builder' 'form-title'}}
 						</th>
 						<th class="text-ellipsis">{{agile_lng_translate 'form-builder' 'last-modified'}}</th>
-						<th style="display:none"></th>
+						<th style="display:none;width:15%"></th>
+						<th style="display:none;width:10%"></th>
 					</tr>
 				</thead>
 				<tbody id="forms-model-list" class="c-p"></tbody>
@@ -144,18 +150,18 @@
 		</a>
 	</td>
 	<td>
+		<div class="table-resp hide" id="form_report">
+			<div class="pull-right text-ellipsis">
+				<a href="#form-reports/{{id}}" class="stop-propagation"><span style="width:10%"><i class="icon-bar-chart"></i></span></a>
+			</div>
+		</div>
+	</td>
+	<td>
 	    <div class="table-resp hide" id="formcode_manager">
 		<a class="codeshare" data-formid="{{id}}"><i class="fa icon-code" ></i><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
 		</div>
 	</td>
-	<td>
-	<div class="table-resp hide" id="form_report">
-	<div class="pull-left text-ellipsis">
-	<a href="#form-reports/{{id}}" class="stop-propagation"><i class="icon-bar-chart"></i>
-	</a>
-	 </div>
-	</div>
-	</td>
 	</br>
 {{/is_mobile}}
 </script>
+

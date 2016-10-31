@@ -1,5 +1,7 @@
 package com.agilecrm.webhooks.triggers.util;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,7 +16,6 @@ import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
-import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/webhooksregister")
@@ -127,10 +128,109 @@ public class AgileWebhookAPI
 	else
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate contact found with the same email address.").build());
+		    .entity("Sorry, no webhook found").build());
 	}
 	System.out.println("webhook id " + webhook);
 	return null;
+    }
+    
+    /**
+     * 
+     * @param webhook
+     * @return
+     * 
+     * @return response ok
+     */
+    @Path("/create/")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Webhook saveWebhookDeveloper(Webhook webhook) {
+	try {
+	    String domain = NamespaceManager.get();
+	    Subscription sub = SubscriptionUtil.getSubscription();
+	    System.out.println("plan name = " + sub.plan.getPlanName());
+	    if (sub.plan.getPlanName().equals("ENTERPRISE")
+		    || sub.plan.getPlanName().equals("PRO")) {
+
+		List<Webhook> whook = WebhookTriggerUtil.getWebhooksList();
+
+		System.out.println("hook count = " + whook.size());
+		if (whook != null && whook.size() > 0) {
+		    System.out.println("Webhook found = " + whook);
+		    throw new Exception(
+			    "Webhook found. Please remove current webhook to create new.");
+		}
+
+		webhook.domain = domain;
+
+		webhook.save();
+
+		return webhook;
+	    } else {
+		throw new Exception(
+			"Please upgrade to Enterprise plan to use this feature.");
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+
+    @Path("/list/")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Webhook> getListWebhook() {
+	return WebhookTriggerUtil.getWebhooksList();
+    }
+
+    /**
+     * 
+     * @param webhook
+     * @return 
+     * 
+     * @return response ok
+     */
+    @Path("/update/")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Webhook updateHookDeveloper(Webhook webhook) {
+
+	try {
+	    String domain = NamespaceManager.get();
+	    Subscription sub = SubscriptionUtil.getSubscription();
+	    System.out.println("plan name = " + sub.plan.getPlanName());
+	    if (sub.plan.getPlanName().equals("ENTERPRISE")
+		    || sub.plan.getPlanName().equals("PRO")) {
+
+		
+		Webhook whook = WebhookTriggerUtil.getWebhook(webhook.id);
+
+		System.out.println("hook  = " + whook);
+		if (whook == null ) {
+		    throw new Exception("No Webhook found");
+		}
+
+		whook = webhook;
+		whook.save();
+
+		return whook;
+	    } else {
+		throw new Exception(
+			"Please upgrade to Enterprise plan to use this feature.");
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response
+		    .status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
     }
 
 }

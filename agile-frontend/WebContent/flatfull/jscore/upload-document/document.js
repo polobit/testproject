@@ -308,6 +308,22 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			
 			add_recent_view(new BaseModel(document));
 			
+			var contactcompanydealtype=$("#documents-listener-container").attr("contactcompanydealtype")
+			if(contactcompanydealtype=="email-template")
+			{
+				var sRoute=window.location.hash.split("#")[1];
+				var sRedirectRoute="email-templates"
+				if(sRoute!="")
+				{
+					try{
+					var arrRoutes=sRoute.split("/")
+					sRedirectRoute=arrRoutes.splice(2).join("/")
+					}catch(e){}	
+				}
+				Backbone.history.navigate(sRedirectRoute,{trigger: true});  
+				return;
+			}
+			
 			if (App_Contacts.contactDetailView)
 			{
 					if(Current_Route.indexOf( "contact")>-1)	
@@ -372,6 +388,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 					
 			
 			} 
+			
 			if (App_Companies.companyDetailView)
 			{
 					if(Current_Route.indexOf( "company")>-1)	

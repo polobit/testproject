@@ -2553,5 +2553,6 @@ transform: translateX(-50%);}
     border-top: 1px solid #eaeff0 !important;
 }
 .knowledgebase-name{width: 93% !important; float: left;}
+.agile-row tr:first-child td{border-top: 0px;}
 
 /*end custom css code*/

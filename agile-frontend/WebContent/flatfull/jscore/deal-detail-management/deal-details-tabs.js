@@ -730,8 +730,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		{
 			var id = $(targetEl).attr('data');
 			var that = targetEl;
-			showAlertModal("complete_task", "confirm", function() 
-			{
+			//showAlertModal("complete_task", "confirm", function() 
+			//{
 				complete_task(id, dealTasksView.collection, undefined, function(data)
 				{
 					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
@@ -739,7 +739,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
 					dealTasksView.collection.add(data, { silent : true });
 				});
-			 });
+			 //});
 		}
 	},
 
@@ -760,6 +760,13 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		fill_relation_deal_task(el);
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
         agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+        
+        var size = $('.newtypeaheadcontact', el).children().length;
+       	if(size && size > 0){        
+        	var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+        	sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+        	$('#sendEmailInviteBlock').html(sendInviteHtml);
+    	}
 
     },
 

@@ -28,6 +28,7 @@ public class LandingPageHelper {
   public boolean showBrandMessage = true;
   public boolean setAnalyticsCode = true;
   public boolean compileMergeFields = true;
+  public boolean enableWebrules = true;
   
   public JSONObject mergeFieldsJson = null;
   
@@ -107,6 +108,10 @@ public class LandingPageHelper {
         analyticsCode += "_agile.set_tracking_domain('" + cnameHost + "');";
     }
     analyticsCode += " _agile.track_page_view();";
+    
+    if(enableWebrules) {
+      analyticsCode += "_agile_execute_web_rules();";
+    }
     
     analyticsCode += "</script>";
     

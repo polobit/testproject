@@ -56,12 +56,16 @@ public class ShopifyAppServlet extends HttpServlet
 	
 	String encodedURL = response.encodeRedirectURL(redirectURL);
 	try {
-		encodedURL = encodedURL.replaceAll("([;&]jsessionid=\\w+)", "");
-		System.out.println("encodedURL = " + encodedURL);
+		encodedURL = replaceMatching2(encodedURL, ".php", "\\?");
 	} catch (Exception e) {
 	}
-	
+	System.out.println("encodedURL = " + encodedURL);
 	response.sendRedirect(encodedURL);
 	return;
     }
+    
+    public static String replaceMatching2(String input, String lowerBound, String upperBound){
+        String result = input.replaceAll("(.*?"+lowerBound + ")" + "(.*?)" + "(" + upperBound + ".*)", "$1$3");
+        return result;
+   }
 }

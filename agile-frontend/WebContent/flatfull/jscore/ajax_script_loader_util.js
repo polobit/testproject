@@ -38,6 +38,11 @@ function loadMiscScriptsWithTimeOut() {
 
 function loadMiscScripts() {
 
+	//Load Twilio global
+	globalTwilioIOSetup();
+
+	initToPubNub();
+	
     // Load Google Analytics code
     load_analytics_code();
 

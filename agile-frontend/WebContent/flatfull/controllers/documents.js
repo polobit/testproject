@@ -147,6 +147,10 @@ addcontactcompanydealtypedocument:function(contactcompanydealtype,contactcompany
 	{
 	
 	//var value = ele.toJSON();
+		if(id=="email-template")
+		{
+			return this.adddocument("email-template",null,id);	
+		}
 		if(id=="edoc" && templateid!=null)
 		{
 			return this.adddocument(null,null,id,templateid);
@@ -623,7 +627,7 @@ function initializeDocumentsListeners()
     	else
     		saveDocument(form_id, modal_id, this, true, json);
 	});
-	$('#uploadDocumentUpdateModalForm,#uploadDocumentForm').on('click', '.link', function(e)
+	$('#uploadDocumentUpdateForm,#uploadDocumentForm').on('click', '.link', function(e)
 	{
 		e.preventDefault();
 		$(this).closest('form').find('#error').html("");
@@ -677,7 +681,7 @@ function proc_add_document(model_json)
 			
 			
 			
-	
+
 				
 				if(edocattachtype=="edoc")
 				{
@@ -739,6 +743,10 @@ function proc_add_document(model_json)
 				}	
 				else
 				{
+					if(contactcompanydealtype=="email-template")
+					{
+						$('#GOOGLE',$('#uploadDocumentForm')).parent().hide();
+					}
 						$(".related-contacts-required",'#uploadDocumentForm,#uploadDocumentUpdateForm').remove();
 						agile_type_ahead("document_relates_to_contacts", el_form, contacts_typeahead);
 
@@ -938,6 +946,22 @@ function initialize_add_document_template_listeners(elContainer) {
 }
 function cancel_document()
 {
+	var contactcompanydealtype=$("#documents-listener-container").attr("contactcompanydealtype")
+	if(contactcompanydealtype=="email-template")
+	{
+		
+		var sRoute=window.location.hash.split("#")[1];
+		var sRedirectRoute="email-templates"
+		if(sRoute!="")
+		{
+			try{
+			var arrRoutes=sRoute.split("/")
+			sRedirectRoute=arrRoutes.splice(2).join("/")
+			}catch(e){}	
+		}
+		Backbone.history.navigate(sRedirectRoute,{trigger: true});  
+		return;
+	}
 	if (App_Contacts.contactDetailView)
 		{
 				if(Current_Route.indexOf( "contact")>-1)	

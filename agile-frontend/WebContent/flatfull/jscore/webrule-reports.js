@@ -20,13 +20,13 @@ function showWebruleGraphs(webruleid)
 {
 
 	// Daily
-	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=date", 'line-daily-chart', _agile_get_translated_val('reports','daily') , 'Count', null);
+	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=date", 'line-daily-chart', 'daily', 'Count', null);
 
 	// Hourly
-	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=hour", 'line-hourly-chart', _agile_get_translated_val('reports','hourly'), 'Count', null);
+	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=hour", 'line-hourly-chart','hourly', 'Count', null);
 
 	// Weekly
-	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=day", 'line-weekly-chart', _agile_get_translated_val('reports','weekly'), 'Count', null);
+	showBar('core/api/webrule-analytics/web/graphreports/' + webruleid + getOptions() + "&type=day", 'line-weekly-chart', 'weekly', 'Count', null);
 }
 
 
@@ -125,7 +125,7 @@ function render_email_reports_select_ui(id, callback){
 				    		return;
 
 						$('#content').html($(template_ui)); 
-						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						var optionsTemplate = "<option value='{{id}}'{{#if disabled}} style='color:grey;'{{/if}}>{{name}}</option>";
 
 						// fill webrules
 						fillSelect('webrule-reports-select', '/core/api/webrule', 'webrule', function fillwebrule()
