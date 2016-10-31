@@ -847,13 +847,24 @@
  {{/if_equals}}
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_REFUND_AMOUNT" activity_type}}
- {{custom1}} ({{custom3}}) has  Applied the refund  the Domain 
+ {{custom1}} has  Applied the refund  to the {{custom2}}
  <br />
  <small class="activities_second_line m-t-none text-sm">
- {{custom2}} was refunded  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}} with the amount {{custom4}}
+ {{custom2}} was refunded  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}} with the amount {{custom3}}
  </small>
  {{/if_equals}}
  {{/if_equals}}
+
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_SEARCHED_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) had searched for the domain {{custom2}}  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom1}} searched on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ 
   <!-- end of admin panel activities -->
 
 <!-- start of contact condition-->

@@ -2505,7 +2505,22 @@ public class ActivityUtil
 			activity.custom1 = domainuser.name;
 			activity.custom2 = CustName ;
 			activity.custom3 = domainuser.email ; 
-			activity.custom4 = domainuser.IP_ADDRESS ; 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address"); 
+			activity.save();
+		}
+	}
+	
+	public static void adminPanelREfundActivity(DomainUser domainuser , ActivityType activityType , String CustName,Integer amount)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.name;
+			activity.custom2 = CustName ;
+			activity.custom3 = amount.toString(); 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
 			activity.save();
 		}
 	}

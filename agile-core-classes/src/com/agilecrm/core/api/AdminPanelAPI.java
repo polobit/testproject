@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
@@ -68,6 +69,7 @@ public class AdminPanelAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<DomainUser> getDomainUserDetails(@QueryParam("d") String domainname)
     {
+    	 DomainUser domainuser = DomainUserUtil.getCurrentDomainUser();
 	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -95,6 +97,7 @@ public class AdminPanelAPI
 	        users = DomainUserUtil.getUsers(actualDomain);
 	    	
 	    }
+	    ActivityUtil.createAdminPanelActivity( domainuser , Activity.ActivityType.ADMIN_PANEL_SEARCHED_DOMAIN , domainname);
 	    return users;
 	}
 	catch (Exception e)
@@ -117,7 +120,7 @@ public class AdminPanelAPI
     {
 
      try{
-
+    	
 	    String domain = NamespaceManager.get();
 
 		if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
@@ -206,6 +209,7 @@ public class AdminPanelAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
+	ActivityUtil.createAdminPanelActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_DELETED_USER ,domainUser.name );
 
 	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
@@ -310,11 +314,11 @@ public class AdminPanelAPI
     public Subscription getsubscriptionOfDomain(@QueryParam("d") String domainname) throws StripeException
     {
     	
-//	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
-//	{
-//	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-//		    .entity("Sorry you don't have privileges to access this page.").build());
-//	}
+	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry you don't have privileges to access this page.").build());
+	}
 
 	// System.out.println(sc.billing_data_json_string.toString());
 	return Subscription.getSubscriptionOfParticularDomain(domainname);
@@ -497,7 +501,7 @@ public class AdminPanelAPI
     public Charge applyRefund(@QueryParam("chargeid") String chargeid)
     {
 	String domain = NamespaceManager.get();
-
+	
 	if (StringUtils.isEmpty(chargeid) || !domain.equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -518,6 +522,8 @@ public class AdminPanelAPI
 		    .build());
 
 	}
+	
+	
 
     }
 
@@ -525,7 +531,7 @@ public class AdminPanelAPI
     @Path("/applypartialrefund")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount ,@QueryParam("d") String cust_domain  )
+    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount ,@QueryParam("domain") String cust_domain  )
 	    throws StripeException
     {
     	
@@ -543,7 +549,7 @@ public class AdminPanelAPI
 	{
 
 	    Refund refund = StripeUtil.createPartialRefund(chargeId, amount);
-	    ActivityUtil.createAdminPanelActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT , "");
+	    ActivityUtil.adminPanelREfundActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT ,cust_domain,amount );
 	    return refund;
 
 	}
