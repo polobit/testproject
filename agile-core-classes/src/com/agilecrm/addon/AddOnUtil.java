@@ -116,7 +116,7 @@ public class AddOnUtil {
 	public static boolean canDowngradeCampaigns(int count){
 		int workflowsCount = WorkflowUtil.getCount();
 		Subscription subscription = SubscriptionUtil.getSubscription();
-		int limit = subscription.planLimits.getWorkflowLimit();
+		int limit = subscription.planLimits.getWorkflowLimitWithoutAddons();
 		int totalLimit = limit + count;
 		if(totalLimit < workflowsCount)
 			return false;
@@ -131,7 +131,7 @@ public class AddOnUtil {
 	public static boolean canDowngradeTriggers(int count){
 		int triggersCount = TriggerUtil.getCount();
 		Subscription subscription = SubscriptionUtil.getSubscription();
-		int limit = subscription.planLimits.getTriggersLimit();
+		int limit = subscription.planLimits.getTriggersLimitWithoutAddons();
 		int totalLimit = limit + count;
 		if(totalLimit < triggersCount)
 			return false;
