@@ -258,7 +258,7 @@ function renderToMailView(data){
 				to_emails = $parent_element.find('.to-emails').data('from');
 			
 			var subject = $parent_element.find('.subject').html();
-			var body = '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+$parent_element.find('.to-emails').html()+'</blockquote>';
+			var body = '<p class="showreply"></p><blockquote id="show'+attrid+'" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+$parent_element.find('.to-emails').html()+'</blockquote>';
 			to_emails = to_emails.replace(/(, $)/g, "");
 			
 			var model = {};

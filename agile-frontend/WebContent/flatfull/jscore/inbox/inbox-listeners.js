@@ -456,7 +456,7 @@ function initializeInboxListeners(){
 	}
 	//$('#inbox-listners').on('click', '.button-check', function(e){
 	$(".button-check").unbind().click(function(e) {
-		var $ele = $(e.currentTarget).parents("button").parent();
+		var $ele = $(e.currentTarget).parents("div").parent();
 		if($ele.hasClass("open")){
 			$ele.removeClass("open");
 		}
