@@ -395,7 +395,8 @@ function get_merge_field_objs()
 		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
 		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
 		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}", 
-		"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
+		"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}",
+		"{{agile_lng_translate 'contact-view' 'unsubscribe'}} {{agile_lng_translate 'landingpage-builder' 'link'}}":"{{{unsubscribe_link}}}"
 	}
 	
 	// Get Custom Fields in template format
