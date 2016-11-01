@@ -7656,3 +7656,8 @@ Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
 {
 	console.log("Not found " + key + " : " + value);
 });
+
+Handlebars.registerHelper('contactlimitcount', function()
+{
+	return USER_BILLING_PREFS.planLimits.contactLimit;
+});
