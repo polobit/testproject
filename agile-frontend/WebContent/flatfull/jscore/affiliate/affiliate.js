@@ -164,7 +164,7 @@ function setAffiliateDetailsFilter(){
 		filter_key = "createdTime";
 		_agile_set_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter", filter_key);
 	}
-	$("#affiliate_filter_btn").attr("data",filter).html(filterJson[filter_key]);
+	$("#affiliate_filter_btn").attr("data",filter_key).html(filterJson[filter_key]);
 }
 
 
