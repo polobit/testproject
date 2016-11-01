@@ -38,6 +38,7 @@ var LandingPageRouter = Backbone.Router.extend({
                             // Add collection view
                             console.log("Load collection");
                             App_LandingPageRouter.loadLandingPagesCollection($("#content"));
+                            el.find('[data-toggle="tooltip"]').tooltip();
                         }
                     });
 
