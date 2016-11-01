@@ -290,6 +290,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     -moz-transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
 }
+<%
+   if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+%>
+    #personModal #import-link{display: none!important;}
+<%}%>
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->

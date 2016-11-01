@@ -91,10 +91,12 @@
                                             <!--<img src='img/gravatar.png'  alt='...'></img>-->
                                             {{/if}}                                            
                                     </div>
+                                    {{#is_mobile}} {{else}}
                                    <div class="user_img_upload m-l-xs">
                                      <input type="hidden" id="upload_url" name="pic" class="pic"  />  
                                      <input  class="upload_s3 btn btn-xs btn-default" type="button" style="    vertical-align: bottom;" value="{{agile_lng_translate 'others' 'upload'}}" />
                                     </div>
+                                    {{/is_mobile}}
                        
                   </div>
               </div>
