@@ -54,7 +54,7 @@ pageEncoding="UTF-8"%>
 	if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
 	{
 %>
-<%@ include file="file-hash.json"%>
+
 <%
 	}
 %>
@@ -423,6 +423,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
       }
   %>
+  <li id="inboxmenu">
+    <a  href="#inbox">
+      <i class="icon icon-inbox"></i>
+      <span>Inbox</span>
+    </a>
+  </li>
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
   %>
