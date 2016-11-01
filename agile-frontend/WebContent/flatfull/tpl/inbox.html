@@ -232,9 +232,9 @@
 			    <h2 class="font-thin m-n ng-binding subject">{{this.subject}}</h2>
 			  </div>
 			  <div class="wrapper b-b ng-binding">
-			    <!--<img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">-->
+			    <img ng-src="//ssl.gstatic.com/ui/v1/icons/mail/profile_mask2.png" class="img-circle thumb-xs m-r-sm" src="//ssl.gstatic.com/ui/v1/icons/mail/profile_mask2.png">
 			    From <a class="ng-binding showtoaddress">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
-			    &nbsp;&nbsp;&nbsp;&nbsp;<div class="toaddress">To <a class="ng-binding">{{this.to}}</a></div>
+			    &nbsp;&nbsp;&nbsp;&nbsp;<div class="toaddress" style="margin-left:48px;display:none;">To <a class="ng-binding">{{this.to}}</a></div>
 			  </div>
 			  
 			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-from="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">

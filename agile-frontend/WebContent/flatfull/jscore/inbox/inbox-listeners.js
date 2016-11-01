@@ -210,13 +210,13 @@ function inboxFlagListners(){
 			$("#mark-dropdown").show();
 		}
 	});
-	/*$(".showtoaddress").unbind().click(function() {
+	$(".showtoaddress").unbind().click(function() {
 		if($(".toaddress").is(":visible")){
 			$(".toaddress").hide();
 		}else{
 			$(".toaddress").show();
 		}
-	});*/
+	});
 	
 }
 function setSeenFlag(url,dataVal, attrid){
@@ -242,7 +242,7 @@ function getContent(url,dataVal){
 				$("#message"+dataVal).html(html);
 		        $("#mails-list").hide();
 		        $("#mail-details-view").show();
-		        //$(".toaddress").hide();
+		        $(".toaddress").hide();
 		        $("#message"+dataVal).find("a").attr("target", "_blank");
 		        $("#message"+dataVal).find("div").removeClass("column");
 		        $("#message"+dataVal).find(".column").removeClass("column");
