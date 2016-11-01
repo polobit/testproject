@@ -68,3 +68,9 @@ $('#codeShareModal').on('focus','.form-control',function(){
         return false;
     });
 });
+function formVideoPopup(){
+       var data={};
+    data.title="Form Tutorial";
+    data.videourl="//www.youtube.com/embed/TCJDBBhA5ag?enablejsapi=10&autoplay=1";
+    showHelpVideoModal(data);
+}
