@@ -84,7 +84,7 @@ function initializeAdminpanelListner(el){
 		var domain = $(this).attr("domain");
 		$.ajax({
 				type : "post",
-				url : "core/api/admin_panel/logintodomain/" + domain,
+				url : "core/api/admin_panel/logintodomain?d=" + domain,
 				success : function(data)
 				{
 					console.log("loged in domain");
