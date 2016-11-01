@@ -157,7 +157,7 @@ public class AddOnUtil {
 	 */
 	public static void deleteAddOn(){
 		AddOn addOn = getAddOn();
-		if(addOn != null)
+		if(addOn != null && addOn.id != null)
 			addOn.delete();
 	}
 

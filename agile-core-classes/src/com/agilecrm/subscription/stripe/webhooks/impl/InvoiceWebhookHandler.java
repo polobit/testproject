@@ -42,16 +42,16 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	 */
 	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
 	{
+		if(isAddonPlan()){
+	    	updateAddOnStatus(getAddonPlan(), AddOnStatus.SUCCESS);
+	    	return;
+	    }
 	    Subscription subscription = setSubscriptionFlag(Subscription.BillingStatus.BILLING_SUCCESS);
 
 	    // Get domain owner
 	    DomainUser user = getUser();
 
 	    System.out.println(user);
-	    if(isAddonPlan()){
-	    	updateAddOnStatus(getAddonPlan(), AddOnStatus.SUCCESS);
-	    	return;
-	    }
 	    if (isEmailAddonPlan())
 	    {
 		setEmailsCountBillingRestriction();
