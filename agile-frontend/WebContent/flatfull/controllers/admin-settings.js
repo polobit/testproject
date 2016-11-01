@@ -1675,7 +1675,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 	contactsLimitreachedview : function(e){
 
-		console.log("contactsLimitreachedview");
+		if(readCookie("contactslimit"))
+		{
+			return ;
+		}
+	console.log("contactsLimitreachedview");
 		// Creata a global view
 		this.contactsLimitview = new Base_Model_View({ 
 			url : '/core/api/contacts/list/count/jsonformat', 
