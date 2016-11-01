@@ -126,9 +126,10 @@ function loadAdminAffiliateDetailListeners(){
 	{
 		e.preventDefault();
 		var name = $(this).html();
-		var data = $(this).attr("data");
+		var filter_key = $(this).attr("data");
+		_agile_set_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter", filter_key);
 		$(this).closest(".btn-group").find("#affiliate_filter_btn").text(name);
-		$(this).closest(".btn-group").find("#affiliate_filter_btn").attr("data", data);
+		$(this).closest(".btn-group").find("#affiliate_filter_btn").attr("data", filter_key);
 		var data = getAdminAffiliateFilterParameters();
 		App_Affiliate.showAffiliateDetailCollection(data);
 	});
@@ -156,5 +157,14 @@ var Admin_Affiliate_Detail_Collection_View = Base_Collection_View.extend({
     }
 });
 
+function setAffiliateDetailsFilter(){
+	var filterJson = {"createdTime":"Created Time","lastAffiliateAddedTime":"Last Affiliate Added Time"};
+	var filter_key = _agile_get_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter");
+	if(filter_key == null || filter_key == undefined){
+		filter_key = "createdTime";
+		_agile_set_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter", filter_key);
+	}
+	$("#affiliate_filter_btn").attr("data",filter).html(filterJson[filter_key]);
+}
 
 
