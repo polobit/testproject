@@ -213,7 +213,7 @@ public abstract class StripeWebhookHandler
 		e.printStackTrace();
 	    }
 
-	    return AliasDomainUtil.getCachedAliasDomainName(domain);
+	    return domain;
 	}
 
 	customer = getCustomerFromStripe();
@@ -224,7 +224,7 @@ public abstract class StripeWebhookHandler
 	// Description is set to namespace while saving
 	domain = customer.getDescription();
 
-	return AliasDomainUtil.getCachedAliasDomainName(domain);
+	return domain;
     }
 
     protected void sendMail(String emailSubject, String template)
