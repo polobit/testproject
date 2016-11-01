@@ -121,6 +121,9 @@ function _agile_get_prefs(key){
 
     //  Checks in cookie first. If it is present delete from cookie and reset to localstorage and returns the value
     var value = readCookie(key);
+    if(value && key == "contactslimit")
+        return value;
+
     if(value != null && value != undefined && value != "null"){
 
     	// Remove value from cookie and 

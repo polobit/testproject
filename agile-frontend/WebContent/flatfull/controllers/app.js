@@ -108,12 +108,7 @@ function currentRoute(route)
 	}
 	
 	 showUpgradeNoty();
-	 if(!_agile_get_prefs("contactslimit"))
-	{
-	App_Admin_Settings.contactsLimitreachedview();
-	}
-
-
+	 
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)
 		 tight_acl.init_permissions();
