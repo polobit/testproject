@@ -2035,11 +2035,11 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 .web-rule-contact-condition-table tbody tr td .form-control{padding: 6px 5px;}
 .activity-time-ago{float: left !important; padding-top:0px; }
 .need-help-video{display: table; margin: 0px auto;}
-.trigger-save-btns{padding: 0;}
-.campaign-sub-tabs li a{padding: 10px 14px;}
-.triggers-sub-tabs li a{padding: 5px 4px;}
-.webrules-sub-tabs li a{padding: 5px 7px;}
-#workflow-save-popup .modal-dialog{width: 100% !important;}
+.trigger-save-btns,.web-rules-actions{text-align: center;}
+.campaign-sub-tabs li a{padding: 10px 15px;}
+.triggers-sub-tabs li a{padding: 5px 6px;}
+.webrules-sub-tabs li a{padding: 5px 8px;}
+#workflow-save-popup .modal-dialog{width: auto !important;}
 }
 
 @media all and (min-width: 768px) {
