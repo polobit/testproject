@@ -244,6 +244,9 @@ function getContent(url,dataVal){
 		        $("#mail-details-view").show();
 		        //$(".toaddress").hide();
 		        $("#message"+dataVal).find("a").attr("target", "_blank");
+		        $("#message"+dataVal).find("div").removeClass("column");
+		        $("#message"+dataVal).find(".column").removeClass("column");
+		        $("#message"+dataVal).find("table").removeClass("container");
 		        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
 		        $("#message"+dataVal).css({"background-color":"white"});
 			} 
@@ -282,6 +285,9 @@ function getExchangeContent(url,from_email,folder_name,messageid){
 	        $("#mails-list").hide();
 	        $("#mail-details-view").show();
 	        $("#message"+dataVal).find("a").attr("target", "_blank");
+	        $("#message"+dataVal).find("div").removeClass("column");
+	        $("#message"+dataVal).find(".column").removeClass("column");
+		    $("#message"+dataVal).find("table").removeClass("container");
 	        $("#message"+dataVal).find("a").css({"color": "#15c","text-decoration":"underline"});
 	        $("#message"+dataVal).css({"background-color":"white"});
 		} 
@@ -321,7 +327,7 @@ function setExchangeFlag(url,from_email,folder_name,flag,messageid){
 var idcol = []
 function initializeInboxListeners(){
 
-	$('.inbox-menu li a').click(function(e) {
+	/*$('.inbox-menu li a').click(function(e) {
         $('.inbox-menu li').removeClass('active');
 
         var $parent = $(this).parent();
@@ -329,7 +335,7 @@ function initializeInboxListeners(){
             $parent.addClass('active');
         }
         e.preventDefault();
-    });
+    });*/
 
 	$('#inbox-listners').on('click', '#mail-inbox', function(e){
 		e.preventDefault();
@@ -344,11 +350,14 @@ function initializeInboxListeners(){
 		if(server != "agile"){
 			if(!$(this).hasClass( "pending" ) ) {
 	   			$(this).addClass("pending");
+	   			$('.folder-link').bind('click', false);
 				renderToMailList(url,1,10);
 			}
 		}else{
 			displayNoEmailTemplate();
 		}
+		$(".ng-scope").removeClass("active");
+		$(this).parent("li").addClass("active");
 	});
 
 	$('#inbox-listners').on('click', '#mail-sent', function(e){
@@ -362,8 +371,11 @@ function initializeInboxListeners(){
 		SHOW_TOTALCOUNT = true;
 		if(!$(this).hasClass( "pending" ) ) {
    			$(this).addClass("pending");
+   			$('.folder-link').bind('click', false);
 			renderToMailList(url,1,10);
 		}
+		$(".ng-scope").removeClass("active");
+		$(this).parent("li").addClass("active");
 	});
 	$('#inbox-listners').on('click', '#mail-draft', function(e){
 		e.preventDefault();
@@ -378,11 +390,14 @@ function initializeInboxListeners(){
 		if(server != "agile"){
 			if(!$(this).hasClass( "pending" ) ) {
 	   			$(this).addClass("pending");
+	   			$('.folder-link').bind('click', false);
 				renderToMailList(url,1,10);
 			}
 		}else{
 			displayNoEmailTemplate();
 		}
+		$(".ng-scope").removeClass("active");
+		$(this).parent("li").addClass("active");
 	});
 	$('#inbox-listners').on('click', '#mail-trash', function(e){
 		e.preventDefault();
@@ -397,10 +412,13 @@ function initializeInboxListeners(){
 		//if(server != "agile")
 		if(!$(this).hasClass( "pending" )) {
    			$(this).addClass("pending");
+   			$('.folder-link').bind('click', false);
 			renderToMailList(url,1,10);
 		}
 		//else
 			//displayNoEmailTemplate();
+		$(".ng-scope").removeClass("active");
+		$(this).parent("li").addClass("active");
 	});
 	$('#inbox-listners').on('click', '.mail-compose', function(e){
 		e.preventDefault();

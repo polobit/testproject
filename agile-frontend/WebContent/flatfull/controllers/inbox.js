@@ -171,6 +171,7 @@ function renderToMailList(url,offset_val,page_size_val){
 					inboxFlagListners();
 					hideTransitionBar();
 					$(".pending").removeClass("pending");
+					$('.folder-link').unbind('click', false);
 					$(".loading").hide();
 				},
 				error: function (errorResponse) {

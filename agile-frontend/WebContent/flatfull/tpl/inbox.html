@@ -16,19 +16,19 @@
     <div class="wrapper hidden-sm hidden-xs" id="email-menu">
       <ul class="nav nav-pills nav-stacked nav-sm inbox-menu">
        	<li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope active">
-          <a class="ng-binding" href="#inbox" id="mail-inbox">{{agile_lng_translate 'menu' 'menu-inbox'}}
+          <a class="ng-binding folder-link" href="#inbox" id="mail-inbox">{{agile_lng_translate 'menu' 'menu-inbox'}}
           </a>
         </li>
         <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
-          <a class="ng-binding" href="#sent" id="mail-sent">{{agile_lng_translate 'inbox' 'sent'}}
+          <a class="ng-binding folder-link" href="#sent" id="mail-sent">{{agile_lng_translate 'inbox' 'sent'}}
           </a>
         </li>
          <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
-          <a class="ng-binding" href="#sent" id="mail-draft">Drafts
+          <a class="ng-binding folder-link" href="#sent" id="mail-draft">Drafts
           </a>
         </li>
         <li ng-repeat="fold in folds" ui-sref-active="active" class="ng-scope">
-          <a class="ng-binding" href="#sent" id="mail-trash">Trash
+          <a class="ng-binding folder-link" href="#sent" id="mail-trash">Trash
           </a>
         </li>
       </ul>
@@ -232,15 +232,15 @@
 			    <h2 class="font-thin m-n ng-binding subject">{{this.subject}}</h2>
 			  </div>
 			  <div class="wrapper b-b ng-binding">
-			    <img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">
+			    <!--<img ng-src="img/a10.jpg" class="img-circle thumb-xs m-r-sm" src="img/a10.jpg">-->
 			    From <a class="ng-binding showtoaddress">{{this.from}}</a> on <time class="email-sent-time" datetime="{{epochToHumanDate "" this.date_secs}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" this.date_secs}}</time>
-			    &nbsp;&nbsp;&nbsp;&nbsp;<div class="toaddress" style="margin-left:48px;">To <a class="ng-binding">{{this.to}}</a></div>
+			    &nbsp;&nbsp;&nbsp;&nbsp;<div class="toaddress">To <a class="ng-binding">{{this.to}}</a></div>
 			  </div>
 			  
 			  <div class="wrapper ng-binding to-emails" id="message{{removeSpecialCharacter this.id}}" data-to="{{this.to}}" data-from="{{this.from}}" data-cc="{{this.cc}}" data-bcc="{{this.bcc}}">
 			    {{{this.message}}}
 			  </div>
-			  <div class="wrapper">
+			  <div class="wrapper" style="width: 100%;float: left;">
 			    <div class="panel b-a">
 			      <div class="panel-heading ng-show" id="id{{this.date_secs}}" ng-hide="reply" aria-hidden="false">
 			        <div class="m-b-lg">
@@ -459,8 +459,8 @@
 						</div>
 						<div class="box-right pull-left">
 		            		<h4 class="m-t-none">You do not have any emails currently.</h4>
-		            		<div class="text">You have no emails {{agile_lng_translate 'contact-details' 'in'}} {{read_global_var}} {{agile_lng_translate 'contact-details' 'account'}}</div>
-		            	<!--<a href="#" modal_id="personModal" class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Contacts</a>-->
+		            		<!--<div class="text">You have no emails {{agile_lng_translate 'contact-details' 'in'}} {{read_global_var}} {{agile_lng_translate 'contact-details' 'account'}}</div>
+		            	<a href="#" modal_id="personModal" class="modal-form btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  Add Contacts</a>-->
 		        		</div>
 	    			</div>
 					<div class="clearfix"></div>
