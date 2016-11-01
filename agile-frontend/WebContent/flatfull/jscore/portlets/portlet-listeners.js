@@ -323,18 +323,37 @@ function initializePortletsListeners() {
 					content: function() {
       				return getTemplate("extensions-download-model");
     }
-	}).on("show.bs.popover", function(e){ 
-				setTimeout(function(event){
-    				var $target = $(e.target);
-				if (document.getElementById('agilecrm_extension')) {
-				  $("#chrome-extension").css({"pointer-events": "none", "opacity": "0.4"});
-				  //alert("Already installed");
-				}
-    				console.log("$target = "+ $target);
-    				$('[data-toggle="tooltip"]').tooltip();
-    			},100);	
-    			});
 
+	}).on("click", function(e){
+							initExtensionHandlers(e);
+			    			}).on("shown.bs.popover", function(e){ 
+							if (document.getElementById('agilecrm_extension')) {
+							  $(".chromeExtension").css({"cursor": "not-allowed", "opacity": "0.4"});
+							  //alert("Already installed");
+							}
+	    				
+	    				$('[data-toggle="tooltip"]').tooltip();	
+	});
+
+
+	 if($('#automation-video').css("display")!="none"){
+    	$('#dashlet_heading').off("click").on('click', '#automation-video',	function(e) {		
+   			e.preventDefault();
+
+	        getTemplate('marketing-video-modal', {}, undefined, function(template_ui){
+	            if(!template_ui)
+	                  return;           
+
+	            $("#marketing-dashboard-video-modal").html($(template_ui)).modal('show');
+
+	            // Stops video on modal hide
+	            $("#marketing-dashboard-video-modal").on("hide.bs.modal", function(){
+	                $(this).html("");
+	            });
+
+	        }, null);
+    	});
+    }
 	$('.modal-body').off("click").on('click', '#category-select-all',
 			function(e) {
 				e.preventDefault();
@@ -931,13 +950,40 @@ $('.portlet_body')
 						e.stopPropagation();
 						if ($(this).is(':checked')) {
 							var that=$(this);
+
+
+                              var taskId = $(that).attr('data');
+
+							var column_pos = $(that).parentsUntil('.gs-w')
+									.last().parent().find('.column_position')
+									.text().trim();
+							var row_pos = $(that).parentsUntil('.gs-w').last()
+									.parent().find('.row_position').text()
+									.trim();
+							var pos = column_pos + '' + row_pos;
+
+							complete_task(
+									taskId,
+									App_Portlets.tasksCollection[parseInt(pos)].collection,
+									$(that).closest('tr'));
+
+							if ($(that).parentsUntil('table').last().find(
+									'tr:visible').length == 1) {
+								$(that)
+										.parentsUntil('table')
+										.parent()
+										.parent()
+										.html(
+												'<div class="portlet-error-message">{{agile_lng_translate "tasks" "no-tasks-found"}}</div>');
+							}
+
 /*
 							if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
 		{
 			$(this).attr("checked", false);
 				return;
 		}*/
-				showAlertModal("complete_task", "confirm", function() {
+				/*showAlertModal("complete_task", "confirm", function() {
 							// Complete
 							var taskId = $(that).attr('data');
 
@@ -968,7 +1014,7 @@ $('.portlet_body')
 								$(that).attr("checked", false);
 				
 							}
-						);
+						);*/
 						}
 					});
 
@@ -1013,6 +1059,10 @@ $('.portlet_body')
 				_agile_set_prefs("dashboard_"+CURRENT_DOMAIN_USER.id, id);
 				gridster = undefined;
 				loadPortlets(id, $('#content'));
+				if(id=="MarketingDashboard")
+					$("#automation-video").show();
+				else
+					$("#automation-video").hide();
 		    }
 		    else if(!$(this).hasClass("predefined-dashboard") && dashboard_name && dashboard_name != id){
 				e.preventDefault();
@@ -1437,4 +1487,62 @@ if (endDate - startDate >= 0)
 				.find(".invalid-range").parents('.form-group').show();
 		return false;
 	}
+}
+
+function initExtensionHandlers(e){
+
+	$(".extension-popover li a").unbind("click").click(function(e){
+	var extensionName = $(this).attr("data-extension-name");
+	if(!extensionName)
+	  return;
+	switch(extensionName){
+		case "ios-extension": 
+				iosExtensionRequest();
+				break;
+		
+		case "chrome-extension" :
+			installChromeExtension(e);
+			break;
+		
+	}
+});
+	//$("#chrome-extensions").popover("hide");
+}
+
+function iosExtensionRequest(){
+		$(".extension-popover li").addClass("hide");
+	  	var json = {};
+		json.from=CURRENT_DOMAIN_USER.email;
+		json.to = "kiran@agilecrm.com";
+		json.cc = "narmada@invox.com" ;
+		json.subject = "Request for getting the Beta Access";	
+		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
+		sendEmail(json);
+		$("#betasuccess").removeClass("hide");
+}
+
+function installChromeExtension(e){
+		if (document.getElementById('agilecrm_extension')) {
+			e.preventDefault();
+			return;
+		}
+			
+
+	  	// e.stopImmediatePropagation();
+	  	$(this).parents(".popover").popover('hide');
+	  	e.stopPropagation();
+	  	console.log("before the chrome installation");
+	  	try{
+	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
+		        function(d){
+		          console.log("installed");
+		          
+		        },function(e){
+		          console.log("not installed: "+ e)
+		        });
+	  	}catch(e){
+	  		console.log(e);
+	  	}
+      	
+      	console.log("after the chrome installation")
 }

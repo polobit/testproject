@@ -191,6 +191,19 @@ $(function()
 		return options.fn(exclusive_fields)
 
 	});
+
+	/**
+	 * 
+	 */
+	Handlebars.registerHelper('getCompanyCustomProperties', function(items, options)
+	{
+		var fields = getCompanyCustomProperties(items);
+		if (fields.length == 0)
+			return options.inverse(fields);
+
+		return options.fn(fields);
+
+	});
 	
 	/**
 	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
@@ -1164,7 +1177,7 @@ $(function()
 			}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -1200,7 +1213,8 @@ $(function()
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 			element = element.replace("_", " ")
-
+			if(element=='last campaign_emaild')
+				element = element.replace("_", " ")
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
 
 		});
@@ -3138,6 +3152,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -3181,6 +3201,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			 if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -5150,6 +5176,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+		    if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -5193,6 +5225,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -6563,7 +6601,7 @@ $(function()
 		}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -7584,11 +7622,16 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactCompanyTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
@@ -7772,7 +7815,6 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 	
 });
 
-
 /**
  * 
  */
@@ -7809,4 +7851,62 @@ Handlebars.registerHelper("convertToi18ForCall",function(value)
 	} 
 	return value;
 	
+});
+
+Handlebars.registerHelper('isExtensionInstalled', function(options)
+{
+	if (document.getElementById('agilecrm_extension')) 
+		return options.fn(this);
+
+	return options.inverse(this);
+ 		 
+});
+
+Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
+{
+	var track ; 
+	if(id)
+		track = trackListView.collection.get(id);
+	if(milestone && track && track.get('won_milestone') && milestone == track.get('won_milestone'))
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+
+});
+
+Handlebars.registerHelper('isEmailCreditsExists', function(options)
+{
+	var credits = _billing_restriction.email_credits_count;
+	if (credits != undefined && credits > 0)
+		return options.fn(this);
+	return options.inverse(this);
+});
+Handlebars.registerHelper('brandedemailstatus', function(options)
+{
+	var count = getPendingEmails();
+	if(count == 0)
+		return options.inverse(this);
+	return options.fn(this);
+
+});
+Handlebars.registerHelper('calc_Products_Total', function(products)
+{
+	var iSubTotal=0
+	for (var i = 0; i < products.length; i++)
+	{
+		iSubTotal+=products[i].total
+	}
+	return iSubTotal;
+});
+Handlebars.registerHelper('retrevie_Deal_Value', function(element)
+{
+	var iDealAmt=element.currency_conversion_value;
+	if(!$.isNumeric(iDealAmt))
+		iDealAmt=element.expected_value;
+	return iDealAmt;
+});
+Handlebars.registerHelper('contactlimitcount', function()
+{
+	return USER_BILLING_PREFS.planLimits.contactLimit;
+
 });

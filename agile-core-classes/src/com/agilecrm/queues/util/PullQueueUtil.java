@@ -119,30 +119,6 @@ public class PullQueueUtil
 	    TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
 			    .method(Method.POST);
 	    queue.addAsync(taskOptions);
-	    
-	    try
-		{
-			QueueStatistics qs = queue.fetchStatistics();
-			
-			int count = qs.getNumTasks();
-				
-			// Sends 20 requests to increase tasks execution
-			if(count < 20)
-			{
-				count = 20;
-				
-				while(count != 0)
-				{
-					queue.addAsync(taskOptions);
-					count--;
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.err.println("Exception occured while adding tasks " + e.getMessage());
-		}
 	}
 	catch (Exception e)
 	{
@@ -166,6 +142,9 @@ public class PullQueueUtil
 		|| StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE)
 		|| StringUtils.equals(queueName, AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE))
 	    return AgileQueues.BULK_CAMPAIGN_QUEUE;
+	
+	if(StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE_1))
+		return AgileQueues.BULK_CAMPAIGN_QUEUE_1;
 
 	// Runs NORMAL_PULL_QUEUE tasks in normal backend
 	if (StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
@@ -194,6 +173,26 @@ public class PullQueueUtil
 	// Delete Tasks
 	Queue q = QueueFactory.getQueue(queue);
 	q.deleteTaskAsync(tasks);
+    }
+    
+    public static int getTasksCountofQueue(String queueName)
+    {
+    	int count = 0;
+    	
+    	try
+ 		{
+    		Queue queue = QueueFactory.getQueue(queueName);
+ 			QueueStatistics qs = queue.fetchStatistics();
+ 			
+ 			count = qs.getNumTasks();
+ 		}
+ 		catch (Exception e)
+ 		{
+ 			e.printStackTrace();
+ 			System.err.println("Exception occured getting count of tasks " + e.getMessage());
+ 		}
+    	 
+    	 return count;
     }
 
 }

@@ -97,15 +97,65 @@ function showCustomFieldModel(data)
 		isNew : isNew,
 		prePersist : function(model){
 			var scopeExtension = [];
-			var scopeFields = $("#textModalForm").find(".CustomFieldScope");
-			$.each(scopeFields , function(index,element){
-				
-				if($(element).find('input').is(':checked'))
-					scopeExtension.push($(element).find('input').attr('id'));
-			});
-			model.set({scopeExtension : scopeExtension.toString()});
-			//model.scopeExtension = scopeExtension.toString(); 
-			console.log("test");
+		    var positionList = [];
+		    var scopeFields = $("#textModalForm").find(".CustomFieldScope");
+		 	$.each(scopeFields , function(index,element)
+		 	{
+		        if($(element).find('input').is(':checked')){
+		            var typ = $(element).find('input').attr('id') ;
+		            scopeExtension.push(typ);
+		            var position = 0 ;
+		            if(typ == 'contacts'){
+		                if(App_Admin_Settings.contactCustomFieldsListView && App_Admin_Settings.contactCustomFieldsListView.collection)
+		                { 
+		                   	$.each(App_Admin_Settings.contactCustomFieldsListView.collection.models , function(i,m)
+							{
+								if(m.get('position') && m.get('position') > position)
+									position = m.get('position') ;
+							});
+		                    positionList.push(typ+'-'+ position);
+		                }
+		            }
+		            else if(typ == 'companies'){
+		                if(App_Admin_Settings.companyCustomFieldsListView && App_Admin_Settings.companyCustomFieldsListView.collection)
+		                { 
+		                   	$.each(App_Admin_Settings.companyCustomFieldsListView.collection.models , function(i,m)
+							{
+								if(m.get('position') && m.get('position') > position)
+									position = m.get('position') ;
+							});
+		                    positionList.push(typ+'-'+ position);
+		             	}
+		            }
+		            else if(typ == 'deals'){
+		            	if(App_Admin_Settings.dealCustomFieldsListView && App_Admin_Settings.dealCustomFieldsListView.collection)
+		                {
+		                   	$.each(App_Admin_Settings.dealCustomFieldsListView.collection.models , function(i,m)
+							{
+								if(m.get('position') && m.get('position') > position)
+									position = m.get('position') ;
+							});
+		                    positionList.push(typ+'-'+ position);
+		             	}
+		            }
+		        }
+		    });
+			model.attributes['scopeExtension'] = scopeExtension.toString();
+			model.attributes['positionsList'] = positionList.toString();
+			if(model.get('field_type') && model.get('field_type') == 'LIST' && model.get('field_data'))
+			{
+				var data = model.get('field_data').split(';');
+				var dataTrim='' ;
+				$.each(data , function(a,b)
+				{
+					if(b)
+					{
+						dataTrim = dataTrim + b.trim() ;
+						dataTrim = dataTrim + ';' ;
+					}
+				});
+				model.attributes.field_data = dataTrim ;
+			}
 		},
 		postRenderCallback : function(el) {
 			
@@ -134,85 +184,89 @@ function showCustomFieldModel(data)
 
 		     bindCustomFiledChangeEvent(el);
 		},
-		saveCallback : function(model)
+		saveCallback : function(models)
 		{
-			console.log(model);
-		
+			if(models.length > 1)
+			{
+				$.each(models, function(index, value) {
+								
+					var custom_field_model_json;
 
-					//var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
-			var custom_field_model_json;
-			if(model.scope=="CONTACT")
-				custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(model.id);
-			else if(model.scope=="COMPANY")
-				custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(model.id);
-			else if(model.scope=="DEAL")
-				custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(model.id);
-			else if(model.scope=="CASE")
-				custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(model.id);
-			
-			
-			if(custom_field_model_json)
-			{
-				//App_Admin_Settings.customFieldsListView.collection.remove(custom_field_model_json);
-				custom_field_model_json.set(model);
-			/*	if(model.scope=="CONTACT")
-					App_Admin_Settings.contactCustomFieldsListView.render(true);
-				else if(model.scope=="COMPANY")
-					App_Admin_Settings.companyCustomFieldsListView.render(true);
-				else if(model.scope=="DEAL")
-					App_Admin_Settings.dealCustomFieldsListView.render(true);
-				else if(model.scope=="CASE")
-					App_Admin_Settings.caseCustomFieldsListView.render(true);*/
-			}
-			
-			else
-			{
-				var scopeDetails =[];
-				scopeDetails = model.scopeExtension.split(',');
-				var i;
-				for (i=0;i<scopeDetails.length;i++)
+					if(value.scope=="CONTACT")
+						custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(value.id);
+					else if(value.scope=="COMPANY")
+						custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(value.id);
+					else if(value.scope=="DEAL")
+						custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(value.id);
+					else if(value.scope=="CASE")
+						custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(value.id);
+
+					if(custom_field_model_json)
 					{
-						if(scopeDetails[i]== "contacts")
-						App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-						if(scopeDetails[i]== "companies")
+						custom_field_model_json.set(value);
+					}
+					else
+					{
+						if(value.scope=="CONTACT")
 						{
-							App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
-							App_Admin_Settings.companyCustomFieldsListView.render(true);
+							App_Admin_Settings.contactCustomFieldsListView.collection.add(value);
+							App_Admin_Settings.contactCustomFieldsListView.render(true);
 						}
-						if(scopeDetails[i]== "deals")
+						if(value.scope=="COMPANY")
 						{
-							App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
+							App_Admin_Settings.companyCustomFieldsListView.collection.add(value);
+							App_Admin_Settings.companyCustomFieldsListView.render(true);	
+						}	
+						if(value.scope=="DEAL")
+						{
+							App_Admin_Settings.dealCustomFieldsListView.collection.add(value);
 							App_Admin_Settings.dealCustomFieldsListView.render(true);
 						}
 					}
 
-					if(model.scope=="CASE"){
-					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.caseCustomFieldsListView.render(true);
-				}
-				/*if(model.scope=="CONTACT"){
-					App_Admin_Settings.contactCustomFieldsListView.collection.add(model);
-				}else if(model.scope=="COMPANY"){
-				
-						App_Admin_Settings.companyCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.companyCustomFieldsListView.render(true);
-					}
-				}else if(model.scope=="DEAL"){
-					if(	$('#textModalForm').find("#deals").is(':checked')== true){
-					App_Admin_Settings.dealCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.dealCustomFieldsListView.render(true);}
-				}else if(model.scope=="CASE"){
-					App_Admin_Settings.caseCustomFieldsListView.collection.add(model);
-					App_Admin_Settings.caseCustomFieldsListView.render(true);
-				}*/
-				/*App_Admin_Settings.customFieldsListView.collection.add(model);
-				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
-					App_Admin_Settings.customFieldsListView.render(true);*/
+				});
 			}
-			CONTACT_CUSTOM_FIELDS=App_Admin_Settings.contactCustomFieldsListView.collection.toJSON();
+			else
+			{
+				var custom_field_model_json;var cuModel;
+				if(models[0])
+					cuModel = models[0];
+				else
+					cuModel = models;
+				if(cuModel.scope=="CONTACT")
+					custom_field_model_json = App_Admin_Settings.contactCustomFieldsListView.collection.get(models.id);
+				else if(cuModel.scope=="COMPANY")
+					custom_field_model_json = App_Admin_Settings.companyCustomFieldsListView.collection.get(models.id);
+				else if(cuModel.scope=="DEAL")
+					custom_field_model_json = App_Admin_Settings.dealCustomFieldsListView.collection.get(models.id);
+				else if(cuModel.scope=="CASE")
+					custom_field_model_json = App_Admin_Settings.caseCustomFieldsListView.collection.get(models.id);
+				if(custom_field_model_json)
+				{
+					custom_field_model_json.set(models);
+				}
+				else
+				{
+					if(cuModel.scope=="CONTACT")
+					{
+						App_Admin_Settings.contactCustomFieldsListView.collection.add(models);
+						App_Admin_Settings.contactCustomFieldsListView.render(true);
+					}
+					if(cuModel.scope=="COMPANY")
+					{
+						App_Admin_Settings.companyCustomFieldsListView.collection.add(models);
+						App_Admin_Settings.companyCustomFieldsListView.render(true);	
+					}	
+					if(cuModel.scope=="DEAL")
+					{
+						App_Admin_Settings.dealCustomFieldsListView.collection.add(models);
+						App_Admin_Settings.dealCustomFieldsListView.render(true);
+					}	
+				}
+
+			}
 			$("#custom-field-add-modal").modal('hide');
 			$("body").removeClass("modal-open").css("padding-right", "");
-			//location.reload(true);
 		},
 		errorCallback : function(response)
 		{
@@ -431,27 +485,27 @@ function show_custom_fields_helper(custom_fields, properties){
 		var checkbox_style ="";
 		var max_len = 500;
 		if(field.scope == "CONTACT"){
-			label_style = "col-sm-3 word-break-all";
+			label_style = "col-sm-3 word-break";
 			field_style = "col-sm-10";
 			div_col9_style = "col-sm-9 company_input";
 			div_col3_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "COMPANY"){
-			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-3 word-break-all"; 
+			label_style = "control-label col-sm-3 word-break";
+			modal_label_style = "control-label col-sm-3 word-break"; 
 			modal_control_style = "col-sm-7";
 			div_col9_style = "company_input";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "DEAL"){
-			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-3 word-break-all";
+			label_style = "control-label col-sm-3 word-break";
+			modal_label_style = "control-label col-sm-3 word-break";
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3 modal-cbx-m-t";
 		}else if(field.scope == "CASE"){
-			label_style = "control-label col-sm-3 word-break-all";
-			modal_label_style = "control-label col-sm-3 word-break-all";
+			label_style = "control-label col-sm-3 word-break";
+			modal_label_style = "control-label col-sm-3 word-break";
 			modal_control_style = "col-sm-7";
 			checkbox_style = "col-sm-3";
 			modal_checkbox = "col-sm-offset-3";
@@ -476,7 +530,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.is_required){
 					
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 								+field.field_label
 								+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><span><select class="'
 								+field.field_type.toLowerCase()
@@ -503,7 +557,7 @@ function show_custom_fields_helper(custom_fields, properties){
 					
 				}else{
 					if(isModal){
-						el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+						el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 								+field.field_label
 								+'</label><div class="controls '+modal_control_style+'"><select class="'
 								+field.field_type.toLowerCase()
@@ -644,7 +698,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls agiletxexpander '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
@@ -666,7 +720,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group  "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group  "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'</label><div class="controls agiletxexpander '+modal_control_style+'"><textarea rows="'
 							+rows+'" class="'
@@ -694,7 +748,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "number";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 						+field.field_label
 						+'<span class="field_req">*</span></label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
 						+field.field_type.toLowerCase()
@@ -716,7 +770,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+					el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 						+field.field_label
 						+'</label><div class="controls custom-number-controls '+modal_control_style+'"><input type="number" class="'
 						+field.field_type.toLowerCase()
@@ -750,7 +804,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "contact";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'<span class="field_req">*</span></label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
@@ -772,7 +826,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_contact_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'</label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_contact"></ul>'
@@ -803,7 +857,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			field_type = "company";
 			if(field.is_required){
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'<span class="field_req">*</span></label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
@@ -825,7 +879,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				}
 			}else{
 				if(isModal){
-					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break-all col-sm-3">'
+					el = el.concat('<div class="control-group form-group " id="custom_company_'+field.id+'"><label class="control-label word-break col-sm-3">'
 								+field.field_label
 								+'</label><div class="controls col-sm-7">'
 								+'<ul name="'+field.field_label+'" class="contacts tagsinput tags p-n m-n custom_company"></ul>'
@@ -855,7 +909,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required){
 			if(isModal){
-				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'<span class="field_req">*</span></label><div class="controls '+modal_control_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()
@@ -873,7 +927,7 @@ function show_custom_fields_helper(custom_fields, properties){
 			}
 		}else{
 			if(isModal){
-				el = el.concat('<div class="control-group form-group "><label class="control-label word-break-all '+modal_label_style+'">'
+				el = el.concat('<div class="control-group form-group "><label class="control-label word-break '+modal_label_style+'">'
 							+field.field_label
 							+'</label><div class="controls '+modal_control_style+'"><input type="text" class="'
 							+field.field_type.toLowerCase()

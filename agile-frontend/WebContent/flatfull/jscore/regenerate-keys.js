@@ -70,7 +70,7 @@ $("#webhook_accordian").on('click', function(e) {
         },500)
        
     });
-
+/*
  $("sendgrid-dkim_accordian").off('click');
  $("#sendgrid-dkim_accordian").on('click', function(e) {
     e.preventDefault();
@@ -96,7 +96,7 @@ $("#webhook_accordian").on('click', function(e) {
        });
     $("#sendgrid-dkim-restriction-template").html(view.render().el);
     return;
-    });
+    });*/
 
 $("#js-security_accordian").on('click', function(e) {
         e.preventDefault();
@@ -198,8 +198,23 @@ $("#sso-login_accordian").on('click', function(e) {
              validateSendgridWhitelabel(whitelabel_domain)
          }
     });
+    //@function for the to call the validate 
+  //method and returns the result as per the validation
+ $("#validate_anaytical_code").off('click');
+     $("#validate_anaytical_code").on('click', function(e) {
+         e.preventDefault();
+          $("#invalidate-tracking-code").addClass("hide");
+           $("#validate-tracking-code").addClass("hide");
 
-
+         var websiteUrl = $("#verification_anaytical_code").val();
+         if(websiteUrl=="" || !isUrlValid(websiteUrl))
+              $("#empty_url").removeClass("hide");
+          else
+          {
+              $("#empty_url").addClass("hide");
+              validateAnalyticalCode(websiteUrl);
+          }
+     });
     try {
         if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
             $("#tracking-webrules, .tracking-webrules-tab").hide();
@@ -225,4 +240,42 @@ function validateSendgridWhitelabel(domainName)
      template : "admin-setting-sendgrid-whitelabel-validate",
     });
   $("#sendgrid-whitelabel-key-template").html(view.render().el);
+}
+//validate the web analytical code callback function
+function validateAnalyticalCode(websiteUrl)
+ {   
+    $("#validate_anaytical_code").text("Verifying...");
+    $.ajax({
+        url : 'core/api/api-key/validate?website_url='+websiteUrl,
+        type : 'POST',
+     //   dataType : 'json', 
+        async: true,
+        success : function(data){
+
+            if(data=="Tracking code is valid.")
+            {
+             $("#validate-tracking-code").removeClass("hide");
+             $("#validate-tracking-code").html("<span style='color:green;font-size: 13px;margin-left: 0px;'>"+data+"</span>");
+          }
+
+           else
+           {
+            $("#invalidate-tracking-code").removeClass("hide");
+             $("#invalidate-tracking-code").html("<span style='color: #f05050;font-size: 13px;margin-left: 0px;'>"+data+"</span>");
+        
+          }
+
+          $("#validate_anaytical_code").text("Verify");
+        },
+        error: function (data) {
+        console.log(data);
+      }
+    })
+}
+/*
+*@function for the validating website URL
+*starts 
+*/
+function isUrlValid(url) {
+    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
 }

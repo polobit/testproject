@@ -56,6 +56,10 @@
             fill_relation(el);
             agile_type_ahead("event_related_to", el, contacts_typeahead);
             agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+
+            var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+                sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+            $('#sendEmailInviteBlock').html(sendInviteHtml);
       },
 
       /**
@@ -102,7 +106,7 @@
             var targetEl = $(e.currentTarget);
 
             var contact_id = App_Contacts.contactDetailView.model.id;
-            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
+            var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ({{agile_lng_translate 'campaigns' 'disabled'}}){{else}}>{{name}}{{/if}}</option>";
             
             // Navigate to Add Campaigns page
             if($(targetEl).hasClass('contact-add-campaign'))
@@ -199,7 +203,7 @@
                     if(properties)
                         name = getPropertyValue(properties, "first_name");
                     
-                    var message = name + " "+_agile_get_translated_val('campaigns','contact-active-in-campaign')+" '" + workflow_name+"'.";
+                    var message = name + " {{agile_lng_translate 'campaigns' 'contact-active-in-campaign'}} " + workflow_name+"'.";
                     
                     showNotyPopUp("information", message, "top", 10000);
                     

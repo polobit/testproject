@@ -119,6 +119,9 @@ ul.tagsinput li.tag > span > a:first-child {
 .right {
   float: right;
 }
+.left {
+  float: left;
+}
 /* Rating stars in contact details */
 .rating {
   unicode-bidi: bidi-override;
@@ -1645,11 +1648,13 @@ width:75%;
 }
 .carousel-control.left
 {
- left: -55px; 
+ left: -68px; 
+ margin-top:0px;
 }
 .carousel-control.right {
   right: -55px!important;
   left: auto;
+  margin-top:0px;
 
 }
 
@@ -4123,6 +4128,7 @@ background-color : #522E2E;
     -ms-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     -o-transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
     transition: opacity 0.3s ease-out,bottom 0.1s ease-out 1s;
+    top: calc(100vh - 150px);
 }
 
 #dealActions.open {
@@ -4337,7 +4343,7 @@ border-bottom-right-radius:3px;
 text-align:center;
 border: 1px solid #e5e5e5;
 }
-.extensionPopovers
+.extension-popover li
 {
 
   width:60px !important;
@@ -4350,7 +4356,7 @@ border: 1px solid #e5e5e5;
 
 }
 .grid-sub-nav li#betasuccess {
-    width: 213px;
+    width: 213px !important;
 }
 @-moz-document url-prefix(){
     .grid-sub-nav li{
@@ -4432,7 +4438,15 @@ border: 1px solid #e5e5e5;
 .update-drag-deal + .tooltip{
   width: auto!important;
 }
-
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-88{
+  width: 88% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
 @media (max-width: 767px){
   #affiliate-datepicker {
     ext-align: center;
@@ -4602,7 +4616,15 @@ div.list-tasks.panel-body:hover
 {
   width:150px;
 }
-
+.h-230{
+  height: 230px;
+}
+.w-140{
+  width: 140px;
+}
+.icon-sun-p{
+  padding: 6px 5px;
+}
 /* start of dialler */
 
 	.keyPad:hover{
@@ -4712,6 +4734,7 @@ div.list-tasks.panel-body:hover
   color: #58666e!important;
   background-color: #fff!important;
 }
+
 ul#recent-menu-model-list li:nth-child(even)
 {
   background-color: #f9f9f9;
@@ -4772,7 +4795,78 @@ ul#recent-menu-model-list li:nth-child(even)
   background-color: #fff!important;
 }
 
-.chrome-extenstion-disabled{
-  pointer-events:none;
+.disable-chrome-extenstion
+{
   opacity: 0.65;
+  cursor: not-allowed;
+}
+.call-log-input:focus{
+  border-color: rgba(82,168,236,.8) !important;
+}
+.w-83{
+  width: 83% !important;
+}
+.p-l-15{
+  padding-left: 15px !important;
+}
+.p-t-7{
+  padding-top: 7px;
+}
+
+#admin-affiliate-detail-model-list tr:hover{
+  cursor: pointer;
+}
+
+
+.filter-dynamic-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.filter-dynamic-scrollbar::-webkit-scrollbar-thumb {
+  background:#ccc;
+  border-radius:10px;
+}
+
+.agile-feature-item-blink-new:before, .agile-feature-item-blink-new:after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    pointer-events: none;
+    background: orange;
+    border-radius: 1000px;
+    right: 22px;
+    top: 19px;
+}
+.agile-feature-item-blink-new:after
+{
+    animation:pulse-location 1s infinite;
+}
+@keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+@-webkit-keyframes pulse-location{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+
+.app-aside-folded #email-content .freePlanDetails
+{
+  padding-bottom:35px;
+}
+#email-content .subscriptionDetail
+{
+  padding-bottom:35px;
+}
+#automation-video +  .tooltip > .tooltip-inner ,.help-video +  .tooltip > .tooltip-inner {
+    color: #58666e;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    white-space:nowrap;
+    max-width:none;
+      
+}
+#automation-video + .tooltip.bottom > .tooltip-arrow ,.help-video + .tooltip.bottom > .tooltip-arrow  {
+      border-bottom: 5px solid  #fff;
+      border-width: 0 10px 10px;
+}
+
+.contactlimitwarning
+{
+  float: left;
+  text-indent: 0;
 }

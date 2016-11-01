@@ -1,0 +1,47 @@
+<script id="webrule-table-reports-template" type="text/html">
+<div class="table-responsive">  
+	<table class="table table-bordered table-layout-mob-view">
+		<tbody>
+			<tr>
+				<th>Total Views</th>
+				<th>Total Submissions<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Will be Zero if the Web Rule has no Input Fields."
+							id="element" data-trigger="hover" />
+						</span></th>
+				
+				<!-- <th>NOTY MESSAGE</th>
+				<th>ADD TO CAMPAIGN</th>
+				<th>UNSUBSCRIBE CAMPAIGN</th>
+				<th>ADD TAG</th>
+				<th>REMOVE TAG</th>
+				<th>ADD SCORE</th>
+				<th>SUBSTRACT SCORE</th>
+				<th>SITE BAR</th>
+				<th>REQUEST PUSH POPUP</th> -->
+			</tr>
+			<tr>
+			   	<td>{{#if views}}{{views}}{{else}} 0 {{/if}}</td>
+				<td>{{#if submissions}}{{submissions}}{{else}} 0 {{/if}}</td>
+				<!-- <td>{{#if noty}}{{noty}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtocampaign}}{{addtocampaign}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtocampaign}}{{addtocampaign}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if sitebar}}{{sitebar}} {{else}} 0 {{/if}}</td>
+				<td>{{#if callpopup}} {{callpopup}}  {{else}} 0 {{/if}}</td> -->
+								
+
+               <!-- <td>{{#if spam}}{{spam}} {{else}} 0 {{/if}}</td> -->
+			</tr>
+			
+		</tbody>
+	</table>
+	</div>
+
+</script>

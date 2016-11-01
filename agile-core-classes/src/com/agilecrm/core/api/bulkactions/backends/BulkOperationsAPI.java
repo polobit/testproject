@@ -36,6 +36,7 @@ import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
+import com.agilecrm.bulkaction.deferred.UpdateRelatedContactsDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -81,7 +82,6 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.RetryOptions;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
-import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -1115,7 +1115,8 @@ public class BulkOperationsAPI
 	}
 	companyExporter.finalize();
 	companyExporter.sendEmail(user.email);
-	ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
+	companyExporter.addToActivity(ActivityType.COMPANY_EXPORT, EntityType.CONTACT);
+	//ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
 
 	// creates a log for company export
 
@@ -1229,6 +1230,45 @@ public class BulkOperationsAPI
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while deleting workflow related entities" + e.getMessage());
+	}
+    }
+    
+    /**
+     * Change the updated time of selected contacts
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param current_user
+     *            id of domain user (DomainUser id)
+     * 
+     * @throws JSONException
+     */
+    @Path("/update/{current_user}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    public void updateContacts(@FormParam("ids") String contact_ids, 
+    		@PathParam("current_user") Long current_user)throws JSONException
+    {
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(null, null,
+		contact_ids, null, 200, current_user);
+
+	while (idsFetcher.hasNext())
+	{
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		UpdateRelatedContactsDeferredTask task = new UpdateRelatedContactsDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, null);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
     }
 

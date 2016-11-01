@@ -103,6 +103,11 @@ public class EmailTemplates
 	 * Attached document id
 	 */
 	public String attachment_id = null;
+	
+	/**
+	 * EmailTemplateCategory id
+	 */
+	public Long emailTemplate_category_id = 0L;
 	/***************************************************************/
 
 	/**

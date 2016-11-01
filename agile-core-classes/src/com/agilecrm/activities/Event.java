@@ -231,6 +231,8 @@ public class Event extends Cursor
      */
     @NotSaved
     public String owner_id = null;
+    
+    public boolean sendInvite = false;
     /***************************************************************/
 
     // Dao
@@ -340,39 +342,58 @@ public class Event extends Cursor
      */
     public void save()
     {
-	if (this.contacts != null)
-	{
-	    // Create list of Contact keys
-	    for (String contact_id : this.contacts)
-	    {
-		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
-	    }
-
-	    this.contacts = null;
-	}
-
-	// Saves domain user key
-	if (owner_id != null)
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(Long.parseLong(owner_id));
-	    if (agileUser != null)
-		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	}
-
-	// Create owner key
-	if (owner == null)
-	{
-	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    if (agileUser != null)
-		this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
-	}
-
-	if (id == null)
-	    EventTriggerUtil.executeTriggerForNewEvent(this);
-
-	dao.put(this);
-
-	System.out.println("Event object " + this);
+		if (this.contacts != null)
+		{
+		    // Create list of Contact keys
+		    for (String contact_id : this.contacts)
+		    {
+			this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
+		    }
+	
+		    this.contacts = null;
+		}
+	
+		// Saves domain user key
+		if (owner_id != null)
+		{
+		    AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(Long.parseLong(owner_id));
+		    if (agileUser != null)
+			this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		}
+	
+		// Create owner key
+		if (owner == null)
+		{
+		    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		    if (agileUser != null)
+			this.owner = new Key<AgileUser>(AgileUser.class, agileUser.id);
+		}
+	
+		if (id == null)
+		    EventTriggerUtil.executeTriggerForNewEvent(this);
+	
+		dao.put(this);
+	
+		System.out.println("Event object " + this);
+    }
+    
+	/**
+	 * Saves the event entity in database
+	 * 
+	 * Saves the new one or even updates the existing one
+	 */
+    public void update(){
+		if (this.contacts != null){
+		    // Create list of Contact keys
+			this.related_contacts = new ArrayList<Key<Contact>>();
+		    for (String contact_id : this.contacts){
+		    	this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
+		    }
+		    this.contacts = null;
+		}
+		dao.put(this);
+		
+		System.out.println("Event object " + this);
     }
 
     /**
@@ -510,6 +531,11 @@ public class Event extends Cursor
 	    deal_ids.add(String.valueOf(dealKey.getId()));
 
 	return deal_ids;
+    }
+    
+    public List<Opportunity> relatedDeals()
+    {
+    	return Opportunity.dao.fetchAllByKeys(this.related_deals);
     }
 
 }

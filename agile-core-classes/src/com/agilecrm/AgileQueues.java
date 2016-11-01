@@ -17,6 +17,7 @@ public class AgileQueues
     public static final String NORMAL_CAMPAIGN_QUEUE = "normal-campaign-queue";
     public static final String UPDATE_WORKFLOWS_QUEUE = "update-workflows-queue";
     public static final String JSONIO_NODE_QUEUE = "jsonio-node-queue";
+    public static final String BULK_CAMPAIGN_QUEUE_1 = "bulk-campaign-queue-1";
 
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";
@@ -52,6 +53,7 @@ public class AgileQueues
     // Campaign pull queues
     public static final String BULK_CAMPAIGN_PULL_QUEUE = "bulk-campaign-pull-queue";
     public static final String NORMAL_CAMPAIGN_PULL_QUEUE = "normal-campaign-pull-queue";
+    public static final String BULK_CAMPAIGN_PULL_QUEUE_1 = "bulk-campaign-pull-queue-1";
     
     // Campaign push queues
     public static final String NORMAL_CAMPAIGN_PUSH_QUEUE = "normal-campaign-push-queue";
@@ -73,6 +75,9 @@ public class AgileQueues
 
     // Free Emails added push queue
     public static final String EMAILS_ADDED_QUEUE = "free-emails-added-queue";
+    
+    // Credits auto renewal queue
+    public static final String CREDITS_AUTO_RENEWAL_QUEUE = "credits-auto-renewal-queue";
 
     // Contacts and Deal push queue
     public static final String WEBHOOKS_REGISTER_ADD_QUEUE = "webhooks-register-add-queue";
@@ -96,4 +101,6 @@ public class AgileQueues
 	public static final String EMAIL_ATTACHEMNT_QUEUE = "email-attachment-queue";
 	
 	public static final String IP_FILTERS_TRANSFER_QUEUE = "ip-filters-transfer-queue";
+	
+	public static final String CRON_PULL_TASK_QUEUE = "cron-pull-task-queue";
 }

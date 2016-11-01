@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
@@ -24,8 +27,12 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.InvitedUser;
+import com.agilecrm.user.util.InvitedUsersUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
+import com.google.appengine.api.NamespaceManager;
 
 public class Defaults
 {
@@ -40,6 +47,7 @@ public class Defaults
 		TicketFiltersUtil.saveDefaultFilters();
 		//saveDefaultWorkflowsAndTriggers();
 		//TicketsUtil.createDefaultTicket();
+		saveInvitedUsers();
     }
 
 	/**
@@ -207,7 +215,7 @@ public class Defaults
     private void saveDefaultTasks()
     {
 		Task task = new Task();
-		task.subject = "<a href=\"https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&amp;text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20\">Tweet about Agile</a>";
+		task.subject = "Tweet about Agile";
 		task.is_complete = false;
 		task.type = Type.TWEET.toString();
 		task.priority_type = PriorityType.HIGH;
@@ -221,7 +229,7 @@ public class Defaults
 		task.save();		
 	
 		Task task1 = new Task();
-		task1.subject = "<a href=\"https://www.facebook.com/crmagile\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.facebook.com/crmagile\">Like Agile on Facebook</a>";
+		task1.subject = "Like Agile on Facebook";
 		task1.is_complete = false;
 		task1.type = Type.SEND.toString();
 		task1.priority_type = PriorityType.NORMAL;
@@ -500,4 +508,26 @@ public class Defaults
     	newTicketTrigger.is_disabled = true;
     	newTicketTrigger.save();
    	}
+    private void saveInvitedUsers(){
+    	List<InvitedUser> list = InvitedUsersUtil.dao.fetchAll();
+
+		for (InvitedUser invitedUser : list) {
+			if (invitedUser == null || StringUtils.isBlank(invitedUser.email))
+				continue;
+
+			String emailName = invitedUser.email;
+			String name = emailName.split("@")[0];
+
+			DomainUser domainUser = new DomainUser(NamespaceManager.get(), emailName, name, APIKey.generateRandom(),
+					false, false, name);
+			try {
+				Long user_id = invitedUser.id;
+				domainUser.invitedUser_id = user_id;
+				domainUser.save();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
 }

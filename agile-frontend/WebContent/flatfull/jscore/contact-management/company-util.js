@@ -245,7 +245,7 @@
 		
 		var map_view=_agile_get_prefs('MAP_VIEW');
 		if(map_view=="disabled"){
-			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
+			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='{{agile_lng_translate 'contact-details' 'show-map'}}' id='enable_map_view'></i>");
 			return;
 		}
 			
@@ -260,7 +260,7 @@
 	
 			var script = document.createElement("script");
 			script.type = "text/javascript";
-			script.src = "https://maps.googleapis.com/maps/api/js?&sensor=false&callback=company_util.displayGoogleMap";
+			script.src = get_agile_gmap_url_with_key() + "&callback=company_util.displayGoogleMap";
 			document.body.appendChild(script);
 		}
 	
@@ -516,7 +516,24 @@
 				// Showing updated owner
 				show_owner(); 
 				App_Companies.companyDetailView.model = model;
-				
+				COMPANIES_HARD_RELOAD = true;
+				if(!hasScope("VIEW_CONTACTS") && !CURRENT_DOMAIN_USER.is_admin)
+    				Backbone.history.navigate("companies",{trigger: true});
+
+    			if(!hasScope("VIEW_CONTACTS")){
+	    			var storageItems = JSON.parse(localStorage.recentItems);
+		            var arr = [];
+		            localStorage.removeItem("recentItems");
+		            for(var i=0;i<storageItems.length;i++){
+		              if(storageItems[i].id != App_Companies.companyDetailView.model.get('id')){
+		                arr.push(storageItems[i]);
+		              }else{
+		                recent_view.collection.remove(storageItems[i].id);
+		              }
+		            }
+	                localStorage.setItem("recentItems", JSON.stringify(arr));
+	                recent_view_update_required = true;
+            	}
 		    }});
    	};
 	
@@ -606,7 +623,18 @@
 			});
 		}
 	};
-	
+	company_detail_tab.openCompanyTimeLine = function(e){
+	  		
+			$('div.tab-content', App_Companies.companyDetailView.el).find('div.active').removeClass('active');
+			$("#timeline").append("<div id='line-container'><div id='line'></div></div>");
+			$('#company-timeline', App_Companies.companyDetailView.el).addClass('active');
+			if($("#timeline", App_Companies.companyDetailView.el).hasClass('isotope'))
+			{
+				$("#timeline", App_Companies.companyDetailView.el).isotope( 'reLayout', function(){} )
+				return;
+			}
+			load_company_timeline_details(App_Companies.companyDetailView.el, App_Companies.companyDetailView.model.get('id'));
+	};
 	company_detail_tab.load_company_deals = function ()
 	{
 		id = App_Companies.companyDetailView.model.id;
@@ -1064,7 +1092,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
 							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
+								html = html+ ' ({{agile_lng_translate "contact-details" "shared"}})';
 						}
 					}
 					else if(email_server.toLowerCase()==='imap')
@@ -1098,7 +1126,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/imap/imap-emails?from_email='+email;
 							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
+								html = html+ ' ({{agile_lng_translate "contact-details" "shared"}})';
 						}
 					}
 					else if(email_server.toLowerCase()==='exchange')
@@ -1132,7 +1160,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/office/office365-emails?from_email='+email;
 							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
+								html = html+ ' ({{agile_lng_translate "contact-details" "shared"}})';
 						}
 					}
 					if(final_url)
@@ -1202,7 +1230,7 @@ function showMailsInfoMessages()
 	{
 		if(($('#all-emails-info',App_Companies.companyDetailView.el).length === 0))
 		{
-			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">'+_agile_get_translated_val('mails','show-mails-error')+' </div>');
+			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">{{agile_lng_translate "mails" "show-mails-error"}} </div>');
 		}
 	}
 	$('#company-mail-account-types', App_Companies.companyDetailView.el).find('.all-mails-loading').remove();
@@ -1235,7 +1263,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('mails','mo-mails-error')+'</div>');
+	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "mails" "mo-mails-error"}}</div>');
 }
 
 

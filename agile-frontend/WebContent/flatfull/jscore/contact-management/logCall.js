@@ -39,7 +39,7 @@ $(function()
 		// This method is called when the add-note modal is closed .....
 		//This will check if the if the activities is saved or not
 			$('#logCallModal').on('shown.bs.modal', function (e) {
-				$("#phoneLogForm #status-wait").html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 40px;"></img>');
+				$("#phoneLogForm #status-wait").html('<img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif"></img>');
 				getTelephonyStatus(function(status){
 					var statusHtml="";
 					$.each(status,function(index,stats){
@@ -463,8 +463,7 @@ try{
 
 			  }
 
-		     }
-		     
+		    }
 			}
 		}
 		

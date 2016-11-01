@@ -73,6 +73,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
     	'click .document-edit-deal-tab' : 'dealDocumentEdit',
     	'click .document-unlink-deal-tab' : 'dealUnlinkDocument',
     	'click .add-deal-document-select' : 'dealDocumentsList',
+    	'click .add-deal-edocument-select' : 'navigateToeDocument',
     	'click .add-deal-document-confirm' : 'dealAddDocumentConfirm',
     	'click .add-deal-document-cancel' : 'dealAddDocumentCancel',
     	'click .deal-add-task' : 'dealAddtask',
@@ -484,8 +485,11 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
-		var id = $(targetEl).attr('data');
-		updateDocument(dealDocsView.collection.get(id));
+		var document_id = $(targetEl).attr('data');
+		var currentDeal = App_Deal_Details.dealDetailView.model.toJSON();
+		
+		Backbone.history.navigate("documents/"+document_id+"/" + currentDeal.id,{trigger: true});	
+		//updateDocument(dealDocsView.collection.get(id));
 	},
 
 	// For unlinking document from contact-details
@@ -532,12 +536,19 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	/**
 	 * For showing new/existing documents
 	 */
+	navigateToeDocument:function(e)
+	{
+		e.preventDefault();
+		var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+		Backbone.history.navigate("documents/deal/" + deal_json.id+ "/edoc",{trigger: true});	        
+	},
 	dealDocumentsList: function(e){
 		e.preventDefault();
 		var targetEl = $(e.currentTarget);
 
 		var el = $(targetEl).closest("div");
 		$(targetEl).css("display", "none");
+		$(".add-deal-edocument-select,.dropdown-toggle",el).css("display", "none");
 		el.find(".deal-document-select").css("display", "block");
 		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 	    fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
@@ -568,7 +579,9 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	    }	    	
 	    else if(document_id == "new")
 	    {
-	    	
+	    	var deal_json = App_Deal_Details.dealDetailView.model.toJSON();
+	    	Backbone.history.navigate("documents/deal/" + deal_json.id+ "/attachment",{trigger: true});	        
+	    	return;
 	    	$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
 			
 			var el = $("#uploadDocumentForm");
@@ -615,7 +628,8 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 
 		var el = $(targetEl).closest("div");
 		el.find(".deal-document-select").css("display", "none");
-		el.find(".add-deal-document-select").css("display", "inline");
+		el.find(".add-deal-document-select,.add-deal-edocument-select,.dropdown-toggle").css("display", "inline");
+		
 	},
 
 	
@@ -716,13 +730,16 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		{
 			var id = $(targetEl).attr('data');
 			var that = targetEl;
-			complete_task(id, dealTasksView.collection, undefined, function(data)
-			{
-				$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
-				console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
-				$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
-				dealTasksView.collection.add(data, { silent : true });
-			});
+			//showAlertModal("complete_task", "confirm", function() 
+			//{
+				complete_task(id, dealTasksView.collection, undefined, function(data)
+				{
+					$(that).parent().siblings(".task-subject").css("text-decoration", "line-through");
+					console.log($(that).parents('.activity-text-block').css("background-color", "#FFFAFA"));
+					$(that).parent().replaceWith('<span style="margin-right:9px;"><i class="fa fa-check"></i></span>');
+					dealTasksView.collection.add(data, { silent : true });
+				});
+			 //});
 		}
 	},
 
@@ -743,6 +760,13 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 		fill_relation_deal_task(el);
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
         agile_type_ahead("task_relates_to_deals", el, deals_typeahead, false,null,null,"core/api/search/deals",false, true);
+        
+        var size = $('.newtypeaheadcontact', el).children().length;
+       	if(size && size > 0){        
+        	var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+        	sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+        	$('#sendEmailInviteBlock').html(sendInviteHtml);
+    	}
 
     },
 
@@ -816,7 +840,7 @@ var Deal_Modal_Event_View = Base_Model_View.extend({
 	  		owner = model.get("owner").id;
 	  	}
 
-		if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+		if(!hasScope("DELETE_CALENDAR") && model.get("entity_type") && model.get("entity_type") == "event"){
 			$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 			return;
 		}

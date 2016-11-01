@@ -37,7 +37,7 @@ function initializeDataSyncListners(){
 
 	$('#prefs-tabs-content #data-sync-type').off();
     $('#prefs-tabs-content').on('click', '#data-sync-type', function(e){
-
+    	$(this).addClass('disabled');
 		var sync_type=$(this).attr("sync_type");
 		if(sync_type=="GOOGLE"){
 		// URL to return, after fetching token and secret key from LinkedIn

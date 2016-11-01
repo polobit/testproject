@@ -1,0 +1,151 @@
+<script id="webrule-reports-template" type="text/html">
+<div id="webrule-report">
+<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm m-b" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);">
+     <i class="icon-calendar icon-large"></i>
+     <span id="range">{{date-range "today" "-6"}}</span>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+<div class="col-md-12">		
+	<!-- Email Reports -->
+	<div id="email-reports">
+		<div class="row">
+			<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">{{agile_lng_translate 'web-rules' 'webrule-report'}}</div>
+			<div class="panel-body">	
+			<div id="web-table-reports"></div>
+			</div>
+			</div>
+			</div>
+		
+
+
+		
+		<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{agile_lng_translate 'report-add' 'daily'}}</div>
+			<div class="panel-body">
+				<div id="line-daily-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+			</div>
+		</div>
+		</div>
+		
+		
+		
+		<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">{{agile_lng_translate 'report-add' 'hourly'}}</div>
+			<div class="panel-body">
+				<div id="line-hourly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+			</div>
+		</div>
+		</div>
+		
+		
+		
+		<div class="col-md-12">
+		<div class="panel panel-default">
+				<div class="panel-heading">{{agile_lng_translate 'report-add' 'weekly'}}
+				<small>({{agile_lng_translate 'contact-details' 'from'}} 
+				<span id="week-range">{{date-range "today" "-6"}}</span>)</span></small></div>
+			<div class="panel-body">
+			<div id="line-weekly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+			</div>
+		</div>
+		</div>
+		
+		 
+	</div>
+	<!-- end of webrule reports-->
+   </div>
+</div>
+</div>
+
+</script>
+
+
+<script id="webrule-analysis-template" type="text/html">
+<div class="wrapper-md lter bg-light b-b" id="webrule-logs-list">
+<div class="row">
+    <div class="col-md-12">
+        
+            <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'webrule-analysis'}}</h3>
+
+			<!--Shown only in Subscribers block-->
+			<div id="subscribers-block" class="pull-left" style="margin-top: 2px; margin-left: 11px;">
+				<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-webrule" style="display: none;">{{agile_lng_translate 'web-rules' 'remove-from-webrule'}}</div>
+            	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
+            	<div class="pull-left m-l-sm"  style="margin-top: 6px;" id="subscribers-bulk-select"></div>
+			</div>
+
+            <div class="right">
+        		<select id="webrule-reports-select" class="required form-control">
+        			<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+        		</select>
+			</div>
+            <div class="clearfix"></div>
+       
+    </div>
+</div>
+</div>
+<div id="webrule-analysis-tabs"></div>
+</script>
+
+<script id="webrule-analysis-tabs-template" type="text/html">
+
+	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">	
+		<div class="col overflow-visible">
+			<div class="tabs wrapper-md" id="webrule-analysis-tabs-content"></div>
+		</div>
+	</div>
+
+</script>
+
+<script id="webrule-table-reports-template" type="text/html">
+<div class="table-responsive">  
+	<table class="table table-bordered table-layout-mob-view">
+		<tbody>
+			<tr>
+				<th>{{agile_lng_translate 'web-rules' 'views'}}</th>
+				<th>{{agile_lng_translate 'forms' 'submissions'}}<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="Will be Zero if the Web Rule has no Input Fields."
+							id="element" data-trigger="hover" />
+						</span></th>
+				
+				<!-- <th>NOTY MESSAGE</th>
+				<th>ADD TO CAMPAIGN</th>
+				<th>UNSUBSCRIBE CAMPAIGN</th>
+				<th>ADD TAG</th>
+				<th>REMOVE TAG</th>
+				<th>ADD SCORE</th>
+				<th>SUBSTRACT SCORE</th>
+				<th>SITE BAR</th>
+				<th>REQUEST PUSH POPUP</th> -->
+			</tr>
+			<tr>
+			   	<td>{{#if views}}{{views}}{{else}} 0 {{/if}}</td>
+				<td>{{#if submissions}}{{submissions}}{{else}} 0 {{/if}}</td>
+				<!-- <td>{{#if noty}}{{noty}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtocampaign}}{{addtocampaign}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtocampaign}}{{addtocampaign}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if addtag}}{{addtag}} {{else}} 0 {{/if}}</td>
+				<td>{{#if sitebar}}{{sitebar}} {{else}} 0 {{/if}}</td>
+				<td>{{#if callpopup}} {{callpopup}}  {{else}} 0 {{/if}}</td> -->
+								
+
+               <!-- <td>{{#if spam}}{{spam}} {{else}} 0 {{/if}}</td> -->
+			</tr>
+			
+		</tbody>
+	</table>
+	</div>
+
+</script>

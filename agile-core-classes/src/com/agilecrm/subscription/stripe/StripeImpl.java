@@ -21,6 +21,7 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
@@ -62,7 +63,7 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 public class StripeImpl implements AgileBilling {
 
 	static {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = StripeUtil.getStripeApiKey();
 		Stripe.apiVersion = "2012-09-24";
 	}
 
@@ -655,7 +656,7 @@ public class StripeImpl implements AgileBilling {
 		invoiceParams.put("subscription_prorate", true);
 		invoiceParams.put("subscription_plan", plan.plan_id);
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
-		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setApiKey(StripeUtil.getStripeApiKey());
 		builder.setStripeVersion("2015-10-16");
 		RequestOptions options = builder.build();
 		Invoice invoice = Invoice.upcoming(invoiceParams, options);
@@ -664,7 +665,7 @@ public class StripeImpl implements AgileBilling {
 	}
 	
 	// Create InvoiceIterm and pay to purchase life time emails
-	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+	public boolean purchaseEmailCredits(JSONObject customerJSON, int quantity) throws Exception {
 		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("customer", customer.getId());
@@ -675,18 +676,21 @@ public class StripeImpl implements AgileBilling {
 		System.out.println("invoiceItem for email credits "+invoiceItem);
 		params.remove("amount");
 		params.remove("currency");
-		try{
-			Invoice invoice = Invoice.create(params).pay();
+		Invoice invoice = Invoice.create(params).pay();
+		if(invoice.getPaid()){
+			CacheUtil.deleteCache(NamespaceManager.get()+"_auto_renewal_billing_failed");
 			System.out.println("invoice for email credits "+invoice);
-		}catch(Exception e){
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			return true;
+		}else{
 			params.remove("description");
 			params.put("limit", 1);
-			List<InvoiceItem> invoiceItems = InvoiceItem.all(params).getData();
-			invoiceItems.get(0).delete();
-			throw new Exception(e.getMessage());
+			List<Invoice> invoiceList = Invoice.all(params).getData();
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			updateParams.put("closed", "true");
+			invoiceList.get(0).update(updateParams);
+			CacheUtil.setCache(NamespaceManager.get()+"_auto_renewal_billing_failed", "BILLING_FAILED", 5 * 60 * 1000);
+			return false;
 		}
-		
 		
 	}
 	

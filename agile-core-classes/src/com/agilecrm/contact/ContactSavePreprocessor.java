@@ -172,7 +172,7 @@ public class ContactSavePreprocessor
 	    if (oldContact == null)
 		return;
 
-	    if (newContact.getLastContacted() == 0L || newContact.getLastContacted() == null)
+	    if (newContact.getLastContacted() == 0L || newContact.getLastContacted() == null || (newContact.getLastContacted() != null && oldContact.getLastContacted() != null && newContact.getLastContacted() < oldContact.getLastContacted()))
 		newContact.last_contacted = oldContact.last_contacted;
 
 	    if (newContact.getLastCampaignEmailed() == 0L || newContact.getLastCampaignEmailed() == null)
@@ -181,7 +181,7 @@ public class ContactSavePreprocessor
 	    if (newContact.getLastEmailed() == 0L || newContact.getLastEmailed() == null)
 		newContact.last_emailed = oldContact.last_emailed;
 
-	    if (newContact.getLastCalled() == 0L || newContact.getLastCalled() == null)
+	    if (newContact.getLastCalled() == 0L || newContact.getLastCalled() == null || (newContact.getLastCalled() != null && oldContact.getLastCalled() != null && newContact.getLastCalled() < oldContact.getLastCalled()))
 		newContact.last_called = oldContact.last_called;
 
 	}

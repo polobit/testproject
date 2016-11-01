@@ -6,8 +6,14 @@ var LandingPageRouter = Backbone.Router.extend({
 	"landing-page-add/:id" : "loadSelectedTemplate",
 	"landing-page/:id" : "loadSavedLandingPage",
     "landing-page-settings/:id" : "pageSettings",
-    "landing-page-copy/:id" : "copySelectedLandingPage"
+    "landing-page-copy/:id" : "copySelectedLandingPage",
+    "pagebuilder" : "pageBuilderRedirect",
 	},
+    pageBuilderRedirect : function(){
+       var loc = window.location.href.replace("#", "");
+       window.location = loc;
+       return;
+    },
 
 	getListOfLandingPages : function()
     {

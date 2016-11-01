@@ -22,16 +22,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AllDomainStats;
+import com.agilecrm.account.RecaptchaGateway;
+import com.agilecrm.account.util.RecaptchaGatewayUtil;
 import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
+import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/forms")
 public class FormsAPI
 {
-    @GET
+	@GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Form> getAllForms()
     {
@@ -57,8 +60,8 @@ public class FormsAPI
 	    String name = formJson.getString("formName");
 	    String json = formJson.getString("formJson");
 	    boolean emailNotification=false;
-		
-		/*checking the condition for the when emailNotification is true
+		boolean agileformcaptcha=false;
+		/*checking the condition for the whn emailNotification is true
 		 * and user clicks on the submit button of the form  */
 		try{
 			JSONArray jsn=new JSONArray(json);
@@ -70,11 +73,42 @@ public class FormsAPI
 		{
 			System.out.println("Error occured while geeting email notification value... :"+e.getMessage());
 		}
-	    String html = null;
+		/**@Priyanka
+		 * checking the condition for the when agileformcaptcha is true(enable captcha)
+		 * and user clicks on the submit button of the form then dynamically 
+		 * the recaptcha key and site key will be append on the souce code(render time)
+		 * */
+		
+		try{
+			JSONArray jsn1=new JSONArray(json);
+			agileformcaptcha=jsn1.getJSONObject(0).getJSONObject("fields").getJSONObject("agileformcaptcha").getJSONArray("value").getJSONObject(0).getBoolean("selected");
+			agileformcaptcha=agileformcaptcha?false:true;
+		}
+		catch(Exception e){
+			System.out.println("Error occured while getting captcha value..."+e.getMessage());
+			
+		}
+		 String html = null;
 	    
 	    if(formJson.has("formHtml"))
 	    {
 	    html = formJson.getString("formHtml");
+	    }
+	    /**
+	     * checking the condition when recaptcha will be selected as true by user  
+	     * */
+	    if(agileformcaptcha==true){	
+	       RecaptchaGateway recaptchaGateway = RecaptchaGatewayUtil.getRecaptchaGateway();
+	       
+	       if(recaptchaGateway != null)
+	       {
+		    	
+		    	html=html.replaceFirst("</form>","</form><script id=\"gRecaptchaSrc\" src='https://www.google.com/recaptcha/api.js'></script>"); 	
+		    	html = html.replaceFirst("<!--recaptcha aglignment-->", " <!--recaptcha aglignment--><div class=\"agile-group\">"
+			 + "<label class=\"agile-label\"></label>"
+			 + "<div class=\"agile-field-xlarge agile-field\">"
+			 + "<div class='g-recaptcha' style=\"transform:scale(0.91);-webkit-transform:scale(0.91);transform-origin:0 0;-webkit-transform-origin:0 0; width='304px';\" data-sitekey='" + recaptchaGateway.site_key + "' data-callback='agileGCaptchaOnSuccess'></div></div></div>");
+		   }
 	    }
 
 	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
@@ -109,6 +143,7 @@ public class FormsAPI
 		form.formHtml = html;
 		//adding another for emailNotification
 		form.emailNotification=emailNotification;
+		form.agileformcaptcha=agileformcaptcha;
 		//if(form.emailNotification)
 
 		form.save();
@@ -178,4 +213,32 @@ public class FormsAPI
 	}
 	
     }
+ 	/**
+ 	 * 
+ 	 * @param captchaResponse
+ 	 * @return
+ 	 */
+ 	/*@Path("/verify/recaptcha")
+    @GET
+    @Produces("application/x-javascript;charset=UTF-8;")
+    public boolean verifyRecaptcha(@PathParam("captchaResponse") String captchaResponse)
+    {	
+	try 
+	{
+		
+		 String captchaURL = RECAPTCHA_VERIFY_URL + "?secret=" +RECAPTCHA_SITE_KEY ;
+		 captchaURL = captchaURL + "&response="+captchaResponse;
+		 
+		String response =  HTTPUtil.accessURL(captchaURL);
+		
+		JSONObject data = new JSONObject(response);
+		return data.getBoolean("success");
+		
+	} 
+	catch(Exception e){
+		e.printStackTrace();
+		return false;
+	}
+	
+    }*/
 }

@@ -24,7 +24,9 @@ $(function()
     $('#opportunityUpdateModal #opportunity_validate').trigger('click');
   });
 
-
+  	$('#opportunityUpdateModal, #newDealModal').on('hidden.bs.modal', function (e) {
+    	$("#timeline","#deal-details").css("zIndex","1");		
+  	});
   /**
    * Validates deal and saves
    */
@@ -107,12 +109,15 @@ $(function()
                     return false;
             }
         }
-    console.log(json);
-    if (form_id == "opportunityForm")
-      saveDeal(form_id, modal_id, this, json, false);
-    else
-      saveDeal(form_id, modal_id, this, json, true);
-  });
+
+        json["products"] = serialize_deal_products(form_id);
+        
+		console.log(json);
+		if (form_id == "opportunityForm")
+			saveDeal(form_id, modal_id, this, json, false);
+		else
+			saveDeal(form_id, modal_id, this, json, true);
+	});
 
 	/**
 	 * When mouseover on any row of opportunities list, the popover of deal is shown
@@ -543,6 +548,12 @@ function initializeDealListners(el){
 				dealModel.set({ "pipeline_id" : track }, { silent : true });
 				update_milestone(dealModel, deal_id, newMilestone, old_milestone, true, "", false);
 				$('#'+old_milestone.replace(/ +/g, '')+'_count').text(parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text())-1);
+				var modelsLength = $("#" + old_milestone.replace(/ +/g, "")).find('ul li.deal-color').size() ;
+	        	if(modelsLength ==10 && modelsLength <= parseInt($('#'+old_milestone.replace(/ +/g, '')+'_count').text()))
+	        	{
+	          		dealsCollection[0]['isUpdateCollection'] = true ;
+	          		dealsFetch(dealsCollection[0]);
+	        	}
 			}
 		}
 		//If deal moves to lost milestone of other track, will ask reasons for lost the deal
@@ -609,4 +620,63 @@ function initializeMilestoneListners(el){
     	});
     	
     });
+}
+function createtypeheadcontact(el){
+	var cname = el.closest('form').find('.typeahead_contacts').val();
+	var type = $(el).attr('type') ; 
+	var contact = {}; var url = '/core/api/contacts' ;
+	var properties = []; var json = {};
+	contact['source'] = 'manual' ;
+	if(type == "contact"){
+		contact['type'] = 'PERSON' ;
+		json.name = "first_name";
+		json.type = "SYSTEM";
+		json.value = cname ; 
+	}
+	else {
+		contact['type'] = 'COMPANY' ;
+		json.name = "name";
+		json.type = "SYSTEM";
+		json.value = cname ;
+	}
+	properties.push(json);
+	contact.properties = properties ;
+	$.ajax({
+	  type: "POST",
+	  url: url,contentType : "application/json; charset=utf-8",
+	  dataType : 'json',
+	  data: JSON.stringify(contact),
+	  success: function(data){
+	  	console.log(data);
+	  	var properties = [];var i ;var coname ;var cValue = 'first_name'; 
+	  	var cType = data.type ; 
+	  	properties = data['properties'];
+	  	if(cType == 'COMPANY')
+	  		cValue = 'name';
+	  	for(i=0 ; i<properties.length ; i++){
+	  		if(properties[i].name == cValue){
+	  			coname = properties[i].value;
+	  			break ; 
+	  		}
+	  	}
+	  	el.closest('form')
+			.find(".newtypeaheadcontact")
+			.append(
+					'<li class="tag  btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data.id + '"><a class="text-white v-middle" href="#contact/' + data.id + '">' + coname + '</a><a class="close" id="remove_tag">&times</a></li>');
+	  },error : function(model, response)
+		{
+			if (model && model.responseText)
+			{
+				// Show cause of error in saving
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + model.responseText + '</i></p></small></div>');
+				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
+
+			}
+			else
+			{
+				var save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>Exception while saving the Contact/Company</i></p></small></div>');
+				el.closest('form').find('.contact-add-error').html(save_info).show().delay(3000).hide(1);
+			}
+		}
+	});
 }

@@ -48,8 +48,10 @@ function initializeEmailBuilderListeners() {
         e.preventDefault();
         var selectedVal = $('#attachmentSelectBox').val();
         if(selectedVal == "new"){
-            $('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
-            $('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
+            //$('#uploadDocumentModal').html(getTemplate("upload-document-modal", {})).modal('show');
+            var sCurrentRoute=window.location.hash.split("#")[1]
+            Backbone.history.navigate("documents/email-template/" + sCurrentRoute,{trigger: true});         
+            //$('#GOOGLE',$('#uploadDocumentModal')).parent().hide();
         }else if(selectedVal != ""){
             $('#attachmentSelectBoxHolder').hide();
             $('#attachmentHolder').show();
@@ -82,11 +84,172 @@ function initializeEmailBuilderListeners() {
         BRING_YOUR_CODE_BTN = true;
         window.location.hash = "#email-template-add";
     });
+
+    /**
+     * Script to show create a new category in bootstrap modal.
+     **/
+    $('#emailbuilder-listeners').on('change','select#emailTemplate-category-select',  function(e){
+        e.preventDefault();
+        currentCtgObj = {};
+        var selectedVal = $(this).val();
+        if(selectedVal == "CREATE_NEW_CATEGORY") {
+
+            getTemplate('emailbuilder-templates-category-modal', {}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;           
+
+                $("#emailbuilder-templates-category-modal").html($(template_ui)).modal('show');
+
+                // refresh category list  on modal hide
+                $("#emailbuilder-templates-category-modal").on("hidden.bs.modal", function(e){
+                    e.preventDefault();
+                    getEmailTemplateCategories(currentCtgObj);
+                });
+
+            });
+        }
+    });
+
+    $('body').on('click','#emailTemplCtgySaveBtn', function(e){
+        e.preventDefault();
+        var isCtg = $(this).attr("data-id");
+        if(isCtg != undefined && isCtg == "new"){
+            $(".emailTemplCategoryFormMsgHolder").html("");
+            var ctgyName = $("#emailTemplate-category-name").val();
+            if(ctgyName != "" && ctgyName.trim() != "") {
+                $("#emailTemplCtgySaveBtn").text("Saving...");
+                $("#emailTemplCtgySaveBtn").prop('disabled', true);
+                $(this).removeAttr("data-id");
+                emailTemplateCtg.saveEmailTemplateCategory(ctgyName.trim());
+            } else {
+                $(".emailTemplCategoryFormMsgHolder").html("Name field is required.");
+            }
+        }
+    });
     
+    $('#emailbuilder-listeners').on('click', '.videoRecordHiddenBtn', function(e){
+        e.preventDefault();
+
+        $("#modal-backdrop").hide();
+        var $videoRecordModalEl = $("#videoRecordModal");
+        $.getJSON("core/api/video-record", function(data) {
+           getTemplate("video-record-modal",data, undefined, function(ui){
+            $videoRecordModalEl.html(ui).modal("show");
+                videoRecordPreview.videoRecordModalLoad();                                                                                                                                                                                                                                                                                                                                                                                                      
+           });
+        });
+
+    });
+
+    $('body').on('click','#videoRecordSaveBtn', function(e){
+        e.preventDefault();
+
+        var isVideo = $(this).attr("data-id");
+        if(isVideo !== undefined && isVideo === "new"){
+
+            $(".videoRecordFormMessageHolder").html("");
+            var videoRecordType = $("input[id=videoRecordType]").val();
+            if(videoRecordType === "new") {
+                if($("#video-record-name").val() != "") {
+                    $("#videoRecordSaveBtn").text("Saving...");
+                    $("#videoRecordSaveBtn").prop('disabled', true);
+                    $(this).removeAttr("data-id");
+                    emailVideoRecord.uploadVideoToS3();
+                    return;
+                } else {
+                    $(".videoRecordFormMessageHolder").html("Name field is required.");
+                }
+            } else {
+                var selectedVal = $("#video-record-select").val();
+                if(selectedVal != "" && selectedVal != "AGILE_CREATE_NEW_VIDEO") {
+                    emailVideoRecord.buildVideoPageURL(selectedVal);
+                } else {
+                    $(".videoRecordFormMessageHolder").html("Please select a video.");
+                }
+            }
+        }
+    });
+
+    $('body').on('change','#video-record-select', function(e){
+        e.preventDefault();
+        $(".videoRecordFormMessageHolder").html("");
+        var selectedVal = $(this).val();
+        /*if(selectedVal === "AGILE_CREATE_NEW_VIDEO") {
+            $("#headerTitle").html("Record your video");
+            $("#videoRecordSelectFields").hide();
+            $("#videoRecordType").val("new");
+            $("#videoRecordFields").show();
+
+        }*/
+        if(selectedVal !== ""){
+            videoRecordPreview.showVideoPreviewModal(selectedVal);
+        }
+        $("#videoRecordSaveBtn").prop('disabled', false);
+    });
+
+    $('#emailbuilder-listeners').on('click', '.videoRecordHiddenBtnNew', function(e){
+        e.preventDefault();
+        $("#modal-backdrop").hide();
+        $('#videoRecordModal').html(getTemplate("video-record-modal", {})).modal('show');
+        $("#headerTitle").html("Record your video");
+        $(".videoRecordFormMessageHolder").html("");
+        $("#videoRecordSelectFields").hide();
+        $("#videoRecordType").val("new");
+        $("#videoRecordFields").show();
+    });
+
+    $('#videoRecordModal').on('hidden.bs.modal', function(){
+        $('#videoRecordModal').empty();
+    });
+
 }
 
+var currentCtgObj = {};
+
+var emailTemplateCtg = {
+    saveEmailTemplateCategory : function(ctgyName){
+        var templateCategory = {
+            "name" : ctgyName
+        };
+        var requestType = "POST";
+
+        $.ajax({
+            type: requestType, 
+            url: 'core/api/emailTemplate-category',       
+            data: JSON.stringify(templateCategory),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                currentCtgObj = data;
+                $(".emailTemplCategoryFormMsgHolder").html("Saved Successfully").css("color","green");
+                $("#emailTemplCtgySaveBtn").text("Save");
+                $("#emailTemplCtgySaveBtn").prop('disabled', false);
+                $("#emailTemplCtgySaveBtn").attr("data-id", "new");
+                $("#emailbuilder-templates-category-modal").modal("hide");
+            },
+            error:function(response){
+                $("#emailTemplCtgySaveBtn").text("Save");
+                $("#emailTemplCtgySaveBtn").prop('disabled', false); 
+                $("#emailTemplCtgySaveBtn").attr("data-id", "new");
+
+                // Shows error alert of duplicate category name
+                if (response.status == 400){
+                    show_error('emailbuilder-templates-category-modal', 'emailTemplCategoryForm', 
+                        'duplicate-category', response.responseText);
+                }else{
+                    $(".emailTemplCategoryFormMsgHolder").html(response.responseText);
+                }
+
+            }
+        });
+    }
+};
+
 function saveEmailTemplateFromBuilder(fullSource,builderSource) {
-    
+    var emailTemp_ctg_id = $("select#emailTemplate-category-select").val();
+    if(emailTemp_ctg_id == "" || emailTemp_ctg_id == "CREATE_NEW_CATEGORY"){
+        emailTemp_ctg_id = 0;
+    }
     var template = {
     "name": $("#nameoftemplate").val(),
     "subject": $("#subject").val(),
@@ -94,7 +257,8 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     "text_email": $("#text_email").val(),
     "html_for_builder": builderSource,
     "is_template_built_using_builder": true,
-    "attachment_id": ($("#attachment_id").val()) ? $("#attachment_id").val() : ""
+    "attachment_id": ($("#attachment_id").val()) ? $("#attachment_id").val() : "",
+    "emailTemplate_category_id": emailTemp_ctg_id
     };
 
     var requestType = "post";
@@ -246,3 +410,104 @@ function check_merge_fields_and_send(template)
          });
      }); 
  }
+
+var emailVideoRecord = {
+
+    uploadVideoToS3 : function() {
+        if(typeof emailVideoRecordRecordedData != "undefined") {
+
+            var file = emailVideoRecordRecordedData.video;
+
+            var uploadedFileName = file.name;
+            var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+            formData = new FormData();
+            formData.append('key',  "videos/" + CURRENT_DOMAIN_USER.domain + "/" + filename);
+            formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+            formData.append('acl', 'public-read');
+            formData.append('content-type', 'video/webm');
+            formData.append('policy', 'ewogICJleHBpcmF0aW9uIjogIjIwMjUtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInZpZGVvcy8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJ2aWRlby8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyIsICIyMDEiXSwKICBdCn0=');
+            formData.append('signature', '/XP/Uq6l0iVo+uNWkwwhC8l4jVY=');
+            formData.append('success_action_status', '201');
+            formData.append('file', file);
+            
+            $.ajax({
+                data: formData,
+                dataType: 'xml',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                url: "https://agilecrm.s3.amazonaws.com/",
+                success: function(data) {
+                  emailVideoRecordRecordedData = undefined;
+                  // getting the url of the file from amazon and insert it into the editor
+                  var url = $(data).find('Location').text();
+                  emailVideoRecord.saveVideoRecord(decodeURIComponent(url));
+                }
+            });
+        } else {
+            $(".videoRecordFormMessageHolder").html("Please record a video.");
+            $("#videoRecordSaveBtn").text("Save");
+            $("#videoRecordSaveBtn").prop('disabled', false);
+            $("#videoRecordSaveBtn").attr("data-id", "new");
+        }
+    },
+
+    saveVideoRecord : function(videoS3URL) {
+        var videoMeta = {
+            "name": $("#video-record-name").val(),
+            "url": videoS3URL
+        };
+
+        var requestType = "post";
+
+        $.ajax({
+            type: requestType, 
+            url: 'core/api/video-record',       
+            data: JSON.stringify(videoMeta),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                $("#videoRecordSaveBtn").text("Save");
+                $("#videoRecordSaveBtn").prop('disabled', false);
+                $("#videoRecordSaveBtn").attr("data-id", "new");
+                emailVideoRecord.buildVideoPageURL(data.id);
+            },
+        });
+    },
+
+    buildVideoPageURL : function(videoId) {
+        var videoURL = window.location.origin + "/video/" + videoId + "?n={{first_name}}&c={{owner.calendar_url}}";
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL);
+        $("#videoRecordModal").modal("hide");
+    }
+
+};
+
+var videoRecordPreview = {
+
+    videoRecordModalLoad : function(){
+        var videoLinkUrl = document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val();
+
+        if(videoLinkUrl != undefined && videoLinkUrl != ""){
+
+            var matchResults = videoLinkUrl.match(/video\/([0-9]*)/);
+
+            if(matchResults[1] != ""){
+                $('select[id=video-record-select]').val(matchResults[1]);
+                videoRecordPreview.showVideoPreviewModal(matchResults[1]);
+            } 
+        }
+    },
+
+    showVideoPreviewModal : function(selectedVideoId){
+        var url = window.location.origin+"/video/"+selectedVideoId+"?embed=true";
+
+        $("#videoPreviewField").show();
+        document.getElementById('loader').style.display='block';
+        $('iframe[id=videoPreviewIframeId]').attr('src',url);
+        
+    }
+};

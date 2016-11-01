@@ -9,7 +9,7 @@ var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId
 
 $(function()
 {
-	initToPubNub();
+//	initToPubNub();
 	globalCallWidgetSet();
 });
 
@@ -687,7 +687,7 @@ function getPhoneWithSkypeInArray(items)
  * This method updates two fields of contact object - lastcalled and last contacted
  * This method retrieves the current contact object and make the json call to server to save json time in server.
  */
-function twilioIOSaveContactedTime(contactId)
+function twilioIOSaveContactedTime(contactId, callback)
 {
 	console.log ('in IOSaveContactedTime');
 	var id;
@@ -702,9 +702,17 @@ function twilioIOSaveContactedTime(contactId)
 				console.log('processed In twilioIOSaveContactedTime');
 				console.log('Results : ' + result);
 				console.log('result = ' + result);
+				if(callback && typeof callback === "function")
+				{
+					callback();
+				}
 			}).error(function(data)
 			{
 				console.log('Error - Results :' + data);
+				if(callback && typeof callback === "function")
+				{
+					callback();
+				}
 			});
 }
 

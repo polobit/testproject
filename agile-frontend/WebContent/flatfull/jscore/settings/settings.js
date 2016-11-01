@@ -93,6 +93,34 @@ function load_office365_widgets(limit) {
 	$('#prefs-tabs-content').find("#office-prefs").html(App_Settings.officeListView.el);
 }
 
+function load_smtp_widgets(limit) {
+	// Gets smtp prefs
+	smtpListView1 = new Settings_Collection_Events({
+		url : 'core/api/smtp/',
+		templateKey : "settings-smtp-access",
+		individual_tag_name : 'div',
+		postRenderCallback : function(el) {
+			$("#loadingImgHolder").hide();
+			var smtp_count = smtpListView1.collection.length;
+			/*if ((smtp_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED) */
+			if ((smtp_count < SMTP_ACCOUNT_LIMIT) 
+					|| smtp_count === 0) {
+				var data1 = {};
+
+				getTemplate("settings-smtp-access-model", data1, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#prefs-tabs-content').find("#smtp-prefs").append($(template_ui));
+				}, null);
+			}
+			updateTimeOut();
+		}
+	});
+	smtpListView1.collection.fetch();
+	App_Settings.smtpListView = smtpListView1;
+	$('#prefs-tabs-content').find("#smtp-prefs").html(App_Settings.smtpListView.el);
+}
+
 function updateTimeOut(widget_height) {
 	setTimeout(function() {
 		$('#all-email-settings-prefs .col-md-4 .panel').each(function() {	
@@ -306,8 +334,9 @@ var Settings_Modal_Events = Base_Model_View.extend({
 */
 var Settings_Collection_Events = Base_Collection_View.extend({
 	events: {
-		'click #gmail-prefs-delete': 'onGmailPrefsDelete',	
-		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',	
+		'click #gmail-prefs-delete': 'onGmailPrefsDelete',
+		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',
+		'click #smtp-prefs-delete': 'onSmtpPrefsDelete',
 	},
 
 	
@@ -368,11 +397,61 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 		});		
 
 	},
+
+	onSmtpPrefsDelete : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var saveBtn = $(target_el);		
+		var id = $(saveBtn).attr("oid");
+
+		// Returns, if the save button has disabled attribute
+		if ($(saveBtn).attr('disabled'))
+			return;
+		
+		showAlertModal("delete", "confirm", function(){
+			// Disables save button to prevent multiple click event issues
+			disable_save_button($(saveBtn));
+
+			var button_id = $(saveBtn).attr("name");
+
+			$.ajax({
+				url : '/core/api/' + button_id + "/delete/" + id,
+				type : 'DELETE',
+				success : function()
+				{
+					enable_save_button($(saveBtn));
+					App_Settings.email();
+					return;
+				}
+			});
+		});		
+	},
+
 });
 
 
 $(function(){
 	
+	$('#content').on("change", "#server_host", function(e){
+		$("#server_url").val($(this).val());
+		
+		// make server_url readonly for given server host
+		if($("#server_url").val() != "")
+			$("#server_url").attr("readonly", "readonly");
+		else
+			$("#server_url").removeAttr("readonly");
+
+
+		// Hide checkbox for Outlook SMTP 
+		if($(this).val() == "smtp.live.com" || $(this).val() == "smtp.office365.com") {
+			$("#useSSLCheckboxHolder").hide();
+		} 
+		else {
+			$("#useSSLCheckboxHolder").show();
+		}
+	});
+
 	$("#content").on("click", '#email-gateway-delete', function(e) {
 		e.preventDefault();
 		
@@ -418,6 +497,20 @@ $(function(){
     	showAlertModal("delete", "confirm", function(){
     		$.ajax({
 				url: 'core/api/widgets/integrations/'+id,
+				type: 'DELETE',
+				success: function(){
+					location.reload(true);
+				}
+			});
+		});
+	});
+
+	$("#content").on('click', '#recaptcha-gateway-delete', function(e){ 
+		e.preventDefault();
+		var id=$(this).attr('data');
+    	showAlertModal("delete", "confirm", function(){
+    		$.ajax({
+				url: 'core/api/recaptcha-gateway',
 				type: 'DELETE',
 				success: function(){
 					location.reload(true);

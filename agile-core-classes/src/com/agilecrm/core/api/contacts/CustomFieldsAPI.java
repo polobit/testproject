@@ -65,7 +65,8 @@ public class CustomFieldsAPI
     List<CustomFieldDef> customFieldsList = new ArrayList<CustomFieldDef>();
 	try
 	{
-	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+	    //List<CustomFieldDef> cusList = CustomFieldDefUtil.getAllCustomFields();
+		List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByPosition();
 	    if (cusList != null)
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
@@ -219,7 +220,8 @@ public class CustomFieldsAPI
 	    if (scope == null)
 		CustomFieldDefUtil.getSearchableCustomFields();
 
-	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    //List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	    List<CustomFieldDef> cusList = CustomFieldDefUtil.getCustomFieldsByScopeAndPosition(scope);
 	    if (cusList != null)
 	    {
 	    	for (CustomFieldDef customFieldDef : cusList)
@@ -314,31 +316,92 @@ public class CustomFieldsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public CustomFieldDef createCustomField(CustomFieldDef customField)throws Exception
+    public List< CustomFieldDef> createCustomField(CustomFieldDef customField)throws Exception
     {
+    	List< CustomFieldDef> CustomFieldDefs = new ArrayList<CustomFieldDef>();
+    	String warningMsg = "A custom field with this Label is already present in ";
+    	String msg="";
+    	boolean duplicateCF=false;
+    	
 	try
 	{
 			String scopecf[]=new String[3];
+			String position[]=new String[3];
 			if(customField.scopeExtension != null){
 				scopecf=customField.scopeExtension.split(",");
 			}
-		for(int i=0;i<scopecf.length;i++)
-		{
-			customField.id=null;
-				if(scopecf[i].equalsIgnoreCase("contacts"))
-				{
-					customField.scope=CustomFieldDef.SCOPE.valueOf("CONTACT");
+			 if(customField.positionsList != null){
+		        position=customField.positionsList.split(",");
+		    }
+			
+
+			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldswithFieldLabel(customField.field_label);
+			if(customFields.size() > 0){				
+				for(CustomFieldDef cu : customFields){
+					if(cu != null && cu.scope != null ){
+						if(cu.scope.equals(CustomFieldDef.SCOPE.CONTACT) && customField.scopeExtension.contains("contacts")){
+							msg = msg + " contacts" ;
+							duplicateCF = true;
+						}
+						else if(cu.scope.equals(CustomFieldDef.SCOPE.COMPANY)&& customField.scopeExtension.contains("companies")){
+							msg = msg + " , " ;
+							msg = msg + " companies" ;
+							duplicateCF = true;
+						}
+						else if(cu.scope.equals(CustomFieldDef.SCOPE.DEAL)&& customField.scopeExtension.contains("deals")){
+							msg = msg + " , " ;
+							msg = msg + " deals" ;
+							duplicateCF = true;
+						}
+					}
 				}
-				else if(scopecf[i].equalsIgnoreCase("companies"))
-				{
-					customField.scope=CustomFieldDef.SCOPE.valueOf("COMPANY");
+				msg = msg + "." ;
+			}
+			if(!duplicateCF){
+				for(int i=0;i<scopecf.length ; i++){
+					CustomFieldDef custom_Field = new CustomFieldDef(customField.field_type,customField.field_label,customField.field_description, customField.field_data,
+						     customField.is_required, customField.searchable);
+					custom_Field.id = null ;String p = "0";
+					if(scopecf[i].equalsIgnoreCase("contacts"))
+					{
+						custom_Field.scope=CustomFieldDef.SCOPE.valueOf("CONTACT");
+						for(int j= 0;j<position.length;j++){
+							if(position[j].startsWith("contacts")){
+								p = position[i].split("-")[1];
+								break;
+							}
+						}
+						custom_Field.position = Integer.parseInt(p) + 1;
+					}
+					else if(scopecf[i].equalsIgnoreCase("companies"))
+					{
+						custom_Field.scope=CustomFieldDef.SCOPE.valueOf("COMPANY");
+						for(int j= 0;j<position.length;j++){
+							if(position[j].startsWith("companies")){
+								p = position[i].split("-")[1];
+								break;
+							}
+						}
+						custom_Field.position = Integer.parseInt(p) + 1;
+					}
+					else if(scopecf[i].equalsIgnoreCase("deals"))
+					{
+						custom_Field.scope=CustomFieldDef.SCOPE.valueOf("DEAL");
+						for(int j= 0;j<position.length;j++){
+							if(position[j].startsWith("deals")){
+								p = position[i].split("-")[1];
+								break;
+							}
+						}
+						custom_Field.position = Integer.parseInt(p) + 1;
+					}
+					custom_Field.save();
+					CustomFieldDefs.add(custom_Field);
 				}
-				else if(scopecf[i].equalsIgnoreCase("deals"))
-				{
-					customField.scope=CustomFieldDef.SCOPE.valueOf("DEAL");
-				}			
-	    customField.save();
-		}
+			}
+			else{
+				throw new DuplicateCustomFieldException(warningMsg+msg.toLowerCase());
+			}	
 	}
 	catch (DuplicateCustomFieldException e)
 	{
@@ -348,7 +411,7 @@ public class CustomFieldsAPI
 	{
 	    e.printStackTrace();
 	}
-	return customField;
+	return CustomFieldDefs;
     }
 
     /**

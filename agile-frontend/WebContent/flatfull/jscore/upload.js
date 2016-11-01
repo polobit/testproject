@@ -2,6 +2,7 @@ $(function(){
 
 	$("body").on('click', ".upload_s3", function(e){
 		e.preventDefault();
+
 		uploadImage("upload-container", $(this).closest("div"));
 	});
 
@@ -32,6 +33,9 @@ $(function(){
 
 function uploadImage(id, parent_div)
 {
+	if(agile_is_mobile_browser())
+		return;
+
 	var allow_croper = ["contact/", "company/", "user-prefs"];
 	var allow_image_crop = false;
 	for (var i = 0; i < allow_croper.length; i++) {

@@ -17,10 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.jsoup.helper.StringUtil;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.RecaptchaGateway;
 import com.agilecrm.account.util.APIKeyUtil;
+import com.agilecrm.account.util.RecaptchaGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
@@ -38,6 +42,8 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.servlets.util.TrackClickUtil;
+import com.formio.reports.FormReportsSQLUtil;
+import com.google.appengine.api.NamespaceManager;
 
 @SuppressWarnings("serial")
 public class AgileForm extends HttpServlet
@@ -67,6 +73,38 @@ public class AgileForm extends HttpServlet
 	    String agileFormName = formJson.getString("_agile_form_name");
 	    if(formJson.has("_agile_form_id"))
 		 agileFormId = formJson.getString("_agile_form_id");
+	    
+	    Form form =null;
+        if(!agileFormId.isEmpty()&& agileFormId.contains("[0-9]+"))
+        form = FormUtil.getFormById(Long.parseLong(agileFormId));
+        else
+        form = FormUtil.getFormByName(agileFormName);       
+        
+        if (form == null)
+        {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
+        return;
+        }
+        //Check whether Google has verified the user, when captcha is enabled
+        if(form.agileformcaptcha) {
+          RecaptchaGateway recaptcha = RecaptchaGatewayUtil.getRecaptchaGateway();
+          if(recaptcha != null) {
+            String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+            
+            String secret = recaptcha.api_key;
+            
+            String isPermanentLink = request.getParameter("_agile_is_permanent_link");
+            if("yes".equals(isPermanentLink)) {
+              secret = RecaptchaGatewayUtil.GOOGLE_RECAPTCHA_DATA_SECRET;
+            }
+            
+            if(!RecaptchaGatewayUtil.isGoogleVerifiedUser(secret, gRecaptchaResponse)) {
+              response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Google reCaptcha verification is failed");
+              return;
+            }
+          }
+        }
+	    
 	    com.googlecode.objectify.Key<DomainUser> owner = getDomainUserKeyFromInputKey(apiKey);
 
 	    org.json.JSONObject reqFormJson = getReqFormJson(formJson);
@@ -79,26 +117,17 @@ public class AgileForm extends HttpServlet
 	    if(newContact)
 	    {
 	    contact.setContactOwner(owner);
+	    contact.source="form";
 	    }
 	    String[] tags = getContactTags(formJson);
 	    
 	    
 		 
 	    updateContactWithOldTag(contact, tags);
+	    addNotesToContact(contact, owner, formJson);  
 
-	    addNotesToContact(contact, owner, formJson);   	   
-	    
-	    Form form =null;
-	    if(!agileFormId.isEmpty()&& agileFormId.contains("[0-9]+"))
-		form = FormUtil.getFormById(Long.parseLong(agileFormId));
-	    else
-		form = FormUtil.getFormByName(agileFormName);	    
-	    
-	    if (form == null)
-	    {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Form with name does not exist");
-		return;
-	    }
+// 	    FormReportsSQLUtil.insertData(reqFormJson.getString("email"),NamespaceManager.get(),(form.id).toString()); 
+	    System.out.println("permanent link"+NamespaceManager.get());
 	    //creating the emailNotification for the new contact  
 	    if(form.emailNotification && newContact)
 	    	 FormUtil.sendMailToContactOwner(contact, agileFormName);
@@ -107,8 +136,9 @@ public class AgileForm extends HttpServlet
 
 	    try
 	    {
+	    	
 		request.setAttribute("url", getNormalizedRedirectURL(agileRedirectURL, contact, request));
-		request.getRequestDispatcher("/agileformredirect").forward(request, response);
+		request.getRequestDispatcher("/agileformredirect").forward(request, response);	
 	    }
 	    catch (ServletException e)
 	    {
@@ -384,11 +414,9 @@ public class AgileForm extends HttpServlet
     public String getNormalizedRedirectURL(String agileRedirectURL, Contact contact, HttpServletRequest request)
     {
 	Boolean externalRedirect = StringUtils.equals(agileRedirectURL, "#") ? false : true;
-
 	String normalizedRedirectURL = externalRedirect ? agileRedirectURL.trim().replaceAll("\r", "")
 	        .replaceAll("\n", "") : request.getRequestURL().toString()
 	        .replaceAll("formsubmit", "agileform_thankyou.jsp");
-
 	String params = "?fwd=cd";
 	if (StringUtils.contains(normalizedRedirectURL, "?"))
 	    params = "&fwd=cd";

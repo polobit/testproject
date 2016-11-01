@@ -48,6 +48,24 @@ public class EmailTemplatesUtil
 	{
 		return dao.fetchAll();
 	}
+	
+	
+	/**
+	 * Gets EmailTemplates with respect to emailTemplate_category_id.
+	 * 
+	 * @param category_id
+	 *            - EmailTemplateCategory id.
+	 * @return EmailTemplates List
+	 */
+	public static List<EmailTemplates> getEmailTemplatesBasedOnCategory(Long category_id)
+	{
+		try {
+			return dao.ofy().query(EmailTemplates.class).filter("emailTemplate_category_id",category_id).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * Retuns count of email templates

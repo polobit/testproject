@@ -53,8 +53,23 @@ public class API
     public APIKey generateJSAPIKey()
     {
 	return APIKey.regenerateJSAPIKey();
-    }
-
+    }    
+    /**
+     *@Priyanka
+     *<code>
+     *code for the validate tracking code taking website_url as
+     * the parameter and if website_url is correct and contains 
+     * agilecrm's tracking code then showing the result.  
+     *</code> 
+     * */
+     @Path("api-key/validate")
+     @POST
+     @Produces({ MediaType.TEXT_PLAIN, MediaType.APPLICATION_XML })
+     public String validateTrackingCode(@QueryParam("website_url") String websiteURL)
+     {
+     	//System.out.print("Website URL for tracking code "+websiteURL);
+     	return APIKeyUtil.validateWebTrackingCode(websiteURL);
+     }
     @Path("api-key/allowed-domains")
     @PUT
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

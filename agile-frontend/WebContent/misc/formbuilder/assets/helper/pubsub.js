@@ -31,12 +31,12 @@ var addAgileApi = function(json, api, callback)
 {
 	json = JSON.parse(json);
 	var agileapi = {};
-	agileapi.label = "Agile API";
+	agileapi.label = "";
 	agileapi.type = "input";
 	agileapi.value = api.js_api_key;
 
 	var agiledomain = {};
-	agiledomain.label = "Agile Domain";
+	agiledomain.label = "";
 	agiledomain.type = "input";
 	agiledomain.value = window.location.hostname.split('.')[0];
 
@@ -45,15 +45,30 @@ var addAgileApi = function(json, api, callback)
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
+	//adding for the inline submit
+	var agileconfirmationmsg = {};
+	agileconfirmationmsg.label = "Confirmation Message";
+	agileconfirmationmsg.type = "input";
+	agileconfirmationmsg.value = "Great! Thanks for filling out the form.";
+
+
 	var agilepreloadfields = {};
 	agilepreloadfields.label = "Preload Fields";
 	agilepreloadfields.type = "select";
 	agilepreloadfields.value = [{value : false, selected : true, label : "no"}, {value : true, selected : false, label: "yes"}];
    // adding the tag for the TO SEND EMAIL Notification 
+
 	var formemailnotification = {};
 	formemailnotification.label = "Email Notification";
 	formemailnotification.type = "select";
 	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
+    //Adding the Recaptcha for the website 
+
+   //var integrationUrl = window.location.protocol + '//' + window.location.host +'/#integrations' ;
+   var agileformcaptcha = {};
+	agileformcaptcha.label = "Enable reCaptcha <p style='font-size: 10px;'>Please enable the reCaptcha integration <a href='/#integrations' target='_blank'> here.</a></p>" ;
+	agileformcaptcha.type = "select";
+	agileformcaptcha.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
 	var agileformidtag = {};
 	agileformidtag.label = "Form Tags";
@@ -73,14 +88,16 @@ var addAgileApi = function(json, api, callback)
 
 	for ( var b = 0; b < json.length; b++)
 	{
-		json[b].fields["agileapi"] = agileapi;
-		json[b].fields["agiledomain"] = agiledomain;
 		json[b].fields["agileredirecturl"] = agileredirecturl;
+        json[b].fields["agileconfirmationmsg"] = agileconfirmationmsg;
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;
+		json[b].fields["agileformcaptcha"]=agileformcaptcha;
 		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
 		json[b].fields["agiletheme"] = agiletheme;
+		json[b].fields["agileapi"] = agileapi;
+		json[b].fields["agiledomain"] = agiledomain;
 	}
 	callback(json);
 };
@@ -132,3 +149,17 @@ var addAgileFields = function(json, fields, callback)
 };
 
 var saveform = [];
+
+var checkCaptchaIntegration = function (callback){
+	console.log("recaptcha integration cchecking");
+	var url = window.location.protocol + '//' + window.location.host + '/core/api/recaptcha-gateway';
+   var captchaAllow = false;
+	$.ajax({ type : 'GET', url : url, asynch : true, dataType : 'json', success : function(data)
+	{
+		console.log("Recaptcha"+data);
+		if(data)
+			captchaAllow = true;
+
+		callback(captchaAllow);
+	} });
+}

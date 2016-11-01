@@ -21,7 +21,7 @@ function isValidForm(form) {
             	return true;			
 			
 			return false;
-		},_agile_get_translated_val("validation-msgs",'required'));
+		},"{{agile_lng_translate 'validation-msgs' 'required'}}");
 	
 	// Internal regex of jQuery validator allows for special characters in e-mails for ticketing.
 	// This regex solves that, overriding 'email'
@@ -31,7 +31,7 @@ function isValidForm(form) {
 			return true;
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
-	},_agile_get_translated_val("validation-msgs",'pls-enter-valid-email'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-enter-valid-email'}}");
 
 
 	// Credit card validation to check card is valid for next 3 months
@@ -53,7 +53,7 @@ function isValidForm(form) {
 			// true
 			return this.optional(element)
 					|| (((date - new Date().getTime()) / one_day) > 90);
-		}, _agile_get_translated_val("validation-msgs",'card-3months-valid'));
+		}, "{{agile_lng_translate 'validation-msgs' 'card-3months-valid'}}");
 	
 	// Validates multiple emails separated by comma entered in textbox
 	jQuery.validator.addMethod("multipleEmails", function(value, element) {
@@ -71,14 +71,14 @@ function isValidForm(form) {
         }
         
         return valid;
-    }, _agile_get_translated_val("validation-msgs", 'pls-enter-valid-email-sep-by-comma'));
+    }, "{{agile_lng_translate 'validation-msgs'  'pls-enter-valid-email-sep-by-comma'}}");
 
 	
 	jQuery.validator.addMethod("noSpecialChars", function(value, element) {
 		return isAlphaNumeric(value);
 	//	console.log(params);
 		
-	}, _agile_get_translated_val("validation-msgs",'email-should-start-with-an-alphabet'));
+	}, "{{agile_lng_translate 'validation-msgs' 'email-should-start-with-an-alphabet'}}");
 
 	// Internal regex of jQuery validator allows for special characters in e-mails.
 	// This regex solves that, overriding 'email'
@@ -88,7 +88,7 @@ function isValidForm(form) {
 			return true;
 		
 		return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
-	},_agile_get_translated_val("validation-msgs",'pls-enter-valid-email'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-enter-valid-email'}}");
 
 	// Phone number validation
 	jQuery.validator.addMethod("phone", function(value, element){
@@ -98,7 +98,7 @@ function isValidForm(form) {
 		
 		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
 		return /^[^a-zA-Z]+$/.test(value);
-	},_agile_get_translated_val("validation-msgs",'Pls-enter-a-valid-ph-no'));
+	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-a-valid-ph-no'}}");
 	
 	// Phone number validation
 	jQuery.validator.addMethod("allow-char-phone", function(value, element){
@@ -108,7 +108,7 @@ function isValidForm(form) {
 		
 		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
 		return /^((\+)(\d)+)$/.test(value);
-	},_agile_get_translated_val("validation-msgs",'Pls-enter-valid-ph-no'));
+	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-valid-ph-no'}}");
 	
 	jQuery.validator.addMethod("multi-tags", function(value, element){
 		
@@ -123,7 +123,7 @@ function isValidForm(form) {
 		}
 		
 		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
-	},_agile_get_translated_val("validation-msgs",'this-field-is-required'));
+	},"{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}");
 
 	//IP validation
 	jQuery.validator.addMethod("ipValidation", function(value, element){
@@ -136,9 +136,8 @@ function isValidForm(form) {
 			
 		return is_valid_ip(value.trim());
 	
-	},_agile_get_translated_val("validation-msgs",'ipaddress'));
+	},"{{agile_lng_translate 'validation-msgs' 'ipaddress'}}");
 
-	
 	jQuery.validator.addMethod("formulaData", function(value, element){
 		var source = $(element).val();
 		var tpl;
@@ -150,7 +149,7 @@ function isValidForm(form) {
 			compiled=false;
 		}
 		return compiled ? true : false;
-	},_agile_get_translated_val("validation-msgs",'pls-enter-a-valid-formula'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-enter-a-valid-formula'}}");
 	
 	//Number validation
 	jQuery.validator.addMethod("number_input", function(value, element){
@@ -159,7 +158,7 @@ function isValidForm(form) {
 			return false;
 		
 		return /^[0-9\-]+$/.test(value);
-	},_agile_get_translated_val("validation-msgs",'Pls-enter-valid-no'));
+	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-valid-no'}}");
 
 	//Positive Number validation
 	jQuery.validator.addMethod("positive_number", function(value, element){
@@ -176,7 +175,17 @@ function isValidForm(form) {
 			return true;
 		}
 
-	},_agile_get_translated_val("validation-msgs",'value-validation'));
+	},"{{agile_lng_translate 'validation-msgs' 'value-validation'}}");
+
+	jQuery.validator.addMethod("isNotHackScript", function(value, element){
+		if(value=="")
+			return true;
+ 		
+		  if(value.indexOf("<")!=-1 || value.indexOf(">")!=-1) {
+				return false;
+		    }
+		  return true;
+	},_agile_get_translated_val("validation-msgs",'script-element-not-allowed'));
 
 
 	jQuery.validator.addMethod("multi-select", function(value, element){
@@ -188,7 +197,7 @@ function isValidForm(form) {
 		if(counter>limit)
 			return false;
 		return true;
-	},_agile_get_translated_val("validation-msgs",'folder-select-validation'));
+	},"{{agile_lng_translate 'validation-msgs' 'folder-select-validation'}}");
 
 	jQuery.validator.addMethod("checkedMultiSelect", function(value, element){
 		
@@ -198,7 +207,7 @@ function isValidForm(form) {
 			return false;
 
 		return true;
-	},_agile_get_translated_val("validation-msgs",'pls-select-atleast-one-option'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-select-atleast-one-option'}}");
 
 	jQuery.validator.addMethod("checkedMultiCheckbox", function(value, element){
 		
@@ -211,7 +220,7 @@ function isValidForm(form) {
 			return false;
 
 		return true;
-	},_agile_get_translated_val("validation-msgs",'pls-select-atleast-one-option'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-select-atleast-one-option'}}");
 
 	jQuery.validator.addMethod("date", function(value, element){
 		if(value=="")
@@ -220,12 +229,12 @@ function isValidForm(form) {
 		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
 
 			
-	},_agile_get_translated_val("validation-msgs",'Pls-enter-a-valid-date'));
+	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-a-valid-date'}}");
 
 	jQuery.validator.addMethod("isHttpsURL", function(value, element){
 		var urlregex = new RegExp("^(https:\/\/){1}([0-9A-Za-z]+\.)");
   		return urlregex.test(value);		
-	},_agile_get_translated_val("validation-msgs",'pls-enter-a-valid-https-url'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-enter-a-valid-https-url'}}");
 
 	jQuery.validator.addMethod("date_input", function(value, element){
 		if(value=="")
@@ -234,7 +243,7 @@ function isValidForm(form) {
 		return !/Invalid|NaN/.test(getFormattedDateObjectWithString(value));
 
 		
-	},_agile_get_translated_val("validation-msgs",'Pls-enter-a-valid-date'));
+	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-a-valid-date'}}");
 
     
 	jQuery.validator.addMethod("field_length", function(value, element){
@@ -257,14 +266,14 @@ function isValidForm(form) {
 	jQuery.validator.addMethod("domain_format", function(value, element){
 		
 		return /^[a-zA-Z][a-zA-Z0-9-_]{3,20}$/.test(value);	   
-	},_agile_get_translated_val("validation-msgs",'domain-validation'));
+	},"{{agile_lng_translate 'validation-msgs' 'domain-validation'}}");
     
 
     jQuery.validator.addMethod("customFieldSpecialCharacter", function(value, element){
 		
 		var custvals = /^\s*[_a-zA-Z0-9\s]+\s*$/;
 		return custvals.test(value);
-	},_agile_get_translated_val('validation-msgs','formlabel-validation')); 
+	},"{{agile_lng_translate 'validation-msgs' 'formlabel-validation'}}"); 
 
 	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
 		var labelJson = [];
@@ -301,7 +310,7 @@ function isValidForm(form) {
     jQuery.validator.addMethod("tickets_group_name", function(value, element){
 
 		return /^[a-zA-Z0-9._]*$/.test(value);
-	},_agile_get_translated_val("validation-msgs",'pls-use-only-letters'));
+	},"{{agile_lng_translate 'validation-msgs' 'pls-use-only-letters'}}");
 
 
 	//Image keyword validation for custom fields
@@ -316,7 +325,7 @@ function isValidForm(form) {
 			return true;
 		}
 
-	},_agile_get_translated_val("validation-msgs",'image-is-a-keyword-desc'));
+	},"{{agile_lng_translate 'validation-msgs' 'image-is-a-keyword-desc'}}");
 
 	jQuery.validator.addMethod("verified-email", function(value, element){
 		if($(element).find("option").length !=0){
@@ -325,7 +334,7 @@ function isValidForm(form) {
  				
  					return false;
  		}
- 	},_agile_get_translated_val("validation-msgs",'verify-email'));
+ 	},"{{agile_lng_translate 'validation-msgs' 'verify-email'}}");
 
 	jQuery.validator.addMethod("month_date", function(value, element){
 		if(value=="")
@@ -334,8 +343,30 @@ function isValidForm(form) {
 		return !/Invalid|NaN/.test(getFormattedDateObjectForMonthWithString(value));
 
 			
-	}, _agile_get_translated_val("validation-msgs",'date'));
+	}, "{{agile_lng_translate 'validation-msgs' 'date'}}");
 
+	//required validation for sendmail
+	jQuery.validator.addMethod("requiredEmail", function(value, element){
+              if(element.value!="" || element.parentElement.firstElementChild.firstElementChild.children.length!=0)
+                       return true;
+               else 
+                       return false;   
+    },_agile_get_translated_val("validation-msgs",'this-field-is-required'));
+    jQuery.validator.addMethod("validateWebsite", function(value, element){
+		var type = $(element).closest('.website').find('.website-select').val() ;
+		if(!type || type == "URL")
+		{
+			if(value == "")
+				return true;
+			var substr = value.substring(0, 4);
+			if(substr == 'http' || substr == 'http' || value.substring(0, 3) == 'ftp')
+				return /^(?:(?:(?:https?|ftp?|):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);			
+			else
+				return /^(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);
+		}
+		return true;
+	}, _agile_get_translated_val("validation-msgs",'url'));
+    
 	$(form).validate({
 		ignoreTitle: true,
 		rules : {
@@ -397,7 +428,7 @@ function isAlphaNumeric(subdomain) {
   
   var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,20}$/);
   if(!regularExpression.test(subdomain)) {
-        error = _agile_get_translated_val("validation-msgs",'domain-validation');
+        error = "{{agile_lng_translate 'validation-msgs' 'domain-validation'}}";
 		return false;
     }
   return true;
@@ -413,6 +444,8 @@ function isAlphaNumeric(subdomain) {
   return true;
 }
 
+
+
 function isValidContactCustomField(id) {
     var name = $('#' + id).attr("name");
     if($('ul[name="'+name+'"]').find("li").length == 0) {
@@ -421,22 +454,29 @@ function isValidContactCustomField(id) {
     	return true;
     }
 }
-jQuery.extend(jQuery.validator.messages, {
-    required: _agile_get_translated_val("validation-msgs",'required'),
-    remote: _agile_get_translated_val("validation-msgs",'remote'),
-    email: _agile_get_translated_val("validation-msgs",'email'),
-    url: _agile_get_translated_val("validation-msgs",'url'),
-    date: _agile_get_translated_val("validation-msgs",'date'),
-    dateISO: _agile_get_translated_val("validation-msgs",'dateISO'),
-    number: _agile_get_translated_val("validation-msgs",'number'),
-    digits: _agile_get_translated_val("validation-msgs",'digits'),
-    creditcard: _agile_get_translated_val("validation-msgs",'creditcard'),
-    equalTo: _agile_get_translated_val("validation-msgs",'equalTo'),
-    accept: _agile_get_translated_val("validation-msgs",'accept'),
-    maxlength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'maxlength')),
-    minlength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'minlength')),
-    rangelength: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'rangelength')),
-    range: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'range')),
-    max: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'max')),
-    min: jQuery.validator.format(_agile_get_translated_val("validation-msgs",'min'))
+
+function localizeValidationMessages(){
+	jQuery.extend(jQuery.validator.messages, {
+	    required: "{{agile_lng_translate 'validation-msgs' 'required'}}",
+	    remote: "{{agile_lng_translate 'validation-msgs' 'remote'}}",
+	    email: "{{agile_lng_translate 'validation-msgs' 'email'}}",
+	    url: "{{agile_lng_translate 'validation-msgs' 'url'}}",
+	    date: "{{agile_lng_translate 'validation-msgs' 'date'}}",
+	    dateISO: "{{agile_lng_translate 'validation-msgs' 'dateISO'}}",
+	    number: "{{agile_lng_translate 'validation-msgs' 'number'}}",
+	    digits: "{{agile_lng_translate 'validation-msgs' 'number'}}",
+	    creditcard: "{{agile_lng_translate 'validation-msgs' 'creditcard'}}",
+	    equalTo: "{{agile_lng_translate 'validation-msgs' 'equalTo'}}",
+	    accept: "{{agile_lng_translate 'validation-msgs' 'accept'}}",
+	    maxlength: jQuery.validator.format("{{agile_lng_translate 'validation-msgs' 'maxlength'}}"),
+	    minlength: jQuery.validator.format("{{agile_lng_translate 'validation-msgs' 'minlength'}}"),
+	    rangelength: jQuery.validator.format("{{agile_lng_translate 'validation-msgs' 'rangelength'}}"),
+	    range: jQuery.validator.format("{{agile_lng_translate 'validation-msgs' 'range'}}"),
+	    max: jQuery.validator.format("{{agile_lng_translate 'validation-msgs' 'max'}}"),
+	    min: jQuery.validator.format("{{agile_lng_translate 'validation-msgs' 'min'}}")
+	});	
+}
+
+$(function(){
+	localizeValidationMessages();	
 });

@@ -254,6 +254,48 @@ public class EmailsAPI
 	    return null;
 	}
     }
+    @Path("imap-comEmail")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8" })
+    public String getCompanyEmails(@QueryParam("e") String searchEmail, @QueryParam("o") String offset,
+	    @QueryParam("c") String count)
+    {
+	try
+	{
+		JSONArray contactEmails = ContactEmailUtil.mergeCompanyEmails(StringUtils.split(searchEmail, ",")[0],
+			null);
+		JSONObject res = new JSONObject();
+
+		// return in the same format {emails:[]}
+		EmailPrefs emailPrefs = null;
+		List<String> mailUrls = new ArrayList<>();
+		
+		try
+		{
+		    emailPrefs = ContactEmailUtil.getEmailPrefs();
+		    mailUrls = emailPrefs.getFetchUrls();
+		    String agileEmailsUrl = "core/api/emails/agile-cemails?count=20";
+		    for(int i=0; i< mailUrls.size();i++){
+		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
+		    		mailUrls.remove(i);
+		    	}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		res.put("emails", contactEmails);
+		res.put("emailPrefs", mailUrls);
+		return res.toString();
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
     /**
      * Returns mandrill subaccount information
@@ -370,7 +412,7 @@ public class EmailsAPI
 			emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
-		    textEmail, null, new ArrayList<Long>(),new ArrayList<BlobKey>());
+		    textEmail, null, null, null);
 
 	}
 	catch (Exception e)

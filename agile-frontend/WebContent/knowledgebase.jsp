@@ -54,17 +54,15 @@ pageEncoding="UTF-8"%>
 
 
 <%
-  ObjectMapper mapper = new ObjectMapper();
-  
   
   // Download the template the user likes
-  String templated = "default";
+  String template = "default";
 
-  boolean is_fluidd = false;
+  boolean is_fluid = false;
 
-  String _AGILE_VERSIONd = SystemProperty.applicationVersion.get();
+  String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
-  String _VERSION_IDd = VersioningUtil.getVersion();
+  String _VERSION_ID = VersioningUtil.getVersion();
   
 
   LandingPageKnowledgebase  kblppage = KbLandingPageUtil.get(); 
@@ -94,11 +92,12 @@ pageEncoding="UTF-8"%>
 	  CLOUDFRONT_STATIC_FILES_PATHd = FLAT_FULL_PATHd;
 	  CLOUDFRONT_TEMPLATE_LIB_PATHd = "";	
 	  CSS_PATHd = FLAT_FULL_PATHd;
+    
   }
 %>
 
-<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSIONd%>"></link>
-<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSIONd%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
+<link rel="stylesheet" type="text/css" href="flatfull/css/lib/helpcenter.css?_=<%=_AGILE_VERSION%>"></link>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -149,13 +148,13 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
-boolean debugd = true;
+boolean debug =true;
 boolean productiond = false;
-boolean HANDLEBARS_PRECOMPILATIONd = false;
+boolean HANDLEBARS_PRECOMPILATION= false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 {
-    debugd = false;
-    HANDLEBARS_PRECOMPILATIONd = true;
+    debug = false;
+    HANDLEBARS_PRECOMPILATION = true;
     productiond = true;
    
 }
@@ -171,36 +170,42 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 
 try{console.time("startbackbone");}catch(e){}
 
-var USER_IP_ADDRESSd = '<%=request.getRemoteAddr()%>'
+var USER_IP_ADDRESS = '<%=request.getRemoteAddr()%>'
 
-var S3_STATIC_IMAGE_PATHd = '<%=S3_STATIC_IMAGE_PATHd%>';
+var S3_STATIC_IMAGE_PATH = '<%=S3_STATIC_IMAGE_PATHd%>';
 //var LIB_PATH = "//-dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
-var LIB_PATHd = '<%=CLOUDFRONT_STATIC_FILES_PATHd%>';
+var LIB_PATH = '<%=CLOUDFRONT_STATIC_FILES_PATHd%>';
 
-var FLAT_FULL_PATHd = '<%=FLAT_FULL_PATHd%>';
+var FLAT_FULL_PATH = '<%=FLAT_FULL_PATHd%>';
 
 // Target to cloudfront URL
-var LIB_PATH_FLATFULLd = '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd + FLAT_FULL_PATHd%>'
+var LIB_PATH_FLATFULL = '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd + FLAT_FULL_PATHd%>'
 
-var CLOUDFRONT_PATHd = '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>';
+var CLOUDFRONT_PATH = '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>';
 
-var FLAT_FULL_UId = "flatfull/";  
+var FLAT_FULL_UI = "flatfull/";  
 
-var _AGILE_VERSIONd = <%="\"" + _AGILE_VERSIONd + "\""%>;
+var _AGILE_VERSION = <%="\"" + _AGILE_VERSION + "\""%>;
 
-var HANDLEBARS_PRECOMPILATIONd = false || <%=productiond%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=productiond%>;
 
-var CSS_PATHd = '<%=CSS_PATHd%>';
+var CSS_PATH = '<%=CSS_PATHd%>';
 // var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 var kbpagelpid = <%=Kblpid%>;
 
-var IS_CONSOLE_ENABLEDd = <%=debugd%>;
-var LOCAL_SERVERd = <%=debugd%>;
+var IS_CONSOLE_ENABLED = <%=debug%>;
+var LOCAL_SERVER = <%=debug%>;
 
-var IS_FLUIDd = <%=is_fluidd %>
+var IS_FLUID = <%=is_fluid %>
+var en;
 
-var HANDLEBARS_LIBd = LOCAL_SERVERd ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
+// Fetch/Create contact from our domain
+var Agile_Contact = {};
+
+var _LANGUAGE = "en";
+
+var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
   var _AGILE_FILE_HASH;
   
@@ -223,8 +228,8 @@ var HANDLEBARS_LIBd = LOCAL_SERVERd ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.clo
 
 // head.js({ library  : LIB_PATH + 'final-lib/min/lib-all-min-1.js?_=' + _AGILE_VERSION });
 
-if(HANDLEBARS_PRECOMPILATIONd)
-head.js(CLOUDFRONT_PATHd + "tpl/min/precompiled/" + FLAT_FULL_PATHd + "helpcenter-tpl.js" + "?_=" + _AGILE_VERSIONd);	
+if(HANDLEBARS_PRECOMPILATION)
+head.js(CLOUDFRONT_PATH + "tpl/min/precompiled/" + FLAT_FULL_PATH + "helpcenter-tpl.js" + "?_=" + _AGILE_VERSION);	
 
 var en;
 
@@ -233,8 +238,8 @@ var en;
 
 head.ready(function() {
 
-if(!HANDLEBARS_PRECOMPILATIONd){
-    head.js(HANDLEBARS_LIBd, FLAT_FULL_PATHd + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSIONd, function()
+if(!HANDLEBARS_PRECOMPILATION){
+    head.js(HANDLEBARS_LIB, FLAT_FULL_PATH + "jscore/handlebars/download-template.js" + "?_=" + _AGILE_VERSION, function()
     {
         downloadTemplate("helpcenter-tpl.js");
     });
@@ -245,9 +250,9 @@ $('body').css('background-image', 'none');
 
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>/img/ajax-loader-cursor.gif");
-head.js({"core" :   CLOUDFRONT_PATHd + 'jscore/min/' + FLAT_FULL_PATHd +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSIONd});
+head.js({"core" :   CLOUDFRONT_PATH + 'jscore/min/' + FLAT_FULL_PATH +'helpcenter-all-min.js' + "?_=" + _AGILE_VERSION});
 
-// head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSIONd});
+// head.js({"stats" : '<%=CLOUDFRONT_TEMPLATE_LIB_PATHd%>stats/min/agile-min.js' + "?_=" + _AGILE_VERSION});
 head.ready(["core"], function(){
 
    try{

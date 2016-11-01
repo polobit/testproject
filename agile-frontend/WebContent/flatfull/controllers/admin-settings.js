@@ -26,6 +26,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Milestones */
 	"milestones" : "milestones",
 	
+	/* Products */
+	"products" : "products", "product-add" : "productsAdd", "product-edit/:id" : "productEdit",
+
 	/* telepnony */
 	"telephony" : "telephony",
 	
@@ -49,6 +52,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"email-gateways/:id" : "emailGateways",
 
 	"sms-gateways/:id" : "smsGateways",
+
+	"recaptcha-gateways/:id" : "recaptchaGateway",
 
 	"lost-reasons" : "lostReasons",
 
@@ -383,6 +388,30 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 					
 				
+			},prePersist : function(model){
+				//Chage deals from newscopes to newMenuScopes
+				if(!model.toJSON() || !model.toJSON().newscopes)
+					return;
+				if(!model.toJSON().newMenuScopes){
+					return;		
+				}
+
+			    var newscopes = model.toJSON().newscopes;
+			    $.each(newscopes, function(index, data) {
+					if(newscopes[index] == "DEALS"){model.toJSON().newMenuScopes.push("DEALS");}
+					if(newscopes[index] == "CALENDAR"){model.toJSON().newMenuScopes.push("CALENDAR");}
+				});
+				var new_newscopes = _.without(newscopes,"DEALS","CALENDAR");
+				model.toJSON().newscopes =  new_newscopes;
+				model.set({ 
+			       'newscopes' : new_newscopes
+			      }, 
+			      { 
+			       silent : true 
+			      });
+
+				
+			      
 			}, saveCallback : function(response)
 			{
 				$.getJSON("core/api/users/current-owner", function(data)
@@ -504,7 +533,29 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$('a[href="#sales-previlages"]',el).tab('show');
 					$('a[href="#sales-previlages"]',el).trigger('click');
 				},500);
-			}, saveAuth : function(el){
+			}, prePersist : function(model){
+				
+			   if(!model.toJSON() || !model.toJSON().newscopes)
+					return;
+				if(!model.toJSON().newMenuScopes){
+					return;		
+				}
+
+			   var newscopes = model.toJSON().newscopes;
+			    $.each(newscopes, function(index, data) {
+					if(newscopes[index] == "DEALS"){model.toJSON().newMenuScopes.push("DEALS");}
+					if(newscopes[index] == "CALENDAR"){model.toJSON().newMenuScopes.push("CALENDAR");}
+				});
+				var new_newscopes = _.without(newscopes,"DEALS","CALENDAR");
+				model.toJSON().newscopes =  new_newscopes;
+				model.set({ 
+			       'newscopes' : new_newscopes
+			      }, 
+			      { 
+			       silent : true 
+			      });
+			      
+			   },saveAuth : function(el){
 				if(CURRENT_DOMAIN_USER.is_account_owner && $("#userForm", el).find("#owner:checked").length == 1 && $("#userForm", el).find("#eaddress").val() != CURRENT_DOMAIN_USER.email)
 				{
 					$("#saveUserAuthentication", el).html(getTemplate("conform-owner-change-model",{}));
@@ -733,6 +784,172 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
 	},
 	
+	/**
+	 * Creates a Model to show and edit products, reloads the page on save
+	 * success
+	 */
+
+	products : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		} 
+		var that = this;
+		$('#content').html("<div id='milestone-listner'>&nbsp;</div>");
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#milestone-listner').html($(template_ui));
+			$('#milestone-listner').find('#admin-prefs-tabs-content').html(getTemplate("settings-milestones-tab"), {});
+	
+			
+
+			App_Admin_Settings.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
+			templateKey : "admin-settings-products", sortKey : 'created_time', descending : true ,
+			individual_tag_name : 'tr', postRenderCallback : function(el)
+			{
+				console.log("loaded products : ", el);
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							
+							$(".created_time", el).timeago();
+						});
+				initializeAdminProductsListners();		
+				
+			} });
+			App_Admin_Settings.productsGridView.collection.fetch();
+
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-milestones-tab-content').html(App_Admin_Settings.productsGridView.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.milestones-tab').addClass('select');
+			$(".active").removeClass("active");
+			$('.settings-deal-products').addClass('active');
+			$('#milestone-listner').find('#admin-prefs-tabs-content').parent().removeClass('bg-white');
+			$('.settings-deal-products').parent().removeClass('b-b-none');
+
+		}, "#milestone-listner");
+
+		
+		
+	},
+
+	/**
+	 * Loads a template to add new user, navigates to users list on adding a
+	 * user
+	 */
+	productsAdd : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		console.log('product add...');
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			console.log('product add1...');
+			$('#content').html($(template_ui));	
+
+			var view = new Base_Model_View({ url : 'core/api/products', template : "admin-settings-product-add", isNew : true,  reload : false,
+			postRenderCallback : function(el)
+			{
+
+				
+			}, saveCallback : function(response)
+			{
+				Backbone.history.navigate('products', { trigger : true });
+			} });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.products-tab').addClass('select');
+			$(".active").removeClass("active");
+
+		}, "#content");
+
+		
+
+	},
+
+	/**
+	 * Loads a template to add new user, to a particular domain user
+	 */
+
+	/**
+	 * Edits the existing user by verifying whether the users list view is
+	 * defined or not
+	 */
+	productEdit : function(id)
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		var that = this;
+		console.log("Product Edit");
+			getTemplate("admin-settings", {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+
+				// If products list is not defined then take back to products template
+				if (!App_Admin_Settings.productsGridView || !App_Admin_Settings.productsGridView.collection.get(id))
+				{
+					that.navigate("products", { trigger : true });
+					return;
+				}
+
+				// Gets product from the collection based on id
+				var product = App_Admin_Settings.productsGridView.collection.get(id);
+			
+			
+				/*
+				 * Creates a Model for products edit, navigates back to 'product' window on
+				 * save success
+				 */
+				var view = new Base_Model_View({ url : 'core/api/products',
+					model : product, template : "admin-settings-product-add", 				
+				saveCallback : function(response)
+				{
+						Backbone.history.navigate('products', { trigger : true });
+				}, 
+				postRenderCallback : function(el)
+				{
+					initializeAdminProductsListners("settings-milestones-tab-content");
+								
+				}
+			 });
+
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.products-tab').addClass('select');
+			$(".active").removeClass("active");
+		
+		}, "#content");
+
+		
+
+	},
+
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success
@@ -1039,6 +1256,94 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				});
 
 				$('#content').find('#admin-settings-integrations-tab-content').html(that.email_gateway.render().el);
+				$('#content').find('.integrations-tab').addClass('select');
+				//$(".active").removeClass("active");
+			}, "#admin-settings-integrations-tab-content");
+		}, null);
+
+		
+	},
+
+	recaptchaGateway : function(id)
+	{
+		console.log(App_Admin_Settings.integrations.collection);
+		var that = this;
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+			getTemplate("web-to-lead-settings", {}, undefined, function(template_ui1){
+				if(!template_ui1)
+					return;
+				$('#admin-prefs-tabs-content').html($(template_ui1));
+				var integrationsTab = _agile_get_prefs("integrations_tab");
+				$("#admin-prefs-tabs-content").find('a[href="#'+integrationsTab+'"]').closest("li").addClass("active");	
+				// On Reload, navigate to integrations
+				if (!that.integrations || that.integrations.collection == undefined)
+				{
+					that.navigate("integrations", { trigger : true });
+					return;
+				}
+
+				var value = 'RECAPTCHA';
+
+				var recaptchaGateway;
+				$.each(that.integrations.collection.where({name:"RecaptchaGateway"}),function(key,value){
+				
+					recaptchaGateway = JSON.parse(value.attributes.prefs);
+				
+				});
+				
+				
+				// To show template according to api. Note: Widget and EmailGateway model is different
+				if(!recaptchaGateway)
+					recaptchaGateway = {"recaptcha_api":value, "api_key": "", "site_key":""}; 
+						
+				that.recaptcha_gateway = new Base_Model_View({ 
+					data : recaptchaGateway,
+					url : 'core/api/recaptcha-gateway',
+					template : 'settings-recaptcha-gateway', postRenderCallback : function(el)
+					{
+						initializeIntegrationsTabListeners("integrations_tab", "integrations");
+							$("#integrations-image",el).attr("src","img/crm-plugins/grecaptcha.png");						
+						
+					}, saveCallback : function()
+					{
+						$('.ses-success-msg').show();
+						
+						// On saved, navigate to integrations
+						Backbone.history.navigate("integrations", { trigger : true });
+
+					},
+					errorCallback : function(response)
+					{
+						var $save = $('.save', '#recaptcha-gateway-integration-form');
+
+						disable_save_button($save);
+
+						var msg = response.responseText;
+						// Show cause of error in saving
+						var $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+													+ msg
+													+ '</i></p></small></div>');
+
+						// Appends error info to form actions
+						// block.
+						$save.closest(".form-actions", this.el).append(
+								$save_info);
+
+						// Hides the error message after 3
+						// seconds
+						if(response.status != 406)
+							$save_info.show().delay(3000).hide(1, function(){
+
+								enable_save_button($save);
+							});
+					}
+
+				});
+
+				$('#content').find('#admin-settings-integrations-tab-content').html(that.recaptcha_gateway.render().el);
 				$('#content').find('.integrations-tab').addClass('select');
 				//$(".active").removeClass("active");
 			}, "#admin-settings-integrations-tab-content");
@@ -1366,10 +1671,41 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
 
-		}, "#content");
+		}, "#content");	
+	},
+	contactsLimitreachedview : function(e){
 
-		
-		
+		if(readCookie("contactslimit"))
+		{
+			return ;
+		}
+	console.log("contactsLimitreachedview");
+		// Creata a global view
+		this.contactsLimitview = new Base_Model_View({ 
+			url : '/core/api/contacts/list/count/jsonformat', 
+			template : "contactslimitouter", 
+			postRenderCallback : function(el){
+					var template = "";
+					var maxContactLimit = App_Admin_Settings.contactsLimitview.model.toJSON().count;
+					var planLimit = parseInt(USER_BILLING_PREFS.planLimits.contactLimit);
+					if (maxContactLimit > planLimit*0.8 &&  maxContactLimit<planLimit)
+					{
+						template = "contactslimitwarning";
+							$("#contacts_limit_alert_info").removeClass("hide");
+					}
+					else if (maxContactLimit > planLimit)
+					{
+						template = "contactslimitalert";
+							$("#contacts_limit_alert_info").removeClass("hide");
+					}
+						getTemplate(template, {}, undefined, function(template_ui)
+							{
+								if(!template_ui)
+									return;
+								$("#contactlimitouterdiv",el).html($(template_ui));
+							});
+			},});
+		$('#contacts_limit_alert_info').html(this.contactsLimitview.render().el);	
 	},
 	
 	telephony : function(){
@@ -1409,7 +1745,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			
 		}, "#telephony-listner");
-
 	}
 
 });
@@ -1491,4 +1826,5 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 			checkbox_el.attr("checked","checked");
 
 	},
+	
 });

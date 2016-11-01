@@ -1,5 +1,7 @@
 package com.agilecrm.subscription.ui.serialize;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -10,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement
-public class CreditCard {
+public class CreditCard implements Serializable{
 	// public String name = "";
 	public String cvc = null;
 	public String number = null;

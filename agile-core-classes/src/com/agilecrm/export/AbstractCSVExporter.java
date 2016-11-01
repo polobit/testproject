@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.agilecrm.CSVWriterAgile;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.export.util.ContactExportCSVUtil;
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.export.util.DealExportCSVUtil;
@@ -42,9 +45,11 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	try
 	{
+		 csvWriter = new CSVWriterAgile(NamespaceManager.get() + "_" + export_type + "_" + GoogleSQL.getFutureDate()
+				 + ".csv");
 
-	    csvWriter = new CSVWriterAgile(NamespaceManager.get() + "_" + export_type + "_" + GoogleSQL.getFutureDate()
-		    + ".csv");
+	   // csvWriter = new CSVWriterAgile("local"+ "_" + export_type + "_" + GoogleSQL.getFutureDate()
+	   //	    + ".csv");
 	}
 	catch (IOException e)
 	{
@@ -154,11 +159,15 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	return null;
     }
 
-    private String getDownloadURL()
+	private String getDownloadURL()
     {
 	return csvWriter.getPath();
     }
 
+	public final void addToActivity(ActivityType activitytype,EntityType entitytype)
+	{
+		ActivityUtil.createLogForExport(activitytype, entitytype, csvWriter.getNumberOfRows() - 1,csvWriter.getPath());
+	}
     public final void sendEmail(String email)
     {
 

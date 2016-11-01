@@ -1970,6 +1970,16 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-id")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-id")%>'' value="">
+
+                    <p class="text-center or">
+                        <span>OR</span>
+                    </p>
+
+                    <label>Your Video:</label>
+                    
+                    <select id="videoRecordId" name="videoRecordlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                        <option value="">Select Video</option>
+                    </select>
                     
                 </div><!-- /.tab-pane -->
             
@@ -2442,9 +2452,10 @@ function showAgileCRMForm(formJson,formHolderId) {
                     if(window.current_agileform!=null){
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
-                        div.html(formJson.formHtml); 
+                         div.html(formJson.formHtml); 
                         $('#'+iframe_id).contents().find('#agileform_div').append(div);
-                    }            
+                        //$('#'+iframe_id).contents().find('#agileform_div').innerHTML=div;
+                        }            
                     return;
                 } 
                 else {            
@@ -2456,7 +2467,7 @@ function showAgileCRMForm(formJson,formHolderId) {
                         replace_form_class.html(formJson.formHtml);
                     }                    
                     return;
-                } 
+                }         
                 }catch(err){}   
             }
          }

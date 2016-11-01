@@ -38,6 +38,7 @@ import com.agilecrm.util.FailedContactBean;
 import com.agilecrm.util.email.SendMail;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.api.NamespaceManager;
+import com.google.gdata.data.contacts.ContactEntry;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 
@@ -125,7 +126,7 @@ public abstract class ContactSyncService implements IContactSyncService
     {
 	if (total_synced_contact >= MAX_SYNC_LIMIT)
 	{
-	    sendNotification(prefs.type.getNotificationEmailSubject(),null);
+	    //sendNotification(prefs.type.getNotificationEmailSubject(),null);
 	    return true;
 	}
 
@@ -166,7 +167,7 @@ public abstract class ContactSyncService implements IContactSyncService
 
 	    ++total_synced_contact;
 
-	    contact = saveContact(contact,mergedContacts);
+	    contact = saveContact(contact,mergedContacts,object);
 	    System.out.println("Contact After saving"+contact);
 	   contactWrapper.updateContact(contact);
 	    // Works as save callback to perform actions like creating
@@ -176,8 +177,21 @@ public abstract class ContactSyncService implements IContactSyncService
 	    System.out.println("Contact-------" + contact);
 	    
 	    if(contact.contact_company_id!=null){
+	    	
 	    Contact related_company=ContactUtil.getContact(Long.parseLong(contact.contact_company_id));
+
 	    addTagToCompany(related_company);
+	    if (prefs.type == Type.GOOGLE){
+		    ContactField googleContactfield = contact.getContactFieldByName("Google_Sync_Type");
+
+			// Does not create contact if it is already imported form google
+			if (googleContactfield != null && "Agile_Google".equals(googleContactfield.value)){
+				String tag = "gmail company".toLowerCase();
+
+				contact.tags.remove(StringUtils.capitalize(tag));
+			}
+				
+	    }
 	    related_company.save();
 	    }
 	    return contact;
@@ -297,6 +311,9 @@ public abstract class ContactSyncService implements IContactSyncService
 			syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
 	    	SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, 
 		    		new Object[] { user, syncStatus },SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	    	
+	    	SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
+	    		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
 		}
 	    service.deleteFile();
 	 }
@@ -373,7 +390,7 @@ public abstract class ContactSyncService implements IContactSyncService
     {
 	for (Contact contact : contacts)
 	{
-	    saveContact(contact,mergedContacts);
+	    saveContact(contact,mergedContacts,null);
 	}
 
 	// Sets total number of contacts imported/updated
@@ -447,7 +464,7 @@ public abstract class ContactSyncService implements IContactSyncService
 	return ContactUtil.mergeContactFields(contact);
     }
     
-    private Contact saveContact(Contact contact,List<FailedContactBean> mergedContacts)
+    private Contact saveContact(Contact contact,List<FailedContactBean> mergedContacts,Object object)
     {
 	addTagToContact(contact);
 	Map<String, Object> queryMap = null;
@@ -472,8 +489,20 @@ public abstract class ContactSyncService implements IContactSyncService
 	if (isUpdated)
 	{
 		
-	    contact = mergeContacts(contact,queryMap);
+	    if (prefs.type == Type.GOOGLE){
+	    	 contact = mergeContacts(contact,object);
+	    ContactField googleContactfield = contact.getContactFieldByName("Google_Sync_Type");
 
+		// Does not create contact if it is already imported form google
+		if (googleContactfield != null && "Agile_Google".equals(googleContactfield.value))
+		{
+			String tag = "gmail contact".toLowerCase();
+
+				contact.tags.remove(StringUtils.capitalize(tag));
+		}
+		}
+	    else
+	    	contact = mergeContacts(contact,queryMap);
 	    accessControl.setObject(contact);
 	    if (!accessControl.canCreate())
 	    {
@@ -522,7 +551,30 @@ public abstract class ContactSyncService implements IContactSyncService
 	return contact;
     }
 
-    /**
+    private Contact mergeContacts(Contact contact,Object object)
+	{
+		// TODO Auto-generated method stub
+    	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+    	if (emails.size() == 0)
+    	    return contact;
+
+    	Contact oldContact = ContactUtil.getDuplicateContact(contact);
+
+    	if (oldContact != null && oldContact.updated_time>=((ContactEntry)object).getUpdated().getValue())
+    	{
+    		List<ContactField> field = contact.getContactPropertiesList(Contact.COMPANY);
+    		contact.properties.remove(field.get(0));
+    		field = contact.getContactPropertiesList(Contact.TITLE);
+    		contact.properties.remove(field.get(0));
+    	}
+    	if (oldContact != null)
+    	    return ContactUtil.mergeContactFeilds(contact, oldContact);
+
+    	return oldContact;
+	}
+
+	/**
      * Adds the tag to contact.
      * 
      * @param contact

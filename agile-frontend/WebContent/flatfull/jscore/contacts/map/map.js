@@ -66,8 +66,16 @@ function load_gmap_script() {
 	
 	var script = document.createElement("script");
 	script.type = "text/javascript";
-	script.src = "https://maps.googleapis.com/maps/api/js?&sensor=false&callback=display_google_map";
+	script.src = get_agile_gmap_url_with_key() + "&callback=display_google_map";
 	document.body.appendChild(script);
+}
+// Gets Map URL with JS API Key
+function get_agile_gmap_url_with_key(){
+	var key = "AIzaSyCFJ_sheJycHVRpQ62E6ZhedYzGswYJ0Kk";
+	if(window.location.href.indexOf("agilecrm.com") > -1) 
+		key = "AIzaSyApc647aMom3kEHsTQ9m6WiL9_6iHrsl_4";
+	
+	return Google_Maps_URL + "?key=" + key + "&sensor=false"; 
 }
 
 /**

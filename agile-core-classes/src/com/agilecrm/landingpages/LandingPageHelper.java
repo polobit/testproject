@@ -28,6 +28,7 @@ public class LandingPageHelper {
   public boolean showBrandMessage = true;
   public boolean setAnalyticsCode = true;
   public boolean compileMergeFields = true;
+  public boolean enableWebrules = true;
   
   public JSONObject mergeFieldsJson = null;
   
@@ -108,6 +109,10 @@ public class LandingPageHelper {
     }
     analyticsCode += " _agile.track_page_view();";
     
+    if(enableWebrules) {
+      analyticsCode += "_agile_execute_web_rules();";
+    }
+    
     analyticsCode += "</script>";
     
     return analyticsCode;
@@ -167,8 +172,8 @@ public class LandingPageHelper {
     lpHeadSection.append(headerContent);    
     lpBodySection.append(footerContent);
     
-    pageHeader = lpHeadSection.toString();
-    pagefooter = lpBodySection.toString();
+    pageHeader = lpHeadSection.html();
+    pagefooter = lpBodySection.html();
     fullPage = lpDocument.toString();
     
   }

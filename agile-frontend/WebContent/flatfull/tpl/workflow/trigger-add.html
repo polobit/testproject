@@ -79,7 +79,8 @@
 										<option value="TICKET_LABEL_IS_ADDED">{{agile_lng_translate 'campaigns' 'ticket-label-is-added'}}</option>
 										<option value="TICKET_LABEL_IS_DELETED">{{agile_lng_translate 'campaigns' 'ticket-label-is-deleted'}}</option>
 										<!-- <option value="SLA_CROSSED">SLA crossed</option> --> 
-
+										<optgroup label="{{agile_lng_translate 'campaigns' 'sms_trigger'}}">
+										<option value="REPLY_SMS">{{agile_lng_translate 'campaigns' 'reply-sms'}}</option>
 									</select>
                                 </div>
                             </div>
@@ -96,10 +97,16 @@
 							
                         <div class="control-group form-group" style="display:none;">
                             <div id="RHS" name="RHS">
-                                <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-xs-4 col-sm-4"></label>
+                                <label class="control-label REPLY_SMS TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-xs-4 col-sm-4"></label>
                                 <div class="controls col-sm-8">
+                                	<div id="keyword-tooltip" class="controls col-sm-8" style="margin-bottom: -19px; margin-left: 223px;display:none;">        
+                                	    <img border="0" src="//doxhze3l6s7v9.cloudfront.net/app/static//img/help.png" style="height: 7px; margin-top: -30px;" rel="popover" data-placement="right" data-title:"="" data-content="{{agile_lng_translate 'campaigns' 'keyword-tooltip'}}" id="element" data-trigger="hover" "="" data-original-title="" title="">  
+       								</div> 
                                     <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED form-control m-b-n-xxs w-md" placeholder="{{agile_lng_translate 'contact-details' 'enter-tag'}}" style ="width:100%!imp" />
                                     <input type="text" placeholder="{{agile_lng_translate 'campaigns' 'enter-score'}}" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits form-control w-md" />
+                                   <input type="text" placeholder="{{agile_lng_translate 'campaigns' 'enter-keyword'}}" {{#if sms_keyword}} value="{{this.sms_keyword}}" {{/if}} id="trigger-custom-keyword" name="sms_keyword" class="REPLY_SMS required form-control w-md" 
+                                   />
+
                                 </div>
                             </div>
                         </div>
@@ -115,6 +122,22 @@
 									</select>
 								</div>
 									<span id="status-wait"></span>	
+							</div>
+						</div>
+						<div class="control-group form-group" style="display: none;">
+							<div id="SMS">
+								<label class="control-label REPLY_SMS "></label>
+								<div class="controls col-sm-offset-4 col-sm-8">	
+									<select name="sms_reply" class="required form-control w-md">
+										 <option  class="REPLY_SMS" value="">{{agile_lng_translate 'campaigns' 'reply-number'}}</option>
+
+									</select>
+									<div class="m-t-xs " style="display:none;" id="setuptwilio">
+										<small style="color: rgba(0,0,0,0.87);">{{agile_lng_translate 'campaigns' 'setuptwilio'}}
+										<a href="#integrations" class="text-info">{{agile_lng_translate 'campaigns' 'here'}}</a>
+									</small>
+									</div>									
+								</div>									
 							</div>
 						</div>
                         
@@ -384,6 +407,9 @@
 
 											<li role="presentation" data-tab="9">
 												<a href="#service" name="tab9" aria-control="tab9" role="tab" data-toggle="tab" id="tab9">{{agile_lng_translate 'campaigns' 'service'}}</a>
+											</li>
+											<li role="presentation" data-tab="10">
+												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">{{agile_lng_translate 'campaigns' 'sms_trigger'}}</a>
 											</li>
 </ul>
 
@@ -1082,6 +1108,33 @@
 
                 </div>  
                 <!-- End of tab-pane - service -->
+
+          <!-- Start of tab-pane - sms reply -->
+		<div class="tab-pane" role="tab-panel" id="sms">
+
+		    <div id="general" class="row">
+		            <div class="col-md-3 col-sm-6 col-xs-12">
+		                <div class="panel wrapper text-center b-a">
+		                    <!-- Icon and Title -->
+		                    <div>
+		                        <div>
+		                            <img id="icon" border="0" src="json/nodes/icons/sms/replysmstrigger.svg" width="66px" height="66px" >
+		                        </div>
+		                        <b>{{agile_lng_translate 'campaigns' 'reply-sms'}}</b>
+		                    </div>
+		                    <br/>
+		                    <div class="ellipsis-multiline m-b-md" rel="tooltip">
+		                       {{agile_lng_translate 'campaigns' 'reply-sms-desc'}}
+		                    </div>
+		                    <!-- Add button -->
+		                    <div>
+		                        <a class="btn btn-sm btn-default add-trigger" data = "REPLY_SMS"  >{{agile_lng_translate 'campaigns' 'go'}}</a>
+		                    </div>
+		                </div>
+		            </div>
+		    </div>
+
+		</div>  <!-- End of tab-pane - sms reply -->
 
             </div>  <!-- End of tab-content -->
 

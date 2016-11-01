@@ -73,7 +73,7 @@ calendar : function()
 			showCalendar([]);
 			hideTransitionBar();
 			initializeEventListners();
-			loadPortlets('Events');
+			loadPortlets('Events',$('.route_Portlet',$('#calendar-listers')));
 			$('#due_tasks').css('pointer-events','inherit');
 		});
 
@@ -136,7 +136,7 @@ tasks_new : function()
 
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
-		loadPortlets('Tasks');
+		loadPortlets('Tasks',$('.route_Portlet',$('#tasks-list-template')));
 	}, "#tasks-list-template");
 
 },

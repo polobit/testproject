@@ -103,17 +103,25 @@ public class StripeSyncImpl extends OneWaySyncService
 	    {
 		pages = pages + 1;
 	    }*/
+	    boolean limitExceeded = false;
 	    List<FailedContactBean> mergedContacts = new ArrayList<FailedContactBean>();
 	    while (true)
 	    {
 		CustomerCollection customerCollections = Customer.all(Options(syncTime),requestOptions());
 		List<Customer> customers = customerCollections.getData();
-		if(customers !=null && customers.size()==0)
+		 limitExceeded = isLimitExceeded();
+		if(limitExceeded || (customers !=null && customers.size()==0)){
+			System.out.println("Limit exceeded so updating last sync prefs");
+			updateLastSyncedInPrefs();
 			break;
+		}
+		else{
 		for (Customer customer : customers)
 		{
-		    if (!isLimitExceeded())
-		    {
+			if(isLimitExceeded())
+			{
+				break;
+			}
 		    	//If email or first name not existed, we didn't sync that contact
 		    	String email = null;
 			    String name = null;
@@ -134,13 +142,12 @@ public class StripeSyncImpl extends OneWaySyncService
 			printCustomerCharges(contact, customer);
 		    }
 
-		}
-
 		if (customers.size() != 0)
 		{
 		    Customer customer = customers.get(customers.size() - 1);
 		    lastSyncCheckPoint = customer.getId();
 		    updateLastSyncedInPrefs();
+		}
 		}
 		currentPage += 1;
 	    }

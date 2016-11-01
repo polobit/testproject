@@ -1,11 +1,12 @@
 /**
  * Creates backbone router to access preferences of the user (email templates,
- * email (gmail/IMAP), notifications and etc..).
+ * email (gmail/IMAP and SMTP), notifications and etc..).
  */
 
 var HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
 var EMAIL_PREFS_WIDGET_SIZE = 0;
+var SMTP_ACCOUNT_LIMIT = 0;
 
 var SettingsRouter = Backbone.Router
 		.extend({
@@ -35,6 +36,12 @@ var SettingsRouter = Backbone.Router
 			/* Office edit prefs */
 			"office/:id" : "officeEdit",
 
+			/* smtp add prefs */
+			"smtp" : "smtpAdd",
+
+			/* smtp edit prefs */
+			"smtp/:id" : "smtpEdit",
+
 			/* Social preferences */
 			"social-prefs" : "socialPrefs",
 
@@ -44,6 +51,8 @@ var SettingsRouter = Backbone.Router
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
 			"email-template/:id" : "emailTemplateEdit",
+
+			"document-templates" : "documentTemplates", "document-template-add" : "documentTemplateAdd", "document-template/:id" : "documentTemplateEdit",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
@@ -273,10 +282,23 @@ var SettingsRouter = Backbone.Router
 							that.imapListView = {};
 							that.officeListView = {};
 							that.gmailListView = {};
+							that.smtpListView = {};
 
 							$('#PrefsTab .select').removeClass('select');
 							$('.email-tab').addClass('select');
 							$(".active").removeClass("active");
+
+							var emailPrefsTab = _agile_get_prefs("emailprefs_tab");
+			                if(!emailPrefsTab || emailPrefsTab == null) {
+			                    _agile_set_prefs('emailprefs_tab', "imap-tab");
+			                    emailPrefsTab = "imap-tab";
+			                }
+			                $('#prefs-tabs-content a[href="#'+emailPrefsTab+'"]').tab('show');
+			                $("#prefs-tabs-content .tab-container ul li").off("click");
+			                $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
+								var temp = $(this).find("a").attr("href").split("#");
+			                	_agile_set_prefs('emailprefs_tab', temp[1]);
+			                });
 
 					}, "#prefs-tabs-content");
 
@@ -288,12 +310,15 @@ var SettingsRouter = Backbone.Router
 						else
 							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
+						SMTP_ACCOUNT_LIMIT = 1;
+
 						var limit = data.emailAccountsLimit;
 
 						load_gmail_widgets(limit);
 						load_imap_widgets(limit);
 						load_office365_widgets(limit);
 
+						load_smtp_widgets(limit);
 					});
 
 				}, "#content");
@@ -442,6 +467,86 @@ var SettingsRouter = Backbone.Router
 				}, "#content");
 			},
 
+
+			/**
+			 * smtp Add settings
+			 */
+			smtpAdd : function()
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					// Gets smtp Prefs
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/smtp', template : "settings-smtp-prefs", isNew : true, change : false,
+						postRenderCallback : function(el)
+						{
+							itemView3.model.set("password", "");
+						}, saveCallback : function()
+						{
+							// $("#smtp-prefs-form").find("#smtp-password").val("");
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+					// Appends smtp
+					$('#prefs-tabs-content').html(itemView3.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+					$("#server_host").trigger('change');
+
+				}, "#content");
+			},
+
+			/**
+			 * smtp Update settings
+			 */
+			smtpEdit : function(id)
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					if (App_Settings.smtpListView === undefined)
+					{
+						App_Settings.navigate("email", { trigger : true });
+						return;
+					}
+
+					var smtp_model = App_Settings.smtpListView.collection.get(id);
+
+					// Gets smtp Prefs
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/smtp/', model : smtp_model, template : "settings-smtp-prefs",
+						postRenderCallback : function(el)
+						{
+							itemView3.model.set("password", "");
+							$("#server_host").val(smtp_model.server_url);
+
+							if(el.find("div [id = server_host]").val() == "smtp.live.com" || el.find("div [id = server_host]").val() == "smtp.office365.com"){
+								el.find("div [id = useSSLCheckboxHolder]").hide();
+							}else{
+								el.find("div [id = useSSLCheckboxHolder]").show();
+							}
+
+						}, saveCallback : function()
+						{
+							// $("#smtp-prefs-form").find("#smtp-password").val("");
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+
+					// Appends smtp
+					$('#prefs-tabs-content').html(itemView3.render().el);
+					$('#PrefsTab .active').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
+			},
+
+
 			/**
 			 * Gmail sharing settings
 			 */
@@ -481,17 +586,48 @@ var SettingsRouter = Backbone.Router
 			/**
 			 * Shows list of email templates, with an option to add new template
 			 */
-			emailTemplates : function()
+			emailTemplates : function(selectedEmailTempCtg)
 			{
 				var that = this;
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
-					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
+					var currUrl = "/core/api/email/templates";
+					if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
+						currUrl = "/core/api/email/templates/category/"+selectedEmailTempCtg;
+					}
+					that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
+
+						if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
+						{
+							if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
+							{
+								window.location.href  = window.location.origin+"/#emailbuilder-templates";
+							}
+						}
+						
 						agileTimeAgoWithLngConversion($(".created_time", el));
+
+					    var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	        			fillSelect('emailTemplate-category-select','core/api/emailTemplate-category', 'emailTemplateCategory',  
+	        				function fillCategory(){
+								if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
+									$('select#emailTemplate-category-select').find('option[value='+selectedEmailTempCtg+']').attr("selected","selected");
+								}
+								el.on('change','select#emailTemplate-category-select',  function(e){
+									e.preventDefault();
+									var selectedCtg = $(this).val();
+									if(selectedCtg != ""){
+										that.emailTemplates(selectedCtg);
+									}else{
+										that.emailTemplates();
+									}
+								});
+								}, optionsTemplate, false, el,'Select Category');
+
 					} });
 
 					that.emailTemplatesListView.collection.fetch();
@@ -613,6 +749,165 @@ var SettingsRouter = Backbone.Router
 						$('#tpl-attachment-name').show();
 					}, optionsTemplate, false, el);
 				}
+			},
+
+			documentTemplates : function()
+			{
+				
+
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', 
+					templateKey : "settings-document-templates",
+					individual_tag_name : 'tr', postRenderCallback : function(el)
+					{
+						console.log("loaded document template : ", el);
+								head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+								{
+									
+									$(".created_time", el).timeago();
+								});
+						
+					} });
+					that.documentTemplatesListView.collection.fetch();
+
+					$('#content').find('#prefs-tabs-content').html(that.documentTemplatesListView.render().el);
+					$('#content').find('#PrefsTab .active').removeClass('select');
+					$('#content').find('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+			},
+
+			/**
+			 * Loads a form to add new document-template. Sets HTMLEditor for the
+			 * form. Navigates to list of document templates on save success.
+			 */
+			documentTemplateAdd : function()
+			{
+
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",change:false,
+					saveAuth:function (el)
+					{
+						trigger_tinymce_save('document-template-html')
+						var sVal1=$("#document-template-html").val()
+						if(sVal1.length<=61)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return false;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						if($("#id","#userForm").length==0){
+							$("#userForm").append('<input id="id" name="id" type="hidden" value="' + data.id + '" />')	
+						}
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', '');
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
+
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+			},
+
+			/**
+			 * Updates existing document-template. On updation navigates the page
+			 * to document-templates list
+			 * 
+			 * @param id
+			 *            DocumentTemplate Id
+			 */
+			documentTemplateEdit : function(id)
+			{
+
+				if (!this.documentTemplatesListView || this.documentTemplatesListView.collection.length == 0)
+				{
+					this.navigate("document-templates", { trigger : true });
+					return;
+				}
+				var that = this;
+				that.currentTemplate = that.documentTemplatesListView.collection.get(id);
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",reload : false,change:false,
+					saveAuth:function (el)
+					{
+						
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+						}
+						catch(err){}
+
+						if(plain_content.trim().length==0)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return true;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', that.currentTemplate.toJSON().text);
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+
+								$('.save-doc-template').on('click', function(e) {
+									e.preventDefault();
+									
+								
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
+
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+
+				
 			},
 
 			/**

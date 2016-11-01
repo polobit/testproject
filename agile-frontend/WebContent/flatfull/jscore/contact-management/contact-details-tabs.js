@@ -123,7 +123,7 @@ var Contact_Details_Tab_Actions = {
 				$active_campaign.remove();
 
 			} });
-		},undefined, _agile_get_translated_val('campaigns','remove-active-campaign'));
+		},undefined, "{{agile_lng_translate 'campaigns' 'remove-active-campaign'}}");
 
 		
 	  },
@@ -237,7 +237,7 @@ var Contact_Details_Tab_Actions = {
 		  		return;
 		  	}
 
-		  	if(!hasScope("MANAGE_CALENDAR") && (CURRENT_DOMAIN_USER.id != owner) && model.get("entity_type") && model.get("entity_type") == "event"){
+		  	if(!hasScope("DELETE_CALENDAR") && model.get("entity_type") && model.get("entity_type") == "event"){
 				$("#deleteEventErrorModal").html(getTemplate("delete-event-error-modal")).modal('show');
 				return;
 			}
@@ -308,7 +308,7 @@ function populate_send_email_details(el)
 
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
-	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, _agile_get_translated_val('other','fill-from-template'));
+	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined, optionsTemplate, false, el, "{{agile_lng_translate 'other' 'fill-from-template'}}");
 }
 
 /**
@@ -341,10 +341,10 @@ function activate_timeline_tab()
 function activate_company_contact_tab()
 {
 	$('#contactDetailsTab').find('li.active').removeClass('active');
-	$('#contactDetailsTab li:first-child').addClass('active');
+	$('#contactDetailsTab li:nth-child(2)').addClass('active');
 
 	$('div.tab-content').find('div.active').removeClass('active');
-	$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+	$('div.tab-content > div:nth-child(2)',App_Companies.companyDetailView.el).addClass('active');
 
 	// $('#time-line').addClass('active'); //old original code for flicking
 	// timeline
@@ -455,9 +455,9 @@ function load_company_tab(el, contactJSON)
 	//timeline_collection_view = null;
 	var position = _agile_get_prefs(company_tab_position_cookie_name);
 	if (position == null || position == undefined || position == "")
-		position = "contacts";
+		position = "timeline";
 
-	if(position == "contacts" && agile_is_mobile_browser())
+	if(position == "timeline" && agile_is_mobile_browser())
 			return;
 
 	//Any tab is saved as cookie and if that tab doesn't have permissions,
@@ -469,11 +469,21 @@ function load_company_tab(el, contactJSON)
 
 	$('#contactDetailsTab a[href="#company-' + position + '"]', el).tab('show');
 
-	if (!position || position == "contacts")
+	if (!position || position == "timeline")
 	{
-		activate_company_contact_tab()
-		company_detail_tab.load_fill_company_related_contacts
+		$('#contactDetailsTab').find('li.active').removeClass('active');
+		$('#contactDetailsTab li:first-child').addClass('active');
+		$('div.tab-content').find('div.active').removeClass('active');
+		$('div.tab-content > div:first-child',App_Companies.companyDetailView.el).addClass('active');
+		$('#company-timeline').addClass('active');
+		company_detail_tab.openCompanyTimeLine(el);
 		return;
+	}
+	else if (position == "contacts")
+	{
+	  activate_company_contact_tab()
+	  company_detail_tab.load_fill_company_related_contacts
+	  return;
 	}
 
 	if (company_detail_tab["load_company_" + position])
@@ -627,7 +637,7 @@ function initializeSendEmailListeners(){
 				var optionsTemplate = "<option value='{{id}}' network_type='{{titleFromEnums network_type}}' size='{{size}}' url='{{url}}'>{{name}}</option>";
         		fillSelect('attachment-select','core/api/documents', 'documents',  function fillNew()
 				{
-					el.find("#attachment-select option:first").after("<option value='new'>"+_agile_get_translated_val('others','upload-new-doc')+"</option>");
+					el.find("#attachment-select option:first").after("<option value='new'>{{agile_lng_translate 'others' 'upload-new-doc'}}</option>");
 					$('#attachment-select').find('option[value='+model.attachment_id+']').attr("selected","selected");
 					$('.add-attachment-confirm').trigger("click");
 
@@ -643,7 +653,7 @@ function initializeSendEmailListeners(){
 				$('.add-attachment-select').hide();
 				$('#eattachment_error').hide();
 			}
-			else if(!model.attachment_id)
+			else if(!model.attachment_id && $("#eattachment_key","#emailForm").attr('name')!="edoc_key")
 			{
 				$('.add-attachment-cancel').trigger("click");
 				$('#eattachment_error').hide();
@@ -695,7 +705,7 @@ function initializeSendEmailListeners(){
 						if (json.to == "" || json.to == null || json.to == undefined)
 						{
 							// Appends error info to form actions block.
-							$save_info = $('<span style="display:inline-block;color:#df382c;">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
+							$save_info = $('<span style="display:inline-block;color:#df382c;">{{agile_lng_translate "validation-msgs" "required"}}</span>');
 							$('#emailForm').find("#to").closest(".controls > div").append($save_info);
 							$('#emailForm').find("#to").focus();
 							// Hides the error message after 3 seconds
@@ -709,6 +719,23 @@ function initializeSendEmailListeners(){
 						if (!isValidForm($('#emailForm')))
 							return;
 
+						if($("#eattachment_key","#emailForm").attr('name')=="edoc_key")
+						{
+							var sMessage=json.message.match(/<body[^>]*>[\s\S]*<\/body>/gi)[0].replace("<body>","").replace("</body>","");
+
+							var email_json={"domain_user_name":CURRENT_DOMAIN_USER.name,
+							"attachment_name": $("#agile_attachment_name","#emailForm").attr("value"),
+							"message": sMessage,
+							"domain": CURRENT_DOMAIN_USER.domain,
+							"document_id":json.document_id,
+							"contact_id":json.edoc_contact_id
+							};
+							var sCompleteMessage=getTemplate("documents-send-mail",email_json);
+							console.log(sCompleteMessage)
+							sCompleteMessage="<!DOCTYPE html><html><head></head><body>" + sCompleteMessage + "</body></html>";
+
+							json.message=sCompleteMessage;
+						}
 						try
 						{
 							var emails_length = json.to.split(',').length;
@@ -741,8 +768,8 @@ function initializeSendEmailListeners(){
 						}
 						else
 						{
-							showModalConfirmation(_agile_get_translated_val('contact-details','send-email'), 
-								_agile_get_translated_val('campaigns','no-perm-send-emails') + "<br/><br/> " + _agile_get_translated_val('deal-view','do-you-want-to-proceed'),
+							showModalConfirmation("{{agile_lng_translate 'contact-details' 'send-email'}}", 
+								"{{agile_lng_translate 'campaigns' 'no-perm-send-emails'}}<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}",
 								function (){
 									emailSend(that,json);
 								},
@@ -823,8 +850,12 @@ function emailSend(ele,json)
 
 			// Enables Send Email button.
 			enable_send_button($('#sendEmail'));
+			if(Current_Route.indexOf("/documents/")>0 && Current_Route.indexOf("/send")>0){
 
-			window.history.back();
+				Backbone.history.navigate("#documents/" + Current_Route.split("/")[2], { trigger : true });
+			}
+			else
+				window.history.back();
 
 		},
 		error : function(response)
@@ -866,7 +897,7 @@ function modelDelete(model, targetEl, callback){
 			web_event_contact_name = firstname + " " + lastname;
 		}
 		$("#webEventCancelModel").modal('show');
-		$("#cancel_event_title").html(_agile_get_translated_val('events','delete-event') + " &#39" + web_event_title + "&#39");
+		$("#cancel_event_title").html("{{agile_lng_translate 'events' 'delete-event'}} &#39" + web_event_title + "&#39");
 		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
 		return;
 	}
@@ -926,7 +957,7 @@ function modelDelete(model, targetEl, callback){
 			}
 			if(!can_edit)
 			{
-				showModalConfirmation(_agile_get_translated_val('contact-details','delete') + " <span class='text-cap'>"+model.get("entity_type")+"</span>", 
+				showModalConfirmation("{{agile_lng_translate 'contact-details' 'delete'}} <span class='text-cap'>"+model.get("entity_type")+"</span>", 
 					'<span class="text-cap">'+model.get("entity_type")+'</span> '+CONTACTS_ACTIVITY_ACL_DELETE_ERROR, 
 					function (){
 						return;
@@ -937,7 +968,7 @@ function modelDelete(model, targetEl, callback){
 					function (){
 						return;
 					},
-					_agile_get_translated_val('contact-details','cancel')
+					"{{agile_lng_translate 'contact-details' 'cancel'}}"
 				);
 				return;
 			}

@@ -10,7 +10,9 @@ import com.agilecrm.DataSyncUrlConstants;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.service.impl.AgileUserServiceImpl;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
@@ -215,6 +217,24 @@ public class ContactPrefsUtil
 	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	if(ContactPrefs.dao.getByProperty(searchMap)==null){
 		return true;
+	}
+	return false;
+    }
+    
+    /**
+     * check for existence of widget for all users in domain
+     * @param type
+     * @return
+     */
+    public static boolean checkWidgetExists(Type type, List<AgileUser> users)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", type);
+	for(AgileUser agileUser : users){
+		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, agileUser.domain_user_id));
+		if(ContactPrefs.dao.getByProperty(searchMap)!=null){
+			return true;
+		}
 	}
 	return false;
     }

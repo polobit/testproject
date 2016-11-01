@@ -2497,4 +2497,5 @@ padding-right:0px !important;
 .activities_second_line i{padding-right:2px}
 .campaign-history-details ul{padding: 0px; margin-bottom:0px;}
 .webrules-tabview .tab-content{ border: 1px solid #dee5e7 !important; border-top: 0px !important;}
+.agile-row tr:first-child td{border-top: 0px;}
 /*end custom css code*/

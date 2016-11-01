@@ -12,11 +12,32 @@
 
 <div id = "all-email-settings-prefs" class="row">
 	<div class="col-md-12">
-<div class="row">
-	<div id="social-prefs"></div>
-	<div id="imap-prefs"></div>
-	<div id="office-prefs"></div>
-</div>
+		<div class="tab-container m-b-none">
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a href="#imap-tab" data-toggle="tab" class="b-l-none">Inbound</a>
+				</li>
+				<li>
+					<a href="#smtp-tab" data-toggle="tab">Outbound</a>
+				</li>
+			</ul>
+		</div>
+
+		<div class="tab-content wrapper-md panel" id="setting-email-prefs-tab-content">
+			<div class="tab-pane" id="imap-tab">
+				<div class="row">
+					<div id="social-prefs"></div>
+					<div id="imap-prefs"></div>
+					<div id="office-prefs"></div>
+				</div>
+			</div>
+
+			<div class="tab-pane" id="smtp-tab">
+				<div class="row">
+					<div id="smtp-prefs"></div>
+				</div>
+			</div>
+		</div>
     </div>
 </div>
 </script>
@@ -117,4 +138,57 @@
 </script>
 <script id="settings-office-access-collection-template" type="text/html">
 <div id="settings-office-access-model-list"></div>
+</script>
+
+<script id="settings-smtp-access-model-template" type="text/html">
+<div class="col-lg-4 col-sm-6 col-xs-12">
+	<!-- <div id="loadingImgHolder">
+		<img class="loading" src= "//doxhze3l6s7v9.cloudfront.net/beta/static/img/ajax-loader-cursor.gif"/>
+	</div> -->
+	<div class="panel panel-default" style="min-height:257px; height:auto !important;">
+	<div class="panel-heading">
+		<center>
+			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/icons/smtp-logo-icon.png"/>
+			<span class="label label-sm bg-danger" style="vertical-align: top">Beta</span>
+		</center>
+		</div>
+		<div class="panel-body">
+		<div  style="min-height: 85px;"> 
+			{{#if id}}
+			  <div class="m-b-md p-b-xs">
+		   	  <div class="l-h word-break">{{agile_lng_translate 'settings' 'server'}}: {{server_url}}</div>
+		   	  <div class="l-h word-break">{{agile_lng_translate 'portlets' 'emails'}}: {{user_name}}</div>
+		   </div>
+			{{else}}
+			<p style="height:15px"></p>
+			<div class="m-b-sm" rel="tooltip" title="{{agile_lng_translate 'prefs-email' 'smtp-content'}}">
+				{{agile_lng_translate 'prefs-email' 'smtp-content'}}
+			</div>
+			{{/if}}
+		</div>
+        <center>
+			{{#if id}}
+				<a class="btn btn-sm btn-danger" href="#" id="smtp-prefs-delete" name="smtp" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+				<a class="btn btn-sm btn-default" href="#smtp/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
+			{{else}}
+				<div>
+				<a class="btn btn-sm btn-default" href="#smtp">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
+			    <!-- {{#has_email_account_limit_reached}}
+			    {{#if_non_pro_plan}}
+			    <div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>				
+				{{/if_non_pro_plan}} -->
+				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
+				<!-- {{else}}
+				<a class="btn btn-sm btn-default" href="#smtp">{{agile_lng_translate 'prefs-email' 'enable'}}</a>
+				{{/has_email_account_limit_reached}} -->
+				</div>
+			{{/if}}
+		</center>
+	</div>
+	</div>
+</div>
+</script>
+<script id="settings-smtp-access-collection-template" type="text/html">
+<div id="settings-smtp-access-model-list"></div>
+
 </script>

@@ -80,7 +80,8 @@ public class CustomFieldDefUtil
     if(scope!=null && (scope==SCOPE.CONTACT || scope==SCOPE.PERSON)){
     	Map<String, Object> map = new HashMap<String, Object>();
     	map.put("searchable", true);
-		List<CustomFieldDef> customFieldsList = dao.listByProperty(map);;
+		//List<CustomFieldDef> customFieldsList = dao.listByProperty(map);;
+    	List<CustomFieldDef> customFieldsList = dao.listByPropertyAndOrder(map, "position");
 		for(CustomFieldDef cfd : customFieldsList){
 			if(cfd.scope==SCOPE.CONTACT || cfd.scope==SCOPE.PERSON || cfd.scope==null)
 				contactCustomFieldsList.add(cfd);
@@ -303,6 +304,20 @@ public class CustomFieldDefUtil
 		}
 	
 		return contactCustomFields;
+    }
+    public static List<CustomFieldDef> getCustomFieldswithFieldLabel(String field_label)
+    {
+    	return dao.listByProperty("field_label", field_label);
+    }
+    public static int getCustomFieldPosition(SCOPE scope){
+    	try {
+			List<CustomFieldDef> cust =  dao.ofy().query(CustomFieldDef.class).filter("scope", scope).order("-position").limit(1).list();
+			if(cust.size() > 0)
+				return cust.get(0).position ;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}    	
+    	return 0;
     }
 
 }

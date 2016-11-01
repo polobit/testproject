@@ -104,7 +104,9 @@
 					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
 					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
 					<ul class="dropdown-menu search-view animated fadeInRight agile-search mobile-search-view pos-r-0" style="left:auto">
-
+							<div class="pos-abs search-close" data-toggle="tooltip" data-placement="bottom" title="Close" style="right: 16px;top:-3px;z-index:1;color: #363f44!important;">
+							<span class="c-p" style="font-size:15px;">&times;</span>
+						</div>
 					<div class="col-sm-12">
 
 					<form class=" m-t-sm m-b-sm searchForm" id="searchForm" role="search">
@@ -270,7 +272,9 @@
 					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
 					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
 					<ul class="dropdown-menu search-view animated fadeInRight agile-search">
-
+						<div class="pos-abs search-close" data-toggle="tooltip" data-placement="bottom" title="Close" style="right: 16px;top:-3px;z-index:1;color: #363f44!important;">
+							<span class="c-p" style="font-size:15px;">&times;</span>
+						</div>
 					<div class="col-sm-12">
 
 					<form class=" m-t-sm m-b-sm" id="searchForm" role="search">
@@ -350,7 +354,7 @@
 						 	<!--<li id="homemenu" class="active"></li>-->
 							<%
 							    if ("admin".equals(domainUser.domain)) {
-											out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
+											out.println("<ul class='nav navbar-nav agile-menu'><li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li><li><a href='#admin-affiliate'>Affiliates</a></li></ul>");
 											out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'>	<form id='domainSearchForm' class=' navbar-search'	style='margin: 5px;'>	<input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'	data-provide='typeahead'		placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li><li><a href="
 													+ logoutURL
 													+ "><i class='icon-off'></i>Logout</a></li>");

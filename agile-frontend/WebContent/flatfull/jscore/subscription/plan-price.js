@@ -116,20 +116,22 @@ function setCost(price)
 	return $("#users_total_cost").text(($("#users_quantity").text() * price).toFixed(2));
 }
 
-function update_price()
+function update_price(text)
 {
 	// Get the selected plan cost
 	var plan_name = $("#plan_type").val();
-	if(_billing_restriction.currentLimits.planName == "FREE")
-	{
-		if(plan_name == "starter")
+	if(!text){
+		if(_billing_restriction.currentLimits.planName == "FREE")
+		{
+			if(plan_name == "starter")
+				$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
+			else if(IS_TRIAL && IS_ALLOWED_TRIAL)
+				$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-trial'}}");
+			else
+				$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
+		}else
 			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
-		else if(IS_TRIAL && IS_ALLOWED_TRIAL)
-			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-trial'}}");
-		else
-			$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
-	}else
-		$("#purchase-plan").text("{{agile_lng_translate 'plan-and-upgrade' 'proceed-to-pay'}}");
+	}
 	return $("#" + plan_name + "_plan_price").text();
 }
 
@@ -349,7 +351,7 @@ function initializeSubscriptionListeners()
 				}
 				plan_json = {};
 				var buttonText = $(this).html();
-				$(this).text("{{agile_lng_translate 'tickets' 'loading'}}");
+				$(this).html("<img style='padding-bottom: 2px;width: 17px;' src='img/21-0.gif'>{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
 				$(this).attr("disabled","disabled");
 				/*
 				 * var quantity = $("#users_quantity").text(); var cost =
@@ -441,7 +443,7 @@ function initializeSubscriptionListeners()
 
 				
 				plan_json.new_signup = is_new_signup_payment();
-				plan_json.price = update_price();
+				plan_json.price = update_price(true);
 				plan_json.cost = (cost * months).toFixed(2);
 				if(credit > 0){
 					plan_json.costWithCredit = plan_json.cost;
@@ -540,22 +542,21 @@ function initializeSubscriptionListeners()
 							
 						}else{
 							var restrictions = data.restrictions;
-							restrictions.plan = data.plan;
-							restrictions.users.limit = parseInt(plan_json.quantity);
-							if(restrictions.contacts.count > restrictions.contacts.limit)
-								errorsCount++;
-							if(restrictions.webrules.count > restrictions.webrules.limit)
-								errorsCount++;
-							if(restrictions.users.count > restrictions.users.limit)
-								errorsCount++;
-							if(restrictions.workflows.count > restrictions.workflows.limit)
-								errorsCount++;
-							if(restrictions.triggers.count > restrictions.triggers.limit)
-								errorsCount++;
+							var usersLimit = parseInt(plan_json.quantity);
+							if(restrictions.users != undefined){
+								restrictions.users.limit = usersLimit;
+								if(restrictions.users.limit >= restrictions.users.count)
+									delete restrictions['users'];
+							}
+							errorsCount = (_.size(restrictions));
 							if(errorsCount >= 1)
 							{
 								restrictions.errorsCount = errorsCount;
-								getTemplate("subscribe-error-modal",restrictions , undefined, function(template_ui){
+								restrictions.plan = data.plan;
+								var template_name = "subscribe-error-modal";
+								if(errorsCount > 5)
+									template_name = "subscribe-error-more-modal";
+								getTemplate(template_name,restrictions , undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$(template_ui).modal('show');
@@ -748,6 +749,25 @@ function initializeSubscriptionListeners()
 			return;
 		$("#total_credits_cost").html(quantity*4);
 	});
+
+	$("#manage_auto_recharge").off("click");
+	$("#email-content").on("click","#manage_auto_recharge", function(e){
+		e.preventDefault();
+		var data = {};
+		if(_billing_restriction.nextRechargeCount != undefined)
+			data.nextRechargeCount = _billing_restriction.nextRechargeCount;
+		if(_billing_restriction.autoRenewalPoint != undefined)
+			data.autoRenewalPoint = _billing_restriction.autoRenewalPoint;
+		if(_billing_restriction.isAutoRenewalEnabled != undefined)
+			data.isAutoRenewalEnabled = _billing_restriction.isAutoRenewalEnabled;
+		getTemplate("auto-recharge",data , undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("#auto-recharge-modal").html($(template_ui)).modal("show");
+		}, null);
+			
+	});
+
 }
 
 function is_new_signup_payment()
@@ -834,6 +854,50 @@ $(function(){
 		});
 	});
 
+	//auto recharge related events
+	$("#auto-recharge-modal #save_auto_recharge").off("click");
+	$("#auto-recharge-modal").on("click","#save_auto_recharge", function(e){
+		e.preventDefault();
+		var $form = $("#auto-recharge-form");
+		if(!isValidForm($form))
+			return;
+		var json = serializeForm("auto-recharge-form");
+		json.isAutoRenewalEnabled = true;
+		disable_save_button($(this));
+		var $that = $(this);
+		$.post("core/api/subscription/auto_recharge", json, function(data){
+			$that.closest(".modal").modal("hide");
+			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
+			_billing_restriction.nextRechargeCount = json.nextRechargeCount;
+			_billing_restriction.autoRenewalPoint = json.autoRenewalPoint;
+			$that.html("save").removeAttr("disabled");
+			showNotyPopUp("information","Auto recharge has been enabled successfully.", "top");
+		}).fail(function(data) {
+			$that.closest(".modal").modal("hide");
+		    showNotyPopUp("warning", data.responseText, "top");
+  		});
+			
+	});
+
+	$("#auto-recharge-modal #disable_auto_recharge").off("click");
+	$("#auto-recharge-modal").on("click","#disable_auto_recharge", function(e){
+		e.preventDefault();
+		var json = {};
+		json.isAutoRenewalEnabled = false;
+		var $that = $(this);
+		$.post("core/api/subscription/auto_recharge", json, function(data){
+			$that.closest(".modal").modal("hide");
+			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
+			_billing_restriction.nextRechargeCount = undefined;
+			_billing_restriction.autoRenewalPoint = undefined;
+			showNotyPopUp("information","Auto recharge has been disabled successfully.", "top");
+		}).fail(function(data) {
+			$that.closest(".modal").modal("hide");
+		    showNotyPopUp("warning", data.responseText, "top");
+  		});
+			
+	});
+
 });
 
 function addAsAffiliate(amount){
@@ -844,4 +908,3 @@ function addAsAffiliate(amount){
 
 	}});
 }
-

@@ -3,6 +3,8 @@ package com.agilecrm.export;
 import java.util.HashMap;
 import java.util.List;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.util.email.SendMail;
 
 public interface Exporter<T>
@@ -34,5 +36,6 @@ public interface Exporter<T>
 
     public void sendEmail(String email);
     public void sendEmail(String email,HashMap<String, String> stats,String domain);
+    public void addToActivity(ActivityType activityType,EntityType entityType);
 
 }
