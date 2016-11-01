@@ -231,3 +231,14 @@ function verifyUpdateImgPermission(callback) {
 		return callback(true);
 	}
 }
+
+function agileOpenWindowAndFocus(pageURL, name, settings){
+	if(agile_is_mobile_browser())
+		return;
+	
+	var newwindow = window.open(pageURL, name, settings);
+	if (window.focus)
+	{
+		newwindow.focus();
+	}
+}
