@@ -1475,9 +1475,9 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	abortCountQueryCall();
 
     	Count_XHR_Call = $.get(countURL, {}, function(data){
+    			if(type == "contacts")
     		        data = parseInt(data);
-    		        
-                    count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
+    		        count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
 					$('#contacts-count').html(count_message);
 
 					if(type == "workflows")

@@ -95,6 +95,9 @@ if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILL
 $(".free_plan_strip_close").click(function(e){
 	$(this).closest(".free_plan_alert").hide().removeAttr("id");
 });
+$(".contact_plan_strip_close").click(function(e){
+	$(this).closest(".contacts_plan_alert").hide().removeAttr("id");
+});
 	
  $("#addDescriptionLink").click(function(e){
  e.preventDefault();
@@ -292,6 +295,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    $("#documentsmenu span").text("Documents");
    
    }
+   $("body").on("click",".contactlimit-msg-cross",function(e){
+		_agile_set_prefs("contactslimit","true",1);
+	});
 
 	$(".person").on("click", function(e){
 		e.preventDefault();
@@ -348,6 +354,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	        }
 	    });
 	});
+
 
 	$(".show-search-dropdown").on("click",function(e){
 		$("#searchText").val("");
