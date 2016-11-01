@@ -153,10 +153,8 @@ public class AgileWebhookAPI
 	    if (sub.plan.getPlanName().equals("ENTERPRISE")
 		    || sub.plan.getPlanName().equals("PRO")) {
 
-		List<Webhook> whook = WebhookTriggerUtil.getWebhooksList();
-
-		System.out.println("hook count = " + whook.size());
-		if (whook != null && whook.size() > 0) {
+		Webhook whook = WebhookTriggerUtil.getWebhook();
+		if (whook != null) {
 		    System.out.println("Webhook found = " + whook);
 		    throw new Exception(
 			    "Webhook found. Please remove current webhook to create new.");
