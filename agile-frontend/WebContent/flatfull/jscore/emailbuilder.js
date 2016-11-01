@@ -511,3 +511,10 @@ var videoRecordPreview = {
         
     }
 };
+
+function emailBuilderVideoPopup(){
+       var data={};
+       data.title="Email Builder Tutorial";
+       data.videourl="//www.youtube.com/embed/YvKbPqZpT58?enablejsapi=10&autoplay=1";
+       showHelpVideoModal(data);
+}
