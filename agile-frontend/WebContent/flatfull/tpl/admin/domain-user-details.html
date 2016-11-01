@@ -6,7 +6,7 @@
 {{#if is_account_owner}}
             <span class="label bg-light m-l-xs dk text-tiny">Owner</span>
             {{#adminpanel_restrictions "LOGIN_INTO_DOMAIN"}}
-            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">{{agile_lng_translate 'other' 'login-to-domain'}}</a>{{/check_admin_ip}}{{else}}{{/adminpanel_restrictions}}	
+            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" domain="{{domain}}" class="text-info p-l-xs agentLogin">{{agile_lng_translate 'other' 'login-to-domain'}}</a>{{/check_admin_ip}}{{else}}{{/adminpanel_restrictions}}	
     {{/if}}
 </td>
 <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>

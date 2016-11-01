@@ -808,13 +808,21 @@
 <!-- start of delete domain  activity -->
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_DELETE_ACCOUNT" activity_type}}
+ {{custom1}} ({{custom3}}) had logged into the customer Domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom1}} has logged in on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ <!-- end of admin panel activities -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_LOGIN_INTO_DOMAIN" activity_type}}
  {{custom1}} ({{custom3}}) had Deleted the Domain ({{custom2}}) 
  <br />
  <small class="activities_second_line m-t-none text-sm">
  {{custom2}} was deleted on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
  </small>
  {{/if_equals}}{{/if_equals}}
- <!-- end of admin panel activities -->
  <!-- start of release domain  activity -->
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_SUBSCRIPTION_CANCEL" activity_type}}

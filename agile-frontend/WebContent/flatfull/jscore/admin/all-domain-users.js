@@ -79,6 +79,18 @@ function initializeAdminpanelListner(el){
 		 * If user clicks on delete, delete request is sent to
 		 * "core/api/admin/delete/namespace"
 		 */
+	$("#admin-panel-listners").on("click", '.agentLogin', function(e) 
+	{
+		var domain = $(this).attr("domain");
+		$.ajax({
+				type : "post",
+				url : "core/api/admin_panel/logintodomain/" + domain,
+				success : function(data)
+				{
+					console.log("loged in domain");
+				}
+			});
+	});
 	$("#admin-panel-listners").on("click", '.delete-namespace', function(e) {
 			
 					e.preventDefault();

@@ -718,5 +718,19 @@ public class AdminPanelAPI
 					.build());
 		}
 	}
+    @Path("/logintodomain")
+    @POST
+	public void createAdminloginActivity(@QueryParam("d") String userdomain){
+    	try {
+    		ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_LOGIN_INTO_DOMAIN,userdomain);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+    
+    
     
 }
