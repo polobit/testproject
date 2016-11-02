@@ -43,9 +43,11 @@ $(function(){
 		save_event('updateActivityForm', 'updateActivityModal', true, this,currentDiv, function(data)
 		{
 			console.log(data);
-			var eventModel = eventCollectionView.collection.get(eventId);
-			eventModel.set(data.toJSON(), { merge : true });
-			eventCollectionView.render(true);
+			if(eventCollectionView && eventCollectionView.collection){
+				var eventModel = eventCollectionView.collection.get(eventId);
+				eventModel.set(data.toJSON(), { merge : true });
+				eventCollectionView.render(true);
+			}
 		});
 
 	});

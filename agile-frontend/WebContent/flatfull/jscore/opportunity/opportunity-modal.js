@@ -1161,8 +1161,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		}
 		else
 		{
-			App_Deal_Details.dealDetailView.model = data;
-			App_Deal_Details.dealDetailView.render(true)
+			if(App_Deal_Details.dealDetailView){
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+			}
 			Backbone.history.navigate("deal/" + data.toJSON().id, { trigger : true });
 			/*
 			 * App_Deals.navigate("deals", { trigger : true });
