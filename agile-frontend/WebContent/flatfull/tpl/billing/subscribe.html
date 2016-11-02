@@ -24,11 +24,15 @@
 												<a href="#email-content" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">{{agile_lng_translate 'other' 'email'}}</a>
 											</li>
 											{{#if billingData}}
-											{{#isRegularPlan}}
+											{{#checkPlan 'pro'}}
+                      {{else}}
+                      {{#checkPlan 'enterprise'}}
+                      {{else}}
 											<li id="addontab" data-tab="3">
 												<a href="#addon-content" name="addon-content" aria-control="addon-content" role="tab" data-toggle="tab">Addons</a>
 											</li>
-											{{/isRegularPlan}}
+                      {{/checkPlan}}
+											{{/checkPlan}}
 											{{/if}}
 </ul>
             <div class="tab-content" style=" display: block;">

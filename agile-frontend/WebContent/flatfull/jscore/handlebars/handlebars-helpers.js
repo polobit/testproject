@@ -30,11 +30,13 @@ $(function()
 		return optionsHtml;
 	});
 
-	Handlebars.registerHelper('isRegularPlan', function(options)
+	Handlebars.registerHelper('checkPlan', function(plan, options)
 	{
+		if(!plan)
+			return options.inverse(this);
 		var plan_name = USER_BILLING_PREFS.plan.plan_type;
 		var plan_fragments = plan_name.split("_");
-		if(plan_fragments[0].toLowerCase() == "regular")
+		if(plan_fragments[0].toLowerCase() == plan)
 			return options.fn(this);
 		return options.inverse(this);
 	});

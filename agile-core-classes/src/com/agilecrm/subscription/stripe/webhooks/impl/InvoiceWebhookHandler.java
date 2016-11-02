@@ -144,6 +144,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 			updateAddOnStatus(addOntype, AddOnStatus.FAILED2);
 		else if(attemptCount == 3)
 			updateAddOnStatus(addOntype, AddOnStatus.FAILED3);
+		if(getEvent().getRequest() == null)
+			SendMail.sendMail("mogulla@invox.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
 		return;
 	}
 	if (attemptCount == 0 || attemptCount == 1)

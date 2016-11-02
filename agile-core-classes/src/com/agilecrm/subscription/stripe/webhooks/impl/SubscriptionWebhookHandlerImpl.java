@@ -114,6 +114,8 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	
 	if(isAddonPlan()){
 		updateAddOnStatus(getAddonPlan(), AddOnStatus.DELETED);
+		if(getEvent().getRequest() == null)
+			SendMail.sendMail("mogulla@invox.com", "Addon Subscription Deleted", SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
 		return;
 	}
 

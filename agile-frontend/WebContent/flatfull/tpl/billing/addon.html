@@ -1,7 +1,7 @@
 <script id="acl-addon-model-template" type="text/html">
 <form name="addOn" class="form-horizontal" id="aclInfo">
   <div class="panel panel-default">
-    <div class="panel-heading">ACLs</div>
+    <div class="panel-heading">Permissions</div>
 	<div class="panel-body">
 	  <div class="row">
 	    <div class="col-md-6">
@@ -61,6 +61,7 @@
                 <select name="quantity" class="campaign_quantity form-control">
                 	{{#fillSelectOptionWithNumbers "0" "20"}}{{/fillSelectOptionWithNumbers}}
                 </select>
+                <input type="hidden" name="planId" value="addon-campaign-12"></input>
             </div>
           </div>
         </div>
@@ -110,9 +111,11 @@
             <select name="quantity" class="trigger_quantity form-control">
                 {{#fillSelectOptionWithNumbers "0" "20"}}{{/fillSelectOptionWithNumbers}}
             </select>
+            <input type="hidden" name="planId" value="addon-trigger-12"></input>
           </div>
         </div>
       </div>
+
     	<div class="col-md-6">
         <div class="text-md font-bold m-b-sm m-l">Billing Details</div> 
 

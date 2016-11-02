@@ -87,7 +87,8 @@ public class AddOnAPI implements Serializable{
 				boolean proration = true;
 				if(addOn.aclInfo.quantity < dbAddOn.aclInfo.quantity)
 					proration = false;
-				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-acl", addOn.getAclUsers().size(), dbAddOn.aclInfo.subscriptionId, proration);
+				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-acl-12", addOn.getAclUsers().size(), dbAddOn.aclInfo.subscriptionId, proration);
+				dbAddOn.aclInfo.planId = "addon-acl-12";
 				dbAddOn.aclInfo.subscriptionId = subscription.getId();
 			}
 			Set<Long> modifiedUsers = new HashSet<Long>();
@@ -130,8 +131,9 @@ public class AddOnAPI implements Serializable{
 				boolean proration = true;
 				if(addOn.campaignInfo.quantity < dbAddOn.campaignInfo.quantity)
 					proration = false;
-				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-campaign", addOn.campaignInfo.quantity, dbAddOn.campaignInfo.subscriptionId, proration);
+				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription(addOn.campaignInfo.planId, addOn.campaignInfo.quantity, dbAddOn.campaignInfo.subscriptionId, proration);
 				dbAddOn.campaignInfo.subscriptionId = subscription.getId();
+				dbAddOn.campaignInfo.planId = addOn.campaignInfo.planId;
 			}
 			dbAddOn.campaignInfo.quantity = addOn.campaignInfo.quantity;
 			dbAddOn.campaignInfo.status = AddOnStatus.SUCCESS;
@@ -167,8 +169,9 @@ public class AddOnAPI implements Serializable{
 				boolean proration = true;
 				if(addOn.triggerInfo.quantity < dbAddOn.triggerInfo.quantity)
 					proration = false;
-				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription("addon-trigger", addOn.triggerInfo.quantity, dbAddOn.triggerInfo.subscriptionId,proration);
+				com.stripe.model.Subscription subscription = StripeUtil.updateAddOnSubscription(addOn.triggerInfo.planId, addOn.triggerInfo.quantity, dbAddOn.triggerInfo.subscriptionId,proration);
 				dbAddOn.triggerInfo.subscriptionId = subscription.getId();
+				dbAddOn.triggerInfo.planId = addOn.triggerInfo.planId;
 			}
 			dbAddOn.triggerInfo.quantity = addOn.triggerInfo.quantity;
 			dbAddOn.triggerInfo.status = AddOnStatus.SUCCESS;

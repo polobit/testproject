@@ -110,7 +110,19 @@ $(function(){
 
 				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 					return;
-
+				var canProceed = true;
+				if($(table).attr("id") == "users-list-table"){
+					if(ADDON_INFO && ADDON_INFO.id && ADDON_INFO.aclUsers.length > 0){
+						$.each( id_array, function( index, value ){
+						   if($.inArray(value, ADDON_INFO.aclUsers) != -1){
+							   	showNotyPopUp('warning', "Sorry, You can't delete users until you remove the ACL permissions in Addons", "top", 10000);
+							   	canProceed = false;
+						   }
+						});
+					}
+				}
+				if(!canProceed)
+					return;
 				// Default message for all tables
 				var confirm_msg = _agile_get_translated_val("others", "delete-warn");
 				var $that = $(this);

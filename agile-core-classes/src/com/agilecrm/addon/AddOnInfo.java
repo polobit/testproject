@@ -46,6 +46,8 @@ public class AddOnInfo implements Serializable{
 	@NotSaved(IfDefault.class)
 	public int quantity;
 	
+	public String planId;
+	
 	public AddOnInfo(){
 		
 	}

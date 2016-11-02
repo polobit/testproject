@@ -79,6 +79,9 @@ public class SendMail
     
     public static final String INVOICE_CREATED = "subscription/payments/invoice_created";
     public static final String INVOICE_CREATED_SUBJECT = "Your Agile CRM Invoice";
+    
+    public static final String ADDON_PAYMENT_FAILED = "subscription/payments/failed/our_addon_payment_failed";
+    public static final String ADDON_PAYMENT_FAILED_SUBJECT = "Addon payment failed";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";

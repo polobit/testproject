@@ -11,6 +11,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOn;
 import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -310,7 +311,19 @@ public class StripeImpl implements AgileBilling {
 			} catch (Exception e) {
 			}
 		}
-
+		//If plan is Enterprise remove all addon subscriptions
+		if(StringUtils.equalsIgnoreCase(plan.plan_type.toString().toLowerCase(), "enterprise")){
+			AddOn addon = AddOnUtil.getAddOn();
+			if(addon.id != null){
+				for(com.stripe.model.Subscription subscription : subscriptionList){
+					if(subscription.getPlan().getId().toLowerCase().contains("addon")){
+						subscription.cancel(null);
+						AddOnUtil.deleteAddOn();
+					}
+				}
+			}
+		}
+		
 		// Returns Customer object as JSONObject
 		return StripeUtil.getJSONFromCustomer(customer);
 	}

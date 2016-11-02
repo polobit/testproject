@@ -363,12 +363,14 @@ function initializeSubscriptionListeners()
 				if(credit == "")
 					credit = 0;
 				var plan = $("#plan_type").val();
-				if(plan != "regular" && addonsExists()){
+
+				/*if(plan != "regular" && addonsExists()){
 					showNotyPopUp("warning", "Please cancel all your addons before change the plan.", "top");
 					$(this).text("Proceed to Pay");
 					$(this).removeAttr("disabled");
 					return;
-				}
+				}*/
+				
 				if("pro" == plan)
 					plan = "enterprise";
 				var discount = "", months = "";
