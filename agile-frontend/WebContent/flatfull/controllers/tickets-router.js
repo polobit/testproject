@@ -469,7 +469,8 @@
 		 					$('#ticket-contact-details', el).html(
 		 						getTemplate('ticket-contact-fallback', data));
 		 				}
-		 				loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
+		 				Tickets.ticketsloadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON());
+		 				//loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
 		 			});
 
 
