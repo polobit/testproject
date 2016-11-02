@@ -232,15 +232,17 @@ public class ContactEmailUtil
 
 		// Sends email
 		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
-
+		System.out.println("After send email");
 		// If contact is available, no need of fetching contact from
 		// to-email again.
 		if (contact != null)
 		{
+			System.out.println("if contact is not null , save the contact email");
 			saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
 					Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
-			
+			System.out.println("After save contact email , set contact last mailed");
 			contact.setLastEmailed(System.currentTimeMillis() / 1000);
+			System.out.println("After set contact last emailed , update contact");
 			contact.update();
 			
 			for (String toEmail : toEmailSet)
@@ -248,6 +250,7 @@ public class ContactEmailUtil
 		}
 		else
 		{
+			System.out.println("if contact is null , loop the save contact email");
 			// When multiple emails separated by comma are given
 			for (String toEmail : toEmailSet)
 			{
@@ -263,12 +266,13 @@ public class ContactEmailUtil
 				// Saves email with contact-id
 				if (contact != null)
 				{
+					System.out.println("save contact email in loop");
 					saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
 							Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
-
+					System.out.println("after save contact in loop");
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();
-					
+					System.out.println("save contact emailed activity");
 					// Add activity
 					ActivitySave.createEmailSentActivityToContact(email, contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
 				}
@@ -352,7 +356,7 @@ public class ContactEmailUtil
 
 		// Remove trailing commas for to emails
 		ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);
-
+		System.out.println("in savecontactemail , get contact email object ");
 		contactEmail.from_name = fromName;
 
 		contactEmail.cc = cc;
@@ -361,7 +365,7 @@ public class ContactEmailUtil
 		contactEmail.trackerId = trackerId;
 
 		contactEmail.attachment_ids = documentIds;
-
+		System.out.println("before save contact email");
 		contactEmail.save();
 	}
 

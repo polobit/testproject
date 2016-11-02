@@ -296,7 +296,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    
    }
    $("body").on("click",".contactlimit-msg-cross",function(e){
-		_agile_set_prefs("contactslimit","true",1);
+		createCookie("contactslimit","true",1);
 	});
 
 	$(".person").on("click", function(e){

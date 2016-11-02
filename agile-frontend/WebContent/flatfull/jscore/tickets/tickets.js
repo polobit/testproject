@@ -80,6 +80,7 @@ var Tickets = {
 		});
 	},
 
+	
 	//Fetches new ticket collection
 	fetchTicketsCollection: function(){
 
@@ -1174,44 +1175,24 @@ var Tickets = {
 	// 	});
 	// },
 
-	ticketsloadWidgets: function(){
+	ticketsloadWidgets: function(elc,contact){
 
-		var widgetState = _agile_get_prefs("hide_ticket_details_widgets");
-		if(widgetState && widgetState == "true")
-			return;
-
-		var model_coun = 0;
-
-		var ticketModel = App_Ticket_Module.ticketView.model.toJSON();
-
+		
 		//Loading widgets
-		if(ticketModel && ticketModel.contactID){
+		//if(ticketModel && ticketModel.contactID){
 			/*var contactDetails = Backbone.Model.extend({urlRoot : '/core/api/contacts/' + ticketModel.contactID});
 			new contactDetails().fetch({success: function(contact, response, options){
 				}, error: function(){}
 			});*/
 			App_Contacts.contactDetailView = new Base_Model_View({ 
 				isNew : false,
-				url: '/core/api/contacts/' + ticketModel.contactID,
-				template : "contact-detail",
-				postRenderCallback : function(el, contact)
-				{	
-					model_coun++;
-
-					if(model_coun > 1)
-						return;
-
-					clearContactWidetQueues(ticketModel.contactID);
-					loadWidgets(App_Contacts.contactDetailView.el, contact, "widgets");
-
-										
-				}
-
-
+				url: '/core/api/contacts/' + contact.id,
+				template:"zyz"
+			
 			});
 			
-			//App_Contacts.contactDetailView.render(true).el;
-		}
+			loadWidgets(elc, contact, "widgets");
+			
 	},
 
 	isSingleRowView: function(){
@@ -1906,3 +1887,4 @@ var Tickets = {
 // 	// Returns list of contact/company names
 // 	return contact_names_list;
 // }
+

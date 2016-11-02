@@ -7905,3 +7905,8 @@ Handlebars.registerHelper('retrevie_Deal_Value', function(element)
 		iDealAmt=element.expected_value;
 	return iDealAmt;
 });
+Handlebars.registerHelper('contactlimitcount', function()
+{
+	return USER_BILLING_PREFS.planLimits.contactLimit;
+
+});

@@ -634,15 +634,15 @@ function initializeDocumentsListeners()
 		var form_id = $(this).closest('form').attr("id");
 		var id = $(this).find("a").attr("id");
 		
-		if(id && id == "GOOGLE")
-			var newwindow = window.open("upload-google-document.jsp?id="+ form_id, 'name','height=510,width=800');
-		else if(id && id == "S3")
-			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
-		
-		if (window.focus)
-		{
-			newwindow.focus();
+		var pageSettings = "height=310,width=500";
+		var pageURL = "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain;
+
+		if(id && id == "GOOGLE"){
+			pageURL = "upload-google-document.jsp?id="+ form_id;
+			pageSettings = "height=510,width=800";
 		}
+		
+		agileOpenWindowAndFocus(pageURL, 'name', pageSettings);
 		return false;
 	});
 	$('#uploadDocumentForm').on('hidden.bs.modal', function(e){

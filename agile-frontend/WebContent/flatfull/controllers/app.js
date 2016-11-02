@@ -108,12 +108,7 @@ function currentRoute(route)
 	}
 	
 	 showUpgradeNoty();
-	 if(!_agile_get_prefs("contactslimit"))
-	{
-	App_Admin_Settings.contactsLimitreachedview();
-	}
-
-
+	 
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)
 		 tight_acl.init_permissions();
@@ -203,21 +198,7 @@ function executeWebRulesOnRoute(){
 $(document).ready(function(){
   load_clickdesk_code();
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
-if(_agile_get_prefs("contacts_limit_noty") ==  true || _agile_get_prefs("contacts_limit_noty") == undefined)
 
-{
-  $.get("/core/api/contacts/list/count", {}, function(data)
-		{
-			console.log('inside the contacts count ajax request');
-    		data = parseInt(data);
-    		if(data > parseInt(USER_BILLING_PREFS.planLimits.contactLimit*0.8))
-    		{
-    			_agile_set_prefs("contacts_limit_noty",true)
-    			$("#contacts_plan_alert_info").css("display" , "block");
-    		}
-    			
-    	});
-	}
 });
 
 SUBSCRIBERS_SELECT_ALL = false;

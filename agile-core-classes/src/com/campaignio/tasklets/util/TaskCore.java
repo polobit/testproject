@@ -1,6 +1,8 @@
 package com.campaignio.tasklets.util;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
@@ -47,6 +49,8 @@ public class TaskCore
 	String campaignId = AgileTaskletUtil.getId(campaignJSON);
 	String campaignName = AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON);
 
+    boolean isEmailCampaign = isEmailCampaign(campaignJSON);
+	
 	// Iterate through JSONArray
 	for (int i = 0, len = subscriberJSONArray.length(); i < len; i++)
 	{
@@ -98,7 +102,7 @@ public class TaskCore
 		// taskletWorkflowDeferredTask.run();
 
 		// Add deferred tasks to pull queue with namespace as tag
-		PullQueueUtil.addToPullQueue((VersioningUtil.isBackgroundThread() || len >= 200) ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		PullQueueUtil.addToPullQueue((VersioningUtil.isBackgroundThread() || len >= 200) ? (isEmailCampaign ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE_1 : AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
 			: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 
 	    }
@@ -112,4 +116,43 @@ public class TaskCore
 
 	System.out.println("Campaign Completed ");
     }
+
+	/**
+	 * @param campaignJSON
+	 * @param isEmailCampaign
+	 * @return
+	 */
+	public static boolean isEmailCampaign(JSONObject campaignJSON) {
+		
+		boolean isEmailCampaign = false;
+		
+		try 
+		{
+			// If null or didn't exist
+			if(campaignJSON == null || !campaignJSON.has(TaskletUtil.CAMPAIGN_WORKFLOW_JSON))
+				return false;
+			
+			JSONArray rules = campaignJSON.getJSONObject(TaskletUtil.CAMPAIGN_WORKFLOW_JSON).getJSONArray("nodes");
+			JSONObject  ruleJSON = null;
+			
+			for(int i=0 ; i< rules.length(); i++)
+			{
+				ruleJSON = rules.getJSONObject(i);
+				
+				if(ruleJSON.getJSONObject("NodeDefinition").getString("name").equals("Send Email"))
+				{
+					isEmailCampaign = true;
+					break;
+				}
+			}
+		} catch (JSONException e1) {
+			System.out.println("JSONException occured.");
+			e1.printStackTrace();
+		}
+		catch(Exception ex)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(ex));
+		}
+		return isEmailCampaign;
+	}
 }

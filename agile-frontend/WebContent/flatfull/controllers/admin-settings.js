@@ -1675,7 +1675,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 	contactsLimitreachedview : function(e){
 
-		console.log("contactsLimitreachedview");
+		if(readCookie("contactslimit"))
+		{
+			return ;
+		}
+	console.log("contactsLimitreachedview");
 		// Creata a global view
 		this.contactsLimitview = new Base_Model_View({ 
 			url : '/core/api/contacts/list/count/jsonformat', 
@@ -1683,13 +1687,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			postRenderCallback : function(el){
 					var template = "";
 					var maxContactLimit = App_Admin_Settings.contactsLimitview.model.toJSON().count;
-					var planLimit = parseInt(USER_BILLING_PREFS.planLimits.contactLimit*0.8);
-					if (maxContactLimit > planLimit &&  maxContactLimit<100)
+					var planLimit = parseInt(USER_BILLING_PREFS.planLimits.contactLimit);
+					if (maxContactLimit > planLimit*0.8 &&  maxContactLimit<planLimit)
 					{
 						template = "contactslimitwarning";
 							$("#contacts_limit_alert_info").removeClass("hide");
 					}
-					if (maxContactLimit > planLimit &&  maxContactLimit>100)
+					else if (maxContactLimit > planLimit)
 					{
 						template = "contactslimitalert";
 							$("#contacts_limit_alert_info").removeClass("hide");

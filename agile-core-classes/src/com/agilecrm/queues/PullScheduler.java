@@ -158,6 +158,33 @@ public class PullScheduler
 	    e.printStackTrace();
 	}
     }
+    
+    /**
+         *  Runs only once without iterating in loop. This will be useful for running limited 
+         *  tasks in frontend
+         */
+        public void runOnce()
+        {
+        	System.out.println("Executing in pull scheduler runOnce method...");
+        	
+        	try 
+        	{
+    			List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
+    
+    			if (tasks == null || tasks.isEmpty())
+    			{
+    			    System.out.println("Tasked fetched are null. Time they are null : " + System.currentTimeMillis());
+    			    return;
+    			}
+    
+    			System.out.println("tasks fetched " + tasks.size());
+    
+    			processTasks(queueName, tasks);
+    		}
+        	catch (Exception e) {
+    			e.printStackTrace();
+    		}
+        }
 
     /**
      * Returns boolean value based on condition. Verifies time limit 10mins when
