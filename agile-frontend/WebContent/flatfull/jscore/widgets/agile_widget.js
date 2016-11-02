@@ -245,6 +245,13 @@ function agile_crm_is_model_property_changed(propertyName, value){
 		if (property.name == propertyName && property.value == value)
 			   changed = false;
 	});
+	if(propertyName == "last_name" && !value)
+	{
+       	var js = {};
+       	js['name'] = propertyName;
+       	if($.inArray(js , properties) == -1)
+            changed = false ;
+	}
 
 	return changed;
 

@@ -826,6 +826,10 @@ function getContactCustomProperties(items)
  		if($.inArray(fields[x], finalFields) == -1)
  			finalFields.push(fields[x]);	
  	}
+ 	for(var x = 0;x<finalFields.length ;x++){
+ 		if(finalFields[x].name == 'first_name' || finalFields[x].name == 'last_name')
+ 			finalFields.splice(finalFields[x],1);
+ 	}
 
 	return finalFields;
 }
@@ -1017,6 +1021,10 @@ function getCompanyCustomProperties(items)
 	for(var x=0;x<fields.length;x++){
  		if($.inArray(fields[x], finalFields) == -1)
  			finalFields.push(fields[x]);	
+ 	}
+ 	for(var x = 0;x<finalFields.length ;x++){
+ 		if(finalFields[x].name == 'first_name' || finalFields[x].name == 'last_name')
+ 			finalFields.splice(finalFields[x],1);
  	}
 	
 	return finalFields;
