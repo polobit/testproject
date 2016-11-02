@@ -7905,3 +7905,8 @@ Handlebars.registerHelper('adminpanel_restrictions', function(restriction,option
 	return options.inverse(this);
 
 });
+
+Handlebars.registerHelper('permissionshanged', function(value)
+{
+	var added  = value.split(",");
+});

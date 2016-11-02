@@ -872,7 +872,18 @@
  </small>
  {{/if_equals}}
  {{/if_equals}}
+ <!-- admin panel user permisssions changed -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
+ {{#if custom3}}
  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom1}} searched on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- end of user admin panel permissions changed -->
   <!-- end of admin panel activities -->
 
 <!-- start of contact condition-->
