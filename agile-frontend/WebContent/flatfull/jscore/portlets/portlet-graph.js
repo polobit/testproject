@@ -776,14 +776,8 @@ var portlet_graph_utility = {
 						        			for(var k=0; k<series.length; k++){
 							        			if(this.points[k]!=undefined && this.points[k].series!=undefined){
 							        				var tooltipLabel="";
-									        		if (this.points[k].series.name.length > 12) {
-									        			tooltipLabel =  this.points[k].series.name
-																.slice(0,
-																		12)
-																+ '...';
-													} else {
 														tooltipLabel = this.points[k].series.name;
-													}
+													
 							        				tt += 	'<tr><td style="color:'+this.points[k].series.color+';padding:0">'+tooltipLabel+':&nbsp; </td>' +
 								                      		'<td style="padding:0"><b>'+this.points[k].point.y+'</b></td></tr>';
 							        			}
