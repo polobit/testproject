@@ -249,6 +249,19 @@ public class StripeImpl implements AgileBilling {
 		//
 		// }
 
+		//If plan is Enterprise remove all addon subscriptions
+		if(StringUtils.containsIgnoreCase(plan.plan_type.toString().toLowerCase(), "enterprise")){
+			AddOn addon = AddOnUtil.getAddOn();
+			if(addon.id != null){
+				for(com.stripe.model.Subscription subscription : subscriptionList){
+					if(subscription.getPlan().getId().toLowerCase().contains("addon")){
+						subscription.cancel(null);
+						AddOnUtil.deleteAddOn();
+					}
+				}
+			}
+		}
+				
 		// Updates customer with changed plan
 		if (oldSubscription != null) {
 			oldSubscription.update(updateParams);
@@ -309,18 +322,6 @@ public class StripeImpl implements AgileBilling {
 				if (invoice != null)
 					invoice.pay();
 			} catch (Exception e) {
-			}
-		}
-		//If plan is Enterprise remove all addon subscriptions
-		if(StringUtils.equalsIgnoreCase(plan.plan_type.toString().toLowerCase(), "enterprise")){
-			AddOn addon = AddOnUtil.getAddOn();
-			if(addon.id != null){
-				for(com.stripe.model.Subscription subscription : subscriptionList){
-					if(subscription.getPlan().getId().toLowerCase().contains("addon")){
-						subscription.cancel(null);
-						AddOnUtil.deleteAddOn();
-					}
-				}
 			}
 		}
 		
