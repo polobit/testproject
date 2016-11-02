@@ -17,6 +17,12 @@ public class AgileQueues
     public static final String NORMAL_CAMPAIGN_QUEUE = "normal-campaign-queue";
     public static final String UPDATE_WORKFLOWS_QUEUE = "update-workflows-queue";
     public static final String JSONIO_NODE_QUEUE = "jsonio-node-queue";
+    
+    //Form push queue
+    public static final String FORM_LOG_QUEUE = "form-log-queue";
+    
+    //webrule push queue
+    public static final String WEBRULE_LOG_QUEUE = "webrule-log-queue";
 
     // Cron Push Queue
     public static final String CRON_QUEUE = "cron-queue";

@@ -10,6 +10,7 @@ import com.agilecrm.forms.Form;
 import com.agilecrm.forms.util.FormUtil;
 import com.formio.reports.FormReportsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.formio.reports.FormLogUtil;
 
 @SuppressWarnings("serial")
 public class FormReportsServlet extends HttpServlet
@@ -21,28 +22,31 @@ public class FormReportsServlet extends HttpServlet
 	{
 	    emailid = req.getParameter("email").toLowerCase();
 	}
-	//String domainname =req.getParameter("domain");
-	//System.out.println("the value from get parameter is"+domainname);
-	String domain=NamespaceManager.get();
-	System.out.println("the value from Namespacemanager is"+domain);
+	// String domainname =req.getParameter("domain");
+	// System.out.println("the value from get parameter is"+domainname);
+	String domain = NamespaceManager.get();
+	System.out.println("the value from Namespacemanager is" + domain);
 	String formid = req.getParameter("formid");
 	String formName = req.getParameter("form_name");
-	if(formid.equalsIgnoreCase("null"))
-	  {
-	    Form frm=FormUtil.getFormByName(formName);
-	    String frmid =(frm.id).toString();
-	    System.out.println("the srvlet details"+" "+emailid + " " + domain+" "+frmid);
-	    FormReportsSQLUtil.insertData(emailid, domain, frmid);
-	
-	     
-	  }
-	else
-	   {
-	    System.out.println("the srvlet details"+" "+emailid + " " + domain+" "+formid);
-	    FormReportsSQLUtil.insertData(emailid, domain, formid);
-	    
-	    }
+	if (formid.equalsIgnoreCase("null"))
+	{
+	    Form frm = FormUtil.getFormByName(formName);
+	    String frmid = (frm.id).toString();
+	    System.out.println("the srvlet details" + " " + emailid + " " + domain + " " + frmid);
+	    FormLogUtil.addLogToSQL(frmid,emailid);
 
+	    //FormReportsSQLUtil.insertData(emailid, domain, frmid);
+	    System.out.println("the push queue functionality");
+
+	}
+	else
+	{
+	    System.out.println("the srvlet details" + " " + emailid + " " + domain + " " + formid);
+	    FormLogUtil.addLogToSQL(formid,emailid);
+	    //FormReportsSQLUtil.insertData(emailid, domain, formid);
+	    System.out.println("the push queue functionality");
+
+	}
 
     }
 
