@@ -33,7 +33,7 @@ public class InvitedUsersAPI {
 				if (invitedUser == null || StringUtils.isBlank(invitedUser.email))
 					continue;
 
-				if (DomainUserUtil.getDomainUserCountFromEmail(invitedUser.email) > 0)
+				if (DomainUserUtil.getDomainUserCountFromEmail(invitedUser.email.toLowerCase()) > 0)
 					throw new Exception("User with this email address " + invitedUser.email + " already exists.");
 			}
 
