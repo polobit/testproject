@@ -817,10 +817,10 @@
  <!-- end of admin panel activities -->
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_LOGIN_INTO_DOMAIN" activity_type}}
- {{custom1}} ({{custom3}}) had Deleted the Domain ({{custom2}}) 
+ {{custom1}} ({{custom3}}) has logged into the Domain ({{custom2}}) 
  <br />
  <small class="activities_second_line m-t-none text-sm">
- {{custom2}} was deleted on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ {{custom1}} has logged on to {{custom2}} on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
  </small>
  {{/if_equals}}{{/if_equals}}
  <!-- start of release domain  activity -->
