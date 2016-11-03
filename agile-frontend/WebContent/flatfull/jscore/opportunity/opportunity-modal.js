@@ -440,9 +440,9 @@ function updateDeal(ele, editFromMilestoneView)
 
 	$("#opportunityUpdateForm")[0].reset();
 
-	$("input[type='hidden']",dealForm).each(function(){
+	/*$("input[type='hidden']",dealForm).each(function(){
 		$(this).val('');
-	});
+	});*/
 
 	deserializeForm(value, $("#opportunityUpdateForm"));
 
@@ -504,7 +504,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Fills the pipelines list in the select menu.
 	populateTrackMilestones(dealForm, undefined, value, function(pipelinesList)
 	{
-
+		populateLostReasons(dealForm, value);
 	});
 
 	// Enable the datepicker
@@ -577,8 +577,6 @@ function updateDeal(ele, editFromMilestoneView)
 	}, "DEAL")
 
 	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
-
-	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
 	// setup tags for the search 

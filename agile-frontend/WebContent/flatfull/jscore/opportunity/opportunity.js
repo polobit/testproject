@@ -615,8 +615,8 @@ function populateLostReasons(el, value){
 				if(temp!=""){
 					var track = temp.substring(0, temp.indexOf('_'));
 					var milestone = temp.substring(temp.indexOf('_') + 1, temp.length + 1);
-					/*$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
-					$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);*/
+					$('#pipeline_milestone',el).closest('form').find('#pipeline').val(track);
+					$('#pipeline_milestone',el).closest('form').find('#milestone').val(milestone);
 					console.log(track, '-----------', milestone);
 					
 					$('#pipeline_milestone',el).find('option').each(function(){
