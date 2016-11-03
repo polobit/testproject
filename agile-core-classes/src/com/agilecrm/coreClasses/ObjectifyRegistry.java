@@ -4,6 +4,7 @@ import com.agilecrm.account.EmailTemplateCategory;
 import com.agilecrm.affiliate.Affiliate;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.AffiliateDeal;
+import com.agilecrm.addon.AddOn;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.workflows.WorkflowBackup;
@@ -41,7 +42,6 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(Product.class);
 		ObjectifyService.register(DocumentNote.class);
 		ObjectifyService.register(InvitedUser.class);
-
-
+		ObjectifyService.register(AddOn.class);
 	}
 }

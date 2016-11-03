@@ -688,6 +688,84 @@ var SubscribeRouter = Backbone.Router
 				else{
 					that.subscribe();
 				}
+			},
+
+			aclAddon : function(){
+				var acl_addon_model_view = new ACL_Addon_Events_Model_View({
+					url:"core/api/addon/acl",
+					template:"acl-addon-model",
+					postRenderCallback: function(el){
+						var addOn = acl_addon_model_view.model.toJSON();
+						var quantity = addOn.aclUsers.length;
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
+							updatePriceAndQuantity(quantity, el);
+					}, noLoading : true,
+					saveCallback : function(data){
+						ADDON_INFO = data;
+						showNotyPopUp("information", "Addon saved successfully.", "top");
+					}, errorCallback : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+					}, form_custom_validate : function(){
+						return true;
+					}
+				});
+				$("#acl-addon-content").html(acl_addon_model_view.render().el);
+			},
+			campaignAddon : function(){
+				var campaign_addon_model_view = new Campaign_Addon_Events_Model_View({
+					url:"core/api/addon/campaign",
+					template:"campaign-addon-model",
+					postRenderCallback: function(el){
+						var addOn = campaign_addon_model_view.model.toJSON();
+						var quantity = addOn.campaignInfo.quantity;
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
+							updatePriceAndQuantity(quantity, el);
+					}, noLoading : true,
+					saveCallback : function(data){
+						ADDON_INFO = data;
+						showNotyPopUp("information", "Addon saved successfully.", "top");
+					}, errorCallback : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+					}, form_custom_validate : function(){
+						if(ADDON_INFO && ADDON_INFO.campaignInfo && ADDON_INFO.campaignInfo.quantity && ADDON_INFO.campaignInfo.quantity == $('.campaign_quantity').val()){
+							showAlertModal("change_addon");
+							return false;
+						}
+						return true;
+					}
+				});
+				$("#campaign-addon-content").html(campaign_addon_model_view.render().el);
+			},
+			triggerAddon : function(){
+				var trigger_addon_model_view = new Trigger_Addon_Events_Model_View({
+					url:"core/api/addon/trigger",
+					template:"trigger-addon-model",
+					postRenderCallback: function(el){
+						var addOn = trigger_addon_model_view.model.toJSON();
+						var quantity = addOn.triggerInfo.quantity;
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
+							updatePriceAndQuantity(quantity, el);
+					}, noLoading : true,
+					saveCallback : function(data){
+						ADDON_INFO = data;
+						showNotyPopUp("information", "Addon saved successfully.", "top");
+					}, errorCallback : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+					}, form_custom_validate : function(){
+						if(ADDON_INFO && ADDON_INFO.triggerInfo && ADDON_INFO.triggerInfo.quantity && ADDON_INFO.triggerInfo.quantity == $('.campaign_quantity').val()){
+							showAlertModal("change_addon");
+							return false;
+						}
+						return true;
+					}
+				});
+				$("#trigger-addon-content").html(trigger_addon_model_view.render().el);
 			}
 
 		});
@@ -805,3 +883,5 @@ function getEmailCreditsCount()
 
 	return count;
 }
+
+
