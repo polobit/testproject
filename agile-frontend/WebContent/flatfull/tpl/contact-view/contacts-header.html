@@ -145,22 +145,22 @@
 						    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
 						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
 						    <div class="dropdown inline-block">
-						     <button class="btn btn-default btn-sm disabled txt-small  dropdown-toggle"  data-toggle="dropdown">More  <span class="caret m-l-xs" style="margin-top:2px;"></span>
+						     <button class="btn btn-default btn-sm disabled txt-small  dropdown-toggle"  data-toggle="dropdown">More  <span class="caret m-l-xs" ></span>
 							</button>
 							 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							 <li>
-							 	<a id="bulk-owner" class="bulk-action-btn _contact_bulk_action  disabled ">{{agile_lng_translate 'contacts-view' 'change-owner'}}
+							 	<a id="bulk-owner" style="opacity:0.7;" class="bulk-action-btn _contact_bulk_action  disabled ">{{agile_lng_translate 'contacts-view' 'change-owner'}}
 							 	</a>
 							 </li>
 							 {{#hasScope "EXPORT_CONTACTS"}}
 							 <li>
-							 	<a id="bulk-contacts-export" class=" bulk-action-btn _contact_bulk_action  disabled " onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}
+							 	<a id="bulk-contacts-export" style="opacity:0.7;" class=" bulk-action-btn _contact_bulk_action  disabled " onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}
 							 	</a>
 							 </li>
 							 {{/hasScope}}
 							 {{#hasRestrictedMenuScope 'DELETE_CONTACT'}}
 							 {{else}}
-							 <li><a class=" bulk-action-btn delete-checked-contacts disabled ">{{agile_lng_translate 'contacts-view' 'delete'}}</a>
+							 <li><a class=" bulk-action-btn delete-checked-contacts disabled " style="opacity:0.7;">{{agile_lng_translate 'contacts-view' 'delete'}}</a>
 							 </li>
 							 {{/hasRestrictedMenuScope}}
 							 </ul>
