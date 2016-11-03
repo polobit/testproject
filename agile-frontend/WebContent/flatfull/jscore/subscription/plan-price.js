@@ -531,7 +531,7 @@ function initializeSubscriptionListeners()
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
 							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
-							  if(value.plan.id.indexOf("email") == -1)
+							  if(value.plan.id.indexOf("email") == -1 && value.plan.id.indexOf("addon") == -1)
 							  {
 							  	if((cost * months).toFixed(2) > value.quantity*(value.plan.amount/100))
 							  	{
