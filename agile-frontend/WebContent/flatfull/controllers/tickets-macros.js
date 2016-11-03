@@ -23,7 +23,7 @@ var TicketMacroRouter = Backbone.Router.extend({
 			templateKey : "ticket-macros",
 			individual_tag_name : 'tr',
 			cursor : true,
-			page_size : 20,
+			page_size :getMaximumPageSize(),
 			slateKey : "ticket-macros",
 			postRenderCallback : function(el) {
 				agileTimeAgoWithLngConversion($("time.macro-created-time", el));

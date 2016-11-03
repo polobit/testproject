@@ -782,7 +782,7 @@ var portlet_utility = {
 				descending : true,
 				templateKey : "portlets-activities-list-log",
 				cursor : true,
-				page_size : 20,
+				page_size : getMaximumPageSize(),
 				individual_tag_name : 'div',
 				postRenderCallback : function(p_el) {
 					portlet_utility.addWidgetToGridster(base_model);

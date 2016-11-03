@@ -97,7 +97,7 @@ var Tickets = {
 				customLoaderTemplate: 'ticket-collection-loader',
 				individual_tag_name : 'tr',
 				cursor : true,
-				page_size : 20,
+				page_size : getMaximumPageSize(),
 				slateKey : 'no-tickets',
 				infini_scroll_cbk: function(){
 

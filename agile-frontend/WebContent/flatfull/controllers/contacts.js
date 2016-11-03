@@ -353,7 +353,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * infiniScroll
 		 */
 		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
+			cursor : true, page_size : getMaximumPageSize(), global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{		  
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
@@ -467,7 +467,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * infiniScroll
 		 */
 		this.duplicateContactsListView = new Contacts_Events_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
-			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
+			page_size : getMaximumPageSize(), sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
 			{
 				// this.duplicateContactsListView.collection.forEach(function(model,
 				// index) {
@@ -1159,7 +1159,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}	
 		that = this ;
 		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : getMaximumPageSize(), sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
 				
@@ -1428,7 +1428,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			_agile_set_prefs("contacts_tag", tag_id);
 		}
 		$('#content').html('<div id="contacts-listener-container"></div>');
-		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,
+		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,page_size:3,
 			postRenderCallback : function(el)
 			{
 				contacts_view_loader.buildContactsView(el, tag_id);
@@ -1795,7 +1795,7 @@ function addTypeCustomData(contactId, el){
 							descending : true,
 							templateKey : "contact-type-custom-fields",
 							cursor : true,
-							page_size : 20,
+							page_size : getMaximumPageSize(),
 							postRenderCallback : function(el){
 								
 							}

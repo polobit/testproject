@@ -864,3 +864,6 @@ function agileTimeAgoWithLngConversion(el, callback){
         	 callback();
     });
 }
+function getMaximumPageSize(){
+	return CURRENT_USER_PREFS.page_size;
+}
