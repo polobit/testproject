@@ -808,10 +808,10 @@
 <!-- start of delete domain  activity -->
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_DELETE_ACCOUNT" activity_type}}
- {{custom1}} ({{custom3}}) had logged into the customer Domain ({{custom2}}) 
+ {{custom1}} ({{custom3}}) had deleted  Domain ({{custom2}}) 
  <br />
  <small class="activities_second_line m-t-none text-sm">
- {{custom1}} has logged in on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ {{custom2}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
  </small>
  {{/if_equals}}{{/if_equals}}
  <!-- end of admin panel activities -->
@@ -846,7 +846,7 @@
  {{/if_equals}}
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_DELETED_USER" activity_type}}
- {{custom1}} ({{custom3}}) had deleted the user {{custom2}} ({{custom4}}) 
+ {{custom3}} had been  deleted 
  <br />
  <small class="activities_second_line m-t-none text-sm">
   {{custom3}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
