@@ -115,7 +115,7 @@
 
 	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        		 <a href="#contact/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" id="img{{id}}" /></a>
+        		 <a href="#contact/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{contact_name_necessary this}}" id="img{{id}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
         		 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}" id="img{{id}}" /></a>
@@ -238,11 +238,10 @@
 	<div class="table-resp">
           {{#if_contact_type "PERSON"}}
 			<div class="thumb-sm agile-img m-r-sm">
-        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{contact_name_necessary this}}" />
 			</div>
             <div class="agile-thumb-sm text-ellipsis">
-        		<a class="">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>
+        		<a class="">{{contact_name_necessary this}} </a>
         		<br />
         		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
     		</div>
@@ -444,7 +443,7 @@
 	<div class="inline-block text-ellipsis" style="width:9em">
 	{{#each contacts}}
        {{#if_contact_type "PERSON"}}
-        <a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        <a href="#contact/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x img-inital" data-name="{{dataNameAvatar properties 40}}" src="{{gravatarurl properties 40}}"   title="{{contact_name_necessary this}}" /></a>
        {{/if_contact_type}}
 	   {{#if_contact_type "COMPANY"}}
         <a href="#company/{{id}}" class="activate-link hide-popover thumb-sm popover_contact" data="{{id}}"><img class="r r-2x" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>

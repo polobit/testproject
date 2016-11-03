@@ -1224,7 +1224,7 @@ function fetchDealsList(data){
 	}
     // Fetches deals as list
     App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,
-        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
+        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : getMaximumPageSize(),
         postRenderCallback : function(el)
         {
 

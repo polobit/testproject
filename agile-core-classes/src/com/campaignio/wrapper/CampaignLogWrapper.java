@@ -76,7 +76,8 @@ public class CampaignLogWrapper extends Cursor
 	}
 
 	public void setMessage(String message) {
-		this.message = StringEscapeUtils.unescapeJava(message);
+		this.message = StringEscapeUtils.unescapeJava(message).replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
+			        "<script>-->");
 	}
 
 }

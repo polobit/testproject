@@ -121,8 +121,8 @@
 										"last_name"}}">
 							</div>
 						<div class="text-ellipsis" id="contactName">
-								{{getPropertyValue properties
-										"first_name"}} {{getPropertyValue properties "last_name"}}
+								{{contact_name_necessary this
+										}}
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} --></div>
 
 								</div>
@@ -814,16 +814,26 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 							</div>
                             </div>  
 					<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;height:28px;" id="Contact-input">
+					{{#contactsnamestatus}}
 							<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
 										"first_name"}} '>
 							<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
 										"last_name"}}">
+						{{else}}
+						<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
+										"last_name"}}">
+						<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
+										"first_name"}} '>
+						{{/contactsnamestatus}}
 					</div>
 					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
-
-								<span class="text-capitalize " id="contact_name">{{getSystemPropertyValue properties
-										"first_name"}}</span> <span class="text-capitalize "> {{getSystemPropertyValue properties "last_name"}}</span>
-
+							{{#contactsnamestatus}}
+								<span class="text-capitalize " id="contact_name">{{getContactNameProperty this "last_name"}}</span> <span class="text-capitalize "> {{getContactNameProperty this
+										"first_name"}}</span>
+							{{else}}
+							<span class="text-capitalize " id="contact_name">{{getContactNameProperty this
+										"first_name"}}</span> <span class="text-capitalize "> {{getContactNameProperty this "last_name"}}</span>
+							{{/contactsnamestatus}}
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 						</div>
@@ -1559,7 +1569,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 		</div>
 		{{#each this}}
          	{{#if_contact_type "PERSON"}}
-      			<a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+      			<a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{contact_name_necessary this}}" /></a>
           	{{/if_contact_type}}
   			{{#if_contact_type "COMPANY"}}
             	<a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>

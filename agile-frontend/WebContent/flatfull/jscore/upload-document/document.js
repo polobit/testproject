@@ -578,7 +578,7 @@ function documentsCollection(sortField)
 			sort_collection : false ,
 			templateKey : "documents",
 			cursor : true,
-			page_size : 20,
+			page_size : getMaximumPageSize(),
 			individual_tag_name : 'tr',
 			order_by : sortField,
 			postRenderCallback : function(el)

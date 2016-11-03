@@ -516,7 +516,7 @@ function loadAgileEvents()
 		if (view == "calendar_list_view")
 		{
 			eventCollectionView = new Base_Collection_View({ url : 'core/api/events/list?ownerId=' + agile_event_owners + '', templateKey : "events",
-				individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+				individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : getMaximumPageSize() });
 			eventCollectionView.appendItem = appendItem2;
 			eventCollectionView.collection.fetch();
 			if (calEnable)
@@ -531,7 +531,7 @@ function loadAgileEvents()
 		else if (view == "calendar_list_view_future")
 		{
 			eventCollectionView = new Base_Collection_View({ url : 'core/api/events/future/list?ownerId=' + agile_event_owners, templateKey : "future",
-				individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : 25 });
+				individual_tag_name : 'tr', sort_collection : true, sortKey : 'start', descending : false, cursor : true, page_size : getMaximumPageSize() });
 			eventCollectionView.appendItem = appendItem1;
 			eventCollectionView.collection.fetch();
 			if (calEnable)

@@ -7766,10 +7766,14 @@ Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
 	else
 		return options.inverse(this);
 });
-
 Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
 {
 	console.log("Not found " + key + " : " + value);
+});
+
+Handlebars.registerHelper('getContactNameProperty', function(contact, prop_key)
+{ 
+	return getContactName(contact, prop_key);
 });
 
 //returning 0sec in case of no time
@@ -7930,3 +7934,9 @@ Handlebars.registerHelper('contactlimitcount', function()
 	return USER_BILLING_PREFS.planLimits.contactLimit;
 
 });
+
+Handlebars.registerHelper('contactsnamestatus', function(options)
+	{
+
+		return (_agile_get_custom_contact_display_type == "ftl") ?  options.fn(this) : options.inverse(this);
+	});

@@ -648,8 +648,9 @@ var SubscribeRouter = Backbone.Router
 							.append(getTemplate("js-recent-invoice"));
 					return;
 				}
+				var pageSize = getMaximumPageSize();
 
-				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=20", templateKey : "invoice",
+				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=pageSize", templateKey : "invoice",
 					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'date', descending : true });
 
 				// Fetches the invoice payments

@@ -142,7 +142,34 @@ var addAgileFields = function(json, fields, callback)
 				i--;
 				continue;
 			}
+  
+			if(json[k][i].title == "Hidden Input"){
+					var hiddenagilefield = {};
+					hiddenagilefield.label = "Agile Field";
+					hiddenagilefield.type = "select";
+
+					var hiddenAgileFieldValues=[{ value : null, label : "Select", selected : true }];
+				
+					for ( var j = 0; j < fields.length; j++)
+					{
+						if(fields[j].field_type == "TEXT" || fields[j].field_type == "TEXTAREA" || fields[j].field_type == "LIST"){
+
+							var value = {};
+							value.value = fields[j].field_label;
+							value.label = fields[j].field_label;
+							value.selected = false;
+							hiddenAgileFieldValues.push(value);
+						}
+					}
+					hiddenagilefield.value=hiddenAgileFieldValues;
+					json[k][i].fields["agilefield"] = hiddenagilefield;
+
+			}
+			else{
 			json[k][i].fields["agilefield"] = agilefield;
+
+		   }
+			/*json[k][i].fields["agilefield"] = agilefield;*/
 		}
 	}
 	callback(json);
