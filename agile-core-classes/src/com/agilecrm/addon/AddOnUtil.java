@@ -69,7 +69,7 @@ public class AddOnUtil {
 	 */
 	public static boolean isCreditCardExist(){
 		Subscription subscription = SubscriptionUtil.getSubscription();
-		if(subscription.billing_data == null)
+		if(subscription.billing_data_json_string == null)
 			return false;
 		return true;
 	}

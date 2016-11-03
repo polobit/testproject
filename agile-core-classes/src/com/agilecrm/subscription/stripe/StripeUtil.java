@@ -513,9 +513,9 @@ public class StripeUtil {
 	 */
 	public static Customer getStripeCustomer() throws Exception{
 		Subscription agileSub = SubscriptionUtil.getSubscription();
-		if(agileSub.billing_data == null)
+		if(agileSub.billing_data_json_string == null)
 			return null;
-		return getCustomerFromJson(agileSub.billing_data);
+		return getCustomerFromJson(agileSub.fetchBillingDataJSONObject());
 	}
 	
 	
