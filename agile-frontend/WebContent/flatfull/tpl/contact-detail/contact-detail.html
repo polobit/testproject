@@ -827,13 +827,8 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 						{{/contactsnamestatus}}
 					</div>
 					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
-							{{#contactsnamestatus}}
-							<span class="text-capitalize " id="contact_name">{{getContactNameProperty this
-										"first_name"}}</span> <span class="text-capitalize "> {{getContactNameProperty this "last_name"}}</span>	
-							{{else}}
-							<span class="text-capitalize " id="contact_name">{{getContactNameProperty this "last_name"}}</span> <span class="text-capitalize "> {{getContactNameProperty this
-										"first_name"}}</span>
-							{{/contactsnamestatus}}
+						<span class="text-capitalize " id="contact_name">{{contact_name_necessary this}}</span>
+							
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 						</div>
