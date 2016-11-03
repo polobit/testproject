@@ -611,8 +611,9 @@ var SettingsRouter = Backbone.Router
 								var isCtg = $(this).attr("data-id");
 								if(isCtg != undefined && isCtg == "new"){
 									$(this).removeAttr("data-id");
-									$("#emailCatBtn").hide();
+									$("#emailCtg-option").hide();
 									$("#selected-emailTemplate-category").show();
+									var defaultSelectOption = '{{agile_lng_translate "portlets" "all"}}&nbsp;{{agile_lng_translate "portlets" "category"}}';
 									var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 				        			fillSelect('selected-emailTemplate-category','core/api/emailTemplate-category', 'emailTemplateCategory',  
 				        				function fillCategory(){
@@ -622,7 +623,7 @@ var SettingsRouter = Backbone.Router
 												var selectedCtg = $(this).val();
 												that.emailTemplates(selectedCtg, true);
 											});
-											}, optionsTemplate, false, el,'Select Category');
+											}, optionsTemplate, false, el, defaultSelectOption);
 			        			}
 
 							});
