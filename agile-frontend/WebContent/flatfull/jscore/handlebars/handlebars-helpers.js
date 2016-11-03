@@ -21,6 +21,26 @@ $(function()
 		return getSystemPropertyValue(items, name);
 	});
 
+	Handlebars.registerHelper('fillSelectOptionWithNumbers', function(start, end)
+	{
+		var optionsHtml = "";
+		for(var i = start; i <= end; i++){
+			optionsHtml = optionsHtml+"<option value="+i+">"+i+"</option>";
+		}
+		return optionsHtml;
+	});
+
+	Handlebars.registerHelper('checkPlan', function(plan, options)
+	{
+		if(!plan)
+			return options.inverse(this);
+		var plan_name = USER_BILLING_PREFS.plan.plan_type;
+		var plan_fragments = plan_name.split("_");
+		if(plan_fragments[0].toLowerCase() == plan)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -7323,9 +7343,9 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		return dashboard_name;
 	});
 
-	Handlebars.registerHelper('is_acl_allowed', function(options)
+	Handlebars.registerHelper('is_acl_allowed', function(id, options)
 	{
-		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers(id))
 			return options.inverse(this);
 		else
 			return options.fn(this);
@@ -7918,5 +7938,5 @@ Handlebars.registerHelper('contactlimitcount', function()
 Handlebars.registerHelper('contactsnamestatus', function(options)
 	{
 
-		return (_agile_get_custom_contact_display_type == "ftl") ?  options.fn(this) : options.inverse(this);
+		return (_agile_get_custom_contact_display_type() == "FTL") ?  options.fn(this) : options.inverse(this);
 	});

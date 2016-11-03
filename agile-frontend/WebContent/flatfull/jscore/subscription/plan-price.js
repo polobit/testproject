@@ -365,6 +365,14 @@ function initializeSubscriptionListeners()
 				if(credit == "")
 					credit = 0;
 				var plan = $("#plan_type").val();
+
+				/*if(plan != "regular" && addonsExists()){
+					showNotyPopUp("warning", "Please cancel all your addons before change the plan.", "top");
+					$(this).text("Proceed to Pay");
+					$(this).removeAttr("disabled");
+					return;
+				}*/
+				
 				if("pro" == plan)
 					plan = "enterprise";
 				var discount = "", months = "";
@@ -525,7 +533,7 @@ function initializeSubscriptionListeners()
 							Backbone.history.navigate("purchase-plan", { trigger : true });
 						}else if(data.lines){
 							$.each( JSON.parse(USER_BILLING_PREFS.billingData).subscriptions.data, function( key, value ) {
-							  if(value.plan.id.indexOf("email") == -1)
+							  if(value.plan.id.indexOf("email") == -1 && value.plan.id.indexOf("addon") == -1)
 							  {
 							  	if((cost * months).toFixed(2) > value.quantity*(value.plan.amount/100))
 							  	{
@@ -766,6 +774,13 @@ function initializeSubscriptionListeners()
 			$("#auto-recharge-modal").html($(template_ui)).modal("show");
 		}, null);
 			
+	});
+
+	$("#subscribe_plan_change #addontab").off("click");
+	$("#subscribe_plan_change").on("click", "#addontab",function(e){
+		App_Subscription.aclAddon();
+		App_Subscription.campaignAddon();
+		App_Subscription.triggerAddon();
 	});
 
 }

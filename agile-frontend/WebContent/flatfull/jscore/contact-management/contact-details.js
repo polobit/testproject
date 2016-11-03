@@ -212,7 +212,10 @@ function validateCompanyName(value){
 
           // Toggle fields
           $("#Contact-input").addClass("hidden");
-          $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+          if(_agile_get_custom_contact_display_type() == 'FTL')
+            $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+           else
+           $("#contactName").text(lastName+" "+firstName).removeClass("hidden");
           $("#contactName").addClass("text-capitalize ");
           $("#Contact-input-firstname").removeClass("error-inputfield");
           $("#Contact-input-lastname").removeClass("error-inputfield"); 
