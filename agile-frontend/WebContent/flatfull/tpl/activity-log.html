@@ -875,12 +875,28 @@
  <!-- admin panel user permisssions changed -->
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
- {{#if custom3}}
+ {{#PermissionsExist custom2}}
+{{else}}
+{{custom1}} added Permissions {{permissionChanged custom3}} to {{custom4}}
  
  <br />
  <small class="activities_second_line m-t-none text-sm">
-  {{custom1}} searched on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+  permissions modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
  </small>
+ {{/PermissionsExist}}
+ {{/if_equals}}
+ {{/if_equals}}
+
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
+ {{#PermissionsExist custom3}}
+{{else}}
+{{custom1}} deleted Permissions {{permissiondeleted custom2}} to {{custom4}}
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  Permissions  modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
+ </small>
+ {{/PermissionsExist}}
  {{/if_equals}}
  {{/if_equals}}
  <!-- end of user admin panel permissions changed -->
@@ -1749,5 +1765,8 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  {{/is_admin_domain}}
 
 
+</script>
+<script type="text/html" id="removedaccessScopes-template">
+<div></div>
 </script>
 

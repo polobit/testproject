@@ -7910,3 +7910,34 @@ Handlebars.registerHelper('permissionshanged', function(value)
 {
 	var added  = value.split(",");
 });
+Handlebars.registerHelper('permissionChanged', function(value)
+{
+	var changes = value.replace("[","").replace("]","");
+	var el = "<span> Permissions added are ";
+	var elements = changes.split(",");
+	$.each(elements, function(index)
+	{
+			el = el.concat(elements[index] + " ");
+	});
+		return new Handlebars.SafeString(el);
+});
+
+Handlebars.registerHelper('PermissionsExist', function(value,options)
+{
+	var changes = value.replace("[","").replace("]","");
+	if(changes == "")
+		return options.inverse(this);
+	return options.fn(this);
+});
+
+Handlebars.registerHelper('permissiondeleted', function(value)
+{
+	var changes = value.replace("[","").replace("]","");
+	var el = "<span> Permissions deleted  are ";
+	var elements = changes.split(",");
+	$.each(elements, function(index)
+	{
+			el = el.concat(elements[index] + " ");
+	});
+		return new Handlebars.SafeString(el);
+});
