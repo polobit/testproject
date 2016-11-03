@@ -440,9 +440,9 @@ function updateDeal(ele, editFromMilestoneView)
 
 	$("#opportunityUpdateForm")[0].reset();
 
-	$("input[type='hidden']",dealForm).each(function(){
+/*	$("input[type='hidden']",dealForm).each(function(){
 		$(this).val('');
-	});
+	});*/
 
 	deserializeForm(value, $("#opportunityUpdateForm"));
 
