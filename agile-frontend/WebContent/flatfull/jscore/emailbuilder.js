@@ -103,7 +103,16 @@ function initializeEmailBuilderListeners() {
                 // refresh category list  on modal hide
                 $("#emailbuilder-templates-category-modal").on("hidden.bs.modal", function(e){
                     e.preventDefault();
-                    getEmailTemplateCategories(currentCtgObj);
+                    /*getEmailTemplateCategories(currentCtgObj);*/
+
+                    var emailTempCtgId = _agile_get_prefs("emailTempCtg_id");
+
+                    if(!emailTempCtgId || emailTempCtgId == null || emailTempCtgId == "0") {
+                        emailTempCtgId = "";
+                        _agile_set_prefs('emailTempCtg_id', emailTempCtgId);
+                    }
+
+                    $('select#emailTemplate-category-select').val(emailTempCtgId);
                 });
 
             });
@@ -225,6 +234,8 @@ var emailTemplateCtg = {
                 $("#emailTemplCtgySaveBtn").text("Save");
                 $("#emailTemplCtgySaveBtn").prop('disabled', false);
                 $("#emailTemplCtgySaveBtn").attr("data-id", "new");
+                $("#emailTemplate-category-select option:first").after("<option value='"+data.id+"'>"+data.name+"</option>");
+                _agile_set_prefs('emailTempCtg_id', data.id);
                 $("#emailbuilder-templates-category-modal").modal("hide");
             },
             error:function(response){
