@@ -18,8 +18,8 @@
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap">{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>        	
+        		<a class="text-cap">{{contact_name_necessary this}}
+        		 </a>        	
         		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
@@ -64,8 +64,8 @@
     	</div>
     	<div class="h-auto inline-block v-top text-ellipsis" style="width:70%">
         	{{#if_contact_type "PERSON"}}
-        		<b>	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </b>
+        		<b>	{{contact_name_necessary this}}
+        		</b>
         		<br />
         		{{getPropertyValue properties "email"}}
         	{{/if_contact_type}}

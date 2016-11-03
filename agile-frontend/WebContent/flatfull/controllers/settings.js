@@ -1198,11 +1198,14 @@ var SettingsRouter = Backbone.Router
 			userPrefsAdvanced : function(data)
 			{
 				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
+
 					postRenderCallback : function(el, data){
+						$('[data-toggle="tooltip"]',el).tooltip();
 					},saveCallback : function(response){
 						console.log(response);
 						// Save language cookie
 						createCookie("user_lang", response.language, 360);
+
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
