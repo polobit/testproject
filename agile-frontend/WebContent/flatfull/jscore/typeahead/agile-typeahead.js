@@ -824,7 +824,7 @@ function getContactName(contact, prop_key)
 		last_name = last_name != undefined ? last_name.trim() : "";
 		first_name = first_name != undefined ? first_name.trim() : "";
 
-		// name = (first_name + " " + last_name).trim();
+		name = (first_name + " " + last_name).trim();
 		name = _agile_get_contact_display_name(first_name, last_name, prop_key);
 	}
 	else if (contact.type == "COMPANY")
@@ -833,7 +833,10 @@ function getContactName(contact, prop_key)
 		company_name = company_name != undefined ? company_name.trim() : "";
 		name = company_name.trim();
 	}
-
+	if(prop_key)
+	{
+		return name;
+	}
 	if (name.length)
 		return name;
 
