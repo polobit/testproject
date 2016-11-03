@@ -240,7 +240,17 @@ function loadFullContactData(apikey, emailID){
 							//contact_model.save();
 							var model = new Backbone.Model();
 							model.url = "core/api/contacts";
-							model.save(contact_model.toJSON());	
+							model.save(contact_model.toJSON(), 
+							{
+								success : function(data)
+								{
+									if(data)
+									{
+										App_Contacts.contactDetailView.model = data;
+										App_Contacts.contactDetailView.render(true);
+									}
+								}
+							});	
 						},undefined, "FullContact"); 						
 
 					}else{													
