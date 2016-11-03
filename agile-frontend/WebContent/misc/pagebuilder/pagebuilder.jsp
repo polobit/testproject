@@ -324,7 +324,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <span>OR</span>
                     </p>-->
                     
-                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "open-img-lib")%></a>
+                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a>
                     
                 </div><!-- /.tab-pane -->
 
@@ -2051,7 +2051,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                     
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
-                                            <div>
+                                             <button type="button" class="btn btn-primary btn-embossed btn-wide upload  fileinput-exists" id="uploadImageButton"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></button>
+                                            <div style="float:right;">
                                                 <span class="btn btn-primary btn-embossed btn-file">
                                                     <span class="fileinput-new"><span class="fui-image"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-img")%></span>
                                                     <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "change")%></span>
@@ -2063,9 +2064,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                     
                                     </form>
                                     
-                                    <hr>
-                                    
-                                    <button type="button" class="btn btn-primary btn-embossed btn-wide upload btn-block disabled" id="uploadImageButton"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></button>
+                                   
                                 
                                 </div><!-- /.tab-pane -->
                             
