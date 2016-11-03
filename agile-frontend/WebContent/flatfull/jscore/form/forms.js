@@ -70,7 +70,7 @@ $('#codeShareModal').on('focus','.form-control',function(){
 });
 function formVideoPopup(){
        var data={};
-    data.title="Form Tutorial";
+    data.title="Forms Tutorial";
     data.videourl="//www.youtube.com/embed/TCJDBBhA5ag?enablejsapi=10&autoplay=1";
     showHelpVideoModal(data);
 }
