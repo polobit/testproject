@@ -684,7 +684,13 @@ function populate_deal_products(el, value,form_id){
 		$("#discount_type",form_id).val("Value");
 	$("#discount_type_btn span:first-child",form_id).text($("#discount_type",form_id).val());
 	//Init
-
+	$(".discounttype-input-group-btn ul li").click(function(e){
+		if($(this).text() == "Percent"){
+			$("#discount_value").attr("placeholder","Enter percent");
+		}else if($(this).text() == "Value"){
+			$("#discount_value").attr("placeholder","Enter Value");
+		}
+	});
 	$(".modal-body").on(
 			"click",form_id,
 			function(e)
@@ -714,7 +720,7 @@ function populate_deal_products(el, value,form_id){
 				return;
 				App_Deal_Details.deal_products_collection_view=new Base_Collection_View({ url : '/core/api/products', 
 					templateKey : "deal-products",
-					individual_tag_name : 'tr',className:'deal-products_tr',sort_collection : false,
+					individual_tag_name : 'tr',className:'deal-products_tr',sort_collection : true,sortKey : 'name',
 					errorCallback:function(e)
 					{
 						console.log(e)
@@ -1055,8 +1061,10 @@ function populate_deal_products(el, value,form_id){
 							iTotal+=parseFloat(iQtyPriceTotal);		
 					}
 					var iDiscountAmt=0;
-					if($("#apply_discount",me._form_id).is(':checked'))
-					{
+					//if($("#apply_discount",me._form_id).is(':checked'))
+					//{
+						var val= document.getElementById("discount_value").value;
+					if(val){
 						iDiscountAmt=$("#discount_value",me._form_id).val();
 						if(iDiscountAmt=="")
 							iDiscountAmt=0
@@ -1067,7 +1075,8 @@ function populate_deal_products(el, value,form_id){
 									iDiscountAmt=(iTotal *  iDiscountAmt)/100;
 								}
 							}
-					}
+						}
+					//}
 					if(iDiscountAmt.toFixed)
 						iDiscountAmt=iDiscountAmt.toFixed(2)
 					$("input[name='discount_amt']",$(me._form_id)).val(iDiscountAmt);
@@ -1097,8 +1106,10 @@ function ValidateDealDiscountAmt(_form_id)
 				$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-should-be-numeric'}}")
 				return false;
 			}
-		if($("#apply_discount",_form_id).is(':checked'))
-		{
+		var val= document.getElementById("discount_value").value;
+		if(val){
+		//if($("#apply_discount",_form_id).is(':checked'))
+		//{
 			
 			var RE = /^-{0,1}\d*\.{0,1}\d+$/;
 			if( !(RE.test(iDiscountValue)) )

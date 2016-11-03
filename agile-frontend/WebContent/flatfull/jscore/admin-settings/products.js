@@ -37,8 +37,10 @@ var admin_products = {
 				var product_model_json = App_Admin_Settings.productsGridView.collection.get(model.id);
 				if(product_model_json)
 					product_model_json.set(model);	
-				else	
+				else{
 					App_Admin_Settings.productsGridView.collection.add(model);
+					App_Admin_Settings.productsGridView.render(true);
+				}
 				
 				if($("#admin-settings-products-model-list > tr").length >0)
 						$('.product-header').removeClass("hide")
