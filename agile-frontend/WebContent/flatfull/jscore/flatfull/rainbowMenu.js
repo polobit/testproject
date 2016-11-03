@@ -91,6 +91,10 @@ $('#theme-and-layout').on('change', '#animations', function(e){
 	}
 });
 
+$('#theme-and-layout').on('change', '#page_size', function(e){
+	CURRENT_USER_PREFS.page_size = $(this).val();
+});
+
 //retrieve the current radio button value	
 $('#theme-and-layout').on('change', '.magicMenu input:radio', function(e){
 		CURRENT_USER_PREFS.theme = $(this).val();

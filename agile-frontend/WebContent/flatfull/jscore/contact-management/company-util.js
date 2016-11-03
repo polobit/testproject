@@ -901,7 +901,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
 
 	// Fetches mails collection
-	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
+	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : getMaximumPageSize(),
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{

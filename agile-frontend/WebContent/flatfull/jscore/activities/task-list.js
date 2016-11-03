@@ -55,7 +55,7 @@ function updateData(params) {
 		restKey : "task",
 		sort_collection : false,
 		templateKey : "tasks-list",
-		cursor : true, page_size : 25,
+		cursor : true, page_size : getMaximumPageSize(),
 		individual_tag_name : 'tr',
 		postRenderCallback : function(el) {
 			$('.tasks-count').html(getCount(this.App_Calendar.allTasksListView.collection.toJSON()));

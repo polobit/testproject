@@ -347,7 +347,7 @@ function landingpagesCollection(sortKey)
             sort_collection : false,
             templateKey : "landingpages",
             cursor : true,
-            page_size : 20,  
+            page_size : getMaximumPageSize(),  
             individual_tag_name : 'tr',
             global_sort_key : sortKey,
             postRenderCallback : function(el)

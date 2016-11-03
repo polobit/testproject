@@ -51,8 +51,10 @@ function buildActivityFilters(name,valueid,clickedFrom){
 function renderActivityView(params)
 {
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params,sortKey : 'time',
-		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : 15,
+
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time',
+
+		descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, scroll_symbol : 'scroll', page_size : getMaximumPageSize(),
 		individual_tag_name : 'li', postRenderCallback : function(el)
 		{
 			includeTimeAgo(el);

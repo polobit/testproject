@@ -200,7 +200,7 @@ var CompaniesRouter = Backbone.Router
 		this.companiesListView = new Contacts_Events_Collection_View({ 
 			url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, 
-			cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, 
+			cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : getMaximumPageSize(), 
 			sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -544,7 +544,7 @@ var CompaniesRouter = Backbone.Router
 			templateKey : template_key, 
 			individual_tag_name : 'tr', 
 			cursor : true,
-			page_size : 25, 
+			page_size : getMaximumPageSize(), 
 			sort_collection : collection_is_reverse, 
 			slateKey : null, 
 			postRenderCallback : function(el){
