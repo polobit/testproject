@@ -1669,8 +1669,8 @@
 					        var kb_id = json.id;
 					        var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
 								
-
-								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
+					        	var pageSize = getMaximumPageSize();
+								fillSelect('template_id', '/core/api/landingpages?page_size=pageSize', '', 
 								function(){
 									$("#template_id",el).append('<option value=1>Default</option>');
 									$('#template_id option[value=""]',el).attr("value",0);

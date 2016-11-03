@@ -87,7 +87,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 'timeZone' : timeZone
 
                             },
-                            page_size: 20,
+                            page_size: getMaximumPageSize(),
                             sort_collection: false,
                             postRenderCallback: function(
                                 el, collection) {

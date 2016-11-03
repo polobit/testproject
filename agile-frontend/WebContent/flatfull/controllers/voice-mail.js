@@ -14,7 +14,7 @@ var VoiceMailRouter = Backbone.Router.extend({
 			$('#PrefsTab .select').removeClass('select');
 			$('.add-widget-prefs-tab').addClass('select');
 			
-			that.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail", cursor : true, page_size : 20,
+			that.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail", cursor : true, page_size : getMaximumPageSize(),
 				individual_tag_name : 'tr', postRenderCallback : function(el)
 				{
 					includeTimeAgo(el);

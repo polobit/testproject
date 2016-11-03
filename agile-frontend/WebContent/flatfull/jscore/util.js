@@ -443,8 +443,9 @@ function text_gravatar_initials(items, char_count)
 
 	if (first_name && last_name)
 	{
-		name = first_name.substr(0, 1);
-		name += last_name.substr(0, 1);
+		/*name = first_name.substr(0, 1);
+		name += last_name.substr(0, 1);*/
+		name = (_agile_get_custom_contact_display_type() == "FTL")  ? first_name.substr(0, 1)+last_name.substr(0, 1)  : last_name.substr(0, 1)+first_name.substr(0, 1);
 	}
 	else
 	{
@@ -863,4 +864,7 @@ function agileTimeAgoWithLngConversion(el, callback){
         if(callback)
         	 callback();
     });
+}
+function getMaximumPageSize(){
+	return CURRENT_USER_PREFS.page_size;
 }

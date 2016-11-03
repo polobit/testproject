@@ -47,7 +47,7 @@ var contacts_view_loader = {
 		if(!App_Contacts.contactsListView)
 		{
 			App_Contacts.contactsListView = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
-				post_data: postData, cursor : true, page_size : 25, global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
+				post_data: postData, cursor : true, page_size : getMaximumPageSize(), global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
 				{	
 
 					that.setUpContactView($("#content"));	  

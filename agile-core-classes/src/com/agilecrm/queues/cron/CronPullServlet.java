@@ -149,8 +149,9 @@ public class CronPullServlet extends HttpServlet
     	}
     	else
     	{
-    	    // If from cron Process tasks in frontend
-    	    addTaskToQueue(queueName);
+    	    // If from cron Process tasks in frontend. Max 5K tasks will be running frontend tasks
+    		if(PullQueueUtil.getTasksCountofQueue(AgileQueues.CRON_PULL_TASK_QUEUE) < 5000)
+    			addTaskToQueue(queueName);
     	}
 	}
 	
