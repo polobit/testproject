@@ -600,7 +600,7 @@ var SettingsRouter = Backbone.Router
 					that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
 					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
-						el.find('[data-toggle="tooltip"]').tooltip();
+
 						if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
 						{
 							if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
