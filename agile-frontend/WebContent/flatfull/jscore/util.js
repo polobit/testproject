@@ -44,8 +44,10 @@ var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
  * 
  * @returns
  */
-function getRandomLoadingImg()
+function getRandomLoadingImg(noLoading)
 {
+	if(noLoading)
+		return "";
 	var length = LOADING_HTML_IMAGES.length;
 	return LOADING_HTML_IMAGES[Math.round(Math.random() * (LOADING_HTML_IMAGES.length - 1))]
 }
@@ -730,6 +732,13 @@ function showPageBlockModal() {
 		if(USER_BILLING_PREFS.status == "SUBSCRIPTION_DELETED" || USER_BILLING_PREFS.status == "SUB&#x73;criptION_DELETED")
 			template = "block-cancelled-user";
 		getTemplate(template, {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
+	}else if(hasAddonDues()){
+		getTemplate("addon-blocked-modal", {}, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
 			$("body").append(template_ui);
