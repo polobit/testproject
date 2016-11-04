@@ -1,5 +1,4 @@
 <script id="admin-settings-products-collection-template" type="text/html">
-
 <div class="panel">
  <div class="panel-heading">
     <div class="pull-right p-t ">
@@ -9,6 +8,7 @@
  </div>
     <div class="row">
         <div class="col-md-12 col-sm-12">
+        {{#if this.length}}
                     <div class=" table-responsive" style="overflow:hidden;"> 
                     <table class="table table-striped showCheckboxes no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url="core/api/products/bulk">
                         <thead>
@@ -25,6 +25,25 @@
                          </tbody>
                     </table>
                     </div>
+                    {{else}}
+                        <div class="panel panel-default " style=" overflow-x:auto;  border:none;box-shadow: none;margin-bottom:0px;">
+                            <div class="m-l-sm" id="slate"><div class="alert bg-white " style="padding:0px;">
+                                <div class="slate-content p-md">
+                                <div class="box-left pull-left m-r-md">
+                                    <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                                </div>
+                                <div class="box-right pull-left">
+                                <h4 class="m-t-none">You do not have any products currently.</h4>
+                                <div class="text" style="padding-bottom: 5px;">Products are either goods or services that your organization deals with.</div>
+            
+                       <a href="#product-add" role="button" data-toggle="modal" type="submit"  class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'products' 'add-product'}}</a>
+            
+                    </div>
+                 </div>
+                    <div class="clearfix"></div>
+                </div></div>
+            {{/if}}
+
             </div>
         </div>
     </div>
