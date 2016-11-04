@@ -535,7 +535,7 @@ public class AdminPanelAPI
 	    throws StripeException
     {
     	
-    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	String domain = NamespaceManager.get();
 	System.out.println(chargeId);
 	System.out.println(amount);
@@ -549,7 +549,7 @@ public class AdminPanelAPI
 	{
 
 	    Refund refund = StripeUtil.createPartialRefund(chargeId, amount);
-	    ActivityUtil.adminPanelREfundActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT ,cust_domain,amount );
+	    ActivityUtil.adminPanelREfundActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT ,cust_domain,amount/100 );
 	    return refund;
 
 	}

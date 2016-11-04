@@ -1206,7 +1206,7 @@ public class ActivitySave
     public static void  createUserEditActivity(DomainUser domainuser)
     {
     	Activity activity = new Activity();
-    	if(!"admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
+    	if("admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
 		{
     		activity.entity_type = EntityType.ADMINPANEL;
 		}
@@ -1252,7 +1252,7 @@ public class ActivitySave
 				 activity.save();
 			 }
 			 activity.custom1 = (DomainUserUtil.getCurrentDomainUser().domain); 
-			 if(!"admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
+			 if("admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
 			 {	
 				Set <AdminPanelAccessScopes> ScopesAdded = new HashSet<AdminPanelAccessScopes>();
 			 	Set <AdminPanelAccessScopes> ScopesDeleted = new HashSet<AdminPanelAccessScopes>();
