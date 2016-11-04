@@ -20,6 +20,7 @@ function inboxFlagListners(){
 			$(".next").prop("disabled",true);
 			if(cursor){
 				$(".inti-val").text(cursor+" - "+totalcount);
+				$("#pagination").show();
 			}else{
 				$("#pagination").hide();
 			}
@@ -150,7 +151,7 @@ function inboxFlagListners(){
 			if(server == "exchange"){
 				setExchangeFlag(url,from_email,folder_name,'DELETED',dataVal);
 			}else{
-				if(server =! "agile"){
+				if(server != "agile"){
 					url = url+"from_email="+from_email+"&folder_name="+folder_name+"&flag=DELETED&messageid="+dataVal;
 				}else{
 					url = url+"folder_name="+folder_name+"&messageid="+dataVal;
