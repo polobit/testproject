@@ -1,9 +1,15 @@
 <script id="settings-account-tab-template" type="text/html">
     <div class="tab-container m-b-none">
            <ul class="nav nav-tabs b-b-none">
-            <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">{{agile_lng_translate 'menu' 'preferences'}}</a></li>
-            <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">{{agile_lng_translate 'admin-settings' 'security'}}</a></li>
-            <li class="settings-sso-login"><a href="#sso-login" class="b-l-none">{{agile_lng_translate 'admin-settings' 'single-sign-on'}}</a></li>
+            {{#is_mobile}}
+                <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none"><i class="icon icon-settings"></i></a></li>
+                <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none"><i class="icon icon-lock"></i></a></li>
+                <li class="settings-sso-login"><a href="#sso-login" class="b-l-none"><i class="icon icon-lock-open"></i></a></li>
+            {{else}}
+                <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">{{agile_lng_translate 'menu' 'preferences'}}</a></li>
+                <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">{{agile_lng_translate 'admin-settings' 'security'}}</a></li>
+                <li class="settings-sso-login"><a href="#sso-login" class="b-l-none">{{agile_lng_translate 'admin-settings' 'single-sign-on'}}</a></li>
+            {{/is_mobile}}
            </ul>
     </div>
     <div class="tab-pane active" id="settings-account-tab-content">
@@ -214,14 +220,19 @@
             <div class="clearfix"></div>
 <div class="line ling-lg b-b"></div>
 <div class="row">
-<div class="col-md-8 col-xs-8">
-<div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
-            
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
-           
-
-</div>
-</div>
+{{#is_mobile}}
+    <div class="col-md-8 col-xs-12 text-center">
+        <div class="col-sm-8 col-xs-12">
+            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+        </div>
+    </div>
+{{else}}
+    <div class="col-md-8 col-xs-8">
+        <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+        </div>
+    </div>
+{{/is_mobile}}
 </div>
         </fieldset>
     </form>
@@ -243,29 +254,44 @@
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
             <div class="row">
-                <div class="col-md-7 col-xs-12">
-                    
-                    
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'alias'}}<span class="field_req">*</span></label> 
-                        <div class="controls col-sm-8 col-xs-8">
-                            <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="{{agile_lng_translate 'prefs-settings' 'domain-alias'}}" value="{{alias}}" />
-                            <span for="alias" generated="true" class="help-inline text-xs"> </span>
+                {{#is_mobile}}
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-3 col-xs-12 text-left">{{agile_lng_translate 'prefs-settings' 'alias'}}<span class="field_req">*</span></label> 
+                            <div class="controls col-sm-8 col-xs-12">
+                                <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="{{agile_lng_translate 'prefs-settings' 'domain-alias'}}" value="{{alias}}" />
+                                <span for="alias" generated="true" class="help-inline text-xs"> </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
+                {{else}}
+                    <div class="col-md-7 col-xs-12">
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'prefs-settings' 'alias'}}<span class="field_req">*</span></label> 
+                            <div class="controls col-sm-8 col-xs-8">
+                                <input name="alias" id="alias" class="input-medium required domain_format form-control" type="text" placeholder="{{agile_lng_translate 'prefs-settings' 'domain-alias'}}" value="{{alias}}" />
+                                <span for="alias" generated="true" class="help-inline text-xs"> </span>
+                            </div>
+                        </div>
+                    </div>
+                {{/is_mobile}}
             </div>
             <div class="clearfix"></div>
 <div class="line ling-lg b-b"></div>
 <div class="row">
-<div class="col-md-7 col-xs-8">
-<div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
-            
-                <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
-           
-
-</div>
+{{#is_mobile}}
+    <div class="col-sm-12 col-xs-12">
+        <div class="col-sm-12 col-xs-12 text-center">
+            <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
+        </div>
+    </div>
+{{else}}
+    <div class="col-md-7 col-xs-8">
+        <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+            <a href="#" type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a>
+        </div>
+    </div>
+{{/is_mobile}}
 </div>
 </div>
         </fieldset>
@@ -334,14 +360,25 @@
                             <div class="inline-block v-top text-ellipsis" style="width:80%">{{this}}</div>
                             <input class="form-control ip_edit" type="hidden" value="{{this}}" />
                         </td>
-                        <td class="b-r-none" style="width:8%;">
-                            <div class="m-b-n-xs pull-left" style="visibility: hidden;">
-                                <a class="upsert-ip c-p m-l-sm text-l-none text-sm hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
+                        {{#is_mobile}}
+                            <td class="b-r-none" style="width:15%;">
+                                <div class="m-b-n-xs pull-right">
+                                    <a class="upsert-ip c-p text-l-none text-sm hover-show" data-toggle="modal" role="button" data-position="{{@index}}">
                                         <i title="{{agile_lng_translate 'contact-details' 'edit'}}" class="icon icon-edit"></i>
-                                </a>
-                                <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
-                            </div>
-                        </td>
+                                    </a>
+                                    <a class="blocked-panel-ip-delete c-p m-l-xs text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
+                                </div>
+                            </td>
+                        {{else}}
+                            <td class="b-r-none" style="width:8%;">
+                                <div class="m-b-n-xs pull-left" style="visibility: hidden;">
+                                    <a class="upsert-ip c-p m-l-sm text-l-none text-sm hover-show" data-toggle="modal" role="button" style="margin-left:27px;" data-position="{{@index}}">
+                                        <i title="{{agile_lng_translate 'contact-details' 'edit'}}" class="icon icon-edit"></i>
+                                    </a>
+                                    <a class="blocked-panel-ip-delete c-p m-l-sm text-l-none text-sm" data-toggle="modal" role="button" href="#"><i title="Delete  IP" class="task-action icon icon-trash"></i></a>
+                                </div>
+                            </td>
+                        {{/is_mobile}}
                     </tr>
                     {{/each}}
                     <tr data="{{this}}" style="display:none;" >
@@ -395,59 +432,104 @@
             {{#if id}}
             <input name="id" class="form-control" type="hidden" value="">
             {{/if}}
-            <div class="row">
-                <div class="col-md-8 col-xs-12">
-                    
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4" style="padding-left: 5px;">{{agile_lng_translate 'admin-settings' 'remote-login-url'}}<span class="field_req">*</span></label> 
-                        <div class="controls col-sm-8 col-xs-8">
-                            <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="https://">
+            
+            {{#is_mobile}}
+                <div class="row">
+                    <div class="col-md-8 col-xs-12">
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4 col-xs-12">{{agile_lng_translate 'admin-settings' 'remote-login-url'}}<span class="field_req">*</span></label> 
+                            <div class="controls col-sm-8 col-xs-12">
+                                <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="https://">
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings' 'shared-secret'}}</label> 
-                        <div class="controls col-sm-8 col-xs-8">
-                            <div>
-                                <input type="hidden" name="secretKey" value="{{secretKey}}">
-                                <pre class="prettyprint pln" id="secret_key_sso_code">{{secretKey}}</pre>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4 col-xs-12">{{agile_lng_translate 'admin-settings' 'shared-secret'}}</label><div class="controls col-sm-8 col-xs-12">
+                                <div>
+                                    <input type="hidden" name="secretKey" value="{{secretKey}}">
+                                    <pre class="prettyprint pln" id="secret_key_sso_code">{{secretKey}}</pre>
                                 </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
-                <div class="clearfix"></div>
+            {{else}}
+                <div class="row">
+                    <div class="col-md-8 col-xs-12">
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4 col-xs-4" style="padding-left: 5px;">{{agile_lng_translate 'admin-settings' 'remote-login-url'}}<span class="field_req">*</span></label> 
+                            <div class="controls col-sm-8 col-xs-8">
+                                <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="https://">
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'admin-settings' 'shared-secret'}}</label><div class="controls col-sm-8 col-xs-8">
+                                <div>
+                                    <input type="hidden" name="secretKey" value="{{secretKey}}">
+                                    <pre class="prettyprint pln" id="secret_key_sso_code">{{secretKey}}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/is_mobile}}
+
+            <div class="clearfix"></div>
             <div class="line ling-lg b-b"></div>
-            <div class="row">
-            <div class="col-md-8 col-xs-8">
-            <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
-                {{#if id}}
-                    {{#if url}}
-                    <a href="#" type="submit" class="delete btn btn-sm btn-danger">{{agile_lng_translate 'deal-view' 'delete'}}</a>
-                    {{/if}}
-                {{/if}}
 
-                <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
-           
+            {{#is_mobile}}
+                <div class="row">
+                    <div class="col-md-8 col-xs-12 text-center">
+                        <div class="col-sm-8 col-xs-12">
+                            {{#if id}}
+                                {{#if url}}
+                                <a href="#" type="submit" class="delete btn btn-sm btn-danger">{{agile_lng_translate 'deal-view' 'delete'}}</a>
+                                {{/if}}
+                            {{/if}}
+                            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
+                        </div>
+                    </div>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="col-md-8 col-xs-8">
+                        <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
+                            {{#if id}}
+                                {{#if url}}
+                                <a href="#" type="submit" class="delete btn btn-sm btn-danger">{{agile_lng_translate 'deal-view' 'delete'}}</a>
+                                {{/if}}
+                            {{/if}}
+                            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
+                        </div>
+                    </div>
+                </div>    
+            {{/is_mobile}}
 
-            </div>
-            </div>
-            </div>
-                
             </fieldset></form>
 </div>
 </div>
-<div class="col w-md  wrapper pos-rlt track-milestone-text" style="padding-top: 0px;">
- <div class="data-block">
-  <div class="p-l p-r">
-   <h4 class="m-t-none">{{agile_lng_translate 'admin-settings' 'sso-help'}}</h4>   
-   <p>{{agile_lng_translate 'admin-settings' 'admin-and-others-can-use-sso-option-to-login-to-agile-crm'}} <br/>
-        <a href="https://github.com/agilecrm/sso" target="_blank" style="color: #337ab7;">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
-    </p>
-   <br>
-   
-  </div>
- </div>
-</div>
+{{#is_mobile}}
+    <div class="col w-md pos-rlt track-milestone-text" style="padding-top: 0px;">
+     <div class="data-block">
+      <div id="learn-sso">
+       <h4 class="m-t-none">{{agile_lng_translate 'admin-settings' 'sso-help'}}</h4>   
+       <p>{{agile_lng_translate 'admin-settings' 'admin-and-others-can-use-sso-option-to-login-to-agile-crm'}} <br/>
+            <a href="https://github.com/agilecrm/sso" target="_blank" style="color: #337ab7;">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
+        </p>
+       <br>
+      </div>
+     </div>
+    </div>
+{{else}}
+    <div class="col w-md  wrapper pos-rlt track-milestone-text" style="padding-top: 0px;">
+     <div class="data-block">
+      <div class="p-l p-r">
+       <h4 class="m-t-none">{{agile_lng_translate 'admin-settings' 'sso-help'}}</h4>   
+       <p>{{agile_lng_translate 'admin-settings' 'admin-and-others-can-use-sso-option-to-login-to-agile-crm'}} <br/>
+            <a href="https://github.com/agilecrm/sso" target="_blank" style="color: #337ab7;">{{agile_lng_translate 'admin-settings-integrations' 'learn-more'}}</a>
+        </p>
+       <br>
+      </div>
+     </div>
+    </div>
+{{/is_mobile}}
 </script>

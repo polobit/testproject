@@ -2072,6 +2072,20 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
   .colorBox.RestDayState,.colorBox.WorkingDayState{
     margin-top: 5px !important;
   }
+ /*Start of Profile Pic Tab Admin Settings UI CSS*/
+
+ #newip-modal-width{
+  width: auto !important;
+ }
+ #learn-sso h4{
+  font-size: 14px !important;
+ }
+ #learn-sso p{
+  font-size: 12px !important;
+ }
+
+ /*End of of Profile Pic Tab Admin Settings UI CSS*/
+
 }
 
 /*End of Mobile Device Media Query CSS(767px)*/
