@@ -13,7 +13,7 @@
         pageSize,
         prevScrollY = 0;
 
-    pageSize = collection.length || 25;
+    pageSize = collection.length || getMaximumPageSize();
 
     self.collection = collection;
     self.options = _.defaults(options, {

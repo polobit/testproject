@@ -1,5 +1,6 @@
 package com.agilecrm.webhooks.triggers.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -164,20 +165,27 @@ public class WebhookTriggerUtil
 
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
-
+	List<Webhook> hooks = new ArrayList<Webhook>();
+	
 	try
 	{
-	    List<Webhook> hooks = hooksdao.fetchAllByOrder("id");
-	    return hooks;
+	    Map map = new HashMap();
+	    if (StringUtils.isNotBlank(oldNamespace))
+		map.put("domain", oldNamespace);
+
+	    hooks = hooksdao.listByProperty(map);
+	    System.out.println("hoooooooooooooooks" + hooks);
 	}
 	catch (Exception e)
 	{
-	    return null;
+	    hooks = null;
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+	
+	return hooks;
 
     }
 

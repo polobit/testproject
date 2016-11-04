@@ -169,7 +169,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			var params = "contactid=" + contact_id + "&formname=" + encodeURIComponent(form_name) + "&formdata=" + encodeURIComponent(JSON
                     .stringify(form_data)) + "&new=" + new_contact+"&checkId="+id_check;
 			var trigger_url="https://"+ agile_id.getNamespace()+".agilecrm.com/formtrigger";
-			sendRequest(trigger_url,"",params);
+			sendRequest(trigger_url,"",params);				
 		}
 	}
 	else if (error[1])
@@ -199,10 +199,17 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 					window.location = url+"?"+"fwd=cd&data="+emailParam;
 			}	
 			else if(url && url == "#"){
-				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				//condition for the checking custom templates
+				var confirmationMsgEl = document.getElementById("_agile_confirmation_msg");
+				var confirmationMsg = "Great! Thanks for filling out the form.";
+				if(confirmationMsgEl) {
+					confirmationMsg = confirmationMsgEl.value;
+				}
+				document.getElementById("agile-error-msg").innerHTML = '<br><span style="color:green; font-size: 13px;">' + confirmationMsg + '</span>';
 				var agile_form = document.forms["agile-form"];
 				if(typeof grecaptcha != "undefined") grecaptcha.reset();
 				agile_form.reset();
+			
 			}
 		
 		} else {
@@ -217,7 +224,12 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			}
 		}	
 
-		
+		agile_track_form_action({
+			"id" : form_data._agile_form_id || null,
+			"name" : form_name,
+			"email" : emailVal
+		});
+
 	}, 1500);
 }
 
@@ -469,4 +481,10 @@ function createXMLHTTPObject() {
         break;
     }
     return xmlhttp;
+}
+
+function agile_find_closest_element(el, condCallback) {
+    return el && (
+        condCallback(el) ? el : agile_find_closest_element(el.parentNode, condCallback)
+    );
 }

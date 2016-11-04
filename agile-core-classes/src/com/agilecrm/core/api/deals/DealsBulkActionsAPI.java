@@ -659,5 +659,59 @@ public class DealsBulkActionsAPI
 	    je.printStackTrace();
 	}
     }
+    
+    /**
+     * Call backends to update deals with updated time in bulk.
+     */
+    @Path("/update/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void updateDeals(@FormParam("ids") String deal_ids, @PathParam("current_user") Long current_user)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(current_user);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(current_user);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
+
+	try
+	{
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(deal_ids, null, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, current_user);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
+	    
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    for (Opportunity deal : deals)
+	    {
+	    deal.updated_time = System.currentTimeMillis() / 1000;
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.putAll(subList);
+		    OpportunityUtil.updateSearchDoc(subList);
+		    subList.clear();
+		}
+	    }
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.updateSearchDoc(subList);
+	    }
+
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
 
 }

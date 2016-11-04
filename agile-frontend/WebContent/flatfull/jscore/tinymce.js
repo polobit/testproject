@@ -15,9 +15,11 @@ var CONTACT_CUSTOM_FIELDS = undefined;
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
+function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,merge_fields_values_callback)
 {
 	
+	var that=this;
+	that._merge_fields_values_callback	=merge_fields_values_callback;
 	// Id undefined
 	if (selector === undefined)
 	{
@@ -77,7 +79,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 			        forced_root_block : false,
 					extended_valid_elements : "*[*]", setup : function(editor)
 					{
-						editor.addButton('merge_fields', { type : 'menubutton', text : '{{agile_lng_translate "contact-view" "merge-fields"}}', icon : false, menu : set_up_merge_fields(editor) });
+						editor.addButton('merge_fields', { type : 'menubutton', text : '{{agile_lng_translate "contact-view" "merge-fields"}}', icon : false, menu : set_up_merge_fields(editor,that._merge_fields_values_callback) });
 					},
 					language : get_tinymce_supported_language(),
 					});
@@ -247,12 +249,12 @@ function remove_tinymce_editor_instance(selector)
  * @param editor -
  *            editor instance
  */
-function set_up_merge_fields(editor)
+function set_up_merge_fields(editor,merge_fields_values_callback)
 {
 	var menu = [];
 
 	var contact_json;
-
+	var _merge_fields_values_callback=merge_fields_values_callback;
 	// Get Current Contact json for merge fields
 	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 		contact_json = get_contact_json_for_merge_fields();
@@ -275,7 +277,7 @@ function set_up_merge_fields(editor)
 			{
 
 				// Insert value without compiling
-				if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1)
+				if (Current_Route === "bulk-email" || Current_Route === "send-email" || Current_Route.indexOf('email-template') != -1 || Current_Route.indexOf('emailbuilder') != -1 || Current_Route.indexOf('document-template') != -1)
 				{
 					editor.insertContent(value);
 				}
@@ -286,6 +288,9 @@ function set_up_merge_fields(editor)
 
 					try
 					{
+						if(_merge_fields_values_callback)
+							contact_json=_merge_fields_values_callback(contact_json);
+
 						compiled_template = template(contact_json);
 					}
 					catch(err)
@@ -338,6 +343,12 @@ function get_merge_fields(callback)
 			"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
 			}
 	
+	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
+	{
+		var document_options={"{{agile_lng_translate 'documents' 'pricing-table'}}":"{{{pricing_table}}}"}
+		options = merge_jsons({}, options,document_options);
+	}
+
 	if(!callback){
 		// Get Custom Fields in template format
 		var custom_fields = get_custom_merge_fields();
@@ -384,7 +395,8 @@ function get_merge_field_objs()
 		"{{agile_lng_translate 'contact-view' 'owner-name'}}":"{{owner.name}}",
 		"{{agile_lng_translate 'contact-view' 'owner-email'}}":"{{owner.email}}", 
 		"{{agile_lng_translate 'domain-user' 'phone'}}":"{{owner.phone}}", 
-		"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}"
+		"{{agile_lng_translate 'contact-view' 'calendar-url'}}":"{{owner.calendar_url}}",
+		"{{agile_lng_translate 'contacts-view' 'unsubscribe'}} {{agile_lng_translate 'landingpage-builder' 'link'}}":"{{{unsubscribe_link}}}"
 	}
 	
 	// Get Custom Fields in template format
@@ -395,6 +407,10 @@ function get_merge_field_objs()
 	if(custom_fields && !$.isEmptyObject(custom_fields))
 		json['{{agile_lng_translate "campaigns" "custom"}}'] = custom_fields;
 
+	if((Current_Route.indexOf('document-template') != -1 || Current_Route.indexOf('document') != -1))
+	{
+		json['{{agile_lng_translate "documents" "deal-products"}}']={"{{agile_lng_translate 'documents' 'pricing-table'}}":"{{{pricing_table}}}"}
+	}
 	//Return json if path isn't email-template
 	if(Current_Route.indexOf('emailbuilder-add') == -1 && 
 		Current_Route.indexOf('email-template-add') == -1 &&
@@ -496,16 +512,21 @@ function merge_jsons(target, object1, object2)
 /**
  * Returns json required for merge fields in Editor
  */
-function get_contact_json_for_merge_fields()
+function get_contact_json_for_merge_fields(contact_json)
 {
-	// Compile templates immediately in Send email but not for bulk contacts
-	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
+	if (contact_json==undefined && App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 	{
 
 		// Get Current Contact
-		var contact_json = App_Contacts.contactDetailView.model.toJSON();
-		var contact_property_json = get_property_JSON(contact_json);
+		contact_json = App_Contacts.contactDetailView.model.toJSON();
 		
+	}	
+	// Compile templates immediately in Send email but not for bulk contacts
+	if(contact_json!=undefined)
+	{
+
+		// Get Current Contact
+		var contact_property_json = get_property_JSON(contact_json);		
 		try
 		{
 			contact_property_json["score"]= contact_json["lead_score"];
@@ -635,4 +656,3 @@ function get_tinymce_supported_language(){
 
 	return supported_language;
 }
-

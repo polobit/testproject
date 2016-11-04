@@ -407,10 +407,25 @@
     {{/if}}
   {{/if}}
 {{/if_equals}}
-
-
-                           
-
+<div class="deal-products"> 
+    {{#if products}}
+      <div class="panel panel-default m-b ">
+        <div class="panel-body">
+            <small class="text-base text-muted">{{agile_lng_translate 'documents' 'deal-products'}}</small>
+          <div class="m-b-xs m-t-xs">      
+            <ul id="deal-products-ul" class="inline v-top m-b-sm p-n">
+                {{#each products}}               
+                  <li class="deal-product inline-block btn btn-xs btn-default m-r-xs m-b-xs text-xs" style="word-break:break-all;white-space:normal;text-align:left;">
+                    <div class="anchor m-r-xs custom-color" style="color:#363f44" >{{name}}</div>
+                  </li>
+                {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+   {{/if}}
+</div>
 <div class="deal-custom-data"> 
                 
           
@@ -479,7 +494,9 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-         <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  class="img{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+
+         <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  class="img{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{contact_name_necessary this}}" /></a>
+
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
                 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  class="img{{id}}" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -563,7 +580,7 @@
 <div id="deal-details">
 	<div class="tab-container">
            <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
-             <li><a href="#dealactivities" data-toggle="tab" >{{agile_lng_translate 'deal-view' 'activity'}}</a></li>
+             <li><a href="#dealactivities" data-toggle="tab" >{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
              <li><a href="#dealnotes" data-toggle="tab" >{{agile_lng_translate 'deal-view' 'notes'}}</a></li>
 			       {{#hasMenuScope "DOCUMENT"}}
               <li><a href="#dealdocs" data-toggle="tab">{{agile_lng_translate 'deal-view' 'documents'}}</a></li>

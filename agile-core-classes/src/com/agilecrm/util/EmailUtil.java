@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.mail.internet.InternetAddress;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -21,7 +20,6 @@ import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.amazonaws.services.simpleemail.model.Message;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -475,7 +473,7 @@ public class EmailUtil
 		content.append("<tr> <td style='color:#1E90FF; font-weight:bold;font-size:16px; text-align:center;'> _title </td> </tr> ");
 		content.append("<tr> <td style='font-weight:bold;font-size:12px; text-align:center;'> _date</td> </tr> </tbody> </table> ");
 		content.append("<table cellspacing=\"0\" cellpadding=\"0\"> <tbody> <tr> ");
-		content.append("<td style=\"padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:arial,sans-serif;color:#4B4848\"> ");
+		content.append("<td style=\"padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:arial,sans-serif;color:#4B4848\"> <p>");
 
 		String header = StringUtils.replaceOnce(content.toString(), "_title", title);
 		return StringUtils.replaceOnce(header, "_date", DateUtil.getCalendarString(System.currentTimeMillis(), DateUtil.EMAIL_TEMPLATE_DATE_FORMAT, "GMT"));
@@ -501,6 +499,58 @@ public class EmailUtil
 		content.append("</td> </tr> </tbody> </table> </td> </tr> </table> </body> </html>");
 		
 		return content.toString();
+    }
+    
+    /**
+     * Common email template.
+     * 
+     * @param mail_content
+     * @return
+     */
+    public static String emailTemplate(String mail_content) {
+    	
+    	String template = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">	" +
+    	            "<html>\n" +
+    	            "  <head>\n" +
+    	            "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n" +
+    	            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n" +
+    	            "    <title>AgileCRM</title>\n" +
+    	            "    \n" +
+    	            "  </head>\n" +
+    	            "  <body>\n" +
+    	            "    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"background-color:#edf1f2;padding:6% 10%\">\n" +
+    	            "      <tr>\n" +
+    	            "        <td align=\"center\">\n" +
+    	            "          <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" bgcolor=\"#FFFFFF\" style=\"border:1px solid #ccc;border-radius:2px\">\n" +
+    	            "            <tr>\n" +
+    	            "              <td style=\"font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc\" height=\"70\" align=\"center\" class=\"responsive-image\">\n" +
+    	            "                <img width=\"150\" alt=\"AgileCRM\" src=\"https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png\">\n" +
+    	            "              </td>\n" +
+    	            "            </tr>\n" +
+    	            "            <tr>\n" +
+    	            "              <td style=\"padding: 15px 25px 5px\">\n" +
+    	            "                <div style=\"font-size:14px;font-family:sans-serif;\">\n" +
+    	            "\t\t\t" + mail_content + "\n" +
+    	            "                </div>\n" +
+    	            "              </td>\n" +
+    	            "            </tr>\n" +
+    	            "\t\t\t\n" +
+    	            "\t\t\t<tr>\n" +
+    	            "              <td style=\"padding: 10px 25px 25px\">\n" +
+    	            "                \t\t<div style=\"font-weight: bold; font-size: 12px;\">\n" +
+    	            "\t\t\t\t\t\tThe Crew at Agile CRM  <br />\n" +
+    	            "\t\t\t\t\t  </div>\n" +
+    	            "\t\t\t\t\t  <div><a target=\"_blank\" href=\"https://www.agilecrm.com\" style=\"color:blue\">https://www.agilecrm.com</a></div>\n" +
+    	            "              </td>\n" +
+    	            "            </tr>\n" +
+    	            "          </table>\n" +
+    	            "        </td>\n" +
+    	            "      </tr>\n" +
+    	            "    </table>\n" +
+    	            "  </body>\n" +
+    	            "</html>";
+    	
+    	return template;
     }
     
 }

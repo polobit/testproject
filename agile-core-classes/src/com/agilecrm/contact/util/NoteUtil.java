@@ -4,6 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import com.agilecrm.activities.Event;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -45,6 +51,7 @@ public class NoteUtil
 
 	return dao.ofy().query(Note.class).filter("related_contacts = ", contactKey).order("-created_time").list();
     }
+
 
     /**
      * Gets all the notes related to a contact.

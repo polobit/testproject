@@ -299,16 +299,61 @@
 <!-- starting of deal condition-->
 
 {{#if_equals "DEAL" entity_type}}
-{{#if_equals "DEAL_ADD" activity_type}}
-{{agile_lng_translate 'contacts-view' 'created-deal'}} {{#if entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}
-<div class="activities_second_line m-t-none"><small>
-{{#if custom2}}
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}{{agile_lng_translate 'campaigns' 'deal'}}  ({{currencySymbol}}{{numberWithCommasForActivities custom2}} - {{custom3}}%) {{agile_lng_translate 'contacts-view' 'added'}} {{#if entityObject}}{{agile_lng_translate 'contacts-view' 'to-track'}} '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
-{{else}}
-<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{agile_lng_translate 'campaigns' 'deal'}}  {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'added-to-track'}}  '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
-{{/if}}	
-</small></div>	
-{{/if_equals}}
+	{{#if_equals "DEAL_ADD" activity_type}}
+		{{agile_lng_translate 'contacts-view' 'created-deal'}} 
+		{{#if entityObject}}
+			<a  href="#deal/{{entity_id}}">{{label}}</a> 
+		{{else}}
+			'{{label}}'
+		{{/if}}
+		<div class="activities_second_line m-t-none">
+			<small>
+				{{#if custom2}}
+					<i class="icon-money icon-white"></i>
+					{{#unless this.entityObject}}
+						{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}
+					{{/unless}}
+					{{agile_lng_translate 'campaigns' 'deal'}}  
+					({{currencySymbol}}{{numberWithCommasForActivities custom2}} - {{custom3}}%) 
+					{{agile_lng_translate 'contacts-view' 'added'}}
+					{{#if entityObject}}
+						{{agile_lng_translate 'contacts-view' 'to-track'}} 
+						' {{entityObject.milestone}}'.
+					{{/if}}
+					{{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} 
+						{{#stringToJSON this "related_contact_ids"}}
+							{{#toLinkTrigger this}} 
+								<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">
+									{{this.contactname}}
+								</a>
+							{{/toLinkTrigger}}
+						{{/stringToJSON}}.
+					{{/if}}
+				{{else}}
+					<i class="icon-money icon-white"></i>
+					{{#unless this.entityObject}} 
+						{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}
+					{{/unless}} 
+					{{agile_lng_translate 'campaigns' 'deal'}}  
+					{{#if this.entityObject}} 
+						({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) 
+						{{agile_lng_translate 'contacts-view' 'added-to-track'}}  
+							' {{entityObject.milestone}}'.
+					{{/if}} 
+					{{#if related_contact_ids}}
+						{{agile_lng_translate 'contacts-view' 'deal-related-to'}}
+						{{#stringToJSON this "related_contact_ids"}}
+							{{#toLinkTrigger this}} 
+								<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">
+									{{this.contactname}}
+								</a>
+							{{/toLinkTrigger}}
+						{{/stringToJSON}}.
+					{{/if}} 
+				{{/if}}	
+			</small>
+		</div>	
+	{{/if_equals}}
 
 
 {{#if_equals "DEAL_ARCHIVE" activity_type}}
@@ -325,15 +370,37 @@
 </small></div>	
 {{/if_equals}}
 
-
-
 {{#if_equals "DEAL_CLOSE" activity_type}}
- {{agile_lng_translate 'contacts-view' 'won-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}
-<div class="activities_second_line m-t-none"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} {{agile_lng_translate 'menu' 'deal'}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'won'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
-</small></div>	
+	{{agile_lng_translate 'contacts-view' 'won-deal'}}
+	{{#if this.entityObject}}
+		<a  href="#deal/{{entity_id}}">{{label}}</a>
+	{{else}}
+		'{{label}}'
+	{{/if}}
+	<div class="activities_second_line m-t-none">
+		<small>
+			<i class="icon-money icon-white"></i>
+			{{#unless this.entityObject}}
+				{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}
+			{{/unless}}
+			{{#if this.entityObject}}
+				{{agile_lng_translate 'menu' 'deal'}}
+				({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) 
+				{{custom1}}
+			{{/if}}
+			{{#if related_contact_ids}}
+				{{agile_lng_translate 'contacts-view' 'deal-related-to'}}
+				{{#stringToJSON this "related_contact_ids"}}
+					{{#toLinkTrigger this}}
+						<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">
+							{{this.contactname}}
+						</a>
+					{{/toLinkTrigger}}
+				{{/stringToJSON}}.
+			{{/if}}
+		</small>
+	</div>	
 {{/if_equals}}
-
 
 {{#if_equals "DEAL_EDIT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'modified-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
@@ -402,10 +469,25 @@
 
 
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
-{{agile_lng_translate 'contacts-view' 'changed-milestone-of-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
-<div class="activities_second_line m-t-none"><small> 
-<i class="icon-money icon-white"></i> {{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}{{#if this.entityObject}}{{agile_lng_translate 'menu' 'deal'}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} {{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} '{{custom2}}' {{agile_lng_translate 'contacts-view' 'to'}} '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
-</small></div>	
+	{{agile_lng_translate 'contacts-view' 'changed-milestone-of-deal'}}
+	{{#if this.entityObject}}
+		<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'
+	{{/if}}
+	<div class="activities_second_line m-t-none">
+		<small> 
+			<i class="icon-money icon-white"></i> 
+			{{#unless entityObject}} 
+				{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}
+			{{/unless}}
+			{{#if this.entityObject}}
+				{{agile_lng_translate 'menu' 'deal'}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%)
+			{{/if}}
+			{{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} '{{custom2}}' {{agile_lng_translate 'contacts-view' 'to'}} '{{custom1}}'.
+			{{#if related_contact_ids}}
+				{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.
+			{{/if}}
+		</small>
+	</div>	
 {{/if_equals}}
 
  {{#if_equals "DEAL_IMPORT" activity_type}}
@@ -432,10 +514,35 @@
 
 
 {{#if_equals "DEAL_LOST" activity_type}}
-{{agile_lng_translate 'contacts-view' 'lost-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
-<div class="activities_second_line m-t-none"><small>
-<i class="icon-money icon-white"></i>{{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{agile_lng_translate 'menu' 'deal'}} {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
-</small></div>	
+	{{agile_lng_translate 'contacts-view' 'lost-deal'}}
+	{{#if this.entityObject}}
+		<a href="#deal/{{entity_id}}" >{{label}}</a>
+	{{else}}
+		'{{label}}'
+	{{/if}}
+	<div class="activities_second_line m-t-none">
+		<small>
+			<i class="icon-money icon-white"></i>
+			{{#unless entityObject}}
+				{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}
+			{{/unless}}
+			{{agile_lng_translate 'menu' 'deal'}}
+			{{#if this.entityObject}}
+				({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) 
+			{{/if}}
+			{{custom1}}.
+			{{#if related_contact_ids}} 
+				{{agile_lng_translate 'contacts-view' 'deal-related-to'}}
+				{{#stringToJSON this "related_contact_ids"}}
+					{{#toLinkTrigger this}}
+						<a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">
+							{{this.contactname}}
+						</a>
+					{{/toLinkTrigger}}
+				{{/stringToJSON}}.
+			{{/if}}
+		</small>
+	</div>
 {{/if_equals}}
 
 {{#if_equals "BULK_ACTION" activity_type}}
@@ -739,6 +846,7 @@
 {{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'contacts-view' 'contacts-were-updated-during-the-import'}}{{/if}} 
 </small>  
 {{/if_equals}}
+
  {{#if_equals "COMPANY_IMPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'imported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'companies'}} 
 <br/>	
@@ -748,14 +856,20 @@
 {{/if_equals}}
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+</small> 
 {{/if_equals}}
 {{#if_equals "COMPANY_EXPORT" activity_type}}
 {{#if_equals "1" custom1}}
-{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'other' 'company'}} <br/>
+	{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'other' 'company'}}
 {{else}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'companies-view' 'companies'}} 
+{{/if_equals}}
 <br/>
-{{/if_equals}}	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+</small> 
 {{/if_equals}}
 {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
 {{#if_equals "PERSON" type}}
@@ -863,6 +977,24 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+
+{{#if_equals "SEND_EMAIL_BULK" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} <span style="text-transform: lowercase;">{{agile_lng_translate 'menu' 'email'}}</span><br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'plan-and-upgrade' 'emails'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "CHANGE_OWNER" custom1}}
 {{#if_equals "contacts" label}}	
 {{#if_equals "1" custom3}}
@@ -1427,26 +1559,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
                 <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu pull-right" id="entity_type" role="menu">
-					 <li><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
-					 </li>
-                     <li><a href="CALL">{{agile_lng_translate 'portlets' 'calls'}}</a></li>
-                    <li><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
-                    </li>  
-                     <li><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
-                     
-                     
-					{{#hasMenuScope 'DEALS'}}
-                     	<li><a href="DEAL">{{agile_lng_translate 'report-view' 'deals'}}</a></li>
-					{{/hasMenuScope}}
-                    {{#hasMenuScope 'DOCUMENT'}}
-                        <li><a href="DOCUMENT">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
-                    {{/hasMenuScope}}
-					 <li><a href="EVENT">{{agile_lng_translate 'contact-details' 'events'}}</a></li>
-					 <li><a href="EMAIL_SENT">{{agile_lng_translate 'contact-details' 'emails'}}</a></li>
-					 <li><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
-					 <li><a href="TICKET">Tickets</a></li>
-					<li><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
+
+                <ul class="dropdown-menu pull-right dashboard-activities" id="entity_type" role="menu">
+					
+
                 </ul>
             </div>            
         </div>
@@ -1466,6 +1582,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </div>
 </div>
 </script>
+
 
 <script id="activity-campaign-history-modify-template" type="text/html">
 <div>
@@ -1524,4 +1641,45 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </ul>{{/if}}
 </div>
  </script>
+
+<script id="sales-activity-list-header-template" type="text/html">
+ <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
+					 </li>
+<li data-type="CALL"><a href="CALL">{{agile_lng_translate 'portlets' 'calls'}}</a></li>
+<li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>                    
+{{#hasMenuScope 'DEALS'}}
+ 	<li data-type="DEAL"><a href="DEAL">{{agile_lng_translate 'report-view' 'deals'}}</a></li>
+{{/hasMenuScope}}
+{{#hasMenuScope 'DOCUMENT'}}
+    <li data-type="DOCUMENT"><a href="DOCUMENT">{{agile_lng_translate 'contact-details' 'documents'}}</a></li>
+{{/hasMenuScope}}
+ 
+ <li data-type="EVENT"><a href="EVENT">{{agile_lng_translate 'contact-details' 'events'}}</a></li>
+
+  
+  <li data-type="EMAIL_SENT"><a href="EMAIL_SENT">{{agile_lng_translate 'contact-details' 'emails'}}</a></li>
+ 
+ <li data-type="TASK"><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
+
+	<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
+</script>
+
+
+<script id="marketing-activity-list-header-template" type="text/html">
+ <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
+					 </li>
+ <li data-type="CAMPAIGN"><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
+                    </li>
+ <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li>
+</script>
+
+<script id="service-activity-list-header-template" type="text/html">
+ <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
+					 </li>
+	<li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
+ <li data-type="TICKET"><a href="TICKET">Tickets</a></li>
+    
+					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>                 
+
+</script>
 

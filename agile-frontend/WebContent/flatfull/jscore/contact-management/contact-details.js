@@ -180,7 +180,10 @@ function validateCompanyName(value){
                 return;
 
               $("#Contact-input").addClass("hidden");
+              if(_agile_get_custom_contact_display_type() == 'FTL')
               $("#contactName").text(firstName+" "+lastName ).removeClass("hidden");
+            else
+              $("#contactName").text(lastName+" "+firstName ).removeClass("hidden");
               $("#contactName").addClass("text-capitalize ");
               $("#Contact-input-firstname" ).removeClass("error-inputfield");
               $("#Contact-input-lastname" ).removeClass("error-inputfield");  
@@ -209,7 +212,10 @@ function validateCompanyName(value){
 
           // Toggle fields
           $("#Contact-input").addClass("hidden");
-          $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+          if(_agile_get_custom_contact_display_type() == 'FTL')
+            $("#contactName").text(firstName+" "+lastName).removeClass("hidden");
+           else
+           $("#contactName").text(lastName+" "+firstName).removeClass("hidden");
           $("#contactName").addClass("text-capitalize ");
           $("#Contact-input-firstname").removeClass("error-inputfield");
           $("#Contact-input-lastname").removeClass("error-inputfield"); 
@@ -390,11 +396,17 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     	'click .cases-edit-contact-tab' : 'editCase',
     	'click .contact-add-contact' : 'addContact',
     	'click .contact-add-document' : 'addDocument',
-    	'click .document-edit-contact-tab' : 'editDocument',
+    	//'click .document-edit-contact-tab' : 'editDocument',
+    	'click .document-edit-contact-tab' : 'navigateToContacteditDocument',
+    	'click .document-edit-company-tab' : 'navigateToCompanyeditDocument',
     	'click .document-unlink-contact-tab' : 'unlinkDocument',
     	'click .add-document-select' : 'listDocuments',
+      
+    	'click .add-company-edocument-select' : 'navigateToCompanyeDocument',
+    	'click .add-contact-edocument-select' : 'navigateToContacteDocument',
     	'click .add-document-cancel' : 'cancelDocuments',
-    	'click .add-document-confirm' : 'addSelectedDocument',
+    	'click .add-company-document-confirm' : 'addCompanySelectedDocument',
+    	'click .add-contact-document-confirm' : 'addContactSelectedDocument',
 
     	'click #contacts-inner-tabs #next' : 'tabViewNext',
     	'click #contacts-inner-tabs #prev' : 'tabViewPrev',
@@ -721,10 +733,10 @@ show and hide the input for editing the contact name and saving that
     onChangeOwner : function(e){
          e.preventDefault();
          	var contact_owner = $(e.currentTarget).attr("data");
-         	var error_msg = _agile_get_translated_val('contact-details','no-perm-to-update');
+         	var error_msg = "{{agile_lng_translate 'contact-details' 'no-perm-to-update'}}";
     			if(contact_owner != CURRENT_DOMAIN_USER.id && !hasScope("EDIT_CONTACT"))
     			{
-    				showModalConfirmation(_agile_get_translated_val('contact-details','owner-changed'), 
+    				showModalConfirmation("{{agile_lng_translate 'contact-details' 'owner-changed'}}", 
     						error_msg, 
     						function (){
     							return;
@@ -735,7 +747,7 @@ show and hide the input for editing the contact name and saving that
     						function() {
     							
     						},
-    						_agile_get_translated_val('contact-details', 'cancel'), "");
+    						"{{agile_lng_translate 'contact-details' 'cancel'}}", "");
     				return;
     			}
          fill_owners(undefined, undefined, function(){
@@ -991,7 +1003,7 @@ show and hide the input for editing the contact name and saving that
 		
 		$("#map").css('display', 'none');
 		$("#contacts-local-time").hide();
-		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
+		$("#map_view_action").html("<i class='icon-plus text-sm c-p' title='{{agile_lng_translate 'contact-details' 'show-map'}}' id='enable_map_view'></i>");
 		
     },
 
@@ -1283,7 +1295,41 @@ enterCompanyScore: function(e){
 		contact_details_documentandtasks_actions.document_unlink(e);
 		
 	},
+	navigateToContacteDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edocument(e,"contact");
 
+		        
+	},
+	navigateToCompanyeDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edocument(e,"company");
+
+		        
+	},
+	navigateToContacteditDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edit_document(e,"contact");
+
+		        
+	},
+	navigateToCompanyeditDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edit_document(e,"company");
+
+		        
+	},
+	navigateToeDocument:function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.navigate_to_edocument(e);
+
+		        
+	},
 	/**
 	 * For showing new/existing documents
 	 */
@@ -1301,16 +1347,24 @@ enterCompanyScore: function(e){
 		e.preventDefault();
 		var el = $("#documents");
 		el.find(".contact-document-select").css("display", "none");
+
 		el.find(".add-document-select").css("display", "inline-block");
+		el.find(".add-contact-edocument-select,.add-company-edocument-select,.dropdown-toggle").css("display", "inline-block");
 	},
 
 	/**
 	 * For adding existing document to current contact
 	 */
-	addSelectedDocument : function(e)
+	addContactSelectedDocument : function(e)
 	{
 		e.preventDefault();
-		contact_details_documentandtasks_actions.add_selected_document(e);
+		contact_details_documentandtasks_actions.add_selected_document(e,"contact");
+
+	}, 
+	addCompanySelectedDocument : function(e)
+	{
+		e.preventDefault();
+		contact_details_documentandtasks_actions.add_selected_document(e,"company");
 
 	},
 

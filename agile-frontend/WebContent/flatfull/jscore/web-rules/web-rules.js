@@ -8,6 +8,8 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#RHS_CALL_POPUOP", el).chained($("#action", el),  function(){
 	});
+	$("#dynamic-button-title", el).chained($("#action", el),  function(){
+	});
 	$("#WEB_RULE_RHS", el).chained($("#action", el), function(el, self){
 
 		var select = $('select', $(self));
@@ -29,6 +31,8 @@ function chainWebRules(el, data, isNew, actions)
 			addTagsDefaultTypeahead(self);
 		
 	});
+
+	
 	$("#campaign", el).chained($("#action", el));
 	
 	$("#possition", el).chained($("#action", el));
@@ -73,8 +77,12 @@ function chainWebRules(el, data, isNew, actions)
 				$("#tiny_mce_webrules_link", self).show();
 				self.find(".web-rule-preview").show();
 				return;
+			} else if(value == "DYNAMIC_IMAGE") {
+				self.find(".dynamic-image-browse").show();
+				return;
 			}
 		self.find(".web-rule-preview").hide();
+		self.find(".dynamic-image-browse").hide();
 	});
 	
 	
@@ -83,6 +91,13 @@ function chainWebRules(el, data, isNew, actions)
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
+
+$("body").on("mouseenter", "#webrule-model-list tr", function(b) {
+    $(this).find("#web_report").removeClass("hide");
+});
+$("body").on("mouseleave", "#webrule-model-list tr", function(b) {
+    $(this).find("#web_report").addClass("hide");
+});
 
 /**
 *  WebRules event view
@@ -95,6 +110,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 		 		'click i.filter-contacts-web-rule-multiple-remove' : 'webruleMultipleRemove',
 		 		'click .web-rule-preview' : 'webrulePreview',
 		 		'click #tiny_mce_webrules_link' : 'tinymceWebruleLink',
+		 		'change #uploadImageToS3Btn' : 'uploadImageToS3BtnChange',
 		    },
 
 			// Filter Contacts- Clone Multiple
@@ -221,6 +237,11 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					}*/
 				return false;
 			},
+
+			uploadImageToS3BtnChange : function(e) {
+		        var fileInput = document.getElementById('uploadImageToS3Btn');
+		        uploadImageToS3ThroughBtn(fileInput.files[0],e.currentTarget.parentElement.getElementsByClassName("btn")[0]);
+    		},
 
 		});
 
@@ -363,3 +384,42 @@ function merge_webrules_jsons(target, object1, object2)
 					}
 				return false;
  }
+
+ function uploadImageToS3ThroughBtn(file,buttonElement) {
+    if(typeof file != "undefined") {
+    	$buttonElement = $(buttonElement);
+        $buttonElement.prop("disabled",true);
+        $buttonElement.text("Uploading...");
+
+        var uploadedFileName = file.name;
+        var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+        formData = new FormData();
+        formData.append('key',  "editor/webrules/"+CURRENT_DOMAIN_USER.domain+"/"+filename);
+        formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+        formData.append('acl', 'public-read');
+        formData.append('content-type', 'image/png');
+        formData.append('policy', 'CnsKICAiZXhwaXJhdGlvbiI6ICIyMDI1LTAxLTAxVDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJidWNrZXQiOiAiYWdpbGVjcm0iIH0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJlZGl0b3IvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiaW1hZ2UvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9zdGF0dXMiLCAiMjAxIl0sCiAgXQp9');
+        formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
+        formData.append('success_action_status', '201');
+        formData.append('file', file);
+
+        $.ajax({
+            data: formData,
+            dataType: 'xml',
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: "https://agilecrm.s3.amazonaws.com/",
+            success: function(data) {
+              // getting the url of the file from amazon and insert it into the editor
+              var url = $(data).find('Location').text();
+              $('#dynamic-image-source-url').val(decodeURIComponent(url));
+              $buttonElement.prop("disabled",false);
+              $buttonElement.text("Browse");
+            }
+        });
+    }
+}

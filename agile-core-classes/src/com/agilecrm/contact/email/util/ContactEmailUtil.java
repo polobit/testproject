@@ -19,7 +19,10 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.util.ContactUtil;
@@ -32,12 +35,14 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.EmailPrefs;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.OfficeEmailPrefs;
+import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
+import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
@@ -181,7 +186,7 @@ public class ContactEmailUtil
 	    List<Long> documentIds = new ArrayList<Long>();
 	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
 	    
-	    if (StringUtils.isNotBlank(contactEmailWrapper.getDocument_key()))
+	    if (StringUtils.isNotBlank(contactEmailWrapper.getDocument_key()) && StringUtils.isBlank(contactEmailWrapper.getedoc_key()))
 	    {
 		Long documentId = Long.parseLong(contactEmailWrapper.getDocument_key());
 		documentIds.add(documentId);
@@ -201,7 +206,13 @@ public class ContactEmailUtil
 		
 		// Returns set of To Emails
 		Set<String> toEmailSet = getToEmailSet(to);
-
+		
+		// Returns set of Cc Emails
+		Set<String> ccEmailSet = getToEmailSet(cc);
+		
+		// Returns set of Bcc Emails
+		Set<String> bccEmailSet = getToEmailSet(bcc);
+			
 		// Personal Email open tracking id
 		contactEmailWrapper.setTrackerId(String.valueOf(System.currentTimeMillis()));
 		
@@ -228,22 +239,32 @@ public class ContactEmailUtil
 
 		// Sends email
 		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
-
+		System.out.println("After send email");
+				
+		// it is for calculating total contact emails
+		int contactsCount=0;
+		
 		// If contact is available, no need of fetching contact from
 		// to-email again.
 		if (contact != null)
 		{
+			System.out.println("if contact is not null , save the contact email");
 			saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
 					Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
-			
+			System.out.println("After save contact email , set contact last mailed");
 			contact.setLastEmailed(System.currentTimeMillis() / 1000);
+			System.out.println("After set contact last emailed , update contact");
 			contact.update();
 			
 			for (String toEmail : toEmailSet)
 			    ActivitySave.createEmailSentActivityToContact(EmailUtil.getEmail(toEmail), contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
+			
+			contactsCount++;
 		}
 		else
 		{
+			System.out.println("if contact is null , loop the save contact email");
+
 			// When multiple emails separated by comma are given
 			for (String toEmail : toEmailSet)
 			{
@@ -259,16 +280,36 @@ public class ContactEmailUtil
 				// Saves email with contact-id
 				if (contact != null)
 				{
+					System.out.println("save contact email in loop");
 					saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
 							Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
-
+					System.out.println("after save contact in loop");
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();
-					
+					System.out.println("save contact emailed activity");
 					// Add activity
 					ActivitySave.createEmailSentActivityToContact(email, contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
+					
+					contactsCount++;
 				}
 			}
+			
+		}
+		//total email including cc, bcc also
+		int totalEmail = toEmailSet.size() + ccEmailSet.size() + bccEmailSet.size();
+		
+		//total emails which are not in our contact list
+		int totalNonContactEmail = totalEmail - contactsCount;
+		
+		/*	If there are some non contact emails in to then this condition will be execute
+		 * 	Here all emails in cc and bcc we are taking as non contact email
+		 * 	only the emails are in "to" which are in our contact list are treated as contact email
+		 * 	for all non contact emails we will save a seperate activities
+		 */
+		if(totalNonContactEmail>0){
+			//add activity for non contact emails
+			ActivityUtil.createBulkActionActivity(ActivityType.SEND_EMAIL_BULK.toString(), ActivitySave.html2text(contactEmailWrapper.getMessage()), String.valueOf(totalNonContactEmail), "contacts",
+					contactEmailWrapper.getSubject(), EntityType.CONTACT);
 		}
 	}
 
@@ -284,16 +325,18 @@ public class ContactEmailUtil
 	{
 		// Set to avoid duplicate emails
 		Set<String> toEmailSet = new HashSet<String>();
-
-		// If only one email is given, add directly to set
-		if (!to.contains(","))
-		{
-			toEmailSet.add(StringUtils.trim(to));
-		}
-		else
-		{
-			// Splits multiple emails and add each one to set
-			toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+		
+		if(to.length()>0){
+			// If only one email is given, add directly to set
+			if (!to.contains(","))
+			{
+				toEmailSet.add(StringUtils.trim(to));
+			}
+			else
+			{
+				// Splits multiple emails and add each one to set
+				toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+			}
 		}
 
 		return toEmailSet;
@@ -348,7 +391,7 @@ public class ContactEmailUtil
 
 		// Remove trailing commas for to emails
 		ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);
-
+		System.out.println("in savecontactemail , get contact email object ");
 		contactEmail.from_name = fromName;
 
 		contactEmail.cc = cc;
@@ -357,7 +400,7 @@ public class ContactEmailUtil
 		contactEmail.trackerId = trackerId;
 
 		contactEmail.attachment_ids = documentIds;
-
+		System.out.println("before save contact email");
 		contactEmail.save();
 	}
 
@@ -650,100 +693,143 @@ public class ContactEmailUtil
 	}
 
 	/**
-	     * Gets the list of synced email account names of this Agile user
-	     * 
-	     * @return
-	     */
-	    public static EmailPrefs getEmailPrefs()
-	    {
-		EmailPrefs emailPrefs = new EmailPrefs();
-		AgileUser agileUser = AgileUser.getCurrentAgileUser();
-		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	 * Gets the list of synced email account names of this Agile user
+	 * 
+	 * @return
+	 */
+    public static EmailPrefs getEmailPrefs(){
+    	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+    	EmailPrefs emaillPrefs = getEmailPrefsByAgileUser(agileUser);
+    	return emaillPrefs;
+	}
+    
+    /**
+	 * Gets the list of synced email account names of this Agile user
+	 * and if limit of any user reached then return count;
+	 * 
+	 * @return
+	 */
+    public static int checkForDowngrade(int limit, List<AgileUser> users){
+    	int count = 0;
+    	for(AgileUser agileUser : users){
+    		EmailPrefs emailPrefs = getEmailPrefsByAgileUser(agileUser);
+    		count = emailPrefs.getEmailAccountsCount();
+    		if(count > limit)
+    			return count;
+    	}
+    	return count;
+	}
+	
+	/**
+	 * Gets the list of synced email account names of provided Agile user
+	 * @param agileUser
+	 * @return
+	 */
+    public static EmailPrefs getEmailPrefsByAgileUser(AgileUser agileUser){
+    	EmailPrefs emailPrefs = new EmailPrefs();
+    	Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 		boolean hasEmailAccountsConfigured = false;
 		boolean hasSharedEmailAccounts = false;
 		int emailAccountsCount = 0;
 		try
 		{
-		    DomainUser domainUser = agileUser.getDomainUser();
-		    if (domainUser != null)
+			DomainUser domainUser = agileUser.getDomainUser();
+			if(domainUser != null) {
+				if(StringUtils.isNotBlank(domainUser.email))
+					emailPrefs.setAgileUserName(domainUser.email);
+			}
+			// Get Gmail Social Prefs
+			Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
+			List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefsList(agileUser,
+					socialPrefsTypeEnum);
+			if(socialPrefsList != null && socialPrefsList.size() > 0) {
+				emailAccountsCount = emailAccountsCount + socialPrefsList.size();
+				List<String> socialUserNames = new ArrayList<String>();
+				for(SocialPrefs socialPrefs : socialPrefsList)
+					socialUserNames.add(socialPrefs.email);
+				emailPrefs.setGmailUserNames(socialUserNames);
+				hasEmailAccountsConfigured = true;
+			}
+			// Get Imap prefs
+			List<IMAPEmailPrefs> imapPrefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(agileUser);
+			if(imapPrefsList != null && imapPrefsList.size() > 0) {
+				emailAccountsCount = emailAccountsCount + imapPrefsList.size();
+				List<String> imapUserNames = new ArrayList<String>();
+				for(IMAPEmailPrefs imapPrefs : imapPrefsList)
+					imapUserNames.add(imapPrefs.user_name);
+				emailPrefs.setImapUserNames(imapUserNames);
+				hasEmailAccountsConfigured = true;
+			}
+			// Get Office365 prefs
+			List<OfficeEmailPrefs> officePrefsList = OfficeEmailPrefsUtil
+					.getOfficePrefsList(agileUser);
+			if(officePrefsList != null && officePrefsList.size() > 0) {
+				emailAccountsCount = emailAccountsCount + officePrefsList.size();
+				List<String> officeUserNames = new ArrayList<String>();
+				for(OfficeEmailPrefs officePrefs : officePrefsList)
+					officeUserNames.add(officePrefs.user_name);
+				emailPrefs.setExchangeUserNames(officeUserNames);
+				hasEmailAccountsConfigured = true;
+			}
+			// Get SMTP prefs
+		    List<SMTPPrefs> smtpPrefsList = SMTPPrefsUtil.getSMTPPrefsList(agileUser);
+		    if (smtpPrefsList != null && smtpPrefsList.size() > 0)
 		    {
-			if (StringUtils.isNotBlank(domainUser.email))
-			    emailPrefs.setAgileUserName(domainUser.email);
+				//emailAccountsCount = emailAccountsCount + smtpPrefsList.size();
+				List<String> smtpUserNames = new ArrayList<String>();
+				for (SMTPPrefs smtpPrefs : smtpPrefsList)
+				    smtpUserNames.add(smtpPrefs.user_name);
+				emailPrefs.setSmtpUserNames(smtpUserNames);
+				hasEmailAccountsConfigured = true;
 		    }
-		    // Get Gmail Social Prefs
-		    Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-		    List<SocialPrefs> socialPrefsList = SocialPrefsUtil.getPrefsList(agileUser, socialPrefsTypeEnum);
-		    if (socialPrefsList != null && socialPrefsList.size() > 0)
-		    {
-			emailAccountsCount = emailAccountsCount + socialPrefsList.size();
-			List<String> socialUserNames = new ArrayList<String>();
-			for (SocialPrefs socialPrefs : socialPrefsList)
-			    socialUserNames.add(socialPrefs.email);
-			emailPrefs.setGmailUserNames(socialUserNames);
-			hasEmailAccountsConfigured = true;
-		    }
-		    // Get Imap prefs
-		    List<IMAPEmailPrefs> imapPrefsList = IMAPEmailPrefsUtil.getIMAPPrefsList(agileUser);
-		    if (imapPrefsList != null && imapPrefsList.size() > 0)
-		    {
-			emailAccountsCount = emailAccountsCount + imapPrefsList.size();
-			List<String> imapUserNames = new ArrayList<String>();
-			for (IMAPEmailPrefs imapPrefs : imapPrefsList)
-			    imapUserNames.add(imapPrefs.user_name);
-			emailPrefs.setImapUserNames(imapUserNames);
-			hasEmailAccountsConfigured = true;
-		    }
-		    // Get Office365 prefs
-		    List<OfficeEmailPrefs> officePrefsList = OfficeEmailPrefsUtil.getOfficePrefsList(agileUser);
-		    if (officePrefsList != null && officePrefsList.size() > 0)
-		    {
-			emailAccountsCount = emailAccountsCount + officePrefsList.size();
-			List<String> officeUserNames = new ArrayList<String>();
-			for (OfficeEmailPrefs officePrefs : officePrefsList)
-			    officeUserNames.add(officePrefs.user_name);
-			emailPrefs.setExchangeUserNames(officeUserNames);
-			hasEmailAccountsConfigured = true;
-		    }
-		    // Get Shared Gmail Prefs
-		    List<SocialPrefs> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
-		    List<String> sharedGmailUsers = new ArrayList<String>();
-		    for (SocialPrefs socialPrefs : sharedGmailPrefs)
-			sharedGmailUsers.add(socialPrefs.email);
-		    emailPrefs.setSharedGmailUserNames(sharedGmailUsers);
-		    // Get Shared Imap Prefs
-		    List<IMAPEmailPrefs> sharedImapPrefs = getSharedIMAPPrefs(agileUserKey);
-		    List<String> sharedImapUsers = new ArrayList<String>();
-		    for (IMAPEmailPrefs imapEmailPrefs : sharedImapPrefs)
-			sharedImapUsers.add(imapEmailPrefs.user_name);
-		    emailPrefs.setSharedImapUserNames(sharedImapUsers);
-		    // Get Shared Office Prefs
-		    List<OfficeEmailPrefs> sharedOfficePrefs = getSharedToOfficePrefs(agileUserKey);
-		    List<String> sharedOfficeUsers = new ArrayList<String>();
-		    for (OfficeEmailPrefs officeEmailPrefs : sharedOfficePrefs)
-			sharedOfficeUsers.add(officeEmailPrefs.user_name);
-		    emailPrefs.setSharedExchangeUserNames(sharedOfficeUsers);
+		    
+			// Get Shared Gmail Prefs
+			List<SocialPrefs> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
+			List<String> sharedGmailUsers = new ArrayList<String>();
+			for(SocialPrefs socialPrefs : sharedGmailPrefs)
+				sharedGmailUsers.add(socialPrefs.email);
+			emailPrefs.setSharedGmailUserNames(sharedGmailUsers);
+			// Get Shared Imap Prefs
+			List<IMAPEmailPrefs> sharedImapPrefs = getSharedIMAPPrefs(agileUserKey);
+			List<String> sharedImapUsers = new ArrayList<String>();
+			for(IMAPEmailPrefs imapEmailPrefs : sharedImapPrefs)
+				sharedImapUsers.add(imapEmailPrefs.user_name);
+			emailPrefs.setSharedImapUserNames(sharedImapUsers);
+			// Get Shared Office Prefs
+			List<OfficeEmailPrefs> sharedOfficePrefs = getSharedToOfficePrefs(agileUserKey);
+			List<String> sharedOfficeUsers = new ArrayList<String>();
+			for(OfficeEmailPrefs officeEmailPrefs : sharedOfficePrefs)
+				sharedOfficeUsers.add(officeEmailPrefs.user_name);
+			emailPrefs.setSharedExchangeUserNames(sharedOfficeUsers);
+			// Get Shared smtp Prefs
+		   /* List<SMTPPrefs> sharedsmtpPrefs = getSharedToSMTPPrefs(agileUserKey);
+		    List<String> sharedsmtpUsers = new ArrayList<String>();
+		    for (SMTPPrefs smtpEmailPrefs : sharedsmtpPrefs)
+		    	sharedsmtpUsers.add(smtpEmailPrefs.user_name);
+		    emailPrefs.setSharedExchangeUserNames(sharedsmtpUsers);*/
 
-		    if ((sharedGmailUsers != null && sharedGmailUsers.size() > 0)
-			    || (sharedImapUsers != null && sharedImapUsers.size() > 0)
-			    || (sharedOfficeUsers != null && sharedOfficeUsers.size() > 0))
-			hasSharedEmailAccounts = true;
-		    int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null).getCurrentLimits()
-			    .getEmailAccountLimit();
-		    if (emailAccountsCount >= emailAccountLimitCount)
-			emailPrefs.setEmailAccountsLimitReached(true);
-		    else
-			emailPrefs.setEmailAccountsLimitReached(false);
-		    emailPrefs.setEmailAccountsLimit(emailAccountLimitCount);
-		    emailPrefs.setHasEmailAccountsConfigured(hasEmailAccountsConfigured);
-		    emailPrefs.setHasSharedEmailAccounts(hasSharedEmailAccounts);
-		    emailPrefs.setFetchUrls(getAllEmailFetchUrls(null, "0", "20"));
+			if((sharedGmailUsers != null && sharedGmailUsers.size() > 0)
+					|| (sharedImapUsers != null && sharedImapUsers.size() > 0)
+					|| (sharedOfficeUsers != null && sharedOfficeUsers.size() > 0))
+				hasSharedEmailAccounts = true;
+			int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null)
+					.getCurrentLimits().getEmailAccountLimit();
+			if(emailAccountsCount >= emailAccountLimitCount)
+				emailPrefs.setEmailAccountsLimitReached(true);
+			else
+				emailPrefs.setEmailAccountsLimitReached(false);
+			emailPrefs.setEmailAccountsCount(emailAccountsCount);
+			emailPrefs.setEmailAccountsLimit(emailAccountLimitCount);
+			emailPrefs.setHasEmailAccountsConfigured(hasEmailAccountsConfigured);
+			emailPrefs.setHasSharedEmailAccounts(hasSharedEmailAccounts);
+			emailPrefs.setFetchUrls(getAllEmailFetchUrls(null, "0", "20"));
 		}
 		catch(Exception e)
 		{
 		    System.out.println(e.getMessage());
 		}
 		return emailPrefs;
-	 }
+    }
 
 	/**
 	 * Returns the total count of email prefs of the current user
@@ -768,6 +854,24 @@ public class ContactEmailUtil
 		if (officePrefsList != null)
 			emailPrefsCount = emailPrefsCount + officePrefsList.size();
 		return emailPrefsCount;
+	}
+
+	/**
+	 * Returns the total count of smtp prefs of the current user
+	 * 
+	 * @return
+	 */
+	public static int getSMTPPrefsCount()
+	{
+		int smtpPrefsCount = 0;
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		
+		// Get SMTP Prefs
+		List<SMTPPrefs> smtpPrefsList = SMTPPrefsUtil.getSMTPPrefsList(agileUser);
+		if (smtpPrefsList != null)
+			smtpPrefsCount = smtpPrefsCount + smtpPrefsList.size();
+		
+		return smtpPrefsCount;
 	}
 
 	/**
@@ -870,6 +974,21 @@ public class ContactEmailUtil
 				.filter("sharedWithUsers", agileUserKey).list();
 		return sharedOfficePrefs;
 	}
+	
+	/**
+	 * Gets list of Shared Office prefs with this current user
+	 * 
+	 * @param agileUserKey
+	 * @return
+	 */
+	private static List<SMTPPrefs> getSharedToSMTPPrefs(Key<AgileUser> agileUserKey)
+	{
+		Objectify ofy = ObjectifyService.begin();
+		List<SMTPPrefs> sharedOfficePrefs = ofy.query(SMTPPrefs.class)
+				.filter("sharedWithUsers", agileUserKey).list();
+		return sharedOfficePrefs;
+	}
+
 
 	/**
 	 * Returns emails opened by individual user in specific duration

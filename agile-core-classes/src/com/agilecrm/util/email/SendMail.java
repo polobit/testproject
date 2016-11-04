@@ -81,6 +81,9 @@ public class SendMail
     
     public static final String INVOICE_CREATED = "subscription/payments/invoice_created";
     public static final String INVOICE_CREATED_SUBJECT = "Your Agile CRM Invoice";
+    
+    public static final String ADDON_PAYMENT_FAILED = "subscription/payments/failed/our_addon_payment_failed";
+    public static final String ADDON_PAYMENT_FAILED_SUBJECT = "Addon payment failed";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
@@ -162,6 +165,10 @@ public class SendMail
    	//Helpcenter
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
+   	
+   	//For invited user form email
+  	public static final String INVITED_USER = "inviteduser_authentication";
+  	public static final String INVITED_USER_SUBJECT = "Welcome to Agile CRM";
    	
     /**
      * From Name of email.

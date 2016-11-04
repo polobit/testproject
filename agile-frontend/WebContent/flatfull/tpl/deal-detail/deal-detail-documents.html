@@ -11,7 +11,13 @@
                     <div class="text">
                         {{agile_lng_translate 'deal-view' 'save-specific-document-information'}}
                     </div>
-					<div><a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+					<div class="btn-group">
+						<a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+						<a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+
+						<ul class="dropdown-menu pull-right" style="margin-top:3px;">
+									<li style="padding:0px 0px;border:0px;"><a href="#" class="add-deal-edocument-select">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
+						</ul>
 						<span class="deal-document-select upload-doc-field" style="display:none;">
 							<select class="form-control m-b-sm inline-block w m-r-sm" id="document-select">
 								<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
@@ -45,7 +51,13 @@
 			</ul>
 		</div>-->
 		{{#hasMenuScope 'DOCUMENT'}}
-		<div><a href="#" class="btn btn-sm btn-default btn-addon add-deal-document-select"><i class='icon-plus-sign'/></i> {{agile_lng_translate 'deal-view' 'select'}}</a>
+		<div class="btn-group">
+			<a href="#" class="btn btn-default btn-sm add-deal-document-select m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+			<a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+
+			<ul class="dropdown-menu pull-right" style="margin-top:3px;">
+				<li style="padding:0px 0px;border:0px;"><a href="#" class="add-deal-edocument-select">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
+			</ul>
 			<span class="deal-document-select" style="display:none;">
 				<select class="form-control w m-r-sm p-t-xs inline-block" id="document-select">
 					<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
@@ -58,7 +70,7 @@
 		</div>
 		{{/hasMenuScope}}
 	</div>
-			<ul id="deal-docs-model-list" class="ativity-block-ul list-group list-group-lg m-b-none""></ul>
+			<ul id="deal-docs-model-list" class="ativity-block-ul list-group list-group-lg m-b-none"></ul>
 		{{/if}} 
 </script>
 <script id="deal-docs-model-template" type="text/html">
@@ -74,7 +86,7 @@
 	</div>
 <div class="pull-left rightThumbView pos-rlt">
 <div class="pull-left contact-title-dynamic text-ellipsis">
-<a class="document-title text-md text-cap custom-color">{{name}}</a>
+	{{name}}
 </div>
 <div class="pull-right">
  <small class="edit-hover text-muted"> 
@@ -86,12 +98,15 @@
  
 
 	<div class="pos-rlt">
-		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>
+	{{#if url}}
+		{{network network_type}}&nbsp;&nbsp;<a href="{{url}}" target="_blank" class="pull-left"><i class="icon-external-link" title="Open Document"></i></a>{{/if}}	
 		<span class="pull-right">{{#is_mobile}}{{#hasMenuScope 'DOCUMENT'}}
 	  <div class="pos-abs pos-r-0 icons-text-sm" >
 		<span class="actions">
 			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="fa fa-edit"></i> </a>
+			{{#if url}}
 			<a title="{{agile_lng_translate 'contact-details' 'detach'}}"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
+			{{/if}}	
             <!--<a title="{{agile_lng_translate 'contact-details' 'delete'}}" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>
         </div>
@@ -105,7 +120,7 @@
 		{{#each contacts}}
            	{{#if id}}
 						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact">{{contact_name_necessary this}}</a>,
         				{{/if_contact_type}}
 						{{#if_contact_type "COMPANY"}}
         					<a href="#company/{{id}}" data="{{id}}" class="popover_contact">{{getPropertyValue properties "name"}}</a>,
@@ -126,7 +141,9 @@
 	  <div class="pos-abs pos-r-0 pos-b-0 icons-text-sm" style="bottom:-7px">
 		<span class="actions">
 			<a title="{{agile_lng_translate 'contact-details' 'edit'}}"  data="{{id}}" class="document-edit-deal-tab  m-r-sm"> <i class="fa fa-edit"></i> </a>
+			{{#if url}}
 			<a title="{{agile_lng_translate 'contact-details' 'detach'}}"  data="{{id}}" class="document-unlink-deal-tab"> <i class="icon-unlink"></i> </a>
+			{{/if}}	
             <!--<a title="{{agile_lng_translate 'contact-details' 'delete'}}" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>
         </div>

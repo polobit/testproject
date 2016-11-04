@@ -202,6 +202,7 @@ var AffiliateRouter = Backbone.Router.extend({
 				if(!template_ui)
 					  return;
 				$('#content').html($(template_ui));
+				setAffiliateDetailsFilter();
 				loadAdminAffiliateDetailListeners();
 				head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 					that.showDateRangePickerInAdminPanel();

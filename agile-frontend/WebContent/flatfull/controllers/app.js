@@ -56,6 +56,8 @@ $(function()
 	 * events, and dispatching routes
 	 */
 	Backbone.history.start();
+	App_Admin_Settings.contactsLimitreachedview()
+
 //	setup_our_domain_sync();
 });
 
@@ -106,7 +108,7 @@ function currentRoute(route)
 	}
 	
 	 showUpgradeNoty();
-
+	 
 	 // Check the user permission to view the current route.
 	 if(CURRENT_DOMAIN_USER)
 		 tight_acl.init_permissions();
@@ -196,6 +198,8 @@ function executeWebRulesOnRoute(){
 $(document).ready(function(){
   load_clickdesk_code();
   setTimeout(function(){$(".modal-header .close").html("&times;");}, 1000);
+
 });
 
 SUBSCRIBERS_SELECT_ALL = false;
+

@@ -224,19 +224,26 @@ function initializeTasksListeners(){
 			$(this).closest(".task-content-view").find(".taskComplete").attr("checked", false);
 				return;
 		}*/
-		showAlertModal("complete_task", "confirm", function() {
 		if(!getTaskListId(that)  && $(that).parent().attr('data')){
-			completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
-		}
-		else
-			completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
-		},
-		function() {
-								$(that).closest(".task-content-view").find(".taskComplete").attr("checked", false);
-				
-							}
-						);
+					completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
+				}
+				else
+					completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
+		
 
+		/*showAlertModal("complete_task", "confirm", 
+			function() {
+				if(!getTaskListId(that)  && $(that).parent().attr('data')){
+					completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
+				}
+				else
+					completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
+			},
+			function() {
+				$(that).closest(".task-content-view").find(".taskComplete").attr("checked", false);
+					
+			});
+*/
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
@@ -641,7 +648,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							if (isUpdate)
 								App_Calendar.allTasksListView.collection.remove(json);
 
-							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == _agile_get_translated_val('tasks', 'All Tasks') || json.owner_id == CURRENT_DOMAIN_USER.id))
+							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "{{agile_lng_translate 'tasks' 'All Tasks'}}" || json.owner_id == CURRENT_DOMAIN_USER.id))
 								App_Calendar.allTasksListView.collection.add(data);
 
 							App_Calendar.allTasksListView.render(true);
@@ -1251,7 +1258,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 						count = count - t ;
 						$('#tasks-list-template').find('.tasks-count').removeAttr('data');
 						$('#tasks-list-template').find('.tasks-count').attr('data' , count);
-						$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
+						$('#tasks-list-template').find('.tasks-count').text('('+count+' {{agile_lng_translate "other" "total"}})');
 					}
 					App_Calendar.allTasksListView.render(true);
 				}

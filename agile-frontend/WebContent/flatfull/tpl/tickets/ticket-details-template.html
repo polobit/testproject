@@ -337,7 +337,7 @@
           <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'canned-responses'}} <span class="caret"></span></a>
           <ul class="dropdown-menu" style="width:300px;">
             {{#each canned_responses}}
-            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}><span class="text-flow-ellipsis word-break-all line-clamp-2" style="width: 160px;float: left;">{{title}}</span> <div class="text-muted" style="width:90px;text-overflow: ellipsis;overflow: hidden;float: right;white-space: nowrap">({{owner_name}})</div> <div style="clear:both;"></div></a></li>
+            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}><span class="text-flow-ellipsis word-break-all line-clamp-2" style="width: 160px;float: left;">{{title}}</span> <div class="text-muted" style="width:90px;text-overflow: ellipsis;overflow: hidden;float: right;white-space: nowrap">{{#if owner_name}}({{owner_name}}){{/if}}</div> <div style="clear:both;"></div></a></li>
             {{/each}}
           </ul>
         </div>
@@ -564,8 +564,8 @@
     </div>
     <div style="max-width: 210px; margin:auto;">
     <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none"> <span class="">
-        {{getPropertyValue properties "first_name"}}
-        {{getPropertyValue properties "last_name"}} 
+        {{contact_name_necessary this}}
+        
       </span>
     </div>
     <div class="overflow-elipsis m-b-none">

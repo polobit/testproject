@@ -142,7 +142,7 @@ public class Activity extends Cursor
 	CONTACT_CREATE, COMPANY_CREATE,CONTACT_DELETE, COMPANY_DELETE, DEAL_ARCHIVE, DEAL_RESTORE, CONTACT_IMPORT, CONTACT_EXPORT, COMPANY_IMPORT, COMPANY_EXPORT, DEAL_IMPORT, DEAL_EXPORT, CAMPAIGN_CREATE, CAMPAIGN_EDIT, CAMPAIGN_DELETE, CAMPAIGN_RESTORE, MERGE_CONTACT, MERGE_COMPANY,
 	TICKET_CREATED, TICKET_DELETED, TICKET_ASSIGNED, TICKET_ASSIGNEE_CHANGED, TICKET_GROUP_CHANGED, TICKET_STATUS_CHANGE, TICKET_PRIORITY_CHANGE, TICKET_TYPE_CHANGE, TICKET_LABEL_ADD, TICKET_LABEL_REMOVE, TICKET_ASSIGNEE_REPLIED, TICKET_REQUESTER_REPLIED, TICKET_PRIVATE_NOTES_ADD, TICKET_MARKED_FAVORITE, TICKET_MARKED_UNFAVORITE, TICKET_MARKED_SPAM, TICKET_MARKED_UNSPAM, BULK_ACTION_MANAGE_LABELS, BULK_ACTION_CHANGE_ASSIGNEE, BULK_ACTION_EXECUTE_WORKFLOW, BULK_ACTION_CLOSE_TICKETS, BULK_ACTION_DELETE_TICKETS, TICKET_TAG_ADD, TICKET_TAG_REMOVE, SET_DUE_DATE, DUE_DATE_CHANGED, DUE_DATE_REMOVED,TICKET_CC_EMAIL_ADD, TICKET_CC_EMAIL_REMOVE, TICKET_NOTES_FORWARD, BULK_ACTION_FAVORITE_TICKETS, BULK_ACTION_SPAM_TICKETS,
 	DEAL_NOTES_UPDATED,DEAL_NOTES_DELETED, DEAL_EVENT_ADDED, DEAL_EVENT_DELETED, DEAL_EVENT_UPDATED,
-	DEAL_TASK_ADDED, DEAL_TASK_UPDATED, DEAL_TASK_DELETED 
+	DEAL_TASK_ADDED, DEAL_TASK_UPDATED, DEAL_TASK_DELETED, SEND_EMAIL_BULK 
     };
 
     /**
@@ -151,6 +151,7 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     public EntityType entity_type = null;
 
+    
     /**
      * Type of the activity.
      */
@@ -168,6 +169,10 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String label = null;
+    
+    
+    @NotSaved(IfDefault.class)
+    public String activityTypeArray = null;
 
     /**
      * Time of activity performed.
@@ -209,9 +214,21 @@ public class Activity extends Cursor
 	 */
 	@NotSaved
 	public Long domainUserID = null;
+	
+	/**
+     * stores related deal ids for each activity
+     */
+    @NotSaved(IfDefault.class)
+    public List<Long> related_deal_ids;
+    
+    /**
+     * stores related deal ids and name for each activity
+     */
+    @NotSaved(IfDefault.class)
+    public String related_deals;
 
     // Dao
-    private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
+    public static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
 
     public Activity()
     {

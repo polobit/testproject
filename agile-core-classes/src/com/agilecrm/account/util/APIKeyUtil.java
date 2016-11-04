@@ -1,6 +1,11 @@
 package com.agilecrm.account.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.SecureRandom;
 
 import javax.persistence.Id;
@@ -250,4 +255,59 @@ public class APIKeyUtil
 	String postURL = AnalyticsUtil.STATS_SERVER_URL+"/api";
 	HTTPUtil.accessURLAsynchronouslyUsingPost(postURL, data);
     }
+    /**
+     * @author Priyanka
+     * 
+	 * This method will validate tracking code
+	 * if tracking code entered wrong or if in 
+	 * copying/pasting user gave the space or enter
+	 * also it won't recognize(invalide tracking code)
+	 * 
+	 * @param trackingCode
+	 * @return a string msg
+	 */
+  public static String validateWebTrackingCode(String websiteURL)
+   	{
+   		try {
+   			String domain = NamespaceManager.get();
+   			
+   			URL url = new URL(websiteURL);
+   			URLConnection conn = url.openConnection();
+   			//for crome as well as it will work for the mozila also
+   			conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+   			// open the stream and put it into BufferedReader
+   			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+   			String websiteString = null;
+   			//reading the website data that contains Agile CRM tracking code or not
+   			for(String line=bufferedReader.readLine(); line != null; line=bufferedReader.readLine()) {
+   				  websiteString = websiteString + line;
+   				}
+   				
+   			bufferedReader.close();
+
+   			String JSAPIKey = APIKey.getAPIKey().js_api_key;
+   			String trackingCodeURL = "src=\"https://"+domain+".agilecrm.com/stats/min/agile-min.js\"";
+   			//beta URL
+   			//String trackingCodeURL = "src=\"https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/stats/min/agile-min.js\"";
+   			String domainAPIKey = "_agile.set_account('" + JSAPIKey + "', '" + domain + "');";               
+   			//String trackingCodeURL = "src=\"https://"+domain+".agilecrm.com/stats/min/agile-min.js\""; 
+   			String whiteListTrackingCode = "https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js";
+   			//if Agile CRM tracking code is not there then this msg will be returns
+   			 if(!websiteString.contains(trackingCodeURL) && ! websiteString.contains(whiteListTrackingCode))
+   				return "Tracking code is invalid or not exist.";
+   			
+   			if(!websiteString.contains(domainAPIKey))
+   				return "Domain name or API key is Invalid.";
+   			
+   			if(StringUtils.indexOf(websiteString, domainAPIKey) != StringUtils.lastIndexOf(websiteString, domainAPIKey))
+   				return "Tracking code exist more than one time.";
+   			} catch (IOException e) {
+   				e.printStackTrace();
+   				return "Tracking code is not exist.";
+   			}
+   		
+   	  return "Tracking code is valid.";
+   	}
 }

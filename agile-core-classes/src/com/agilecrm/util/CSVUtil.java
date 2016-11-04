@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -525,7 +526,7 @@ public class CSVUtil
 		    }
 
 		    tempContact.properties.add(field);
-		    tempContact.source = "import" ;
+		    tempContact.source = "importing" ;
 		    System.out.println("temp contact source is "+tempContact.source);
 
 		}// end of inner for loop
@@ -1648,6 +1649,7 @@ public class CSVUtil
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
+		System.out.println("StackTrace_of_deal_import"+ExceptionUtils.getFullStackTrace(e));
 		failedDeals++;
 	    }
 	}

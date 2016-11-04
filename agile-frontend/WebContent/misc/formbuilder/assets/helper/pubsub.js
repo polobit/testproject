@@ -31,12 +31,12 @@ var addAgileApi = function(json, api, callback)
 {
 	json = JSON.parse(json);
 	var agileapi = {};
-	agileapi.label = "Agile API";
+	agileapi.label = "";
 	agileapi.type = "input";
 	agileapi.value = api.js_api_key;
 
 	var agiledomain = {};
-	agiledomain.label = "Agile Domain";
+	agiledomain.label = "";
 	agiledomain.type = "input";
 	agiledomain.value = window.location.hostname.split('.')[0];
 
@@ -44,6 +44,13 @@ var addAgileApi = function(json, api, callback)
 	agileredirecturl.label = "Form Action / Redirect URL";
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
+
+	//adding for the inline submit
+	var agileconfirmationmsg = {};
+	agileconfirmationmsg.label = "Confirmation Message";
+	agileconfirmationmsg.type = "input";
+	agileconfirmationmsg.value = "Great! Thanks for filling out the form.";
+
 
 	var agilepreloadfields = {};
 	agilepreloadfields.label = "Preload Fields";
@@ -81,15 +88,16 @@ var addAgileApi = function(json, api, callback)
 
 	for ( var b = 0; b < json.length; b++)
 	{
-		json[b].fields["agileapi"] = agileapi;
-		json[b].fields["agiledomain"] = agiledomain;
 		json[b].fields["agileredirecturl"] = agileredirecturl;
+        json[b].fields["agileconfirmationmsg"] = agileconfirmationmsg;
 		json[b].fields["agilepreloadfields"] = agilepreloadfields;
 		json[b].fields["agileformidtag"] = agileformidtag;
 		json[b].fields["formemailnotification"] = formemailnotification;
 		json[b].fields["agileformcaptcha"]=agileformcaptcha;
 		json[b].fields["agiletransparentbackground"] = agiletransparentbackground;
 		json[b].fields["agiletheme"] = agiletheme;
+		json[b].fields["agileapi"] = agileapi;
+		json[b].fields["agiledomain"] = agiledomain;
 	}
 	callback(json);
 };
@@ -134,7 +142,34 @@ var addAgileFields = function(json, fields, callback)
 				i--;
 				continue;
 			}
+  
+			if(json[k][i].title == "Hidden Input"){
+					var hiddenagilefield = {};
+					hiddenagilefield.label = "Agile Field";
+					hiddenagilefield.type = "select";
+
+					var hiddenAgileFieldValues=[{ value : null, label : "Select", selected : true }];
+				
+					for ( var j = 0; j < fields.length; j++)
+					{
+						if(fields[j].field_type == "TEXT" || fields[j].field_type == "TEXTAREA" || fields[j].field_type == "LIST"){
+
+							var value = {};
+							value.value = fields[j].field_label;
+							value.label = fields[j].field_label;
+							value.selected = false;
+							hiddenAgileFieldValues.push(value);
+						}
+					}
+					hiddenagilefield.value=hiddenAgileFieldValues;
+					json[k][i].fields["agilefield"] = hiddenagilefield;
+
+			}
+			else{
 			json[k][i].fields["agilefield"] = agilefield;
+
+		   }
+			/*json[k][i].fields["agilefield"] = agilefield;*/
 		}
 	}
 	callback(json);

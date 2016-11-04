@@ -494,6 +494,7 @@ function openVerifyEmailModal(el) {
 						 $(this).find('input').focus();
 
 						parent.send_verify_email();
+						$('[data-toggle="tooltip"]').tooltip();
 					});
 
 					// On hidden

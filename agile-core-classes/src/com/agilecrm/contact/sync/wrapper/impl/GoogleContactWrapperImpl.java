@@ -413,7 +413,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	    boolean New = true;
 	    for(Note note:notes)
 	    {
-	    	if(StringUtils.equalsIgnoreCase(entry.getTextContent().getContent().getPlainText(), note.description))
+	    	if(note.description!=null && StringUtils.equalsIgnoreCase(entry.getTextContent().getContent().getPlainText(), ((note.description).replaceAll("\\r", ""))))
 	    			{
 	    				New=false;
 	    				break;

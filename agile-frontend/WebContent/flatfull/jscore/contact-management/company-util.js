@@ -245,7 +245,7 @@
 		
 		var map_view=_agile_get_prefs('MAP_VIEW');
 		if(map_view=="disabled"){
-			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='"+_agile_get_translated_val('contact-details','show-map')+"' id='enable_map_view'></i>");
+			$("#map_view_action",el).html("<i class='icon-plus text-sm c-p' title='{{agile_lng_translate 'contact-details' 'show-map'}}' id='enable_map_view'></i>");
 			return;
 		}
 			
@@ -260,7 +260,7 @@
 	
 			var script = document.createElement("script");
 			script.type = "text/javascript";
-			script.src = "https://maps.googleapis.com/maps/api/js?&sensor=false&callback=company_util.displayGoogleMap";
+			script.src = get_agile_gmap_url_with_key() + "&callback=company_util.displayGoogleMap";
 			document.body.appendChild(script);
 		}
 	
@@ -901,7 +901,7 @@ function company_fetchMails(company_detail_tab_scope,has_email_configured,mail_s
 		mail_server_url = mail_server_url + '&search_email='+encodeURIComponent(email);
 
 	// Fetches mails collection
-	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : 10,
+	mailsView = new Base_Collection_View({ url : mail_server_url , cursor : cursor, page_size : getMaximumPageSize(),
 	templateKey : "email-social-company", sort_collection : true, sortKey : "date_secs", descending : true, individual_tag_name : "li",
 	postRenderCallback : function(el)
 	{
@@ -1092,7 +1092,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/social-prefs/google-emails?from_email='+email;
 							html = '<i class="icon-google-plus" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
+								html = html+ ' ({{agile_lng_translate "contact-details" "shared"}})';
 						}
 					}
 					else if(email_server.toLowerCase()==='imap')
@@ -1126,7 +1126,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/imap/imap-emails?from_email='+email;
 							html = '<i class="icon-envelope-alt" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
+								html = html+ ' ({{agile_lng_translate "contact-details" "shared"}})';
 						}
 					}
 					else if(email_server.toLowerCase()==='exchange')
@@ -1160,7 +1160,7 @@ function fetch_mailserverurl_from_cookie(model)
 							final_url = 'core/api/office/office365-emails?from_email='+email;
 							html = '<i class="icon-windows" style="margin-right:4px;font-size: 1.2em"></i>'+email;
 							if(shared)
-								html = html+ ' ('+_agile_get_translated_val('contact-details','shared')+')';
+								html = html+ ' ({{agile_lng_translate "contact-details" "shared"}})';
 						}
 					}
 					if(final_url)
@@ -1230,7 +1230,7 @@ function showMailsInfoMessages()
 	{
 		if(($('#all-emails-info',App_Companies.companyDetailView.el).length === 0))
 		{
-			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">'+_agile_get_translated_val('mails','show-mails-error')+' </div>');
+			$('#company-mails',App_Companies.companyDetailView.el).append('<div id="all-emails-info" class="alert alert-info">{{agile_lng_translate "mails" "show-mails-error"}} </div>');
 		}
 	}
 	$('#company-mail-account-types', App_Companies.companyDetailView.el).find('.all-mails-loading').remove();
@@ -1263,7 +1263,7 @@ function killAllPreviousRequests()
 }
 function show_no_email_alert()
 {
-	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>'+_agile_get_translated_val('mails','mo-mails-error')+'</div>');
+	$('#company-mail', App_Companies.companyDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "mails" "mo-mails-error"}}</div>');
 }
 
 

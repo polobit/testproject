@@ -45,5 +45,9 @@ function getTimestamp(month_index, year)
 {
 	if ((year % 4) == 0)
 		monthArray[1] = 'February 29';
-	return Date.parse(monthArray[month_index] + ', ' + year) + 86400000 - 1;
+	var timestamp = Date.parse(monthArray[month_index] + ', ' + year) + 86400000 - 1;
+	if(timestamp){
+		return timestamp;
+	}
+	return Date.parse(monthArray[month_index] + ', ' + year).getTime() + 86400000 - 1;
 }

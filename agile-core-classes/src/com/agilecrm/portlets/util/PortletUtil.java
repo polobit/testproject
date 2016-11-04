@@ -865,6 +865,8 @@ public class PortletUtil {
 		try {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());			
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,3,3,1,1,Portlet.PortletRoute.DashBoard.toString());
 			Portlet onboardingPortlet = new Portlet("Onboarding",PortletType.CONTACTS,3,1,1,2,Portlet.PortletRoute.DashBoard.toString());
@@ -1660,7 +1662,7 @@ public class PortletUtil {
 			String cursor, Long starttime, Long endtime) {
 		
 		List<Activity> list = ActivityUtil.getActivititesBasedOnSelectedConditon(entitytype, userid, max, cursor,
-	        starttime, endtime, null);
+	        starttime, endtime,null,"");
 		System.out.println("Size of List"+list.size());
 		System.out.println(list);
 		return list;
@@ -1935,6 +1937,8 @@ public class PortletUtil {
  
  public static void addDefaultMarketingPortlets(){
 	try {
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
 	    Portlet onboardingMarketingPortlet = new Portlet("Marketing Onboarding",PortletType.CONTACTS,3,1,1,3,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet dummyMarketiPortlet = new Portlet("Dummy Marketing Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignStatsMarketingPortlet = new Portlet("Campaign stats",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
@@ -2058,6 +2062,8 @@ public class PortletUtil {
 	{
 		try 
 		{
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
 			Portlet dummySalesPortlet = new Portlet("Dummy Sales Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
 			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());

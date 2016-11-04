@@ -28,7 +28,7 @@ $(function(){
 		// after DOM ready.
 		if (document.readyState === "complete")
 		{
-			globalTwilioIOSetup();
+			//globalTwilioIOSetup();
 		}
 	}, 10000); // 15 sec
     
@@ -985,17 +985,18 @@ function fill_twilioio_numbers()
 	});
 }
 
-function setUpGlobalTwilio()
+function loadTwilioMin()
 {
-/*	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
-			{
-				console.log("i18PhoneFormat  loaded for validating numbers");
-			});*/
-	// Loads twilio min.js to intiliaze twilio call events
-	//head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
 	head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
-	
 	{
+		if(Twilio.Device!=null && Twilio.Device!=undefined)
+			initTwilioListeners()
+		else
+			loadTwilioMin();			
+	});	
+}
+function initTwilioListeners()
+{
 		Twilio.Device.setup(Twilio_Token, {debug: true});
 
 		if (Twilio_Start)
@@ -1092,9 +1093,7 @@ function setUpGlobalTwilio()
 						/*showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
 					 }		
 		});
-
-		Twilio.Device.disconnect(function(conn)
-		{
+Twilio.Device.disconnect(function(conn){
 			
 			console.log("Twilio call is disconnected");
 
@@ -1147,15 +1146,32 @@ function setUpGlobalTwilio()
 						return;
 					
 					if(!cnf_started){
-						// getting logs if the conference call is not there
-						getTwilioIOLogs(phoneNumber,null, TWILIO_CONTACT);
+						
 						// Change selected number if its different than calling number.
-						var selectedNumber = $('#contact_number').val();
-						if(selectedNumber != phoneNumber)
+						//var selectedNumber = $('#contact_number').val();
+
+						var contact_id = window.location.hash.split("/")[1];
+						if(contact_id == (TWILIO_CONTACT.id+""))
 						{
+						  var from_number = phoneNumber.replace(/[\+\-\(\)]/gi,'');
+						 // var patt = new RegExp(from_number);
+						  for(var i=0; i<TWILIO_CONTACT.properties.length; i++){
+						  	if(TWILIO_CONTACT.properties[i].name == "phone"){
+						  		var reg_exp = new RegExp(TWILIO_CONTACT.properties[i].value.replace(/[\+\-\(\)]/gi,''));
+						  		if(reg_exp.test(from_number)){
+						  			$("#contact_number").val(TWILIO_CONTACT.properties[i].value);
+						  			// getting logs if the conference call is not there
+									getTwilioIOLogs(phoneNumber,null, TWILIO_CONTACT);
+									break;
+						  		} 
+						  	}
+						  }
+						  /*if(selectedNumber != phoneNumber)
+						  {
 							$("#contact_number").val(phoneNumber);
+						  }*/
 						}
-				  }	
+				    }	
 				  }	
 			}catch(err){
 				console.log('error in log fetching' + err.message);
@@ -1413,7 +1429,18 @@ function setUpGlobalTwilio()
 			// true or false
 			console.log(presenceEvent.available);
 		});
-	});
+}
+function setUpGlobalTwilio()
+{
+
+	loadTwilioMin();
+/*	head.js(LIB_PATH + "jscore/telephony/i18PhoneFormat.js", function()
+			{
+				console.log("i18PhoneFormat  loaded for validating numbers");
+			});*/
+	// Loads twilio min.js to intiliaze twilio call events
+	//head.js("https://static.twilio.com/libs/twiliojs/1.2/twilio.min.js", function()
+	
 }
 function twiliocall(phoneNumber, toName,conferenceName, contact)
 {
@@ -1651,12 +1678,13 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 
 						//changed by prakash to add the last_called parameter and last_connected parameter of contact object on server side - 15/6/15
 							if(TWILIO_DIRECTION == "outbound-dial") {
-								twilioIOSaveContactedTime();	
-							//code to be written to save tag to cotacts for call campaign...
-							if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign){
-								updateTotalTime(callRespJson.duration);
-								saveTagForCampaign();
-							}
+								twilioIOSaveContactedTime(undefined, function(){
+									//code to be written to save tag to cotacts for call campaign...
+									if(CALL_CAMPAIGN.start && CALL_CAMPAIGN.call_from_campaign){
+										updateTotalTime(callRespJson.duration);
+										saveTagForCampaign();
+									}
+								});	
 							}
 											
 					} else {

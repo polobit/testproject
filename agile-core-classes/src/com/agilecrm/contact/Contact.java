@@ -543,25 +543,33 @@ public class Contact extends Cursor
 	{
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
-
-	// Execute trigger for contacts
-	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
-
-	// Update Email Bounce status
-	EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
-
-	// Boolean value to check whether to avoid notification on each contact.
-	boolean notification_condition = true;
-
-	// Reads arguments from method. If it is not null and then reading first
-	// parameter will judge whether to send notification or not
-	if (args != null && (args.length > 0))
-	    notification_condition = args[0];
-
-	if (notification_condition)
-	    // Execute notification for contacts
-	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
-
+	if(!(("importing").equals(this.source)))
+	{
+		// Execute trigger for contacts
+		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+	
+		// Update Email Bounce status
+		EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
+	
+		// Boolean value to check whether to avoid notification on each contact.
+		boolean notification_condition = true;
+	
+		// Reads arguments from method. If it is not null and then reading first
+		// parameter will judge whether to send notification or not
+		if (args != null && (args.length > 0))
+		    notification_condition = args[0];
+	
+		if (notification_condition)
+		    // Execute notification for contacts
+		    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
+		System.out.println("trigger ran for non import source" );
+	}
+	else
+	{
+		System.out.println("trigger didnot run for import" );
+		this.source = "import" ;
+	}	
+	
 	System.out.println("Time taken to process post save on contact : " + this.id + " time is : "
 		+ (System.currentTimeMillis() - time));
     }
@@ -1375,6 +1383,7 @@ public class Contact extends Cursor
 	{
 		try
 		{
+			System.out.println("Checking Owner Change id :"+ id +"  Owner_Key : " + owner_key + "  owner_updated : " + owner_updated);
 			// Set old owner only if owner_updated is false
 			if(id == null || owner_key == null || owner_updated)
 				return;
@@ -1386,9 +1395,14 @@ public class Contact extends Cursor
 			else
 				oldContact = ContactUtil.getContact(id);
 			
-			if(oldContact == null || oldContact.getContactOwnerKey() == null)
-				return;
+			System.out.println("OldContact " + oldContact);
 			
+			if(oldContact == null || oldContact.getContactOwnerKey() == null){
+				System.out.println("Old Contact Owner Key is null");
+				return;
+			}
+			
+			System.out.println("OldContact " + oldContact);
 			// If updated owner key doesn't match with old owner key
 			if(!oldContact.getContactOwnerKey().equals(owner_key))
 			{

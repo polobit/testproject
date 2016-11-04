@@ -21,6 +21,26 @@ $(function()
 		return getSystemPropertyValue(items, name);
 	});
 
+	Handlebars.registerHelper('fillSelectOptionWithNumbers', function(start, end)
+	{
+		var optionsHtml = "";
+		for(var i = start; i <= end; i++){
+			optionsHtml = optionsHtml+"<option value="+i+">"+i+"</option>";
+		}
+		return optionsHtml;
+	});
+
+	Handlebars.registerHelper('checkPlan', function(plan, options)
+	{
+		if(!plan)
+			return options.inverse(this);
+		var plan_name = USER_BILLING_PREFS.plan.plan_type;
+		var plan_fragments = plan_name.split("_");
+		if(plan_fragments[0].toLowerCase() == plan)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -1177,7 +1197,7 @@ $(function()
 			}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -1213,7 +1233,8 @@ $(function()
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 			element = element.replace("_", " ")
-
+			if(element=='last campaign_emaild')
+				element = element.replace("_", " ")
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
 
 		});
@@ -6600,7 +6621,7 @@ $(function()
 		}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -7322,9 +7343,9 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		return dashboard_name;
 	});
 
-	Handlebars.registerHelper('is_acl_allowed', function(options)
+	Handlebars.registerHelper('is_acl_allowed', function(id, options)
 	{
-		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers(id))
 			return options.inverse(this);
 		else
 			return options.fn(this);
@@ -7621,7 +7642,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -7745,10 +7766,14 @@ Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
 	else
 		return options.inverse(this);
 });
-
 Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
 {
 	console.log("Not found " + key + " : " + value);
+});
+
+Handlebars.registerHelper('getContactNameProperty', function(contact, prop_key)
+{ 
+	return getContactName(contact, prop_key);
 });
 
 //returning 0sec in case of no time
@@ -7814,7 +7839,6 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 	
 });
 
-
 /**
  * 
  */
@@ -7873,3 +7897,46 @@ Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
 		return options.inverse(this); 
 
 });
+
+Handlebars.registerHelper('isEmailCreditsExists', function(options)
+{
+	var credits = _billing_restriction.email_credits_count;
+	if (credits != undefined && credits > 0)
+		return options.fn(this);
+	return options.inverse(this);
+});
+Handlebars.registerHelper('brandedemailstatus', function(options)
+{
+	var count = getPendingEmails();
+	if(count == 0)
+		return options.inverse(this);
+	return options.fn(this);
+
+});
+Handlebars.registerHelper('calc_Products_Total', function(products)
+{
+	var iSubTotal=0
+	for (var i = 0; i < products.length; i++)
+	{
+		iSubTotal+=products[i].total
+	}
+	return iSubTotal;
+});
+Handlebars.registerHelper('retrevie_Deal_Value', function(element)
+{
+	var iDealAmt=element.currency_conversion_value;
+	if(!$.isNumeric(iDealAmt))
+		iDealAmt=element.expected_value;
+	return iDealAmt;
+});
+Handlebars.registerHelper('contactlimitcount', function()
+{
+	return USER_BILLING_PREFS.planLimits.contactLimit;
+
+});
+
+Handlebars.registerHelper('contactsnamestatus', function(options)
+	{
+
+		return (_agile_get_custom_contact_display_type() == "FTL") ?  options.fn(this) : options.inverse(this);
+	});

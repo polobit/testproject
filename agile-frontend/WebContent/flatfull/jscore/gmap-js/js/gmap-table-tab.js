@@ -6,7 +6,7 @@ function gmap_create_table_view(Search_Url){
 		url : Search_Url,	// ""
 		templateKey : "gmap-table", 
 		individual_tag_name : "tr",
-		cursor : true, page_size : 25,
+		cursor : true, page_size : getMaximumPageSize(),
 		sort_collection:false,
 		postRenderCallback : function(el)
 		{

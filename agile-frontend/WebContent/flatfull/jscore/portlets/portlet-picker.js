@@ -1,3 +1,4 @@
+
 /*
  * Appends the model (portlet) to its specific div, based on the portlet_type
  * as div id (div defined in portlet-add.html)
@@ -38,7 +39,7 @@ function organize_portlets(base_model) {
 /*
  * Appends the outer view and inner view of each portlet.
  */
-function set_p_portlets(base_model) {
+function set_p_portlets(base_model,model_list_element_fragment_portlets) {
 	console.log("collection----" + Portlets_View.collection.length);
 	var routeJSON = {
 		"Contacts" : "contacts",
@@ -76,8 +77,8 @@ function set_p_portlets(base_model) {
 		$('#portlets').parents('.route_Portlet').show();
 	}
 	var that = this;
-	portlet_utility.getOuterViewOfPortlet(base_model, this.el, function() {
-		portlet_utility.getInnerViewOfPortlet(base_model, that.el);
+	portlet_utility.getOuterViewOfPortlet(base_model, this.el,model_list_element_fragment_portlets, function() {
+		portlet_utility.getInnerViewOfPortlet(base_model, that.el,model_list_element_fragment_portlets);
 		
 	});
 
@@ -89,8 +90,12 @@ function set_p_portlets(base_model) {
  */
 function setPortletContentHeight(base_model) {
 	if (base_model.get("name") == "Stats Report" || base_model.get("name") == "Deal Goals") {
-
-		var $resize_ele = $('#' + base_model.get("id")).parent().find(
+		var $resize_ele;
+		if(this.Portlets_View.model_list_element_fragment.childElementCount>0)
+					$resize_ele = $(this.Portlets_View.model_list_element_fragment.querySelector('[id="'+base_model.get("id")+'"]'))
+					.parent().find('.stats_report_portlet');
+		else
+		$resize_ele = $('#' + base_model.get("id")).parent().find(
 				'.stats_report_portlet');
 		var size_y = base_model.get("size_y"), resized_val = 0;
 
@@ -112,8 +117,11 @@ function setPortletContentHeight(base_model) {
 		$resize_ele.css(css);
 
 	} else if (base_model.get("name") == "Mini Calendar") {
-
-		var $resize_ele = $('#' + base_model.get("id")).parent().find(
+		var $resize_ele;
+		if(this.Portlets_View.model_list_element_fragment.childElementCount>0)
+					$resize_ele = $(this.Portlets_View.model_list_element_fragment.querySelector('[id="'+base_model.get("id")+'"]'))
+					.parent().find('.portlet_body_calendar');
+		else $resize_ele = $('#' + base_model.get("id")).parent().find(
 				'.portlet_body_calendar');
 		var size_y = base_model.get("size_y"), resized_val = 0;
 
@@ -132,8 +140,12 @@ function setPortletContentHeight(base_model) {
 
 		$resize_ele.css(css);
 	} else {
-
-		var $resize_ele = $('#' + base_model.get("id")).parent().find(
+ 		var $resize_ele;
+		if(this.Portlets_View.model_list_element_fragment.childElementCount>0)
+					$resize_ele = $(this.Portlets_View.model_list_element_fragment.querySelector('[id="'+base_model.get("id")+'"]'))
+					.parent().find('.portlet_body');
+		else 
+			$resize_ele= $('#' + base_model.get("id")).parent().find(
 				'.portlet_body');
 		var size_y = base_model.get("size_y"), resized_val = 0;
 
@@ -210,3 +222,83 @@ function append_activity(base_model) {
 	if($('#tomorrow-heading', this.el).css('display')=="none" && $('#today-heading', this.el).css('display')=="none")
 		$('#next-week-heading', this.el).hide();
 }
+
+
+
+var Portlets_Collection_View = Base_Collection_View.extend({
+
+	appendItem : function(base_model, append)
+			{
+
+				if (append)
+				{
+					$(this.model_list_element).append(this.createListView(base_model).render().el);
+					return;
+				}
+
+				console.log("appendItem");
+				set_p_portlets(base_model,this.model_list_element_fragment);
+				//this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
+			},
+
+	buildCollectionUI : function(result)
+{
+				$(this.el).html(result);
+				// If collection is Empty show some help slate
+				if (this.collection.models.length == 0)
+				{
+					// Add element slate element in collection template send
+					// collection template to show slate pad
+					fill_slate("slate", this.el, this.options.slateKey);
+				}
+
+				// Used to store all elements as document fragment
+				this.model_list_element_fragment = document.createDocumentFragment();
+
+				
+				/*
+				 * Iterates through each model in the collection and creates a
+				 * view for each model and adds it to model-list
+				 */
+				_(this.collection.models).each(function(item)
+				{ // in case collection is not empty
+
+					this.appendItem(item);
+				}, this);
+
+				this.model_list_element = $('.gridster > div:visible', this.el)
+				$(this.model_list_element).append(this.model_list_element_fragment);
+
+				var callback = this.options.postRenderCallback;
+
+				/*
+				 * If callback is available for the view, callback functions is
+				 * called by sending el(current view html element) as parameters
+				 */
+				if (callback && typeof (callback) === "function")
+				{
+					// startFunctionTimer("postRenderCallback");
+					// execute the callback, passing parameters as necessary
+					callback($(this.el), this.collection);
+				}
+				
+				hideTransitionBar();
+
+				// Add checkboxes to specified tables by triggering view event
+				$('body').trigger('agile_collection_loaded', [
+					this.el
+				]);
+
+				// $(this.el).trigger('agile_collection_loaded', [this.el]);
+
+				// For the first time fetch, disable Scroll bar if results are
+				// lesser
+				if (callback && typeof (callback) === "function"){}
+					// endFunctionTimer("postRenderCallback");
+
+				// printCurrentDateMillis("render end");
+
+				return this;
+}
+
+    });

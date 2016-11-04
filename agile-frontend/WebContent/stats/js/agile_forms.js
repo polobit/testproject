@@ -9,93 +9,99 @@ var _agile_synch_form_v4 = function()
 	}
 
 	var agile_button = document.getElementsByClassName("agile-button")[0];
-	if (agile_button)
+	if(agile_button)
 		agile_button.setAttribute("disabled", "disabled");
 
 	var agile_error_msg = document.getElementById("agile-error-msg");
-	if (agile_error_msg)
-	{
+	if(agile_error_msg) {
 		var spin = document.createElement("img");
 		spin.src = "https://s3.amazonaws.com/PopupTemplates/form/spin.gif";
 		agile_error_msg.appendChild(spin);
 	}
 
 	var agile_form = document.forms["agile-form"];
-	var agile_redirect_url = agile_form["_agile_redirect_url"].value;
+	if(!agile_form) return;
+
+	var agile_redirect_url = "#";
+	if(agile_form["_agile_redirect_url"]) {
+		agile_redirect_url = agile_form["_agile_redirect_url"].value
+	}
 
 	var agile_contact = {};
 	var agile_address = {};
-	var agile_multiple_checkbox = "";
-	var agile_tags = undefined;
 	var agile_notes = [];
 	var form_data = {};
 	var new_contact = true;
 
-	for ( var i = 0; i < agile_form.length; i++)
-	{
-		var field_name = agile_form[i].getAttribute("name");
-		var field_value = agile_form[i].value;
-		var field_id = agile_form[i].getAttribute("id");
-		var field_type = agile_form[i].getAttribute("type");
-		if (field_type == "hidden")
-			agile_form[i].setAttribute("disabled", "disabled");
+	var field, l;
+    if (typeof agile_form == 'object' && agile_form.nodeName == "FORM") {
+    	var len = agile_form.elements.length;
+        for (var i = 0; i < len; i++) {
+            field = agile_form.elements[i];
+            
+            if(field.id && field.id == "g-recaptcha-response") continue;
 
-		if ((field_type == "radio" || field_type == "checkbox") && !agile_form[i].checked)
-			continue;
-         /*recaptcha will identify the user input on the basis of the id*/
-		if(field_id == "g-recaptcha-response")
-			continue;
-
-		if (field_name && field_value)
-		{
-			form_data[field_id] = field_value;
-			if ('address, city, state, country, zip'.indexOf(field_name) != -1)
-				agile_address[field_name] = field_value;
-			else if (field_name == "tags" && (field_id=="_agile_form_id_tags" || ((field_type=="checkbox" || 
-				field_type=="radio") && agile_form[i].checked)))
-			{
-				if (agile_tags)
-					agile_tags = agile_tags + ',' + field_value;
-				else
-					agile_tags = field_value;
-			}
-			else if (field_name == "note")
-			{
-				var agile_note = {};
-				agile_note.subject = agile_form[i].parentNode.parentNode.getElementsByTagName("label")[0].innerHTML;
-				agile_note.description = field_value;
-				agile_notes.push(agile_note);
-			}
-			else if(agile_form[i].checked &&(field_type == "checkbox" &&  (typeof agile_tags == undefined || agile_tags)))
-			   {
-				if (agile_multiple_checkbox)
-					agile_multiple_checkbox = agile_multiple_checkbox + ',' + field_value;
-				else{
-					agile_multiple_checkbox = field_value;
+            if (field.name && !field.disabled && field.type != 'file' && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+            	
+            	form_data[field.id] = field.value;
+            	
+            	if ('address, city, state, country, zip'.indexOf(field.name) != -1) {
+            		agile_address[field.name] = field.value;
+            	} else if (field.type == 'select-multiple') {
+                    l = agile_form.elements[i].options.length; 
+                    for (var j = 0; j < l; j++) {
+                        if(field.options[j].selected && field.options[j].value) {
+                        	if(agile_contact.hasOwnProperty(field.name)) {
+                        		agile_contact[field.name] = agile_contact[field.name] + ", " + field.options[j].value;
+                        	} else {
+                        		agile_contact[field.name] = field.options[j].value;
+                        	}
+                        }
                     }
-				  agile_contact[field_name] = agile_multiple_checkbox;  
-				
-			}
+                } else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
+                	if(field.value) {
+                		if(agile_contact.hasOwnProperty(field.name)) {
+                        	agile_contact[field.name] = agile_contact[field.name] + "," + field.value;
+	                    } else {
+	                    	agile_contact[field.name] = field.value;
+	                    }
+                	}
+                }
+            
+                if (field.name == "note" && agile_contact["note"]) {
+					var agile_note = {};
+					var closestParentLabelEl = agile_find_closest_element(field, function (el) {
+					if(el.getElementsByTagName("label")[0])
+					    return (" " + el.getElementsByTagName("label")[0].className + " ").replace(/[\n\t]/g, " ").indexOf(" agile-label ") != -1;
+					return false;
+					});
+					
+					var labelTextForFieldEl = "";
+					if(closestParentLabelEl) {
+						labelTextForFieldEl = closestParentLabelEl.getElementsByTagName("label")[0];
+					}
 
-			else
-				if(!agile_multiple_checkbox)
-				agile_contact[field_name] = field_value;
-		}
-		else if (field_value)
-		{
-			form_data[field_id] = field_value;
-		}
+					if(labelTextForFieldEl) {
+						agile_note.subject = labelTextForFieldEl.innerText || labelTextForFieldEl.textContent || "Form Note";
+					} else {
+						agile_note.subject = "Form Note";
+					}
+					agile_note.subject = agile_note.subject.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+					agile_note.description = agile_contact["note"];
+					if(agile_note.description)
+						agile_notes.push(agile_note);
+					delete agile_contact["note"];
+				}
 
-	}
-	
+            }
+        }
+    }
+
 
 	// If address present, add to contact
 	agile_address = JSON.stringify(agile_address);
 	if (agile_address.length > 2)
 		agile_contact.address = agile_address;
-
-	if (agile_tags)
-		agile_contact.tags = agile_tags;
 
 	var agile_email = agile_contact.email;
 	if (agile_email)
@@ -135,6 +141,7 @@ var _agile_synch_form_v4 = function()
 		}
 		agile_contact=arr_obj[0];
 	}	
+	 agile_contact['agile_source'] = "form";
 	_agile.create_contact(agile_contact, { success : function(data)
 	{
 		var contact_id = data.id;

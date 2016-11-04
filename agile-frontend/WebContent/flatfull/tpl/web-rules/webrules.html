@@ -29,6 +29,7 @@
 						<th style="width:40%">{{agile_lng_translate 'web-rules' 'action'}}</th>
 						<th style="width:10%"></th>
 						<th style="width:10%"></th>
+                        <th style="width:10%"></th>
               	  </tr>
            		</thead>
             	<tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
@@ -37,7 +38,12 @@
             </div>
 			</div>
 		{{else}}
-			<div class="panel wrapper">
+
+             <!-- redirect to template page -->
+
+             <img id="loader" src="img/loader.gif" class="img-responsive " alt="loading gif" style="position: absolute;top: 35%;left: 42%;" />
+
+			<!-- <div class="panel wrapper">
    				<div class="slate-content">
 					<div class="box-left pull-left m-r-md">
  	           			<img alt="Clipboard" src="{{getS3ImagePath '/img/clipboard.png'}}">
@@ -48,7 +54,9 @@
             			<a href="#webrules-templates" class="m-t-xs btn blue btn-slate-action btn-info btn-addon btn-sm"><i class="fa fa-plus-circle">
                         </i>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a><br><br>
 						<p>{{agile_lng_translate 'web-rules' 'web-rules-to-work'}} <code class="text-black">&lt;/body&gt;</code> {{agile_lng_translate 'web-rules' 'tag'}}</p>
-						<div id="whitelist-disabled"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+						<div id="whitelist-disabled">
+
+
 <pre class="prettyprint" id="api_track_webrules_code">
 &lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
 &lt;/script&gt;
@@ -60,7 +68,9 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 &lt;/script&gt;
 </pre>
 						</div>
-						<div id="whitelist-enabled" class="hide"><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+						<div id="whitelist-enabled" class="hide">
+
+
 <pre class="prettyprint" id="api_track_webrules_code">
 &lt;script id="_agile_min_js" async type="text/javascript" src=src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
 &lt;/script&gt;
@@ -88,7 +98,7 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
                 height: 304px;
                 " allowfullscreen=""></iframe>
             </div>
-            <br>
+            <br> -->
 		{{/if}}
     </div>
     <div class="col-md-3">
@@ -140,6 +150,15 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 {{/if}}
 </div>
 </td>
+<td>
+<div class="table-resp hide" id="web_report">
+<div class="pull-left text-ellipsis">
+<a href="#webrule-report/{{id}}" class="stop-propagation"><i class="icon icon-bar-chart"></i>
+</a>
+ </div>
+</div>
+</td>
+
 <td>
 <div style="display:none;"><i class="icon-move"></i></div>
 </td>

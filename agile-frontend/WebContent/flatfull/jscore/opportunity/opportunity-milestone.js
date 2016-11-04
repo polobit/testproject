@@ -147,7 +147,7 @@ function dealsFetch(base_model)
 
 	// Define sub collection
 	var dealCollection = new Base_Collection_View({ url : base_model.get("url"), templateKey : dealsTemplate, individual_tag_name : 'li', 
-		sort_collection : false, cursor : true, page_size : 20, postRenderCallback : function(el)
+		sort_collection : false, cursor : true, page_size : getMaximumPageSize(), postRenderCallback : function(el)
 		{   
 			$(el).find('ul li').each(function(index){
 				$(this).addClass("deal-color");
@@ -169,9 +169,20 @@ function dealsFetch(base_model)
 	// Fetch task from DB for sub collection
 	dealCollection.collection.fetch({ success : function(data)
 	{
-		// Add sub collection in model of main collection.
-		base_model.set('dealCollection', dealCollection.collection);
-		$('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el)
+		if(base_model.isUpdateCollection)
+        {
+           	$.each(dealCollection.collection.models , function(m){
+                base_model.get('dealCollection').models.push(m);
+          	});
+            $('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').find('ul').append(dealCollection.$el.find('li'));
+            delete base_model.isUpdateCollection ;
+        }
+ 		else
+        {
+        	// Add sub collection in model of main collection.
+           base_model.set('dealCollection', dealCollection.collection);
+           $('#' + base_model.get("heading").replace(/ +/g, '') + '-list-container').html(dealCollection.render(true).el);
+        }
 		console.log($('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
 		$('#' + base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
 		var heading =  base_model.get("heading"); 

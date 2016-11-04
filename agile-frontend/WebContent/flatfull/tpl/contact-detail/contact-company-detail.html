@@ -16,10 +16,7 @@
         <div class="panel-body">
 				<div class="text-center pos-rlt">
 							<form id="contact-container">
-								<a href="#" class="tooltip_info" data-placement="top"
-									data-toggle="tooltip"
-									title="<i class='icon-edit icon-white icon'></i> {{agile_lng_translate 'contact-details' 'change-picture'}}"
-									style='text-decoration: none;'> 
+								<a href="#" style='text-decoration: none;'> 
 								<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:57px" type="submit"
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a> <input type="hidden" id="upload_url" name="gravatarurl">
@@ -934,8 +931,7 @@
         		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" />
     	</div>
     	<div class="agile-thumb agile-thumb-view">
-        		<a class="text-cap">	{{getPropertyValue properties "first_name"}}
-        		{{getPropertyValue properties "last_name"}} </a>  </br>      		
+        		<a class="text-cap">	{{contact_name_necessary this}}</a>  </br>      		
         		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
     	</div>
 	</td>
@@ -989,7 +985,7 @@
 							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
                     		<i class="caret"></i>
                 			</button> -->
-                			<ul class="pull-right dropdown-menu  p-l"  role="menu">
+                			<ul class="pull-right dropdown-menu  p-l filter-dynamic-scrollbar"  role="menu" style="overflow-y:auto;max-height:400px">
                 			
                 			
                 			<form id="contact-static-fields" class="">

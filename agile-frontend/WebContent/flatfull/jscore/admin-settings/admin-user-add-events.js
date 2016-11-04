@@ -1,26 +1,38 @@
 function bindAdminChangeAction(el, data)
 {
+	//Remove deals from newscopes
+	var newscopesarray = $("input[type=checkbox]", $('div[name="newscopes"]', el));
+	var newMenuScopesArray = $("input[type=checkbox]", $('div[name="newMenuScopes"]', el));
+	$.each(newscopesarray, function(index, data) {
+				if($(newscopesarray[index]).attr("id") == "deals-privilege"){	
+					newscopesarray.splice(index,1);}
+				else if($(newscopesarray[index]).attr("id") == "calendar-privilege"){
+					newscopesarray.splice(index,1);
+				}
+				});
 	$('input[name="is_admin"]', el).on('change', function(e){
+
 	var is_admin = $(this).is(":checked");
-	if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
+	var id = $('input[name="id"]', el).val();
+	if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers(id))
 	{
 		if(is_admin == false)
-			$("input[type=checkbox]", $('div[name="newscopes"]', el)).removeAttr("disabled");
+			newscopesarray.removeAttr("disabled");
 		else
-			$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" ).attr("disabled", "disabled");
+			newscopesarray.prop("checked", "checked" ).attr("disabled", "disabled");
 		
 		$('#calendar-privilege', el).trigger("change");
 		$('#deals-privilege', el).trigger("change");
 	}else{
 		if(is_admin == true)
 		{
-			$("input[type=checkbox]", $('div[name="newscopes"]', el)).prop("checked", "checked" )
+			newscopesarray.prop("checked", "checked" )
 			$("input[type=checkbox]", $('div[name="newMenuScopes"]', el)).prop("checked", "checked" )
 		}
 	}
 	});
 	
-	$("input[type=checkbox]", $('div[name="newscopes"]', el)).on('change', function(e){
+	newscopesarray.on('change', function(e){
 		if(!this.checked){
 			$(this).removeAttr("checked");
 		}
@@ -76,12 +88,16 @@ function bindAdminChangeAction(el, data)
 		{
 			if(!$(this).is(':checked')){
 				$('input[value="VIEW_CALENDAR"]', el).attr("disabled", "disabled");
-				$('input[value="MANAGE_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="CREATE_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="UPDATE_CALENDAR"]', el).attr("disabled", "disabled");
+				$('input[value="DELETE_CALENDAR"]', el).attr("disabled", "disabled");
 			}
 			else{
 				if(_plan_restrictions.is_ACL_allowed[0]()){
 					$('input[value="VIEW_CALENDAR"]', el).removeAttr("disabled");
-					$('input[value="MANAGE_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="CREATE_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="UPDATE_CALENDAR"]', el).removeAttr("disabled");
+					$('input[value="DELETE_CALENDAR"]', el).removeAttr("disabled");
 				}
 			}
 		}
@@ -90,10 +106,11 @@ function bindAdminChangeAction(el, data)
 }
 
 // Allow acls for specific domains
-function checkForACLExceptionalUsers(){
-	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi"];
+function checkForACLExceptionalUsers(id){
+	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi", "orcamortgages", "nexusworkspace", "gaspumptv"];
 	if($.inArray(CURRENT_DOMAIN_USER.domain, specialUsers) != -1)
 		return true;
-	else
-		return false;
+	else if (id && ADDON_INFO.aclUsers && $.inArray(parseInt(id), ADDON_INFO.aclUsers) != -1)
+		return true;
+	return false;
 }

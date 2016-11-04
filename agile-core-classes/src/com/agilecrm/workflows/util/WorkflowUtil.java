@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -320,5 +322,28 @@ public class WorkflowUtil
 		workflow.save();
 		
 		return workflow;
+	}
+	
+	/**
+	 * Fetch all workflows and check the max number of nodes among them.
+	 * @return int
+	 */
+	public static int getMaxWorkflowNodes(){
+			int maxNodes = 0;
+	    	List<Workflow> workflows = getAllWorkflows();
+	    	for(Workflow workflow : workflows){
+	    		if(workflow.rules != null){
+	    			try{
+	    			JSONObject json = new JSONObject(workflow.rules);
+	    			JSONArray nodes = json.getJSONArray("nodes");
+	    			if(nodes.length() > maxNodes)
+	    				maxNodes = nodes.length();
+	    			}catch(JSONException e){
+	    				e.printStackTrace();
+	    			}
+	    			
+	    		}
+	    	}
+	    	return maxNodes;
 	}
 }
