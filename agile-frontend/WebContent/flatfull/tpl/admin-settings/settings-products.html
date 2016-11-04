@@ -49,23 +49,25 @@
     </div>
 </script>
 <script id="admin-settings-products-model-template" type="text/html">
-    <td class='data' data='{{id}}' title="{{name}}">
-        <div class="table-resp">
+    <td class='data v-middle' data='{{id}}' title="{{name}}">
+        <div class="table-resp v-middle">
             {{name}}
         </div>
 	</td>
-    <td class='data'>
+    <td class='data v-middle'>
         {{currencySymbol}}{{price}}
     </td>
-    <td class='data'>
-        {{sku}}
+    <td class='data v-middle'>
+        <div class="table-resp" title="{{sku}}">
+            {{sku}}
+        </div>
     </td>
-	<td class='data'>
+	<td class='data v-middle'>
         <div class="table-resp" title="{{description}}">
             {{description}}
         </div>
 	</td>
-    <td class='data'>
+    <td class='data v-middle'>
         {{#if image}}
             <div class="imgholder  thumb-wrapper thumb">
                 <img class="w-full" src="{{image}}"  align="center" />
@@ -74,7 +76,7 @@
             &nbsp;
         {{/if}}    
     </td>
-   <td align="right" class="b-r-none p-l-none" style="width:10%;">
+   <td align="right" class="b-r-none p-l-none v-middle" style="width:10%;">
         <div style="visibility:hidden;">
             <a id="edit-product-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
                 <i title="Edit Product" class="task-action icon icon-edit"></i>

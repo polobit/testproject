@@ -35,9 +35,10 @@ var admin_products = {
 				$("#product-field-add-modal").modal('hide');
 				$("body").removeClass("modal-open").css("padding-right", "");
 				var product_model_json = App_Admin_Settings.productsGridView.collection.get(model.id);
-				if(product_model_json)
+				if(product_model_json){
 					product_model_json.set(model);	
-				else{
+					App_Admin_Settings.productsGridView.render(true);
+				}else{
 					App_Admin_Settings.productsGridView.collection.add(model);
 					App_Admin_Settings.productsGridView.render(true);
 				}
