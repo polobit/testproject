@@ -254,18 +254,18 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 }
 
 .background-img-sales{
-  background: url("/flatfull/img/allIcons.png") no-repeat;
-  background-position: 0 -5px;
+  background: url("/flatfull/img/alliconsvg.png") no-repeat;
+  background-position: 0 0px;
   border: 0 none;'
 }
 .background-img-marketing{
-  background: url("/flatfull/img/allIcons.png") no-repeat;
+  background: url("/flatfull/img/alliconsvg.png") no-repeat;
   display: inline-block;
-  background-position: 49% -5px;
+  background-position: 49% 0px;
 }
 .background-img-service{
-   background: url("/flatfull/img/allIcons.png") no-repeat;
-   background-position: 98% -5px;
+   background: url("/flatfull/img/alliconsvg.png") no-repeat;
+   background-position: 98% 0px;
 }
 
 </style>
