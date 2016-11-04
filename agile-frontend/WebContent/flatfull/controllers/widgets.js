@@ -43,8 +43,8 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
-                "knowlarity" : "knowlarity",
-                "knowlarity/:id" : "knowlarity",
+                "Knowlarity" : "Knowlarity",
+                "Knowlarity/:id" : "Knowlarity",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
@@ -384,7 +384,7 @@ var WidgetsRouter = Backbone.Router
                 }
             },
 
-            knowlarity : function(id){
+            Knowlarity : function(id){
                 addConfigurableWidget(id, "Knowlarity", "knowlarity-login");
             },
             
