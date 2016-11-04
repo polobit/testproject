@@ -7912,12 +7912,12 @@ Handlebars.registerHelper('permissionshanged', function(value)
 });
 Handlebars.registerHelper('permissionChanged', function(value)
 {
-	var changes = value.replace("[","").replace("]","");
-	var el = "<span> Permissions added are ";
+	var changes = value.replace("[","").replace("]","").replace("_"," ");
+	var el = "<span> ";
 	var elements = changes.split(",");
 	$.each(elements, function(index)
 	{
-			el = el.concat(elements[index] + " ");
+			el = el.concat(elements[index] + "  ");
 	});
 		return new Handlebars.SafeString(el);
 });
@@ -7932,12 +7932,12 @@ Handlebars.registerHelper('PermissionsExist', function(value,options)
 
 Handlebars.registerHelper('permissiondeleted', function(value)
 {
-	var changes = value.replace("[","").replace("]","");
-	var el = "<span> Permissions deleted  are ";
+	var changes = value.replace("[","").replace("]","").replace("_"," ");
+	var el = "<span> ";
 	var elements = changes.split(",");
 	$.each(elements, function(index)
 	{
-			el = el.concat(elements[index] + " ");
+			el = el.concat(elements[index] + "  ");
 	});
 		return new Handlebars.SafeString(el);
 });

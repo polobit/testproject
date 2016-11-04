@@ -2524,6 +2524,20 @@ public class ActivityUtil
 			activity.save();
 		}
 	}
+	public static void adminPanelAddAffliateAmount(DomainUser domainuser , ActivityType activityType , String CustName,Integer amount)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.email;
+			activity.custom2 = CustName ;
+			activity.custom3 = amount.toString(); 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
+			activity.save();
+		}
+	}
 	
 }
 

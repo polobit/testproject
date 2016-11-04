@@ -710,7 +710,7 @@ public class AdminPanelAPI
     		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
     		details.setAmount(details.getAmount() + amount * 100);
     		AffiliateDetailsUtil.save(details);
-    		ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT,userdomain);
+    		ActivityUtil.adminPanelAddAffliateAmount( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT,userdomain,amount);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WebApplicationException(Response
