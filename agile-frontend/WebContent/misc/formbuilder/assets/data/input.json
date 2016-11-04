@@ -572,6 +572,11 @@
                 "type": "input",
                 "value": "Text Area"
             },
+            "placeholder": {
+                "label": "Placeholder",
+                "type": "input",
+                "value": "placeholder"
+            },
             "textarea": {
                 "label": "Starting Text",
                 "type": "textarea",
