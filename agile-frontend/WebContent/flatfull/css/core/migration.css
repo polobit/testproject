@@ -2086,6 +2086,14 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 
  /*End of of Profile Pic Tab Admin Settings UI CSS*/
 
+/*Start of Admins Settings Users Tab Responsive UI CSS*/
+
+ .agile-table td>div.table-resp{
+  width: 100% !important;
+ }
+
+/*End of Admins Settings Users Tab Responsive UI CSS*/
+
 }
 
 /*End of Mobile Device Media Query CSS(767px)*/
