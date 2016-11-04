@@ -1,0 +1,52 @@
+<script id="Knowlarity-login-template" type="text/html">
+	<div>
+		<form  id="Knowlarity_login_form" name="braintree_login_form" method="post">
+	    	<fieldset>	
+				<label><b>{{agile_lng_translate 'widgets' 'enter-your-braintree-details'}} </b></label>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="merchant_id" placeholder="{{agile_lng_translate 'widgets' 'merchant-id'}}" class="input-medium required widget_input_box form-control" value="" name="merchant_id">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="public_key" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'public-key'}}" value="" name="public_key">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="private_key" class="input-medium required widget_input_box form-control"  placeholder="{{agile_lng_translate 'widgets' 'private-key'}}" value="" name="private_key">
+						</input>
+					</div>
+				</div>	
+				<div class="control-group form-group">					
+			  		<div class="controls">
+			    		<select name="braintree_custom_field" id="braintree_custom_field" class="required col-md-10 form-control w-full m-b-sm">
+			      			<option class="default-select" value="">{{agile_lng_translate 'deal-view' 'select'}}</option>	
+			      			<option value="email">{{agile_lng_translate 'other' 'email'}}</option>
+			      			{{#each this.custom_fields}}
+								<option value="{{field_label}}">{{field_label}} </option>
+							{{/each}}			      
+			    		</select>
+			  		</div>
+				</div>
+				<p class="text-sm">
+					{{agile_lng_translate 'widgets' 'braintree-note-desc'}} 
+					{{agile_lng_translate 'portlets' 'please'}} 
+					{{#isAdmin}}
+						<a class="text-info" href="#custom-fields">{{agile_lng_translate 'widgets' 'create-one'}}</a>
+					{{else}}
+						{{agile_lng_translate 'widgets' 'create-one'}}
+					{{/isAdmin}}
+					 {{agile_lng_translate 'widgets' 'if-necessary'}}
+				</p>
+				<div class="text-center">		
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
+				</div>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
