@@ -173,6 +173,12 @@ public class DefaultWidgets {
 				 "Know your customers Klout score, a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.",
 				 "/widgets/klout.js", "widgets/klout-lg-logo.png",
 				 "widgets/klout-md-logo.png", null, WidgetType.SOCIAL));
+		widgets.add(new Widget(
+				 "Knowlarity",
+				 "Knowlarity",
+				 "Know your customers Klout score, a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.",
+				 "/widgets/knowlarity.js", "widgets/knowlarity-lg-logo.png",
+				 "widgets/knowlarity-md-logo.png", null, WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
