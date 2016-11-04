@@ -77,12 +77,14 @@ public class InviteUserServlet extends HttpServlet {
 			request.setAttribute("user_email", email);
 
 			// Update domain user
-			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+			DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email.toLowerCase());
 			if (domainUser == null)
 				throw new Exception("We have not been able to locate any user "+email);
 			
-			if (DomainUserUtil.getDomainUserCountFromEmail(updated_email.toLowerCase()) > 0)
-				throw new Exception("User with this email address " + updated_email + " already exists.");
+			if(!email.equalsIgnoreCase(updated_email)){
+				if (DomainUserUtil.getDomainUserCountFromEmail(updated_email.toLowerCase()) > 0)
+					throw new Exception("User with this email address " + updated_email + " already exists.");
+			}
 
 			System.out.println("domainuser with that email address = " + domainUser);
 			domainUser.password = password;

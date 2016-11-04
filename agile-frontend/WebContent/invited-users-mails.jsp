@@ -30,12 +30,12 @@
 		CSS_PATH = FLAT_FULL_PATH;
 	}
 
-	//String redirectHomeURL = (String) request.getAttribute("redirectionurl");
-	String redirectHomeURL = request.getParameter("redirectionurl");
+	String redirectHomeURL = (String)request.getSession().getAttribute("RedirectionHomeURL");
+	//String redirectHomeURL = request.getParameter("redirectionurl");
 	System.out.println("After JSP code in new file");
 	//List<String> restrictedDomains = new List<String>();
 	//restrictedDomains.add("zoho").add("yandex").add("hotmail").add("yahoo").add("");
-	String[] restrictedDomains = {"zoho","yandex","hotmail","yahoo","aol","outlook","rossbergercom","fastmail","usa.gov","yopmail"};
+	String[] restrictedDomains = {"zoho","yandex","hotmail","yahoo","aol","outlook","rossbergercom","fastmail","usa.gov","yopmail","gmail"};
 	String email = (String)request.getSession().getAttribute("Email");
 	//String email="hi@yopmail.com";
 	boolean is_restricted= false;
