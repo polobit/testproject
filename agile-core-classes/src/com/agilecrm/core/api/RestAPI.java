@@ -43,8 +43,7 @@ import com.agilecrm.util.PHPAPIUtil;
 import com.agilecrm.zapier.util.ZapierUtil;
 
 @Path("/rest/api")
-public class RestAPI
-{
+public class RestAPI {
     /**
      * Used to create contact based on data given
      * 
@@ -58,67 +57,53 @@ public class RestAPI
     @Path("contact")
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
-    public String createContact(String data)
-    {
+    public String createContact(String data) {
 	System.out.println("Input received = " + data);
-	try
-	{
+	try {
 	    Contact contact = new Contact();
-	    List<ContactField> properties = new ArrayList<ContactField>();
 	    String[] tags = new String[0];
 
 	    // Get data and iterate over keys
+
 	    JSONObject obj = new JSONObject(data);
 	    Iterator<?> keys = obj.keys();
-	    while (keys.hasNext())
-	    {
+	    while (keys.hasNext()) {
 		String key = (String) keys.next();
 
 		if (key.equals("flag"))
 		    continue;
 		// If key equals to tags, format tags String and prepare tags
 		// array
-		if (key.equals("tags"))
-		{
+		if (key.equals("tags")) {
 		    tags = ZapierUtil.getModifiedTag(obj.getString(key));
 		}
-		// Prepare Contact Field and add to properties list
-		else
-		{
-		    ContactField field = new ContactField();
-		    String value = obj.getString(key);
-		    field.name = key;
-		    field.value = value;
-		    field.type = PHPAPIUtil.getFieldTypeFromName(key);
-		    properties.add(field);
-		}
 	    }
+
+	    List<ContactField> properties = ZapierUtil
+		    .getAllPropertiesCreateContact(data);
 
 	    int count = 0;
 
 	    if (obj.has("email"))
-		count = ContactUtil.searchContactCountByEmail(obj.getString("email").toLowerCase());
+		count = ContactUtil.searchContactCountByEmail(obj.getString(
+			"email").toLowerCase());
 
 	    System.out.println("contacts available" + count);
-	    if (count != 0)
-	    {
+	    if (count != 0) {
 		System.out.println("duplicate contact");
-		if (obj.has("flag"))
-		{
-		    if (obj.getString("flag").equals("YES"))
-		    {
+		if (obj.has("flag")) {
+		    if (obj.getString("flag").equals("YES")) {
 			return ZapierUtil.updateContactCanBeDone(data);
+		    } else {
+			throw new WebApplicationException(
+				Response.status(Response.Status.BAD_REQUEST)
+					.entity("Sorry, duplicate contact found with the same email address.")
+					.build());
 		    }
-		    else
-		    {
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-				.entity("Sorry, duplicate contact found with the same email address.").build());
-		    }
-		}
-		else
-		{
+		} else {
 		    System.out.println("No flag selected");
-		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    throw new WebApplicationException(Response
+			    .status(Response.Status.BAD_REQUEST)
 			    .entity("No flag selected").build());
 		}
 
@@ -133,12 +118,12 @@ public class RestAPI
 
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);
-	}
-	catch (Exception e)
-	{
+	} catch (Exception e) {
 	    e.printStackTrace();
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate contact found with the same email address.").build());
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, duplicate contact found with the same email address.")
+			    .build());
 	}
     }
 
@@ -150,94 +135,155 @@ public class RestAPI
      * @param apiKey
      *            Agile API key
      * @return returns contact object as String
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonGenerationException 
-     * @throws JSONException 
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
+     * @throws JSONException
      */
     @PUT
     @Path("contact")
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8;")
-    public String updateContact(String data) throws JsonGenerationException, JsonMappingException, IOException, JSONException
-    {
-	    System.out.println("Input received = " + data);
-	    
-	    // Get data and check if email is present
-	    JSONObject obj = new JSONObject(data);
-	    String[] tags = new String[0];
-	    ObjectMapper mapper = new ObjectMapper();
-	    if (!obj.has("email"))
-		return null;
+    public String updateContact(String data) throws JsonGenerationException,
+	    JsonMappingException, IOException, JSONException {
+	System.out.println("Input received = " + data);
 
-	    // Search contact if email is present else return null
-	    Contact contact = ContactUtil.searchContactByEmailZapier(obj.getString("email").toLowerCase());
+	// Get data and check if email is present
+	JSONObject obj = new JSONObject(data);
+	String[] tags = new String[0];
+	ObjectMapper mapper = new ObjectMapper();
+	if (!obj.has("email"))
+	    return null;
 
-	    if (contact == null)
-	    {
-		System.out.println("No contact found first");
+	// Search contact if email is present else return null
+	Contact contact = ContactUtil.searchContactByEmailZapier(obj.getString(
+		"email").toLowerCase());
 
-		if (obj.has("flag"))
-		{
-		    if (obj.getString("flag").equals("YES"))
-		    {
-			return ZapierUtil.createContactCanBeDone(data);
-		    }
-		    else
-		    {
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-				    .entity("New contact found, but create contact is diasbled").build());
-		    }
-		}
+	if (contact == null) {
+	    System.out.println("No contact found first");
 
-	    }
-	    
-	    contact.contact_company_id = null;
-
-	    // Iterate data by keys ignore email key value pair
-	    Iterator<?> keys = obj.keys();
-	    List<ContactField> input_properties = new ArrayList<ContactField>();
-	    while (keys.hasNext())
-	    {
-		String key = (String) keys.next();
-		if (key.equals("flag"))
-		    continue;
-		if (key.equals("email"))
-		    continue;
-		else if (key.equals("tags"))
-		{
-		    tags = ZapierUtil.getModifiedTag(obj.getString(key));
-		}
-		else
-		{
-		    // Create and add contact field to contact
-		    JSONObject json = new JSONObject();
-		    if (key.equals("address"))
-		    {
-
-			String zapaddress = obj.getString(key);
-			JSONObject jsonzap = new JSONObject(zapaddress);
-			String oldaddress = contact.getContactFieldValue("ADDRESS");
-			json = ZapierUtil.modifyZapierAddress(oldaddress,jsonzap,key);
-
-		    }
-		    else
-		    {
-			json.put("name", key);
-			json.put("value", obj.getString(key));
-		    }
-
-		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
-		    input_properties.add(field);
+	    if (obj.has("flag")) {
+		if (obj.getString("flag").equals("YES")) {
+		    return ZapierUtil.createContactCanBeDone(data);
+		} else {
+		    throw new WebApplicationException(
+			    Response.status(Response.Status.BAD_REQUEST)
+				    .entity("New contact found, but create contact is diasbled")
+				    .build());
 		}
 	    }
-	    // Partial update, send all properties
-	    contact.addPropertiesData(input_properties);
-	    if (tags.length > 0)
-		contact.addTags(PHPAPIUtil.getValidTags(tags));
 
-	    // Return contact object as String
-	    return mapper.writeValueAsString(contact);
+	}
+
+	contact.contact_company_id = null;
+
+	// Iterate data by keys ignore email key value pair
+	Iterator<?> keys = obj.keys();
+	List<ContactField> input_properties = new ArrayList<ContactField>();
+	while (keys.hasNext()) {
+	    String key = (String) keys.next();
+	    if (key.equals("flag"))
+		continue;
+	    if (key.equals("email"))
+		continue;
+	    else if (key.equals("tags")) {
+		tags = ZapierUtil.getModifiedTag(obj.getString(key));
+	    } else {
+		// Create and add contact field to contact
+		JSONObject json = new JSONObject();
+		if (key.equals("address")) {
+
+		    String zapaddress = obj.getString(key);
+		    JSONObject jsonzap = new JSONObject(zapaddress);
+		    String oldaddress = contact.getContactFieldValue("ADDRESS");
+		    json = ZapierUtil.modifyZapierAddress(oldaddress, jsonzap,
+			    key);
+
+		} else if (key.equals("phone")) {
+		    json.put("name", "phone");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "work");
+		} else if (key.equals("home_phone_zapier")) {
+		    json.put("name", "phone");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "home");
+		} else if (key.equals("mobile_phone_zapier")) {
+		    json.put("name", "phone");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "mobile");
+		} else if (key.equals("main_phone_zapier")) {
+		    json.put("name", "phone");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "main");
+		} else if (key.equals("home_fax_zapier")) {
+		    json.put("name", "phone");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "home fax");
+		} else if (key.equals("work_fax_zapier")) {
+		    json.put("name", "phone");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "work fax");
+		} else if (key.equals("website")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "URL");
+		} else if (key.equals("skype_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "SKYPE");
+		} else if (key.equals("twitter_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "TWITTER");
+		} else if (key.equals("linkedin_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "LINKEDIN");
+		} else if (key.equals("facebook_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "FACEBOOK");
+		} else if (key.equals("xing_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "XING");
+		} else if (key.equals("feed_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "FEED");
+		}else if (key.equals("googleplus_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "GOOGLE_PLUS");
+		}else if (key.equals("flickr_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "FLICKR");
+		}else if (key.equals("github_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "GITHUB");
+		}else if (key.equals("youtube_website_zapier")) {
+		    json.put("name", "website");
+		    json.put("value", obj.getString(key));
+		    json.put("subtype", "YOUTUBE");
+		} else {
+		    json.put("name", key);
+		    json.put("value", obj.getString(key));
+		}
+
+		ContactField field = mapper.readValue(json.toString(),
+			ContactField.class);
+		input_properties.add(field);
+	    }
+	}
+	// Partial update, send all properties
+	contact.addPropertiesData(input_properties);
+	if (tags.length > 0)
+	    contact.addTags(PHPAPIUtil.getValidTags(tags));
+
+	// Return contact object as String
+	return mapper.writeValueAsString(contact);
 
     }
 
@@ -274,35 +320,32 @@ public class RestAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String addNoteToContactsBasedOnEmail(Note note, @PathParam("email") String email) throws JSONException
-    {
+    public String addNoteToContactsBasedOnEmail(Note note,
+	    @PathParam("email") String email) throws JSONException {
 
 	System.out.println("email to search on" + email);
 	System.out.println("Notes " + note);
 	JSONObject object = new JSONObject();
 
-	if (note == null)
-	{
+	if (note == null) {
 	    object.put("error", "Note could not be added");
 	    return object.toString();
 	}
 
-	Contact contact = ContactUtil.searchContactByEmailZapier(email.toLowerCase());
-	if (contact == null)
-	{
-	    object.put("error", "No contact found with email address \'" + email + "\'");
+	Contact contact = ContactUtil.searchContactByEmailZapier(email
+		.toLowerCase());
+	if (contact == null) {
+	    object.put("error", "No contact found with email address \'"
+		    + email + "\'");
 	    return object.toString();
 	}
 
-	try
-	{
+	try {
 	    note.addRelatedContacts(contact.id.toString());
 	    note.save();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(note);
-	}
-	catch (Exception e)
-	{
+	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	return null;
@@ -320,38 +363,38 @@ public class RestAPI
     @Path("company")
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Contact createCompany(Contact contact)
-    {
+    public Contact createCompany(Contact contact) {
 	// Check if the email exists with the current email address
-	boolean isDuplicate = ContactUtil.isExists(contact.getContactFieldValue("EMAIL"));
+	boolean isDuplicate = ContactUtil.isExists(contact
+		.getContactFieldValue("EMAIL"));
 
 	// Throw non-200 if it exists
-	if (isDuplicate)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate contact found with the same email address.").build());
+	if (isDuplicate) {
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, duplicate contact found with the same email address.")
+			    .build());
 	}
 
-	boolean isDuplicateCompany = ContactUtil.isCompanyExist(contact.getContactFieldValue("NAME"));
+	boolean isDuplicateCompany = ContactUtil.isCompanyExist(contact
+		.getContactFieldValue("NAME"));
 
 	// Throw non-200 if it exists
-	if (isDuplicateCompany)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Sorry, duplicate company found with the same name.").build());
+	if (isDuplicateCompany) {
+	    throw new WebApplicationException(
+		    Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, duplicate company found with the same name.")
+			    .build());
 	}
 	contact.save();
 	UserInfo user_info = SessionManager.get();
-	if (user_info != null && !("agilecrm.com/js").equals(user_info.getClaimedId())
+	if (user_info != null
+		&& !("agilecrm.com/js").equals(user_info.getClaimedId())
 		&& !("agilecrm.com/dev").equals(user_info.getClaimedId())
-		&& !("agilecrm.com/php").equals(user_info.getClaimedId()))
-	{
-	    try
-	    {
+		&& !("agilecrm.com/php").equals(user_info.getClaimedId())) {
+	    try {
 		ActivitySave.createTagAddActivity(contact);
-	    }
-	    catch (Exception e)
-	    {
+	    } catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
@@ -372,58 +415,65 @@ public class RestAPI
     @Path("/newTagsByUpdate/{tag}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContactsBasedOnTagFilter(@PathParam("tag") String tag) throws JSONException
-    {
+    public List<Contact> getContactsBasedOnTagFilter(
+	    @PathParam("tag") String tag) throws JSONException {
 	List<Contact> contactList = new ArrayList<Contact>();
 	String filterJson = "";
-	
-	filterJson = "{'rules':[{'LHS':'tags','CONDITION':'EQUALS','RHS':'"+tag+"'}],'or_rules':[],'contact_type':'PERSON'}";
-	
-	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
 
-	
-	List<Contact> contactList1 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("10"), null, "-updated_time"));
-	
-	List<Contact> contactList2 = new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt("10"), null, "-created_time"));
-	
+	filterJson = "{'rules':[{'LHS':'tags','CONDITION':'EQUALS','RHS':'"
+		+ tag + "'}],'or_rules':[],'contact_type':'PERSON'}";
+
+	ContactFilter contact_filter = ContactFilterUtil
+		.getFilterFromJSONString(filterJson);
+
+	List<Contact> contactList1 = new ArrayList<Contact>(
+		contact_filter.queryContacts(Integer.parseInt("10"), null,
+			"-updated_time"));
+
+	List<Contact> contactList2 = new ArrayList<Contact>(
+		contact_filter.queryContacts(Integer.parseInt("10"), null,
+			"-created_time"));
+
 	Map<Long, Contact> unsortMap = new HashMap<Long, Contact>();
-	
-	System.out.println("========================  Log 1  =================================== ");
-	for (Contact c : contactList1)
-	{
-	    	System.out.println("========================  Log 2  =================================== ");
-		int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
-		if(index != -1 && index >= 0)
-		    unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
-		
-		System.out.println("========================  Log 3  =================================== ");
-		
+
+	System.out
+		.println("========================  Log 1  =================================== ");
+	for (Contact c : contactList1) {
+	    System.out
+		    .println("========================  Log 2  =================================== ");
+	    int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
+	    if (index != -1 && index >= 0)
+		unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
+
+	    System.out
+		    .println("========================  Log 3  =================================== ");
+
 	}
-	
-	System.out.println("========================  Log 4  =================================== ");
-	for (Contact c : contactList2)
-	{
-	    	System.out.println("========================  Log 5  =================================== ");
-		int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
-		if(index != -1 && index >= 0)
-		    unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
+
+	System.out
+		.println("========================  Log 4  =================================== ");
+	for (Contact c : contactList2) {
+	    System.out
+		    .println("========================  Log 5  =================================== ");
+	    int index = Arrays.asList(c.tags.toArray()).indexOf(tag);
+	    if (index != -1 && index >= 0)
+		unsortMap.put(c.tagsWithTime.get(index).createdTime, c);
 	}
-	
-	Map<Long, Contact> treeMap = new TreeMap<Long, Contact>(new Comparator<Long>()
-	{
-	    @Override
-	    public int compare(Long o1, Long o2)
-	    {
-		return o2.compareTo(o1);
-	    }
-	});
+
+	Map<Long, Contact> treeMap = new TreeMap<Long, Contact>(
+		new Comparator<Long>() {
+		    @Override
+		    public int compare(Long o1, Long o2) {
+			return o2.compareTo(o1);
+		    }
+		});
 	treeMap.putAll(unsortMap);
 
-	for (Map.Entry<Long, Contact> entry : treeMap.entrySet())
-	{
+	for (Map.Entry<Long, Contact> entry : treeMap.entrySet()) {
 	    contactList.add((Contact) entry.getValue());
 	}
-	System.out.println("========================  Log 6  =================================== ");
+	System.out
+		.println("========================  Log 6  =================================== ");
 	return contactList;
     }
 
