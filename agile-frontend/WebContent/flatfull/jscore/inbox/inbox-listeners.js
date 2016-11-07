@@ -62,7 +62,7 @@ function inboxFlagListners(){
 	});
 	$("div.unread").css({"font-weight":"bold"});
 
-	var color=['b-l-info','b-l-primary','b-l-warning','b-l-success',''];
+	/*var color=['b-l-info','b-l-primary','b-l-warning','b-l-success',''];
 	var j =0;
     $('#mails-list-view ul li').each(function(i){
         $(this).addClass(color[j]);
@@ -70,7 +70,7 @@ function inboxFlagListners(){
         	j = 0
         else
         	j++
-    });
+    });*/
     $('.read, .unread').unbind('click').click(function(e) {
 	    var dataVal = $(this).attr("data-val");
 		var from_email = $('#inbox-email-type-select').attr("from_email");
