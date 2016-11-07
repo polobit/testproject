@@ -296,7 +296,7 @@ Proceed to Trial
 <div class="tab-pane" role="tab-panel" id="email-content" onclick="document.getElementById('email-quantity').focus();">
 <div class="row" style="display: flex;align-items:stretch;flex-flow:row wrap;">
 <!-- start of purchase email -->
-<div class="col-md-6 col-sm-6 col-xs-12  p-r-none" id="purchase-email" style="flex: 1 0;height: auto;">
+<div class="col-md-6 col-sm-6 col-xs-12 {{#is_mobile}} p-r {{else}} p-r-none {{/is_mobile}}" id="purchase-email" style="flex: 1 0;height: auto;">
  
 </div>
 <!-- end of purchase email -->
@@ -351,7 +351,7 @@ Proceed to Trial
 <!--end of second onfo dashlet -->
 {{else}}
 <!-- Detailedinfo first dashlet -->
-		<div class="col-md-12 col-sm-12 col-xs-12 pos-abs pos-t-0 ">
+		<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} pos-t-0 ">
 			<div class="panel panel-default m-t-sm">
 				<div class="panel-heading ">
 				Free Emails
@@ -359,31 +359,31 @@ Proceed to Trial
 				<div class="panel-body p-md freePlanDetails">
 			    	<form class="bs-example form-horizontal">
 		           		<div class="form-group m-b-sm">
-		              		<label class="col-sm-6 control-label p-t-none">
+		              		<label class="col-sm-6 col-xs-6 control-label p-t-none">
 		              		{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
 		              		</label>
-		              		<div class="col-sm-6">
+		              		<div class="col-sm-6 col-xs-6">
 		                	{{getFreeEmailsCount}} 
 		              		</div>
 		            	</div>
 		            	<div class="form-group m-b-sm">
-			              		<label class="col-sm-6 control-label p-t-none ">
+			              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
 			              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
 			              		</label>
-			              		<div class="col-sm-6">
+			              		<div class="col-sm-6 col-xs-6">
 			               		{{getRemaininaEmails}}{{#brandedemailstatus}} {{#is_paid_emails}}
                            (Unbranded) {{else}}(Branded){{/is_paid_emails}} {{else}}
                             {{/brandedemailstatus}}
 			              		</div>
 			           	</div>
 			           	<div class="form-group m-b-sm">
-				              		<label class="col-sm-6 control-label p-t-none ">
+				              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
 				              		{{#is_paid_emails}}
 				               			{{else}}
 				               			{{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
 				               			{{/is_paid_emails}}
 				              		</label>
-				              		<div class="col-sm-6" id="next_emails_renewal">
+				              		<div class="col-sm-6 col-xs-6" id="next_emails_renewal">
 				               		{{#is_paid_emails}}
 				               			{{else}}
 				               			{{emails_next_renewal_time}}
@@ -400,7 +400,7 @@ Proceed to Trial
 <!-- End of detailed Info first dashlet-->
 {{/getSubscriptionBasedOnPlan}}
 <!-- start of email credits dashlet -->
-<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 pos-abs emailCreditsDetails" >
+<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} emailCreditsDetails" >
 <div class="panel panel-default m-t-sm m-b-sm">
 		<div class="panel-heading ">
 		{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}
@@ -408,10 +408,10 @@ Proceed to Trial
 		<div class="panel-body p-t-md">
         	<form class="bs-example form-horizontal p-b-md">
 				<div class="form-group m-b-sm">
-      				<label class="col-sm-4 control-label p-t-none ">
+      				<label class="col-sm-4 col-xs-6 control-label p-t-none ">
       					{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}
       				</label>
-      				<div class="col-sm-8">
+      				<div class="col-sm-8 col-xs-6">
         				{{getEmailCreditsCount}}
         				{{#if billingData}}
         				<span class="m-l-xs">
@@ -457,7 +457,7 @@ Proceed to Trial
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info" style="margin-left: 63px;">
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
                {{agile_lng_translate 'plan-and-upgrade' 'joão-camacho-coordenador-desc'}}  
             </div>
          </div>
@@ -472,7 +472,7 @@ Proceed to Trial
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info" style="margin-left: 63px;">
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
                {{agile_lng_translate 'plan-and-upgrade' 'jeri-murphy-desc'}} 
             </div>
          </div>
@@ -489,7 +489,7 @@ Proceed to Trial
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info" style="margin-left: 63px;">
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
                {{agile_lng_translate 'plan-and-upgrade' 'brenton-brien-desc'}}  
             </div>
          </div>
@@ -504,7 +504,7 @@ Proceed to Trial
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info" style="margin-left: 63px;">
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
                {{agile_lng_translate 'plan-and-upgrade' 'sebastian-desc'}} 
             </div>
          </div>
@@ -519,7 +519,7 @@ Proceed to Trial
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info" style="margin-left: 63px;">
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
                {{agile_lng_translate 'plan-and-upgrade' 'unplug-desc'}} 
             </div>
          </div>
@@ -534,7 +534,7 @@ Proceed to Trial
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info" style="margin-left: 63px;">
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
                {{agile_lng_translate 'plan-and-upgrade' 'deean-harper-desc'}} 
             </div>
          </div>
@@ -549,7 +549,7 @@ Proceed to Trial
 </div>
 <!-- Detailed Info div end -->
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
-	<a href="#" style="margin-left:80%;" class="text-info text-xs pull-right p-r" id="cancel_email_plan">{{agile_lng_translate 'portlets' 'cancel-email-subscriptiion'}} </a> 
+	<a href="#" {{#is_mobile}} style="margin-left:50%;" {{else}} style="margin-left:80%;" {{/is_mobile}} class="text-info text-xs pull-right p-r" id="cancel_email_plan">{{agile_lng_translate 'portlets' 'cancel-email-subscriptiion'}} </a> 
 {{/getSubscriptionBasedOnPlan}}
 </div>
 
@@ -880,18 +880,18 @@ Proceed to Trial
 			      <div class="control-group form-group m-b-none"> 
 			       <label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'emails'}}<span class="field_req">*</span></label> 
 			       <div class="controls col-sm-9"> 
-					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" style="width:25%;">
+					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" {{#is_mobile}} style="width:75%;" {{else}} style="width:25%;" {{/is_mobile}}>
 			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>
 			        
 			       </div>
 			       <div class="col-sm-offset-3 p-l help-block m-b-none"> 
 				     {{agile_lng_translate 'billing' 'email-credits-tooltip'}} @ $4/1000 {{agile_lng_translate 'portlets' 'emails'}}.
 				   </div>
-			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
+			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l {{#is_mobile}} inline-block p-t {{else}} block {{/is_mobile}}"></span> 
 			      </div>
 			      <div class="control-group form-group m-b-xs"> 
-			       <label class="control-label col-sm-3">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}}</label> 
-			       <div class="controls col-sm-6" style="padding-top:7px;">
+			       <label class="control-label {{#is_mobile}} col-xs-4 {{else}} col-sm-3 {{/is_mobile}}">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}}</label> 
+			       <div class="controls {{#is_mobile}} col-xs-6 {{else}} col-sm-6 {{/is_mobile}}" {{#is_mobile}} style="padding-top: 0px !important" {{else}} style="padding-top: 7px !important" {{/is_mobile}}>
 			       	 $<span id="total_credits_cost">0</span>
 			       </div>
 			       </div>

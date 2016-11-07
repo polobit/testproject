@@ -352,6 +352,17 @@
 			</div>
 			</div>
 
+			{{#if source}}
+				<div class="wrapper text-left m-b-sm p-none">
+					<div class="panel panel-default m-b-none">
+						<div class="panel-body">
+							<small class="text-muted text-base">{{agile_lng_translate 'portlets' 'source'}}</small>
+							<div class="text-cap">{{source}}</div>
+						</div>
+					</div>
+				</div>
+			{{/if}}
+
 
 <div class="wrapper text-left m-b-sm p-none">
 <div class="panel panel-default m-b-none">
@@ -1062,6 +1073,16 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
     </div>
    </div>
  </div>
+{{#if source}}
+	<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+		<div class="panel panel-default m-b-none">
+	    	<div class="panel-body">
+				<small class="text-muted text-base">{{agile_lng_translate 'portlets' 'source'}}</small>
+				<div class="text-cap">{{source}}</div>
+	    	</div>
+	   	</div>
+	</div>
+{{/if}}
    
 {{#property_is_exists "klout_score" properties}}
 <div id="klout-data-panel" class="hide">
