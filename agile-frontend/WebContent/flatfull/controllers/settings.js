@@ -8,6 +8,8 @@ var HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 var EMAIL_PREFS_WIDGET_SIZE = 0;
 var SMTP_ACCOUNT_LIMIT = 0;
 
+/*var Email_Template_Category = {};*/
+
 var SettingsRouter = Backbone.Router
 		.extend({
 			routes : {
@@ -587,7 +589,23 @@ var SettingsRouter = Backbone.Router
 			 * Shows list of email templates, with an option to add new template
 			 */
 			emailTemplates : function(selectedEmailTempCtg, no_load)
-			{
+			{	
+				var Email_Template_Category = _agile_get_prefs("Email_Template_Category-List");
+
+                if(!Email_Template_Category || Email_Template_Category == null) {
+                    Email_Template_Category = "";
+                    _agile_set_prefs('Email_Template_Category-List', Email_Template_Category);
+                }
+
+                var storeData = Email_Template_Category;
+				
+				var selected_emailTemp_ctg = _agile_get_prefs("selected-emailTemp-ctg");
+
+                if(!selected_emailTemp_ctg || selected_emailTemp_ctg == null) {
+                    selected_emailTemp_ctg = "";
+                    _agile_set_prefs('selected-emailTemp-ctg', selected_emailTemp_ctg);
+                }
+
 				var that = this;
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
@@ -602,36 +620,88 @@ var SettingsRouter = Backbone.Router
 						  return;
 
 						if(!no_load){
-							$('#prefs-tabs-content').html($(template_ui));
-							var el = $("#prefs-tabs-content");
-							/*$("#selected-emailTemplate-category", el).empty().append('<option class="default-select" value="">Select Category</option>');*/
 
-							el.on('click', '#emailCtgDiv', function(event){
-								event.preventDefault();
-								var isCtg = $(this).attr("data-id");
-								if(isCtg != undefined && isCtg == "new"){
-									$(this).removeAttr("data-id");
-									$("#emailCtg-option").hide();
-									$("#selected-emailTemplate-category").show();
-									var defaultSelectOption = '{{agile_lng_translate "portlets" "all"}}&nbsp;{{agile_lng_translate "portlets" "category"}}';
-									var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-				        			fillSelect('selected-emailTemplate-category','core/api/emailTemplate-category', 'emailTemplateCategory',  
-				        				function fillCategory(){
-											
-											el.on('change','select#selected-emailTemplate-category',  function(e){
+							$('#prefs-tabs-content').html($(template_ui));
+								var el = $("#prefs-tabs-content");
+								/*$("#selected-emailTemplate-category", el).empty().append('<option class="default-select" value="">Select Category</option>');*/
+
+							if(storeData == ""){
+
+								el.on('click', '#emailCtgDiv', function(event){
+									event.preventDefault();
+									var isCtg = $(this).attr("data-id");
+									if(isCtg != undefined && isCtg == "new"){
+										$(this).removeAttr("data-id");
+										$("#emailCtg-option").hide();
+										$("#selected-emailTemplate-category").show();
+										var defaultSelectOption = '{{agile_lng_translate "portlets" "all"}}';
+
+										$.getJSON("core/api/emailTemplate-category", function(data){
+											var Email_Template_Category = {};
+	               							$('#selected-emailTemplate-category').empty().append('<option value="">' + defaultSelectOption + '</option>');
+								            for(var i=0;i<data.length;i++){
+								                $('#selected-emailTemplate-category').append("<option value= "+data[i].id +">"+data[i].name+"</option>");
+								                
+								                var tempObj = {};
+								                tempObj["id"] = data[i].id;
+								                tempObj["name"] = data[i].name;
+
+								                Email_Template_Category[i] = tempObj;  
+								            }
+								            _agile_set_prefs('Email_Template_Category-List', JSON.stringify(Email_Template_Category)); 
+
+							                $('select#selected-emailTemplate-category').on('change',  function(e){
 												e.preventDefault();
 												var selectedCtg = $(this).val();
+												_agile_set_prefs('selected-emailTemp-ctg', selectedCtg);
 												that.emailTemplates(selectedCtg, true);
 											});
-											}, optionsTemplate, false, el, defaultSelectOption);
-			        			}
+							            });
 
-							});
-						}	
+				        			}
+
+								});
+
+							}else{
+
+								$("#emailCtg-option").hide();
+								$("#selected-emailTemplate-category").show();
+								var defaultSelectOption = '{{agile_lng_translate "portlets" "all"}}';
+
+								var Email_Template_Category_Json = JSON.parse(storeData);
+								var size = Object.keys(Email_Template_Category_Json).length;
+								var selCtgId = "";
+								if(selected_emailTemp_ctg && selected_emailTemp_ctg != ""){
+									selCtgId = selected_emailTemp_ctg;
+								}
+
+								$('#selected-emailTemplate-category').empty().append('<option value="">' + defaultSelectOption + '</option>');
+					            for(var i=0;i<size;i++){
+					            	if(selCtgId != "" && selCtgId == Email_Template_Category_Json[i].id){
+					            		$('#selected-emailTemplate-category').append("<option value= "+Email_Template_Category_Json[i].id +" selected = 'selected'>"+Email_Template_Category_Json[i].name+"</option>");
+					            	}else{
+					            		$('#selected-emailTemplate-category').append("<option value= "+Email_Template_Category_Json[i].id +">"+Email_Template_Category_Json[i].name+"</option>");
+					            	}
+					            }
+
+					            $('select#selected-emailTemplate-category').on('change',  function(e){
+									e.preventDefault();
+									var selectedCtg = $(this).val();
+									_agile_set_prefs('selected-emailTemp-ctg', selectedCtg);
+									that.emailTemplates(selectedCtg, true);
+								});
+							}
+
+						}
+								
 						
 						var currUrl = "/core/api/email/templates";
 						if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
 							currUrl = "/core/api/email/templates/category/"+selectedEmailTempCtg;
+						}else if(storeData && storeData != ""){
+							if(selected_emailTemp_ctg && selected_emailTemp_ctg != ""){
+								currUrl = "/core/api/email/templates/category/"+selected_emailTemp_ctg;
+							}
 						}
 
 						that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
@@ -640,9 +710,12 @@ var SettingsRouter = Backbone.Router
 
 							if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
 							{
-								if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
+								if(!(storeData && storeData != ""))
 								{
-									window.location.href  = window.location.origin+"/#emailbuilder-templates";
+									if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
+									{
+										window.location.href  = window.location.origin+"/#emailbuilder-templates";
+									}
 								}
 							}
 							
