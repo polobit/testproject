@@ -46,7 +46,7 @@ function initWebstatsDateRange() {
                 } else {
                     var from_date = Date.parse('today');
                     var to_date = Date.today().add({
-                        days: parseInt(-6)
+                        days: parseInt(-1)
                     });
                     $('#activities_date_range #range').html(
                         to_date.toString('MMMM d, yyyy') + " - " + from_date
@@ -93,8 +93,8 @@ function getFirstTimeWebstats() {
 
     var time_range = new Array();
 
-    lastday=Date.today();
-    lastday.setDate(new Date().getDate()-6);
+    lastday=new Date();
+    lastday.setDate(new Date().getDate()-1);
     var start_time = lastday.getTime();
     var end_value =new Date();
     var end_time = end_value.getTime();
