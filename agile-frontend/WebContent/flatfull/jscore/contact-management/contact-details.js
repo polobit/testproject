@@ -1114,6 +1114,7 @@ enterCompanyScore: function(e){
 	    
 	     // Changes score in UI
 	     $('#lead-cscore').text(add_score);
+       $("#lead-cscore").attr("title",add_score);
        
 	    App_Companies.companyDetailView.model.set({'lead_score': add_score}, {silent: true});
 	 	var contact_model =  App_Companies.companyDetailView.model.toJSON();
@@ -1179,6 +1180,7 @@ enterCompanyScore: function(e){
 			
 		 	// Changes score in UI
 		 	 $('#lead-cscore').text(sub_score);
+       $("#lead-cscore").attr("title",sub_score);
 			
 		 // Changes lead_score of the contact and save it.
 		 App_Companies.companyDetailView.model.set({'lead_score': sub_score}, {silent: true});
@@ -1588,7 +1590,7 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+		if (isNaN(scoreboxval) || scoreboxval!=decimalcheck){
       showAlertModal("number_validation", undefined, function(){
         scoreboxval=prvs;
         setleadScoreStyles(scoreboxval);
@@ -1623,10 +1625,10 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
       showAlertModal("number_validation", undefined, function(){
         scoreboxval=prvs;
-        setleadScoreStyles(scoreboxval);
+        setleadCScoreStyles(scoreboxval);
       });
       return;
 		}
@@ -1635,7 +1637,7 @@ updateScoreValue :function(){
 				scoreboxval=prvs;
 			}
 		}
-		setleadScoreStyles(scoreboxval)
+		setleadCScoreStyles(scoreboxval)
 	},
 
   addOrRemoveContactCompanyColumns :function(e){
@@ -1782,11 +1784,18 @@ function epochToHumanDate(format,date)
 
 }
 function setleadScoreStyles(scoreboxval){
-  $('#lead-score').attr("data-original-title", scoreboxval);
-  $('#lead-score').text(scoreboxval).removeClass("hide");
-  $("#scorebox").addClass("hide").val(scoreboxval);
-  $("#lead-score").attr("title",scoreboxval);
+  $("#scorebox").addClass("hide");
+  $('#lead-contactscore').attr("data-original-title", scoreboxval);
+  $('#lead-contactscore').text(scoreboxval).removeClass("hide");
+  //$("#scorebox").addClass("hide").val(scoreboxval);
+  $("#lead-contactscore").attr("title",scoreboxval);
 }
-
+function setleadCScoreStyles(scoreboxval){
+  $("#cscorebox").addClass("hide");
+  $('#lead-cscore').attr("data-original-title", scoreboxval);
+  $('#lead-cscore').text(scoreboxval).removeClass("hide");
+  //$("#cscorebox").addClass("hide").val(scoreboxval);
+  $("#lead-cscore").attr("title",scoreboxval);
+}
 
     
