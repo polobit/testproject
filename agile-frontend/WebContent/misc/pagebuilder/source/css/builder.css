@@ -11,7 +11,7 @@ body #builder > .container {
 }
 
 body .modal-dialog {
-	margin: 120px auto 30px;
+	margin: 10px auto 30px;
 }
 
 .toggle:hover, .toggle:focus {
@@ -1061,3 +1061,6 @@ li.element {
 }
 
 /* end image upload tab */
+.modal-backdrop{
+	position: absolute;
+}
