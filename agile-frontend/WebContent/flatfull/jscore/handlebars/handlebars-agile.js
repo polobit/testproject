@@ -219,6 +219,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("skype.js");
 	}
+
 	if(templateName.indexOf("formbuilder") == 0)
 	{
 		template_relative_urls.push("formbuilder.js")
@@ -255,7 +256,12 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("video-record.js");
 	}
-	
+
+	if (templateName.indexOf("asterisk") == 0)
+	{	
+		template_relative_urls.push("asterisk.js");
+	}
+
 	return template_relative_urls;
 }
 
