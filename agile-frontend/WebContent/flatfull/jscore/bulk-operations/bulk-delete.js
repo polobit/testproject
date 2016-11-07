@@ -611,6 +611,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				}
 				case 'core/api/tickets/filters/bulk':{
 
+					if(App_Ticket_Module.ticketFiltersList && App_Ticket_Module.ticketFiltersList.collection){
 					  if(id_array.length == App_Ticket_Module.ticketFiltersList.collection.length)
 						App_Ticket_Module.ticketFilters();
 
@@ -622,7 +623,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 	                      var filterJSON = App_Ticket_Module.ticketFiltersList.collection.at(0).toJSON();
 			 			  Ticket_Filter_ID = filterJSON.id;
 			 		  }
-
+			 		}
 					break;
 				}
 

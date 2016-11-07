@@ -26,7 +26,7 @@ $(function(){
 	setTimeout(function()
 	{
 		// after DOM ready.
-		if (document.readyState === "complete")
+		if (document.readyState === "complete" && CURRENT_DOMAIN_USER)
 		{
 			//globalTwilioIOSetup();
 		}
