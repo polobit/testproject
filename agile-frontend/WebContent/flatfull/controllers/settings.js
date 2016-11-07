@@ -58,7 +58,10 @@ var SettingsRouter = Backbone.Router
 			"contact-us" : "contactUsEmail",
 
 			/* Theme & Layout page */
-			"themeandlayout" : "themeandlayout" },
+			"themeandlayout" : "themeandlayout" ,
+
+			"help-options" : "helpOptions"
+		},
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -911,6 +914,14 @@ var SettingsRouter = Backbone.Router
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
+			},
+			helpOptions : function(){
+				var that =this;
+				getTemplate("prefs-dropdown-options", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+				},"#content");
 			}
 
 		});
