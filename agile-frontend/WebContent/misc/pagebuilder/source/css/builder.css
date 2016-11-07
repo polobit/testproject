@@ -10,10 +10,6 @@ body #builder > .container {
 	padding: 60px 0px 0px 0px;
 }
 
-body .modal-dialog {
-	margin: 10px auto 30px;
-}
-
 .toggle:hover, .toggle:focus {
 	color: #fff;
 }

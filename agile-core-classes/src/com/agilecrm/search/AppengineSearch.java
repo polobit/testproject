@@ -267,4 +267,41 @@ public class AppengineSearch<T>
     {
     	builder.bulkDelete(ids);
     }
+    
+    /**
+     * Gets top 10 contacts and top 5 companies with search keyword
+     * @param {String} keyword
+     * 					search keyword to get results
+     * @param {Integer} count
+     * 					maximum count to fetch results
+     * @param {Integer} cursor
+     * 
+     * @return {Collection}
+     */
+    @SuppressWarnings("unchecked")
+	public Collection getContactsSearchResults(String keyword, Integer count, String cursor)
+    {
+    	try 
+    	{
+    		List<Contact> companiesList  = (List<Contact>) query.simpleSearchWithType(keyword, 5, cursor, Contact.Type.COMPANY.toString());
+    		List<Contact> contactsList  = (List<Contact>) query.simpleSearchWithType(keyword, count, cursor, Contact.Type.PERSON.toString());
+
+    		List<Contact> searchResults = new ArrayList<Contact>();
+    		if(companiesList != null && companiesList.size() > 0)
+    		{
+    			searchResults.addAll(companiesList);
+    		}
+    		if(contactsList != null && contactsList.size() > 0)
+    		{
+    			searchResults.addAll(contactsList);
+    		}
+    		
+    		return searchResults;
+		} 
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+    }
 }
