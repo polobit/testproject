@@ -18,7 +18,7 @@ define([
 							var placeholder={
 								"label": "Placeholder",
                 				"type": "input",
-                				"value": "placeholder"
+                				"value": ""
 							};
 							saveform[i].fields.placeholder=placeholder;
 						}
