@@ -694,8 +694,8 @@ $('body').on('click', '#downloadCallJar', function(e)
 $('body').on('click', '#downloadCallJar_widget', function(e)
 {
 	e.preventDefault();
-	var widget_name = $(this).getAttr("widget-name");
-	var version = 1.0;
+	var widget_name = $(this).attr("widget-name");
+	var version = '1.0';
 	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/'+widget_name+'-'+version+'.jar';
 });
 
