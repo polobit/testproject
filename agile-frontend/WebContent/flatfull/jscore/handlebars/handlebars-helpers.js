@@ -8040,5 +8040,9 @@ Handlebars.registerHelper('getLeadSource', function(leadSourceId, options)
  */
 Handlebars.registerHelper('isAccessToLeads', function(options)
 {
-	return isAccessToLeads();
+	if(isAccessToLeads())
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
 });
