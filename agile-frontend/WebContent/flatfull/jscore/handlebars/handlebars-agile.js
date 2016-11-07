@@ -1430,3 +1430,18 @@ function updateLeadCustomData(el)
 {
 	$(".custom-data", App_Leads.leadDetailView.el).html(el)
 }
+
+/*
+ * To enable leads for some domains
+ *
+ */
+ function isAccessToLeads()
+ {
+ 	var domainNamesJSON = {"phanidesk" : true, "subrahmanyam" : true, "phanisbox" : true};
+ 	if(CURRENT_DOMAIN_USER && domainNamesJSON[CURRENT_DOMAIN_USER.domain])
+ 	{
+ 		return true;
+ 	}
+
+ 	return false;
+ }

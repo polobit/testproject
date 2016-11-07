@@ -13,6 +13,7 @@
                 {{#if id}}
                     {{else}}
                         <div class="control-group form-group  " style=" margin-left: 50px;"> 
+                            {{#isAccessToLeads}}
                             <div class="CustomFieldScope col-sm-3 p-l-none m-r-n">
                                 <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'menu' 'leads'}} </label>     
                                 <label class="i-checks i-checks-sm" style="padding-top: 7px;">
@@ -20,6 +21,7 @@
                                     <i></i>
                                 </label>                       
                             </div>
+                            {{/isAccessToLeads}}
                             <div class="CustomFieldScope col-sm-3 p-l-none m-r-n">
                                 <label class="control-label pull-left m-r-sm">{{agile_lng_translate 'contact-details' 'Contacts'}} </label>     
                                 <label class="i-checks i-checks-sm" style="padding-top: 7px;">

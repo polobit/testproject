@@ -8034,3 +8034,11 @@ Handlebars.registerHelper('getLeadSource', function(leadSourceId, options)
 	}
 	return "";
 });
+
+/*
+ * Helper to enable leads for some domains
+ */
+Handlebars.registerHelper('isAccessToLeads', function(options)
+{
+	return isAccessToLeads();
+});

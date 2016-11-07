@@ -466,12 +466,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
 
-   <li id="leadsmenu">
+   <!-- <li id="leadsmenu">
     <a  href="#leads">
       <i class="icon icon-group"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads") %></span>
     </a>
-  </li>
+  </li> -->
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){

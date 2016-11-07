@@ -30,6 +30,7 @@
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 	
          {{#if this.length}}
+         	{{#isAccessToLeads}}
         	<div class="panel panel-default">
 			<div id="LEAD-custom-fields">
 				<div class="panel-heading" role="tab" id="headingLeads">
@@ -43,6 +44,7 @@
 				</div>
 			
 			</div>
+			{{/isAccessToLeads}}
 
         	<div class="panel panel-default">
 			<div id="CONTACT-custom-fields">
