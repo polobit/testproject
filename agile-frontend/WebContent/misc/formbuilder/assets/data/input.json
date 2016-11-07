@@ -577,11 +577,6 @@
                 "type": "input",
                 "value": "placeholder"
             },
-            "textarea": {
-                "label": "Starting Text",
-                "type": "textarea",
-                "value": ""
-            },
             "required": {
                 "label": "Required",
                 "type": "checkbox",

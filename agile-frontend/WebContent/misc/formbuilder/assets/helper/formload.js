@@ -22,6 +22,9 @@ define([
 							};
 							saveform[i].fields.placeholder=placeholder;
 						}
+						if(saveform[i].fields.textarea){
+							saveform[i].fields.textarea=null;
+						}
 					}
 				}
 				var agilethemeObj=saveform[0].fields.agiletheme;
