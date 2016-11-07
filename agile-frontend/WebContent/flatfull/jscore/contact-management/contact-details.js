@@ -194,7 +194,7 @@ function validateCompanyName(value){
 
           if(agile_crm_is_model_property_changed("last_name", lastName)){
                // Update last name
-               agile_crm_update_contact("last_name", lastName,function(contact_model){
+               agile_crm_update_contact_render("last_name", lastName,function(contact_model){
                 
                 if(model_id != contact_model.id)
                 return;
