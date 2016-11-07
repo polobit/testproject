@@ -1177,7 +1177,8 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 			}
 		}else{
 			$("#bulk-action-btns button").removeClass("disabled");
-			resultCount = App_Contacts.contactsListView.collection.length;
+			if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+				resultCount = App_Contacts.contactsListView.collection.length;
 			appCount = total_available_contacts;
 
 			if (isBulk && total_available_contacts != resultCount){
@@ -1256,14 +1257,16 @@ function getAvailableContacts()
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
-		 else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		 else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
-	 
-	return App_Contacts.contactsListView.collection.toJSON().length;
+	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+		return App_Contacts.contactsListView.collection.toJSON().length;
+	else
+		return 0;
 }
 
 /**

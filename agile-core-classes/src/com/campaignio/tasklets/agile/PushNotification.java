@@ -193,7 +193,7 @@ public class PushNotification extends TaskletAdapter
 		    			PushNotificationMessage pushNotificationMessage = new PushNotificationMessage(created_time, browser_id, notification_message.toString(),AgileTaskletUtil.getId(campaignJSON), contactId );
 		    			pushNotificationMessage.save();
 		    			
-		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification sent successfully sent to the Chrome Browser.",
+		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification successfully sent to the chrome browser.",
 		    				    LogType.PUSH_NOTIFICATION_SENT.toString());
 		    		}
 		    			
@@ -213,7 +213,7 @@ public class PushNotification extends TaskletAdapter
 		    			PushNotificationMessage pushNotificationMessage = new PushNotificationMessage(created_time, browser_id, notification_message.toString(),AgileTaskletUtil.getId(campaignJSON), contactId );
 		    			pushNotificationMessage.save();
 		    			
-		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification sent successfully to the Mozilla Browser.",
+		    			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Push notification successfully sent to the mozilla browser.",
 		    				    LogType.PUSH_NOTIFICATION_SENT.toString());
 		    		}
 		    			
