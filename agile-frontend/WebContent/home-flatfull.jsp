@@ -254,17 +254,17 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 }
 
 .background-img-sales{
-  background: url("/flatfull/img/alliconsvg.png") no-repeat;
+  background: url("/flatfull/img/menu-service-icons-sprite.png") no-repeat;
   background-position: 0 0px;
   border: 0 none;'
 }
 .background-img-marketing{
-  background: url("/flatfull/img/alliconsvg.png") no-repeat;
+  background: url("/flatfull/img/menu-service-icons-sprite.png") no-repeat;
   display: inline-block;
   background-position: 49% 0px;
 }
 .background-img-service{
-   background: url("/flatfull/img/alliconsvg.png") no-repeat;
+   background: url("/flatfull/img/menu-service-icons-sprite.png") no-repeat;
    background-position: 98% 0px;
 }
 
@@ -341,7 +341,7 @@ function isIE() {
               
          %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
                   <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
-                    
+                    <img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img>
                 <li class='pull-left m-b-sm'>
                   <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb background-img-sales'></i>
                     <span class='block' ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %>
