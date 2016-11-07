@@ -1155,6 +1155,9 @@ function ValidateDealDiscountAmt(_form_id)
 						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'atleast-one-product-should-select'}}")
 						return false;		
 					}
+					if($(".discounttype-input-group-btn span",_form_id).eq(0).text()=="Percent")
+						iDiscountValue=(iTotal *  iDiscountValue)/100;
+					
 					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
 					{
 						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-value-greater-total-product-value'}}")
