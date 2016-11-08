@@ -6326,3 +6326,175 @@ admin-settings-users.create-update-delete-events-content,Add and edit events own
 admin-settings-users.view-events-owned-by-others,View events owned by other users
 contacts-view.download-csv-file,Download CSV File
 contacts-view.this-link-is-valid,This link is valid for 24 hours only.
+
+contacts-view.import-upto-10&#44,000-deals-from-a-CSV-file
+prefs-online-calendar.In Person&#44, Phone&#44
+tickets.Last&nbsp,Updated&nbsp
+tickets.Requester&nbsp,Name
+tickets.Assigned&nbsp,Date
+tickets.Created&nbsp,Date
+tickets.Ticket&nbsp,Type
+tickets.Closed&nbsp,Date
+tickets.Due&nbsp,Date
+prefs-email.smtp-content,Send emails from your email provider.
+prefs-data-sync.smtp,SMTP
+prefs-email.smtp,SMTP
+prefs-email.smtp-note1,1. SMTP email address needs to be verified for sending emails&#44
+prefs-email.smtp-note2,2. Emails with attachments will be sent through default gateway.
+prefs-email.smtp-note3,3. SMTP will not work for Campaign and Bulk Emails.
+report-view.won-deals-user, Won Deals Analysis
+report-view.won-deal-details,Get insights on deals won (count/revenue) by users over time
+prefs-notifications.for-ringcentral-only,For RingCentral Only
+portlets.email-subscription,Email Subscription
+portlets.branded-emails-details,Email Subscription Details
+plan-and-upgrade.andymailwain,Andy McIlwain
+plan-and-upgrade.content-community,Content & Community
+plan-and-upgrade.andymailwain-desc,Agile CRM has delivered significant improvements in efficiency and reliability for us. In the first month of integration&#44
+plan-and-upgrade.brenton-brien,Brenton O'Brien
+plan-and-upgrade.managing-director-microbric,Managing Director-Microbric
+plan-and-upgrade.brenton-brien-desc,I’m really impressed with the way Agile CRM works. I LOVE the contact timeline!!! This is a killer feature. It means that in one place anyone on the team can see all the communications with a contact&#44
+plan-and-upgrade.brian-juhl,Brian Juhl
+plan-and-upgrade.founder-aqivera,Founder – Aquivera
+plan-and-upgrade.founder-aqivera-desc,You guys are seriously the bomb friggin diggity. Keep the mail coming&#44
+plan-and-upgrade.joão-camacho,João Camacho
+plan-and-upgrade.joão-camacho-coordenador,Coordenador – Ião.positivo
+plan-and-upgrade.joão-camacho-coordenador-desc,Very good application. I think for me it's the best one till now&#44
+plan-and-upgrade.jeri-murphy,Jeri Murphy
+plan-and-upgrade.jeri-murphy-co-founder,Co Founder – WhichAddOn
+plan-and-upgrade.jeri-murphy-desc,We absolutely love Agile CRM. We recently upgraded to Enterprise and just working through to make sure we are using it the best of our ability. We will be in touch with further questions I'm sure. 
+plan-and-upgrade.free-emails-first-text,Please note that once you have purchased the email subscription&#44
+plan-and-upgrade.free-emails-branded,Free Emails
+plan-and-upgrade.sebastian-desc,One week testing #agilecrm and I think that I've finally found THE crm I was looking for. Thanks @agilecrm !
+plan-and-upgrade.sebastian-madrid,Madrid&#44
+plan-and-upgrade.sebastian,Sébastien F
+plan-and-upgrade.unplug,UnPlug
+plan-and-upgrade.unplug-desc,After using @salesforce for years in big corps I've run a trial for it @unplughq vs @agilecrm - AgileCrm won by a mile #startup #SME #CRM
+plan-and-upgrade.unplug-auth,Dublin City&#44
+plan-and-upgrade.deean-harper,Deeann Harper
+plan-and-upgrade.deean-harper-auth,Orlando&#44
+plan-and-upgrade.deean-harper-desc,I love when I find a product that is perfect for small businesses and @agilecrm is my new favorite! #smallbusiness #harperadmin
+other.campaign-webhooks-will-not-be-triggered-new,*Webhooks & Triggers (Contact Added & Tag Added) will not be automatically run during contacts import. Triggers need to be run manually.
+documents.select-template,Select Template
+documents.document-content,Content
+documents.document-cance,Cancel
+documents.document-sendemail,Send Email
+documents.document-sendcomments,Send Comments
+documents.document-typeoftemplate,Type of Template
+documents.document-document-content,Document content
+documents.document-what-are-docs-title,What are documents?
+documents.document-what-are-docs-para1,1. Documents helps you to build and deliver sales quotes and proposals as well as track presentations and close deals faster with legally binding eSignatures.
+documents.document-what-are-docs-para2,Generation
+documents.document-what-are-docs-para3,of eDocument is based on Template Selected.Template content is merged with Contact and Deal Selected and rendered.
+documents.document-what-are-docs-para4,3. Upload documents from computer and append them from cloud storage like Google Drive.
+documents.document-what-are-docs-para5,Need more help? Please check the
+documents.document-what-are-docs-para6,detailed documentation
+deal-view.add-edocument,Add eDocument
+documents.document-select-doc-template,Select eDocument Template
+documents.document-add-doc-template,Add eDocument Template
+documents.document-add-no-doc-template,There are no document templates
+documents.document-add-template-throug-pref,You can add document templates through preferences.
+documents.document-comments,Comments
+documents.edoc-dicussion,eDocs Discussion
+documents.deal-products,Products
+documents.deal-select-products,Select Products
+documents.deal-discount,Discount
+documents.deal-discount-place-value,Enter Value
+documents.pricing-table,Pricing Table
+documents.document-edoc-dicussion,Discussion
+products.add-product,Add Product
+products.product,Product
+products.product-price,Price
+products.product-upload-image,Upload Image
+products.product-recommended-image-size,Recommended Image Size
+products.edit-product-details,Edit Product Details
+products.new-product-details,New Product Details
+products.product-qty,Qty
+products.product-total,Total
+products.product-enter-qty,Enter Qty
+products.product-not-setup,You do not have any Products currently setup
+products.discount-should-be-numeric,Discount should be numeric
+products.discount-percent-cannot-greater,Discount percent cannot be greater than 100
+products.discount-percent-cannot-less,Discount percent cannot be less than 0
+products.atleast-one-product-should-select,Atleast one product should be selected to apply discount
+products.discount-value-greater-total-product-value,Discount value cannot be greater than total products value
+products.discount-value-cannot-less-that-zero,Discount value cannot be less than 0
+document.document-templates,Document Templates
+document.document-new-template,New Template
+document.document-no-document-template,You do not have any Document Templates currently.
+document.document-add-document-template-comment,You can add document template by clicking the button below or the one on the right side of the page.
+document.document-add-document-template,Add Document Template
+document.document-add-templates,Add Templates
+document.document-generate,Generate
+products.sub-total,Sub Total
+products.current-sub-total,Current Subtotal
+products.grand-total,Grand Total
+products.add-comments,Add Comments
+validation-msgs.script-element-not-allowed,< and > are not allowed
+documents.please-relate-the-document-to-contact,Please relate the document to a contact.
+other.campaign-webhooks-will-not-be-triggered-modified,Note : In order for the import to be super fast&#44 webhooks and related triggers will not run on these imported contacts. Please select these contacts (based on tag or created date) and run them manually.
+email-builder.Newsletters,Newsletters
+email-builder.Notifications,Notifications
+email-builder.Celebrations,Celebrations
+dashlet-video.video-tooltip,Help Video
+Plan-and-upgrade.widgets-limit-msg,Widgets with your current plan and are trying to subscribe with
+Plan-and-upgrade.widgets,widgets.
+Plan-and-upgrade.nodes-limit-msg,Campaign nodes with your current plan in one or more campaigns and are trying to subscribe with
+Plan-and-upgrade.nodes,campaign nodes.
+Plan-and-upgrade.emailAccounts-limit-msg,Email accounts with your current plan and are trying to subscribe with
+Plan-and-upgrade.emailAccounts,email accounts.
+Plan-and-upgrade.reports-limit-msg,Reports with your current plan and are trying to subscribe with
+Plan-and-upgrade.reports,reports.
+Plan-and-upgrade.smsGateway-limit-msg,We see that you already have an SMS gateway with your current plan and are trying to subscribe with
+Plan-and-upgrade.smsGateway,SMS gateway.
+Plan-and-upgrade.ecommerceSync-limit-msg,We see that you already have enabled Ecommerce sync with your current plan and are trying to subscribe with
+Plan-and-upgrade.ecommerceSync,ecommerce sync.
+Plan-and-upgrade.accountingSync-limit-msg,We see that you already have enabled Accounting sync integration with your current plan and are trying to subscribe with
+Plan-and-upgrade.accountingSync,accounting sync.
+Plan-and-upgrade.tracks-limit-msg,Tracks with your current plan and are trying to subscribe with
+Plan-and-upgrade.tracks,tracks.
+Plan-and-upgrade.below-features-in-plan,We see that you are using below features in your current plan&#44
+Plan-and-upgrade.plan,plan
+Plan-and-upgrade.Users,Users
+Plan-and-upgrade.Contacts,Contacts
+Plan-and-upgrade.Campaigns,Campaigns
+Plan-and-upgrade.Webrules,Webrules
+Plan-and-upgrade.Triggers,Triggers
+Plan-and-upgrade.Widgets,Widgets
+Plan-and-upgrade.Nodes,Campaign Nodes
+Plan-and-upgrade.EmailAccounts,Email Accounts
+Plan-and-upgrade.Reports,Reports
+Plan-and-upgrade.Tracks,Tracks
+Plan-and-upgrade.SmsGateway,SMS Gateway
+Plan-and-upgrade.EcommerceSync,E-Commerce Sync
+Plan-and-upgrade.AccountingSync,Accounting Sync
+Plan-and-upgrade.users-limit-msg,Users with your current plan and are trying to subscribe with
+Plan-and-upgrade.contacts-limit-msg,Contacts with your current plan and are trying to subscribe with
+Plan-and-upgrade.campaigns-limit-msg,Campaigns with your current plan and are trying to subscribe with
+Plan-and-upgrade.webrules-limit-msg,Web rules with your current plan and are trying to subscribe with
+Plan-and-upgrade.triggers-limit-msg,Triggers with your current plan and are trying to subscribe with
+sync.google-note, Google Contacts API provides predefined systems groups ’My Contacts’&#44 ‘Friends’&#44 ‘Family’ & ‘Coworkers’ that cannot be edited or deleted.
+web-rules.webrule-analysis,Web Rule Analysis
+web-rules.webrule-report,Web Rule Reports
+web-rules.views,Total Views
+forms.form-analysis,Form Analysis
+forms.form-report,Form Reports
+forms.submissions,Total Submissions
+admin-settings-api-analytics.tracking-code-verification,Tracking Code Verification
+plan-and-upgrade.email-credits-tooltip-msg,Email credits can only be utilized once you have exhausted all your emails from email subscription.
+Plan-and-upgrade.your-invoice-of,Your invoice of
+Plan-and-upgrade.has-been-generated-on,has been generated on
+contacts-view.csv-file-desc-with-activity,We will email you the CSV file shortly and also show it in User Activities. Proceed?
+billing.addon-change-select,Please change the quantity to proceed
+web-rules.templates-sub-heading,Select a template and start creating Web Rules.
+theme.new-menu-position,Menu Position
+
+widgets.Ozonetel-content,Make and receive calls from your contacts using your Ozonetel account.
+widgets.Ozonetel-displayName,Ozonetel
+widgets.Ozonetel-name,Ozonetel
+
+widgets.enter-ozonetel-details,Enter your Ozonetel details  
+Widgets.ozonetel-auth-key,Ozonetel Api Key
+
+Widgets.caller-id,KooKoo assigned phone number
+
+Widgets.do-not-have-an-ozonetel-account,Don't have an Ozonetel account?

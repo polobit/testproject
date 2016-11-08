@@ -37,6 +37,8 @@ var WidgetsRouter = Backbone.Router
                 "Twilio/:id" : "Twilio",
                 "TwilioIO" : "TwilioIO",
                 "TwilioIO/:id" : "TwilioIO",
+                "Ozonetel" : "Ozonetel",
+                "Ozonetel/:id" : "Ozonetel",
                 "callscript/rules" : "CallScriptShow",
                 "callscript/add-rules" : "CallScriptAdd",
                 "callscript/editrules/:id" : "CallScriptEdit",
@@ -144,6 +146,13 @@ var WidgetsRouter = Backbone.Router
              */
             TwilioIO : function(id) {
                 addConfigurableWidget(id, "TwilioIO", 'twilioio-login');
+            },
+
+            /**
+             * Manages TwilioIo widget
+             */
+            Ozonetel : function(id) {
+                addConfigurableWidget(id, "Ozonetel", 'ozonetel-login');
             },
 
             Custom : function(id){                
