@@ -45,7 +45,7 @@ public class VoiceCallUtil
         	     
         	    if(StringUtils.isBlank(domain))
         		domain=NamespaceManager.get();
-        	     
+        	     System.out.println("domain: " + domain);
         	     String path ="https://"+domain+".agilecrm.com/twiliovoicecall?message="+URLEncoder.encode(msg, "UTF-8")+"&number2="+secondCall;
             	     params.put("From", from);
         	     params.put("To", firstCall);
