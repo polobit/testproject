@@ -526,11 +526,11 @@ public class Contact extends Cursor
 
 	Contact oldContact = preProcessor.getOldContact();
 	String sSource=this.source;
-	if(!(("importing").equals(this.source)))
+	if(("importing").equals(this.source))
 		this.source="import";
 	dao.put(this);
 
-	postSave(oldContact,sSource, args);
+	postSave(oldContact,sSource,args);
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
