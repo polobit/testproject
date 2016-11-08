@@ -7917,7 +7917,7 @@ Handlebars.registerHelper('permissionChanged', function(value)
 	var elements = changes.split(",");
 	$.each(elements, function(index)
 	{
-			el = el.concat(elements[index] + "  ");
+			el = el.concat(elements[index] + " &nbsp;");
 	});
 		return new Handlebars.SafeString(el);
 });
@@ -7925,9 +7925,9 @@ Handlebars.registerHelper('permissionChanged', function(value)
 Handlebars.registerHelper('PermissionsExist', function(value,options)
 {
 	var changes = value.replace("[","").replace("]","");
-	if(changes == "")
-		return options.inverse(this);
-	return options.fn(this);
+	if(changes.length == 0)
+		return options.fn(this);
+	return options.inverse(this);
 });
 
 Handlebars.registerHelper('permissiondeleted', function(value)
@@ -7937,7 +7937,7 @@ Handlebars.registerHelper('permissiondeleted', function(value)
 	var elements = changes.split(",");
 	$.each(elements, function(index)
 	{
-			el = el.concat(elements[index] + "  ");
+			el = el.concat(elements[index] + "&nbsp;");
 	});
 		return new Handlebars.SafeString(el);
 });

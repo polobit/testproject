@@ -356,6 +356,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
+			if(CURRENT_DOMAIN_USER.domain == "admin" && CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("VIEW_LOGS") == -1)
+            return  showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
+        
 			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;

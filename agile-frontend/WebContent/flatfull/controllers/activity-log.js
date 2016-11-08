@@ -17,7 +17,7 @@ var ActivitylogRouter = Backbone.Router.extend({
         if (!tight_acl.checkPermission('ACTIVITY'))
             return;
         if(CURRENT_DOMAIN_USER.domain == "admin" && CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("VIEW_LOGS") == -1)
-            return ;
+            return  showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
         head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 
             $('#content').html("<div id='activities-listners'>&nbsp;</div>");

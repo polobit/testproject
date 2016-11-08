@@ -816,7 +816,7 @@
  {{/if_equals}}{{/if_equals}}
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT" activity_type}}
- {{custom1}} has added Affliate Amount of $({{custom4}}) to the domain {{custom2}}) 
+ {{custom1}} has added Affliate Amount of $({{custom3}}) to the domain {{custom2}}) 
  <br />
  <small class="activities_second_line m-t-none text-sm">
  {{custom1}} has added  amount on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
@@ -883,7 +883,7 @@
  <!-- admin panel user permisssions changed -->
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
- {{#PermissionsExist custom2}}
+ {{#PermissionsExist custom3}}
 {{else}}
 {{custom1}} has enabled  Permissions {{permissionChanged custom3}} to {{custom4}}
  
@@ -897,12 +897,12 @@
 
  {{#if_equals "ADMINPANEL" entity_type}}
  {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
- {{#PermissionsExist custom3}}
+{{#PermissionsExist custom2}}
 {{else}}
-{{custom1}} disabled Permissions {{permissiondeleted custom2}} to {{custom4}}
+{{custom1}} has disabled  Permissions {{permissionChanged custom2}} to {{custom4}}
  <br />
  <small class="activities_second_line m-t-none text-sm">
-  Permissions  modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
+  permissions modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
  </small>
  {{/PermissionsExist}}
  {{/if_equals}}

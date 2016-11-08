@@ -115,7 +115,7 @@
 
 	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> {{agile_lng_translate 'plan-and-upgrade' 'change-plan'}}</strong></u> </a> </span>
     
-	{{#adminpanel_restrictions "CANCEL_SUBSCRIPTION"}}<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
+	{{#adminpanel_restrictions "CANCEL_SUBPLAN"}}<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
 	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}} email="{{email}}"> <strong><u>{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}</u></strong> </a></span>{{else}}{{/adminpanel_restrictions}}
 </p><br/><br/>
 </div>
@@ -156,7 +156,7 @@
 {{agile_lng_translate 'plan-and-upgrade' 'plan-type'}}: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
 <p>
-{{#adminpanel_restrictions "CANCEL_SUBSCRIPTION"}}
+{{#adminpanel_restrictions "CANCEL_SUBPLAN"}}
 	<span class="pull-right" id="deleteEmailPlanSpan">
 	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}} email='{{email}}'> <strong><u>Cancel Subscription</u></strong> </a></span>
     {{/adminpanel_restrictions "CANCEL_SUBSCRIPTION"}}
