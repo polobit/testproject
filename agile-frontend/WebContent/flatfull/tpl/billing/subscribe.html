@@ -296,7 +296,7 @@ Proceed to Trial
 <div class="tab-pane" role="tab-panel" id="email-content" onclick="document.getElementById('email-quantity').focus();">
 <div class="row" style="display: flex;align-items:stretch;flex-flow:row wrap;">
 <!-- start of purchase email -->
-<div class="col-md-6 col-sm-6 col-xs-12 {{#is_mobile}} p-r {{else}} p-r-none {{/is_mobile}}" id="purchase-email" style="flex: 1 0;height: auto;">
+<div class="col-md-6 col-sm-6 col-xs-12 {{#is_mobile}} p-r {{else}} p-r-none {{/is_mobile}}" id="purchase-email" {{#is_mobile}} {{else}}style="flex: 1 0;height: auto;"{{/is_mobile}}>
  
 </div>
 <!-- end of purchase email -->
