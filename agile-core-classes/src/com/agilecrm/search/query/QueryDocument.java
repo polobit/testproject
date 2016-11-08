@@ -836,8 +836,28 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    String type = Type.CONTACT.toString();
 
-	    if (doc.getFieldCount("type") > 0)
+	    if (doc.getFieldCount("type") > 0 && doc.getFieldCount("type") <= 1)
 		type = doc.getOnlyField("type").getText();
+	    
+	    //If fields are more than 1 with name "type", iterate them and set object type (quick search fix for "mtxcomputer" domain)
+	    if(doc.getFieldCount("type") > 1)
+	    {
+	    	Iterable<com.google.appengine.api.search.Field> typeFields = doc.getFields("type");
+	    	for(com.google.appengine.api.search.Field fld : typeFields)
+	    	{
+	    		if(fld != null)
+	    		{
+	    			String fldName = fld.getText();
+	    			if(fldName != null && (fldName.equals(Type.PERSON.toString()) || fldName.equals(Type.COMPANY.toString()) 
+	    					|| fldName.equals(Type.CONTACT.toString()) || fldName.equals(Type.OPPORTUNITY) || fldName.equals(Type.CASES)
+	    					|| fldName.equals(Type.DOCUMENT) || fldName.equals(Type.TICKETS)))
+	    			{
+	    				type = fldName;
+	    				break;
+	    			}
+	    		}
+	    	}
+	    }
 
 	    Class entityClazz = QueryInterface.Type.valueOf(type).getClass();
 
