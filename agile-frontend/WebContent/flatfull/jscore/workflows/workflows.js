@@ -1090,7 +1090,7 @@ function get_modified_value(modified_field_ui_obj, field_name, field_value)
 }
 function workflowVideoPopup(){
     var data={};
-    data.title="Workflow Tutorial";
+    data.title="Workflows Tutorial";
     data.videourl="//www.youtube.com/embed/fPFS3w0GSyw?enablejsapi=10&amp;autoplay=1";
     showHelpVideoModal(data);
 }
