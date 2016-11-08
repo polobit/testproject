@@ -13,7 +13,7 @@
       </div>
         <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
         {{#if id}}
-          <input type="text" name="id" class="hide" value={{id}} >
+          <input type="hidden" name="id" value={{id}} >
         {{/if}}
                 {{#if is_forms_updated}}
                     <input type="hidden" name="is_forms_updated" value="{{is_forms_updated}}">

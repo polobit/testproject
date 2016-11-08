@@ -4,13 +4,16 @@ package com.agilecrm.account.util;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.call.util.deferred.CallDeferredTask;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import org.apache.commons.lang.StringUtils;
 import com.thirdparty.twilio.TwilioSMSUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
@@ -33,15 +36,17 @@ public class VoiceCallUtil
 	
 	public static final String callGateWay = "TWILIO";
     
-        public static String sendVoiceall(String account_id,String auth_token,String from,String firstCall,String secondCall,String msg){
+        public static String sendVoiceall(String account_id,String auth_token,String from,String firstCall,String secondCall,String msg,String domain){
         	
         	 try {
         	     String response = null;
         	     TwilioRestClient client = new TwilioRestClient(account_id, auth_token,"");
         	     Map<String, String> params = new HashMap<>();
         	     
-        	     String namespace = NamespaceManager.get();
-        	     String path ="https://"+namespace+".agilecrm.com/twiliovoicecall?message="+URLEncoder.encode(msg, "UTF-8")+"&number2="+secondCall;
+        	    if(StringUtils.isBlank(domain))
+        		domain=NamespaceManager.get();
+        	     
+        	     String path ="https://"+domain+".agilecrm.com/twiliovoicecall?message="+URLEncoder.encode(msg, "UTF-8")+"&number2="+secondCall;
             	     params.put("From", from);
         	     params.put("To", firstCall);
         	     params.put("Url", path);
@@ -80,7 +85,8 @@ public class VoiceCallUtil
 	
 	private static void addToQueue(String account_id, String auth_token,String from, String firstCall,String secondCall,String message)
 	{
-	    CallDeferredTask callDeferredTask = new CallDeferredTask(callGateWay,account_id, auth_token,from ,firstCall,secondCall,message);
+	    String domain = NamespaceManager.get();
+	    CallDeferredTask callDeferredTask = new CallDeferredTask(callGateWay,account_id, auth_token,from ,firstCall,secondCall,message,domain);
 
             PullQueueUtil.addToPullQueue(
         			Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_CALL_PULL_QUEUE

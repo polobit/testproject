@@ -440,10 +440,6 @@ function updateDeal(ele, editFromMilestoneView)
 
 	$("#opportunityUpdateForm")[0].reset();
 
-/*	$("input[type='hidden']",dealForm).each(function(){
-		$(this).val('');
-	});*/
-
 	deserializeForm(value, $("#opportunityUpdateForm"));
 
    if($('#color1' , dealForm).is(':hidden')){
@@ -504,7 +500,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Fills the pipelines list in the select menu.
 	populateTrackMilestones(dealForm, undefined, value, function(pipelinesList)
 	{
-
+		populateLostReasons(dealForm, value);
 	});
 
 	// Enable the datepicker
@@ -577,8 +573,6 @@ function updateDeal(ele, editFromMilestoneView)
 	}, "DEAL")
 
 	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
-
-	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
 	// setup tags for the search 
@@ -1184,8 +1178,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		}
 		else
 		{
-			App_Deal_Details.dealDetailView.model = data;
-			App_Deal_Details.dealDetailView.render(true)
+			if(App_Deal_Details.dealDetailView){
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+			}
 			Backbone.history.navigate("deal/" + data.toJSON().id, { trigger : true });
 			/*
 			 * App_Deals.navigate("deals", { trigger : true });
