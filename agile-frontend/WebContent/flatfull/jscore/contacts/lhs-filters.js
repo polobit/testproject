@@ -811,6 +811,11 @@ function bindChangeEvent(ele){
 	console.log("I am in change updated " + $(ele).val());
 	var prevVal = $(ele).attr('prev-val');
 	var currVal = $(ele).val().trim();
+	var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
+	 if (!regex.test(currVal)) {
+        showAlertModal("tag_name_restriction");
+        return;
+     }
 	if (prevVal == currVal)
 	{
 		hideTypeaheadMenu(ele);
