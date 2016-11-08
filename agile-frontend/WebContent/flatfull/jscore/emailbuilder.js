@@ -131,7 +131,7 @@ function initializeEmailBuilderListeners() {
                 $(this).removeAttr("data-id");
                 emailTemplateCtg.saveEmailTemplateCategory(ctgyName.trim());
             } else {
-                $(".emailTemplCategoryFormMsgHolder").html("Name field is required.");
+                $(".emailTemplCategoryFormMsgHolder").html("{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}");
             }
         }
     });
@@ -236,8 +236,15 @@ var emailTemplateCtg = {
                 $("#emailTemplCtgySaveBtn").attr("data-id", "new");
                 $("#emailTemplate-category-select option:first").after("<option value='"+data.id+"'>"+data.name+"</option>");
                 _agile_set_prefs('emailTempCtg_id', data.id);
-                _agile_set_prefs('Email_Template_Category-List', "");
-                _agile_set_prefs('selected-emailTemp-ctg', "");
+
+                if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
+                    var size = Object.keys(Email_Template_Category).length;
+                    var tempObj = {};
+                    tempObj["id"] = data.id;
+                    tempObj["name"] = data.name;
+
+                    Email_Template_Category[size] = tempObj; 
+                }
                 $("#emailbuilder-templates-category-modal").modal("hide");
             },
             error:function(response){
@@ -294,8 +301,6 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
             $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
             $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
-            _agile_set_prefs('Email_Template_Category-List', "");
-            _agile_set_prefs('selected-emailTemp-ctg', "");
             if(requestType == "post") {
                 window.location.hash = "email-templates";
             }
