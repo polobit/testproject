@@ -525,19 +525,19 @@ public class Contact extends Cursor
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
-	String sSource=this.source;
+	/*String sSource=this.source;
 	if(!(("importing").equals(this.source)))
-		this.source="import";
+		this.source="import";*/
 	dao.put(this);
 
-	postSave(oldContact,sSource, args);
+	postSave(oldContact,args);
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
 	addToSearch();
     }
 
-    public void postSave(Contact oldContact,String sSource, boolean... args)
+    public void postSave(Contact oldContact, boolean... args)
     {
 
 	Long time = System.currentTimeMillis();
@@ -547,7 +547,7 @@ public class Contact extends Cursor
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
 	
-	if(!(("importing").equals(sSource)))
+	if(("importing").equals(this.source))
 	{
 		// Execute trigger for contacts
 		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
