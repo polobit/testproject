@@ -2094,6 +2094,9 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 
 /*End of Admins Settings Users Tab Responsive UI CSS*/
 
+ #sendgrid-whitelabel-key-template label{
+  margin-top: 0px !important;
+ }
 }
 
 /*End of Mobile Device Media Query CSS(767px)*/
