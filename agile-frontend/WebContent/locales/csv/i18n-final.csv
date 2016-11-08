@@ -421,7 +421,7 @@ twilio.manage-invoices-tracks-and-payments-and-see-invoice-history,Manage invoic
 admin-settings-tasks.all-existing-tasks-desc,All existing tasks in this category can be accessed from the Tasks list view.,Todas las tareas existentes en esta categoría se pueden acceder desde la vista de lista de tareas.
 widgets.paypal-desc,Configure your PayPal business account to view your PayPal invoices in Agile.,Configura tu cuenta empresarial de PayPal para ver tus facturas de PayPal en Agile
 widgets.googleplus-desc,Keep tabs on your customers' activity on Google+ and engage with them better.,Mantén tabs para poder dar seguimiento a la actividad de tus clientes en Google+ y poder interactuar mejor con ellos.
-billing.not-send->25email,You can apply this bulk action only on 25 contacts. Please create a campaign.,Puede aplicar esta acción en masa sólo en 25 contactos. Por favor&#44; crear una campaña.
+billing.not-send->25email,Use campaigns to send emails to more than 25 contacts. Leverage on it to automate most of your follow-up activities.,Puede aplicar esta acción en masa sólo en 25 contactos. Por favor&#44; crear una campaña.
 admin-settings-users.enagage-your-website-visitors,Engage your website visitors with smart popups&#44; or perform automatic actions,Involucre a sus visitantes del sitio web con pop-ups inteligentes&#44; o lleve a cabo acciones automáticas
 validation-msgs.domain-validation,Domain should start with an alphabet and special characters are not allowed.,Dominio debe comenzar con un alfabeto y caracteres especiales no están permitidos.
 calendar.slot-exists,Something went wrong as your appointment was not scheduled. Please try again,Algo salió mal ya que su nombramiento no fue programado. Por favor&#44; inténtelo de nuevo
