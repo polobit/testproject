@@ -189,7 +189,7 @@ public class EmailUtil
      */
     public static String getPoweredByAgileURL(String medium)
     {
-	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
+	return "http://www.crm.io?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
 	        + NamespaceManager.get();
     }
 
@@ -217,7 +217,7 @@ public class EmailUtil
     {
 
 	// Returns only html if Agile label exits
-	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
+	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by") || StringUtils.contains(html, "http://www.crm.io?utm_source=powered-by")
 	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
 	    return html;
 
@@ -487,7 +487,7 @@ public class EmailUtil
      */
     public static String templateFooter() {
     	StringBuilder content = new StringBuilder();
-    	content.append("<br> <br> <br> The Crew at AgileCRM<br> <a target=\"_blank\" href=\"https://www.agilecrm.com\">https://www.agilecrm.com</a><br> ");
+    	content.append("<br> <br> <br> The Crew at AgileCRM<br> <a target=\"_blank\" href=\"http://www.crm.io\">https://www.agilecrm.com</a><br> ");
 		content.append("<br> <br> </td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> </tr> <tr> <td> ");
 		content.append("<table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" class=\"container\"> <tbody> <tr> <td align=\"center\"> ");
 		content.append("<img width=\"600\" height=\"15\" src=\"http://venkat2desk.site90.net/images/border-shadow.png\" alt=\"\" class=\"img-shadow\"> </td> </tr> ");
@@ -540,7 +540,7 @@ public class EmailUtil
     	            "                \t\t<div style=\"font-weight: bold; font-size: 12px;\">\n" +
     	            "\t\t\t\t\t\tThe Crew at Agile CRM  <br />\n" +
     	            "\t\t\t\t\t  </div>\n" +
-    	            "\t\t\t\t\t  <div><a target=\"_blank\" href=\"https://www.agilecrm.com\" style=\"color:blue\">https://www.agilecrm.com</a></div>\n" +
+    	            "\t\t\t\t\t  <div><a target=\"_blank\" href=\"http://www.crm.io\" style=\"color:blue\">https://www.agilecrm.com</a></div>\n" +
     	            "              </td>\n" +
     	            "            </tr>\n" +
     	            "          </table>\n" +
