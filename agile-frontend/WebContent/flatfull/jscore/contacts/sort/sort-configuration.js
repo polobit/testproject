@@ -87,7 +87,7 @@ var agile_deal_sort_configuration = [
 	buildProperty("{{agile_lng_translate 'deal-view' 'won-date'}}", "won_time"), 
 	
 
-	buildProperty("{{agile_lng_translate 'deal-view' 'won-date'}}", "expected_value")
+	buildProperty("{{agile_lng_translate 'deal-view' 'value'}}", "expected_value")
 
 ];
 
