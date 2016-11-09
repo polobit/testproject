@@ -66,20 +66,22 @@
             
 </div>
 
-
+{{#is_admin_domain}}{{else}}
 <div class="control-group form-group">
     					<label class="control-label col-md-3" for="phone">{{agile_lng_translate 'other' 'phone'}}</label> 
 
 <div class="col-md-9">                      
 <div class="controls">
-{{#is_admin_domain}}{{else}}
+
     						<input type="text" id="cphone" class="allow-char-phone form-control" name='phone' placeholder="{{agile_lng_translate 'modals' 'phone-number'}}"/> 
-                {{/is_admin_domain}}
+                
     					</div>
     				</div>
     </div>
+    {{/is_admin_domain}}
+    {{#is_admin_domain}}{{else}}
     <div class="control-group form-group">
-     {{#is_admin_domain}}{{else}}
+     
               <label class="control-label col-md-3" for="user-img">{{agile_lng_translate 'prefs-settings' 'avatar'}}</label> 
 
               <div class="col-md-9">                      
@@ -101,22 +103,23 @@
                   </div>
               </div>
               </div>
-               {{/is_admin_domain}}
+              
     </div>
-
+ {{/is_admin_domain}}
+ {{#is_admin_domain}}{{else}}
           <div class="control-group form-group">
 <div class="col-sm-offset-3 col-md-9">
               <div class="controls">
                 <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                 {{#is_admin_domain}}{{else}}<input type="checkbox" id="securelogin" name='is_secure' value='true' checked/><i></i>
-                              Secure Login<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'other' 'send-email-if-unusual-activity-detected'}}</small></div>{{/is_admin_domain}}
+                 <input type="checkbox" id="securelogin" name='is_secure' value='true' checked/><i></i>
+                              Secure Login<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'other' 'send-email-if-unusual-activity-detected'}}</small></div>
 </label>
                 </div>
               </div>
             </div>
 </div>
-
+{{/is_admin_domain}}
     
             <div class="control-group form-group">
 <div class="col-sm-offset-3 col-md-9">
@@ -176,7 +179,7 @@
                       <i></i>Add Affiliate Amount<br/>
                       <div style="margin-left:6px;">
                         <small> 
-                          Affiliate amount add to the customer
+                          Add Affiliate amount to the Customer
                         </small>
                       </div>
                   </label>
@@ -184,7 +187,7 @@
                     <input type="checkbox" name="LOGIN_INTO_DOMAIN"  value="LOGIN_INTO_DOMAIN"  >
                       <i></i>Login into the Customer Domain<br/>
                       <div style="margin-left:6px;">
-                        <small> log in into customer domain
+                        <small> Log in into Customer Domain
                         </small>
                       </div>
                   </label>
@@ -192,7 +195,7 @@
                     <input type="checkbox" name="REFUND_AMOUNT"  value="REFUND_AMOUNT"  >
                       <i></i>Refund the Amount<br/>
                       <div style="margin-left:6px;">
-                        <small> refund the amount to customer
+                        <small> Refund the amount to Customer
                         </small>
                       </div>
                   </label>
@@ -200,7 +203,7 @@
                     <input type="checkbox" name="DELETE_USER"  value="DELETE_USER" >
                       <i></i>Delete User<br/>
                       <div style="margin-left:6px;">
-                        <small> Delete users 
+                        <small> Delete Users 
                         </small>
                       </div>
                   </label>
@@ -225,7 +228,7 @@
                     <input type="checkbox" name="ADD_USER"  value="ADD_USER" >
                       <i></i>Add User<br/>
                       <div style="margin-left:6px;">
-                        <small> Add users 
+                        <small> Add Users 
                         </small>
                       </div>
                   </label>
@@ -234,7 +237,7 @@
                     <input type="checkbox" name="AFFILIATES"  value="AFFILIATES" >
                       <i></i>View Affiliates<br/>
                       <div style="margin-left:6px;">
-                        <small> view affiliates
+                        <small> View Affiliates
                         </small>
                       </div>
                   </label>
@@ -250,7 +253,7 @@
                     <input type="checkbox" name="VIEW_LOGS"  value="VIEW_LOGS" >
                       <i></i>View Admin Panel Logs<br/>
                       <div style="margin-left:6px;">
-                        <small> view panel logs
+                        <small>View Panel Logs
                         </small>
                       </div>
                   </label>

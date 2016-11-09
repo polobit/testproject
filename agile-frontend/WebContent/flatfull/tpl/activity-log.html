@@ -1612,9 +1612,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
             
 		<div class="pull-right" id="activity-log-header-div">
 		<div class="btn-group pull-left" role="group">
-                <a href="#activities" class="btn btn-default btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
-                {{#is_admin_domain}}
+		{{#is_admin_domain}}
                 {{else}}
+                <a href="#activities" class="btn btn-default btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
+                
 
                 <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
                 {{/is_admin_domain}}
