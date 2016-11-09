@@ -182,6 +182,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										TYPEHEAD_TYPE[tag_name] = '#contact/';
 									else if(item.type == 'COMPANY')
 										TYPEHEAD_TYPE[tag_name] = '#company/';
+									else if(item.type == 'LEAD')
+										TYPEHEAD_TYPE[tag_name] = '#lead/';
 										
 								});
 
@@ -429,6 +431,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											}
 											else if(relContact.type == 'COMPANY'){
 												tplJSON.type_item = '#company/';
+											}
+											else if(relContact.type == 'LEAD'){
+												tplJSON.type_item = '#lead/';
 											}
 											tplJSON.tag_item = relContact.id;
 											tplJSON.item = getContactName(relContact);
@@ -817,7 +822,7 @@ function checkEmailValidation(value)
 function getContactName(contact, prop_key)
 {
 	var name = "";
-	if (!contact.type || contact.type == 'PERSON')
+	if (!contact.type || contact.type == 'PERSON' || contact.type == 'LEAD')
 	{
 		var first_name = getPropertyValue(contact.properties, "first_name");
 		var last_name = getPropertyValue(contact.properties, "last_name");
@@ -919,6 +924,12 @@ function appendItemInResult(item)
 
 			$("#company-typeahead-heading", this.el).show();
 			$("#company-results", this.el).append(i);
+		}
+		if (type == "lead_entity")
+		{
+
+			$("#lead-typeahead-heading", this.el).show();
+			$("#lead-results", this.el).append(i);
 		}
 		if (type == "deal")
 		{

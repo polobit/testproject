@@ -499,6 +499,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
+
+   <!-- <li id="leadsmenu">
+    <a  href="#leads">
+      <i class="icon icon-group"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads") %></span>
+    </a>
+  </li> -->
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
@@ -1174,6 +1181,9 @@ var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(re
 // Get Contact Date Fields
 var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeDate")))%>;
 
+// Get Lead Date Fields
+var LEADS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeDate")))%>;
+
 // Get Contact contact type custom fields
 var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeContact")))%>;
 // Get Contact company type custom fields
@@ -1183,6 +1193,11 @@ var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsS
 var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeContact")))%>;
 // Get Company company type custom fields
 var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeCompany")))%>;
+
+// Get Lead contact type custom fields
+var LEADS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeContact")))%>;
+// Get Lead company type custom fields
+var LEADS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeCompany")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

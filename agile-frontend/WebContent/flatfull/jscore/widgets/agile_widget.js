@@ -222,6 +222,8 @@ function agile_crm_get_contact_model(){
 	
 	if(company_util.isCompany()){
 		return App_Companies.companyDetailView.model;
+	} else if(Current_Route && Current_Route.indexOf("lead/") == 0 && App_Leads.leadDetailView) {
+		return App_Leads.leadDetailView.model;
 	} else {
 		return App_Contacts.contactDetailView.model;
 	}

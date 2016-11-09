@@ -30,4 +30,9 @@ public class ExportBuilder
     {
 	return new DealsExporter();
     }
+    
+    public static Exporter<Contact> buildLeadExporter()
+    {
+	return new ContactExporter(EXPORT_TYPE.LEAD);
+    }
 }
