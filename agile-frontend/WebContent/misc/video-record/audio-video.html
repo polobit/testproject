@@ -75,6 +75,13 @@ player.on('finishRecord', function()
     // console.log('finished recording: ', player.recordedData);
     // uploadImageToS3ThroughBtn(player.recordedData.video);
     window.parent.emailVideoRecordRecordedData = player.recordedData;
+
+    //set frame to middle
+    var totalTimeInSec = player.duration();
+    if(totalTimeInSec) {
+      player.currentTime(totalTimeInSec/2);
+    }
+
     generateThumbnailForVideo();
     if(window.parent.document.getElementById("videoRecordSaveBtn")) {
       window.parent.document.getElementById("videoRecordSaveBtn").disabled = false;
