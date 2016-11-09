@@ -353,6 +353,11 @@ public class CustomFieldsAPI
 							msg = msg + " deals" ;
 							duplicateCF = true;
 						}
+						else if(cu.scope.equals(CustomFieldDef.SCOPE.LEAD)&& customField.scopeExtension.contains("leads")){
+							msg = msg + " , " ;
+							msg = msg + " leads" ;
+							duplicateCF = true;
+						}
 					}
 				}
 				msg = msg + "." ;
@@ -389,6 +394,17 @@ public class CustomFieldsAPI
 						custom_Field.scope=CustomFieldDef.SCOPE.valueOf("DEAL");
 						for(int j= 0;j<position.length;j++){
 							if(position[j].startsWith("deals")){
+								p = position[i].split("-")[1];
+								break;
+							}
+						}
+						custom_Field.position = Integer.parseInt(p) + 1;
+					}
+					else if(scopecf[i].equalsIgnoreCase("leads"))
+					{
+						custom_Field.scope=CustomFieldDef.SCOPE.valueOf("LEAD");
+						for(int j= 0;j<position.length;j++){
+							if(position[j].startsWith("leads")){
 								p = position[i].split("-")[1];
 								break;
 							}
