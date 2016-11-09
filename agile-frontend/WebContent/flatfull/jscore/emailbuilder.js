@@ -288,7 +288,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     if(templateId) {
         var requestType = "put";
         template["id"] = templateId;
-        message = "{{agile_lng_translate 'emailbuilder' 'updated'}}";
+        /*message = "{{agile_lng_translate 'emailbuilder' 'updated'}}";*/
     }
 
     $.ajax({
