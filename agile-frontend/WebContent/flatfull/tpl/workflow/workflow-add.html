@@ -183,6 +183,14 @@
                     <div class="m-t {{#is_mobile}}{{else}}m-b{{/is_mobile}}">
 						<a href="#" class="text-info" id="workflow-unsubscribe-option">
 							<i class="icon-plus"></i> {{agile_lng_translate 'campaigns' 'manage-unsubscription'}}
+							<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 8px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="{{agile_lng_translate 'campaigns' 'unsubscribed-contacts-are-not-sent'}}"
+							id="element" data-trigger="hover" />
+						</span>
 						</a>
 					</div>
 					<div id="workflow-unsubscribe-block" class="m-t-sm" style="display:none">
@@ -190,6 +198,14 @@
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-action'}}:</b>
+								<span
+									style="color:#656565; vertical-align: text-top; margin-left: -3px"> <img
+									border="0" src="{{getS3ImagePath '/img/help.png'}}"
+									style="height: 8px; vertical-align: top" rel="popover"
+									data-placement="right"
+									data-title:" data-content="{{agile_lng_translate 'campaigns' 'agilecan-unsubscribe-desc'}}"
+									id="element" data-trigger="hover" />
+								</span>
 							</label>
 							<div class="controls col-sm-4">
 								<select name="action" id="unsubscribe-action" class="form-control">
@@ -200,24 +216,38 @@
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agilecan-unsubscribe-desc'}}</div>
                         <br/>
                     	<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'other' 'tags'}}:</b>
+								<span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}"
+								id="element" data-trigger="hover" />
+							</span>
 							</label>
 							<div class="controls col-sm-4">
 								<input type="text" name="tag" id="unsubscribe-tag" placeholder="{{agile_lng_translate 'campaigns' 'separate-tags-with-comma'}}" class="form-control">
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}</div>
                         <br/>
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-name'}}:</b>
+								<span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc'}}"
+								id="element" data-trigger="hover" />
+							</span>
 							</label>
 
 							<div class="controls col-sm-4">
@@ -225,9 +255,6 @@
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc'}}</div>
-						
-
 						<br/>
 						<div class="row">
 							<div class="control-group form-group">
@@ -268,29 +295,43 @@
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-email'}}:</b>
+								<span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'when-a-contact-unsubscribes-from-your-campaign'}}"
+								id="element" data-trigger="hover" />
+							</span>
 							</label>
 							<div class="controls col-sm-4">
 								<input type="text" name="unsubscribe_email" id="unsubscribe-email" placeholder="{{agile_lng_translate 'campaigns' 'from-email-address'}}" class="email form-control">
 							</div>
                     	</div>
                         </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'when-a-contact-unsubscribes-from-your-campaign'}}</div>
 						<br/>
 						<div class="row">
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-template'}}</b>
+								<span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc1'}}"
+								id="element" data-trigger="hover" />
+							</span>
 							</label>
 							<div class="controls col-sm-4">
 								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="{{agile_lng_translate 'other' 'fill-from-template'}}" name="unsubscribe_subject"><option class="default-select" value="">{{agile_lng_translate 'campaigns' 'default-template'}}</option></select>
 							</div>
                     	</div>
                         </div>
-                        <div class="text-sm text-light"> {{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc1'}}</div>
 						<br/>
-                        <small>{{agile_lng_translate 'campaigns' 'unsubscribed-contacts-are-not-sent'}}</small>
-                        <br/>
-					</div>	
+						<br/>
+					</div>
+
 					<div class="row">
                      <div class="control-group form-group hidden">
 						<label class="control-label col-sm-2">
