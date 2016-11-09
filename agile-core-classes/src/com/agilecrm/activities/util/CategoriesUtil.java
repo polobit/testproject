@@ -354,6 +354,33 @@ public class CategoriesUtil
     		Category cat11 = new Category("New Opportunity", 10, Category.EntityType.TELEPHONY_STATUS);
     		categories.add(cat11);
     	}
+    	else if (type.equals(Category.EntityType.LEAD_SOURCE.toString()))
+    	{
+    		Category cat2 = new Category("Website", 1, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat2);
+    		Category cat3 = new Category("Referrals", 2, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat3);
+    		Category cat4 = new Category("Email Inquiry", 3, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat4);
+    		Category cat5 = new Category("Conference", 4, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat5);
+    		Category cat6 = new Category("Social", 5, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat6);
+    		Category cat7 = new Category("Other", 5, Category.EntityType.LEAD_SOURCE);
+    		categories.add(cat7);
+    	}
+    	else if (type.equals(Category.EntityType.LEAD_STATUS.toString()))
+    	{
+    		Category cat2 = new Category("New", 1, Category.EntityType.LEAD_STATUS);
+    		categories.add(cat2);
+    		Category cat3 = new Category("Unqualified", 2, Category.EntityType.LEAD_STATUS);
+    		categories.add(cat3);
+    		Category cat4 = new Category("Working", 3, Category.EntityType.LEAD_STATUS);
+    		categories.add(cat4);
+    		Category cat5 = new Category("Converted", 4, Category.EntityType.LEAD_STATUS);
+    		cat5.setIs_conversion_flag(true);
+    		categories.add(cat5);
+    	}
     	dao.putAll(categories);
     	return categories;
     }

@@ -1,5 +1,6 @@
 package com.agilecrm.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +11,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,7 +22,10 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.amazonaws.services.simpleemail.model.Message;
+import com.agilecrm.user.EmailPrefs;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
@@ -553,4 +559,38 @@ public class EmailUtil
     	return template;
     }
     
-}
+	/**
+     * It gives mails data as String based on mails passing
+     * 
+     * @param contactEmails
+     *            - JSONArray contains mails
+     * 
+     * @return String
+     */
+    public static String getEmails(JSONArray contactEmails) throws JSONException
+    {
+    	JSONObject res = new JSONObject();
+		
+		EmailPrefs emailPrefs = null;
+		List<String> mailUrls = new ArrayList<>();
+		
+		try
+		{
+		    emailPrefs = ContactEmailUtil.getEmailPrefs();
+		    mailUrls = emailPrefs.getFetchUrls();
+		    String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
+		    for(int i=0; i< mailUrls.size();i++){
+		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
+		    		mailUrls.remove(i);
+		    	}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		res.put("emails", contactEmails);
+		res.put("emailPrefs", mailUrls);
+		return res.toString();
+    }
+   }

@@ -21,6 +21,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
@@ -94,7 +95,7 @@ public class Contact extends Cursor
      */
     public static enum Type
     {
-	PERSON, COMPANY
+	PERSON, COMPANY, LEAD
     };
 
     /**
@@ -333,8 +334,93 @@ public class Contact extends Cursor
     @JsonIgnore
     @NotSaved
     private transient ContactSavePreprocessor preProcessor = null;
+    
+    /**
+     * Lost source Id of the Lead.
+     */
+    @NotSaved
+    private Long lead_source_id = 0L;
 
     /**
+     * Key object of Lead source
+     */
+    private Key<Category> leadSource = null;
+
+    /**
+     * Lead status Id
+     */
+    @NotSaved
+    private Long lead_status_id = 0L;
+
+    /**
+     * Key object of Lead status
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> leadStatus = null;
+    
+    /**
+     * boolean value to know lead is converted or not
+     */
+    @NotSaved
+    private boolean is_lead_converted = false;
+    
+    /**
+     * Converted time of a lead into contact
+     */
+    @NotSaved(IfDefault.class)
+    private Long lead_converted_time = 0L;
+    
+    
+
+    public Long getLead_source_id() {
+    	if(leadSource != null)
+    	{
+    		lead_source_id = leadSource.getId();
+    	}
+		return lead_source_id;
+	}
+
+	public void setLead_source_id(Long lead_source_id) {
+		this.lead_source_id = lead_source_id;
+	}
+
+	public Long getLead_status_id() {
+		if(leadStatus != null)
+    	{
+			lead_status_id = leadStatus.getId();
+    	}
+		return lead_status_id;
+	}
+
+	public void setLead_status_id(Long lead_status_id) {
+		this.lead_status_id = lead_status_id;
+	}
+
+	public boolean isIs_lead_converted() {
+		return is_lead_converted;
+	}
+
+	public void setIs_lead_converted(boolean is_lead_converted) {
+		this.is_lead_converted = is_lead_converted;
+	}
+
+	public Long getLead_converted_time() {
+		return lead_converted_time;
+	}
+
+	public void setLead_converted_time(Long lead_converted_time) {
+		this.lead_converted_time = lead_converted_time;
+	}
+
+	public void setLeadSource(Key<Category> leadSource) {
+		this.leadSource = leadSource;
+	}
+
+	public void setLeadStatus(Key<Category> leadStatus) {
+		this.leadStatus = leadStatus;
+	}
+
+	/**
      * Default constructor
      */
     public Contact()
@@ -1291,8 +1377,26 @@ public class Contact extends Cursor
 	    // Set lead owner(current domain user)
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
+	
+	if(this.type == Type.LEAD || (this.lead_converted_time != null && this.lead_converted_time > 0))
+	{
+		if(this.lead_source_id != null && this.lead_source_id > 0)
+		{
+			this.leadSource = new Key<Category>(Category.class, this.lead_source_id);
+		}
+		
+		if(this.lead_status_id != null && this.lead_status_id > 0)
+		{
+			this.leadStatus = new Key<Category>(Category.class, this.lead_status_id);
+		}
+	}
+	
+	if(this.is_lead_converted && (this.lead_converted_time == null || (this.lead_converted_time != null && this.lead_converted_time == 0)))
+	{
+		this.lead_converted_time = System.currentTimeMillis() / 1000;
+	}
 
-	if (this.type == Type.PERSON)
+	if (this.type == Type.PERSON || this.type == Type.LEAD)
 	{
 
 	    System.out.println("type of contact is person");
@@ -1505,6 +1609,10 @@ public class Contact extends Cursor
 	if (this.type == Contact.Type.COMPANY)
 	{
 		this.entity_type = "company_entity";
+	}
+	else if (this.type == Contact.Type.LEAD)
+	{
+		this.entity_type = "lead_entity";
 	}
     }
 

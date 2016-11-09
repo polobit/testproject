@@ -53,7 +53,9 @@ public class BulkActionUtil
 		"/core/api/bulk-actions/contacts/export-companies-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), REMOVE_TAG(
 		"/core/api/bulk-actions/contact/remove-tags", AgileQueues.BULK_ACTION_QUEUE), UPDATE(
 				"/core/api/bulk-actions/update", AgileQueues.BULK_ACTION_QUEUE),DEALS_UPDATE(
-						"/core/api/opportunity/backend/update", AgileQueues.BULK_ACTION_QUEUE);
+						"/core/api/opportunity/backend/update", AgileQueues.BULK_ACTION_QUEUE), EXPORT_LEADS_CSV(
+								"/core/api/bulk-actions/contacts/export-leads-csv", AgileQueues.CONTACTS_EXPORT_QUEUE), CHANGE_STATUS(
+										"/core/api/bulk-actions/change-status/%s", AgileQueues.BULK_ACTION_QUEUE);
 
 	String url, queue;
 
@@ -464,6 +466,65 @@ public class BulkActionUtil
 	int randomNum = rand.nextInt((max - min) + 1) + min;
 
 	return randomNum;
+    }
+    
+    /**
+     * Filters based on search criteria
+     * 
+     * @param criteria
+     * @param domainUserId
+     * @return
+     */
+    public static List<Contact> getFilterLeads(String criteria, String cursor, Long domainUserId)
+    {
+	if (criteria.isEmpty())
+	    return new ArrayList<Contact>();
+
+	setSessionManager(domainUserId);
+
+	if (criteria.equalsIgnoreCase("Leads"))
+	    return ContactUtil.getAllCompanies(ENTITIES_FETCH_LIMIT, cursor);
+
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor, null));
+    }
+    
+    /**
+     * Formats url with status id. It is called when action is to be performed
+     * based on lead ids list
+     * 
+     * @param data
+     * @param parameter
+     * @param url
+     * @param contentType
+     * @param type
+     */
+    public static void changeStatus(byte[] data, Map<String, Object> parameter, String url, String contentType,
+	    Method type)
+    {
+	String statusId = ((String[]) parameter.get("status"))[0];
+	url = String.format(url, statusId);
+
+	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type, AgileQueues.BULK_ACTION_QUEUE);
+    }
+    
+    /**
+     * Formats url with status id. It is called when action is to be performed
+     * based on filter criteria
+     * 
+     * @param id
+     * @param parameter
+     * @param url
+     * @param contentType
+     * @param type
+     */
+    public static void changeStatus(String id, Map<String, Object> parameter, String url, String contentType, Method type)
+    {
+	String statusId = ((String[]) parameter.get("status"))[0];
+	url = String.format(url, statusId);
+
+	System.out.println("url to send : " + url);
+
+	BulkActionUtil.postDataToBulkActionBackend(url, contentType, AgileQueues.BULK_ACTION_QUEUE, type, id);
     }
 
 }
