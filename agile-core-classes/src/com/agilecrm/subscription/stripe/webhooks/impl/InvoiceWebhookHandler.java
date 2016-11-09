@@ -277,7 +277,14 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 			System.out.println("fetching subscription from stripe");
 			com.stripe.model.Subscription subscription = null;
 			try {
-				subscription = StripeUtil.getStripeSubscriptionById(obj.getString("subscription"));
+				Customer cust = Customer.retrieve(obj.getString("customer"));
+				List<com.stripe.model.Subscription> subscriptions = cust.getSubscriptions().getData();
+				for(com.stripe.model.Subscription sub : subscriptions){
+					if(sub.getId().equals(obj.getString("subscription"))){
+						subscription = sub;
+						break;
+					}
+				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
