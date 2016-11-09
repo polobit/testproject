@@ -822,6 +822,11 @@ var SettingsRouter = Backbone.Router
 
 			themeandlayout : function()
 			{
+				getTemplate("settings", {}, undefined, function(template_ui){
+										if(!template_ui)
+											  return;
+										$('#content').html($(template_ui));
+									});
 				// $("#content").html(getTemplate("theme-layout-form"), {});
 				showTransitionBar();
 				$
@@ -831,10 +836,11 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
-									$('#content').html($(template_ui));	
+									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#layout").val(CURRENT_USER_PREFS.layout);
@@ -844,6 +850,8 @@ var SettingsRouter = Backbone.Router
 									if (data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 										$(".theme-save-status").css("display", "inline");
 									hideTransitionBar();
+									$('#PrefsTab .select').removeClass('select');
+									$('.theme-and-layout').addClass('select');
 
 								}, "#content");
 
