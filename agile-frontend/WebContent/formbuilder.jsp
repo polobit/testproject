@@ -17,6 +17,17 @@ String template = request.getParameter("template");
       <style type="text/css">
       input[type=url],textarea{border:1px solid #ccc;border-radius:4px;box-shadow:0 1px 1px rgba(0,0,0,.075) inset;color:#555;font-size:14px;line-height:1.42857;transition:border-color .15s ease-in-out 0s,box-shadow .15s ease-in-out 0s;width:100%;margin:0}
          .agile-label{float:left;overflow:hidden;padding:7px 25px 0 0;text-align:left;word-wrap:break-word;width:100%;font-size:15px}
+         .tooltip {z-index: 2001;}
+         .tooltip.right .tooltip-arrow {
+                background-color: white;
+                border-right-color: #f2f2f2;
+                background-color: white;
+                  }
+         .tooltip-inner {
+             background-color: #f2f2f2;
+             color: black;
+           }
+         .tooltip.in{opacity:1 !important;}
       </style>
 	<script>
 		var formNumber = <%=formId%>;
