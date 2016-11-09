@@ -474,6 +474,7 @@ public class StripeUtil {
 		}else{
 			System.out.println("updating subscription with plan:"+planId+" quantity:"+quantity);
 			System.out.println("Old plandetails::: plan:"+subscription.getId()+" quantity:"+quantity);
+			params.put("id", subscription.getId());
 			sub = cust.updateSubscription(params);
 			System.out.println("Subscription updated");
 		}
