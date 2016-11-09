@@ -72,12 +72,14 @@
 
 <div class="col-md-9">                      
 <div class="controls">
+{{#is_admin_domain}}{{else}}
     						<input type="text" id="cphone" class="allow-char-phone form-control" name='phone' placeholder="{{agile_lng_translate 'modals' 'phone-number'}}"/> 
+                {{/is_admin_domain}}
     					</div>
     				</div>
     </div>
     <div class="control-group form-group">
-
+     {{#is_admin_domain}}{{else}}
               <label class="control-label col-md-3" for="user-img">{{agile_lng_translate 'prefs-settings' 'avatar'}}</label> 
 
               <div class="col-md-9">                      
@@ -99,6 +101,7 @@
                   </div>
               </div>
               </div>
+               {{/is_admin_domain}}
     </div>
 
           <div class="control-group form-group">
@@ -106,8 +109,8 @@
               <div class="controls">
                 <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                  <input type="checkbox" id="securelogin" name='is_secure' value='true' checked/><i></i>
-                              Secure Login<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'other' 'send-email-if-unusual-activity-detected'}}</small></div>
+                 {{#is_admin_domain}}{{else}}<input type="checkbox" id="securelogin" name='is_secure' value='true' checked/><i></i>
+                              Secure Login<br/><div style="margin-left:6px;"><small>{{agile_lng_translate 'other' 'send-email-if-unusual-activity-detected'}}</small></div>{{/is_admin_domain}}
 </label>
                 </div>
               </div>
@@ -170,7 +173,7 @@
                 <div class="multiple-checkbox" name="adminPanelAccessScopes" style="margin-top: 10px;">
                   <label class="i-checks i-checks-sm checkbox">
                     <input type="checkbox" name="ADD_AFFILIATE_AMOUNT"  value="ADD_AFFILIATE_AMOUNT" >
-                      <i></i>Add Affiliate amount<br/>
+                      <i></i>Add Affiliate Amount<br/>
                       <div style="margin-left:6px;">
                         <small> 
                           Affiliate amount add to the customer
@@ -179,7 +182,7 @@
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
                     <input type="checkbox" name="LOGIN_INTO_DOMAIN"  value="LOGIN_INTO_DOMAIN"  >
-                      <i></i>Login into the customer domain<br/>
+                      <i></i>Login into the Customer Domain<br/>
                       <div style="margin-left:6px;">
                         <small> log in into customer domain
                         </small>
@@ -187,7 +190,7 @@
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
                     <input type="checkbox" name="REFUND_AMOUNT"  value="REFUND_AMOUNT"  >
-                      <i></i>Refund The amount<br/>
+                      <i></i>Refund the Amount<br/>
                       <div style="margin-left:6px;">
                         <small> refund the amount to customer
                         </small>
@@ -212,7 +215,7 @@
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
                     <input type="checkbox" name="DELETE_ACCOUNT"  value="DELETE_ACCOUNT" >
-                      <i></i>Delete Account permanently<br/>
+                      <i></i>Delete Account Permanently<br/>
                       <div style="margin-left:6px;">
                         <small> Delete Account
                         </small>
@@ -245,7 +248,7 @@
                   </label>
                   <label class="i-checks i-checks-sm checkbox">
                     <input type="checkbox" name="VIEW_LOGS"  value="VIEW_LOGS" >
-                      <i></i>View Admin Panel logs<br/>
+                      <i></i>View Admin Panel Logs<br/>
                       <div style="margin-left:6px;">
                         <small> view panel logs
                         </small>

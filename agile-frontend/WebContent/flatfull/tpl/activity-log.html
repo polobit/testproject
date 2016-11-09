@@ -1613,7 +1613,11 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 		<div class="pull-right" id="activity-log-header-div">
 		<div class="btn-group pull-left" role="group">
                 <a href="#activities" class="btn btn-default btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
+                {{#is_admin_domain}}
+                {{else}}
+
                 <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
+                {{/is_admin_domain}}
             </div>
             <div class="pull-left" style=" margin-bottom:0px !important;">
             <div id="activities_date_range" style="line-height:20px;" 
@@ -1723,6 +1727,9 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  </script>
 
 <script id="sales-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
 <li data-type="CALL"><a href="CALL">{{agile_lng_translate 'portlets' 'calls'}}</a></li>
@@ -1742,34 +1749,34 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  <li data-type="TASK"><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
 
 	<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
-	{{#is_admin_domain}}
- 	<li data-type="ADMINPANEL"><a href="ADMINPANEL">admin panel</a></li>
  {{/is_admin_domain}}
 
 </script>
 
 
 <script id="marketing-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
  <li data-type="CAMPAIGN"><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
                     </li>
- <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li>
- {{#is_admin_domain}}
- 	<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+ <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li> 	
  {{/is_admin_domain}}
 
 </script>
 
 <script id="service-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
 	<li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
  <li data-type="TICKET"><a href="TICKET">Tickets</a></li>
     
 					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li> 
-{{#is_admin_domain}}
- 	<li data-type="ADMINPANEL"><a href="ADMINPANEL">Admin panel</a></li>
  {{/is_admin_domain}}
 
 
