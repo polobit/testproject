@@ -36,7 +36,10 @@ $(function()
 			return options.inverse(this);
 		var plan_name = USER_BILLING_PREFS.plan.plan_type;
 		var plan_fragments = plan_name.split("_");
-		if(plan_fragments[0].toLowerCase() == plan)
+		var db_plan_name = plan_fragments[0].toLowerCase();
+		if(db_plan_name == "pro")
+			db_plan_name = "enterprise";
+		if(db_plan_name == plan.toLowerCase())
 			return options.fn(this);
 		return options.inverse(this);
 	});
