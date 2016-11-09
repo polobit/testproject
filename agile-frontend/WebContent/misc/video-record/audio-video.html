@@ -30,6 +30,8 @@
 
 <video id="myVideo" class="video-js vjs-default-skin"></video>
 
+<canvas id="thumbnailCanvas" width="320" height="240" style="display:none;"/>
+
 <script>
 var player = videojs("myVideo",
 {
@@ -73,6 +75,7 @@ player.on('finishRecord', function()
     // console.log('finished recording: ', player.recordedData);
     // uploadImageToS3ThroughBtn(player.recordedData.video);
     window.parent.emailVideoRecordRecordedData = player.recordedData;
+    generateThumbnailForVideo();
     if(window.parent.document.getElementById("videoRecordSaveBtn")) {
       window.parent.document.getElementById("videoRecordSaveBtn").disabled = false;
     }
@@ -85,6 +88,40 @@ $( window ).load(function() {
       alert("Browser is not supported this video service.");
   }
 });
+
+
+function generateThumbnailForVideo() {
+  var canvas = document.getElementById('thumbnailCanvas');
+  var video = document.getElementById('myVideo_html5_api');
+  canvas.getContext('2d').drawImage(video, 0, 0, 320, 240);
+  addPlayIconToCanvas(canvas);
+}
+
+function addPlayIconToCanvas(canvas) {
+  var playIcon = new Image();
+  playIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAABDFJREFUeJztmc9vVFUUx7/nvJlhpg2B/hxNfxAR2jJlo+jKkqiJEmOMxkTjP8CKvT8WNBqJBGMwU8A01o0GFg0kWiFBF+rCho11Y3/QaTVpawsBAcv05/x457jAKDHivTPvzbSG+1mfe+73ft958849AzgcDofD4XA4HA6Hw3HfQUEWK0ALXV317PnNqtQgrNtUdBuBasFIkGILgJgCUShFiMCAskGSqEJAWiSgACCvhBwEawwsCyPLQreJ9Kb43vWWyclbBGi5ZyjZgLnujscBHGJBD1jaAI6Vu3k4SB7CvyrjeyE6tWMsM1LKamsDFKCF7t1HBfQ6B6ycSiGAMvRY6/j0W7ZrDOX4Nwupjl6A3tishweAO9rozflUx2HbNVaHme/q6hAqjjNzpHx51UNEiiDd0z7xy8+mWKsKUJaD/5fDAwAzRwh80CrWLqU+FUTQRkBqp9logL4Cj4j2BpdUZYj3qsX5jAFzk7t3ANgSREviuedR++proEgV3yJC4kpqZ6spzOyQcHtQLV5jI7b3vo3mCxdR88KLAFt/fAKhFA1uAEGT4cgBIq1tqDt6DMnPv0TimQMAVfaLKiRG7eZHQVIXipq7iDy8C/UfptE8eA7xnv1hp/8LBhu1mw0Qqg1Fzb8QTXWjoX8ATZ+dQWzfY6HnFxGjdosKQDwUNf9B7NF9aPr0NBr6BxBNdYeWlwHjPcX8GQSi4cgxE+/Zj+bBc6g/nkbkoZ2B8ynIqN1cAUpeYCWlQITEsweQHDqPuiPvwWtpCZDLdPW26wQ35vLDHmpeehnJC18h/uTTZaUgC+2bur/PXRpGti+N/NhoxfbYlAbkfxxB9kQauZEfAuVRi0mR2QBSqdZbkB8bRbYvjdyl4XASKokpxGgAKRUqff7C9BSyJ9JY//abUPMSadEUY1MB65WqgOLMDLIn+7D29UVAy55r3hNR5EwxNgYsQcM1wL96BdmPTmF16AtA/FBz3w0zr5hizAYo/x6KGgD+jRtY+rgfq2cHoYVCWGnvCfl6yxRjNEBB16j8sTsAQBYXcfv4B1g5cxqaWw+UqxTU86+ZYowGRDyd9QNW6er5oWAJysQvRGZNMcZO8IHOqTkA1XtsISGQ5fZM5qopzjwQOQsfImPhyKoiQj/Z/GVmNxYn/i64oupCRFaa7YZz6g2IiLGp2DxIPuLTJzaRVga0Xb48zUzvBBNVPQh8+MFMZsYm1no82zo+fUSh7wpg7K83CgEEit6W8an3bdeU3OLN79n1iBIdUtUnALQxc8VmhjaIyAoxzxIwLEwn20czJd2dA/e4v3V2bl2NSRP5aPRItwuwFaBaIq1R5ThBowpESclTUu/PPQn6j5k4qeLOr7aSkq+kPgEFBRWgugbCGoBlJl3ylReV9Wbcj15PTkwsBz2Dw+FwOBwOh8PhcDgc9xl/ANPLXZ3zymqPAAAAAElFTkSuQmCC';
+  playIcon.onload = function () {
+    var cxt = canvas.getContext('2d');
+    cxt.drawImage(playIcon,
+      canvas.width / 2 - playIcon.width / 2,
+      canvas.height / 2 - playIcon.height / 2
+    );
+    window.parent.emailVideoRecordRecordedVideoThumbnailBlob = dataURItoBlob(canvas.toDataURL("image/png"));
+  };
+}
+
+
+function dataURItoBlob(dataURI) {
+    var binary = atob(dataURI.split(',')[1]);
+    var array = [];
+    for(var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {type: 'image/png'});
+}
+
+
+
 </script>
 
 </body>
