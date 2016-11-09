@@ -423,3 +423,10 @@ function merge_webrules_jsons(target, object1, object2)
         });
     }
 }
+
+function webruleVideoPopup(){
+       var data={};
+       data.title="Web Rules Tutorial";
+       data.videourl="//www.youtube.com/embed/NcUFum-_kqE?enablejsapi=10&amp;autoplay=1";
+       showHelpVideoModal(data);
+}

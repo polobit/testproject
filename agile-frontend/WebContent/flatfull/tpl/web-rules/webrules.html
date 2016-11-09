@@ -5,8 +5,11 @@
     <div class="col-sm-12 col-md-12">
         
             <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'web-rules'}}</h3>
-            <div class="pull-right">
-   <a href="#webrules-templates" class="btn btn-sm btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a>
+            <div class="pull-right btn-group">
+            <a href="#webrules-templates" class="btn btn-sm btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a>
+            <a id="webrule-video-tutorial" onclick="webruleVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-left: 3px; line-height: 1px;" >
+                 <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+            </a>
             </div>
 			<div class="clearfix"></div>
         
@@ -150,14 +153,14 @@ var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
 {{/if}}
 </div>
 </td>
-<td>
+<!--<td>
 <div class="table-resp hide" id="web_report">
 <div class="pull-left text-ellipsis">
 <a href="#webrule-report/{{id}}" class="stop-propagation"><i class="icon icon-bar-chart"></i>
 </a>
  </div>
 </div>
-</td>
+</td>-->
 
 <td>
 <div style="display:none;"><i class="icon-move"></i></div>

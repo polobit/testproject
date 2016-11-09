@@ -572,10 +572,10 @@
                 "type": "input",
                 "value": "Text Area"
             },
-            "textarea": {
-                "label": "Starting Text",
-                "type": "textarea",
-                "value": ""
+            "placeholder": {
+                "label": "Placeholder",
+                "type": "input",
+                "value": "placeholder"
             },
             "required": {
                 "label": "Required",

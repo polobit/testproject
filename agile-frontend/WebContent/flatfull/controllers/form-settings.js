@@ -17,7 +17,7 @@ var FormsRouter = Backbone.Router.extend({
 		var that = this;
 		this.formsListView = new Form_Collection_Events({ url : '/core/api/forms', restKey : "forms", templateKey : "forms",
 			individual_tag_name : 'tr', postRenderCallback : function(el){
-
+				el.find('[data-toggle="tooltip"]').tooltip();
 				if (that.formsListView.collection && that.formsListView.collection.length == 0)
 				{
 					window.location.href  = window.location.origin+"/#form-builder-templates";

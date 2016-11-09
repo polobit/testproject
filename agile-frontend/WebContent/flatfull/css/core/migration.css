@@ -2016,6 +2016,12 @@ display: block!important;
  .service-table-mobile td > div.table-resp{width: 100%}
  .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
  .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
+ div.email-selected-plan{
+  margin: 10px 0px !important;
+ }
+ .m-l-63{
+  margin-left: 63px !important;
+ }
 
 }
 
