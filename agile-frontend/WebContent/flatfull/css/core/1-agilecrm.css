@@ -4870,3 +4870,6 @@ ul#recent-menu-model-list li:nth-child(even)
   float: left;
   text-indent: 0;
 }
+#lhs_filters_segmentation #lhs-filters-header .popover {
+    max-width: 277px;
+}
