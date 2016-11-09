@@ -2528,4 +2528,37 @@ public class ActivityUtil
 			return null;
 		}
 	}
+	/**
+	 * gets list of activities based on entity id
+	 * 
+	 * @param entity_id
+	 * @param max
+	 * @param cursor
+	 * @return list of activities
+	 */
+	
+	
+	public static List<Activity> getDealBulkActionActivitiesByEntityId(Long entity_id, Integer max, String cursor)
+	{
+		try
+		{
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			List<Activity> dealList = null;
+			
+			searchMap.put("bulk_deal_ids", entity_id);
+
+			if (max != 0){
+				dealList = dao.fetchAll(max, cursor, searchMap, true, false);
+				return dealList;
+			}
+
+			return dao.listByProperty(searchMap);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

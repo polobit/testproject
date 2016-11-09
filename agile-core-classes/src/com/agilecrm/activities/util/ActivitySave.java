@@ -786,6 +786,15 @@ public class ActivitySave
 	        bulk_email_subject, EntityType.DEAL);
 
     }
+    
+    public static void createDealBulkActionActivity(List<Long> dealIds, int dealidscount, String actiontype, String data, String label,
+    	    String bulk_email_subject) throws JSONException
+        {
+
+    	ActivityUtil.createDealBulkActionActivity(dealIds, actiontype, data, String.valueOf(dealidscount), label,
+    	        bulk_email_subject, EntityType.DEAL);
+
+        }
 
     /**
      * common method to get the changed fields when updating deal,task,event

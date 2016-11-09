@@ -93,6 +93,12 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     public List<String> contacts = null;
     
+    /**
+     * List of contact ids related to a task
+     */
+    @NotSaved(IfDefault.class)
+    public List<Long> bulk_deal_ids = null;
+    
     
     /**
      * Key object of DomainUser.
