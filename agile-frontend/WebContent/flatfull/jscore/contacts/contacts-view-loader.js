@@ -91,8 +91,8 @@ var contacts_view_loader = {
 			App_Contacts.contactsListView.appendItem = function(base_model){
 				contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 			};
-
-			$("#contacts-list-view", el).html(App_Contacts.contactsListView.render(true).el);
+			$("#contacts-list-view", el).html(App_Contacts.contactsListView.el);
+			App_Contacts.contactsListView.render(true);
 		}
 	},
 
