@@ -10,7 +10,7 @@
      <div class="wrapper-md">
       <div class="row">  
         <div class="col-md-9">
-          <div class="panel wrapper" style="padding-bottom:35px;">
+          <div class="panel wrapper p-b-md">
             <form id="uploadDocumentForm" name="uploadDocumentForm" method="post" class="form-horizontal">
               <fieldset>
                   <input id="id" type="hidden"/>
@@ -76,12 +76,12 @@
                           <input type="hidden" name="size" id="size" class="required"/>
                           <input type="hidden" name="network_type" id="network_type" class="required"/>
                           <div class="row" id="document-link">
-                          <div class="col-md-4 col-sm-6 col-xs-6" style="width:39%;">
+                          <div class="col-md-4 col-sm-6 col-xs-6" style="width:50%;">
                           <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
                             <a href="#" id="S3"><i class="icon-desktop icon-2x" title="{{agile_lng_translate 'campaigns' 'custom'}}"></i><br/><span>{{agile_lng_translate 'documents' 'my-computer'}}</span></a>
                           </div>
                         </div>
-                        <div class="col-md-4 col-sm-6 col-xs-6 " style="width:39%;">
+                        <div class="col-md-4 col-sm-6 col-xs-6 " style="width:50%;">
                           <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
                             <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="{{agile_lng_translate 'prefs-data-sync' 'google'}}"></i><br/><span>{{agile_lng_translate 'documents' 'google-drive'}}</span></a>
                           </div>
@@ -100,7 +100,7 @@
                   </div>
                   <div id="error"></div>
                   <div class="form-actions">      
-                           <div class="col-sm-offset-3 col-sm-9">    
+                           <div class="col-sm-offset-3 col-sm-9 doc-form-actions">    
                               <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
                               <a  class="c-p m-t-xs m-r-xs btn btn-sm hide btn-success text-white generate-send-doc">{{agile_lng_translate 'document' 'document-generate'}}</a>
                               
@@ -123,7 +123,7 @@
           </div>
           </div>
           <div class="col-md-3">
-           <div class="panel wrapper">
+           <div class="panel wrapper p-b-xs">
                <h4 class="m-t-none font-thin">
                    {{agile_lng_translate 'documents' 'document-what-are-docs-title'}}
                </h4>

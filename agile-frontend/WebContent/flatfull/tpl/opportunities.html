@@ -1,7 +1,7 @@
 <script id="opportunities-model-template" type="text/html">
 
 {{#is_mobile}}
-
+<td class="hide"></td>
 <td data="{{id}}" class="data" style="padding-bottom:12px;">
 
   <div class="text-ellipsis deals-name"> 
@@ -21,7 +21,7 @@
 
 
 </td>
-<td>
+<td class="data-contact" width="40"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
 
 
 {{else}}
@@ -102,16 +102,29 @@
         <br>
       </div>
       {{/is_mobile}}
-      <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
-      {{#is_mobile}} {{else}} <div class="panel-heading"> {{agile_lng_translate 'deal-view' 'deals'}}
-      </div>{{/is_mobile}}
+
+    {{#is_mobile}}
+
+    <div class="panel panel-default" style="border:0px; border-radius:0px;">
       <div class="table-responsive">
 
-                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
+                <table class="table m-b-none no-sorting agile-table panel deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="border-radius:0px;">
 
-          {{#is_mobile}}
-           {{else}}
-          <thead>
+                    <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
+    {{else}}
+
+      <div class="panel panel-default">
+     <div class="panel-heading"> {{agile_lng_translate 'deal-view' 'deals'}}</div>
+      <div class="table-responsive">
+
+                <table class="table table-striped showCheckboxes table-layout-mob-view m-b-none no-sorting agile-table panel  deals-table deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="table-layout:auto;">
+
+                      <thead>
                         <tr>
                             <th>{{agile_lng_translate 'deal-view' 'opportunity'}}</th>
                             <th>{{agile_lng_translate 'deal-view' 'related-to'}}</th>
@@ -121,12 +134,13 @@
                             <th>{{agile_lng_translate 'deal-view' 'owner'}}</th>
                         </tr>
                     </thead>
-                    {{/is_mobile}}
                     <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
                     </tbody>
                 </table>
             </div>
             </div>
+
+      {{/is_mobile}}
         
         {{/if}}
         </div>
