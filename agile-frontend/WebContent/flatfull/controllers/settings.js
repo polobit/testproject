@@ -920,8 +920,11 @@ var SettingsRouter = Backbone.Router
 				getTemplate("prefs-dropdown-options", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
-					$('#content').html($(template_ui));	
+					$('#content').html($(template_ui));
+					loadLiveChat();
+					hideTransitionBar();
 				},"#content");
+			
 			}
 
 		});
@@ -934,4 +937,12 @@ function getCurrentDomain(options){
 		return url.split(exp)[0];
 	}
 	return " ";
+}
+
+function loadLiveChat(){
+	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
+	});
 }

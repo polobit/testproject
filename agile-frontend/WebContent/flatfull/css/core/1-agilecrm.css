@@ -4802,3 +4802,8 @@ ul#recent-menu-model-list li:nth-child(even)
 #admin-affiliate-detail-model-list tr:hover{
   cursor: pointer;
 }
+
+
+.btn-hover-color:hover{
+  background:#f6f6f6;
+}
