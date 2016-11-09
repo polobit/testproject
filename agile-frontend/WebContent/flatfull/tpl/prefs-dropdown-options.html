@@ -1,15 +1,15 @@
 <script id="prefs-dropdown-options-template" type="text/html"> 
 <div class="bg-light lter b-b wrapper-md">
-	<h1 class="m-n font-thin h3">Support<small></small></h1>
+	<h1 class="m-n font-thin h3">Help<small></small></h1>
 </div>
 <div>
 	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light {{#is_mobile}} prefs-mobile-view {{/is_mobile}}">
-		
+	<div id="prefs-dropdown-options">
 		<div class="col-md-3 col-sm-6 col-xs-12 m-t-sm">
 		<div class="panel panel-default" style="min-height: 230px;">
-			<div class="panel-heading">
+			<!--<div class="panel-heading">
 			<div class="text-md">Affiliate Program</div>
-			</div>
+			</div>-->
 			<div class="panel-body">
 				<center>
 			    	<img class="thumb-xl bg-transparent" style="height:80px;width:80px;margin:20px 20px;" src="/flatfull/img/product_update1.png">
@@ -26,10 +26,39 @@
 		</div>
 		</div>
 		</div>
-	<div class="col-md-3 col-sm-6 col-xs-12 m-t-sm">
+		<div class="col-md-3 col-sm-6 col-xs-12 m-t-sm">
+		<div class="panel panel-default" style="min-height: 230px;">
+			<!--<div class="panel-heading">
+			<div class="text-md"><i class="fa fa-circle" aria-hidden="true" style="color: green;margin-right: 5px;"></i>Chat With Us</div>
+			</div>-->
+			<div class="panel-bodys">
+			<div style="background-color:#f6f6f6">
+				<center>
+			    	<img class="thumb-xl bg-transparent" style="height:80px;width:80px;margin:20px 20px;" src="/flatfull/img/product_update1.png">
+			    </center>
+			</div>
+			<div class="panel-body">
+			    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:45px;" rel="tooltip" title="">
+					Agile is getting better every day. Find all the latest updates to Agile CRM here.
+				</div>
+				<hr>
+				<div class="text-center">
+					<a class="btn btn-sm btn-default m-b-xs" href="#" id="clickdesk_live_chat">
+					<div class="pull-left">Chat
+											</div>
+					<div class='pull-right shortcuts'>Shift + H</div>
+					</a>
+
+				<div class="clearfix"></div>
+				</div>
+			</div>
+			</div>
+		</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-xs-12 m-t-sm">
 		<div class="panel panel-default" style="min-height: 230px;">
 			<div class="panel-heading">
-			<div class="text-md">Support</div>
+			<div class="text-md">Reach Us</div>
 			</div>
 			<div class="panel-body">
 				<center>
@@ -42,7 +71,7 @@
 				<hr>
 				<div class="text-center">
 					<a class="btn btn-sm btn-default m-b-xs" href="https://www.agilecrm.com/support" target="_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')">
-					Help
+					Reach Us
 					<div class='pull-right shortcuts'>Shift + H</div>
 					</a>
 
@@ -51,6 +80,7 @@
 			</div>
 		</div>
 		</div>
+		
 		<div class="col-md-3 col-sm-6 col-xs-12 m-t-sm">
 		<div class="panel panel-default" style="min-height: 230px;">
 			<div class="panel-heading">
@@ -75,5 +105,6 @@
 			</div>
 		</div>
 		</div>
+	</div>
 </div>
 </script>
