@@ -170,7 +170,7 @@ function initializeEmailBuilderListeners() {
                 }
             } else {
                 var selectedVal = $("#video-record-select").val();
-                var videoThumbS3URL = $("#video-record-select:selected").attr('data-thumb');
+                var videoThumbS3URL = $("#video-record-select option:selected").attr('data-thumb');
                 if(selectedVal != "" && selectedVal != "AGILE_CREATE_NEW_VIDEO") {
                     emailVideoRecord.buildVideoPageURL(selectedVal,videoThumbS3URL);
                 } else {
