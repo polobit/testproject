@@ -706,6 +706,16 @@ function populate_deal_products(el, value,form_id){
 					$(".discounttype-input-group-btn",me._form_id).removeClass("open");
 				}	
 			});
+
+	/*$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0){
+			$("#showtoggle").show();
+		}else{
+			$("#showtoggle").hide();
+		}
+	});*/
 	$(form_id).on(
 			"click",".toggleHead",
 			function(e)
@@ -717,7 +727,6 @@ function populate_deal_products(el, value,form_id){
 			});
 		this.Process=function()
 		{
-			var show_table = true;
 			if(App_Deal_Details.deal_products_collection_view !=null)
 				return;
 				App_Deal_Details.deal_products_collection_view=new Base_Collection_View({ url : '/core/api/products', 
@@ -862,11 +871,9 @@ function populate_deal_products(el, value,form_id){
 							}
 						}
 						if(bProductsFound==false){
-							var sHTML='<tr><td colspan="6"><center>{{agile_lng_translate 'products' 'product-not-setup'}}</center></td></tr>';
-							$("#deal_products_div").html(sHTML);
-							$("#showdiscount").hide();
+							//$("#showproducts").hide();
 						}else{
-							$("#showdiscount").show();
+							//$("#showproducts").show();
 						}
 					}
 				});

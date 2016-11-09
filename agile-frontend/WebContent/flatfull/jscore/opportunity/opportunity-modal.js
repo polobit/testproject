@@ -570,10 +570,24 @@ function updateDeal(ele, editFromMilestoneView)
 			}
 		});
 
-	}, "DEAL")
+	}, "DEAL");
 
-	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
-
+	$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0){
+			$("#opportunityUpdateForm").find("#showtoggle_show").show();
+			$("#opportunityUpdateForm").find("#showproducts").show();
+			//$("#showtoggle_show").show();
+			//$("#showproducts").show();
+			populate_deal_products(dealForm,value,"#opportunityUpdateForm");
+		}else{
+			$("#opportunityUpdateForm").find("#showtoggle_show").hide();
+			$("#opportunityUpdateForm").find("#showproducts").hide();
+			//$("#showtoggle_show").hide();
+			//$("#showproducts").hide();
+		}
+	});
 	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
@@ -628,7 +642,18 @@ function show_deal()
 	// Contacts type-ahead
 	agile_type_ahead("relates_to", e, contacts_typeahead);
 
-	populate_deal_products(e, undefined,"#opportunityForm");
+	$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0){
+			$("#showtoggle_show").show();
+			$("#showproducts").show();
+			populate_deal_products(e, undefined,"#opportunityForm");
+		}else{
+			$("#showtoggle_show").hide();
+			$("#showproducts").hide();
+		}
+	});
 	
 	// Fills the pipelines list in select box.
 	populateTrackMilestones(e, undefined, undefined, function(pipelinesList)

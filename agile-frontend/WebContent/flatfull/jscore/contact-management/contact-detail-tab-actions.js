@@ -149,7 +149,18 @@ var contact_details_documentandtasks_actions = {
 				});
 
 				//Populate products
-				populate_deal_products(e, undefined,"#opportunityForm");
+				$.ajax({
+				  url: "/core/api/products",
+				}).done(function(data) {
+					if(data.length > 0){
+						$("#showtoggle_show").show();
+						populate_deal_products(e, undefined,"#opportunityForm");
+						$("#showproducts").show();
+					}else{
+						$("#showtoggle_show").hide();
+						$("#showproducts").hide();
+					}
+				});
 				
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", e, contacts_typeahead);
