@@ -24,15 +24,14 @@
 												<a href="#email-content" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">{{agile_lng_translate 'other' 'email'}}</a>
 											</li>
 											{{#if billingData}}
-											{{#checkPlan 'pro'}}
-                      {{else}}
-                      {{#checkPlan 'enterprise'}}
-                      {{else}}
-											<li id="addontab" data-tab="3" class="hide">
-												<a href="#addon-content" name="addon-content" aria-control="addon-content" role="tab" data-toggle="tab">Addons</a>
-											</li>
-                      {{/checkPlan}}
-											{{/checkPlan}}
+  											{{#checkPlan 'enterprise'}}
+                        {{else}}
+                          {{#isAdmin}}
+    											<li id="addontab" data-tab="3" class="hide">
+    												<a href="#addon-content" name="addon-content" aria-control="addon-content" role="tab" data-toggle="tab">Add-ons</a>
+    											</li>
+                          {{/isAdmin}}
+  											{{/checkPlan}}
 											{{/if}}
 </ul>
             <div class="tab-content" style=" display: block;">

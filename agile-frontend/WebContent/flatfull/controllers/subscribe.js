@@ -704,7 +704,7 @@ var SubscribeRouter = Backbone.Router
 					}, noLoading : true,
 					saveCallback : function(data){
 						ADDON_INFO = data;
-						showNotyPopUp("information", "Addon saved successfully.", "top");
+						showNotyPopUp("information", "Your ‘Add-ons’ subscription has been successfully enabled.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
 					}, form_custom_validate : function(){
@@ -727,7 +727,7 @@ var SubscribeRouter = Backbone.Router
 					}, noLoading : true,
 					saveCallback : function(data){
 						ADDON_INFO = data;
-						showNotyPopUp("information", "Addon saved successfully.", "top");
+						showNotyPopUp("information", "Your ‘Add-ons’ subscription has been successfully enabled.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
 					}, form_custom_validate : function(){
@@ -754,7 +754,7 @@ var SubscribeRouter = Backbone.Router
 					}, noLoading : true,
 					saveCallback : function(data){
 						ADDON_INFO = data;
-						showNotyPopUp("information", "Addon saved successfully.", "top");
+						showNotyPopUp("information", "Your ‘Add-ons’ subscription has been successfully enabled.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
 					}, form_custom_validate : function(){

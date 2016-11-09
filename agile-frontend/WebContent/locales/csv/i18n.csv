@@ -5752,3 +5752,8 @@ web-rules.templates-sub-heading,Select a template and start creating Web Rules.,
 theme.maximum-pagesize,Maximum Page Size,Máximo tamaño de página,,,,,,,,,,,,,
 theme.showconverstionperpage,Show conversations per page,Mostrar conversaciones por página,,,,,,,,,,,,,
 theme.new-menu-position,Menu Position,Posición del menú,,,,,,,,,,,,,
+account.cancel-addons,Cancel Add-ons,
+account.delete-acl-subscription-confirm,Are you sure&#44; you want to cancel your Permissions Add-on subscription?,
+account.delete-campaigns-subscription-confirm,Are you sure&#44; you want to cancel your Campaigns Add-on subscription?,
+account.delete-triggers-subscription-confirm,Are you sure&#44; you want to cancel your Triggers Add-on subscription?,
+

@@ -23,7 +23,7 @@ var ACL_Addon_Events_Model_View = Base_Model_View.extend({
         var el = $(target_el).closest("#acl-addon-content");
         cancelAddOn("core/api/addon/acl", $(target_el), function(){
         	$(".multiple-checkbox", el).find("input").removeAttr("checked").trigger("change");
-        });
+        }, "acl");
     }
 });
 
@@ -51,7 +51,7 @@ var Campaign_Addon_Events_Model_View = Base_Model_View.extend({
         var el = $(target_el).closest("#campaign-addon-content");
         cancelAddOn("core/api/addon/campaign", $(target_el), function(){
         	$(".campaign_quantity", el).val("0").trigger("change");
-        });
+        }, "campaign");
     }
 });
 
@@ -79,7 +79,7 @@ var Trigger_Addon_Events_Model_View = Base_Model_View.extend({
         var el = $(target_el).closest("#trigger-addon-content");
         cancelAddOn("core/api/addon/trigger", $(target_el), function(){
         	$(".trigger_quantity", el).val("0").trigger("change");
-        });
+        }, "trigger");
     }
 });
 
@@ -89,14 +89,14 @@ function updatePriceAndQuantity(quantity, el){
     var total_cost = (cost * quantity).toFixed(2);
     $(".total_cost", el).html(total_cost);
 }
-function cancelAddOn(url, el, callback){
-	showAlertModal("delete_subscription", "confirm", function(){
+function cancelAddOn(url, el, callback, type){
+	showAlertModal("delete_"+type+"_subscription", "confirm", function(){
 		$.ajax({url : url,
 			type : 'DELETE',
 			success: function()
 			{
 				$(el).remove();
-				showNotyPopUp("information", "Your plan has been deleted successfully", "top");
+				showNotyPopUp("information", "You have successfully canceled your Add-on subscription.", "top");
 				if(callback && typeof(callback == "function")){
 					callback();
 				}

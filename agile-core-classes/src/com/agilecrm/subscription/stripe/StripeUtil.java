@@ -474,14 +474,11 @@ public class StripeUtil {
 			invoiceParams.put("customer", cust.getId());
 			invoiceParams.put("subscription", newSub.getId());
 
-			try {
-				// Creates invoice for plan upgrade and charges customer
-				// immediately
-				Invoice invoice = Invoice.create(invoiceParams);
-				if (invoice != null && invoice.getSubscription().equals(newSub.getId()))
-					invoice.pay();
-			} catch (Exception e) {
-			}
+			// Creates invoice for plan upgrade and charges customer
+			// immediately
+			Invoice invoice = Invoice.create(invoiceParams);
+			if (invoice != null && invoice.getSubscription().equals(newSub.getId()))
+				invoice.pay();
 			System.out.println("Subscription created");
 			return newSub;
 		}else{
@@ -493,14 +490,11 @@ public class StripeUtil {
 			invoiceParams.put("customer", cust.getId());
 			invoiceParams.put("subscription", updatedSub.getId());
 
-			try {
-				// Creates invoice for plan upgrade and charges customer
-				// immediately
-				Invoice invoice = Invoice.create(invoiceParams);
-				if (invoice != null && invoice.getSubscription().equals(updatedSub.getId()))
-					invoice.pay();
-			} catch (Exception e) {
-			}
+			// Creates invoice for plan upgrade and charges customer
+			// immediately
+			Invoice invoice = Invoice.create(invoiceParams);
+			if (invoice != null && invoice.getSubscription().equals(updatedSub.getId()))
+				invoice.pay();
 			return updatedSub;
 		}
 		
