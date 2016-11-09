@@ -272,18 +272,25 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    else
 	    {
 		System.out.println("plan details not found ");
-		if (obj.has("metadata"))
+		if (obj.has("subscription"))
 		{
-		    JSONObject metadata = obj.getJSONObject("metadata");
-
-		    System.out.println("meta data : " + metadata);
-		    if (metadata != null)
-		    {
-			plan.put("quantity", metadata.get("quantity"));
-			plan.put("plan", metadata.get("plan"));
-		    }
+			System.out.println("fetching subscription from stripe");
+			com.stripe.model.Subscription subscription = null;
+			try {
+				subscription = StripeUtil.getStripeSubscriptionById(obj.getString("subscription"));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(subscription != null){
+				System.out.println("stripeSubscription:: "+subscription);
+				plan.put("quantity", subscription.getQuantity());
+				plan.put("plan", subscription.getPlan().getName());
+			}else{
+				System.out.println("subscription is null in stripe");
+			}
+		 }
 		}
-	    }
 
 	    if (data.has("period"))
 	    {
