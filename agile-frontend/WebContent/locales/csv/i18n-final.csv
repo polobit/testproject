@@ -903,7 +903,7 @@ Deal-detail.sorr-we-dont-have-your-credit-card-details,Sorry&#44 we do not have 
 portlets.duriation-should-be-in-only-positive-values,Duration should be in positive values only.,Duración será de sólo valores positivos.
 billing.email-credits-added,Email credits have been added successfully.,créditos correo electrónico se han agregado con éxito.
 dashboards.marketing-help,Welcome to Agile CRM Marketing Automation.,Bienvenido a Agile CRM Marketing Automation.
-visitors.link-clicked-on-page,A link clicked on a page that led to  your,Una liga seleccionada desde una página llevó a tu
+visitors.link-clicked-on-page,Link clicked on a page that led to your,Una liga seleccionada desde una página llevó a tu
 referrals.iam-using-agile,I am using Agile CRM and I really love it!,Estoy utilizando CRM ágil y realmente me encanta!
 workflows.you-dont-have-automations-currently,You do not have any Automations currently.,Usted no tiene ningún Automations actualmente.
 emails.thanks-for-sharing-we-appreciate-it,Thanks for sharing. We sure appreciate it!,Gracias por compartir. ¡Desde luego que lo apreciamos!
@@ -1227,7 +1227,7 @@ tickets.group-changed-to,Ticket group has been changed to,grupo de entradas se h
 contacts-view.deals-track-milestone-changed-to,Deals track/milestone changed to,Registro de oferta/hito cambiado a 
 validation-msgs.dateISO,Please enter a valid date (ISO).,Por favor&#44; introduzca una fecha válida (ISO).
 portlets.contact-activities-unsubscribed-pad-content-title,No unsubscriptions recorded yet.,No se ha registrado ningún usuario dado de baja.
-visitors.web-page-viewed-on-the-website,A web page viewed on the website,Una página web vista desde el sitio web
+visitors.web-page-viewed-on-the-website,Web page viewed on the website,Una página web vista desde el sitio web
 deal-view.no-notes-for-deal,You have no notes for this Deal.,No tiene notas de esta oferta.
 landing-pages.start-with-an-empty-landing-page,Start with an empty landing page,Empieza con un landing vacío
 icalfeed.send-the-calendar-fee-url-via-email,Send Calendar Feed URL via Email,Enviar URL Calendario RSS a través de correo electrónico
