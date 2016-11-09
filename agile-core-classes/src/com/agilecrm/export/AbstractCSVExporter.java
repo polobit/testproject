@@ -16,6 +16,7 @@ import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.export.util.DealExportCSVUtil;
 import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 
@@ -45,11 +46,12 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	try
 	{
-		 csvWriter = new CSVWriterAgile(NamespaceManager.get() + "_" + export_type + "_" + GoogleSQL.getFutureDate()
+		 csvWriter = new CSVWriterAgile(AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()) + "_" + export_type + "_" + GoogleSQL.getFutureDate()
 				 + ".csv");
 
 	   // csvWriter = new CSVWriterAgile("local"+ "_" + export_type + "_" + GoogleSQL.getFutureDate()
 	   //	    + ".csv");
+
 	}
 	catch (IOException e)
 	{

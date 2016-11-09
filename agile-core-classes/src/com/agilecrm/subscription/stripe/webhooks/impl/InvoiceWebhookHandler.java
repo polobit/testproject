@@ -18,6 +18,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -315,7 +316,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	Map<String, Object> details = getPlanDetails();
 	details.put("user_name", user.name);
-	details.put("domain", getDomain());
+	details.put("domain", AliasDomainUtil.getCachedAliasDomainName(getDomain()));
 	details.put("email", user.email);
 	Card card = StripeUtil.getDefaultCard(customer);
 	details.put("last4", card.getLast4());
