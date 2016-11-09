@@ -862,7 +862,8 @@ var LeadDetails = (function(){
 
 	LeadDetails.prototype.show_no_email_alert = function()
 	{
-		$('#mail', App_Leads.leadDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "contact-details" "sorry-this-contact-has-no-email-to-get-the-mails"}}</div>');
+		$('#mail', App_Leads.leadDetailView.el).html('<div class="alert alert-danger m-t-sm m-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "leads-view" "sorry-this-lead-has-no-email-to-get-the-mails"}}</div>');
+		this.activateLeadTab($('#mail', App_Leads.leadDetailView.el));
 	}
 
 	return LeadDetails;
