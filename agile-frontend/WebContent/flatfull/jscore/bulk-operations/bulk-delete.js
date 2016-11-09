@@ -121,7 +121,7 @@ $(function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
 					confirm_msg = "{{agile_lng_translate 'contacts' 'delete-contacts-from'}} " +$('#subscribers-campaign-name').text()+" {{agile_lng_translate 'contact-details' 'campaign'}}?";
-					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					//$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
 					if(SELECT_ALL && SELECT_ALL == true)
