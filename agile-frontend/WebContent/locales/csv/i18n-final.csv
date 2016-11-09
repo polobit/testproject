@@ -6264,3 +6264,258 @@ builder.you-cant-remove,You can\'t remove this element,Puede \'t eliminar este e
 builder.name,Name,Nombre
 builder.social-links,Social Links,vínculos sociales
 builder.divider,Divider,Divisor
+others.no-results-found,No Results Found
+campaigns.all-campaigns-stats,All Campaign Emails
+others.no-results,No Results
+affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.
+affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.
+affiliate.add,Register Deal
+other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
+admin-settings-integrations.site-key,Site Key
+campaigns.reply-yes,Yes
+campaigns.reply-sms,Inbound SMS
+campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
+campaigns.sms_trigger,SMS
+campaigns.reply-no,No
+campaigns.reply-number,Select a number
+campaigns.enter-keyword,Enter a keyword
+campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.
+campaigns.setuptwilio,Please enable your Twilio integration 
+campaigns.here,here.
+Help-center.mark-as-public-cannedmessage,Mark as Public
+portlets.Hours,Hours
+portlets.Minutes,Minutes
+portlets.Seconds,Seconds
+deal-view.detailed-notes,Detailed Notes
+tickets.feedback-subject,Subject
+tickets.feedback-created-time,Note Sent
+tickets.feedback-ticket-details,Ticket Details
+tickets.unacceptable,Unacceptable
+tickets.meets_expectations,Meets Expectations
+tickets.acceptable,Acceptable
+tickets.can_improve,Can Improve
+tickets.exceptional,Exceptional
+tickets.feedback-view-note,View Note
+tickets.feedback-contact,Contact
+tickets.feedback-feedback,Feedback
+tickets.feedback-feedback-comment,Comment
+tickets.feedback-feedback-modal,Feedback Comment
+tickets.feedback-nocomment,No comment available.
+tickets.feedback-ticket,Ticket
+tickets.feedback-all,All
+tickets.feedback-allgroups,All Groups
+calendar.double-quotes-not-allowed,Double quotes are not allowed in the message
+sync.sync-all-continue,Syncing of all contacts of other users will be initiated and this is expected to take some time. Do you want to continue?
+contacts-view.edited-call-log-to, Edited call log to
+contacts-view.deleted-call-log-to, Deleted call log to
+contacts-view.deleted-note-to, Deleted note to
+prefs-notifications.Deal_won, Deal_Won
+prefs-notifications.All_Domain_users, All_Domain_users
+prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.
+prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification)
+sync.all-contacts,Sync All Contacts
+other.campaign-webhooks-will-not-be-triggered,*Campaigns and Webhooks will be paused during import process
+verify-email.having-questions,Have questions or need help?,¿Tienes alguna pregunta o necesita ayuda?
+subscription-email.you-can-subscribe,You can subscribe,Puede suscribirse
+subscription-email.plan-subscribed,Plan subscribed,plan de suscrito
+payment-fail-email.enrolled-plan-payment-failed-second-time,Your AgileCRM subscription payment towards your enrolled plan has failed for the second time.,Su pago de la suscripción AgileCRM hacia su plan de matriculados ha fracasado por segunda vez.
+account-email.data-deleted,Data Deleted,datos eliminados
+subscription-email.charback-details,Chargeback details,detalles de devolución de cargo
+verify-email.verfify-email-now,Verify Email Now,Verificar email ahora
+subscription-email.new-plan,New Plan,Nuevo plan
+reports-email.account-holder-name,Account Holder Name,nombre del titular de la cuenta
+welcome-email.login-to-account,Log in to your account at,Ingrese a su cuenta en
+tasks-email.cause-email-is-linked-to-agile,because this email ID is linked to an Agile CRM account & is subscribed to our mailing list.,porque este ID de correo electrónico está vinculada a una cuenta ágil CRM y está suscrito a nuestra lista de correo.
+verify-email.thx-for-being-a-valued-customer,Thanks for being a valued customer.,Gracias por ser un cliente valioso.
+subscription-email.account-suspended-info,Your account has been suspended temporarily until this chargeback gets resolved. You will not be able to access your data during this duration.,Su cuenta ha sido suspendida temporalmente hasta que se resuelva este reembolso. Usted no será capaz de acceder a sus datos durante este periodo de tiempo.
+subscription-email.card-holder-name,Card holder's name,Nombre del tarjetahabiente
+payment-fail-email.payment-toy-agile-declined,Your Payment to Agile CRM has Declined,Su Pago a Agile CRM ha disminuido
+subscription-email.free-emails-added,We have added your monthly free 5000 Emails quota (Agile Branded Emails) to your account successfully.,Hemos añadido a su libre de cuotas mensuales de 5000 correos electrónicos (correos electrónicos ágil de marca) a su cuenta correctamente.
+reports-email.in-csv-file,in CSV file,en el archivo CSV
+payment-fail-email.received-refund-request,Recently we have received your refund request placed through one of our support associates. This is to confirm that the refund process has been initiated. Please allow up to 4 business days for the credited amount to reflect back in your credit card statement.,Recientemente hemos recibido la solicitud de reembolso colocado a través de uno de nuestros representantes de servicio. Esto es para confirmar que se ha iniciado el proceso de reembolso. Favor de hasta 4 días hábiles por la cantidad acreditada para reflejar de vuelta en su estado de cuenta de tarjeta de crédito.
+pwd-email.with-following-creds,with the following credentials,con las siguientes credenciales
+reports-email.email-for-created-report,You are receiving this email as you have created a report,Usted está recibiendo este correo electrónico ya que ha creado un informe
+account-email.sorry-to-go-confirm,We are sorry to see you go. You have chosen to cancel your Agile CRM account and we confirm that your account is now deactivated,Lamentamos que te vayas. Usted ha optado por cancelar su cuenta ágil CRM y confirmar que su cuenta ha sido desactivada
+contact-form-email.contact-with-email-id,A Contact with Email ID,Un contacto con la ID de correo electrónico
+payment-fail-email.disabled-account-until-receive-payment,We have disabled your account until we receive the full payment.,Hemos inhabilitado su cuenta hasta que recibamos el pago completo.
+import-email.merged-contacts,Merged Contacts,Contactos fusionadas
+deals-email.hurray,Hurray,Viva
+import-email.best-wishes,Best Wishes,Los mejores deseos
+unsubscribe-email.unsubscribed-by-mistake,Unsubscribed by mistake,Dado de baja por error
+ticket-reply-email.your-request,Your request,Tu petición
+event-email.what,What,Qué
+account-email.charge-appear-as-stmt,This charge will appear on your credit card statement as,Este cargo aparecerá en su estado de cuenta de tarjeta de crédito como
+account-email.data-deleted-confirm,All your account information will be deleted in next 48-72 hrs. If you believe this is a mistake and you would like to get your account restored&#44; please contact us immediately and we will do everything needful.,Toda la información de su cuenta será eliminada en las próximas 48-72 horas. Si considera que este es un error y que le gustaría que su cuenta restaurada&#44; póngase en contacto con nosotros de inmediato y vamos a hacer todo lo necesario.
+tasks-email.hurray,Hurray,Viva
+import-email.failed-contacts,Failed Contacts,fallidos Contactos
+reports-email.access-denied-to-update,Access denied to update,Acceso denegado para actualizar
+reports-email.total-duration,Total Duration,Duración total
+payment-fail-email.you-can-reinstate-account,Your data will be deleted in next 48 hrs. You still have time. You can login to your control panel and reinstate the service by making a payment in the next 24 hrs.,Sus datos serán eliminados en los próximos 48 hrs. Usted todavía tiene tiempo. Puede acceder a su panel de control y restablecer el servicio mediante un pago en las próximas 24 horas.
+subscription-email.normal-plan-changed-done-by-you-or-support-team,We would like to notify you of a change in your Agile CRM Subscription. You may have either changed the subscription yourself or this change has been done as per your request to our support team.,Nos gustaría que le notifique de un cambio en su suscripción ágil CRM. Es posible que tenga ya sea cambiada la suscripción sí mismo o este cambio se ha hecho conforme a su solicitud a nuestro equipo de soporte.
+tasks-email.has-won-deal,has won deal,tiene mucho ganado
+verify-email.drop-us-an,Drop us an,somos una caída
+import-email.wrong-track-value,Wrong track value or track not found in Agile,Valor por mal camino o pista no se encuentra en Agile
+payment-fail-email.reason-by-bank,Reason given by bank,Razón dada por el banco
+ticket-reply-email.delivered-by,Delivered by,Entregado por
+ticket-reply-email.reviewed-by-team,has been reviewed by support team.,ha sido revisado por el equipo de apoyo.
+subscription-email.account-suspended,Account Suspended,Cuenta suspendida
+reports-email.you-can-manage,You can manage,Puede administrar
+reports-email.failed-contacts-csv-info,Attached CSV file contains the failed contacts along with the reason for failure. You may correct the data and upload the file again,archivo CSV adjunto contiene los contactos fallidos junto con el motivo del fallo. Es posible corregir los datos y cargar el archivo de nuevo
+subscription-email.chargeback-about-outbound-emails,Outbound Emails carried out in your account,Los correos electrónicos salientes realizadas en su cuenta
+reports-email.won-on,Won on,ganado en
+welcome-email.support-assistance,Should you have any questions or need assistance&#44; don't hesitate to get in touch with us at any time by sending an email to,Si tiene alguna pregunta o necesita ayuda&#44; no dude en ponerse en contacto con nosotros en cualquier momento enviando un correo electrónico a
+subscription-email.price,Price,Precio
+payment-fail-email.data-will-delete-in-next-48-hrs,Data will be deleted automatically in next 48 hrs,Los datos se eliminarán de forma automática en las próximas 48 horas
+payment-fail-email.will-try-again-after-6-days-and-cancel,We will try again after 6 days. Your account will be cancelled fully and data deleted if we fail to charge your card again.,Vamos a intentarlo de nuevo después de 6 días. Su cuenta será cancelada totalmente y datos borrado si no somos capaces de cargar su tarjeta de nuevo.
+payment-fail-email.your-refund-has-processed,Your Refund has been Processed,Su procesamiento del reembolso
+payment-fail-email.refund-issued-on,Refund issued on,Emitido el reembolso
+import-email.total-contacts-found,Total Contacts found,Total de contactos encontrados
+account-email.payment-recieved,Payment Received,Pago recibido
+pwd-email.reset-password-request,You have made a request to reset your password. Here is your newly generated password. Please login and change your password.,Usted ha hecho una solicitud para restablecer la contraseña. Aquí está su nueva contraseña generada. Entra en la cuenta y cambiar su contraseña.
+ticket-reply-email.email-service-from,This email is a service from,Este correo electrónico es un servicio de
+event-email.open-agile-calendar,Open Agile Calendar,Abrir Calendario ágil
+reports-email.changed-to,Changed to,Cambiado a
+reports-email.report-name,Report Name,Reportar nombre
+subscription-email.chargeback-terms,You have agreed to our terms and policies before you have signed up for Agile CRM paid plans,Usted ha aceptado nuestros términos y políticas antes de que se haya registrado para Agile CRM planes de pago
+account-email.CALL-TOLL-FREE,call toll-free,llame gratis
+otp-email.just-sign-in,was just used to sign in from,se acaba de usar para acceder desde
+payment-fail-email.account-will-cancelled,Account will be cancelled,Cuenta será cancelada
+subscription-email.charge-back-steps,Agile CRM chargeback resolution steps,pasos de resolución de cargo ágil CRM
+subscription-email.amount-due,Amount due,cantidad debida
+deals-email.worth,worth,valor
+otp-email.security-info,We take your account security very seriously and we want to keep you in the loop on important actions in your account. We were unable to determine whether you have used this browser or device with your account before.,Tomamos la seguridad de su cuenta muy en serio y queremos mantener en el bucle en acciones importantes en su cuenta. No se pudo determinar si usted ha usado este navegador o dispositivo con su cuenta antes.
+subscription-email.deleted-due-to-payment-fail,is deleted due to payment failure,se suprime debido a la falta de pago
+payment-fail-email.had-problem-with-charging,We had a problem charging your account.,Hemos tenido un problema de carga de su cuenta.
+subscription-email.chargeback-about-logs,IP Address&#44; location and usage logs&#44; chat and email transcripts with our support associates,Dirección IP&#44; ubicación y uso de registros&#44; chat y las transcripciones de correo electrónico con nuestros representantes de servicio
+campaign-email.shared-with-you,has shared a campaign with you,ha compartido una campaña con usted
+account-email.cc-on-file,Credit card on File (last four),tarjeta de crédito registrada (semifinales)
+account-email.account-cancelled,Account Cancelled,Cancelación de la cuenta
+payment-fail-email.failed-again,Your Payment to AgileCRM has Declined Yet Again,Su Pago a AgileCRM ha disminuido Sin embargo&#44; otra vez
+reports-email.assigned,Assigned,asignado
+subscription-email.bill-to,Bill To,Cobrar a
+import-email.total-tasks-found,Total Tasks found,Tareas Número de resultados
+reports-email.uploaded-on,Uploaded on,Subido en
+welcome-email.url,URL,URL
+subscription-email.email-subscription-with-domain,Your account Email subscription with domain,Su cuenta de correo electrónico con el dominio de suscripción
+tasks-email.tasks-due-today,tasks due today,tareas que vencen hoy
+verify-email.verify-email-now,Verify your Email Now,Verificar su email ahora
+tasks-email.you-have,You have,Tienes
+otp-email.verfification-code,Verification Code,Código de verificación
+account-email.back-on-board,We would like to thank you for using our services and we hope to see you back on board in the near future.,Nos gustaría darle las gracias por utilizar nuestros servicios y esperamos verte de nuevo a bordo en un futuro próximo.
+payment-fail-email.fauiled-4th-time,Your AgileCRM subscription payments towards your enrolled plan has failed for the fourth time.,Sus pagos de suscripción AgileCRM hacia su plan ha fracasado inscrito por cuarta vez.
+account-email.from-you,from you,de ti
+verify-email.built-for-smbs,Built with love for small businesses,Construido con amor para las pequeñas empresas
+otp-email.ipaccess-info,It seems that you are accessing your Agile CRM account in different IP address. We could not find your current IP address in the list of allowed IPs.,Parece que está accediendo a su cuenta ágil CRM en diferentes direcciones IP. No hemos podido encontrar su dirección IP actual en la lista de direcciones IP permitidas.
+import-email.total-contacts-in-csv,Total Contacts in CSV file,Contactos totales en archivo CSV
+unsubscribe-email.removed-from-campaign,You have been successfully removed from campaign,Se le ha quitado con éxito de la campaña
+import-email.limit-exceeded,Limit exceeded,Límite excedido
+payment-fail-email.payment-declined-again,Your Payment to Agile CRM has Declined Again.,Su Pago a Agile CRM ha vuelto a disminuir.
+new-user-email.you-have-invited,You have been invited to Agile CRM,Se le ha invitado a CRM ágil
+payment-fail-email.we-will-try-after-6-days,We will try again after 6 days. Your account has been suspended till we receive a full payment.,Vamos a intentarlo de nuevo después de 6 días. Su cuenta ha sido suspendida hasta que recibamos el pago completo.
+event-email.who,Who,Quien
+tasks-email.won-deal-alert,Deal Won Alert,Tratar de alerta Won
+pwd-email.you-can-login,You can now login,Ahora puede iniciar sesión
+subscription-email.charback-received-info,We have received a chargeback on your AgileCRM subscription. We would like to get this chargeback dispute resolved quickly by processing your request. May we know the reasons for filing this chargeback?,Hemos recibido una devolución de cargo de su suscripción AgileCRM. Nos gustaría obtener esta diferencia de cargo resolvió rápidamente mediante el procesamiento de su solicitud. Podemos conocer las razones de la presentación de este cargo?
+pwd-email.your-login-details,Your Login Details,Su nombre de usuario detalles
+subscription-email.purchasing-emails-info,On a side note&#44; by purchasing Emails quota&#44; your out going Emails would not display the Agile branding.,En una nota lateral&#44; mediante la compra de cuotas correos electrónicos&#44; mensajes de correo electrónico de su saliente serían no mostrar la marca ágil.
+account-email.sorry-to-go,Sorry to see you go,Siento verte ir
+account-email.payment-details,Payment Details,Detalles del pago
+account-email.payment-received-thx,Payment Received. Thank you.,Pago recibido. Gracias.
+campaign-email.to-open-in-agile,to open in Agile CRM,para abrir en CRM ágil
+payment-fail-email.will-try-again-after-6-days,We will try again after 6 days. Your account will be suspended till we receive a full payment.,Vamos a intentarlo de nuevo después de 6 días. Su cuenta será suspendida hasta que recibamos el pago completo.
+reports-email.assigned-to,Assigned on,asignado en
+payment-fail-email.will-try-again,We will try again,Vamos a intentarlo de nuevo
+subscription-email.plan-changed-done-by-you-or-support-team,We would like to notify you of a change in your Agile CRM Email pack Subscription. You have either changed the subscription or this change has been done as per your request to our support team.,Nos gustaría que le notifique de un cambio en su dirección de correo paquete de suscripción ágil CRM. Ha cambiado ya sea la suscripción o Este cambio se ha hecho conforme a su solicitud a nuestro equipo de soporte.
+import-email.emails-missing,Email missing,correo electrónico que falta
+account-email.thanks-for-using-agile,Thanks for using Agile CRM!,Gracias por usar ágil CRM!
+verify-email.unable-toclick-link,If you are unable to click the above link&#44; please click here or paste it in a browser window.,Si no puede hacer clic en el enlace de arriba&#44; por favor haga clic aquí o pegarlo en una ventana del navegador.
+subscription-email.billing-date,Billing Date,Fecha de facturación
+account-email.subscription-cancelled-by-support-team,You have either cancelled the subscription or this change has been done as per your request to our support team.,Ha cancelado la suscripción o bien este cambio se ha hecho conforme a su solicitud a nuestro equipo de soporte.
+user-disabled.user-disabled-info,Your access to Agile CRM has been disabled by your account administrator. This is for your kind information.,Su acceso a Agile CRM ha sido deshabilitado por el administrador de la cuenta. Esto es para tu clase de información.
+reports-email.contact-notes,Contact Notes,contacto Notas
+subscription-email.chargebacks-are-bad-for-company,Chargebacks are bad for your credit history & company,Las devoluciones de cargo son malas para su historial de crédito y empresa
+reports-email.name-missing,Name missing,Nombre faltante
+reports-email.lost-on,Lost on,perdido en
+import-email.wrong-milestone,Wrong Milestone,Milestone incorrecto
+payment-fail-email.amount-refunded,Amount refunded,importe reembolsado
+payment-fail-email.you-can-pay,You can Pay,Puedes pagar
+reports-email.email-missing,Email missing/Invalid,Email falta / no válido
+reports-email.automated-email-dont-reply,This is an automated email. Please do not reply,Este es un correo electrónico automático. Por favor&#44; no responda
+otp-email.your-agile-account,Your Agile CRM account,Su cuenta ágil CRM
+subscription-email.chargeback-will-disputed,Chargeback will be disputed,Devolución de cargo se disputará
+tasks-email.completion-info,This is a friendly reminder of your tasks that are due for completion today. You can view&#44; edit and complete these tasks directly from the,Este es un recordatorio de las tareas que se deben de ejecución en la actualidad. Puede ver&#44; editar y completar estas tareas directamente desde el
+deals-email.won-deal-alert,Deal Won Alert,Tratar de alerta Won
+import-email.customer-service-help-text,Our customer service and support team is here to help you any way we can. Please email us at,Nuestro servicio al cliente y equipo de soporte está aquí para ayudarle en cualquier manera que podamos. Por favor&#44; envíenos un email a
+tasks-email.worth,worth,valor
+import-email.time-ended,Time Ended,Hora en que terminó
+account-email.we-have-received-payment,We have received a payment of,Hemos recibido un pago de
+contact-form-email.has-submitted-form,has submitted the form,ha enviado el formulario
+reports-email.added-on,Added on,Añadido
+export-email.total-deals-exported,Total Deals Exported,Ofertas total exportado
+otp-email.ipaccess-invalid-info,We have detected unusual activity on your account. Please use the below verification code so that our system will provide you the access to login and the current IP address will be automatically added to the allowed IP address list&#44; you can even delete the IP address later.,Hemos detectado una actividad inusual en su cuenta. Utilice el código de verificación a continuación para que nuestro sistema le proporcionará el acceso a la conexión y la dirección IP actual se añade automáticamente a la lista de direcciones IP permitidas&#44; incluso se puede eliminar la dirección IP más tarde.
+payment-fail-email.questions-need-help,If you have any questions or need help&#44; please feel free to contact us at billing@agilecrm.com.,Si usted tiene alguna pregunta o necesita ayuda&#44; no dude en ponerse en contacto con nosotros en billing@agilecrm.com.
+otp-email.verfification-entry-info,We have detected unusual activity on your account. Please use the Verification Code mentioned below so that our system can provide you the login access. Once you login successfully with the Verification Code&#44; our system will recognize the browser&#44; device and location for future access.,Hemos detectado una actividad inusual en su cuenta. Utilice el código de verificación se menciona a continuación para que nuestro sistema puede proporcionarle el acceso de inicio de sesión. Una vez que se conecte correctamente con el código de verificación&#44; nuestro sistema reconocerá el navegador&#44; dispositivo y ubicación para el acceso futuro.
+subscription-email.plan-details,Plan Details,Detalles del plan
+payment-fail-email.second-time,Second Time,Segunda vez
+subscription-email.free-emails-updated,Your Free 5000 Branded Emails Are Updated,Sus libre 5000 Los correos electrónicos de marca se actualizan
+import-email.time-started,Time Started,Hora de inicio
+ticket-reply-email.rate-for-ticket,How would you rate the support received?,¿Cómo calificaría el apoyo recibido?
+import-email.deal-name-missing,Deal Name is Missing,Trato Falta el nombre
+reports-email.total-value,Total Value,Valor total
+new-user-email.you-can-login,You can login,Puede iniciar sesión
+payment-fail-email.third-time,Third Time,Tercera vez
+verify-email.verity-account,Verify your Agile CRM Account,Verificar su cuenta ágil CRM
+import-email.total-accounts-found,Total Accounts found,Cuentas Número de resultados
+account-email.email-package-cancelled,We would like to notify you that your Email Package has been cancelled,Nos gustaría informarle de que su dirección de correo paquete ha sido cancelado
+verify-email.link-to-verify-email,Please click the link below to verify your email,Por favor&#44; haga clic en el siguiente enlace para verificar su correo electrónico
+payment-fail-email.enrolled-plan-payment-failed,Your Agile CRM subscription payment towards your enrolled plan has failed.,Su pago de la suscripción de CRM ágil hacia su plan de matriculados ha fallado.
+campaign-email.remaining-credit-is,Your remaining email credit is,Su crédito restante es correo electrónico
+import-email.merged-accounts,Merged Accounts,Cuentas fusionadas
+payment-fail-email.last-try-info,Having been unable to complete the transaction for the last 15 days&#44; we regret to inform that your subscription has been cancelled fully.,Después de haber sido incapaz de completar la transacción durante los últimos 15 días&#44; lamentamos informarle que su suscripción se ha cancelado totalmente.
+export-email.download-csv-file,Download CSV File,Descarga de archivos CSV
+user-enabled.access-restored,Your access has been restored. You can now login,Su acceso ha sido restaurada. Ahora puede iniciar sesión
+new-user-email.pwd-to-login,Your password to login,Su contraseña para iniciar sesión
+payment-fail-email.enrolled-plan-payment-failed-third-time,Your AgileCRM subscription payments towards your enrolled plan has failed for the third time,Sus pagos de suscripción AgileCRM hacia su plan de matriculados ha fracasado por tercera vez
+import-email.thx-for-being-valid-customer,Thanks for being a valued customer,Gracias por ser un cliente valioso
+subscription-email.chargeback-notice-plan-info,Your Agile CRM account shows the users&#44; website on which Agile CRM was installed and the contacts&#44; deals&#44; calendar usage&#44; analytic reports and the recent operations carried out by your Agile CRM account users,Su cuenta ágil CRM muestra los usuarios del sitio web&#44; en el que se instaló ágil CRM y los contactos&#44; oportunidades&#44; de uso civil&#44; informes analíticos y las recientes operaciones llevadas a cabo por los usuarios de cuentas ágil CRM
+payment-fail-email.confirm-refund,Confirmation of refund,La confirmación de restitución
+verify-email.email,email,correo electrónico
+payment-fail-email.cc-on-file-last4,Credit card on file:(last four digits {{last4}}),tarjeta de crédito registrada: (últimos cuatro dígitos {{LAST4}})
+reports-email.completed-on,Completed on,Completado en
+payment-fail-email.refund-details,Refund Details,Detalles del reembolso
+reports-email.reports,reports,informes
+welcome-email.dear,Dear,querido
+payment-fail-email.account-disabled,Account Disabled,Cuenta deshabilitada
+payment-fail-email.your-payment-for-domain,Your Payment for the domain,Su Pago para el dominio
+export-email.download-button,Please download the file by clicking on the button below. This link is valid for 24 hours only.,Por favor&#44; descargue el archivo haciendo clic en el botón de abajo. Este enlace es válida sólo para las 24 horas.
+payment-fail-email.cc-plan-details,Credit Card & Plan Details,Tarjeta de crédito y detalles del plan
+pwd-email.your-pwd-changed,Your password has been changed.,Su contraseña ha sido cambiada.
+subscription-email.signed-up-on,Signed up on,Ingreso en
+payment-fail-email.agile-friendly-team,AgileCRM Friendly Team,Amable equipo AgileCRM
+welcome-email.crew-at-agile,The Crew at Agile CRM,La tripulación en CRM ágil
+unsubscribe-email.resubscribe,Resubscribe,resubscribir
+reports-email.milestone-change,Milestone Change,Milestone Cambio
+account-email.you-can-download-invoice,You can download the invoice,Puede descargar la factura
+account-email.end,End,Fin
+unsubscribe-email.unsubscribed-from-company,You have been unsubscribed successfully from all communications,Usted ha sido dado de baja con éxito de todas las comunicaciones
+verify-email.ingore-if-not-signed-up,Please ignore if you have not signed up.,Por favor&#44; ignora si no se ha registrado.
+tasks-email.email-sent-to,This email is sent to,Este correo electrónico se envía a
+subscription-email.plan-has-changed,Your Agile CRM plan has changed,Su plan ágil CRM ha cambiado
+import-email.acess-denied-to-create-update,Access denied to create/update,Acceso denegado para crear / actualizar
+import-email.successfully-saved,Successfully Saved,Guardado con éxito
+payment-fail-email.subscription-amount,Subscription amount,importe de la suscripción
+reports-email.chat-with-us-at,or chat with us at,o chatear con nosotros en
+event-email.when,When,Cuando
+payment-fail-email.update-your-card-now,Update your Card Now,Actualiza tu tarjeta ahora
+payment-fail-email.unable-to-charge-4-times,We were unable to charge your account 4 times,No se pudo cargar su cuenta de 4 veces
+reports-email.showing-first100,Showing first 100,Mostrando primeros 100
+subscription-email.old-plan,Old Plan,plan de edad
+export-email.exported-to-csv,exported to csv file,exportado a archivo csv
+subscription-email.chargeback-disputed-proof,If you would like to proceed forward with the chargeback&#44; we will dispute with the following proof.,Si desea continuar adelante con la devolución de cargo&#44; vamos a disputar con la siguiente prueba.
+deals-email.has-won-deal,has won deal,tiene mucho ganado
+subscription-email.details-as-per-records,Your Details as per our Records,Sus detalles como por nuestros registros
+pwd-email.login-now,Login Now,Inicia sesión ahora
+welcome-email.info,Thanks for choosing Agile CRM! It's great to have you on board! We hope you will like the service as much as we liked building it.,Gracias por elegir ágil CRM! Es muy bueno tenerlo a bordo! Esperamos que te guste el servicio tanto como nos gustó la construcción de ésta.
+subscription-email.plan-changed,Plan Changed,plan cambió
+payment-fail-email.unfortunately-your-account-cancelled,Unfortunately&#44; your account is cancelled,Por desgracia&#44; su cuenta es cancelada
+verify-email.click-link-to-verify,Thanks for signing up. Please click the link below to verify your email.,Gracias por registrarte. Por favor&#44; haga clic en el siguiente enlace para verificar su correo electrónico.
