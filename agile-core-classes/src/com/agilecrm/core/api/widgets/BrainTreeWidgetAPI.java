@@ -20,7 +20,7 @@ public class BrainTreeWidgetAPI {
 	@Path("get/{widget-id}/{keyID}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getTicketsFromZendesk(@PathParam("widget-id") Long widgetId,
+	public String getBainTreeDetails(@PathParam("widget-id") Long widgetId,
 			@PathParam("keyID") String keyID) {
 		try {
 			// Retrieves widget based on its id

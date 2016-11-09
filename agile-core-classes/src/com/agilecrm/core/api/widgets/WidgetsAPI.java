@@ -24,6 +24,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
+import com.agilecrm.social.KnowlarityUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
@@ -506,8 +507,7 @@ public class WidgetsAPI {
 			BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 					privateKey);
 			JSONArray resultObj = bUtil.getTransactions("test@agilecrm.com");
-		}
-		if (widget.name.equals("Uservoice")) {
+		}else if (widget.name.equals("Uservoice")) {
 			String prefs = widget.prefs;
 			JSONObject prefsObj = new JSONObject(prefs);
 			String API_KEY = prefsObj.getString("uv_api_key");
@@ -515,5 +515,14 @@ public class WidgetsAPI {
 			String domain = prefsObj.getString("uv_domain_name");
 			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
 		}
+			//else if (widget.name.equals("Knowlarity")) {
+//			String prefs = widget.prefs;
+//			JSONObject prefsObj = new JSONObject(prefs);
+//			String API_KEY = prefsObj.getString("apiKEY");
+//			String email = prefsObj.getString("email");
+//			String channel = prefsObj.getString("knowlarity_channel");
+//			KnowlarityUtil knowlarity = new KnowlarityUtil(API_KEY, email, channel);
+//			knowlarity.checkAgentIsValid();
+//		}
 	}
 }
