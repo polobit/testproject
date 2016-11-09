@@ -61,7 +61,7 @@
                     {{/is_mobile}}
                 </tr>
             </thead>
-            <tbody id="settings-email-templates-model-list" route="emailbuilder/">
+            <tbody id="settings-email-templates-model-list" route="email">
             </tbody>
         </table>
      </div>
@@ -70,7 +70,11 @@
 </script>
 
  <script id="settings-email-templates-model-template" type="text/html">
-    <td class='data hide' data='{{id}}'></td>
+    {{#if is_template_built_using_builder}}
+        <td class='data hide' data='builder/{{id}}'></td>
+    {{else}}
+        <td class='data hide' data='-template/{{id}}'></td>
+    {{/if}}
     <td>
 		<div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
     		{{name}}
