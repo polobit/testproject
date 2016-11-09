@@ -225,7 +225,7 @@ $(function()
 					return;
 				}
 			  		
-			  accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+to, function(responseJson){
+			  accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+encodeURIComponent(to), function(responseJson){
 				  callToNumber(to,from,widgetName,responseJson,"dialler");
 			  });
 			});
