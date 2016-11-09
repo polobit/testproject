@@ -5,8 +5,12 @@
 	<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.min.js'></script>
 </head>
 <body>
-   <script>
-   function get_cloudfront_path(type){
+   <script type="text/javascript">
+   		window.onerror = function(message, url, lineNumber) {  
+		    // maybe some handling?  
+		    return true; // prevents browser error messages  
+		};
+   		function get_cloudfront_path(type){
 			if(type == "static")
 				return "<%=CLOUDFRONT_STATIC_FILES_PATH%>";
 			else if(type == "lib")
@@ -19,15 +23,23 @@
        var CLOUDFRONT_TEMPLATE_LIB_PATH = parent.get_cloudfront_path("lib");
        var _AGILE_VERSION = parent.get_cloudfront_path("version");
        var _AGILE_LANGUAGE = parent.get_cloudfront_path("language");
+       if(window.location.href.indexOf("localhost:88") != -1)
+       {
+       		CLOUDFRONT_TEMPLATE_LIB_PATH = "/";
+       		CLOUDFRONT_STATIC_FILES_PATH = "/flatfull/";
+       }
 
-       head.load(CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _AGILE_VERSION,
-       			CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _AGILE_VERSION, 
-					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/'+ _AGILE_LANGUAGE +'/js-all-min-1.js?_=' + _AGILE_VERSION, 
-					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/'+ _AGILE_LANGUAGE + '/js-all-min-2.js?_=' + _AGILE_VERSION, 
-					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/' + _AGILE_LANGUAGE + '/js-all-min-3.js?_=' + _AGILE_VERSION, 
-					CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/' + _AGILE_LANGUAGE + '/js-all-min-4.js?_=' + _AGILE_VERSION, 
-					CLOUDFRONT_TEMPLATE_LIB_PATH + 'tpl/min/precompiled/locales/' + _AGILE_LANGUAGE + '/tpl.js?_=' + _AGILE_VERSION, 
-					CLOUDFRONT_TEMPLATE_LIB_PATH + 'tpl/min/precompiled/locales/' + _AGILE_LANGUAGE + '/portlets.js?_=' + _AGILE_VERSION
+       head.load("https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js", 
+       			 "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js",
+    		     CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/lib-all-new-1.js?_=' + _AGILE_VERSION,
+    		     CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/backbone-min.js',
+       			 CLOUDFRONT_STATIC_FILES_PATH + 'final-lib/min/lib-all-new-2.js?_=' + _AGILE_VERSION, 
+				 CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/'+ _AGILE_LANGUAGE +'/js-all-min-1.js?_=' + _AGILE_VERSION, 
+				 CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/'+ _AGILE_LANGUAGE + '/js-all-min-2.js?_=' + _AGILE_VERSION, 
+				 CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/' + _AGILE_LANGUAGE + '/js-all-min-3.js?_=' + _AGILE_VERSION, 
+				 CLOUDFRONT_TEMPLATE_LIB_PATH + 'jscore/min/locales/' + _AGILE_LANGUAGE + '/js-all-min-4.js?_=' + _AGILE_VERSION, 
+				 CLOUDFRONT_TEMPLATE_LIB_PATH + 'tpl/min/precompiled/locales/' + _AGILE_LANGUAGE + '/' + _AGILE_LANGUAGE + '.js?_=' + _AGILE_VERSION, 
+				 CLOUDFRONT_TEMPLATE_LIB_PATH + 'tpl/min/precompiled/locales/' + _AGILE_LANGUAGE + '/portlets.js?_=' + _AGILE_VERSION
 							);
    </script>
 
