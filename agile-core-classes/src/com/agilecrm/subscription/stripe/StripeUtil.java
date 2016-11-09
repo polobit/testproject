@@ -467,32 +467,30 @@ public class StripeUtil {
 		com.stripe.model.Subscription subscription = null;;
 		if(subscriptionId != null)
 			subscription= getStripeSubscriptionById(subscriptionId);
-		com.stripe.model.Subscription sub = null;
 		if(subscription == null){
 			System.out.println("creating subscription with plan:"+planId+" quantity:"+quantity);
-			sub = cust.createSubscription(params);
+			subscription = cust.createSubscription(params);
 		}else{
 			System.out.println("updating subscription with plan:"+planId+" quantity:"+quantity);
 			System.out.println("Old plandetails::: plan:"+subscription.getId()+" quantity:"+quantity);
-			params.put("id", subscription.getId());
-			sub = cust.updateSubscription(params);
+			subscription = subscription.update(params);
 			System.out.println("Subscription updated");
 		}
 		Map<String, Object> invoiceParams = new HashMap<String, Object>();
 		invoiceParams.put("customer", cust.getId());
-		invoiceParams.put("subscription", sub.getId());
+		invoiceParams.put("subscription", subscription.getId());
 
 		// Creates invoice for plan upgrade and charges customer
 		// immediately
+		Invoice invoice = null;
 		try{
-			Invoice invoice = Invoice.create(invoiceParams);
-			if (invoice != null && invoice.getSubscription().equals(sub.getId()) && !invoice.getPaid())
-				invoice.pay();
-			System.out.println("Subscription created");
+			invoice = Invoice.create(invoiceParams);
 		}catch(Exception e){
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
-		return sub;
+		if (invoice != null && invoice.getSubscription().equals(subscription.getId()) && !invoice.getPaid())
+			invoice.pay();
+		return subscription;
 		
 	}
 	
