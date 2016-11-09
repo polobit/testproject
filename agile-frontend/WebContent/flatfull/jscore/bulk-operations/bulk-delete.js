@@ -117,7 +117,10 @@ $(function(){
 					if(ADDON_INFO && ADDON_INFO.id && ADDON_INFO.aclUsers.length > 0){
 						$.each( id_array, function( index, value ){
 						   if($.inArray(value, ADDON_INFO.aclUsers) != -1){
-							   	showNotyPopUp('warning', "Sorry, You can't delete users until you remove the ACL permissions in Addons", "top", 10000);
+						   		var msg = "Sorry, you cannot delete the selected user. Cancel Permissions Add-on and try again.";
+						   		if(id_array.length > 1)
+						   			msg = "Sorry, you cannot delete the selected users. Cancel Permissions Add-on and try again.";
+							   	showNotyPopUp('warning', msg, "top", 10000);
 							   	canProceed = false;
 						   }
 						});
