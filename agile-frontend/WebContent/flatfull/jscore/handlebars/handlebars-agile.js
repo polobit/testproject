@@ -1448,7 +1448,7 @@ function updateLeadCustomData(el)
  */
  function isAccessToLeads()
  {
- 	var domainNamesJSON = {"phanidesk" : true, "subrahmanyam" : true, "phanisbox" : true};
+ 	var domainNamesJSON = {"phanidesk" : true, "subrahmanyam" : true};
  	if(CURRENT_DOMAIN_USER && domainNamesJSON[CURRENT_DOMAIN_USER.domain])
  	{
  		return true;
