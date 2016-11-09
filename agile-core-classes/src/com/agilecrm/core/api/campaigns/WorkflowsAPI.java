@@ -568,7 +568,7 @@ public class WorkflowsAPI {
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("verification_link",
-					VersioningUtil.getHostURLByApp(NamespaceManager.get()));
+					VersioningUtil.getHostURLByApp(AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get())));
 
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			map.put("campaignId", workflow_id);
