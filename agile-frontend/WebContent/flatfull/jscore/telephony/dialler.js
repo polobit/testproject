@@ -374,6 +374,8 @@ try{
 			dialFromSip(to,from,contact)
 		}else if(widgetName == "Skype"){
 			dialFromSkype(to,from,contact)
+		}else if(widgetName == "Ozonetel"){
+			dialFromOzonetel(to,from,contact)
 		}
 	
 }catch(e){
@@ -417,7 +419,9 @@ function dialFromTwilio(to,from,contact){
 		  }
 	twiliocall(to, name, null, contact);
 }
+function dialFromOzonetel(){
 
+}
 function dialFromBria(to,from,contact){
 
 	var command = "startCall";
@@ -525,6 +529,8 @@ function getIcon(widgetName){
 		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >Bria";
 	}else if(widgetName == "Skype"){
 		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
+	}else if(widgetName == "Ozonetel"){
+		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
 	}
 	return icon;
 }
