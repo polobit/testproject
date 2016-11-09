@@ -1423,7 +1423,13 @@ function getLeadCustomProperties(items)
 		}
 	}
 	
-	return finalFields;
+	var finalCustomFields = [];
+ 	for(var x = 0;x<finalFields.length ;x++){
+ 		if(finalFields[x].name != 'first_name' && finalFields[x].name != 'last_name')
+ 			finalCustomFields.push(finalFields[x]);
+ 	}
+
+	return finalCustomFields;
 }
 
 function updateLeadCustomData(el)
