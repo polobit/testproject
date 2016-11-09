@@ -1,0 +1,48 @@
+<script id="ozonetel-profile-template" type="text/html">
+<div class="widget_content">
+  <div class="row-fluid">  
+     <div>
+        <p>{{msg}}</p>
+     </div>  
+  </div>
+<div>
+</script>
+
+<script id="ozonetel-login-template" type="text/html">
+<div>
+	<form class="p-xs" id="ozonetel_login_form" name="ozonetel_login_form" method="post">
+    	<fieldset>
+		      <p class="m-t-sm">
+                   {{agile_lng_translate 'widgets' 'Ozonetel-content'}}
+              </p>
+			  
+				<label><b>{{agile_lng_translate 'widgets' 'enter-ozonetel-details'}} </b></label>
+                <label id="sip_reg_status"></label>
+				<div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="ozontel_auth_key" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'ozonetel-auth-key'}}" value="" name="ozontel_auth_key" placeholder="{{agile_lng_translate 'widgets' 'ozonetel-auth-key'}}"></input>
+                     </div>
+                </div>
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="text" id="caller_id" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'caller-id'}}" value="" name="caller_id" placeholder="{{agile_lng_translate 'widgets' 'caller-id'}}"></input>
+                     </div>
+                </div>				
+				<!--<div class="checkbox">
+					<label class="i-checks i-checks-sm">
+              			<input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="{{agile_lng_translate 'widgets' 'websocket-url'}}"></input><i></i> {{agile_lng_translate 'widgets' 'enable-sip-legacy-mode'}}
+					</label>
+				</div>-->
+              <div class="text-center">
+			  	<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+			  	<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
+			 </div>
+              
+              <p class="m-t-sm m-b-none">
+                  {{agile_lng_translate 'widgets' 'do-not-have-an-ozonetel-account'}} 
+                  <a href="http://www.kookoo.in/index.php/component/user/?task=register" target="_blank" class="text-info"> {{agile_lng_translate 'widgets' 'signup'}} </a>
+              </p>
+		 </fieldset>
+    </form>
+</div>
+</script>
