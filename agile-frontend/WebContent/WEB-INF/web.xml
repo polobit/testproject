@@ -1588,4 +1588,24 @@
         <servlet-name>OpenDocumentViewer</servlet-name>
         <url-pattern>/sendemail/*</url-pattern>
  </servlet-mapping>
+ 
+ <servlet>
+		<servlet-name>OzonetelOutboundCallServlet</servlet-name>
+		<servlet-class>com.thirdparty.ozonetel.OzonetelOutboundCallServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OzonetelOutboundCallServlet</servlet-name>
+		<url-pattern>/outboundcall</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>OzonetelCallBackServlet</servlet-name>
+		<servlet-class>com.thirdparty.ozonetel.OzonetelCallBackServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OzonetelCallBackServlet</servlet-name>
+		<url-pattern>/outbound_callstatus</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
