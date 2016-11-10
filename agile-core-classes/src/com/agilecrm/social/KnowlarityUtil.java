@@ -15,7 +15,7 @@ public class KnowlarityUtil {
 	private String channel;
 	private String API_URL = "https://kpi.knowlarity.com/";
 
-	public KnowlarityUtil(String APIKey, String agentEmail, String channel) {
+	public KnowlarityUtil(String APIKey, String agentEmail, String channel){
 		this.APIKey = APIKey;
 		this.agentEmail = agentEmail;
 		this.channel = channel;
@@ -39,7 +39,7 @@ public class KnowlarityUtil {
 		if (!valid) {
 			throw new Exception();
 		}
-		
+
 		return valid;
 	}
 
