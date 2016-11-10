@@ -203,7 +203,7 @@ var MODAL_MESSAGES = {
 	},
 	"change_campaigns_addon" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "{{agile_lng_translate 'billing' 'camapagns-addon-change-select'}}"
+		"message" : "{{agile_lng_translate 'billing' 'campaigns-addon-change-select'}}"
 	},
 	"change_triggers_addon" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
