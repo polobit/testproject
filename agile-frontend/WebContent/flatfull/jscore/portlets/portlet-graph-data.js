@@ -962,7 +962,7 @@ var portlet_graph_data_utility = {
 					{
 						$('#' + graphSelector1)
 										.html(
-												'<div class="portlet-error-message" style="padding:30px 15px">{{agile_lng_translate "portlets" "no-deals-goals-set"}} </div>');
+												'<div class="portlet-error-message" style="padding:30px 15px">{{agile_lng_translate "portlets" "no-deals-goals-set-new"}} </div>');
 								
 					}
 					else{
@@ -976,7 +976,7 @@ var portlet_graph_data_utility = {
 					{
 						$('#' + graphSelector2)
 										.html(
-												'<div class="portlet-error-message" style="padding:30px 15px">{{agile_lng_translate "portlets" "no-revenue-goals-set"}}</div>');
+												'<div class="portlet-error-message" style="padding:30px 15px">{{agile_lng_translate "portlets" "no-revenue-goals-set-new"}}</div>');
 								
 					}
 					 else{
