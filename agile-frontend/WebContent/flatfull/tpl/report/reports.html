@@ -323,40 +323,22 @@
 
     <div class="tab-pane" id="UserActivities">
 
-        
-        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
         <a class="report-go" href="#activities">
-        <div class="text-center show_screenshot" >
-        <!-- Description -->
-        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-          {{agile_lng_translate 'report-view' 'user-reports-details'}}
+          <div class="text-center show_screenshot" >
+             <!-- Description -->
+             <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+               {{agile_lng_translate 'report-view' 'user-reports-details'}}
           
-        </div>
-        <img src='flatfull/img/reports_images/user-activities.png'></img>
-        <div style="display:none;" class="activities-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
-        </div>
-                </a>
-            {{else}}
-            
-            <div class="text-center show_screenshot" >
-            <!-- Description -->
-            <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-             {{agile_lng_translate 'report-view' 'user-reports-details'}}
-           
-            </div>
-            <div class="_upgrade" id="activities-upgrade">
+              </div>
             <img src='flatfull/img/reports_images/user-activities.png'></img>
-            </div>
-
-            <div style="display:none;" class="activities-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
-               </div>  
-            {{/isAllowedInCurrentPlan}}
-             <div class="clearfix"></div>
+            <br/>
+          </div>
+        </a>
     </div>
 
     <div class="tab-pane" id="ContactActivities">
-<a class="report-go" href="#contact-activities">
-                    <div class="text-center show_screenshot" >
+      <a class="report-go" href="#contact-activities">
+        <div class="text-center show_screenshot" >
                             <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
           {{agile_lng_translate 'report-view' 'contact-reports-details'}}
@@ -365,7 +347,7 @@
        
         <br />
 
-    </div>
+         </div>
         </a>
     </div>
 
