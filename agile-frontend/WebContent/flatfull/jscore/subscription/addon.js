@@ -86,7 +86,7 @@ var Trigger_Addon_Events_Model_View = Base_Model_View.extend({
 function updatePriceAndQuantity(quantity, el){
     $(".quantity", el).html(quantity);
     var cost = $(".cost",el).text();
-    var total_cost = (cost * quantity).toFixed(2);
+    var total_cost = (cost * quantity * 12).toFixed(2);
     $(".total_cost", el).html(total_cost);
 }
 function cancelAddOn(url, el, callback, type){
