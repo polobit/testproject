@@ -990,9 +990,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
              
              // Gets the domain name from the contacts of the custom fields.
                var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
+               var email;
                if(contactId == currentContactJson.id){
 					var properties = currentContactJson.properties;
-					var email;
+					
 					$.each(properties,function(id, obj){
 						if(obj.name == "email"){
 							email = obj.value;
@@ -1000,6 +1001,15 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 						}
 					});
 			   }
+
+			   if(App_Companies.companyDetailView){
+			      var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			      var tempId = id;
+			      id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+			        if(id && id == compEmailTemp){
+				        email = tempId;
+			        }
+		        }
               
               this.sendEmail(email, subject, body, cc, bcc, true,id_type);
               return;
