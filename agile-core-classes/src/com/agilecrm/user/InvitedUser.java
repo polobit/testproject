@@ -60,10 +60,11 @@ public class InvitedUser {
 		dao.put(this);
 
 		// Send invitation Email
+		String tempDomain = this.domain;
 		this.domain = AliasDomainUtil.getCachedAliasDomainName(this.domain);
 		if (isNewOne)
 			SendMail.sendMail(email, SendMail.INVITED_USER_SUBJECT, SendMail.INVITED_USER, this);
-
+		this.domain = tempDomain;
 	}
 
 }
