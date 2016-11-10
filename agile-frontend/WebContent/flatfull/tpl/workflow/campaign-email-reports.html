@@ -1,64 +1,79 @@
 <script id="campaign-email-reports-template" type="text/html">
-<div id="campaign-email-report">
-<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm m-b" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);">
-     <i class="icon-calendar icon-large"></i>
-     <span id="range">{{date-range "today" "-6"}}</span>
-</div>
-<div class="clearfix"></div>
-<div class="row">
-<div class="col-md-12">		
-	<!-- Email Reports -->
-	<div id="email-reports">
+	<div id="campaign-email-report">
+		<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm m-b" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);">
+			<i class="icon-calendar icon-large"></i>
+			<span id="range">{{date-range "today" "-6"}}</span>
+		</div>
+		<div class="clearfix"></div>
 		<div class="row">
-			<div class="col-md-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">{{agile_lng_translate 'report-add' 'email-reports'}}</div>
-			<div class="panel-body">	
-			<div id="email-table-reports"></div>
+			<div class="col-md-12">		
+				<!-- Email Reports -->
+				<div id="email-reports">
+					<div class="tab-container m-b-none">
+						<ul class="nav nav-tabs b-b-none">
+							<li id="campaignreports">
+								<a href="#email-reports/all" class="b-l-none">
+									Campaign 
+								</a>
+							</li>
+							<li id="pushnotificationreports"> 
+								<a href="#push-notification-reports/all" class="b-l-none">
+									Push Notification
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'report-add' 'email-reports'}}</div>
+								<div class="panel-body">	
+									<div id="email-table-reports"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'report-add' 'daily'}}</div>
+								<div class="panel-body">
+									<div id="line-daily-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'report-add' 'hourly'}}</div>
+								<div class="panel-body">
+									<div id="line-hourly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'portlets' 'weekly'}}<small>({{agile_lng_translate 'contact-details' 'from'}} <span id="week-range">{{date-range "today" "-6"}}</span>)</span></small></div>
+								<div class="panel-body">
+									<div id="line-weekly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+				<!-- End of Email Reports -->  
 			</div>
-			</div>
-			</div>
 		</div>
-		
-		
-		<div class="row">
-		<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">{{agile_lng_translate 'report-add' 'daily'}}</div>
-			<div class="panel-body">
-				<div id="line-daily-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
-			</div>
-		</div>
-		</div>
-		</div>
-		
-		<div class="row">
-		<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">{{agile_lng_translate 'report-add' 'hourly'}}</div>
-			<div class="panel-body">
-				<div id="line-hourly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
-			</div>
-		</div>
-		</div>
-		</div>
-		
-		<div class="row">
-		<div class="col-md-12">
-		<div class="panel panel-default">
-				<div class="panel-heading">{{agile_lng_translate 'portlets' 'weekly'}}<small>({{agile_lng_translate 'contact-details' 'from'}} <span id="week-range">{{date-range "today" "-6"}}</span>)</span></small></div>
-			<div class="panel-body">
-			<div id="line-weekly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
-			</div>
-		</div>
-		</div>
-		</div>
-		
-		
 	</div>
-	<!-- End of Email Reports -->  
-	</div>
-   </div>
-</div>
 </div>
 </script>

@@ -1,0 +1,173 @@
+<script id="pushNotification-reports-template" type="text/html">
+	<div id="pushNotification-report">
+		<div id="reportrange" class="pull-right m-r-xs p-t-xs p-b-xs p-l-sm p-r-sm m-b" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);border: 1px solid rgb(207, 218, 221);">
+			<i class="icon-calendar icon-large"></i>
+			<span id="range">{{date-range "today" "-6"}}</span>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+			<div class="col-md-12">		
+				<!-- Push notification Reports -->
+				<div id="email-reports">
+					<div class="tab-container m-b-none">
+						<ul class="nav nav-tabs b-b-none">
+							<li id="campaignreports">
+								<a href="#email-reports/all" class="b-l-none">
+									Campaign 
+								</a>
+							</li>
+							<li id="pushnotificationreports"> 
+								<a href="#push-notification-reports/all" class="b-l-none">
+									Push Notification
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">Push Notification Reports</div>
+								<div class="panel-body">	
+									<div id="pushNotification-table-reports"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'report-add' 'daily'}}</div>
+								<div class="panel-body">
+									<div id="line-daily-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'report-add' 'hourly'}}</div>
+								<div class="panel-body">
+									<div id="line-hourly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">{{agile_lng_translate 'report-add' 'weekly'}}
+									<small>({{agile_lng_translate 'contact-details' 'from'}} 
+										<span id="week-range">{{date-range "today" "-6"}}</span>)</span></small></div>
+										<div class="panel-body">
+											<div id="line-weekly-chart" class="p-t-xxl m-l-lg" style="height:300px;"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</script>
+		<script id="pushReport-analysis-template" type="text/html">
+			<div class="wrapper-md lter bg-light b-b" id="form-logs-list">
+				<div class="row">
+					<div class="col-md-12">
+
+						<h3 class="pull-left font-thin h3">Push Notification Analysis</h3>
+
+						<!--Shown only in Subscribers block-->
+						<div id="subscribers-block" class="pull-left" style="margin-top: 2px; margin-left: 11px;">
+							<div class="btn btn-sm btn-default m-l-lg delete-checked-contacts pull-left" id="remove-active-from-form" style="display: none;">{{agile_lng_translate 'web-rules' 'remove-from-campaign'}}</div> 
+							<!--Shows selected contacts list and offer to select all if current list is more than the page-size -->
+							<div class="pull-left m-l-sm"  style="margin-top: 6px;" id="subscribers-bulk-select"></div>
+						</div> 
+
+						<div class="right">
+							<select id="pushNotification-reports-select" class="required form-control">
+								<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+							</select>
+						</div>
+						<div class="clearfix"></div>
+
+					</div>
+				</div>
+			</div>
+			<div id="pushReport-analysis-tabs"></div>
+		</script>
+
+		<script id="pushReport-analysis-tabs-template" type="text/html">
+
+			<div class="hbox hbox-auto-xs hbox-auto-sm bg-light">
+				<div class="col w b-r">
+					<div class="vbox">
+						<div class="row-row">
+							<div id="campaign-tabs" class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+								<a href="#email-reports/{{id}}" class="campaign-stats-tab list-group-item select" data-campaign-tab-active="STATS">{{agile_lng_translate 'report-view' 'reports'}}</a>
+								<a href="#workflow/all-subscribers/{{id}}" class="campaign-subscribers-tab list-group-item" data-campaign-tab-active="SUBSCRIBERS">{{agile_lng_translate 'report-view' 'subscribers'}}</a>
+								<a href="#workflows/logs/{{id}}" class="campaign-logs-tab list-group-item" data-campaign-tab-active="LOGS">{{agile_lng_translate 'report-view' 'logs'}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col overflow-visible">
+					<div class="tabs wrapper-md" id="pushReport-analysis-tabs-content"></div>
+				</div>
+			</div>
+
+		</script>
+		<!--Form Table -->
+		<script id="pushReport-table-reports-template" type="text/html">
+			<div class="table-responsive">  
+				<table class="table table-bordered table-layout-mob-view" width='50%'>
+					<tbody>
+						<tr>
+							<th>{{agile_lng_translate 'portlets' 'emails-sent'}}</th>
+							<th>{{agile_lng_translate 'workflows' 'emails-skipped'}}<span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 6px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'workflows' 'total-email-skipped-recorded'}}"
+								id="element" data-trigger="hover" />
+							</span></th>
+							<th>{{agile_lng_translate 'portlets' 'emails-opened'}}<span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 6px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'total-email-opens-recorded-desc'}}"
+								id="element" data-trigger="hover" />
+							</span></th>
+							<th>{{agile_lng_translate 'campaigns' 'clicks'}}<span
+
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 6px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'total-email-link-clicks-recorded-desc'}}"
+								id="element" data-trigger="hover" /></th>
+
+
+
+							</tr>
+
+							<tr>
+								<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
+								<td>{{#if skipped}}{{skipped}} {{else}} - {{/if}}</td>
+								<td>{{#if shown}}{{shown}} {{else}} - {{/if}}</td>
+								<td>{{#if clicks}} {{clicks}} {{else}} - {{/if}}</td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</script>
