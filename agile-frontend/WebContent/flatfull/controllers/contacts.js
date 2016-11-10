@@ -1551,6 +1551,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 		
 		if(App_Companies.companyDetailView){
 			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
 			if(id && id == compEmailTemp){
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
