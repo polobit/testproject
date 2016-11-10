@@ -301,6 +301,10 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    $("#documentsmenu span").text("Documents");
    
    }
+   
+   $("body").on("click",".contactslimitUpgrade",function(e){
+		$(".contactlimit-msg-cross").trigger("click");
+	});
    $("body").on("click",".contactlimit-msg-cross",function(e){
 		createCookie("contactslimit","true",1);
 	});

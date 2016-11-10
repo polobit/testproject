@@ -37,6 +37,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Category;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
@@ -1632,6 +1633,15 @@ public class CSVUtil
 		{
 		    opportunity.save();
 		    savedDeals++;
+		    try
+			{
+			    ActivitySave.createDealAddActivity(opportunity);
+			}
+			catch (JSONException e)
+			{
+			    // TODO Auto-generated catch block
+			    e.printStackTrace();
+			}
 		}
 		else
 		{
