@@ -847,9 +847,16 @@ function deserialize_contact(contact, template, callback)
 			fill_multi_options(field_element, element);
 		});
 
+		var related_company_id = "contact_company_id";
+
+		if(contact.type == "LEAD")
+		{
+			related_company_id = "lead_company_id";
+		}
+
 		var fxn_display_company = function(data, item)
 		{
-			$("#content [name='contact_company_id']")
+			$("#content [name='"+related_company_id+"']")
 					.html(
 							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 			$("#content #contact_company").hide();
@@ -897,7 +904,7 @@ function deserialize_contact(contact, template, callback)
 				if (contact.properties[i].name == 'company')
 				{
 					$("#content #contact_company").hide();
-					$("#content [name='contact_company_id']")
+					$("#content [name='"+related_company_id+"']")
 							.html(
 									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 				}
@@ -954,6 +961,13 @@ function deserialize_contact(contact, template, callback)
 				}
 			}
 		});
+
+		if(contact.type == "LEAD")
+		{
+			leadsViewLoader = new LeadsViewLoader();
+			leadsViewLoader.setupSources($("#content"), contact);
+			leadsViewLoader.setupStatuses($("#content"), contact);
+		}
 
 		initializeEditContactListeners($('form', $('#content')).attr("id"));
 		
@@ -1366,5 +1380,22 @@ function initializeEditContactListeners(ele_id)
 		e.preventDefault();
 
 		$('.country-mismatch-error').hide();
+	});
+
+	$("#"+ele_id).off('click', '#lead-update');
+	$("#"+ele_id).on('click', '#lead-update', function(e)
+	{
+		serialize_and_save_continue_lead(e, 'updateLeadForm', 'new-lead-modal', false, e.currentTarget, 'tags_source_continue_lead');
+	});
+
+	$("#"+ele_id).off('click', '#lead-close');
+	$("#"+ele_id).on('click', '#lead-close', function(e)
+	{
+		e.preventDefault();
+		var id = $('#updateLeadForm input[name=id]').val();
+		if (id)
+		{
+			Backbone.history.navigate("lead/" + id, { trigger : true });
+		}
 	});
 }

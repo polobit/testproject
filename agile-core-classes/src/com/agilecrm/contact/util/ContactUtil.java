@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.AgileQueues;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
@@ -52,6 +53,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.workflows.status.CampaignStatus;
+import com.amazonaws.services.route53domains.model.ContactType;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.agile.CheckCampaign;
@@ -2304,6 +2306,105 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 	Query<Contact> q = dao.ofy().query(Contact.class);
 	q.filter("type", Type.PERSON);
 	q.filter("guid", guId);
+	try
+	{
+	    return dao.get(q.getKey());
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
+    
+    public static List<Contact> getAllByOrder(int max, String cursor, String sortKey, Type type)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("type", type);
+	if (max != 0)
+	    return dao.fetchAllByOrder(max, cursor, searchMap, false, true, sortKey);
+
+	return dao.listByPropertyAndOrder(searchMap, sortKey);
+    }
+    
+    /**
+     * Updates leads with new status
+     * 
+     * @param contacts_list
+     *            contacts collection to updated leads
+     * @param new_status
+     *            update leads with new status
+     * @return
+     */
+    public static void changeStatusToLeadsBulk(List<Contact> contacts_list, String new_status, boolean is_conversion_status)
+    {
+	if (contacts_list.size() == 0 || new_status == null)
+	{
+	    return;
+	}
+	
+	Key<Category> newStatusKey = new Key<Category>(Category.class, Long.parseLong(new_status));
+	
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+
+	ContactDocument contactDocuments = new ContactDocument();
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
+	for (Contact contact : contacts_list)
+	{
+
+	    String statusId = String.valueOf(contact.getLead_status_id());
+
+	    if (statusId != null && !statusId.equals(new_status))
+	    {
+			contact.setLeadStatus(newStatusKey);
+			if (is_conversion_status)
+			{
+				contact.type = Contact.Type.PERSON;
+				
+				//If duplicate contact exist, it will merge both converted lead and existed contact
+				if(isDuplicateContact(contact))
+				{
+					contact = ContactUtil.mergeContactFields(contact);
+				}
+				
+				contact.setIs_lead_converted(is_conversion_status);
+			}
+			builderObjects.add(contactDocuments.buildDocument(contact));
+			++i;
+	    }
+
+	    if (i >= 50)
+	    {
+		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+		builderObjects.clear();
+		i = 0;
+	    }
+	}
+
+	if (builderObjects.size() >= 1)
+	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+
+	Contact.dao.putAll(contacts_list);
+    }
+    
+    /**
+     * Gets a lead based on its email
+     * 
+     * @param email
+     *            email value to get a contact
+     * @return {@Contact} related to an email
+     */
+    public static Contact searchLeadByEmail(String email)
+    {
+	if (StringUtils.isBlank(email))
+	    return null;
+
+	Query<Contact> q = dao.ofy().query(Contact.class);
+	q.filter("properties.name", Contact.EMAIL);
+	q.filter("type", Type.LEAD);
+	q.filter("properties.value", email.toLowerCase());
 
 	try
 	{
@@ -2361,4 +2462,111 @@ public static Contact searchMultipleContactByEmail(String email,Contact contact)
 		return dao.fetchAllByKeys(contactKeys);
     }
 
+    /**
+     * Gets existence of a lead/contact with email and type
+     * 
+     * @param email
+     *            email value to get a contact/lead
+     * @param type
+     *            represents contact or lead
+     *            
+     * @return boolean
+     */
+    public static boolean isExistsByType(String email, Type type)
+    {
+
+	if (StringUtils.isBlank(email))
+	    return false;
+
+	return searchContactCountByEmailAndType(email, type) != 0 ? true : false;
+    }
+    
+    /**
+     * Checks if lead have any duplicate email addresses. It iterates though
+     * all the email property fields if any of that email exists already. If
+     * lead is old, then it fetches old lead check whether duplicate email
+     * is newly added in to current lead
+     * 
+     * @param contact
+     * @return
+     */
+    public static boolean isDuplicateLead(Contact contact)
+    {
+	// Hold old contact if contact is not new.
+	Contact oldContact = null;
+
+	// Iterates though all email fields
+	for (ContactField emailField : contact.getContactPropertiesList(Contact.EMAIL))
+	{
+	    // In case email field value is empty it removes property from
+	    // contact and continue
+
+	    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
+	    {
+		System.out.println(contact.properties.contains(emailField));
+		contact.properties.remove(emailField);
+		continue;
+	    }
+
+	    // If email is not available, then it iterates though other emails
+	    if (!isExistsByType(emailField.value.toLowerCase(), Type.LEAD))
+		continue;
+
+	    // If count is not 0 and lead is new, then lead is
+	    // duplicate and true is returned
+	    if (contact.id == null)
+		return true;
+
+	    // If lead is not new, then it checks if email exists in current
+	    // lead sent.
+	    if (contact.isEmailExists(emailField.value))
+	    {
+		if (oldContact == null)
+		    oldContact = ContactUtil.getContact(contact.id);
+
+		// If email exists in old lead, then it is not considered
+		// duplicate lead
+		if (oldContact.isEmailExists(emailField.value))
+		    continue;
+	    }
+
+	    return true;
+	}
+
+	return false;
+    }
+    
+    public static Contact mergeLeadFields(Contact contact)
+    {
+	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	if (emails.size() == 0)
+	    return contact;
+
+	Contact oldContact = getDuplicateLead(contact);
+
+	if (oldContact != null)
+	    return mergeContactFeilds(contact, oldContact);
+
+	return oldContact;
+
+    }
+    
+    public static Contact getDuplicateLead(Contact contact)
+    {
+	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+	if (emails.size() == 0)
+	    return contact;
+
+	Contact oldContact = null;
+	for (ContactField field : emails)
+	{
+	    oldContact = searchContactByEmailAndType(field.value, Type.LEAD);
+	    if (oldContact != null)
+		break;
+	}
+
+	return oldContact;
+    }
 }

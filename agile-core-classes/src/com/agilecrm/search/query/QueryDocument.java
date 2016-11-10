@@ -133,7 +133,7 @@ public class QueryDocument<T> implements QueryInterface
 			    	if(object instanceof Contact){
 			    		Contact contact = (Contact) object;
 			    		com.agilecrm.contact.Contact.Type contactType = contact.type;
-			    		if(contactType.equals(com.agilecrm.contact.Contact.Type.PERSON)){
+			    		if(contactType.equals(com.agilecrm.contact.Contact.Type.PERSON) || contactType.equals(com.agilecrm.contact.Contact.Type.LEAD)){
 				    		ContactField firstNameField = contact.getContactField(Contact.FIRST_NAME);
 				    		ContactField lastNameField = contact.getContactField(Contact.LAST_NAME);
 				    		String firstName = null;

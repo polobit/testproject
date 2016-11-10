@@ -129,6 +129,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 			return "documents-search";
 		else if(module_name == "tickets")
 			return "tickets-search";
+		else if(module_name == "lead")
+			return "lead-search";
 	},
 	getModuleName : function(url){
 		if(url.indexOf("type=person") != -1){
@@ -145,6 +147,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 		}
 		else if(url.indexOf("type=tickets") != -1){
 			return "{{agile_lng_translate 'report-view' 'tickets'}}";
+		}
+		else if(url.indexOf("type=lead") != -1){
+			return "{{agile_lng_translate 'menu' 'leads'}}";
 		}
 	},
 });
