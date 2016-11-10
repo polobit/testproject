@@ -962,7 +962,7 @@ li.deal-color:after {
     width: 2px;
 }
 li.deal-color{position:relative;}
-li.deal-color.YELLOW:after { background: yellow;}
+/*li.deal-color.YELLOW:after { background: yellow;}
 li.deal-color.RED:after { background: red;}
 li.deal-color.VIOLET:after { background: violet;}
 li.deal-color.INDIGO:after { background: indigo;}
@@ -972,7 +972,7 @@ li.deal-color.ORANGE:after { background: orange;}
 li.deal-color.BLACK:after { background: black;}
 li.deal-color.WHITE:after { background: white;}
 li.deal-color.GREY:after { background: grey;}
-
+*/
 /*Styling for deal color ends*/
 
 .milestone-main {
@@ -4906,9 +4906,9 @@ ul#recent-menu-model-list li:nth-child(even)
   margin-left:0px!important;
 }
 .btn-hover-color:hover{
-  color: #FFF !important;
-  background-color: #6254b2;
-  border-color: #5a4daa;
+  
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
 }
 .prefs-option-col{
     display: table;
@@ -4924,11 +4924,9 @@ ul#recent-menu-model-list li:nth-child(even)
   margin-top:25px;
   margin-bottom: 25px;
 }
-.btn-hover-color a:hover{
-  color:white;
-}
-.btn-hover-color:hover a{
-  color:white;
+
+.prefs-dropdown-img-background{
+ background-color:#fafafa;
 }
 .c-default {
   cursor: default;
