@@ -4906,9 +4906,9 @@ ul#recent-menu-model-list li:nth-child(even)
   margin-left:0px!important;
 }
 .btn-hover-color:hover{
-  color: #FFF !important;
-  background-color: #6254b2;
-  border-color: #5a4daa;
+  
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
 }
 .prefs-option-col{
     display: table;
@@ -4924,11 +4924,9 @@ ul#recent-menu-model-list li:nth-child(even)
   margin-top:25px;
   margin-bottom: 25px;
 }
-.btn-hover-color a:hover{
-  color:white;
-}
-.btn-hover-color:hover a{
-  color:white;
+
+.prefs-dropdown-img-background{
+ background-color:#fafafa;
 }
 .c-default {
   cursor: default;
