@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <queue-entries>
   <queue>
+    <name>mobile-notification-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+  </queue>
+  
+  <queue>
     <name>campaign-queue</name>
     <rate>10/s</rate>
     <bucket-size>10</bucket-size>
