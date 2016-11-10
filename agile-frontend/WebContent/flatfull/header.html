@@ -628,8 +628,11 @@
 											<span class="text-sm text-ellipsis block" style="clear: both;"> <b><%=user.getEmail()%></b></span>
 										</a>
 									</li>
+									<% if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
+									%>
 									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+									<%}%>
 									<li><a href="#user-prefs" onclick="Agile_GA_Event_Tracker.track_event('Preferences in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
