@@ -201,9 +201,13 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : "{{agile_lng_translate 'billing' 'plan-change-select'}}"
 	},
-	"change_addon" : {
+	"change_campaigns_addon" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "{{agile_lng_translate 'billing' 'addon-change-select'}}"
+		"message" : "{{agile_lng_translate 'billing' 'camapagns-addon-change-select'}}"
+	},
+	"change_triggers_addon" : {
+		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
+		"message" : "{{agile_lng_translate 'billing' 'triggers-addon-change-select'}}"
 	},
 	"social_access" : {
 		"title": "{{agile_lng_translate 'social' 'access'}}",
