@@ -146,6 +146,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		else if(attemptCount == 3)
 			updateAddOnStatus(addOntype, AddOnStatus.FAILED3);
 		//if(getEvent().getRequest() == null)
+			System.out.println("Sending addon_payment_failed to us");
 			SendMail.sendMail("mogulla@invox.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
 			SendMail.sendMail("narmada@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
 			SendMail.sendMail("venkat@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
@@ -261,43 +262,44 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    System.out.println(data);
 	    if (data.has("quantity"))
-		plan.put("quantity", data.get("quantity"));
+	    	plan.put("quantity", data.get("quantity"));
 	    plan.put("invoiceId", obj.get("id"));
 	    if (data.has("plan"))
 	    {
-		JSONObject planJSON = data.getJSONObject("plan");
-		plan.put("plan", planJSON.get("name"));
-		plan.put("plan_id", planJSON.getString("id"));
+			JSONObject planJSON = data.getJSONObject("plan");
+			plan.put("plan", planJSON.get("name"));
+			plan.put("plan_id", planJSON.getString("id"));
 
 	    }
 	    else
 	    {
-		System.out.println("plan details not found ");
-		if (obj.has("subscription"))
-		{
-			System.out.println("fetching subscription from stripe");
-			com.stripe.model.Subscription subscription = null;
-			try {
-				Customer cust = Customer.retrieve(obj.getString("customer"));
-				List<com.stripe.model.Subscription> subscriptions = cust.getSubscriptions().getData();
-				for(com.stripe.model.Subscription sub : subscriptions){
-					if(sub.getId().equals(obj.getString("subscription"))){
-						subscription = sub;
-						break;
+			System.out.println("plan details not found ");
+			if (obj.has("subscription"))
+			{
+				System.out.println("fetching subscription from stripe");
+				com.stripe.model.Subscription subscription = null;
+				try {
+					Customer cust = Customer.retrieve(obj.getString("customer"));
+					List<com.stripe.model.Subscription> subscriptions = cust.getSubscriptions().getData();
+					for(com.stripe.model.Subscription sub : subscriptions){
+						if(sub.getId().equals(obj.getString("subscription"))){
+							subscription = sub;
+							break;
+						}
 					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(subscription != null){
-				System.out.println("stripeSubscription:: "+subscription);
-				plan.put("quantity", subscription.getQuantity());
-				plan.put("plan", subscription.getPlan().getName());
-			}else{
-				System.out.println("subscription is null in stripe");
-			}
-		 }
+				if(subscription != null){
+					System.out.println("stripeSubscription:: "+subscription);
+					plan.put("quantity", subscription.getQuantity());
+					plan.put("plan", subscription.getPlan().getName());
+					plan.put("plan_id", subscription.getPlan().getId());
+				}else{
+					System.out.println("subscription is null in stripe");
+				}
+			 }
 		}
 
 	    if (data.has("period"))
