@@ -76,6 +76,6 @@ String template = request.getParameter("template");
          </div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built-v2-5.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-v2-6.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
    </body>
 </html>
