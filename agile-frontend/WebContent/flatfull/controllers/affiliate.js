@@ -16,6 +16,7 @@ var AffiliateRouter = Backbone.Router.extend({
 
 	showCommissionDetails : function(){
 		var that = this;
+		$("#prefsDropdownModal").modal("hide")
 		checkForAffiliateDetails(function(){
 			getTemplate('affiliate', {}, undefined, function(template_ui){
 				if(!template_ui)
@@ -74,6 +75,7 @@ var AffiliateRouter = Backbone.Router.extend({
 	},
 	showaffiliateDetails : function()
 	{
+		$("#prefsDropdownModal").modal("hide")
 		this.affiliateDetailsView = new Base_Model_View({ url : 'core/api/affiliate_details', template : "affiliate-details",
 		    postRenderCallback : function(el){
 		    	if(!$("input[name='phone']", el).val()){

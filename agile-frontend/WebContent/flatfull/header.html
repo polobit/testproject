@@ -616,7 +616,8 @@
 											<span class="text-sm text-ellipsis block" style="clear: both;"> <b><%=user.getEmail()%></b></span>
 										</a>
 									</li>
-
+									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
 									<li><a href="#user-prefs" onclick="Agile_GA_Event_Tracker.track_event('Preferences in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
@@ -624,32 +625,31 @@
 									<%
 									    if (domainUser != null && domainUser.is_admin)
 									    {
-														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
+														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li><li class='divider' ></li>");
 													//	out.println("<li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
+
 									    }
 									%>
-									<li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
-									<li class="divider"></li>
-									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+						
+											<!--<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick=\"Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')\"><i class="icon-off"></i>-->
+											<!--<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>-->
 
-											<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick="Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')">
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
 											
-									<li><a href="#affiliate-overview" id="affiliate_link">
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "affiliate") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
+									<!--<li><a href="#affiliate-overview" id="affiliate_link">
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "affiliate") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>-->
 									<li class="hide"><a href="#refer" id="referrals_link"><!-- <i class="icon-cog"></i> -->
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "refer") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
 						
-									<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"><!-- <i class="icon-off"></i> -->
-									<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
-
-									<li class="none"><a href="#" id="clickdesk_live_chat">
+									<!--<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"> <i class="icon-off"></i> 
+									<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>-->
+									<li><a id="help-options"><!-- <i class="icon-off"></i> -->
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a>
+									</li>
+									<!--<li class="none"><a href="#" id="clickdesk_live_chat">
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "chat-with-us") %> 
 												<i class="fa fa-circle" aria-hidden="true" style="color: green;margin-left: 5px;"></i>
 											</div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a>
-									</li>
+									</li>-->
 									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->

@@ -4817,7 +4817,6 @@ ul#recent-menu-model-list li:nth-child(even)
   cursor: pointer;
 }
 
-
 .filter-dynamic-scrollbar::-webkit-scrollbar {
   width: 5px;
 }
@@ -4896,4 +4895,29 @@ ul#recent-menu-model-list li:nth-child(even)
 .adminPanelcontainer
 {
   margin-left:0px!important;
+}
+.btn-hover-color:hover{
+  color: #FFF !important;
+  background-color: #6254b2;
+  border-color: #5a4daa;
+}
+.prefs-option-col{
+    display: table;
+    width: 90%;
+    margin: 0 auto;
+}
+.pref-dropdown-image{
+  height:80px;width:80px;
+  margin:30px 20px;
+  opacity:0.65;
+}
+.prefs-dropdown-modal-header{
+  margin-top:25px;
+  margin-bottom: 25px;
+}
+.btn-hover-color a:hover{
+  color:white;
+}
+.btn-hover-color:hover a{
+  color:white;
 }
