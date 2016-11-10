@@ -342,7 +342,7 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
-<div style="position: absolute;right: 0;z-index:1;top:50px">
+<div class="pos-abs pos-r-0 " style="z-index:3;top:116px">
 <div id="contacts_limit_alert_info" class="contacts_plan_alert hide" style="position: relative;width:340px;"> 
 </div>
 </div>
