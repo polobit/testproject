@@ -241,6 +241,7 @@ public abstract class StripeWebhookHandler
     {
 	// Send mail to domain user
     Map<String, Object> data = getMailDetails();
+    System.out.println("Sending mail to domain owner with data:: "+data);
     if(data != null)
     	SendMail.sendMail(user.email, emailSubject, template, data);
     }
