@@ -499,7 +499,7 @@ String template = request.getParameter("template");
                                 for(j=0;j<themeArray[i].form_element.length;j++){
                                   var ele=themeArray[i].form_element[j].ele;
                                   var elecss=themeArray[i].form_element[j].css;
-                                  if(ele.includes("Field Label")){
+                                  /*if(ele.includes("Field Label")){
                                     var eleProp = elecss.substring(0,elecss.indexOf("{"));
                                     var elepropArr = eleProp.split(",");
                                     var finalEleProp = "";
@@ -513,9 +513,9 @@ String template = request.getParameter("template");
                                     });
                                     custTheme=custTheme+finalEleProp+"\t"+elecss.substring(elecss.indexOf("{"),elecss.length);
                                   }
-                                  else{
+                                  else{*/
                                     custTheme=custTheme+"."+themeclass+"\t"+elecss;
-                                  }
+                                  /*}*/
                                 }
                               }
                               var customTheme = {};

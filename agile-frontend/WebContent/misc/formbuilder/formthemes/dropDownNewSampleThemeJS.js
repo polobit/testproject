@@ -844,47 +844,88 @@
 			<!--BORDER COMPONENT FORM ELEMENTS CLICK LOGIC START -->
 			<!--FONT COMPONENT FORM ELEMENTS CLICK LOGIC START -->
 				$(".innerFontEleTheme select").change(function(){
-					fontChangeEventHandler();
+					fontChangeEventHandler("elementchange");
 				});
 				$(".innerFontFamilyTheme select").change(function(){
-					fontChangeEventHandler();
+					fontChangeEventHandler("fontchange");
 				});
 				$(".innerFontStyleDiv select").change(function(){
 					
-					fontChangeEventHandler();
+					fontChangeEventHandler("fontchange");
 				});
 				$(".innerFontWeightDiv select").change(function(){
 					
-					fontChangeEventHandler();
+					fontChangeEventHandler("fontchange");
 				});
 				$(".innerFontSizeUlDiv select").change(function(){
-					fontChangeEventHandler();
+					fontChangeEventHandler("fontchange");
 				});
 				$(".innerFontTheme input").change(function(){
-					fontChangeEventHandler();
+					fontChangeEventHandler("fontchange");
 				});
-				function fontChangeEventHandler(){
+				function fontChangeEventHandler(changeVal){
 					var formEle=$(".innerFontEleTheme select option:selected").text();
 					var fontFamilyEle=$(".innerFontFamilyTheme select").val();
 					var fontStyleEle=$(".innerFontStyleDiv select").val();
 					var fontWeightEle=$(".innerFontWeightDiv select").val();
 					var fontSizeEle=$(".innerFontSizeDiv select").val()+"px";
+					var isThemeEleExist=false;
 					if(formEle=="Title"){
+						for(i=0;i<fontCss.form_element.length;i++){
+							if(fontCss.form_element[i].ele=="Title/form legend"){
+								if(changeVal=="elementchange"){
+									var fontOnlyCss = fontCss.form_element[i].css.substring(fontCss.form_element[i].css.lastIndexOf("{")+1,fontCss.form_element[i].css.lastIndexOf("}"));
+									var fontOnlyCssArr = fontOnlyCss.split(";");
+									$.each(fontOnlyCssArr,function(index,value){
+										var fontCssSplit = value.split(":");
+										if(fontCssSplit[0] == "font-family"){
+											fontFamilyEle=fontCssSplit[1];
+											$(".innerFontFamilyTheme select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-style"){
+											fontStyleEle=fontCssSplit[1];
+											$(".innerFontStyleDiv select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-weight"){
+											fontWeightEle=fontCssSplit[1];
+											$(".innerFontWeightDiv select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-size"){
+											fontSizeEle=fontCssSplit[1];
+											$(".innerFontSizeDiv select").val(fontCssSplit[1].substring(0,fontCssSplit[1].lastIndexOf("px")));
+
+										}
+									});
+								}
+								isThemeEleExist=true;
+								fontCss.form_element.splice(i,1);
+								break;
+							}
+						}
+						if(changeVal=="elementchange" && !isThemeEleExist){
+							
+								//default
+								fontFamilyEle="Arial,Arial,Helvetica,sans-serif";
+								fontStyleEle="normal";
+								fontWeightEle="normal";
+								fontSizeEle="14px";
+								$(".innerFontFamilyTheme select").val(fontFamilyEle);
+								$(".innerFontStyleDiv select").val(fontStyleEle);
+								$(".innerFontWeightDiv select").val(fontWeightEle);
+								$(".innerFontSizeDiv select").val("14");
+						}
+						
 						$(".createCustomFormContent form legend").css("font-family",fontFamilyEle);
 						$(".createCustomFormContent form legend").css("font-style",fontStyleEle);
 						$(".createCustomFormContent form legend").css("font-weight",fontWeightEle);
 						$(".createCustomFormContent form legend").css("font-size",fontSizeEle);
 						var css="legend{font-family:"+fontFamilyEle+";font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
 						var eleThemeCss=new EleThemeCss("Title/form legend",css);
-						for(i=0;i<fontCss.form_element.length;i++){
-							if(fontCss.form_element[i].ele=="Title/form legend"){
-								fontCss.form_element.splice(i,1);
-								break;
-							}
-						}
+						
 					}
 					else if(formEle=="Field Label"){
-						var multipleFormEleFinal="";
+						var formEle=".agile-group .agile-label";
+						/*var multipleFormEleFinal="";
 						var multipleFormEle=".agile-group .agile-label,.agile-group input,.agile-group .agile-group-addon,.agile-group select,.agile-group .agile-field";
 						var multipleFormEleArr=multipleFormEle.split(",");
 						for(i=0;i<multipleFormEleArr.length;i++){
@@ -893,28 +934,107 @@
 							$(".createCustomFormContent form"+"\t"+multipleFormEleArr[i]).css("font-weight",fontWeightEle);
 							$(".createCustomFormContent form"+"\t"+multipleFormEleArr[i]).css("font-size",fontSizeEle);
 						}
-						var css=multipleFormEle+"{font-family:"+fontFamilyEle+"!important;font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
-						var eleThemeCss=new EleThemeCss("Field Label/"+multipleFormEle,css);
+						var css=multipleFormEle+"{font-family:"+fontFamilyEle+"!important;font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";*/
 						for(i=0;i<fontCss.form_element.length;i++){
-							if(fontCss.form_element[i].ele=="Field Label/"+multipleFormEle){
+							if(fontCss.form_element[i].ele=="Field Label/"+formEle){
+								if(changeVal == "elementchange"){
+									var fontOnlyCss = fontCss.form_element[i].css.substring(fontCss.form_element[i].css.lastIndexOf("{")+1,fontCss.form_element[i].css.lastIndexOf("}"));
+									var fontOnlyCssArr = fontOnlyCss.split(";");
+									$.each(fontOnlyCssArr,function(index,value){
+										var fontCssSplit = value.split(":");
+										if(fontCssSplit[0] == "font-family"){
+											fontFamilyEle=fontCssSplit[1];
+											$(".innerFontFamilyTheme select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-style"){
+											fontStyleEle=fontCssSplit[1];
+											$(".innerFontStyleDiv select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-weight"){
+											fontWeightEle=fontCssSplit[1];
+											$(".innerFontWeightDiv select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-size"){
+											fontSizeEle=fontCssSplit[1];
+											$(".innerFontSizeDiv select").val(fontCssSplit[1].substring(0,fontCssSplit[1].lastIndexOf("px")));
+
+										}
+									});
+								}
+								isThemeEleExist = true;
 								fontCss.form_element.splice(i,1);
 								break;
 							}
 						}
+						if(changeVal == "elementchange" && !isThemeEleExist){
+							//default
+							fontFamilyEle="Arial,Arial,Helvetica,sans-serif";
+							fontStyleEle="normal";
+							fontWeightEle="normal";
+							fontSizeEle="14px";
+							$(".innerFontFamilyTheme select").val(fontFamilyEle);
+							$(".innerFontStyleDiv select").val(fontStyleEle);
+							$(".innerFontWeightDiv select").val(fontWeightEle);
+							$(".innerFontSizeDiv select").val("14");
+						}
+						var css=formEle+"{font-family:"+fontFamilyEle+"!important;font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
+						var eleThemeCss=new EleThemeCss("Field Label/"+formEle,css);
+						    $(".createCustomFormContent form .agile-group .agile-label").css("font-family",fontFamilyEle);
+							$(".createCustomFormContent form .agile-group .agile-label").css("font-style",fontStyleEle);
+							$(".createCustomFormContent form .agile-group .agile-label").css("font-weight",fontWeightEle);
+							$(".createCustomFormContent form .agile-group .agile-label").css("font-size",fontSizeEle);
+						
 					}
 					else if(formEle=="Button Text"){
+						for(i=0;i<fontCss.form_element.length;i++){
+							if(fontCss.form_element[i].ele=="Button Text/button"){
+								if(changeVal == "elementchange"){
+									var fontOnlyCss = fontCss.form_element[i].css.substring(fontCss.form_element[i].css.lastIndexOf("{")+1,fontCss.form_element[i].css.lastIndexOf("}"));
+									var fontOnlyCssArr = fontOnlyCss.split(";");
+									$.each(fontOnlyCssArr,function(index,value){
+										var fontCssSplit = value.split(":");
+										if(fontCssSplit[0] == "font-family"){
+											fontFamilyEle=fontCssSplit[1];
+											$(".innerFontFamilyTheme select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-style"){
+											fontStyleEle=fontCssSplit[1];
+											$(".innerFontStyleDiv select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-weight"){
+											fontWeightEle=fontCssSplit[1];
+											$(".innerFontWeightDiv select").val(fontCssSplit[1]);
+										}
+										else if(fontCssSplit[0] == "font-size"){
+											fontSizeEle=fontCssSplit[1];
+											$(".innerFontSizeDiv select").val(fontCssSplit[1].substring(0,fontCssSplit[1].lastIndexOf("px")));
+										}
+									});
+								}
+								isThemeEleExist = true;
+								fontCss.form_element.splice(i,1);
+								break;
+							}
+						}
+						if(changeVal == "elementchange" && !isThemeEleExist){
+							//default
+							fontFamilyEle="Arial,Arial,Helvetica,sans-serif";
+							fontStyleEle="normal";
+							fontWeightEle="normal";
+							fontSizeEle="14px";
+							$(".innerFontFamilyTheme select").val(fontFamilyEle);
+							$(".innerFontStyleDiv select").val(fontStyleEle);
+							$(".innerFontWeightDiv select").val(fontWeightEle);
+							$(".innerFontSizeDiv select").val("14");
+						}
 						$(".createCustomFormContent form button").css("font-family",fontFamilyEle);
 						$(".createCustomFormContent form button").css("font-style",fontStyleEle);
 						$(".createCustomFormContent form button").css("font-weight",fontWeightEle);
 						$(".createCustomFormContent form button").css("font-size",fontSizeEle);
 						var css=".agile-group button{font-family:"+fontFamilyEle+";font-style:"+fontStyleEle+";font-weight:"+fontWeightEle+";font-size:"+fontSizeEle+";}";
 						var eleThemeCss=new EleThemeCss("Button Text/button",css);
-						for(i=0;i<fontCss.form_element.length;i++){
-							if(fontCss.form_element[i].ele=="Button Text/button"){
-								fontCss.form_element.splice(i,1);
-								break;
-							}
-						}
+						
+
 					}
 					fontCss.form_element.push(eleThemeCss);
 						
