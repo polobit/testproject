@@ -126,7 +126,7 @@ public class AddOnAPI implements Serializable{
 			if(addOn.campaignInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(!AddOnUtil.canDowngradeCampaigns(addOn.campaignInfo.quantity))
-				throw new Exception("you cannot do this action until you delete the extra campaigns");
+				throw new Exception("Sorry, we are unable to process your request for downgrading your Campaigns Add-on subscription. Delete extra campaigns from your account & try again.");
 			if(dbAddOn.campaignInfo.quantity != addOn.campaignInfo.quantity){
 				boolean proration = true;
 				if(addOn.campaignInfo.quantity < dbAddOn.campaignInfo.quantity)
@@ -164,7 +164,7 @@ public class AddOnAPI implements Serializable{
 			if(addOn.triggerInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(!AddOnUtil.canDowngradeCampaigns(addOn.triggerInfo.quantity))
-				throw new Exception("you cannot do this action until you delete the extra triggers");
+				throw new Exception("Sorry, we are unable to process your request for downgrading your Triggers Add-on subscription. Delete extra triggers from your account & try again.");
 			if(dbAddOn.triggerInfo.quantity != addOn.triggerInfo.quantity){
 				boolean proration = true;
 				if(addOn.triggerInfo.quantity < dbAddOn.triggerInfo.quantity)
@@ -223,7 +223,7 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(!AddOnUtil.canDowngradeCampaigns(0))
-				throw new Exception("you cannot do this action until you delete the extra campaigns");
+				throw new Exception("Sorry, we are unable to process your request for canceling your Campaigns Add-on subscription. Delete extra campaigns from your account & try again.");
 			if(dbAddOn.campaignInfo.subscriptionId != null)
 				StripeUtil.cancelAddOnSubscription(dbAddOn.campaignInfo.subscriptionId);
 			dbAddOn.campaignInfo.quantity = 0;
@@ -249,7 +249,7 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(!AddOnUtil.canDowngradeCampaigns(0))
-				throw new Exception("you cannot do this action until you delete the extra triggers");
+				throw new Exception("Sorry, we are unable to process your request for canceling your Triggers Add-on subscription. Delete extra triggers from your account & try again.");
 			if(dbAddOn.triggerInfo.subscriptionId != null)
 				StripeUtil.cancelAddOnSubscription(dbAddOn.triggerInfo.subscriptionId);
 			dbAddOn.triggerInfo.quantity = 0;
