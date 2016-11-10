@@ -33,10 +33,12 @@ public class OzonetelWidgetAPI {
 	@Path("connect")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String connectOzonetel(@QueryParam("widget-id") Long widgetId, @QueryParam("user_phone") String user_phone){
+	public String connectOzonetel(@QueryParam("user_phone") String user_phone){
+		System.out.println(user_phone);
 		try{
-			Widget widget = WidgetUtil.getWidget(widgetId);
-			OzonetelUtil util = new OzonetelUtil(widget.getProperty("ozontel_auth_key"), widget.getProperty("caller_id"),widget.getProperty("agent_no"));
+			Widget widget = WidgetUtil.getWidget("Ozonetel");
+			
+			OzonetelUtil util = new OzonetelUtil(widget.getProperty("ozontel_auth_key"),widget.getProperty("agent_no"), widget.getProperty("caller_id"));
 			util.connectToNumber(user_phone);
 		}catch(Exception e){
 			System.out.println("Exception form OzonetelWidgetAPI connectOzonetel method");

@@ -419,8 +419,23 @@ function dialFromTwilio(to,from,contact){
 		  }
 	twiliocall(to, name, null, contact);
 }
-function dialFromOzonetel(){
-
+function dialFromOzonetel(to,from,contact){
+	if(checkForActiveCall()){
+		alert("Already on call.");
+		return;
+	}
+	$.ajax({ 
+		url : 'core/api/widgets/ozonetel/connect?user_phone=' + to, 
+		type : 'GET', 
+		success : function(data){
+					
+		}, error : function(response){
+			console.log(response);
+		} 
+	});
+	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+	showDraggableNoty("Ozonetel", "7406447973", "outgoing", to, btns);
+				
 }
 function dialFromBria(to,from,contact){
 
