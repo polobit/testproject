@@ -61,7 +61,7 @@ public class URLShortener
     /**
      * Shortner Url for Beta
      */
-    public static final String SHORTENER_BETA_URL = "https://click-dot-sandbox-dot-agilecrmbeta.appspot.com/";
+    public static final String SHORTENER_BETA_URL = "https://click-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/click/";
     
     @Unindexed
     private String push = null;
