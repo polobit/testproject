@@ -60,7 +60,7 @@ var SettingsRouter = Backbone.Router
 			/* Theme & Layout page */
 			"themeandlayout" : "themeandlayout" ,
 
-			"help-options" : "helpOptions"
+			/*"help-options" : "helpOptions"*/
 		},
 
 			/**
@@ -923,7 +923,7 @@ var SettingsRouter = Backbone.Router
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
 			},
-			helpOptions : function(){
+			/*helpOptions : function(){
 				var that =this;
 				getTemplate("prefs-dropdown-options", {}, undefined, function(template_ui){
 					if(!template_ui)
@@ -933,7 +933,7 @@ var SettingsRouter = Backbone.Router
 					hideTransitionBar();
 				},"#content");
 			
-			}
+			}*/
 
 		});
 
@@ -947,10 +947,10 @@ function getCurrentDomain(options){
 	return " ";
 }
 
-function loadLiveChat(){
+/*function loadLiveChat(){
 	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
 		e.preventDefault();
 		$(this).closest(".dropdown").removeClass("open");
 		CLICKDESK_LIVECHAT.show();
 	});
-}
+}*/

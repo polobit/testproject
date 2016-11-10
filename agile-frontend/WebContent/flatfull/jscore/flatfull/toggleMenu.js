@@ -73,11 +73,17 @@ $(".trial_strip_close").click(function(e){
 	_agile_set_prefs("free_trial_time", parseInt(new Date().getTime()/1000));
 });
 
-/*$("#clickdesk_live_chat").click(function(e){
-	e.preventDefault();
-	$(this).closest(".dropdown").removeClass("open");
-	CLICKDESK_LIVECHAT.show();
-});*/
+$("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".modal").modal("hide");
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
+});
+
+$("#help-options").click(function(e){
+	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
+
+});
 
 if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILLING_PREFS.freeTrialStatus == "TRIALING" && USER_BILLING_PREFS.freeTrialEnd > parseInt(new Date().getTime()/1000))
 {

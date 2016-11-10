@@ -4807,3 +4807,8 @@ ul#recent-menu-model-list li:nth-child(even)
 .btn-hover-color:hover{
   background:#f6f6f6;
 }
+.prefs-option-col{
+    display: table;
+    width: 90%;
+    margin: 0 auto;
+}
