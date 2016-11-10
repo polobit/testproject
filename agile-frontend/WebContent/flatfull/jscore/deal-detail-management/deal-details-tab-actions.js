@@ -96,8 +96,13 @@ var deal_details_tab = {
 					builder.timeline(id, function(){
 						$.getJSON('/core/api/opportunity/' + id + '/activities?page_size=100', function(data){
 							builder.addEntities(data);
+
 						});
 						$.getJSON('/core/api/opportunity/' + id + '/related-activities?page_size=100', function(data){
+							builder.addEntities(data);
+						});
+
+						$.getJSON('/core/api/opportunity/' + id + '/bulk_activities?page_size=100', function(data){
 							builder.addEntities(data);
 						});
 					});	

@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.access.AdminPanelAccessScopes"%>
+<%@page import="com.itextpdf.text.log.SysoCounter"%>
 <%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="com.agilecrm.util.FileStreamUtil"%>
 <%@page import="org.json.JSONObject"%>
@@ -481,7 +483,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
  
   }
       
- %>">
+ if ( "admin".equals(domainUser.domain))
+  {
+    out.print("hide adminPanel");
+  }
+  %>">
           <div class="aside-wrap">
         <div class="navi-wrap">
   
@@ -922,12 +928,21 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <ul class="nav navbar-nav agile-menu">
               <li id="homemenu" class="active"></li>
               <%
-                  if ("admin".equals(domainUser.domain)) {
-                      out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
-                      out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li><li><a href="
-                          + logoutURL
-                          + "><i class='icon-off'></i>Logout</a></li>");
-                    } else {
+                  if ("admin".equals(domainUser.domain)) 
+                  {
+                	  
+                	out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");  
+               
+                    out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li>");
+                    if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.ADD_USER))
+                  	{
+                  		out.println("<li style='margin-top: 7px;'><div class='btn-group'><a href='#users-add' class='btn btn-default btn-sm ''><i class='icon-plus-sign'></i> Add User</a>");
+                  		out.println("<button class='btn btn-default btn-sm dropdown-toggl' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
+                  		out.println("</div></li>");
+                  		 out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                  	}
+                  
+                  } else {
               %>
               
              <!--  <li class="line dk"></li>
@@ -1040,7 +1055,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </div>
   </aside>
-<div class="app-content" id="agilecrm-container">
+<div class='app-content <%if("admin".equals(domainUser.domain)) out.print("adminPanelcontainer"); %>' id="agilecrm-container">
 <div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
 <div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 

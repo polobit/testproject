@@ -67,7 +67,10 @@ var SettingsRouter = Backbone.Router
 			"contact-us" : "contactUsEmail",
 
 			/* Theme & Layout page */
-			"themeandlayout" : "themeandlayout" },
+			"themeandlayout" : "themeandlayout" ,
+
+			/*"help-options" : "helpOptions"*/
+		},
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -586,57 +589,124 @@ var SettingsRouter = Backbone.Router
 			/**
 			 * Shows list of email templates, with an option to add new template
 			 */
-			emailTemplates : function(selectedEmailTempCtg)
-			{
+			emailTemplates : function(selectedEmailTempCtg, no_load)
+			{	
+
 				var that = this;
-				getTemplate('settings', {}, undefined, function(template_ui){
-					if(!template_ui)
-						  return;
-					$('#content').html($(template_ui));	
-					var currUrl = "/core/api/email/templates";
-					if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
-						currUrl = "/core/api/email/templates/category/"+selectedEmailTempCtg;
-					}
-					that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
-					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
-					{
+				// check emailTemplate count
+            	$.getJSON(location.origin + '/core/api/email/templates/count', function(count){
+					if(!count || count == 0){
+						window.location.href  = window.location.origin+"/#emailbuilder-templates";
+						return;
+					}else{
 
-						if(!(selectedEmailTempCtg && selectedEmailTempCtg != ""))
-						{
-							if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0)
-							{
-								window.location.href  = window.location.origin+"/#emailbuilder-templates";
-							}
-						}
-						
-						agileTimeAgoWithLngConversion($(".created_time", el));
+						getTemplate('settings', {}, undefined, function(template_ui){
+							if(!template_ui)
+								  return;
 
-					    var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	        			fillSelect('emailTemplate-category-select','core/api/emailTemplate-category', 'emailTemplateCategory',  
-	        				function fillCategory(){
-								if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
-									$('select#emailTemplate-category-select').find('option[value='+selectedEmailTempCtg+']').attr("selected","selected");
-								}
-								el.on('change','select#emailTemplate-category-select',  function(e){
-									e.preventDefault();
-									var selectedCtg = $(this).val();
-									if(selectedCtg != ""){
-										that.emailTemplates(selectedCtg);
+							if(!no_load)	
+							$('#content').html($(template_ui));	
+
+							getTemplate('setting-email-templates-header', {}, undefined, function(template_ui){
+
+								if(!template_ui)
+								  return;
+
+								if(!no_load){
+
+									$('#prefs-tabs-content').html($(template_ui));
+										var el = $("#prefs-tabs-content");
+
+									if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
+
+										$("#emailCtg-option").hide();
+										$("#selected-emailTemplate-category").show();
+										var defaultSelectOption = '{{agile_lng_translate "portlets" "all"}}';
+
+										var size = Object.keys(Email_Template_Category).length;
+
+										$('#selected-emailTemplate-category').empty().append('<option value="">' + defaultSelectOption + '</option>');
+							            for(var i=0;i<size;i++){
+							            	if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category == Email_Template_Category[i].id){
+							            		$('#selected-emailTemplate-category').append("<option value= "+Email_Template_Category[i].id +" selected = 'selected'>"+Email_Template_Category[i].name+"</option>");
+							            	}else{
+							            		$('#selected-emailTemplate-category').append("<option value= "+Email_Template_Category[i].id +">"+Email_Template_Category[i].name+"</option>");
+							            	}
+							            }
+
+							            $('select#selected-emailTemplate-category').on('change',  function(e){
+											e.preventDefault();
+											var selectedCtg = $(this).val();
+											Selected_Email_Template_Category = selectedCtg;
+											that.emailTemplates(selectedCtg, true);
+										});
+
 									}else{
-										that.emailTemplates();
+
+										el.on('click', '#emailCtgDiv', function(event){
+											event.preventDefault();
+											var isCtg = $(this).attr("data-id");
+											if(isCtg != undefined && isCtg == "new"){
+												$(this).removeAttr("data-id");
+												$("#emailCtg-option").hide();
+												$("#selected-emailTemplate-category").show();
+												var defaultSelectOption = '{{agile_lng_translate "portlets" "all"}}';
+
+												$.getJSON("core/api/emailTemplate-category", function(data){
+													Email_Template_Category = {};
+			               							$('#selected-emailTemplate-category').empty().append('<option value="">' + defaultSelectOption + '</option>');
+										            for(var i=0;i<data.length;i++){
+										                $('#selected-emailTemplate-category').append("<option value= "+data[i].id +">"+data[i].name+"</option>");
+										                
+										                var tempObj = {};
+										                tempObj["id"] = data[i].id;
+										                tempObj["name"] = data[i].name;
+
+										                Email_Template_Category[i] = tempObj;  
+										            }
+
+									                $('select#selected-emailTemplate-category').on('change',  function(e){
+														e.preventDefault();
+														var selectedCtg = $(this).val();
+														Selected_Email_Template_Category = selectedCtg;
+														that.emailTemplates(selectedCtg, true);
+													});
+									            });
+
+						        			}
+
+										});
 									}
-								});
-								}, optionsTemplate, false, el,'Select Category');
 
-					} });
+								}
+										
+								var currUrl = "/core/api/email/templates";
+								if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
+									currUrl = "/core/api/email/templates/category/"+selectedEmailTempCtg;
+								}else if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
+									if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category != ""){
+										currUrl = "/core/api/email/templates/category/"+Selected_Email_Template_Category;
+									}
+								}
 
-					that.emailTemplatesListView.collection.fetch();
-					$('#prefs-tabs-content').html(that.emailTemplatesListView.el);
-					$('#PrefsTab .select').removeClass('select');
-					$('.email-templates-tab').addClass('select');
-					make_menu_item_active("email-templates-menu");
+								that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
+								templateKey : 'settings-email-templates', individual_tag_name : 'tr', postRenderCallback : function(el)
+								{
+									agileTimeAgoWithLngConversion($(".created_time", el));
 
-				}, "#content");
+								} });
+
+								that.emailTemplatesListView.collection.fetch();
+								$('#prefs-table-content').html(that.emailTemplatesListView.el);
+								$('#PrefsTab .select').removeClass('select');
+								$('.email-templates-tab').addClass('select');
+								make_menu_item_active("email-templates-menu");
+							});
+
+						}, "#content");
+
+					}
+				});
 
 			},
 
@@ -1114,6 +1184,11 @@ var SettingsRouter = Backbone.Router
 
 			themeandlayout : function()
 			{
+				getTemplate("settings", {}, undefined, function(template_ui){
+										if(!template_ui)
+											  return;
+										$('#content').html($(template_ui));
+									});
 				// $("#content").html(getTemplate("theme-layout-form"), {});
 				showTransitionBar();
 				$
@@ -1123,10 +1198,11 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
-									$('#content').html($(template_ui));	
+									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
@@ -1137,6 +1213,8 @@ var SettingsRouter = Backbone.Router
 									if (data.page_size != CURRENT_USER_PREFS.page_size || data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 										$(".theme-save-status").css("display", "inline");
 									hideTransitionBar();
+									$('#PrefsTab .select').removeClass('select');
+									$('.theme-and-layout').addClass('select');
 
 								}, "#content");
 
@@ -1210,7 +1288,18 @@ var SettingsRouter = Backbone.Router
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
-			}
+			},
+			/*helpOptions : function(){
+				var that =this;
+				getTemplate("prefs-dropdown-options", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+					loadLiveChat();
+					hideTransitionBar();
+				},"#content");
+			
+			}*/
 
 		});
 
@@ -1223,3 +1312,11 @@ function getCurrentDomain(options){
 	}
 	return " ";
 }
+
+/*function loadLiveChat(){
+	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
+	});
+}*/

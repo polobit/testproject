@@ -14,6 +14,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.stripe.model.Customer;
@@ -232,7 +233,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
     protected Map<String, Object> getMailDetails()
     {
 	Map<String, Object> map = getPlanDetails();
-	map.put("domain", getDomain());
+	map.put("domain", AliasDomainUtil.getCachedAliasDomainName(getDomain()));
 	map.put("user_name", getUser().name);
 	map.put("email", getUser().email);
 

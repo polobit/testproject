@@ -1492,6 +1492,7 @@ function loadSavedTemplate() {
                     }
                     if(data.emailTemplate_category_id && data.emailTemplate_category_id != "0"){
                         $("select#emailTemplate-category-select",parent.document).val(data.emailTemplate_category_id);
+                        parent._agile_set_prefs('emailTempCtg_id', data.emailTemplate_category_id);
                     }
                 }
 

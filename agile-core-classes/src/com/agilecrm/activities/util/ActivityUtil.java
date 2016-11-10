@@ -2528,4 +2528,84 @@ public class ActivityUtil
 			return null;
 		}
 	}
+	/**
+	 * gets list of activities based on entity id
+	 * 
+	 * @param entity_id
+	 * @param max
+	 * @param cursor
+	 * @return list of activities
+	 */
+	
+	
+	public static List<Activity> getDealBulkActionActivitiesByEntityId(Long entity_id, Integer max, String cursor)
+	{
+		try
+		{
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			List<Activity> dealList = null;
+			
+			searchMap.put("bulk_deal_ids", entity_id);
+
+			if (max != 0){
+				dealList = dao.fetchAll(max, cursor, searchMap, true, false);
+				return dealList;
+			}
+
+			return dao.listByProperty(searchMap);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+			
+		}
+	}
+
+	/*create admin panel activities*/
+	
+	public static void createAdminPanelActivity(DomainUser domainuser , ActivityType activityType , String CustName)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.name;
+			activity.custom2 = CustName ;
+			activity.custom3 = domainuser.email ; 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address"); 
+			activity.save();
+		}
+	}
+	
+	public static void adminPanelREfundActivity(DomainUser domainuser , ActivityType activityType , String CustName,Integer amount)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.name;
+			activity.custom2 = CustName ;
+			activity.custom3 = amount.toString(); 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
+			activity.save();
+		}
+	}
+	public static void adminPanelAddAffliateAmount(DomainUser domainuser , ActivityType activityType , String CustName,Integer amount)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.email;
+			activity.custom2 = CustName ;
+			activity.custom3 = amount.toString(); 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
+			activity.save();
+		}
+	}
 }
+

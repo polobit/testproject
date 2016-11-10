@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
 <%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
@@ -38,10 +39,11 @@ if (!StringUtils.isEmpty(password)) {
 	domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 
 	domainUser.password = EncryptDecryptUtil.decrypt(password);
-
+	String domain = domainUser.domain;
+	domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
 	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
 			SendMail.FORGOT_PASSWORD, domainUser);
-	
+	domainUser.domain = domain;
 	success = LanguageUtil.getLocaleJSONValue(localeJSON, "we-sent-email");
 }
 else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))

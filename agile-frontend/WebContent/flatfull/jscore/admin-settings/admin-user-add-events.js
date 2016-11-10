@@ -19,8 +19,7 @@ function bindAdminChangeAction(el, data)
 		if(is_admin == false)
 			newscopesarray.removeAttr("disabled");
 		else
-			newscopesarray.prop("checked", "checked" ).attr("disabled", "disabled");
-		
+			newscopesarray.prop("checked", "checked" ).attr("disabled", "disabled");		
 		$('#calendar-privilege', el).trigger("change");
 		$('#deals-privilege', el).trigger("change");
 	}else{
