@@ -28,7 +28,7 @@ public interface QueryInterface
     public static enum Type
     {
 	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
-		Case.class), DOCUMENT(Document.class), TICKETS(Tickets.class);
+		Case.class), DOCUMENT(Document.class), TICKETS(Tickets.class), LEAD(Contact.class);
 	;
 
 	private Class clazz;

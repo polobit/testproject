@@ -71,3 +71,40 @@
 </div>
 </div>
 </script>
+
+<script id="bulk-actions-leads-tags-remove-template" type="text/html">
+<div class="row">
+    <div class="col-md-8">
+        <div class="well">
+            <form id="tagsRemoveBulkForm" class="form-horizontal">
+                <fieldset>
+                    <legend>{{agile_lng_translate 'leads-view' 'remove-tags-from-selected-leads'}}</legend>
+                    <div class="control-group form-group">         
+                        <label class="control-label col-sm-2">{{agile_lng_translate 'contacts-view' 'enter-tags'}}
+                            <span class="field_req">*</span>
+                        </label>
+                        <div class="controls col-sm-10">
+                            <div class="pull-left">
+                                <ul name="tags" class= "tagsinput tags p-n"></ul>
+                            </div>              
+                            <input name="tags" type="text" id="removeBulkTags" class="tags-typeahead form-control" placeholder="{{agile_lng_translate 'portlets' 'tags-desc'}}"/>
+                            <span class="error-tags text-danger" style="display:none;">{{agile_lng_translate 'prefs-email-templates' 'this-field-is-required'}}</span>
+                            <input class="hide"/>      
+                        </div>
+                    </div>
+                    <hr class="m-t-none">
+                    <div class="row">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="form-actions">          
+                                <a href="#leads" class="btn btn-sm btn-danger">{{agile_lng_translate 'report-add' 'close'}}</a>
+                                <a href="#" type="submit" id="removeTagsToLeadsBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
+                                <span class="save-status"></span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+</script>

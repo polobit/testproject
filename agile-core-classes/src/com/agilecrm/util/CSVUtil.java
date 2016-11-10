@@ -141,7 +141,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK, FAILEDCSV, INVALID_TAG, SOURCE_MISMATCHED, STATUS_MISMATCHED, CONVERTED_CONTACTS;
 
     }
 
@@ -2090,5 +2090,633 @@ public class CSVUtil
     		e.printStackTrace();
     		return failedContactsWriter;
     	}
+    }
+    
+    public void createLeadsFromCSV(InputStream blobStream, Contact contact, String ownerId) throws PlanRestrictedException, IOException
+    {
+    	// Creates domain user key, which is set as a contact owner
+    	this.ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+    	domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+    	BulkActionUtil.setSessionManager(domainUser);
+
+    	// Refreshes count of contacts. This is removed as it already calculated
+    	// in deferred task; there is limation on count in remote api (max count
+    	// it gives is 1000)
+    	// billingRestriction.refreshContacts();
+
+    	System.out.println(billingRestriction.getCurrentLimits().getPlanId() + " : "
+    		+ billingRestriction.getCurrentLimits().getPlanName());
+    	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
+    	boolean limitCrossed = false;
+    	// stores list of failed contacts in beans with causes
+    	List<FailedContactBean> failedContacts = new ArrayList<FailedContactBean>();
+
+    	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
+    	reportStatus(csvData.size());
+
+    	if (csvData.isEmpty())
+    	    return;
+    	// extract csv heading from csv file
+    	String[] headings = csvData.remove(0);
+
+    	contact.type = Contact.Type.LEAD;
+
+    	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+    	// Adds new tags to temporary list to save them in all contacts
+    	tags.addAll(contact.tags);
+
+    	List<ContactField> properties = contact.properties;
+
+    	System.out.println(csvData.size());
+
+    	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
+    		+ accessControl.getCurrentUserScopes());
+
+    	// Counters to count number of contacts saved contacts
+    	int savedContacts = 0;
+    	int mergedContacts = 0;
+    	int limitExceeded = 0;
+    	int accessDeniedToUpdate = 0;
+    	int sourceMismatched = 0;
+    	int statusMismatched = 0;
+    	int convertedContacts = 0;
+    	Map<Object, Object> status = new HashMap<Object, Object>();
+    	status.put("type", "Leads");
+
+    	List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "DATE");
+    	List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT, "text");
+    	
+    	CategoriesUtil categoriesUtil = new CategoriesUtil();
+    	List<Category> leadSourceList = categoriesUtil.getCategoriesByType(Category.EntityType.LEAD_SOURCE.toString());
+    	List<Category> leadStatusList = categoriesUtil.getCategoriesByType(Category.EntityType.LEAD_STATUS.toString());
+    	
+    	Map<String, Long> leadSources = new HashMap<String, Long>();
+    	Map<String, Long> leadStatuses = new HashMap<String, Long>();
+    	
+    	for(Category category : leadSourceList)
+    	{
+    		leadSources.put(StringUtils.lowerCase(category.getLabel()), category.getId());
+    	}
+    	
+    	for(Category category : leadStatusList)
+    	{
+    		leadStatuses.put(StringUtils.lowerCase(category.getLabel()), category.getId());
+    	}
+
+    	/**
+    	 * Processed contacts count.
+    	 */
+    	int processedContacts = 0;
+    	int resettedProcessedcontacts = 0;
+    	/**
+    	 * Iterates through all the records from blob
+    	 */
+    	for (String[] csvValues : csvData)
+    	{
+    	    processedContacts++;
+    	    resettedProcessedcontacts++;
+    	    if (resettedProcessedcontacts >= 1000)
+    	    {
+    		try
+    		{
+    		    resettedProcessedcontacts = 0;
+    		    importStatusDAO.updateStatus(processedContacts);
+    		}
+    		catch (Exception e)
+    		{
+    		    e.printStackTrace();
+    		}
+
+    	    }
+
+    	    // Set to hold the notes column positions so they can be created
+    	    // after a contact is created.
+    	    Set<Integer> notes_positions = new TreeSet<Integer>();
+    	    Contact tempContact = new Contact();
+
+    	    boolean isMerged = false;
+    	    boolean is_source_added = false;
+    	    boolean is_status_added = false;
+    	    boolean is_source_mismatch = false;
+    	    boolean is_status_mismatch = false;
+    	    boolean is_lead_converted = false;
+    	    try
+    	    {
+    		// create dummy contact
+
+    		// Cloning so that wrong tags don't get to some contact if
+    		// previous
+    		// contact is merged with exiting contact
+    		tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
+    		tempContact.setContactOwner(ownerKey);
+    		tempContact.type = Type.LEAD;
+
+    		tempContact.properties = new ArrayList<ContactField>();
+
+    		for (int j = 0; j < csvValues.length; j++)
+    		{
+    		    String csvValue = csvValues[j];
+    		    if (StringUtils.isBlank(csvValue))
+    			continue;
+
+    		    ContactField field = null;
+    		    if (j < properties.size())
+    		    {
+    			field = properties.get(j);
+    		    }
+    		    else
+    		    {
+    			break;
+    		    }
+
+    		    // This is hardcoding but found no way to get
+    		    // tags
+    		    // from the CSV file
+    		    if (field == null)
+    		    {
+    			continue;
+    		    }
+
+    		    if ("note".equals(field.name))
+    		    {
+    			notes_positions.add(j);
+    			continue;
+    		    }
+
+    		    // Trims content of field to 490 characters. It should not
+    		    // be trimmed for notes
+    		    csvValues[j] = checkAndTrimValue(csvValue);
+
+    		    if ("tags".equals(field.name))
+    		    {
+    			// Multiple tags are supported. Multiple tags are added
+    			// split at , or ;
+    			String[] tagsArray = csvValues[j].split("[,;]+");
+
+    			for (String tag : tagsArray)
+    			{
+    			    tag = tag.trim();
+    			    if (!TagValidator.getInstance().validate(tag))
+    			    {
+    				throw new InvalidTagException();
+    			    }
+    			    tempContact.tags.add(tag);
+    			}
+    			continue;
+    		    }
+    		    if (Contact.ADDRESS.equals(field.name))
+    		    {
+    			ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+
+    			JSONObject addressJSON = new JSONObject();
+
+    			try
+    			{
+    			    if (addressField != null && addressField.value != null)
+    			    {
+    				addressJSON = new JSONObject(addressField.value);
+    				
+    				CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+    				
+    				addressField.value = addressJSON.toString();
+    			    }
+    			    else
+    			    {
+    			    CountryUtil.setCountryCode(addressJSON, field, csvValues[j]);
+    			    
+    				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+    					field.type.toString()));
+    			    }
+
+    			}
+    			catch (JSONException e)
+    			{
+    			    e.printStackTrace();
+    			}
+    			continue;
+    		    }
+    		    
+    		    if ("lead_source".equals(field.name))
+    		    {
+    		    is_source_added = true;
+    		    //If no lead source, set Other as source
+		    	if(StringUtils.isEmpty(csvValues[j]))
+				{
+		    		tempContact.setLead_source_id(leadSources.get("other"));
+				}
+		    	else
+		    	{
+		    		Long source_id = leadSources.get(StringUtils.lowerCase(csvValues[j]));
+		    		if(source_id != null && source_id > 0)
+		    		{
+		    			tempContact.setLead_source_id(source_id);
+		    		}
+		    		else
+		    		{
+		    			is_source_mismatch = true;
+		    		}
+		    		continue;
+		    	}
+    		    }
+    		    
+    		    if ("lead_status".equals(field.name))
+    		    {
+    		    is_status_added = true;
+    		    //If no lead status, set New as status
+		    	if(StringUtils.isEmpty(csvValues[j]))
+				{
+		    		tempContact.setLead_status_id(leadStatuses.get("new"));
+				}
+		    	else
+		    	{
+		    		Long status_id = leadStatuses.get(StringUtils.lowerCase(csvValues[j]));
+		    		if(status_id != null && status_id > 0)
+		    		{
+		    			tempContact.setLead_status_id(status_id);
+		    			if("converted".equalsIgnoreCase(csvValues[j]))
+		    			{
+		    				is_lead_converted = true;
+		    				tempContact.type = Type.PERSON;
+		    				tempContact.setIs_lead_converted(is_lead_converted);
+		    			}
+		    		}
+		    		else
+		    		{
+		    			is_status_mismatch = true;
+		    		}
+		    		continue;
+		    	}
+    		    }
+
+    		    // To avoid saving ignore field value/ and avoid fields with
+    		    // empty values
+    		    if (field.name == null)
+    			continue;
+
+    		    field.value = csvValues[j];
+
+    		    if (field.type.equals(FieldType.CUSTOM))
+    		    {
+    			for (CustomFieldDef customFieldDef : customFields)
+    			{
+    			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+    			    {
+    				String customDate = csvValues[j];
+
+    				if (customDate != null && !customDate.isEmpty())
+    				{
+    				    field.value = getFormattedDate(customDate);
+    				}
+
+    			    }
+    			}
+
+    			// set image in custom fields
+    			if (field.name.equalsIgnoreCase(Contact.IMAGE))
+    			{
+
+    			    for (CustomFieldDef customFieldDef : imagefield)
+    			    {
+    				if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+    				{
+    				    String img = csvValues[j];
+    				    if (!StringUtils.isBlank(img))
+    				    {
+    					field.value = img;
+    				    }
+    				}
+    			    }
+    			}
+
+    		    }
+    		    if (field.name.equalsIgnoreCase(Contact.COMPANY))
+    		    {
+    		    	String companyName = csvValues[j].trim();
+    			tempContact.properties.add(new ContactField(Contact.COMPANY, companyName,
+    				null));
+    		    }
+
+    		    tempContact.properties.add(field);
+    		    tempContact.source = "import" ;
+    		    System.out.println("temp contact source is "+tempContact.source);
+
+    		}// end of inner for loop
+
+    		// Contact dummy = getDummyContact(properties, csvValues);
+
+    		if (!isValidFields(tempContact, status, failedContacts, properties, csvValues))
+
+    		    continue;
+
+    		// If lead is duplicate with existed contact, it will not save.
+    		if (ContactUtil.isDuplicateContact(tempContact))
+    		{
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Duplicate Contact existed with same email."));
+    			continue;
+    		}
+    		// If lead is duplicate, it fetches old lead and updates
+    		// data.
+    		if (ContactUtil.isDuplicateLead(tempContact))
+    		{
+    		    // Checks if user can update the contact
+
+    		    // Sets current object to check scope
+
+    		    tempContact = ContactUtil.mergeLeadFields(tempContact);
+    		    accessControl.setObject(tempContact);
+    		    if (!accessControl.canCreate())
+    		    {
+    			accessDeniedToUpdate++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+    				"Access denied to update lead"));
+
+    			continue;
+    		    }
+    		    isMerged = true;
+    		}
+    		else
+    		{
+
+    		    // If it is new contacts billingRestriction count is
+    		    // increased
+    		    // and checked with plan limits
+
+    		    ++billingRestriction.contacts_count;
+    		    System.out.println("Leads limit - Allowed : "
+    			    + billingRestriction.getCurrentLimits().getContactLimit() + " current leads count : "
+    			    + billingRestriction.contacts_count);
+    		    if (limitCrossed)
+    		    {
+    			++limitExceeded;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+    				"limit is exceeded"));
+    			continue;
+    		    }
+
+    		    if (billingRestriction.contacts_count >= allowedContacts)
+    		    {
+    			limitCrossed = true;
+
+    			continue;
+    		    }
+    		}
+
+    		tempContact.bulkActionTracker = bulk_action_tracker;
+    		if(is_source_mismatch && is_status_mismatch)
+    		{
+    			sourceMismatched++;
+    			statusMismatched++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+        				"source and status mismatched"));
+    			continue;
+    		}
+    		else if(is_source_mismatch)
+    		{
+    			sourceMismatched++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+        				"source mismatched"));
+    			continue;
+    		}
+    		else if(is_status_mismatch)
+    		{
+    			statusMismatched++;
+    			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+        				"status mismatched"));
+    			continue;
+    		}
+    		
+    		//If no source added, set Other as source
+    		if(!is_source_added)
+    		{
+    			tempContact.setLead_source_id(leadSources.get("other"));
+    		}
+    		//If no status added, set New as status
+    		if(!is_status_added)
+    		{
+    			tempContact.setLead_status_id(leadStatuses.get("new"));
+    		}
+    		tempContact.save(false);
+    	    }// end of try
+    	    catch (InvalidTagException e)
+    	    {
+
+    		System.out.println("Invalid tag exception raised while saving lead ");
+    		e.printStackTrace();
+    		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+    		continue;
+    	    }
+    	    catch (AccessDeniedException e)
+    	    {
+
+    		accessDeniedToUpdate++;
+    		System.out.println("ACL exception raised while saving lead ");
+    		e.printStackTrace();
+    		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+
+    	    }
+    	    catch (Exception e)
+    	    {
+
+    		System.out.println("exception raised while saving lead ");
+    		e.printStackTrace();
+    		if (tempContact.id != null)
+    		{
+    		    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+    			    "Exception raise while saving lead"));
+    		}
+
+    	    }
+
+    	    if (isMerged)
+    	    {
+    		mergedContacts++;
+    	    }
+    	    else
+    	    {
+    		// Increase counter on each contact save
+    		savedContacts++;
+    	    }
+    	    
+    	    if(is_lead_converted)
+    	    {
+    	    convertedContacts++;
+    	    }
+
+    	    try
+    	    {
+
+    		// Creates notes, set CSV heading as subject and value as
+    		// description.
+    		for (Integer i : notes_positions)
+    		{
+    		    Note note = new Note();
+    		    note.subject = headings[i];
+    		    note.description = csvValues[i];
+    		    note.addRelatedContacts(String.valueOf(tempContact.id));
+
+    		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+    		    note.save();
+    		}
+    	    }
+    	    catch (Exception e)
+    	    {
+    		System.out.println("exception while saving leads");
+    		e.printStackTrace();
+    	    }
+
+    	    processedContacts++;
+
+    	}// end of for loop
+
+    	try
+    	{
+    	    importStatusDAO.deleteStatus();
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	}
+
+    	if (failedContacts.size() > 0)
+    	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContacts.size());
+
+    	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
+
+    	if (savedContacts > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+    	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+    	}
+    	if (mergedContacts > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, mergedContacts);
+
+    	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
+
+    	}
+    	if (convertedContacts > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.CONVERTED_CONTACTS, convertedContacts);
+    	}
+    	if (limitExceeded > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+    	}
+    	if (accessDeniedToUpdate > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+    	}
+    	if (statusMismatched > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.STATUS_MISMATCHED, statusMismatched);
+    	}
+    	if (sourceMismatched > 0)
+    	{
+    	    buildCSVImportStatus(status, ImportStatus.SOURCE_MISMATCHED, sourceMismatched);
+    	}
+    	buildCSVImportStatus(status, ImportStatus.FAILEDCSV, 1);
+
+    	// Sends notification on CSV import completion
+    	dBbillingRestriction.send_warning_message();
+
+    	// Send notification after contacts save complete
+    	BulkActionNotifications.publishconfirmation(BulkAction.LEADS_CSV_IMPORT, String.valueOf(savedContacts));
+    	// create failed contact csv
+
+    	buildFailedLeads(domainUser, failedContacts, headings, status);
+    	if (savedContacts != 0 || mergedContacts != 0)
+    	    ActivityUtil.createLogForImport(ActivityType.LEAD_IMPORT, EntityType.CONTACT, savedContacts,
+    		    mergedContacts);
+    }
+    
+    /**
+     * build failed lead csv file
+     * 
+     * @param contact
+     */
+    private void buildFailedLeads(DomainUser domainUser, List<FailedContactBean> failedContacts, String[] headings,
+	    Map<Object, Object> status)
+    {
+	String path = null;
+	try
+	{
+	    System.out.println("Export functionality email" + failedContacts);
+	    if (failedContacts == null || failedContacts.size() == 0)
+	    {
+		System.out.println("no failed conditions");
+		// Send every partition as separate email
+		sendFailedLeadImportFile(domainUser, null, 0, status);
+		return;
+	    }
+
+	    System.out.println("writing file service");
+
+	    // Builds Contact CSV
+	    writeFailedContactsInCSV(getCSVWriterForFailedContacts(), failedContacts, headings);
+
+	    System.out.println("wrote files to CSV");
+	    byte[] data=null;
+	    
+	    try{
+
+	    service.getOutputchannel().close();
+
+	    System.out.println("closing stream");
+
+	    
+	    data = service.getDataFromFile();
+
+	    System.out.println("byte data");
+
+	    System.out.println(data.length);
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
+	    System.out.println(domainUser.email);
+	    
+	    if(data==null)
+	    {
+	    	sendFailedLeadImportFile(domainUser, "", failedContacts.size(), status);
+	    }
+	    // Send every partition as separate email
+	    else
+	    sendFailedLeadImportFile(domainUser, new String(data, "UTF-8"), failedContacts.size(), status);
+
+	    service.deleteFile();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+    
+    /**
+     * helper function for send mail of import leads status with failed
+     * lead csv attachment if failed leads are found then it will send
+     * with failed contact csv file other wise send normal status mail
+     * 
+     */
+    public void sendFailedLeadImportFile(DomainUser domainUser, String csvData, int totalRecords,
+	    Map<Object, Object> status)
+    {
+	if (totalRecords >= 1)
+	{
+	    String[] strArr = { "text/csv", "FailedLeads.csv", csvData };
+	    SendMail.sendMail(domainUser.email, "CSV Leads Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	}
+	else
+	{
+	    SendMail.sendMail(domainUser.email, "CSV Leads Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		    new Object[] { domainUser, status });
+	}
+
     }
 }

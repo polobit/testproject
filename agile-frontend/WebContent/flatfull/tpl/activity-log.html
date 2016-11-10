@@ -888,9 +888,6 @@
 {{custom1}} has enabled  Permissions {{permissionChanged custom3}} to {{custom4}}
  
  <br />
- <small class="activities_second_line m-t-none text-sm">
-  permissions modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
- </small>
  {{/PermissionsExist}}
  {{/if_equals}}
  {{/if_equals}}
@@ -901,9 +898,6 @@
 {{else}}
 {{custom1}} has disabled  Permissions {{permissionChanged custom2}} to {{custom4}}
  <br />
- <small class="activities_second_line m-t-none text-sm">
-  permissions modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
- </small>
  {{/PermissionsExist}}
  {{/if_equals}}
  {{/if_equals}}
@@ -919,6 +913,15 @@
  <i class="icon-user"></i>{{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}}{{agile_lng_translate 'contacts-view' 'contact-assigned-to'}} {{custom1}}.
 </small>  
 {{/if_equals}}
+
+{{#if_equals "LEAD_CREATE" activity_type}}
+{{agile_lng_translate 'leads-view' 'created-a-new-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}
+</a>{{else}}'{{label}}'{{/if}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+ <i class="icon-user"></i>{{#unless this.entityObject}}{{agile_lng_translate 'leads-view' 'lead-deleted-later'}} {{/unless}}{{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom1}}.
+</small>  
+{{/if_equals}}
+
 {{#if_equals "MERGE_CONTACT" activity_type}}
 {{#if_equals "1" custom1}} 
 {{agile_lng_translate 'contacts-view' 'merged'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contact-to'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
@@ -945,6 +948,11 @@
 {{#if_equals "COMPANY_DELETE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'deleted-company'}} '{{label}}'
 {{/if_equals}}
+
+{{#if_equals "LEAD_DELETE" activity_type}}
+{{agile_lng_translate 'leads-view' 'deleted-lead'}} '{{label}}'
+{{/if_equals}}
+
 {{#if_equals "CONTACT_IMPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'imported'}}  {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
@@ -959,6 +967,14 @@
 {{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'contacts-view' 'companies-were-updated-during-the-import'}}{{/if}} 
 </small>  
 {{/if_equals}}
+
+{{#if_equals "LEAD_IMPORT" activity_type}}
+{{agile_lng_translate 'contacts-view' 'imported'}}  {{custom1}} {{agile_lng_translate 'menu' 'leads'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'leads-view' 'leads-were-updated-during-the-import'}}{{/if}} 
+</small>  
+{{/if_equals}}
+
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
@@ -976,11 +992,27 @@
 {{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
 {{/if_equals}}
+
+{{#if_equals "LEAD_EXPORT" activity_type}}
+{{#if_equals "1" custom1}}
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+{{else}}
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'menu' 'leads'}} 
+<br/>
+{{/if_equals}}	
+{{/if_equals}}
+
 {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
 {{#if_equals "PERSON" type}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for-contact'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-user icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{agile_lng_translate 'contacts-view' 'contact-assigned-to'}} {{custom1}}.
+</small>
+{{else}}
+{{#if_equals "LEAD" type}}
+{{agile_lng_translate 'leads-view' 'changed-owner-for-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom1}}.
 </small>
 {{else}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for-company'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
@@ -989,10 +1021,11 @@
 </small>
 {{/if_equals}}	
 {{/if_equals}}
+{{/if_equals}}
   {{#if_equals "NOTE_ADD" activity_type}}
 {{#if custom4}}
-{{agile_lng_translate 'contacts-view' 'added-call-log-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}  {{#if this.entityObject}}<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
-{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{agile_lng_translate 'contacts-view' 'added-call-log-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} {{agile_lng_translate 'menu' 'lead'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}{{/if_equals}}  {{#if this.entityObject}}<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
+{{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} #lead/{{entity_id}} {{else}} #contact/{{entity_id}} {{/if_equals}}{{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small> <br/>
@@ -1000,9 +1033,9 @@
  <i class="icon-pencil"></i>{{custom4}}
 </small>
 {{else}}
-{{agile_lng_translate 'contacts-view' 'added-note-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}} {{#if this.entityObject}}
+{{agile_lng_translate 'contacts-view' 'added-note-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} {{agile_lng_translate 'menu' 'lead'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}{{/if_equals}} {{#if this.entityObject}}
 <a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
-{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} #lead/{{entity_id}} {{else}} #contact/{{entity_id}} {{/if_equals}}{{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small>  
@@ -1029,6 +1062,25 @@
 </small>
 {{/if_equals}}
 {{else}}
+
+{{#if_equals "leads" label}}
+{{#if_equals "ADD_TAG" custom1}}
+{{agile_lng_translate 'contacts-view' 'added-tag-to'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'added'}}
+</small>
+{{/if_equals}}
+
+
+{{#if_equals "REMOVE_TAG" custom1}}
+{{agile_lng_translate 'contacts-view' 'removed-tags-from'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'removed'}}
+</small>
+{{/if_equals}}
+
+{{else}}
+
 {{#if_equals "ADD_TAG" custom1}}
  {{agile_lng_translate 'contacts-view' 'added-tag-to'}}&nbsp;{{custom3}} {{agile_lng_translate 'companies-view' 'companies'}}<br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -1042,6 +1094,8 @@
 </small>
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
 {{#if_equals "1" custom3}}
 		{{agile_lng_translate 'contacts-view' 'Added'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<br/>
@@ -1069,6 +1123,19 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </small>
 {{/if_equals}}
 {{else}}
+{{#if_equals "leads" label}}
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'contacts-view' 'sent-a-email-to'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'contacts-view' 'sent-a-bulk-email-to'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
+{{/if_equals}}
+{{else}}
 {{#if_equals "1" custom3}}
 {{agile_lng_translate 'contacts-view' 'sent-a-email-to'}} {{custom3}} {{agile_lng_translate 'contact-details' 'company'}}<br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -1079,6 +1146,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}} - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
 </small>
+{{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
@@ -1114,6 +1182,21 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </small>
 {{/if_equals}}
 {{else}}
+
+{{#if_equals "leads" label}}
+{{#if_equals "1" custom3}}
+{{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom2}}.
+</small>
+{{else}}
+	{{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'companies-view' 'companies'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'leads-assigned-to'}} {{custom2}}.
+</span>
+{{/if_equals}}
+{{else}}
+
 {{#if_equals "1" custom3}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'contact-details' 'company'}} <br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -1127,6 +1210,8 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "DELETE" custom1}}
 	
 {{#if_equals "contacts" label}}	
@@ -1136,6 +1221,13 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
     {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'portlets' 'contacts'}}
 {{/if_equals}}
 {{else}}
+{{#if_equals "leads" label}}	
+{{#if_equals "1" custom3}}
+		{{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}}
+{{else}}	
+    {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}
+{{/if_equals}}
+{{else}}
 {{#if_equals "1" custom3}}
 		{{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'company'}}
 {{else}}	
@@ -1143,6 +1235,8 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
 {{/if_equals}}
 {{#if_equals "CAMPAIGN" activity_type}}
 {{agile_lng_translate 'contacts-view' 'Added'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} {{agile_lng_translate 'contact-details' 'to-campaign'}} <br/>
@@ -1176,6 +1270,23 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/unless}}
 </small>
 {{/if_equals}}
+
+{{#if_equals "LEAD_TAG_ADD" activity_type}}
+{{agile_lng_translate 'leads-view' 'added-a-tag-to-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} {{agile_lng_translate 'contacts-view' 'added'}}{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} 
+{{/unless}}
+</small>
+{{/if_equals}}
+
+{{#if_equals "LEAD_TAG_REMOVE" activity_type}}
+{{agile_lng_translate 'leads-view' 'removed-a-tag-from-lead'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} {{agile_lng_translate 'contacts-view' 'removed'}}{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} 
+{{/unless}}
+</small>
+{{/if_equals}}
+
 {{#if_equals "CALL" activity_type}}
 {{#if custom1}}
 {{#if_equals "incoming" custom2}}
@@ -1192,6 +1303,21 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if}}
 {{/if_equals}}
+
+{{#if_equals "CHANGE_LEAD_STATUS" custom1}}
+{{#if_equals "1" custom3}}
+{{agile_lng_translate 'leads-view' 'changed-status-for'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'status-changed-to'}} {{custom2}}.
+</small>
+{{else}}
+	{{agile_lng_translate 'leads-view' 'changed-status-for'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'status-changed-to'}} {{custom2}}.
+</small>
+{{/if_equals}}
+{{/if_equals}}
+
 {{/if_equals}}
 <!-- end of contact-->
 <!-- document added startig-->

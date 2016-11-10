@@ -66,5 +66,7 @@
       "affiliate" : "{{agile_lng_translate 'affiliate' 'affiliate-program'}}",
       "home" : "{{agile_lng_translate 'menu' 'home'}}",
       "menu-add" : "{{agile_lng_translate 'menu' 'menu-add'}}",
+      "menu-leads": "{{agile_lng_translate 'menu' 'leads'}}",
+      "menu-lead": "{{agile_lng_translate 'menu' 'lead'}}"
 
 }

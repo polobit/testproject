@@ -34,6 +34,7 @@ import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.AdminPanelAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.amazonaws.services.route53domains.model.ContactType;
 import com.google.gson.Gson;
 import com.agilecrm.contact.DocumentNote;
 /**
@@ -605,6 +606,9 @@ public class ActivitySave
 
 	if (contact.type.toString().equalsIgnoreCase("COMPANY"))
 	    ActivityUtil.createContactActivity(ActivityType.COMPANY_CREATE, contact, owner_name, "", "Company Created");
+	
+	if (contact.type.toString().equalsIgnoreCase("LEAD"))
+	    ActivityUtil.createContactActivity(ActivityType.LEAD_CREATE, contact, owner_name, "", "Lead Created");
 	JSONObject js = new JSONObject(new Gson().toJson(contact));
 	JSONArray jsn = js.getJSONArray("tagsWithTime");
 	ArrayList<String> tag = new ArrayList<String>();
@@ -670,11 +674,18 @@ public class ActivitySave
 
 	    if (_tags_difference != null && _tags_difference.length() > 0)
 	    {
+	    ActivityType addTagActiivtyType = ActivityType.TAG_ADD;
+	    ActivityType removeTagActiivtyType = ActivityType.TAG_REMOVE;
+	    if(contact != null && contact.type == Contact.Type.LEAD)
+	    {
+	    	addTagActiivtyType = ActivityType.LEAD_TAG_ADD;
+	    	removeTagActiivtyType = ActivityType.LEAD_TAG_REMOVE;
+	    }
 		if (old_tags.size() < jsn.length())
-		    ActivityUtil.createContactActivity(ActivityType.TAG_ADD, contact, _tags_difference.toString(), "",
+		    ActivityUtil.createContactActivity(addTagActiivtyType, contact, _tags_difference.toString(), "",
 			    "tag Added");
 		if (old_tags.size() > jsn.length())
-		    ActivityUtil.createContactActivity(ActivityType.TAG_REMOVE, contact, _tags_difference.toString(),
+		    ActivityUtil.createContactActivity(removeTagActiivtyType, contact, _tags_difference.toString(),
 			    "", "tag Removed");
 	    }
 	}
@@ -1316,14 +1327,12 @@ public class ActivitySave
 				 activity.custom4 = domainuser.name;
 				 activity.custom3 = ScopesAdded.toString();
 				 activity.custom2 = ScopesDeleted.toString();
+				 if(ScopesAdded.isEmpty() && ScopesDeleted.isEmpty())
+					 return ;
 				 activity.save();
 			 }
 		}
-    	
-	
-    	
-		
-   
+ 
 }
     
     public static void  createNewUserActivity(DomainUser domainuser)

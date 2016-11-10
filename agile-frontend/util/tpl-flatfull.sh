@@ -55,6 +55,10 @@ cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
+cat flatfull/tpl/leads-filters/*.html  > tpl/min/flatfull/leads-filters.js
+cat flatfull/tpl/leads-view/*.html  > tpl/min/flatfull/leads-view.js
+cat flatfull/tpl/leads-form/*.html  > tpl/min/flatfull/leads-form.js
+cat flatfull/tpl/leads-detail/*.html  > tpl/min/flatfull/leads-detail.js
 
 ## Widgets
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js

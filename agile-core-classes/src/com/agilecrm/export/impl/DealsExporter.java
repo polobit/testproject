@@ -64,4 +64,12 @@ public class DealsExporter extends AbstractCSVExporter<Opportunity>
 	return str;
     }
 
+	@Override
+	protected String[] convertEntityToCSVRow(Opportunity entity,
+			Map<String, Integer> indexMap, int headerLength,
+			Map<Long, String> source_map, Map<Long, String> status_map) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
