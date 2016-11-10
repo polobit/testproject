@@ -4805,10 +4805,27 @@ ul#recent-menu-model-list li:nth-child(even)
 
 
 .btn-hover-color:hover{
-  background:#f6f6f6;
+  color: #FFF !important;
+  background-color: #6254b2;
+  border-color: #5a4daa;
 }
 .prefs-option-col{
     display: table;
     width: 90%;
     margin: 0 auto;
+}
+.pref-dropdown-image{
+  height:80px;width:80px;
+  margin:30px 20px;
+  opacity:0.65;
+}
+.prefs-dropdown-modal-header{
+  margin-top:25px;
+  margin-bottom: 25px;
+}
+.btn-hover-color a:hover{
+  color:white;
+}
+.btn-hover-color:hover a{
+  color:white;
 }
