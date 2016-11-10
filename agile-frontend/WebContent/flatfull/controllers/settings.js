@@ -727,12 +727,18 @@ var SettingsRouter = Backbone.Router
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));
+					$("#content").find(".col").hide();
+					$("#content").find("h1").html("Add Email Template");
+
 					var view = new Email_Template_Events({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
+					$("#prefs-tabs-content").addClass("col-md-9");
+					var discript = $("#prefs-tabs-content").find(".col-md-3");
+					$("#prefs-tabs-content").after(discript);
 
 					// set up TinyMCE Editor
 					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
