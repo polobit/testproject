@@ -145,7 +145,7 @@
         
         <div id="custom-field-deals"></div>
 
-        <div class="control-group form-group">
+        <div class="control-group form-group" style="margin-bottom: 0px;">
             <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'add-description'}}
             </label>
             <div class="controls col-sm-7 agiletxexander">
@@ -162,7 +162,7 @@
             </div>
           </div>
         </div>
-        <div class="toggleHead col-sm-offset-3 col-sm-7 text-left" id="showtoggle_show" style="display:none;margin-left: 24%;"><i class="icon-plus-sign control-label " style="cursor:pointer;color: #23b7e5;"> <span class="m-l-xs" style="cursor:pointer;"> {{agile_lng_translate 'documents' 'deal-products'}}</span></i></div>
+        <div class="toggleHead col-sm-offset-3 col-sm-7 text-left" id="showtoggle_show" style="display:none;margin-left: 24%;margin-top: 5px;"><i class="icon-plus-sign control-label " style="cursor:pointer;color: #23b7e5;"> <span class="m-l-xs" style="cursor:pointer;"> {{agile_lng_translate 'documents' 'deal-products'}}</span></i></div>
         <div class="advances hide  p-r-md p-l-md" id="showproducts">
            <div class="row">
               <div class="col-md-12  m-t-md"><b>{{agile_lng_translate 'documents' 'deal-select-products'}}</b></div>
@@ -182,6 +182,7 @@
                         <ul class="dropdown-menu"></ul>
                       </div><!-- /btn-group -->
                       <input name="discount_value" type="text" placeholder="Enter Percent" class="form-control  discountvalue" id="discount_value">
+                      <input type="text" class="hide" name="discount_type" id="discount_type">
                     </div>
                   </div>
               </div>  

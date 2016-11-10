@@ -682,7 +682,8 @@ function populate_deal_products(el, value,form_id){
 	$(".toggleHead",form_id).find('i').addClass('icon-plus-sign');	
 
 	if($("#discount_type",form_id).val()==""  )
-		$("#discount_type",form_id).val("Value");
+		$("#discount_type",form_id).val("Percent");
+
 	$("#discount_type_btn span:first-child",form_id).text($("#discount_type",form_id).val());
 	//Init
 	$(".discounttype-input-group-btn ul li").click(function(e){
@@ -1073,9 +1074,9 @@ function populate_deal_products(el, value,form_id){
 					var iDiscountAmt=0;
 					//if($("#apply_discount",me._form_id).is(':checked'))
 					//{
-						var val= document.getElementById("discount_value").value;
+						var val= $("#discount_value",me._form_id).val();
 					if(val){
-						iDiscountAmt=$("#discount_value",me._form_id).val();
+						iDiscountAmt= val; 
 						if(iDiscountAmt=="")
 							iDiscountAmt=0
 						if(iDiscountAmt!=null && iDiscountAmt!=undefined )
@@ -1085,12 +1086,16 @@ function populate_deal_products(el, value,form_id){
 									iDiscountAmt=(iTotal *  iDiscountAmt)/100;
 								}
 							}
+
+							$("input[name='discount_type']",$(me._form_id)).val($(".discounttype-input-group-btn span",me._form_id).eq(0).text());
 						}
 					//}
+
 					if(iDiscountAmt.toFixed)
 						iDiscountAmt=iDiscountAmt.toFixed(2)
 					$("input[name='discount_amt']",$(me._form_id)).val(iDiscountAmt);
 					iTotal-=iDiscountAmt
+
 					if(iTotal.toFixed)
 						iTotal=iTotal.toFixed(2)
 					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
