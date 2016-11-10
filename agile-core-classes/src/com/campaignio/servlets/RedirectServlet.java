@@ -247,15 +247,16 @@ public class RedirectServlet extends HttpServlet
 		    	}
 		    	
 		    }
-		    
-		    //If linked click is push notification then add push  notification linked log
-		    if(pushNotificationLinked !=null)
+		    else if(pushNotificationLinked != null)
+		    {
+		    	//If linked click is push notification then add push  notification linked log
 		    	TrackClickUtil.addPushNtificationClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    }
 		    else
 		    {
 		    	TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
 	
-			// Show notification
+				// Show notification
 		    	TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
 		    }
 	    }
