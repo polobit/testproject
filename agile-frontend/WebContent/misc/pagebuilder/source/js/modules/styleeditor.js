@@ -800,6 +800,11 @@
             var theHref;
 
             $('a#link_Link').parent().show();
+            //link tab should active
+            $("#tab1").removeClass("active");
+            $("a#default-tab1").parent().removeClass("active");
+            $("#link_Tab").addClass("active");
+            $("a#link_Link").parent().addClass("active");
 
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
