@@ -732,7 +732,7 @@ var SubscribeRouter = Backbone.Router
 						showNotyPopUp("warning", data.responseText, "top");
 					}, form_custom_validate : function(){
 						if(ADDON_INFO && ADDON_INFO.campaignInfo && ADDON_INFO.campaignInfo.quantity && ADDON_INFO.campaignInfo.quantity == $('.campaign_quantity').val()){
-							showAlertModal("change_addon");
+							showAlertModal("change_campaigns_addon");
 							return false;
 						}
 						return true;
@@ -759,7 +759,7 @@ var SubscribeRouter = Backbone.Router
 						showNotyPopUp("warning", data.responseText, "top");
 					}, form_custom_validate : function(){
 						if(ADDON_INFO && ADDON_INFO.triggerInfo && ADDON_INFO.triggerInfo.quantity && ADDON_INFO.triggerInfo.quantity == $('.campaign_quantity').val()){
-							showAlertModal("change_addon");
+							showAlertModal("change_triggers_addon");
 							return false;
 						}
 						return true;

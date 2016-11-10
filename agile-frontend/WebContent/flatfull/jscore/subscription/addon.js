@@ -51,7 +51,7 @@ var Campaign_Addon_Events_Model_View = Base_Model_View.extend({
         var el = $(target_el).closest("#campaign-addon-content");
         cancelAddOn("core/api/addon/campaign", $(target_el), function(){
         	$(".campaign_quantity", el).val("0").trigger("change");
-        }, "campaign");
+        }, "campaigns");
     }
 });
 
@@ -79,7 +79,7 @@ var Trigger_Addon_Events_Model_View = Base_Model_View.extend({
         var el = $(target_el).closest("#trigger-addon-content");
         cancelAddOn("core/api/addon/trigger", $(target_el), function(){
         	$(".trigger_quantity", el).val("0").trigger("change");
-        }, "trigger");
+        }, "triggers");
     }
 });
 
