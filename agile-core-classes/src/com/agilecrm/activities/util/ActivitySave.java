@@ -56,8 +56,15 @@ public class ActivitySave
 	    jsn = ActivityUtil.getContactIdsJson(contacts);
 	}
 
-	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
-
+	String owner_name = "" ; 
+	try {
+		if(opportunity.owner_id != null)
+			owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
+		else if(opportunity.getOwner().name != null)
+			owner_name = opportunity.getOwner().name ;
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
 	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name,
 	        opportunity.expected_value.toString(), String.valueOf(opportunity.probability), jsn);
 	if(opportunity.tagsWithTime.size() >0){
