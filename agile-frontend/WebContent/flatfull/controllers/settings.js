@@ -601,8 +601,13 @@ var SettingsRouter = Backbone.Router
 							if(!template_ui)
 								  return;
 
-							if(!no_load)	
-							$('#content').html($(template_ui));	
+							if(!no_load)
+							{	
+							$('#content').html($(template_ui));
+							$("#content").find(".col").hide();
+							$("#content").find("h1").html("Email Templates");
+							$("#content").find("#add-new").removeClass("hide");
+							}	
 
 							getTemplate('setting-email-templates-header', {}, undefined, function(template_ui){
 
@@ -612,7 +617,8 @@ var SettingsRouter = Backbone.Router
 								if(!no_load){
 
 									$('#prefs-tabs-content').html($(template_ui));
-										var el = $("#prefs-tabs-content");
+									var el = $("#prefs-tabs-content");
+									$(el.find(".col-md-9")).css("padding", "0");
 
 									if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
 
