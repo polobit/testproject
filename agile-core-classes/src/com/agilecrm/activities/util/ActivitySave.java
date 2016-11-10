@@ -1282,14 +1282,12 @@ public class ActivitySave
 				 activity.custom4 = domainuser.name;
 				 activity.custom3 = ScopesAdded.toString();
 				 activity.custom2 = ScopesDeleted.toString();
+				 if(ScopesAdded.isEmpty() && ScopesDeleted.isEmpty())
+					 return ;
 				 activity.save();
 			 }
 		}
-    	
-	
-    	
-		
-   
+ 
 }
     
     public static void  createNewUserActivity(DomainUser domainuser)
