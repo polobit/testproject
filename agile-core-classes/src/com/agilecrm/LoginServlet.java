@@ -19,6 +19,7 @@ import com.agilecrm.ssologin.SingleSignOnUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
@@ -213,6 +214,9 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 
 		String timezone = request.getParameter("account_timezone");
+		
+		// Agile push notification Registration Id
+		String registrationId = request.getParameter("registrationId");
 
 		// Hash to redirect after login
 		String hash = request.getParameter("location_hash");
@@ -322,6 +326,12 @@ public class LoginServlet extends HttpServlet {
 		{
 			new LoginUtil().setMiscValuesAtLogin(request, domainUser);
 		}
+		
+		// Add User Push Notification Registration Id
+ 		if(StringUtils.isNotBlank(registrationId)){
+ 			new AgileUserPushNotificationId(domainUser.id, registrationId, NamespaceManager.get()).save();
+ 		}
+ 		
 		
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);

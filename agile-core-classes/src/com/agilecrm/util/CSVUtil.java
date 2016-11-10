@@ -1981,6 +1981,7 @@ public class CSVUtil
     	 * HashMap<String, String> map = new HashMap<String, String>();
     	 * map.put("count", totalRecords);
     	 */
+    	String tempDomain = domainUser.domain;
 		domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
     	if (totalRecords >= 1)
     	{
@@ -1993,6 +1994,7 @@ public class CSVUtil
     	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
     		    new Object[] { domainUser, status });
     	}
+    	domainUser.domain = tempDomain;
 
         }
 

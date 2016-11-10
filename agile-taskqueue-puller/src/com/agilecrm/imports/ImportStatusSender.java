@@ -28,8 +28,10 @@ public class ImportStatusSender implements StatusSender
 
 	// TODO Auto-generated method stub
 	System.out.println("Email to be sent to email");
+	String tempDomain = domainUser.domain;
 	domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
 	SendMail.sendMail(domainUser.email, "CSV Import Delay", SendMail.CSV_IMPORT_DELAY_NOTIFICATION,
 		new Object[] { domainUser });
+	domainUser.domain = tempDomain;
     }
 }
