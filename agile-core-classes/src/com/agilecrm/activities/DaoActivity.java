@@ -40,7 +40,9 @@ public class DaoActivity
 	
 	TICKET(Tickets.class),
     
-    USER(DomainUser.class);
+    USER(DomainUser.class),
+   
+    ADMINPANEL(DomainUser.class);
 
 	Class clazz;
 

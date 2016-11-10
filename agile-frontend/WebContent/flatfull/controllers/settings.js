@@ -67,7 +67,10 @@ var SettingsRouter = Backbone.Router
 			"contact-us" : "contactUsEmail",
 
 			/* Theme & Layout page */
-			"themeandlayout" : "themeandlayout" },
+			"themeandlayout" : "themeandlayout" ,
+
+			/*"help-options" : "helpOptions"*/
+		},
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -1187,6 +1190,11 @@ var SettingsRouter = Backbone.Router
 
 			themeandlayout : function()
 			{
+				getTemplate("settings", {}, undefined, function(template_ui){
+										if(!template_ui)
+											  return;
+										$('#content').html($(template_ui));
+									});
 				// $("#content").html(getTemplate("theme-layout-form"), {});
 				showTransitionBar();
 				$
@@ -1196,10 +1204,11 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
-									$('#content').html($(template_ui));	
+									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
@@ -1210,6 +1219,8 @@ var SettingsRouter = Backbone.Router
 									if (data.page_size != CURRENT_USER_PREFS.page_size || data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 										$(".theme-save-status").css("display", "inline");
 									hideTransitionBar();
+									$('#PrefsTab .select').removeClass('select');
+									$('.theme-and-layout').addClass('select');
 
 								}, "#content");
 
@@ -1283,7 +1294,18 @@ var SettingsRouter = Backbone.Router
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
-			}
+			},
+			/*helpOptions : function(){
+				var that =this;
+				getTemplate("prefs-dropdown-options", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+					loadLiveChat();
+					hideTransitionBar();
+				},"#content");
+			
+			}*/
 
 		});
 
@@ -1296,3 +1318,11 @@ function getCurrentDomain(options){
 	}
 	return " ";
 }
+
+/*function loadLiveChat(){
+	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
+	});
+}*/

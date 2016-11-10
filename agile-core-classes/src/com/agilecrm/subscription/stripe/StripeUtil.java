@@ -469,40 +469,28 @@ public class StripeUtil {
 			subscription= getStripeSubscriptionById(subscriptionId);
 		if(subscription == null){
 			System.out.println("creating subscription with plan:"+planId+" quantity:"+quantity);
-			com.stripe.model.Subscription newSub = cust.createSubscription(params);
-			Map<String, Object> invoiceParams = new HashMap<String, Object>();
-			invoiceParams.put("customer", cust.getId());
-			invoiceParams.put("subscription", newSub.getId());
-
-			try {
-				// Creates invoice for plan upgrade and charges customer
-				// immediately
-				Invoice invoice = Invoice.create(invoiceParams);
-				if (invoice != null && invoice.getSubscription().equals(newSub.getId()))
-					invoice.pay();
-			} catch (Exception e) {
-			}
-			System.out.println("Subscription created");
-			return newSub;
+			subscription = cust.createSubscription(params);
 		}else{
 			System.out.println("updating subscription with plan:"+planId+" quantity:"+quantity);
 			System.out.println("Old plandetails::: plan:"+subscription.getId()+" quantity:"+quantity);
-			com.stripe.model.Subscription updatedSub = subscription.update(params);
+			subscription = subscription.update(params);
 			System.out.println("Subscription updated");
-			Map<String, Object> invoiceParams = new HashMap<String, Object>();
-			invoiceParams.put("customer", cust.getId());
-			invoiceParams.put("subscription", updatedSub.getId());
-
-			try {
-				// Creates invoice for plan upgrade and charges customer
-				// immediately
-				Invoice invoice = Invoice.create(invoiceParams);
-				if (invoice != null && invoice.getSubscription().equals(updatedSub.getId()))
-					invoice.pay();
-			} catch (Exception e) {
-			}
-			return updatedSub;
 		}
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		invoiceParams.put("customer", cust.getId());
+		invoiceParams.put("subscription", subscription.getId());
+
+		// Creates invoice for plan upgrade and charges customer
+		// immediately
+		Invoice invoice = null;
+		try{
+			invoice = Invoice.create(invoiceParams);
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		if (invoice != null && invoice.getSubscription().equals(subscription.getId()) && !invoice.getPaid())
+			invoice.pay();
+		return subscription;
 		
 	}
 	

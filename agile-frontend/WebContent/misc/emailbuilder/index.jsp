@@ -266,7 +266,7 @@ var localeJSON = <%=localeJSON%>;
                                 
                                 <div class="col-xs-4">
                                     <button type="button" class="btn btn-default" id="videoRecordBtn">
-                                        <span>Browse</span>
+                                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select") %></span>
                                     </button>
                                 </div>
                             </div>

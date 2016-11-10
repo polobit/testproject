@@ -35,6 +35,11 @@ define([
           };
         });
       }
+    
+      $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+      });
+
     }
 
     , preventPropagation: function(e) {

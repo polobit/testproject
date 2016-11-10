@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
 <%@page import="com.twilio.sdk.resource.instance.Trigger"%>
 <%@page import="com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
@@ -449,7 +450,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 								fromEmail = owner.email;
 						}
 					    
-					    map.put("domain", domain);
+					    map.put("domain", AliasDomainUtil.getCachedAliasDomainName(domain));
 					    
 					    map.put("campaign_id", campaignId);
 					    map.put("email", email);

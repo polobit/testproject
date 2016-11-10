@@ -1,7 +1,9 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +32,7 @@ import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.AdminPanelAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 import com.agilecrm.contact.DocumentNote;
@@ -786,6 +789,15 @@ public class ActivitySave
 	        bulk_email_subject, EntityType.DEAL);
 
     }
+    
+    public static void createDealBulkActionActivity(List<Long> dealIds, int dealidscount, String actiontype, String data, String label,
+    	    String bulk_email_subject) throws JSONException
+        {
+
+    	ActivityUtil.createDealBulkActionActivity(dealIds, actiontype, data, String.valueOf(dealidscount), label,
+    	        bulk_email_subject, EntityType.DEAL);
+
+        }
 
     /**
      * common method to get the changed fields when updating deal,task,event
@@ -1228,7 +1240,14 @@ public class ActivitySave
     public static void  createUserEditActivity(DomainUser domainuser)
     {
     	Activity activity = new Activity();
-    	activity.entity_type = EntityType.USER;
+    	if("admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
+		{
+    		activity.entity_type = EntityType.ADMINPANEL;
+		}
+    	else
+    	{
+    		activity.entity_type = EntityType.USER;
+    	}
     	activity.entity_id = domainuser.id;
     	if(domainuser.id != null)
 		{
@@ -1266,8 +1285,43 @@ public class ActivitySave
 				 activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
 				 activity.save();
 			 }
+			 activity.custom1 = (DomainUserUtil.getCurrentDomainUser().domain); 
+			 if("admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
+			 {	
+				Set <AdminPanelAccessScopes> ScopesAdded = new HashSet<AdminPanelAccessScopes>();
+			 	Set <AdminPanelAccessScopes> ScopesDeleted = new HashSet<AdminPanelAccessScopes>();
+				List<AdminPanelAccessScopes> Scopes = new ArrayList<AdminPanelAccessScopes>(Arrays.asList(AdminPanelAccessScopes.values()));
+				Set <AdminPanelAccessScopes> Scopeslist = new HashSet<AdminPanelAccessScopes>(Scopes);
+				 for(AdminPanelAccessScopes access :Scopeslist )
+			 	 {
+			 		 if(domainuser.adminPanelAccessScopes.contains(access))
+			 		 {
+			 			 if(old_user.adminPanelAccessScopes.contains(access))
+			 			 {
+			 				 continue;
+			 			 }
+			 			 	ScopesAdded.add(access);
+			 		 }
+			 		 else if(old_user.adminPanelAccessScopes.contains(access))
+			 		 {
+			 			if(domainuser.adminPanelAccessScopes.contains(access))
+			 			{
+			 				continue;
+			 			}
+			 			ScopesDeleted.add(access);
+			 			}
+			 	 }
+				 activity.activity_type = activity.activity_type.ADMIN_PANEL_PERMISSIONS_CHANGED;
+			 	 activity.custom1 = DomainUserUtil.getCurrentDomainUser().email;
+				 activity.custom4 = domainuser.name;
+				 activity.custom3 = ScopesAdded.toString();
+				 activity.custom2 = ScopesDeleted.toString();
+				 activity.save();
+			 }
+		}
+    	
 	
-    	}
+    	
 		
    
 }
