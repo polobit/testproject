@@ -27,6 +27,7 @@ cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
+cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
 cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
