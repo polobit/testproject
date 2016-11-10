@@ -236,11 +236,15 @@ public class RedirectServlet extends HttpServlet
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);
 					
 		    	}
-		    	
-		    	// Show notification
-				TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
-				
-				return;
+
+		    	// For Emails
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.EMAIL))
+		    	{
+		    		TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    		
+		    		// Show notification
+					TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
+		    	}
 		    	
 		    }
 		    
