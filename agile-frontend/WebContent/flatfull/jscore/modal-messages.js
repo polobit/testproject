@@ -84,6 +84,18 @@ var MODAL_MESSAGES = {
 		"title": "{{agile_lng_translate 'account' 'delete-subscription'}}",
 		"message" : "{{agile_lng_translate 'account' 'delete-subscription-confirm'}}"
 	},
+	"delete_acl_subscription" : {
+		"title": "{{agile_lng_translate 'account' 'cancel-addons'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-acl-subscription-confirm'}}"
+	},
+	"delete_campaigns_subscription" : {
+		"title": "{{agile_lng_translate 'account' 'cancel-addons'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-campaigns-subscription-confirm'}}"
+	},
+	"delete_triggers_subscription" : {
+		"title": "{{agile_lng_translate 'account' 'cancel-addons'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-triggers-subscription-confirm'}}"
+	},
 	"delete_rule" : {
 		"title": "{{agile_lng_translate 'webrule' 'delete'}}",
 		"message" : "{{agile_lng_translate 'webrule' 'delete-confirm'}}"

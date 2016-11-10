@@ -2528,6 +2528,31 @@ public class ActivityUtil
 			return null;
 		}
 	}
+	
+	public static Activity createDealBulkActionActivity(List<Long> dealIds, String new_data, String old_data, String changed_field,
+			String label, String bulk_email_subject, EntityType entityType)
+	{
+		Activity activity = new Activity();
+		activity.label = label;
+		activity.activity_type = ActivityType.BULK_ACTION;
+		activity.entity_type = entityType;
+
+		if (StringUtils.isNotEmpty(new_data))
+			activity.custom1 = new_data;
+		if (StringUtils.isNotEmpty(old_data))
+			activity.custom2 = old_data;
+		if (StringUtils.isNotEmpty(changed_field))
+			activity.custom3 = changed_field;
+		if (StringUtils.isNotEmpty(changed_field))
+			activity.custom4 = bulk_email_subject;
+		if(dealIds != null && dealIds.size()>0)
+			activity.bulk_deal_ids = dealIds;
+
+		activity.save();
+		return activity;
+	}
+
+	
 	/**
 	 * gets list of activities based on entity id
 	 * 

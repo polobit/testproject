@@ -24,7 +24,11 @@ var Form_Collection_Events = Base_Collection_View.extend({
 
 		 	//permanent link
 		 	var link = window.location.protocol + "//" +window.location.host+ "/forms/"+$(e.currentTarget).data("formid");
+		 	/*var encodedLink=encodeURIComponent(link);*/
 		 	$codeShareModalEl.find("#linkArea").text(link);
+		 	/*$("#agile-tweet-redirect").attr('href','https://twitter.com/home?status='+link);
+		 	$("#agile-fb-redirect").attr('href','https://www.facebook.com/sharer/sharer.php?u='+encodedLink);
+		 	$("#agile-google-redirect").attr('href','https://plus.google.com/share?url='+encodedLink);*/
 
 		 	//iframe code
 		 	var iframe =  "<iframe width=\"100%\" height=\"100%\" src=\""+link+"\" frameborder=\"0\"></iframe>";
