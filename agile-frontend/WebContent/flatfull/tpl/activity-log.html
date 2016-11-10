@@ -805,6 +805,111 @@
 {{else}}
 {{/if_equals}}
 <!-- end of user owner change -->
+<!-- start of delete domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_DELETE_ACCOUNT" activity_type}}
+ {{custom1}} ({{custom3}}) had deleted  Domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom2}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT" activity_type}}
+ {{custom1}} has added Affliate Amount of $({{custom3}}) to the domain {{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom1}} has added  amount on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ <!-- end of admin panel activities -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_LOGIN_INTO_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) has logged into the Domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom1}} has logged on to {{custom2}} on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ <!-- start of release domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_SUBSCRIPTION_CANCEL" activity_type}}
+ {{custom1}} ({{custom3}}) has cancelled the subscritpion for the domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+   The Subscription was cancelled on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- end of admin panel activities -->
+ <!-- start of release domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_RELEASE_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) had released the Domain {{custom2}}  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom2}} was released on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_DELETED_USER" activity_type}}
+ {{custom3}} had been  deleted 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom3}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_REFUND_AMOUNT" activity_type}}
+ {{custom1}} has  Applied the refund  to the {{custom2}}
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom2}} was refunded  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}} with the amount {{custom3}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_SEARCHED_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) had searched for the domain {{custom2}}  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom1}} searched on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- admin panel user permisssions changed -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
+ {{#PermissionsExist custom3}}
+{{else}}
+{{custom1}} has enabled  Permissions {{permissionChanged custom3}} to {{custom4}}
+ 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  permissions modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
+ </small>
+ {{/PermissionsExist}}
+ {{/if_equals}}
+ {{/if_equals}}
+
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
+{{#PermissionsExist custom2}}
+{{else}}
+{{custom1}} has disabled  Permissions {{permissionChanged custom2}} to {{custom4}}
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  permissions modified on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
+ </small>
+ {{/PermissionsExist}}
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- end of user admin panel permissions changed -->
+  <!-- end of admin panel activities -->
+
 <!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
 {{#if_equals "CONTACT_CREATE" activity_type}}
@@ -1532,8 +1637,13 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
             
 		<div class="pull-right" id="activity-log-header-div">
 		<div class="btn-group pull-left" role="group">
+		{{#is_admin_domain}}
+                {{else}}
                 <a href="#activities" class="btn btn-default btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
+                
+
                 <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
+                {{/is_admin_domain}}
             </div>
             <div class="pull-left" style=" margin-bottom:0px !important;">
             <div id="activities_date_range" style="line-height:20px;" 
@@ -1643,6 +1753,9 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  </script>
 
 <script id="sales-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
 <li data-type="CALL"><a href="CALL">{{agile_lng_translate 'portlets' 'calls'}}</a></li>
@@ -1662,24 +1775,39 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  <li data-type="TASK"><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
 
 	<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
+ {{/is_admin_domain}}
+
 </script>
 
 
 <script id="marketing-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
  <li data-type="CAMPAIGN"><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
                     </li>
- <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li>
+ <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li> 	
+ {{/is_admin_domain}}
+
 </script>
 
 <script id="service-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
 	<li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
  <li data-type="TICKET"><a href="TICKET">Tickets</a></li>
     
-					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>                 
+					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li> 
+ {{/is_admin_domain}}
 
+
+</script>
+<script type="text/html" id="removedaccessScopes-template">
+<div></div>
 </script>
 

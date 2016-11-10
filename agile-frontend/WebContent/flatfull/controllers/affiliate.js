@@ -197,6 +197,10 @@ var AffiliateRouter = Backbone.Router.extend({
 
 	listAffiliateDetails : function()
 	{
+		if(CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("AFFILIATES") ==-1)
+		{
+			 return showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
+		}
 		var that = this;
 			getTemplate('admin-affiliate-details', {}, undefined, function(template_ui){
 				if(!template_ui)

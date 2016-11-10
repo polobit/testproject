@@ -66,7 +66,7 @@
             
 </div>
 
-
+{{#is_admin_domain}}{{else}}
 <div class="control-group form-group">
               <label class="control-label col-md-3" for="phone">{{agile_lng_translate 'other' 'phone'}}</label> 
 
@@ -102,7 +102,8 @@
               </div>
               </div>
     </div>
-
+    {{/is_admin_domain}}
+{{#is_admin_domain}}{{else}}
           <div class="control-group form-group">
 <div class="col-sm-offset-3 col-md-9">
               <div class="controls">
@@ -115,6 +116,7 @@
               </div>
             </div>
 </div>
+{{/is_admin_domain}}
 
     
             <div class="control-group form-group">
@@ -163,7 +165,102 @@
 <input type="hidden" id="owner" name='is_account_owner' value=''/><i></i> 
 {{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
-<div class="tab-container m-b-none">
+{{#is_admin_domain}}
+    <div class="tab-container m-b-none">
+        <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
+        </label>
+            <div class="control-group form-group">
+              <div class="controls" >
+                <div class="multiple-checkbox" name="adminPanelAccessScopes" style="margin-top: 10px;">
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="ADD_AFFILIATE_AMOUNT"  value="ADD_AFFILIATE_AMOUNT" >
+                      <i></i>Add Affiliate Amount<br/>
+                      <div style="margin-left:6px;">
+                        <small> 
+                          Add Affiliate amount to the Customer
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="LOGIN_INTO_DOMAIN"  value="LOGIN_INTO_DOMAIN"  >
+                      <i></i>Login into the Customer Domain<br/>
+                      <div style="margin-left:6px;">
+                        <small> Log in into Customer Domain
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="REFUND_AMOUNT"  value="REFUND_AMOUNT"  >
+                      <i></i>Refund the Amount<br/>
+                      <div style="margin-left:6px;">
+                        <small> Refund the amount to Customer
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="DELETE_USER"  value="DELETE_USER" >
+                      <i></i>Delete User<br/>
+                      <div style="margin-left:6px;">
+                        <small> Delete Users 
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="CANCEL_SUBPLAN"
+                    value="CANCEL_SUBPLAN">
+                      <i></i>Cancel Subscription<br/>
+                      <div style="margin-left:6px;">
+                        <small> Cancel Subscription
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="DELETE_ACCOUNT"  value="DELETE_ACCOUNT" >
+                      <i></i>Delete Account Permanently<br/>
+                      <div style="margin-left:6px;">
+                        <small> Delete Account
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="ADD_USER"  value="ADD_USER" >
+                      <i></i>Add User<br/>
+                      <div style="margin-left:6px;">
+                        <small> Add Users 
+                        </small>
+                      </div>
+                  </label>
+                 
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="AFFILIATES"  value="AFFILIATES" >
+                      <i></i>View Affiliates<br/>
+                      <div style="margin-left:6px;">
+                        <small> View Affiliates
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="ACCOUNT_RELEASE"  value="ACCOUNT_RELEASE" >
+                      <i></i>Release Account<br/>
+                      <div style="margin-left:6px;">
+                        <small> Release Account
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="VIEW_LOGS"  value="VIEW_LOGS" >
+                      <i></i>View Admin Panel Logs<br/>
+                      <div style="margin-left:6px;">
+                        <small>View Panel Logs
+                        </small>
+                      </div>
+                  </label>
+          </div>
+        </div>
+      </div>
+    </div>
+{{/is_admin_domain}}
+<div class="tab-container m-b-none {{#is_admin_domain}} hide {{/is_admin_domain}}">
 <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}</label>
   <ul class="nav nav-tabs b-b-none">
 
@@ -178,7 +275,7 @@
     </ul>
     </div>
     <div class="tab-pane multiple-checkbox-adminprefs" name="newMenuScopes">
-    <div class="col panel wrapper b-t" style="box-shadow: inherit;">
+    <div class="col panel wrapper b-t {{#is_admin_domain}} hide {{/is_admin_domain}}" style="box-shadow: inherit;">
     {{#is_acl_allowed id}}
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
          {{else}}
