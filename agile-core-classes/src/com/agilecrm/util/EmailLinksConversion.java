@@ -142,7 +142,7 @@ public class EmailLinksConversion
 			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
 			            + cid + sid + tid + push);*/
 		    
-		    link.attr("href",URLShortenerUtil.getShortURL(URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
+		    link.attr("href",URLShortenerUtil.getShortURL(StringEscapeUtils.unescapeXml(url)
 		           , "email", subscriberId, personalEmailTrackerId, campaignId, ShortenURLType.EMAIL, pushParam));
 		    
 		    System.out.println("New Link URL after shortner:"+link.attr("href"));

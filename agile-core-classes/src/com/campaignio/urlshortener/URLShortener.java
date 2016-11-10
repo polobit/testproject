@@ -16,6 +16,7 @@ import com.googlecode.objectify.annotation.Unindexed;
  */
 @XmlRootElement
 @Cached
+@Unindexed
 public class URLShortener
 {
     /**
