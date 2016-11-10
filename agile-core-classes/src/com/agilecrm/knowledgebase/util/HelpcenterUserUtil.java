@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -35,7 +36,7 @@ public class HelpcenterUserUtil
 		try
 		{
 			data.put("name", user.name);
-			data.put("domain", NamespaceManager.get());
+			data.put("domain", AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()));
 			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())
 					+ "/helpcenter/verify_email?tid=" + URLEncoder.encode(user.created_time + "", "UTF-8") + "&id="
 					+ user.id);

@@ -701,7 +701,81 @@
     {{/if_equals}}
   </div>  
 {{/if_equals}}
+{{#if_equals "BULK_ACTION" activity_type}}
+{{#if_equals "BULK_DEAL_OWNER_CHANGE" custom1}}
+<div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-user text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_OWNER_CHANGE'}}
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>{{agile_lng_translate 'activity_message' 'deal_owner_change_to'}} {{custom2}}.</div></span>
+    </div>
+  </div>
+{{/if_equals}}
+{{#if_equals "BULK_DEAL_MILESTONE_CHANGE" custom1}}
+<div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-user text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_MILESTONE_CHANGE'}}
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>{{agile_lng_translate 'activity_message' 'deal_milestone_change_to'}} {{custom2}}.</div></span>
+    </div>
+  </div>
+{{/if_equals}}
 
+{{#if_equals "BULK_DEAL_ARCHIVE" custom1}}
+<div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-user text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_ARCHIVE'}}
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>{{agile_lng_translate 'activity_message' 'deal_archive'}}</div></span>
+    </div>
+  </div>
+{{/if_equals}}
+{{#if_equals "BULK_DEAL_RESTORE" custom1}}
+<div class="inner">
+    <div class="timestamp">{{time}}</div>
+    <div class="text-md text-cap pull-left">  
+      <div class="contact-job-title text-base custom-color">
+        <i class="icon-user text-muted p-r-xs"></i>{{agile_lng_translate 'activity_type' 'DEAL_RESTORE'}}
+      </div>
+    </div>
+    <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>
+      {{epochToHumanDate "hh:MM tt" time}}
+    </div>
+    <div class="clearfix"></div>
+    <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
+    <div class="body">
+      <span class="text-xs"><div>{{agile_lng_translate 'activity_message' 'deal_restore'}}</div></span>
+    </div>
+  </div>
+{{/if_equals}}
+{{/if_equals}}
 </div>
 {{/each}}
 </script>

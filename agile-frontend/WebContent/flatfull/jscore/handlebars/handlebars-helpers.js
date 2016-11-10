@@ -7919,6 +7919,7 @@ Handlebars.registerHelper('brandedemailstatus', function(options)
 	return options.fn(this);
 
 });
+
 Handlebars.registerHelper('calc_Products_Total', function(products)
 {
 	var iSubTotal=0
@@ -7946,3 +7947,55 @@ Handlebars.registerHelper('contactsnamestatus', function(options)
 
 		return (_agile_get_custom_contact_display_type() == "FTL") ?  options.fn(this) : options.inverse(this);
 	});
+
+Handlebars.registerHelper('is_admin_domain', function(options)
+{
+	if(CURRENT_DOMAIN_USER.domain == null || CURRENT_DOMAIN_USER.domain == "admin")
+		return options.fn(this);
+	return options.inverse(this);
+
+});
+
+Handlebars.registerHelper('adminpanel_restrictions', function(restriction,options)
+{
+	if(CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf(restriction) != -1)
+		return options.fn(this);
+	return options.inverse(this);
+
+});
+
+Handlebars.registerHelper('permissionshanged', function(value)
+{
+	var added  = value.split(",");
+});
+Handlebars.registerHelper('permissionChanged', function(value)
+{
+	var changes = value.replace("[","").replace("]","").replace("_"," ");
+	var el = "<span> ";
+	var elements = changes.split(",");
+	$.each(elements, function(index)
+	{
+			el = el.concat(elements[index] + " &nbsp;");
+	});
+		return new Handlebars.SafeString(el);
+});
+
+Handlebars.registerHelper('PermissionsExist', function(value,options)
+{
+	var changes = value.replace("[","").replace("]","");
+	if(changes.length == 0)
+		return options.fn(this);
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('permissiondeleted', function(value)
+{
+	var changes = value.replace("[","").replace("]","").replace("_"," ");
+	var el = "<span> ";
+	var elements = changes.split(",");
+	$.each(elements, function(index)
+	{
+			el = el.concat(elements[index] + "&nbsp;");
+	});
+		return new Handlebars.SafeString(el);
+});

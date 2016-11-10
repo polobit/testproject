@@ -4817,7 +4817,6 @@ ul#recent-menu-model-list li:nth-child(even)
   cursor: pointer;
 }
 
-
 .filter-dynamic-scrollbar::-webkit-scrollbar {
   width: 5px;
 }
@@ -4872,4 +4871,53 @@ ul#recent-menu-model-list li:nth-child(even)
 }
 #lhs_filters_segmentation #lhs-filters-header .popover {
     max-width: 280px;
+}
+
+.adduseradminpanel .caret
+{
+  display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 5px solid;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+}
+.adminPanel.app-aside
+{
+      width: 0px;
+}
+.adminPanel .app-content
+{
+  margin-left:0px!important;
+}
+.adminPanelcontainer
+{
+  margin-left:0px!important;
+}
+.btn-hover-color:hover{
+  color: #FFF !important;
+  background-color: #6254b2;
+  border-color: #5a4daa;
+}
+.prefs-option-col{
+    display: table;
+    width: 90%;
+    margin: 0 auto;
+}
+.pref-dropdown-image{
+  height:80px;width:80px;
+  margin:30px 20px;
+  opacity:0.65;
+}
+.prefs-dropdown-modal-header{
+  margin-top:25px;
+  margin-bottom: 25px;
+}
+.btn-hover-color a:hover{
+  color:white;
+}
+.btn-hover-color:hover a{
+  color:white;
 }
