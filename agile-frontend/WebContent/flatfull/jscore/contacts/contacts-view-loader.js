@@ -54,9 +54,9 @@ var contacts_view_loader = {
 					that.setupContactFilterName(cel, tag_id);
 					if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-					$('time',cel).timeago();
-				});
-										}
+							$('time',cel).timeago();
+						});
+					}
 					if(App_Contacts.contactsListView.collection.models.length > 0 && !App_Contacts.contactsListView.collection.models[0].get("count"))
 					{
 						// Call to get Count 
@@ -70,12 +70,11 @@ var contacts_view_loader = {
 					contactListener();
 
 				},
-					appendItemCallback : function(p_el) {
-						if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
+				appendItemCallback : function(p_el) {
+					if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
 						includeTimeAgo(p_el);
 					}
-				}
-				 });
+				}});
 			App_Contacts.contactsListView.collection.fetch();
 
 			App_Contacts.contactsListView.appendItem = function(base_model){

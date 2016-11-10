@@ -357,6 +357,11 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 			data :JSON.stringify(json),
 			success : function(data)
 			{
+				//After add or remove column, make SELECT_ALL false and remove check for select all checkbox
+				SELECT_ALL = false;
+				$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+				$("#bulk-action-btns button").addClass("disabled");
+
 				App_Contacts.contactViewModel = data;
 				contacts_view_loader.fetchHeadings(function(modelData){
 					contacts_view_loader.getContacts(modelData, $("#contacts-listener-container"));
@@ -422,6 +427,11 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 			data :JSON.stringify(array),
 			success : function(data)
 			{
+				//After add or remove column, make SELECT_ALL false and remove check for select all checkbox
+				SELECT_ALL = false;
+				$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+				$("#bulk-action-btns button").addClass("disabled");
+
 				App_Companies.companyViewModel = data;
 				companies_view_loader.fetchHeadings(function(modelData){
 					companies_view_loader.getCompanies(modelData, $("#companies-listener-container"));

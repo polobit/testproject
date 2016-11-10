@@ -85,6 +85,11 @@ var Leads_Header_Events_View = Base_Model_View.extend({
 			data :JSON.stringify(json),
 			success : function(data)
 			{
+                //After add or remove column, make SELECT_ALL_LEADS false and remove check for select all checkbox
+                App_Leads.leadsBulkActions.SELECT_ALL_LEADS = false;
+                $(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+                $("#bulk-action-btns button").addClass("disabled");
+                
 				App_Leads.leadViewModel = data;
 				App_Leads.leadsViewLoader.fetchHeadings(function(modelData){
 					App_Leads.leadsViewLoader.getLeads(modelData, $("#content"));
