@@ -108,6 +108,8 @@ var AffiliateRouter = Backbone.Router.extend({
 		var url = 'core/api/affiliate?startTime='+time.start+'&endTime='+time.end
 		var userId = CURRENT_DOMAIN_USER.id;
 		if(CURRENT_DOMAIN_USER.domain == "admin"){
+			if(!admin_affiliate_id)
+				window.location.href="#admin-affiliate";
 			userId = admin_affiliate_id;
 			url = url+"&domain="+admin_affiliate_domain;
 		}
