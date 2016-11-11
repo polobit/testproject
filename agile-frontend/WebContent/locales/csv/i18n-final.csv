@@ -421,7 +421,7 @@ twilio.manage-invoices-tracks-and-payments-and-see-invoice-history,Manage invoic
 admin-settings-tasks.all-existing-tasks-desc,All existing tasks in this category can be accessed from the Tasks list view.,Todas las tareas existentes en esta categoría se pueden acceder desde la vista de lista de tareas.
 widgets.paypal-desc,Configure your PayPal business account to view your PayPal invoices in Agile.,Configura tu cuenta empresarial de PayPal para ver tus facturas de PayPal en Agile
 widgets.googleplus-desc,Keep tabs on your customers' activity on Google+ and engage with them better.,Mantén tabs para poder dar seguimiento a la actividad de tus clientes en Google+ y poder interactuar mejor con ellos.
-billing.not-send->25email,Use campaigns to send emails to more than 25 contacts. Leverage on it to automate most of your follow-up activities.,Puede aplicar esta acción en masa sólo en 25 contactos. Por favor&#44; crear una campaña.
+billing.not-send->25email,You can apply this bulk action only on 25 contacts. Please create a campaign.,Puede aplicar esta acción en masa sólo en 25 contactos. Por favor&#44; crear una campaña.
 admin-settings-users.enagage-your-website-visitors,Engage your website visitors with smart popups&#44; or perform automatic actions,Involucre a sus visitantes del sitio web con pop-ups inteligentes&#44; o lleve a cabo acciones automáticas
 validation-msgs.domain-validation,Domain should start with an alphabet and special characters are not allowed.,Dominio debe comenzar con un alfabeto y caracteres especiales no están permitidos.
 calendar.slot-exists,Something went wrong as your appointment was not scheduled. Please try again,Algo salió mal ya que su nombramiento no fue programado. Por favor&#44; inténtelo de nuevo
@@ -521,10 +521,10 @@ prefs-data-sync.widget-bria-desc,Make and receive calls from your contacts using
 forms.delete-confirm,Are you sure you want to delete this Form from your Facebook page?,¿Está seguro de que desea eliminar este formulario de su página de Facebook?
 plan-and-upgrade.selected-plan-desc,Please note that the account will be charged for the selected plan,Por favor toma en cuenta que a la cuenta se le cobrará por el plan seleccionado
 report-view.contact-reports-details,See a chronological contact activity report of your CRM contacts.,Mostrar un reporte cronológico de actividad por cliente de tus contactos CRM.
-Plan-and-upgrade.webrules-with-your-current-plan-and-are-trying-to-subscribe,web rules with your current plan and are trying to subscribe with,Web gobierna con su plan actual y están tratando de suscribirse con
+Plan-and-upgrade.webrules-with-your-current-plan-and-are-trying-to-subscribe,Web rules with your current plan and are trying to subscribe with,Web gobierna con su plan actual y están tratando de suscribirse con
 campaigns.added-to-deal-desc,Add contact to a campaign when the contact is attached to a deal.,Agregar contacto a una campaña cuando un contacto se adjunta a una oferta.
 tickets.configure-more-reports-desc,You can also configure more reports as dashlets on your dashboard,También puedes configurar más reportes como dashlets en tu dashboard
-Plan-and-upgrade.campaigns-with-your-current-plan-and-are-trying-to-subscribe,campaigns with your current plan and are trying to subscribe with,campañas con su plan actual y están tratando de suscribirse con
+Plan-and-upgrade.campaigns-with-your-current-plan-and-are-trying-to-subscribe,Campaigns with your current plan and are trying to subscribe with,campañas con su plan actual y están tratando de suscribirse con
 contacts-view.import-some-of-the-columns-desc,to import some of the columns in your CSV file and map them here.,para importar algunas de las columnas del archivo CSV y mapéalas aquí.
 acl.please-contact-your-admin-to-enable-this-option,Please contact your admin or account owner to enable this option.,Por favor&#44; póngase en contacto con el administrador o propietario de la cuenta para habilitar esta opción.
 admin-settings-users.configure-agile-cms,Configure Agile with your CMS&#44; eCommerce&#44; SMS and email gateways.,Configurar Agile con tu CMS&#44; eCommerce&#44; SMS y gateways de correo electrónico.
@@ -538,10 +538,10 @@ campaigns.connect-start-node,Please connect the \’Start\' node to another node
 contacts-view.easy -drag-and-drop-builders-help-to-build-landing-pages,Easy Drag and Drop builder helps you build your own Landing pages,Fácil de arrastrar y constructor gota ayuda a construir sus propias páginas de destino
 companies.enable-permission,Please contact your admin or account owner to enable this option.,Por favor&#44; póngase en contacto con el administrador o propietario de la cuenta para habilitar esta opción.
 note.exit-froom-the-campaign-and-will-be-redirected-to-contacts,Exit from the campaign and will be redirect to contacts list page,Salida de la campaña y será redirigir a página de la lista de contactos
-Plan-and-upgrade.contacts-with-your-current-plan-and-are-trying-to-subscribe,contacts with your current plan and are trying to subscribe with,contactos con su plan actual y están tratando de suscribirse con
+Plan-and-upgrade.contacts-with-your-current-plan-and-are-trying-to-subscribe,Contacts with your current plan and are trying to subscribe with,contactos con su plan actual y están tratando de suscribirse con
 admin-settings-users.add-deals-to-others,Add deals to others. View&#44; edit and delete deals owned by others,Añadir ofertas a los demás. Ver&#44; editar y eliminar ofertas que sean propiedad de otros
 admin-settings-users.start-your-list-from-csv,Start your list from CSV&#44; Google Contacts&#44; Stripe or other CRMs.,Comience su lista desde un  CSV&#44; contactos de Google&#44; Stripe o de otros CRMs
-Plan-and-upgrade.triggers-with-your-current-plan-and-are-trying-to-subscribe,triggers with your current plan and are trying to subscribe with,desencadena con su plan actual y están tratando de suscribirse con
+Plan-and-upgrade.triggers-with-your-current-plan-and-are-trying-to-subscribe,Triggers with your current plan and are trying to subscribe with,desencadena con su plan actual y están tratando de suscribirse con
 campaigns.ticket-note-cust,Runs a Campaign on a contact When new note is added by customer.,Ejecuta una campaña en un contacto cuando se añade nueva nota por parte del cliente.
 contacts.merge-max,you can merge maximum of 2 records at a time with master record.,puede combinar máximo de 2 registros a la vez con el registro maestro.
 welcome.you-can-the-API-javascript,you can use the API JavaScript to your web pages and use the API,puede utilizar la API de JavaScript a sus páginas web y el uso de la API
@@ -903,7 +903,7 @@ Deal-detail.sorr-we-dont-have-your-credit-card-details,Sorry&#44 we do not have 
 portlets.duriation-should-be-in-only-positive-values,Duration should be in positive values only.,Duración será de sólo valores positivos.
 billing.email-credits-added,Email credits have been added successfully.,créditos correo electrónico se han agregado con éxito.
 dashboards.marketing-help,Welcome to Agile CRM Marketing Automation.,Bienvenido a Agile CRM Marketing Automation.
-visitors.link-clicked-on-page,Link clicked on a page that led to your,Una liga seleccionada desde una página llevó a tu
+visitors.link-clicked-on-page,A link clicked on a page that led to  your,Una liga seleccionada desde una página llevó a tu
 referrals.iam-using-agile,I am using Agile CRM and I really love it!,Estoy utilizando CRM ágil y realmente me encanta!
 workflows.you-dont-have-automations-currently,You do not have any Automations currently.,Usted no tiene ningún Automations actualmente.
 emails.thanks-for-sharing-we-appreciate-it,Thanks for sharing. We sure appreciate it!,Gracias por compartir. ¡Desde luego que lo apreciamos!
@@ -1227,7 +1227,7 @@ tickets.group-changed-to,Ticket group has been changed to,grupo de entradas se h
 contacts-view.deals-track-milestone-changed-to,Deals track/milestone changed to,Registro de oferta/hito cambiado a 
 validation-msgs.dateISO,Please enter a valid date (ISO).,Por favor&#44; introduzca una fecha válida (ISO).
 portlets.contact-activities-unsubscribed-pad-content-title,No unsubscriptions recorded yet.,No se ha registrado ningún usuario dado de baja.
-visitors.web-page-viewed-on-the-website,Web page viewed on the website,Una página web vista desde el sitio web
+visitors.web-page-viewed-on-the-website,A web page viewed on the website,Una página web vista desde el sitio web
 deal-view.no-notes-for-deal,You have no notes for this Deal.,No tiene notas de esta oferta.
 landing-pages.start-with-an-empty-landing-page,Start with an empty landing page,Empieza con un landing vacío
 icalfeed.send-the-calendar-fee-url-via-email,Send Calendar Feed URL via Email,Enviar URL Calendario RSS a través de correo electrónico
@@ -1447,7 +1447,7 @@ admin-settings-custom-fields.delete-company-custom-field,Delete Company Custom F
 campaigns.email-will-be-sent-shortly,Email will be sent shortly.,Correo electrónico será enviado en breve.
 calls.avg-duration-secs,Average Call Duration (Sec),Promedio de duración de llamada (Sec)
 twill.enter-valid-details,Please enter valid details.,Por favor&#44; introduzca los datos válidos.
-Refer-friend.love-agile-crm,Hope you love Agile CRM&#48,Esperamos que el amor Agile CRM&#48
+Refer-friend.love-agile-crm,Hope you love Agile CRM&#44;,Esperamos que el amor Agile CRM&#44;
 contacts-view.of-the-following-conditions,of the following conditions,de las siguientes condiciones
 validation-msgs.deal_milestone_duplicated,'Milestone' already exists!,\'Milestone\' ya existe!
 widgets.enter-custom-widget-details,Enter custom widget details,Insera los detalles del widget personalizado
@@ -2356,7 +2356,7 @@ campaigns.customer-deleted,Customer deleted,cliente eliminado
 report-add.add-email-reports,Add Email Report,Añadir Informe de e-mail
 plan-and-upgrade.nicolas-woirhaye,Nicolas Woirhaye,Nicolas Woirhaye
 report-view.campaignreports,Campaign Reports,Informes de campaña
-others.no-reults-found,No Results Found,No se han encontrado resultados
+others.no-results-found,No Results Found,No se han encontrado resultados
 portlets.emails-per-month,emails per month,correos electrónicos por mes
 visitors.sync-new-signups,Sync new Signups,Sincronizar los nuevos registros
 emails.unsubscribing,Unsubscribing...,Darse de baja ...
@@ -2980,6 +2980,7 @@ portlets.revenue-graph,Revenue Graph,Gráfico de ingresos
 admin-settings-integrations.your-facebook,Your Facebook,Tu Facebook
 web-rules.times-to-show,Times to show,Veces para mostrar
 campaigns.all-campaigns,All Campaigns,todas las campañas
+campaigns.all-campaigns-stats,All Campaign Emails,
 landingpages.invalid-path,Invalid path.,Ruta no válida.
 menu.menu-landing-pages,Landing Pages,Páginas de landing
 currency.Fijian Dollar,Fijian Dollar,Dólar fiyiano
@@ -3040,7 +3041,7 @@ contacts-view.added-tag-to,Added  tag to,Se añadió la etiqueta a
 countries.FO,Faroe Islands,Islas Feore
 countries.GW,Guinea-Bissau,Guinea-Bissau
 modals.document-name,Document Name,nombre del documento
-logcall.edit-call-log,Edit call log,Editar el registro de llamadas
+logcall.edit-call-log,Edit Call Log,Editar el registro de llamadas
 report-view.calls-by-user,Calls by User,Llamadas por usuario
 countries.LI,Liechtenstein,Liechtenstein
 preferences.notifications,Notifications,Notificaciones
@@ -3235,7 +3236,7 @@ tickets.greater-than,Greater Than,Mayor a
 contact-edit.phone-number,Phone number,Número de teléfono
 report-add.updated-date,Updated Date,Fecha actualizada
 tickets.satisfaction,Satisfaction,Satisfacción
-contact-details.add-call-log,Add Call-log,Añadir registro de llamadas
+contact-details.add-call-log,Add Call Log,Añadir registro de llamadas
 modals.company-name,Company Name,nombre de empresa
 tasks.name-of-task,Name of Task,Nombre de la Tarea
 contacts-view.deleted-deal,Deleted Deal,Oferta eliminada
@@ -3518,7 +3519,7 @@ countries.TL,Timor-Leste,Timor-Leste
 portlets.activities,Activities,Actividades
 admin-settings-integrations.account-id,Account ID,ID de la cuenta
 tickets.loading,Loading...,Cargando…
-call-log.log-a-call,Log a call,Ingrese una llamada
+call-log.log-a-call,Call Log,Ingrese una llamada
 admin-settings-integrations.auth-token,Auth Token,Token de autorización
 widgets.QuickBooks-name,QuickBooks,QuickBooks
 portlets.contact-filters-btn-text,Add Filter,Agregar filtro
@@ -3646,7 +3647,7 @@ admin-settings-custom-fields.DATE,Date Field,campo de fecha
 help.start-chat,Start chat,Comenzar chat
 admin-settings-users.last-login,Last login,Último acceso
 portlets.select-all,Select all,Seleccionar todo
-others.no-reults,No Results,No hay resultados
+others.no-results,No Results,No hay resultados
 portlets.last-month,Last Month,El mes pasado
 admin-settings-deals.new-source,New Source,Nueva fuente
 admin-settings-tags.lead-score,Lead Score,Puntuación de lead
@@ -3876,7 +3877,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,+ Add new,+ Add new
+others.add-new,#NAME?,#NAME?
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -4658,7 +4659,6 @@ contacts-view.Email,Email,Email
 deal-view.phone,Phone,Teléfono
 contacts-view.Owner,Owner,Propietario
 report-add.score,Score,Puntuación
-Key,Value,Value
 campaigns.timer,Timer,Minutero
 prefs-email.gmail,Gmail,Gmail
 portlets.tasks,Tasks,Tareas
@@ -4824,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+ Add new,+ Add new
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5196,7 +5196,6 @@ contacts-view.added-call-log-to,Added call log to,Se añadió registro de llamad
 contacts-view.added-note-to,Added note to ,Se agregó una nota a
 datasync.resync-info,Update will 'resync' your entire data to make it searchable. This may be needed in extreme scenarios. Eg: you made an existing custom field searchable.,Update 'sincronizar' sus datos completos para facilitar las búsquedas . Esto puede ser necesario en situaciones extremas . Por ejemplo : se hizo un campo personalizado existente búsquedas.
 validation-msgs.system-fields,Given name is a system field name. Please choose another name.,Nombre dado es un nombre de campo del sistema. Por favor&#44; elija otro nombre .
-others.moreresults,More,Más
 widgets.view-tickets-and-chats,View tickets and chats,Ver las entradas y chats
 widgets.customer-support,Customer Support,Atención al cliente
 widgets.send-and-rcv-email,Send and Receive Email,Enviar y recibir correo electrónico
@@ -5234,7 +5233,6 @@ common-words.relative-cap,Relative,
 contacts-view.on-after,on after,
 contacts-view.on-before,on before,
 months.February,February,
-others.chat-with-us,Chat With Us,Habla con nosotros
 others.verify,verify,verificar
 others.sending,sending,enviando
 admin-settings-integrations.amazon-note-1-new,1. Amazon SES services require verification of email addresses in the 'From' field of sent emails. Please ensure that you,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo 'De' de los correos electrónicos enviados . Por favor asegúrese de que
@@ -5257,7 +5255,7 @@ campaigns.delete-status,Delete Status,
 campaigns.confirm-delete-status,Are you sure you want to delete the Status,
 campaigns.help,Help,
 campaigns.telephony-help-text,Here you can add or remove call status and order them as needed. The status will help you to manage call logs better.,
-campaigns.telephony-status-invalid-text,Status should not start with numeric value,
+campaigns.telephony-status-invalid-text,Status should not start with numeric value and should not contain quotes.,
 contact-details.emails,Email,
 widgets.Klout-update-twitter-profile,Please update the twitter profile to get the Klout score.,
 widgets.Klout-content,Know your customers Klout score&#44; a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.,
@@ -5301,109 +5299,6 @@ prefs-online-calendar.is-cancelled,is cancelled,está cancelado
 prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita
 prefs-online-calendar.something-wrong,Something is wrong,Algo está mal
 prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación
-landingpage-builder.drag-info,Build your page by dragging blocks onto the canvas,Construir su página arrastrando bloques en el lienzo
-landingpage-builder.builder-page-title,Page Builder,Creador de página
-landingpage-builder.back-modal-info,You've got pending changes&#44; if you leave this page your changes will be lost. Are you sure?,Tienes cambios pendientes&#44; si sale de esta página se perderán los cambios. ¿Estás seguro?
-landingpage-builder.are-you-sure,Are you sure,Estás seguro
-landingpage-builder.stay-on-the-page,Stay on this page!,Permanecer en esta página!
-landingpage-builder.leave-the-page,Leave the page,Salir de la página
-landingpage-builder.update-content,Update Content,actualización de contenido
-landingpage-builder.cancel-and-close,Cancel & Close,Cancelar y cerrar
-landingpage-builder.all-blocks,All Blocks,Todos los bloques
-landingpage-builder.blocks,Blocks,Bloques
-landingpage-builder.add-page,Add Page,Añadir página
-landingpage-builder.page-settings,Page Settings,Configuración de página
-landingpage-builder.nothing-to-save,Nothing to save,No hay nada que salvar
-landingpage-builder.detail-editor,Detail Editor,Editor detalle
-landingpage-builder.editing,editing,edición
-landingpage-builder.style,Style,Estilo
-landingpage-builder.link,Link,Enlazar
-landingpage-builder.icons,Icons,Iconos
-landingpage-builder.video,Video,Vídeo
-landingpage-builder.agile-form,Agile Form,Agile Forma
-landingpage-builder.link-text,Link text,Texto del enlace
-landingpage-builder.choose-a-page,Choose a page,Elija una página
-landingpage-builder.choose-a-block,Choose a block,Elija un bloque
-landingpage-builder.open-img-lib,Open image library,Abrir biblioteca de imágenes
-landingpage-builder.choose-a-icon,Choose an icon below,Elegir un icono de abajo
-landingpage-builder.youtube-video-id,Youtube Video ID,Youtube Video ID
-landingpage-builder.enter-youtube-video-id,Enter a Youtube video ID,Introduzca un ID de vídeo de Youtube
-others.or-cap,OR,O
-landingpage-builder.vimeo-video-id,Vimeo Video ID,Vimeo Video ID
-landingpage-builder.enter-vimeo-video-id,Enter a Vimeo video ID,Introduzca un ID de vídeo Vimeo
-landingpage-builder.changes-applied,The changes were applied successfully!,Los cambios se aplicaron correctamente!
-landingpage-builder.changes-apply,Apply changes,Aplicar cambios
-landingpage-builder.clone,Clone,Clon
-landingpage-builder.img-library,Image Library,Biblioteca de imágenes
-landingpage-builder.uploading-img,Uploading image,Carga de imágenes
-landingpage-builder.upload-img,Upload Image,Cargar imagen
-landingpage-builder.upload-img-info,You currently have no images uploaded. To upload images&#44; please use the upload panel on your left.,Actualmente no tiene imagenes actualizadas . Para subir imágenes&#44; por favor utilice el panel de subida en su izquierda .
-landingpage-builder.select-img,Select Image,Seleccionar imagen
-landingpage-builder.delete-block-confirm,Are you sure you want to delete this block?,¿Está seguro de que desea borrar este bloque ?
-landingpage-builder.reset-block-confirm,Are you sure you want to reset this block?,¿Está seguro de que desea restablecer este bloque ?
-landingpage-builder.all-changed-destroyed,All changes made to the content will be destroyed.,Todos los cambios realizados en el contenido serán destruidos .
-landingpage-builder.reset-block,Reset Block,Restaurar el bloque
-landingpage-builder.delete-page-confirm,Are you sure you want to delete this entire page?,¿Está seguro de que quiere borrar toda esta página ?
-landingpage-builder.delete-page,Delete Page,Eliminar página
-landingpage-builder.delete-element-info,Are you sure you want to delete this element? Once deleted&#44; it can not be restored.,¿Está seguro de que quiere eliminar este elemento ? Una vez eliminada&#44; no puede ser restaurado.
-landingpage-builder.delete-block,Delete Block,Eliminar Bloque
-landingpage-builder.saving-page-changes,Saving page settings,Ahorro de configuración de la página
-landingpage-builder.page-title,Page Title,Título de la Página
-landingpage-builder.page-title-sm,Page title,Título de la página
-landingpage-builder.page-meta-desc,Page Meta Description,La página de Meta Descripción
-landingpage-builder.page-meta-desc-sm,Page meta description,La página de descripción de la meta
-landingpage-builder.page-meta-keywords,Page Meta Keywords,Página Meta Keywords
-landingpage-builder.page-meta-keywords-sm,Page meta keywords,Palabras clave de la página meta
-landingpage-builder.page-header,Header Includes,Cabecera incluye
-landingpage-builder.page-header-info,Additional code you'd like to include in the,Código adicional que le gustaría incluir en el
-landingpage-builder.head-section,section,sección
-landingpage-builder.page-css,Page CSS,La página de CSS
-landingpage-builder.page-css-applied,CSS applied specifically to this page,CSS aplicado específicamente a esta página
-landingpage-builder.save-settings,Save Settings,Guardar ajustes
-landingpage-builder.page-name,Enter a name to the page,Introduzca un nombre para la página
-landingpage-builder.site-preview,Site Preview,Vista previa del sitio
-landingpage-builder.preview-saved-info,Please note that the preview will always show your latest saved version; changes which haven't been saved yet will not be visible in the preview.,Tenga en cuenta que la vista previa siempre mostrará su última versión guardada; cambios que no se han guardado aún no serán visibles en la vista previa .
-landingpage-builder.preview-changes,Preview Changes,Los cambios de previsualización
-landingpage-builder.headers,Headers,Encabezados
-landingpage-builder.save-now,Save now,Guardar ahora
-landingpage-builder.content-sections,Content Sections,Las secciones de contenido
-landingpage-builder.dividers,Dividers,Divisores
-landingpage-builder.portfolios,Portfolios,Carteras
-landingpage-builder.team,Team,Equipo
-landingpage-builder.pricing-tables,Pricing Tables,Las tablas de precios
-landingpage-builder.footers,Footers,Pies de página
-landingpage-builder.forms,Forms,Formas
-landingpage-builder.saved-successfully,Landing page have been saved successfully,La página de destino ha sido guardado con éxito
-landingpage-builder.publish-title,You can publish your page with a custom domain.,Puede publicar su página con un dominio personalizado .
-landingpage-builder.source,source,fuente
-landingpage-builder.Move,Move,Movimiento
-login.duplicate-login,We had to log you out as you seem to have logged in from some other browser,Te hemos desconectado porque parece que estás conectado desde otro navegador
-login.login,Login,Conéctate 
-login.signin-using-registration,Sign in using your registered account,Ingresa usando tu cuenta registrada.
-login.user-id-your-email,User ID (Your Email Address),Identificación de Usuario (Tu correo electrónico)
-login.sign-in,Sign In,Ingresar
-login.login-with,Login with,Conectando con
-login.login-with-google,Login with Google,Conectando con Google 
-login.login-with-yahoo,Login with Yahoo,Conectando con Yahoo
-widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,Crear sus propios formularios web personalizados fácilmente y colocarlos en su sitio web para actualizar los datos de los visitantes web.
-bulk-task.change-priority,Change priority of tasks,Cambiar prioridad de las tareas
-bulk-task.change-status,Change status of tasks,Cambiar el estado de las tareas
-bulk-task.change-owner,Change owner of tasks,Cambiar propietario de tareas
-bulk-task.change-duedate,Change due date of tasks,Cambiar la fecha de vencimiento de las tareas
-bulk-task.duedate,Change Due Date,Cambiar fecha
-bulk-task.priority,Change Priority,Cambiar prioridad
-bulk-task.status,Change status,Cambiar Estado
-bulk-task-noty.tasks-deleted,task(s) deleted,tarea (s) suprimido
-bulk-task-noty.tasks-modified,task(s) modified,tarea (s) modificado
-bulk-task-noty.task-scheduled,Bulk Task scheduled ,Tarea programada a granel
-activity.tasks-assigned,Tasks assigned to ,Las tareas asignadas a
-activity.task-bulk-status,Task status changed to ,Estado de la tarea cambió a
-activity.tasks-bulk-status,Tasks status changed to ,estado de Tareas cambió a
-activity.task-bulk-priority,Task priority changed to ,Prioridad de la tarea cambió a
-activity.tasks-bulk-priority,Tasks priority changed to ,prioridad Tareas cambió a
-activity.tasks-bulk-delete,Tasks deleted.,Tareas borrados.
-activity.task-bulk-duedate,Task due date changed to ,Tarea fecha de vencimiento cambiado a
-activity.tasks-bulk-duedate,Tasks due date changed to ,Tareas fecha de vencimiento cambiado a
 widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,
 bulk-task.change-priority,Change priority of tasks,
 bulk-task.change-status,Change status of tasks,
@@ -5432,14 +5327,6 @@ login.login-with,Login with,Inicia con
 login.login-with-google,Login with Google,Ingresar con Google
 login.login-with-yahoo,Login with Yahoo,Inicia sesión con Yahoo
 login.dont-have-account,Do not have an account,No tiene una cuenta
-login.sign-up,Sign Up,Inscríbete
-login.forgot,Forgot,Olvidé
-others.verify,verify,verificar
-others.sending,sending,enviando
-admin-settings-integrations.amazon-note-1-new,1. Amazon SES services require verification of email addresses in the 'From' field of sent emails. Please ensure that you,1. Los servicios de Amazon SES requieren la verificación de direcciones de correo electrónico en el campo 'De' de los correos electrónicos enviados . Por favor asegúrese de que
-admin-settings-integrations.amazon-note-1-new1,the email addresses of all your Agile CRM users and the 'From' addresses of all your campaign emails.,las direcciones de correo electrónico de todos sus usuarios ágil de CRM y los 'de' direcciones de todos sus mensajes de correo electrónico de la campaña.
-register.already-have-account,Already have an account,Ya tengo una cuenta
-register.sign-in,Sign In,Registrarse
 login.sign-up,Sign Up,Regístrate
 login.forgot,Forgot,Olvidó
 forgot-domain.forgot-domain,Forgot Domain,Olvidé el dominio
@@ -5503,57 +5390,60 @@ register.pnone-num-validation,Please enter valid number,Por favor inserta un nú
 forgot-domain.email-invalid-after-@,Please enter a part following '@'. '$1' is incomplete.,Por favor introduzca una parte siguiente '@' . '$1' Es incompleta .
 html5Validations.invalid-select-one,Please select an item in the list.,Por favor seleccione un elemento de la lista.
 html5Validations.enter-number-only,Please enter a number,Por favor introduzca un número
-affiliate.affiliate-program,Affiliate Program,programa de afiliación
-affiliate.commission-details,Overview,Visión de conjunto
-affiliate.referrals,Referrals,referidos
-affiliate.affiliate-tools,Creatives,Creativos
-affiliate.no-affiliates,There are no Referrals,No hay referencias
-affiliate.total-count,Total Referrals,Referidos totales
-affiliate.total-commission,Total Commission,total Comisión
-affiliate.email,Email,Email
-affiliate.domain,Domain,Dominio
-affiliate.plan,Plan,Plan
-affiliate.commission,Commission,Comisión
-affiliate.created-time,Created Time,Creado Tiempo
-affiliate.amount-added-to-your-account,Total Paid Commission,Comisión de pago total
-affiliate.name,Name,Nombre
-affiliate.paypal-id,Paypal ID,identificación de payPal
-affiliate.phone,Phone,Teléfono
-affiliate.business, Partner Type,Tipos de partner
-affiliate.select-type,Select Type,Seleccione tipo
-affiliate.affiliate,Affiliate,Afiliado
-affiliate.reseller,Reseller,Revendedores
-affiliate.managed_service_partner, Managed Service Partner,Socio de servicios gestionados
-affiliate.register,Register,Registro
-affiliate.click_register,By clicking register&#44; I agree to Agile CRM's Affiliate,Al registrarse&#44; acepto afiliado de Agile CRM
-affiliate.terms_and_conditions,Terms & Conditions,Términos y condiciones
-affiliate.p1,You can now earn money easily by participating in Agile's Affiliate Program.,Ahora puede ganar dinero de forma fácil mediante la participación en el Programa de Afiliación de Agile.
-affiliate.ph2,What will you earn?,¿Qué va a ganar?
-affiliate.p2,Our clear-cut and attractive commission structure is transparent and has no hidden clauses. You'll get 20% for each customer that starts a paid subscription with Agile CRM.,Nuestra estructura de comisiones clara y atractiva es transparente y no tiene cláusulas ocultas. Usted obtendrá el 20% por cada cliente que se inicia con una suscripción de pago ágil CRM.
-affiliate.ph3,Why should you join?,¿Por qué debería unirse?
-affiliate.p3,Agile CRM is a popular Sales&#44; Marketing & Support solution with a rapidly growing customer base. It was featured in Entrepreneur&#44; CXO&#44; Tech In Asia among other leading technology & review sites. It is widely admired by its users as well as the industry&#44; in general.,Ágil CRM es una solución de ventas&#44; marketing y soporte popular con una base de clientes en rápido crecimiento. Fue ofrecido en empresario&#44; CXO&#44; Tech En Asia&#44; entre otros sitios principales de la tecnología y de reconsideración. Es ampliamente admirado por sus usuarios&#44; así como la industria en general.
-affiliate.ph4,How will you promote Agile from your website or blog?,¿Cómo va a promover ágil desde su sitio web o blog?
-affiliate.p4,By joining our affiliate program&#44; you'll get access to our best propagative materials with above-average industry CTRs.,Al unirse a nuestro programa de afiliados&#44; usted tendrá acceso a nuestros mejores materiales de propagación con un CTR por encima del promedio de la industria.
-affiliate.ph5,How would we support you?,¿Cómo podemos ayudarle?
-affiliate.p5,We'll take good care of your leads and improve conversion rates by providing them with onboarding materials and support from the sales team&#44; if required. As an affiliate&#44; you'll also get support and tips from our experienced Agile Affiliate managers.,Tomaremos una buena atención de sus clientes potenciales y mejorar las tasas de conversión&#44; proporcionándoles materiales onboarding y el apoyo del equipo de ventas&#44; si es necesario. Como afiliado&#44; usted también recibirá apoyo y consejos de nuestros experimentados gerentes de afiliados ágil.
-affiliate.ph6,How will you track sales?,¿Cómo va a realizar un seguimiento de las ventas?
-affiliate.p6,Gain access to real-time reports on paid subscriptions and commissions.,Obtener acceso a informes en tiempo real sobre las suscripciones y las comisiones pagadas.
-affiliate.p7-1,For any queries about Agile's affiliate program&#44; please contact:,Para cualquier consulta sobre el programa de afiliados de Agile&#44; por favor&#44; póngase en contacto con:
-affiliate.p7-2,affiliates@agilecrm.com,affiliates@agilecrm.com
-affiliate.earn_20,Get 20% on each sale!,Obtenga un 20% en cada venta!
-affiliate.deal-registration,Add Deal,Añadir reparto
-affiliate.registered-deals,Affiliate Deals,Ofertas de afiliados
-affiliate.no-registered-deals,There are no Affiliate Deals,No hay ofertas de afiliados
-affiliate.personal-email,Personal Email,Email personal
-affiliate.office-email,Office Email,Oficina de Correo
-affiliate.website-url,Website URL,URL del sitio web
-webrules.push-popup,Request Push Popup,Solicitud de inserción emergente
-web-rules.Pushnoty,Push Notification,Notificación de inserción
+affiliate.affiliate-program,Affiliate Program,
+affiliate.commission-details,Overview,
+affiliate.referrals,Referrals,
+affiliate.affiliate-tools,Creatives,
+affiliate.no-affiliates,You have no referrals yet.,
+affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.,
+affiliate.total-count,Total Referrals,
+affiliate.total-commission,Total Commission,
+affiliate.email,Email,
+affiliate.domain,Domain,
+affiliate.plan,Plan,
+affiliate.commission,Commission,
+affiliate.created-time,Created Time,
+affiliate.amount-added-to-your-account,Total Paid Commission,
+affiliate.name,Name,
+affiliate.paypal-id,Paypal ID,
+affiliate.phone,Phone,
+affiliate.business, Partner Type,
+affiliate.select-type,Select Type,
+affiliate.affiliate,Affiliate,
+affiliate.reseller,Reseller,
+affiliate.managed_service_partner, Managed Service Partner,
+affiliate.register,Register,
+affiliate.click_register,By clicking register&#44; I agree to Agile CRM's Affiliate,
+affiliate.terms_and_conditions,Terms & Conditions,
+affiliate.p1,You can now earn money easily by participating in Agile's Affiliate Program.,
+affiliate.ph2,What will you earn?,
+affiliate.p2,Our clear-cut and attractive commission structure is transparent and has no hidden clauses. You'll get 20% for each customer that starts a paid subscription with Agile CRM.,
+affiliate.ph3,Why should you join?,
+affiliate.p3,Agile CRM is a popular Sales&#44; Marketing & Support solution with a rapidly growing customer base. It was featured in Entrepreneur&#44; CXO&#44; Tech In Asia among other leading technology & review sites. It is widely admired by its users as well as the industry&#44; in general.,
+affiliate.ph4,How will you promote Agile from your website or blog?,
+affiliate.p4,By joining our affiliate program&#44; you'll get access to our best propagative materials with above-average industry CTRs.,
+affiliate.ph5,How would we support you?,
+affiliate.p5,We'll take good care of your leads and improve conversion rates by providing them with onboarding materials and support from the sales team&#44; if required. As an affiliate&#44; you'll also get support and tips from our experienced Agile Affiliate managers.,
+affiliate.ph6,How will you track sales?,
+affiliate.p6,Gain access to real-time reports on paid subscriptions and commissions.,
+affiliate.p7-1,For any queries about Agile's affiliate program&#44; please contact:,
+affiliate.p7-2,affiliates@agilecrm.com,
+affiliate.earn_20,Get 20% on each sale!,
+affiliate.deal-registration,Deal Registration,
+affiliate.registered-deals,Registered Deals,
+affiliate.no-registered-deals,Sorry&#44; we were unable to find any registered deals here.,
+affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.,
+affiliate.personal-email,Personal Email,
+affiliate.office-email,Business Email,
+affiliate.website-url,Website URL,
+affiliate.add,Register Deal,
+webrules.push-popup,Request Push Popup,
+web-rules.Pushnoty,Push Notification,
 others.chat-with-us,Chat With Us,Habla con nosotros
 menu.menu-add,Add,Añadir
 menu.home,Home,Casa
-tickets.sections,Sections,secciones
-tickets.articles,Articles,Artículos
+tickets.sections,Sections,
+tickets.articles,Articles,
 upload-image.upload-image,Upload Image,Cargar imagen
 upload-image.upload-valid-image,Please select a valid image file and try again,Por favor&#44 seleccione un archivo de imagen válido y vuelva a intentarlo
 upload-image.upload-your-image,Upload your image file,Sube el archivo de imagen
@@ -5575,454 +5465,6 @@ upload-google-doc.select-doc,Select Document,Seleccionar documento
 upload-voicemail.upload-wav-file,Upload WAV File,Upload WAV FileDocument
 upload-voicemail.not-a-wav-file,File selected is not a WAV file,Archivo seleccionado no es un archivo WAV
 upload-voicemail.wav-file-info,You may upload a recorded voice (.wav) file here,Usted puede cargar una grabación de voz ( .wav) aquí
-tickets.sections,Sections,
-tickets.articles,Articles,
-forgot-domain.email-invalid-after-@,Please enter a part following '@'. '$1' is incomplete.,Por favor introduzca una parte siguiente '@' . '$1' Es incompleta .
-html5Validations.invalid-select-one,Please select an item in the list.,Por favor seleccione un elemento de la lista.
-html5Validations.enter-number-only,Please enter a number,Por favor introduzca un número
-contacts-view.added-a-tag-to-company,added a tag to company,
-contacts-view.removed-a-tag-from-company,removed a tag from company,
-contacts-view.changed-owner-for-company,changed owner for company,
-other.tags-added-to-deal,Tags Added to Deal,
-other.tags-removed-to-deal,Tags Removed to Deal,
-Deal-detail.deal-won,Deal Won,
-Deal-detail.owner-changed-from,Owner changed from,
-Deal-detail.all-contacts-removed,All Contacts Removed.,
-Deal-detail.contacts-removed,Contacts Removed.,
-Deal-detail.contacts-added,Contacts Added.,
-Deal-detail.note-added,Deal Note Added.,
-campaigns.call-status,Call Status,
-campaigns.add-status,Add status,
-campaigns.new-status,New Status,
-campaigns.delete-status,Delete Status,
-campaigns.confirm-delete-status,Are you sure you want to delete the Status,
-campaigns.help,Help,
-campaigns.telephony-help-text,Here you can add or remove call status and order them as needed. The status will help you to manage call logs better.,
-campaigns.telephony-status-invalid-text,Status should not start with numeric value,
-contact-details.emails,Email,
-widgets.Klout-update-twitter-profile,Please update the twitter profile to get the Klout score.,
-widgets.Klout-content,Know your customers Klout score&#44; a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.,
-widgets.Klout-error,Unable to fetch the score. It might be due to private/invalid Twitter profile or request time-out.,
-widgets.Klout-label-nickname,Nickname,
-widgets.Klout-label-score,Score,
-widgets.Klout-displayName,Klout,
-widgets.Klout-name,Klout,
-widgets.Fullcontact-email-required,Please update the email address to get any new information from FullContact.,
-widgets.Fullcontact-invalid-api-key,API key is invalid. Please provide valid API key.,
-widgets.Fullcontact-nodata,No new data available for update.,
-widgets.Fullcontact-newdata,New data is available for customer profile. Do you want to update the profile?,
-widgets.FullContact-content,Stay updated on customers profile through FullContact integration with information like name&#44; photo&#44; company&#44; address and websites.,
-widgets.FullContact-enter-your-api-key,Enter your FullContact API Key,
-widgets.newcall,New Call,
-widgets.select-contact-update,Please select a related contact to update.,
-widgets.continue,Continue,
-prefs-online-calendar.welcome-message-bulk,Welcome to our scheduling page. Please follow the instructions to book an appointment.,Bienvenido a nuestra página de planificación . Por favor&#44; siga las instrucciones para reservar una cita .
-prefs-online-calendar.select-a-person,Select a Person,Seleccionar una persona
-prefs-online-calendar.welcome-message-single,Welcome to my scheduling page. Please follow the instructions to book an appointment.,Bienvenidos a mi programación page. Por favor&#44; siga las instrucciones para reservar una cita .
-prefs-online-calendar.holiday-today,Today is holiday,Hoy es día festivo
-prefs-online-calendar.choose-time-slot,Choose a Time Slot,Elija un intervalo de tiempo
-prefs-online-calendar.select-date-time,Select Date and Time,Seleccione Fecha y hora
-prefs-online-calendar.on-availability,Availability on,Disponibilidad bajo
-prefs-online-calendar.sendconfirmation,Send me a confirmation email,Envíame un correo electrónico de confirmación
-prefs-online-calendar.user-phone-details,Notes (Phone number/Skype details),Notas (número de teléfono / datos de Skype )
-prefs-online-calendar.email-format,Your email address must be in the format of name@domain.com  ,Su dirección de correo electrónico debe estar en el formato de name@domain.com  
-prefs-online-calendar.name-validation,Please specify your name,Por favor&#44; indique su nombre
-prefs-online-calendar.email-validation,We need your email address to contact you,Necesitamos su dirección de correo electrónico para comunicarse con usted
-prefs-online-calendar.no-working-hrs,No working hours,No hay horas de trabajo
-common-words.for,for,para
-common-words.mins-on,mins on,en minutos
-common-words.with,with,con
-prefs-online-calendar.online-appointment-cancellation,Online Appointment Cancellation,Designación de cancelación en línea
-prefs-online-calendar.event-starts,Event starts,Evento comienza 
-prefs-online-calendar.cancel-appointment,Cancel Appointment,Revocar la designación
-prefs-online-calendar.cancelled-already,Looks like this appointment is already cancelled.,Parece que esta cita ya está cancelada .
-prefs-online-calendar.cancelled-appointment,Appointment Cancelled,Cita cancelada
-prefs-online-calendar.your-appointment-with,Your appointment with,Su cita con
-prefs-online-calendar.is-cancelled,is cancelled,está cancelado
-prefs-online-calendar.schedule-new,Schedule new appointment,Programar nueva cita
-prefs-online-calendar.something-wrong,Something is wrong,Algo está mal
-prefs-online-calendar.reasong-for-cancel,Reason for cancellation,Razón de la cancelación
-others.chat-with-us,Chat With Us,Habla con nosotros
-widgets.create-your-own-custom,Create your own custom web forms easily and place them on your website to update web visitor details.,
-menu.menu-add,Add,Añadir
-menu.home,Home,Casa
-theme.maximum-pagesize,Maximum Page Size,Máximo tamaño de página
-theme.showconverstionperpage,Show conversations per page,Mostrar conversaciones por página
-campaign-node-start.start,Start,Comienzo
-campaign-node-start.start-info,Entry point of your campaign. Please create workflow for your campaign starting from here.,Punto de entrada de su campaña . Por favor crear flujos de trabajo para su campaña a partir de aquí .
-campaign-node-start.start-point,Start point in your campaign workflow.,Punto de inicio en el flujo de trabajo de campaña .
-campaign-node-start.start-help,Help,Ayuda
-campaign-node-sendmail.sendemail,Send Email,Enviar correo electrónico
-campaign-node-sendmail.info,Send email in text or HTML format. You can choose your delivery day and time.,Enviar correo electrónico en formato de texto o HTML. Se puede elegir el día y hora de entrega.
-campaign-node-sendmail.fromname,From (Name),De (nombre)
-campaign-node-sendmail.cat-info,Info,información
-campaign-node-sendmail.enter-name,Enter your name.,Introduzca su nombre.
-campaign-node-sendmail.fromemail,From (Email),Desde el e-mail)
-campaign-node-sendmail.select-email,Select your email address,Seleccione su dirección de correo electrónico
-campaign-node-sendmail.enter-subscriber,Enter your subscriber E-mail ID. If you are using a list&#44 you can use,Introduzca su suscriptor de correo-e Identificación. Si está utilizando una lista&#44; puede utilizar
-campaign-node-sendmail.cc-title,Enter CC email address,Introduzca la dirección de correo electrónico CC
-campaign-node-sendmail.bcc-title,Enter BCC email address,Introduzca la dirección de correo electrónico BCC
-campaign-node-sendmail.subject-title,Enter your subject for your email,Introduzca el asunto de su correo electrónico
-campaign-node-sendmail.reply-to,Reply To,Responder a
-campaign-node-sendmail.reply-to-title,Enter email your subscribers need to reply,Introducir e-mail a sus suscriptores necesitan para responder
-campaign-node-sendmail.merge-field-title,Select required merge field to insert into below Text Field,Seleccionar campo de combinación requerida para insertar en continuación campo de texto
-campaign-node-sendmail.text-title,Enter text content here,Introduzca el contenido del texto aquí
-campaign-node-sendmail.send-btn,Send test Email,Enviar correo electrónico de prueba
-campaign-node-sendmail.send-btn-val,Test Email,Correo electrónico de prueba
-campaign-node-sendmail.spam-score,Spam Score,Puntuación de spam
-campaign-node-sendmail.html-merge-field,Select required merge field to insert into below HTML Field,Seleccionar campo de combinación requerida para insertar en HTML de abajo Campo
-campaign-node-sendmail.html-editor,HTML Editor,Editor HTML
-campaign-node-sendmail.enter-html-mssg,Enter Your HTML message,Ingrese su mensaje HTML
-campaign-node-sendmail.track-clicks,Track Clicks,seguimiento de los clics
-campaign-node-sendmail.track-title,Enable tracking for email link clicks. Use Yes &amp; Push if you want to push contact data to your website (to enable web activity tracking),Habilitar el seguimiento de clics en enlaces de correo electrónico. Sí usar y de inserción si se quiere empujar los datos de contacto de su sitio web (para permitir la actividad en la web de seguimiento)
-campaign-node-sendmail.choose-timezone,Simply choose timezone&#44 day and time. Agile can schedule your email delivery.,Basta con elegir la zona horaria&#44; día y hora. Ágil puede programar su entrega de correo electrónico.
-campaign-node-sendmail.central-us,Central Time (US & Canada),Hora del Centro (Estados Unidos &amp; Canadá)
-campaign-node-sendmail.select-timezone,Select the time zone for your email delivery,Seleccione la zona horaria para el envío de correo electrónico
-campaign-node-sendmail.On,On,En
-campaign-node-sendmail.At,At,A
-campaign-node-sendmail.select-time,Select the time for your email delivery.,Seleccione la hora para la entrega de correo electrónico.
-campaign-node-sendmail.help-text1,Send email in TEXT or HTML format. You can choose from email-id and name&#44 and optionally specify a different email-id the replies should go to.,Enviar correo electrónico en formato HTML o TEXTO. Se puede elegir entre correo electrónico-id y nombre&#44; y opcionalmente especificar un correo electrónico-id diferente las respuestas deben ir a.
-campaign-node-sendmail.help-text2,You can track if the links in your email are clicked by the recepient. You can set a time when the email should be delivered to the recepient.,Puede hacer un seguimiento si los enlaces en el correo electrónico se hace clic en el recepient. Se puede establecer un momento en que el correo electrónico debe ser entregada a la recepient.
-campaign-node-addcase.info,Add a case to the contact in Agile.,Añadir un caso al contacto en ágil.
-campaign-node-addcase.case-title,Enter title of the case,Introducir el título del caso
-campaign-node-addcase.select-status,Select status,Seleccionar estado
-campaign-node-addcase.select-owner,Select owner of the case,Seleccione propietario del caso
-campaign-node-addcase.contact-owner,Contact's Owner,de contacto del propietario
-campaign-node-addcase.enter-case-desc,Enter description for the case.,Introduzca una descripción para el caso.
-campaign-node-addcase.add-case-to-contact,Add a case to a contact in CRM. Cases related to a contact can be viewed in the Cases tab in Contact details page.,Añadir un caso a un contacto en CRM. Los casos relacionados con un contacto se pueden ver en la pestaña de contacto en casos página de detalles.
-campaign-node-change-deal-milestone.name,Change Deal Milestone,Cambio acuerdo Milestone
-campaign-node-change-deal-milestone.info,Change the milestone for Deal(s) related to this contact.,Cambiar el hito para Deal (s) relacionada con este contacto.
-campaign-node-change-deal-milestone.deal-owner,Deal Owner,trato propietario
-campaign-node-change-deal-milestone.current-track,Current Track & Milestone,Pista actual y Milestone
-campaign-node-change-deal-milestone.select-current-track,Select current milestone,Seleccionar hito actual
-campaign-node-change-deal-milestone.new-track,New Track & Milestone,New Track &amp; Milestone
-campaign-node-change-deal-milestone.select-track-to-convert,Select track and milestone to convert.,Seleccionar la pista y un hito para convertir.
-campaign-node-change-deal-milestone.change-milestone,Change the milestone for Deal(s) related to this contact. You can choose a specific Owner and Current Milestone.,Cambiar el hito para Deal (s) relacionada con este contacto. Se puede elegir un propietario específico y Milestone actual.
-campaign-node-check-tag.name,Check Tags,precods
-campaign-node-check-tag.info,Verify whether given tag exists for a contact in Agile.,Compruebe si existe determinada etiqueta para un contacto en ágil.
-campaign-node-check-tag.enter-tagnames,Enter the tag values separated by comma.,Introduzca los valores de variables separadas por comas.
-campaign-node-check-tag.help-text1,Checks whether given tag exists for a contact. If multiple tags separated by comma are given&#44 then the condition will be evaluated to Yes only when ALL tags exists for that contact.,Comprueba si existe determinada etiqueta para un contacto. Si se dan varias etiquetas separadas por comas&#44; entonces la condición será evaluada en Sí sólo cuando existe TODAS las etiquetas para ese contacto.
-campaign-node-check-tag.help-text2,For example&#44 if 'lead&#44 paid' are given then the condition will be evaluated to Yes only if both lead and paid exists&#44 otherwise No if only lead exists.,Por ejemplo&#44; si &#39;plomo&#44; paga&#39; se dan a continuación&#44; la condición será evaluada en Sí&#44; sólo si tanto el plomo y pagó existe&#44; de lo contrario No se si existe una única pista.
-campaign-node-close-case.name,Close Case,Caso cerrado
-campaign-node-close-case.info,Close cases related to this contact.,Cerrar los casos relacionados con este contacto.
-campaign-node-close-case.owner,Case Owner,caso propietario
-campaign-node-close-case.help-text,Close cases that are in 'Open' state for the campaign subscriber. You can choose to close cases based on a specific owner.,Cerrar los casos que se encuentran en estado &#39;abierto&#39; para el abonado campaña. Usted puede optar por cerrar los casos en base a un propietario específico.
-campaign-node-push-notify.info,Engage with your audience through Browser Push notification.,Interactuar con su audiencia a través de la notificación de inserción del explorador.
-campaign-node-push-notify.noty-temp,Push Notification Template,Plantilla de notificación de inserción
-campaign-node-push-notify.select-noty-temp,Select Push Notification Template,Plantilla de Notificación seleccione PPH
-campaign-node-push-notify.help-text1,Engage with your audience easily through Browser notification. Schedule and send messages to engage the right users at the most relevant time through our Marketing Campaigns..,Comprometerse con su público fácilmente a través de la notificación del navegador. Horario y enviar mensajes a participar los usuarios correctos en el momento más relevante a través de nuestras campañas de marketing ..
-campaign-node-push-notify.help-text2,Note: Currently it will work only for Chrome 42 or above and Firefox browser. For Firefox&#44 If the audience browser is active then only the messages will be shown.,Nota: Actualmente sólo funcionará para Chrome 42 o superior y Firefox. Para Firefox&#44; el navegador Si la audiencia está activo&#44; sólo se mostrarán los mensajes.
-campaign-node-score.info,Add or subtract score to your contact to identify hot leads based on total score.,Añadir o restar puntuación a su contacto para identificar conductores calientes sobre la base de la puntuación total.
-campaign-node-score.select-operation,Select the operation type.,Seleccione el tipo de operación.
-campaign-node-score.options-set,Set,Conjunto
-campaign-node-score.options-subtract,Subtract,Sustraer
-campaign-node-score.enter-val,Enter the value.,Introducir el valor.
-campaign-node-score.help-text1,You can set&#44 increase or decrease the Lead Score using this option.,Se puede establecer&#44; aumentar o disminuir la puntuación de plomo uso de esta opción.
-campaign-node-score.help-text2,For example&#44 if the user opened your email&#44 add a score of 5 and on clicking a link add 10.,Por ejemplo&#44; si el usuario abre su correo electrónico&#44; añadir una puntuación de 5 y al hacer clic en un enlace añadir 10.
-campaign-node-time.name,Check Business Hours,Compruebe horario comercial
-campaign-node-time.info,Check if the current time is within the set business hours.,Compruebe si la hora actual se encuentra dentro de los horarios de trabajo conjunto.
-campaign-node-time.desc,Time Based routing lets you conveniently route the calls based on time and day of the week.\n\nUse this to play your business hour and non-business hour greetings&#44 manage call forwarding&#44 or play off-hours voice mail.,enrutamiento basado en el tiempo que le permite convenientemente enrutar las llamadas en base a hora y día de la semana. \ n \ nUsa esto para reproducir sus saludos hora negocio y hora inhábil&#44; gestionar la transferencia de llamadas&#44; correo de voz o jugar fuera de horas.
-campaign-node-time.select-timezone,Select the time zone of your location.,Seleccione la zona horaria de su ubicación.
-campaign-node-time.business-list,Business day(s) list,día hábil (s) lista
-campaign-node-time.days,Day(s),Días)
-campaign-node-time.enter-days,Enter the business day(s) for your company.,Introduzca el día (s) de negocio para su empresa.
-campaign-node-time.enter-hours,Enter the business hours of the user on the selected day(s).,Introduzca las horas de oficina del usuario en el día (s) seleccionado.
-campaign-node-time.business-hrs-text,Use this node to send emails to customers during business hours or route your new leads to appropriate sales representatives. Time Based routing lets you conveniently route the calls based on time and day of the week.,Utilice este nodo para enviar correos electrónicos a los clientes durante las horas de oficina o de ruta a sus nuevos clientes potenciales a los representantes de ventas apropiadas. enrutamiento basado en el tiempo que le permite convenientemente enrutar las llamadas basadas en la hora y día de la semana.
-campaign-node-unsubscribe.info,Unsubscribe the contact from selected campaign.,Darse de baja el contacto de campaña seleccionada.
-campaign-node-unsubscribe.desc,Unsubscribe the contact from selected campaigns.You can unsubscribe the contact from either a specific campaign or all the campaigns the contact is currently in.,Darse de baja el contacto de campaigns.You seleccionado puede darse de baja el contacto ya sea de una campaña específica o todas las campañas el contacto se encuentra actualmente en.
-campaign-node-unsubscribe.select-campaign,Select a campaign to unsubscribe,Seleccione una campaña para darse de baja
-campaign-node-unsubscribe.unsubscribe-from-all,Unsubscribe from All Campaigns / Selected Campaigns,Darse de baja de todas las campañas / campañas seleccionadas
-campaign-node-unsubscribe.select-a-campaign,Select a campaign,Seleccione una campaña
-campaign-node-url.name,URL Visited?,Visitado el URL?
-campaign-node-url.info,Check if a URL has been visited by the contact earlier or in a specified duration.,Comprobar si una URL ha sido visitado por el contacto anterior o en un tiempo determinado.
-campaign-node-url.enter-valid-url,Enter a valid URL.,Introduzca una URL válida.
-campaign-node-url.match-type,Match type,Tipo de concordancia
-campaign-node-url.select-url-type,Select the given URL type.,Seleccione el tipo de URL dada.
-campaign-node-url.exact-match,Exact Match,Coincidencia exacta
-campaign-node-url.las-visited,Visited in last,Visitado en el pasado
-campaign-node-url.enter-duration,Enter the duration in days or hours. Leave as zero if you don't want time limit.,Introduzca la duración en días u horas. Deja como cero si no desea límite de tiempo.
-campaign-node-url.enter-duration-type,Select the type of duration.,Seleccione el tipo de duración.
-campaign-node-url.days,Days,Días
-campaign-node-url.help-text1,Check if a URL (on your website) has been visited by the contact. This works when you have the tracking code setup on your web page.,Comprobar si una dirección URL (en su página web) ha sido visitado por el contacto. Esto funciona cuando se tiene la configuración del código de seguimiento en su página web.
-campaign-node-url.help-text2,The 'Match type' option allows you to specify a partial match of url. For example&#44 if you just mention 'product' in the URL field and select Type as ‘Contains’&#44 then the condition will be evaluated to True if the user visited any page containing 'product' in the URL.,La opción &quot;Tipo de concordancia &#39;le permite especificar una coincidencia parcial de la URL. Por ejemplo&#44; si sólo ha de mencionar &quot;producto&quot; en el campo URL y seleccione el tipo: «Contiene &#39;&#44; entonces la condición se evalúa como True si el usuario visita cualquier página que contenga&#39; producto &#39;en la URL.
-campaign-node-url.help-text3,You can optionally give a time duration for the visit. Ex: Check if they visited your pricing page in last 3 days,Usted puede dar opcionalmente una duración de tiempo para la visita. Ex: Comprobar si se han visitado su página de precios en los últimos 3 días
-campaign-node-wait.name,Wait,Espere
-campaign-node-wait.info,Wait for a specified duration before next action. Useful for responders and periodic emails.,Esperar un tiempo determinado antes de la próxima acción. Útil para los respondedores y correos electrónicos periódicos.
-campaign-node-wait.enter-duration,Enter the duration period.,Introduzca el período de duración.
-campaign-node-wait.help-text1,Wait for a specified duration before proceeding to the next step.,Esperar durante un tiempo especificado antes de proceder al siguiente paso.
-campaign-node-wait.help-text2,For example&#44 send email-1&#44 wait for 2 days and then send email-2.,Por ejemplo&#44; enviar un correo electrónico-1&#44; esperar 2 días y luego envía un correo electrónico-2.
-campaign-node-wait.business-days,Business Days,Días hábiles
-campaign-node-wait.select-time,Select the time ,Seleccione el tiempo
-campaign-node-wait-till.name,Wait Till,Espera hasta
-campaign-node-wait-till.info,Wait till a specified date and time before proceeding to the next step.,Espera a una fecha y hora especificada antes de proceder al siguiente paso.
-campaign-node-wait-till.info1,Useful if you want to send new year offers or birthday wishes.,Es útil si se desea enviar nuevas ofertas año o deseos de cumpleaños.
-campaign-node-condition.info,Check for a condition (IF/Value/Len) in your workflow.,Compruebe si hay una condición (SI / Valor / Len) en su flujo de trabajo.
-campaign-node-condition.if,IF,SI
-campaign-node-condition.variable-type,Variable type.,Tipo de variable.
-campaign-node-condition.value-sm,value,valor
-campaign-node-condition.strlen,strlen,strlen
-campaign-node-condition.select-req-merge-field,Select required merge field.,Seleccionar campo de combinación requerida.
-campaign-node-condition.your-custom-field,your custom field,su campo personalizado
-campaign-node-condition.compare-this,compare this,comparar esta
-campaign-node-condition.operation-type,Operation type,Tipo de operación
-campaign-node-condition.lessthan-or-equals,less than or equals,inferior o igual a igual
-campaign-node-condition.grthan-or-equals,greater than or equals,mayor que o igual a igual
-campaign-node-condition.not-equals,not equal to,no igual a
-campaign-node-condition.equal-to,equal to,igual a
-campaign-node-condition.date-value,Enter a value. For Date value enter in 'mm/dd/yyyy',Introducir un valor. Para el valor de Fecha entrar en &#39;dd / mm / aaaa&#39;
-campaign-node-jsonio.name,JSON IO,JSON IO
-campaign-node-jsonio.info,Integrate your workflow with your web infrastructure using JSON. Push or retrieve data to/from your other applications.,Integrar su flujo de trabajo con su infraestructura web utilizando JSON. Empuje o recuperar datos a / desde otras aplicaciones.
-campaign-node-jsonio.enter-valid-url,Please enter a valid REST URL,Por favor&#44; introduzca una URL válida RESTO
-campaign-node-jsonio.method-type,Method type,tipo de método
-campaign-node-jsonio.access-type,Select the appropriate type for accessing the URL&#44 POST or GET.,Seleccione el tipo apropiado para acceder a la URL&#44; POST o GET.
-campaign-node-jsonio.option-get,Get,Obtener
-campaign-node-jsonio.option-post,Post,Enviar
-campaign-node-jsonio.params,Params,Parámetros
-campaign-node-jsonio.key,Key,Llave
-campaign-node-jsonio.key-name,Please enter keyname,Por favor&#44; introduzca nombre de clave
-campaign-node-jsonio.pl-enter-val,Please enter value,Por favor&#44; introduzca el valor
-campaign-node-jsonio.headers,Headers,encabezados
-campaign-node-jsonio.help-text1,Integrate your workflow with your web infrastructure using JSON IO. You can retrive or post information with a JSON Http call to a given URL and defined URL parameters. ,Integrar su flujo de trabajo con su infraestructura web utilizando JSON IO. Puede retrive o publicar información con una llamada JSON HTTP a una URL determinada y parámetros de URL definidos.
-campaign-node-jsonio.help-text2,The returned JSON will be merged and this can be used in the rest of the workflow.,El JSON devuelto se fusionará y esto se puede utilizar en el resto del flujo de trabajo.
-campaign-node-jsonio.help-text3,You can find more documentation with an example,Puede encontrar más documentación con un ejemplo
-campaign-node-new-condition.info,Check for multiple conditions in your workflow.,Compruebe si hay múltiples condiciones en su flujo de trabajo.
-campaign-node-new-condition.and,And,Y
-campaign-node-new-condition.variable,variable,variable
-campaign-node-new-condition.Or,Or,O
-campaign-node-new-condition.help-text,Only And or only Or conditions can also be provided.,Y sólo sea solo o condiciones también puede ser proporcionada.
-campaign-node-set-prop.name,Set Property,Establecer propiedad
-campaign-node-set-prop.info,Change the value of a specific property for the Contact,Cambiar el valor de una propiedad específica para el contacto
-campaign-node-set-prop.select-property,Select Property,Seleccione la propiedad
-campaign-node-set-prop.enter-val,Enter the field value.,Introduzca el valor del campo.
-campaign-node-set-prop.hep-text1,For date fields use the format mm/dd/yyyy.,Para la fecha campos utilizan el formato dd / mm / aaaa.
-campaign-node-set-prop.hep-text2,It also supports incrementing number & date properties. To increment a date or number by 2&#44 you may specify &quot;+2&quot; (without quotes). Date will be incremented by 2 days in this case.,También es compatible con incremento de número y fecha de propiedades. Para incrementar una fecha o número por 2&#44; es posible especificar &quot;2&quot; (sin comillas). La fecha se incrementa en 2 días en este caso.
-campaign-node-set-prop.hep-text3,For fields of type List&#44 the value should match one of the List values (case sensitive),Para los campos de lista de tipos&#44; el valor debe coincidir con uno de los valores de la lista (mayúsculas y minúsculas)
-campaign-node-ab.name,A/B,A/B
-campaign-node-ab.info,A/B testing can be used to test contact response with different messages in your email.,Las pruebas A/B puede ser utilizado para probar el comportamiento de contacto con diferentes mensajes en su correo electrónico.
-campaign-node-ab.freq,Frequency (Less than 1 - eg: 0.5),Frecuencia (Menos de 1 - por ejemplo: 0&#44;5)
-campaign-node-ab.freq-title,Enter the frequency for your A/B testing. Eg: 0.5 for 50%,Introducir la frecuencia para su prueba A/B. Por ejemplo: 0&#44;5 para el 50%
-campaign-node-ab.help-text1,This is useful when you want to test what messages/content in the email gives you maximum clicks.,Esto es útil cuando se quiere probar qué mensajes / contenido en el correo electrónico que da el máximo de clics.
-campaign-node-ab.help-text2,This node has two exit paths - A and B.,Este nodo tiene dos vías de salida - A y B.
-campaign-node-ab.help-text3,So&#44 if you have 1000 users going through this campaign&#44 some users will be taken through path A&#44 and some through path B. How many&#44 will depend on the 'Frequency' parameter you set.,Por lo tanto&#44; si usted tiene 1000 usuarios que pasan a través de esta campaña&#44; algunos usuarios serán tomadas por el camino A&#44; y algunos por la ruta B. ¿Cuántas&#44; dependerán del parámetro &#39;Frecuencia&#39; que ha establecido.
-campaign-node-ab.help-text4,If you set the Frequency to 0.6&#44 approximately 600 will go through path A.,Si se establece la frecuencia a 0&#44;6&#44; aproximadamente 600 pasarán por el camino A.
-campaign-node-bounced.info,Triggered when email is bounced back during delivery,Se activa cuando el correo electrónico se recuperó durante el parto
-campaign-node-bounced.max-wait-time,Max wait time,el tiempo máximo de espera
-campaign-node-bounced.enter-max-wait-time,Enter the max wait time.,Introduzca el tiempo de espera máximo.
-campaign-node-bounced.help-text,Event is triggered when emailed bounced back due to deliverability issues.,El evento se activa cuando se recuperó enviado por correo electrónico debido a problemas de capacidad de entrega.
-campaign-node-clicked.name,Clicked?,Hecho clic?
-campaign-node-clicked.info,Check if a link in the email/sms/tweet is clicked within a specified duration.,Comprobar si un enlace en el correo electrónico / SMS / pío se hace clic dentro de un tiempo especificado.
-campaign-node-clicked.help-text1,Check if the recepient has clicked on a link in the email/sms/tweet. Here&#44 you need to mention the maximum waiting period before it proceeds to the next step.,Compruebe si el recepient ha hecho clic en un enlace en el correo electrónico / SMS / tweet. En este caso&#44; es necesario mencionar el período máximo de espera antes de proceder al siguiente paso.
-campaign-node-clicked.help-text2,This node has 2 exit paths - Yes and No.,Este nodo tiene 2 vías de salida - Sí y No.
-campaign-node-clicked.help-text3,If there is a click&#44 then the control moves through the 'Yes' path without waiting any further.,Si hay un clic&#44; la secuencia de mando se mueve por el &quot;Sí&quot; camino sin esperar más.
-campaign-node-clicked.help-text4,If the recepient did not click any link in the preceding email/sms/tweet&#44 it waits here for specified time. If there is no click till the max wait time&#44 it moves through the 'No' path.,Si el recepient no haga clic en cualquier enlace del correo electrónico / SMS / pío anterior&#44; se espera aquí durante un tiempo especificado. Si no hay un clic hasta que el tiempo de espera máximo&#44; que se mueve a través de la ruta de acceso &#39;n&#39;.
-campaign-node-gender.info,Retrieve the gender of the subscriber based on email address.,Recuperar el género del abonado basada en la dirección de correo electrónico.
-campaign-node-gender.help,AgileCRM uses Rapleaf to retrieve the gender of the subscriber based on the email address.,AgileCRM utiliza Rapleaf para recuperar el género del abonado en base a la dirección de correo electrónico.
-campaign-node-gender.email,Email ID,Identificación de correo
-campaign-node-gender.email-title,Enter a valid email ID.,Introduzca un ID de correo electrónico válida.
-campaign-node-opened.name,Opened?,¿Abrió?
-campaign-node-opened.info,Check if the contact has opened any of the previous emails sent in the campaign.,Compruebe si el contacto ha abierto cualquiera de los correos electrónicos enviados previamente en la campaña.
-campaign-node-opened.help-text1,Check if any of the emails sent earlier in the campaign has been opened. You need to define a maximum wait duration before it proceeds to the next step.,Compruebe si alguno de los correos electrónicos enviados a principios de la campaña ha sido abierto. Es necesario definir una duración máxima de espera antes de proceder al siguiente paso.
-campaign-node-opened.help-text2,If the email is opened&#44 then the campaign moves through the 'Yes' path immediately.,Si se abre el correo electrónico&#44; a continuación&#44; la campaña se mueve a través del &#39;Sí&#39; ruta inmediatamente.
-campaign-node-opened.help-text3,If the recipient did not open the email&#44 it waits here for the specified duration and then moves through the 'No' path.,Si el destinatario no abrió el correo electrónico&#44; espera aquí durante el tiempo especificado y luego se mueve a través de la ruta de acceso &#39;n&#39;.
-campaign-node-opened.help-text4,Note: Email open checking is not 100% accurate. For some email clients or web email services (like Gmail) it is not possible to know if the recipient has opened the email. In which case&#44 it waits here for max wait duration and takes the 'No' path&#44 while the recipient may have actually opened the email.,Nota: consultar el correo electrónico abierto no es fiable al 100%. Para algunos clientes de correo electrónico o servicios de correo electrónico web (como Gmail)&#44; no es posible saber si el destinatario ha abierto el correo electrónico. En cuyo caso&#44; se espera a su duración de espera máximo y toma el camino &quot;no&quot;&#44; mientras que el receptor puede realmente tener abierto el correo electrónico.
-campaign-node-replied.name,Replied?,¿Respondido?
-campaign-node-replied.info,Check if the contact has replied any of the previous emails sent in the campaign,Compruebe si el contacto ha respondido cualquiera de los correos electrónicos enviados previamente en la campaña
-campaign-node-replied.help-text1,Check if any of the emails sent earlier in the campaign has been replied. You need to define a maximum wait duration before it proceeds to the next step.,Compruebe si alguno de los correos electrónicos enviados a principios de la campaña ha sido contestado. Es necesario definir una duración máxima de espera antes de proceder al siguiente paso.
-campaign-node-replied.help-text2,If the email is replied&#44 then the campaign moves through the 'Yes' path immediately.,Si se contesta el correo electrónico&#44; a continuación&#44; la campaña se mueve a través del &#39;Sí&#39; ruta inmediatamente.
-campaign-node-replied.help-text3,If the recipient did not reply the email&#44 it waits here for the specified duration and then moves through the 'No' path.,Si el destinatario no respondió el correo electrónico&#44; espera aquí durante el tiempo especificado y luego se mueve a través de la ruta de acceso &#39;n&#39;.
-campaign-node-replied.help-text4,Note: For Agile CRM to recognize your emails&#44 please setup,Nota: Para ágil CRM para reconocer sus mensajes de correo electrónico&#44; por favor&#44; instalación
-campaign-node-replied.help-text5,as forwarding email at your email server,como el reenvío de correo en el servidor de correo electrónico
-campaign-node-getmessage.name,Get Message,Obtener Mensaje
-campaign-node-getmessage.info,Get the content of an incoming text message (SMS),Obtener el contenido de un mensaje de texto (SMS)
-campaign-node-getmessage.start-word,Start Word At,Al iniciar Word
-campaign-node-getmessage.select-number,Select number to start count. Eg: 1 will return the entire text starting from second word. 0 will return the entire content.,Seleccionar número para iniciar el recuento. Por ejemplo: 1 devolverá la totalidad del texto a partir de la segunda palabra. 0 devolverá la totalidad del contenido.
-campaign-node-getmessage.variable-name,Variable Name,Nombre de la variable
-campaign-node-getmessage.store-result,Store the result into a variable. Start with $,Almacenar el resultado en una variable. Comience con $
-campaign-node-getmessage.number-of-sender,Enter the number of the sender,Introduzca el número del remitente
-campaign-node-getmessage.max-wait-duration,Max Wait Duration,Espere Max Duración
-campaign-node-getmessage.max-wait-duration-before-timeout,Enter the max wait time before timeout is issued,Introduzca el tiempo de espera máximo de tiempo de espera antes de la emisión
-campaign-node-getmessage.help-text,Get Message will return the content in text message starting from (start-word-count),Obtener mensajes volverá el contenido de un mensaje de texto a partir de (puesta en número de palabras)
-campaign-node-getmessage.number-of-receipient,Enter the number of the recipient,Introduzca el número del destinatario
-campaign-node-getword.name,Get N Word,Obtener N Palabra
-campaign-node-getword.info,This returns the nth word in a message.,Esto devuelve la palabra de orden n de un mensaje.
-campaign-node-getword.word-at,Word At,En palabra
-campaign-node-getword.select-number,Select nth number,Seleccione el número de orden n
-campaign-node-getword.res-stored,The result is stored in this variable,El resultado se almacena en esta variable
-campaign-node-getword.return-info,This returns the nth word,Esto devuelve la palabra enésima
-campaign-node-getmessage.return-mssg-info,Get Message will return the content in text message starting from (startwordcount),Recibe mensajes volverá el contenido de un mensaje de texto a partir de (startwordcount)
-campaign-node-getmessage.select-number-to-start,Select number to start count,Seleccionar número para iniciar el recuento
-campaign-node-menusms.name,Menu,Menú
-campaign-node-menusms.info,Match your incoming message with SMS Menu options,Que coincida con su mensaje de entrada con opciones de menú SMS
-campaign-node-menusms.variable-title-1,Provide the Variable name (starting with $) in which the desired result was stored.,Proporcionar el nombre de variable (a partir de $) en el que se almacena el resultado deseado.
-campaign-node-menusms.variable-title-2,Tip: Provide the same variable name as you gathered in GetMessage.,Consejo: Proporcionar el mismo nombre de variable como que se reunieron en GetMessage.
-campaign-node-menusms.menus,Menus,menús
-campaign-node-menusms.menus-option,Option,Opción
-campaign-node-menusms.enter-menus-option,Enter the option for your SMS Menu,Entre en la opción para el menú SMS
-campaign-node-menusms.help-text1,Allow your callers to reach an extension by sms,Permitir que las personas que llaman para llegar a una extensión por SMS
-campaign-node-menusms.help-multiconditional,MultiConditional lets you configure Extensions. It allows your callers to reach any extension by simply sending a sms,MultiConditional le permite configurar las extensiones. Permite a las personas que llaman para llegar a cualquier extensión&#44; simplemente enviando un SMS
-campaign-node-menusms.names,Names,nombres
-campaign-node-menusms.enter-name-ext,Enter the name for the user at this extension,Introduzca el nombre de usuario en esta extensión
-campaign-node-menusms.name-help-text1,Provide the Variable name in which the desired result was stored.,Proporcionar el nombre de la variable en la que se almacena el resultado deseado.
-campaign-node-menusms.name-help-text2,Tip: you can provide the same variable name here as $var-name Which you have used in GetNWord/GetMessage to store the result,Consejo: puede proporcionar el mismo nombre de variable aquí como $ var-nombre que usted ha utilizado en GetNWord / GetMessage para almacenar el resultado
-campaign-node-searchtext.name,Search Text,Buscar texto
-campaign-node-searchtext.search-token-present,It will search if a token is present,Se buscará si un elemento está presente
-campaign-node-sendmessage.info,Send SMS to the contact using SMS Gateway Integration,Enviar SMS al contacto mediante SMS Gateway Integración
-campaign-node-sendmessage.desc,You can enable SMS Gateway Integration from Admin settings -> Integrations,Puede habilitar SMS Gateway Integración de configuración de administrador -&gt; Integraciones
-campaign-node-sendmessage.select-number,Select Number,Seleccionar Número
-campaign-node-sendmessage.enter-number,Enter the recipient number or ,Introduzca el número del destinatario o
-campaign-node-sendmessage.to-play-voice,to play the voice message,para reproducir el mensaje de voz
-campaign-node-sendmessage.enter-message,Enter your message,Ingrese su mensaje
-campaign-node-sendmessage.enbale-tracking,Enable tracking for sms link clicks. Use Yes &amp; Push if you want to push contact data to your website (to enable web activity tracking),Habilitar el seguimiento de los clics de enlace SMS. Sí usar y de inserción si se quiere empujar los datos de contacto de su sitio web (para permitir la actividad en la web de seguimiento)
-campaign-node-sendmessage.help-text,Send SMS to the contact using the SMS Gateway Integration,Enviar SMS al contacto utilizando la Integración SMS Gateway
-campaign-node-sendmessage.send-mssg-from-here,You can send your message form here,Puede enviar su formulario de mensaje aquí
-campaign-node-sendmessage.enter-caller-id,Enter the caller ID,Introduzca el identificador de llamadas
-campaign-node-sendmessage.cat-more,More Settings,Más ajustes
-campaign-node-tweet.info,Tweet or mention automatically.,Tweet o mencionar de forma automática.
-campaign-node-tweet.allow-crm-to,Please allow AgileCRM to,Por favor permita a AgileCRM
-campaign-node-tweet.access-your-accont,access your account,acceder a tu cuenta
-campaign-node-tweet.userid,UserId,Identidad de usuario
-campaign-node-tweet.userid-title,You cannot edit this field. Please allow access using the option listed above.,No puedes editar este campo. Permite el acceso mediante la opción que aparece arriba.
-campaign-node-tweet.token,Token,Simbólico
-campaign-node-tweet.token-secret,Token Secret,Token secreto
-campaign-node-tweet.rate-limit,Rate Limit (Hourly),Límite de velocidad (por hora)
-campaign-node-tweet.rate-limit-for-posting,Rate Limit for posting,Margen de límite para la contabilización
-campaign-node-tweet.enable-tracking,Enable tracking for tweet link clicks. Use Yes &amp; Push if you want to push contact data to your website (to enable web activity tracking),Habilitar el seguimiento de clics en enlaces tweet. Sí usar y de inserción si se quiere empujar los datos de contacto de su sitio web (para permitir la actividad en la web de seguimiento)
-campaign-node-tweet.help-text1,Automatically send tweets (@mention) to contacts using your/company twitter account.,enviar automáticamente mensajes de twitter (@ mención) a los contactos utilizando su cuenta de twitter / empresa.
-campaign-node-tweet.help-text2,You need to give access to Agile CRM to your account and provide a message to be posted. The message you provide will be preceded with a @contactTwitterId and posted as status message in your/company Twitter.,Es necesario dar acceso a Agile CRM a su cuenta y proporcionar un mensaje para ser publicado. El mensaje que nos proporcione será precedida con un @contactTwitterId y publicado como mensaje de estado en su / empresa Twitter.
-campaign-node-dialnumber.name,Transfer,Transferir
-campaign-node-dialnumber.info,Transfer subscribers to a different list,los suscriptores de transferencia a una lista diferente
-campaign-node-dialnumber.choose-list,Choose your new list,Elija su nueva lista
-campaign-node-dialnumber.help-text,Choose the new list to transfer your subscribers,Elige la nueva lista para transferir sus suscriptores
-campaign-node-gathered.name,URL Visited,Visitado el URL
-campaign-node-gathered.info,Check if the URL has been visited in a workflow,Compruebe si la URL se ha visitado en un flujo de trabajo
-campaign-node-gathered.help,ContactSpot can check if the subscriber (Email address) has visited a web page (URL),ContactSpot puede comprobar si el abonado (dirección de correo electrónico) ha visitado una página web (URL)
-campaign-node-gathered.identifier,Identifier,identificador
-campaign-node-gathered.identifier-valid,Enter a valid Identifier,Introduzca un identificador válido
-campaign-node-gathered.select-type-account,Select the type of Account.,Seleccione el tipo de cuenta.
-campaign-node-gathered.name-validation,Enter a valid username,Introduzca un nombre de usuario válido
-campaign-node-gathered.pwd-validation,Enter a valid password,Introduzca una contraseña válida
-campaign-node-gathered.help-text,Specify your visited url,Especificar su URL visitado
-campaign-node-play.info,Add or delete tag for your customer. You can sort your customers based on tags or generate reports accordingly.,Añadir o eliminar la etiqueta para su cliente. Puede ordenar sus clientes basándose en las etiquetas o generar informes en consecuencia.
-campaign-node-play.delete,Delete,Borrar
-campaign-node-play.enter-tag-val,Enter the tag value,Introduzca el valor de la etiqueta
-campaign-node-say.name,Say,Decir
-campaign-node-say.play-message,Play a message using Text to Speech,Reproducir un mensaje de texto a voz usando
-campaign-node-say.help-text,Add or subtract a score for your subscriber. You can sort your customers based on score or generate reports accordingly.,Añadir o restar un punto para su suscriptor. Puede ordenar sus clientes basado en la puntuación o generar informes en consecuencia.
-campaign-node-sms.name,Wait for a specified duration. Useful for responders and periodic emails.,Esperar un tiempo especificado. Útil para los respondedores y correos electrónicos periódicos.
-campaign-node-sms.help-text,Wait for a specified duration in your campaign workflow.,Esperar una duración especificada en el flujo de trabajo de campaña.
-campaign-node-addevent.info,Add a calendar event related to the contact.,Añadir un evento del calendario relacionado con el contacto.
-campaign-node-addevent.help-text,Use this to automatically schedule meetings or calls with customers.,Utilice esta opción para programar automáticamente las reuniones o llamadas con los clientes.
-campaign-node-addevent.enter-name,Enter name of the event,Introduce el nombre del evento
-campaign-node-addevent.select-priority,Select priority,Seleccione la prioridad
-campaign-node-addevent.date-title,You can choose a specific calendar date&#44 or give the number of days from campaign run time like &#39;+2&#39;&#44 or use a merge field like {{YourCustomDateField}},Se puede elegir una fecha del calendario específico&#44; o dar el número de días desde el tiempo de ejecución como la campaña &#39;2&#39;&#44; o usar un campo de combinación como {{}} YourCustomDateField
-campaign-node-addevent.select-timezone,Select the time zone,Seleccione la zona horaria
-campaign-node-addevent.event-duration,Event Duration,Duración del evento
-campaign-node-addevent.select-event-duration,Select duration of an event,Seleccione la duración de un evento
-campaign-node-addevent.select-event-owner,Select owner of the event,Seleccione propietario del evento
-campaign-node-adddeal.info,Add a deal in Agile related to the contact.,Añadir un acuerdo en Agile relacionado con el contacto.
-campaign-node-adddeal.deal-title,Deal Title,Nombre de la oferta
-campaign-node-adddeal.enter-deal,Enter the name of a deal.,Introduce el nombre de un acuerdo.
-campaign-node-adddeal.enter-value,Enter the expected value of a deal.,Introduzca el valor esperado de un acuerdo.
-campaign-node-adddeal.enter-probobality,Enter the probability value less than 100. Eg. 50,Introduzca el valor de probabilidad inferior a 100. Ej. 50
-campaign-node-adddeal.closure,Expected closure (in Days),cierre de espera (en días)
-campaign-node-adddeal.closure-title,Expected close date of the deal from the time it is created.,Fecha prevista de cierre del acuerdo desde el momento en que se crea.
-campaign-node-adddeal.cat-more,More details,Más detalles
-campaign-node-adddeal.select-milestone,Select milestone from the list.,Elija un hito de la lista.
-campaign-node-adddeal.select-source,Select deal source.,Seleccione la fuente trato.
-campaign-node-adddeal.select-owner,Select Owner of the deal.,Seleccionar propietario del trato.
-campaign-node-adddeal.describe,Describe the deal.,Describir el trato.
-campaign-node-adddeal.help-text1,Add a deal related to a contact in the CRM.,Añadir un acuerdo relacionado con un contacto de la CRM.
-campaign-node-adddeal.help-text2,For example&#44 if a contact opens and clicks a link in your email&#44 then you might want to add a deal.,Por ejemplo&#44; si un contacto se abre y se hace clic en un enlace en su correo electrónico&#44; entonces es posible que desee agregar un trato.
-campaign-node-adddeal.help-text3,When this deal is created&#44 the contact is automatically added to the 'Related to' field in the deal.,Cuando se crea este acuerdo&#44; el contacto se agrega automáticamente a la &quot;conexos&quot; campo en el trato.
-campaign-node-addnote.info,Add a note to the contact in Agile.,Añadir una nota al contacto en ágil.
-campaign-node-addnote.enter-subject,Enter your subject,Introduzca el asunto
-campaign-node-addnote.enter-note,Enter your note here.,Ingrese su nota aquí.
-campaign-node-addnote.help-text1,Add a note to a contact in CRM.,Añadir una nota a un contacto en CRM.
-campaign-node-addnote.help-text2,For example&#44 if a contact opens and clicks a link in your email&#44 then you might want to add a note about it.,Por ejemplo&#44; si un contacto se abre y se hace clic en un enlace en su correo electrónico&#44; entonces es posible que desee agregar una nota al respecto.
-campaign-node-addnote.help-text3,Notes related to a contact can be viewed in the Notes tab in Contact details page.,Notas relacionadas con un contacto se pueden ver en la ficha Notas de Contacto página de detalles.
-campaign-node-addtask.info,Add a task in Agile related to the contact.,Añadir una tarea en Agile relacionado con el contacto.
-campaign-node-addtask.enter-name,Enter the task name,Introduzca el nombre de la tarea
-campaign-node-addtask.cat-type,Select the category type,Seleccionar el tipo de categoría
-campaign-node-addtask.priority-type,Select the priority type,Seleccione el tipo de prioridad
-campaign-node-addtask.due-days,Due Days,debido Días
-campaign-node-addtask.noof-due-days,Enter the number of Due Days.,Introduce el número de días de vencimiento.
-campaign-node-addtask.select-owner,Select Owner of the task.,Seleccionar propietario de la tarea.
-campaign-node-addtask.help-text1,Add a task related to a contact in the CRM.,Añadir una tarea relacionada con un contacto de la CRM.
-campaign-node-addtask.help-text2,For example&#44 if a contact opens and clicks a link in your email&#44 then you might want to add a task to your list for Calling him/her.,Por ejemplo&#44; si un contacto se abre y se hace clic en un enlace en su correo electrónico&#44; entonces es posible que desee agregar una tarea a la lista para llamar a él / ella.
-campaign-node-addtask.help-text3,When this task is created&#44 the contact is automatically added to the 'Related to' field in the task.,Cuando se crea esta tarea&#44; el contacto se agrega automáticamente a la &quot;conexos&quot; campo en la tarea.
-campaign-node-call.info,Call and play automated voice message,Llamar y escuchar el mensaje de voz automatizado
-campaign-node-call.desc,Play a voice message using Text,Reproducir un mensaje de voz utilizando texto
-campaign-node-call.help,You can enable Twilio Call widget Integration from Admin settings -> preferences,Puede activar Twilio llamada Integración widget desde la configuración de administrador -&gt; preferencias
-campaign-node-call.number,Recipient Number,Número de destinatarios
-campaign-node-call.redirect-number,Redirect Number,Número redirigir
-campaign-node-call.enter-voicemail-number,Enter the number to be connected after voice message is played.,Introduzca el número para ser conectado después de la reproducción de mensajes de voz.
-campaign-node-call.enter-redirect-number,Enter redirect number,Escribir un número redirigir
-campaign-node-call.help-text,Press 1 and connect the Recipient Number with the Redirect Number.,Pulse 1 y conecte el número de destinatario con el número de redireccionamiento.
-campaign-node-check-campaign.name,Check Campaign,Campaña de verificación
-campaign-node-check-campaign.info,Check the contact's status for a specified campaign,Comprobar el estado del contacto de una campaña especificada
-campaign-node-check-campaign.help-text,Check if the contact is active in some other campaign. You can also check if he/she is done with the campaign.,Compruebe si el contacto está activo en alguna otra campaña. También puede comprobar si él / ella se realiza con la campaña.
-campaign-node-check-campaign.select-status,Select status from the list.,Seleccione el estado de la lista.
-campaign-node-closetask.name,Close Task,Cerca de tareas
-campaign-node-closetask.info,Mark the tasks related to the contact as completed,Marcar las tareas relacionadas con el contacto como completada
-campaign-node-closetask.help-text,You can optionally choose to complete only a particular user’s tasks.,Opcionalmente&#44; puede elegir para completar las tareas sólo de usuarios en particular.
-campaign-node-closetask.select-owner,Select owner of the task,Seleccione propietario de la tarea
-campaign-node-hasdeal.name,Has Deal?,Pone de su parte?
-campaign-node-hasdeal.info,Checks whether a Deal exists for this contact.,Comprueba si existe una oferta para este contacto.
-campaign-node-hasdeal.help-text,You can check for a specific milestone or owner.,Puede comprobar si hay un hito o propietario específico.
-campaign-node-hasevent.name,Has Event?,Tiene Evento?
-campaign-node-hasevent.info,Checks whether an Event exists for this contact.,Comprueba si existe un evento para este contacto.
-campaign-node-hasevent.select-event,Select status of event from the list.,Elija un estado de evento de la lista.
-campaign-node-hasevent.select-type,Select type of event from the list.,Seleccione el tipo de evento de la lista.
-campaign-node-notify.name,Notify,Notificar
-campaign-node-notify.info,Show notification to user(s),Mostrar notificación al usuario (s)
-campaign-node-notify.help,Show notification to specified user(s),Mostrar notificación al usuario especificado (s)
-campaign-node-notify.noty-name,Notification Name,Nombre de la notificación
-campaign-node-notify.noty-content,Enter content of notification,Ingrese el contenido de la notificación
-campaign-node-notify.select-user,Select user,Seleccionar usuario
-campaign-node-setowner.name,Set Owner,Establecer propietario
-campaign-node-setowner.info,Set owner to the contact.,Establecer propietario al contacto.
-campaign-node-setowner.select-owner-title,Select owner from the list. For Round Robin&#44 select multiple to assign.,Propietario de seleccionar de la lista. Para Round Robin&#44; seleccionar varios asignar.
-campaign-node-setowner.owner-merge-field,Owner Merge Field,Dueño del campo de combinación
-campaign-node-setowner.enter-merge-field,Enter the merge field for the owner. Eg:,Entrar en el campo de combinación para el propietario. P.ej:
-campaign-node-setowner.help-text1,Change the owner of the contact.,Cambiar el propietario del contacto.
-campaign-node-setowner.help-text2,An example use case for this could be - If the contact clicks a link in email&#44 set the owner to a sales guy so that the contact shows up in his My Contacts list.,Un caso ejemplo&#44; el uso de esto podría ser - Si el contacto hace clic en un vínculo de correo electrónico&#44; defina el propietario a un tipo de ventas de manera que el contacto aparece en su lista Mis contactos.
-campaign-node-tags.enter-tags,Enter the tag values separated by comma,Introduzca los valores de variables separadas por comas
-campaign-node-tags.help-text1,Add/remove tags to a contact.,Añadir / quitar etiquetas a un contacto.
-campaign-node-tags.help-text2,For example&#44 if a customer visits a particular product page on your website&#44 you may add a tag with the product name to the contact.,Por ejemplo&#44; si un cliente visita una página en particular de productos en su sitio web&#44; es posible añadir una etiqueta con el nombre del producto para el contacto.
-campaign-node-territory.name,Territory,Territorio
-campaign-node-territory.info,Compares given location conditions across territories.,Compara las condiciones de ubicación suministrada a través de territorios.
-campaign-node-territory.help-text,Compares the contact’s address against the territories defined. If there’s no match&#44 then a default No match route will be taken.,Compara la dirección del contacto contra los territorios definidos. Si no hay ninguna coincidencia&#44; a continuación&#44; un defecto se tomará ninguna ruta partido.
-campaign-node-territory.help-text1,In Agile&#44 countries are saved with their respective 2 letter codes by default as per ISO 3166-1 standard (E.g.&#44 IN for India&#44 AU for Australia).,En ágil&#44; los países se guardan con sus respectivos códigos de 2 letras por defecto según la norma ISO 3166-1 (por ejemplo&#44; en la India&#44; la UA para Australia).
-campaign-node-territory.comparison,Territories Comparison,Comparación territorios
-campaign-node-territory.enter-name,Enter territory name,Introduce el nombre de territorio
-campaign-node-territory.select-type,Select a type,Seleccione un tipo de
-campaign-node-territory.loc-type,Location Type,Tipo de ubicacion
-campaign-node-territory.compares,Compares,compara
-campaign-node-territory.select-condition,Select condition,Seleccione la condición
-campaign-node-transfer.select-campaign,Select campaign from the list.,Seleccione la campaña de la lista.
-campaign-node-transfer.info,Transfer the contact into a different campaign.,Transferir el contacto en una campaña diferente.
-campaign-node-transfer.help-text,For example&#44 if a contact completes a purchase on your website&#44 you can transfer the contact to a Welcome Customer campaign!,Por ejemplo&#44; si un contacto realiza una compra en su sitio web&#44; puede transferir el contacto a una campaña al Cliente Bienvenido!
-campaign-node-updatedeal.name,Update Deal,actualización de reparto
-campaign-node-updatedeal.info,Updates latest deal of contact with Milestone/Value or both.,Actualizaciones último acuerdo de contacto con Milestone / Valor o ambas cosas.
-campaign-node-updatedeal.enter-merge-field-val,Enter value or merge field,Introducir el valor o campo de combinación
-campaign-node-updatestatus.name,Update Status,Estado de actualización
-campaign-node-updatestatus.info,Update status for your existing lead in your CRM,Actualizar el estado para su plomo existente en su CRM
-campaign-node-updatestatus.crm,CRM,CRM
-campaign-node-updatestatus.crm-title,CRM type.,Tipo de CRM.
-campaign-node-updatestatus.username,User Name,Nombre de usuario
-campaign-node-updatestatus.pwd-validation,Please enter your CRM Password,Por favor&#44; introduzca su contraseña de CRM
-campaign-node-updatestatus.api-key,API Key,Clave API
-campaign-node-updatestatus.url-for-sugar,URL (For Sugar),URL (para el azúcar)
-campaign-node-updatestatus.new-status,New Status,nuevo Estado
-campaign-node-updatestatus.enter-status,Enter your new status,Introduzca su nueva condición
-campaign-node-updatestatus.search-field,Search Field,Campo de búsqueda
-campaign-node-updatestatus.search-field-title,Search Field - Email or Number. This will be searched in CRM and when matched&#44 a note is added,Buscar Campo - correo electrónico o número. Esta será buscada en CRM y cuando se combina&#44; se añade una nota
-campaign-node-updatestatus.search-value,Search Value,Valor de búsqueda
-campaign-node-designer.node-name,Node Name,Nombre de nodo
-campaign-node-designer.node-name-title,You can edit node name.,Puede editar el nombre del nodo.
-campaign-node-designer.add-this,Add this,Agrega esto
-campaign-node-designer.utilities,Utilities,Utilidades
-campaign-node-designer.developers,Developers,Desarrolladores
 landingpage-builder.drag-info,Build your page by dragging blocks onto the canvas,Construir su página arrastrando bloques en el lienzo
 landingpage-builder.builder-page-title,Page Builder,Creador de página
 landingpage-builder.back-modal-info,You've got pending changes&#44; if you leave this page your changes will be lost. Are you sure?,Tienes cambios pendientes&#44; si sale de esta página se perderán los cambios. ¿Estás seguro?
@@ -6100,229 +5542,333 @@ landingpage-builder.saved-successfully,Landing page have been saved successfully
 landingpage-builder.publish-title,You can publish your page with a custom domain.,Puede publicar su página con un dominio personalizado .
 landingpage-builder.source,source,fuente
 landingpage-builder.Move,Move,Movimiento
-servererrmssgs.blank-input,Invalid Input. Email or password has been left blank.,Entrada inválida. Correo electrónico o la contraseña ha dejado en blanco.
-servererrmssgs.no-locate-user,We have not been able to locate any user ,No hemos podido localizar a cualquier usuario
-servererrmssgs.user-disabled,Sorry&#44 your account has been disabled. Please contact your admin to reenable your access,Lo sentimos&#44 tu cuenta ha sido deshabilitada. Por favor&#44 póngase en contacto con su administrador para volver a activar el acceso al usuario
-servererrmssgs.user-oauth-login,Looks like you have registered using Google or Yahoo account. Please use the same to login. ,Parece que se haya registrado con la cuenta de Google o Yahoo. Utilice el mismo para iniciar sesión.
-servererrmssgs.incorrect-password,Incorrect password. Please try again.,Contraseña incorrecta. Por favor&#44 inténtelo de nuevo.
-servererrmssgs.email-registered-in,User with same email address is registered in ,Usuario con la misma dirección de correo electrónico se ha registrado en
-servererrmssgs.domain-sm,domain,dominio
-servererrmssgs.to-login,to login,iniciar sesión
-servererrmssgs.register-invalid-domain,Invalid Domain. Please go to choose domain.,Dominio no válido. Por favor&#44 vaya a elegir dominio.
-servererrmssgs.register-email-exists,User with same email address already exists in our system for ,Usuario con la misma dirección de correo electrónico ya existe en nuestro sistema de
-servererrmssgs.pl-enter-verification-code,Please enter valid verification code.,Por favor&#44 introduzca el código de verificación válido.
-servererrmssgs.sso-invalid-shared-key,Please verify your shared key,Por favor&#44 compruebe la clave compartida
-servererrmssgs.sso-invalid-name-email,Please verify your email and name,Por favor&#44 compruebe su correo electrónico y el nombre
-servererrmssgs.invoice-pdf-invalid-id,Invalid Id.,Identificación invalida.
-servererrmssgs.invoice-not-found,Invoice Not found.,Factura no encontrado.
-servererrmssgs.invoice-invalid-user,Invalid User.,Usuario invalido.
-servererrmssgs.error-saving,Error Saving ,error al guardar
-servererrmssgs.mailgun-api-invalid-domain,Mailgun API Key or Domain Name is Invalid.,Mailgun API clave o nombre de dominio no es válido.
-servererrmssgs.api-calls-count-exceed,API call cannot be completed as you have exceeded the ,llamada a la API no puede ser completado como se ha superado el
-servererrmssgs.api-calls-per-day,calls per/day,llamadas por / día
-servererrmssgs.email-quota-expired,Your email quota has expired,Su cuota de correo electrónico ha expirado
-servererrmssgs.visitor-filter-condition-req,Atleast one condition is required.,Se requiere al menos una condición.
-servererrmssgs.widgets-cust-not-found,Customer not found,El cliente no encontrado
-servererrmssgs.widgets-reconfigure-quickbooks,We have updated our QuickBooks widget API. Please reconfigure the QuickBooks widget.,Hemos actualizado la API de widget de QuickBooks. Por favor&#44 vuelva a configurar el widget de QuickBooks.
-servererrmssgs.widgets-reconfigure-xero,Please reconfigure your Xero integration.,Por favor&#44 vuelva a configurar la integración Xero.
-servererrmssgs.widgets-zendesk-perm-denied,Unable to add Ticket. Permission Denied.,No es posible añadir entradas. Permiso denegado.
-servererrmssgs.jsapi-invalid-param,Invalid param for template,param no válido para la plantilla
-servererrmssgs.smsgateway-auth-error,Incorrect Authentication ID or Auth token,ID de autenticación incorrecta o token de autenticación
-servererrmssgs.smsgateway-purchase-number,You do not have a number purchased for this account. You can purchase one,Usted no tiene un número comprado de esta cuenta. Usted puede comprar uno
-servererrmssgs.register-domain-exists,already exists. If you already have an account&#44 you can login,ya existe. Si ya tiene una cuenta&#44 puede iniciar sesión
-servererrmssgs.deals-track-not-found,Track not found. Pleas check the id.,Realizar un seguimiento de que no se encuentra. Motivos comprobar el ID.
-servererrmssgs.deals-milestone-not-found,Unable to find the given milestone. Please check the input.,No se puede encontrar el hito dado. Por favor&#44 compruebe la entrada.
-servererrmssgs.forms-no-form-found,No form found.,No se encontró forma.
-servererrmssgs.articles-with-name,Article with name,El artículo con el nombre
-servererrmssgs.articles-choose-diff,already exists. Please choose a different name.,ya existe. Por favor&#44 elija un nombre diferente.
-servererrmssgs.articles-req-params-missing,Required parameters missing.,Parámetros necesarios que faltan.
-servererrmssgs.sections-with-name,Section with name,Sección con nombre
-servererrmssgs.sections-already-exists,already exists,ya existe
-servererrmssgs.knowledgebase-email-not-verified,You haven't verified your email address yet. Just now we have sent an verification email. Please verify to login.,Aún no ha comprobado su dirección de correo electrónico todavía. Justo ahora hemos enviado un mensaje de verificación. Por favor&#44 compruebe que iniciar sesión.
-servererrmssgs.knowledgebase-email-exists,User already exists with same email.,El usuario ya existe con el mismo correo electrónico.
-servererrmssgs.landignpages-not-found,No landing page found.,No se encontró la página de destino.
-servererrmssgs.twitter-page-not-found,Sorry&#44 that page doesn't exist! @,Lo sentimos&#44 la página que no existe! @
-servererrmssgs.chargify-apikey-empty,Chargify ApiKey is empty,Chargify ApiKey está vacía
-servererrmssgs.chargify-namespace-empty,Chargify Namespace is empty,Chargify Espacio de nombres está vacía
-servererrmssgs.chargify-no-customers,domain of doesn't contain any customers,dominio de no contiene ningún cliente
-servererrmssgs.freshbooks-auth-failed,Authentication failed. Please try again,Error de autenticación. Por favor&#44 inténtelo de nuevo
-servererrmssgs.freshbooks-something-wrong,Something went wrong. Please try again.,Algo salió mal. Por favor&#44 inténtelo de nuevo.
-servererrmssgs.quickbooks-reconfigure,Authentication Error. Please re-configure your QuickBooks integration.,Error de autenticación. Por favor&#44 vuelva a configurar la integración de QuickBooks.
-servererrmssgs.quickbooks-cust-already-exists,Customer already exists,El cliente ya existe
-servererrmssgs.quickbooks-error,String length specified does not match the supported length,longitud de la cadena especificada no coincide con la longitud admitida
-servererrmssgs.quickbooks-not-cust-name,Not a valid customer name,No es un nombre de cliente válido
-servererrmssgs.quickbooks-name-regex,Names must have at least one character and cannot include tabs&#44 newlines or,Los nombres deben tener al menos un carácter y no pueden incluir tabulaciones&#44 saltos de línea o
-servererrmssgs.twilio-need-credits,Your Twilio account needs a recharge. Please add credit and refresh.,Su cuenta Twilio necesita una recarga. Por favor&#44 añadir crédito y refrescar.
-servererrmssgs.twilio-error,Error in Twilio,Error en Twilio
-servererrmssgs.xero-authentication-error,Authentication Error.The access token has expired. Please reconfigure your Xero integration.,token de acceso de autenticación Error.The ha expirado. Por favor&#44 vuelva a configurar la integración Xero.
-servererrmssgs.cannedmessage-name-exists,Canned Message with same name already exists. Please choose different name.,Mensaje grabado con el mismo nombre ya existe. Por favor&#44 elija otro nombre.
-servererrmssgs.ticketgroup-select-user,Please select atleast one User to create Ticket Group.,Por favor&#44 seleccione al menos un usuario para crear grupo de entradas.
-servererrmssgs.ticketgroup-with-name,Ticket Group with name,Grupo de entradas con el nombre
-servererrmssgs.ticketgroup-name-exists,already exists. Please choose a different Group name.,ya existe. Por favor&#44 seleccione un nombre de grupo diferente.
-servererrmssgs.labels-name-pattern,"Sorry&#44 Label name should start with an alphabet and can not contain special characters other than underscore,space and hyphen","Lo sentimos nombre&#44 La etiqueta debe comenzar con un alfabeto y no puede contener caracteres especiales, salvo el guión, espacio y guión"
-servererrmssgs.ticketnotes-add-message,Please provide message body.,Por favor proporcionar el cuerpo del mensaje.
-servererrmssgs.ticketnotes-ticket-deleted,Ticket has been deleted.,Venta de entradas ha sido eliminado.
-servererrmssgs.ticketnotes-id-missing,Ticket ID is missing.,Identificación de entradas no se encuentra.
-servererrmssgs.ticketnotes-group-deleted,Ticket group has been deleted. Please change ticket group to reply.,grupo de entradas ha sido eliminado. Por favor cambia grupo de entradas para responder.
-servererrmssgs.ticketnotes-you-must-in,You must in,Usted debe en
-servererrmssgs.ticketnotes-invalid-reply,group in order to reply to this ticket,grupo con el fin de responder a este boleto
-servererrmssgs.ticketfilters-not-exists,Filter not exits,El filtro no salidas
-servererrmssgs.ticket-invalid-email,Please provide email address.,Por favor&#44 indique la dirección de correo electrónico.
-servererrmssgs.ticket-invalid-message,Please provide message body.,Por favor proporcionar el cuerpo del mensaje.
-servererrmssgs.ticket-id-missing,ticketID or workflowID is missing.,ticketID o workflowID no se encuentra.
-servererrmssgs.ticket-no-contact-exists,No contact found for this customer.,No hay resultados para este cliente contacto.
-servererrmssgs.ticket-group-exists,Group name already exists. Please choose a different Group name,nombre de grupo ya existe. Por favor&#44 seleccione un nombre de grupo diferente
-servererrmssgs.ticket-group-id-missing,Group id is missing.,Identificación del grupo no se encuentra.
-servererrmssgs.ticket-label-exists,Label already exists.,La etiqueta ya existe.
-servererrmssgs.nogroup-with-id,No group found with id,Ningún grupo se encontró con id
-servererrmssgs.group-deleted,or group has been deleted.,o grupo ha sido eliminado.
-servererrmssgs.register-invalid-email,Email should not be empty,El correo electrónico no debe estar vacía
-servererrmssgs.register-not-bussiness-email,Agile CRM needs your business email to signup,Ágil CRM necesita su correo electrónico de negocios para registrarse
-servererrmssgs.invalid-csv,Invalid CSV file,archivo CSV no válido
-servererrmssgs.empty-csv,Empty CSV,CSV vacía
-servererrmssgs.upgrade-enterprise,Please upgrade to Enterprise plan to use this feature.,Por favor&#44 actualice el plan de la empresa para utilizar esta función.
-servererrmssgs.queryfilter-enter-query,Please provide Query.,Sírvanse proporcionar consulta.
-servererrmssgs.trigger-change-invalid,Sorry&#44 this trigger is already being used by another user for a private campaign.,Lo sentimos&#44 este disparador ya está siendo utilizado por otro usuario para una campaña privada.
-servererrmssgs.campaign-not-urs,This Workflow is not related to yours.,Este flujo de trabajo no está relacionado con la suya.
-servererrmssgs.freshbooks-no-contacts,There are no contacts with this email.,No hay contactos con este correo electrónico.
-servererrmssgs.freshbooks-add-contact,To add this contact&#44; please send \\add,Para agregar este contacto&#44 por favor&#44 envíe \\ añadir
-servererrmssgs.salesforce-invalid-login,Invalid login. Please try again,Ingreso invalido. Por favor&#44 inténtelo de nuevo
-servererrmssgs.shopify-invalid-request,Invalid Request,Solicitud no válida
-servererrmssgs.contact-email-exists,Sorry&#44 a contact with this email already exists,En este momento&#44 un contacto con este correo electrónico ya existe
-servererrmssgs.custom-field-name-exists,Sorry&#44 a custom field with that name is already present.,En este momento&#44 un campo personalizado con ese nombre ya está presente.
-servererrmssgs.events-access-denied-to-delete,Event cannot be deleted because you do not have permission to update associated contact.,Evento no puede ser eliminada porque no tiene permiso para actualizar el contacto asociado.
-servererrmssgs.events-access-denied-to-delete-deal,Event cannot be deleted because you do not have permission to update associated deal.,Evento no puede ser eliminada porque no tiene permiso para actualizar cantidad asociada.
-servererrmssgs.events-access-denied-to-delete-contacts,Event cannot be created because you do not have permission to update associated contact(s).,Evento no puede ser creado&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.events-access-denied-to-delete-deals,Event cannot be created because you do not have permission to update associated deal(s).,Evento no puede ser creado&#44 ya que no tiene permiso para actualizar oferta (s) asociada.
-servererrmssgs.events-access-denied-to-update-contacts,Event cannot be updated because you do not have permission to update associated contact(s).,Evento no puede ser actualizado&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.events-access-denied-to-update-deals,Event cannot be updated because you do not have permission to update associated deal(s).,Evento no puede ser actualizado&#44 ya que no tiene permiso para actualizar oferta (s) asociada.
-servererrmssgs.task-access-denied-to-delete-contact,Task cannot be deleted because you do not have permission to update associated contact.,Tarea no puede ser eliminada porque no tiene permiso para actualizar el contacto asociado.
-servererrmssgs.task-access-denied-to-delete-deal,Task cannot be deleted because you do not have permission to update associated deal.,Tarea no puede ser eliminada porque no tiene permiso para actualizar cantidad asociada.
-servererrmssgs.task-access-denied-to-create-contacts,Task cannot be created because you do not have permission to update associated contact(s).,Tarea no puede ser creado&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.task-access-denied-to-create-deals,Task cannot be created because you do not have permission to update associated deal(s).,Tarea no puede ser creado&#44 ya que no tiene permiso para actualizar oferta (s) asociada.
-servererrmssgs.task-access-denied-to-update-contacts,Task cannot be updated because you do not have permission to update associated contact(s).,Tarea no puede ser actualizado&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.task-access-denied-to-update-deals,Task cannot be updated because you do not have permission to update associated deal(s).,Tarea no puede ser actualizado&#44 ya que no tiene permiso para actualizar oferta (s) asociada.
-servererrmssgs.note-access-denied-to-create-contacts,Note cannot be added because you do not have permission to update associated contact(s).,Nota No se puede agregar porque no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.note-access-denied-to-update-contacts,Note cannot be updated because you do not have permission to update associated contact(s).,Nota no puede ser actualizado&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.tag-add-permission-denied,does not exist. You don't have permissions to create a new Tag.,no existe. Usted no tiene permisos para crear una nueva etiqueta.
-servererrmssgs.deal-add-permission-denied,Deal cannot be created because you do not have permission to update associated contact(s).,Acuerdo no se puede crear porque no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.deal-update-permission-denied,Deal cannot be updated because you do not have permission to update associated contact(s).,Acuerdo no puede ser actualizado&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.document-detache-permission-denied,Document cannot be detached because you do not have permission to update associated contact.,El documento no se puede separar&#44 ya que no tiene permiso para actualizar el contacto asociado.
-servererrmssgs.document-detache-permission-denied-deal,Document cannot be detached because you do not have permission to update associated deal.,El documento no se puede separar&#44 ya que no tiene permiso para actualizar cantidad asociada.
-servererrmssgs.document-attach-permission-denied,Document cannot be attached because you do not have permission to update associated contact(s).,El documento no puede ser unida&#44 ya que no tiene permiso para actualizar el contacto (s) asociada.
-servererrmssgs.document-attach-permission-denied-deals,Document cannot be attached because you do not have permission to update associated deal(s).,El documento no puede ser unida&#44 ya que no tiene permiso para actualizar oferta (s) asociada.
-servererrmssgs.emails-content-length-exceeded,Email content length exceeded.,Email longitud del contenido excede.
-servererrmssgs.linkedin-not-allow-to-access-profile,LinkedIn doesn't allow you to access this profile,LinkedIn no permite tener acceso a este perfil
-servererrmssgs.amazon-ses-authorization-error,Authorization parameters access key&#44 secret key and region can neither be 'null' nor 'blank space' is accepted,parámetros de autorización tecla de acceso&#44 clave secreta y la región no puede ser ni &#39;nulo&#39; ni &#39;espacio en blanco&#39; es aceptado
-contact-detail-notes.add-call-log,Add Call Log
-builder.alternate-text,Alternate Text,Texto alternativo
-builder.link-to-web-link,Link to Web Address(URL),Enlace a la Web de direcciones (URL)
-builder.btn-align-right,Align buttons to Right,Alinear los botones a la derecha
-builder.btn-align-center,Align buttons to Center,Alinear botones para Centro
-builder.poll,Poll,Encuesta
-builder.add-one-more-btn,Add one more button,Añadir un botón más
-builder.font,Font,Fuente
-builder.browse,Browse,Vistazo
-builder.font-size,Font Size,Tamaño de fuente
-builder.tablet,tablet,tableta
-builder.button,Button,Button
-builder.bottom,bottom,fondo
-builder.you-cant-remove-all,you cannot remove all elements,no se puede eliminar todos los elementos
-builder.left,izquierda
-builder.click-me,Click me,Haz click en mi
-builder.bg-color,Background Color,Color de fondo
-builder.btn-align-left,Align buttons to Left,Alinear los botones a la izquierda
-builder.background,Background,Fondo
-builder.body,BODY,CUERPO
-builder.btn-title,Enter Button Title,Entre en el botón Título
-builder.done,done,hecho
-builder.image-text,Image+Text,Imagen + Texto
-builder.enter-tilte,Enter your Title here!,Introduzca su título aquí!
-builder.color,Color,Color
-builder.font-color,Font Color,Color de fuente
-builder.smartphone,smartphone,teléfono inteligente
-builder.btn-style,Button Style,Estilo botón
-builder.padding,Padding,Relleno
-builder.caption-image,Caption+Image,Leyenda + Imagen
-builder.size,Size,tamaño
-builder.builder-edit-info,This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.,Se trata de un bloque de texto! Haga clic en este texto para editarlo. Puede añadir contenido fácilmente arrastrando bloques de contenido desde la barra lateral derecha. Arrastre este y otros bloques para volver a pedir ellos.
-builder.your-sub-tilte,Your Subtitle,su Subtítulo
-builder.image-caption,Image+Caption,Imagen + Leyenda
-builder.edit-background,Edit background,Editar fondo
-builder.2-col-text,2 Column Text,Texto 2 Columna
-builder.add-link-to-btn,Add link to button,Añadir un enlace al botón
-builder.buttons,Buttons,Botones
-builder.font-style,Font style,Estilo de fuente
-builder.3-col-text,3 Column Text,Texto 3 Columna
-builder.2-col-image-text,2 Column Image+Text,Imagen de la columna 2 + Texto
-builder.top,top,parte superior
-builder.right,right,derecho
-builder.ipad,ipad,ipad
-builder.limit-reached,You have reached maximum limit,Has alcanzado el límite máximo
-builder.3-col-image-text,3 Column Image+Text,Imagen de la columna 3 + Texto
-builder.you-cant-remove,You can\'t remove this element,Puede \'t eliminar este elemento
-builder.name,Name,Nombre
-builder.social-links,Social Links,vínculos sociales
-builder.divider,Divider,Divisor
-others.no-results-found,No Results Found
-campaigns.all-campaigns-stats,All Campaign Emails
-others.no-results,No Results
-affiliate.no-affiliates-text,Please share your creatives with your network to get your referrals.
-affiliate.no-registered-deals-text,You can register deals before converting and track them in your referrals tab.
-affiliate.add,Register Deal
-other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease
-admin-settings-integrations.site-key,Site Key
-campaigns.reply-yes,Yes
-campaigns.reply-sms,Inbound SMS
-campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.
-campaigns.sms_trigger,SMS
-campaigns.reply-no,No
-campaigns.reply-number,Select a number
-campaigns.enter-keyword,Enter a keyword
-campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.
-campaigns.setuptwilio,Please enable your Twilio integration 
-campaigns.here,here.
-Help-center.mark-as-public-cannedmessage,Mark as Public
-portlets.Hours,Hours
-portlets.Minutes,Minutes
-portlets.Seconds,Seconds
-deal-view.detailed-notes,Detailed Notes
-tickets.feedback-subject,Subject
-tickets.feedback-created-time,Note Sent
-tickets.feedback-ticket-details,Ticket Details
-tickets.unacceptable,Unacceptable
-tickets.meets_expectations,Meets Expectations
-tickets.acceptable,Acceptable
-tickets.can_improve,Can Improve
-tickets.exceptional,Exceptional
-tickets.feedback-view-note,View Note
-tickets.feedback-contact,Contact
-tickets.feedback-feedback,Feedback
-tickets.feedback-feedback-comment,Comment
-tickets.feedback-feedback-modal,Feedback Comment
-tickets.feedback-nocomment,No comment available.
-tickets.feedback-ticket,Ticket
-tickets.feedback-all,All
-tickets.feedback-allgroups,All Groups
-calendar.double-quotes-not-allowed,Double quotes are not allowed in the message
-sync.sync-all-continue,Syncing of all contacts of other users will be initiated and this is expected to take some time. Do you want to continue?
-contacts-view.edited-call-log-to, Edited call log to
-contacts-view.deleted-call-log-to, Deleted call log to
-contacts-view.deleted-note-to, Deleted note to
-prefs-notifications.Deal_won, Deal_Won
-prefs-notifications.All_Domain_users, All_Domain_users
-prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.
-prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification)
-sync.all-contacts,Sync All Contacts
-other.campaign-webhooks-will-not-be-triggered,*Campaigns and Webhooks will be paused during import process
-typeahead.add-as-new-contact,Add as new Contact
-typeahead.add-as-new-company,Add as new Company
-verify-email.we-encourage-you-to-use-a-from-email-address-text-info,We encourage you to use a From email address at a domain owned by your organisation. Using free email providers like Gmail&#44; Yahoo&#44; AOL etc. emails may automatically get rejected.
-deals.activity-mode-deprecated-message,Note: Activity mode will be removed going forward.
-admin-settings-users.create-events,Create Events
-admin-settings-users.update-events,Update Events
-admin-settings-users.delete-events,Delete Events
-admin-settings-users.create-update-delete-events-content,Add and edit events owned by other users. Delete own and other user events
-admin-settings-users.view-events-owned-by-others,View events owned by other users
-contacts-view.download-csv-file,Download CSV File
-contacts-view.this-link-is-valid,This link is valid for 24 hours only.
+other.recaptcha-description,Protect your website from spam and abuse while letting real people pass through with ease,
+admin-settings-integrations.site-key,Site Key,
+campaigns.reply-yes,Yes,
+campaigns.reply-sms,Inbound SMS,
+campaigns.reply-sms-desc,Run a Campaign on a contact when a SMS with specified keyword is received on your Twilio Number.,
+campaigns.sms_trigger,SMS,
+campaigns.reply-no,No,
+campaigns.reply-number,Select a number,
+campaigns.enter-keyword,Enter a keyword,
+campaigns.keyword-tooltip,Enter the Keyword to be looked out for in the Incoming SMS.,
+campaigns.setuptwilio,Please enable your Twilio integration ,
+campaigns.here,here.,
+Help-center.mark-as-public-cannedmessage,Mark as Public,
+portlets.Hours,Hours,
+portlets.Minutes,Minutes,
+portlets.Seconds,Seconds,
+deal-view.detailed-notes,Detailed Notes,
+tickets.feedback-subject,Subject,
+tickets.feedback-created-time,Note Sent,
+tickets.feedback-ticket-details,Ticket Details,
+tickets.unacceptable,Unacceptable,
+tickets.meets_expectations,Meets Expectations,
+tickets.acceptable,Acceptable,
+tickets.can_improve,Can Improve,
+tickets.exceptional,Exceptional,
+tickets.feedback-view-note,View Note,
+tickets.feedback-contact,Contact,
+tickets.feedback-feedback,Feedback,
+tickets.feedback-feedback-comment,Comment,
+tickets.feedback-feedback-modal,Feedback Comment,
+tickets.feedback-nocomment,No comment available.,
+tickets.feedback-ticket,Ticket,
+tickets.feedback-all,All,
+tickets.feedback-allgroups,All Groups,
+calendar.double-quotes-not-allowed,Double quotes are not allowed in the message,
+sync.sync-all-continue,Syncing of all contacts of other users will be initiated and this is expected to take some time. Do you want to continue?,
+contacts-view.edited-call-log-to, Edited call log to,
+contacts-view.deleted-call-log-to, Deleted call log to,
+contacts-view.deleted-note-to, Deleted note to,
+prefs-notifications.Deal_won, Deal_Won,
+prefs-notifications.All_Domain_users, All_Domain_users,
+prefs-notifications.get-notified-when-Deal_wons,Get notified when a deal wons.,
+prefs-notifications.deal-is-closed-email, Deal is closed by any user(Email Notification),
+sync.all-contacts,Sync All Contacts,
+other.campaign-webhooks-will-not-be-triggered,*Campaigns and Webhooks will be paused during import process,
+typeahead.add-as-new-contact,Add as new Contact,
+typeahead.add-as-new-company,Add as new Company,
+verify-email.we-encourage-you-to-use-a-from-email-address-text-info,We encourage you to use a From email address at a domain owned by your organisation. Using free email providers like Gmail&#44; Yahoo&#44; AOL etc. emails may automatically get rejected.,
+deals.activity-mode-deprecated-message,Note: Activity mode will be removed going forward.,
+admin-settings-users.create-events,Create Events,
+admin-settings-users.update-events,Update Events,
+admin-settings-users.delete-events,Delete Events,
+admin-settings-users.create-update-delete-events-content,Add and edit events owned by other users. Delete own and other user events,
+admin-settings-users.view-events-owned-by-others,View events owned by other users,
+prefs-email.smtp-content,Send emails from your email provider.,Enviar mensajes de correo electrónico de su proveedor de correo electrónico.
+prefs-data-sync.smtp,SMTP,SMTP
+prefs-email.smtp,SMTP,SMTP
+prefs-email.smtp-note1,1. SMTP email address needs to be verified for sending emails&#44; in the 'From' section of Send Email.,1. dirección de correo electrónico SMTP debe ser verificado para el envío de mensajes de correo electrónico&#44; en la sección "De" de Enviar correo electrónico.
+prefs-email.smtp-note2,2. Emails with attachments will be sent through default gateway.,2. Mensajes de correo electrónico con archivos adjuntos serán enviados a través de puerta de enlace predeterminada.
+prefs-email.smtp-note3,3. SMTP will not work for Campaign and Bulk Emails.,3. SMTP no funcionará para Campaña y correos electrónicos masivos.
+report-view.won-deals-user, Won Deals Analysis
+report-view.won-deal-details,Get insights on deals won (count/revenue) by users over time
+prefs-notifications.for-ringcentral-only,For RingCentral Only
+portlets.email-subscription,Email Subscription
+portlets.branded-emails-details,Email Subscription Details
+plan-and-upgrade.andymailwain,Andy McIlwain
+plan-and-upgrade.content-community,Content & Community
+plan-and-upgrade.andymailwain-desc,Agile CRM has delivered significant improvements in efficiency and reliability for us. In the first month of integration&#44;  our business grew 270 percent.,
+plan-and-upgrade.brenton-brien,Brenton O'Brien
+plan-and-upgrade.managing-director-microbric,Managing Director-Microbric
+plan-and-upgrade.brenton-brien-desc,I’m really impressed with the way Agile CRM works. I LOVE the contact timeline!!! This is a killer feature. It means that in one place anyone on the team can see all the communications with a contact&#44;  even if an email was sent (IMAP) from outlook or web mail..,
+plan-and-upgrade.brian-juhl,Brian Juhl
+plan-and-upgrade.founder-aqivera,Founder – Aquivera
+plan-and-upgrade.founder-aqivera-desc,You guys are seriously the bomb friggin diggity. Keep the mail coming&#44;  I am impressed by your product. True disruption!,
+plan-and-upgrade.joão-camacho,João Camacho
+plan-and-upgrade.joão-camacho-coordenador,Coordenador – Ião.positivo
+plan-and-upgrade.joão-camacho-coordenador-desc,Very good application. I think for me it's the best one till now&#44;  and I know thousands of them. You are in the good road! Great!
+plan-and-upgrade.jeri-murphy,Jeri Murphy
+plan-and-upgrade.jeri-murphy-co-founder,Co Founder – WhichAddOn
+plan-and-upgrade.jeri-murphy-desc,We absolutely love Agile CRM. We recently upgraded to Enterprise and just working through to make sure we are using it the best of our ability. We will be in touch with further questions I'm sure. ,
+plan-and-upgrade.free-emails,Free Email
+plan-and-upgrade.free-emails-first-text,Please note that once you have purchased the email subscription&#44;  all the branded emails will be removed from your account.&#44;
+plan-and-upgrade.free-emails-branded,Free Emails
+plan-and-upgrade.sebastian-desc,One week testing #agilecrm and I think that I've finally found THE crm I was looking for. Thanks @agilecrm !
+plan-and-upgrade.sebastian-madrid,Madrid&#44;  www.panalespingo.es
+plan-and-upgrade.sebastian,Sébastien F
+plan-and-upgrade.unplug,UnPlug
+plan-and-upgrade.unplug-desc,After using @salesforce for years in big corps I've run a trial for it @unplughq vs @agilecrm - AgileCrm won by a mile #startup #SME #CRM
+plan-and-upgrade.unplug-auth,Dublin City&#44;  Ireland&#44;  www.unplug.ie
+plan-and-upgrade.deean-harper,Deeann Harper
+plan-and-upgrade.deean-harper-auth,Orlando&#44;  FL&#44;  www.harperadministrativeservices.com
+plan-and-upgrade.deean-harper-desc,I love when I find a product that is perfect for small businesses and @agilecrm is my new favorite! #smallbusiness #harperadmin,
+other.campaign-webhooks-will-not-be-triggered-new,*Webhooks & Triggers (Contact Added & Tag Added) will not be automatically run during contacts import. Triggers need to be run manually.
+documents.select-template,Select Template,
+documents.document-content,Content,
+documents.document-cance,Cancel,
+documents.document-sendemail,Send Email,
+documents.document-sendcomments,Send Comments,
+documents.document-typeoftemplate,Type of Template,
+documents.document-document-content,Document content,
+documents.document-what-are-docs-title,What are documents?,
+documents.document-what-are-docs-para1,1. Documents helps you to build and deliver sales quotes and proposals as well as track presentations and close deals faster with legally binding eSignatures.,
+documents.document-what-are-docs-para2,Generation,
+documents.document-what-are-docs-para3,of eDocument is based on Template Selected.Template content is merged with Contact and Deal Selected and rendered.,
+documents.document-what-are-docs-para4,3. Upload documents from computer and append them from cloud storage like Google Drive.,
+documents.document-what-are-docs-para5,Need more help? Please check the,
+documents.document-what-are-docs-para6,detailed documentation,
+deal-view.add-edocument,Add eDocument,
+documents.document-select-doc-template,Select eDocument Template,
+documents.document-add-doc-template,Add eDocument Template,
+documents.document-add-no-doc-template,There are no document templates,
+documents.document-add-template-throug-pref,You can add document templates through preferences.,
+documents.document-comments,Comments,
+documents.edoc-dicussion,eDocs Discussion,
+documents.deal-products,Products,
+documents.deal-select-products,Select Products,
+documents.deal-discount,Discount,
+documents.deal-discount-place-value,Enter Value,
+documents.pricing-table,Pricing Table,
+documents.document-edoc-dicussion,Discussion,
+products.add-product,Add Product,
+products.product,Product,
+products.product-price,Price,
+products.product-upload-image,Upload Image,
+products.product-recommended-image-size,Recommended Image Size,
+products.edit-product-details,Edit Product Details,
+products.new-product-details,New Product Details,
+products.product-qty,Qty,
+products.product-total,Total,
+products.product-enter-qty,Enter Qty,
+products.product-not-setup,You do not have any Products currently setup,
+products.discount-should-be-numeric,Discount should be numeric,
+products.discount-percent-cannot-greater,Discount percent cannot be greater than 100,
+products.discount-percent-cannot-less,Discount percent cannot be less than 0,
+products.atleast-one-product-should-select,Atleast one product should be selected to apply discount,
+products.discount-value-greater-total-product-value,Discount value cannot be greater than total products value,
+products.discount-value-cannot-less-that-zero,Discount value cannot be less than 0,
+document.document-templates,Document Templates,
+document.document-new-template,New Template,
+document.document-no-document-template,You do not have any Document Templates currently.,
+document.document-add-document-template-comment,You can add document template by clicking the button below or the one on the right side of the page.,
+document.document-add-document-template,Add Document Template,
+document.document-add-templates,Add Templates,
+document.document-generate,Generate,
+products.sub-total,Sub Total,
+products.current-sub-total,Current Subtotal,
+products.grand-total,Grand Total,
+products.add-comments,Add Comments,
+validation-msgs.script-element-not-allowed,< and > are not allowed,
+documents.please-relate-the-document-to-contact,Please relate the document to a contact.,
+other.campaign-webhooks-will-not-be-triggered-modified,Note : In order for the import to be super fast&#44; webhooks and related triggers will not run on these imported contacts. Please select these contacts (based on tag or created date) and run them manually.,
+email-builder.Newsletters,Newsletters
+email-builder.Notifications,Notifications
+email-builder.Celebrations,Celebrations
+dashlet-video.video-tooltip,Help Video,
+Plan-and-upgrade.widgets-limit-msg,Widgets with your current plan and are trying to subscribe with,
+Plan-and-upgrade.widgets,widgets.,
+Plan-and-upgrade.nodes-limit-msg,Campaign nodes with your current plan in one or more campaigns and are trying to subscribe with,
+Plan-and-upgrade.nodes,campaign nodes.,
+Plan-and-upgrade.emailAccounts-limit-msg,Email accounts with your current plan and are trying to subscribe with,
+Plan-and-upgrade.emailAccounts,email accounts.,
+Plan-and-upgrade.reports-limit-msg,Reports with your current plan and are trying to subscribe with,
+Plan-and-upgrade.reports,reports.,
+Plan-and-upgrade.smsGateway-limit-msg,We see that you already have an SMS gateway with your current plan and are trying to subscribe with,
+Plan-and-upgrade.smsGateway,SMS gateway.,
+Plan-and-upgrade.ecommerceSync-limit-msg,We see that you already have enabled Ecommerce sync with your current plan and are trying to subscribe with,
+Plan-and-upgrade.ecommerceSync,ecommerce sync.,
+Plan-and-upgrade.accountingSync-limit-msg,We see that you already have enabled Accounting sync integration with your current plan and are trying to subscribe with,
+Plan-and-upgrade.accountingSync,accounting sync.,
+Plan-and-upgrade.tracks-limit-msg,Tracks with your current plan and are trying to subscribe with,
+Plan-and-upgrade.tracks,tracks.,
+Plan-and-upgrade.below-features-in-plan,We see that you are using below features in your current plan&#44; which we do not support in,
+Plan-and-upgrade.plan,plan,
+Plan-and-upgrade.Users,Users,
+Plan-and-upgrade.Contacts,Contacts,
+Plan-and-upgrade.Campaigns,Campaigns,
+Plan-and-upgrade.Webrules,Webrules,
+Plan-and-upgrade.Triggers,Triggers,
+Plan-and-upgrade.Widgets,Widgets,
+Plan-and-upgrade.Nodes,Campaign Nodes,
+Plan-and-upgrade.EmailAccounts,Email Accounts,
+Plan-and-upgrade.Reports,Reports,
+Plan-and-upgrade.Tracks,Tracks,
+Plan-and-upgrade.SmsGateway,SMS Gateway,
+Plan-and-upgrade.EcommerceSync,E-Commerce Sync,
+Plan-and-upgrade.AccountingSync,Accounting Sync,
+Plan-and-upgrade.users-limit-msg,Users with your current plan and are trying to subscribe with,
+Plan-and-upgrade.contacts-limit-msg,Contacts with your current plan and are trying to subscribe with,
+Plan-and-upgrade.campaigns-limit-msg,Campaigns with your current plan and are trying to subscribe with,
+Plan-and-upgrade.webrules-limit-msg,Web rules with your current plan and are trying to subscribe with,
+Plan-and-upgrade.triggers-limit-msg,Triggers with your current plan and are trying to subscribe with,
+contacts-view.download-csv-file,Download CSV File,
+contacts-view.this-link-is-valid,This link is valid for 24 hours only.,
+sync.google-note, Google Contacts API provides predefined systems groups ’My Contacts’&#44 ‘Friends’&#44 ‘Family’ & ‘Coworkers’ that cannot be edited or deleted.,
+web-rules.webrule-analysis,Web Rule Analysis,
+web-rules.webrule-report,Web Rule Reports,
+web-rules.views,Total Views,
+forms.form-analysis,Form Analysis,
+forms.form-report,Form Reports,
+forms.submissions,Total Submissions,
+admin-settings-api-analytics.tracking-code-verification,Tracking Code Verification
+plan-and-upgrade.email-credits-tooltip-msg,Email credits can only be utilized once you have exhausted all your emails from email subscription.
+Plan-and-upgrade.your-invoice-of,Your invoice of
+Plan-and-upgrade.has-been-generated-on,has been generated on
+contacts-view.csv-file-desc-with-activity,We will email you the CSV file shortly and also show it in User Activities. Proceed?
+billing.addon-change-select,Please change the quantity to proceed
+web-rules.templates-sub-heading,Pick a Template
+theme.maximum-pagesize,Maximum Page Size,Máximo tamaño de página
+theme.showconverstionperpage,Show conversations per page,Mostrar conversaciones por página
+theme.new-menu-position,Menu Position,Posición del menú
+landingpage-builder.upload,Upload
+activity_message.deal_owner_change_to,Deal owner changed to
+activity_message.deal_milestone_change_to,Deal milestone changed to
+activity_message.deal_archive,Deal state changed to archive
+activity_message.deal_restore,Deal state changed to restore
+triggers.add-new,Add Trigger
+email-builder.add-new,Add Email Template
+web-rules.add-new,Add Web Rule
+forms.add-new,Add Form
+campaigns.add-new,Add Campaign
+account.cancel-addons,Cancel Add-ons
+account.delete-acl-subscription-confirm,Are you sure&#44; you want to cancel your Permissions Add-on subscription?
+account.delete-campaigns-subscription-confirm,Are you sure&#44; you want to cancel your Campaigns Add-on subscription?
+account.delete-triggers-subscription-confirm,Are you sure&#44; you want to cancel your Triggers Add-on subscription?
+others.mobile-notication,Mobile Notification,Notificaciones móviles
+others.mobile-notication-help-text,Show all Notifications in Mobile,Mostrar todas las notificaciones en Mobile
+others.mobile-notication-help-text-new-apk,Use AgileCRM latest build(apk),Utilice AgileCRM última versión (APK)
+leads-view.add-tags-to-selected-leads,Add tags to selected leads
+leads-view.remove-tags-from-selected-leads,Remove tags from selected leads
+leads-view.change-owner-to-leads-bulk,Change owner to leads bulk
+bulk-actions.leads-owner-change-scheduled,Leads owner change scheduled
+bulk-actions.leads-delete-scheduled,Leads delete scheduled
+leads.no-leads-pad-content-title,Leads are your customers or prospects that you interact with using Agile.
+leads.no-leads-pad-content,You do not have any leads currently.
+leads.leads-btn-text,Add Leads
+leads.leads-filter-results-title,No leads matching this criteria.
+leads.lead-filters-pad-content-desc,Filters are used to sort leads with a specific criteria to find patterns.
+menu.lead,Lead
+menu.leads,Leads
+leads-view.delete-lead,Delete Lead
+leads-view.csv-leads-import,CSV Leads Import
+leads-view.import-upto-10000-leads-from-a-CSV-file,Import upto 10&#44;000 leads from a CSV file
+leads-view.csv-leads-import-list,CSV Leads Import List
+leads-view.lead-source,Lead Source
+leads-view.lead-status,Lead Status
+leads-view.created-a-new-lead,Created a new Lead
+leads-view.lead-deleted-later,Lead deleted later.,El contacto se eliminará más tarde.
+leads-view.lead-assigned-to,Lead assigned to,Contacto asignado a
+leads-view.deleted-lead,Deleted Lead,Contacto eliminado
+leads-view.added-a-tag-to-lead,Added a Tag to Lead,Se ha añadido una etiqueta a Contacto
+leads-view.removed-a-tag-from-lead,Removed a Tag from Lead,Eliminó una etiqueta del Contacto
+leads-view.new-lead,New Lead
+leads-view.source,Source
+leads-view.select,Select
+leads-view.status,Status
+leads-view.edit-lead-filter,Edit Lead Filter
+leads-view.lead-filter-popover-content,Use filters to sort leads with a specific criteria to find patterns. You can save your preferred filters and fetch the leads based on saved preferences.
+leads-view.add-lead-filter,Add Lead Filter
+leads-view.never,never
+leads-view.manage-filters,Manage Filters
+leads-view.my-leads,My Leads
+leads-view.lead-filters,Lead Filters
+leads-view.lead-filters-desc,Filters are used to sort leads with a specific criteria to find patterns. You can save your preferred filters and fetch the leads based on saved preferences.
+leads-view.add-lead,Add Lead
+leads-view.leads,Lead(s)
+leads-view.import-success,Leads are now being imported. You will be notified on email when it is done
+leads-view.export-leads-in-CSV,Export Leads in CSV
+leads-view.change-status,Change Status
+leads-view.change-status-to-leads-bulk,Change status to leads bulk
+leads-view.select-status,Select Status
+bulk-actions.leads-status-change-scheduled,Leads status change scheduled
+leads-view.leads-were-updated-during-the-import,lead(s) were updated during the import.
+leads-view.changed-status-for,Changed status for 
+leads-view.status-changed-to,Status changed to
+leads-view.leads-assigned-to,Leads assigned to,Compañías asignadas a
+leads-view.edit-lead,Edit Lead
+leads-view.changed-owner-for-lead,Changed owner for Lead
+leads-view.sorry-this-lead-has-no-email-to-get-the-mails,Sorry! this lead has no email to get the mails
+billing.campaigns-addon-change-select,Please change number of campaigns & try again.,
+billing.triggers-addon-change-select,Please change number of triggers & try again.,
+
+builder.alternate-text,Alternate Text
+builder.link-to-web-link,Link to Web Address(URL)
+builder.btn-align-right,Align buttons to Right
+builder.btn-align-center,Align buttons to Center
+builder.poll,Poll
+builder.add-one-more-btn,Add one more button
+builder.font,Font
+builder.browse,Browse
+builder.font-size,Font Size
+builder.tablet,tablet
+builder.button,Button
+builder.bottom,bottom
+builder.you-cant-remove-all,you cannot remove all elements
+builder.left,left
+builder.click-me,Click me
+builder.bg-color,Background Color
+builder.btn-align-left,Align buttons to Left
+builder.background,Background
+builder.body,BODY
+builder.btn-title,Enter Button Title
+builder.done,done
+builder.image-text,Image+Text
+builder.enter-tilte,Enter your Title here!
+builder.color,Color
+builder.font-color,Font Color
+builder.smartphone,smartphone
+builder.btn-style,Button Style
+builder.padding,Padding
+builder.caption-image,Caption+Image
+builder.size,Size
+builder.builder-edit-info,This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.
+builder.your-sub-tilte,Your Subtitle
+builder.image-caption,Image+Caption
+builder.edit-background,Edit background
+builder.2-col-text,2 Column Text
+builder.add-link-to-btn,Add link to button
+builder.buttons,Buttons
+builder.font-style,Font style
+builder.3-col-text,3 Column Text
+builder.2-col-image-text,2 Column Image+Text
+builder.top,top
+builder.right,right
+builder.ipad,ipad
+builder.limit-reached,You have reached maximum limit
+builder.3-col-image-text,3 Column Image+Text
+builder.you-cant-remove,You can\'t remove this element
+builder.name,Name
+builder.social-links,Social Links
+builder.divider,Divider
