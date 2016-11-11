@@ -85,22 +85,23 @@ public class EmailOpenServlet extends HttpServlet
 	URL url = new URL(request.getRequestURL().toString());
 	String namespace = NamespaceUtil.getNamespaceFromURL(url);
 	
-	//code for IP filter on emails open
-	  System.out.println("Client IP is : "+ clientIPAddress);
-	  if(AnalyticsServlet.isBlockedIp(clientIPAddress, namespace))
-	  {
-		  System.out.println("Testing email open IP filter..");
-		  return;
-	  }
-	
-
 	if (StringUtils.isEmpty(namespace))
 	    return;
     
 	//If domain name is trackopen then fetch domain name from query param
-	
 	if(namespace.equals("trackopen"))
 		namespace = request.getParameter("ns");
+	
+	System.out.println("Redirect servlet domain name from url : " + namespace);
+	
+	//code for IP filter on emails open
+	  System.out.println("Client IP is : "+ clientIPAddress);
+	  if(AnalyticsServlet.isBlockedIp(clientIPAddress, namespace))
+	  {
+		  System.out.println("Eemail open IP filter block this tracking..");
+		  return;
+	  }
+	
 	
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(namespace);
