@@ -228,6 +228,7 @@ public class RedirectServlet extends HttpServlet
 					// Interrupt cron tasks of clicked.
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
 					
+				    return;
 		    	}
 		    	
 		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.TWEET))
@@ -237,6 +238,8 @@ public class RedirectServlet extends HttpServlet
 			    	
 					// Interrupt cron tasks of clicked.
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);
+				    
+				    return;
 					
 		    	}
 
@@ -254,6 +257,8 @@ public class RedirectServlet extends HttpServlet
 		    {
 		    	//If linked click is push notification then add push  notification linked log
 		    	TrackClickUtil.addPushNtificationClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    	
+		    	return;
 		    }
 		    else
 		    {
