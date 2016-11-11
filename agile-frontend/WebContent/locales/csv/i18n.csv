@@ -5519,7 +5519,7 @@ landingpage-builder.page-meta-desc-sm,Page meta description,La página de descri
 landingpage-builder.page-meta-keywords,Page Meta Keywords,Página Meta Keywords
 landingpage-builder.page-meta-keywords-sm,Page meta keywords,Palabras clave de la página meta
 landingpage-builder.page-header,Header Includes,Cabecera incluye
-landingpage-builder.page-header-info,Additional code you'd like to include in the,Código adicional que le gustaría incluir en el
+landingpage-builder.page-header-info,Additional code specifically to this page,,
 landingpage-builder.head-section,section,sección
 landingpage-builder.page-css,Page CSS,La página de CSS
 landingpage-builder.page-css-applied,CSS applied specifically to this page,CSS aplicado específicamente a esta página
@@ -5835,3 +5835,6 @@ calls.duration-secs-new,Call Duration (Min),
 calls.avg-duration-secs-new,Average Call Duration (Min),
 contacts-view.manage-filters,Manage Filter,
 portlets.+add-new,+ Add new,
+landingpage-builder.page-js-applied,Script applied specifically to this page (JavaSCript),,,,,,,,,,,,,,
+landingpage-builder.page-js,Page JS,La página de JS,,,,,,,,,,,,,
+
