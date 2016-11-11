@@ -13,8 +13,11 @@ function initializeDomainsearchListner(el){
             });
 	
 	});
-	
-	
+
+}
+
+$(document).ready(function(){
+
 	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
@@ -26,8 +29,8 @@ function initializeDomainsearchListner(el){
             });
 	
 	});
+});
 
-}
 
 
 function initializeAdminpanelListner(el){
