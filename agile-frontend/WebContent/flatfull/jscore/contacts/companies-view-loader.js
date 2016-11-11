@@ -181,6 +181,15 @@ var companies_view_loader = {
 		}
 	},
 
+	disableBulkActionBtns : function()
+	{
+		//After add or remove column, toggle list view, make SELECT_ALL false and remove check for select all checkbox
+		SELECT_ALL = false;
+		$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+		$("#bulk-action-btns button").addClass("disabled");
+		$("#companiesTabelView").removeClass("disabled");
+	},
+
 	buildCompaniesView : function(el, tag_id)
 	{
 		var that = this;

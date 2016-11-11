@@ -600,6 +600,19 @@ var LeadsViewLoader = (function(){
 	}
 
 	/*
+	 * To disbale bulk action buttons when add or remove columns, toggle list view
+	 * and make SELECT_ALL_LEADS as false
+	 *
+	 */
+	LeadsViewLoader.prototype.disableBulkActionBtns = function()
+	{
+		App_Leads.leadsBulkActions.SELECT_ALL_LEADS = false;
+        $(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+        $("#bulk-action-btns button").addClass("disabled");
+		$("#leadTabelView").removeClass("disabled");
+	},
+
+	/*
 	 * To build comlete leads list or grid view by invoke different functions.
 	 * Leads view contains filters (static and dynamic), sort options and view set up.
 	 *
