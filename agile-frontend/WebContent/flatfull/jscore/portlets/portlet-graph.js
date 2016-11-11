@@ -750,7 +750,7 @@ var portlet_graph_utility = {
 						       tooltip: {
 						        	formatter: function(){
 						        		var tt = '';
-						        		if(text=="{{agile_lng_translate 'calls' 'duration-secs'}}")
+						        		if(text=="{{agile_lng_translate 'calls' 'duration-secs-new'}}")
 						        			tt = '<table>' + 
 						        					'<tr><td  class="b-b-none"><u style="text-decoration:none;border-bottom:1px solid">'+domainUsersList[this.points[0].point.x]+'</u></td></tr>'+	
 					        		              '<tr><td style="color:'+this.points[0].series.color+';padding:0">'+					        		              
@@ -761,7 +761,7 @@ var portlet_graph_utility = {
 					        		        	  '<td style="padding:0"><b>'+totalCallsCountList[this.points[0].point.x]+'</b></td></tr>' +
 					        		        	  '</table>';
 					        		        	  
-						        		else if(text=="{{agile_lng_translate 'calls' 'avg-duration-secs'}}"){
+						        		else if(text=="{{agile_lng_translate 'calls' 'avg-duration-secs-new'}}"){
 						        			
 						        			tt += '<table>';
 						        			if(this.points[0]!=undefined && this.points[0].series!=undefined){

@@ -745,7 +745,7 @@ var portlet_graph_data_utility = {
 									});
 									tempData.data=callsDurationInMinsList;
 									series[0]=tempData;
-									text="{{agile_lng_translate 'calls' 'duration-secs'}}";
+									text="{{agile_lng_translate 'calls' 'duration-secs-new'}}";
 									colors=['green'];
 								}
 							portlet_graph_utility.callsPerPersonBarGraph(

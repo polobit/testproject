@@ -278,7 +278,7 @@ call_reports : function(url,reportType,graphOn){
 				    tempData.data=averageCallList;
 				    tempData.showInLegend=false;
 				    series[0]=tempData;
-				    text="{{agile_lng_translate 'calls' 'avg-duration-secs'}}";
+				    text="{{agile_lng_translate 'calls' 'avg-duration-secs-new'}}";
 				    colors=['green'];
 			}
 			else
@@ -297,7 +297,7 @@ call_reports : function(url,reportType,graphOn){
 				tempData.data=callsDurationInMinsList;
 				tempData.showInLegend=false;
 				series[0]=tempData;
-				text="{{agile_lng_translate 'calls' 'duration-secs'}}";
+				text="{{agile_lng_translate 'calls' 'duration-secs-new'}}";
 				colors=['green'];
 			}
 			portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList,undefined,averageCallList_temp);

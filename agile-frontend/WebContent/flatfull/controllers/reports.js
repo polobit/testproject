@@ -643,6 +643,7 @@ var ReportsRouter = Backbone.Router
 	               if(reportType == 'average-calls'){
 						graphOn='average-calls';
 						$('select[id="typeCall"]').find('option[value="average-calls"]').attr("selected",true);
+						$('.reports-calltype').text(_agile_get_translated_val('report-add','average-call-duration'));
 						
 					}else{
 						$('select[id="typeCall"]').find('option[value="number-of-calls"]').attr("selected",true);
