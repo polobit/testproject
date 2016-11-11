@@ -16,6 +16,7 @@ import com.googlecode.objectify.annotation.Unindexed;
  */
 @XmlRootElement
 @Cached
+@Unindexed
 public class URLShortener
 {
     /**
@@ -55,6 +56,12 @@ public class URLShortener
      * Shortener Url - "https://click.agilecrm.com/backend/click"
      */
     public static final String SHORTENER_URL = "http://agle.cc/";
+    
+    
+    /**
+     * Shortner Url for Beta
+     */
+    public static final String SHORTENER_BETA_URL = "https://click-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/click/";
     
     @Unindexed
     private String push = null;

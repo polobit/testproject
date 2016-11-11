@@ -117,6 +117,9 @@ public class URLShortenerUtil
 		    keyword = keyword.replace(" ", "_");
 		    keyword = keyword + "/";
 		}
+		
+		if(SystemProperty.applicationId.get().equals("agilecrmbeta"))
+			return URLShortener.SHORTENER_BETA_URL + keyword + domainKey + "-" + urlKey;;
 
 		return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;
 	}

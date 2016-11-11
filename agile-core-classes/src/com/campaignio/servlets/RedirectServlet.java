@@ -181,6 +181,9 @@ public class RedirectServlet extends HttpServlet
 	    // For personal emails campaign-id is blank  and checked ip address is blocked or not for mail notification
 	    if (StringUtils.isBlank(campaignId) && contact != null && IPFilterStatus == false)
 	    {
+	    	// In URLShortener we get from tracker Id
+	    	if(StringUtils.isBlank(personalEmailTrackerId))
+	    		personalEmailTrackerId = trackerId;
 	    	
 	    	// Save link clicked time
 	    	if(StringUtils.isNotBlank(personalEmailTrackerId))
@@ -236,22 +239,27 @@ public class RedirectServlet extends HttpServlet
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);
 					
 		    	}
-		    	
-		    	// Show notification
-				TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
-				
-				return;
+
+		    	// For Emails
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.EMAIL))
+		    	{
+		    		TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    		
+		    		// Show notification
+					TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
+		    	}
 		    	
 		    }
-		    
-		    //If linked click is push notification then add push  notification linked log
-		    if(pushNotificationLinked !=null)
+		    else if(pushNotificationLinked != null)
+		    {
+		    	//If linked click is push notification then add push  notification linked log
 		    	TrackClickUtil.addPushNtificationClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    }
 		    else
 		    {
 		    	TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
 	
-			// Show notification
+				// Show notification
 		    	TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
 		    }
 	    }
