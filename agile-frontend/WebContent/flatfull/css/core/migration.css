@@ -2022,7 +2022,6 @@ display: block!important;
  .m-l-63{
   margin-left: 63px !important;
  }
-
 }
 
 @media all and (min-width: 768px) {
@@ -2310,6 +2309,7 @@ display: block!important;
 .companytabListCenter .nav li a{ padding: 10px 4px !important;}
 .taskTabListCenter .nav li a{ padding-left: 12px; padding-right: 12px;}
 .grid_custom_popover .grid-sub-nav li{ width: 75px;}
+.calender-header #calendarAgendaButtons{margin-bottom: 5px;}
 }
 
 
