@@ -181,6 +181,9 @@ public class RedirectServlet extends HttpServlet
 	    // For personal emails campaign-id is blank  and checked ip address is blocked or not for mail notification
 	    if (StringUtils.isBlank(campaignId) && contact != null && IPFilterStatus == false)
 	    {
+	    	// In URLShortener we get from tracker Id
+	    	if(StringUtils.isBlank(personalEmailTrackerId))
+	    		personalEmailTrackerId = trackerId;
 	    	
 	    	// Save link clicked time
 	    	if(StringUtils.isNotBlank(personalEmailTrackerId))
