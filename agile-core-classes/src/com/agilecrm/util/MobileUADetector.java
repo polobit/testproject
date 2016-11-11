@@ -1,6 +1,8 @@
 package com.agilecrm.util;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 /**
  * Detect mobile User Agent
  *
@@ -27,5 +29,54 @@ public class MobileUADetector {
     public static boolean isMobileOrTablet(String ua) {
         return ua != null && (mobile_tablet_b.matcher(ua).find() ||
                 ua.length() >= 4 && mobile_tablet_v.matcher(ua.substring(0, 4)).find());
+    }
+    
+    static enum OS_NAME {
+    	WINDOWS, ANDRIOD, IOS, UNKNOWN
+    };
+    /**
+     * Determine the mobile operating system.
+     * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+     *
+     * @returns {String}
+     */
+    static OS_NAME getMobileOperatingSystem(String userAgent) {
+    	
+    	try {
+    		Pattern windows = Pattern.compile("/windows phone/", Pattern.CASE_INSENSITIVE);
+        	Pattern andriod = Pattern.compile("/android/", Pattern.CASE_INSENSITIVE);
+        	Pattern ios = Pattern.compile("/iPad|iPhone|iPod/", Pattern.CASE_INSENSITIVE);
+        	
+            // Windows Phone must come first because its UA also contains "Android"
+            if (windows.matcher(userAgent).find()) {
+                return OS_NAME.WINDOWS;
+            }
+
+            if (andriod.matcher(userAgent).find()) {
+                return OS_NAME.ANDRIOD;
+            }
+
+            // iOS detection from: http://stackoverflow.com/a/9039885/177710
+            if (ios.matcher(userAgent).find()) {
+                return OS_NAME.IOS;
+            }
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+        
+        return OS_NAME.UNKNOWN;
+    }
+    
+    public static boolean isWindows(String ua) {
+    	return getMobileOperatingSystem(ua).equals(OS_NAME.WINDOWS);
+    }
+    
+    public static boolean isAndriod(String ua) {
+    	return getMobileOperatingSystem(ua).equals(OS_NAME.ANDRIOD);
+    }
+    
+    public static boolean isiPhone(String ua) {
+    	return getMobileOperatingSystem(ua).equals(OS_NAME.IOS);
     }
 }

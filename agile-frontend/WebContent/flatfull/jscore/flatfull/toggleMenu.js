@@ -81,6 +81,7 @@ $("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
 
 $("#help-options").click(function(e){
 	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
+	agile_toggle_chat_option_on_status();
 
 });
 

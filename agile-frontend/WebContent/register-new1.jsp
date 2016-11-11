@@ -27,6 +27,12 @@ pageEncoding="UTF-8"%>
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
+  
+  String shopifyUserEmail = request.getParameter("merchant_email");
+  String shopifyUserName = request.getParameter("merchant_name");
+  if(StringUtils.isBlank(shopifyUserName))
+	  shopifyUserName = "";
+  
 
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
@@ -73,6 +79,8 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  }
 	
   }
+  if(StringUtils.isNotBlank(shopifyUserEmail))
+	  registered_email = shopifyUserEmail; 
   
 //Get the language and save as cookie
 String _LANGUAGE = request.getParameter("lang");
@@ -221,7 +229,7 @@ if(isSafari && isWin)
 
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
-<input class="input-xlarge field required form-control no-border" name='name'
+<input class="input-xlarge field required form-control no-border" name='name' value="<%=shopifyUserName%>"
 											type="text" required maxlength="50" minlength="3" title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "name-validation")%>' 
                       pattern="[a-zA-Z0-9\s]+"
 											oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "full-name")%>' autocapitalize="off" autofocus>
