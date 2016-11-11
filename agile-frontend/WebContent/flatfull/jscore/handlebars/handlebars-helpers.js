@@ -7299,15 +7299,16 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						switch(selected_li_id){
-							case 'SalesDashboard':
-							    options_el += getTemplate("js-sales-dashboards-options-newui");
+
+						switch(CURRENT_DOMAIN_USER.role){
+							case 'SALES':
+							    return options_el += getTemplate("js-sales-dashboards-options-newui");
 							    break;
-							case 'MarketingDashboard':
-								options_el += getTemplate("js-marketing-dashboards-options-newui");
+							case 'MARKETING':
+								return options_el += getTemplate("js-marketing-dashboards-options-newui");
 								break;
-							case 'dashboard' :
-								options_el += getTemplate("js-service-dashboards-options-newui");
+							case 'SERVICE' :
+								return options_el += getTemplate("js-service-dashboards-options-newui");
 								break;
 						}	
 						
@@ -7319,17 +7320,18 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
-				//options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
-				switch(selected_li_id){
-							case 'SalesDashboard':
-							    options_el += getTemplate("js-sales-dashboards-options-newui");
-							    break;
-							case 'MarketingDashboard':
-								options_el += getTemplate("js-marketing-dashboards-options-newui");
-								break;
-							case 'dashboard' :
-								options_el += getTemplate("js-service-dashboards-options-newui");
-								break;
+				
+				//options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";		
+				switch(CURRENT_DOMAIN_USER.role){
+					case 'SALES':
+					    return options_el += getTemplate("js-sales-dashboards-options-newui");
+					    break;
+					case 'MARKETING':
+						return options_el += getTemplate("js-marketing-dashboards-options-newui");
+						break;
+					case 'SERVICE' :
+						return options_el += getTemplate("js-service-dashboards-options-newui");
+						break;
 				}	
 			}			
 		}
