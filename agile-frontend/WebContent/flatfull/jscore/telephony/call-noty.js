@@ -284,6 +284,14 @@ if(message.state == "connected"){
 	var btns = [];
 	showDraggableNoty(widgetype, globalCall.contactedContact , "busy", globalCall.callNumber, btns);
 	
+}else if(message.state == "noanswer" || message.state == "not_answered"){
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "Not Answered", globalCall.callNumber, btns);
+	
+}else if(message.state == "answered"){
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "answered", globalCall.callNumber, btns);
+	
 }else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
 	closeCallNoty(true);
 }
@@ -336,7 +344,10 @@ function showBriaCallNoty(message){
 			// write new noty code here ...
 
 }
-
+function showOzonetelCallNoty(message){
+	ShowWidgetCallNoty(message);
+	return;
+}
 
 //added by prakash for skype call notification
 function showSkypeCallNoty(message){
@@ -417,7 +428,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		}
 	}
 	
-	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed"){
+	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered" || s == "answered"){
 		$("#draggable_noty").show().delay(5000).hide(1);
 	}
 }
@@ -490,6 +501,10 @@ function makeDraggableMessage(status){
 		return "Call Failed";
 	}else if(status == "busy"){
 		return "Call Busy";
+	}else if(status == "Not Answered"){
+		return "Call not answered";
+	}else if(status == "answered"){
+		return "Call completed";
 	}else if(status == "dialing"){
 		return "Dialing <img src='/img/ajax-loader-cursor.gif' width='15px' height='5px'  style='margin-left:8px;margin-right:-3px;'></img>";
 	}else{

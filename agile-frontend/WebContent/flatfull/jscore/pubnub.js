@@ -20,12 +20,15 @@ function initToPubNub(callback)
 	head.js(protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js', function()
 	{
 		// CREATE A PUBNUB OBJECT
-		Pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274', 'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90',
-			ssl : true, origin : 'pubsub.pubnub.com', });
+		/*Pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274', 'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90',
+			ssl : true, origin : 'pubsub.pubnub.com', });*/
 		// Get compatibility with all browsers.
 		// Pubnub.ready();
 
 		// Subscribe to client channel. Receive tweet from social server.
+		Pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-6b11bf61-b2c4-4662-83da-003dea06707f', 'subscribe_key' : 'sub-c-20574022-a7e6-11e6-80fa-02ee2ddab7fe',
+			ssl : true, origin : 'pubsub.pubnub.com', });
+
 		subscribeClientChannel(callback);
 	});
 }
@@ -46,6 +49,7 @@ function subscribeClientChannel(callback)
 			}catch(e){
 				return;
 			}
+			alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).from);
 			if((message || {}).type  == "call"){
 				handleCallRequest(message);
 			}else{

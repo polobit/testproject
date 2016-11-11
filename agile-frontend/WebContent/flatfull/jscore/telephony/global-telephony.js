@@ -583,6 +583,13 @@ function handleCallRequest(message)
 		showSkypeCallNoty(message);
 		return;
 	
+		}else if((message || {}).callType == "Ozonetel"){
+			var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
+			if( index == -1){
+				sendCommandToClient("notConfigured","Ozonetel");
+				return;
+			}
+			showOzonetelCallNoty(message);
 		}
 }
 
