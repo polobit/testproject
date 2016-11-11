@@ -92,9 +92,9 @@
         <li class="dropdown hide add-modal-mobile visible-xs pull-right wrapper-sm p-t p-r-md" id="menu1"><a class="dropdown-toggle"data-toggle="dropdown" href=""><i class="icon-plus"></i></a>
                 <ul class="dropdown-menu  animated fadeInRight mobile-add-modals" role="menu">
                   <li><a href="#personModal"  class="person" id="person">
-                      <div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
                   <li><a href="#companyModal"  data-toggle="modal"
-                    id="company"> <div class="pull-left">Company</div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
+                    id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company")%></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
                      <%
                     if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
                   %>
