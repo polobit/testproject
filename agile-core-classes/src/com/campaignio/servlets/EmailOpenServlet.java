@@ -96,7 +96,12 @@ public class EmailOpenServlet extends HttpServlet
 
 	if (StringUtils.isEmpty(namespace))
 	    return;
-
+    
+	//If domain name is trackopen then fetch domain name from query param
+	
+	if(namespace.equals("trackopen"))
+		namespace = request.getParameter("ns");
+	
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(namespace);
 

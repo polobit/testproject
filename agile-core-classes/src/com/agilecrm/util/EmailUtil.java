@@ -37,6 +37,8 @@ public class EmailUtil
     // Agile emails - to avoid count when emails are sent to Agile support
     public static String[] agileEmails = { "care@agilecrm.com", "sales@agilecrm.com" };
     public static List<String> agileEmailsList = Arrays.asList(agileEmails);
+    
+    public static final String OPEN_TRACKING_URL = "https://agle.me/open";
 
     /**
      * Parses html body of an email using jsoup.
@@ -165,7 +167,10 @@ public class EmailUtil
      **/
     public static String appendTrackingImage(String html, String campaignId, String trackerId)
     {
-	String queryParams = "";
+      // Adding domain name in query param
+	String queryParams = "ns=" + NamespaceManager.get() + "&";
+	
+	
 
 	// Campaign-id
 	if (!StringUtils.isEmpty(campaignId))
@@ -178,9 +183,9 @@ public class EmailUtil
 	// Contact id (for campaigns) or Tracker Id (for personal emails)
 	if (!StringUtils.isEmpty(trackerId))
 	    queryParams += "s=" + trackerId;
-
+	
 	String trackingImage = "<div class=\"ag-img\"><img src="
-	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
+	        + OPEN_TRACKING_URL + "?" + queryParams
 	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
