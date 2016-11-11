@@ -177,17 +177,17 @@ public class EmailUtil
     public static String appendTrackingImage(String html, String campaignId, String trackerId)
     {
       // Adding domain name in query param
-	String queryParams = "ns=" + NamespaceManager.get() + "&";
+	String queryParams ="";
 	
+	String domain =  NamespaceManager.get() ;
 	
-
+	//domain name
+	if(!StringUtils.isEmpty(domain))
+	    queryParams = "ns=" + NamespaceManager.get() + "&";
+	
 	// Campaign-id
 	if (!StringUtils.isEmpty(campaignId))
-	    queryParams = "c=" + campaignId;
-
-	/*// If not emtpy add '&'
-	if (!StringUtils.isEmpty(queryParams))
-	    queryParams += "&";*/
+	    queryParams = "c=" + campaignId + "&";
 
 	// Contact id (for campaigns) or Tracker Id (for personal emails)
 	if (!StringUtils.isEmpty(trackerId))
