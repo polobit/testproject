@@ -523,12 +523,22 @@ public class SendgridInboundParser extends HttpServlet
 		 */
 		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
 
-		String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
-
-		System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
-
-		if (toAddressArray.length < 2)
+		//String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
+		/*
+		 * Domain name might have _ in it. So, we need to consider the case
+		 * where there is _ in the domain name
+		 */
+		String[] toAddressArray = new String[2];
+		String temp = toAddress.replace(inboundSuffix, "");
+		int index = temp.lastIndexOf('_');
+		
+		if( index != -1 )
 		{
+			toAddressArray[0] = temp.substring(0, index);
+			toAddressArray[1] = temp.substring(index + 1);
+			System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
+		} else {
+			// No _ found in the toAddress. Check for + as delimiter
 			// Earlier we have provided forwarding email's with plus delimeter.
 			// This is fall-back code to handle those addresses.
 			toAddressArray = toAddress.replace(inboundSuffix, "").split("\\+");
