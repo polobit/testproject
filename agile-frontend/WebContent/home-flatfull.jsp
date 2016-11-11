@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.user.access.AdminPanelAccessScopes"%>
 <%@page import="com.itextpdf.text.log.SysoCounter"%>
 <%@page import="com.agilecrm.util.CookieUtil"%>
@@ -1043,11 +1044,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
                   %>
                   <li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
-                  
+
+                  <% if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
+                	    if(!MobileUADetector.isiPhone(request.getHeader("user-agent"))) {
+                  %>
                   <li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+                      <%}%>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
+                  <%}%>
                   <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
                   <li><a href="<%=logoutURL%>"><!-- <i class="icon-off"></i> -->
