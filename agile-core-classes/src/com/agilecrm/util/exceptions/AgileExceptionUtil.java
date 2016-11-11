@@ -14,12 +14,16 @@ public class AgileExceptionUtil {
 
 	// To Emails
 	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@agilecrm.com,govind@agilecrm.com";
-	static final String SALES_TEAM_ERRORS_EMAILS = "mogulla@agilecrm.com,govind@agilecrm.com";
-	static final String MA_TEAM_ERRORS_EMAILS = "mogulla@agilecrm.com,govind@agilecrm.com";
-	static final String TICKET_TEAM_ERRORS_EMAILS = "mogulla@agilecrm.com,govind@agilecrm.com";
+	static final String SALES_TEAM_ERRORS_EMAILS = "subrahmanyam@agilecrm.com,nidhi@agilecrm.com";
+	static final String MA_TEAM_ERRORS_EMAILS = "naresh@faxdesk.com,ramesh@agilecrm.com";
+	static final String TICKET_TEAM_ERRORS_EMAILS = "rohit@agilecrm.com";
+	static final String INTEGRATIONS_TEAM_ERRORS_EMAILS = "sri@agilecrm.com";
+	
+	static final String COMMON_TEAM_ERRORS_EMAILS = CORE_TEAM_ERRORS_EMAILS + "," + SALES_TEAM_ERRORS_EMAILS + "," + MA_TEAM_ERRORS_EMAILS + 
+			"," + TICKET_TEAM_ERRORS_EMAILS + "," + INTEGRATIONS_TEAM_ERRORS_EMAILS;
 
 	// From Email
-	static final String ERRORS_EMAIL_FROM = "errors@agilecrm.com";
+	static final String ERRORS_EMAIL_FROM = "noreply@agilecrm.com";
 	static final String ERRORS_EMAIL_FROM_NAME = "Application Error";
 
 	public static void handleException(Exception e) {
@@ -34,7 +38,6 @@ public class AgileExceptionUtil {
 			Queue queue = QueueFactory.getQueue(AgileQueues.AGILE_APP_ERRORS_QUEUE);
 			AgileExceptionEmail task = new AgileExceptionEmail(e.getMessage(), ExceptionUtils.getFullStackTrace(e),
 					getToEmail(e));
-
 			queue.add(TaskOptions.Builder.withPayload(task));
 		} catch (Exception e2) {
 		}
@@ -49,7 +52,7 @@ public class AgileExceptionUtil {
 
 	static String getToEmail(Exception e) {
 		if (e instanceof NullPointerException)
-			return SALES_TEAM_ERRORS_EMAILS;
+			return CORE_TEAM_ERRORS_EMAILS;
 
 		return CORE_TEAM_ERRORS_EMAILS;
 	}
