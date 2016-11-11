@@ -181,12 +181,12 @@ function agile_toggle_chat_option_on_status(){
 	clickdesk_livechat_get_current_status(function(status){
 		//var $li = $("#clickdesk_live_chat").closest("li");
 		var $li = $("#clickdesk_live_chat").find(".chat-bubble");
-		$li.removeClass("none block");
+		//$li.removeClass("none block");
 		
     	if(status == "online")
-	    	$li.addClass("block");
+	    	$li.removeClass("hide");
 	    else 
-	    	$li.addClass("none");
+	    	$li.addClass("hide");
     });
 }
 
