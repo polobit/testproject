@@ -423,6 +423,9 @@ if(isSafari && isWin)
 	
                   
 		<script type="text/javascript">
+		    // Save mobile device GCM Id
+		    var registrationId = '<%=registrationId%>';
+
 			// localStorage setup
 			var _agile_storage = {
 				key : "_agile_user_fingerprint",
@@ -478,6 +481,10 @@ if(isSafari && isWin)
 			});
 
 			var localeJSON = <%=localeJSON%>;
+
+			// Save mobile device Id to localstorage
+			if(registrationId)
+				 _agile_storage.set(registrationId, "_agile_GCM_Id");
 			
 		</script>
 		

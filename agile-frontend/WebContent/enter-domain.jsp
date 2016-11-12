@@ -180,6 +180,9 @@ padding-left:10px!important;
 						   	   name="subdomain" class="input-xlarge  required form-control no-border w pull-left" autocapitalize="off"><div class="inline-block m-t-xs">.agilecrm.com</div><div class="clearfix"></div>
 				</div>
 			</div>
+			<%if(StringUtils.isNotBlank(registrationId)) {%>
+						 <input class="hide" id="registrationId" name="registrationId" value="<%=registrationId%>"></input>
+			<%} %>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>'>
 		</form>
 	 	<div class="text-center text-white m-t m-b">
