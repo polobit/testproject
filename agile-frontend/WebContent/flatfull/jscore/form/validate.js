@@ -345,6 +345,15 @@ function isValidForm(form) {
 		}
 		return true;
 	}, _agile_get_translated_val("validation-msgs",'url'));
+	
+	//Number validation for Deals by trimming
+	jQuery.validator.addMethod("number_with_trim", function(value, element){
+		
+		if(value=="")
+			return false;
+		
+		return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value.trim());
+	}," Please enter a valid number.");
     
 	$(form).validate({
 		ignoreTitle: true,
