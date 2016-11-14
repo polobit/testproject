@@ -314,6 +314,25 @@ function isValidForm(form) {
  					return false;
  		}
  	},"{{agile_lng_translate 'validation-msgs' 'verify-email'}}");
+	
+	
+	// Phone number validation with extension
+	jQuery.validator.addMethod("phone-ext", function(value, element){
+		if(this.optional(element))
+			return true;
+		
+			var regE1 = new RegExp("^(.*[;]+.*)$");
+			var regE2 = new RegExp("^(.+[\;][0-9\*\#]+)$");
+			if(regE1.test(value)){
+				if(regE2.test(value)){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return true;
+			}
+		},_agile_get_translated_val("validation-msgs",'Pls-enter-a-valid-ext-no'));	
 
 	jQuery.validator.addMethod("month_date", function(value, element){
 		if(value=="")
