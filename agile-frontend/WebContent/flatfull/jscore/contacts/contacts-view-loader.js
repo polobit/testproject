@@ -32,6 +32,10 @@ var contacts_view_loader = {
 			App_Contacts.contactsListView = undefined;
 			CONTACTS_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+
 		var that = this;
 		var url = this.getContactsUrl(tag_id);
 		var slateKey = getContactPadcontentKey(url);

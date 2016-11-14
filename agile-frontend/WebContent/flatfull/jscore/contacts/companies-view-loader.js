@@ -32,6 +32,10 @@ var companies_view_loader = {
 			App_Companies.companiesListView = undefined;
 			COMPANIES_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+		
 		var that = this;
 		var url = this.getCompaniesUrl(tag_id);
 		var slateKey = getCompanyPadcontentKey(url);

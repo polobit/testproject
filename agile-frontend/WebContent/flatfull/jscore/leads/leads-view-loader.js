@@ -58,6 +58,10 @@ var LeadsViewLoader = (function(){
 			App_Leads.leadsListView = undefined;
 			LEADS_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+
 		var that = this;
 		var url = this.getLeadsUrl(tag_id);
 		var slateKey = getLeadPadcontentKey(url);
