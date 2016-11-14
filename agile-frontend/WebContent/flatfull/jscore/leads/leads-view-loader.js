@@ -58,6 +58,10 @@ var LeadsViewLoader = (function(){
 			App_Leads.leadsListView = undefined;
 			LEADS_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+
 		var that = this;
 		var url = this.getLeadsUrl(tag_id);
 		var slateKey = getLeadPadcontentKey(url);
@@ -598,6 +602,19 @@ var LeadsViewLoader = (function(){
 			$('#leads-import', el).html(App_Leads.importLeadsView.render().el);
 		}
 	}
+
+	/*
+	 * To disbale bulk action buttons when add or remove columns, toggle list view
+	 * and make SELECT_ALL_LEADS as false
+	 *
+	 */
+	LeadsViewLoader.prototype.disableBulkActionBtns = function()
+	{
+		App_Leads.leadsBulkActions.SELECT_ALL_LEADS = false;
+        $(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+        $("#bulk-action-btns button").addClass("disabled");
+		$("#leadTabelView").removeClass("disabled");
+	},
 
 	/*
 	 * To build comlete leads list or grid view by invoke different functions.

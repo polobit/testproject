@@ -32,6 +32,10 @@ var companies_view_loader = {
 			App_Companies.companiesListView = undefined;
 			COMPANIES_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+		
 		var that = this;
 		var url = this.getCompaniesUrl(tag_id);
 		var slateKey = getCompanyPadcontentKey(url);
@@ -179,6 +183,15 @@ var companies_view_loader = {
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
 		}
+	},
+
+	disableBulkActionBtns : function()
+	{
+		//After add or remove column, toggle list view, make SELECT_ALL false and remove check for select all checkbox
+		SELECT_ALL = false;
+		$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+		$("#bulk-action-btns button").addClass("disabled");
+		$("#companiesTabelView").removeClass("disabled");
 	},
 
 	buildCompaniesView : function(el, tag_id)

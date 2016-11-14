@@ -60,8 +60,8 @@ var Leads_Header_Events_View = Base_Model_View.extend({
     		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
     	}
     	$(e.currentTarget).parent().parent().toggleClass("compact");
-    	$(".thead_check", $("#content")).prop("checked", false);
-		App_Leads.leadsViewLoader.getLeads(App_Leads.leadViewModel, $("#content"));
+    	App_Leads.leadsViewLoader.disableBulkActionBtns();
+        App_Leads.leadsViewLoader.getLeads(App_Leads.leadViewModel, $("#content"));
     },
 
     addOrRemoveLeadColumns : function(e)
@@ -85,6 +85,8 @@ var Leads_Header_Events_View = Base_Model_View.extend({
 			data :JSON.stringify(json),
 			success : function(data)
 			{
+                App_Leads.leadsViewLoader.disableBulkActionBtns();
+                
 				App_Leads.leadViewModel = data;
 				App_Leads.leadsViewLoader.fetchHeadings(function(modelData){
 					App_Leads.leadsViewLoader.getLeads(modelData, $("#content"));
