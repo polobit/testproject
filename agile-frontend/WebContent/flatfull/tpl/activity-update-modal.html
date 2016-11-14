@@ -14,17 +14,17 @@
                     <input type="hidden"  name="current_div" id="current_div"/>
                     <input type="hidden"  name="type" id="type" value="{{type}}"/>
                      <input type="hidden"  name="meeting_type" id="meeting_type"/>
-                    <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
+                    <div id="addEvent" class="control-group form-group">
                             <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'event-name'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                                 <input id="title" placeholder="{{agile_lng_translate 'tasks' 'name-of-event'}}" type="text" name="title" class="required form-control" />
                             </div>
                     </div>
-                    <div class="text-muted">
+                   <!--  <div class="text-muted">
                             <div class="col-sm-offset-3 col-sm-7" {{#is_mobile}} style="padding-left: 0px !important;font-size: 11px;" {{else}} style="font-size:12px;margin-bottom:10px;padding-left: 9px"{{/is_mobile}}>
                                  {{agile_lng_translate 'tasks' 'events-description'}}
                             </div>
-                    </div>
+                    </div> -->
 
                     <div class="control-group form-group">
                             <label for="priority_type" class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'priority'}}</label>
