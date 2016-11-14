@@ -163,6 +163,7 @@ String registrationId = request.getParameter("registrationId");
 body {
 	
 	<% 
+	String userAgent = request.getHeader("user-agent");
 	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 
 		background-color: #f0f3f4;
@@ -401,6 +402,7 @@ if(isSafari && isWin)
   			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 		id="mobile"
 	<% }else {  %> <%}%> >
+	<%if(!MobileUADetector.isiPhone(userAgent)) {%>
 	<div class="text-center tags-color text-white m-t m-b" >
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with")%></small> 
 		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
@@ -408,6 +410,7 @@ if(isSafari && isWin)
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>?</small> <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%></a><br/>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 		</div>
+	<%} %>
 	</div>
 		
 		</form>
