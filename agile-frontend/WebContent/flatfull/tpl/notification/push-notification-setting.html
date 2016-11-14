@@ -123,21 +123,36 @@
                 </div>
                
                <div class="control-group form-group">
-                      <label class="control-label col-sm-4 col-xs-12">Destination URL</label>
+                      <label class="control-label col-sm-4 col-sm-5">Destination URL
+
+                      <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-content="URL to open when user clicks the push notification." id="element" data-trigger="hover">
+               </span> 
+
+                      </label>
                 	 <div class="controls col-sm-6 col-xs-12">
                     	 <input type="url" placeholder="Destination url" class="form-control" id="notification-link" name="notificationLink"/>
-                    	 <p class="help-block m-b-none">URL to open when user clicks the push notification.</p>
+                    	 
                     </div>
                 </div>
 
                 <div class="control-group form-group">
-                      <label class="control-label col-sm-4 col-xs-12">Image URL</label>
+                      <label class="control-label col-sm-4 col-sm-5">Image URL
+                      <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-content="Image address url (Recommended 200*200 px)" id="element" data-trigger="hover">
+               </span> 
+                      </label>
                 	 <div class="controls col-sm-6 col-xs-12">
                     	 <input type="url" placeholder="Image url" class="form-control" id="notification-icon" name="notificationIcon"/>
-                    	 <p class="help-block m-b-none">Image address url (Recommended 200*200 px)</p>
-                	</div>
+                    	</div>
                 	 <a class="btn btn-xs btn-default" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() " style="margin-top:11px;">Upload</a>
 			        <input type="file" id="uploadIconToS3Btn" class="hidden">
+                </div>
+
+              
+                 <div class="control-group form-group" >
+                <div class="control-label col-sm-2 col-sm-12" id="dynamic-img-change" ></div>
+                <img id="prev-notification-icon" class="js-custom-notifications-image img-rounded" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 7%;margin-left: 111px;margin-top: -14px;">
+                <img src="moustiers-sainte-marie.jpg" alt="" style="width:7%;margin-left: 3px; margin-top: -14px;">
+                <img class="img-rounded" src="cinqueterre.jpg" alt="" style="width:7%;margin-left: -14px; margin-top: -14px;">
                 </div>
 
                <div class="control-group form-group">
@@ -178,10 +193,10 @@
                        <div class="col-md-3 col-xs-3" style="width: 20%">
                             <img id="prev-notification-icon" class="js-custom-notifications-image" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 130%;">
                         </div>
-                            <div class="col-md-9 col-xs-9" style="padding-left: 20px; letter-spacing:1px;">
+                            <div class="col-md-9 col-xs-9" style="padding-left: 20px; letter-spacing:1px; ">
                                 <p style="margin-top:5px; color: black;" id = "prev-notification-title" class="h4">Push notification is live </p>
-                                <p style="line-height:1.4;margin-top:8px;color: black;" id="prev-notification-message" class="h5 p-b-sm">Engage with your customers on and off the webpage through push notifications. </p>
-                                <p  style="color: #989898;" class="h6 p-b-xs"><b>domain.agilecrm.com</b> </p>
+                                <p style="line-height:1.4;margin-top:8px;color: #1d1d1d;" id="prev-notification-message" class="h5 p-b-sm">Engage with your customers on and off the webpage through push notifications. </p>
+                                <p  style="color: #6f7273; font-size: 15px;" class="h6 p-b-xs">domain.agilecrm.com</p>
                             </div>
                         </div>
                     </div>
