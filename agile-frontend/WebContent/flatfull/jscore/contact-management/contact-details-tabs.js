@@ -1050,7 +1050,8 @@ function fetchContactCompanyHeadings(callback,url)
 
 function getContactofCompanies(modelData,el,companyId)
 {
-						var url = 'core/api/contacts/related/' + companyId;
+		disableCompanyContactsBulkActionBtns();
+		var url = 'core/api/contacts/related/' + companyId;
 		var slateKey = getContactPadcontentKey(url);
 		//var postData = {'filterJson': contacts_view_loader.getPostData()};
 		//var sortKey = contacts_view_loader.getContactsSortKey();
@@ -1091,3 +1092,12 @@ function getContactofCompanies(modelData,el,companyId)
 			$("#company-contacts-list-view", el).html(App_Companies.contacts_Company_List.render(true).el);
 		}
 		}
+
+function disableCompanyContactsBulkActionBtns()
+{
+	//After add or remove column, toggle list view, make SELECT_ALL false and remove check for select all checkbox
+	SELECT_ALL = false;
+	$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+	$("#bulk-action-btns button").addClass("disabled");
+	$("#contactCompanyTabelView").removeClass("disabled");
+},
