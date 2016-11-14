@@ -356,7 +356,7 @@ function appendToText(name,value){
 //widget - Twilio,Sip,Bria,Skype
 //to - number to call
 function callToNumber(to,from,widgetName,contact,dialler){
-	
+	console.log("widgetName : **** "+ widgetName);
 	dialled.using = dialler; //Needed to know if dialled from dialler or contact-detail or from campaign
 	
 	if(dialled.using == "dialler"){
@@ -383,14 +383,57 @@ function callToNumber(to,from,widgetName,contact,dialler){
 	
 }	
 
+
 function dialFromKnowlarity(to,from,contact){
 	if (checkForActiveCall()){
 		alert("Already on call.");
 		return;
 	}
-	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
-	showDraggableNoty("Knowlarity", contact, "outgoing", to, btns);
-	console.log(to + " : " +  from  + " : " + contact);
+
+	var requestURL = "core/api/widgets/knowlarity/getPrefs";
+	$.ajax({		
+		url : requestURL,
+		type : "GET",	
+		complete : function(result) {
+			if(result){
+				var responceObject = JSON.parse(result.responseText);
+				knowlarityDailer(responceObject, to);
+			}
+		}
+	});
+}
+
+function knowlarityDailer(responceObject, to){
+	var agentNumber = responceObject.agentNumber;
+	var knowlarityNumber = responceObject.knowlarityNumber;
+	var authCode = responceObject.apiKEY;
+	var appCode = responceObject.app_code;
+	var channel = responceObject.knowlarity_channel;
+
+	var dataObj = {
+	  "k_number": knowlarityNumber,
+	  "agent_number": agentNumber,
+	  "customer_number": to
+	};
+
+	var requestURL = "https://kpi.knowlarity.com/"+channel+"/v1/account/call/makecall";
+
+	$.ajax({
+		headers : {
+				"Accept-Language" : "en_US",			
+				"Authorization" : authCode,
+				"x-api-key" : appCode
+		},
+		url : requestURL,
+		type : "POST",		
+		data : JSON.stringify(dataObj),
+		complete : function(result) {
+			console.log("Knowlarity *** calling loaded");
+			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+			showDraggableNoty("Knowlarity", contact, "outgoing", to, btns);
+			console.log(to + " : " +  from  + " : " + contact);					
+		}
+	});
 }
 
 function dialFromTwilio(to,from,contact){

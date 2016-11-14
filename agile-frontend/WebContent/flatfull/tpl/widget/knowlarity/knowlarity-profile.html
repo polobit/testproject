@@ -5,16 +5,16 @@
 				<label><b>Please enter your knowlarity details</b></label>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="email" placeholder="email" class="input-medium required widget_input_box form-control" value="" name="email">
+						<input type="text" id="email" placeholder="Email" class="input-medium required widget_input_box form-control" value="" name="email">
 						</input>
 					</div>
 				</div>
 				<div class="control-group form-group">
 					<div class="controls">
-						<input type="text" id="apiKEY" placeholder="apiKEY" class="input-medium required widget_input_box form-control" value="" name="apiKEY">
+						<input type="text" id="apiKEY" placeholder="API key" class="input-medium required widget_input_box form-control" value="" name="apiKEY">
 						</input>
 					</div>
-				</div>
+				</div>				
 				<div class="control-group form-group">					
 			  		<div class="controls">
 			    		<select name="knowlarity_channel" id="knowlarity_channel" class="required col-md-10 form-control w-full m-b-sm">
@@ -26,6 +26,22 @@
 			    		</select>
 			  		</div>
 				</div>
+				<!--{{#if this.knowlarityNumber}}-->
+					<div class="control-group form-group">
+						<div class="controls">
+							<input type="number" id="knowlarityNumber" placeholder="Knowlarity Number" class="input-medium required widget_input_box form-control" value="" name="knowlarityNumber">
+							</input>
+						</div>
+					</div>
+				<!--{{/if}}
+				{{#if this.agentNumber}}-->
+					<div class="control-group form-group">
+						<div class="controls">
+							<input type="number" id="agentNumber" placeholder="Agent Number" class="input-medium required widget_input_box form-control" value="" name="agentNumber">
+							</input>
+						</div>
+					</div>
+				<!--{{/if}}-->
 				<div class="text-center">		
 				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
 				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>

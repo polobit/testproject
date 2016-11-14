@@ -6,41 +6,58 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class KnowlarityUtil {
-	private String APP_ACCESS_KEY = "iHvMDdH3k68Ndtp8SflAE5X8EVWRjdxE3Gt0w6bI";
+	public static String APP_ACCESS_KEY = "iHvMDdH3k68Ndtp8SflAE5X8EVWRjdxE3Gt0w6bI";
 	private String APIKey;
 	private String agentEmail;
 	private String channel;
 	private String API_URL = "https://kpi.knowlarity.com/";
 
-	public KnowlarityUtil(String APIKey, String agentEmail, String channel){
-		this.APIKey = APIKey;
-		this.agentEmail = agentEmail;
-		this.channel = channel;
+	public KnowlarityUtil(String prefs) {
+		JSONObject prefsObj;
+		try {
+			prefsObj = new JSONObject(prefs);
+			this.APIKey = prefsObj.getString("apiKEY");
+			this.agentEmail = prefsObj.getString("email");
+			this.channel = prefsObj.getString("knowlarity_channel");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public boolean checkAgentIsValid() throws Exception {
-		boolean valid = false;
+	public JSONObject checkAgentIsValid() throws Exception {
+		JSONObject resultObject = null;
 		StringBuilder URL = new StringBuilder(API_URL);
 		URL.append(channel + "/v1/account/agent?email=" + agentEmail);
-		String result = knowlarityGetCall(URL.toString());
+		String result = knowlarityGetRequest(URL.toString());
 
 		if (result != null) {
-			JSONObject resultObject = new JSONObject(result);
-			JSONObject metaData = resultObject.getJSONObject("meta");
-			int count = metaData.getInt("total_count");
-			if (count > 0) {
-				valid = true;
+			JSONObject resultData = new JSONObject(result);
+			JSONArray agentsArray = resultData.getJSONArray("objects");
+			if (agentsArray.length() > 0) {
+				JSONObject obj = new JSONObject(agentsArray.get(0));
+				if (obj != null) {
+					resultObject = new JSONObject();
+					resultObject.put("agentNumber", obj.get("customer_number"));
+					resultObject.put("knowlarityNumber",
+							obj.get("knowlarity_number"));
+					resultObject.put("apiKEY", this.APIKey);
+					resultObject.put("email", this.agentEmail);
+					resultObject.put("knowlarity_channel", this.channel);
+
+				}
 			}
 		}
 
-		if (!valid) {
+		if (resultObject == null) {
 			throw new Exception();
 		}
 
-		return valid;
+		return resultObject;
 	}
 
 	public JSONArray getLogs(String phoneNumber) {
@@ -48,12 +65,7 @@ public class KnowlarityUtil {
 		return result;
 	}
 
-	public boolean makeCall(String phoneNumber) {
-		boolean valid = false;
-		return valid;
-	}
-
-	private String knowlarityGetCall(String url) throws Exception {
+	private String knowlarityGetRequest(String url) throws Exception {
 		String result = null;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -66,6 +78,7 @@ public class KnowlarityUtil {
 		con.setRequestProperty("x-api-key", APP_ACCESS_KEY);
 
 		int responseCode = con.getResponseCode();
+		System.out.println("Knowlarity repsonse code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
@@ -81,5 +94,4 @@ public class KnowlarityUtil {
 		System.out.println(response.toString());
 		return result;
 	}
-
 }
