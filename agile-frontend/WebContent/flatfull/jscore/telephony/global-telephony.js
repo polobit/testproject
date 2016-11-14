@@ -589,10 +589,10 @@ function handleCallRequest(message)
 				sendCommandToClient("notConfigured","Ozonetel");
 				return;
 			}
-			/*if(message.state){
-				saveCallNoteOzonetel(message);
-			}*/
 			showOzonetelCallNoty(message);
+			if(message.state && message.state != "ringing"){
+				saveCallNoteOzonetel(message);
+			}
 		}
 }
 
