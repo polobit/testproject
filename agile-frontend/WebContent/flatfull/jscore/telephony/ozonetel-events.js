@@ -83,8 +83,10 @@ function saveCallNoteOzonetel(message){
 
 	var noteSub = message.direction + " Call - " + message.state;
 	var cntId = globalCall.contactedId;
-alert(cntId);
-	/*if(direction == "Incoming"){
+	var call = { "direction" : message.direction, "phone" : message.contact_number, "status" : message.status,
+				"duration" : message.duration, "contactId" : cntId };
+
+	if(message.direction == "Incoming"){
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    	if(!responseJson){
 	    		
@@ -130,7 +132,7 @@ alert(cntId);
 				data.widget = "Ozonetel";
 				showDynamicCallLogs(data);
 	    	}else{
-	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : 0 };
+	    		var note = {"subject" : noteSub, "message" : "", "contactid" : contact.id,"phone": number, "callType": "inbound", "status": callStatus, "duration" : message.duration };
 				autosaveNoteByUser(note,call,"/core/api/widgets/bria");
 	    	}
 	    });
@@ -146,32 +148,32 @@ alert(cntId);
 
 					contact_name = getContactName(json);
 					var data = {};
-					data.url = "/core/api/widgets/bria/";
+					data.url = "/core/api/widgets/ozonetel/";
 					data.subject = noteSub;
 					data.number = message.contact_number;
 					data.callType = "outbound-dial";
 					data.status = "answered";
-					data.duration = message.callduration;
+					data.duration = message.duration;
 					data.contId = cntId;
 					data.contact_name = contact_name;
 					data.widget = "Ozonetel";
 					showDynamicCallLogs(data);
 					});
 				}else{
-					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": message.contact_number,"callType": "outbound-dial", "status": message.state, "duration" : 0 };
-					autosaveNoteByUser(note,call,"/core/api/widgets/bria");
+					var note = {"subject" : noteSub, "message" : "", "contactid" : cntId,"phone": message.contact_number,"callType": "outbound-dial", "status": message.state, "duration" : message.duration };
+					autosaveNoteByUser(note,call,"/core/api/widgets/ozonetel");
 				}
 		}else{
 			resetCallLogVariables();
     		
     		if(message.state == "answered") {
     			var data = {};
-    			data.url = "/core/api/widgets/bria/";
+    			data.url = "/core/api/widgets/ozonetel/";
     			data.subject = noteSub;
     			data.number = message.contact_number;
     			data.callType = "outbound-dial";
     			data.status = "answered";
-    			data.duration = message.callduration;;
+    			data.duration = message.duration;;
     			data.contId = null;
     			data.contact_name = "";
     			data.widget = "Ozonetel";
@@ -181,11 +183,11 @@ alert(cntId);
 	    		CallLogVariables.callWidget = "Ozonetel";
 	    		CallLogVariables.callType = "outbound-dial";
 	    		CallLogVariables.phone = message.contact_number;
-	    		CallLogVariables.duration = message.callduration;;
+	    		CallLogVariables.duration = message.duration;;
 	    		CallLogVariables.status = message.state;
 	    		var jsonObj = {};
 	    		jsonObj['phoneNumber'] = message.contact_number;
 	    		return showContactMergeOption(jsonObj);
 		}
-	}*/
+	}
 }

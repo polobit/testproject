@@ -589,14 +589,9 @@ function handleCallRequest(message)
 				sendCommandToClient("notConfigured","Ozonetel");
 				return;
 			}
-
-			/*globalCallForActivity.duration = message.duration;
-			var call = { "direction" : message.direction, "phone" : message.contact_number, "status" : message.status,
-				"duration" : message.duration, "contactId" : "5565693500063744" };
-			//var num = globalCallForActivity.callNumber;*/
-			if(message.state){
+			/*if(message.state){
 				saveCallNoteOzonetel(message);
-			}
+			}*/
 			showOzonetelCallNoty(message);
 		}
 }
