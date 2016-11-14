@@ -39,6 +39,37 @@
              </div> 
             </div> 
            </div> 
+           <div class="toggleHead col-sm-7 text-left" id="showtoggle_show" style="display:none;margin-left: 17%;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
+          <div class="advances hide p-r-md p-l-md" id="showproducts">
+            <div class="row">
+              <div class="col-md-12  m-t-md"><b></b></div>
+            </div>
+            <div class="row">
+            <div class="col-md-12">           
+              <div class="" id="deal_products_div">
+                      
+              </div>
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="control-group form-group m-t-md" style="margin-bottom:0px;">
+                  <label class="control-label col-sm-2 text-left">Discount</label>
+                  <div class="controls col-sm-10 input-group pull-right" style="padding-right:15px;">
+                     <div class="input-group m-b">
+                        <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
+                          <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Percent</span><span class="caret"></span></button>
+                          <ul class="dropdown-menu"></ul>
+                        </div><!-- /btn-group -->
+                         <input name="discount_value" placeholder="Enter Percent" type="text" class="form-control  discountvalue" id="discount_value">
+                         <input type="text" class="hide" name="discount_type" id="discount_type" value="Percent">
+                      </div>
+                        </div>
+                      </div>  
+                      <span class="calculation-error-status pull-right col-sm-10" style="color:#d9534f;margin-right:20px;"></span>
+                  </div>
+            </div>
+        </div>
           </div>    
           <div class="control-group form-group" style="margin-bottom:0px;"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
@@ -140,7 +171,7 @@
 
         <div class="form-group m-b-none" style="margin-bottom: 0px;">
                     <div class="col-sm-offset-3 col-sm-7 text-left">
-        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
+        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -152,37 +183,7 @@
                 class="input col-md-12 form-control textarea" placeholder="{{agile_lng_translate 'tasks' 'add-comment'}}"></textarea>
             </div>
           </div>
-          <div class="toggleHead col-sm-offset-3 col-sm-7 text-left" id="showtoggle_show" style="display:none;margin-left: 24%;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
-          <div class="advances hide p-r-md p-l-md" id="showproducts">
-            <div class="row">
-              <div class="col-md-12  m-t-md"><b>Select Products</b></div>
-            </div>
-            <div class="row">
-            <div class="col-md-12">           
-              <div class="" id="deal_products_div">
-                      
-              </div>
-            </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="control-group form-group m-t-md" style="margin-bottom:0px;">
-                  <label class="control-label col-sm-2 text-left">Discount</label>
-                  <div class="controls col-sm-10 input-group pull-right" style="padding-right:15px;">
-                     <div class="input-group m-b">
-                        <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
-                          <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Percent</span><span class="caret"></span></button>
-                          <ul class="dropdown-menu"></ul>
-                        </div><!-- /btn-group -->
-                         <input name="discount_value" placeholder="Enter Percent" type="text" class="form-control  discountvalue" id="discount_value">
-                         <input type="text" class="hide" name="discount_type" id="discount_type" value="Percent">
-                      </div>
-                        </div>
-                      </div>  
-                      <span class="calculation-error-status pull-right col-sm-10" style="color:#d9534f;margin-right:20px;"></span>
-                  </div>
-            </div>
-        </div>
+          
       </fieldset>
     </form>
   </div>
