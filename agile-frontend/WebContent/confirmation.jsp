@@ -342,43 +342,52 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String campaign_name = request.getParameter("c_name");
 			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
 			    String unsubscribeName = request.getParameter("unsubscribe_name");
-
-			    String hiddenEmail = request.getParameter("he"); hiddenEmail = StringUtils.isBlank(hiddenEmail) ? "" : hiddenEmail;
 			    
-			    // To Fix trailing space email getting trimmed issue
-			    if(StringUtils.equalsIgnoreCase(email.trim(), hiddenEmail.trim()))
-			    	email = hiddenEmail;
-
-			    String is_unsubscribe_email_disabled = request.getParameter("is_unsubscribe_email_disabled");
-			    System.out.println("Is Unsubscribe Email Disabled :"+is_unsubscribe_email_disabled);
+			    String namespace = request.getParameter("ns");
 			    
-			    String unsubscribe_subject = request.getParameter("unsubscribe_subject");
-			    System.out.println("Unsubscribe subject"+unsubscribe_subject);
+			    String oldNamespace = NamespaceManager.get();
 			    
-			    // Used to send as from name in confirmation email
-			    String company = request.getParameter("company");
-
-			    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
-
-			    Contact contact = ContactUtil.searchContactByEmail(email);
-
-			    String msg = "You are successfully unsubscribed. Thank you.";
-
-			    if (contact == null)
-			    {
-					msg = "The given email does not match any in our database.";
-			%>
-			<h2>Error</h2>
-			<p><%=msg%></p>
-			<%
-			    } // End of if
-			    else
-			    {
-			%>
-			<h2>Confirmation</h2>
-			<p><%=msg%></p>
-			<%
 			    try
+			    {
+					if(StringUtils.isNotBlank(namespace))
+					    NamespaceManager.set(namespace);
+					
+				    String hiddenEmail = request.getParameter("he"); hiddenEmail = StringUtils.isBlank(hiddenEmail) ? "" : hiddenEmail;
+				    
+				    // To Fix trailing space email getting trimmed issue
+				    if(StringUtils.equalsIgnoreCase(email.trim(), hiddenEmail.trim()))
+				    	email = hiddenEmail;
+	
+				    String is_unsubscribe_email_disabled = request.getParameter("is_unsubscribe_email_disabled");
+				    System.out.println("Is Unsubscribe Email Disabled :"+is_unsubscribe_email_disabled);
+				    
+				    String unsubscribe_subject = request.getParameter("unsubscribe_subject");
+				    System.out.println("Unsubscribe subject"+unsubscribe_subject);
+				    
+				    // Used to send as from name in confirmation email
+				    String company = request.getParameter("company");
+	
+				    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
+	
+				    Contact contact = ContactUtil.searchContactByEmail(email);
+	
+				    String msg = "You are successfully unsubscribed. Thank you.";
+
+				    if (contact == null)
+				    {
+						msg = "The given email does not match any in our database.";
+						%>
+						<h2>Error</h2>
+						<p><%=msg%></p>
+						<%
+				    } // End of if
+				    else
+				    {
+						%>
+						<h2>Confirmation</h2>
+						<p><%=msg%></p>
+						<%
+			    	try
 					{
 					    String contactId = contact.id.toString();
 
@@ -517,13 +526,22 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					{
 					    e.printStackTrace();
 					    System.err.println("Exception occured while confirmation " + e.getMessage());
-					}
-			
-			%>
-
-			<%
+					}			
+					%>		
+					<%
 			    } // End of else
+				
+			 }// End of try
+		     catch(Exception e)
+			 {
+			     System.err.println(e.getMessage());
+			 }
+			 finally
+			 {
+			     NamespaceManager.set(oldNamespace);
+			 }
 			%>
+			
 		</div>
 	</div>
 	<br />
