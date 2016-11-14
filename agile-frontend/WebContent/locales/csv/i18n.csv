@@ -5822,3 +5822,5 @@ leads-view.changed-owner-for-lead,Changed owner for Lead
 leads-view.sorry-this-lead-has-no-email-to-get-the-mails,Sorry! this lead has no email to get the mails
 billing.campaigns-addon-change-select,Please change number of campaigns & try again.,
 billing.triggers-addon-change-select,Please change number of triggers & try again.,
+landingpage-builder.image-url,Enter image path,,
+landingpage-builder.enter-image-url,Enter an image Url ,,

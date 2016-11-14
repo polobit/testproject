@@ -95,4 +95,6 @@
     "invalid-pattern": "{{agile_lng_translate 'register' 'invalid-pattern'}}",
     "email-invalid-after-@": "{{agile_lng_translate 'forgot-domain' 'email-invalid-after-@'}}",
     "upload" : "{{agile_lng_translate 'landingpage-builder' 'upload'}}",
+    "image-url" : "{{agile_lng_translate 'landingpage-builder' 'image-url'}}",
+    "enter-image-url" : "{{agile_lng_translate 'landingpage-builder' 'enter-image-url'}}",
 }
