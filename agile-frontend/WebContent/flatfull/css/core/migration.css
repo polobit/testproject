@@ -1922,7 +1922,7 @@ width: 1%!important;
   
   display: none;
 }
-.deals-name{ width: 18em;}
+.deals-name{ width: calc(100% - 0px);}
 #event-time-1{
   width: 100% !important;
 }
@@ -2026,6 +2026,7 @@ display: block!important;
 #documents-top-view .documentsheading h3 {margin-bottom: 0px !important;}
 .change-deal-activity{display: none;}
 #dealactivities #timeline{float: none !important;}
+#contacts-filter-wrapper .chained-table tr td .form-control,  #companies-filter-wrapper .chained-table tr td .form-control{ width: 100% !important;}
 }
 
 @media all and (min-width: 768px) {
@@ -2050,9 +2051,6 @@ display: block!important;
     .contact-list-mobile {
       float: right;
     }
-    .deals-name{
-      width: 40em;
-    }
 }
 
 @media all and (orientation:landscape) and (max-width: 480px) { 
@@ -2060,12 +2058,6 @@ display: block!important;
 }
 @media all and (orientation:landscape) and (max-width: 640px) { 
     .ticket-name, .ticket-subject{ max-width: 38em;}
-}
-
-@media all and (orientation:landscape) and (min-width: 480px) and (max-width: 600px) { 
-     .deals-name{
-      width: 28em;
-    }
 }
 
 .thumb-avatar-wrapper {
