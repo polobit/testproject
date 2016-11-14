@@ -1100,4 +1100,4 @@ function disableCompanyContactsBulkActionBtns()
 	$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
 	$("#bulk-action-btns button").addClass("disabled");
 	$("#contactCompanyTabelView").removeClass("disabled");
-},
+}
