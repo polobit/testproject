@@ -453,7 +453,7 @@ function dialFromOzonetel(to,from,contact){
 			} 
 		});
 		var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
-		showDraggableNoty("Ozonetel", "7406447973", "outgoing", to, btns);
+		showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
 	}catch (e) {
 	}
 }
