@@ -10,7 +10,7 @@ $(function(){
 			return;
 		}else{
 			var contactDetailsObj = agile_crm_get_contact();
-			dialFromOzonetel($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj), null, contactDetailsObj);
+			dialFromOzonetel($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj),contactDetailsObj);
 		}
 	});
 });

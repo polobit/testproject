@@ -424,18 +424,38 @@ function dialFromOzonetel(to,from,contact){
 		alert("Already on call.");
 		return;
 	}
-	$.ajax({ 
-		url : 'core/api/widgets/ozonetel/connect?user_phone=' + to, 
-		type : 'GET', 
-		success : function(data){
-					
-		}, error : function(response){
-			console.log(response);
-		} 
-	});
-	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
-	showDraggableNoty("Ozonetel", "7406447973", "outgoing", to, btns);
-				
+	var action ={};
+  	action['command'] = "startCall";
+  	action['number'] = to;
+  	action['callId'] = "";
+	alert(contact)
+	try{
+		resetglobalCallVariables();
+		resetglobalCallForActivityVariables();
+		globalCall.callStatus = "dialing";
+		globalCall.calledFrom = "Ozonetel";
+		setTimerToCheckDialing("ozonetel");
+		
+		if(!contact){
+			globalCall.contactedContact = {};
+			globalCall.contactedId = "";
+		}else{
+			globalCall.contactedContact = contact;
+			globalCall.contactedId = contact.id;
+		}
+	  	$.ajax({ 
+			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to, 
+			type : 'GET', 
+			success : function(data){
+						
+			}, error : function(response){
+				console.log(response);
+			} 
+		});
+		var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+		showDraggableNoty("Ozonetel", "7406447973", "outgoing", to, btns);
+	}catch (e) {
+	}
 }
 function dialFromBria(to,from,contact){
 

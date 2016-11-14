@@ -49,7 +49,7 @@ function subscribeClientChannel(callback)
 			}catch(e){
 				return;
 			}
-			alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).from);
+			alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
 			if((message || {}).type  == "call"){
 				handleCallRequest(message);
 			}else{

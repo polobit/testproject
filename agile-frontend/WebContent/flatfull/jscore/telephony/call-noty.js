@@ -345,6 +345,7 @@ function showBriaCallNoty(message){
 
 }
 function showOzonetelCallNoty(message){
+	//_getMessageOzonetel(message);
 	ShowWidgetCallNoty(message);
 	return;
 }
