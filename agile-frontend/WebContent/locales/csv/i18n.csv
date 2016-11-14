@@ -5826,4 +5826,11 @@ admin-settings-custom-fields.text-area-desc-new,Text area - A large text input f
 admin-settings-custom-fields.formula-desc-new,Formula - An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. Mustache conditions can be used here.,Fórmula - Una fórmula aritmética en el siguiente formato \{{número1}}* \{{numero2}} - sólo funciona con campos personalizados numéricos. Las condiciones bigote pueden usarse.
 modals.phone-number-ext, Phone Number;Ext,
 validation-msgs.Pls-enter-a-valid-ext-no, Invalid extension. Extension can contain only numbers or * or #,
+portlets.no-user-activities,No User Activities Found,
+portlets.no-tasks-found,No Tasks Found,
+portlets.no-deals-goals-set-new,No Deals Goals Set ,
+portlets.no-revenue-goals-set-new,No Revenue Goals Set,
+portlets.no-pending-deals,No Pending Deals,
+calls.duration-secs-new,Call Duration (Min),
+calls.avg-duration-secs-new,Average Call Duration (Min),
 

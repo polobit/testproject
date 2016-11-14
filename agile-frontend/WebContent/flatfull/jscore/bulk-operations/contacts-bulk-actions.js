@@ -1194,7 +1194,12 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	{
 		if (isBulk)
 		{
-			if(company_util.isCompany())
+			if(company_util.isCompanyContact())
+			{
+				$("#bulk-action-btns button").addClass("disabled");
+				$("#contactCompanyTabelView").removeClass("disabled");
+			}
+			else if(company_util.isCompany())
 			{
 				$("#bulk-action-btns button").addClass("disabled");
 				$("#companiesTabelView").removeClass("disabled");
@@ -1223,6 +1228,18 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		{
 			
 				$("#bulk-action-btns button").addClass("disabled");
+			if(company_util.isCompanyContact())
+			{
+				$("#contactCompanyTabelView").removeClass("disabled");
+			}
+			else if(company_util.isCompany())
+			{
+				$("#companiesTabelView").removeClass("disabled");
+			}
+			else
+			{
+				$("#contactTabelView").removeClass("disabled");
+			}
 		}
 	}
 }

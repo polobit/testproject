@@ -74,7 +74,8 @@ if(redirectTo  != null)
 body {
 
 <% 
-	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+    String userAgent = request.getHeader("user-agent");
+	if(MobileUADetector.isMobile(userAgent)) {%>
 		background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
 	
 	<% } else if(VersioningUtil.isDevelopmentEnv()){  %>
@@ -186,11 +187,12 @@ padding-left:10px!important;
 			</div>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>'>
 		</form>
+		<%if(!MobileUADetector.isiPhone(userAgent)) {%>
 	 	<div class="text-center text-white m-t m-b">
 	  		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "new-user")%>? </small> <a href="/register" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "click-here")%></a><br/>
 	  	 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%> </small><a href="/forgot-domain" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 		 </div>
-
+		<%} %>
 	</div>
   </div>
 </div>
