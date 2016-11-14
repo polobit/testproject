@@ -548,6 +548,10 @@ function initRolehandlers(){
  							console.log("success");
  							console.log(model);
  							CURRENT_DOMAIN_USER = model.toJSON();
+ 							// Call dashboard route
+					 		Backbone.history.navigate("#navigate-dashboard", {
+					                trigger: true
+					            });
  						}, 
  						error: function(model, response){
 							console.log("error");
@@ -566,10 +570,7 @@ function initRolehandlers(){
  			// Update UI
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 
- 			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard", {
-                trigger: true
-            });
+ 			
 	});
 }
 
@@ -591,6 +592,7 @@ function addContactBasedOnCustomfields(){
 				}
 			});
  }
+
 
 /**
  * checks if there are any custom fields and if present navigates to lead-add page 
@@ -632,6 +634,19 @@ function addLeadBasedOnCustomfields(){
  }
 
 
+function renderDashboardOnMenuServiceSelect(role,options_el){
+	switch(role){
+		case 'SALES':
+		    return options_el += getTemplate("js-sales-dashboards-options-newui");
+		    break;
+		case 'MARKETING':
+			return options_el += getTemplate("js-marketing-dashboards-options-newui");
+			break;
+		case 'SERVICE' :
+			return options_el += getTemplate("js-service-dashboards-options-newui");
+			break;
+	}	
+}
 
 
 
