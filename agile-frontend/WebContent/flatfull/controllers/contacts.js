@@ -103,9 +103,18 @@ var ContactsRouter = Backbone.Router.extend({
             return;
 		}
 		var role = CURRENT_DOMAIN_USER.role;
-		var dashboard_name = menuServiceDashboard(role);
+		//var dashboard_name = menuServiceDashboard(role);
 		
-		//var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(isNaN(dashboard_name)){
+			dashboard_name = menuServiceDashboard(role);	
+		}
+		else{
+				dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		}
+
+		
+
 
 		if(!dashboard_name){
 			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
