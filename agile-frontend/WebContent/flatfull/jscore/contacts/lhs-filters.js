@@ -368,6 +368,11 @@ $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS inp
 	{
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
+		var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
+	    if (!regex.test(currVal)) {
+            showAlertModal("tag_name_restriction");
+            return;
+        }
 		if (prevVal == currVal)
 		{
 			return;
