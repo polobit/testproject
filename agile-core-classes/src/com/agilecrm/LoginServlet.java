@@ -250,12 +250,17 @@ public class LoginServlet extends HttpServlet {
 					"Looks like you have registered using Google or Yahoo account. Please use the same to login. ");
 
 		// Check if Encrypted passwords are same
-		if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password),
-				domainUser.getHashedString())
-				&& !StringUtils.equals(password,
+		if(!StringUtils.equals(MD5Util.getMD5HashedPassword(password),
+				domainUser.getHashedString())) {
+			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production){
+				if("admin".equalsIgnoreCase(NamespaceManager.get()) && !StringUtils.equals(password,
+						LoginUtil.ADMIN_DOMAIN_MASTER_PWD))
+					throw new Exception("Incorrect password. Please try again.");
+				else if(!"admin".equalsIgnoreCase(NamespaceManager.get()) && !StringUtils.equals(password,
 						Globals.MASTER_CODE_INTO_SYSTEM))
-			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-				throw new Exception("Incorrect password. Please try again.");
+					throw new Exception("Incorrect password. Please try again.");
+			}
+		}
 
 		// Read Subdomain
 		String subdomain = NamespaceUtil.getNamespaceFromURL(request
