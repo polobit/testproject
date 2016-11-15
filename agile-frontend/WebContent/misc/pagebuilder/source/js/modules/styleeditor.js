@@ -800,11 +800,18 @@
             var theHref;
 
             $('a#link_Link').parent().show();
-            //link tab should active
             $("#tab1").removeClass("active");
             $("a#default-tab1").parent().removeClass("active");
-            $("#link_Tab").addClass("active");
-            $("a#link_Link").parent().addClass("active");
+
+            if($(el).prop('tagName') === 'IMG'){
+                $("#image_Tab").addClass("active");
+                $("a#img_Link").parent().addClass("active");
+
+            }else {
+                //link tab should active                
+                $("#link_Tab").addClass("active");
+                $("a#link_Link").parent().addClass("active");
+            }
 
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
@@ -840,6 +847,13 @@
         editImage: function(el) {
 
             $('a#img_Link').parent().show();
+
+            if($(el).prop('tagName')=== "IMG" && $(el).parent().prop('tagName') !== 'A' && $(el).attr('data-type') !== 'video'){
+                $("#tab1").removeClass("active");
+                $("a#default-tab1").parent().removeClass("active");
+                $("#image_Tab").addClass("active");
+                $("a#img_Link").parent().addClass("active");
+            }      
 
             //set the current SRC
             $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
