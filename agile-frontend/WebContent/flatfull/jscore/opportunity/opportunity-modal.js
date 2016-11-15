@@ -652,6 +652,7 @@ function show_deal()
 		}else{
 			$("#showtoggle_show").hide();
 			$("#showproducts").hide();
+			$('.no-products').show();
 		}
 	});
 	

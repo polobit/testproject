@@ -31,7 +31,7 @@
           </div>
            <div class="control-group form-group" style="margin-bottom:0px;"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'value'}}<span class="field_req">*</span></label> 
-           <div class="controls col-sm-3"> 
+           <div class="controls col-sm-5"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
              <div class="p-n"> 
               <input type="text" name="expected_value" class="required  number form-control" min="0" max="2147483647"
@@ -39,23 +39,20 @@
              </div> 
             </div> 
            </div> 
-           <div class="toggleHead col-sm-3 text-left" id="showtoggle_show" style="display:none;margin-left: 17%;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
+           <div class="toggleHead col-sm-2 text-left" id="showtoggle_show" style="display:none;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
           <div class="advances hide p-r-md p-l-md" id="showproducts">
             <div class="row">
-              <div class="col-md-12  m-t-md"><b></b></div>
-            </div>
-            <div class="row">
-            <div class="col-md-12">           
+            <div class="col-md-9" style="margin-left: 9%;">           
               <div class="" id="deal_products_div">
                       
               </div>
             </div>
             </div>
-            <div class="row">
-              <div class="col-md-12">
+            <div class="">
+              <div class="" style="margin-top: 4%;">
                 <div class="control-group form-group m-t-md" style="margin-bottom:0px;">
-                  <label class="control-label col-sm-2 text-left">Discount</label>
-                  <div class="controls col-sm-10 input-group pull-right" style="padding-right:15px;">
+                  <label class="control-label col-sm-3">Discount</label>
+                  <div class="controls col-sm-7 input-group" style="padding-right:15px;padding-left:15px;">
                      <div class="input-group m-b">
                         <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
                           <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Percent</span><span class="caret"></span></button>
@@ -70,7 +67,13 @@
                   </div>
             </div>
         </div>
-          </div>    
+          </div> 
+
+          <div class="text-muted no-products" style="display:none;">
+                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;padding-left: 9px">
+                                 {{agile_lng_translate 'documents' 'no-products'}}  <a href="#" data-dismiss="modal" class="navigate-products text-info">{{agile_lng_translate 'contact-details' 'here'}}</a>
+                            </div>
+                        </div>   
           <div class="control-group form-group" style="margin-bottom:0px;"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
            <div class="controls col-sm-7"> 
@@ -252,3 +255,4 @@
     <a href="#" class="btn btn-sm btn-primary" id="deals-filter-validate">{{agile_lng_translate 'deal-view' 'done'}}</a> 
   </div>
 </div>
+
