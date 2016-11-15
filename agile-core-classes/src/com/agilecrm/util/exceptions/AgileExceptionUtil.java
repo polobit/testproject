@@ -13,7 +13,7 @@ import com.thirdparty.sendgrid.SendGrid;
 public class AgileExceptionUtil {
 
 	// To Emails
-	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@agilecrm.com,govind@agilecrm.com";
+	static final String CORE_TEAM_ERRORS_EMAILS = "venkat@agilecrm.com,mogulla@agilecrm.com,govind@agilecrm.com";
 	static final String SALES_TEAM_ERRORS_EMAILS = "subrahmanyam@agilecrm.com,nidhi@agilecrm.com";
 	static final String MA_TEAM_ERRORS_EMAILS = "naresh@faxdesk.com,ramesh@agilecrm.com";
 	static final String TICKET_TEAM_ERRORS_EMAILS = "rohit@agilecrm.com";
