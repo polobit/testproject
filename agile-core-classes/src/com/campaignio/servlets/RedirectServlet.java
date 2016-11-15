@@ -67,6 +67,7 @@ public class RedirectServlet extends HttpServlet
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
 	String pushNotificationLinked = req.getParameter("n");
+	String namespace = req.getParameter("ns");
 	
 	//Get client IP address
 	String clientIPAddress=AnalyticsServlet.getClientIP(req);
@@ -80,7 +81,13 @@ public class RedirectServlet extends HttpServlet
 
 	// When requested from shorten url, get domain from URLShortener
 	if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
-	    domain = URLShortenerUtil.getDomainFromShortURL(url);
+	{
+		// Get namespace from request parameter
+		if(StringUtils.isNotBlank(namespace))
+			domain = namespace;
+		else
+			domain = URLShortenerUtil.getDomainFromShortURL(url);
+	}
 	else
 	    domain = NamespaceUtil.getNamespaceFromURL(host);
 
@@ -88,6 +95,7 @@ public class RedirectServlet extends HttpServlet
 	// using contactspot URLs
 	if (StringUtils.isBlank(domain))
 	    return;
+	
     //IP Filter status for email clicked and open
 	IPFilterStatus=AnalyticsServlet.isBlockedIp(clientIPAddress,domain);
 	
