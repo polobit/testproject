@@ -2069,7 +2069,9 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
   }
 
   /*End of Profile Pic Dropdown CSS*/
-
+  .colorBox.RestDayState,.colorBox.WorkingDayState{
+    margin-top: 5px !important;
+  }
 }
 
 /*End of Mobile Device Media Query CSS(767px)*/
