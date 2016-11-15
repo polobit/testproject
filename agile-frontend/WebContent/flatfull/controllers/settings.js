@@ -777,7 +777,9 @@ var SettingsRouter = Backbone.Router
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
-					$('#content').html($(template_ui));	
+					$('#content').html($(template_ui));
+					$("#content").find(".col").hide();
+					$("#content").find("h1").html("Edit Email Template");	
 
 					// Navigates to list of email templates, if it is not defined
 					if (!that.emailTemplatesListView || that.emailTemplatesListView.collection.length == 0)
@@ -795,6 +797,9 @@ var SettingsRouter = Backbone.Router
 						} });
 
 					$('#prefs-tabs-content').html(view.render().el);
+					$("#prefs-tabs-content").addClass("col-md-9");
+					var discript = $("#prefs-tabs-content").find(".col-md-3");
+					$("#prefs-tabs-content").after(discript);
 
 					/** TinyMCE * */
 
