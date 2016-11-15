@@ -296,7 +296,7 @@ public class LoginServlet extends HttpServlet {
 		
 		UserFingerPrintInfo browser_auth = null;
 		
-		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
+		if(!Globals.MASTER_CODE_INTO_SYSTEM.equals(password))
 		{
 			// Validate User finger print
 			browser_auth = new UserFingerPrintInfo();
