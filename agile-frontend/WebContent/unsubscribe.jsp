@@ -25,69 +25,58 @@
             
             String oldNamespace = NamespaceManager.get();
             
-            try
+            if(StringUtils.isNotBlank(namespace))
             {
-            
-	            if(StringUtils.isNotBlank(namespace))
-	            {
-	        	    NamespaceManager.set(namespace);
-	            }
+	            NamespaceManager.set(namespace);
+	        }
 	            
-				String contactId = request.getParameter("sid");
+			String contactId = request.getParameter("sid");
+			
+			String email = request.getParameter("e");
 				
-				String email = request.getParameter("e");
-				
-				// When & is converted to amp; in url
-				if(StringUtils.isBlank(email))
-				    email = request.getParameter("amp;e");
+			// When & is converted to amp; in url
+			if(StringUtils.isBlank(email))
+			    email = request.getParameter("amp;e");
 	
-				String company = "";
-				try
-				{
-					AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
-					
-					if(!accountPrefs.company_name.equals("My company"))
-					    company = accountPrefs.company_name;
-				}
-				catch(Exception e)
-				{
-			    	e.printStackTrace();
-			    	System.err.println("Exception occured while getting company " + e.getMessage());
-				}
+			String company = "";
+			try
+			{
+				AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 				
-				if (StringUtils.isBlank(campaignId)
-						|| StringUtils.isBlank(contactId))
-				{
-				    System.err.println("Got both ids empty. Unsubscribe campaignId " + campaignId + " and contact id " + contactId + " are empty.");
-				    out.println("Oops! something went wrong. Please try again later.");
-				    return;
-				}
+				if(!accountPrefs.company_name.equals("My company"))
+			    	company = accountPrefs.company_name;
+			}
+			catch(Exception e)
+			{
+			   	e.printStackTrace();
+			   	System.err.println("Exception occured while getting company " + e.getMessage());
+			}
+				
+			if (StringUtils.isBlank(campaignId)
+					|| StringUtils.isBlank(contactId))
+			{
+			    System.err.println("Got both ids empty. Unsubscribe campaignId " + campaignId + " and contact id " + contactId + " are empty.");
+			    out.println("Oops! something went wrong. Please try again later.");
+			    return;
+			}
 	
-				Workflow workflow = WorkflowUtil.getWorkflow(Long
+			Workflow workflow = WorkflowUtil.getWorkflow(Long
 						.parseLong(campaignId));
 	
-				// If workflow is deleted
-				if (workflow == null) {
-					out.println("You are successfully unsubscribed. Thank you.");
-					return;
-				}
-				//Static images s3 path
-				String FLAT_FULL_PATH = "flatfull/";
-				String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
-				String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
+			// If workflow is deleted
+			if (workflow == null) {
+				out.println("You are successfully unsubscribed. Thank you.");
+				return;
+			}
+			//Static images s3 path
+			String FLAT_FULL_PATH = "flatfull/";
+			String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
+			String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
 				
-				// Users can show their company logo on login page. 
-				AccountPrefs accountPrefs2 = AccountPrefsUtil.getAccountPrefs();
-				String logo_url = accountPrefs2.logo;
-            }
-            catch(Exception e)
-            {
-        	   System.err.println(e.getMessage());
-            }
-            finally
-            {
-        		NamespaceManager.set(oldNamespace);
-            }
+			// Users can show their company logo on login page. 
+			AccountPrefs accountPrefs2 = AccountPrefsUtil.getAccountPrefs();
+			String logo_url = accountPrefs2.logo;
+       		NamespaceManager.set(oldNamespace);
 %>
 
 <html>

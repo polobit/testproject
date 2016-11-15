@@ -349,7 +349,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    
 			    try
 			    {
-					if(StringUtils.isNotBlank(namespace))
+					System.out.println("Namespace is " + namespace);
+				
+					if(StringUtils.isNotBlank(namespace) && !StringUtils.equalsIgnoreCase(namespace, "null"))
 					    NamespaceManager.set(namespace);
 					
 				    String hiddenEmail = request.getParameter("he"); hiddenEmail = StringUtils.isBlank(hiddenEmail) ? "" : hiddenEmail;

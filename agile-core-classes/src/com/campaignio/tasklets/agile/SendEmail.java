@@ -774,7 +774,7 @@ public class SendEmail extends TaskletAdapter
     	    if(!VersioningUtil.isProductionAPP())
     		unsubscribeLink = UNSUBSCRIBE_SANDBOX_LINK;
     		
-    	    return unsubscribeLink + "unsubscribe?e="
+    	    return unsubscribeLink + "?e="
                     + URLEncoder.encode(email, "UTF-8")
                     + "&ns="+URLEncoder.encode(NamespaceManager.get(),"UTF-8")
                     + "&sid=" + URLEncoder.encode(subscriberId, "UTF-8")
