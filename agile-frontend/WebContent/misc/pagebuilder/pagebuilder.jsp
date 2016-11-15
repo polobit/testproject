@@ -331,7 +331,11 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
                     <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
                         <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
-                    </select>            
+                    </select> 
+		    <p class="text-center or">
+                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
+                    <a href="<%=MAIN_URL%>#form-builder-templates" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20" id="addnew-formlink">Add new Form</a>
                 </div> 
                 
                 <!-- /tabs -->
