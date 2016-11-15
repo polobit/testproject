@@ -12,6 +12,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.ipaccess.IpAccessUtil;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.NamespaceManager;
 
 public class UserFingerPrintInfo implements Serializable{
 	
@@ -74,6 +75,12 @@ public class UserFingerPrintInfo implements Serializable{
 		
 		// IP Validation from request scope
 		valid_ip = IpAccessUtil.isValidIpOpenPanel(request);
+		
+		if(!"admin".equalsIgnoreCase(NamespaceManager.get()))
+		{
+			valid_ip = true;
+			valid_finger_print = true;
+		}
 		
 		// Resave
 		set(request);
