@@ -40,6 +40,10 @@ public class PHPAPIFilter implements Filter
 	    {
 		UserInfo userInfo = (UserInfo) req.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 		DomainUser domainUser = APIKeyUtil.getDomainUserRelatedToAPIKey(agileId);
+		if(domainUser == null){
+		    res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		    return;
+		}
 		if (userInfo == null || !userInfo.getEmail().equalsIgnoreCase(domainUser.email))
 		{
 		    userInfo = new UserInfo("agilecrm.com/php", domainUser.email, domainUser.name);
@@ -50,6 +54,8 @@ public class PHPAPIFilter implements Filter
 		chain.doFilter(req, res);
 		return;
 
+	    }else{
+		res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 	    }
 	}
 	res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
