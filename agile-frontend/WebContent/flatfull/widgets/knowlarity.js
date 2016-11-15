@@ -1,11 +1,17 @@
+function saveCallNoteKnolarity(event){
+
+}
+
 function knowlarityEventsFinder(SR_API_KEY){
 	console.log("In event source created");
 	var notificationURL = "https://konnect.knowlarity.com:8100/update-stream/"+SR_API_KEY+"/konnect";
 	knowlaritySource = new EventSource(notificationURL);
 	knowlaritySource.onmessage = function (event) {
-		var data = JSON.parse(event.data);
-		console.log('Received an event .......');
-		console.log(data);
+		console.log('***** Received an event *****');
+		console.log(event);0
+		saveCallNoteKnolarity(event);
+		var data = JSON.parse(event.data);		
+		console.log(JSON.stringify(data));
 	}
 }
 
