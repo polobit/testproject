@@ -183,11 +183,11 @@ public class EmailUtil
 	
 	//domain name
 	if(!StringUtils.isEmpty(domain))
-	    queryParams = "ns=" + NamespaceManager.get() + "&";
+	    queryParams = "ns=" + domain + "&";
 	
 	// Campaign-id
 	if (!StringUtils.isEmpty(campaignId))
-	    queryParams = "c=" + campaignId + "&";
+	    queryParams += "c=" + campaignId + "&";
 
 	// Contact id (for campaigns) or Tracker Id (for personal emails)
 	if (!StringUtils.isEmpty(trackerId))
