@@ -10,6 +10,7 @@ function knowlarityEventsFinder(SR_API_KEY){
 }
 
 function knowlarityDailer(responceObject, to, contact){
+
 	var knowlarityNumber = responceObject.knowlarityNumber;
 	var agentNumber = responceObject.agentNumber;
 	var authCode = responceObject.apiKEY;
@@ -24,7 +25,12 @@ function knowlarityDailer(responceObject, to, contact){
 	  "customer_number": to
 	};
 
+	//console.log(knowlarityNumber+" : "+agentNumber+" : "+authCode+" : "+appCode+" : "+channel);
+
 	var requestURL = "https://kpi.knowlarity.com/"+channel+"/v1/account/call/makecall";
+
+	//console.log(requestURL);
+
 	$.ajax({
 		headers : {
 				"Accept-Language" : "en_US",			
@@ -65,9 +71,7 @@ function startKnowlarityWidget(contact_id){
 		e.preventDefault();
 		e.stopPropagation();
 		var contactDetailsObj = agile_crm_get_contact();
-		var contactPhoneNumber = $(this).closest(".contact-make-call").attr("phone");
-		var prefsObject = JSON.parse(knowlarity_widget.prefs);
-
-   		knowlarityDailer(prefsObject, contactPhoneNumber, contactDetailsObj);		
+		var contactPhoneNumber = $(this).closest(".contact-make-call").attr("phone");		
+   		knowlarityDailer(KnowlarityWidgetPrefs, contactPhoneNumber, contactDetailsObj);		
 	});
 }
