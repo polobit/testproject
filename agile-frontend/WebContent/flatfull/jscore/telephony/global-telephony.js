@@ -6,11 +6,34 @@ var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "S
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
+var KnowlarityWidgetPrefs;
+var knowlaritySource;
+
+function knowlaritySetup(){
+	var requestURL = "core/api/widgets/knowlarity/getPrefs";
+	$.ajax({
+		url : requestURL,
+		type : "GET",	
+		success : function(result) {
+			if(result){
+				console.log(result);
+				KnowlarityWidgetPrefs = JSON.parse(result);
+				var authCode = KnowlarityWidgetPrefs.apiKEY;
+				head.js(LIB_PATH + 'widgets/knowlarity.js', function(){ 
+					if(!knowlaritySource){
+						knowlarityEventsFinder(authCode);
+					}					
+				});								
+			}
+		}
+	});
+}
 
 $(function()
 {
 //	initToPubNub();
 	globalCallWidgetSet();
+	knowlaritySetup();
 });
 
 function getContactImage(number, type, callback)
