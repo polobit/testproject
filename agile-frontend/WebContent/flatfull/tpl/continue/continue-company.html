@@ -14,6 +14,12 @@
                         <input name="name" type="text" class="required form-control  field_length" max_len="100" id="company_name" value="{{getPropertyValue properties "name"}}" placeholder="Name"/>
                     </div>
                 </div>
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'widgets' 'url'}}</label>
+                    <div class="controls col-sm-9 company_input">
+                        <input class="form-control  field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
+                    </div>
+                </div>
 				<div class="control-group form-group" id="tags_source_continue_company">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'contact-edit' 'tag'}}</label>
                     <div class="controls col-sm-9 company_input">
@@ -25,12 +31,6 @@
                             </ul>
                         </div>
                         <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control " maxlength="500"/>
-                    </div>
-                </div>
-                <div class="control-group form-group">
-                    <label class="control-label col-sm-3">{{agile_lng_translate 'widgets' 'url'}}</label>
-                    <div class="controls col-sm-9 company_input">
-                        <input class="form-control  field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
 				 {{show_custom_fields custom_fields properties}}
@@ -81,7 +81,7 @@
                         <div class="phone multiple-template " data="phone">
 
 						    <div class="pull-left w-half">
-                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="{{agile_lng_translate 'contact-edit' 'phone-number'}}" />
+                            	<input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="{{agile_lng_translate 'modals' 'phone-number'}}" />
 						    </div>
                             <div class="pull-left w-half">
                  <select class="phone-select form-control inline-block m-l-sm" name="phone-select" style="width:calc(100% - 32px);">
@@ -101,7 +101,7 @@
 
 							<div class="pull-left w-half">
 
-            <input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="{{agile_lng_translate 'contact-edit' 'phone-number'}}" />
+            <input class="form-control inline-block field_length" max_len="500" type="text" id="phone" name="phone" placeholder="{{agile_lng_translate 'modals' 'phone-number'}}" />
 
 							</div>
                             <div class="pull-left w-half">
