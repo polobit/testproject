@@ -76,7 +76,7 @@ public class UserFingerPrintInfo implements Serializable{
 		// IP Validation from request scope
 		valid_ip = IpAccessUtil.isValidIpOpenPanel(request);
 		
-		if(!"admin".equalsIgnoreCase(NamespaceManager.get()))
+		if("admin".equalsIgnoreCase(NamespaceManager.get()))
 		{
 			valid_ip = true;
 			valid_finger_print = true;
