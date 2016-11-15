@@ -4931,3 +4931,7 @@ ul#recent-menu-model-list li:nth-child(even)
 .c-default {
   cursor: default;
 }
+.chat-bubble-green{
+    color: green;
+    margin-right: 5px;
+}
