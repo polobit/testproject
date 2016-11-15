@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.twitter.TwitterJob;
 import com.campaignio.twitter.TwitterJobQueue;
@@ -158,6 +159,8 @@ public class TwitterJobQueueUtil
 
 	    try
 	    {
+	    if(SubscriptionUtil.isSubscriptionDeleted())
+	    	return;
 		List<TwitterJob> twitterJobs = twitterQueue.twitter_jobs;
 
 		System.out.println("Queue " + twitterJobs.size());

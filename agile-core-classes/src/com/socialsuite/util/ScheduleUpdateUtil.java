@@ -3,6 +3,7 @@ package com.socialsuite.util;
 import java.util.List;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -32,7 +33,8 @@ public class ScheduleUpdateUtil
 
 			// Sets namespace for log.
 			NamespaceManager.set(update.namespace);
-
+			if(SubscriptionUtil.isSubscriptionDeleted())
+				return;
 			// Create temp stream.
 			Stream stream = new Stream();
 			stream.domain_user_id = update.domain_user_id;

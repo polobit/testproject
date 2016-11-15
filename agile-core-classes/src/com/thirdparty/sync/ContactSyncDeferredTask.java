@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.sync.SyncFrequency;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.google.ContactPrefs;
@@ -42,7 +43,8 @@ public class ContactSyncDeferredTask implements DeferredTask
 	try
 	{
 	    NamespaceManager.set(namespace);
-
+	    if(SubscriptionUtil.isSubscriptionDeleted())
+	    	return;
 	    List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(frequency);
 	    if (prefs == null || prefs.size() == 0)
 		return;

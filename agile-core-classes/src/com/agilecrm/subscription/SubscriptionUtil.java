@@ -302,4 +302,11 @@ public class SubscriptionUtil
 
 	return plan;
     }
+    
+    public static boolean isSubscriptionDeleted(){
+    	Subscription subscription = getSubscription();
+    	if(subscription.status != null && subscription.status.equals(BillingStatus.SUBSCRIPTION_DELETED))
+			return true;
+    	return false;
+    }
 }
