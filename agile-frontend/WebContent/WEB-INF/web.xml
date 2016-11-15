@@ -1608,4 +1608,13 @@
 		<url-pattern>/outbound_callstatus</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>OzonetelIncomingCallServlet</servlet-name>
+		<servlet-class>com.thirdparty.ozonetel.OzonetelIncomingCallServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OzonetelIncomingCallServlet</servlet-name>
+		<url-pattern>/incomingcall</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

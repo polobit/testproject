@@ -589,10 +589,23 @@ function handleCallRequest(message)
 				sendCommandToClient("notConfigured","Ozonetel");
 				return;
 			}
-			showOzonetelCallNoty(message);
 			if(message.state && message.state != "ringing"){
 				saveCallNoteOzonetel(message);
+				globalCall.callStatus = "Ideal";
 			}
+			try{
+				var phone = $("#skype_contact_number").val();
+				if (!phone || phone == ""){
+					phone = agile_crm_get_contact_properties_list("phone")[0].value;
+				}
+				if (phone == num){
+					getLogsForOzonetel(num);
+					//handleLogsForOzonetel(message);
+				}
+			}catch (e){
+
+			}
+			showOzonetelCallNoty(message);
 		}
 }
 
@@ -617,6 +630,7 @@ function checkForActiveCall()
 	{
 
 	}
+
 	try
 	{
 		if (globalCall.callStatus != "Ideal")

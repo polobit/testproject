@@ -40,7 +40,7 @@ public class OzonetelOutboundCallServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String uri = request.getRequestURI();
+    	String uri = request.getRequestURI();
         if (request.getQueryString() != null) {
             uri += "?" + request.getQueryString();
         }
@@ -63,30 +63,17 @@ public class OzonetelOutboundCallServlet extends HttpServlet {
                     r.addPlayText("re trying again");
                     Dial dialnumber = new Dial();
                     dialnumber.setNumber(request.getParameter("contact_number"));
-                    //dialnumber.setLimitTime(3600);
                     r.addDial(dialnumber);
                 }
             } else if((null != kookoo_event) && kookoo_event.equalsIgnoreCase("hangup")) {
                 
-            	r.addHangup();
-            } else {
+            	//r.addHangup();
+            }else {
                 r.addHangup();
             }
-            
-            JSONObject pubnub_notification = new JSONObject();
-		    pubnub_notification.put("title", "");
-		    pubnub_notification.put("start", "");
-		    pubnub_notification.put("end", "");
-		    pubnub_notification.put("priority", "");
-		    pubnub_notification.put("username", "");
-		    pubnub_notification.put("useremail", "");
-		    pubnub_notification.put("type", "EVENT_REMINDER");
-
-		    PubNub.pubNubPush(AgileUser.getCurrentAgileUser().domain_user_id+"_Channel", pubnub_notification);
-            
             System.out.println(r.getXML());/*here I am just printing kookoo final xml prepared*/
             out.println(r.getXML());
-        } catch (JSONException e) {
+        } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

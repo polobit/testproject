@@ -1,3 +1,20 @@
+/*
+ * This method is called after the sucessful loading of the widget
+ * If the pubnub is not connected then it will reenter in timeout function
+ * @author - Rajesh
+ */
+
+function startOzonetelWidget(contact_id){
+	/*setTimeout(function()
+	{
+		if(!Pubnub.is_connected_call){
+			startOzonetelWidget();
+			return;
+		}
+		getLogsForOzonetel();
+	}, 9000);*/
+	getLogsForOzonetel();
+}
 $(function(){
 	$('body').off('click', '.Ozonetel_call');
 	$('body').on('click', '.Ozonetel_call', function(e){

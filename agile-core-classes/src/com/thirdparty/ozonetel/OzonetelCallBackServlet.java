@@ -1,21 +1,12 @@
 package com.thirdparty.ozonetel;
-
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.google.appengine.labs.repackaged.org.json.JSONArray;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
-import com.ozonetel.kookoo.Dial;
-import com.ozonetel.kookoo.Response;
-
-//add and import kookoo response.jar or source code into your application
+import com.agilecrm.user.AgileUser;
+import com.thirdparty.PubNub;
+import org.json.*;
 
 @SuppressWarnings("serial")
 public class OzonetelCallBackServlet extends HttpServlet {
@@ -30,32 +21,21 @@ public class OzonetelCallBackServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	try{
-	        String uri = request.getRequestURI();
-	        System.out.println("kookoo outbound status : " + uri);/*here I am just kookoo final xml prepared*/
-	        if (request.getQueryString() != null) {
-	            uri += "?" + request.getQueryString();
-	        }
-	        JSONObject jsonobj = new JSONObject();
-	
-	        JSONArray jsonarry = new JSONArray();
+	        String phone_no = request.getParameter("phone_no");
+	        String contact_number = request.getParameter("contact_number");
+	        String status = request.getParameter("status");
+	        String duration = request.getParameter("duration");
 	        
-	        /*printing outbound callback parameters*/
-	        Enumeration<String> parameterNames = request.getParameterNames();
-	        while (parameterNames.hasMoreElements()) {
-	            String paramName = parameterNames.nextElement();
-	            String[] paramValues = request.getParameterValues(paramName);
-	            for (String paramValue : paramValues) {
-	            	jsonobj.put(paramName, paramValue);
-	                System.out.println("param : " + paramName + "=" + paramValue);
-	            }
-	        }
-	        try (PrintWriter out = response.getWriter()) {
-	            out.println("OK");
-	            out.println(jsonarry.put(jsonobj).toString());
-	            out.close();
-	           
-	        }
-	
+	        JSONObject pubnub_notification = new JSONObject();
+	        pubnub_notification.put("direction", "Outgoing");
+	        pubnub_notification.put("type", "call");
+	        pubnub_notification.put("callType", "Ozonetel");
+	        pubnub_notification.put("state", status.toLowerCase());
+	        pubnub_notification.put("contact_number", contact_number);
+	        pubnub_notification.put("phone_no", phone_no);
+	        pubnub_notification.put("duration", duration);
+	        
+	        PubNub.pubNubPush(AgileUser.getCurrentAgileUser().domain_user_id+"_Channel", pubnub_notification);
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    }

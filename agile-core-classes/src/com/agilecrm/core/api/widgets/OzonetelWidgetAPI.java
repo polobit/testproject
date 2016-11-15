@@ -34,17 +34,22 @@ public class OzonetelWidgetAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String connectOzonetel(@QueryParam("user_phone") String user_phone){
-		System.out.println(user_phone);
+		String status = "";
 		try{
 			Widget widget = WidgetUtil.getWidget("Ozonetel");
-			
+			String url = "http://kookoo.in/outbound/outbound.php";
 			OzonetelUtil util = new OzonetelUtil(widget.getProperty("ozontel_auth_key"),widget.getProperty("agent_no"), widget.getProperty("caller_id"));
-			util.connectToNumber(user_phone);
+			status = util.connectToNumber(user_phone,url);
+			if(StringUtils.equals("failed", status)){
+				url = "http://1.kookoo.in/outbound/outbound.php";
+				status = util.connectToNumber(user_phone,url);
+			}
 		}catch(Exception e){
 			System.out.println("Exception form OzonetelWidgetAPI connectOzonetel method");
 			e.printStackTrace();
+			status = "failed";
 		}
-		return "String";
+		return status;
 	}
 	
 	/**

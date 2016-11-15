@@ -428,7 +428,7 @@ function dialFromOzonetel(to,from,contact){
   	action['command'] = "startCall";
   	action['number'] = to;
   	action['callId'] = "";
-	alert(contact)
+	//alert(contact)
 	try{
 		resetglobalCallVariables();
 		resetglobalCallForActivityVariables();
@@ -447,13 +447,17 @@ function dialFromOzonetel(to,from,contact){
 			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to, 
 			type : 'GET', 
 			success : function(data){
-						
+				if(data == "success"){
+					var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+					showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
+					globalCall.callStatus = "Oncall";
+				}else{
+					alert("Failed to connect with kookoo server");
+				}
 			}, error : function(response){
 				console.log(response);
 			} 
 		});
-		var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
-		showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
 	}catch (e) {
 	}
 }
