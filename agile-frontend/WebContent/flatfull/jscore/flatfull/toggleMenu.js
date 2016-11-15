@@ -84,6 +84,10 @@ $("#help-options").click(function(e){
 	agile_toggle_chat_option_on_status();
 
 });
+$("#prefsDropdownModal").on('click','#affiliate_link',function(e){		
+		$("#prefsDropdownModal").modal("hide");
+});
+
 
 if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILLING_PREFS.freeTrialStatus == "TRIALING" && USER_BILLING_PREFS.freeTrialEnd > parseInt(new Date().getTime()/1000))
 {
