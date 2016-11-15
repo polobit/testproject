@@ -54,6 +54,9 @@ public class MobileUADetector {
 	static OS_NAME getMobileOperatingSystem(String userAgent) {
 		
 		try {
+			if(!isMobileOrTablet(userAgent))
+				return OS_NAME.UNKNOWN;
+			
 			// =================OS=======================
 			if (userAgent.toLowerCase().indexOf("windows") >= 0) {
 				return OS_NAME.WINDOWS;

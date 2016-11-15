@@ -7246,14 +7246,17 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					{
 						trim_name = trim_name.substring(0, 30)+"...";
 					}
-					if(index == 0 && (!selected_li_id || !is_active_added))
-					{
+					if(!selected_li_id){
 						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
 					}
-					else if(index == 0)
+					/*if(index == 0 && (!selected_li_id || !is_active_added))
+					{
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
+					}*/
+					/*else if(index == 0)
 					{
 						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
-					}
+					}*/
 
 					if(selected_li_id == this.id)
 					{
@@ -7265,7 +7268,19 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += getTemplate("js-dashboards-options-newui");
+
+						switch(CURRENT_DOMAIN_USER.role){
+							case 'SALES':
+							    return options_el += getTemplate("js-sales-dashboards-options-newui");
+							    break;
+							case 'MARKETING':
+								return options_el += getTemplate("js-marketing-dashboards-options-newui");
+								break;
+							case 'SERVICE' :
+								return options_el += getTemplate("js-service-dashboards-options-newui");
+								break;
+						}	
+						
 					}
 					
 				}
@@ -7274,8 +7289,19 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
-				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
-				options_el += getTemplate("js-dashboards-options-newui");
+				
+				//options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";		
+				switch(CURRENT_DOMAIN_USER.role){
+					case 'SALES':
+					    return options_el += getTemplate("js-sales-dashboards-options-newui");
+					    break;
+					case 'MARKETING':
+						return options_el += getTemplate("js-marketing-dashboards-options-newui");
+						break;
+					case 'SERVICE' :
+						return options_el += getTemplate("js-service-dashboards-options-newui");
+						break;
+				}	
 			}			
 		}
 

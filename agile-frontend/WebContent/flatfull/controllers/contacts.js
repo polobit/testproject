@@ -105,8 +105,20 @@ var ContactsRouter = Backbone.Router.extend({
             });
             return;
 		}
-
+		var role = CURRENT_DOMAIN_USER.role;
+		//var dashboard_name = menuServiceDashboard(role);
+		
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(isNaN(dashboard_name)){
+			dashboard_name = menuServiceDashboard(role);	
+		}
+		else{
+				dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		}
+
+		
+
+
 		if(!dashboard_name){
 			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
 			if(selected_id == "Dashboard")
@@ -1839,6 +1851,7 @@ function addTypeCustomData(contactId, el){
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 	
 }
+
 function confirmandVerifyEmail()
 {
 	var options = {};
@@ -1869,4 +1882,19 @@ function confirmandVerifyEmail()
 				}
 				rearrange_from_email_options($select, data);
 			});
+
+}
+
+function menuServiceDashboard(role){
+		switch(role){
+			case 'SALES':
+			    return "SalesDashboard"
+			    break;
+			case 'MARKETING':
+				return "MarketingDashboard";
+				break;
+			case 'SERVICE' :
+				return "Dashboard";
+				break;
+		}
 }

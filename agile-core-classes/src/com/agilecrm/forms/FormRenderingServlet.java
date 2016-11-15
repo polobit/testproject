@@ -46,7 +46,7 @@ public class FormRenderingServlet extends HttpServlet
 		throw new Exception("No form found.");
 	    String htmlBody = form.formHtml;
 	    htmlBody = updateMethodType(htmlBody);
-	    String htmlHeading = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<title>Form</title>\n</head>\n<body>\n<div id=\"agileFormHolder\" style=\"margin:0 auto;width:450px\">\n";
+	    String htmlHeading = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<title>"+form.formName+"</title>\n</head>\n<body>\n<div id=\"agileFormHolder\" style=\"margin:0 auto;width:450px\">\n";
 	    String htmlButtom = "\n<script>var agform = document.getElementById(\"agile-form\");agform.onsubmit=function(){console.log(\"Submit button processing hitting\");document.getElementsByClassName(\"agile-button\")[0].innerHTML=\"Processing...\";document.getElementsByClassName(\"agile-button\")[0].disabled=true;}</script>\n</div>\n</body>\n</html>";
 	    /**
 	     * putting the validation for the recaptcha validation 

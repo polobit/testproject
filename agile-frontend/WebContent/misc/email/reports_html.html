@@ -23,6 +23,9 @@
 					{{#HashMap.limit_message}}
 					<div style="font-size:12px;margin-bottom:10px;font-family:sans-serif;text-align:right">First 100 (of {{HashMap.count}}) Contacts</div>
 					{{/HashMap.limit_message}}
+					{{^HashMap.limit_message}}
+					<div style="font-size:12px;margin-bottom:10px;font-family:sans-serif;text-align:right">{{HashMap.report.name}} ({{HashMap.count}})</div>	
+					{{/HashMap.limit_message}}
 					<table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#FFFFFF" style="line-height:20px">
 						<tbody>
 						{{#HashMap.report_results}}
