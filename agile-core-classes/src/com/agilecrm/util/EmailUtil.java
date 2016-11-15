@@ -29,6 +29,7 @@ import com.agilecrm.user.EmailPrefs;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.sendgrid.SendGrid;
 
 public class EmailUtil
@@ -37,6 +38,16 @@ public class EmailUtil
     // Agile emails - to avoid count when emails are sent to Agile support
     public static String[] agileEmails = { "care@agilecrm.com", "sales@agilecrm.com" };
     public static List<String> agileEmailsList = Arrays.asList(agileEmails);
+    
+    /**
+     * Beta open email track url
+     */
+    public static final String BETA_OPEN_TRACKING_URL = "http://open-beta.agle.me";
+    
+    /**
+     * Live open email track url
+     */
+    public static final String LIVE_OPEN_TRACKING_URL = "http://open.agle.me";
 
     /**
      * Parses html body of an email using jsoup.
@@ -165,22 +176,31 @@ public class EmailUtil
      **/
     public static String appendTrackingImage(String html, String campaignId, String trackerId)
     {
-	String queryParams = "";
-
+      // Adding domain name in query param
+	String queryParams ="";
+	
+	String domain =  NamespaceManager.get() ;
+	
+	//domain name
+	if(!StringUtils.isEmpty(domain))
+	    queryParams = "ns=" + domain + "&";
+	
 	// Campaign-id
 	if (!StringUtils.isEmpty(campaignId))
-	    queryParams = "c=" + campaignId;
-
-	// If not emtpy add '&'
-	if (!StringUtils.isEmpty(queryParams))
-	    queryParams += "&";
+	    queryParams += "c=" + campaignId + "&";
 
 	// Contact id (for campaigns) or Tracker Id (for personal emails)
 	if (!StringUtils.isEmpty(trackerId))
 	    queryParams += "s=" + trackerId;
-
+	
+	String trackURL = LIVE_OPEN_TRACKING_URL;
+	
+	//If environment is beta then use beta url
+	if(SystemProperty.applicationId.get().equals("agilecrmbeta"))
+		trackURL = BETA_OPEN_TRACKING_URL;
+	
 	String trackingImage = "<div class=\"ag-img\"><img src="
-	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
+	        + trackURL + "?" + queryParams
 	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;

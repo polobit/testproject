@@ -224,7 +224,9 @@ public class SendEmail extends TaskletAdapter
     /**
      * Unsubscribe link that is shortened
      */
-    public static String UNSUBSCRIBE_LINK = "http://unscr.be/";
+    private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
+    
+    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
 
     /*
      * (non-Javadoc)
@@ -767,8 +769,14 @@ public class SendEmail extends TaskletAdapter
     {
     	try
     	{
-    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?e="
+    	    String unsubscribeLink = UNSUBSCRIBE_LINK;
+    	    
+    	    if(!VersioningUtil.isProductionAPP())
+    		unsubscribeLink = UNSUBSCRIBE_SANDBOX_LINK;
+    		
+    	    return unsubscribeLink + "?e="
                     + URLEncoder.encode(email, "UTF-8")
+                    + "&ns="+URLEncoder.encode(NamespaceManager.get(),"UTF-8")
                     + "&sid=" + URLEncoder.encode(subscriberId, "UTF-8")
                     + "&cid=" + URLEncoder.encode(campaignId, "UTF-8");
     	}
