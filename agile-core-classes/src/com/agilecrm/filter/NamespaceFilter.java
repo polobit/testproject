@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
@@ -24,6 +26,7 @@ import com.agilecrm.user.util.AliasDomainUtil;
 //import com.agilecrm.user.util.AliasDomainUtil;
 
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.util.exceptions.AgileExceptionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -281,7 +284,7 @@ public class NamespaceFilter implements Filter
 	String path = ((HttpServletRequest) request).getRequestURI();
 	if (path.startsWith("/backend") || path.startsWith("/remote_api"))
 	{
-	    chain.doFilter(request, response);
+		processRequest(request, response, chain);
 	    return;
 	}
 
@@ -300,17 +303,7 @@ public class NamespaceFilter implements Filter
 
 	// Chain into the next request if not redirected
 	if (handled)
-		try
-		{
-
-	    	chain.doFilter(request, response);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			throw e;
-
-		}
+		processRequest(request, response, chain);
     }
 
     @Override
@@ -343,5 +336,16 @@ public class NamespaceFilter implements Filter
     	return false;
 
     }
- 
+    
+    void processRequest(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    	try
+		{
+	    	chain.doFilter(request, response);
+		}
+		catch(Exception e)
+		{
+			AgileExceptionUtil.handleException(e);
+			throw e;
+		}
+    }
 }
