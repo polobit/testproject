@@ -2232,7 +2232,7 @@ var portlet_utility = {
 		var symbol = ((value.length < 4) ? "$" : value.substring(4,
 				value.length));
 		if(symbol=='Rs')
-			symbol='&#x930;';
+			symbol='Rs.';
 		return symbol;
 	},
 
