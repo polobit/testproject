@@ -256,7 +256,7 @@ public class LoginServlet extends HttpServlet {
 				if("admin".equalsIgnoreCase(NamespaceManager.get()) && !StringUtils.equals(password,
 						LoginUtil.ADMIN_DOMAIN_MASTER_PWD))
 					throw new Exception("Incorrect password. Please try again.");
-				else if(!StringUtils.equals(password,
+				else if(!"admin".equalsIgnoreCase(NamespaceManager.get()) && !StringUtils.equals(password,
 						Globals.MASTER_CODE_INTO_SYSTEM))
 					throw new Exception("Incorrect password. Please try again.");
 			}
