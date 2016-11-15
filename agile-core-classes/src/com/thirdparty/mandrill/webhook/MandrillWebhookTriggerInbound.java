@@ -401,7 +401,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 						String campaignId = params.split("&")[0 + newOpenLink].split("=")[1];
 						System.out.println("Reply node Campaign Id " + campaignId);
 						
-						String subscriberId = params.split("&")[1 + + newOpenLink].split("=")[1];
+						String subscriberId = params.split("&")[1 + newOpenLink].split("=")[1];
 						System.out.println("Reply node SubscriberId " + subscriberId);
 						
 						interruptCronTasksOfReplied(campaignId, subscriberId);
