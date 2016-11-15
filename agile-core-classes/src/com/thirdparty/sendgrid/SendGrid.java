@@ -160,7 +160,7 @@ public class SendGrid
      * @return String
      */
     public static String sendMail(String apiUser, String apiKey, String fromEmail, String fromName, String to,
-	    String cc, String bcc, String subject, String replyTo, String html, String text, String SMTPHeaderJSON,
+	    String cc, String bcc, String subject, String replyTo, String html, String text, String SMTPHeaderJSON, String language,
 	    String... attachmentData)
     {
 
@@ -329,7 +329,7 @@ public class SendGrid
     public static String sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text)
     {
-	return sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
+	return sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, null);
     }
 
     private static String getAttachmentQueryString(String... attachmentData)

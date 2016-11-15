@@ -217,7 +217,7 @@ public class SendMail
      */
     @SuppressWarnings("unused")
     public static void sendMail(String to, String subject, String template, Object object, String from,
-	    String fromName, String... args)
+	    String fromName, String language, String... args)
     {
 	try
 	{
@@ -289,7 +289,7 @@ public class SendMail
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
-	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
+	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, language, args);
 
 	    // Send Email
 	    // Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
@@ -320,8 +320,8 @@ public class SendMail
      * @param args
      *            - Variable args to send email attachment.
      */
-    public static void sendMail(String to, String subject, String template, Object object)
+    public static void sendMail(String to, String subject, String template, Object object, String language)
     {
-	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME);
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME, language);
     }
 }
