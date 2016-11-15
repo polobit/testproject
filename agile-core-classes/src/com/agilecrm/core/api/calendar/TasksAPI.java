@@ -775,6 +775,10 @@ public class TasksAPI
 
 	    if (key.equals("progress"))
 		task.progress = obj.getInt(key);
+	    
+	    if (key.equals("is_complete"))
+		task.is_complete = obj.getBoolean(key);
+	    
 
 	    if (key.equals("contacts"))
 	    {
