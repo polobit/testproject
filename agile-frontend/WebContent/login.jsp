@@ -152,6 +152,7 @@ String registrationId = request.getParameter("registrationId");
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<meta name="robots" content="noindex, nofollow">
 
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
