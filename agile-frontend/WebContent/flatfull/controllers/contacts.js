@@ -1433,7 +1433,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			_agile_delete_prefs('dynamic_contact_filter');
 		}
 
-		if(_agile_get_prefs("contacts_tag") != tag_id)
+		if(tag_id && _agile_get_prefs("contacts_tag") != tag_id)
 		{
 			CONTACTS_HARD_RELOAD = true;
 			_agile_set_prefs("contacts_tag", tag_id);
