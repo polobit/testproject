@@ -4931,3 +4931,7 @@ ul#recent-menu-model-list li:nth-child(even)
 .c-default {
   cursor: default;
 }
+.agile-menu-dropdown-aside
+{
+      padding-top: 8px !important;
+}

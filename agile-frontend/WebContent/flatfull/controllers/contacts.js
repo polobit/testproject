@@ -20,7 +20,7 @@ var ContactsRouter = Backbone.Router.extend({
 		"dashboard" : "dashboard",
 
 		"navigate-dashboard" : "navigateDashboard", 
-		
+		"navigate-dashboard/:id" : "navigateDashboard",
 		// "dashboard-test": "dashboard",
 
 		/* Contacts */
@@ -87,8 +87,10 @@ var ContactsRouter = Backbone.Router.extend({
          App_Datasync.salesforce();
 	},
 
-	navigateDashboard : function(){
+	navigateDashboard : function(id){
 		// Call dashboard route
+		if(id)
+		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
 		Backbone.history.navigate("#", {
             trigger: true
         });

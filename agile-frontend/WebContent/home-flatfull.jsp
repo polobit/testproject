@@ -431,7 +431,7 @@ function isIE() {
           
           <% } %>
        
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed 
+<div id="wrap" class="app app-aside-folded-inactive app-header-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
   out.print("app-aside-dock ");
@@ -488,23 +488,30 @@ if(currentUserPrefs.menuPosition.equals("top")){
     out.print("hide adminPanel");
   }
   %>">
-          <div class="aside-wrap">
+          <div class="">
         <div class="navi-wrap">
   
-  <nav  class="navi clearfix" id="agile-menu-navigation-container">
+  <nav  class="navi clearfix" ui-nav >
     <ul class="nav">
     
   <!-- Sales menu -->   
-  <%if(domainUser.role == ROLE.SALES){ %>
-   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-     <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
-   </li>
-   <li id="home_dashboard">
-    <a  href="#">
-      <i class="icon icon-home"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
-    </a>
-  </li>
+    <li class="appaside dropdownnavbar  <%if(domainUser.role == ROLE.SALES){ %> agile-menuactive <% } %> " id="agile-sales-menu-navigation-container">
+          <a class="auto agile-menu-dropdown-aside">      
+            <span class="pull-right text-muted">
+              <i class="fa fa-fw fa-angle-right text "></i>
+              <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-line-chart icon "></i>
+            <span class="font-bold">Sales</span>
+          </a>
+    <ul class="nav nav-sub dk" style="display:block;" >
+       
+       <li id="home_dashboard">
+        <a  href="#" class="menu-service-select" data-service-name="SALES" data-dashboard="SalesDashboard" >
+          <!-- <i class="icon icon-home"></i> -->
+          <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
+        </a>
+      </li>
 
    <!-- <li id="leadsmenu">
     <a  href="#leads">
@@ -513,138 +520,143 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li> -->
         
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
-  %>      
-  <li id="contactsmenu">
-    <a  href="#contacts">
-      <i class="icon icon-user"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
-    </a>
-  </li>
-  <%
-      }
-  %>
-
-  <li id="companiesmenu">
-    <a  href="#companies">
-      <i class="icon icon-building"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
-    </a>
-  </li>
-
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
-  %>
-   <li  id="dealsmenu">
-    <a  href="#deals">
-      <i class="fa fa-money"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
-    </a>
-  </li>
-  <%
-      }
-  %>
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
-  %>
-  <li id="casesmenu">
-    <a  href="#cases">
-      <i class="icon icon-folder"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-cases") %></span>
-    </a>
-  </li> 
-  <%
-      }
-  %>
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
-  %>
-  
-   <li id="documentsmenu">
-    <a  href="#documents">
-      <i class="icon icon-doc"></i>
-      <span class="leftcol-menu-folded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %></span>
-      <span class="leftcol-menu-expanded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-documents") %></span>
-      <%if(currentUserPrefs.menuPosition.equals("leftcol")){%>
-      <%}else {%>
-      <%}%>
-    </a>
-  </li>
-  <%
-        }
-  %>  
-  
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
-  %>
-  
-  <li id="calendarmenu">
-    <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
-      <i class="icon icon-calendar"></i> 
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> 
-    </a>
-  </li>
-  <%
-        }
-  %>  
-  
-  <li id="tasksmenu">
-    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
-      <i class="icon-list" data-original-title="" title=""></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
-      <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
-          <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
-      </span>
-    </a>
-  </li>
-
-  <li id="schedulingmenu">
-    <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
-      <i class="icon-tag" data-original-title="" title=""></i>
-      <span>Online Calendar</span>
-    </a>
-  </li>
-
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
-    %>
-    <li id="activitiesmenu">
-    <a  href="#activities">
-      <i class="icon-speedometer icon-white"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
-    </a>
-  </li>
-    <%
-          }
-    %>
+        <%
+            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+        %>      
+        <li id="contactsmenu">
+          <a  href="#contacts">
+           <!--  <i class="icon icon-user"></i> -->
+            <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
+          </a>
+        </li>
+        <%
+            }
+        %>
+        <li id="companiesmenu">
+          <a  href="#companies">
+           <!--  <i class="icon icon-building"></i> -->
+            <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
+          </a>
+        </li>
+        <%
+            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DEALS)){
+        %>
+         <li  id="dealsmenu">
+          <a  href="#deals">
+            <!-- <i class="fa fa-money"></i> -->
+            <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
+          </a>
+        </li>
+        <%
+            }
+        %>
+        <%
+            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CASES) && domainUser.version == null){
+        %>
+        <li id="casesmenu">
+          <a  href="#cases">
+            <!-- <i class="icon icon-folder"></i> -->
+            <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-cases") %></span>
+          </a>
+        </li> 
+        <%
+            }
+        %>
+        <%
+            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.DOCUMENT)){
+        %>
+        
+         <li id="documentsmenu">
+          <a  href="#documents">
+           <!--  <i class="icon icon-doc"></i> -->
+            <span class="leftcol-menu-folded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %></span>
+            <span class="leftcol-menu-expanded"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-documents") %></span>
+            <%if(currentUserPrefs.menuPosition.equals("leftcol")){%>
+            <%}else {%>
+            <%}%>
+          </a>
+        </li>
+        <%
+              }
+        %>  
+        <%
+            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CALENDAR)){
+        %>
+        
+        <li id="calendarmenu">
+          <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
+            <!-- <i class="icon icon-calendar"></i>  -->
+            <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> 
+          </a>
+        </li>
+        <%
+              }
+        %>  
+      <li id="tasksmenu">
+        <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+          <!-- <i class="icon-list" data-original-title="" title=""></i> -->
+          <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
+          <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
+              <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
+          </span>
+        </a>
+      </li>
+      <li id="schedulingmenu">
+        <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
+         <!--  <i class="icon-tag" data-original-title="" title=""></i> -->
+          <span>Online Calendar</span>
+        </a>
+      </li>
+      <%
+          if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+        %>
+        <li id="activitiesmenu">
+        <a  href="#activities">
+         <!--  <i class="icon-speedometer icon-white"></i> -->
+          <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
+        </a>
+      </li>
+        <%
+              }
+        %>
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
-    %>
-  <li id="reportsmenu">
-    <a  href="#reports">
-      <i class="icon-bar-chart icon-white"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
-    </a>
-  </li> 
-    <%
-          }
-    %> 
-  
+      %>
+    <li id="reportsmenu">
+      <a  href="#reports">
+       <!--  <i class="icon-bar-chart icon-white"></i> -->
+        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
+      </a>
+    </li> 
+      <%
+            }
+      %> 
+    
   <!-- End of Sales menu -->
-  <%} %>
+
+</ul>
+</li>
 
   
   <!--  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li> -->
   
-  <!-- Marketing menu -->   
-  <%if(domainUser.role == ROLE.MARKETING){ %>
-  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
-  </li>
+  <!-- Marketing menu -->  
+  <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.MARKETING){ %> agile-menuactive <% } %>" id="agile-marketing-menu-navigation-container">
+      <a class="auto ">      
+        <span class="pull-right text-muted">
+          <i class="fa fa-fw fa-angle-right text"></i>
+          <i class="fa fa-fw fa-angle-down text-active"></i>
+        </span>
+        <i class=" icon-rocket icon "></i>
+        <span class="font-bold">Marketing</span>
+      </a>
+      <ul class="nav nav-sub dk" style="display:block;" > 
+
+  
   <li id="home_dashboard">
-    <a  href="#">
-      <i class="icon icon-home"></i>
+
+    <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/MarketingDashboard">
+     <!--  <i class="icon icon-home"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
@@ -652,8 +664,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
   <li id="contactsmenu">
-    <a  href="#contacts">
-      <i class="icon icon-user"></i>
+    <a class="agile-menu-dropdown-aside" href="#contacts">
+     <!--  <i class="icon icon-user"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
     </a>
   </li>
@@ -665,15 +677,15 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
    <li id="workflowsmenu">
-    <a  href="#workflows">
-      <i class="icon icon-sitemap"></i>
+    <a class="agile-menu-dropdown-aside" href="#workflows">
+      <!-- <i class="icon icon-sitemap"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-campaigns") %></span>
     </a>
   </li>
 
   <li id="triggersmenu">
-    <a  href="#triggers">
-      <i class="icon icon-magic-wand"></i>
+    <a class="agile-menu-dropdown-aside" href="#triggers">
+     <!--  <i class="icon icon-magic-wand"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
     </a>
   </li>
@@ -684,8 +696,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
     %>
    <li id="web-rules-menu">
-    <a  href="#web-rules">
-      <i class="icon icon-globe"></i>
+    <a class="agile-menu-dropdown-aside" href="#web-rules">
+      <!-- <i class="icon icon-globe"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
     </a>
   </li>
@@ -696,8 +708,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
     %>
    <li id="segmentationmenu">
-    <a  href="#visitors">
-       <i class="icon-eye"></i>
+    <a class="agile-menu-dropdown-aside" href="#visitors">
+      <!--  <i class="icon-eye"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
@@ -708,8 +720,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>
   <li id="landing-pages-menu">
-    <a href="#landing-pages">
-      <i class="fa fa-file-code-o"></i>
+    <a class="agile-menu-dropdown-aside" href="#landing-pages">
+     <!--  <i class="fa fa-file-code-o"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
     </a>
   </li>
@@ -721,16 +733,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
   if(domainUser.is_admin){
   %>
   <li id="formsmenu">
-    <a  href="#forms">
-       <i class="icon-large1 icon-docs"></i>
+    <a class="agile-menu-dropdown-aside" href="#forms">
+      <!--  <i class="icon-large1 icon-docs"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
   <%}%>
   
   <li id="email-templates-menu">
-    <a href="#email-templates">
-      <i class="icon-envelope-letter"></i>
+    <a class="agile-menu-dropdown-aside" href="#email-templates">
+     <!--  <i class="icon-envelope-letter"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
     </a>
   </li>
@@ -739,8 +751,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
    %>
    <li id="socialsuitemenu">
-    <a  href="#social">
-      <i class="icon-bubbles"></i>
+    <a class="agile-menu-dropdown-aside" href="#social">
+     <!--  <i class="icon-bubbles"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
     </a>
   </li>
@@ -748,8 +760,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
           }
     %>
     <li id="push-notification-menu">
-    <a href="#push-notification">
-      <i class="fa fa-bell-o"></i>
+    <a  class="agile-menu-dropdown-aside" href="#push-notification">
+     <!--  <i class="fa fa-bell-o"></i> -->
       <span>Push Notifications</span>
     </a>
   </li>
@@ -757,8 +769,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu">
-    <a  href="#activities">
-      <i class="icon-speedometer icon-white"></i>
+    <a class="agile-menu-dropdown-aside" href="#activities">
+    <!--   <i class="icon-speedometer icon-white"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
@@ -769,14 +781,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu">
-    <a  href="#reports">
-      <i class="icon-bar-chart icon-white"></i>
+    <a class="agile-menu-dropdown-aside" href="#reports">
+    <!--   <i class="icon-bar-chart icon-white"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
   <li id="tasksmenu" class="hide">
-    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
-      <i class="icon-list" data-original-title="" title=""></i>
+    <a class="agile-menu-dropdown-aside" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+     <!--  <i class="icon-list" data-original-title="" title=""></i> -->
       <span>Tasks</span>
       <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
@@ -788,19 +800,29 @@ if(currentUserPrefs.menuPosition.equals("top")){
     %> 
     
   <!-- End of Marketing menu -->
-  <%} %>
+  
+</ul>
+</li>
   
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->   
-  <%if(domainUser.role == ROLE.SERVICE){ %>
+   <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.SERVICE){ %> agile-menuactive <% } %>" id="agile-service-menu-navigation-container">
+      <a class="auto">      
+        <span class="pull-right text-muted">
+          <i class="fa fa-fw fa-angle-right text"></i>
+          <i class="fa fa-fw fa-angle-down text-active"></i>
+        </span>
+        <i class="icon-book-open icon"></i>
+        <span class="font-bold">Service</span>
+      </a>
+      <ul class="nav nav-sub dk" style="display:block;" > 
   
-  <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
-    <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
-  </li>
+  
+  
 
   <li id="home_dashboard">
-    <a  href="#">
-      <i class="icon icon-home"></i>
+    <a class="agile-menu-dropdown-aside"  href="#" class="menu-service-select" data-service-name="SERVICE" data-dashboard="dashboard">
+    <!--   <i class="icon icon-home"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
@@ -810,8 +832,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
   <li id="contactsmenu">
-    <a  href="#contacts">
-      <i class="icon icon-user"></i>
+    <a class="agile-menu-dropdown-aside" href="#contacts">
+     <!--  <i class="icon icon-user"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
     </a>
   </li>
@@ -821,15 +843,15 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   
   <li id="tickets">
-    <a href="#tickets">
-      <i class="icon icon-ticket"></i>
+    <a class="agile-menu-dropdown-aside" href="#tickets">
+      <!-- <i class="icon icon-ticket"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
 
   <li id="tasksmenu" class="hide">
-    <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
-      <i class="icon-list" data-original-title="" title=""></i>
+    <a class="agile-menu-dropdown-aside" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+     <!--  <i class="icon-list" data-original-title="" title=""></i> -->
       <span>Tasks</span>
       <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
@@ -841,32 +863,32 @@ if(currentUserPrefs.menuPosition.equals("top")){
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>          
   <li id="ticketgroupsmenu">
-    <a href="#ticket-groups">
-      <i class="icon icon-users"></i>
+    <a class="agile-menu-dropdown-aside" href="#ticket-groups">
+    <!--   <i class="icon icon-users"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
-    <a href="#ticket-labels">
-      <i class="icon icon-flag"></i>
+    <a  class="agile-menu-dropdown-aside"href="#ticket-labels">
+    <!--   <i class="icon icon-flag"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
-    <a href="#canned-responses">
-      <i class="icon icon-cursor"></i>
+    <a class="agile-menu-dropdown-aside" href="#canned-responses">
+    <!--   <i class="icon icon-cursor"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
-    <a href="#ticket-views">
-      <i class="icon icon-directions"></i>
+    <a class="agile-menu-dropdown-aside" href="#ticket-views">
+     <!--  <i class="icon icon-directions"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
-    <a href="#knowledgebase">
-      <i class="fa fa-search"></i>
+    <a  class="agile-menu-dropdown-aside" href="#knowledgebase">
+    <!--   <i class="fa fa-search"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
@@ -878,8 +900,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="feedbackactivitiesmenu">
-    <a  href="#ticket-feedback">
-      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+    <a class="agile-menu-dropdown-aside" href="#ticket-feedback">
+     <!--  <i class="m-r-sm fa fa-thumbs-up v-middle"></i> -->
       <span>Feedback</span>
     </a>
   </li>
@@ -891,8 +913,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu">
-    <a  href="#activities">
-      <i class="icon-speedometer icon-white"></i>
+    <a class="agile-menu-dropdown-aside" href="#activities">
+    <!--   <i class="icon-speedometer icon-white"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
@@ -903,8 +925,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu">
-    <a  href="#reports">
-      <i class="icon-bar-chart icon-white"></i>
+    <a class="agile-menu-dropdown-aside" href="#reports">
+     <!--  <i class="icon-bar-chart icon-white"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
@@ -915,8 +937,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
  
   <!-- End of Service menu -->
-  <%} %>
-             
+ 
+             </ul>
+           </li>
   </ul>
 
 

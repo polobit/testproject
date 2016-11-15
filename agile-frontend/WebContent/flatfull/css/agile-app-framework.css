@@ -12023,7 +12023,7 @@ body {
           transition: all 0.2s ease-in-out 0s;
 }
 
-.active .nav-sub,
+.active .nav-sub,.agile-menuactive  .nav-sub,
 .app-aside-folded li:hover .nav-sub,
 .app-aside-folded li:focus .nav-sub,
 .app-aside-folded li:active .nav-sub {
@@ -14952,12 +14952,12 @@ a.text-#000000:hover {
 }
 
 .text-active,
-.active > .text,
+.active > .text,.agile-menuactive > .text,.agile-menuactive > .auto .text,
 .active > .auto .text {
   display: none !important;
 }
 
-.active > .text-active,
+.active > .text-active,.agile-menuactive > .text-active,.agile-menuactive > .auto .text-active
 .active > .auto .text-active {
   display: inline-block !important;
 }

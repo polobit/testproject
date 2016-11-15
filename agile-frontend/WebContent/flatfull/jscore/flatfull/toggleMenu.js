@@ -474,6 +474,22 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$("#helpcontent_popover").addClass("hide");
 	
 	}
+	$(".appaside.dropdownnavbar ul li").on("click",function(e)
+	{
+		$(this).addClass("agile-menuactive");
+		$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+	});
+	$(".appaside.dropdownnavbar").on("click",function(e)
+	{
+		
+		if($(this).hasClass("agile-menuactive"))
+		{
+			$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+			return $(this).addClass("agile-menuactive");
+		}
+		$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+		return $(this).addClass("agile-menuactive");
+	});
 	// initializing need help popover for header page
    $(".need_help").popover({ 
    					placement : $(this).attr("data-placement"),
@@ -561,10 +577,11 @@ function initRolehandlers(){
 
  			var due_tasks_count = $("#due_tasks_count").text();
  			due_tasks_count = due_tasks_count ? due_tasks_count : "";
-
+ 			$(".appaside.dropdownnavbar").removeClass("active");
+ 			$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").addClass("active");
  			// Update UI
- 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
-
+ 			/*$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+*/
  			// Call dashboard route
  			Backbone.history.navigate("#navigate-dashboard", {
                 trigger: true
