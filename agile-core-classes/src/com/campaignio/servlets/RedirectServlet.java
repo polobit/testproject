@@ -67,7 +67,7 @@ public class RedirectServlet extends HttpServlet
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
 	String pushNotificationLinked = req.getParameter("n");
-	String namespace = req.getParameter("ns");
+	String namespace = req.getParameter("ns"); // for new click tracking urls
 	
 	//Get client IP address
 	String clientIPAddress=AnalyticsServlet.getClientIP(req);
@@ -110,22 +110,22 @@ public class RedirectServlet extends HttpServlet
 		NamespaceManager.set(domain);
 
 	    // When requested from shorten url, get values from URLShortener
-	    if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
+	    if (StringUtils.isBlank(namespace) && StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
 	    {
-		// Get URLShortener object based on key i.e., URLShortener id
-		urlShortener = URLShortenerUtil.getURLShortener(url);
-
-		if (urlShortener == null)
-		{
-		    resp.getWriter().println("Invalid URL");
-		    return;
-		}
-
-		subscriberId = urlShortener.subscriber_id;
-		campaignId = urlShortener.campaign_id;
-		originalURL = urlShortener.long_url;
-		trackerId = urlShortener.tracker_id;
-		push = urlShortener.getPushParameter();
+			// Get URLShortener object based on key i.e., URLShortener id
+			urlShortener = URLShortenerUtil.getURLShortener(url);
+	
+			if (urlShortener == null)
+			{
+			    resp.getWriter().println("Invalid URL");
+			    return;
+			}
+	
+			subscriberId = urlShortener.subscriber_id;
+			campaignId = urlShortener.campaign_id;
+			originalURL = urlShortener.long_url;
+			trackerId = urlShortener.tracker_id;
+			push = urlShortener.getPushParameter();
 	    }
 
 	    // Remove spaces, \n and \r
