@@ -7968,7 +7968,7 @@ Handlebars.registerHelper('contactsnamestatus', function(options)
 
 Handlebars.registerHelper('is_admin_domain', function(options)
 {
-	if(CURRENT_DOMAIN_USER.domain == null || CURRENT_DOMAIN_USER.domain == "admin")
+	if(CURRENT_DOMAIN_USER.domain == "admin")
 		return options.fn(this);
 	return options.inverse(this);
 
