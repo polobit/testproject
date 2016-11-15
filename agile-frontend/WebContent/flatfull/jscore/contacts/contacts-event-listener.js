@@ -333,8 +333,8 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
     	}
     	$(e.currentTarget).parent().parent().toggleClass("compact");
-    	$(".thead_check", $("#contacts-listener-container")).prop("checked", false);
-		contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
+    	contacts_view_loader.disableBulkActionBtns();
+    	contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
     },
 
     addOrRemoveContactColumns : function(e){
@@ -357,6 +357,8 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 			data :JSON.stringify(json),
 			success : function(data)
 			{
+				contacts_view_loader.disableBulkActionBtns();
+
 				App_Contacts.contactViewModel = data;
 				contacts_view_loader.fetchHeadings(function(modelData){
 					contacts_view_loader.getContacts(modelData, $("#contacts-listener-container"));
@@ -398,8 +400,8 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
     	}
     	$(e.currentTarget).parent().toggleClass("compact");
-    	$(".thead_check", $("#companies-listener-container")).prop("checked", false);
-		companies_view_loader.getCompanies(App_Companies.companyViewModel, $("#companies-listener-container"));
+    	companies_view_loader.disableBulkActionBtns();
+    	companies_view_loader.getCompanies(App_Companies.companyViewModel, $("#companies-listener-container"));
     },
 
     addOrRemoveCompanyColumns : function(e){
@@ -422,6 +424,8 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 			data :JSON.stringify(array),
 			success : function(data)
 			{
+				companies_view_loader.disableBulkActionBtns();
+
 				App_Companies.companyViewModel = data;
 				companies_view_loader.fetchHeadings(function(modelData){
 					companies_view_loader.getCompanies(modelData, $("#companies-listener-container"));

@@ -450,13 +450,7 @@ var contacts_bulk_actions = {
 
 											// Uncheck contacts table and
 											// hide bulk actions button.
-											$('body').find('#bulk-actions').css('display', 'none');
-											$('body').find('#bulk-select').css('display', 'none');
-											$('body').find('#bulk-action-btns button').addClass("disabled");
-											$('table#contacts-table').find('.thead_check').removeAttr('checked');
-											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
-											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
-                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
+											contacts_view_loader.disableBulkActionBtns();
 
 										}, "no_noty");
 									});
@@ -534,10 +528,7 @@ var contacts_bulk_actions = {
 
 												// Uncheck contacts table and
 												// hide bulk actions button.
-												$('body').find('#bulk-actions').css('display', 'none');
-												$('body').find('#bulk-select').css('display', 'none');
-												$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
-												$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
+												companies_view_loader.disableBulkActionBtns();
 
 											}, "no_noty");
 										});
@@ -1203,7 +1194,12 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	{
 		if (isBulk)
 		{
-			if(company_util.isCompany())
+			if(company_util.isCompanyContact())
+			{
+				$("#bulk-action-btns button").addClass("disabled");
+				$("#contactCompanyTabelView").removeClass("disabled");
+			}
+			else if(company_util.isCompany())
 			{
 				$("#bulk-action-btns button").addClass("disabled");
 				$("#companiesTabelView").removeClass("disabled");
@@ -1232,6 +1228,18 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		{
 			
 				$("#bulk-action-btns button").addClass("disabled");
+			if(company_util.isCompanyContact())
+			{
+				$("#contactCompanyTabelView").removeClass("disabled");
+			}
+			else if(company_util.isCompany())
+			{
+				$("#companiesTabelView").removeClass("disabled");
+			}
+			else
+			{
+				$("#contactTabelView").removeClass("disabled");
+			}
 		}
 	}
 }

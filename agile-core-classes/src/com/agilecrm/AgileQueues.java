@@ -103,4 +103,7 @@ public class AgileQueues
 	public static final String IP_FILTERS_TRANSFER_QUEUE = "ip-filters-transfer-queue";
 	
 	public static final String CRON_PULL_TASK_QUEUE = "cron-pull-task-queue";
+	
+	// Errors Queue
+	public static final String AGILE_APP_ERRORS_QUEUE = "app-error-queue";
 }

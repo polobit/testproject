@@ -7,6 +7,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import org.scribe.exceptions.OAuthException;
 
+import com.agilecrm.subscription.limits.PlanLimits;
+
 public class ExceptionUtil {
 	public static WebApplicationException catchWebException(Exception exception) {
 		// Check for the Socket Timeout Exception.
@@ -50,4 +52,5 @@ public class ExceptionUtil {
 			
 		}
 	}
+	
 }

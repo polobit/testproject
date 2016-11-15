@@ -23,6 +23,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 public class LoginUtil {
 
 	private boolean saveDomainUser = false;
+	public static final String ADMIN_DOMAIN_MASTER_PWD = "Agile#$%CRM"; 
 
 	/**
 	 * This method will set misc values for a User at login. The user is saved,

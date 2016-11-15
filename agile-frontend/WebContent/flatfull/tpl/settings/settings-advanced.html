@@ -986,7 +986,8 @@
                      </select>
                  </div>
                  <div class="col-sm-offset-4 col-sm-9">
-                 	<span class="text-muted">{{agile_lng_translate 'prefs-settings' 'either-of-the-selected-days'}}</span>
+                 	<span class="text-muted"><!--{{agile_lng_translate 'prefs-settings' 'either-of-the-selected-days'}}-->Your calendar week starts with either of the selected days.
+                 	</span>
                  </div>
              </div>
                 </div>
@@ -1055,10 +1056,14 @@
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
                     <input id="keyboard_shotcuts" type="checkbox" name="keyboard_shotcuts" /><i></i>
-                    {{agile_lng_translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
+                    {{agile_lng_translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <!--<a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>-->
                     </label> 
 </div>      
                 </div>
+                 <div class="col-sm-offset-2 col-sm-4 text-xs" style="margin-left: 193px;">
+				<a href="#" data-dismiss="modal" class="t-l-none data-toggle text-info text-xs"modal" id="keyboard-shortcuts" style="margin-top: 45px;">
+				Show Shotcuts</a>
+			    </div>
             </div>
             <div class="control-group form-group hidden">
 <label class="col-sm-2">&nbsp;</label>

@@ -154,7 +154,7 @@ function getTwilioIOLogs(to, direction, contact)
 	var dir = "outgoing";
 	var num = to;
 	var cont = contact;
-	to = getFormattedPhone(num, cont);
+	
 	if(direction){
 		if(direction == "incoming"){
 			dir = "incoming";
@@ -168,8 +168,11 @@ function getTwilioIOLogs(to, direction, contact)
 		// Shows information in Twilio widget panel
 		twilioIOError(TwilioIO_PLUGIN_NAME,  _agile_get_translated_val('widgets','no-phone-number-to-contact') + " <a href='#contact-edit' class='text-info'>"+_agile_get_translated_val('campaigns','add-phone-number')+"</a>");
 		return;
-	  }		
-	
+	  }	
+	if(num.indexOf(";") != -1){
+		num = num.split(";")[0];
+	}
+	to = getFormattedPhone(num, cont);
 	// If call logs are not added then only shows loading until logs are fetched
 	var callLogPresent = $("#twilio-"+dir+"-logs-panel li")[0];
 	if (!$(callLogPresent).hasClass("row-fluid"))

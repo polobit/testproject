@@ -32,6 +32,10 @@ var contacts_view_loader = {
 			App_Contacts.contactsListView = undefined;
 			CONTACTS_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+
 		var that = this;
 		var url = this.getContactsUrl(tag_id);
 		var slateKey = getContactPadcontentKey(url);
@@ -54,9 +58,9 @@ var contacts_view_loader = {
 					that.setupContactFilterName(cel, tag_id);
 					if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-					$('time',cel).timeago();
-				});
-										}
+							$('time',cel).timeago();
+						});
+					}
 					if(App_Contacts.contactsListView.collection.models.length > 0 && !App_Contacts.contactsListView.collection.models[0].get("count"))
 					{
 						// Call to get Count 
@@ -70,12 +74,11 @@ var contacts_view_loader = {
 					contactListener();
 
 				},
-					appendItemCallback : function(p_el) {
-						if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
+				appendItemCallback : function(p_el) {
+					if(CURRENT_DOMAIN_USER.domain=='fieldglobal'){
 						includeTimeAgo(p_el);
 					}
-				}
-				 });
+				}});
 			App_Contacts.contactsListView.collection.fetch();
 
 			App_Contacts.contactsListView.appendItem = function(base_model){
@@ -91,8 +94,8 @@ var contacts_view_loader = {
 			App_Contacts.contactsListView.appendItem = function(base_model){
 				contactTableView(base_model,App_Contacts.contactDateFields,this,App_Contacts.contactContactTypeFields,App_Contacts.contactCompanyTypeFields);
 			};
-
-			$("#contacts-list-view", el).html(App_Contacts.contactsListView.render(true).el);
+			$("#contacts-list-view", el).html(App_Contacts.contactsListView.el);
+			App_Contacts.contactsListView.render(true);
 		}
 	},
 
@@ -226,6 +229,15 @@ var contacts_view_loader = {
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
 		}
+	},
+
+	disableBulkActionBtns : function()
+	{
+		//After add or remove column, toggle list view, make SELECT_ALL false and remove check for select all checkbox
+		SELECT_ALL = false;
+		$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+		$("#bulk-action-btns button").addClass("disabled");
+		$("#contactTabelView").removeClass("disabled");
 	},
 
 	buildContactsView : function(el, tag_id)

@@ -141,7 +141,7 @@
 	</table>
 {{else}}
 	<div class="portlet-error-message">
-      {{agile_lng_translate 'portlets' 'no-deals-pending'}}
+      {{agile_lng_translate 'portlets' 'no-pending-deals'}}
 	</div>
 {{/if}}
 </script>
@@ -185,7 +185,7 @@
 </div>
 {{else}}
 <div class="portlet-error-message">
-	{{agile_lng_translate 'portlets' 'no-tasks'}}
+	{{agile_lng_translate 'portlets' 'no-tasks-found'}}
 </div>
 {{/if}}
 </script>
@@ -1363,9 +1363,9 @@
 						{{#getCurrentUserDashboards 'dashboard'}}{{/getCurrentUserDashboards}}
 					</ul>
 				</div>
-				<div class="text-ellipsis" style="max-width:300px;">
+				<!-- <div class="text-ellipsis" style="max-width:300px;">
 					<small class="text-muted" id="dashboard-desc" title="{{#if description}}{{description}}{{/if}}">{{#if description}}{{description}}{{else}}{{agile_lng_translate 'portlets' 'welcome-msg'}}{{/if}}</small>
-				</div>
+				</div> -->
 		{{/is_mobile}}		
 			</div>
 			<div class="pull-right">
@@ -1510,7 +1510,7 @@
 </div>
 {{else}}
 <div class="portlet-error-message">
-     {{agile_lng_translate 'portlets' 'no-customer-activities'}}
+     {{agile_lng_translate 'portlets' 'no-user-activities'}}
 	</div>
 {{/if}}
 
@@ -2224,7 +2224,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
-{{#if custom2}}<span> target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+{{#if custom2}}<span> <a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
 {{/if_equals}}
 {{#if_equals "COMPANY_EXPORT" activity_type}}
