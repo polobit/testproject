@@ -29,6 +29,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.exception.AccessDeniedException;
@@ -36,6 +37,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.FailedContactBean;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.data.contacts.ContactEntry;
@@ -252,7 +254,10 @@ public abstract class ContactSyncService implements IContactSyncService
     public void sendNotification(String notificationSubject,List<FailedContactBean> mergedContacts)
     {
 	DomainUser user = DomainUserUtil.getCurrentDomainUser();
-
+	
+	// Get user prefs language
+    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+    
 	// Saves limits
 	restriction.save();
 
@@ -310,7 +315,7 @@ public abstract class ContactSyncService implements IContactSyncService
 		    if (emailRequired == 0)
 			syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
 	    	SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, 
-		    		new Object[] { user, syncStatus },SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+		    		new Object[] { user, syncStatus },SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language, strArr);
 		}
 	    service.deleteFile();
 	 }
@@ -328,11 +333,11 @@ public abstract class ContactSyncService implements IContactSyncService
 	    if (emailRequired == 0)
 		syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
 	   
-	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
+	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus }, language);
     	
 
 	    SendMail.sendMail("yaswanth@agilecrm.com", notificationSubject + " - " + user.domain,
-		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
+		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus }, language);
 	}
 	}
     }

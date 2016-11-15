@@ -16,6 +16,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.googlecode.objectify.Key;
@@ -132,10 +133,13 @@ public class StripeImportUtil
 	    buildStripeImportStatus(status, ImportStatus.TOTAL, total);
 	    buildStripeImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
 	    buildStripeImportStatus(status, ImportStatus.DUPLICATE_CONTACT, duplicatedContacts);
-
+	    
+	    // Get user prefs language
+	    String language = LanguageUtil.getUserLanguageFromDomainUser(domainUser);
+	    
 	    // send email notification to domain user
 	    SendMail.sendMail(domainUser.email, SendMail.STRIPE_IMPORT_NOTIFICATION_SUBJECT,
-		    SendMail.STRIPE_IMPORT_NOTIFICATION, new Object[] { domainUser, status });
+		    SendMail.STRIPE_IMPORT_NOTIFICATION, new Object[] { domainUser, status }, language);
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException

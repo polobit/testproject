@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.json.JSONObject;
 
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 
 public class ContactExportEmailUtil
@@ -65,8 +66,11 @@ public class ContactExportEmailUtil
 	map.put("download_url", downloadUrl);
 	map.put("contact_type", contactExportType.label);
 
+	// Get user prefs language
+	String language = LanguageUtil.getUserLanguageFromEmail(toEmail);
+	
 	SendMail.sendMail(toEmail, contactExportType.mailHeader, SendMail.EXPORT_CONTACTS_CSV, map,
-		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME);
+		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language);
     }
 
 }

@@ -25,6 +25,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
@@ -102,6 +103,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    if (taskList.isEmpty())
 		return;
 	    
+	    String language = userPrefs.language;
 
 	    // Update time with timezone
 	    for(Task task : taskList){
@@ -147,7 +149,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 		map.put("domain", domain);
 
 		// Sends mail to the domain user.
-		SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
+		SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map, language);
 
 		return;
 	    }
@@ -192,7 +194,7 @@ public class TaskReminderDeferredTask implements DeferredTask
 	    map.put("domain", domain);
 
 	    // Sends mail to the domain user.
-	    SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map);
+	    SendMail.sendMail(user_email, SendMail.DUE_TASK_REMINDER_SUBJECT, SendMail.DUE_TASK_REMINDER, map, language);
 
 	}
 	catch (TransientFailureException tfe)

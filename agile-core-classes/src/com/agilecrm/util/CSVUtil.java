@@ -71,6 +71,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.validator.TagValidator;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.api.NamespaceManager;
@@ -1670,8 +1671,11 @@ public class CSVUtil
 	    buildDealsImportStatus(status, "MILESTONE", milestoneMissing);
 	}
 
+	// Get user prefs language
+	String language = LanguageUtil.getUserLanguageFromDomainUser(domainUser);
+	
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
-		status });
+		status }, language);
 
 	if (savedDeals > 0)
 	    ActivityUtil.createLogForImport(ActivityType.DEAL_IMPORT, EntityType.DEAL, savedDeals, 0);
@@ -1944,6 +1948,9 @@ public class CSVUtil
 	    Map<Object, Object> status,Map<Object, Object> stats)
     {
 
+    // Get user prefs language
+    String language = LanguageUtil.getUserLanguageFromDomainUser(domainUser);
+    	
 	/*
 	 * HashMap<String, String> map = new HashMap<String, String>();
 	 * map.put("count", totalRecords);
@@ -1954,15 +1961,15 @@ public class CSVUtil
 	{
 	    String[] strArr = { "text/csv", "Import_Contacts_Remarks.csv", csvData };
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language, strArr);
 	}
 	else
 	{
 	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-		    new Object[] { domainUser, status });
+		    new Object[] { domainUser, status }, language);
 	}
 	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Import Status"+domainUser.domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
-		    new Object[] { stats});
+		    new Object[] { stats}, language);
 
     }
   //send failed companies import file  
@@ -1974,17 +1981,20 @@ public class CSVUtil
     	 * HashMap<String, String> map = new HashMap<String, String>();
     	 * map.put("count", totalRecords);
     	 */
+    	
+    	// Get user prefs language
+    	String language = LanguageUtil.getUserLanguageFromDomainUser(domainUser);
 
     	if (totalRecords >= 1)
     	{
     	    String[] strArr = { "text/csv", "Import_Companies_Remarks.csv", csvData };
     	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-    		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+    		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language, strArr);
     	}
     	else
     	{
     	    SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-    		    new Object[] { domainUser, status });
+    		    new Object[] { domainUser, status }, language);
     	}
 
         }

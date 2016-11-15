@@ -40,6 +40,7 @@ import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -277,12 +278,12 @@ public class TicketNotesUtil
 		{
 			// No template is chosen so returning default template html content
 			if (group.template_id == null)
-				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
 
 			dataJSON.put("ticket_comments",
-					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 			dataJSON.put("ticket_footer",
-					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 
 			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
 

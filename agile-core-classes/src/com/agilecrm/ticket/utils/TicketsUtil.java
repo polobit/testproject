@@ -32,9 +32,11 @@ import com.agilecrm.ticket.entitys.Tickets.Source;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.ticket.entitys.Tickets.Type;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -379,7 +381,13 @@ public class TicketsUtil
 
 		String[] emails = csvEmails.split(",");
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
-
+		
+		String language = UserPrefs.DEFAULT_LANGUAGE;
+		if(ticket.getAssignee_id() != null){
+			DomainUser user = DomainUserUtil.getDomainUser(ticket.getAssignee_id().getId());
+			language = LanguageUtil.getUserLanguageFromDomainUser(user);
+		}
+		
 		String agentName = SessionManager.get().getName();
 		String fromAddress = SessionManager.get().getEmail();
 
@@ -388,7 +396,7 @@ public class TicketsUtil
 			try
 			{
 				String emailHTML = MustacheUtil.templatize(SendMail.TICKET_FORWARD + SendMail.TEMPLATE_HTML_EXT,
-						new JSONObject().put("content", content));
+						new JSONObject().put("content", content), language);
 
 				TicketNotesUtil.sendEmail(email, ticket.subject, agentName, fromAddress, ticket.cc_emails, emailHTML);
 
@@ -894,7 +902,10 @@ public class TicketsUtil
 		if(StringUtils.isBlank(from_address))
 			from_address = SendMail.AGILE_FROM_EMAIL;
 		
-		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name);
+		// Get user language
+		String language = LanguageUtil.getUserLanguageFromEmail(email);
+		
+		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name, language);
 		
 		System.out.println("Sent email to: " + email);
 	}

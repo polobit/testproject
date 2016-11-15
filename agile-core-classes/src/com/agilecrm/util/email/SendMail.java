@@ -273,10 +273,10 @@ public class SendMail
 	    System.out.println("mergedJson in sendemail" + mergedJSON);
 
 	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON, language);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON, language);
 
 	    // If both are null, nothing to be sent
 	    if (emailHTML == null && emailBody == null)
@@ -289,7 +289,7 @@ public class SendMail
 	    String oldNamespace = NamespaceManager.get();
 	    NamespaceManager.set("");
 
-	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, language, args);
+	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
 
 	    // Send Email
 	    // Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,

@@ -18,6 +18,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CountryUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -213,7 +214,9 @@ public class UpdateContactsOfDomainDeferredTask implements DeferredTask
 			if(status.equalsIgnoreCase("COMPLETED"))
 			{		
 				DomainUser dUser=DomainUserUtil.getDomainUserByEmailFromParticularDomain(domainUserMail,domain);
-				SendMail.sendMail(domainUserMail, "Update Contacts & Companies Status", SendMail.CONTACT_UPDATE_STATUS, dUser);
+				String language = LanguageUtil.getUserLanguageFromEmail(domainUserMail);
+				
+				SendMail.sendMail(domainUserMail, "Update Contacts & Companies Status", SendMail.CONTACT_UPDATE_STATUS, dUser, language);
 				
 				
 			}

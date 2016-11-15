@@ -19,8 +19,10 @@ import com.agilecrm.ssologin.SingleSignOnUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.NamespaceUtil;
@@ -28,6 +30,7 @@ import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.AppengineMail;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -388,11 +391,12 @@ public class LoginServlet extends HttpServlet {
 			}
 			
 			String email = domainUser.email;
+			String language = LanguageUtil.getUserLanguageFromEmail(email);
 			
 			if(resend)
-				SendMail.sendMail(email, subject, template, data);
+				SendMail.sendMail(email, subject, template, data, language);
 			else 
-				AppengineMail.sendMail(email, subject, template, data);
+				AppengineMail.sendMail(email, subject, template, data, language);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -37,6 +37,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -576,10 +577,13 @@ public class WorkflowsAPI {
 			map.put("senderName", domainUser.name);
 			map.put("senderId", domainUser.id.toString());
 			map.put("senderDomain", domainUser.domain);
-
+			
+			// Get user prefs language
+		    String language = LanguageUtil.getUserLanguageFromEmail(recEmail);
+		    
 			SendMail.sendMail(recEmail, SendMail.SHARE_CAMPAIGN_SUBJECT,
 					SendMail.SHARE_CAMPAIGN_CONFIRMATION, map,
-					domainUser.email, domainUser.name);
+					domainUser.email, domainUser.name, language);
 
 		} catch (Exception e) {
 			e.printStackTrace();

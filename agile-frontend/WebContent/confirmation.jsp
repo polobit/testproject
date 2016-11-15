@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.twilio.sdk.resource.instance.Trigger"%>
 <%@page import="com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
@@ -435,6 +437,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					 
 					    String domain = NamespaceManager.get();
 					    String fromEmail = "noreply@agilecrm.com";
+					    String language = UserPrefs.DEFAULT_LANGUAGE;
 					    
 					    // From email as given in Workflow
 					    if(StringUtils.isNotBlank(unsubscribeEmail) && !StringUtils.equalsIgnoreCase(unsubscribeEmail, "null"))
@@ -445,8 +448,11 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    {
 					    	DomainUser owner = DomainUserUtil.getDomainOwner(domain);
 						    
-							if(owner != null)
+							if(owner != null) {
 								fromEmail = owner.email;
+								language = LanguageUtil.getUserLanguageFromDomainUser(owner);
+							}
+								
 						}
 					    
 					    map.put("domain", domain);
@@ -507,7 +513,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
-								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company);
+								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
 								System.out.println("Email sent successfully...");
 							}
 						}

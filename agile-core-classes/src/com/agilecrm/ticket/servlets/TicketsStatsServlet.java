@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
@@ -59,7 +60,7 @@ public class TicketsStatsServlet extends HttpServlet
 
 				// Read template - HTML
 				String emailHTML = MustacheUtil
-						.templatize(SendMail.TICKET_STATS + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+						.templatize(SendMail.TICKET_STATS + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
 
 				EmailSender emailSender = EmailSender.getEmailSender();
 
