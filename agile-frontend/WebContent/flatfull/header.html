@@ -628,11 +628,7 @@
 											<span class="text-sm text-ellipsis block" style="clear: both;"> <b><%=user.getEmail()%></b></span>
 										</a>
 									</li>
-									<% if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
-									%>
-									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
-									<%}%>
+									
 									<li><a href="#user-prefs" onclick="Agile_GA_Event_Tracker.track_event('Preferences in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
@@ -640,11 +636,16 @@
 									<%
 									    if (domainUser != null && domainUser.is_admin)
 									    {
-														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li><li class='divider m-n' ></li>");
+														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
 													//	out.println("<li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 
 									    }
 									%>
+										<% if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
+									%>
+									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li><li class='divider m-n' ></li>
+									<%}%>
 						
 											<!--<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick=\"Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')\"><i class="icon-off"></i>-->
 											<!--<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>-->
