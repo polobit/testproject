@@ -25,8 +25,7 @@ public class AgileExceptionUtil {
 
 	// From Email
 	static final String ERRORS_EMAIL_FROM = "noreply@agilecrm.com";
-	static final String APP_ERRORS_EMAIL_FROM_NAME = "Application Error(App)";
-	static final String BETA_ERRORS_EMAIL_FROM_NAME = "Application Error(Beta)";
+	static final String ERRORS_EMAIL_FROM_NAME = "Application Error";
 
 	public static void handleException(Exception e) {
 		System.out.println("Handle Exceptions");
@@ -74,9 +73,7 @@ class AgileExceptionEmail implements DeferredTask {
 	@Override
 	public void run() {
 		String fromEmail = AgileExceptionUtil.ERRORS_EMAIL_FROM;
-		String fromName = AgileExceptionUtil.APP_ERRORS_EMAIL_FROM_NAME;
-		if(VersioningUtil.getApplicationAPPId().equals("agilecrmbeta"))
-			fromName = AgileExceptionUtil.BETA_ERRORS_EMAIL_FROM_NAME;
+		String fromName = AgileExceptionUtil.ERRORS_EMAIL_FROM_NAME+"("+VersioningUtil.getApplicationAPPId()+")";
 		SendGrid.sendMail(fromEmail, fromName, toEmailIds, null, null, exceptionMessage, null, null, exceptionLog);
 	}
 }
