@@ -165,7 +165,7 @@ body {
 	
 	<% 
 	String userAgent = request.getHeader("user-agent");
-	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+	if(MobileUADetector.isMobile(userAgent)) {%>
 
 		background-color: #f0f3f4;
 	
