@@ -57,14 +57,14 @@ public class OzonetelOutboundCallServlet extends HttpServlet {
             } else if ((null != kookoo_event) && kookoo_event.equalsIgnoreCase("dial")) {
                 String status = request.getParameter("status");
                 if (status.equalsIgnoreCase("answered")) {
-                    r.addPlayText("thanks for calling");
+                    //r.addPlayText("thanks for calling");
                     r.addHangup();
-                } else {
+                }/* else {
                     r.addPlayText("re trying again");
                     Dial dialnumber = new Dial();
                     dialnumber.setNumber(request.getParameter("contact_number"));
                     r.addDial(dialnumber);
-                }
+                }*/
             } else if((null != kookoo_event) && kookoo_event.equalsIgnoreCase("hangup")) {
                 
             	//r.addHangup();

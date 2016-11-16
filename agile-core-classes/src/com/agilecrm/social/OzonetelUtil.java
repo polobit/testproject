@@ -1,5 +1,9 @@
 package com.agilecrm.social;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -57,8 +61,9 @@ public class OzonetelUtil {
 	        uribuilder.addParameter("callback_url",domainUrl+"/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
 	        //uribuilder.addParameter("url", "http://ozonetelin.appspot.com/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId);
 	        //uribuilder.addParameter("callback_url","http://ozonetelin.appspot.com/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
-	        
-	        HttpClient client = HttpClientBuilder.create().build();
+	        URI uri = uribuilder.build();
+	        ozonetelGetRequest(uri.toString());
+	        /*HttpClient client = HttpClientBuilder.create().build();
 	        URI uri = uribuilder.build();
 	        HttpGet request = new HttpGet(uri);
 	        try {
@@ -70,7 +75,8 @@ public class OzonetelUtil {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 
-	        }
+	        }*/
+	        status="success";
 		}catch(Exception e){
 			System.out.println("Exception form OzonetelUtil connectToNumber method");
 			e.printStackTrace();
@@ -78,6 +84,28 @@ public class OzonetelUtil {
 		}
 		return status;
 		
+	}
+	
+	private String ozonetelGetRequest(String url) throws Exception {
+		  String result = null;
+		  System.out.println("Final OutBound URL"+url);
+		  URL obj = new URL(url);
+		  HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		  con.setRequestMethod("GET");
+		  int responseCode = con.getResponseCode();
+		  System.out.println("ozonetel repsonse code : " + responseCode);
+
+		  BufferedReader in = new BufferedReader(new InputStreamReader(
+		    con.getInputStream()));
+		  String inputLine;
+		  StringBuffer response = new StringBuffer();
+
+		  while ((inputLine = in.readLine()) != null) {
+		   response.append(inputLine);
+		  }
+		  in.close();
+		  System.out.println(response.toString());
+		  return result;
 	}
 
 }
