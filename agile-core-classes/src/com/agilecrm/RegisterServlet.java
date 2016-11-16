@@ -42,6 +42,7 @@ import com.agilecrm.util.CookieUtil;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
@@ -616,6 +617,10 @@ public class RegisterServlet extends HttpServlet
 	
 	// Set Role
 	domainUser.role = DomainUserUtil.getDomainUserRole(((String) request.getParameter(RegistrationGlobals.USER_ROLE)));
+	
+	// Add user selected language from register page dropdown
+	domainUser.language_on_register = LanguageUtil.getLanguageKeyFromCookie(request);
+	
 	domainUser.save();
 
 	if (domainUser != null && reference_domain != null)
