@@ -162,15 +162,15 @@ public class URLShortenerUtil
 	    String[] tokens = shortURL.split("/");
 	    String shortKey = tokens[tokens.length - 1];
 
-	    String[] keys = shortKey.split("-");
-	    String domain = "";
+	    String key = StringUtils.substringAfterLast(shortKey, "-") ;
+	    String domain = StringUtils.substringBeforeLast(shortKey, "-");
 
-	    System.out.println("Keys obtained after spliting url: " + keys[0] + " " + keys[1]);
+	    System.out.println("Keys obtained after spliting url,  domain : " + domain + "  key : " + key);
 
-	    if (StringUtils.isEmpty(keys[0]))
+	    if (StringUtils.isEmpty(domain))
 		return domain;
 
-	    domain = Rot13.convertStringUsingRot13(keys[0]);
+	    domain = Rot13.convertStringUsingRot13(domain);
 	    return domain;
 	}
 	catch (Exception e)
