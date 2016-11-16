@@ -6,6 +6,10 @@
 package com.thirdparty.ozonetel;
 
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.service.AgileUserService;
+import com.agilecrm.user.service.impl.AgileUserServiceImpl;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.ozonetel.kookoo.CollectDtmf;
@@ -57,8 +61,13 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
         }
         System.out.println("kookoo request url : " + uri);/*here I am just kookoo final xml prepared*/
         
-        Widget widget = WidgetUtil.getWidget("Ozonetel");
-        System.out.println(widget.getProperty("agent_no"));
+        String email = request.getParameter("email");
+        
+        DomainUser user = DomainUserUtil.getDomainUserFromEmail(email);
+        AgileUser aguser = AgileUser.getCurrentAgileUserFromDomainUser(user.id);
+        System.out.println(user.id);
+        System.out.println(aguser.id);
+        Widget widget = WidgetUtil.getWidget("Ozonetel", aguser.id); //WidgetUtil.getWidget("Ozonetel");
         agent_no = widget.getProperty("agent_no");
         
         try (PrintWriter out = response.getWriter()) {
@@ -80,7 +89,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
      	        pubnub_notification.put("number", contact_number);
      	        pubnub_notification.put("callId", agent_no);
 
-     	        PubNub.pubNubPush(AgileUser.getCurrentAgileUser().domain_user_id+"_Channel", pubnub_notification);
+     	        PubNub.pubNubPush(user.id+"_Channel", pubnub_notification);
      		    
             }else if ((null != kookoo_event) && kookoo_event.equalsIgnoreCase("dial")) {
                 String status = request.getParameter("status");
@@ -104,7 +113,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
     	        pubnub_notification.put("callId", agent_no);
     	        pubnub_notification.put("duration", callduration);
                 
-    	        PubNub.pubNubPush(AgileUser.getCurrentAgileUser().domain_user_id+"_Channel", pubnub_notification);
+    	        PubNub.pubNubPush(user.id+"_Channel", pubnub_notification);
             } else {
                 r.addHangup();
             }
