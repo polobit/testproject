@@ -153,12 +153,14 @@ var contact_details_documentandtasks_actions = {
 				  url: "/core/api/products",
 				}).done(function(data) {
 					if(data.length > 0){
-						$("#showtoggle_show").show();
+						$("#showtoggle_show",e).show();
+						$("#showproducts",e).show();
 						populate_deal_products(e, undefined,"#opportunityForm");
-						$("#showproducts").show();
 					}else{
-						$("#showtoggle_show").hide();
-						$("#showproducts").hide();
+						$("#showtoggle_show",e).hide();
+						$("#showproducts",e).hide();
+						$('.no-products',e).show();
+						$('.value_box',e).removeClass('col-sm-5').addClass('col-sm-7');
 					}
 				});
 				

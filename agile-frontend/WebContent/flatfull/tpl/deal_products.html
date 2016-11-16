@@ -1,7 +1,7 @@
 <script id="deal-products-collection-template" type="text/html">
 
 <div class="table-responsive products_deals" style="max-width:520px;max-height:300px;">
-		<table id="" class="table table-striped no-sorting checkbox dealproducts_table  noDelete agile-table panel table-layout-mob-view" url="core/api/products" style="padding-top:0px;border-left:0px;border-right:0px;">  
+		<table id="" class="table table-striped no-sorting checkbox dealproducts_table  noDelete agile-table panel table-layout-mob-view" url="core/api/products" style="padding-top:0px;border-right:0px;">  
             <thead>
                 <tr>
 					<th style="width:5%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;"><label class="i-checks i-checks-sm m-b-none "><input type="checkbox" class=" dealproducts_th_checkbox " name="productthcheck" value=""><i></i></label></th>	   
@@ -23,7 +23,7 @@
 		<label class="i-checks i-checks-sm"><input data='{{id}}' name="productcheck" type="checkbox" {{#if isChecked}}checked{{/if}} class="dealproducts_td_checkbox" value=""><i></i></label>
 	</td>
 	<td class='data' data='{{id}}'  style="border-bottom: 1px solid #ddd;">
-		<div class="line-clamp" style="display:-moz-box;" title="{{name}}">	
+		<div class="text-ellipsis" style="display:-moz-box;width:5em" title="{{name}}">	
     		{{name}}
     	</div>
 	</td>
@@ -32,13 +32,18 @@
     	<span class="dealproducts_td_qty_span" style="cursor:pointer;">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" style="width: 100%;margin: 0px;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;" placeholder="{{agile_lng_translate 'products' 'product-enter-qty'}}" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
 	</td>
 	<td class='data' style="border-bottom: 1px solid #ddd;">
+	<div class="text-ellipsis" style="display:-moz-box;width:5em" title="{{price}}">	
     	{{currencySymbol}}{{price}}
+    	</div>
 	</td>
 	<td class='data none' style="display:none;">
     	{{image}}
 	</td>
 	<td  class='data' style="border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;">
-		{{currencySymbol}}{{total}}
+	<div class="text-ellipsis" style="display:-moz-box;width:5em" title="{{total}}">	
+    			{{currencySymbol}}{{total}}
+    	</div>
+
 	</td>
 	
 </script>
