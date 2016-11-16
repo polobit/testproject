@@ -1054,9 +1054,21 @@ li.element {
 
 .tab-pane#uploadTab button.upload {
 	margin-bottom: 15px;
+
+
 }
 
 /* end image upload tab */
 .modal-backdrop{
 	position: absolute;
 }
+
+.tooltip {z-index: 2001;}
+
+.agile-tooltip +  .tooltip > .tooltip-inner {
+   color: white;
+   background-color: #34495e;
+   white-space:nowrap;
+   max-width:none;
+}
+

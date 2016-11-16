@@ -98,4 +98,7 @@
     "email-invalid-after-@": "{{agile_lng_translate 'forgot-domain' 'email-invalid-after-@'}}",
     "upload" : "{{agile_lng_translate 'landingpage-builder' 'upload'}}",
     "add-form" : "{{agile_lng_translate 'form-builder' 'add-form'}}",
+    "recorded-video" : "{{agile_lng_translate 'landingpage-builder' 'recorded-video'}}",
+    "recorded-video-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'recorded-video-tooltip'}}",
+    "form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'form-tooltip'}}",
 }

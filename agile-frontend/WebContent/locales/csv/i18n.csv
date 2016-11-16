@@ -5842,3 +5842,6 @@ landingpage-builder.page-js,Page JS,La página de JS
 admin-settings-users.updated-time,Updated Time,
 admin-settings-users.status,Status,
 admin-settings-deals.manage-tracks,Manage Tracks,
+landingpage-builder.recorded-video,Recorded Video,,
+landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39;Email Builder&#39;,,
+landingpage-builder.form-tooltip,Select/Add agile form in landing page,,
