@@ -6,7 +6,6 @@
     var bConfig = require('./config.js');
     var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
-    
     var styleeditor = {
 
         buttonSaveChanges: document.getElementById('saveStyling'),
@@ -34,6 +33,7 @@
         ulPageList: document.getElementById('pageList'),
         responsiveToggle: document.getElementById('responsiveToggle'),
         theScreen: document.getElementById('screen'),
+        prevFocus:null,
 
         init: function() {
 
@@ -171,8 +171,12 @@
                          
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
-                if(el.style.cursor === "pointer")                   
-                   styleeditor.styleClick(this);
+                if(el.style.cursor === "pointer") {
+                    styleeditor.styleClick(this);
+                    if($(el).attr('data-selector').indexOf(".editContent")!==-1)
+                        styleeditor.prevFocus = el;
+                }                  
+                  
             };
 
             var newElement = new canvasElement(element);
@@ -1206,6 +1210,8 @@
                 styleeditor.toggleSidePanel('close');
 
             }
+            if(styleeditor.prevFocus)
+                $(styleeditor.prevFocus).focus();
 
         },
 
