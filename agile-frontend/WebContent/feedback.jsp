@@ -422,7 +422,7 @@ function changeFeedback(e,objButton){
        
         },
         error:function(){
-          document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;padding-left:40px;padding-top:40px;text-align:center;    margin-top: 100px;margin-bottom: 100px;>Sorry, cannot submit your feedback as the URL expired!</div>";
+          document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;padding-bottom:40px;padding-top:40px;text-align:center;    margin-top: 100px;margin-bottom: 100px;>Sorry, cannot submit your feedback as the URL expired!</div>";
         }
         
     });
