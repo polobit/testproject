@@ -57,7 +57,6 @@ public class URLShortener
      */
     public static final String SHORTENER_URL = "http://agle.cc/";
     
-    
     /**
      * Shortner Url for Beta
      */
