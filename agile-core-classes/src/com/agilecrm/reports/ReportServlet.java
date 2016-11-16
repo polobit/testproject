@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.reports.deferred.ActivityReportsDeferredTask;
 import com.agilecrm.reports.deferred.CampaignReportsCronDeferredTask;
 import com.agilecrm.reports.deferred.ReportsDeferredTask;
-import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -44,17 +42,10 @@ public class ReportServlet extends HttpServlet
 	    return;
 
 	System.out.println("Duration : " + duration);
-
-	Set<String> domains = NamespaceUtil.getAllNamespaces();
-
-		for (String namespace : domains)
-		{
-			CheckSubscriptionRestriction deferredTast = new CheckSubscriptionRestriction(namespace, duration);
-			Queue queue = QueueFactory.getQueue("reports-queue");
-		    addTaskToQueue(queue,deferredTast);
-		}
 	
-
+	CheckSubscriptionRestriction deferredTast = new CheckSubscriptionRestriction(duration);
+	Queue queue = QueueFactory.getQueue("reports-queue");
+    addTaskToQueue(queue,deferredTast);
     }
     
     public static void addTaskToQueue(Queue queue,DeferredTask dt)
@@ -73,45 +64,47 @@ public class ReportServlet extends HttpServlet
 
 class CheckSubscriptionRestriction implements DeferredTask{
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	private String namespace;
-	private String duration;
-	
 	/**
 	 * 
 	 */
-	public CheckSubscriptionRestriction(String namespace, String duration) {
-		this.namespace = namespace;
+	private static final long serialVersionUID = 1L;
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	private String duration;
+	
+	public CheckSubscriptionRestriction(String duration) {
 		this.duration = duration;
 	}
 	@Override
 	public void run() {
-		String oldNamespace = NamespaceManager.get();
-		NamespaceManager.set(namespace);
-		try{
-			if(SubscriptionUtil.isSubscriptionDeleted())
-				return;
-			ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
-		    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created"+namespace);
-		    // Add to queue
-		    Queue queue = QueueFactory.getQueue("reports-queue");
-		    ReportServlet.addTaskToQueue(queue,reportsDeferredTask);
-		    
-		    // Created a deferred task for campaign report generation
-		 	CampaignReportsCronDeferredTask campaignReportsDeferredTask = new CampaignReportsCronDeferredTask(namespace, duration);
-
-		 	// Add to queue
-		 	ReportServlet.addTaskToQueue(queue,campaignReportsDeferredTask);
-		 	
-		 	// Created a deferred task for activity report generation
-		    ActivityReportsDeferredTask activityReportsDeferredTask = new ActivityReportsDeferredTask(namespace, duration);
-
-		    // Add to queue
-		    ReportServlet.addTaskToQueue(queue,activityReportsDeferredTask);
-		}finally{
-			NamespaceManager.set(oldNamespace);
+		Set<String> namespaces = NamespaceUtil.getAllNamespaces();
+		for(String namespace : namespaces){
+			String oldNamespace = NamespaceManager.get();
+			NamespaceManager.set(namespace);
+			try{
+				if(SubscriptionUtil.isSubscriptionDeleted())
+					return;
+				ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
+			    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created"+namespace);
+			    // Add to queue
+			    Queue queue = QueueFactory.getQueue("reports-queue");
+			    ReportServlet.addTaskToQueue(queue,reportsDeferredTask);
+			    
+			    // Created a deferred task for campaign report generation
+			 	CampaignReportsCronDeferredTask campaignReportsDeferredTask = new CampaignReportsCronDeferredTask(namespace, duration);
+	
+			 	// Add to queue
+			 	ReportServlet.addTaskToQueue(queue,campaignReportsDeferredTask);
+			 	
+			 	// Created a deferred task for activity report generation
+			    ActivityReportsDeferredTask activityReportsDeferredTask = new ActivityReportsDeferredTask(namespace, duration);
+	
+			    // Add to queue
+			    ReportServlet.addTaskToQueue(queue,activityReportsDeferredTask);
+			}finally{
+				NamespaceManager.set(oldNamespace);
+			}
 		}
 	}
 	
