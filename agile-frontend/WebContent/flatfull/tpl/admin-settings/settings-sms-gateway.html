@@ -21,17 +21,17 @@
 				<div class="p-t-sm">
 					<div>
 						{{#if id}} 
-							<input type="hidden" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" name="id" value="{{id}}" />
+							<input type="hidden" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} name="id" value="{{id}}" />
 						{{/if}} 
-							<input type="hidden" class="input-medium required TWILIO" style="width: 90%" value="INTEGRATIONS" name="widget_type" /> 
-							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" value="SMS-Gateway" name="name" /> 
+							<input type="hidden" class="input-medium required TWILIO" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} value="INTEGRATIONS" name="widget_type" /> 
+							<input type="hidden" class="input-medium required TWILIO PLIVO" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} value="SMS-Gateway" name="name" /> 
 						
 						{{#if widget_type}} 
-							<input type="hidden" class="input-medium required TWILIO PLIVO" style="width: 90%" value="This is a {{widget_type}} gateway" name="description" />
+							<input type="hidden" class="input-medium required TWILIO PLIVO" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} value="This is a {{widget_type}} gateway" name="description" />
 						{{/if}}
 
 						{{#if_equals "TWILIO" sms_api}} 
-							<input type="hidden" class="input-medium required TWILIO" style="width: 90%" name="endpoint" value="https://api.twilio.com" /> 
+							<input type="hidden" class="input-medium required TWILIO" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} name="endpoint" value="https://api.twilio.com" /> 
 						{{/if_equals}} 
 
 						{{#if_equals "INTEGRATIONS" widget_type}}
@@ -39,28 +39,28 @@
 								{{#if prefs}} 
 									{{#stringToJSON this "prefs"}} 
 										
-										<input type="hidden" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" name="id" />
+										<input type="hidden" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} name="id" />
 
 										{{#if_equals "TWILIO" sms_api}}
-											<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
+											<div class="control-group" {{#is_mobile}} {{else}} style="margin-bottom: 0px; margin-top: -12px;" {{/is_mobile}}>
 												<div class="controls">
-													<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  name="account_sid" value="{{account_sid}}"/>
+													<input type="text" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  name="account_sid" value="{{account_sid}}"/>
 												</div>
 											</div>
 
 										{{else}}
 
-										<div class="control-group" style="margin-bottom: 0px; margin-top: -12px;">
+										<div class="control-group" {{#is_mobile}} {{else}} style="margin-bottom: 0px; margin-top: -12px;" {{/is_mobile}}>
 											<div class="controls">
-												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-id'}}" name="account_id" value="{{account_id}}"/>
+												<input type="text" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-id'}}" name="account_id" value="{{account_id}}"/>
 											</div>
 										</div>
 
 										{{/if_equals}}
 
-										<div class="control-group form-group" style="margin-bottom: 0px;">
+										<div class="control-group form-group" {{#is_mobile}} {{else}} style="margin-bottom: 0px;" {{/is_mobile}}>
 											<div class="controls">
-												<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px;" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'auth-token'}}" name="auth_token" value="{{auth_token}}" id = "auth_token" />
+												<input type="text" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%;margin-top: 10px" {{else}} style="width: 90%;margin-top: 10px" {{/is_mobile}} placeholder="{{agile_lng_translate 'admin-settings-integrations' 'auth-token'}}" name="auth_token" value="{{auth_token}}" id = "auth_token" />
 											</div>
 										</div>
 
@@ -73,18 +73,18 @@
 						{{else}} 
 
 							{{#if id}}
-								<input type="hidden" class="input-medium required TWILIO PLIVO form-control" style="width: 90%" name="id" />
+								<input type="hidden" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%" {{else}} style="width: 90%" {{/is_mobile}} name="id" />
 							{{/if}}
 
-							<div class="control-group form-group" style="margin-bottom: 0px;">
+							<div class="control-group form-group" {{#is_mobile}} {{else}} style="margin-bottom: 0px;" {{/is_mobile}}>
 								<div class="controls">
-									<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%;margin-top: -12px;" id="accoundID" />
+									<input type="text" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%;margin-top: 0px" {{else}} style="width: 90%;margin-top: -12px" {{/is_mobile}} id="accoundID" />
 								</div>
 							</div>
 
-							<div class="control-group form-group" style="margin-bottom: 0px;">
+							<div class="control-group form-group" {{#is_mobile}} {{else}} style="margin-bottom: 0px;" {{/is_mobile}}>
 								<div class="controls">
-									<input type="text" class="input-medium required TWILIO PLIVO form-control" style="width: 90%; margin-top: 10px" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'auth-token'}}" name="auth_token" id = "auth_token" />
+									<input type="text" class="input-medium required TWILIO PLIVO form-control" {{#is_mobile}} style="width: 100%;margin-top: 0px" {{else}} style="width: 90%;margin-top: -10px" {{/is_mobile}} placeholder="{{agile_lng_translate 'admin-settings-integrations' 'auth-token'}}" name="auth_token" id = "auth_token" />
 								</div>
 							</div>
 
