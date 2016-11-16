@@ -76,6 +76,18 @@
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/locales">
               <fileset dir="../agile-frontend/WebContent/locales" />
         </copy>
+        <!-- Copy misc folder -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc">
+              <fileset dir="../agile-frontend/WebContent/campaign-templates" />
+              <fileset dir="../agile-frontend/WebContent/email" />
+              <fileset dir="../agile-frontend/WebContent/email-templates" />
+              <fileset dir="../agile-frontend/WebContent/formbuilder" />
+              <fileset dir="../agile-frontend/WebContent/gmail" />
+              <fileset dir="../agile-frontend/WebContent/gmap" />
+              <fileset dir="../agile-frontend/WebContent/modal-templates" />
+              <fileset dir="../agile-frontend/WebContent/site" />
+              <fileset dir="../agile-frontend/WebContent/zendesk-widget" />
+        </copy>
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
              <fileset dir="${LIB_DIR}" >
