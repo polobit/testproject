@@ -26,7 +26,6 @@ public class EmailTemplateParseUtil {
 					 
 		Matcher m = pattern.matcher(fileInput);
 		HashMap<String, String> agilemap = getKeysMapOfFile(m, map);
-System.out.println(m);
 
 		for (Iterator iterator = agilemap.keySet().iterator(); iterator.hasNext();) {
 			String type = (String) iterator.next();

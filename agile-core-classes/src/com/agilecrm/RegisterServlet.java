@@ -619,7 +619,10 @@ public class RegisterServlet extends HttpServlet
 	domainUser.role = DomainUserUtil.getDomainUserRole(((String) request.getParameter(RegistrationGlobals.USER_ROLE)));
 	
 	// Add user selected language from register page dropdown
-	domainUser.language_on_register = LanguageUtil.getLanguageKeyFromCookie(request);
+	String language = request.getParameter("user_lang");
+	if(StringUtils.isBlank(language))
+		language = UserPrefs.DEFAULT_LANGUAGE;
+	domainUser.language_on_register = language;
 	
 	domainUser.save();
 
