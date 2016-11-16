@@ -4870,3 +4870,13 @@ ul#recent-menu-model-list li:nth-child(even)
   float: left;
   text-indent: 0;
 }
+
+.products_deals::-webkit-scrollbar-thumb {
+ background: #bebebe;
+ border-radius:10px;
+}
+.products_deals::-webkit-scrollbar {
+ width: 5px;
+ margin-right: 4px !important;
+ background:#eee;
+}

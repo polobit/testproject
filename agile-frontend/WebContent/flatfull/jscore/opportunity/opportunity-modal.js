@@ -648,14 +648,14 @@ function show_deal()
 	  url: "/core/api/products",
 	}).done(function(data) {
 		if(data.length > 0){
-			$("#showtoggle_show").show();
-			$("#showproducts").show();
+			$("#showtoggle_show",e).show();
+			$("#showproducts",e).show();
 			populate_deal_products(e, undefined,"#opportunityForm");
 		}else{
-			$("#showtoggle_show").hide();
-			$("#showproducts").hide();
-			$('.no-products').show();
-			$('.value_box').removeClass('col-sm-5').addClass('col-sm-7');
+			$("#showtoggle_show",e).hide();
+			$("#showproducts",e).hide();
+			$('.no-products',e).show();
+			$('.value_box',e).removeClass('col-sm-5').addClass('col-sm-7');
 		}
 	});
 	
