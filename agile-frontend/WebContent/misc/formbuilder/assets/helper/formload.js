@@ -12,21 +12,7 @@ define([
 			success: function(data){
 				
 				saveform = JSON.parse(data.formJson);
-				for(i=0;i<saveform.length;i++){
-					if(saveform[i].title=="Text Area"){
-						if(saveform[i].fields.placeholder==undefined){
-							var placeholder={
-								"label": "Placeholder",
-                				"type": "input",
-                				"value": ""
-							};
-							saveform[i].fields.placeholder=placeholder;
-						}
-						if(saveform[i].fields.textarea){
-							saveform[i].fields.textarea=null;
-						}
-					}
-				}
+				
 				var agilethemeObj=saveform[0].fields.agiletheme;
 				var themeClassName="";
 				if(agilethemeObj!=undefined || agilethemeObj!=null){
@@ -59,6 +45,20 @@ define([
 					$.getJSON( "/core/api/custom-fields", function(fields) {
 
 					for ( var j = 0; j < saveform.length; j++){
+
+					if(saveform[j].title=="Text Area"){
+						if(saveform[j].fields.placeholder==undefined){
+							var placeholder={
+								"label": "Placeholder",
+                				"type": "input",
+                				"value": ""
+							};
+							saveform[j].fields.placeholder=placeholder;
+						}
+						if(saveform[j].fields.textarea){
+							saveform[j].fields.textarea=null;
+						}
+					}
 
 							if(saveform[j].fields.agilefield){							
 							
