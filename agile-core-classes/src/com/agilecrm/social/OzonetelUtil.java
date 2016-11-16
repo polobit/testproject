@@ -1,6 +1,7 @@
 package com.agilecrm.social;
 import java.net.URI;
 import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -8,6 +9,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.jboss.resteasy.spi.UnhandledException;
+
 import com.agilecrm.user.util.DomainUserUtil;
 
 public class OzonetelUtil {
@@ -30,7 +33,7 @@ public class OzonetelUtil {
 	 * @param user_phone //number from contacts
 	 * @return
 	 */
-	public String connectToNumber(String user_phone,String url){
+	public String connectToNumber(String user_phone,String url)throws UnhandledException{
 		String status="";
 		try{
 			String  domainUrl = "";
@@ -54,19 +57,19 @@ public class OzonetelUtil {
 	        uribuilder.addParameter("callback_url",domainUrl+"/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
 	        //uribuilder.addParameter("url", "http://ozonetelin.appspot.com/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId);
 	        //uribuilder.addParameter("callback_url","http://ozonetelin.appspot.com/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
-	
+	        
+	        HttpClient client = HttpClientBuilder.create().build();
 	        URI uri = uribuilder.build();
-	        System.out.println("Final Outboud API url " + uri);
 	        HttpGet request = new HttpGet(uri);
 	        try {
-		        HttpClient client = HttpClientBuilder.create().build();
-		        HttpResponse response = client.execute(request);
-		        
-		        String responseString = new BasicResponseHandler().handleResponse(response);
+	        	System.out.println("Final out bound URL"+uri);
+	            HttpResponse response = client.execute(request);
+	            String responseString = new BasicResponseHandler().handleResponse(response);
 		        System.out.println(responseString);
 		        status="success";
-	        }catch(Exception e){
-	        	e.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+
 	        }
 		}catch(Exception e){
 			System.out.println("Exception form OzonetelUtil connectToNumber method");
