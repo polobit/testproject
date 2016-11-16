@@ -113,25 +113,7 @@ define([
 						}
 						saveform[j].fields.agilefield.value = agileFields;
 					
-					}else{
-						for ( var i = 0; i < saveform.length; i++){
-							
-							if(saveform[i].title != "Hidden Input" && saveform[i].fields.agilefield){		
-							var field = saveform[i].fields.agilefield.value;							
-							if(field.length>15){
-								for(var j=field.length; j>15; j--)
-									field.pop(field[j]);								
-							}
-						}
-						else if(saveform[i].title == "Hidden Input" && saveform[i].fields.agilefield){
-							var field = saveform[i].fields.agilefield.value;							
-							if(field.length>0){
-								for(var j=1;j<field.length;j++)
-									field.pop(field[j]);								
-							}
-						}
 					}
-				}
 			}
 		}
 
