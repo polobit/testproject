@@ -584,6 +584,8 @@ function updateDeal(ele, editFromMilestoneView)
 		}else{
 			$("#opportunityUpdateForm").find("#showtoggle_show").hide();
 			$("#opportunityUpdateForm").find("#showproducts").hide();
+			$("#opportunityUpdateForm").find('.no-products').show();
+			$("#opportunityUpdateForm").find('.value_box').removeClass('col-sm-5').addClass('col-sm-7');
 			//$("#showtoggle_show").hide();
 			//$("#showproducts").hide();
 		}
