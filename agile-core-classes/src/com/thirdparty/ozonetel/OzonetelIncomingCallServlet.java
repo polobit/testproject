@@ -58,6 +58,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
         System.out.println("kookoo request url : " + uri);/*here I am just kookoo final xml prepared*/
         
         Widget widget = WidgetUtil.getWidget("Ozonetel");
+        System.out.println(widget.getProperty("agent_no"));
         agent_no = widget.getProperty("agent_no");
         
         try (PrintWriter out = response.getWriter()) {
@@ -67,7 +68,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
             if ((null != kookoo_event)&& kookoo_event.equalsIgnoreCase("newcall")) {
             	
                 Dial dialnumber = new Dial(); //kookoo dial tag class
-                dialnumber.setNumber("9052500344");
+                dialnumber.setNumber(agent_no);
                 r.addDial(dialnumber);
                 
                 contact_number = request.getParameter("cid");
