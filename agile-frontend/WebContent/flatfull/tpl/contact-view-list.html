@@ -28,7 +28,7 @@
 
         <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-        <ul class="dropdown-menu pull-right" role="menu">
+        <ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
             <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
         {{/hasRestrictedMenuScope}}
@@ -39,7 +39,7 @@
     <button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 
-        <ul class="dropdown-menu pull-right" role="menu">
+        <ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
             <li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
         {{/hasRestrictedMenuScope}}
@@ -92,7 +92,7 @@
         <a href="#companyModal" class="btn btn-default btn-sm disabled" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_lng_translate 'report-chart-forms' 'add-company'}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle disabled" data-toggle="dropdown"><span class="caret"></span></button>
         {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
-        <ul class="dropdown-menu pull-right" role="menu">
+        <ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
          
             <li><a href="#import">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
             
@@ -103,7 +103,7 @@
         <a href="#companyModal" class="btn btn-default btn-sm" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_lng_translate 'companies-view' 'add-company'}}</a>
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
          {{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
-        <ul class="dropdown-menu pull-right" role="menu">
+        <ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
             <li><a href="#import">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
         </ul>
         {{/hasRestrictedMenuScope}}  
