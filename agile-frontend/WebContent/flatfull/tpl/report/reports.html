@@ -323,40 +323,22 @@
 
     <div class="tab-pane" id="UserActivities">
 
-        
-        {{#isAllowedInCurrentPlan "is_email_gateway_allowed"}}
         <a class="report-go" href="#activities">
-        <div class="text-center show_screenshot" >
-        <!-- Description -->
-        <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-          {{agile_lng_translate 'report-view' 'user-reports-details'}}
+          <div class="text-center show_screenshot" >
+             <!-- Description -->
+             <div class=" m-b-sm" rel="tooltip" title="{{description}}">
+               {{agile_lng_translate 'report-view' 'user-reports-details'}}
           
-        </div>
-        <img src='flatfull/img/reports_images/user-activities.png'></img>
-        <div style="display:none;" class="activities-upgrade" ><span class="text-danger">{{toSafeString message}}<span></div>
-        </div>
-                </a>
-            {{else}}
-            
-            <div class="text-center show_screenshot" >
-            <!-- Description -->
-            <div class=" m-b-sm" rel="tooltip" title="{{description}}">
-             {{agile_lng_translate 'report-view' 'user-reports-details'}}
-           
-            </div>
-            <div class="_upgrade" id="activities-upgrade">
+              </div>
             <img src='flatfull/img/reports_images/user-activities.png'></img>
-            </div>
-
-            <div style="display:none;" class="activities-upgrade text-center" ><span class="text-danger">{{toSafeString message}}<span></div>
-               </div>  
-            {{/isAllowedInCurrentPlan}}
-             <div class="clearfix"></div>
+            <br/>
+          </div>
+        </a>
     </div>
 
     <div class="tab-pane" id="ContactActivities">
-<a class="report-go" href="#contact-activities">
-                    <div class="text-center show_screenshot" >
+      <a class="report-go" href="#contact-activities">
+        <div class="text-center show_screenshot" >
                             <!-- Description -->
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
           {{agile_lng_translate 'report-view' 'contact-reports-details'}}
@@ -365,7 +347,7 @@
        
         <br />
 
-    </div>
+         </div>
         </a>
     </div>
 
@@ -648,7 +630,7 @@
  <ul class="nav nav-tabs sub-nav-tab" id="subTab1" style="display:none;">
  <li><a href="#CallsbyUser" role="tab" data-toggle="tab"><i class="m-r-sm icon-call-end v-middle"></i>{{agile_lng_translate 'report-view' 'calls-by-user'}}</a></li>
 
- <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle" style="float:left"></i><div style="display:table-cell">{{agile_lng_translate 'report-view' 'average-call-duration'}}</div></a></li>
+ <li><a href="#Averagecall" role="tab" data-toggle="tab"><i class="m-r-sm icon-clock v-middle" style="float:left"></i><div style="display:table-cell">{{agile_lng_translate 'report-add' 'average-call-duration'}}</div></a></li>
   <li><a href="#CallLogs" role="tab" data-toggle="tab"><i class="m-r-sm icon-list v-middle"></i>
   {{agile_lng_translate 'report-view' 'call-logs'}}</a></li>
    <li><a href="#CallOutcomes" role="tab" data-toggle="tab"><i class="m-r-sm icon-pie-chart v-middle"></i>{{agile_lng_translate 'report-view' 'call-outcomes'}}</a></li>
@@ -696,9 +678,9 @@
 
 
 
-<li><a href="#webrule-report/all">{{agile_lng_translate 'menu' 'menu-web-rules'}}</a></li>
+<!--<li><a href="#webrule-report/all">{{agile_lng_translate 'menu' 'menu-web-rules'}}</a></li>-->
                                                 
-<li><a href="#form-reports/all">{{agile_lng_translate 'form-builder' 'forms'}}</a></li>
+<!--<li><a href="#form-reports/all">{{agile_lng_translate 'form-builder' 'forms'}}</a></li>-->
 {{#hasMenuScope 'ACTIVITY'}}
 <li role="presentation" data-tab="4" class="maintab reports-tab-none reportsliElement">
 <a href="#activities-tab"  role="tab" data-toggle="tab" >{{agile_lng_translate 'portlets' 'activities'}}</a>

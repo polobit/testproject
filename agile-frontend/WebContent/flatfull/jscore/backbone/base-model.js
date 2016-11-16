@@ -216,7 +216,8 @@ var Base_Model_View = Backbone.View
 				 */
 				var $el = $(this.el);
 				var formId = $(this.el).find('form').attr('id');
-				
+				if(!formId)
+					return;
 				var saveCallback = this.options.saveCallback;
 				
 				var errorCallback = this.options.errorCallback;
@@ -509,7 +510,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					$(this.el).html(getRandomLoadingImg());
+					$(this.el).html(getRandomLoadingImg(this.options.noLoading));
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -530,7 +531,8 @@ var Base_Model_View = Backbone.View
 					}
 					else
 					{
-						$(this.el).html(getRandomLoadingImg());
+						if(typeof(showLoading) != undefined)
+						$(this.el).html(getRandomLoadingImg(this.options.noLoading));
 					}
 				}
 

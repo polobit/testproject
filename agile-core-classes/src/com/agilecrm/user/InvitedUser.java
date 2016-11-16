@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -59,9 +60,11 @@ public class InvitedUser {
 		dao.put(this);
 
 		// Send invitation Email
+		String tempDomain = this.domain;
+		this.domain = AliasDomainUtil.getCachedAliasDomainName(this.domain);
 		if (isNewOne)
 			SendMail.sendMail(email, SendMail.INVITED_USER_SUBJECT, SendMail.INVITED_USER, this);
-
+		this.domain = tempDomain;
 	}
 
 }

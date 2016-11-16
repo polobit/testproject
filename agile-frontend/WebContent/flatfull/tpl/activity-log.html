@@ -805,6 +805,105 @@
 {{else}}
 {{/if_equals}}
 <!-- end of user owner change -->
+<!-- start of delete domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_DELETE_ACCOUNT" activity_type}}
+ {{custom1}} ({{custom3}}) had deleted  Domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom2}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT" activity_type}}
+ {{custom1}} has added Affliate Amount of $({{custom3}}) to the domain {{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom1}} has added  amount on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} 
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ <!-- end of admin panel activities -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_LOGIN_INTO_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) has logged into the Domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom1}} has logged on to {{custom2}} on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}{{/if_equals}}
+ <!-- start of release domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_SUBSCRIPTION_CANCEL" activity_type}}
+ {{custom1}} ({{custom3}}) has cancelled the subscritpion for the domain ({{custom2}}) 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+   The Subscription was cancelled on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- end of admin panel activities -->
+ <!-- start of release domain  activity -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_RELEASE_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) had released the Domain {{custom2}}  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom2}} was released on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_DELETED_USER" activity_type}}
+ {{custom3}} had been  deleted 
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom3}} was deleted  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_REFUND_AMOUNT" activity_type}}
+ {{custom1}} has  Applied the refund  to the {{custom2}}
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+ {{custom2}} was refunded  on {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}} with the amount {{custom3}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_SEARCHED_DOMAIN" activity_type}}
+ {{custom1}} ({{custom3}}) had searched for the domain {{custom2}}  
+ <br />
+ <small class="activities_second_line m-t-none text-sm">
+  {{custom1}} searched on  {{epochToHumanDate "mmm dd, yyyy HH:MM" time}} from the ip {{custom4}}
+ </small>
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- admin panel user permisssions changed -->
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
+ {{#PermissionsExist custom3}}
+{{else}}
+{{custom1}} has enabled  Permissions {{permissionChanged custom3}} to {{custom4}}
+ 
+ <br />
+ {{/PermissionsExist}}
+ {{/if_equals}}
+ {{/if_equals}}
+
+ {{#if_equals "ADMINPANEL" entity_type}}
+ {{#if_equals "ADMIN_PANEL_PERMISSIONS_CHANGED" activity_type}}
+{{#PermissionsExist custom2}}
+{{else}}
+{{custom1}} has disabled  Permissions {{permissionChanged custom2}} to {{custom4}}
+ <br />
+ {{/PermissionsExist}}
+ {{/if_equals}}
+ {{/if_equals}}
+ <!-- end of user admin panel permissions changed -->
+  <!-- end of admin panel activities -->
+
 <!-- start of contact condition-->
 {{#if_equals "CONTACT" entity_type}}
 {{#if_equals "CONTACT_CREATE" activity_type}}
@@ -814,6 +913,15 @@
  <i class="icon-user"></i>{{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}}{{agile_lng_translate 'contacts-view' 'contact-assigned-to'}} {{custom1}}.
 </small>  
 {{/if_equals}}
+
+{{#if_equals "LEAD_CREATE" activity_type}}
+{{agile_lng_translate 'leads-view' 'created-a-new-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}
+</a>{{else}}'{{label}}'{{/if}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+ <i class="icon-user"></i>{{#unless this.entityObject}}{{agile_lng_translate 'leads-view' 'lead-deleted-later'}} {{/unless}}{{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom1}}.
+</small>  
+{{/if_equals}}
+
 {{#if_equals "MERGE_CONTACT" activity_type}}
 {{#if_equals "1" custom1}} 
 {{agile_lng_translate 'contacts-view' 'merged'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contact-to'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
@@ -840,6 +948,11 @@
 {{#if_equals "COMPANY_DELETE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'deleted-company'}} '{{label}}'
 {{/if_equals}}
+
+{{#if_equals "LEAD_DELETE" activity_type}}
+{{agile_lng_translate 'leads-view' 'deleted-lead'}} '{{label}}'
+{{/if_equals}}
+
 {{#if_equals "CONTACT_IMPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'imported'}}  {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
@@ -854,6 +967,14 @@
 {{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'contacts-view' 'companies-were-updated-during-the-import'}}{{/if}} 
 </small>  
 {{/if_equals}}
+
+{{#if_equals "LEAD_IMPORT" activity_type}}
+{{agile_lng_translate 'contacts-view' 'imported'}}  {{custom1}} {{agile_lng_translate 'menu' 'leads'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'leads-view' 'leads-were-updated-during-the-import'}}{{/if}} 
+</small>  
+{{/if_equals}}
+
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
@@ -871,11 +992,27 @@
 {{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
 {{/if_equals}}
+
+{{#if_equals "LEAD_EXPORT" activity_type}}
+{{#if_equals "1" custom1}}
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+{{else}}
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'menu' 'leads'}} 
+<br/>
+{{/if_equals}}	
+{{/if_equals}}
+
 {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
 {{#if_equals "PERSON" type}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for-contact'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-user icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{agile_lng_translate 'contacts-view' 'contact-assigned-to'}} {{custom1}}.
+</small>
+{{else}}
+{{#if_equals "LEAD" type}}
+{{agile_lng_translate 'leads-view' 'changed-owner-for-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom1}}.
 </small>
 {{else}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for-company'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
@@ -884,10 +1021,11 @@
 </small>
 {{/if_equals}}	
 {{/if_equals}}
+{{/if_equals}}
   {{#if_equals "NOTE_ADD" activity_type}}
 {{#if custom4}}
-{{agile_lng_translate 'contacts-view' 'added-call-log-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}  {{#if this.entityObject}}<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
-{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{agile_lng_translate 'contacts-view' 'added-call-log-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} {{agile_lng_translate 'menu' 'lead'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}{{/if_equals}}  {{#if this.entityObject}}<a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
+{{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} #lead/{{entity_id}} {{else}} #contact/{{entity_id}} {{/if_equals}}{{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small> <br/>
@@ -895,9 +1033,9 @@
  <i class="icon-pencil"></i>{{custom4}}
 </small>
 {{else}}
-{{agile_lng_translate 'contacts-view' 'added-note-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}} {{#if this.entityObject}}
+{{agile_lng_translate 'contacts-view' 'added-note-to'}} {{#if_equals "company_entity" this.entityObject.entity_type}} {{agile_lng_translate 'contacts-view' 'Company'}} {{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} {{agile_lng_translate 'menu' 'lead'}} {{else}} {{agile_lng_translate 'contact-details' 'Contact'}}{{/if_equals}}{{/if_equals}} {{#if this.entityObject}}
 <a href="{{#if_equals "company_entity" this.entityObject.entity_type}} #company/{{entity_id}} 
-{{else}} #contact/{{entity_id}} {{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{else}} {{#if_equals "lead_entity" this.entityObject.entity_type}} #lead/{{entity_id}} {{else}} #contact/{{entity_id}} {{/if_equals}}{{/if_equals}}" data="{{entity_id}}" class="popover_contact">{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm">
  <i class="icon-pencil"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} {{/unless}} {{custom1}} {{#if custom2}}- {{custom2}}{{/if}}
 </small>  
@@ -924,6 +1062,25 @@
 </small>
 {{/if_equals}}
 {{else}}
+
+{{#if_equals "leads" label}}
+{{#if_equals "ADD_TAG" custom1}}
+{{agile_lng_translate 'contacts-view' 'added-tag-to'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'added'}}
+</small>
+{{/if_equals}}
+
+
+{{#if_equals "REMOVE_TAG" custom1}}
+{{agile_lng_translate 'contacts-view' 'removed-tags-from'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'removed'}}
+</small>
+{{/if_equals}}
+
+{{else}}
+
 {{#if_equals "ADD_TAG" custom1}}
  {{agile_lng_translate 'contacts-view' 'added-tag-to'}}&nbsp;{{custom3}} {{agile_lng_translate 'companies-view' 'companies'}}<br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -937,6 +1094,8 @@
 </small>
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
 {{#if_equals "1" custom3}}
 		{{agile_lng_translate 'contacts-view' 'Added'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<br/>
@@ -964,6 +1123,19 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </small>
 {{/if_equals}}
 {{else}}
+{{#if_equals "leads" label}}
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'contacts-view' 'sent-a-email-to'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'contacts-view' 'sent-a-bulk-email-to'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
+{{/if_equals}}
+{{else}}
 {{#if_equals "1" custom3}}
 {{agile_lng_translate 'contacts-view' 'sent-a-email-to'}} {{custom3}} {{agile_lng_translate 'contact-details' 'company'}}<br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -977,6 +1149,25 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "SEND_EMAIL_BULK" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} <span style="text-transform: lowercase;">{{agile_lng_translate 'menu' 'email'}}</span><br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'plan-and-upgrade' 'emails'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "CHANGE_OWNER" custom1}}
 {{#if_equals "contacts" label}}	
 {{#if_equals "1" custom3}}
@@ -991,6 +1182,21 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </small>
 {{/if_equals}}
 {{else}}
+
+{{#if_equals "leads" label}}
+{{#if_equals "1" custom3}}
+{{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom2}}.
+</small>
+{{else}}
+	{{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'companies-view' 'companies'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'leads-assigned-to'}} {{custom2}}.
+</span>
+{{/if_equals}}
+{{else}}
+
 {{#if_equals "1" custom3}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'contact-details' 'company'}} <br/>
 <small class="activities_second_line m-t-none text-sm">
@@ -1004,6 +1210,8 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
 {{#if_equals "DELETE" custom1}}
 	
 {{#if_equals "contacts" label}}	
@@ -1013,6 +1221,13 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
     {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'portlets' 'contacts'}}
 {{/if_equals}}
 {{else}}
+{{#if_equals "leads" label}}	
+{{#if_equals "1" custom3}}
+		{{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}}
+{{else}}	
+    {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}
+{{/if_equals}}
+{{else}}
 {{#if_equals "1" custom3}}
 		{{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'company'}}
 {{else}}	
@@ -1020,6 +1235,8 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
+
 {{/if_equals}}
 {{#if_equals "CAMPAIGN" activity_type}}
 {{agile_lng_translate 'contacts-view' 'Added'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} {{agile_lng_translate 'contact-details' 'to-campaign'}} <br/>
@@ -1053,6 +1270,23 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/unless}}
 </small>
 {{/if_equals}}
+
+{{#if_equals "LEAD_TAG_ADD" activity_type}}
+{{agile_lng_translate 'leads-view' 'added-a-tag-to-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} {{agile_lng_translate 'contacts-view' 'added'}}{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} 
+{{/unless}}
+</small>
+{{/if_equals}}
+
+{{#if_equals "LEAD_TAG_REMOVE" activity_type}}
+{{agile_lng_translate 'leads-view' 'removed-a-tag-from-lead'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} {{agile_lng_translate 'contacts-view' 'removed'}}{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} 
+{{/unless}}
+</small>
+{{/if_equals}}
+
 {{#if_equals "CALL" activity_type}}
 {{#if custom1}}
 {{#if_equals "incoming" custom2}}
@@ -1069,6 +1303,21 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 {{/if}}
 {{/if_equals}}
+
+{{#if_equals "CHANGE_LEAD_STATUS" custom1}}
+{{#if_equals "1" custom3}}
+{{agile_lng_translate 'leads-view' 'changed-status-for'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'status-changed-to'}} {{custom2}}.
+</small>
+{{else}}
+	{{agile_lng_translate 'leads-view' 'changed-status-for'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'status-changed-to'}} {{custom2}}.
+</small>
+{{/if_equals}}
+{{/if_equals}}
+
 {{/if_equals}}
 <!-- end of contact-->
 <!-- document added startig-->
@@ -1514,8 +1763,13 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
             
 		<div class="pull-right" id="activity-log-header-div">
 		<div class="btn-group pull-left" role="group">
+		{{#is_admin_domain}}
+                {{else}}
                 <a href="#activities" class="btn btn-default btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
+                
+
                 <a href="#contact-activities" class="btn btn-default btn-sm" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
+                {{/is_admin_domain}}
             </div>
             <div class="pull-left" style=" margin-bottom:0px !important;">
             <div id="activities_date_range" style="line-height:20px;" 
@@ -1625,6 +1879,9 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  </script>
 
 <script id="sales-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
 <li data-type="CALL"><a href="CALL">{{agile_lng_translate 'portlets' 'calls'}}</a></li>
@@ -1644,24 +1901,39 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
  <li data-type="TASK"><a href="TASK">{{agile_lng_translate 'contact-details' 'tasks'}}</a></li>
 
 	<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>
+ {{/is_admin_domain}}
+
 </script>
 
 
 <script id="marketing-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
  <li data-type="CAMPAIGN"><a href="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}</a>
                     </li>
- <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li>
+ <li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>           <li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a>   </li> 	
+ {{/is_admin_domain}}
+
 </script>
 
 <script id="service-activity-list-header-template" type="text/html">
+{{#is_admin_domain}}
+<li data-type="ADMINPANEL"><a href="ADMINPANEL">Amin panel</a></li>
+{{else}}
  <li data-type="ALL"><a href="">{{agile_lng_translate 'report-view' 'all-activities'}}</a>
 					 </li>
 	<li data-type="CONTACT"><a href="CONTACT">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
  <li data-type="TICKET"><a href="TICKET">Tickets</a></li>
     
-					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li>                 
+					<li data-type="USER"><a href="USER">{{agile_lng_translate 'admin-settings' 'users'}}</a></li> 
+ {{/is_admin_domain}}
 
+
+</script>
+<script type="text/html" id="removedaccessScopes-template">
+<div></div>
 </script>
 

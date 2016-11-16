@@ -148,15 +148,9 @@ public class AgileWebhookAPI
     public Webhook saveWebhookDeveloper(Webhook webhook) {
 	try {
 	    String domain = NamespaceManager.get();
-	    Subscription sub = SubscriptionUtil.getSubscription();
-	    System.out.println("plan name = " + sub.plan.getPlanName());
-	    if (sub.plan.getPlanName().equals("ENTERPRISE")
-		    || sub.plan.getPlanName().equals("PRO")) {
 
-		List<Webhook> whook = WebhookTriggerUtil.getWebhooksList();
-
-		System.out.println("hook count = " + whook.size());
-		if (whook != null && whook.size() > 0) {
+		Webhook whook = WebhookTriggerUtil.getWebhook();
+		if (whook != null) {
 		    System.out.println("Webhook found = " + whook);
 		    throw new Exception(
 			    "Webhook found. Please remove current webhook to create new.");
@@ -167,10 +161,7 @@ public class AgileWebhookAPI
 		webhook.save();
 
 		return webhook;
-	    } else {
-		throw new Exception(
-			"Please upgrade to Enterprise plan to use this feature.");
-	    }
+	    
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    System.out.println(e.getMessage());

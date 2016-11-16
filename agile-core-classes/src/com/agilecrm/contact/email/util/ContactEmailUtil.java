@@ -19,7 +19,10 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.util.ContactUtil;
@@ -37,7 +40,6 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
-import com.agilecrm.user.service.impl.AgileUserServiceImpl;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
@@ -48,7 +50,6 @@ import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.repackaged.com.google.common.base.CharMatcher;
 import com.google.appengine.repackaged.com.google.common.base.Splitter;
-import com.google.apphosting.client.serviceapp.ServiceRegistry;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -205,7 +206,13 @@ public class ContactEmailUtil
 		
 		// Returns set of To Emails
 		Set<String> toEmailSet = getToEmailSet(to);
-
+		
+		// Returns set of Cc Emails
+		Set<String> ccEmailSet = getToEmailSet(cc);
+		
+		// Returns set of Bcc Emails
+		Set<String> bccEmailSet = getToEmailSet(bcc);
+			
 		// Personal Email open tracking id
 		contactEmailWrapper.setTrackerId(String.valueOf(System.currentTimeMillis()));
 		
@@ -232,22 +239,32 @@ public class ContactEmailUtil
 
 		// Sends email
 		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
-
+		System.out.println("After send email");
+				
+		// it is for calculating total contact emails
+		int contactsCount=0;
+		
 		// If contact is available, no need of fetching contact from
 		// to-email again.
 		if (contact != null)
 		{
+			System.out.println("if contact is not null , save the contact email");
 			saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
 					Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
-			
+			System.out.println("After save contact email , set contact last mailed");
 			contact.setLastEmailed(System.currentTimeMillis() / 1000);
+			System.out.println("After set contact last emailed , update contact");
 			contact.update();
 			
 			for (String toEmail : toEmailSet)
 			    ActivitySave.createEmailSentActivityToContact(EmailUtil.getEmail(toEmail), contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
+			
+			contactsCount++;
 		}
 		else
 		{
+			System.out.println("if contact is null , loop the save contact email");
+
 			// When multiple emails separated by comma are given
 			for (String toEmail : toEmailSet)
 			{
@@ -263,16 +280,36 @@ public class ContactEmailUtil
 				// Saves email with contact-id
 				if (contact != null)
 				{
+					System.out.println("save contact email in loop");
 					saveContactEmail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), emailBody, signature, contact.id,
 							Long.parseLong(contactEmailWrapper.getTrackerId()), documentIds, contactEmailWrapper.getAttachment_name(), contactEmailWrapper.getAttachment_url());
-
+					System.out.println("after save contact in loop");
 					contact.setLastEmailed(System.currentTimeMillis() / 1000);
 					contact.update();
-					
+					System.out.println("save contact emailed activity");
 					// Add activity
 					ActivitySave.createEmailSentActivityToContact(email, contactEmailWrapper.getSubject(), contactEmailWrapper.getMessage(), contact);
+					
+					contactsCount++;
 				}
 			}
+			
+		}
+		//total email including cc, bcc also
+		int totalEmail = toEmailSet.size() + ccEmailSet.size() + bccEmailSet.size();
+		
+		//total emails which are not in our contact list
+		int totalNonContactEmail = totalEmail - contactsCount;
+		
+		/*	If there are some non contact emails in to then this condition will be execute
+		 * 	Here all emails in cc and bcc we are taking as non contact email
+		 * 	only the emails are in "to" which are in our contact list are treated as contact email
+		 * 	for all non contact emails we will save a seperate activities
+		 */
+		if(totalNonContactEmail>0){
+			//add activity for non contact emails
+			ActivityUtil.createBulkActionActivity(ActivityType.SEND_EMAIL_BULK.toString(), ActivitySave.html2text(contactEmailWrapper.getMessage()), String.valueOf(totalNonContactEmail), "contacts",
+					contactEmailWrapper.getSubject(), EntityType.CONTACT);
 		}
 	}
 
@@ -288,16 +325,18 @@ public class ContactEmailUtil
 	{
 		// Set to avoid duplicate emails
 		Set<String> toEmailSet = new HashSet<String>();
-
-		// If only one email is given, add directly to set
-		if (!to.contains(","))
-		{
-			toEmailSet.add(StringUtils.trim(to));
-		}
-		else
-		{
-			// Splits multiple emails and add each one to set
-			toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+		
+		if(to.length()>0){
+			// If only one email is given, add directly to set
+			if (!to.contains(","))
+			{
+				toEmailSet.add(StringUtils.trim(to));
+			}
+			else
+			{
+				// Splits multiple emails and add each one to set
+				toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+			}
 		}
 
 		return toEmailSet;
@@ -352,7 +391,7 @@ public class ContactEmailUtil
 
 		// Remove trailing commas for to emails
 		ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);
-
+		System.out.println("in savecontactemail , get contact email object ");
 		contactEmail.from_name = fromName;
 
 		contactEmail.cc = cc;
@@ -361,7 +400,7 @@ public class ContactEmailUtil
 		contactEmail.trackerId = trackerId;
 
 		contactEmail.attachment_ids = documentIds;
-
+		System.out.println("before save contact email");
 		contactEmail.save();
 	}
 
@@ -1112,6 +1151,52 @@ public class ContactEmailUtil
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	/**
+	 * Merges lead-emails with imap emails if exists, otherwise returns
+	 * lead-emails. Fetches lead emails of the lead with search email
+	 * and merge them with imap emails.
+	 * 
+	 * @param searchEmail
+	 *            - Lead EmailId.
+	 * @param imapEmails
+	 *            - array of imap emails obtained.
+	 * @return JSONArray
+	 */
+	public static JSONArray mergeLeadEmails(String searchEmail, JSONArray imapEmails)
+	{
+		// if email preferences are not set.
+		if (imapEmails == null)
+			imapEmails = new JSONArray();
+
+		try
+		{
+			Contact lead = ContactUtil.searchContactByEmailAndType(searchEmail, com.agilecrm.contact.Contact.Type.LEAD);
+			if(lead != null)
+			{
+				// Fetches contact emails
+				List<ContactEmail> contactEmails = getContactEmails(lead.id);
+
+				// Merge Contact Emails with obtained imap emails
+				for (ContactEmail contactEmail : contactEmails)
+				{
+					// parse email body
+					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+
+					ObjectMapper mapper = new ObjectMapper();
+					String emailString = mapper.writeValueAsString(contactEmail);
+					imapEmails.put(new JSONObject(emailString));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception while merging emails " + e.getMessage());
+		}
+
+		return imapEmails;
 	}
 
 }

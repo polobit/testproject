@@ -962,7 +962,7 @@ li.deal-color:after {
     width: 2px;
 }
 li.deal-color{position:relative;}
-li.deal-color.YELLOW:after { background: yellow;}
+/*li.deal-color.YELLOW:after { background: yellow;}
 li.deal-color.RED:after { background: red;}
 li.deal-color.VIOLET:after { background: violet;}
 li.deal-color.INDIGO:after { background: indigo;}
@@ -972,7 +972,7 @@ li.deal-color.ORANGE:after { background: orange;}
 li.deal-color.BLACK:after { background: black;}
 li.deal-color.WHITE:after { background: white;}
 li.deal-color.GREY:after { background: grey;}
-
+*/
 /*Styling for deal color ends*/
 
 .milestone-main {
@@ -3210,7 +3210,7 @@ table.hide-head-checkbox th label.i-checks {
 .contact_popover .arrow{
   display: none;
 }
-#scorebox{
+#scorebox, #lead-scorebox{
   text-align:center;
   right: 5px;
   width: 56px;
@@ -4059,6 +4059,15 @@ padding-left:0px;
     margin-top: 0; 
  }
 
+ div#lead-custom-coloumns:hover.compact .dropdown-menu{
+    display: block;
+    margin-top: 0; 
+ }
+ div#lead-custom-coloumns .dropdown-menu{
+    display: none;
+    margin-top: 0; 
+ }
+
 .delete-checked-contacts .bulk-delete-loading
 {
   padding-right: 5px;
@@ -4817,7 +4826,6 @@ ul#recent-menu-model-list li:nth-child(even)
   cursor: pointer;
 }
 
-
 .filter-dynamic-scrollbar::-webkit-scrollbar {
   width: 5px;
 }
@@ -4870,4 +4878,66 @@ ul#recent-menu-model-list li:nth-child(even)
 }
 .m-l-32{
   margin-left: 32.6%;
+}
+.contactlimitwarning
+{
+  float: left;
+  text-indent: 0;
+}
+#lhs_filters_segmentation #lhs-filters-header .popover {
+    max-width: 280px;
+}
+
+.adduseradminpanel .caret
+{
+  display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 5px solid;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+}
+.adminPanel.app-aside
+{
+      width: 0px;
+}
+.adminPanel .app-content
+{
+  margin-left:0px!important;
+}
+.adminPanelcontainer
+{
+  margin-left:0px!important;
+}
+.btn-hover-color:hover{
+  
+  background-color: #f6f6f6;
+  border-color: #f6f6f6;
+}
+.prefs-option-col{
+    display: table;
+    width: 90%;
+    margin: 0 auto;
+}
+.pref-dropdown-image{
+  height:80px;width:80px;
+  margin:30px 20px;
+  opacity:0.65;
+}
+.prefs-dropdown-modal-header{
+  margin-top:25px;
+  margin-bottom: 25px;
+}
+
+.prefs-dropdown-img-background{
+ background-color:#fafafa;
+}
+.c-default {
+  cursor: default;
+}
+.chat-bubble-green{
+    color: green;
+    margin-right: 5px;
 }

@@ -10,6 +10,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -73,7 +74,7 @@ public class VerifiedEmails
     	
     	try
 		{
-			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())+"verify-email?tid="+ URLEncoder.encode(token, "UTF-8"));
+			data.put("verify_link", VersioningUtil.getHostURLByApp(AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()))+"verify-email?tid="+ URLEncoder.encode(token, "UTF-8"));
 		}
 		catch (UnsupportedEncodingException e)
 		{

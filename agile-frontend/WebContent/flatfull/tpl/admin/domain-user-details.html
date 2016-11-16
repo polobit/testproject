@@ -5,13 +5,14 @@
 {{email}}
 {{#if is_account_owner}}
             <span class="label bg-light m-l-xs dk text-tiny">Owner</span>
-            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" class="text-info p-l-xs">{{agile_lng_translate 'other' 'login-to-domain'}}</a>{{/check_admin_ip}}	
+            {{#adminpanel_restrictions "LOGIN_INTO_DOMAIN"}}
+            {{#check_admin_ip}}	<a href="https://{{domain}}.agilecrm.com/custLogin?d={{id}}" target="_blank" domain="{{domain}}" class="text-info p-l-xs agentLogin">{{agile_lng_translate 'other' 'login-to-domain'}}</a>{{/check_admin_ip}}{{else}}{{/adminpanel_restrictions}}	
     {{/if}}
 </td>
 <td class="text-muted"><i class="fa fa-clock-o m-r-xs"></i><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
 <td ><a href="/#change-password-admin/{{id}}"  >{{agile_lng_translate 'settings' 'reset-password'}}</a></td>
-<td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">{{agile_lng_translate 'contact-details' 'delete'}}</a></td>
- <td><a href="#" class="text-info check_affiliate" domain="{{domain}}" userId="{{id}}">add</a></td>
+<td>{{#adminpanel_restrictions "DELETE_USER"}}<a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">{{agile_lng_translate 'contact-details' 'delete'}}</a>{{else}}{{/adminpanel_restrictions}}</td>
+ <td>{{#adminpanel_restrictions "ADD_AFFILIATE_AMOUNT"}}<a href="#" class="text-info check_affiliate" domain="{{domain}}" userId="{{id}}">add</a>{{else}}{{/adminpanel_restrictions}}</td>
  <td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
 
 </script>
@@ -111,9 +112,11 @@
 <p>
 	{{agile_lng_translate 'admin-settings' 'users'}}: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{quantity}}
 </p><br/><p>
+
 	<span style="width: auto;max-width: 40%;display: inline-block;"><a href="/#domainSubscribe/{{../../description}}"><strong><u> {{agile_lng_translate 'plan-and-upgrade' 'change-plan'}}</strong></u> </a> </span>
-	<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
-	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}</u></strong> </a></span>
+    
+	{{#adminpanel_restrictions "CANCEL_SUBPLAN"}}<span id="deleteUserPlanSpan" class="pull-right" style="text-overflow: ellipsis;overflow: hidden;height: auto;white-space: nowrap;max-width: 55%;display: inline-block;">
+	<a href="#" id="delete_userplan" sub_id={{id}} cus_id={{customer}} email="{{email}}"> <strong><u>{{agile_lng_translate 'plan-and-upgrade' 'cancel-subscription'}}</u></strong> </a></span>{{else}}{{/adminpanel_restrictions}}
 </p><br/><br/>
 </div>
 {{/is_userPlan}}
@@ -153,8 +156,10 @@
 {{agile_lng_translate 'plan-and-upgrade' 'plan-type'}}: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{plan.name}}
 </p>
 <p>
+{{#adminpanel_restrictions "CANCEL_SUBPLAN"}}
 	<span class="pull-right" id="deleteEmailPlanSpan">
-	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{../../id}}> <strong><u>Cancel Subscription</u></strong> </a></span>
+	<a href="#" id="delete_emailplan" sub_id={{id}} cus_id={{customer}} email='{{email}}'> <strong><u>Cancel Subscription</u></strong> </a></span>
+    {{/adminpanel_restrictions}}
 </p>
 <br/><br/>
 </div>
@@ -238,7 +243,10 @@
 {{#if emailcount}}
 	{{#if_equals emailcount.status "paused"}}<div class="text-danger" id="unPauseMandrillDiv">{{agile_lng_translate 'other' 'emails-sending-in-this-domain-is-paused'}}<a href="#" class="btn" id="unpause_mandrill" domain={{emailcount.name}}>{{agile_lng_translate 'other' 'resume'}}</a></div><br/>{{/if_equals}}
 {{/if}}
+{{#adminpanel_restrictions "DELETE_ACCOUNT"}}
 <a  align="center" data="" class="delete-namespace data btn btn-danger">{{agile_lng_translate 'other' 'delete-account'}}</a>
+{{else}}
+{{/adminpanel_restrictions}}
 
 </div>
 </div>

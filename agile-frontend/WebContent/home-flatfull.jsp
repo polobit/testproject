@@ -1,8 +1,13 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.MobileUADetector"%>
+<%@page import="com.agilecrm.user.access.AdminPanelAccessScopes"%>
+<%@page import="com.itextpdf.text.log.SysoCounter"%>
 <%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="com.agilecrm.util.FileStreamUtil"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="com.agilecrm.addon.AddOn"%>
+<%@page import="com.agilecrm.addon.AddOnUtil"%>
 <%@page import="com.agilecrm.user.DomainUser.ROLE"%>
 <%@page import="com.campaignio.servlets.deferred.WorkflowAddAccessLevelDeferredTask"%>
 <%@page import="com.google.appengine.api.taskqueue.Queue"%>
@@ -91,6 +96,8 @@ return;
 
 DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
+AddOn addOn = AddOnUtil.getAddOn();
+
 System.out.println("Domain user " + domainUser);
 
 ObjectMapper mapper = new ObjectMapper();
@@ -172,6 +179,7 @@ if(!StringUtils.equalsIgnoreCase(languageCookieValue, _LANGUAGE) && LanguageUtil
 }
 
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(currentUserPrefs, application, "menu");
+String userAgent = request.getHeader("user-agent");
 %>
 
 
@@ -241,7 +249,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     outline:none;
     cursor:text;
 }
-.free_plan_alert{
+.free_plan_alert {
   padding-top: 5px;
   padding-bottom: 7px;
   z-index: 1;top: 65px;
@@ -290,6 +298,25 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     -moz-transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
 }
+.background-img-sales{
+  background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
+  background-position: 0 0px;
+  border: 0 none;'
+}
+.background-img-marketing{
+  background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
+  display: inline-block;
+  background-position: 49% 0px;
+}
+.background-img-service{
+   background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
+   background-position: 98% 0px;
+}
+<%
+   if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+%>
+    #personModal #import-link{display: none!important;}
+<%}%>
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -317,7 +344,10 @@ function isIE() {
 
 </script>
 <div id="alert-message" style="display:none;"></div>
-
+<div class="pos-abs pos-r-0 " style="z-index:3;top:116px">
+<div id="contacts_limit_alert_info" class="contacts_plan_alert hide" style="position: relative;width:340px;"> 
+</div>
+</div>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
    <%=LanguageUtil.getLocaleJSONValue(localeJSON, "you-are-currently-on-free-plan") %>.
@@ -325,6 +355,9 @@ function isIE() {
   <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
+
+<img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img>
+
 <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
             case 1:  out.print("bg-white-only ");
@@ -363,11 +396,16 @@ function isIE() {
          %>" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
                   <ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
                     
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span></a></li>
+                <li class='pull-left m-b-sm'>
+                  <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'><i class='thumb background-img-sales'></i>
+                    <span class='block' ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %>
+                    </span>
+                  </a>
+                </li>
 
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard' ><i class='thumb background-img-marketing' ></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
 
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard' ><i class='thumb background-img-service'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
 
                 </ul>
                 </div>
@@ -447,7 +485,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
  
   }
       
- %>">
+ if ( "admin".equals(domainUser.domain))
+  {
+    out.print("hide adminPanel");
+  }
+  %>">
           <div class="aside-wrap">
         <div class="navi-wrap">
   
@@ -465,6 +507,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
+
+   <!-- <li id="leadsmenu">
+    <a  href="#leads">
+      <i class="icon icon-group"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads") %></span>
+    </a>
+  </li> -->
         
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
@@ -888,12 +937,21 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <ul class="nav navbar-nav agile-menu">
               <li id="homemenu" class="active"></li>
               <%
-                  if ("admin".equals(domainUser.domain)) {
-                      out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
-                      out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li><li><a href="
-                          + logoutURL
-                          + "><i class='icon-off'></i>Logout</a></li>");
-                    } else {
+                  if ("admin".equals(domainUser.domain)) 
+                  {
+                	  
+                	out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");  
+               
+                    out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li>");
+                    if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.ADD_USER))
+                  	{
+                  		out.println("<li style='margin-top: 7px;'><div class='btn-group'><a href='#users-add' class='btn btn-default btn-sm ''><i class='icon-plus-sign'></i> Add User</a>");
+                  		out.println("<button class='btn btn-default btn-sm dropdown-toggl' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
+                  		out.println("</div></li>");
+                  		 out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                  	}
+                  
+                  } else {
               %>
               
              <!--  <li class="line dk"></li>
@@ -987,13 +1045,17 @@ if(currentUserPrefs.menuPosition.equals("top")){
                   %>
                   <li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
-                  
+
+                  <%if(!MobileUADetector.isiPhone(userAgent)) {%>
                   <li><a href="#subscribe"><!-- <i class="icon-cog"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+                  <%}%>
+                  <%if(!MobileUADetector.isMobile(userAgent)) {%>
                   <li><a href="https://www.agilecrm.com/product-updates" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
                   <li><a href="https://www.agilecrm.com/support" target="_blank"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
+                  <%}%>
                   <li><a href="<%=logoutURL%>"><!-- <i class="icon-off"></i> -->
                       <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "logout") %></div><div class='pull-right shortcuts'>Shift + G</div><div class="clearfix"></div></a></li>
 
@@ -1006,7 +1068,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </div>
   </div>
   </aside>
-<div class="app-content" id="agilecrm-container">
+<div class='app-content <%if("admin".equals(domainUser.domain)) out.print("adminPanelcontainer"); %>' id="agilecrm-container">
 <div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
 <div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
@@ -1127,6 +1189,9 @@ var ACCOUNT_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(accountPr
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(domainUser))%>;
 
+//Get current domain addon json
+var ADDON_INFO = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(addOn))%>;
+
 // Get current user dashboards
 var CURRENT_USER_DASHBOARDS = <%=mapper.writeValueAsString(dashboardsList)%>;
 // Get Current Agile User
@@ -1137,6 +1202,9 @@ var CONTACTS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(re
 // Get Contact Date Fields
 var COMPANY_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeDate")))%>;
 
+// Get Lead Date Fields
+var LEADS_DATE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeDate")))%>;
+
 // Get Contact contact type custom fields
 var CONTACTS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeContactTypeContact")))%>;
 // Get Contact company type custom fields
@@ -1146,6 +1214,11 @@ var CONTACTS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsS
 var COMPANIES_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeContact")))%>;
 // Get Company company type custom fields
 var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeCompanyTypeCompany")))%>;
+
+// Get Lead contact type custom fields
+var LEADS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeContact")))%>;
+// Get Lead company type custom fields
+var LEADS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeCompany")))%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

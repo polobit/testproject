@@ -1,20 +1,12 @@
 <script id="theme-layout-form-template" type="text/html">
 <div id="theme-and-layout" class="custom-animated custom-fadeInUp">
-<div class="wrapper-md bg-light lter b-b">
-	<div class="row">
-		<div class="col-md-12">
-			<h3 class="h3 font-thin pull-left">{{agile_lng_translate 'menu' 'theme-and-layout'}}</h3>
-		</div>
-	</div>
-</div>
-
-<div class="wrapper-md">
+  <div class="wrapper-md p-t-none">
 	<form id="themeform" class="form-horizontal" role="form">
         <fieldset>
         	<div class="row">
-                <div class="col-md-6 col-sm-6 col-sm-offset-0 col-xs-offset-3 col-xs-6">
+                <div class="col-md-7 col-sm-6 col-sm-offset-0 col-xs-offset-3 col-xs-6">
                    <div class="control-group form-group hidden-xs">
-                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'menu-position'}}
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'new-menu-position'}}
                         </label> 
                         <div class="controls col-sm-8">
                             <select name="menuPosition" id="menuPosition" class="form-control">
@@ -24,6 +16,26 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="control-group form-group hidden-xs">
+                        <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'maximum-pagesize'}} 
+                        </label> 
+                        <div class="controls col-sm-8">
+                           <!--<input class="field required form-control number" id="page_size" name="page_size" required="" type="number" pattern="\d*" min="1" placeholder="" autocapitalize="off">-->
+                           <select name="page_size" id="page_size" class="form-control">
+                           
+                           <option value="25">25</option>
+                          <option value="50">50</option>
+                        
+
+                           </select>
+                        </div>
+                        <div class="text-muted">
+                            <div class="col-sm-offset-4 col-sm-8 p-l ">{{agile_lng_translate 'theme' 'showconverstionperpage'}}</div>
+                    </div>
+                    </div>
+
+
           <!--      <div class="control-group form-group">
                         <label class="control-label col-sm-4">Layout</label> 
                         <div class="controls col-sm-8">

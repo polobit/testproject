@@ -30,10 +30,11 @@
 		CSS_PATH = FLAT_FULL_PATH;
 	}
 
-	
 	String redirectHomeURL = (String)request.getSession().getAttribute("RedirectionHomeURL");
+	//String redirectHomeURL = request.getParameter("redirectionurl");
 	System.out.println("After JSP code in new file");
-	
+	//List<String> restrictedDomains = new List<String>();
+	//restrictedDomains.add("zoho").add("yandex").add("hotmail").add("yahoo").add("");
 	String[] restrictedDomains = {"zoho","yandex","hotmail","yahoo","aol","outlook","rossbergercom","fastmail","usa.gov","yopmail","gmail"};
 	String email = (String)request.getSession().getAttribute("Email");
 	//String email="hi@yopmail.com";
@@ -221,7 +222,7 @@ a{
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script type="text/javascript" src="flatfull/lib/jquery.validate.min.js"></script>
-<script type='text/javascript' src='flatfull/final-lib/final-lib-1/b-bootstrap.js'></script>
+<script src="/flatfull/lib/bootstrap.v3.min.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
@@ -235,7 +236,7 @@ a{
 		<div class="row" >
 			<div class="align-center m-b-xs"style="font-size:18px;"> Congratulations, you have signed up successfully!</div>
 			<div class="align-center"style="margin-bottom:15px;font-size: 16px;">
-			  Invite your team for seamless collaboration.
+			  Invite your colleagues and enjoy Agile CRM's extensive features.
 			</div>
 		<div class="col-sm-5" style="float: none !important;margin: 0 auto;">
 			<div class='well'>
@@ -253,21 +254,24 @@ a{
 					</div>
 					</div>
 					
-					<div class="control-group form-group" >
-					<label class="control-label col-sm-3">User <span>1</span></label>
-					<div class="control-group col-sm-8 removeUser" id="sales-form-group"> 
+					<div class="control-group form-group users" >
+					<label class="control-label col-sm-3">User <span class="number">1</span></label>
+					<div class="control-group col-sm-8 removeUser pos-rlt" id="sales-form-group"> 
 									         <span class="controls" > 
 									         	<input  name="temp1" type="email" class="form-control input-style"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span> 
+									         	 <a class="remove-user pos-abt hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
 									        
 					</div>
 					</div>
 					
-					<div class="control-group form-group ">
+					<div class="control-group form-group users">
 					<label class="control-label col-sm-3">User <span class="number">2</span></label>
-					<div class="control-group col-sm-8 removeUser"> 
-									         <span class="controls"> <input name="temp2"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" type="email" class=" form-control input-style "   placeholder="Email Address"> </span> 
+					<div class="control-group col-sm-8 removeUser pos-rlt"> 
+									         <span class="controls"> <input name="temp2"  pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" type="email" class=" form-control input-style "   placeholder="Email Address"> </span>
+									        <a class="remove-user pos-abt"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
 									        
 					</div>
+
 					</div>
 					<div id="newuser_sales"></div>
 					<a id="another-user-add-sales" class=" add-user text-info text-11 text-right block m-t-n-sm " style="padding-right: 38px;"><img src='flatfull/img/addInviteUser.svg' style="height:12px;margin-top:-4px;"> <span>Add User</span>
@@ -284,17 +288,19 @@ a{
 					</div>
 
 					
-					<div class="control-group form-group">
-					<label class="control-label col-sm-3">User <span>1</span></label>
-					<div class="control-group col-sm-8 removeUser" id="support-form-group"> 
+					<div class="control-group form-group users">
+					<label class="control-label col-sm-3">User <span class="number">1</span></label>
+					<div class="control-group col-sm-8 removeUser pos-rlt" id="support-form-group"> 
 									         <span class="controls"> <input name="temp3" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  type="email" class=" form-control input-style "   placeholder="Email Address"> </span> 
+									         <a class="remove-user pos-abs hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
 									        
 					</div>
 					</div>
-					<div class="control-group form-group ">
-					<label class="control-label col-sm-3">User <span>2</span></label>
-					<div class="control-group col-sm-8 removeUser"> 
-									         <span class="controls"> <input name="temp4"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span> 
+					<div class="control-group form-group users ">
+					<label class="control-label col-sm-3">User <span class="number">2</span></label>
+					<div class="control-group col-sm-8 removeUser pos-rlt"> 
+									         <span class="controls"> <input name="temp4"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span>
+									           <a class="remove-user pos-abs"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
 									         
 					</div>
 					</div>
@@ -310,17 +316,19 @@ a{
 					</div>
 					</div>
 					
-					<div class="control-group form-group">
-					<label class="control-label col-sm-3">User <span>1</span></label>
-					<div class="control-group col-sm-8 removeUser" id="marketing-form-group"> 
+					<div class="control-group form-group users">
+					<label class="control-label col-sm-3">User <span class="number">1</span></label>
+					<div class="control-group col-sm-8 removeUser pos-rlt" id="marketing-form-group"> 
 									         <span class="controls"> <input name="temp5" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"   placeholder="Email Address"> </span> 
+									         <a class="remove-user pos-abs hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
 									        
 					</div>
 					</div>
-					<div class="control-group form-group ">
-					<label class="control-label col-sm-3">User <span>2</span></label>
-					<div class="control-group col-sm-8 removeUser"> 
-									         <span class="controls"> <input name="temp6" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span> 
+					<div class="control-group form-group users">
+					<label class="control-label col-sm-3">User <span class="number">2</span></label>
+					<div class="control-group col-sm-8 removeUser pos-rlt"> 
+									         <span class="controls"> <input name="temp6" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span>
+									           <a class="remove-user pos-abs"  title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
 									        
 					</div>
 					</div>
@@ -405,13 +413,14 @@ var restricted = '<%=is_restricted%>';
 var emailDomain = '<%=email_domain%>';
 
 	$(document).ready(function(e) {
+		 $('[data-toggle="tooltip"]').tooltip();
 
 		if(restricted == 'false'){
 			if(emailDomain != ''){
 			console.log($("#sales-form-group"));
 			$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
 			$("#support-form-group").find('input').val("support@"+emailDomain+".com");
-			$("#marketing-form-group").find('input').val("marketing@"+emailDomain+".com");
+			$("#marketing-form-group").find('input').val("info@"+emailDomain+".com");
 		}
 		}
 
@@ -434,7 +443,7 @@ var emailDomain = '<%=email_domain%>';
 		        var $this = $(this);
 		        if ($this.val()===''){ return;}
 		        $('input[type^=email]').not($this).each(function(){
-		            if ( $(this).val()==$this.val()) {duplicate=true;}
+		            if ( $(this).val().toLowerCase() == $this.val().toLowerCase()) {duplicate=true;}
 		        });
 		    });
 		    if(duplicate){
@@ -454,7 +463,7 @@ var emailDomain = '<%=email_domain%>';
 			var JSONdata = JSON.stringify(list);
 
 			if(JSONdata.length == 2){
-				$("#error-area").slideDown("slow").html("Please enter at least one email address of a team member you wish to invite.");
+				$("#error-area").slideDown("slow").html("Please enter atleast one email address.");
 				setTimeout(function(){
 	   					$("#error-area").hide();
 	   				},5000);
@@ -507,40 +516,64 @@ var emailDomain = '<%=email_domain%>';
 		}*/
 	});
 
-	$(".add-user").on('click',function(){
-		var c =  $("#agile-useradd-form").find(".form-group");
+	$("body").on('click',".add-user",function(){
+		var c =  $("#agile-useradd-form").find(".users");
 		var id = $(this).prop("id");
-			var g = c[1];
+			var g = c[0];
 			switch(id){
 			case "another-user-add-sales" :
-			    var number = $(this).closest("div").find(".form-group").length;
+			    var number = $(this).closest("div").find(".users").length;
+			    /*if(number == 1){
+			    	$(g).find(".removeUser").append('<a class="remove-user pos-abt"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>');
+			    }*/
 			    number++;
-			    var $el = $(g.outerHTML.replace("2" , number));
+			    var spanvalue = $(g).find('label span').text();
+			    var $el = $(g.outerHTML.replace(spanvalue , number));
 			   	$el.find("input").attr('name','sales'+number);
 				$("#newuser_sales").append($el);
+				var userlength = $("#newuser_sales").find(".users").length;
+				if(userlength == 1){
+					$("#newuser_sales").find(".users").find(".remove-user").removeClass("hide");
+				}
+				$("#newuser_sales").find(".users").find(".remove-user").removeClass("hide");
 				if(number == 9){
-					$("#another-user-add-sales").remove();
+					//$("#another-user-add-sales").remove();
+					$("#another-user-add-sales").addClass("hide");
 				}
 				break;
 			case "another-user-add-support" :
-			    var number = $(this).closest("div").find(".form-group").length;
+			    var number = $(this).closest("div").find(".users").length;
 			    number++;
-			    var $el = $(g.outerHTML.replace("2" , number));
-			   $el.find("input").attr('name','support'+number);
+			    var spanvalue = $(g).find('label span').text();
+			    var $el = $(g.outerHTML.replace(spanvalue , number));
+			   	$el.find("input").attr('name','support'+number);
 				$("#newuser_support").append($el);
+				var userlength = $("#newuser_support").find(".users").length;
+				if(userlength == 1){
+					$("#newuser_support").find(".users").find(".remove-user").removeClass("hide");
+				}
+				$("#newuser_support").find(".users").find(".remove-user").removeClass("hide");
 				if(number == 9){
-					$("#another-user-add-support").remove();
+					//$("#another-user-add-support").remove();
+					$("#another-user-add-support").addClass("hide");
 				}
 				break;
 
 			case "another-user-add-marketing":
-			    var number = $(this).closest("div").find(".form-group").length;
+			    var number = $(this).closest("div").find(".users").length;		   
 			    number++;
-			    var $el = $(g.outerHTML.replace("2" , number));
+			    var spanvalue = $(g).find('label span').text();
+			    var $el = $(g.outerHTML.replace(spanvalue , number));
 			    $el.find("input").attr('name','marketing'+number);
 				$("#newuser_marketing").append($el);
+				var userlength = $("#newuser_marketing").find(".users").length;
+				if(userlength == 1){
+					$("#newuser_marketing").find(".users").find(".remove-user").removeClass("hide");
+				}
+				$("#newuser_marketing").find(".users").find(".remove-user").removeClass("hide");
 				if(number == 9){
-					$("#another-user-add-marketing").remove();
+					//$("#another-user-add-marketing").remove();
+					$("#another-user-add-marketing").addClass("hide")
 				}
 				break;
 			}
@@ -549,15 +582,43 @@ var emailDomain = '<%=email_domain%>';
 	});
 
 
-	/*$(".remove-user").on("click",function(e){
+	$('body').on('click','.remove-user',function(e){
 		console.log("sfasda");
-	var length = $(this).closest("div").closest("div").closest(".form-group").parent().find(".form-group").length;
-	if(length == 1){
-			$(this).closest("div").closest("div").closest(".form-group").parent().remove();
+		var length = $(this).closest("div").closest("div").closest(".users").parent().find(".form-group").length;
+		
+	
+		var id = $(this).closest("div").closest("div").closest(".users").parent().parent().attr("id");
+		if(id == "agile-useradd-form"){
+			id = $(this).closest("div").closest("div").closest(".users").parent().attr('id');
 		}
+		/*if(length == 1){
+				$(this).closest("div").closest("div").closest(".users").parent().remove();
+			}*/
+				
+			$(this).closest("div").closest("div").closest(".users").remove();
+
+		
+		var noOfEmails = $("#"+id).find(".users").length;
+		for(m=0;m<noOfEmails;m++){
+			var eachEmail = $("#"+id).find(".number")[m];
+			$(eachEmail).html(m+1);
+		}
+		if(noOfEmails < 9){
+			switch($("#"+id).attr("id")){
+				case "support_team":
+						$("#another-user-add-support").removeClass("hide");
+						break;
+				case "Sales_Team" :
+						$("#another-user-add-sales").removeClass("hide");
+						break;
+				case "marketing_team" :
+						$("#another-user-add-marketing").removeClass("hide");
+						break;
+
+			}
 			
-		$(this).closest("div").closest("div").closest(".form-group").remove();
-	});*/
+		}
+	});
 
 	
 		

@@ -60,6 +60,10 @@ public class SendGridUtil
 	public static final String SENDGRID_SUBDOMAIN = "subdomain";
 	public static final String SENDGRID_USERNAME = "username";
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
+	
+     // 
+     private static final String[] blockedBodyStringList = new String[] { "paypal", "unknown device"};
+     private static final String[] blockedSubjectStringList = new String[] {"unknown device"};
 
     /**
      * Substitution tags
@@ -85,6 +89,12 @@ public class SendGridUtil
 	try
 	{
 	    MailDeferredTask firstSendGridDefferedTask = tasks.get(0);
+	    
+	    String htmlContent = firstSendGridDefferedTask.html;
+	    String subject = firstSendGridDefferedTask.subject;
+	    
+	    if(isBlockListedEmail(htmlContent, subject))
+		return;
 	    
 	    // SendGrid Credentials based on domain and gateway
 	    JSONObject credentials = getSendGridCredentials(firstSendGridDefferedTask.domain, emailSender.emailGateway);
@@ -638,5 +648,48 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		
 		sendSendGridMails(lt, null);
 	}
-    
+	
+	/**
+	 * Checks whether email content/subject having block listed words.
+	 * because of these words we are having spam problems.
+	 * @param htmlContent
+	 * @param subject
+	 * @return
+	 */
+	private static boolean isBlockListedEmail(String htmlContent,String subject)
+	{
+	    boolean result = false;
+	    if(StringUtils.isBlank(htmlContent) || StringUtils.isBlank(subject))
+		return result;
+	    try
+	    {
+		//checking has email content having block listed words
+		for(int i=0;i<blockedBodyStringList.length;i++)
+		{
+		    if(StringUtils.containsIgnoreCase(htmlContent,blockedBodyStringList[i]))
+		    {
+			result = true;
+			return result;
+		    }
+		}
+		//checking has email subject having block listed words
+		for(int j=0;j<blockedSubjectStringList.length;j++)
+		{
+		    if(StringUtils.containsIgnoreCase(subject,blockedBodyStringList[j]))
+		    {
+			result = true;
+			return result;
+		    }
+		}
+	    }
+	    catch(Exception e)
+	    {
+		System.err.println(e.getMessage());
+	    }
+	    finally
+	    {
+		result = false;
+	    }
+	    return result;
+	}
 }

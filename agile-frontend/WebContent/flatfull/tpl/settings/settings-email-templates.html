@@ -1,4 +1,4 @@
-<script id="settings-email-templates-collection-template" type="text/html">
+<script id="setting-email-templates-header-template" type="text/html">
     <div class="col" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
 	{{#is_mobile}}
         <div class="hbox h-auto">
@@ -18,11 +18,14 @@
                     <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
                 </div>
                 <div class="pull-right">
-                    <div class="col-sm-12" style="padding-left: 0;">
-                         <select id="emailTemplate-category-select" style="margin-bottom: -1px;padding: 4px 4px !important;height: 31px !important" name="emailTemplate-category-select" class="form-control">
-                        </select>
-                    </div> 
-                </div>
+                        <div class="col-sm-12" style="padding-left: 0;" id="emailCtgDiv" data-id="new">
+                            <a href="#" class="add-to-campaign" id="emailCtg-option" style="vertical-align: -webkit-baseline-middle;">
+                                <span><i class="icon-filter"/></span> {{agile_lng_translate 'admin-settings-tasks' 'categories'}}
+                            </a>
+                            <select id="selected-emailTemplate-category" style="margin-bottom: -1px; height: 31px; padding-top: 0; padding-bottom: 0; display:none;" name="selected-emailTemplate-category" class="form-control">
+                            </select>
+                        </div> 
+                    </div>
                 <div class="clearfix"></div>
             {{else}}
                 <div class="pull-right">
@@ -30,15 +33,41 @@
                     <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
                 </div>
                 <div class="pull-right">
-                    <div class="col-sm-12" style="padding-left: 0;">
-                         <select id="emailTemplate-category-select" style="margin-bottom: -1px;padding: 4px 4px !important;height: 31px !important" name="emailTemplate-category-select" class="form-control">
-                        </select>
-                    </div> 
-                </div>
+                        <div class="col-sm-12" style="padding-left: 0;" id="emailCtgDiv" data-id="new">
+                            <a href="#" class="add-to-campaign" id="emailCtg-option" style="vertical-align: -webkit-baseline-middle;">
+                                <span><i class="icon-filter"/></span> {{agile_lng_translate 'admin-settings-tasks' 'categories'}}
+                            </a>
+                            <select id="selected-emailTemplate-category" style="margin-bottom: -1px; height: 31px; padding-top: 0; padding-bottom: 0; display:none;" name="selected-emailTemplate-category" class="form-control">
+                            </select>
+                        </div> 
+                    </div>
                 <div class="clearfix"></div>
             {{/is_mobile}}
+            <div id="prefs-table-content"></div>
         </div>
-   
+    </div>
+
+    <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
+        <div class="data-block">
+            <div class="p-l p-r">
+                <h4 class="m-t-none">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                </h4>
+                
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                </p>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                </p>
+           </div>
+        </div>
+    </div>
+
+</script>
+
+
+<script id="settings-email-templates-collection-template" type="text/html">
 	<div id="slate"></div>
 	{{#if this.length}}
     {{#is_mobile}}

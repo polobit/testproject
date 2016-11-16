@@ -500,7 +500,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Fills the pipelines list in the select menu.
 	populateTrackMilestones(dealForm, undefined, value, function(pipelinesList)
 	{
-
+		populateLostReasons(dealForm, value);
 	});
 
 	// Enable the datepicker
@@ -573,8 +573,6 @@ function updateDeal(ele, editFromMilestoneView)
 	}, "DEAL")
 
 	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
-
-	populateLostReasons(dealForm, value);
 
 	populateDealSources(dealForm, value);
 	// setup tags for the search 
@@ -747,9 +745,18 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		add_recent_view(new BaseModel(deal));
 
 		// Updates data to timeline
-		if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+		if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+			(App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id')))
 		{
-
+			var contactId;
+			if(App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+			{
+				contactId = App_Contacts.contactDetailView.model.get('id');
+			}
+			else
+			{
+				contactId = App_Leads.leadDetailView.model.get('id');
+			}
 			// Add model to collection. Disabled sort while adding and called
 			// sort explicitly, as sort is not working when it is called by add
 			// function
@@ -761,7 +768,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 			$.each(deal.contacts, function(index, contact)
 			{
 
-				if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+				if (contact.id == contactId)
 				{
 
 					if (dealsView && dealsView.collection)
@@ -1180,8 +1187,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		}
 		else
 		{
-			App_Deal_Details.dealDetailView.model = data;
-			App_Deal_Details.dealDetailView.render(true)
+			if(App_Deal_Details.dealDetailView){
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+			}
 			Backbone.history.navigate("deal/" + data.toJSON().id, { trigger : true });
 			/*
 			 * App_Deals.navigate("deals", { trigger : true });

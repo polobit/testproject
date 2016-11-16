@@ -11,7 +11,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.campaignio.tasklets.agile.SendEmail;
+import com.campaignio.tasklets.sms.SendMessage;
+import com.campaignio.urlshortener.URLShortener.ShortenURLType;
+import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 
 public class EmailLinksConversion
@@ -35,6 +39,22 @@ public class EmailLinksConversion
      */
     public static String AGILE_EMAIL_PUSH = "1";
     public static String AGILE_EMAIL_PUSH_EMAIL_ONLY = "2";
+    
+    private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.cc";
+    private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.cc";
+    
+    private static String trackingURL = LINK_TRACK_URL;
+    
+    static 
+    {
+    	// If not production app
+    	if(!VersioningUtil.isProductionAPP())
+    	{
+    		trackingURL = BETA_LINK_TRACK_URL;
+    	}
+    }
+    
+    
 
     /**
      * Validates links present in the email body (either in text or html)
@@ -54,12 +74,15 @@ public class EmailLinksConversion
 	        && (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
 	                ".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
 	        && !str.toLowerCase().startsWith("http://agle.cc")
-	        && !str.toLowerCase().startsWith("http://unscr.be"))
+	        && !str.toLowerCase().startsWith("http://unscr.be")
+	        && !str.toLowerCase().contains("http://ag-email.unscr.me")
+	        && !str.toLowerCase().contains("http://ag-beta.unscr.me")
+	        && !str.toLowerCase().contains("agle1.cc"))
 	    return true;
 
 	return false;
     }
-
+    
     public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String pushParam)
     {
     	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, pushParam);
@@ -90,9 +113,11 @@ public class EmailLinksConversion
 
 	    // Get all anchor element href attributes
 	    Elements links = doc.select("a[href]");
+	    
+	    String namespace = NamespaceManager.get();
 
 	    // Triggered main url
-	    String domainURL = VersioningUtil.getHostURLByApp(NamespaceManager.get());
+	    String domainURL = VersioningUtil.getHostURLByApp(namespace);
 
 	    // Remove all /
 	    while (domainURL.endsWith("/"))
@@ -100,7 +125,7 @@ public class EmailLinksConversion
 		domainURL = domainURL.substring(0, domainURL.length() - 1);
 	    }
 
-	    String sid = "", cid = "", push = "", url = "", tid = "";
+	    String sid = "", cid = "", push = "", url = "", tid = "", domain = "";
 
 	    // Add contactId as param if not empty
 	    if (!StringUtils.isBlank(subscriberId))
@@ -120,6 +145,11 @@ public class EmailLinksConversion
 	    		
 	    	push = "&p=" + URLEncoder.encode(param, "UTF-8");
 	    }
+	    
+	    if(StringUtils.isNotBlank(namespace))
+	    {
+	    	domain = "&ns=" + URLEncoder.encode(namespace, "UTF-8");
+	    }
 
 	    // All href links
 	    for (Element link : links)
@@ -134,9 +164,17 @@ public class EmailLinksConversion
 
 		if (isSpecialLink(url))
 		{
-		    link.attr("href",
+		   /* link.attr("href",
 			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
-			            + cid + sid + tid + push);
+			            + cid + sid + tid + push);*/
+		    
+//		    link.attr("href",URLShortenerUtil.getShortURL(StringEscapeUtils.unescapeXml(url)
+//		           , "email", subscriberId, personalEmailTrackerId, campaignId, ShortenURLType.EMAIL, pushParam));
+		    
+		    link.attr("href", trackingURL +"?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
+            + cid + sid + tid + push + domain);
+		    
+		    System.out.println("New Link URL after shortner:"+link.attr("href"));
 		}
 	    }
 
@@ -228,6 +266,7 @@ public class EmailLinksConversion
 		    m.appendReplacement(stringBuffer,
 			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
 			            + cid + sid + push);
+		    
 		}
 	    }
 

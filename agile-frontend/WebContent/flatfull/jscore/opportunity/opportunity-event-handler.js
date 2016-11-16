@@ -434,13 +434,13 @@ var Deals_Filter_Change_Events_Collection_View = Base_Collection_View.extend({
 
         if (!_agile_get_prefs("agile_deal_view")){
             if(filter_id && filter_id != 'my-deals'){
-                $('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
-                $('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+$(e.currentTarget).text()+'</span><a class="close remove_deal_filter">×</a></div>');
+                $('#opportunity-listners').find('.remove_deal_filter').parent().remove();
+                $('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+$(e.currentTarget).text()+'</span><a class="close remove_deal_filter">×</a></div>');
             }
 
             if(filter_id && filter_id == 'my-deals'){
-                $('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
-                $('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">{{agile_lng_translate "portlets" "my-deals"}}</span><a class="close remove_deal_filter">×</a></div>');
+                $('#opportunity-listners').find('.remove_deal_filter').parent().remove();
+                $('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">{{agile_lng_translate "portlets" "my-deals"}}</span><a class="close remove_deal_filter">×</a></div>');
             }
             startGettingDeals();
             setupTracksAndMilestones($('#opportunity-listners'));
@@ -457,7 +457,7 @@ var Deals_Filter_Change_Events_Collection_View = Base_Collection_View.extend({
         _agile_delete_prefs('deal-filter-name');
         _agile_delete_prefs('deal-filters');
         setupDefaultDealFilters();
-        $('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
+        $('#opportunity-listners').find('.remove_deal_filter').parent().remove();
         if (!_agile_get_prefs("agile_deal_view")){
             startGettingDeals();
             setupTracksAndMilestones($('#opportunity-listners'));

@@ -108,6 +108,9 @@ public class NotificationPrefs {
 
 	@NotSaved(IfDefault.class)
 	public boolean call = true;
+	
+	@NotSaved(IfDefault.class)
+	public boolean push_mobile_notification = true;
 
 	/**
 	 * Notification types.

@@ -324,14 +324,18 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <span>OR</span>
                     </p>-->
                     
-                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "open-img-lib")%></a>
+                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a>
                     
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
                     <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
                         <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
-                    </select>            
+                    </select> 
+		    <p class="text-center or">
+                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
+                    <a href="<%=MAIN_URL%>#form-builder-templates" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20" id="addnew-formlink"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-form")%></a>
                 </div> 
                 
                 <!-- /tabs -->
@@ -2013,7 +2017,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></span></button>
-                        <h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "img-library")%></h4>
+                        <h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></h4>
                     </div>
                     <div class="modal-body">
                                             
@@ -2029,7 +2033,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                             
                             <ul class="nav nav-tabs nav-append-content">
                                 <!-- <li><a href="#myImagesTab">My Images</a></li> -->
-                                <li id="uploadTabLI" class="active"><a href="#uploadTab"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a></li>
+                                <li id="uploadTabLI" class="active"><a href="#uploadTab"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview")%></a></li>
                                 <!-- <li><a href="#adminImagesTab">Other Images</a></li> -->                            </ul> <!-- /tabs -->
                             
                             <div class="tab-content">
@@ -2051,21 +2055,21 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                     
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
-                                            <div>
+                                             <button type="button" class="btn btn-primary btn-embossed btn-wide upload  fileinput-exists" id="uploadImageButton"><span class="fui-upload"></span> 
+                                                <%=LanguageUtil.getLocaleJSONValue(localeJSON, 
+                                                "upload")%></button>
+                                            <div style="float:right;">
                                                 <span class="btn btn-primary btn-embossed btn-file">
                                                     <span class="fileinput-new"><span class="fui-image"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-img")%></span>
                                                     <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "change")%></span>
                                                     <input type="file" name="imageFile" id="imageFile">
                                                 </span>
-                                                <a href="#" class="btn btn-primary btn-embossed fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "remove")%></a>
                                             </div>
                                         </div>
                                     
                                     </form>
                                     
-                                    <hr>
-                                    
-                                    <button type="button" class="btn btn-primary btn-embossed btn-wide upload btn-block disabled" id="uploadImageButton"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></button>
+                                   
                                 
                                 </div><!-- /.tab-pane -->
                             

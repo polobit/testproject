@@ -72,11 +72,22 @@ $(".trial_strip_close").click(function(e){
 	_agile_set_prefs("free_trial_time", parseInt(new Date().getTime()/1000));
 });
 
-$("#clickdesk_live_chat").click(function(e){
-	e.preventDefault();
-	$(this).closest(".dropdown").removeClass("open");
-	CLICKDESK_LIVECHAT.show();
+$("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".modal").modal("hide");
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
 });
+
+$("#help-options").click(function(e){
+	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
+	agile_toggle_chat_option_on_status();
+
+});
+$("#prefsDropdownModal").on('click','#affiliate_link',function(e){		
+		$("#prefsDropdownModal").modal("hide");
+});
+
 
 if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILLING_PREFS.freeTrialStatus == "TRIALING" && USER_BILLING_PREFS.freeTrialEnd > parseInt(new Date().getTime()/1000))
 {
@@ -94,6 +105,9 @@ if(!agile_is_mobile_browser() && USER_BILLING_PREFS.freeTrialStatus && USER_BILL
 
 $(".free_plan_strip_close").click(function(e){
 	$(this).closest(".free_plan_alert").hide().removeAttr("id");
+});
+$(".contact_plan_strip_close").click(function(e){
+	$(this).closest(".contacts_plan_alert").hide().removeAttr("id");
 });
 	
  $("#addDescriptionLink").click(function(e){
@@ -292,10 +306,23 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
    $("#documentsmenu span").text("Documents");
    
    }
+   
+   $("body").on("click",".contactslimitUpgrade",function(e){
+		$(".contactlimit-msg-cross").trigger("click");
+	});
+   $("body").on("click",".contactlimit-msg-cross",function(e){
+		createCookie("contactslimit","true",1);
+	});
 
 	$(".person").on("click", function(e){
 		e.preventDefault();
 		addContactBasedOnCustomfields();
+		
+	});
+
+	$("#lead").on("click", function(e){
+		e.preventDefault();
+		addLeadBasedOnCustomfields();
 		
 	});
 
@@ -348,6 +375,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	        }
 	    });
 	});
+
 
 	$(".show-search-dropdown").on("click",function(e){
 		$("#searchText").val("");
@@ -524,6 +552,10 @@ function initRolehandlers(){
  							console.log("success");
  							console.log(model);
  							CURRENT_DOMAIN_USER = model.toJSON();
+ 							// Call dashboard route
+					 		Backbone.history.navigate("#navigate-dashboard", {
+					                trigger: true
+					            });
  						}, 
  						error: function(model, response){
 							console.log("error");
@@ -542,10 +574,7 @@ function initRolehandlers(){
  			// Update UI
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 
- 			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard", {
-                trigger: true
-            });
+ 			
 	});
 }
 
@@ -569,6 +598,59 @@ function addContactBasedOnCustomfields(){
  }
 
 
+/**
+ * checks if there are any custom fields and if present navigates to lead-add page 
+ * otherwise opens new lead modal
+ * 
+ */
+function addLeadBasedOnCustomfields(){
+ 	$.ajax(
+ 	{
+		url : 'core/api/custom-fields/required/scope?scope=LEAD',
+		type : 'GET',
+		dataType : 'json',
+		success : function(data){
+			if(data && data.length > 0)
+			{
+				Backbone.history.navigate("lead-add" , {trigger: true});
+				
+			}
+			else
+			{
+				var newLeadModalView = new Leads_Form_Events_View({ data : {}, template : "new-lead-modal", isNew : true,
+		            postRenderCallback : function(el)
+		            {
+		                leadsViewLoader = new LeadsViewLoader();
+		                leadsViewLoader.setupSources(el);
+		                leadsViewLoader.setupStatuses(el);
+		                setup_tags_typeahead(undefined, el);
+		                var fxn_display_company = function(data, item)
+		                {
+		                    $("#new-lead-modal [name='lead_company_id']").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+		                }
+		                agile_type_ahead("lead_company", $("#new-lead-modal"), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
+		            }
+		        });
+				$("#new-lead-modal").html(newLeadModalView.render().el).modal("show");
+			}
+		}
+	});
+ }
+
+
+function renderDashboardOnMenuServiceSelect(role,options_el){
+	switch(role){
+		case 'SALES':
+		    return options_el += getTemplate("js-sales-dashboards-options-newui");
+		    break;
+		case 'MARKETING':
+			return options_el += getTemplate("js-marketing-dashboards-options-newui");
+			break;
+		case 'SERVICE' :
+			return options_el += getTemplate("js-service-dashboards-options-newui");
+			break;
+	}	
+}
 
 
 

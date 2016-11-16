@@ -67,6 +67,7 @@ if(!StringUtils.isEmpty(email))
 }
 //Static images s3 path
 String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
+String userAgent = request.getHeader("user-agent");
 
 %>
 <!DOCTYPE html>
@@ -261,11 +262,12 @@ jQuery.validator.setDefaults({
 				
 				
 					
-			
+			<%if(!MobileUADetector.isiPhone(userAgent)) {%>
 			<div class="text-center text-white m-t m-b">
 	                <small> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>? </small><a href="/register" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "register")%></a><br/>
 	                 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%> </small><a href="/enter-domain?to=forgot-password" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>?</a>
                </div>
+            <%} %>
 		</div>
 		</div>
 		</div>

@@ -359,6 +359,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
+			if(CURRENT_DOMAIN_USER.domain == "admin" && CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("VIEW_LOGS") == -1)
+            return  showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
+        
 			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
@@ -1671,10 +1674,41 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
 
-		}, "#content");
+		}, "#content");	
+	},
+	contactsLimitreachedview : function(e){
 
-		
-		
+		if(readCookie("contactslimit"))
+		{
+			return ;
+		}
+	console.log("contactsLimitreachedview");
+		// Creata a global view
+		this.contactsLimitview = new Base_Model_View({ 
+			url : '/core/api/contacts/list/count/jsonformat', 
+			template : "contactslimitouter", 
+			postRenderCallback : function(el){
+					var template = "";
+					var maxContactLimit = App_Admin_Settings.contactsLimitview.model.toJSON().count;
+					var planLimit = parseInt(USER_BILLING_PREFS.planLimits.contactLimit);
+					if (maxContactLimit > planLimit*0.8 &&  maxContactLimit<planLimit)
+					{
+						template = "contactslimitwarning";
+							$("#contacts_limit_alert_info").removeClass("hide");
+					}
+					else if (maxContactLimit > planLimit)
+					{
+						template = "contactslimitalert";
+							$("#contacts_limit_alert_info").removeClass("hide");
+					}
+						getTemplate(template, {}, undefined, function(template_ui)
+							{
+								if(!template_ui)
+									return;
+								$("#contactlimitouterdiv",el).html($(template_ui));
+							});
+			},});
+		$('#contacts_limit_alert_info').html(this.contactsLimitview.render().el);	
 	},
 	
 	telephony : function(){
@@ -1714,7 +1748,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			
 		}, "#telephony-listner");
-
 	}
 
 });
@@ -1796,4 +1829,5 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 			checkbox_el.attr("checked","checked");
 
 	},
+	
 });

@@ -129,9 +129,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								{
 									var txt ;
 									if(!searchParams && searchUrl != "core/api/search/deals")
-										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
+										txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
 									else
-										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>' ; 
+										txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b>' ; 
 									searchParams = "";searchUrl = "";
 
 									if (noResultText && noResultText.length)
@@ -182,6 +182,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										TYPEHEAD_TYPE[tag_name] = '#contact/';
 									else if(item.type == 'COMPANY')
 										TYPEHEAD_TYPE[tag_name] = '#company/';
+									else if(item.type == 'LEAD')
+										TYPEHEAD_TYPE[tag_name] = '#lead/';
 										
 								});
 
@@ -429,6 +431,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											}
 											else if(relContact.type == 'COMPANY'){
 												tplJSON.type_item = '#company/';
+											}
+											else if(relContact.type == 'LEAD'){
+												tplJSON.type_item = '#lead/';
 											}
 											tplJSON.tag_item = relContact.id;
 											tplJSON.item = getContactName(relContact);
@@ -814,16 +819,18 @@ function checkEmailValidation(value)
 	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 }
 
-function getContactName(contact)
+function getContactName(contact, prop_key)
 {
 	var name = "";
-	if (!contact.type || contact.type == 'PERSON')
+	if (!contact.type || contact.type == 'PERSON' || contact.type == 'LEAD')
 	{
 		var first_name = getPropertyValue(contact.properties, "first_name");
 		var last_name = getPropertyValue(contact.properties, "last_name");
 		last_name = last_name != undefined ? last_name.trim() : "";
 		first_name = first_name != undefined ? first_name.trim() : "";
+
 		name = (first_name + " " + last_name).trim();
+		name = _agile_get_contact_display_name(first_name, last_name, prop_key);
 	}
 	else if (contact.type == "COMPANY")
 	{
@@ -831,7 +838,10 @@ function getContactName(contact)
 		company_name = company_name != undefined ? company_name.trim() : "";
 		name = company_name.trim();
 	}
-
+	if(prop_key)
+	{
+		return name;
+	}
 	if (name.length)
 		return name;
 
@@ -914,6 +924,12 @@ function appendItemInResult(item)
 
 			$("#company-typeahead-heading", this.el).show();
 			$("#company-results", this.el).append(i);
+		}
+		if (type == "lead_entity")
+		{
+
+			$("#lead-typeahead-heading", this.el).show();
+			$("#lead-results", this.el).append(i);
 		}
 		if (type == "deal")
 		{

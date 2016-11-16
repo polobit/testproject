@@ -6,12 +6,17 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.addon.AddOn;
+import com.agilecrm.addon.AddOnUtil;
+import com.agilecrm.addon.AddOnInfo.AddOnStatus;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.stripe.model.Customer;
 
 public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
@@ -45,6 +50,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
     public void newSubscription()
     {
+
 	// Sets billing restrictions email count
 	if (isEmailAddonPlan())
 	    ;
@@ -57,6 +63,8 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	{
 	    return;
 	}
+	if(isAddonPlan())
+		return;
 
 	DomainUser user = getUser();
 
@@ -67,6 +75,8 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	System.out.println(getPlanDetails());
 
 	// Sets billing restrictions email count
+	if(isAddonPlan())
+		return;
 	if (isEmailAddonPlan())
 	{
 	    System.out.println("email plan");
@@ -102,6 +112,13 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
 	if (StringUtils.isEmpty(userDomain))
 	    return;
+	
+	if(isAddonPlan()){
+		updateAddOnStatus(getAddonPlan(), AddOnStatus.DELETED);
+		if(getEvent().getRequest() == null)
+			SendMail.sendMail("mogulla@invox.com", "Addon Subscription Deleted", SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
+		return;
+	}
 
 	if (isEmailAddonPlan())
 	{
@@ -216,7 +233,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
     protected Map<String, Object> getMailDetails()
     {
 	Map<String, Object> map = getPlanDetails();
-	map.put("domain", getDomain());
+	map.put("domain", AliasDomainUtil.getCachedAliasDomainName(getDomain()));
 	map.put("user_name", getUser().name);
 	map.put("email", getUser().email);
 

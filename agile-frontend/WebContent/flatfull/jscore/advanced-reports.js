@@ -119,6 +119,11 @@ function initReportsForCalls(callback){
 	$('#typeCall').change(function()
  		{
  			$(this).attr("title", $("#typeCall option:selected").text());
+
+ 			/*if($("#typeCall option:selected").text()=='Average Call Duration')
+ 				$('.reports-calltype').text(_agile_get_translated_val('report-add','average-call-duration'));
+ 			else
+ 				$('.reports-calltype').text(_agile_get_translated_val('report-view','call-by-user'));*/
  			callback();
  		});
 	

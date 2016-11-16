@@ -23,6 +23,23 @@
 		
 %>
 
+<style type="text/css">
+.background-img-sales{
+  background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
+  background-position: 0 0px;
+  border: 0 none;'
+}
+.background-img-marketing{
+  background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
+  display: inline-block;
+  background-position: 49% 0px;
+}
+.background-img-service{
+   background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
+   background-position: 98% 0px;
+}
+</style>
+
 <header id="header" class="app-header navbar" role="menu">
 
 		
@@ -75,9 +92,9 @@
         <li class="dropdown hide add-modal-mobile visible-xs pull-right wrapper-sm p-t p-r-md" id="menu1"><a class="dropdown-toggle"data-toggle="dropdown" href=""><i class="icon-plus"></i></a>
                 <ul class="dropdown-menu  animated fadeInRight mobile-add-modals" role="menu">
                   <li><a href="#personModal"  class="person" id="person">
-                      <div class="pull-left">Contact</div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
+                      <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
                   <li><a href="#companyModal"  data-toggle="modal"
-                    id="company"> <div class="pull-left">Company</div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
+                    id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company")%></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
                      <%
                     if(domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
                   %>
@@ -135,7 +152,12 @@
 		       		  		<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all")%></a>
 					</li>
-	                   	           			
+
+					<!-- <li>
+   		  			<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm  searchtype"><input name="lead" value = "lead" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads")%></a>
+					</li> -->
+
 					<li>
    		  			<a href="javascript:void(0);" class="p-b-none">
 						<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></a>
@@ -172,15 +194,15 @@
 		<%
 			}
 		%>
-
+		<img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img>
         <div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center visible-xs" screen_name="Need Help? We are one click away." data-content="<div class='row' id='need_help_header'>
 									<ul class='col-xs-12 col-sm-12 grid-sub-nav text-center m-t-md p-l-md p-r-md'>
 										
-								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb'><img src='img/sales.svg'></i><span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span></a></li>
+								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'><i class='thumb  background-img-sales'></i><span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span></a></li>
 
-								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'><i class='thumb'><img src='img/marketing.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
+								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard  '><i class='thumb background-img-marketing'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
 
-								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb'><img src='img/service.svg'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
+								<li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'><i class='thumb  background-img-service'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
 
 								</ul>
 								</div>
@@ -303,7 +325,12 @@
 		       		  		<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm searchtypeall "><input name="all" value = "" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all")%></a>
 					</li>
-	                   	           			
+	                
+					<!-- <li>
+   		  			<a href="javascript:void(0);" class="p-b-none">
+						<label class="i-checks i-checks-sm  searchtype"><input name="lead" value = "lead" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-leads")%></a>
+					</li> -->
+
 					<li>
    		  			<a href="javascript:void(0);" class="p-b-none">
 						<label class="i-checks i-checks-sm  searchtype"><input name="person" value = "person" type="checkbox" class="choose-column-chbx"><i></i></label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contacts")%></a>
@@ -340,7 +367,7 @@
 					
 					<li id="homemenu" class="active"></li>
 
-					</ul>
+					
 
 				<%
 				      }
@@ -352,16 +379,34 @@
 
 
 						 	<!--<li id="homemenu" class="active"></li>-->
-							<%
-							    if ("admin".equals(domainUser.domain)) {
-											out.println("<ul class='nav navbar-nav agile-menu'><li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li><li><a href='#admin-affiliate'>Affiliates</a></li></ul>");
-											out.println("<ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'>	<form id='domainSearchForm' class=' navbar-search'	style='margin: 5px;'>	<input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'	data-provide='typeahead'		placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li><li><a href="
-													+ logoutURL
-													+ "><i class='icon-off'></i>Logout</a></li>");
-										} else {
-							%>
-
-							<%--
+							
+							    <%
+                  if ("admin".equals(domainUser.domain)) 
+                  {
+                	
+                	out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li>");
+                	
+                	if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.AFFILIATES))
+                  	{
+                  	out.println("<li><a href='#admin-affiliate'>Affiliates</a></li>");
+                  	}
+                  	if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.VIEW_LOGS))
+                  	{
+                  	out.println("<li><a href='#activities'>Logs</a></li>");
+                  	}
+                  	out.println("</ul><ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li>");
+                  	out.println("<li style='float:right;'><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                    if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.ADD_USER))
+                  	{
+                  		out.println("<li style='margin-top: 15px;'><div class='btn-group'><a href='#users-add' class=''><i class='icon-plus-sign'></i> Add User</a>");
+                  		out.println("<button class=' dropdown-toggl adduseradminpanel' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
+                  		out.println("</div></li>");
+                  	}
+                  
+                  } else {
+              %>
+              		<%--
+							
 							<%
 							
 								for(NavbarConstants constant : domainUser.menu_scopes)
@@ -523,7 +568,9 @@
 									 <%
 								      if(domainUser.restricted_scopes == null || !domainUser.restricted_scopes.contains(UserAccessScopes.CREATE_CONTACT)){
 								    %>
-									<li><a href="#personModal"  class="person p-r-none" id="person">
+								    <!-- <li><a href="#" id="lead">
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-lead") %></div> --><!-- <div class='pull-right shortcuts'>Shift + N</div> --><!-- <div class="clearfix"></div></a></li> -->
+									<li><a href="#personModal"  class="person" id="person">
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "contact") %></div><div class='pull-right shortcuts'>Shift + N</div><div class="clearfix"></div></a></li>
 									<li><a href="#companyModal"  data-toggle="modal"
 										id="company"> <div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "company") %></div><div class='pull-right shortcuts'>Shift + C</div><div class="clearfix"></div></a></li>
@@ -581,7 +628,7 @@
 											<span class="text-sm text-ellipsis block" style="clear: both;"> <b><%=user.getEmail()%></b></span>
 										</a>
 									</li>
-
+									
 									<li><a href="#user-prefs" onclick="Agile_GA_Event_Tracker.track_event('Preferences in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
 
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preferences") %></div><div class='pull-right shortcuts'>Shift + P</div><div class="clearfix"></div></a></li>
@@ -591,30 +638,34 @@
 									    {
 														out.print("<li><a href='#account-prefs' onclick=\"Agile_GA_Event_Tracker.track_event('Admin Settings in Profile Dropdown')\"><div class='pull-left'>" + LanguageUtil.getLocaleJSONValue(localeJSON, "admin-settings")+ "</div><div class='pull-right shortcuts'>Shift + A</div><div class='clearfix'></div></a></li>");
 													//	out.println("<li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
+
 									    }
 									%>
-									<li><a href="#themeandlayout"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "theme-and-layout") %></div><div class='pull-right shortcuts'>Shift + L</div><div class="clearfix"></div></a></li>
-									<li class="divider"></li>
+										<% if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
+									%>
 									<li><a href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Plan & Upgrade in Profile Dropdown')"><!-- <i class="icon-cog"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li>
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upgrade") %></div><div class='pull-right shortcuts'>Shift + U</div><div class="clearfix"></div></a></li><li class='divider m-n' ></li>
+									<%}%>
+						
+											<!--<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick=\"Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')\"><i class="icon-off"></i>-->
+											<!--<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>-->
 
-											<li><a href="https://www.agilecrm.com/product-updates" target="_blank" onclick=\"Agile_GA_Event_Tracker.track_event('Product Updates in Profile Dropdown')\"><!-- <i class="icon-off"></i> -->
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "product-updates") %></div><div class='pull-right shortcuts'>Shift + R</div><div class="clearfix"></div></a></li>
 											
-									<li><a href="#affiliate-overview" id="affiliate_link">
-											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "affiliate") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
+									<!--<li><a href="#affiliate-overview" id="affiliate_link">
+											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "affiliate") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>-->
 									<li class="hide"><a href="#refer" id="referrals_link"><!-- <i class="icon-cog"></i> -->
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "refer") %></div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a></li>
 						
-									<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"><!-- <i class="icon-off"></i> -->
-									<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>
-
-									<li class="none"><a href="#" id="clickdesk_live_chat">
+									<!--<li><a href="https://www.agilecrm.com/support" target= "_blank" onclick="Agile_GA_Event_Tracker.track_event('Help in Profile Dropdown')"> <i class="icon-off"></i> 
+									<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help") %></div><div class='pull-right shortcuts'>Shift + H</div><div class="clearfix"></div></a></li>-->
+									<li><a id="help-options"><!-- <i class="icon-off"></i> -->
+											<div class="pull-left">Contact Us</div><div class="clearfix"></div></a>
+									</li>
+									<!--<li class="none"><a href="#" id="clickdesk_live_chat">
 											<div class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "chat-with-us") %> 
 												<i class="fa fa-circle" aria-hidden="true" style="color: green;margin-left: 5px;"></i>
 											</div><div class='pull-right shortcuts'></div><div class="clearfix"></div></a>
-									</li>
+									</li>-->
 									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->

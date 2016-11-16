@@ -15,6 +15,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", {}, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));
             //fetch template categories
+            _agile_set_prefs('emailTempCtg_id', "");
             getEmailTemplateCategories();
         }, "#emailbuilder-listeners");
 	
@@ -48,6 +49,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));
             //fetch template categories
+            _agile_set_prefs('emailTempCtg_id', "");
             getEmailTemplateCategories();
         }, "#emailbuilder-listeners");
 	
@@ -71,6 +73,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));
             //fetch template categories
+            _agile_set_prefs('emailTempCtg_id', "");
             getEmailTemplateCategories();            
         }, "#emailbuilder-listeners");
 
@@ -94,6 +97,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui)); 
             //fetch template categories
+            _agile_set_prefs('emailTempCtg_id', "");
             getEmailTemplateCategories();           
         }, "#emailbuilder-listeners");
 
@@ -116,15 +120,11 @@ function collapseLeftMenuInBuilder() {
     }
 }
 
-function getEmailTemplateCategories(data) {
-    var categoryObj = data;
+function getEmailTemplateCategories() {
     var el = $("#emailbuilder-listeners").closest("div");
     var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
     fillSelect('emailTemplate-category-select','core/api/emailTemplate-category', 'emailTemplateCategory',  
         function fillCategory(){
             el.find("#emailTemplate-category-select option:last").after("<option value='CREATE_NEW_CATEGORY'>"+_agile_get_translated_val('others','add-new')+"</option>");
-            if(categoryObj != undefined && categoryObj.id != undefined){
-                $('select#emailTemplate-category-select').find('option[value='+categoryObj.id+']').attr("selected","selected");
-            }
         }, optionsTemplate, false, el);
 }

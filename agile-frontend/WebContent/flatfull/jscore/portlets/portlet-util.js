@@ -782,7 +782,7 @@ var portlet_utility = {
 				descending : true,
 				templateKey : "portlets-activities-list-log",
 				cursor : true,
-				page_size : 20,
+				page_size : getMaximumPageSize(),
 				individual_tag_name : 'div',
 				postRenderCallback : function(p_el) {
 					portlet_utility.addWidgetToGridster(base_model);
@@ -1307,12 +1307,12 @@ var portlet_utility = {
 							function(data) {
 								that.find('.deal_count').html(
 									portlet_utility.getNumberWithCommasForPortlets(data["dealcount"]));
-								that.find('.goal_count').html('{{agile_lng_translate "portlets" "won-deals"}} <br> {{agile_lng_translate "contacts-view" "from"}} '+
+								that.find('.goal_count').html('{{agile_lng_translate "portlets" "won-deals"}} <br> {{agile_lng_translate "widgets" "from"}} '+
 										portlet_utility.getNumberWithCommasForPortlets(data["goalCount"])+' {{agile_lng_translate "portlets" "goals"}}');
 								that.find('.deal_amount').html(portlet_utility.getPortletsCurrencySymbol()+
 									'' +
 									portlet_utility.getNumberWithCommasForPortlets(data["dealAmount"]));
-								that.find('.goal_amount').html('{{agile_lng_translate "portlets" "revenue"}} <br> {{agile_lng_translate "contacts-view" "from"}} '+portlet_utility.getPortletsCurrencySymbol()+
+								that.find('.goal_amount').html('{{agile_lng_translate "portlets" "revenue"}} <br> {{agile_lng_translate "widgets" "from"}} '+portlet_utility.getPortletsCurrencySymbol()+
 									'' +
 									portlet_utility.getNumberWithCommasForPortlets(data["goalAmount"])+' {{agile_lng_translate "portlets" "goals"}}');
 									portlet_graph_data_utility.dealGoalsGraphData(selector,data,column_position,row_position);
@@ -2231,7 +2231,8 @@ var portlet_utility = {
 				: "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4,
 				value.length));
-
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	},
 

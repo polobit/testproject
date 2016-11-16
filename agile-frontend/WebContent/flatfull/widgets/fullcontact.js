@@ -233,11 +233,24 @@ function loadFullContactData(apikey, emailID){
 
 							contact_model.set("properties", properties);
 							console.log(newProperties);
-							contact_model.url = "core/api/contacts";
+							//contact_model.url = "core/api/contacts";
 							console.log(contact_model);
 							
 							// Save updated contact model
-							contact_model.save();	
+							//contact_model.save();
+							var model = new Backbone.Model();
+							model.url = "core/api/contacts";
+							model.save(contact_model.toJSON(), 
+							{
+								success : function(data)
+								{
+									if(data)
+									{
+										App_Contacts.contactDetailView.model = data;
+										App_Contacts.contactDetailView.render(true);
+									}
+								}
+							});	
 						},undefined, "FullContact"); 						
 
 					}else{													

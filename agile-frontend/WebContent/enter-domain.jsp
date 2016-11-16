@@ -22,6 +22,12 @@ It checks if any user exists in that domain,
 if user exists,it is redirected to login page in the same domain otherwise it is redirected to register page.
 */
 
+// Get registration ID
+String registrationId = request.getParameter("registrationId");
+if(StringUtils.isNotBlank(registrationId)){
+	// Add a global cookie
+}
+
 //If Email is present
 
 String flatfull_path="/flatfull";
@@ -31,7 +37,12 @@ if(redirectTo  != null)
 {
 	if(!StringUtils.isEmpty(domain))
 	{
-		response.sendRedirect("https://" + domain + ".agilecrm.com/" + redirectTo);
+		String redirectURL = VersioningUtil.getURL(domain, request) + redirectTo;
+		if(StringUtils.isNotBlank(registrationId)){
+			redirectURL += (redirectURL.indexOf("?") == -1 ? "?" : "&") + "registrationId=" + registrationId;
+		}
+		
+		response.sendRedirect(redirectURL);
 		return;
 	}
 }
@@ -63,7 +74,8 @@ if(redirectTo  != null)
 body {
 
 <% 
-	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+    String userAgent = request.getHeader("user-agent");
+	if(MobileUADetector.isMobile(userAgent)) {%>
 		background-image:url('..<%=flatfull_path%>/images/flatfull/buildings-low.jpg');
 	
 	<% } else if(VersioningUtil.isDevelopmentEnv()){  %>
@@ -175,11 +187,12 @@ padding-left:10px!important;
 			</div>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>'>
 		</form>
+		<%if(!MobileUADetector.isiPhone(userAgent)) {%>
 	 	<div class="text-center text-white m-t m-b">
 	  		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "new-user")%>? </small> <a href="/register" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "click-here")%></a><br/>
 	  	 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%> </small><a href="/forgot-domain" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
 		 </div>
-
+		<%} %>
 	</div>
   </div>
 </div>

@@ -94,4 +94,6 @@
     "name-validation": "{{agile_lng_translate 'register' 'name-validation'}}",
     "invalid-pattern": "{{agile_lng_translate 'register' 'invalid-pattern'}}",
     "email-invalid-after-@": "{{agile_lng_translate 'forgot-domain' 'email-invalid-after-@'}}",
+    "upload" : "{{agile_lng_translate 'landingpage-builder' 'upload'}}",
+    "add-form" : "{{agile_lng_translate 'form-builder' 'add-form'}}",
 }

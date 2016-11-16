@@ -6,11 +6,17 @@
         	<h3 class="font-thin h4 pull-left forms-title">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
         	<div class="add-form-btn">
         		<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+        		<a id="form-video-tutorial" onclick="formVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-left: 3px; line-height: 1px;">
+                	<i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+            	</a>
         	</div>
         	<div class="clearfix"></div>
         {{else}}
         	<h3 class="font-thin h3 pull-left">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
         	<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+        	<a id="form-video-tutorial" onclick="formVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-left: 3px; line-height: 1px;">
+                <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+            </a>
         	<div class="clearfix"></div>
         {{/is_mobile}} 
     </div>
@@ -149,13 +155,13 @@
 			</span>
 		</a>
 	</td>
-	<td>
+	<!--<td>
 		<div class="table-resp hide" id="form_report">
 			<div class="pull-right text-ellipsis">
 				<a href="#form-reports/{{id}}" class="stop-propagation"><span style="width:10%"><i class="icon-bar-chart"></i></span></a>
 			</div>
 		</div>
-	</td>
+	</td>-->
 	<td>
 	    <div class="table-resp hide" id="formcode_manager">
 		<a class="codeshare" data-formid="{{id}}"><i class="fa icon-code" ></i><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>

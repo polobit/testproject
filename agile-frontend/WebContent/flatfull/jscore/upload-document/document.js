@@ -18,7 +18,7 @@ var Document_Collection_Events = Base_Collection_View.extend({
      * Document list view edit
      */
 	onDocumentListSelect : function(e){
-		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+		if(e.target.parentElement.attributes.length > 0 && e.target.parentElement.attributes[0] && e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
 
      	 	updateDocument($(e.currentTarget).closest('tr').data());
@@ -101,16 +101,15 @@ $(function(){
 		$(this).closest('form').find('#error').html("");
 		var form_id = $(this).closest('form').attr("id");
 		var id = $(this).find("a").attr("id");
-		
-		if(id && id == "GOOGLE")
-			var newwindow = window.open("upload-google-document.jsp?id="+ form_id, 'name','height=510,width=800');
-		else if(id && id == "S3")
-			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
-		
-		if (window.focus)
-		{
-			newwindow.focus();
+		var pageSettings = "height=310,width=500";
+		var pageURL = "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain;
+
+		if(id && id == "GOOGLE"){
+			pageURL = "upload-google-document.jsp?id="+ form_id;
+			pageSettings = "height=510,width=800";
 		}
+		agileOpenWindowAndFocus(pageURL, 'name', pageSettings);
+
 		return false;
 	});
 	
@@ -579,7 +578,7 @@ function documentsCollection(sortField)
 			sort_collection : false ,
 			templateKey : "documents",
 			cursor : true,
-			page_size : 20,
+			page_size : getMaximumPageSize(),
 			individual_tag_name : 'tr',
 			order_by : sortField,
 			postRenderCallback : function(el)

@@ -20,8 +20,9 @@ public class CallDeferredTask implements DeferredTask
     	public String firstCall = null;
     	public String secondCall = null;
     	public String message = null;
+    	public String domain = null;
     	
-    	public CallDeferredTask(String callGateWayType,String account_id, String auth_token, String fromNumber, String firstCall,String secondCall,String message)
+    	public CallDeferredTask(String callGateWayType,String account_id, String auth_token, String fromNumber, String firstCall,String secondCall,String message,String domain)
     	{	
     	    	this.callGateWayType=callGateWayType;
     		this.fromNumber = fromNumber;
@@ -31,6 +32,7 @@ public class CallDeferredTask implements DeferredTask
     		this.auth_token = auth_token;
     		this.secondCall = secondCall;
     		this.secondCall = secondCall;
+    		this.domain=domain;
     	}
 
     	public void run() 
@@ -38,7 +40,7 @@ public class CallDeferredTask implements DeferredTask
     		System.out.println("CallDeferredTask run...");
 
     		if (callGateWayType.equals("TWILIO"))
-    		    VoiceCallUtil.sendVoiceall(account_id, auth_token, fromNumber, firstCall, secondCall, message);
+    		    VoiceCallUtil.sendVoiceall(account_id, auth_token, fromNumber, firstCall, secondCall, message,domain);
     		
     	}
     

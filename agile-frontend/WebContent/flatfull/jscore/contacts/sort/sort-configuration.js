@@ -87,7 +87,7 @@ var agile_deal_sort_configuration = [
 	buildProperty("{{agile_lng_translate 'deal-view' 'won-date'}}", "won_time"), 
 	
 
-	buildProperty("{{agile_lng_translate 'deal-view' 'won-date'}}", "expected_value")
+	buildProperty("{{agile_lng_translate 'deal-view' 'value'}}", "expected_value")
 
 ];
 
@@ -95,6 +95,41 @@ var sort_deal_configuration = {
 	getDealSortableFields : function()
 	{
 		return agile_deal_sort_configuration;
+	},
+	getCustomFieldSortableFields : function()
+	{
+
+	}
+};
+
+/**
+ * Contact sorting.
+ */
+var agile_lead_sort_configuration = [
+
+	buildProperty("Created Date", "created_time"),
+
+	// score 
+	buildProperty("Score", "lead_score"),
+
+	// Star value
+	buildProperty("Star Value", "star_value", "-star_value"),
+
+
+	// First name
+	buildProperty("First Name", "first_name"),
+
+	// Last name
+	buildProperty("Last Name", "last_name"),
+
+	// Last contacted
+	buildProperty("Contacted Date", "last_contacted")
+];
+
+var sort_lead_configuration = {
+	getLeadSortableFields : function()
+	{
+		return agile_lead_sort_configuration;
 	},
 	getCustomFieldSortableFields : function()
 	{

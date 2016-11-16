@@ -348,10 +348,15 @@ public class TicketsUtil
 
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
+		if(is_spam == true)
+		ticket.status = Status.CLOSED;
+		
+		
 		if (ticket.is_spam.equals(is_spam))
 			return ticket;
 
 		ticket.is_spam = is_spam;
+		
 
 		ticket.save();
 

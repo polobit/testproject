@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -221,6 +222,11 @@ public class Cron extends HttpServlet
 		try
 		{
 			dao.put(this);
+		}
+		catch(Exception ex)
+		{
+			System.out.println("Exception occured while adding to Cron...");
+			System.out.println(ExceptionUtils.getFullStackTrace(ex));
 		}
 		finally
 		{

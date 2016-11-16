@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.addon.AddOnInfo.AddOnStatus;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -17,6 +18,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -41,6 +43,10 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	 */
 	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
 	{
+		if(isAddonPlan()){
+	    	updateAddOnStatus(getAddonPlan(), AddOnStatus.SUCCESS);
+	    	return;
+	    }
 	    Subscription subscription = setSubscriptionFlag(Subscription.BillingStatus.BILLING_SUCCESS);
 
 	    // Get domain owner
@@ -130,6 +136,22 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	// If number of attemps to payment is 0 or 1() the send email to domain
 	// owner
+	if(isAddonPlan()){
+		String addOntype = getAddonPlan();
+		System.out.println("addOnInvoice payment failed... type:"+addOntype+" and attemptcount:"+attemptCount);
+		if(attemptCount == 0)
+			updateAddOnStatus(addOntype, AddOnStatus.FAILED1);
+		else if(attemptCount == 2)
+			updateAddOnStatus(addOntype, AddOnStatus.FAILED2);
+		else if(attemptCount == 3)
+			updateAddOnStatus(addOntype, AddOnStatus.FAILED3);
+		//if(getEvent().getRequest() == null)
+			System.out.println("Sending addon_payment_failed to us");
+			SendMail.sendMail("mogulla@invox.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
+			SendMail.sendMail("narmada@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
+			SendMail.sendMail("venkat@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
+		return;
+	}
 	if (attemptCount == 0 || attemptCount == 1)
 	{
 	    // Set subscription flag billing failed
@@ -240,30 +262,45 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    System.out.println(data);
 	    if (data.has("quantity"))
-		plan.put("quantity", data.get("quantity"));
+	    	plan.put("quantity", data.get("quantity"));
 	    plan.put("invoiceId", obj.get("id"));
 	    if (data.has("plan"))
 	    {
-		JSONObject planJSON = data.getJSONObject("plan");
-		plan.put("plan", planJSON.get("name"));
-		plan.put("plan_id", planJSON.getString("id"));
+			JSONObject planJSON = data.getJSONObject("plan");
+			plan.put("plan", planJSON.get("name"));
+			plan.put("plan_id", planJSON.getString("id"));
 
 	    }
 	    else
 	    {
-		System.out.println("plan details not found ");
-		if (obj.has("metadata"))
-		{
-		    JSONObject metadata = obj.getJSONObject("metadata");
-
-		    System.out.println("meta data : " + metadata);
-		    if (metadata != null)
-		    {
-			plan.put("quantity", metadata.get("quantity"));
-			plan.put("plan", metadata.get("plan"));
-		    }
+			System.out.println("plan details not found ");
+			if (obj.has("subscription"))
+			{
+				System.out.println("fetching subscription from stripe");
+				com.stripe.model.Subscription subscription = null;
+				try {
+					Customer cust = Customer.retrieve(obj.getString("customer"));
+					List<com.stripe.model.Subscription> subscriptions = cust.getSubscriptions().getData();
+					for(com.stripe.model.Subscription sub : subscriptions){
+						if(sub.getId().equals(obj.getString("subscription"))){
+							subscription = sub;
+							break;
+						}
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(subscription != null){
+					System.out.println("stripeSubscription:: "+subscription);
+					plan.put("quantity", subscription.getQuantity());
+					plan.put("plan", subscription.getPlan().getName());
+					plan.put("plan_id", subscription.getPlan().getId());
+				}else{
+					System.out.println("subscription is null in stripe");
+				}
+			 }
 		}
-	    }
 
 	    if (data.has("period"))
 	    {
@@ -297,7 +334,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	Map<String, Object> details = getPlanDetails();
 	details.put("user_name", user.name);
-	details.put("domain", getDomain());
+	details.put("domain", AliasDomainUtil.getCachedAliasDomainName(getDomain()));
 	details.put("email", user.email);
 	Card card = StripeUtil.getDefaultCard(customer);
 	details.put("last4", card.getLast4());

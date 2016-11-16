@@ -2104,6 +2104,13 @@ display: block!important;
 
  /*Marketing Modules Responsive Style End*/
 
+ div.email-selected-plan{
+  margin: 10px 0px !important;
+ }
+ .m-l-63{
+  margin-left: 63px !important;
+ }
+.show-shortcuts-style .i-checks i{margin-right: 7px;}
 }
 
 @media all and (min-width: 768px) {

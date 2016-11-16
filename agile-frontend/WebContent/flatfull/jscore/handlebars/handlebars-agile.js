@@ -26,7 +26,7 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("admin.js");
 	}
-	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
+	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0 || templateName.indexOf("leads-details") == 0)
 	{
 		template_relative_urls.push("contact-detail.js");
 		if (HANDLEBARS_PRECOMPILATION)
@@ -254,6 +254,23 @@ function getTemplateUrls(templateName)
 	if (templateName.indexOf("video-record") == 0)
 	{
 		template_relative_urls.push("video-record.js");
+	}
+	if (templateName.indexOf("leads-filter") == 0 || templateName.indexOf("leads-lhs-filters") == 0 || templateName.indexOf("leads-static-filters") == 0)
+	{
+		template_relative_urls.push("leads-filters.js");
+	}
+	if (templateName.indexOf("new-lead") == 0 || templateName.indexOf("update-lead") == 0)
+	{
+		template_relative_urls.push("leads-form.js");
+	}
+	if (templateName.indexOf("leads-header") == 0 || templateName.indexOf("leads-list-view") == 0 || 
+		templateName.indexOf("leads-sources-statuses") == 0 || templateName.indexOf("leads-grid") == 0)
+	{
+		template_relative_urls.push("leads-view.js");
+	}
+	if (templateName.indexOf("leads-details") == 0)
+	{
+		template_relative_urls.push("leads-detail.js");
 	}
 	
 	return template_relative_urls;
@@ -826,8 +843,13 @@ function getContactCustomProperties(items)
  		if($.inArray(fields[x], finalFields) == -1)
  			finalFields.push(fields[x]);	
  	}
+ 	var finalCustomFields = [];
+ 	for(var x = 0;x<finalFields.length ;x++){
+ 		if(finalFields[x].name != 'first_name' && finalFields[x].name != 'last_name')
+ 			finalCustomFields.push(finalFields[x]);
+ 	}
 
-	return finalFields;
+	return finalCustomFields;
 }
 
 
@@ -1018,8 +1040,14 @@ function getCompanyCustomProperties(items)
  		if($.inArray(fields[x], finalFields) == -1)
  			finalFields.push(fields[x]);	
  	}
+ 	var finalCustomFields = [];
+ 	for(var x = 0;x<finalFields.length ;x++){
+ 		if(finalFields[x].name != 'first_name' && finalFields[x].name != 'last_name')
+ 			finalCustomFields.push(finalFields[x]);
+ 	}
+
+	return finalCustomFields;
 	
-	return finalFields;
 }
 
 /**
@@ -1278,3 +1306,159 @@ function getDealCustomProperties(items)
 	
 	return finalFields;
 }
+
+/**
+ * Returns list of custom properties. used to fill custom data in fields in
+ * continue lead
+ * 
+ * @param items
+ * @returns
+ */
+function getLeadCustomProperties(items)
+{
+	if (items == undefined)
+		return items;
+
+	var fields = [];
+	var fieldName='';
+	var datajson={};
+	for (var i = 0; i < items.length; i++)
+	{
+		if (items[i].type == "CUSTOM" && items[i].name != "image")
+		{
+			if(fieldName=='')
+				fieldName=items[i].name;
+			fields.push(items[i]);
+			datajson[''+items[i].name]=items[i].value;
+		}
+	}
+	
+	//Added for formula type custom field
+	var type='';
+	if(App_Leads.customFieldsList!=undefined && App_Leads.customFieldsList!=null){
+		for(var i=0;i<App_Leads.customFieldsList.collection.models.length;i++){
+			if(App_Leads.customFieldsList.collection.models[i].get("field_label")==fieldName){
+				type = App_Leads.customFieldsList.collection.models[i].get("scope");
+				break;
+			}
+		}
+	}
+	
+	var formulaFields=[];
+	var allCustomFields=[];
+	var finalFields=[];
+	
+	if(App_Leads.customFieldsList!=undefined && App_Leads.customFieldsList!=null){
+		if(type=='')
+			type='LEAD';
+		for(var i=0;i<App_Leads.customFieldsList.collection.models.length;i++){
+			var json={};
+			if(App_Leads.customFieldsList.collection.models[i].get("scope")==type && App_Leads.customFieldsList.collection.models[i].get("field_type")=="FORMULA"){
+				var tplEleData = Mustache.render(App_Leads.customFieldsList.collection.models[i].get("field_data"),datajson);
+				var evalFlag = true;
+				var tplEleDataAftEval;
+				try{
+					tplEleDataAftEval = eval(tplEleData)
+				}catch(err){
+					console.log(err.message);
+					evalFlag = false;
+				}
+				if(!evalFlag)
+					tplEleDataAftEval = tplEleData;
+				if(evalFlag && tplEleDataAftEval!=undefined && tplEleDataAftEval!=null){
+					json.name=App_Leads.customFieldsList.collection.models[i].get("field_label");
+					json.type="CUSTOM";
+					json.position=App_Leads.customFieldsList.collection.models[i].get("position");
+					json.value=tplEleDataAftEval;
+					json.field_type=App_Leads.customFieldsList.collection.models[i].get("field_type");
+					allCustomFields.push(json);
+					
+					formulaFields.push(json);
+				}
+			}else if(App_Leads.customFieldsList.collection.models[i].get("scope")==type){
+				json.name=App_Leads.customFieldsList.collection.models[i].get("field_label");
+				json.type="CUSTOM";
+				json.position=App_Leads.customFieldsList.collection.models[i].get("position");
+				json.field_type=App_Leads.customFieldsList.collection.models[i].get("field_type");
+				allCustomFields.push(json);
+			}
+		}
+	}
+	if(fields.length>0){
+		if(allCustomFields.length>0){
+			for(var i=0;i<allCustomFields.length;i++){
+				var isFieldExist = false;
+				if(allCustomFields[i].field_type=="FORMULA"){
+					if($.inArray(allCustomFields[i], finalFields)==-1)
+						finalFields.push(allCustomFields[i]);
+				}else{
+					for(var j=0;j<fields.length;j++){
+						if(allCustomFields[i].name==fields[j].name){
+							if($.inArray(fields[j], finalFields)==-1){
+								for(var m=0;m<allCustomFields.length;m++){
+									if(fields[j].name == allCustomFields[m].name && (allCustomFields[m].field_type == "CONTACT" || allCustomFields[m].field_type == "COMPANY")){
+										fields[j].custom_field_type = allCustomFields[m].field_type
+									}
+								}
+								finalFields.push(fields[j]);
+							}	
+							isFieldExist = true;
+							break;
+						}
+						if(!isFieldExist){
+							if($.inArray(fields[j], finalFields)==-1)
+							{
+								for(var m=0;m<allCustomFields.length;m++){
+									if(fields[j].name == allCustomFields[m].name && (allCustomFields[m].field_type == "CONTACT" || allCustomFields[m].field_type == "COMPANY")){
+										fields[j].custom_field_type = allCustomFields[m].field_type
+									}
+								}
+								finalFields.push(fields[j]);
+							}
+								
+						}
+					}
+				}
+			}
+		}else{
+			for(var k=0;k<fields.length;k++){
+				if($.inArray(fields[k], finalFields)==-1)
+					finalFields.push(fields[k]);	
+			}
+		}
+		
+	}else{
+		for(var k=0;k<formulaFields.length;k++){
+			if($.inArray(formulaFields[k], finalFields)==-1)
+				finalFields.push(formulaFields[k]);	
+		}
+	}
+	
+	var finalCustomFields = [];
+ 	for(var x = 0;x<finalFields.length ;x++){
+ 		if(finalFields[x].name != 'first_name' && finalFields[x].name != 'last_name')
+ 			finalCustomFields.push(finalFields[x]);
+ 	}
+
+	return finalCustomFields;
+}
+
+function updateLeadCustomData(el)
+{
+	$(".custom-data", App_Leads.leadDetailView.el).html(el)
+}
+
+/*
+ * To enable leads for some domains
+ *
+ */
+ function isAccessToLeads()
+ {
+ 	var domainNamesJSON = {"phanidesk" : true, "subrahmanyam" : true, "jilukara" : true};
+ 	if(CURRENT_DOMAIN_USER && domainNamesJSON[CURRENT_DOMAIN_USER.domain])
+ 	{
+ 		return true;
+ 	}
+
+ 	return false;
+ }

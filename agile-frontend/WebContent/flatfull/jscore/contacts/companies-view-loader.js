@@ -32,6 +32,10 @@ var companies_view_loader = {
 			App_Companies.companiesListView = undefined;
 			COMPANIES_HARD_RELOAD = false;
 		}
+
+		//To disable bulk action buttons and remove check for select all checkbox
+		this.disableBulkActionBtns();
+		
 		var that = this;
 		var url = this.getCompaniesUrl(tag_id);
 		var slateKey = getCompanyPadcontentKey(url);
@@ -47,7 +51,7 @@ var companies_view_loader = {
 		if(!App_Companies.companiesListView)
 		{
 			App_Companies.companiesListView = new  Contacts_Events_Collection_View({ url : url, modelData : modelData, sort_collection : false, templateKey : templateKey, individual_tag_name : individual_tag_name,
-				post_data: postData, cursor : true, page_size : 25, global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
+				post_data: postData, cursor : true, page_size : getMaximumPageSize(), global_sort_key : sortKey, slateKey : slateKey, request_method : 'POST', postRenderCallback : function(cel, collection)
 				{	
 					that.setupCompanyFilterName(cel, tag_id);
 
@@ -179,6 +183,15 @@ var companies_view_loader = {
 				count_message = "<small> (" + count + " Total) </small>";
 			$('#contacts-count', el).html(count_message);
 		}
+	},
+
+	disableBulkActionBtns : function()
+	{
+		//After add or remove column, toggle list view, make SELECT_ALL false and remove check for select all checkbox
+		SELECT_ALL = false;
+		$(".thead_check", $("#bulk-action-btns")).prop("checked", false);
+		$("#bulk-action-btns button").addClass("disabled");
+		$("#companiesTabelView").removeClass("disabled");
 	},
 
 	buildCompaniesView : function(el, tag_id)

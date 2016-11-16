@@ -34,7 +34,7 @@
            <div class="controls col-sm-7"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
              <div class="p-n"> 
-              <input type="text" name="expected_value" class="required  number form-control" min="0" max="2147483647"
+              <input type="text" name="expected_value" class="required  number_with_trim form-control" min="0" max="2147483647"
                 placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"   style="font-size:13px"/> 
              </div> 
             </div> 
@@ -82,13 +82,6 @@
                 class="form-control">
                   <option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
               </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
-            </div>
-          </div>
-          <div class="control-group form-group">
-            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'type'}}</label>
-            <div class="controls col-sm-7" style="height:32px;overflow:hidden;">
-              <span><input type="text" id="color1" name="color1" value="#FFFFFF" class=" required form-control" />
-              </span>
             </div>
           </div>
           <div class="control-group form-group hidden" id="deal_lost_reason">
@@ -140,7 +133,7 @@
 
         <div class="form-group m-b-none">
                     <div class="col-sm-offset-3 col-sm-7 text-left">
-        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
+        <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
                     </div>
                     <div class="clearfix"></div>
                 </div>

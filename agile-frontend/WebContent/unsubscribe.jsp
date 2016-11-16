@@ -14,32 +14,44 @@
 <%
     		String campaignId = request.getParameter("cid");
 
+            String namespace = request.getParameter("ns");
+
             // When & is converted to amp; in url
             if(StringUtils.isBlank(campaignId))
         	campaignId = request.getParameter("amp;cid");
-        	
+            
+            if(StringUtils.isBlank(namespace))
+        	namespace = request.getParameter("amp;ns");
+            
+            String oldNamespace = NamespaceManager.get();
+            
+            if(StringUtils.isNotBlank(namespace))
+            {
+	            NamespaceManager.set(namespace);
+	        }
+	            
 			String contactId = request.getParameter("sid");
 			
 			String email = request.getParameter("e");
-			
+				
 			// When & is converted to amp; in url
 			if(StringUtils.isBlank(email))
 			    email = request.getParameter("amp;e");
-
+	
 			String company = "";
 			try
 			{
 				AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 				
 				if(!accountPrefs.company_name.equals("My company"))
-				    company = accountPrefs.company_name;
+			    	company = accountPrefs.company_name;
 			}
 			catch(Exception e)
 			{
-		    	e.printStackTrace();
-		    	System.err.println("Exception occured while getting company " + e.getMessage());
+			   	e.printStackTrace();
+			   	System.err.println("Exception occured while getting company " + e.getMessage());
 			}
-			
+				
 			if (StringUtils.isBlank(campaignId)
 					|| StringUtils.isBlank(contactId))
 			{
@@ -47,10 +59,10 @@
 			    out.println("Oops! something went wrong. Please try again later.");
 			    return;
 			}
-
+	
 			Workflow workflow = WorkflowUtil.getWorkflow(Long
-					.parseLong(campaignId));
-
+						.parseLong(campaignId));
+	
 			// If workflow is deleted
 			if (workflow == null) {
 				out.println("You are successfully unsubscribed. Thank you.");
@@ -60,10 +72,11 @@
 			String FLAT_FULL_PATH = "flatfull/";
 			String CLOUDFRONT_STATIC_FILES_PATH = VersioningUtil.getStaticFilesBaseURL();
 			String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", "");
-			
+				
 			// Users can show their company logo on login page. 
 			AccountPrefs accountPrefs2 = AccountPrefsUtil.getAccountPrefs();
 			String logo_url = accountPrefs2.logo;
+       		NamespaceManager.set(oldNamespace);
 %>
 
 <html>
@@ -413,6 +426,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				<input type="hidden" name="c_name" value="<%= workflow.name%>">
 				<input type="hidden" name="unsubscribe_email" value="<%= workflow.unsubscribe.unsubscribe_email%>">
 				<input type="hidden" name="unsubscribe_name" value="<%= workflow.unsubscribe.unsubscribe_name%>">
+				<input type="hidden" name="ns" value="<%=namespace%>">
 
 				<input type="hidden" name="he" value="<%= email%>">
 

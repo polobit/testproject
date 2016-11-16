@@ -22,6 +22,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                 VISITORS_HARD_RELOAD = false;                
             }
             _agile_delete_prefs("visitor_repeat_filter");
+            _agile_delete_prefs("duration");
            
             var template_key = "segmentation-custom-view";
 
@@ -87,7 +88,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                 'timeZone' : timeZone
 
                             },
-                            page_size: 20,
+                            page_size: getMaximumPageSize(),
                             sort_collection: false,
                             postRenderCallback: function(
                                 el, collection) {

@@ -13,13 +13,13 @@ function bindAdminChangeAction(el, data)
 	$('input[name="is_admin"]', el).on('change', function(e){
 
 	var is_admin = $(this).is(":checked");
-	if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
+	var id = $('input[name="id"]', el).val();
+	if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers(id))
 	{
 		if(is_admin == false)
 			newscopesarray.removeAttr("disabled");
 		else
-			newscopesarray.prop("checked", "checked" ).attr("disabled", "disabled");
-		
+			newscopesarray.prop("checked", "checked" ).attr("disabled", "disabled");		
 		$('#calendar-privilege', el).trigger("change");
 		$('#deals-privilege', el).trigger("change");
 	}else{
@@ -105,10 +105,11 @@ function bindAdminChangeAction(el, data)
 }
 
 // Allow acls for specific domains
-function checkForACLExceptionalUsers(){
-	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi", "orcamortgages", "nexusworkspace", "gaspumptv"];
+function checkForACLExceptionalUsers(id){
+	var specialUsers = ["savourychef","organicleads","cutrone","sunsationalswimschoo","aviation", "mybandmarket", "grupocsi", "orcamortgages", "nexusworkspace", "gaspumptv", "cloudbyte"];
 	if($.inArray(CURRENT_DOMAIN_USER.domain, specialUsers) != -1)
 		return true;
-	else
-		return false;
+	else if (id && ADDON_INFO.aclUsers && $.inArray(parseInt(id), ADDON_INFO.aclUsers) != -1)
+		return true;
+	return false;
 }

@@ -31,18 +31,18 @@ function setNewDealFilters(data){
 	var cookie_filter_id = _agile_get_prefs("deal-filter-name");
 	
 	if(cookie_filter_id && cookie_filter_id != 'my-deals' && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
-		$('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+data.get(cookie_filter_id).get("name")+'</span><a class="close remove_deal_filter">×</a></div>');
+		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
+		$('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+data.get(cookie_filter_id).get("name")+'</span><a class="close remove_deal_filter">×</a></div>');
 		return;
 	}
 
 	if(cookie_filter_id && cookie_filter_id == 'my-deals'){
-		$('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
-		$('#opportunity-listners').find('h3').find('small').after('<div class="inline-block tag btn btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">{{agile_lng_translate "portlets" "my-deals"}}</span><a class="close remove_deal_filter">×</a></div>');
+		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
+		$('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">{{agile_lng_translate "portlets" "my-deals"}}</span><a class="close remove_deal_filter">×</a></div>');
 		return;
 	}
 
-	$('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
+	$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
 	setupDefaultDealFilters();
 }
 

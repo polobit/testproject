@@ -448,6 +448,8 @@ public class DealsAPI
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
 		NoteUtil.deleteBulkNotes(opportunity.getNotes());
+	    // Send Notification
+	    DealNotificationPrefsUtil.executeNotificationForDeleteDeal(new JSONArray().put(opportunity.id));
 	    opportunity.delete();
 	}
     }
@@ -871,6 +873,27 @@ public class DealsAPI
 	return ActivityUtil.getActivitiesByEntityId("DEAL", dealid, Integer.parseInt(count), cursor);
     }
 
+    /**
+     * fetches activities of a deal bulk actions in deal details page
+     * 
+     * @param dealid
+     * @param cursor
+     * @param count
+     * @return
+     * @throws JSONException
+     */
+    @Path("/{dealid}/bulk_activities")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Activity> getBulkActionActivitiesOfDeal(@PathParam("dealid") Long dealid, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count) throws JSONException
+    {
+    	return ActivityUtil.getDealBulkActionActivitiesByEntityId(dealid, Integer.parseInt(count), cursor);
+
+	
+    }  
+    
+    
     /**
      * save note of a deal from deal details page
      * 

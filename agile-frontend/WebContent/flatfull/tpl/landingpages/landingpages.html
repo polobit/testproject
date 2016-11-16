@@ -78,9 +78,7 @@
                                     {{else}}
                                         <div class="">
                                         <h4 class="inline-block m-n">
-                                            {{agile_lng_translate 'landing-pages' 'landing-pages'}} <small>
-                                            <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span>
-                                            </small></h4>
+                                            {{agile_lng_translate 'landing-pages' 'landing-pages'}}</h4>
                                         </div>
                                     {{/is_mobile}}
                                     <div class="btn-group m-r-xs m-b-xs p-t-n-sm workflow-sortby">
@@ -142,7 +140,10 @@
                                 {{else}}
                                     <div class="pull-right">
                                         <div class="btn-group right pos-rlt pull-right">
-                                            <a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                            <a href="pagebuilder" class="btn btn-default btn-addon  btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                            <a id="lp-video-tutorial" onclick="lpVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-left: 3px; line-height: 1px;">
+                                                <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+                                            </a>
                                         </div>  
                                      </div> 
                                      <div class="m-r-sm pull-right">

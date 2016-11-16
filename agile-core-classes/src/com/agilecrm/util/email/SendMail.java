@@ -81,6 +81,9 @@ public class SendMail
     
     public static final String INVOICE_CREATED = "subscription/payments/invoice_created";
     public static final String INVOICE_CREATED_SUBJECT = "Your Agile CRM Invoice";
+    
+    public static final String ADDON_PAYMENT_FAILED = "subscription/payments/failed/our_addon_payment_failed";
+    public static final String ADDON_PAYMENT_FAILED_SUBJECT = "Addon payment failed";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
@@ -123,7 +126,7 @@ public class SendMail
     public static final String CSV_IMPORT_DELAY_NOTIFICATION = "csv_delay_notifier";
     public static final String CSV_IMPORT_DELAY_NOTIFICATION_SUBJECT = "CSV Import Delay";
 
-    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
+    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";	
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
     public static final String EXPORT_DEALS_CSV = "export_csv";
     public static final String EXPORT_DEALS_CSV_SUBJECT = "Agile CRM Deals CSV";

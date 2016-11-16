@@ -24,6 +24,18 @@
 		"email"}} </small></div> <div class="text-ellipsis" ><small>{{getPropertyValue properties "company"}}</small></div>
    		
 	</div>
+	{{/if_equals}}
+	{{#if_equals type "LEAD"}}
+	<div class="thumb-xs agile-img ">
+		<img class="img-inital r r-2x"  style="height:34px;width:34px;" src="{{gravatarurl properties 40}}" /></img>
+	</div>
+	<div class="agile-thumb text-ellipsis" style="margin-top: -3px;">
+		<div>{{getPropertyValue properties "first_name"}} {{getPropertyValue
+			properties "last_name"}}</div>
+        <div class="text-ellipsis"><small>{{getPropertyValue properties
+		"email"}} </small></div> <div class="text-ellipsis" ><small>{{getPropertyValue properties "company"}}</small></div>
+   		
+	</div>
 	{{/if_equals}} 
 
 <!-- Deals result -->
@@ -93,6 +105,9 @@
 	</div>
 <div id="contact-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'contact-details' 'Contacts'}}</div>
 	<div id="contact-results">
+	</div>
+<div id="lead-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'menu' 'leads'}}</div>
+	<div id="lead-results">
 	</div>
 <div id="deal-typeahead-heading" style="display:none;" class="text-md custom-color m-l-sm">{{agile_lng_translate 'contact-details' 'deals'}}</div>
 	<div id="deals-results">

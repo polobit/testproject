@@ -75,7 +75,7 @@ $(function(){
 								console.log("tickets clicked");
 								
 								$('#ticketsModal').modal('hide');
-								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+								//$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 							});
 						});				
@@ -112,7 +112,22 @@ $(function(){
 
 				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 					return;
-
+				var canProceed = true;
+				if($(table).attr("id") == "users-list-table"){
+					if(ADDON_INFO && ADDON_INFO.id && ADDON_INFO.aclUsers.length > 0){
+						$.each( id_array, function( index, value ){
+						   if($.inArray(value, ADDON_INFO.aclUsers) != -1){
+						   		var msg = "Sorry, you cannot delete the selected user. Cancel Permissions Add-on and try again.";
+						   		if(id_array.length > 1)
+						   			msg = "Sorry, you cannot delete the selected users. Cancel Permissions Add-on and try again.";
+							   	showNotyPopUp('warning', msg, "top", 10000);
+							   	canProceed = false;
+						   }
+						});
+					}
+				}
+				if(!canProceed)
+					return;
 				// Default message for all tables
 				var confirm_msg = "{{agile_lng_translate 'others' 'delete-warn'}}";
 				var $that = $(this);
@@ -121,7 +136,7 @@ $(function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
 					confirm_msg = "{{agile_lng_translate 'contacts' 'delete-contacts-from'}} " +$('#subscribers-campaign-name').text()+" {{agile_lng_translate 'contact-details' 'campaign'}}?";
-					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					//$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
 					if(SELECT_ALL && SELECT_ALL == true)
@@ -599,6 +614,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				}
 				case 'core/api/tickets/filters/bulk':{
 
+					if(App_Ticket_Module.ticketFiltersList && App_Ticket_Module.ticketFiltersList.collection){
 					  if(id_array.length == App_Ticket_Module.ticketFiltersList.collection.length)
 						App_Ticket_Module.ticketFilters();
 
@@ -610,7 +626,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 	                      var filterJSON = App_Ticket_Module.ticketFiltersList.collection.at(0).toJSON();
 			 			  Ticket_Filter_ID = filterJSON.id;
 			 		  }
-
+			 		}
 					break;
 				}
 

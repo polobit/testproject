@@ -269,7 +269,7 @@ var contact_details_tab = {
 		            templateKey: "campaigns",
 		            individual_tag_name: 'li',
 		            cursor : true,
-		            page_size : 20,
+		            page_size : getMaximumPageSize(),
 		            sort_collection:false,
 		            postRenderCallback: function(el) {            	
 
