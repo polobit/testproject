@@ -34,6 +34,7 @@
         ulPageList: document.getElementById('pageList'),
         responsiveToggle: document.getElementById('responsiveToggle'),
         theScreen: document.getElementById('screen'),
+        prevFocus:null,
 
         init: function() {
 
