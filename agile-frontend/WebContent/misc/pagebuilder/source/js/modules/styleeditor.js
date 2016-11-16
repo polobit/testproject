@@ -183,8 +183,11 @@
                         }
                     });
                 }
-                if(el.style.cursor === "pointer")                   
+                if(el.style.cursor === "pointer") {                  
                    styleeditor.styleClick(this);
+                    if($(el).attr('data-selector').indexOf(".editContent")!==-1)
+                        styleeditor.prevFocus = el;
+                }
             };
 
             var newElement = new canvasElement(element);
@@ -1237,6 +1240,8 @@
                 styleeditor.toggleSidePanel('close');
 
             }
+            if(styleeditor.prevFocus)
+                $(styleeditor.prevFocus).focus();
 
         },
 
