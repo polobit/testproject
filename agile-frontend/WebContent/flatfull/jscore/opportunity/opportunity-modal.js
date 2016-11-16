@@ -653,6 +653,7 @@ function show_deal()
 			$("#showtoggle_show").hide();
 			$("#showproducts").hide();
 			$('.no-products').show();
+			$('.value_box').removeClass('col-sm-5').addClass('col-sm-7');
 		}
 	});
 	
