@@ -731,8 +731,8 @@ public class TwilioUtil
 
 		// For Main
 
-		//params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
-		//		+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
+				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
 
 
 		// For Beta
@@ -745,10 +745,10 @@ public class TwilioUtil
 
 		// For Version
 		
-		  params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		  "-dot-32-6-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
-		  record + "&agileuserid=" + agileUserID + "&twimleturl=" +
-		  twimletUrlToSend);
+		 // params.put("VoiceUrl", "https://" + NamespaceManager.get() +
+		 //"-dot-32-6-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
+		 // record + "&agileuserid=" + agileUserID + "&twimleturl=" +
+		 // twimletUrlToSend);
 		 
 
 		params.put("VoiceMethod", "GET");
