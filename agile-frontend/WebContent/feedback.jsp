@@ -216,7 +216,7 @@ var id = <%=note_id%>
       display: inline-block;
       position: relative;
     }
-  
+
     
 </style>
 </head>
@@ -235,38 +235,46 @@ var id = <%=note_id%>
           <div class="text-center" style="width:100%;border-radius: 3px;padding: 10px;margin-bottom: 20px;border-bottom:1px solid #f6f6f6">
           
 
-            <div class="f-w-600" style="margin-bottom:10px">How do you rate our service?</div>
-            <div style="text-align: -webkit-left;padding-left: 50px;">
-            <div id="tick_mark_1" class="fa fa-check tick_mark" style="padding-left: 32px;    color: #3388A7; visibility:hidden;"></div>
-            <div id="tick_mark_2" class="fa fa-check tick_mark" style="padding-left: 32px;    color: #3388A7;visibility:hidden"></div>
-            <div id="tick_mark_3" class="fa fa-check tick_mark" style="padding-left: 32px;    color: #3388A7;visibility:hidden"></div>
-            <div id="tick_mark_4" class="fa fa-check tick_mark" style="padding-left: 32px;    color: #3388A7;visibility:hidden"></div>
-            <div id="tick_mark_5" class="fa fa-check tick_mark" style="padding-left: 30px;    color: #3388A7;visibility:hidden"></div>
-          </div>
+            <div class="f-w-600" style="margin-bottom:14px">How do you rate our service?</div>
+            
             <div class="rating">
+            
+        <span class="m-r-5">
+          <span id="tick_mark_1" class="fa fa-check tick_mark" style="color: #3388A7; visibility:hidden;"></span><br/>
+          <img  data-placement="bottom" data-toggle="tooltip" title="Awful" value="1" id="1" style="width:40px" src="/img/agile-emoj1.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+          <span class="disposition_label" id="disposition_1" style="visibility:hidden;">Awful</span></span>
+          
+        
+        <span class="m-r-5" >
+         <span id="tick_mark_2" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden"></span><br/>
+          <img id="2" data-placement="bottom" data-toggle="tooltip" title="Bad" value="2" style="width:40px" src="/img/agile-emoj2.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)"
+          onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_2" style="visibility:hidden;">Bad</span></span>
 
-        <span class="m-r-5"  data-toggle="tooltip" title="Awful" data-placement="bottom">
-          <img value="1" id="1" style="width:40px" src="/img/agile-emoj1.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-        
-        <span class="m-r-5"  data-toggle="tooltip" title="Bad" data-placement="bottom">
-          <img id="2" value="2" style="width:40px" src="/img/agile-emoj2.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)"
-          onclick ="changeFeedback(event,this)"/></span>
-        
-        <span class="m-r-5"  data-toggle="tooltip" title="Ok" data-placement="bottom">
-          <img  id="3" value="3" style="width:40px" src="/img/agile-emoj3.png" 
-          onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-        
-        <span class="m-r-5" data-toggle="tooltip" title="Good" data-placement="bottom">
-          <img id="4" value="4" style="width:40px" src="/img/agile-emoj4.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-        
-        <span data-toggle="tooltip" title="Awesome" data-placement="bottom">
 
-          <img style="width:40px" value="5" id="5" src="/img/agile-emoj5.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
+        
+        <span class="m-r-5">
+        <span id="tick_mark_3" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden"></span><br/>
+          <img  id="3" value="3" data-toggle="tooltip" title="Ok" data-placement="bottom" style="width:40px" src="/img/agile-emoj3.png" 
+          onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_3" style="visibility:hidden;">OK</span></span>
+
+        
+
+        <span class="m-r-5">
+        <span id="tick_mark_4" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden"></span><br/>
+          <img id="4" value="4" data-toggle="tooltip" title="Good" data-placement="bottom" style="width:40px" src="/img/agile-emoj4.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_4" style="visibility:hidden;">Good</span></span>
+
+                  
+        
+        <span  style="width: 40px;">
+          <span id="tick_mark_5" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden;"></span><br/>
+          <img data-toggle="tooltip" title="Awesome" data-placement="bottom" style="width:40px" value="5" id="5" src="/img/agile-emoj5.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_5" style="visibility:hidden; width:40px;text-align:center;margin-left:-12px">Awesome</span></span>  
       </div>
           </div>
-          <div style="padding-bottom: 5px" class="f-w-600 rating_disposition">Rating : <span id="rating_value" style=""></span> </div> 
-          <div style="padding-bottom: 5px" class="f-w-600">Comments:</div>
-          <textarea style="width:100%;height:100px;border:1px solid #ccc;border-radius: 3px;margin-bottom: 20px;font-size: 14px;resize:vertical;" id="myTextarea"></textarea>
+          <textarea style="width:100%;height:100px;border:1px solid #ccc;border-radius: 3px;margin-bottom: 20px;font-size: 14px;resize:vertical;padding:5px" placeholder="Comments" id="myTextarea"></textarea>
           <div style="width: 100%;height: 40px; text-align: center;">
           <button type="submit" value="submit" class="btn btn-primary btn-md" style="width: 24%">Submit</button>
           </div>
@@ -302,28 +310,34 @@ document.getElementById("addfeedback-message").innerHTML = "<div style=font-size
 
 function changeFeedbackRatingDisposition( feedback ) {
   $(".tick_mark").css("visibility","hidden");
+  $(".disposition_label").css("visibility","hidden");
   var feedbackDisposition;
 
     switch ( feedback ) {
       case "1":
           feedbackDisposition = "Awful";
           $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
           break;
       case "2":
           feedbackDisposition = "Bad";
           $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
           break;
       case "3":
           feedbackDisposition = "OK";
           $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
           break;
       case "4":
           feedbackDisposition = "Good";
           $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
           break;
       case "5":
           feedbackDisposition = "Awesome";
           $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
           break;
   }
   $(".rating_disposition #rating_value").html(feedbackDisposition);
@@ -404,7 +418,8 @@ function changeFeedback(e,objButton){
         data : json,
         success:function(){
           console.log(json);  
-          document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;text-align:center;vertical-align:middle;margin-top:100px;margin-bottom:100px;>Your feedback submitted successfully! <br/><span style=font-size:16px;>Thank you for your time and patience</span></div>";
+          document.getElementById("successmessage").innerHTML = "<div style='font-size: 24px;text-align:center;vertical-align:middle;margin-top: 36px;margin-bottom: 22px;'>Submitted <i class='fa fa-check'></i></div><div style=font-size:20px;text-align:center;vertical-align:middle;margin-bottom:100px;>Your feedback submitted successfully! <br/><span style=font-size:16px;>Thank you for your time and patience.</span></div>";
+       
         },
         error:function(){
           document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;padding-left:40px;padding-top:40px;text-align:center;    margin-top: 100px;margin-bottom: 100px;>Sorry, cannot submit your feedback as the URL expired!</div>";
