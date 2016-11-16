@@ -42,7 +42,7 @@ public class MobileUADetector {
 	}
 
 	static enum OS_NAME {
-		WINDOWS, ANDRIOD, IOS, UNKNOWN, IPHONE, UNIX
+		WINDOWS, ANDRIOD, UNKNOWN, IPHONE, UNIX, MAC
 	};
 
 	/**
@@ -53,6 +53,7 @@ public class MobileUADetector {
 	 */
 	static OS_NAME getMobileOperatingSystem(String userAgent) {
 		
+		System.out.println("userAgent = " + userAgent);
 		try {
 			if(!isMobileOrTablet(userAgent))
 				return OS_NAME.UNKNOWN;
@@ -87,6 +88,6 @@ public class MobileUADetector {
 	}
 
 	public static boolean isiPhone(String ua) {
-		return getMobileOperatingSystem(ua).equals(OS_NAME.IOS);
+		return getMobileOperatingSystem(ua).equals(OS_NAME.IPHONE);
 	}
 }

@@ -7209,6 +7209,10 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
 			var is_active_added = false;
 			var selected_li_id = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+			
+			// If there is no selected dashboard in cookie, get type from Role
+			if(!selected_li_id)
+				selected_li_id = menuServiceDashboard(CURRENT_DOMAIN_USER.role);
 
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
 				if(selected_li_id == this.id)
@@ -7968,7 +7972,7 @@ Handlebars.registerHelper('contactsnamestatus', function(options)
 
 Handlebars.registerHelper('is_admin_domain', function(options)
 {
-	if(CURRENT_DOMAIN_USER.domain == null || CURRENT_DOMAIN_USER.domain == "admin")
+	if(CURRENT_DOMAIN_USER.domain == "admin")
 		return options.fn(this);
 	return options.inverse(this);
 

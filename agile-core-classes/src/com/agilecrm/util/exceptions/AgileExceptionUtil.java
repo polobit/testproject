@@ -4,6 +4,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -44,7 +45,7 @@ public class AgileExceptionUtil {
 	}
 
 	static boolean proceedToEmail(Exception e) {
-		if (e instanceof PlanRestrictedException)
+		if (VersioningUtil.isDevelopmentEnv() && e instanceof PlanRestrictedException)
 			return false;
 
 		return true;
@@ -72,8 +73,7 @@ class AgileExceptionEmail implements DeferredTask {
 	@Override
 	public void run() {
 		String fromEmail = AgileExceptionUtil.ERRORS_EMAIL_FROM;
-		String fromName = AgileExceptionUtil.ERRORS_EMAIL_FROM_NAME;
-
+		String fromName = AgileExceptionUtil.ERRORS_EMAIL_FROM_NAME+"("+VersioningUtil.getApplicationAPPId()+")";
 		SendGrid.sendMail(fromEmail, fromName, toEmailIds, null, null, exceptionMessage, null, null, exceptionLog);
 	}
 }

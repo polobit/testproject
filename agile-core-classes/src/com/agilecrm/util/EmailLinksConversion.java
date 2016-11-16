@@ -58,12 +58,14 @@ public class EmailLinksConversion
 	        && (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
 	                ".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
 	        && !str.toLowerCase().startsWith("http://agle.cc")
-	        && !str.toLowerCase().startsWith("http://unscr.be"))
+	        && !str.toLowerCase().startsWith("http://unscr.be")
+	        && !str.toLowerCase().contains("http://ag-email.unscr.me")
+	        && !str.toLowerCase().contains("http://ag-beta.unscr.me"))
 	    return true;
 
 	return false;
     }
-
+    
     public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, String pushParam)
     {
     	return convertLinksUsingJSOUP(input, subscriberId, campaignId, null, pushParam);
