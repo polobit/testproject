@@ -46,9 +46,11 @@ public class OzonetelUtil {
 				domainUrl = "http://"+domain;
 			}else{
 				if(domain == null){
-					domainUrl = "http://ozonetelin.appspot.com";
+					domainUrl = "https://ozonetelin.appspot.com";
 				}else{
-					domainUrl = "http://"+domain+".agilecrm.com";
+					//rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com
+					//domainUrl = "http://"+domain+".agilecrm.com";
+					domainUrl = "https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com";
 				}
 			}
 			Date d = new Date();
