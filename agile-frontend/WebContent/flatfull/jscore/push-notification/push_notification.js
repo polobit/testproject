@@ -98,11 +98,12 @@ var Push_Notification_Event_View = Base_Model_View.extend({
       },
       changeImageOnImageUrl :function(e){
         e.preventDefault();
-        $('#dynamic-img-change').attr('src', $('#dynamic-img-change').val());
-
-            if($("#dynamic-Img-Change").attr("src")=="")
-               $('#dynamic-Img-Change').attr('src', '');
-        
+        var currentImg = e.target.src;
+        if(currentImg !="")
+          {
+             $('#notification-icon').val(currentImg);
+             $('#prev-notification-icon').attr('src',currentImg);
+       }
       },
 		});
 
