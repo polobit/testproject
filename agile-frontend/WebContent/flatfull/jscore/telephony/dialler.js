@@ -444,7 +444,7 @@ function dialFromOzonetel(to,from,contact){
 			globalCall.contactedId = contact.id;
 		}
 	  	$.ajax({ 
-			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to+'domain_user='+CURRENT_DOMAIN_USER.id, 
+			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to+'&domain_user='+CURRENT_DOMAIN_USER.id, 
 			type : 'GET', 
 			success : function(data){
 				if(data == "success"){
