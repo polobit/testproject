@@ -45,7 +45,7 @@ public class AgileExceptionUtil {
 	}
 
 	static boolean proceedToEmail(Exception e) {
-		if (VersioningUtil.isDevelopmentEnv() && e instanceof PlanRestrictedException)
+		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()) || e instanceof PlanRestrictedException)
 			return false;
 
 		return true;
