@@ -507,7 +507,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <ul class="nav nav-sub dk" style="display:block;" >
        
        <li id="home_dashboard">
-        <a  href="#" class="menu-service-select" data-service-name="SALES" data-dashboard="SalesDashboard" >
+        <a  href="#navigate-dashboard/SalesDashboard" class="menu-service-select" >
           <!-- <i class="icon icon-home"></i> -->
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
@@ -821,7 +821,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
 
   <li id="home_dashboard">
-    <a class="agile-menu-dropdown-aside"  href="#" class="menu-service-select" data-service-name="SERVICE" data-dashboard="dashboard">
+    <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/Dashboard" >
     <!--   <i class="icon icon-home"></i> -->
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
