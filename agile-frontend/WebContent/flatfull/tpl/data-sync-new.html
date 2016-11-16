@@ -91,13 +91,23 @@
 <script id="data-sync-settings-template" type="text/html">
 	<div class="tab-container m-b-none widgets_inner">
        <ul class="nav nav-tabs">
-         <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">{{agile_lng_translate 'prefs-data-sync' 'google'}}</a></li>
-         <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
-         </a></li>
-         <li><a href="#office365-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'Office-365'}}</a></li>
-         <li><a href="#payment-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'payment'}}</a>
-         </li>
-         <li><a href="#accounting-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'accounting'}}</a></li>
+         {{#is_mobile}}
+         	<li><a href="#google-tab" data-toggle="tab"  class="b-l-none"><i class="fa fa-google"></i></a></li>
+	        <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i>
+	        </a></li>
+	        <li><a href="#office365-tab" data-toggle="tab"><i class="icon icon-envelope-open"></i></a></li>
+	        <li><a href="#payment-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a>
+	        </li>
+	        <li><a href="#accounting-tab" data-toggle="tab"><i class="icon icon-calculator"></i></a></li>
+         {{else}}
+	        <li><a href="#google-tab" data-toggle="tab"  class="b-l-none">{{agile_lng_translate 'prefs-data-sync' 'google'}}</a></li>
+	        <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
+	        </a></li>
+	        <li><a href="#office365-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'Office-365'}}</a></li>
+	        <li><a href="#payment-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'payment'}}</a>
+	        </li>
+	        <li><a href="#accounting-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'accounting'}}</a></li>
+         {{/is_mobile}}
        </ul>
 	</div>
 
