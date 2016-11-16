@@ -29,6 +29,15 @@ public class TriggerServlet extends HttpServlet
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
+	        try
+	        {
+	            res.sendError(500,"checking cron erorr");
+	        }
+	        catch(Exception e)
+	        {
+	            System.err.println(e.getMessage());
+	        }
+	        /*
 		// Get period parameter to fetch filter for that period
 		String period = req.getParameter("period");
 
@@ -65,5 +74,6 @@ public class TriggerServlet extends HttpServlet
 			System.err.println("Exception occured in TriggerServlet...");
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+		*/
 	}
 }

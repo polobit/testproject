@@ -24,23 +24,39 @@ cron:
 
 - description: Hourly triggers
   url: /backend/cron/triggers?period=HOURLY
-  schedule: every 1 hours
+  schedule: every 10 mins
   target: agile-normal-bulk
+  retry_parameters:
+    min_backoff_seconds: 2.5
+    max_backoff_seconds: 5
+    max_doublings: 5
 
 - description: daily triggers
   url: /backend/cron/triggers?period=DAILY
   schedule: every day 01:00
   target: agile-normal-bulk
+  retry_parameters:
+    min_backoff_seconds: 5
+    max_backoff_seconds: 10
+    max_doublings: 5
   
 - description: Monthly triggers
   url: /backend/cron/triggers?period=MONTHLY
-  schedule: 1st monday of month 01:00
+  schedule: 1st monday of month 02:30
   target: agile-normal-bulk
+  retry_parameters:
+    min_backoff_seconds: 10
+    max_backoff_seconds: 15
+    max_doublings: 5
   
 - description: Weekly triggers
   url: /backend/cron/triggers?period=WEEKLY
-  schedule: every monday 01:00
+  schedule: every monday 02:00
   target: agile-normal-bulk
+  retry_parameters:
+    min_backoff_seconds: 5
+    max_backoff_seconds: 10
+    max_doublings: 5
 
 - description: Due Tasks Reminder
   url: /backend/cron/tasks
