@@ -33,13 +33,13 @@ public class OzonetelWidgetAPI {
 	@Path("connect")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public String connectOzonetel(@QueryParam("user_phone") String user_phone){
+	public String connectOzonetel(@QueryParam("user_phone") String user_phone,@QueryParam("domain_user") String domain_user){
 		String status = "";
 		try{
 			Widget widget = WidgetUtil.getWidget("Ozonetel");
 			String url = "http://kookoo.in/outbound/outbound.php";
 			OzonetelUtil util = new OzonetelUtil(widget.getProperty("ozontel_auth_key"),widget.getProperty("agent_no"), widget.getProperty("caller_id"));
-			status = util.connectToNumber(user_phone,url);
+			status = util.connectToNumber(user_phone,url,domain_user);
 			if(StringUtils.equals("failed", status)){
 				url = "http://1.kookoo.in/outbound/outbound.php";
 				status = util.connectToNumber(user_phone,url);

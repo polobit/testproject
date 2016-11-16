@@ -25,7 +25,8 @@ public class OzonetelCallBackServlet extends HttpServlet {
 	        String contact_number = request.getParameter("contact_number");
 	        String status = request.getParameter("status");
 	        String duration = request.getParameter("duration");
-	        
+	        String domain_user = request.getParameter("domain_user");
+	        		
 	        JSONObject pubnub_notification = new JSONObject();
 	        pubnub_notification.put("direction", "Outgoing");
 	        pubnub_notification.put("type", "call");
@@ -35,7 +36,7 @@ public class OzonetelCallBackServlet extends HttpServlet {
 	        pubnub_notification.put("phone_no", phone_no);
 	        pubnub_notification.put("duration", duration);
 	        
-	        PubNub.pubNubPush(AgileUser.getCurrentAgileUser().domain_user_id+"_Channel", pubnub_notification);
+	        PubNub.pubNubPush(domain_user+"_Channel", pubnub_notification);
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    }

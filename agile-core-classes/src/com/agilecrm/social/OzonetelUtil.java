@@ -37,7 +37,7 @@ public class OzonetelUtil {
 	 * @param user_phone //number from contacts
 	 * @return
 	 */
-	public String connectToNumber(String user_phone,String url)throws UnhandledException{
+	public String connectToNumber(String user_phone,String url,String domain_user)throws UnhandledException{
 		String status="";
 		try{
 			String  domainUrl = "";
@@ -57,8 +57,8 @@ public class OzonetelUtil {
 	        uribuilder.addParameter("api_key", api_key);
 	        uribuilder.addParameter("phone_no", agent_no);
 	        uribuilder.addParameter("caller_id", caller_id);
-	        uribuilder.addParameter("url", domainUrl+"/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId);
-	        uribuilder.addParameter("callback_url",domainUrl+"/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
+	        uribuilder.addParameter("url", domainUrl+"/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId+"&domain_user="+domain_user);
+	        uribuilder.addParameter("callback_url",domainUrl+"/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId+"&domain_user="+domain_user);
 	        //uribuilder.addParameter("url", "http://ozonetelin.appspot.com/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId);
 	        //uribuilder.addParameter("callback_url","http://ozonetelin.appspot.com/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
 	        URI uri = uribuilder.build();
