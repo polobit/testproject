@@ -13,8 +13,9 @@
 				
 				<div class="control-group form-group">
 					<label class="control-label"><b>{{agile_lng_translate 'portlets' 'amount'}} &nbsp; $</b></label>
-					<div class="controls">
+					<div class="controls agiletxexpander">
 						<div style="margin-top: 3px;"><input type="text" name="amount" id="amount" class="input required number form-control" /></div>
+						<textarea id="refundamountnote" name="refundamountnote" rows="3" class="input col-md-12 required form-control textarea" data-agileexpand="true" placeholder="Add Comment" style="padding: 8px 8px 1px; height: 80px; overflow-y: hidden;"></textarea>
 						<div id="errormsg" style="color: red;"></div>
 						<input type="hidden" name="hchargeid" id="hchargeid" class="hchargeid" />
 						<input type="hidden" name="totamount" id="totamount" class="totamount" />
