@@ -42,7 +42,7 @@ public class OzonetelWidgetAPI {
 			status = util.connectToNumber(user_phone,url,domain_user);
 			if(StringUtils.equals("failed", status)){
 				url = "http://1.kookoo.in/outbound/outbound.php";
-				status = util.connectToNumber(user_phone,url);
+				status = util.connectToNumber(user_phone,url,domain_user);
 			}
 		}catch(Exception e){
 			System.out.println("Exception form OzonetelWidgetAPI connectOzonetel method");
