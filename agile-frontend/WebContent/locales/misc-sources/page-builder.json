@@ -68,7 +68,7 @@
     "page-css" : "{{agile_lng_translate 'landingpage-builder' 'page-css'}}",
     "page-js" : "{{agile_lng_translate 'landingpage-builder' 'page-js'}}",
     "page-css-applied" : "{{agile_lng_translate 'landingpage-builder' 'page-css-applied'}}",
-    "page-js-applied" : "{{agile_lng_translate 'landingpage-builder' 'page-js-applied'}}",
+    "page-script-applied" : "{{agile_lng_translate 'landingpage-builder' 'page-script-applied'}}",
     "save-settings" : "{{agile_lng_translate 'landingpage-builder' 'save-settings'}}",
     "page-name" : "{{agile_lng_translate 'landingpage-builder' 'page-name'}}",
     "save" : "{{agile_lng_translate 'modals' 'save'}}",
