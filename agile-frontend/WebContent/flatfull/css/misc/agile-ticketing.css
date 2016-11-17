@@ -587,3 +587,7 @@ form#new-ticket ul.chosen-choices {
   text-overflow: ellipsis;
   display: -webkit-box;
 }
+
+.color_red{
+  color:red;
+}

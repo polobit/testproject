@@ -89,16 +89,16 @@
     text-overflow: ellipsis;">
                 
         {{#if contact_id}}
-                <a href="#contact/{{contact_id}}" data="{{contact_id}}" {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}}><img class="user-img ref-roundedimg" src="{{img_url}}" target="_blank"/>
+                <a href="#contact/{{contact_id}}" data="{{contact_id}}"><img class="user-img ref-roundedimg" src="{{img_url}}" target="_blank"/>
         {{else}}
-                <a href="#contact/{{contact_id}}" {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}} data="{{contact_id}}"><img class="user-img ref-roundedimg" target="_blank" src="{{defaultGravatarurl 40}}"/>
+                <a href="#contact/{{contact_id}}"  data="{{contact_id}}"><img class="user-img ref-roundedimg" target="_blank" src="{{defaultGravatarurl 40}}"/>
         {{/if}} 
     
                 {{first_name}} {{last_name}}  </a>
     </div>
 
     </td>
-    <td style="text-align:center;vertical-align:middle;{{#if_equals feedback '1'}}color:rgb(240, 110, 80);{{else}}{{#if_equals feedback '2'}}color:rgb(240, 110, 80);{{/if_equals}}{{/if_equals}} ">
+    <td style="text-align:center;vertical-align:middle;">
         
         {{#if feedback}}
         <img src = "/img/agile-emoj{{feedback}}-1.png"  style="width:30px;"/><br/>
@@ -107,12 +107,12 @@
     </td>
     <td style="vertical-align:middle">                   
        {{#if_equals feedback_comment ""}}
-       <div {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}} id="recent-reply-notes" class="recent-reply-notes">
+       <div id="recent-reply-notes" class="recent-reply-notes">
               {{agile_lng_translate 'tickets' 'feedback-nocomment'}} 
             </div>
        {{else}}
       <a href="" class="ticket-feedback-comment" data-id="{{id}}">
-      <div {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}} class="ccemail feedback_comment overflow-hidden line-clamp line-clamp-3 no-wrap">
+      <div class="ccemail feedback_comment overflow-hidden line-clamp line-clamp-3 no-wrap">
                {{feedback_comment}}
             </div>
       </a> 
@@ -120,10 +120,10 @@
        {{/if_equals}}     </td>
 
     <td  style="vertical-align:middle;">
-         <div class="time-ago" {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}}> {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</div>                      
+         <div class="time-ago"> {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</div>                      
     </td>              
     <td class="text-capitalize" style="vertical-align:middle;">
-    <div {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}} class="line-clamp line-clamp-3" style="width:80px;overflow: hidden;text-overflow: ellipsis;">
+    <div class="line-clamp line-clamp-3" >
           {{#if assignee_name}}{{assignee_name}}{{else}}-{{/if}}                      
     </div>
     </td>
