@@ -24,7 +24,7 @@
         {{/if}}
     </div>
 {{else}}
-    <div class="col-md-3" id="learn-workflows">
+    <div class="col-md-3">
         
             <h4 class="m-t-none h4 m-b-sm">
                 {{agile_lng_translate 'landing-pages' 'how-to-use-landing-pages'}}
@@ -68,19 +68,11 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                  <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
-                                    {{#is_mobile}}
-                                        <div>
-                                            <h3 class="font-thin h4 pull-left landing-pages-title">
-                                                {{agile_lng_translate 'landing-pages' 'landing-pages'}} 
-                                                <span class="label label-sm bg-danger landingpages-beta-tag">{{agile_lng_translate 'deal-view' 'beta'}}</span>
-                                            </h3>
-                                        </div>
-                                    {{else}}
-                                        <div class="">
-                                        <h4 class="inline-block m-n">
-                                            {{agile_lng_translate 'landing-pages' 'landing-pages'}}</h4>
-                                        </div>
-                                    {{/is_mobile}}
+                                    <div>
+                                        <h3 class="font-thin h4 pull-left {{#is_mobile}} landing-pages-title {{else}} inline-block m-n {{/is_mobile}}">
+                                            {{agile_lng_translate 'landing-pages' 'landing-pages'}} 
+                                        </h3>
+                                    </div>
                                     <div class="btn-group m-r-xs m-b-xs p-t-n-sm workflow-sortby">
                                         <div class="btn-group dropdown">
                                                      <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
@@ -220,8 +212,8 @@
 {{#is_mobile}}
     <td class="hide"></td>
     <td data="{{id}}" class="data">
-        <div class="text-base table-resp">{{name}}</div>
-        <div class="text-muted text-xs table-resp">
+        <div class="text-base table-resp text-ellipsis">{{name}}</div>
+        <div class="text-muted text-xs table-resp text-ellipsis">
             <i class="fa fa-clock-o"></i>
             {{#if updated_time}}
                 <span><em> {{agile_lng_translate 'campaigns' 'modified'}}</em>
@@ -272,7 +264,7 @@
         <div class="modal-dialog" style="width:350px;">
         <div class="modal-content">
                 <div class="modal-header">
-                 <button class="close" data-dismiss="modal">x</button>
+                 <button class="close" data-dismiss="modal">&times;</button>
                     <h3 class="modal-title">
                         <h6 id="popup-msg" style="margin:5px"><span style="color: green;">{{agile_lng_translate 'landingpages' 'page-saved-sucessfully'}}</span></h6>
                         <i class="glyphicon glyphicon-arrow-right"></i> <strong>{{agile_lng_translate 'landingpages' 'next-action'}} {{title}} </strong> {{agile_lng_translate 'landingpages' 'publish-the-landing-page'}} </h3>
