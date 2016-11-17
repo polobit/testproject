@@ -16,7 +16,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 		 		'change #notification-icon' : 'changeNotificationIcon',
         'click #previewBtn' : 'sendPushNotificationPreview',
         'click #enable-notification' : 'enablePushNotification',
-        'click #dynamic-img-change' :'changeImageOnImageUrl',
+      //  'click #dynamic-img-change' :'changeImageOnImageUrl',
 		    },
 
 			// Add notification title in preview
@@ -96,7 +96,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 
         });
       },
-      changeImageOnImageUrl :function(e){
+     /* changeImageOnImageUrl :function(e){
         e.preventDefault();
         var currentImg = e.target.src;
         if(currentImg !="")
@@ -104,7 +104,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
              $('#notification-icon').val(currentImg);
              $('#prev-notification-icon').attr('src',currentImg);
        }
-      },
+      },*/
 		});
 
 

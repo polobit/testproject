@@ -148,12 +148,13 @@
                 </div>
 
               
-                 <div class="control-group form-group" id="dynamic-img-change">
+                <!-- <div class="control-group form-group" id="dynamic-img-change">
                 <div class="control-label col-sm-2 col-sm-12"></div>
                 <img class="js-custom-notifications-image img-rounded" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 7%;margin-left: 111px;margin-top: -4px;">
                 <img  class="img-rounded" src="https://agilecrm.s3.amazonaws.com/editor/email/null/pushnotification_jpg_1479205060778.jpg" alt="" style="width:7%;margin-left: 3px; margin-top: -2px;">
                 <img class="img-rounded" src="https://agilecrm.s3.amazonaws.com/editor/email/null/messanger_png_1479205148227.png" alt="" style="width:7%;margin-left: 3px; margin-top: -2px;">
                 </div>
+                -->
 
 
                <div class="control-group form-group">
@@ -188,23 +189,38 @@
       <div class="panel-heading h4">
            <p class="m-none">Preview</p>
        </div>
-      <div class="overflow-hidden" style="margin: 10px; box-shadow: 1px 1px 20px 0px #afaaaa;">
+      <div class="overflow-hidden" style="margin: 16px; margin-left: 25px; margin-right: 25px; box-shadow: 1px 1px 20px 0px #afaaaa;">
                 <div class="notification-demo">
-                    <div class="row" style="padding: 5px;">
-                       <div class="col-md-3 col-xs-3" style="width: 20%">
+                    <div class="row" style="padding: 3px;">
+                       <div class="col-md-3 col-xs-3" style="width: 22%">
                             <img id="prev-notification-icon" class="js-custom-notifications-image" src="https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png" alt="" style="width: 130%;">
                         </div>
-                            <div class="col-md-9 col-xs-9" style="padding-left: 20px; letter-spacing:1px; ">
-                                <p style="margin-top:5px; color: black;" id = "prev-notification-title" class="h4">Push notification is live </p>
-                                <p style="line-height:1.4;margin-top:8px;color: #1d1d1d;" id="prev-notification-message" class="h5 p-b-sm">Engage with your customers on and off the webpage through push notifications. </p>
-                                <p  style="color: #6f7273; font-size: 15px;" class="h6 p-b-xs">domain.agilecrm.com</p>
+                            <div class="col-md-9 col-xs-9" style="padding-left: 20px; letter-spacing:1.2px; ">
+                                 <span style="
+								    float: right;
+								    margin-right: -13px;
+								    margin-top: -8px;
+								    font-size: 19px;
+								    font-weight: bold;
+								    color: gray;
+								    ">&times</span>
+                                <p style="margin-top:5px; font-size:17.2px; font-family: Ubuntu Mono, Arial, sans-serif;
+                                 color: #0e0e0e;" id = "prev-notification-title" class="h4">Push notification is live 1
+                                </p>
+
+                                <p style="line-height:1.2; font-family: Ubuntu Mono, Arial, sans-serif; margin-top:6px;color: #0e0e0e;" id="prev-notification-message" class="h5 p-b-sm">Engage with your customers on and off the webpage through push notifications. 
+                                </p>
+                                <span style="float: right; margin-left: -22px; margin-top: -5px; font-size:17px">
+                                  <i class="fa fa-cog" aria-hidden="true" style=" margin-right: -10px;"></i>
+                                  </span>
+                                <p  style="color: #6f7273; font-size:15px; margin-top: -2px; font-family: Ubuntu Mono, Arial, sans-serif;" class="h6 p-b-xs">{{getPushNotificationHost 22}}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 			
   			<div class = "panel-footer">
-			 <a class="btn btn-xm btn-default" id="previewBtn" btn-value="allow" onclick="">Test Now</a>
+			 <a class="btn btn-xm btn-default" id="previewBtn" btn-value="allow" style=" margin-left:10px" onclick="">Test Now</a>
 			  <span id="push-notification-content" class="right text-base">
 	          <i>Push Notifications are now disabled. 
 	         <a href="#" id="enable-notification" class="text-info" style="text-decoration:underline;">Enable</a>
