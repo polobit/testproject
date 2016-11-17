@@ -14,11 +14,11 @@ import com.thirdparty.sendgrid.SendGrid;
 public class AgileExceptionUtil {
 
 	// To Emails
-	static final String CORE_TEAM_ERRORS_EMAILS = "venkat@agilecrm.com,mogulla@agilecrm.com,govind@agilecrm.com";
-	static final String SALES_TEAM_ERRORS_EMAILS = "subrahmanyam@agilecrm.com,nidhi@agilecrm.com";
-	static final String MA_TEAM_ERRORS_EMAILS = "naresh@faxdesk.com,ramesh@agilecrm.com";
-	static final String TICKET_TEAM_ERRORS_EMAILS = "rohit@agilecrm.com";
-	static final String INTEGRATIONS_TEAM_ERRORS_EMAILS = "sri@agilecrm.com";
+	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@invox.com,govind@invox.com";
+	static final String SALES_TEAM_ERRORS_EMAILS = "subrahmanyam@invox.com,sankar@agilecrm.com";
+	static final String MA_TEAM_ERRORS_EMAILS = "naresh@agilecrm.com,ramesh@agilecrm.com";
+	static final String TICKET_TEAM_ERRORS_EMAILS = "rohit@agilecrm.com,sreedevi@agilecrm.com";
+	static final String INTEGRATIONS_TEAM_ERRORS_EMAILS = "sri@agilecrm.com,prem@agilecrm.com";
 	
 	static final String COMMON_TEAM_ERRORS_EMAILS = CORE_TEAM_ERRORS_EMAILS + "," + SALES_TEAM_ERRORS_EMAILS + "," + MA_TEAM_ERRORS_EMAILS + 
 			"," + TICKET_TEAM_ERRORS_EMAILS + "," + INTEGRATIONS_TEAM_ERRORS_EMAILS;
@@ -53,9 +53,9 @@ public class AgileExceptionUtil {
 
 	static String getToEmail(Exception e) {
 		if (e instanceof NullPointerException)
-			return CORE_TEAM_ERRORS_EMAILS;
+			return COMMON_TEAM_ERRORS_EMAILS;
 
-		return CORE_TEAM_ERRORS_EMAILS;
+		return COMMON_TEAM_ERRORS_EMAILS;
 	}
 }
 
