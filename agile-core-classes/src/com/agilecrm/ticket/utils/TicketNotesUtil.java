@@ -389,19 +389,21 @@ public class TicketNotesUtil
 				jsonobject.append("ticket_subject", ticket.subject);
 				jsonobject.append("contact_id", ticket.contactID);
 												
-				String assignee_name = "";
+				String assignee_name;
 		
 				
-					if(tn.assignee_id != null){
-						
+				try{
 						Long assigneeid = (tn.assignee_id);
 						  
 						String agentName = DomainUserUtil.getDomainUser((assigneeid)).name;
 						
 						assignee_name = agentName;
-					}
+				}
+
+				catch(Exception e){
 					
-					
+					assignee_name = "";
+				}
 					
 				jsonobject.append("assignee_name",assignee_name );
 				
