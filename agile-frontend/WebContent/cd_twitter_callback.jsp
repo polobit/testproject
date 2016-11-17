@@ -6,6 +6,7 @@
 <%@page import="com.agilecrm.user.Referer"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.agilecrm.util.NamespaceUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -20,6 +21,13 @@
 <%@page import="org.scribe.model.Verifier"%>
 <%@page import="org.scribe.model.Token"%>
 <%
+
+String host = request.getServerName();
+if(host.contains("-dot-")) {
+  response.sendRedirect("https://" + NamespaceUtil.getNamespaceFromURL() + "-dot-sandbox-dot-agilecrmbeta.appspot.com/cd_twitter_callback.jsp?" + request.getQueryString());
+  return;
+}
+
 String deniedParam  = request.getParameter("denied");
 if(StringUtils.isNotBlank(deniedParam)){
     out.println("You may <a href='#' onclick='window.close();return false;'>close this window</a> and continue browsing AgileCRM Dashboard. Note that Twitter server is not responding right now, Please try again after some time.Seems something went wrong.");
