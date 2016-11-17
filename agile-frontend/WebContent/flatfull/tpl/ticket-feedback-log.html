@@ -123,7 +123,7 @@
          <div class="time-ago" {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}}> {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</div>                      
     </td>              
     <td class="text-capitalize" style="vertical-align:middle;">
-    <div {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}} class="line-clamp line-clamp-3" style="width:80px;overflow: hidden;text-overflow: ellipsis;">
+    <div {{#if_equals feedback '1'}}style="color:rgb(240, 110, 80);"{{else}}{{#if_equals feedback '2'}}style="color:rgb(240, 110, 80);"{{/if_equals}}{{/if_equals}} class="line-clamp line-clamp-3">
           {{#if assignee_name}}{{assignee_name}}{{else}}-{{/if}}                      
     </div>
     </td>
