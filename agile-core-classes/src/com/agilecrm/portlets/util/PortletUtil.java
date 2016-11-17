@@ -791,11 +791,11 @@ public class PortletUtil {
 		
 		CategoriesUtil categoriesUtil = new CategoriesUtil();
 		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
-		CallStatusCountMap.put(Call.ANSWERED,0);
-		CallStatusCountMap.put(Call.BUSY,0);
-		CallStatusCountMap.put(Call.FAILED,0);
-		CallStatusCountMap.put(Call.VOICEMAIL,0);
-		CallStatusCountMap.put(Call.Missed,0);
+		//CallStatusCountMap.put(Call.ANSWERED,0);
+		//CallStatusCountMap.put(Call.BUSY,0);
+		//CallStatusCountMap.put(Call.FAILED,0);
+		//CallStatusCountMap.put(Call.VOICEMAIL,0);
+		//CallStatusCountMap.put(Call.Missed,0);
 		for(Category category : categories){
 			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
 		}
@@ -1871,11 +1871,11 @@ public class PortletUtil {
 		colors.put(Call.VOICEMAIL, "#7266ba");
 		colors.put(Call.FAILED, "#f05050");
 		
-		CallStatusCountMap.put(Call.ANSWERED,0);
-		CallStatusCountMap.put(Call.BUSY,0);
-		CallStatusCountMap.put(Call.FAILED,0);
-		CallStatusCountMap.put(Call.VOICEMAIL,0);
-		CallStatusCountMap.put(Call.Missed,0);
+		//CallStatusCountMap.put(Call.ANSWERED,0);
+		//CallStatusCountMap.put(Call.BUSY,0);
+		//CallStatusCountMap.put(Call.FAILED,0);
+		//CallStatusCountMap.put(Call.VOICEMAIL,0);
+		//CallStatusCountMap.put(Call.Missed,0);
 		
 		int lc=0;
 		for(Category category : categories){
