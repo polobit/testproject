@@ -4935,3 +4935,6 @@ ul#recent-menu-model-list li:nth-child(even)
     color: green;
     margin-right: 5px;
 }
+.no-recent-items{
+  border: 0px !important;
+}
