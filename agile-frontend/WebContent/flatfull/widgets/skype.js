@@ -1,11 +1,26 @@
 
 function startSkypeWidget(contact_id){
-	setTimeout(function()
-	{
-		if(!Pubnub.is_connected_call){
-			startSkypeWidget();
-			return;
-		}
+	sendTestCommandToClient(function(){
+		getLogsIfPubnubIsConnectedSkype();
+	});
+}
+
+function getLogsIfPubnubIsConnectedSkype(){
+	if(!callJar.running){
 		getLogsForSkype();
-	}, 9000);
+		return;
+	}
+	setTimeout(function()
+			{
+				if(!Pubnub){
+					getLogsIfPubnubIsConnectedSkype();
+					return;
+				}
+		
+				if(!Pubnub.is_connected_call){
+					getLogsIfPubnubIsConnectedSkype();
+					return;
+				}
+				getLogsForSkype();
+			}, 1000);
 }
