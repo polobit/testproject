@@ -63,7 +63,7 @@
     "page-meta-keywords" : "{{agile_lng_translate 'landingpage-builder' 'page-meta-keywords'}}",
     "page-meta-keywords-sm" : "{{agile_lng_translate 'landingpage-builder' 'page-meta-keywords-sm'}}",
     "page-header" : "{{agile_lng_translate 'landingpage-builder' 'page-header'}}",
-    "page-header-info" : "{{agile_lng_translate 'landingpage-builder' 'page-header-info'}}",
+    "page-header-inf" : "{{agile_lng_translate 'landingpage-builder' 'page-header-inf'}}",
     "head-section" : "{{agile_lng_translate 'landingpage-builder' 'head-section'}}",
     "page-css" : "{{agile_lng_translate 'landingpage-builder' 'page-css'}}",
     "page-js" : "{{agile_lng_translate 'landingpage-builder' 'page-js'}}",
