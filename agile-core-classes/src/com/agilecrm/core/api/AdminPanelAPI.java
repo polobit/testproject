@@ -574,6 +574,7 @@ public class AdminPanelAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry you don't have privileges to access this page.").build());
 	}
+
 	String oldNameSpace = NamespaceManager.get();
 	NamespaceManager.set(email);
 	try
@@ -584,7 +585,6 @@ public class AdminPanelAPI
 	{
 		NamespaceManager.set(oldNameSpace);
 	}
-	
 	ActivityUtil.createAdminPanelActivity(domainUser, Activity.ActivityType.ADMIN_PANEL_SUBSCRIPTION_CANCEL, email);
     }
    

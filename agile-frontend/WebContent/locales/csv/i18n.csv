@@ -5837,7 +5837,7 @@ calls.duration-secs-new,Call Duration (Min),
 calls.avg-duration-secs-new,Average Call Duration (Min),
 contacts-view.manage-filters,Manage Filter,
 portlets.+add-new,+ Add new,
-landingpage-builder.page-js-applied,Script applied specifically to this page (JavaSCript),
+landingpage-builder.page-js-applied,Script applied specifically to this page (JavaScript),
 landingpage-builder.page-js,Page JS,La página de JS
 admin-settings-users.updated-time,Updated Time,
 admin-settings-users.status,Status,
