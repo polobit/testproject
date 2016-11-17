@@ -24,10 +24,9 @@ function changeCallNotyBasedOnStatus(event){
 			if(callDirection == "Outbound"){
 				if(eventType){				
 					if(eventType == "AGENT_CALL"){
-						KNOWLARITY_PREVIOUS_EVENT = "AGENT_CALL";
-						var json = {"callId": agentNumber};				
+						KNOWLARITY_PREVIOUS_EVENT = "AGENT_CALL";									
 						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns, json);
+						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
 					}else if(eventType == "CUSTOMER_CALL"){
 						KNOWLARITY_PREVIOUS_EVENT = "CUSTOMER_CALL";
 						var json = {"callId": agentNumber};				
@@ -64,7 +63,7 @@ function changeCallNotyBasedOnStatus(event){
 							globalCall.callNumber = customerNumber;
 
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
-							var json = {"callId": callId};
+							var json = {"callId": customerNumber};
 							showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 						});									
 					}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
