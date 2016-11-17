@@ -388,30 +388,22 @@ public class TicketNotesUtil
 				
 				jsonobject.append("ticket_subject", ticket.subject);
 				jsonobject.append("contact_id", ticket.contactID);
+												
+				String assignee_name = "";
+		
 				
-				TicketGroups ticket_group = null;
-
-				try
-				{
-					ticket_group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
-				}
-				catch (Exception e)
-				{
-					throw new Exception("No group found with id " + ticket_group.id + " or group has been deleted.");
-				}
-				String groupName = ticket_group.group_name;
-				
-				String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
-
-				
-				String assignee_name = ""; 
-				
-				if(ticket.groupID != null)
-					assignee_name = groupName;
-				if(ticket.assigneeID != null)
-					assignee_name = agentName;
+					if(tn.assignee_id != null){
+						
+						Long assigneeid = (tn.assignee_id);
+						  
+						String agentName = DomainUserUtil.getDomainUser((assigneeid)).name;
+						
+						assignee_name = agentName;
+					}
 					
-					jsonobject.append("assignee_name",assignee_name );
+					
+					
+				jsonobject.append("assignee_name",assignee_name );
 				
 				Contact contact = ContactUtil.getContact(ticket.contactID);
 				
