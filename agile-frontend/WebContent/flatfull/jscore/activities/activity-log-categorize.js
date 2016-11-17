@@ -89,7 +89,7 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 	{
 		e.preventDefault();
 
-		$(this).find("i").toggleClass('icon-plus').toggleClass('icon-minus');
+		$(this).find("i").toggleClass('icon-plus').toggleClass('fa fa-minus-circle');
 
 		var $campaign_history_details = $(this).siblings('div.campaign-history-details');
 		
@@ -118,7 +118,7 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 
 					if(is_equal)
 					{
-						$campaign_history_details.html("<p>No modifications made to this campaign nodes.</p>");
+						$campaign_history_details.html("<p class='m-b-none text-muted text-sm l-h-xs'>No modifications made to this campaign nodes.</p>");
 						$campaign_history_details.slideToggle("slow");
 						return;
 					}
