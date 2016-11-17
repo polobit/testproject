@@ -578,6 +578,8 @@ function updateDeal(ele, editFromMilestoneView)
 		if(data.length > 0){
 			$("#opportunityUpdateForm").find("#showtoggle_show").show();
 			$("#opportunityUpdateForm").find("#showproducts").show();
+			$("#opportunityUpdateForm").find('.no-products').hide();
+			$("#opportunityUpdateForm").find('.value_box').removeClass('col-sm-7').addClass('col-sm-5');
 			//$("#showtoggle_show").show();
 			//$("#showproducts").show();
 			populate_deal_products(dealForm,value,"#opportunityUpdateForm");

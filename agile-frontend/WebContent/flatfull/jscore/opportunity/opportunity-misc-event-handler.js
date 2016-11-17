@@ -192,8 +192,8 @@ $(function()
     	window.history.back();
     });
 
-	$('#opportunityUpdateForm, #newDealModal').off("click",".navigate-products");
-    $('#opportunityUpdateForm, #newDealModal').on("click",".navigate-products",function(e)
+	$('#opportunityUpdateModal, #newDealModal').off("click",".navigate-products");
+    $('#opportunityUpdateModal, #newDealModal').on("click",".navigate-products",function(e)
 	{
 				Backbone.history.navigate('products', { trigger : true });
 	});

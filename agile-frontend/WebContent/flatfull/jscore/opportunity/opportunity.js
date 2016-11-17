@@ -1071,6 +1071,7 @@ function populate_deal_products(el, value,form_id){
 						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
 							iTotal+=parseFloat(iQtyPriceTotal);		
 					}
+					var selected = iTotal;
 					var iDiscountAmt=0;
 					//if($("#apply_discount",me._form_id).is(':checked'))
 					//{
@@ -1101,7 +1102,12 @@ function populate_deal_products(el, value,form_id){
 					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
 						$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
 					else
-						$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+						{
+							if(selected>0)
+							$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+							else
+							$("input[name='expected_value']",$(me._form_id)).val(0);	
+						}
 					
 					ValidateDealDiscountAmt(me._form_id);
 				}
