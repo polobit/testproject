@@ -736,9 +736,6 @@ var SettingsRouter = Backbone.Router
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
-					$("#prefs-tabs-content").addClass("col-md-9");
-					var discript = $("#prefs-tabs-content").find(".col-md-3");
-					$("#prefs-tabs-content").after(discript);
 
 					// set up TinyMCE Editor
 					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
@@ -797,9 +794,6 @@ var SettingsRouter = Backbone.Router
 						} });
 
 					$('#prefs-tabs-content').html(view.render().el);
-					$("#prefs-tabs-content").addClass("col-md-9");
-					var discript = $("#prefs-tabs-content").find(".col-md-3");
-					$("#prefs-tabs-content").after(discript);
 
 					/** TinyMCE * */
 
