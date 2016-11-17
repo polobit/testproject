@@ -7,6 +7,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Entity;
@@ -44,9 +45,11 @@ public class InvitedUser {
 
 		this.domain = NamespaceManager.get();
 		this.name = email.split("@")[0];
+		DomainUser domainUser = null;
+		
 		// Get invited user id
 		if (invited_user_id != null) {
-			DomainUser domainUser = DomainUserUtil.getDomainUser(invited_user_id);
+			domainUser = DomainUserUtil.getDomainUser(invited_user_id);
 			if (domainUser != null)
 				domainUserName = domainUser.name;
 		}
@@ -62,8 +65,9 @@ public class InvitedUser {
 		// Send invitation Email
 		String tempDomain = this.domain;
 		this.domain = AliasDomainUtil.getCachedAliasDomainName(this.domain);
-		if (isNewOne)
-			SendMail.sendMail(email, SendMail.INVITED_USER_SUBJECT, SendMail.INVITED_USER, this);
+		if (isNewOne) {
+			SendMail.sendMail(email, SendMail.INVITED_USER_SUBJECT, SendMail.INVITED_USER, this, LanguageUtil.getUserLanguageFromDomainUser(domainUser));
+		}
 		this.domain = tempDomain;
 	}
 

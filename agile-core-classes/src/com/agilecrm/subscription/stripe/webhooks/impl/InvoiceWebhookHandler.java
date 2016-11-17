@@ -18,6 +18,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -148,9 +149,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 			updateAddOnStatus(addOntype, AddOnStatus.FAILED3);
 		//if(getEvent().getRequest() == null)
 			System.out.println("Sending addon_payment_failed to us");
-			SendMail.sendMail("mogulla@invox.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
-			SendMail.sendMail("narmada@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
-			SendMail.sendMail("venkat@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
+			String language = UserPrefs.DEFAULT_LANGUAGE;
+			SendMail.sendMail("mogulla@invox.com,narmada@agilecrm.com,venkat@agilecrm.com", SendMail.ADDON_PAYMENT_FAILED_SUBJECT, SendMail.ADDON_PAYMENT_FAILED, getMailDetails(), language);
 		return;
 	}
 	if (attemptCount == 0 || attemptCount == 1)

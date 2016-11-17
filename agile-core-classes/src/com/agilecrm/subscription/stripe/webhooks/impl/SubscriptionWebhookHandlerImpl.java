@@ -14,6 +14,7 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -116,7 +117,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	if(isAddonPlan()){
 		updateAddOnStatus(getAddonPlan(), AddOnStatus.DELETED);
 		if(getEvent().getRequest() == null)
-			SendMail.sendMail("mogulla@invox.com", "Addon Subscription Deleted", SendMail.ADDON_PAYMENT_FAILED, getMailDetails());
+			SendMail.sendMail("mogulla@invox.com", "Addon Subscription Deleted", SendMail.ADDON_PAYMENT_FAILED, getMailDetails(), UserPrefs.DEFAULT_LANGUAGE);
 		return;
 	}
 
