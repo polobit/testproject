@@ -116,12 +116,23 @@
   </queue>
   <queue>
     <name>periodic-triggers-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <rate>20/s</rate>
+    <bucket-size>40</bucket-size>
+    <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-    <task-retry-limit>1</task-retry-limit>
+    <task-retry-limit>5</task-retry-limit>
   </retry-parameters>
   <target>agile-normal-bulk</target>
+  </queue>
+  <queue>
+    <name>periodic-triggers-cron-queue</name>
+    <rate>2/s</rate>
+    <bucket-size>5</bucket-size>
+    <max-concurrent-requests>1</max-concurrent-requests>
+    <retry-parameters>
+    	<task-retry-limit>10</task-retry-limit>
+  	</retry-parameters>
+  <target>agile-campaigns-logs</target>
   </queue>
    <queue>
     <name>email-attachment-queue</name>
