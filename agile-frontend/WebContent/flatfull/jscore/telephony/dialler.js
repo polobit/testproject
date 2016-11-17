@@ -387,7 +387,7 @@ function dialFromKnowlarity(to, from, contact){
 	if (checkForActiveCall()){
 		alert("Already on call.");
 		return;
-	}
+	}	
 
 	knowlarityDailer(KnowlarityWidgetPrefs, to, contact);
 }
