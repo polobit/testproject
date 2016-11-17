@@ -30,4 +30,8 @@ $(function(){
 			dialFromOzonetel($(this).closest(".contact-make-call").attr("phone"), getContactName(contactDetailsObj),contactDetailsObj);
 		}
 	});
+	$('body').off('click', '.noty_ozonetel_cancel');
+	$('body').on('click', '.noty_ozonetel_cancel', function(e){
+		closeCallNoty(true);
+	});
 });
