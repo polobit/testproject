@@ -22,6 +22,7 @@ import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.email.MustacheUtil;
@@ -133,7 +134,7 @@ public class TicketsPdfServlet extends HttpServlet
 			// System.out.println("htmlText "+htmlText);
 			//
 
-			String ticketTemplate = MustacheUtil.templatize("ticket_pdf_download_html.html", json);
+			String ticketTemplate = MustacheUtil.templatize("ticket_pdf_download_html.html", json, UserPrefs.DEFAULT_LANGUAGE);
 			System.out.println("json " + json);
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition", "attachment; filename=TicketDetails.pdf");

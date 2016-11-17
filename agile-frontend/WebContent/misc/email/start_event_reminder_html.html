@@ -21,11 +21,11 @@
 					<table width="100%" cellpadding="0" cellspacing="0">
 					<tbody>
 					{{#events}}
-					<tr><td style="width:55px;padding-bottom:10px;font-weight:bold;color:#58666e;vertical-align:top">What</td><td style="padding-bottom:10px;vertical-align:top">:</td><td style="padding-bottom:10px;padding-left:5px;vertical-align:top">{{title}}</td></tr>
-					<tr><td style="padding-bottom:15px;width:55px;font-weight:bold;color:#58666e;vertical-align:top">When</td><td style="padding-bottom:15px;vertical-align:top">:</td><td style="padding-bottom:15px;padding-left:5px;vertical-align:top">{{date_with_full_format}}</td></tr>
+					<tr><td style="width:55px;padding-bottom:10px;font-weight:bold;color:#58666e;vertical-align:top">{{agile_lng_translate 'event-email' 'what'}}</td><td style="padding-bottom:10px;vertical-align:top">:</td><td style="padding-bottom:10px;padding-left:5px;vertical-align:top">{{title}}</td></tr>
+					<tr><td style="padding-bottom:15px;width:55px;font-weight:bold;color:#58666e;vertical-align:top">{{agile_lng_translate 'event-email' 'when'}}</td><td style="padding-bottom:15px;vertical-align:top">:</td><td style="padding-bottom:15px;padding-left:5px;vertical-align:top">{{date_with_full_format}}</td></tr>
 					{{#related}}
 						<tr>
-							<td style="width:55px;font-weight:bold;color:#58666e;vertical-align:top">Who</td>
+							<td style="width:55px;font-weight:bold;color:#58666e;vertical-align:top">{{agile_lng_translate 'event-email' 'who'}}</td>
 							<td style="vertical-align:top">:</td>
 							<td style="padding-left:5px;vertical-align:top">
 								{{#related_contacts}} 
@@ -69,7 +69,7 @@
 									<tr>
 										<td valign="middle" style="padding:5px 10px;text-align:center">
 											<a href="https://{{owner.domain}}.agilecrm.com/#calendar" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:14px;color:#fff!important;text-decoration:none" target="_blank">
-												<strong>Open Agile Calendar</strong>
+												<strong>{{agile_lng_translate 'event-email' 'open-agile-calendar'}}</strong>
 											</a>
 										</td>
 									</tr>

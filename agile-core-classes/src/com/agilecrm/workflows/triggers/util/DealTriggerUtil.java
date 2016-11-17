@@ -24,6 +24,7 @@ import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -134,7 +135,6 @@ public class DealTriggerUtil
 				 if(user.menu_scopes.contains(NavbarConstants.DEALS) && NotePref.deal_closed_email)
 					SendMail.sendMail(user.email," Deal Won Alert", SendMail.Deal_Won_status,map);
 			}*/
-
 			}
 			// execute trigger for deal milestone change.
 			executeTriggerForDealsBasedOnCondition(updatedOpportunity.relatedContacts(), oldOpportunity, updatedOpportunity,

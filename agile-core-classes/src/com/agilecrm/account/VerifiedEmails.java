@@ -13,6 +13,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -81,7 +82,10 @@ public class VerifiedEmails
 			e.printStackTrace();
 		}
     	
-    	SendMail.sendMail(email, SendMail.FROM_VERIFICATION_EMAIL_SUBJECT, SendMail.FROM_VERIFICATION_EMAIL, data);
+    	// Get user prefs language
+    	String language = LanguageUtil.getUserLanguageFromSession();
+    	
+    	SendMail.sendMail(email, SendMail.FROM_VERIFICATION_EMAIL_SUBJECT, SendMail.FROM_VERIFICATION_EMAIL, data, language);
 	}
 	
 	public void save()

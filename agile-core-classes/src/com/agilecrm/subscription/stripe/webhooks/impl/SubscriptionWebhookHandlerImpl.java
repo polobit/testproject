@@ -139,7 +139,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 		}
 
 		SendMail.sendMail(getUser().email, SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED,
-			planDetails);
+			planDetails, getUserLanguage());
 	    }
 	    else
 		// Send mail to domain user

@@ -7,6 +7,7 @@ import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 
 public class ChargeWebhookHandler extends StripeWebhookHandler
 {
@@ -26,9 +27,12 @@ public class ChargeWebhookHandler extends StripeWebhookHandler
 
 		if (user == null)
 			return;
-
+		
+		// Get user prefs language
+	    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+	    
 		// Send mail to domain user
-		SendMail.sendMail(user.email, SendMail.REFUND_SUBJECT, SendMail.REFUND, getcustomDataForMail());
+		SendMail.sendMail(user.email, SendMail.REFUND_SUBJECT, SendMail.REFUND, getcustomDataForMail(), language);
 	}
     }
 

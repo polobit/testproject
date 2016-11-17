@@ -21,6 +21,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.model.Card;
@@ -192,9 +193,11 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    // Send mail to all domain users
 	    for (DomainUser user : users)
 	    {
-
+	    // Get user prefs language
+		String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+		    
 		SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_SECOND_TIME_SUBJECT,
-			SendMail.FAILED_BILLINGS_SECOND_TIME, getMailDetails());
+			SendMail.FAILED_BILLINGS_SECOND_TIME, getMailDetails(), language);
 	    }
 	}
 

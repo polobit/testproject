@@ -8,7 +8,7 @@
          <tbody>
 	       <tr>
              <td valign="middle" height="32px" style="padding:0;color:#FFFFFF;font-weight:bold">
-            	You have been invited to Agile CRM
+            	{{agile_lng_translate 'new-user-email' 'you-have-invited'}}
              </td>
            </tr>
          </tbody>
@@ -17,17 +17,17 @@
    
    <div style="font-size:13px;background-color:#fff;padding:10px 7px 7px 7px">
       <br>
-     Dear {{name}},
+     {{agile_lng_translate 'welcome-email' 'dear'}} {{name}},
      <br>
      <br>
-     Your password to login {{password}}
+     {{agile_lng_translate 'new-user-email' 'pwd-to-login'}} {{password}}
      <br>
      <br>
-     You can login <a href='https://{{domain}}.agilecrm.com'>here</a>
+     {{agile_lng_translate 'new-user-email' 'you-can-login'}} <a href='https://{{domain}}.agilecrm.com'>{{agile_lng_translate 'widgets' 'here'}}</a>
      <br>
     <br>
 
-   <span style="color:#898989">Agile CRM - Built with love for small businesses.</span>
+   <span style="color:#898989">Agile CRM - {{agile_lng_translate 'verify-email' 'built-for-smbs'}}.</span>
    <div style="text-align:right">
    	<a href="https://www.agilecrm.com" target="_blank">
    		<img style="border:0;margin-top:10px" src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM">

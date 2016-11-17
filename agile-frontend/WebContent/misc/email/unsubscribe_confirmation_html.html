@@ -18,17 +18,17 @@
             </tr>
             <tr>
 				<td style="padding: 10px 25px 10px 25px;line-height:20px;font-size:14px;font-family:sans-serif;">
-				  {{#company}}<div style="padding:7px 0px;font-family:sans-serif;font-size:14px">You have been unsubscribed successfully from all communications from {{company}}.</div>{{/company}}
+				  {{#company}}<div style="padding:7px 0px;font-family:sans-serif;font-size:14px">{{agile_lng_translate 'unsubscribe-email' 'unsubscribed-from-company'}} {{agile_lng_translate 'unsubscribe-email' 'from'}} {{company}}.</div>{{/company}}
 						{{^campaign_name}}
 							{{^company}}
-								<div style="padding:7px 0px;font-family:sans-serif;font-size:14px">You have been unsubscribed successfully from all communications</div>
+								<div style="padding:7px 0px;font-family:sans-serif;font-size:14px">{{agile_lng_translate 'unsubscribe-email' 'unsubscribed-from-company'}}</div>
 									{{/company}}
 									{{/campaign_name}}
-				 {{#campaign_name}}<div style="padding:7px 0px;font-family:sans-serif;font-size:14px">You have been successfully removed from campaign - {{campaign_name}}</div>{{/campaign_name}}
+				 {{#campaign_name}}<div style="padding:7px 0px;font-family:sans-serif;font-size:14px">{{agile_lng_translate 'unsubscribe-email' 'removed-from-campaign'}} - {{campaign_name}}</div>{{/campaign_name}}
 				 {{^campaign_name}}
 								<div style="float: left;">
-									<span style="vertical-align: middle;font-family:sans-serif;font-size:14px">Unsubscribed by mistake?</span>
-									<a href="https://{{domain}}.agilecrm.com/resubscribe?e={{email}}&amp;cid={{campaign_id}}" style="display:inline-block; text-decoration:none; padding:4px 10px 4px;margin-bottom:0;font-size:13px;line-height:18px;color:white;text-align:center;vertical-align:middle;cursor:pointer;background-color:#99CC67;background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);border:1px solid #cccccc;border-bottom-color:#b3b3b3;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);">Resubscribe</a>
+									<span style="vertical-align: middle;font-family:sans-serif;font-size:14px">{{agile_lng_translate 'unsubscribe-email' 'unsubscribed-by-mistake'}}?</span>
+									<a href="https://{{domain}}.agilecrm.com/resubscribe?e={{email}}&amp;cid={{campaign_id}}" style="display:inline-block; text-decoration:none; padding:4px 10px 4px;margin-bottom:0;font-size:13px;line-height:18px;color:white;text-align:center;vertical-align:middle;cursor:pointer;background-color:#99CC67;background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);border:1px solid #cccccc;border-bottom-color:#b3b3b3;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);">{{agile_lng_translate 'unsubscribe-email' 'resubscribe'}}</a>
 								</div>
 				{{/campaign_name}}
 					
@@ -40,7 +40,7 @@
 						<tr>
 							<td>
 								<div style="font-weight: bold; font-size: 12px;padding-left:25px;padding-right:25px">
-									The Crew at Agile CRM 
+									{{agile_lng_translate 'welcome-email' 'crew-at-agile'}} 
 								</div>
 								<div style="padding:0px 25px 25px 25px">
 									<a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a>
