@@ -2025,8 +2025,21 @@ display: block!important;
 #settings-document-templates-model-list td > div.table-resp{ width: 100%;}
 #documents-top-view .documentsheading h3 {margin-bottom: 0px !important;}
 .change-deal-activity{display: none;}
-#dealactivities #timeline{float: none !important;}
+#dealactivities #timeline, #company-timeline #timeline{float: none !important;}
 #contacts-filter-wrapper .chained-table tr td .form-control,  #companies-filter-wrapper .chained-table tr td .form-control{ width: 100% !important;}
+.task-view-description-outbox .task-view-description{text-align: center; max-width: 100%;}
+#task_tab_detail .btn {
+    padding: 3px 7px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+#task_tab_detail ul li {
+    padding: 10px 10px 10px!important;
+    border-bottom: 1px solid #e7ecee;
+}
+#task_tab_detail .btn:not(#send-new-mail) i {
+    display: none;
+}
 }
 
 @media all and (min-width: 768px) {
@@ -2474,4 +2487,5 @@ transform: translateX(-50%);}
 #contacts-filter-wrapper .chained-table tr td:first-child,  #companies-filter-wrapper .chained-table tr td:first-child {
     padding-right: 0px;
 }
+.task-related-contact-tab tr td{padding: 5px 15px 9px !important;}
 /*end custom css code*/
