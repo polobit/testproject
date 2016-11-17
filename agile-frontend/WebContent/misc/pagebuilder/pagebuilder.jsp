@@ -332,13 +332,19 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
-                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block ">
                         <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
                     </select> 
-		    <p class="text-center or">
+                      <div  class="margin-bottom-20" id="refresh-formlist"  style="padding: 3px 0px 5px;" >
+                        <a class="right agile-tooltip refresh-formlist"  data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "refresh-form-tooltip")%>">
+                        <i class="fa fa-refresh" aria-hidden="true" style="color: #bdc3c7;"></i></a>
+                        <a class="agile-tooltip edit-form right"  target="_new" style="margin-right: 5px; display:none;" data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-form-tooltip")%>" >
+                        <i class="fa fa-edit" style="color: #bdc3c7;"></i></a>
+                    </div>
+		           <p class="text-center or">
                          <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
-                    <a href="<%=MAIN_URL%>#form-builder-templates" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20" id="addnew-formlink"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-form")%></a>
+                    <a target="_new"    href="<%=MAIN_URL%>#form-builder-templates" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20" id="addnew-formlink"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-form")%></a>
                 </div> 
                 
                 <!-- /tabs -->

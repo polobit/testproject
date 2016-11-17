@@ -1072,3 +1072,16 @@ li.element {
    max-width:none;
 }
 
+#refresh-formlist .agile-tooltip:hover{
+	cursor:pointer;
+}
+
+.agile-tooltip +  .tooltip > .tooltip-inner {
+    color: white;
+    background-color: #34495e;
+    white-space:nowrap;
+    max-width:none;
+      
+}
+.left{float:left;}
+.right{float:right;}
