@@ -323,11 +323,11 @@ function setupDealsTracksList(cel){
 				if(tracksArray.length<=1 && _billing_restriction && _billing_restriction.currentLimits && _billing_restriction.currentLimits.addTracks)
 				{
 					$('#deals-tracks',cel).find("ul > li:first").hide();
-					$('#deals-tracks',cel).find("ul").append("<li><a href='#milestones'>{{agile_lng_translate 'admin-settings-deals' 'manage-tracks'}}</a></li>");
+					$('#deals-tracks',cel).find("ul > li:first").before("<li><a href='#milestones'>{{agile_lng_translate 'admin-settings-deals' 'manage-tracks'}}</a></li>");
 				}
 				else if(_billing_restriction && _billing_restriction.currentLimits && _billing_restriction.currentLimits.addTracks)
 				{
-					$('#deals-tracks',cel).find("ul").append("<li class='divider'></li><li><a href='#milestones'>{{agile_lng_translate 'admin-settings-deals' 'manage-tracks'}}</a></li>");
+					$('#deals-tracks',cel).find("ul > li:first").before("<li><a href='#milestones'>{{agile_lng_translate 'admin-settings-deals' 'manage-tracks'}}</a></li><li class='divider'></li>");
 				}
 			}, 100);
 			startGettingDeals();
