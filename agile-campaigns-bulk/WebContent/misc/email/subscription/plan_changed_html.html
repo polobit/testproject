@@ -23,7 +23,7 @@
 				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">We would like to notify you of a change in your Agile CRM Subscription. You may have either changed the subscription yourself or this change has been done as per your request to our support team.</div>
 				<div style="font-weight:bold">Plan Details</div>
 				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">
-					   <div>Old Plan : {{#previous_attributes.plan.name}}{{previous_attributes.plan.name}}{{/previous_attributes.plan.name}} {{^previous_attributes.plan.name}} {{plan}} {{/previous_attributes.plan.name}} ({{previous_attributes.quantity}} users)</div>
+					   <div>Old Plan : {{#previous_attributes.plan.name}}{{previous_attributes.plan.name}}{{/previous_attributes.plan.name}} {{^previous_attributes.plan.name}} {{plan}} {{/previous_attributes.plan.name}} ({{#previous_attributes.quantity}}{{previous_attributes.quantity}}{{/previous_attributes.quantity}}{{^previous_attributes.quantity}}{{quantity}}{{/previous_attributes.quantity}} users)</div>
 					   <div>New Plan : {{plan}}  ({{quantity}} users)</div>
 				   </div>
 				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">

@@ -6038,7 +6038,7 @@ import-email.thx-for-being-valid-customer,Thanks for being a valued customer,Gra
 subscription-email.chargeback-notice-plan-info,Your Agile CRM account shows the users&#44; website on which Agile CRM was installed and the contacts&#44; deals&#44; calendar usage&#44; analytic reports and the recent operations carried out by your Agile CRM account users,Su cuenta ágil CRM muestra los usuarios del sitio web&#44; en el que se instaló ágil CRM y los contactos&#44; oportunidades&#44; de uso civil&#44; informes analíticos y las recientes operaciones llevadas a cabo por los usuarios de cuentas ágil CRM
 payment-fail-email.confirm-refund,Confirmation of refund,La confirmación de restitución
 verify-email.email,email,correo electrónico
-payment-fail-email.cc-on-file-last4,Credit card on file:(last four digits {{last4}}),tarjeta de crédito registrada: (últimos cuatro dígitos {{LAST4}})
+payment-fail-email.cc-on-file-last4,Credit card on file:(last four digits {{last4}}),tarjeta de crédito registrada: (últimos cuatro dígitos {{last4}})
 reports-email.completed-on,Completed on,Completado en
 payment-fail-email.refund-details,Refund Details,Detalles del reembolso
 reports-email.reports,reports,informes

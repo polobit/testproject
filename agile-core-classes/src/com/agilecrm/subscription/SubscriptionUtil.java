@@ -114,8 +114,10 @@ public class SubscriptionUtil
 	if (subscription != null)
 	{
 	    JSONObject billing = subscription.fetchBillingDataJSONObject();
-	    System.out.println(billing + " in subscription.java");
-	    return getCustomer(billing);
+	    if(billing != null){
+		    System.out.println(billing + " in subscription.java");
+		    return getCustomer(billing);
+	    }
 	}
 	return null;
 
