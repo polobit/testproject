@@ -1399,7 +1399,7 @@
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
 				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" 
-					style="display:none; line-height: 1px;"   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+					style="display:none; line-height: 1px;float:left;"   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
 					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
 				</a>
 				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
@@ -2308,7 +2308,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 
 
 
-{{#if_equals "SEND_EMAIL_BULK" custom1}}
+<!-- {{#if_equals "SEND_EMAIL_BULK" custom1}}
 
 {{#if_equals "1" custom3}}	
 {{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'menu' 'email'}}<br/>
@@ -2321,7 +2321,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <i class="icon-tag"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
 </small>
 {{/if_equals}}
-{{/if_equals}}
+{{/if_equals}} -->
 
 
 {{else}}
@@ -2341,6 +2341,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small>
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
 
 {{#if_equals "ASIGN_WORKFLOW" custom1}}
 {{#if_equals "1" custom3}}
@@ -2353,7 +2354,6 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>   
 <i class="icon-sitemap icon-white"></i> {{custom2}}. 
 </small></div>
-{{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
 
@@ -2396,6 +2396,23 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
 </small></div>
 {{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "SEND_EMAIL_BULK" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} <span style="text-transform: lowercase;">{{agile_lng_translate 'menu' 'email'}}</span><br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'plan-and-upgrade' 'emails'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}

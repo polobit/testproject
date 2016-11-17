@@ -25,7 +25,7 @@ function setup_deals_in_milestones(id){
 		      	{
 		      		$("#dealActions").css("top", (($(window).height() + window.scrollY) - $("#dealActions").height() - 70) + "px");
 		      	}
-		      	if($("#deals-tracks").is(":visible"))
+		      	if(trackListView && trackListView.collection && trackListView.collection.length > 1)
 		      	{
 		      		$(".move-deal-action").show();
 		      	}
@@ -55,7 +55,7 @@ function setup_deals_in_milestones(id){
 				IS_DEAL_DELETED = false;
 		      },
 		      stop : function(event, ui) {
-		      	if($("#deals-tracks").is(":visible"))
+		      	if(trackListView && trackListView.collection && trackListView.collection.length > 1)
 		      	{
 		      		$(".move-deal-action").show();
 		      	}
@@ -270,7 +270,7 @@ function setup_deals_in_milestones(id){
 				}
 				$(ui.draggable).remove();
 				$("li.ui-sortable-placeholder").remove();
-				if($("#deals-tracks").is(":visible"))
+				if(trackListView && trackListView.collection && trackListView.collection.length > 1)
 		      	{
 		      		$(".move-deal-action").show();
 		      	}

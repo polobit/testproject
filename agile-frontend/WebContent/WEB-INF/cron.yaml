@@ -34,12 +34,12 @@ cron:
   
 - description: Monthly triggers
   url: /backend/cron/triggers?period=MONTHLY
-  schedule: 1st monday of month 01:00
+  schedule: 1st monday of month 02:30
   target: agile-normal-bulk
   
 - description: Weekly triggers
   url: /backend/cron/triggers?period=WEEKLY
-  schedule: every monday 01:00
+  schedule: every monday 02:00
   target: agile-normal-bulk
 
 - description: Due Tasks Reminder

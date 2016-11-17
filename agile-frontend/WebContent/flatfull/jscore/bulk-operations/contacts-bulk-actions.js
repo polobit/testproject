@@ -779,7 +779,7 @@ function show_bulk_owner_change_page()
 			
 			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 			{
-				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+				var template = Handlebars.compile('<li class="inline-block tag btn btn-xs m-r-xs m-b-xs btn-primary text-xs" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
 			 	// Adds contact name to tags ul as li element
 			 	$('#addBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 			}	
@@ -825,13 +825,13 @@ function show_bulk_owner_change_page()
 							}, "{{agile_lng_translate 'contacts' 'add-tag-scheduled'}}");
 				}, function(error){
 					enable_save_button(saveButton);
+				return;
 				});
 			}
 			else 
 			{
 				$('#addBulkTags').focus();
 				$('.error-tags').show().delay(3000).hide(1);
-				return;
 			}
 		});
 	}

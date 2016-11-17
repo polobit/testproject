@@ -42,7 +42,7 @@ if (!StringUtils.isEmpty(password)) {
 	String domain = domainUser.domain;
 	domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
 	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-			SendMail.FORGOT_PASSWORD, domainUser);
+			SendMail.FORGOT_PASSWORD, domainUser, LanguageUtil.getUserLanguageFromDomainUser(domainUser));
 	domainUser.domain = domain;
 	success = LanguageUtil.getLocaleJSONValue(localeJSON, "we-sent-email");
 }

@@ -27,6 +27,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
@@ -150,9 +151,11 @@ public class StripeWebhookServlet extends HttpServlet
 
 				// Set Extra fields to attributes to be used in the template
 				customizeEventAttributes(event, user);
-
+				
+				// Get user prefs language
+			    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
 				SendMail.sendMail(user.email, SendMail.FIRST_PAYMENT_RECEIVED_SUBJECT, SendMail.FIRST_PAYMENT_RECEIVED,
-						getcustomDataForMail(event));
+						getcustomDataForMail(event), language);
 
 				updateContactInOurDomain(contact, user.email, subscription, null);
 			}
@@ -190,10 +193,13 @@ public class StripeWebhookServlet extends HttpServlet
 
 				// Delete account
 				SubscriptionUtil.getSubscription().delete();
-
+				
+				// Get user prefs language
+			    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+			    
 				// Send mail to domain user
 				SendMail.sendMail(user.email, SendMail.SUBSCRIPTION_DELETED_SUBJECT, SendMail.SUBSCRIPTION_DELETED,
-						event);
+						event, language);
 
 			}
 
@@ -214,10 +220,13 @@ public class StripeWebhookServlet extends HttpServlet
 					return;
 
 				event = customizeEventAttributes(event, user);
-
+				
+				// Get user prefs language
+			    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+			    
 				// Send mail to domain user
 				SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT,
-						SendMail.FAILED_BILLINGS_FINAL_TIME, getcustomDataForMail(event));
+						SendMail.FAILED_BILLINGS_FINAL_TIME, getcustomDataForMail(event), language);
 
 				Subscription subscription = SubscriptionUtil.getSubscription();
 				subscription.delete();
@@ -234,12 +243,14 @@ public class StripeWebhookServlet extends HttpServlet
 			else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_CHARGE_REFUNDED))
 			{
 				DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
-
 				if (user == null)
 					return;
-
+				
+				// Get user prefs language
+			    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+			    
 				// Send mail to domain user
-				SendMail.sendMail(user.email, SendMail.REFUND_SUBJECT, SendMail.REFUND, getcustomDataForMail(event));
+				SendMail.sendMail(user.email, SendMail.REFUND_SUBJECT, SendMail.REFUND, getcustomDataForMail(event), language);
 			}
 
 			/**
@@ -262,10 +273,13 @@ public class StripeWebhookServlet extends HttpServlet
 					return;
 
 				customizeEventAttributes(event, user);
-
+				
+				// Get user prefs language
+			    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+			    
 				// Send mail to domain user
 				SendMail.sendMail(user.email, SendMail.PLAN_CHANGED_SUBJECT, SendMail.PLAN_CHANGED,
-						getcustomDataForMail(event));
+						getcustomDataForMail(event), language);
 
 				updateContactInOurDomain(contact, user.email, null, getPlanFromSubscriptionEvent(event));
 			}
@@ -357,9 +371,12 @@ public class StripeWebhookServlet extends HttpServlet
 
 			// Call customize attributes based on namespace and user
 			event = customizeEventAttributes(event, user);
+			
+			// Get user prefs language
+		    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
 
 			SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_FIRST_TIME_SUBJECT,
-					SendMail.FAILED_BILLINGS_FIRST_TIME, getcustomDataForMail(event));
+					SendMail.FAILED_BILLINGS_FIRST_TIME, getcustomDataForMail(event), language);
 
 		}
 
@@ -382,9 +399,12 @@ public class StripeWebhookServlet extends HttpServlet
 			for (DomainUser user : users)
 			{
 				event = customizeEventAttributes(event, user);
-
+				
+				// Get user prefs language
+			    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+			    
 				SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_SECOND_TIME_SUBJECT,
-						SendMail.FAILED_BILLINGS_SECOND_TIME, getcustomDataForMail(event));
+						SendMail.FAILED_BILLINGS_SECOND_TIME, getcustomDataForMail(event), language);
 			}
 		}
 

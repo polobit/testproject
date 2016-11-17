@@ -2011,7 +2011,7 @@ display: block!important;
 .ticket-subj-block{ width: 100% !important;}
  .ticket-name, .ticket-subject{ max-width: 20em;}
  .plan-upgrade-center{ text-align: center; float: none !important;}
- .add-btn-mobile{ float: none !important; text-align: center;}
+ .add-btn-mobile, .add-campaign-btn{ float: none !important; text-align: center;}
  .categori-btn-center{ display: table; margin: auto;}
  .service-table-mobile td > div.table-resp{width: 100%}
  .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
@@ -2114,6 +2114,30 @@ display: block!important;
   margin-left: 63px !important;
  }
 .show-shortcuts-style .i-checks i{margin-right: 7px;}
+.add-campaign-btn .btn-group{ float: none !important;}
+.workflows-right-body h4, .triggers-right-body h4, .webrules-right-body h4{ margin-bottom: 5px; font-size: 14px;}
+.workflows-right-body p, .triggers-right-body p{ margin-bottom: 5px; font-size: 12px;}
+.webrules-right-body p{font-size: 12px;}
+#workflows-model-list td > div.table-resp, #triggers-model-list td > div.table-resp{width: 100%}
+form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
+.campaign-addform #workflow-name{ width: 100%;}
+.campaign-addform #workflow-designer-help{
+  float: none; 
+  margin-top: 10px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.campaign-addform #disable-switch {float: left; margin-right: 15px;}
+.campaign-addform .save-campaign-btns{float: left;}
+.save-campaign-btns #campaign_access_level{margin-left: 0px;}
+.web-rule-contact-condition-table tbody tr td .form-control{padding: 6px 5px;}
+.activity-time-ago{float: left !important; padding-top:0px; }
+.need-help-video{display: table; margin: 0px auto;}
+.trigger-save-btns,.web-rules-actions{text-align: center;}
+.campaign-sub-tabs li a{padding: 10px 15px;}
+.triggers-sub-tabs li a{padding: 5px 6px;}
+.webrules-sub-tabs li a{padding: 5px 8px;}
+#workflow-save-popup .modal-dialog{width: auto !important;}
 }
 
 @media all and (min-width: 768px) {
@@ -2563,6 +2587,13 @@ transform: translateX(-50%);}
     border-top: 1px solid #eaeff0 !important;
 }
 .knowledgebase-name{width: 93% !important; float: left;}
+#lhs_filters_segmentation .panel-body{padding: 8px 15px !important;}
+.activities_second_line .activity-time-ago i
+{
+padding-right:0px !important;
+}
+.activities_second_line i{padding-right:2px}
+.campaign-history-details ul{padding: 0px; margin-bottom:0px;}
+.webrules-tabview .tab-content{ border: 1px solid #dee5e7 !important; border-top: 0px !important;}
 .agile-row tr:first-child td{border-top: 0px;}
-
 /*end custom css code*/

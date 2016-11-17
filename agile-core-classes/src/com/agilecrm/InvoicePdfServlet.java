@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.itextpdf.text.Document;
@@ -67,7 +68,7 @@ public class InvoicePdfServlet extends HttpServlet {
 			System.out.println(invoice);
 			JSONObject invoiceJSON = getInvoiceJSON(request, invoice);
 			System.out.println("Invoice JSON::: "+invoiceJSON);
-			String invoiceTemplate = MustacheUtil.templatize("invoice_pdf_html.html", invoiceJSON);
+			String invoiceTemplate = MustacheUtil.templatize("invoice_pdf_html.html", invoiceJSON, UserPrefs.DEFAULT_LANGUAGE);
 			response.setContentType("application/pdf");
 			SimpleDateFormat invoiceMonthFormat = new SimpleDateFormat("MMM");
 			response.setHeader("Content-Disposition","attachment; filename="+invoiceMonthFormat.format(new Date(invoice.getDate()*1000))+"-Invoice.pdf");

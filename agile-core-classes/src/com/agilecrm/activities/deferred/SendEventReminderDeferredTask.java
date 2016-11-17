@@ -27,6 +27,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -268,9 +269,10 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    HashMap<String, Object> map = new HashMap<String, Object>();
 		    map.put("events", eventListMap);
 
+		    String language = LanguageUtil.getUserLanguageFromEmail(domainuser.email);
 		    // Sends mail to the domain user.
 		    SendMail.sendMail(domainuser.email, "Event Reminder: " + event.title + " - " + event.date,
-			    SendMail.START_EVENT_REMINDER, map);
+			    SendMail.START_EVENT_REMINDER, map, language);
 		}
 	    }
 	    

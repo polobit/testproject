@@ -21,8 +21,10 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.exception.APIConnectionException;
@@ -50,6 +52,7 @@ public abstract class StripeWebhookHandler
     Contact contact;
     DomainUser user;
     AccountPrefs prefs;
+    String userPrefsLanguage = null;
 
     public abstract void process();
 
@@ -60,6 +63,19 @@ public abstract class StripeWebhookHandler
 	return event;
     }
 
+    protected String getUserLanguage()
+    {
+    if(userPrefsLanguage != null)
+    	return userPrefsLanguage;
+    
+	if (user != null) {
+		userPrefsLanguage = LanguageUtil.getUserLanguageFromDomainUser(user);
+		return userPrefsLanguage;
+	}
+	
+	return UserPrefs.DEFAULT_LANGUAGE;
+    }
+    
     protected DomainUser getUser()
     {
 	if (user != null)
@@ -234,7 +250,7 @@ public abstract class StripeWebhookHandler
     protected void sendMail(String emailSubject, String template)
     {
 	// Send mail to domain user
-	SendMail.sendMail(user.email, emailSubject, template, getcustomDataForMail());
+	SendMail.sendMail(user.email, emailSubject, template, getcustomDataForMail(), getUserLanguage());
     }
 
     protected void sendMail1(String emailSubject, String template)
@@ -243,7 +259,7 @@ public abstract class StripeWebhookHandler
     Map<String, Object> data = getMailDetails();
     System.out.println("Sending mail to domain owner with data:: "+data);
     if(data != null)
-    	SendMail.sendMail(user.email, emailSubject, template, data);
+    	SendMail.sendMail(user.email, emailSubject, template, data, getUserLanguage());
     }
 
     protected abstract Map<String, Object> getMailDetails();

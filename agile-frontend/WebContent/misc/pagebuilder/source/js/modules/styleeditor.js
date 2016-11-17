@@ -34,6 +34,7 @@
         ulPageList: document.getElementById('pageList'),
         responsiveToggle: document.getElementById('responsiveToggle'),
         theScreen: document.getElementById('screen'),
+        prevFocus:null,
 
         init: function() {
 
@@ -171,8 +172,23 @@
                          
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
-                if(el.style.cursor === "pointer")                   
+               if(el.dataset.selector==='.bg.bg1, .bg.bg2, .header10, .header11, .search-box1' && el.getElementsByClassName("editContent").length!==0){
+                    $.each(el.getElementsByClassName("editContent"),function( i ){
+                        if(el.getElementsByClassName("editContent")[i].style.cursor==="pointer"){
+                           el.style.cursor="" ;
+                           el.style.outline="";
+                        }
+                        else {
+                           el.style.cursor="pointer" ;
+                           el.style.outline="rgba(233, 94, 94, 0.498039) solid 2px";
+                        }
+                    });
+                }
+                if(el.style.cursor === "pointer") {                  
                    styleeditor.styleClick(this);
+                    if($(el).attr('data-selector').indexOf(".editContent")!==-1)
+                        styleeditor.prevFocus = el;
+                }
             };
 
             var newElement = new canvasElement(element);
@@ -800,6 +816,18 @@
             var theHref;
 
             $('a#link_Link').parent().show();
+            $("#tab1").removeClass("active");
+            $("a#default-tab1").parent().removeClass("active");
+
+            if($(el).prop('tagName') === 'IMG'){
+                $("#image_Tab").addClass("active");
+                $("a#img_Link").parent().addClass("active");
+
+            }else {
+                //link tab should active                
+                $("#link_Tab").addClass("active");
+                $("a#link_Link").parent().addClass("active");
+            }
 
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
@@ -835,6 +863,13 @@
         editImage: function(el) {
 
             $('a#img_Link').parent().show();
+
+            if($(el).prop('tagName')=== "IMG" && $(el).parent().prop('tagName') !== 'A' && $(el).attr('data-type') !== 'video'){
+                $("#tab1").removeClass("active");
+                $("a#default-tab1").parent().removeClass("active");
+                $("#image_Tab").addClass("active");
+                $("a#img_Link").parent().addClass("active");
+            }      
 
             //set the current SRC
             $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
@@ -1206,6 +1241,8 @@
                 styleeditor.toggleSidePanel('close');
 
             }
+            if(styleeditor.prevFocus)
+                $(styleeditor.prevFocus).focus();
 
         },
 

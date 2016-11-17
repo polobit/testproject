@@ -15,5 +15,6 @@
 	require('./modules/preview.js');
 	require('./modules/revisions.js');
 	require('./modules/templates.js');
+	require('./modules/pagebuilderEventlistner.js');
 
 }());

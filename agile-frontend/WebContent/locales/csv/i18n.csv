@@ -101,7 +101,7 @@ campaigns.no-perm-send-emails,You may not have the permission to send emails to 
 bulk-actions.no-pem-to-update-contacts,You may not have permission to update some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.,Puede que no tenga permiso para actualizar algunos de los contactos seleccionados. De proceder con esta operación se sumará sólo a sus contactos a la campaña.
 apikeys.regenerate-confirm,Resetting the API Key will break all existing integrations you may have setup using the current key. Are you sure you want to reset the API key?,Restauración de la clave de la API se romperá todas las integraciones existentes que pueda tener la configuración mediante la clave actual. ¿Está seguro de que desea restablecer la clave de API?
 workflows.workflow-example,e.g. If a user registers on your website&#44 you can automate the workflow to send a welcome email. The user registering on site is the trigger.,por ejemplo&#44; si un usuario se registra en su sitio web&#44; se puede automatizar el flujo de trabajo para enviar un mensaje de bienvenida. El usuario que se registra en el sitio es el gatillo.
-admin-settings-tasks.task-categories-desc,Tasks allow you to segregate and manage tasks better. You can customize categories for Tasks here. Add or remove tasks and order them as needed.,Las tareas te permiten segregar y gestionar mejor tus tareas. Puedes personalizar las categorías de tareas aquí. Añade o elimina tareas y ordénalas según sea necesario.
+admin-settings-tasks.task-categories-desc,Tasks allow you to segregate and manage tasks better. You can customize categories for Tasks here. Add or remove categories and order them as needed.,Las tareas te permiten segregar y gestionar mejor tus tareas. Puedes personalizar las categorías de tareas aquí. Añade o elimina tareas y ordénalas según sea necesario.
 campaigns.no-campaigns-desc,Campaign or workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.,Una campaña o flujo de trabajo es un proceso inteligente de ventas y de automatización de marketing para enviar información relevante a tus contactos en el momento adecuado
 portlets.workflows-pad-content-desc,Campaign or workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.,Una campaña o flujo de trabajo es un proceso de ventas y marketing de automatización inteligente para enviar a sus contactos la información pertinente en el momento adecuado.
 report-view.get-a-periodic-email-digest-of-various-activities-by-users-in-Agile,Get a periodic email digest of various activities by users in Agile. This includes activities on Deals&#44; Tasks&#44; Calendar Events and Emails sent.,Obtener una digestión periódica de emails de varias actividades por usuario en Agile. Esto incluye actividades en Ofertas&#44; Tareas&#44; Eventos de calendario y correos enviados
@@ -849,7 +849,7 @@ icalfeed.subscribe-to-your-events-on-mobile-device,Subscribe to your events on y
 report-view.view-first-response-time-over-the-date-ranges,View first response time over the date ranges.,Ver el tiempo de la primera respuesta a lo largo del tiempo con rangos diversos de tiempo
 portlets.few-steps-kick-start,Here are few steps to kick start your new CRM.,Aquí están algunos pasos para poner en marcha su nuevo CRM.
 widgets.skype-desc-3,3) Open Skype executable and follow the steps.,3) Abre el archivo ejecutable de Skype y sigue los pasos descritos.
-prefs-online-calendar.add-multiple-meeting-names-comma-separated,Add multiple meeting names comma (&#44;) separated,Añadir varios nombres de reuniones coma (&#44;) separados
+prefs-online-calendar.add-multiple-meeting-names-comma-separated,Enter comma separated meeting names,Añadir varios nombres de reuniones coma (&#44;) separados
 admin-settings-api-analytics.tracking-code-with-web-rules-whitelist-enabled,Tracking code with Web Rules Whitelist enabled,código de seguimiento con Whitelist para reglas web habilitada
 other.mail-server-setings-verified-succefully,Mail Server settings is verified successfully.,La configuración del servidor de correo se verifica con éxito.
 report-view.generate-bar-graph-description,Generate a bar graph with calls based on time.,Generar un gráfico de barras de llamadas basado en tiempo.
@@ -1113,7 +1113,7 @@ widgets.ClickDesk-widget-saved-successfully,ClickDesk widget saved successfully,
 campaigns.advanced-triggers-can-be-customised,Advanced triggers can be customized,disparadores avanzados se pueden personalizar
 portlets.contacts-filter-results-title,No contacts matching this criteria.,No hay contactos que coincidan con estos criterios.
 billing.remaining-email,emails remaining as per your quota.,mails pendientes como por su cuota.
-prefs-online-calendar.enter-comma-separated-meeting-types,Enter comma separated meeting types,Introduzca tipos de reuniones separados por comas
+prefs-online-calendar.enter-comma-separated-meeting-types,Enter comma separated locations,Introduzca tipos de reuniones separados por comas
 admin-settings-integrations.please-provide-your-account-details,Please provide your account details,Favor de proporcionar los detalles de su cuenta
 tickets.remove-labels-from-selected-tickets,Remove labels from selected tickets,Remover etiquetas de los tickets seleccionados
 contacts-view.no-contacts-matching-this-criteria,No contacts matching this criteria.,No hay contactos que coincidan con estos criterios.
@@ -1318,7 +1318,7 @@ other.choose-plan-billing-cycle,Choose Plan And Billing Cycle,Elija Ciclo plan y
 portlets.tags-desc,Enter tags separated by comma,Introducir etiquetas separadas por comas
 contacts-view.all-other-fields-are-optional,All other fields are optional,Todos los otros campos son opcionales
 countries.VA,Holy See (Vatican City State),Estado de la Ciudad del Vaticano
-contacts-view.add-contacts-bulk-to-campaign,Add contacts bulk to campaign,Añadir contactos masivos a la campaña
+contacts-view.add-contacts-bulk-to-campaign,Add selected contacts to campaign,Añadir contactos masivos a la campaña
 notifications.disable.desktop,Disable Desktop Notifications,Desactivar las notificaciones de escritorio
 portlets.configure-dashlet-tags,the dashlet and add the Tags.,dashlet y añadir las etiquetas.
 contacts-view.this-contact-has-been-updated,This contact has been updated,Este contacto se ha actualizado
@@ -1357,7 +1357,7 @@ widgets.rule-delete-message,Are you sure to delete a rule,¿Estás seguro de que
 prefs-online-calendar.online-appointment-scheduling,Online Appointment Scheduling,Programación de citas en línea
 portlets.contact-activities-page-views-pad-content-title,No web activity recorded yet.,No se ha registrado actividad en la web.
 contacts-view.removed-contacts-from-event,Removed Contact(s) from Event,Contacto(s) removido(s) del evento
-contacts-view.change-owner-to-contacts-bulk,Change owner to contacts bulk,Cambiar propietario a contactos masivamente
+contacts-view.change-owner-to-contacts-bulk,Change owner for selected contacts,Cambiar propietario a contactos masivamente
 others.pwd-change-success,Password changed successfully,Contraseña cambiada con éxito
 validation-msgs.domain-name-only,Please Enter Domain Name only,Por favor&#44; introduzca nombres de dominio sólo se
 deal-view.no-activity-on-deal,No activity on this deal yet.,No hay actividad en este acuerdo todavía.
@@ -2312,7 +2312,7 @@ portlets.my-pending-deals,My Pending Deals,Mis acuerdos pendientes
 campaigns.unsubscribe-name,Unsubscribe Name,Dar de baja nombre
 plan-and-upgrade.yearly-20-percent-off,(20% off),(20% de descuento)
 portlets.all-deals-funnel,All Deals Funnel,Embudo de todas las ofertas
-contacts-view.does-not-contain,doesn\’t contain,no contiene
+contacts-view.does-not-contain,doesn’t contain,no contiene
 portlets.our-expert-talk,Our expert talk ,Nuestra charla experto
 Contacts-view.outgoing-call-to,Outgoing call to,llamada saliente a
 referrals.referral-program,Referral Program,Programa de referencias
@@ -3877,7 +3877,7 @@ contact-details.campaigns,Campaigns,campañas
 portlets.send-rate,Send Rate,Enviar Tasa
 plan-and-upgrade.plan-with,plan with,plan con
 contact-edit.add-email,Add Email,Añadir Correo
-others.add-new,&#43 Add new,,
+others.add-new,&#43 Add new,
 widgets.ClickDesk,ClickDesk,ClickDesk
 contacts-view.condition,Condition,Condición
 modals.edit-note,Edit Note,Editar nota
@@ -5249,12 +5249,12 @@ Deal-detail.contacts-removed,Contacts Removed.,
 Deal-detail.contacts-added,Contacts Added.,
 Deal-detail.note-added,Deal Note Added.,
 campaigns.call-status,Call Status,
-campaigns.add-status,Add status,
+campaigns.add-status,Add Status,
 campaigns.new-status,New Status,
 campaigns.delete-status,Delete Status,
 campaigns.confirm-delete-status,Are you sure you want to delete the Status,
 campaigns.help,Help,
-campaigns.telephony-help-text,Here you can add or remove call status and order them as needed. The status will help you to manage call logs better.,
+campaigns.telephony-help-text,Call status allows you to segregate and manage calls better. You can customize status for calls here. Add or remove call status and order them as needed.,
 campaigns.telephony-status-invalid-text,Status should not start with numeric value and should not contain quotes.,
 contact-details.emails,Email,
 widgets.Klout-update-twitter-profile,Please update the twitter profile to get the Klout score.,
@@ -5519,7 +5519,7 @@ landingpage-builder.page-meta-desc-sm,Page meta description,La página de descri
 landingpage-builder.page-meta-keywords,Page Meta Keywords,Página Meta Keywords
 landingpage-builder.page-meta-keywords-sm,Page meta keywords,Palabras clave de la página meta
 landingpage-builder.page-header,Header Includes,Cabecera incluye
-landingpage-builder.page-header-info,Additional code you'd like to include in the,Código adicional que le gustaría incluir en el
+landingpage-builder.page-header-inf,Additional code specifically to this page,
 landingpage-builder.head-section,section,sección
 landingpage-builder.page-css,Page CSS,La página de CSS
 landingpage-builder.page-css-applied,CSS applied specifically to this page,CSS aplicado específicamente a esta página
@@ -5562,11 +5562,11 @@ deal-view.detailed-notes,Detailed Notes,
 tickets.feedback-subject,Subject,
 tickets.feedback-created-time,Note Sent,
 tickets.feedback-ticket-details,Ticket Details,
-tickets.unacceptable,Unacceptable,
-tickets.meets_expectations,Meets Expectations,
-tickets.acceptable,Acceptable,
-tickets.can_improve,Can Improve,
-tickets.exceptional,Exceptional,
+tickets.unacceptable,Awful,
+tickets.meets_expectations,Good,
+tickets.acceptable,OK,
+tickets.can_improve,Bad,
+tickets.exceptional,Awesome,
 tickets.feedback-view-note,View Note,
 tickets.feedback-contact,Contact,
 tickets.feedback-feedback,Feedback,
@@ -5576,6 +5576,8 @@ tickets.feedback-nocomment,No comment available.,
 tickets.feedback-ticket,Ticket,
 tickets.feedback-all,All,
 tickets.feedback-allgroups,All Groups,
+tickets.feedback-assignee,Assignee,
+tickets.feedback-time,Created Time,
 calendar.double-quotes-not-allowed,Double quotes are not allowed in the message,
 sync.sync-all-continue,Syncing of all contacts of other users will be initiated and this is expected to take some time. Do you want to continue?,
 contacts-view.edited-call-log-to, Edited call log to,
@@ -5835,3 +5837,11 @@ calls.duration-secs-new,Call Duration (Min),
 calls.avg-duration-secs-new,Average Call Duration (Min),
 contacts-view.manage-filters,Manage Filter,
 portlets.+add-new,+ Add new,
+landingpage-builder.page-script-applied,Script applied specifically to this page (JavaScript),
+landingpage-builder.page-js,Page JS,La página de JS
+admin-settings-users.updated-time,Updated Time,
+admin-settings-users.status,Status,
+admin-settings-deals.manage-tracks,Manage Tracks,
+landingpage-builder.recorded-video,Recorded Video,,
+landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39;Email Builder&#39;,,
+landingpage-builder.form-tooltip,Select/Add agile form in landing page,,

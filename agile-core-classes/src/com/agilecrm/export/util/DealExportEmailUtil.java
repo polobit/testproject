@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 
 public class DealExportEmailUtil
@@ -29,6 +30,9 @@ public class DealExportEmailUtil
 	}
 
 	System.out.println("Domain User email is " + currentUser);
+	
+	// Get user prefs language
+    String language = LanguageUtil.getUserLanguageFromDomainUser(currentUser);
 
 	// Mandrill attachment should contain mime-type, file-name and
 	// file-content.
@@ -44,8 +48,8 @@ public class DealExportEmailUtil
 
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", total);
-
+	
 	SendMail.sendMail(currentUser.email, SendMail.EXPORT_DEALS_CSV_SUBJECT, SendMail.EXPORT_DEALS_CSV, map,
-		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language, strArr);
     }
 }

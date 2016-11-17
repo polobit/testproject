@@ -87,7 +87,7 @@ public class CategoriesUtil
      */
     public Category updateCategory(Category category)
     {
-	if (!validate(category.getLabel()) || category.getId() == null)
+	if ((!validate(category.getLabel()) && !category.getEntity_type().equals(Category.EntityType.TELEPHONY_STATUS))  || category.getId() == null)
 	    return null;
 	Category oldCat = getCategory(category.getId());
 	if (oldCat == null)

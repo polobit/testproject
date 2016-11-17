@@ -20,49 +20,48 @@
 						<tr>
 							<td
 								style="padding-right: 20px; padding-left: 20px; line-height: 20px; font-size: 14px; font-family: Lucida Grande, verdana">
-								<b>Total Contacts found: {{HashMap.TOTAL}} </b><br /> 
-								<b>Successfully Saved: {{HashMap.SAVED_CONTACTS}}</b> <br />
+								<b>{{agile_lng_translate 'import-email' 'total-contacts-found'}}: {{HashMap.TOTAL}} </b><br /> 
+								<b>{{agile_lng_translate 'import-email' 'successfully-saved'}}: {{HashMap.SAVED_CONTACTS}}</b> <br />
 								{{#HashMap.NEW_CONTACTS}}
-									&nbsp;- New Contacts: {{HashMap.NEW_CONTACTS}}
+									&nbsp;- {{agile_lng_translate 'portlets' 'new-contacts'}}: {{HashMap.NEW_CONTACTS}}
 									{{/HashMap.NEW_CONTACTS}}<br />
 									{{#HashMap.MERGED_CONTACTS}}
-									&nbsp;- Merged Contacts: {{HashMap.MERGED_CONTACTS}}
+									&nbsp;- {{agile_lng_translate 'import-email' 'merged-contacts'}}: {{HashMap.MERGED_CONTACTS}}
 									{{/HashMap.MERGED_CONTACTS}}<br />
-								 <b>Failed Contacts </b>
+								 <b>{{agile_lng_translate 'import-email' 'failed-contacts'}} </b>
 								 {{#HashMap.EMAIL_REQUIRED}}
-									&nbsp;- Email missing: {{HashMap.EMAIL_REQUIRED}}<br />
+									&nbsp;- {{agile_lng_translate 'import-email' 'emails-missing'}}: {{HashMap.EMAIL_REQUIRED}}<br />
 									{{/HashMap.EMAIL_REQUIRED}}
 								 {{#HashMap.LIMIT_REACHED}}
-									&nbsp;- Limit exceeded: {{HashMap.LIMIT_REACHED}}<br />
+									&nbsp;- {{agile_lng_translate 'import-email' 'limit-exceeded'}}: {{HashMap.LIMIT_REACHED}}<br />
 									{{/HashMap.LIMIT_REACHED}}
 									{{#HashMap.ACCESS_DENIED}}
-									&nbsp;- Access denied to create/update: {{HashMap.ACCESS_DENIED}}<br />
+									&nbsp;- {{agile_lng_translate 'import-email' 'acess-denied-to-create-update'}}: {{HashMap.ACCESS_DENIED}}<br />
 									{{/HashMap.ACCESS_DENIED}}
 								
 								{{#HashMap.TOTAL_ACCOUNTS}}
-								  <b>Accounts</b>
-								  &nbsp;- Total Accounts found: {{HashMap.TOTAL_ACCOUNTS}} <br />
-								  &nbsp;- Successfully Saved: {{HashMap.SAVED_ACCOUNTS}}</b> <br />
-								  &nbsp;- Merged Accounts: {{HashMap.MERGED_ACCOUNTS}} <br />
+								  <b>{{agile_lng_translate 'admin-settings-integrations' 'accounts'}}</b>
+								  &nbsp;- {{agile_lng_translate 'import-email' 'total-accounts-found'}}: {{HashMap.TOTAL_ACCOUNTS}} <br />
+								  &nbsp;- {{agile_lng_translate 'import-email' 'successfully-saved'}}: {{HashMap.SAVED_ACCOUNTS}}</b> <br />
+								  &nbsp;- {{agile_lng_translate 'import-email' 'merged-accounts'}}: {{HashMap.MERGED_ACCOUNTS}} <br />
 								{{/HashMap.TOTAL_ACCOUNTS}}
 								
 								{{#HashMap.TOTAL_TASKS}}
-								  <b>Tasks</b>
-								  &nbsp;- Total Tasks found: {{HashMap.TOTAL_TASKS}} <br />
-								  &nbsp;- Successfully Saved: {{HashMap.SAVED_TASKS}}</b> <br />
+								  <b>{{agile_lng_translate 'contact-details' 'tasks'}}</b>
+								  &nbsp;- {{agile_lng_translate 'import-email' 'total-tasks-found'}}: {{HashMap.TOTAL_TASKS}} <br />
+								  &nbsp;- {{agile_lng_translate 'import-email' 'successfully-saved'}}: {{HashMap.SAVED_TASKS}}</b> <br />
 								{{/HashMap.TOTAL_TASKS}}
 									
 							</td>
 						</tr>
 					</tbody>
 				</table>
-				<p style="font-weight: bold;">Have questions or need help?</p>
-				<p>Our customer service and support team is here to help you any
-					way we can. Please email us at care@agilecrm.com</p>
-				<p>Thanks for being a valued customer.</p>
+				<p style="font-weight: bold;">{{agile_lng_translate 'verify-email' 'having-questions'}}</p>
+				<p>{{agile_lng_translate 'import-email' 'customer-service-help-text'}} care@agilecrm.com</p>
+				<p>{{agile_lng_translate 'import-email' 'thx-for-being-valid-customer'}}.</p>
 				<div style="height: 80px">
 				<div style="float:left">
-				<br /> Best Wishes, <br /> AgileCRM Support. <br />
+				<br /> {{agile_lng_translate 'import-email' 'best-wishes'}}, <br /> AgileCRM {{agile_lng_translate 'menu' 'support'}}. <br />
 				http://www.agilecrm.com
 				</div>
 				<div style="text-align: right;float:right">

@@ -30,7 +30,7 @@
 									<div>{{#pic}}<img src="{{pic}}" style="vertical-align:middle;height:30px;width:30px;border-radius:5px;margin-left:2px;padding:2px;"/>{{/pic}}</div>
 								</td>
 								<td style="vertical-align:top">
-									<div style="padding-bottom:3px;font-size:17px;font-weight:bold"><span style="text-transform:capitalize">{{user_name}}</span> Activities</div>
+									<div style="padding-bottom:3px;font-size:17px;font-weight:bold"><span style="text-transform:capitalize">{{user_name}}</span> {{agile_lng_translate 'report-view' 'activities'}}</div>
 									<div style="font-size:10px;color: #58666e">{{start_time}} - {{end_time}}</div>
 								</td>
 							</tr>
@@ -40,7 +40,7 @@
 						{{#deals.deals_total}}
 						<table style="width:100%">
 							<tr>
-								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">Deals</td>
+								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">{{agile_lng_translate 'contact-details' 'deals'}}</td>
 							</tr>
 						{{#deals.won_count}}
 							<tr>
@@ -49,8 +49,8 @@
 										<tbody>
 											<tr>
 												<td style="padding-bottom:5px">
-													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">Won ({{deals.won_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.won_value}}</div>
+													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">{{agile_lng_translate 'contacts-view' 'won'}} ({{deals.won_count}})</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{agile_lng_translate 'reports-email' 'total-value'}} {{deals.currency}}{{deals.won_value}}</div>
 												</td>
 											</tr>
 											{{#deals.deals_won}}
@@ -60,7 +60,7 @@
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
-													<div style="font-size:12px;color:#58666e">Won on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'won-on'}} {{time_string}}</div>
 												</td>
 											</tr>
 											{{/deals.deals_won}}
@@ -77,8 +77,8 @@
 										<tbody>
 											<tr>
 												<td style="padding-bottom:5px">
-													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">Lost ({{deals.lost_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.lost_value}}</div>
+													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">{{agile_lng_translate 'admin-settings-deals' 'Lost'}} ({{deals.lost_count}})</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{agile_lng_translate 'reports-email' 'total-value'}} {{deals.currency}}{{deals.lost_value}}</div>
 												</td>
 											</tr>
 											{{#deals.deals_lost}}
@@ -88,7 +88,7 @@
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
-													<div style="font-size:12px;color:#58666e">Lost on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'lost-on'}} {{time_string}}</div>
 												</td>
 											</tr>
 											{{/deals.deals_lost}}
@@ -105,8 +105,8 @@
 										<tbody>
 											<tr>
 												<td style="padding-bottom:5px">
-													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">New ({{deals.new_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.new_value}}</div>
+													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">{{agile_lng_translate 'menu' 'new'}} ({{deals.new_count}})</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{agile_lng_translate 'reports-email' 'total-value'}} {{deals.currency}}{{deals.new_value}}</div>
 												</td>
 											</tr>
 											{{#deals.deals_created}}
@@ -116,7 +116,7 @@
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
-													<div style="font-size:12px;color:#58666e">Assigned on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'assigned-to'}} {{time_string}}</div>
 												</td>
 											</tr>
 											{{/deals.deals_created}}
@@ -133,8 +133,8 @@
 										<tbody>
 											<tr>
 												<td style="padding-bottom:5px">
-													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">Milestone Change ({{deals.mile_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">Total Value {{deals.currency}}{{deals.mile_value}}</div>
+													<div style="font-weight:bold;font-size:14px;padding-bottom:2px">{{agile_lng_translate 'reports-email' 'milestone-change'}} ({{deals.mile_count}})</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{agile_lng_translate 'reports-email' 'total-value'}} {{deals.currency}}{{deals.mile_value}}</div>
 												</td>
 											</tr>
 											{{#deals.mile_change}}
@@ -144,7 +144,7 @@
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
-													<div style="font-size:12px;color:#58666e">Changed to {{custom1}} on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'changed-to'}} {{custom1}} on {{time_string}}</div>
 												</td>
 											</tr>
 											{{/deals.mile_change}}
@@ -165,7 +165,7 @@
 						{{#tasks.tasks_total}}
 						<table style="width:100%">
 							<tr>
-								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">Tasks</td>
+								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">{{agile_lng_translate 'portlets' 'tasks'}}</td>
 							</tr>
 						{{#tasks.tasks_done_count}}
 							<tr>
@@ -174,7 +174,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Done ({{tasks.tasks_done_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'deal-view' 'done'}} ({{tasks.tasks_done_count}})</div>
 												</td>
 											</tr>
 											{{#tasks.tasks_done}}
@@ -184,7 +184,7 @@
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
-													<div style="font-size:12px;color:#58666e">Completed on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'completed-on'}} {{time_string}}</div>
 												</td>
 											</tr>
 											{{/tasks.tasks_done}}
@@ -201,7 +201,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">In Progress ({{tasks.tasks_inprogress_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'tasks' 'In Progress'}} ({{tasks.tasks_inprogress_count}})</div>
 												</td>
 											</tr>
 											{{#tasks.tasks_inprogress}}
@@ -228,7 +228,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Assigned ({{tasks.tasks_assigned_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'reports-email' 'assigned'}} ({{tasks.tasks_assigned_count}})</div>
 												</td>
 											</tr>
 											{{#tasks.tasks_assigned}}
@@ -238,7 +238,7 @@
 													<div style="font-size:12px">
 														{{{related_contact_ids}}}
 													</div>
-													<div style="font-size:12px;color:#58666e">Assigned on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'assigned-to'}} {{time_string}}</div>
 												</td>
 											</tr>
 											{{/tasks.tasks_assigned}}
@@ -259,7 +259,7 @@
 						{{#events.events_total}}
 						<table style="width:100%">
 							<tr>
-								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">Events</td>
+								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">{{agile_lng_translate 'deal-view' 'events'}}</td>
 							</tr>
 						{{#events.events_count}}
 							<tr>
@@ -268,7 +268,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Completed ({{events.events_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'portlets' 'completed'}} ({{events.events_count}})</div>
 												</td>
 											</tr>
 											{{#events.events}}
@@ -292,14 +292,14 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">New ({{events.events_added_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'menu' 'new'}} ({{events.events_added_count}})</div>
 												</td>
 											</tr>
 											{{#events.events_added}}
 											<tr>
 												<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
 													<div>Event '{{custom1}}' ({{custom4}})</div>
-													<div style="font-size:12px;color:#58666e">Added on {{time_string}}</div>
+													<div style="font-size:12px;color:#58666e">{{agile_lng_translate 'reports-email' 'added-on'}} {{time_string}}</div>
 												</td>
 											</tr>
 											{{/events.events_added}}
@@ -316,7 +316,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Rescheduled ({{events.event_moved_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'events' 'rescheduled'}} ({{events.event_moved_count}})</div>
 												</td>
 											</tr>
 											{{#events.events_moved}}
@@ -343,7 +343,7 @@
 						{{#emails.emails_count}}
 						<table style="width:100%">
 							<tr>
-								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">Emails</td>
+								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">{{agile_lng_translate 'portlets' 'emails'}}</td>
 							</tr>
 							<tr>
 								<td>
@@ -351,7 +351,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Emails Sent ({{emails.emails_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'portlets' 'emails-sent'}} ({{emails.emails_count}})</div>
 												</td>
 											</tr>
 											{{#emails.emails_sent}}
@@ -381,7 +381,7 @@
 						{{#notes.notes_contacts_count}}
 						<table style="width:100%">
 							<tr>
-								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">Contact Notes</td>
+								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">{{agile_lng_translate 'reports-email' 'contact-notes'}}</td>
 							</tr>
 							<tr>
 								<td>
@@ -389,7 +389,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Notes ({{notes.notes_contacts_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'contact-details' 'notes'}} ({{notes.notes_contacts_count}})</div>
 												</td>
 											</tr>
 											{{#notes.notes_contacts}}
@@ -417,7 +417,7 @@
 						{{#docs.doc_count}}
 						<table style="width:100%">
 							<tr>
-								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">Documents</td>
+								<td style="font-weight:bold;font-size:16px;color:#807e7e;padding-bottom:5px">{{agile_lng_translate 'deal-view' 'documents'}}</td>
 							</tr>
 							<tr>
 								<td>
@@ -425,14 +425,14 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Documents ({{docs.doc_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'deal-view' 'documents'}} ({{docs.doc_count}})</div>
 												</td>
 											</tr>
 											{{#docs.doc_activities}}
 												<tr>
 													<td style="padding-bottom:5px;font-size: 14px;font-family: sans-serif;line-height:17px;word-break: break-all;width:100%">
 														<div><a href="{{custom1}}" style="text-decoration:none">{{label}}</a></div>
-														<div style="font-size:12px;color: #58666e">Uploaded on {{time_string}}</div>
+														<div style="font-size:12px;color: #58666e">{{agile_lng_translate 'reports-email' 'uploaded-on'}} {{time_string}}</div>
 													</td>
 												</tr>
 											{{/docs.doc_activities}}
@@ -461,8 +461,8 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px;padding-bottom:5px">Done ({{calls.done_count}})</div>
-													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{#calls.done_duration}}Total Duration {{calls.done_duration}}{{/calls.done_duration}} (Outgoing - {{calls.out_count}}, Incoming - {{calls.in_count}})</div>
+													<div style="font-weight:bold;font-size:14px;padding-bottom:5px">{{agile_lng_translate 'deal-view' 'done'}} ({{calls.done_count}})</div>
+													<div style="font-size:12px;color: #58666e;font-family: sans-serif;">{{#calls.done_duration}}{{agile_lng_translate 'reports-email' 'total-duration'}} {{calls.done_duration}}{{/calls.done_duration}} ({{agile_lng_translate 'widgets' 'outgoing'}} - {{calls.out_count}}, {{agile_lng_translate 'widgets' 'incoming'}} - {{calls.in_count}})</div>
 												</td>
 											</tr>
 											{{#calls.done_calls}}
@@ -486,7 +486,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">No Answer ({{calls.no_ans_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'campaigns' 'no-answer'}} ({{calls.no_ans_count}})</div>
 												</td>
 											</tr>
 											{{#calls.no_ans_calls}}
@@ -510,7 +510,7 @@
 										<tbody>
 											<tr>
 												<td>
-													<div style="font-weight:bold;font-size:14px">Failed ({{calls.failed_count}})</div>
+													<div style="font-weight:bold;font-size:14px">{{agile_lng_translate 'campaigns' 'failed'}} ({{calls.failed_count}})</div>
 												</td>
 											</tr>
 											{{#calls.failed_calls}}
@@ -541,10 +541,10 @@
 					<tbody>
 						<tr>
 							<td>
-								<div style="font-size:12px;font-family:sans-serif;line-height:16px;padding:0px 0px 5px 0px">You are receiving this email as you have created a report 
+								<div style="font-size:12px;font-family:sans-serif;line-height:16px;padding:0px 0px 5px 0px">{{agile_lng_translate 'reports-email' 'email-for-created-report'}} 
 									<span>"{{report_name}}"</span> in Agile CRM.
-									You can manage <a href="https://{{domain}}.agilecrm.com/#activity-reports" target="_blank">reports</a> here.</div>
-								<div style="font-size:12px;font-family:sans-serif;">Thanks for being a valued customer.</div>
+									{{agile_lng_translate 'reports-email' 'you-can-manage'}} <a href="https://{{domain}}.agilecrm.com/#activity-reports" target="_blank">{{agile_lng_translate 'reports-email' 'reports'}}</a> {{agile_lng_translate 'widgets' 'here'}}.</div>
+								<div style="font-size:12px;font-family:sans-serif;">{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}</div>
 							</td>
 						</tr>
 					</tbody>

@@ -1,0 +1,31 @@
+{
+	"form-builder": "{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}",
+	"your-form": "{{agile_lng_translate 'formbuilder' 'your-form'}}",
+	"drag-and-drop-comp": "{{agile_lng_translate 'formbuilder' 'drag-and-drop-comp'}}",
+	"save-form": "{{agile_lng_translate 'formbuilder' 'save-form'}}",
+	"buttons": "{{agile_lng_translate 'builder' 'buttons'}}",
+	"source-code": "{{agile_lng_translate 'formbuilder' 'source-code'}}",
+	"input": "{{agile_lng_translate 'formbuilder' 'input'}}",
+	"select": "{{agile_lng_translate 'formbuilder' 'select'}}",
+	"checkboxes": "{{agile_lng_translate 'formbuilder' 'checkboxes'}}",
+	"radios": "{{agile_lng_translate 'formbuilder' 'radios'}}",
+
+	"first-name": "{{agile_lng_translate 'modals' 'first-name'}}",
+	"agile-field": "{{agile_lng_translate 'formbuilder' 'agile-field'}}",
+	"select": "{{agile_lng_translate 'report-add' 'select'}}",
+	"last-name": "{{agile_lng_translate 'formbuilder' 'last-name'}}",
+	"email": "{{agile_lng_translate 'modals' 'email'}}",
+	"company": "{{agile_lng_translate 'contacts-view' 'Company'}}",
+	"title": "{{agile_lng_translate 'other' 'title'}}",
+
+	"website": "{{agile_lng_translate 'other' 'website'}}",
+	"phone": "{{agile_lng_translate 'deal-view' 'phone'}}",
+	"city": "{{agile_lng_translate 'contact-edit' 'city'}}",
+	"state": "{{agile_lng_translate 'deal-view' 'state'}}",
+	"country": "{{agile_lng_translate 'contacts-view' 'country'}}",
+
+	"zip": "{{agile_lng_translate 'other' 'zip'}}",
+	"address": "{{agile_lng_translate 'other' 'address'}}",
+	"tags": "{{agile_lng_translate 'portlets' 'tags'}}",
+	"note": "{{agile_lng_translate 'menu' 'note'}}",
+}

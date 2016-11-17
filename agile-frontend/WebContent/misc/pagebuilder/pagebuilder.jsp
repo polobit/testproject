@@ -259,7 +259,10 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <li style="display: none;"><a href="#image_Tab" id="img_Link"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "Image")%></a></li>
                 <li style="display: none;"><a href="#icon_Tab" id="icon_Link"><span class="fa fa-flag"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "icons")%></a></li>
                 <li style="display: none;"><a href="#video_Tab" id="video_Link"><span class="fa fa-youtube-play"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "video")%></a></li>
-                <li style="display: none;"><a href="#agileform_Tab" id="agileform_link"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-form")%></a></li>
+                <li style="display: none;">
+                    <a href="#agileform_Tab" id="agileform_link" class="agile-tooltip" data-placement="right" data-original-title=" <%=LanguageUtil.getLocaleJSONValue(localeJSON, "form-tooltip")%>" ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-form")%>
+                <sup style="font-size: 9px;color: #337ab7;">?</sup></a>
+                </li>
             </ul><!-- /tabs -->
             
             <div class="tab-content">
@@ -1965,7 +1968,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-id")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-id")%>'' value="">
+                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-id")%>" value="">
                     
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
@@ -1973,13 +1976,16 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-id")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-id")%>'' value="">
+                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-id")%>" value="">
 
                     <p class="text-center or">
-                        <span>OR</span>
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
 
-                    <label>Your Video:</label>
+                    <label class="agile-tooltip" data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "recorded-video-tooltip")%>">
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "recorded-video")%>:
+                     <sup style="font-size: 9px;color: #337ab7;">?</sup>
+                    </label>
                     
                     <select id="videoRecordId" name="videoRecordlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
                         <option value="">Select Video</option>
@@ -2249,7 +2255,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
     <div class="form-group">
       <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header")%>:</label>
       <div class="col-sm-9">
-        <textarea class="form-control" id="pageData_headerIncludes" name="pageData_headerIncludes" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header-info")%> <head> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "head-section")%>'></textarea>
+        <textarea class="form-control" id="pageData_headerIncludes" name="pageData_headerIncludes" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header-inf")%>' <head> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "head-section")%>></textarea>
       </div>
     </div>
     
@@ -2257,6 +2263,13 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
       <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css")%>:</label>
       <div class="col-sm-9">
         <textarea class="form-control" id="pageData_headerCss" name="pageData_headerCss" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css-applied")%>'></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-js")%>:</label>
+      <div class="col-sm-9">
+        <textarea class="form-control" id="pageData_headerJs" name="pageData_headerJs" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-script-applied")%>'></textarea>
       </div>
     </div>
     

@@ -1,24 +1,11 @@
 <script id="setting-email-templates-header-template" type="text/html">
-    <div class="col" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
-	{{#is_mobile}}
-        <div class="hbox h-auto">
-    {{else}}
+    <div class="col-md-9" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
         <div class="hbox h-auto m-b-lg">
-    {{/is_mobile}}
-    <div class="panel panel-default">
-        {{#is_mobile}}
-            <div class="panel-heading b-n">
-        {{else}}
-            <div class="panel-heading">
-        {{/is_mobile}}
-            <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates'}}</div>
-			{{#is_mobile}}
-                <div class="pull-right">
-                    <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon pull-right" id="addEmailTemplate">
-                    <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
-                </div>
-                <div class="pull-right">
-                        <div class="col-sm-12" style="padding-left: 0;" id="emailCtgDiv" data-id="new">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates-list'}}</div>
+                    <div class="pull-right">
+                        <div class="col-sm-12" style="padding-right: 0;" id="emailCtgDiv" data-id="new">
                             <a href="#" class="add-to-campaign" id="emailCtg-option" style="vertical-align: -webkit-baseline-middle;">
                                 <span><i class="icon-filter"/></span> {{agile_lng_translate 'admin-settings-tasks' 'categories'}}
                             </a>
@@ -47,7 +34,7 @@
         </div>
     </div>
 
-    <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
+    <div class="col-md-3 {{#is_mobile}} w-full {{/is_mobile}}">
         <div class="data-block">
             <div class="p-l p-r">
                 <h4 class="m-t-none">

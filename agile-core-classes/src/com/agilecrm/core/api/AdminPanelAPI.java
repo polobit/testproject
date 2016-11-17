@@ -574,7 +574,17 @@ public class AdminPanelAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry you don't have privileges to access this page.").build());
 	}
-	StripeUtil.deleteSubscription(sub_id, cus_id);
+
+	String oldNameSpace = NamespaceManager.get();
+	NamespaceManager.set(email);
+	try
+	{
+		StripeUtil.deleteSubscription(sub_id, cus_id);
+	}
+	finally
+	{
+		NamespaceManager.set(oldNameSpace);
+	}
 	ActivityUtil.createAdminPanelActivity(domainUser, Activity.ActivityType.ADMIN_PANEL_SUBSCRIPTION_CANCEL, email);
     }
    
