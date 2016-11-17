@@ -1965,7 +1965,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-id")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-id")%>'' value="">
+                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-id")%>" value="">
                     
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
