@@ -151,6 +151,7 @@ function initializeAdminpanelListner(el){
 			var totalamount = $(".totamount").val();
 			var chargeid=$("#hchargeid").val();
 			var note = $("#refundamountnote").val();
+			var email = $("#sort-table").attr("email");
 			var domain = window.location.hash.split("#getDomainUserDetails/")[1];
 			if(parseFloat(amount) <= 0)
 			{
@@ -174,7 +175,8 @@ function initializeAdminpanelListner(el){
 				type : 'GET',
 				success : function(data)
 				{	
-					add_refunded_info_as_note_to_owner("harsha@agilecrm.com",domain,note,amount)
+					var subject = "Amount refunded to the domain"+domain+"from the email"+CURRENT_DOMAIN_USER.email+"with an amount of $"+amount;
+					add_note_to_owner(email ,note , subject);
 					alert("successfully applied for refund");
 					location.reload(true);
 				},
