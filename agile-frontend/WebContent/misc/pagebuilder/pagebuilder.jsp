@@ -2259,6 +2259,13 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         <textarea class="form-control" id="pageData_headerCss" name="pageData_headerCss" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css-applied")%>'></textarea>
       </div>
     </div>
+
+    <div class="form-group">
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-js")%>:</label>
+      <div class="col-sm-9">
+        <textarea class="form-control" id="pageData_headerJs" name="pageData_headerJs" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-js-applied")%>'></textarea>
+      </div>
+    </div>
     
   </div><!-- /.optionPane -->
   

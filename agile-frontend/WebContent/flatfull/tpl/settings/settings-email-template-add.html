@@ -1,13 +1,13 @@
  <script id="settings-email-template-add-template" type="text/html">
-<div class="panel panel-default">
-	<div class="panel-heading">
+<div class="panel wrapper col-md-9" >
+	<!--<div class="panel-heading">
 	{{#if id}}
       {{agile_lng_translate 'prefs-email-templates' 'edit-email-template'}}
     {{else}}
        {{agile_lng_translate 'prefs-email-templates' 'new-email-template'}}
    	{{/if}}
 	
-	</div>
+	</div>-->
 	<div class="panel-body">
 
 
@@ -86,9 +86,25 @@
 
          </fieldset>
 		</form>
-    
-
 
 </div>
 </div>
+
+<div class="col-md-3 {{#is_mobile}} w-full {{/is_mobile}}" style="position: relative; right: -16px;">
+        <div class="panel wrapper data-block">
+            <div class="p-l p-r">
+                <h4 class="m-t-none">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                </h4>
+                
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                </p>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                </p>
+           </div>
+        </div>
+</div>
+
 </script>

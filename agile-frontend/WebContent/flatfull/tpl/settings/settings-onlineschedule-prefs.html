@@ -5,7 +5,7 @@
 <div class="row">
 	<div id="settings-online-calendar" class="col-sm-12 col-lg-9">
 
-		<div class="tab-container m-b-none">
+		<div class="tab-container m-b-none" style="margin-right: -26px">
 			<ul class="nav nav-tabs" id="online-calendar">
 			{{#is_mobile}}
 				<li><a href="#calendar-tab" class="b-l-none"  data-toggle="tab"><i class="icon icon-calendar"></i></a></li>
@@ -21,7 +21,7 @@
 
 			</ul>
 		</div>
-		<div class="tab-content panel wrapper" id="online-calendar-content">
+		<div class="tab-content panel wrapper" id="online-calendar-content" style="margin-right: -26px; padding: 10px">
 			<div class="tab-pane" id="calendar-tab">
 				<div class="col" id="schedule-preferences">
 					<div class="hbox h-auto m-b-lg">
@@ -121,13 +121,13 @@
 
 								<form class="form-horizontal">
 									<fieldset>
-										<div class="control-group form-group">
-											<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'business-hours'}}</label>
-											<div class="controls col-sm-9 m-t-xs">
+										<div class="control-group form-group" style="margin-right: -80px;margin-left: -140px;">
+											<label class="control-label col-sm-3" style="left:30px" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'business-hours'}}</label>
+											<div class="controls col-sm-9 m-t-xs" style="right: -15px">
 												<div id="define-business-hours"></div>
 											</div>
 											<div class="col-md-3"></div>
-											<div class="col-md-9 m-t-xs col-xs-12">
+											<div class="col-md-9 m-t-xs col-xs-12" style="width: 67%;left: 15px" >
 												<span class="text-muted">{{agile_lng_translate 'prefs-online-calendar' 'for-more-granularity-please-configure-google-calendar'}} </span>
 											</div>
 

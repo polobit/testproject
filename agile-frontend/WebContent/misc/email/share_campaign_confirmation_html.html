@@ -18,16 +18,16 @@
             </tr>
             <tr>
               <td style="padding: 15px 25px 25px 25px">
-                <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px"><span style="text-transform: capitalize;">{{senderName}}</span> has shared a campaign with you.</div>
+                <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px"><span style="text-transform: capitalize;">{{senderName}}</span> {{agile_lng_translate 'campaign-email' 'shared-with-you'}}.</div>
                 <div style="padding-bottom:10px;font-size:14px;font-family:sans-serif;">
-                  Please <a href="{{{verification_link}}}share?sdom={{senderDomain}}&cid={{campaignId}}&sid={{senderId}}&remail={{recEmail}}">Click Here</a> to open in Agile CRM.
+                  {{agile_lng_translate 'contact-details' 'please'}} <a href="{{{verification_link}}}share?sdom={{senderDomain}}&cid={{campaignId}}&sid={{senderId}}&remail={{recEmail}}">{{agile_lng_translate 'others' 'click-here'}}</a> {{agile_lng_translate 'campaign-email' 'to-open-in-agile'}}.
                 </div>
 				<div style="font-size:14px;font-family:sans-serif;;padding-bottom:10px">
-					Should you have any questions or need assistance, don't hesitate to get in touch with us at any time by sending an email to <font color="blue">
+					{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue">
 					<a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
 				</div>
 				<div style="font-weight: bold; font-size: 12px;">
-						The Crew at Agile CRM  <br />
+						{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
 					  </div>
 					  <div><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
               </td>

@@ -243,7 +243,7 @@ public class SendEmail extends TaskletAdapter
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
     	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
     	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
-    	
+    	String replyTo = getStringValue(nodeJSON, subscriberJSON, data, REPLY_TO);
     	
     	if(StringUtils.isNotBlank(to) && !isValidEmailAddress(to)){
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
@@ -297,6 +297,19 @@ public class SendEmail extends TaskletAdapter
     	{
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
     			    "Email skipped since \'To\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+    		return;
+    	}
+    	
+    	// If ReplyTo email invalid
+    	if(StringUtils.isNotBlank(replyTo) && !isValidEmailAddress(replyTo))
+    	{
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email skipped since \'ReplyTo\' address is invalid.",
     			    LogType.EMAIL_SENDING_SKIPPED.toString());
 
     		// Execute Next One in Loop

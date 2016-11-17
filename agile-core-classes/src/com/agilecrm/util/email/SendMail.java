@@ -1,5 +1,6 @@
 package com.agilecrm.util.email;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
@@ -223,7 +224,7 @@ public class SendMail
      */
     @SuppressWarnings("unused")
     public static void sendMail(String to, String subject, String template, Object object, String from,
-	    String fromName, String... args)
+	    String fromName, String language, String... args)
     {
 	try
 	{
@@ -279,10 +280,10 @@ public class SendMail
 	    System.out.println("mergedJson in sendemail" + mergedJSON);
 
 	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON, language);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON, language);
 
 	    // If both are null, nothing to be sent
 	    if (emailHTML == null && emailBody == null)
@@ -326,8 +327,8 @@ public class SendMail
      * @param args
      *            - Variable args to send email attachment.
      */
-    public static void sendMail(String to, String subject, String template, Object object)
+    public static void sendMail(String to, String subject, String template, Object object, String language)
     {
-	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME);
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME, language);
     }
 }

@@ -35,10 +35,10 @@ String logo_url = accountPrefs.logo;
 
 if(!StringUtils.isEmpty(feedback) || note_id == null )
 {
-    	    error = "Sorry we are not able to save your feedback Please try submitting again";
-		
-	
-			System.out.println(error + " " + success);
+          error = "Sorry we are not able to save your feedback Please try submitting again";
+    
+  
+      System.out.println(error + " " + success);
 }
 
 //Static images s3 path
@@ -49,11 +49,11 @@ String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("fl
 <head>
 <meta charset="utf-8">
 <meta name="globalsign-domain-verification"
-	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
+  content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 <title>Feed Back</title>
 
 <meta name="viewport"
-	content="width=device-width, initial-scale=1.0 maximum-scale=1">
+  content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
 
@@ -68,13 +68,14 @@ var id = <%=note_id%>
       <meta http-equiv="content-type" content="text/html;charset=utf-8" />
       <title>Form 6</title>
        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	   <script>
-		$(document).ready(function(){
-			$('[data-toggle="tooltip"]').tooltip(); 
-		});
-		</script>
+     <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip(); 
+    });
+    </script>
         <style>
         @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
         @media screen and (max-width: 768px){
@@ -201,12 +202,12 @@ var id = <%=note_id%>
        .f-w-600{
         font-weight: 600;
        }
-	   .m-r-5{
-		margin-right:5px;
-	   }
-	   w-40{
-		width :40px;
-	   }
+     .m-r-5{
+    margin-right:5px;
+     }
+     w-40{
+    width :40px;
+     }
        .rating {
       unicode-bidi: bidi-override;
       direction: ltr;
@@ -215,48 +216,67 @@ var id = <%=note_id%>
       display: inline-block;
       position: relative;
     }
-	
+
     
 </style>
 </head>
    <body>
-   	<div id="successmessage">
+    <div>
 
-   	<%if(note_exists){%>
+    <%if(note_exists){%>
       <div class="agile-crm-logo p-t-80 p-t-40" style="margin: 0px auto;text-align: center;width: 125px;border-radius: 3px">
-      	<%if(!StringUtils.isEmpty(logo_url)){%>
+        <%if(!StringUtils.isEmpty(logo_url)){%>
         <img class="logo" alt="AgileCRM" src=<%=logo_url%>>
-      	<%}%>
+        <%}%>
       </div>
         <form class="form-container"  onsubmit="saveTicketFeedback(event)">
-        <div class="form-body m-t-sm">
+        <div id="successmessage" class="form-body m-t-sm">
+          
           <div class="text-center" style="width:100%;border-radius: 3px;padding: 10px;margin-bottom: 20px;border-bottom:1px solid #f6f6f6">
-            <div class="f-w-600" style="margin-bottom:10px">How do you rate our service?</div>
-            <div class="rating">
-				
-				<span class="m-r-5"  data-toggle="tooltip" title="Unacceptable" data-placement="bottom">
-					<img value="1" id="1" style="width:40px" src="/img/agile-emoj1.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-				
-				<span class="m-r-5"  data-toggle="tooltip" title="Can Improve" data-placement="bottom">
-					<img id="2" value="2" style="width:40px" src="/img/agile-emoj2.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)"
-          onclick ="changeFeedback(event,this)"/></span>
-				
-				<span class="m-r-5"  data-toggle="tooltip" title="Acceptable" data-placement="bottom">
-					<img  id="3" value="3" style="width:40px" src="/img/agile-emoj3.png" 
-          onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-				
-				<span class="m-r-5" data-toggle="tooltip" title="Meets Expectations" data-placement="bottom">
-					<img id="4" value="4" style="width:40px" src="/img/agile-emoj4.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-				
-				<span data-toggle="tooltip" title="Exceptional" data-placement="bottom">
+          
 
-					<img style="width:40px" value="5" id="5" src="/img/agile-emoj5.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/></span>
-			</div>
+            <div class="f-w-600" style="margin-bottom:14px">How do you rate our service?</div>
+            
+            <div class="rating">
+            
+        <span class="m-r-5">
+          <span id="tick_mark_1" class="fa fa-check tick_mark" style="color: #3388A7; visibility:hidden;"></span><br/>
+          <img  data-placement="bottom" data-toggle="tooltip" title="Awful" value="1" id="1" style="width:40px" src="/img/agile-emoj1.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+          <span class="disposition_label" id="disposition_1" style="visibility:hidden;">Awful</span></span>
+          
+        
+        <span class="m-r-5" >
+         <span id="tick_mark_2" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden"></span><br/>
+          <img id="2" data-placement="bottom" data-toggle="tooltip" title="Bad" value="2" style="width:40px" src="/img/agile-emoj2.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)"
+          onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_2" style="visibility:hidden;">Bad</span></span>
+
+
+        
+        <span class="m-r-5">
+        <span id="tick_mark_3" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden"></span><br/>
+          <img  id="3" value="3" data-toggle="tooltip" title="Ok" data-placement="bottom" style="width:40px" src="/img/agile-emoj3.png" 
+          onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_3" style="visibility:hidden;">OK</span></span>
+
+        
+
+        <span class="m-r-5">
+        <span id="tick_mark_4" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden"></span><br/>
+          <img id="4" value="4" data-toggle="tooltip" title="Good" data-placement="bottom" style="width:40px" src="/img/agile-emoj4.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_4" style="visibility:hidden;">Good</span></span>
+
+                  
+        
+        <span  style="width: 40px;">
+          <span id="tick_mark_5" class="fa fa-check tick_mark" style="color: #3388A7;visibility:hidden;"></span><br/>
+          <img data-toggle="tooltip" title="Awesome" data-placement="bottom" style="width:40px" value="5" id="5" src="/img/agile-emoj5.png" onmouseover="changefeedbackimg(event,this)" onmouseout="changefeedbackimg(event,this)" onclick ="changeFeedback(event,this)"/><br/>
+        <span class="disposition_label" id="disposition_5" style="visibility:hidden; width:40px;text-align:center;margin-left:-12px">Awesome</span></span>  
+      </div>
           </div>
-          <div style="padding-bottom: 5px" class="f-w-600">Comments:</div>
-          <textarea style="width:100%;height:100px;border:1px solid #ccc;border-radius: 3px;margin-bottom: 20px;font-size: 14px;resize:vertical;" id="myTextarea"></textarea>
-          <div style="width: 100%;height: 40px">
-          <button type="submit" value="submit" class="btn btn-primary btn-md" style="width: 48%;float: right">Submit</button>
+          <textarea style="width:100%;height:100px;border:1px solid #ccc;border-radius: 3px;margin-bottom: 20px;font-size: 14px;resize:vertical;padding:5px" placeholder="Comments" id="myTextarea"></textarea>
+          <div style="width: 100%;height: 40px; text-align: center;">
+          <button type="submit" value="submit" class="btn btn-primary btn-md" style="width: 24%">Submit</button>
           </div>
           
         </div>
@@ -268,17 +288,59 @@ var id = <%=note_id%>
         </form>
     </div>    
    </body>
-					
+          
 <script>
- 	feedback = "<%=feedback%>";
-	feedback_rating = "<%=feedback_rating%>";
+  feedback = "<%=feedback%>";
+  feedback_rating = "<%=feedback_rating%>";
 
-	var image = document.getElementById(feedback_rating)
-		image.src = "/img/agile-emoj"+feedback_rating+"-1.png";	
+  changeFeedbackRatingDisposition( feedback_rating );  
+
+
+
+//document.getElementById("addfeedback-message").innerHTML
+  
+
+  var image = document.getElementById(feedback_rating)
+    image.src = "/img/agile-emoj"+feedback_rating+"-1.png"; 
 
 function functioncancel(){
 document.getElementById("addfeedback-message").innerHTML = "<div style=font-size:20px;padding-left:40px;text-align:center;>No feedback was submitted!</div>";
 
+}
+
+function changeFeedbackRatingDisposition( feedback ) {
+  $(".tick_mark").css("visibility","hidden");
+  $(".disposition_label").css("visibility","hidden");
+  var feedbackDisposition;
+
+    switch ( feedback ) {
+      case "1":
+          feedbackDisposition = "Awful";
+          $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
+          break;
+      case "2":
+          feedbackDisposition = "Bad";
+          $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
+          break;
+      case "3":
+          feedbackDisposition = "OK";
+          $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
+          break;
+      case "4":
+          feedbackDisposition = "Good";
+          $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
+          break;
+      case "5":
+          feedbackDisposition = "Awesome";
+          $("#tick_mark_"+feedback).css("visibility","visible");
+          $("#disposition_"+feedback).css("visibility","visible");
+          break;
+  }
+  $(".rating_disposition #rating_value").html(feedbackDisposition);
 }
 
 function changefeedbackimg(e,objButton){
@@ -308,62 +370,67 @@ function changefeedbackimg(e,objButton){
 
 function changeFeedback(e,objButton){
  
-  	e.preventDefault();
+    e.preventDefault();
  
-  	var i = objButton.id; 	
-  	feedback_rating = ""+objButton.id;
+    var i = objButton.id;   
+    feedback_rating = ""+objButton.id;
 
-  	var j;
-  	for(j=1;j<=5;j++){
-  	
+    var j;
+    for(j=1;j<=5;j++){
+    
       image = document.getElementById(j);
-  		
-    if(j == i){	
+      
+    if(j == i){ 
       image.src = "/img/agile-emoj"+i+"-1.png";
 
       image.className = "selected";
-  	}		
-  	else{
-			image.src = "/img/agile-emoj"+j+".png"
-  	   
+    }   
+    else{
+      image.src = "/img/agile-emoj"+j+".png"
+       
       image.className = ""; 
     }
-		
+  
+    changeFeedbackRatingDisposition(i);  
+
 }
-			
-							
+      
+              
 }
 </script>
-	<script type="text/javascript">		
-	var id = <%=note_id%>
-	var json = {};
-		//saves the feedback commentsto the ticket notes based on notes id. 
-		function saveTicketFeedback(e){
-			e.preventDefault();
+  <script type="text/javascript">   
+  var id = <%=note_id%>
+  var json = {};
+    //saves the feedback commentsto the ticket notes based on notes id. 
+    function saveTicketFeedback(e){
+      e.preventDefault();
 
-			var data = document.getElementById("myTextarea").value;
-			json.id = id;
-			json.feed_back = feedback_rating;
-			 var data = decodeURI(data);
-			data.replace(new RegExp("\\+","g"),' ');
-			json.feedback_comment = data;
-			$.ajax({ type : 'POST', 
-				url : 'feedbackapi/api/tickets/notes/feedback-comment/'+id, 
-				data : json,
-				success:function(){
-					console.log(json);	
-					document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;padding-left:40px;padding-top:40px;text-align:center;>Your feedback submitted successfully!</div>";
-				},
-				error:function(){
-					document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;padding-left:40px;padding-top:40px;text-align:center;>Sorry, cannot submit your feedback as the URL expired!</div>";
-				}
-				
-		});
-			
-			
-		}	
-			
-		    
+      var data = document.getElementById("myTextarea").value;
+      json.id = id;
+      var feedback_time = new Date().getTime();
+      json.feed_back = feedback_rating;
+       var data = decodeURI(data);
+      data.replace(new RegExp("\\+","g"),' ');
+      json.feedback_comment = data;
+    
+      $.ajax({ type : 'POST', 
+        url : 'feedbackapi/api/tickets/notes/feedback-comment/'+id, 
+        data : json,
+        success:function(){
+          console.log(json);  
+          document.getElementById("successmessage").innerHTML = "<div style='font-size: 24px;text-align:center;vertical-align:middle;margin-top: 36px;margin-bottom: 22px;'>Submitted <i class='fa fa-check'></i></div><div style=font-size:20px;text-align:center;vertical-align:middle;margin-bottom:100px;>Your feedback submitted successfully! <br/><span style=font-size:16px;>Thank you for your time and patience.</span></div>";
+       
+        },
+        error:function(){
+          document.getElementById("successmessage").innerHTML = "<div style=font-size:20px;padding-bottom:40px;padding-top:40px;text-align:center;    margin-top: 100px;margin-bottom: 100px;>Sorry, cannot submit your feedback as the URL expired!</div>";
+        }
+        
+    });
+      
+      
+    } 
+      
+        
 </script>
 <%}else{%>
 

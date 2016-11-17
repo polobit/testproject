@@ -38,7 +38,7 @@
 			  <tbody>
 				<tr>
 				 <td width="388" valign="bottom">
-		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px"> Your Refund has been Processed</h2>
+		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px"> {{agile_lng_translate 'payment-fail-email' 'your-refund-has-processed'}}</h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
 			<img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block"></img>
@@ -63,29 +63,29 @@
 	  <tr>
 	   <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Lucida Grande,verdana">
 		  <br/>
-		 Dear  {{Customer.activeCard.name}},
+		 {{agile_lng_translate 'welcome-email' 'dear'}}  {{Customer.activeCard.name}},
          <br/>
          <br/>
-         <b>Confirmation of refund</b><br/>
-    Recently we have received your refund request placed through one of our support associates. This is to confirm that the refund process has been initiated. Please allow up to 4 business days for the credited amount to reflect back in your credit card statement.
+         <b>{{agile_lng_translate 'payment-fail-email' 'confirm-refund'}}</b><br/>
+    {{agile_lng_translate 'payment-fail-email' 'received-refund-request'}}
         <br/>
          <br/>
-         <b>Refund Details </b><br/>
-        Amount refunded: {{Event.data.object.amountRefunded}}<br/>
-       Refund issued on: {{Customer.email}} <br/>
-       Credit card on file (last four digits):{{Customer.activeCard.last4}}
+         <b>{{agile_lng_translate 'payment-fail-email' 'refund-details'}} </b><br/>
+        {{agile_lng_translate 'payment-fail-email' 'amount-refunded'}}: {{Event.data.object.amountRefunded}}<br/>
+       {{agile_lng_translate 'payment-fail-email' 'refund-issued-on'}}: {{Customer.email}} <br/>
+       {{agile_lng_translate 'payment-fail-email' 'cc-on-file-last4'}} {{Customer.activeCard.last4}}
 <br/>
 <br/>
-<b>Have questions or need help?</b><br/>
-Drop us an <a  href="mailto:care@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
+<b>{{agile_lng_translate 'verify-email' 'having-questions'}}</b><br/>
+{{agile_lng_translate 'verify-email' 'drop-us-an'}} <a  href="mailto:care@agilecrm.com" target="_blank">{{agile_lng_translate 'verify-email' 'email'}}</a> or <b>{{agile_lng_translate 'account-email' 'CALL-TOLL-FREE'}}</b> 1-800-980-0729<br/>
 <br/>
-Thanks for being a valued customer.
+{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}
 <br/>
 <br/>
-The crew at AgileCRM<br/>
+{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}<br/>
 <a href="https://www.agilecrm.com" target="_blank">https://www.agilecrm.com</a><br/>
 <br/>
-<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>Built with love for small businesses</i></span>
+<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>{{agile_lng_translate 'verify-email' 'built-for-smbs'}}</i></span>
 <br/>
 <br/>
         </td>

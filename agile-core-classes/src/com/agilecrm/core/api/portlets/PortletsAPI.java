@@ -586,7 +586,7 @@ public class PortletsAPI {
 		json.put("endDate", endDate);
 		json.put("timeZone", timeZone);
 		json.put("reportType", reportType);
-		PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
+		//PortletUtil.checkPrivilegesForPortlets("ACTIVITY");
 		return PortletUtil.getPortletStatsReportData(json);
 	}
 

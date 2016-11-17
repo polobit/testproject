@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonNode;
@@ -18,7 +19,10 @@ import org.codehaus.jackson.map.MappingJsonFactory;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.FileStreamUtil;
+import com.agilecrm.util.language.EmailTemplateParseUtil;
+import com.agilecrm.util.language.LanguageUtil;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -55,14 +59,19 @@ public class MustacheUtil
      *             FileNotFoundException - if file cannot read from given path.
      */
     @SuppressWarnings("unused")
-    public static String templatize(String path, JSONObject emailJson) throws Exception
+    public static String templatize(String path, JSONObject emailJson, String language) throws Exception
     {
 	// Read from path
 	String emailTemplate = FileStreamUtil.readResource(SendMail.TEMPLATES_PATH + path);
 	String value = null;
 	if (emailTemplate == null)
 	    return null;
-
+	
+	// language = LanguageUtil.getUserLanguageFromSession();
+	System.out.println(language);
+	if(StringUtils.isNotBlank(language))
+		emailTemplate = EmailTemplateParseUtil.constructEmailTemplate(emailTemplate, LanguageUtil.getLocaleJSON(language, null, "emails"));
+	
 	// Compile
 	return compile(emailTemplate, emailJson);
     }

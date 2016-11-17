@@ -17,9 +17,9 @@
             </tr>
             <tr>
               <td style="padding: 15px 25px 10px">
-				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{count}} {{contact_type}} exported to csv file. </div>
+				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{count}} {{contact_type}} {{agile_lng_translate 'export-email' 'exported-to-csv'}}. </div>
                 <div style="font-size:14px;font-family:sans-serif;">
-                  Please download the file by clicking on the button below. This link is valid for 24 hours only.
+                  {{agile_lng_translate 'export-email' 'download-button'}}
                 </div>
               </td>
             </tr>
@@ -29,7 +29,7 @@
 						<tr>
 							<td valign="middle" style="padding-top:8px;padding-bottom:8px;padding-right:10px;padding-left:10px;text-align:center">
 								<a href="{{download_url}}" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:14px;color:#fff!important;text-decoration:none" target="_blank">
-									<strong>Download CSV File</strong>
+									<strong>{{agile_lng_translate 'export-email' 'download-csv-file'}}</strong>
 								</a>
 							</td>
 						</tr>
@@ -39,10 +39,10 @@
 			<tr>
               <td style="padding: 10px 25px 25px">
                 <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px;color:#212121 !important">
-					Should you have any questions or need assistance, don't hesitate to get in touch with us at any time by sending an email to <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font><br /> <br />
+					{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font><br /> <br />
                 </div>
 				<div style="font-weight: bold; font-size: 12px;color: #212121 !important;">
-						The Crew at Agile CRM  <br />
+						{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
 					  </div>
 					  <div style="font-size:12.8px"><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
               </td>

@@ -40,6 +40,7 @@ import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -277,12 +278,12 @@ public class TicketNotesUtil
 		{
 			// No template is chosen so returning default template html content
 			if (group.template_id == null)
-				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
 
 			dataJSON.put("ticket_comments",
-					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 			dataJSON.put("ticket_footer",
-					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 
 			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
 
@@ -351,7 +352,7 @@ public class TicketNotesUtil
 	}
 
 	
-	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws JSONException, EntityNotFoundException{
+	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws Exception{
 		
 		JSONArray json = new JSONArray();
 		
@@ -383,10 +384,35 @@ public class TicketNotesUtil
 				jsonobject.append("feedback", tn.feed_back);
 				jsonobject.append("created_time", tn.created_time);
 				Long ticketfeedback_id = tn.ticket_id;		
-				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
-				jsonobject.append("ticket_subject", ticket.subject);
 				
+				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
+				
+				jsonobject.append("ticket_subject", ticket.subject);
 				jsonobject.append("contact_id", ticket.contactID);
+				
+				TicketGroups ticket_group = null;
+
+				try
+				{
+					ticket_group = TicketGroupUtil.getTicketGroupById(ticket.groupID);
+				}
+				catch (Exception e)
+				{
+					throw new Exception("No group found with id " + ticket_group.id + " or group has been deleted.");
+				}
+				String groupName = ticket_group.group_name;
+				
+				String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
+
+				
+				String assignee_name = ""; 
+				
+				if(ticket.groupID != null)
+					assignee_name = groupName;
+				if(ticket.assigneeID != null)
+					assignee_name = agentName;
+					
+					jsonobject.append("assignee_name",assignee_name );
 				
 				Contact contact = ContactUtil.getContact(ticket.contactID);
 				

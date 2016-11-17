@@ -18,6 +18,7 @@ import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -205,7 +206,9 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	}
     public final void sendEmail(String email)
     {
-
+    // Get user prefs language
+	String language = LanguageUtil.getUserLanguageFromEmail(email);
+	    
 	HashMap<String, String> map = new HashMap<String, String>();
 	// -1 to exclude heading from count
 	map.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
@@ -213,16 +216,19 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	map.put("contact_type", export_type.label);
 
 	SendMail.sendMail(email, export_type.templateSubject, export_type.templaceTemplate, map,
-		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME);
+		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language);
     }
     
     public final void sendEmail(String email,HashMap<String, String> stats,String domain)
     {
-
+    String toEmail = "nidhi@agilecrm.com";
+    // Get user prefs language
+    String language = LanguageUtil.getUserLanguageFromEmail(toEmail);
+    	
     stats.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
 
-	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Export Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
-		    new Object[] { stats});
+	SendMail.sendMail(toEmail, "CSV Contacts Export Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
+		    new Object[] { stats}, language);
     }
 
     public static void main(String[] args)
