@@ -24,7 +24,7 @@ cron:
 
 - description: Hourly triggers
   url: /backend/cron/triggers?period=HOURLY
-  schedule: every 10 mins
+  schedule: every 1 hours
   target: agile-normal-bulk
 
 - description: daily triggers
