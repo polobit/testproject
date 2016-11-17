@@ -64,7 +64,7 @@ function changeCallNotyBasedOnStatus(event){
 
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
 							var json = {"callId": customerNumber};
-							showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 						});									
 					}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
 						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
