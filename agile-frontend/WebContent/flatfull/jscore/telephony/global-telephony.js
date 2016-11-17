@@ -594,7 +594,7 @@ function handleCallRequest(message)
 				globalCall.callStatus = "Ideal";
 			}
 			try{
-				var phone = $("#skype_contact_number").val();
+				var phone = $("#ozonetel_contact_number").val();
 				if (!phone || phone == ""){
 					phone = agile_crm_get_contact_properties_list("phone")[0].value;
 				}
@@ -604,6 +604,11 @@ function handleCallRequest(message)
 				}
 			}catch (e){
 
+			}
+			if(message.number){
+				globalCall.callNumber = message.number;
+			}else{
+				globalCall.callNumber = message.contact_number;
 			}
 			showOzonetelCallNoty(message);
 		}
