@@ -579,8 +579,8 @@ function initRolehandlers(){
 
  			var due_tasks_count = $("#due_tasks_count").text();
  			due_tasks_count = due_tasks_count ? due_tasks_count : "";
- 			$(".appaside.dropdownnavbar").removeClass("active");
- 			$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").addClass("active");
+ 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive").removeClass("active");;
+ 			$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").addClass("agile-menuactive");
  			// Update UI
  			/*$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 */
