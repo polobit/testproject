@@ -776,9 +776,24 @@ public class TasksAPI
 	    if (key.equals("progress"))
 		task.progress = obj.getInt(key);
 	    
+	    if (key.equals("status")){
+		try {
+		    task.status = Task.Status.valueOf(obj.getString("status"));
+		} catch (Exception e) {
+		    System.out.println("Status type not found");
+		}
+	    }
+	    
+	    if (key.equals("priority_type")){
+		try {
+		    task.priority_type = Task.PriorityType.valueOf(obj.getString("priority_type"));
+		} catch (Exception e) {
+		    System.out.println("PriorityType type not found");
+		}
+	    }
+	    
 	    if (key.equals("is_complete"))
 		task.is_complete = obj.getBoolean(key);
-	    
 
 	    if (key.equals("contacts"))
 	    {
