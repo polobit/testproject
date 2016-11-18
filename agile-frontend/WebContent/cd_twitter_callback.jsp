@@ -24,7 +24,7 @@
 
 String host = request.getServerName();
 if(host.contains("-dot-")) {
-  response.sendRedirect("https://" + NamespaceUtil.getNamespaceFromURL(host) + "-dot-sandbox-dot-agilecrmbeta.appspot.com/cd_twitter_callback.jsp?" + request.getQueryString());
+  response.sendRedirect("https://" + NamespaceUtil.getNamespaceFromURL(host) + ".agilecrm.com/cd_twitter_callback.jsp?" + request.getQueryString());
   return;
 }
 
