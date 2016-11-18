@@ -1,8 +1,8 @@
 <script id="setting-email-templates-header-template" type="text/html">
     <div class="col-md-9" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
-        <div class="hbox h-auto m-b-lg">
+        <div class="hbox h-auto {{#is_mobile}} {{else}} m-b-lg {{/is_mobile}}">
             <div class="panel panel-default">
-                <div class="panel-heading">
+                <div class="panel-heading {{#is_mobile}} b-n {{/is_mobile}}">
                     <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates-list'}}</div>
                     <div class="pull-right">
                         <div class="col-sm-12" style="padding-right: 0;" id="emailCtgDiv" data-id="new">
@@ -13,30 +13,15 @@
                             </select>
                         </div> 
                     </div>
-                <div class="clearfix"></div>
-            {{else}}
-                <div class="pull-right">
-                    <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon pull-right" id="addEmailTemplate">
-                    <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="pull-right">
-                        <div class="col-sm-12" style="padding-left: 0;" id="emailCtgDiv" data-id="new">
-                            <a href="#" class="add-to-campaign" id="emailCtg-option" style="vertical-align: -webkit-baseline-middle;">
-                                <span><i class="icon-filter"/></span> {{agile_lng_translate 'admin-settings-tasks' 'categories'}}
-                            </a>
-                            <select id="selected-emailTemplate-category" style="margin-bottom: -1px; height: 31px; padding-top: 0; padding-bottom: 0; display:none;" name="selected-emailTemplate-category" class="form-control">
-                            </select>
-                        </div> 
-                    </div>
-                <div class="clearfix"></div>
-            {{/is_mobile}}
-            <div id="prefs-table-content"></div>
+                <div id="prefs-table-content"></div>
+            </div>
         </div>
     </div>
-
-    <div class="col-md-3 {{#is_mobile}} w-full {{/is_mobile}}">
+    <div class="col-md-3 {{#is_mobile}} w-full p-l-none {{/is_mobile}}">
         <div class="data-block">
-            <div class="p-l p-r">
+            <div class="{{#is_mobile}} p-l-none {{/is_mobile}} p-l p-r" id="learn-email-templates">
                 <h4 class="m-t-none">
                     {{agile_lng_translate 'preferences' 'email-templates'}}
                 </h4>
@@ -89,40 +74,6 @@
     </div>
 </div>
 </div>
-    {{#is_mobile}}
-        <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
-            <div class="data-block">
-            <div class="{{#is_mobile}} p-l-none {{/is_mobile}} p-l p-r" id="learn-email-templates">
-                <h4 class="m-t-none">
-                    {{agile_lng_translate 'preferences' 'email-templates'}}
-                </h4>
-                <p>
-                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
-                </p>
-                <p>
-                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
-                </p>
-               </div>
-            </div>
-        </div>
-    {{else}}
-        <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
-            <div class="data-block">
-            <div class="{{#is_mobile}} p-l-none {{/is_mobile}} p-l p-r">
-                <h4 class="m-t-none">
-                    {{agile_lng_translate 'preferences' 'email-templates'}}
-                </h4>
-                
-                <p>
-                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
-                </p>
-                <p>
-                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
-                </p>
-               </div>
-            </div>
-        </div>
-    {{/is_mobile}}
 
 </script>
 

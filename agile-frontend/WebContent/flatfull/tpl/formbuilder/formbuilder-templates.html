@@ -1,30 +1,33 @@
 <script type="text/html" id="formbuilder-categories-template">
 <div class="custom-animated custom-fadeInUp">
-
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     {{#is_mobile}}
       <div class="col-md-12">
-          <h3 class="pull-left font-thin h4 templates-title">{{agile_lng_translate 'forms' 'add-new'}}</h3>
-          <div class="text-ellipsis" style="max-width:300px;">
+          <h4 class="{{#is_mobile}} {{else}} pull-left {{/is_mobile}} font-thin h4 templates-title">{{agile_lng_translate 'forms' 'add-new'}}</h4>
+          <div class="text-ellipsis {{#is_mobile}} m-b-xs {{/is_mobile}}">
             <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
           </div>
-      <div class="pull-right"> 
-          <a target="_blank" href="formbuilder" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'landing-pages' 'start-with-an-empty-landing-page'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+          <div class="pull-right"> 
+              <a target="_blank" href="formbuilder" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'landing-pages' 'start-with-an-empty-landing-page'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+         </div>
      </div>
      <div class="clearfix"></div>
-     </div>
     {{else}}
-      <div class="col-md-12">
-        <h3 class="pull-left font-thin h3">{{agile_lng_translate 'forms' 'add-new'}}</h3>
-        <div class="text-ellipsis" style="max-width:300px;">
-          <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
-        </div>
+    <div class="col-md-12">
+      <div class="pull-left"> 
+          <div class="btn-group">
+              <h3 class="m-n font-thin h3 pull-left">{{agile_lng_translate 'forms' 'add-new'}}</h3>          
+          </div>
+          <div class="text-ellipsis">
+              <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
+          </div>
+      </div>
       <div class="pull-right"> 
           <a target="_blank" href="formbuilder" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'landing-pages' 'start-with-an-empty-landing-page'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
-     </div>
-     <div class="clearfix"></div>
-     </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
     {{/is_mobile}}
 </div>
 </div>
