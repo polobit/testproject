@@ -21,9 +21,10 @@
 
     //render latest form list click on refresh
     $('#refresh-formlist .refresh-formlist').click(function(){
-    	$("#agileform_id option:not(':first')").remove();
+    	
         $('#refresh-formlist .edit-form').hide();
-        $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){               
+        $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){ 
+            $("#agileform_id option:not(':first')").remove();              
             for(var i=0;i<respData.length;i++){
                 $('#agileform_id').append("<option value= "+ window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
             }    
