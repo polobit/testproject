@@ -48,7 +48,8 @@ String oAuthVerifier = request.getParameter("oauth_verifier");
 Verifier verifier = new Verifier(oAuthVerifier);
 
 // Get Service
-StringBuffer callbackURL = "https://" + NamespaceUtil.getNamespaceFromURL(host) + "-dot-agile-crm-cloud.appspot.com/";
+StringBuffer callbackURL = new StringBuffer();
+callbackURL.append("https://" + NamespaceUtil.getNamespaceFromURL(host) + "-dot-agile-crm-cloud.appspot.com/");
 int index = callbackURL.lastIndexOf("/");
 callbackURL.replace(index, callbackURL.length(), "").append("/cd_twitter_callback.jsp");
 OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).callback(callbackURL.toString()).apiKey(Globals.TWITTER_API_KEY)
