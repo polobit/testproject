@@ -986,9 +986,21 @@ function populate_deal_products(el, value,form_id){
 						objModel.set("isChecked",false)	
 						var id=objData.get('id')
 
-						$('#discount_type_btn',me._form_id).addClass('disabled');
-						$('#discount_value',me._form_id).attr('disabled','disabled');
-						$('#discount_value',me._form_id).val('');
+						var product_selected=false;
+						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
+							if($(value).is(":checked"))			
+							{	
+								product_selected=true;
+								return false;
+							}	
+						});
+							if(!product_selected)
+							{
+								$('#discount_type_btn',me._form_id).addClass('disabled');
+								$('#discount_value',me._form_id).attr('disabled','disabled');
+								$('#discount_value',me._form_id).val('');
+							}
+						
 					}
 					me.calculateGrandTotal();
 				}
