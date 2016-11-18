@@ -2,6 +2,7 @@ package com.agilecrm.core.api.widgets;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -25,6 +26,20 @@ public class KnowlarityAPI {
 			return object.toString();
 		}
 		return null;
+	}
+
+	@Path("getLogs/{customer_number}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getLogsBasedOnNumber(
+			@PathParam("customer_number") String customerNumber)
+			throws Exception {
+		String result = null;
+		Widget widget = WidgetUtil.getWidget("Knowlarity");
+		if (widget != null) {
+			
+		}
+		return result;
 	}
 
 }
