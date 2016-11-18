@@ -663,13 +663,6 @@ if(currentUserPrefs.menuPosition.equals("top")){
       }
   %>
 
-    <li id="email-templates-menu">
-    <a href="#email-templates">
-      <i class="icon-envelope-letter"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
-    </a>
-    </li>
-
    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
@@ -691,18 +684,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
         }
     %>
 
-    <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
-    %>
-   <li id="web-rules-menu">
-    <a  href="#web-rules">
-      <i class="icon icon-globe"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
+    <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="icon-envelope-letter"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
     </a>
-  </li>
-    <%
-          }
-    %>
+    </li>
+
 
      <%
   if(domainUser.is_admin){
@@ -725,6 +713,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
   <%
+          }
+    %>
+
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
+    %>
+   <li id="web-rules-menu">
+    <a  href="#web-rules">
+      <i class="icon icon-globe"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
+    </a>
+  </li>
+    <%
           }
     %>
 
