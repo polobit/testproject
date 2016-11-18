@@ -248,12 +248,12 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		         Date date = sdf.parse(datefrom);
 		         Calendar cal = Calendar.getInstance();
 		         cal.setTime(date);
-		         SimpleDateFormat format1 = new SimpleDateFormat(date_format);
+		         SimpleDateFormat format1 = new SimpleDateFormat(date_format.replaceAll("m", "M"));
 		         formatted = format1.format(cal.getTime());
 		     } catch (ParseException e) {
 		         e.printStackTrace();
 		     }
-		    note.description += "\n Created date:" + formatted;
+		    note.description += "\n Created date :" + formatted;
 		    note.addRelatedContacts(contact.id.toString());
 		    note.save();
 		    
