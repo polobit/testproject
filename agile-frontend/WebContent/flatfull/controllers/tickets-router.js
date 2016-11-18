@@ -128,60 +128,53 @@
 		App_Ticket_Module.feedbackollection = new Base_Collection_View({
 			url : '/core/api/tickets/notes/feedback/?start_time=' + start_time + '&end_time=' 
 			+ end_time + '&feedback=' + feedback+ '&group=' + group + '&assignee=' + assignee,
-				templateKey : "ticket-feedback-log",
-				isNew : true,
+			templateKey : "ticket-feedback-log",
+			isNew : true,
 			individual_tag_name : 'tr',
 			sort_collection : true, 
 			sortKey : 'updated_time',
 			descending : true,
-			postRenderCallback:function(el,model){
+			postRenderCallback:function(el,model){		
+				includeTimeAgo(el);
+			
+				/*Ticket related click event to show the modal when requester or assignee replies*/
+				$(".ticket-feedback-notes").on('click', function(e) 
+				{
+					e.preventDefault();
+				   	var id = $(this).data("id");
+				    
+				    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
 
-				console.log(model);
-			var feedback_rating = model.feedback;
-			for(var i=1;i<=feedback_rating;i++){
-				var image = document.getElementById(i+"_Image")
-				if(image.src.includes("star-off.png") )
-					image.src="/flatfull/img/star-on.png";
-			}			
-		
-			/*Ticket related click event to show the modal when requester or assignee replies*/
-			$(".ticket-feedback-notes").on('click', function(e) 
-			{
-				e.preventDefault();
-			   	var id = $(this).data("id");
-			    
-			    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+					getTemplate("ticket-note-feedback-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
 
-				getTemplate("ticket-note-feedback-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
 
-					if(!template_ui)
-						  return;
+						var emailinfo = $(template_ui);
 
-					var emailinfo = $(template_ui);
+						emailinfo.modal('show');
+					}, null);
 
-					emailinfo.modal('show');
-				}, null);
+				});
+				$(".ticket-feedback-comment").on('click', function(e) 
+				{
+					
+					e.preventDefault();
+				   	var id = $(this).data("id");
+				    
+				    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
 
-			});
-			$(".ticket-feedback-comment").on('click', function(e) 
-			{
-				
-				e.preventDefault();
-			   	var id = $(this).data("id");
-			    
-			    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+					getTemplate("ticket-feedback-comment-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
 
-				getTemplate("ticket-feedback-comment-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
 
-					if(!template_ui)
-						  return;
+						var emailinfo = $(template_ui);
 
-					var emailinfo = $(template_ui);
+						emailinfo.modal('show');
+					}, null);	
 
-					emailinfo.modal('show');
-				}, null);	
-
-			});
+				});
 
 		// $(el)
 		// 	.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',

@@ -61,6 +61,8 @@ public class TicketNotes
 	public Long group_id = null;
 
 	
+	public Long feedback_time = 0L;
+	
 	
 	public String feedback_comment = "";
 	/**
@@ -325,6 +327,9 @@ public class TicketNotes
 
 		if (assignee_key != null)
 			assignee_id = assignee_key.getId();
+		
+		if(feedback_time == 0 || feedback_time == null)
+		   feedback_time = created_time;
 		
 		html_text =HTMLUtil.removeScriptFromHtmltext(html_text); 	    
 	}

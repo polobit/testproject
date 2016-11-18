@@ -364,6 +364,40 @@ Handlebars.registerHelper('is_single_row_view', function(options) {
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('get_feedback_status', function(status, options) {
+
+	switch(status[0]){
+		case '3':
+			return "<div class='feedback_label_width color_ok cus-pad'></span>";
+			break;
+		case '1':
+			return "<div   class='feedback_label_width color_awful cus-pad'></div>";
+			break;	
+		case '2':
+			return "<div   class='color_bad cus-pad feedback_label_width'></div>";
+			break;
+		case '4':
+			return "<div  class='feedback_label_width color_good cus-pad'></div>";
+			break;
+		case '5':
+			return "<div  class='feedback_label_width color_awesome cus-pad'></div>";
+			break;
+	}
+});
+
+Handlebars.registerHelper('timeago_feedback', function(time, options) {
+	
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{	
+			if(time){
+				time[0] = new Date(time[0]);
+				var timeago = $.timeago(time[0]);
+				return timeago; 
+			}
+		});
+
+});				
+
 Handlebars.registerHelper('get_status_label', function(status, options) {
 
 	switch(status){

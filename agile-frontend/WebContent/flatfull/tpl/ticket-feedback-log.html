@@ -67,10 +67,10 @@
           <tr>
               <th></th>
               <th width="10%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-contact'}}</th>
+              <th width="20%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-assignee'}}</th>
+              <th width="14%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-time'}}</th>
               <th width="10%" style="text-align:center;max-width:10%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-feedback'}}</th>
               <th width="25%" style="vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-feedback-comment'}}</th>
-              <th width="14%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-time'}}</th>
-              <th width="20%" style="max-width:20%;vertical-align:middle">{{agile_lng_translate 'tickets' 'feedback-assignee'}}</th>
               <th width="10%" style="max-width:20%;vertical-align:middle"></th>
               <th width="10%" style="max-width:20%;vertical-align:middle"></th>
           </tr>             
@@ -81,7 +81,7 @@
 {{/if}}        
 </script>
 <script id="ticket-feedback-log-model-template" type="text/html">
-<td></td>
+<td style="text-align:center;vertical-align:middle;">{{{get_feedback_status feedback}}}</td>
 <td style="vertical-align:middle">
 	
     <div class="avatar thumb-sm text-capitalize" style="width:150px;
@@ -98,6 +98,16 @@
     </div>
 
     </td>
+
+    <td class="text-capitalize" style="vertical-align:middle;">
+    <div class="line-clamp line-clamp-3" >
+          {{#if assignee_name}}{{assignee_name}}{{else}}-{{/if}}                      
+    </div>
+    </td>
+    <td  style="vertical-align:middle;">
+
+         <time class="time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>                       
+    </td>  
     <td style="text-align:center;vertical-align:middle;">
         
         {{#if feedback}}
@@ -119,14 +129,8 @@
 
        {{/if_equals}}     </td>
 
-    <td  style="vertical-align:middle;">
-         <div class="time-ago"> {{epochToHumanDate "mmm dd yyyy HH:MM" created_time}}</div>                      
-    </td>              
-    <td class="text-capitalize" style="vertical-align:middle;">
-    <div class="line-clamp line-clamp-3" >
-          {{#if assignee_name}}{{assignee_name}}{{else}}-{{/if}}                      
-    </div>
-    </td>
+                
+    
      <td  style="vertical-align:middle" id="ticket_note" data-id="{{id}}">        
           <a href="" class="ticket-feedback-notes text-info" data-id="{{id}}">{{agile_lng_translate 'tickets' 'feedback-view-note'}}</a>      
             
