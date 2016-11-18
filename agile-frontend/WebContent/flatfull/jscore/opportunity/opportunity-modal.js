@@ -583,6 +583,9 @@ function updateDeal(ele, editFromMilestoneView)
 			//$("#showtoggle_show").show();
 			//$("#showproducts").show();
 			populate_deal_products(dealForm,value,"#opportunityUpdateForm");
+			$('#discount_type_btn',dealForm).addClass('disabled');
+				$('#discount_value',dealForm).attr('disabled','disabled');
+						
 		}else{
 			$("#opportunityUpdateForm").find("#showtoggle_show").hide();
 			$("#opportunityUpdateForm").find("#showproducts").hide();

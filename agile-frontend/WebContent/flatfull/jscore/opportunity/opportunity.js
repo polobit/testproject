@@ -876,6 +876,14 @@ function populate_deal_products(el, value,form_id){
 						}else{
 							//$("#showproducts").show();
 						}
+						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
+							if($(value).is(":checked"))			
+							{	
+								$('#discount_type_btn',me._form_id).removeClass('disabled');
+								$('#discount_value',me._form_id).removeAttr('disabled');
+								return false;
+							}	
+						});
 					}
 				});
 
@@ -900,6 +908,8 @@ function populate_deal_products(el, value,form_id){
 								//$(value).trigger("click")
 							}	
 						});
+						$('#discount_type_btn',me._form_id).removeClass('disabled');
+						$('#discount_value',me._form_id).removeAttr('disabled');
 					}
 					else
 					{
@@ -915,6 +925,9 @@ function populate_deal_products(el, value,form_id){
 								//$(value).trigger("click")
 							}	
 						});
+						$('#discount_type_btn',me._form_id).addClass('disabled');
+						$('#discount_value',me._form_id).attr('disabled','disabled');
+						$('#discount_value',me._form_id).val('');
 					}
 					me.calculateGrandTotal();
 				}
@@ -964,12 +977,18 @@ function populate_deal_products(el, value,form_id){
 						{
 							objModel.set("isChecked",true)	
 						}
+						$('#discount_type_btn',me._form_id).removeClass('disabled');
+						$('#discount_value',me._form_id).removeAttr('disabled');
 						
 					}
 					else
 					{
 						objModel.set("isChecked",false)	
 						var id=objData.get('id')
+
+						$('#discount_type_btn',me._form_id).addClass('disabled');
+						$('#discount_value',me._form_id).attr('disabled','disabled');
+						$('#discount_value',me._form_id).val('');
 					}
 					me.calculateGrandTotal();
 				}
@@ -1059,6 +1078,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.calculateGrandTotal=function ()
 				{
+					if(ValidateDealDiscountAmt(me._form_id)){
 				//	var currentDeal = App_Deal_Details.dealDetailView.model	
 					var iTotal=0;
 					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
@@ -1108,8 +1128,8 @@ function populate_deal_products(el, value,form_id){
 							else
 							$("input[name='expected_value']",$(me._form_id)).val(0);	
 						}
+					}
 					
-					ValidateDealDiscountAmt(me._form_id);
 				}
 				
 }
@@ -1118,6 +1138,8 @@ function ValidateDealDiscountAmt(_form_id)
 {
 	
 	var iTotal=0;
+	if($("#discount_value").is(':disabled'))
+		return true;
 	try{
 		var iDiscountValue=$("#discount_value",_form_id).val();
 		$(".calculation-error-status",_form_id).html("")
@@ -1127,8 +1149,8 @@ function ValidateDealDiscountAmt(_form_id)
 				$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-should-be-numeric'}}")
 				return false;
 			}
-		var val= document.getElementById("discount_value").value;
-		if(val){
+
+		if(iDiscountValue){
 		//if($("#apply_discount",_form_id).is(':checked'))
 		//{
 			
