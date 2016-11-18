@@ -1244,13 +1244,13 @@ body {
 }
 
 .navi ul.nav li li a {
-  padding-left: 55px;
+  padding-left: 45px;
 }
 
 .navi ul.nav li a {
   position: relative;
   display: block;
-  padding: 10px 20px;
+  padding: 8px 20px;
   font-weight: normal;
   text-transform: none;
   -webkit-transition: background-color 0.2s ease-in-out 0s;

@@ -474,21 +474,23 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$("#helpcontent_popover").addClass("hide");
 	
 	}
-	$(".appaside.dropdownnavbar ul li").on("click",function(e)
-	{
-		$(this).addClass("agile-menuactive");
-		$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
-	});
 	$(".appaside.dropdownnavbar").on("click",function(e)
 	{
 		
 		if($(this).hasClass("agile-menuactive"))
 		{
 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
-			return $(this).addClass("agile-menuactive");
+			return $(this).removeClass("agile-menuactive");
 		}
 		$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
 		return $(this).addClass("agile-menuactive");
+	});
+	$(".appaside.dropdownnavbar ul li").on("click",function(e)
+	{
+		e.stopPropagation();
+		$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
+		$(this).addClass("agile-menuactive");
+		$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
 	});
 	// initializing need help popover for header page
    $(".need_help").popover({ 
