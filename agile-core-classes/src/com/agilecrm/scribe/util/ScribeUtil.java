@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
@@ -45,6 +46,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Account;
 import com.thirdparty.google.ContactPrefs;
@@ -78,9 +80,10 @@ public class ScribeUtil {
 	 *            {@link String} Service type
 	 *            (LinkedIn/Twitter/Google/Facebook..)
 	 * @return {@link OAuthRequest}
+	 * @throws Exception 
 	 */
 	public static OAuthService getService(HttpServletRequest req,
-			HttpServletResponse resp, String serviceType) {
+			HttpServletResponse resp, String serviceType) throws Exception {
 		/*
 		 * Get callback url, to which the tokens are returned after
 		 * authentication
@@ -89,7 +92,7 @@ public class ScribeUtil {
 		System.out.println("getService callback: " + callback);
 
 		OAuthService service = null;
-
+		try{
 		// If service type LinkedIn, creates a Service, specific to LinkedIn
 		if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN))
 			service = getSpecificService(req,
@@ -187,7 +190,10 @@ public class ScribeUtil {
 					com.agilecrm.scribe.api.GoogleApi.class, callback,
 					Globals.GOOGLE_CLIENT_ID, Globals.GOOGLE_CLIENT_ID,
 					ScribeServlet.GMAIL_SCOPE);
-
+		}catch (Exception e){			
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new Exception();
+		}
 		return service;
 	}
 
