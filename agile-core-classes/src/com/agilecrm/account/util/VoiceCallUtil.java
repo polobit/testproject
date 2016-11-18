@@ -46,8 +46,11 @@ public class VoiceCallUtil
         	    if(StringUtils.isBlank(domain))
         		domain=NamespaceManager.get();
         	     System.out.println("domain: " + domain);
-        	     String path ="https://"+domain+".agilecrm.com/twiliovoicecall?message="+URLEncoder.encode(msg, "UTF-8")+"&number2="+secondCall;
-            	     params.put("From", from);
+        	    // String path ="https://"+domain+".agilecrm.com/twiliovoicecall?message="+URLEncoder.encode(msg, "UTF-8")+"&number2="+secondCall;
+        	     // due to special character in domain we are gettin issue so we are hard coding the domain as our
+        	     //changes made by prakash
+        	     String path ="https://our.agilecrm.com/twiliovoicecall?message="+URLEncoder.encode(msg, "UTF-8")+"&number2="+secondCall;
+        	     params.put("From", from);
         	     params.put("To", firstCall);
         	     params.put("Url", path);
         	     TwilioRestResponse twilioResponse = client.request("/" + TwilioSMSUtil.TWILIO_VERSION + "/" + TwilioSMSUtil.TWILIO_ACCOUNTS + "/" + account_id
