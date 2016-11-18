@@ -663,6 +663,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
       }
   %>
 
+    <li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="icon-envelope-letter"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
+    </a>
+    </li>
+
    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CAMPAIGN)){
    %>
@@ -679,9 +686,11 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
     </a>
   </li>
+
     <%
         }
     %>
+
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.WEBRULE)){
     %>
@@ -694,18 +703,18 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %>
+
      <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
-    %>
-   <li id="segmentationmenu">
-    <a  href="#visitors">
-       <i class="icon-eye"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
+  if(domainUser.is_admin){
+  %>
+  <li id="formsmenu">
+    <a  href="#forms">
+       <i class="icon-large1 icon-docs"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
-   <%
-          }
-    %>
+  <%}%>
+     
      <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>
@@ -719,21 +728,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
           }
     %>
 
-  <%
-  if(domainUser.is_admin){
-  %>
-  <li id="formsmenu">
-    <a  href="#forms">
-       <i class="icon-large1 icon-docs"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
-    </a>
-  </li>
-  <%}%>
-  
-  <li id="email-templates-menu">
-    <a href="#email-templates">
-      <i class="icon-envelope-letter"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
+    <li id="push-notification-menu">
+    <a href="#push-notification">
+      <i class="fa fa-bell-o"></i>
+      <span>Push Notifications</span>
     </a>
   </li>
 
@@ -749,12 +747,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
           }
     %>
-    <li id="push-notification-menu">
-    <a href="#push-notification">
-      <i class="fa fa-bell-o"></i>
-      <span>Push Notifications</span>
-    </a>
-  </li>
+
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
@@ -776,6 +769,20 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
+
+  <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+    %>
+   <li id="segmentationmenu">
+    <a  href="#visitors">
+       <i class="icon-eye"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
+    </a>
+  </li>
+   <%
+          }
+    %>
+
   <li id="tasksmenu" class="hide">
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
