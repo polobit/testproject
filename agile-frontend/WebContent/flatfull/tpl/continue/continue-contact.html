@@ -53,7 +53,7 @@
                         <div class="pull-left">
                             <ul name="tags" class="tagsinput tags p-n">
                                 {{#each tags}}
-                                <li class="tag inline-block btn btn-xs btn-primary m-r-xs m-b-xs" data="{{this}}">{{this}}<a class="close m-l-xs" id="remove_tag">&times</a></li>
+                                <li class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" data="{{this}}">{{this}}<a class="close m-l-xs" id="remove_tag" style="color: #363f44;">&times</a></li>
                                 {{/each}}
                             </ul>
                         </div>
@@ -255,6 +255,7 @@
                                 <option value="home">{{agile_lng_translate 'contact-edit' 'home'}}</option>
                                 <option value="postal">{{agile_lng_translate 'contact-edit' 'postal'}}</option>
                                 <option value="office">{{agile_lng_translate 'contact-edit' 'office'}}</option>
+
                             </select>
 
                             </div>
