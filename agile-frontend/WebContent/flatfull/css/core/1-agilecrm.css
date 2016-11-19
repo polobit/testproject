@@ -5093,4 +5093,10 @@ border-top: 0px !important;
 .uv-icon,.uv-popover-tail{
   display: none !important;
 }
+#workflow-unsubscribe-option .popover {
+    color: #656565;
+}
+#unsubscribe-endisable-option{
+  display:none;
+}
 
