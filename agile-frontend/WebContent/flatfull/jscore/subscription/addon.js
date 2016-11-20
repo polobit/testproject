@@ -136,3 +136,73 @@ function changeSaveBtnStatus(target, quantity){
     else
         $(btn).removeAttr("disabled");
 }
+
+function getAddonPriceJson(el, data){
+    var price_json = {};
+    price_json.plan_name = $(".panel-heading", el).text();
+    price_json.duration = "Yearly";
+    price_json.quantity = $(".quantity:first", el).text();
+    price_json.cost = $(".cost:first", el).text();
+    if(data && data.lines){
+        price_json.amount_due = (data.amountDue/100).toFixed(2);
+        price_json.final_amount_due = (data.amountDue/100).toFixed(2);
+        
+        if(data.lines.data.length > 1){
+            var old_plan = data.lines.data[0];
+            var new_plan = data.lines.data[1];
+            price_json.period_end = new_plan.period.end;
+            price_json.old_plan_amount = ((old_plan.amount * (-1))/100).toFixed(2);
+            price_json.new_plan_amount = (new_plan.amount/100).toFixed(2);
+            price_json.amount_due = price_json.new_plan_amount;
+            price_json.final_amount_due = (price_json.new_plan_amount - price_json.old_plan_amount).toFixed(2);
+        }else{
+            price_json.period_end = data.lines.data[0].period.end
+        }
+        // Check if credit exists for fustomer
+        if(data.startingBalance && data.startingBalance != 0){
+            price_json.starting_balance = (data.startingBalance/100).toFixed(2);
+            // If credit exists dedect it from final_amount_due
+            price_json.final_amount_due -= price_json.starting_balance;
+            var remaining_starting_balance = price_json.starting_balance - price_json.amount_due;
+            if(remaining_starting_balance > 0)
+                price_json.remaining_starting_balance = remaining_starting_balance;
+        }
+        if(price_json.final_amount_due < 0)
+                price_json.final_amount_due = 0;
+    }else{
+        price_json.amount_due = $(".total_cost", el).text();
+        price_json.final_amount_due = price_json.amount_due;
+        price_json.period_end = parseInt(new Date().setMonth(new Date().getMonth() + 12) / 1000);
+    }
+    return price_json;
+}
+
+function addonPaymentPreprocess(el, url){
+    var btn = $(".save", el);
+    var json = serializeForms(el);
+    if(json == undefined){
+        enable_save_button(btn);
+        return;
+    }
+    $.ajax({
+        url : url,
+        type : "POST",
+        dataType: "json",
+        contentType : "application/json; charset=utf-8",
+        data : JSON.stringify(json),
+        success : function(data){
+            var price_json = getAddonPriceJson(el,data);
+            getTemplate("addon-show-price-model", price_json, undefined, function(template_ui){
+                if(!template_ui)
+                      return;
+                $('#addon-show-price-modal', el).html($(template_ui)).modal('show');
+                $('[data-toggle="tooltip"]', el).tooltip();
+                enable_save_button(btn);
+            }, null);
+        },
+        error : function(data){
+            enable_save_button(btn);
+            showNotyPopUp("warning", data.responseText, "top");
+        }
+    });
+}

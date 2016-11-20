@@ -17,7 +17,7 @@
         </div>
       	<div class="col-md-6">
           <div class="text-md font-bold m-b-sm m-l">Billing Details</div> 
-
+          <input type="hidden" name="planId" value="addon-acl-12"></input>
           <label class="col-sm-6 p-t-none col-xs-6">Number of Users</label>
           <div class="quantity col-sm-6 col-xs-6">0</div>
           <div class="clearfix"></div>
@@ -41,13 +41,14 @@
         </div>
       </div>
       <div class="line ling-lg b-b"></div>
-      <a href="#" class="save btn btn-sm btn-primary pull-right">Proceed</a>
+      <a href="#" class="save saveAuth btn btn-sm btn-primary pull-right" data-loading-text="Processing...">Proceed</a>
       {{#if this.aclInfo.subscriptionId}}
       <a href="#" class="cancel_addon btn btn-sm btn-default pull-right m-r-xs">Cancel Subscription</a>
       {{/if}}
     </div>
   </div>
 </form>
+<div class="modal fade in" id="addon-show-price-modal"></div>
 </script>
 
 <script id="campaign-addon-model-template" type="text/html">
@@ -96,13 +97,14 @@
         </div>
       </div>
       <div class="line ling-lg b-b"></div>
-      <a href="#" class="save btn btn-sm btn-primary pull-right">Proceed</a>
+      <a href="#" class="save saveAuth btn btn-sm btn-primary pull-right" data-loading-text="Processing...">Proceed</a>
       {{#if this.campaignInfo.subscriptionId}}
       <a href="#" class="cancel_addon btn btn-sm btn-default pull-right m-r-xs">Cancel Subscription</a>
       {{/if}}
     </div>
   </div>
 </form>
+<div class="modal fade in" id="addon-show-price-modal"></div>
 </script>
 
 <script id="trigger-addon-model-template" type="text/html">
@@ -152,11 +154,92 @@
       </div>
       </div>
       <div class="line ling-lg b-b"></div>
-      <a href="#" class="save btn btn-sm btn-primary pull-right">Proceed</a>
+      <a href="#" class="save saveAuth btn btn-sm btn-primary pull-right" data-loading-text="Processing...">Proceed</a>
       {{#if this.triggerInfo.subscriptionId}}
       <a href="#" class="cancel_addon btn btn-sm btn-default pull-right m-r-xs">Cancel Subscription</a>
       {{/if}}
     </div>
   </div>
 </form>
+<div class="modal fade in" id="addon-show-price-modal"></div>
+</script>
+
+<script id="addon-show-price-model-template" type="text/html">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">{{agile_lng_translate 'plan-and-upgrade' 'confirm-your-plan'}}</h3>
+            </div>
+            <div class="modal-body help-text">
+                <div class="row">
+                  <div class="col-md-12">
+
+                    <div class="control-group form-group m-b-xs">
+                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'plan'}}</label>
+                      <div class="controls col-sm-6 text-cap ">{{plan_name}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="control-group form-group m-b-xs">
+                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}} :</label>
+                      <div class="controls col-sm-6 text-cap ">{{quantity}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="control-group form-group m-b-xs">
+                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'billing-cycle'}}</label>
+                      <div class="controls col-sm-6 text-cap ">{{duration}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="control-group form-group m-b-xs">
+                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'next-billing-date'}}</label>
+                      <div class="controls col-sm-6 text-cap ">{{epochToHumanDate "mmm dd, yyyy" period_end}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="line line-dashed b-b line-lg"></div>
+
+                    <div class="control-group form-group m-b-none">
+                      <label class="col-sm-3 control-label">{{agile_lng_translate 'other' 'total-cost'}}</label>
+                      <div class="controls col-sm-6">
+                        <span style="font-size: 22px;color: #FA782D;font-weight: bold;">$</span>
+                        <b class="p-r-xs" style="font-size: 22px;color: #FA782D;">{{final_amount_due}}</b>
+                        {{#if_equals final_amount_due amount_due}}  
+                        {{else}}     
+                          <span class="pos-rlt" style="top:-3px;">
+                            (<span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Total Amount">${{new_plan_amount}}</span> 
+                            {{#if old_plan_amount}}
+                              - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Prorated Amount">${{old_plan_amount}}</span>
+                            {{/if}}
+
+                            {{#if starting_balance}}
+                              - <span class="c-p" data-toggle="tooltip" data-placement="top" title="" data-original-title="Credit">${{starting_balance}}</span>
+                            {{/if}}
+
+                            )
+                          </span>
+                        {{/if_equals}}
+                        <p class="help-block m-t-n-xs">
+                          {{quantity}} × ${{cost}} × 12 Months
+                        </p>
+                      </div>
+                    </div>
+                    {{#if remaining_starting_balance}}
+                      <div class="control-group form-group m-b-xs">
+                        <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'plan-and-upgrade' 'remaining-credit'}}</label>
+                        <div class="controls col-sm-6 text-cap ">${{remaining_starting_balance}}</div>
+                      </div>
+                      <div class="clearfix"></div>
+                    {{/if}}
+
+                  </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="saveAuthConform btn btn-sm btn-primary">{{agile_lng_translate 'plan-and-upgrade' 'pay-now'}}</a>
+            </div>
+        </div>
+    </div>
 </script>

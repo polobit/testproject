@@ -877,3 +877,50 @@ function agileTimeAgoWithLngConversion(el, callback){
 function getMaximumPageSize(){
 	return CURRENT_USER_PREFS.page_size;
 }
+
+function serializeForms(el){
+	var isValid, json;
+	// Initialize variable json as a map
+	json = {};
+	if ($(el).find('form').length > 1) {
+		$.each($(el).find('form'),	function(index, formelement) {			
+			/*
+			 * If any form in multiple forms are not valid
+			 * then returns, setting a flag form data is
+			 * invalid
+			 */
+			if (!isValidForm($(formelement))) {
+				isValid = false;
+				return;
+			}
+
+			/*
+			 * Form id and Mame of the form is read,
+			 * required to serialize and set in JSON
+			 */
+			var form_id = $(formelement).attr('id');
+			var name = $(formelement).attr('name');
+
+			/*
+			 * If name of the form is defined, set the
+			 * serialized data in to JSON object with form
+			 * name as key
+			 */
+			if (name) {
+				json[name] = serializeForm(form_id);
+			}
+			/*
+			 * If form name is not defined the set the
+			 * serialized values to json, with filed names
+			 * as key for the value
+			 */
+			else {
+				$.each(serializeForm(form_id), function(
+						key, value) {
+					json[key] = value;
+				});
+			}
+		});
+	}
+	return json;
+}
