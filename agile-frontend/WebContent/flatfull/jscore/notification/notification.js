@@ -719,7 +719,7 @@ function get_contact_by_email(email,callback)
 // Mobile push notification GCM Id update to server via mobile
 $(function(){
 	// Get GCM Id
-	var gmdId = _agile_get_prefs("GCM_Id");
+	var gmdId = _agile_get_prefs("_agile_GCM_Id");
 	if(!agile_is_mobile_browser() || !gmdId)
 		return;
 

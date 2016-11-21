@@ -2,7 +2,9 @@ package com.agilecrm.user.notification.deferred;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -14,6 +16,8 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Sender;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -51,6 +55,11 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	 * Raw message
 	 */
 	String raw_message = null;
+	
+	// Server Key
+	// private static final String serverAPIKey = "AIzaSyAVanImbijvXcUAr6iZNVZLgSG1EeCBMzk";
+	private static final String serverAPIKey = "AIzaSyApc647aMom3kEHsTQ9m6WiL9_6iHrsl_4";
+	public static final String MESSAGE_KEY = "message";
 
 	/**
 	 * Constructs a new {@link MobileNotificationsDeferredTask}.
@@ -107,7 +116,8 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 				
 				System.out.println("Success");
 				
-				HTTPUtil.accessURL(getURL(agileUserPushNotificationId.registrationId));
+				sendMessageToAndriod(agileUserPushNotificationId.registrationId, URLEncoder.encode(message, "UTF-8"));
+				// HTTPUtil.accessURL(getURL(agileUserPushNotificationId.registrationId));
 			}
 
 		} catch (Exception e) {
@@ -141,7 +151,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	}
 
 	private String getURL(String regId) {
-
+		
 		// URL params
 		String urlParams = "/AgileNotifications/agile-push?regId=$regId&message=$message&platform=$platform";
 
@@ -162,5 +172,22 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 		System.out.println("serverURL = " + serverURL);
 		return serverURL;
 	}
+	
+	private void sendMessageToAndriod(String regId, String data)
+	{
+		try
+		{
+			Sender sender = new Sender(serverAPIKey);
+			Message message = new Message.Builder().timeToLive(125).delayWhileIdle(false)
+					.addData(MESSAGE_KEY, data).build();
+			
+			System.out.println("regId: " + regId);
+			System.out.println(sender.send(message, regId, 1));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
+	}
 }
