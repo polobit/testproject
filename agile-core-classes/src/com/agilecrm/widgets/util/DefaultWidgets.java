@@ -178,7 +178,7 @@ public class DefaultWidgets {
 				 "AppCalling",
 				 "Now you make Outbound calls and get Inbound calls from App",
 				 "/widgets/appcalling.js", "widgets/appcalling-lg-logo.png",
-				 "widgets/appcalling-md-logo.png", null, WidgetType.CALL));
+				 "widgets/appcalling-sm-logo.png", null, WidgetType.CALL));
 		
 
 		System.out.println("Default widgets ");
