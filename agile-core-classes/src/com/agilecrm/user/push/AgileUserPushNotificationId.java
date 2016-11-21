@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.annotation.Cached;
@@ -85,6 +87,9 @@ public class AgileUserPushNotificationId {
 	public static List<AgileUserPushNotificationId> getNotifiers(String domainName) {
 		String oldDomainName = NamespaceManager.get();
 		NamespaceManager.set("");
+		if(StringUtils.isBlank(domainName))
+			domainName = "";
+		
 		try {
 			return dao.listByProperty("domain", domainName);
 		} catch (Exception e) {
@@ -104,6 +109,9 @@ public class AgileUserPushNotificationId {
 	public static int getNotifiersCount(String domainName) {
 		String oldDomainName = NamespaceManager.get();
 		NamespaceManager.set("");
+		if(StringUtils.isBlank(domainName))
+			domainName = "";
+		
 		try {
 			return dao.getCountByProperty("domain", domainName);
 		} catch (Exception e) {
