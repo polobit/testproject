@@ -38,7 +38,7 @@ function saveCallNoteOzonetel(message){
 	    	if(!responseJson){
 	    		
 	    		resetCallLogVariables();
-	    		
+
 	    		if(message.state == "answered") {
 	    			var data = {};
 	    			data.url = "/core/api/widgets/ozonetel/";
@@ -60,6 +60,7 @@ function saveCallNoteOzonetel(message){
 		    		CallLogVariables.status = callStatus;
 		    		var jsonObj = {};
 		    		jsonObj['phoneNumber'] = number;
+		    		closeCallNoty(true);
 		    		return showContactMergeOption(jsonObj);
 	    		
 	    	}
@@ -77,6 +78,7 @@ function saveCallNoteOzonetel(message){
 				data.contId = contact.id;
 				data.contact_name = contact_name;
 				data.widget = "Ozonetel";
+				closeCallNoty(true);
 				showDynamicCallLogs(data);
 	    	}else{
 	    		
@@ -108,6 +110,7 @@ function saveCallNoteOzonetel(message){
 					data.contId = cntId;
 					data.contact_name = contact_name;
 					data.widget = "Ozonetel";
+					closeCallNoty(true);
 					showDynamicCallLogs(data);
 					});
 				}else{
@@ -116,7 +119,7 @@ function saveCallNoteOzonetel(message){
 				}
 		}else{
 			resetCallLogVariables();
-    		
+
     		if(message.state == "answered") {
     			var data = {};
     			data.url = "/core/api/widgets/ozonetel/";
@@ -138,6 +141,7 @@ function saveCallNoteOzonetel(message){
 	    		CallLogVariables.status = callStatus;
 	    		var jsonObj = {};
 	    		jsonObj['phoneNumber'] = message.contact_number;
+	    		closeCallNoty(true);
 	    		return showContactMergeOption(jsonObj);
 		}
 	}

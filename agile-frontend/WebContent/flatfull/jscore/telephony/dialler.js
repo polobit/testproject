@@ -570,7 +570,7 @@ function getIcon(widgetName){
 	}else if(widgetName == "Skype"){
 		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
 	}else if(widgetName == "Ozonetel"){
-		icon = "<img src='/widgets/sip-logo-small.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
+		icon = "<img src='/widgets/ozonetel_fullsize.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
 	}
 	return icon;
 }

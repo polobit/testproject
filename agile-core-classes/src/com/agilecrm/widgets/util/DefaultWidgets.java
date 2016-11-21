@@ -131,7 +131,7 @@ public class DefaultWidgets {
 				"Ozonetel",
 				"Make and receive calls, and send and receive text messages with your customers using Twilio account.",
 				"/widgets/ozonetel.js", "/widgets/ozonetel.png",
-				"/widgets/sip-logo-small.png", null, WidgetType.CALL));
+				"/widgets/ozonetel_fullsize.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
 				"GooglePlus",
 				"Google+",

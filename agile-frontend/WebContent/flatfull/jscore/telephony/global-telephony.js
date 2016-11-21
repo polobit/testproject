@@ -589,10 +589,6 @@ function handleCallRequest(message)
 				sendCommandToClient("notConfigured","Ozonetel");
 				return;
 			}
-			if(message.state && message.state != "ringing"){
-				saveCallNoteOzonetel(message);
-				globalCall.callStatus = "Ideal";
-			}
 			try{
 				var phone = $("#ozonetel_contact_number").val();
 				if (!phone || phone == ""){
@@ -611,6 +607,10 @@ function handleCallRequest(message)
 				globalCall.callNumber = message.contact_number;
 			}
 			showOzonetelCallNoty(message);
+			if(message.state && message.state != "ringing"){
+				saveCallNoteOzonetel(message);
+				globalCall.callStatus = "Ideal";
+			}
 		}
 }
 
