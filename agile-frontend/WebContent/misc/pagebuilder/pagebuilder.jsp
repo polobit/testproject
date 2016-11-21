@@ -191,7 +191,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <li><a href="#" id="saveTemplate" data-toggle="modal" data-siteid="6"><span class="fui-arrow-right"></span> Save page template</a></li>
                     </ul> -->
                 </div>
-                
+                <div class="col-md-5" id="lp-save-msg" style="color: white; text-align: center; float: right; margin-top: 7px; display:none; color: #24bfa0;">Landing page saved.</div>
                 <ul class="nav nav-pills nav-inverse pull-left responsiveToggle" id="responsiveToggle">
                     <li>
                         <a href="" data-responsive="mobile">
@@ -2340,6 +2340,44 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 </div><!-- /.modal-body -->
                                 
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
+                </div>
+                
+            </div><!-- /.modal-content -->
+            
+        </div><!-- /.modal-dialog -->
+                
+    </div><!-- /.modal -->
+    <!-- /.modal for next step instruction -->
+    <div class="modal fade instructionModal" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        
+        <div class="modal-dialog">
+            
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <label id="popup-msg" style="margin:5px; color: green;">
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 
+                        </label>
+                    </h3>
+                    <i class="fa fa-arrow-right"></i> 
+                    <strong> Next Action </strong> 
+                     Publish the landing page
+                    
+                </div>      
+                <div class="modal-body" style="text-align: center;">
+                    <a href="<%=MAIN_URL%>#landing-page-settings/<%=pageId%>" style="color:#34495e;">
+                        <i class="fa fa-cloud-upload fa-4x" ></i></a>
+                    <br>
+                           Publish                    
+                                                                    
+                </div><!-- /.modal-body -->
+                                
+                <div class="modal-footer">
+                    <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
+                        <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false">Don't show me again</label>
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
                 </div>
                 
