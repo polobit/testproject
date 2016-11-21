@@ -160,7 +160,7 @@ function getAddonPriceJson(el, data){
         }
         // Check if credit exists for fustomer
         if(data.startingBalance && data.startingBalance != 0){
-            price_json.starting_balance = (data.startingBalance/100).toFixed(2);
+            price_json.starting_balance = ((data.startingBalance/100) * (-1)).toFixed(2);
             // If credit exists dedect it from final_amount_due
             price_json.final_amount_due -= price_json.starting_balance;
             var remaining_starting_balance = price_json.starting_balance - price_json.amount_due;
