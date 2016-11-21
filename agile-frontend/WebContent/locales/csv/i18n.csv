@@ -4824,7 +4824,7 @@ currency.Euro,Euro,Euro
 deal-view.name,Name,Nombre
 tasks.High,High,Alta
 menu.help,Help,Ayuda
-portlets.+add,+ Add new,+ Añadir nuevo
+portlets.+add,#NAME?,#NAME?
 portlets.tags,Tags,Etiquetas
 report-add.name,Name,Nombre
 contact-edit.main,Main,Principal
@@ -5836,12 +5836,13 @@ portlets.no-pending-deals,No Pending Deals,
 calls.duration-secs-new,Call Duration (Min),
 calls.avg-duration-secs-new,Average Call Duration (Min),
 contacts-view.manage-filters,Manage Filter,
-portlets.+add-new,+ Add new,
+portlets.+add-new,#NAME?,
 landingpage-builder.page-script-applied,Script applied specifically to this page (JavaScript),
 landingpage-builder.page-js,Page JS,La página de JS
 admin-settings-users.updated-time,Updated Time,
 admin-settings-users.status,Status,
 admin-settings-deals.manage-tracks,Manage Tracks,
-landingpage-builder.recorded-video,Recorded Video,,
-landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39;Email Builder&#39;,,
-landingpage-builder.form-tooltip,Select/Add agile form in landing page,,
+landingpage-builder.recorded-video,Recorded Video,
+landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39;Email Builder&#39;,
+landingpage-builder.form-tooltip,Select/Add agile form in landing page,
+specialchar-typeahead.notallowed-apclchars,Search query characters result in server exception. Please try again,
