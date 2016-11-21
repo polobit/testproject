@@ -368,6 +368,9 @@ $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS inp
 	{
 		var prevVal = $(this).attr('prev-val');
 		var currVal = $(this).val().trim();
+		if(currVal == ""){
+		return;
+	    }
 		var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
 	    if (!regex.test(currVal)) {
             showAlertModal("tag_name_restriction");
@@ -816,6 +819,9 @@ function bindChangeEvent(ele){
 	console.log("I am in change updated " + $(ele).val());
 	var prevVal = $(ele).attr('prev-val');
 	var currVal = $(ele).val().trim();
+	if(currVal == ""){
+		return;
+	}
 	var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
 	 if (!regex.test(currVal)) {
         showAlertModal("tag_name_restriction");
