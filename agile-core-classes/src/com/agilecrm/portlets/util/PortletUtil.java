@@ -91,8 +91,17 @@ public class PortletUtil {
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			
 			allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-			allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+			//allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
 			allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
+
+			/*if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(PortletType.MARKETING)){
+			    	allPortlets.add(new Portlet("Emails Opened",PortletType.MARKETING));
+			    	allPortlets.add(new Portlet("Campaign stats",PortletType.MARKETING));
+				allPortlets.add(new Portlet("Campaign graph",PortletType.MARKETING));
+				allPortlets.add(new Portlet("Referralurl stats",PortletType.MARKETING));
+				allPortlets.add(new Portlet("Webstat Visits",PortletType.MARKETING));
+
+			}*/
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
 				allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
@@ -121,15 +130,21 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
-				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
+				/*allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign graph",PortletType.USERACTIVITY));
-				allPortlets.add(new Portlet("Referralurl stats",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Referralurl stats",PortletType.USERACTIVITY));*/
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
-			allPortlets.add(new Portlet("Webstat Visits",PortletType.WEBSTATS));
 			
+			//allPortlets.add(new Portlet("Webstat Visits",PortletType.WEBSTATS));
+			allPortlets.add(new Portlet("Emails Opened",PortletType.MARKETING));
+		    	allPortlets.add(new Portlet("Campaign stats",PortletType.MARKETING));
+			allPortlets.add(new Portlet("Campaign graph",PortletType.MARKETING));
+			allPortlets.add(new Portlet("Referralurl stats",PortletType.MARKETING));
+			allPortlets.add(new Portlet("Webstat Visits",PortletType.MARKETING));
+
 			//setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
 			e.printStackTrace();
