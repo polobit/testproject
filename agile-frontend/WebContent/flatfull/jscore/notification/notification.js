@@ -723,7 +723,7 @@ $(function(){
 	if(!agile_is_mobile_browser() || !gmdId)
 		return;
 
-	alert(gmdId);
+	// alert(gmdId);
 
 	// Save this to Agile Server
 });
