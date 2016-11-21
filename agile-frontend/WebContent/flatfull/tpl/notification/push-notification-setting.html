@@ -2,9 +2,17 @@
 	<div class="wrapper-md lter bg-light b-b">
 		<div class="row">
     		<div class="col-md-12">
-        		<h3 class="font-thin h3 pull-left">Push Notifications <small> <span class="label label-sm bg-danger">Beta</span></small></h3>
+        		{{#is_mobile}}
+	        		<h3 class="font-thin h4 pull-left push-notification-title">Push Notifications <span class="label label-sm bg-danger">Beta</span></h3>
+	        		<div class="add-push-notify-btn">
+						<a href="#push-notification-add" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
+					</div>
+					<div class="clearfix"></div>
+        		{{else}}
+        			<h3 class="font-thin h3 pull-left">Push Notifications <small> <span class="label label-sm bg-danger">Beta</span></small></h3>
 					<a href="#push-notification-add" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
-				<div class="clearfix"></div> 
+					<div class="clearfix"></div>
+        		{{/is_mobile}}
     		</div>
 		</div>
 	</div>
@@ -31,31 +39,44 @@
 			</div>
 		{{/unless}}
 		{{#if this.length}}
-		<div class="data-block">
-			<div class="data-container">
-				<div class="panel panel-default">
-					<div class="panel-heading">Push Notifications List</div>
-					<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/push/notifications/bulk" data-resizable-columns-id="push-notification-template">
-							<thead>
-								<tr>
-									<th data-resizable-column-id="form_title" class="text-ellipsis">Name</th>
-									<th data-resizable-column-id="title" class="text-ellipsis">Title</th>
-									<th data-resizable-column-id="last_modified" class="text-ellipsis">Modified Time</th>
-								</tr>
-							</thead>
-						<tbody id="push-notification-model-list" class="agile-edit-row" route="push-notification-edit/"></tbody>
-					</table>
+		{{#is_mobile}}
+			<div class="data-block">
+				<div class="data-container">
+					<div class="panel panel-default">
+						<div class="panel-heading">Push Notifications List</div>
+						<table class="table c-p agile-table tableHeader tab-layout" url="core/api/push/notifications/bulk" data-resizable-columns-id="push-notification-template">
+							<tbody id="push-notification-model-list" class="agile-edit-row" route="push-notification-edit/"></tbody>
+						</table>
+					</div>
 				</div>
 			</div>
-		</div>
+		{{else}}
+			<div class="data-block">
+				<div class="data-container">
+					<div class="panel panel-default">
+						<div class="panel-heading">Push Notifications List</div>
+						<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/push/notifications/bulk" data-resizable-columns-id="push-notification-template">
+								<thead>
+									<tr>
+										<th data-resizable-column-id="form_title" class="text-ellipsis">Name</th>
+										<th data-resizable-column-id="title" class="text-ellipsis">Title</th>
+										<th data-resizable-column-id="last_modified" class="text-ellipsis">Modified Time</th>
+									</tr>
+								</thead>
+							<tbody id="push-notification-model-list" class="agile-edit-row" route="push-notification-edit/"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		{{/is_mobile}}
 		{{/if}}
  	</div>
 
 	<div class="col-md-3">
-        <div class="data-block">
-            	<h4 class="h4 m-t-none m-b-sm"> What is Push Notification?	</h4>
-				<p>Engage with your audience easily through Browser notification. Schedule and send messages to engage the right users at the most relevant time through our Marketing Campaigns.
-				</p>
+        <div class="data-block" id="learn-push-notify">
+        	<h4 class="h4 m-t-none m-b-sm"> What is Push Notification?	</h4>
+			<p>Engage with your audience easily through Browser notification. Schedule and send messages to engage the right users at the most relevant time through our Marketing Campaigns.
+			</p>
     	</div>
 	</div>
  </div>
@@ -63,6 +84,20 @@
 </script>
 
 <script id="push-notification-model-template" type="text/html">
+{{#is_mobile}}
+	<td class="hide"></td>
+	<td  data="{{id}}" class="data c-p">
+		<div class="table-resp text-base text-ellipsis">{{notificationName}}</div>
+		<div class="table-resp text-sm text-ellipsis">{{notificationTitle}}</div>
+		<div class="text-xs text-ellipsis">
+			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
+				<small class="edit-hover text-muted">
+					<i class="fa fa-clock-o"></i>
+					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+				</small>
+			</span>
+		</div>
+{{else}}
 	<td  data="{{id}}" class="data c-p">
 			<div class="table-resp">{{notificationName}}</div>
     </td>
@@ -78,21 +113,22 @@
 			</span>
 	</td>
 	</br>
+{{/is_mobile}}
 </script>
 
 <script id="push-notification-add-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
-		<div class="row">
-    		<div class="col-md-12">
-				{{#if id}}
-					<h3 class="h3 font-thin"> Edit Push Notification</h3>
-				{{else}}
-					<h3 class="h3 font-thin"> Add Push Notification	</h3>
-				{{/if}}
-				<div class="clearfix"></div> 
-    		</div>
+	<div class="row">
+		<div class="col-md-12" id="edit-add-push-notify-title">
+			{{#if id}}
+				<h3 class="h3 font-thin"> Edit Push Notification</h3>
+			{{else}}
+				<h3 class="h3 font-thin edit-add-push-notify-title"> Add Push Notification	</h3>
+			{{/if}}
+			<div class="clearfix"></div> 
 		</div>
 	</div>
+</div>
 
 <div class="wrapper-sm">
 <div class="row">
@@ -131,8 +167,8 @@
                 </div>
 
                 <div class="control-group form-group">
-                      <label class="control-label col-sm-4 col-xs-12">Image URL</label>
-                	 <div class="controls col-sm-6 col-xs-12">
+                    <label class="control-label col-sm-4 col-xs-12">Image URL</label>
+                	<div class="controls col-sm-6 col-xs-12">
                     	 <input type="url" placeholder="Image url" class="form-control" id="notification-icon" name="notificationIcon"/>
                     	 <p class="help-block m-b-none">Image address url (Recommended 200*200 px)</p>
                 	</div>
@@ -141,19 +177,19 @@
                 </div>
 
                <div class="control-group form-group">
-			   <div class="control-label col-sm-4 col-xs-5">Tracking</div>
-			        <div class="controls col-sm-4 col-xs-5">
-			              <select name="push_param" class="form-control">
-			                   <option value="YES">Yes</option>
-			                   <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes &amp; Push (Email only)</option>
-			                   <option value="YES_AND_PUSH">Yes &amp; Push</option>
-			               </select>
+			   		<label class="control-label col-sm-4 col-xs-12">Tracking</label>
+			        <div class="controls col-sm-6 col-xs-12">
+		             	<select name="push_param" class="form-control">
+		                   <option value="YES">Yes</option>
+		                   <option value="YES_AND_PUSH_EMAIL_ONLY"> Yes &amp; Push (Email only)</option>
+		                   <option value="YES_AND_PUSH">Yes &amp; Push</option>
+		               	</select>
 			         </div>
 			 </div>
 			 
 				<div class="clearfix"></div>           
 				<div class="line ling-lg b-b"></div>
-                <div class="form-actions col-sm-offset-4 col-sm-8" style="margin-left:32.6%;">          
+                <div class="form-actions col-sm-offset-4 col-sm-8">          
 					<a href="#push-notification" class="btn btn-sm btn-default " id="push-notification-close">Close</a>
                     <a href="#push-notification"  id="saveNotification" class="btn btn-sm btn-primary save">Save Notification</a>
                     &nbsp;&nbsp;<span id="msg"></span>  

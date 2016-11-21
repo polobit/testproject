@@ -298,7 +298,10 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+            var html = '<span style="color: green;">'+message+'</span>';
+            if(!agile_is_mobile_browser())
+                html = '<br/>'+html;
+            $("#nameoftemplate-msg",parent.document).html(html).show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
             $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
             if(requestType == "post") {
@@ -331,7 +334,10 @@ function sendTestEmailTemplate(fullSource,builderSource) {
             url: 'core/api/emails/send-test-email',    
             data: template,
             success: function (data) {
-                $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+                var html = '<span style="color: green;">'+message+'</span>';
+                if(!agile_is_mobile_browser())
+                html = '<br/>'+html;
+                $("#nameoftemplate-msg",parent.document).html(html).show().fadeOut(3000);
             
             },
         });
