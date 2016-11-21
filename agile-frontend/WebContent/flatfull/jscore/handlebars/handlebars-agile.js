@@ -164,6 +164,10 @@ function getTemplateUrls(templateName)
  	{
  		template_relative_urls.push("klout.js");
  	}
+ 	else if (templateName.indexOf("appcalling") == 0)
+ 	{
+ 		template_relative_urls.push("appcalling.js");
+ 	}
 
 	if (templateName.indexOf("chargify") == 0)
 	{

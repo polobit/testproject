@@ -1,0 +1,18 @@
+<script id="appcalling-login-template" type="text/html">	
+	<div>
+		Know your customers Klout score, a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.
+		<div class="m-t-md  m-b-xs text-center">
+			{{#if id}}			
+				<a class="btn btn-sm btn-danger deleteWidget" widget-name="Klout" widget-displayname="Klout">Delete</a>
+			{{else}}
+				<form  id="klout_login_form" name="klout_login_form" method="post">
+			    	<fieldset>			
+						<input type="text" id="isActive" class="input-medium widget_input_box form-control hide" value="true" name="isActive">
+						</input>						
+					 </fieldset>
+					 <a class='save-agile-widget btn btn-primary btn-sm text-l-none'>Enable</a>
+			    </form>								
+			{{/if}}
+		</div>
+	</div>
+</script>

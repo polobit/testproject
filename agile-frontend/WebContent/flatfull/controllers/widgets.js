@@ -19,7 +19,7 @@ var WidgetsRouter = Backbone.Router
                 "FullContact" :"FullContact",
                 "FullContact/:id" :"FullContact",
                 "Klout" : "Klout",
-                "Klout/:id" : "Klout",      
+                "Klout/:id" : "Klout",    
 
                 // Support widgets
                 "ClickDesk" : "ClickDesk",
@@ -42,6 +42,9 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
+                "AppCalling" : "AppCalling",
+                "AppCalling/:id" : "AppCalling",
+
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
                 "FreshBooks/:id" : "FreshBooks",
@@ -367,6 +370,13 @@ var WidgetsRouter = Backbone.Router
             Braintree : function(id) {
                addConfigurableWidget(id, "Braintree", "braintree-login");
             },
+
+            /**
+             *
+             */
+            AppCalling : function(id){
+                addConfigurableWidget(id, "AppCalling", "appcalling-login");
+            }
 
             /**
              * Manages CallScript widget
