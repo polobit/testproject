@@ -149,7 +149,20 @@ var contact_details_documentandtasks_actions = {
 				});
 
 				//Populate products
-				populate_deal_products(e, undefined,"#opportunityForm");
+				$.ajax({
+				  url: "/core/api/products",
+				}).done(function(data) {
+					if(data.length > 0){
+						$("#showtoggle_show",e).show();
+						$("#showproducts",e).show();
+						populate_deal_products(e, undefined,"#opportunityForm");
+					}else{
+						$("#showtoggle_show",e).hide();
+						$("#showproducts",e).hide();
+						$('.no-products',e).show();
+						$('.value_box',e).removeClass('col-sm-5').addClass('col-sm-7');
+					}
+				});
 				
 				// Contacts type-ahead
 				agile_type_ahead("relates_to", e, contacts_typeahead);

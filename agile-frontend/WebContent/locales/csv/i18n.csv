@@ -5849,3 +5849,5 @@ specialchar-typeahead.notallowed-apclchars,Search query characters result in ser
 specialchar-typeahead.query-spclchars,Search query characters will result in server exception. Please try again,
 validation-msgs.card-expired,Expiration date must be in future,
 specialchar-typeahead.query-message,Search input contains unsupported characters. Please try again.,
+documents.no-products,Note: You do not have any products currently. Configure them,
+products.product-name,Product Name,
