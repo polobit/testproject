@@ -5847,4 +5847,4 @@ landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39;Emai
 landingpage-builder.form-tooltip,Select/Add agile form in landing page,
 specialchar-typeahead.notallowed-apclchars,Search query characters result in server exception. Please try again,
 specialchar-typeahead.query-spclchars,Search query characters will result in server exception. Please try again,
-validation-msgs.card-expired,Your card has been expired,
+validation-msgs.card-expired,Expiration date must be in future,

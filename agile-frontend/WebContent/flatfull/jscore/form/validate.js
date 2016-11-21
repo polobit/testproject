@@ -56,7 +56,7 @@ function isValidForm(form) {
 			// true
 			return this.optional(element)
 					|| (((selected_date - current_date) / one_day) >= 0);
-		}, "{{agile_lng_translate 'validation-msgs' 'card-3months-valid'}}");
+		}, "{{agile_lng_translate 'validation-msgs' 'card-expired'}}");
 	
 	// Validates multiple emails separated by comma entered in textbox
 	jQuery.validator.addMethod("multipleEmails", function(value, element) {
