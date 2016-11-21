@@ -57,7 +57,8 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	String raw_message = null;
 	
 	// Server Key
-	private static final String serverAPIKey = "AIzaSyAVanImbijvXcUAr6iZNVZLgSG1EeCBMzk";
+	// private static final String serverAPIKey = "AIzaSyAVanImbijvXcUAr6iZNVZLgSG1EeCBMzk";
+	private static final String serverAPIKey = "AIzaSyApc647aMom3kEHsTQ9m6WiL9_6iHrsl_4";
 	public static final String MESSAGE_KEY = "message";
 
 	/**
