@@ -49,19 +49,11 @@
                               <div class="tab-pane" id="analytics">
                                  <p>{{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code-desc'}} <b>&lt;/BODY&gt;</b> {{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code-desc-1'}}</p>
                                  <ul class="nav nav-tabs" id="TrackingTab">
-                                    {{#is_mobile}}
-                                        <li class="tracking-tab"><a data-toggle="tab" href="#tracking"><i class="fa fa-code"></i></a></li>
-                                        <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules"><i class="fa fa-code"></i></a></li>
-                                        <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist"><i class="fa fa-code"></i></a></li>
-                                         <!-- tab name field-->
-                                        <li class="verification-website-tab"><a data-toggle="tab" href="#verification-website"><i class="fa fa-code"></i></a></li>
-                                    {{else}}
                                         <li class="tracking-tab"><a data-toggle="tab" href="#tracking">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code'}}</a></li>
                                         <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-enabled'}}</a></li>
                                         <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-whitelist-enabled'}}</a></li>
                                          <!-- tab name field-->
                                         <li class="verification-website-tab"><a data-toggle="tab" href="#verification-website">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-verification'}}</a></li>
-                                    {{/is_mobile}}
                                  </ul>
                                  <div class="tab-content p-t-sm">
                                     <!--  Tracking code templete -->
