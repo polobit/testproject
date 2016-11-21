@@ -111,7 +111,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
 	String userDomain = getDomain();
 
-	if (StringUtils.isEmpty(userDomain))
+	if (StringUtils.isEmpty(userDomain) || StringUtils.equalsIgnoreCase("admin", userDomain))
 	    return;
 	
 	if(isAddonPlan()){

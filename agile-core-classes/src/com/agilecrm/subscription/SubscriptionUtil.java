@@ -246,6 +246,8 @@ public class SubscriptionUtil
 
     public static void deleteUserSubscription()
     {
+    if(StringUtils.equalsIgnoreCase("admin", NamespaceManager.get()))
+    	return;
 	Subscription subscription = getSubscription();
 	if (subscription.isFreePlan())
 	    return;
