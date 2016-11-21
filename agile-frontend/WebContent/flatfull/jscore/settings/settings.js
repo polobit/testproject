@@ -12,6 +12,20 @@ function load_imap_folders(el, model) {
 	el2.find(".imap-folders-select").css("display", "inline");
 }
 
+function load_office_folders(el, model) {
+	var id = model.id;
+	var optionsTemplate = "<option {{selected}}>{{name}}</option>";
+	fillSelect('office-folders-multi-select', '/core/api/office/' + id
+			+ '/office-folders', 'folders', function fillNew() {
+		$("#office-folders-multi-select .default-select", el).remove();
+
+	}, optionsTemplate, false, el);
+	var el2 = $(".office-folders-settings-click", el).closest("div");
+	$(".office-folders-settings-click", el).css("display", "none");
+	el2.find(".imap-folders-settings-txt").css("display", "none");
+	el2.find(".office-folders-select").css("display", "inline");
+}
+
 function load_gmail_widgets(limit) {
 	// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 	gmailListView1 = new Settings_Collection_Events({
@@ -180,6 +194,24 @@ function load_imap_properties(model, el) {
 	}, optionsTemplate2, false, el2);
 }
 
+function load_office_properties(model, el) {
+	var id = model.id;
+	var optionsTemplate1 = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+	var el1 = $('.office-share-settings-select', el).closest("div");
+	fillSelect('office-share-user-select', 'core/api/office/shared-to-users?id='
+			+ id, 'users', function fillNew() {
+		$("#office-share-user-select .default-select", el).remove();
+		$(".office-share-select .loading", el).hide();
+	}, optionsTemplate1, false, el1);
+
+	var el2 = $('.office-folders-settings-click', el).closest("div");
+	var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
+	fillSelect('office-folders-multi-select', 'core/api/office/' + id
+			+ '/office-folders', 'folders', function fillNew() {
+		$("#office-folders-multi-select .default-select", el).remove();
+
+	}, optionsTemplate2, false, el2);
+}
 
 /**
 *  Settings modal event listeners
@@ -289,6 +321,22 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		}, optionsTemplate, false, el);
 	},
 
+	onOfficeFoldersOptionsSelect :  function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		var id = $(target_el).attr("oid");
+		$(target_el).css("display", "none");
+		el.find(".office-folders-select").css("display", "inline");
+		var optionsTemplate = "<option {{selected}}>{{name}}</option>";
+		fillSelect('office-folders-multi-select', 'core/api/office/' + id
+				+ '/office-folders', 'folders', function fillNew() {
+			$("#office-folders-multi-select .default-select", el)
+					.remove();
+		}, optionsTemplate, false, el);
+	},
+
 	/**
 	 * To cancel the imap folder settings
 	 */
@@ -300,6 +348,17 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		el.find('#imap-folders-multi-select').empty();
 		el.find(".imap-folders-select").css("display", "none");
 		el.find(".imap-folders-settings-click").css("display", "inline");
+	},
+
+
+	onOfficeFoldersOptionsCancel :  function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var el = $(target_el).closest("div");
+		el.find('#office-folders-multi-select').empty();
+		el.find(".office-folders-select").css("display", "none");
+		el.find(".office-folders-settings-click").css("display", "inline");
 	},
 
 
@@ -352,7 +411,9 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		'click .imap-folders-settings-click': 'onImapFoldersOptionsSelect',	
 		'click .imap-folders-settings-cancel': 'onImapFoldersOptionsCancel',	
 		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
-		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',	
+		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',
+		'click .office-folders-settings-click': 'onOfficeFoldersOptionsSelect',
+		'click .office-folders-settings-cancel': 'onOfficeFoldersOptionsCancel',	
 	},
 
 });
