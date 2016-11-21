@@ -176,8 +176,8 @@ public class OAuthLoginUtil
 	    return;
 	}
 
-	if (domainUser != null && domainUser.domain != null && domain != null
-		&& !domain.equalsIgnoreCase(domainUser.domain))
+	if (domainUser != null && domainUser.domain != null  
+		&& !(domainUser.domain).equalsIgnoreCase(domain))
 	{
 	    // String path = "https://" + domainUser.domain +
 	    // ".agilecrm.com/scribe?service=" +
