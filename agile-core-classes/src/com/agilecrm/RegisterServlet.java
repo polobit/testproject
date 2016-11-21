@@ -105,6 +105,9 @@ public class RegisterServlet extends HttpServlet
 		
 	    if (type != null)
 	    {
+	    // Validates Oauth Request
+	    validateOauthRequest(request);
+	    
 		if (type.equalsIgnoreCase("oauth"))
 		{
 		    registerOAuth(request, response);
@@ -138,7 +141,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }
-
+    
     /**
      * If the user is registering using Oauth, it first checks if user
      * information already exists. Domain user is created and it is redirected
@@ -741,6 +744,24 @@ public class RegisterServlet extends HttpServlet
 	{
 	    System.out.println("Exception in setting timezone in account prefs.");
 	}
+    }
+    
+    private void validateOauthRequest(HttpServletRequest request) throws Exception{
+    	String oauthError = request.getParameter("oauth_error");
+    	if(StringUtils.isBlank(oauthError))
+    		return;
+    	
+    	// Delete session from request
+    	deleteSessionFromRequestScope(request);
+    	
+    	throw new Exception(oauthError);
+    }
+    
+    public static void deleteSessionFromRequestScope(HttpServletRequest request){
+    	try {
+    		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+		} catch (Exception e) {
+		}
     }
     
     public static void main(String[] args) {

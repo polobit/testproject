@@ -442,20 +442,18 @@ public class ScribeServlet extends HttpServlet {
 					resp)) {
 				return;
 			}
-
+			
+			// return URL is retrieved from session
+			returnURL = (String) req.getSession()
+					.getAttribute("return_url");
+					
 			if (widgetID != null) {
-
-				// return URL is retrieved from session
-				returnURL = (String) req.getSession()
-						.getAttribute("return_url") + "/" + widgetID;
+				if(returnURL != null)
+					returnURL += "/" + widgetID;
+				
 				resultType = "success";
 				statusMSG = widgetName + " widget saved successfully.";
 				System.out.println("return url " + returnURL);
-			}
-
-			if (serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)) {
-				returnURL = (String) req.getSession()
-						.getAttribute("return_url");
 			}
 
 		} catch (Exception e) {
@@ -471,7 +469,7 @@ public class ScribeServlet extends HttpServlet {
 			req.getSession().setAttribute("widgetMsgType", resultType);
 			req.getSession().setAttribute("widgetMsg", statusMSG);
 		}
-
+		
 		if (returnURL != null) {
 			resp.sendRedirect(returnURL);
 		}

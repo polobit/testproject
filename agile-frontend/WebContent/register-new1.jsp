@@ -19,11 +19,11 @@ pageEncoding="UTF-8"%>
 		return;
 	}
 
- if(RegisterUtil.isWrongURL(request))
+ 	if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} 
+	}
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -50,7 +50,10 @@ String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", 
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 // Error Message
-String errorMessage = "";
+String errorMessage = request.getParameter("error");
+if(StringUtils.isBlank(errorMessage))
+		errorMessage = "";
+
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
@@ -208,6 +211,15 @@ if(isSafari && isWin)
       				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "register-with-free")%></strong>
    				</div>
 
+<form id='oauth' name='oauth' method='post' class="pad-top-10" action="/register">
+			<div id="openid_btns" class="login-social-btns">
+					<input type='hidden' name='type' value='oauth'></input>
+					<input type='hidden' name='server' id='oauth-name' value=''></input>
+					<a title="log in with Google" data='google' href='#'  class="openid_large_btn google tags-color text-white"><i class="fa fa-google"></i> Register with GoogleApps</a>
+			</div>
+</form>
+
+
 <form name='agile' id="agile" method='post'
 					onsubmit="return isValid(this);">
 
@@ -339,6 +351,17 @@ $(document).ready(function() {
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
 //preload_login_pages();
+$('.openid_large_btn').click(function(e)
+			{
+				
+				// Gets Data Google/Yahoo and submits to LoginServlet
+				var data = $(this).attr('data');
+				$('#oauth-name').val(data);
+				$('#oauth').submit();
+
+				e.preventDefault();
+			});
+
 });
 /*
  function preload_login_pages()

@@ -11,6 +11,7 @@ import org.scribe.builder.api.YahooApi;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.LoginServlet;
+import com.agilecrm.LoginUtil;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.scribe.api.LinkedinAPI;
 import com.agilecrm.scribe.login.serviceproviders.GoogleLoginService;
@@ -154,7 +155,12 @@ public class OAuthLoginUtil
 	    }
 	    // Oauth should be set as query parameter so it creates new account
 	    // based on session info set
-	    req.getSession().setAttribute("return_url", "/register?type=oauth");
+	    // Allow only google Apps accounts and throw an error to gmail accounts
+	    String registerPage = "/register?type=oauth";
+	    if(userInfo != null && userInfo.getEmail().contains("@gmail"))
+	    	registerPage += "&oauth_error=" + LoginUtil.GOOGLE_APPS_INVALID_EMAIL_ERROR;
+	    
+	    req.getSession().setAttribute("return_url", registerPage);
 	    return;
 	}
 
