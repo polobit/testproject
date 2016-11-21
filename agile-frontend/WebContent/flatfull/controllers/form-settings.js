@@ -53,7 +53,7 @@ var FormsRouter = Backbone.Router.extend({
             });
         });
         
-        $(".active").removeClass("active");
+        //$(".active").removeClass("active");
 	
 	},
 	formReports : function(id)
