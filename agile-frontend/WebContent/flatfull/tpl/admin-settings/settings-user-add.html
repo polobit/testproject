@@ -275,12 +275,18 @@
     </ul>
     </div>
     <div class="tab-pane multiple-checkbox-adminprefs" name="newMenuScopes">
-    <div class="col panel wrapper b-t {{#is_admin_domain}} hide {{/is_admin_domain}}" style="box-shadow: inherit;">
+    <div class="col panel wrapper b-t {{#is_mobile}} m-b-none {{/is_mobile}} {{#is_admin_domain}} hide {{/is_admin_domain}}" style="box-shadow: inherit;">
     {{#is_acl_allowed id}}
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
          {{else}}
-        <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
-        </div>
+        {{#is_mobile}}
+          <div style="font-size: 12px;top: 5px;padding: 3px 10px 3px 10px;border: 1px solid #ccc;background-color: #fafafa;border-radius: 2px">
+            <span>{{toSafeString message}}</span>
+          </div>
+        {{else}}
+          <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
+          </div>
+        {{/is_mobile}}
         {{/isAllowedInCurrentPlan}}
     {{/is_acl_allowed}}
      <div class="m-l-md">
@@ -949,10 +955,10 @@
 </div>
 <div class="form-group">
 
-            <div class="form-actions col-sm-offset-3 col-md-9">
+            <div class="form-actions col-sm-offset-3 col-md-9 {{#is_mobile}} text-center {{/is_mobile}}">
 
             <div class="form-actions">
-            <a type="reset" href='#users' class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+            <a type="reset" href='#users' class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{/is_mobile}}">{{agile_lng_translate 'other' 'cancel'}}</a>
                     <button type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                   </div>
 </div>

@@ -121,9 +121,9 @@
 
 								<form class="form-horizontal">
 									<fieldset>
-										<div class="control-group form-group" style="margin-right: -80px;margin-left: -140px;">
-											<label class="control-label col-sm-3" style="left:30px" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'business-hours'}}</label>
-											<div class="controls col-sm-9 m-t-xs" style="right: -15px">
+										<div class="control-group form-group" {{#is_mobile}} {{else}} style="margin-right: -80px;margin-left: -140px;" {{/is_mobile}}>
+											<label class="control-label col-sm-3" {{#is_mobile}} {{else}} style="left:30px" {{/is_mobile}} for="cname">{{agile_lng_translate 'prefs-online-calendar' 'business-hours'}}</label>
+											<div class="controls col-sm-9 col-xs-12 {{#is_mobile}} m-t-none {{else}} m-t-xs {{/is_mobile}}">
 												<div id="define-business-hours"></div>
 											</div>
 											<div class="col-md-3"></div>

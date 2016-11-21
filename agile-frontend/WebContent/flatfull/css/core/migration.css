@@ -1577,6 +1577,8 @@ a#email-reply{
     width: auto!important;
 }
 
+/*Start of Mobile Device Media Query CSS(767px)*/
+
 @media all and (max-width: 767px) {
 .custom-animated.custom-fadeInUp > .bg-light .pull-left,.custom-animated.custom-fadeInUp > 
 
@@ -2016,6 +2018,97 @@ display: block!important;
  .service-table-mobile td > div.table-resp{width: 100%}
  .ticket-filter-conditions-table tbody tr td select {padding: 6px 0px 6px 5px;}
  .ticket-filter-conditions-table tbody tr td input {padding: 6px 5px;}
+
+ /*Marketing Modules Responsive Style Start*/
+  .landing-pages-title,.forms-title,.templates-title,.prefs-title,.social-suite-title,.push-notification-title{
+    font-size: 24px !important;
+  }
+  .add-landing-pages-btn,.add-form-btn,.add-push-notify-btn{
+    text-align: center !important;
+    float: none !important;
+  }
+  .manage-forms-btn{
+    text-align: center !important;
+    float: none !important;
+    margin-right: 0px !important;
+  }
+  #learn-workflows h4,#learn-forms h4,#learn-email-templates h4,#learn-push-notify h4,#setup-instructions h4{
+    font-size: 14px !important;
+  }
+  #learn-workflows p,#learn-forms p,#learn-email-templates p,#learn-push-notify p,#setup-instructions p,#source-code-modal p{
+    font-size: 12px !important;
+  }
+  .forms-title,.push-notification-title{
+    text-align: center !important;
+  }
+  .add-form-btn a,.add-push-notify-btn a{
+    text-align: center !important;
+    float: none !important;
+  }
+  .add-stream-btn{
+    display: block !important;
+  }
+  #browseBtn {
+    margin-left: 15px !important;
+  }
+  .agile-table td>div.table-resp{
+    width: 100% !important;
+  }
+  .landingpages-beta-tag{
+    font-size: 10px !important;
+    vertical-align: middle !important; 
+  }
+  #setup-instructions ul li{
+    font-size: 12px !important;
+  }
+  #formbuilder-form-report div#reportrange{
+    width: 100% !important;
+    margin-right: 0px !important;
+  }
+  #tpl-attachment-select b{
+    font-weight: normal !important;
+  }
+  #tpl-attachment-select select{
+    width: 100% !important;
+  }
+  #email-builder-btns{
+    margin: 0px auto !important;
+    display: table !important;
+  } 
+  #attachmentHolder .email-attchment-bg,#tpl-attachment-name .email-attchment-bg{
+    width: 95% !important;
+    max-width: 100% !important;
+  }
+  .add-tpl-attachment-cancel{
+    top: 15px !important;
+  }
+  #email-editor-btns{
+    padding-bottom: 0px !important;
+    text-align: center !important;
+  }
+  #cancel-btn,#push-notification-close{
+    margin-right: 10px !important;
+  }
+  .add-tpl-attachment-cancel,.attachmentCancelBtn{
+    opacity: 0.75 !important;
+  }
+  .form-actions{
+    text-align: center !important;
+    margin-left: 0px !important;
+  }
+  .form-actions a{
+    margin-right: 10px !important;
+  }
+  .push-notification-title .label{
+    font-size: 12px !important;
+    vertical-align: middle !important;
+  }
+  #edit-add-push-notify-title h3{
+    font-size: 18px !important;
+  }
+  
+ /*Marketing Modules Responsive Style End*/
+
  div.email-selected-plan{
   margin: 10px 0px !important;
  }
@@ -2047,7 +2140,57 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 .triggers-sub-tabs li a{padding: 5px 6px;}
 .webrules-sub-tabs li a{padding: 5px 8px;}
 #workflow-save-popup .modal-dialog{width: auto !important;}
+
+  /*Start of Profile Pic Dropdown CSS*/
+
+  #change_pswd_btns,#save_changes_btn{
+    text-align: center !important;
+  }
+  #change_pswd_btns a#saveNewPassword{
+    margin-left: 5px !important;
+  }
+  .agile-table td>div.table-resp{
+    width: 100% !important;
+  }
+  #learn-voicemail h4{
+    font-size: 14px !important;
+  }
+  #learn-voicemail p{
+    font-size: 12px !important;
+  }
+
+  /*End of Profile Pic Dropdown CSS*/
+  .colorBox.RestDayState,.colorBox.WorkingDayState{
+    margin-top: 5px !important;
+  }
+ /*Start of Profile Pic Tab Admin Settings UI CSS*/
+
+ #newip-modal-width{
+  width: auto !important;
+ }
+ #learn-sso h4{
+  font-size: 14px !important;
+ }
+ #learn-sso p{
+  font-size: 12px !important;
+ }
+
+ /*End of of Profile Pic Tab Admin Settings UI CSS*/
+
+/*Start of Admins Settings Users Tab Responsive UI CSS*/
+
+ .agile-table td>div.table-resp{
+  width: 100% !important;
+ }
+
+/*End of Admins Settings Users Tab Responsive UI CSS*/
+
+ #sendgrid-whitelabel-key-template label{
+  margin-top: 0px !important;
+ }
 }
+
+/*End of Mobile Device Media Query CSS(767px)*/
 
 @media all and (min-width: 768px) {
   .addField > .col-sm-9:nth-of-type(n+3) {

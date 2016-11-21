@@ -3,20 +3,20 @@
 
     <div class="wrapper-md lter  bg-light b-b">
       <div class="row">
-          <div class="col-md-12">&nbsp;{{agile_lng_translate 'modals' 'new-document'}}</div>
+          <div class="col-md-12 h3 font-thin m-n">&nbsp;{{agile_lng_translate 'modals' 'new-document'}}</div>
       </div>
     </div>
      
      <div class="wrapper-md">
       <div class="row">  
-        <div class="col-md-9">
+        <div class="col-md-9" {{#is_mobile}}{{else}}style="padding-right:0px;"{{/is_mobile}}>
           <div class="panel wrapper" style="padding-bottom:35px;">
             <form id="uploadDocumentForm" name="uploadDocumentForm" method="post" class="form-horizontal">
               <fieldset>
                   <input id="id" type="hidden"/>
                   <input name="extension" id="extension" type="hidden"/>
                   <input type="hidden" name="template_type" id="template_type"/>
-                  <div class="control-group form-group hide">
+                  <div class="control-group form-group hide {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                      <label class="control-label  col-sm-3"><b>Type </b><span
                         class="field_req">*</span></label>
                      <div class="controls col-sm-9">
@@ -28,7 +28,7 @@
                         </span>
                      </div>
                   </div>
-                    <div class="control-group form-group">
+                    <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                           <label class="control-label  col-sm-3">{{agile_lng_translate 'report-add' 'title'}}<span
                                     class="field_req">*</span></label>
                           <div class="controls col-sm-9">
@@ -36,7 +36,7 @@
                                        class="required form-control" placeholder="{{agile_lng_translate 'modals' 'document-name'}}" /></span>
                           </div>
                     </div>
-                    <div class="control-group form-group">
+                    <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}<span
                           class="field_req related-contacts-required">*</span></label></label>
                     <div class="controls col-sm-9" id="contactTypeAhead">
@@ -53,7 +53,7 @@
                       <span class="contacts_noemail_error" style="color:#d9534f;display:none;">Contact does not have Email.</span>   
                       </div>
                   </div>
-                  <div class="control-group form-group">
+                  <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                     <label class="control-label col-sm-3" >{{agile_lng_translate 'tasks' 'related-deals'}}
                     </label>
                     <div class="controls col-sm-9" id="dealTypeAhead">
@@ -68,7 +68,7 @@
                       </div>
                     </div>
                   </div>
-                    <div class="control-group form-group attachment">
+                    <div class="control-group form-group attachment {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                       <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'choose-document'}}<span
                         class="field_req">*</span></label>
                       <div class="controls col-sm-9 col-xs-12">
@@ -90,7 +90,7 @@
                       </div>
                     </div>
                   <div class="senddoc hide">
-                        <div class="control-group form-group">
+                        <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                                    <label class="control-label col-sm-3"><b>Content </b></label>
                                     <div class="controls col-sm-9">
                                         <div id="loading-editor" ></div>
@@ -122,18 +122,18 @@
             </form>
           </div>
           </div>
-          <div class="col-md-3">
-           <div class="panel wrapper">
+          <div class="col-md-3" style="padding-left:0px;">
+           <div class="wrapper">
                <h4 class="m-t-none font-thin">
                    {{agile_lng_translate 'documents' 'document-what-are-docs-title'}}
                </h4>
                
                
-           <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para1'}}</p>
-           <p>2. <b>{{agile_lng_translate 'documents' 'document-what-are-docs-para2'}}</b> {{agile_lng_translate 'documents' 'document-what-are-docs-para3'}}</p> 
-           <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para4'}}</p>
+           <p>{{agile_lng_translate 'documents' 'newdocuments-helptext-para1'}}</p>
+           <p>{{agile_lng_translate 'documents' 'newdocuments-helptext-para2'}}</p> 
+           <!-- <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para4'}}</p>
    
-           <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para5'}} <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> {{agile_lng_translate 'documents' 'document-what-are-docs-para6'}}</a></p> 
+           <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para5'}} <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> {{agile_lng_translate 'documents' 'document-what-are-docs-para6'}}</a></p> -->
            </div>
        </div>
         </div>

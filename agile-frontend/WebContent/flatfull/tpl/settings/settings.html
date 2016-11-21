@@ -1,11 +1,20 @@
  <script id="settings-template" type="text/html"> 
 <div class="">
 <div class="bg-light lter b-b wrapper-md">
-<h1 class="m-n font-thin h3">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h1>
-<div id="add-new" class="pull-right hide" style="margin-top:-25px">
+{{#is_mobile}}
+	<h3 class="m-b-xs font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h3>
+<div id="add-new" class="text-center hide">
      <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
         <span><i class="icon-plus-sign"></i></span> Add Email Template</a>
 </div>
+<div class="clearfix"></div>
+{{else}}
+	<h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h3>
+	<div id="add-new" class="pull-right hide" style="margin-top:-25px">
+	     <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
+	        <span><i class="icon-plus-sign"></i></span> Add Email Template</a>
+	</div>
+{{/is_mobile}}
 </div>
    
     <!-- <div class="app-content-full  h-full enable-full-height"> -->  

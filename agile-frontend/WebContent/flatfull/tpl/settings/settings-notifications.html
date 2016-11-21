@@ -20,8 +20,8 @@
                         </div>                                           
                     {{#if control_notifications}}
                     </div>
-                    <div class="pull-right">
-                    <span id="desktop-notification-content" class="right text-base"></span>
+                    <div class="{{#is_mobile}} pull-left {{else}} pull-right {{/is_mobile}}">
+                    <span id="desktop-notification-content" class="right {{#is_mobile}} text-sm {{else}} text-base {{/is_mobile}}"></span>
                     {{#is_mobile}}
 
                     {{else}}
@@ -257,7 +257,7 @@
                                         <option value="alert_5">{{agile_lng_translate 'prefs-notifications' 'chime'}}</option>
                                         <option value="no_sound">{{agile_lng_translate 'prefs-notifications' 'silent'}}</option>
                                     </select>
-                        <button class="btn btn-default  m-l-sm inline-block" id="notification-sound-play"><i class="icon-play"></i></button>
+                        <button class="btn btn-default  m-l-sm inline-block" id="notification-sound-play" {{#is_mobile}} style="margin-bottom: 3px" {{/is_mobile}}><i class="icon-play"></i></button>
                         </div>
                     </div>
 
@@ -278,7 +278,7 @@
 
 <div class="line line-lg b-b"></div>
                   <div class="row">
-                    <div class="col-sm-offset-3 col-sm-8">                      
+                    <div class="col-sm-offset-3 col-sm-8 {{#is_mobile}} text-center {{/is_mobile}}">                      
                         <button type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                         <!--<a href="#settings" class="btn btn-sm btn-default">Cancel</a>-->
                     </div>

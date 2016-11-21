@@ -42,8 +42,11 @@ function isValidForm(form) {
 			var month = $(element).siblings('select.exp_month')
 					.val(), year = value;
 
+			//current date
+			var current_date = new Date().getTime()
+
 			// date selected
-			var date = new Date().setFullYear(year, month - 1);
+			var selected_date = new Date().setFullYear(year, month - 1);
 
 			// Get number of milliseconds per day
 			var one_day = 1000 * 60 * 60 * 24;
@@ -52,8 +55,8 @@ function isValidForm(form) {
 			// if number of days are greater than 90 then returns
 			// true
 			return this.optional(element)
-					|| (((date - new Date().getTime()) / one_day) > 90);
-		}, "{{agile_lng_translate 'validation-msgs' 'card-3months-valid'}}");
+					|| (((selected_date - current_date) / one_day) >= 0);
+		}, "{{agile_lng_translate 'validation-msgs' 'card-expired'}}");
 	
 	// Validates multiple emails separated by comma entered in textbox
 	jQuery.validator.addMethod("multipleEmails", function(value, element) {

@@ -31,7 +31,7 @@
           </div>
            <div class="control-group form-group" style="margin-bottom:0px;"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'value'}}<span class="field_req">*</span></label> 
-           <div class="controls col-sm-7"> 
+           <div class="controls col-sm-5 value_box"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
              <div class="p-n"> 
               <input type="text" name="expected_value" class="required  number_with_trim form-control" min="0" max="2147483647"
@@ -39,7 +39,42 @@
              </div> 
             </div> 
            </div> 
-          </div>    
+           <div class="toggleHead col-sm-2 text-left" id="showtoggle_show" style="display:none;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
+          <div class="advances hide p-r p-l" id="showproducts">
+            <div class="row">
+            <div class="col-md-10" style="margin-left: 8%;">           
+              <div class="" id="deal_products_div">
+                      
+              </div>
+            </div>
+            </div>
+            <div class="">
+              <div class="form-group">
+                <div class="control-group m-t-md" style="margin-bottom:0px;margin-top:15px;">
+                  <label class="control-label col-sm-3">Discount</label>
+                  <div class="controls col-sm-7 input-group" style="padding-right:15px;padding-left:15px;">
+                     <div class="input-group">
+                        <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
+                          <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select disabled" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Percent</span><span class="caret"></span></button>
+                          <ul class="dropdown-menu"></ul>
+                        </div><!-- /btn-group -->
+                         <input name="discount_value" placeholder="Enter Percent" type="text" class="form-control  discountvalue" id="discount_value" disabled="disabled">
+                         <input type="text" class="hide" name="discount_type" id="discount_type" value="Percent">
+                      </div>
+                        </div>
+                      </div>  
+                      <span class="calculation-error-status pull-right col-sm-10" style="color:#d9534f;padding-left: 66px;"></span>
+                  </div>
+            </div>
+        </div>
+          </div> 
+
+          <div class="text-muted no-products" style="display:none;">
+                   <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;
+                            margin-top:-15px;padding-left: 9px">
+                                 {{agile_lng_translate 'documents' 'no-products'}}  <a href="#" data-dismiss="modal" class="navigate-products text-info">{{agile_lng_translate 'contact-details' 'here'}}</a>
+                     </div>
+            </div>   
           <div class="control-group form-group" style="margin-bottom:0px;"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
            <div class="controls col-sm-7"> 
@@ -131,7 +166,7 @@
         </div>
         <div id="custom-field-deals"></div>
 
-        <div class="form-group m-b-none">
+        <div class="form-group m-b-none" style="margin-bottom: 0px;">
                     <div class="col-sm-offset-3 col-sm-7 text-left">
         <a href="javascript:;" id="addDescriptionLink" class="text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
                     </div>
@@ -145,41 +180,7 @@
                 class="input col-md-12 form-control textarea" placeholder="{{agile_lng_translate 'tasks' 'add-comment'}}"></textarea>
             </div>
           </div>
-          <div class="toggleHead p-l-md"><i class="icon-plus-sign" style="cursor:pointer;"><span class="  " style="cursor:pointer;"> Products</span></i></div>
-          <div class="advances hide p-r-md p-l-md" >
-            <div class="row">
-              <div class="col-md-12  m-t-md"><b>Select Products</b></div>
-            </div>
-            <div class="row">
-            <div class="col-md-12">           
-              <div class="" id="deal_products_div">
-                      
-              </div>
-            </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="control-group form-group m-t-md" style="margin-bottom:0px;">
-                  <label class="control-label col-sm-2 text-left">Discount</label>
-                  <div class="controls col-sm-10 input-group pull-right" style="padding-right:15px;">
-                    <span class="input-group-addon">
-                            <label class="i-checks i-checks-sm m-b-none">
-                              <input type="checkbox" class="discountcheck" name="apply_discount" id="apply_discount">
-                              <i></i>
-                            </label> 
-                          </span>
-                            <input name="discount_value" placeholder="Enter Value" type="text" class="form-control  discountvalue" id="discount_value">
-                          <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
-                              <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Value</span><span class="caret"></span></button>
-                                <ul class="dropdown-menu pull-right"></ul>
-                                <input type="text" class="hide" name="discount_type" id="discount_type" value="Value">
-                            </div><!-- /btn-group -->
-                        </div>
-                      </div>  
-                      <span class="calculation-error-status pull-right col-sm-10" style="color:#d9534f;margin-right:20px;"></span>
-                  </div>
-            </div>
-        </div>
+          
       </fieldset>
     </form>
   </div>
@@ -248,3 +249,4 @@
     <a href="#" class="btn btn-sm btn-primary" id="deals-filter-validate">{{agile_lng_translate 'deal-view' 'done'}}</a> 
   </div>
 </div>
+
