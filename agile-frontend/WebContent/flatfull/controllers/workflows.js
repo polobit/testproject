@@ -259,6 +259,9 @@ var WorkflowsRouter = Backbone.Router
 							$('#unsubscribe-email', el).val("");
 						
 						}
+						else{
+							$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						}
 						//$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
