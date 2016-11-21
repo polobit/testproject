@@ -376,7 +376,7 @@ var WidgetsRouter = Backbone.Router
              */
             AppCalling : function(id){
                 addConfigurableWidget(id, "AppCalling", "appcalling-login");
-            }
+            },
 
             /**
              * Manages CallScript widget
