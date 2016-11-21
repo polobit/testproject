@@ -575,7 +575,7 @@ function updateDeal(ele, editFromMilestoneView)
 	$.ajax({
 	  url: "/core/api/products",
 	}).done(function(data) {
-		if(data.length > 0){
+		if(data.length > 0 || value.products.length>0){
 			$("#opportunityUpdateForm").find("#showtoggle_show").show();
 			$("#opportunityUpdateForm").find("#showproducts").show();
 			$("#opportunityUpdateForm").find('.no-products').hide();
