@@ -185,6 +185,9 @@ padding-left:10px!important;
           			<div class="clearfix"></div>
 				</div>
 			</div>
+			<%if(StringUtils.isNotBlank(registrationId)) {%>
+						 <input class="hide" id="registrationId" name="registrationId" value="<%=registrationId%>"></input>
+			<%} %>
 			<input class="btn btn-lg btn-primary btn-block" type="submit" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>'>
 		</form>
 		<%if(!MobileUADetector.isiPhone(userAgent)) {%>
