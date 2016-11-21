@@ -1,15 +1,9 @@
 <script id="settings-account-tab-template" type="text/html">
     <div class="tab-container m-b-none">
            <ul class="nav nav-tabs b-b-none">
-            {{#is_mobile}}
-                <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none"><i class="icon icon-settings"></i></a></li>
-                <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none"><i class="icon icon-lock"></i></a></li>
-                <li class="settings-sso-login"><a href="#sso-login" class="b-l-none"><i class="icon icon-lock-open"></i></a></li>
-            {{else}}
                 <li class="settings-account-prefs"><a href="#account-prefs" class="b-l-none">{{agile_lng_translate 'menu' 'preferences'}}</a></li>
                 <li class="settings-account-ips"><a href="#account-ipaccess" class="b-l-none">{{agile_lng_translate 'admin-settings' 'security'}}</a></li>
                 <li class="settings-sso-login"><a href="#sso-login" class="b-l-none">{{agile_lng_translate 'admin-settings' 'single-sign-on'}}</a></li>
-            {{/is_mobile}}
            </ul>
     </div>
     <div class="tab-pane active" id="settings-account-tab-content">
