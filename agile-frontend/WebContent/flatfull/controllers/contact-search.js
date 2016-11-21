@@ -20,7 +20,12 @@ var ContactSearchRouter = Backbone.Router.extend({
 
 		if ( $.trim(query) == '' )
     			return;
-    		
+    	if(/[~\+=\-\[\]\\,/{}|\\""():<>\?]/g.test(query)){    		
+			var txt = '<div id="search-results-container"><div class="wrapper-md lter bg-light b-b"><div class="row"><div class="col-md-12"><div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3 pull-left">{{agile_lng_translate "specialchar-typeahead" "query-spclchars"}}</div><div class="pull-right"><div class="btn-group" id="view-list"></div><div class="btn-group right" id="filter-list"></div></div><div class="clearfix"></div></div></div></div></div>' ;
+			$("#content").html(txt);
+			return false;
+		}
+
     	$('.searchicon-dropdown').removeClass('open');
 		
 		 $("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
