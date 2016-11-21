@@ -495,7 +495,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <ul class="nav">
     
   <!-- Sales menu -->   
-    <li class="appaside dropdownnavbar  <%if(domainUser.role == ROLE.SALES){ %> agile-menuactive <% } %> " id="agile-sales-menu-navigation-container">
+    <li class="appaside dropdownnavbar  <%if(domainUser.role == ROLE.SALES){ %> agile-menuactive <% } %> " id="agile-sales-menu-navigation-container" data-service-name='SALES' data-dashboard='SalesDashboard'>
           <a class="auto agile-menu-dropdown-aside">      
             <span class="pull-right text-muted">
               <i class="fa fa-fw fa-angle-right text "></i>
@@ -612,7 +612,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
         %>
         <li id="activitiesmenu">
-        <a  href="#activities">
+        <a  href="#navbar-activities">
           <i class="icon-speedometer icon-white"></i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
         </a>
@@ -624,7 +624,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
       %>
     <li id="reportsmenu">
-      <a  href="#reports">
+      <a  href="#navbar-reports">
         <i class="icon-bar-chart icon-white"></i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
       </a>
@@ -642,7 +642,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!--  <li class="line dk  m-t-none m-b-none" style="height: 1px;"></li> -->
   
   <!-- Marketing menu -->  
-  <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.MARKETING){ %> agile-menuactive <% } %>" id="agile-marketing-menu-navigation-container">
+  <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.MARKETING){ %> agile-menuactive <% } %>" id="agile-marketing-menu-navigation-container" data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
       <a class="auto ">      
         <span class="pull-right text-muted">
           <i class="fa fa-fw fa-angle-right text"></i>
@@ -770,7 +770,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu">
-    <a class="agile-menu-dropdown-aside" href="#activities">
+    <a class="agile-menu-dropdown-aside" href="#navbar-activities">
       <i class="icon-speedometer icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
@@ -782,7 +782,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu">
-    <a class="agile-menu-dropdown-aside" href="#reports">
+    <a class="agile-menu-dropdown-aside" href="#navbar-reports">
       <i class="icon-bar-chart icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
@@ -807,7 +807,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->   
-   <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.SERVICE){ %> agile-menuactive <% } %>" id="agile-service-menu-navigation-container">
+   <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.SERVICE){ %> agile-menuactive <% } %>" id="agile-service-menu-navigation-container" data-service-name='SERVICE' data-dashboard='dashboard'>
       <a class="auto">      
         <span class="pull-right text-muted">
           <i class="fa fa-fw fa-angle-right text"></i>
@@ -914,7 +914,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu">
-    <a class="agile-menu-dropdown-aside" href="#activities">
+    <a class="agile-menu-dropdown-aside" href="#navbar-activities">
       <i class="icon-speedometer icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
@@ -926,7 +926,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu">
-    <a class="agile-menu-dropdown-aside" href="#reports">
+    <a class="agile-menu-dropdown-aside" href="#navbar-reports">
       <i class="icon-bar-chart icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>

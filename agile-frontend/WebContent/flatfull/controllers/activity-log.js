@@ -8,11 +8,17 @@ var ActivitylogRouter = Backbone.Router.extend({
     routes: {
         /* Shows page */
         "activities": "activities",
+        "navbar-activities" : "navbarActivities",
         "contact-activities": "contactActivities",
         "contact-activities/:type": "contactActivities",
         "activities/campaign/:id" : "activities"
     },
-
+    navbarActivities :function(e)
+    {
+        Backbone.history.navigate("activities", {
+            trigger: true
+        });
+    },
     activities: function(id) {
         if (!tight_acl.checkPermission('ACTIVITY'))
             return;

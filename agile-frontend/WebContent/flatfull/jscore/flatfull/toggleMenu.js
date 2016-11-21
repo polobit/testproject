@@ -480,10 +480,15 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		if($(this).hasClass("agile-menuactive"))
 		{
 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
-			return $(this).removeClass("agile-menuactive");
+			return ;
 		}
 		$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
-		return $(this).addClass("agile-menuactive");
+		 $(this).addClass("agile-menuactive");
+		 var dashboardName = $(this).attr("data-dashboard");
+			if(!dashboardName)
+ 				 dashboardName = "dashboard";
+			 _agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+			 return;
 	});
 	$(".appaside.dropdownnavbar ul li").on("click",function(e)
 	{
