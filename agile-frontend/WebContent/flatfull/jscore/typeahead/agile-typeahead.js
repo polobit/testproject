@@ -91,7 +91,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								searchParams = urlParams ;
 							}
 							if(/[~\+=\-\[\]\\,/{}|\\""():<>\?]/g.test(query) || $.trim(query) == ''){
-								var txt = '<b>{{agile_lng_translate "specialchar-typeahead" "query-spclchars"}}</b>' ;
+								var txt = '<b>{{agile_lng_translate "specialchar-typeahead" "query-message"}}</b>' ;
 								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 								that.render();
 								return false;
