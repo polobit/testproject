@@ -319,7 +319,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
                     <input type="text" class="form-control" id="imageURL" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>'' value=""> 
-                                                         
+                    <span id="error-img-msg" style="font-size: 12px;color:#f05050; display:none;">Please eneter a valid image url</span>
+                                 
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>

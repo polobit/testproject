@@ -599,6 +599,12 @@
             if($(styleeditor.activeElement.element).prop('tagName')==="IMG"){
 
                     var image_url=$('.imageFileTab').find('input#imageURL').val();
+                    if(image_url.match(/\.(jpeg|jpg|gif|png|svg)$/) === null){
+                        $('input#imageURL').css("margin-bottom","0px");
+                        $("#error-img-msg").next().css("margin-top","6px");
+                        $("#error-img-msg").show();
+                        return;
+                    }
                     $(styleeditor.activeElement.element).attr('src',decodeURIComponent(image_url));
             
             }
@@ -849,6 +855,11 @@
 
             $('a#img_Link').parent().show();
 
+            if($("#error-img-msg").css("display")!=="none"){
+                $('input#imageURL').css("margin-bottom","");
+                $("#error-img-msg").next().css("margin-top","");
+                $("#error-img-msg").hide();
+            }
             //set the current SRC 
             if($(el).siblings("IMG").length!==0)
                 $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));            
@@ -1265,5 +1276,11 @@
     styleeditor.init();
 
     exports.styleeditor = styleeditor;
+
+    $('input#imageURL').focus(function(){
+        $('input#imageURL').css("margin-bottom","");
+        $("#error-img-msg").next().css("margin-top","");
+        $("#error-img-msg").hide();
+    });
 
 }());
