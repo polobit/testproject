@@ -608,7 +608,7 @@ var SettingsRouter = Backbone.Router
 							{	
 							$('#content').html($(template_ui));
 							$("#content").find(".col").hide();
-							$("#content").find("h1").html("Email Templates");
+							$("#content").find(".prefs-title").html("Email Templates");
 							$("#content").find("#add-new").removeClass("hide");
 							}	
 
@@ -728,7 +728,7 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));
 					$("#content").find(".col").hide();
-					$("#content").find("h1").html("Add Email Template");
+					$("#content").find(".prefs-title").html("Add Email Template");
 
 					var view = new Email_Template_Events({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
@@ -776,7 +776,7 @@ var SettingsRouter = Backbone.Router
 						  return;
 					$('#content').html($(template_ui));
 					$("#content").find(".col").hide();
-					$("#content").find("h1").html("Edit Email Template");	
+					$("#content").find(".prefs-title").html("Edit Email Template");	
 
 					// Navigates to list of email templates, if it is not defined
 					if (!that.emailTemplatesListView || that.emailTemplatesListView.collection.length == 0)
