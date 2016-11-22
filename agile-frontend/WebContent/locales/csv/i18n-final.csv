@@ -729,7 +729,7 @@ welcome.create-and-run-campaigns-on-your-contacts,Create and run automated campa
 social.search-hover-content,Relevant Tweets matching a specified Search Keyword.,Tweets relevantes que coinciden con una búsqueda por palabra clave específica
 admin-settings-integrations.you-need-a-paid-plivo-account,You need a Paid Plivo account to be able to send SMS,Usted necesita una cuenta de pago Plivo para poder enviar un SMS
 report-view.know-your-revenue-forecast,Know your revenue forecast based on your deals data.,Conocer el pronóstico de tus ingresos de acuerdo a los datos de tus ventas.
-datasync.update-data-confirm,This will update your data. Do you want to continue?,Esto actualizará sus datos. ¿Quieres continuar?
+datasync.update-data-confirm,This will 'resync' your data. Do you want to continue?,Esto actualizará sus datos. ¿Quieres continuar?
 welcome.add-reports-to-improve-customr-reention-statergies,Add reports to improve customer retention strategies,Añadir informes para mejorar las estrategias de retención de clientes
 portlets.delete-deal-goals-dashlet-confirm,Are you sure you want to delete Dashlet - Deal Goals,¿Seguro que quiere eliminar Dashlet - Objetivos de la oferta?
 acls.access-denied,Access denied to sync contacts. Please contact Admin,Acceso denegado para sincronizar los contactos. Por favor&#44; póngase en contacto con administrador
@@ -818,7 +818,7 @@ main.to-resume-services-click-below,To resume the services&#44  please click bel
 companies.no-perm-to-update,You do not have permission to update Companies.,Usted no tiene permiso para actualizar Empresas.
 prefs-data-sync.setup-contact-sync-with-quickbook,Setup contact sync with your Quickbook account.,Configure la sincronización de contactos con su cuenta de Quickbook.
 calls.campaign-exited,You have successfully exited the call campaign.,Que haya salido con éxito la campaña llamada.
-contacts-view.first-name-or-last-name-is-mandatory,Either of first name or last name is mandatory.,Tanto nombre como apellido son obligatorios.
+contacts-view.first-name-or-last-name-is-mandatory,First name is mandatory.,Tanto nombre como apellido son obligatorios.
 deal-view.deal-not-associated-with-contact,Deal is not associated with any person/contact.,El Acuerdo no está asociado a ninguna persona / contacto.
 validation-msgs.max,Please enter a value less than or equal to {0}.,Por favor&#44; introduzca un valor inferior o igual a {0}.
 companies.no-perm-to-add,You do not have permission to create Companies.,Usted no tiene permiso para crear empresas.
@@ -2573,7 +2573,7 @@ admin-settings-custom-fields.link-definition,Link Definition,Definición de enla
 company-details.add-opportunity,Add Opportunity,Añadir Oportunidad
 widgets.twitter-profile,Twitter Profile,Perfil de Twitter
 contacts-view.task-related-to,Task related to,Tarea relacionada con
-admin-settings-tasks.what-are-tasks,What are Tasks?,¿Qué son las tareas?
+admin-settings-tasks.what-are-categories,What are Categories?,¿Qué son las tareas?
 campaigns.order-fulfilled,Order fulfilled,Orden satisfecha
 portlets.deals-pad-content-title,No deals found.,No se encontraron ofertas.
 modals.import-contacts,Import Contacts,Importar contactos

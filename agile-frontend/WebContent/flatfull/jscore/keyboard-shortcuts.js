@@ -138,6 +138,16 @@ function enableKeyboardShotcuts()
 				window.location.href = "/login?sur=true";
 		});
 
+		// New ticket
+		Mousetrap.bind('shift+k',function(){
+			App_Ticket_Module.renderNewTicketModalView();
+		});
+
+		// New call
+		Mousetrap.bind('shift+q',function(){
+			$('body').find(".show-dialler").trigger("click");
+		});
+
 
 
 		
