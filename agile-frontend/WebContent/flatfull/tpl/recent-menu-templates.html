@@ -1,14 +1,14 @@
 
 <script id="recent-menu-model-template" type="text/html">
 <div class="wrapper-sm recent-list-text-color">
-<a data-id="{{id}}"  class="c-p custom-color">
+<a data-id="{{id}}"  class="c-p custom-color recent-view">
 
 {{#if_equals entity_type "contact_entity"}}
     	<div class="pull-left m-r-xs">
         	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 30}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
     	</div>
-    	<div class="agile-thumb text-ellipsis">
-        	<div class="text-cap block" style="line-height: 1.2;"> {{contact_name_necessary this}}
+    	<div class="agile-thumb text-ellipsis recent-top">
+        	<div class="text-cap block recent-view-line-height"> {{contact_name_necessary this}}
             
             <div class="text-ellipsis text-lowercase">
             <small>{{getPropertyValue properties "email"}}</small>
@@ -23,12 +23,12 @@
 
 {{#if_equals entity_type "company_entity"}}
     	<div class="pull-left m-r-xs">
-        <div style="height:30px;width:30px;background-color: gainsboro;border-radius: 3px;line-height:26px;">
-        <img class="img-inital r r-2x m-l-xs" style="margin-left:3px; vertical-align: middle;display: inline-block;height: 25px;width: 25px" {{getCompanyImage "30" "display:inline;"}} />
+        <div class="recent-view-background-color">
+        <img class="img-inital r r-2x m-l-xs recent-view-comany-style m-l-none" {{getCompanyImage "30" "display:inline;"}} />
         </div>
     	</div>
-    	<div class="agile-thumb text-ellipsis">
-        	<div class="text-cap" style="line-height: 1.2;">{{getPropertyValue properties "name"}}
+    	<div class="agile-thumb text-ellipsis recent-top">
+        	<div class="text-cap recent-view-line-height">{{getPropertyValue properties "name"}}
     		<div class="text-ellipsis">
             <small>{{getPropertyValue properties "url"}}</small>
              </div>
@@ -41,8 +41,8 @@
     	<div class="pull-left">
         	<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 30}}" width="25px" height="25px" style="display:inline; width:30px; height:30px; " />
     	</div>
-    	<div class="agile-thumb text-ellipsis">
-        	<div class="text-cap" style="line-height: 1.2;"> {{getPropertyValue properties "first_name"}}
+    	<div class="agile-thumb text-ellipsis recent-top">
+        	<div class="text-cap recent-view-line-height"> {{getPropertyValue properties "first_name"}}
             {{getPropertyValue properties "last_name"}} 
             <div class="text-ellipsis text-lowercase">
             <small>{{getPropertyValue properties "email"}}</small>
@@ -62,8 +62,8 @@
 		<i class="icon-folder-close icon-3x img-inital r r-2x" id="minus"></i>
         </div>
 	</div>
-	<div class="agile-thumb text-ellipsis">
-		<div class="text-cap m-l-xs" style="line-height: 1.2;">{{title}}
+	<div class="agile-thumb text-ellipsis recent-top">
+		<div class="text-cap m-l-xs recent-view-line-height">{{title}}
        <div class="text-ellipsis">
         <small> {{description}}</small>
        </div>
@@ -75,12 +75,12 @@
 {{#if_equals entity_type "deal"}}
 	<div class="pull-left">
 		<!-- <i class="icon-money icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
-        <div style="height:30px;width:30px;background-color: gainsboro;border-radius: 3px;line-height: 27px;">
-		<i class="icon-money img-inital r r-2x m-l-xs" id="minus"  style="font-size:20px;vertical-align: middle;display: inline-block"></i>
+        <div class="recent-view-background-color">
+		<i class="icon-money img-inital r r-2x m-l-xs rectview-deal-icon" id="minus" ></i>
         </div>
 	</div>
 	<div class="agile-thumb text-ellipsis">
-		 <div class="text-cap m-l-xs" style="line-height: 1.2;">{{name}}
+		 <div class="text-cap m-l-xs recent-view-line-height" >{{name}}
         <div class="text-ellipsis">
          <small> {{description}} </small>
          </div>
@@ -92,12 +92,12 @@
 {{#if_equals entity_type "document"}}
 	<div class="pull-left">
 		<!-- <i class="icon-file-text icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
-         <div style="height:30px;width:30px;background-color: gainsboro;border-radius: 3px;line-height: 27px;">
-		<i class="icon-file-text img-inital r r-2x" id="minus" style="font-size:20px;vertical-align: middle;display: inline-block;margin-left: 7px;"></i>
+         <div class="recent-view-background-color">
+		<i class="icon-file-text img-inital r r-2x recent-view-document-icon" id="minus" ></i>
         </div>
 	</div>
-	<div class="agile-thumb text-ellipsis">
-		 <div class="text-cap m-l-xs" style="line-height: 1.2;"> {{name}}
+	<div class="agile-thumb text-ellipsis recent-top">
+		 <div class="text-cap m-l-xs recent-view-line-height"> {{name}}
        <div class="text-ellipsis">
         <small> {{description}}</small> 
         </div>
@@ -110,8 +110,8 @@
 		<!-- <i class="fa-file-text icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
 		<i class="icon-file-text img-inital r r-2x" id="minus" style="font-size:23px;"></i>
 	</div>
-	<div class="agile-thumb text-ellipsis">
-		 <div class="text-cap m-l-xs" style="line-height: 1.2;">{{name}}</div>
+	<div class="agile-thumb text-ellipsis recent-top">
+		 <div class="text-cap m-l-xs recent-view-line-height" >{{name}}</div>
 	</div>
 	<div class="clearfix"></div>
 {{/if}}
