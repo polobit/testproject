@@ -24,7 +24,7 @@ public class LoginUtil {
 
 	private boolean saveDomainUser = false;
 	public static final String ADMIN_DOMAIN_MASTER_PWD = "Agile#$%CRM"; 
-	public static final String GOOGLE_APPS_INVALID_EMAIL_ERROR = "Google Apps Invalid Email Acccont"; 
+	public static final String GOOGLE_APPS_INVALID_EMAIL_ERROR = "Sorry, we could not recognized the email ID registered with any of the Google App."; 
 
 	/**
 	 * This method will set misc values for a User at login. The user is saved,
