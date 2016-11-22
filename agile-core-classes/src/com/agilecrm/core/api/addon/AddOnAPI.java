@@ -85,7 +85,8 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOnUtil.checkForCreditCard();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
-			if(addOn.getAclUsers().size() == 0)
+			addOn.aclInfo.quantity = addOn.getAclUsers().size();
+			if(addOn.aclInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(dbAddOn.getAclUsers().size() != addOn.getAclUsers().size()){
 				boolean proration = true;
@@ -278,7 +279,7 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOnUtil.checkForCreditCard();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
-			
+			addOn.aclInfo.quantity = addOn.getAclUsers().size();
 			if(addOn.aclInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
 				

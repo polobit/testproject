@@ -5835,3 +5835,6 @@ calls.duration-secs-new,Call Duration (Min),
 calls.avg-duration-secs-new,Average Call Duration (Min),
 contacts-view.manage-filters,Manage Filter,
 portlets.+add-new,+ Add new,
+addon.addon-payment,Add-on Payment,
+addon.addon,Add-on,
+

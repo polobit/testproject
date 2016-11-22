@@ -921,6 +921,8 @@ function serializeForms(el){
 				});
 			}
 		});
+	}else{
+		json = serializeForm($("form", el).attr("id"));
 	}
 	return json;
 }
