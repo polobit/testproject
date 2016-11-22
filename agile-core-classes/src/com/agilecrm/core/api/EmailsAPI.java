@@ -706,8 +706,10 @@ public String validateSendgridWhitelabelDomain(@QueryParam("emailDomain") String
 {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
-	String domain = NamespaceManager.get();
+	if(StringUtils.isBlank(emailDomain))
+		return SendGridUtil.isDomainWhiteLabelled(emailGateway) + "";
 	
+	String domain = NamespaceManager.get();
 	return SendGridUtil.validateSendgridWhiteLabelDomain(emailDomain, emailGateway, domain);
 }
 
