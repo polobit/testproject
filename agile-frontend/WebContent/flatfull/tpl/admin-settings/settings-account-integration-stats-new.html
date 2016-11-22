@@ -259,12 +259,12 @@
   	<tbody>
   		<tr class="spacer">
     		<td>{{agile_lng_translate 'contact-details' 'Contacts'}} &amp; {{agile_lng_translate 'companies-view' 'companies'}} :</td>
-    		<td class="{{#is_mobile}} text-left {{/is_mobile}}"><a onclick="syncAppData();" class="btn btn-sm btn-default sync-app-con" style="margin-left: -16px; color: #23b7e5; font-size: 14px">{{agile_lng_translate 'contact-edit' 'update'}}</a></td>
+    		<td><a onclick="syncAppData();" class="btn btn-sm btn-default sync-app-con" style="margin-left: -16px; color: #23b7e5; font-size: 14px">{{agile_lng_translate 'contact-edit' 'update'}}</a></td>
   		</tr>
   		<tr>
   			<td style="padding-top: 8px;">{{agile_lng_translate 'contact-details' 'deals'}} :</td>
-    		<td class="{{#is_mobile}} m-t-sm m-l-sm block text-left {{else}} m-t-sm inline-block {{/is_mobile}}">
-    			<a onclick="syncAppDatatoDeals();" class="btn btn-sm btn-default sync-app-con" {{#is_mobile}} style="margin-left:0px;" {{else}} style="margin-left:-16px; color: #23b7e5; font-size: 14px" {{/is_mobile}}>{{agile_lng_translate 'contact-edit' 'update'}}</a>
+    		<td class="{{#is_mobile}} m-t-sm block {{else}} m-t-sm inline-block {{/is_mobile}}">
+    			<a onclick="syncAppDatatoDeals();" class="btn btn-sm btn-default sync-app-con" {{#is_mobile}} style="margin-left:0px;font-size: 14px" {{else}} style="margin-left:-16px; color: #23b7e5; font-size: 14px" {{/is_mobile}}>{{agile_lng_translate 'contact-edit' 'update'}}</a>
     		</td>
 
   		</tr>
