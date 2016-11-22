@@ -223,7 +223,7 @@ function initializeAdminpanelListner(el){
 			showAlertModal("delete_subscription", "confirm", function(){
 				var sub_id = $("#delete_userplan").attr("sub_id");
 				var cus_id = $("#delete_userplan").attr("cus_id");
-				var domain = window.location.hash.split("#getDomainUserDetails/")[1];
+				var domain = $("#delete_userplan").attr("domain");
 				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id+'&e='+domain,
 					type : 'DELETE',
 					

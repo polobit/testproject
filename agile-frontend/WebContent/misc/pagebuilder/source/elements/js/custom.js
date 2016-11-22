@@ -16,4 +16,8 @@ $(function(){
         $(this).append( overlay );
     });
 
+    $("[contenteditable='true']").each(function() {
+        $(this).removeAttr("contenteditable");
+    });
+
 });
