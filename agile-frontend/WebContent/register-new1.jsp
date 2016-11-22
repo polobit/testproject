@@ -18,12 +18,12 @@ pageEncoding="UTF-8"%>
 		response.sendRedirect("/register");
 		return;
 	}
-
+/*
  	if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	}*/
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -140,6 +140,19 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "regi
 #myFrame {
 	display: none;
 }
+.text-info-color{
+    color: #23b7e5
+}
+.text-alignment{
+	text-align: center;
+	padding-top: 5px;
+}
+.font-11{
+	font-size: 11px;
+}
+.font-18{
+	font-size: 18px;
+}
 </STYLE>
 
 <script type="text/javascript">
@@ -211,13 +224,6 @@ if(isSafari && isWin)
       				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "register-with-free")%></strong>
    				</div>
 
-<form id='oauth' name='oauth' method='post' class="pad-top-10" action="/register">
-			<div id="openid_btns" class="login-social-btns">
-					<input type='hidden' name='type' value='oauth'></input>
-					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					<a title="log in with Google" data='google' href='#'  class="openid_large_btn google tags-color text-white"><i class="fa fa-google"></i> Register with GoogleApps</a>
-			</div>
-</form>
 
 
 <form name='agile' id="agile" method='post'
@@ -273,18 +279,29 @@ if(isSafari && isWin)
 									</div> 		
 
 <input type='submit' id="register_account" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%>' class='btn btn-lg btn-primary btn-block'>
+
+</form>
+
+
+<form id='oauth' name='oauth' method='post' class="pad-top-10 text-alignment" action="/register">
+			<div id="openid_btns" class="login-social-btns">
+					<input type='hidden' name='type' value='oauth'></input>
+					<input type='hidden' name='server' id='oauth-name' value=''></input>
+					<a title="Sign in using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white font-11"><i class="fa fa-google"></i>Sign in using <span class="text-info-color">Google Apps</span></a>
+					
+
+			</div>
+</form>
 <div class="text-center text-white m-t m-b">
 	<div>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
-		</small>
-		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a>
+		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><span class="text-info-color"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></span></a></small>
 	</div>
 	<div>
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
-		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%>
+		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><span class="text-info-color"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</span></a></small> 
 	</div>
 </div>
-</form>
 					
 </div>
 <div class="container hide">
