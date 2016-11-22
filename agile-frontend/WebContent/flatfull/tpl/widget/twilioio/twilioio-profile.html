@@ -35,7 +35,7 @@
 </div>
 
 <div id="incoming_log_details" style="display:none;">
-	<ul id="twilio-incoming-logs-panel" class="list-group m-b-none text-base>
+	<ul id="twilio-incoming-logs-panel" class="list-group m-b-none text-base">
 		<li>
 			<center><img id="logs_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t"></img></center>
 		</li>
@@ -59,12 +59,12 @@
                 </label>                
 				<div class="control-group form-group">
                      <div class="controls">
-                         <input type="text" id="twilio_acc_sid" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'account-sid-validation'}}" value="" name="twilio_acc_sid" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  minlength= "34" maxlength= "34" required></input>
+                         <input type="text" id="twilio_acc_sid" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'account-sid-validation'}}" value="" name="twilio_acc_sid" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}" autocomplete="off" minlength= "34" maxlength= "34" required></input>
                      </div>
                 </div>
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'auth-token-validation'}}" value="" name="twilio_auth_token" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'auth-token'}}"  minlength= "32" maxlength= "32" required></input>
+                          <input type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'auth-token-validation'}}" value="" name="twilio_auth_token" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'auth-token'}}" autocomplete="off" minlength= "32" maxlength= "32" required></input>
                      </div>
                 </div>            
 
@@ -75,7 +75,7 @@
         			      </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
-			          <select name="twilio_number" id="twilio_number" class="form-control">	</select>
+			          <select name="twilio_number" id="twilio_number" class="form-control" required>	</select>
   			        </div> 
 			    </div>     
 
@@ -86,7 +86,7 @@
         			     </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
-			          <select name="twilio_from_number" id="twilio_from_number" class="form-control">	</select>
+			          <select name="twilio_from_number" id="twilio_from_number" class="form-control" required>	</select>
   			        </div> 
 			    </div>  
                 
@@ -102,26 +102,28 @@
                       <input type="text" id="twilio_twimlet_url" class="input-medium widget_input_box form-control"  title="Twimlet Url" value="" name="twilio_twimlet_url" placeholder="{{agile_lng_translate 'widgets' 'twimlet-url'}}">
                       </input>
                     </div> 
-			    </div>    
-
-                <span id="twilio_recording" style="display:none;">
-<div class="checkbox">
-<label class="i-checks i-checks-sm">
-<input type="checkbox" id="twilio_record" name="twilio_record" title="{{agile_lng_translate 'widgets' 'record-calls'}}"></input><i></i> {{agile_lng_translate 'widgets' 'record-calls'}}
-</label>
-</div>
-</span>                         
-              
-                 
+			    </div>                         
               <span id="error-number-not-selected" class="help-inline text-danger" style="display:none;">{{agile_lng_translate 'widgets' 'please-select-twilio-number'}}</span>
               <span id="note-number-not-available" class="help-inline text-danger" style="display:none;"></span>
+          <span id="twilio_recording" >
+        <div class="checkbox">
+        <label class="i-checks i-checks-sm">
+        <input type="checkbox" id="twilio_record" name="twilio_record" title="{{agile_lng_translate 'widgets' 'record-calls'}}"></input><i></i> {{agile_lng_translate 'widgets' 'record-calls'}}
+        </label>
+        </div>
+        </span>    
 <div class="m-t text-center">
               <a href="#" id="validate_account" class="btn btn-sm btn-primary">{{agile_lng_translate 'widgets' 'validate'}}</a>
 			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary" style="display:none;">{{agile_lng_translate 'portlets' 'save'}}</a>
 			  <a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
 </div>              
 		 </fieldset>
-<br><a href="#voicemail" class="text-info">{{agile_lng_translate 'widgets' 'manage-voicemails'}}</a>
+<br>
+    <label class="control-label"><a href="#voicemail" class="text-info">{{agile_lng_translate 'widgets' 'manage-voicemails'}}</a>
+      <span class="v-top">         
+      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'manage-voicemails-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
+      </span>
+    </label>
     </form>
 </div>
 </script>

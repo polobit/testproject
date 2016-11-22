@@ -170,6 +170,7 @@ $(function(){
 		 */
 	});
 
+	var setVal = false;
     $('body').off('change', '#twilio_number');
 	$('body').on('change', '#twilio_number', function(e)
 	{
@@ -179,6 +180,10 @@ $(function(){
 		var numberSID = $("#twilio_number option:selected").attr("data");
 		console.log("twilio_number change");
 		console.log("twilio_number " + $(this).val() + " clicked " + numberSID);
+		
+		if(!setVal){
+			$('#twilio_from_number option[value="'+$("#twilio_number option:selected").attr("value")+'"]').attr("selected",true).siblings().removeAttr('selected');
+		}
 
 		$("#twilio_number_sid").val(numberSID);
 	});
@@ -186,6 +191,8 @@ $(function(){
     $('body').off('change', '#twilio_from_number');
 	$('body').on('change', '#twilio_from_number', function(e)
 	{
+		setVal = true;
+		console.log(setVal+" set value")
 		e.preventDefault();
 		$("#error-number-not-selected").hide();
 	});
@@ -268,7 +275,7 @@ $(function(){
 		// Toggle advanced settings
 		$(".twilioio-advance-settings-hide").toggle();
 	    $(".twilioio-advance-settings-show").toggle();
-	    $("#twilio_recording").toggle();
+	    //$("#twilio_recording").toggle();
 	    $("#twilio_twimlet_url_controls").toggle();
 	 });
 
@@ -711,7 +718,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 
 		// Add verified number in UI
 		addTwilioNumbersInUI(twilioNumbers);
-
+		addVerifiedCallerIdInUI(twilioNumbers);
 		// Hide validate button
 		$("#validate_account").hide();
 
@@ -766,7 +773,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		addTwilioNumbersInUI(twilioNumbers);
 
 		// Add verified number in UI
-		addVerifiedCallerIdInUI(verifiedNumbers);
+		addVerifiedCallerIdInUI(verifiedNumbers,twilioNumbers);
 
 		// Hide validate button
 		$("#validate_account").hide();
@@ -859,26 +866,43 @@ function addTwilioNumbersInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
-	optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
+	//optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
 	phoneNumberHtml = phoneNumberHtml + optionHtml;
 	
 	// Add verified number in list
 	$("#twilio_number").html(phoneNumberHtml);
 }
 
-function addVerifiedCallerIdInUI(result)
+function addVerifiedCallerIdInUI(result,result1)
 {
 	var phoneNumberHtml = '<option value="" default selected style="display:none;">Select a verifed number</option>';
 	var optionHtml = "";
-
+	var numArry = [];
+	var finalnumArry = [];
 	// Collect all verified number for display
-	$.each(result, function(index, phoneNumber)
-	{
-		optionHtml = '<option value="' + phoneNumber.PhoneNumber + '">' + phoneNumber.PhoneNumber + '</option>';
-		phoneNumberHtml = phoneNumberHtml + optionHtml;
-	});
+	if(!result1){
+		$.each(result, function(index, phoneNumber)
+		{
+			optionHtml = '<option value="' + phoneNumber.PhoneNumber + '">' + phoneNumber.PhoneNumber + '</option>';
+			phoneNumberHtml = phoneNumberHtml + optionHtml;
+		});
+	}else{
+		$.each(result, function(index, phoneNumber){
+			numArry.push(parseInt(phoneNumber.PhoneNumber));
+		});
+		$.each(result1, function(index, phoneNumber1){
+			numArry.push(parseInt(phoneNumber1.PhoneNumber));
+		});
 
-	optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
+		numArry.sort(function(a, b){return a-b});
+
+		for(var i=0;i<numArry.length;i++){
+			optionHtml = '<option value="+' + numArry[i] + '">+' + numArry[i] + '</option>';
+			phoneNumberHtml = phoneNumberHtml + optionHtml;
+		}
+	}
+
+	//optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
 	phoneNumberHtml = phoneNumberHtml + optionHtml;
 	
 	// Add verified number in list
