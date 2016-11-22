@@ -168,7 +168,7 @@ function syncAppData(){
 function syncAppDatatoDeals(){
 	 showModalConfirmation(
 		"Update Data",
-		"This will update your data. Do you want to continue?",
+		"This will 'resync' your data. Do you want to continue?",
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 

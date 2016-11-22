@@ -41,7 +41,7 @@
 <div class="m-b-sm" id="account-stats">
 <!--<h4 class="h4 m-b-sm">Account Stats</h4>-->
 <div class="row">
-<div class="col-md-6 b-light" style="width: 52%">
+<div class="col-md-6 b-light" {{#is_mobile}} style="width: 100%" {{else}} style="width: 52%" {{/is_mobile}}>
 <div class="panel panel-default">
 <table class="table table-bordered table-hover">
    
@@ -259,18 +259,19 @@
   	<tbody>
   		<tr class="spacer">
     		<td>{{agile_lng_translate 'contact-details' 'Contacts'}} &amp; {{agile_lng_translate 'companies-view' 'companies'}} :</td>
-    		<td class="{{#is_mobile}} text-left {{/is_mobile}}"><a onclick="syncAppData();" class="btn btn-sm btn-default sync-app-con" style="margin-left: 10px;">{{agile_lng_translate 'contact-edit' 'update'}}</a></td>
+    		<td><a onclick="syncAppData();" class="btn btn-sm btn-default sync-app-con" style="margin-left: -16px; color: #23b7e5; font-size: 14px">{{agile_lng_translate 'contact-edit' 'update'}}</a></td>
   		</tr>
   		<tr>
   			<td style="padding-top: 8px;">{{agile_lng_translate 'contact-details' 'deals'}} :</td>
-    		<td class="{{#is_mobile}} m-t-sm m-l-sm block text-left {{else}} m-t-sm inline-block {{/is_mobile}}">
-    			<a onclick="syncAppDatatoDeals();" class="btn btn-sm btn-default sync-app-con" {{#is_mobile}} style="margin-left:0px;" {{else}} style="margin-left:9px;" {{/is_mobile}}>{{agile_lng_translate 'contact-edit' 'update'}}</a>
+    		<td class="{{#is_mobile}} m-t-sm block {{else}} m-t-sm inline-block {{/is_mobile}}">
+    			<a onclick="syncAppDatatoDeals();" class="btn btn-sm btn-default sync-app-con" {{#is_mobile}} style="margin-left:0px;font-size: 14px" {{else}} style="margin-left:-16px; color: #23b7e5; font-size: 14px" {{/is_mobile}}>{{agile_lng_translate 'contact-edit' 'update'}}</a>
     		</td>
 
   		</tr>
   	</tbody>
 </table>
-<div {{#is_mobile}} style="position:relative;margin-top: 10px !important" {{else}} style="position:relative;margin: 15px 0px 10px 15px;" {{/is_mobile}}>
+<div {{#is_mobile}} style="position:relative;margin-top: 10px !important" {{else}} style="position:relative;margin: 15px 0px -18px 15px;" {{/is_mobile}}>
+
     <p>{{agile_lng_translate 'datasync' 'resync-info'}}</p>
    	<p>* {{agile_lng_translate 'integration-stats' 'sync-in-month'}}</p>
 </div>

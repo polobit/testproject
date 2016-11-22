@@ -18,6 +18,9 @@
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
+{{#if_equals expected_value "0"}}
+<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{expected_value}}</div>
+{{/if_equals}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
@@ -281,6 +284,10 @@
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
+{{#if_equals expected_value "0"}}
+<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{expected_value}}</div>
+{{/if_equals}}
+
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
