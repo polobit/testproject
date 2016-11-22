@@ -1194,7 +1194,8 @@
 	},
 
 	categories: function(){
-				loadServiceLibrary(function(){
+		
+		loadServiceLibrary(function(){
 		 	//Rendering root template
 			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
 				//Initializing base collection with groups URL
@@ -1261,6 +1262,7 @@
 								
 				}
 			});	
+			
 			//Fetching groups collections
 			if(!App_Ticket_Module.categoriesCollection.collection.fetch())
 			setTimeout(function(){
@@ -1271,9 +1273,12 @@
 			//Rendering template
 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);
 
-		 	});
+		 	make_menu_item_active("ticketknowledgebasemenu");
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.helpdesk-tab').addClass('select');
+	
+	 	});
 		});
-		make_menu_item_active("ticketknowledgebasemenu");
 	},
 
 
@@ -1356,6 +1361,9 @@
 
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
     
     articles: function(name){
@@ -1440,6 +1448,10 @@
 
 		 	});
 		});
+	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addArticle : function(section_id){
@@ -1509,7 +1521,10 @@
 		 			callback();
 		 	});
 		});
-
+		
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	editArticle : function(section_id,name){
@@ -1554,6 +1569,9 @@
 		 			callback();
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 
 	},
 
@@ -1579,6 +1597,9 @@
 							
 			});	
 		});	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addSection : function(category_id){
@@ -1617,6 +1638,10 @@
 				$('#admin-prefs-tabs-content').html(addsectionView.render().el);			
 			});	
 		});	
+		
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1650,6 +1675,9 @@
 				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
 			});	
 		});	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	}, 
 
 	addLandingpage : function(){
@@ -1685,7 +1713,10 @@
 
 					$('#admin-prefs-tabs-content').html(addLandingpageView.render().el);			
 				});	
-			});	
+			});
+				make_menu_item_active("ticketknowledgebasemenu");
+				$('#content').find('#AdminPrefsTab .select').removeClass('select');
+				$('#content').find('.helpdesk-tab').addClass('select');	
 		}, 
 
 
@@ -1705,6 +1736,9 @@
 				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
 			});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1733,6 +1767,9 @@
 				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
 			});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	loadAdminsettingsHelpdeskTemplate: function(json, callback){
