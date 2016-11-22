@@ -1264,10 +1264,16 @@
             $('a#agileform_link').parent().show();
             $('a#agileform_link').click();
             $('a#default-tab1').css('display','none');
-            if($(this.activeElement.element).find('.agile_crm_form_embed').size()!==0)
+            if($(this.activeElement.element).find('.agile_crm_form_embed').size()!==0){
                 $('#agileform_id').val($(this.activeElement.element).find('.agile_crm_form_embed').attr('id')).attr('selected','selected');
-            else
+                var form_id=$(this.activeElement.element).find(".agile_crm_form_embed").attr("id").split(window.CURRENT_AGILE_DOMAIN+"_")[1];
+                $('#refresh-formlist .edit-form').attr("href",window.siteUrl+"formbuilder?form="+form_id);
+                $('#refresh-formlist .edit-form').show();
+            }else{
+
                 $('#agileform_id').val('default').attr('selected','selected');
+                $('#refresh-formlist .edit-form').hide();
+            }
 
         },
 

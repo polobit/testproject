@@ -270,14 +270,15 @@
             <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i>  {{agile_lng_translate 'campaigns' 'manage-triggers'}}</a> -->
             
             <div class="btn-group right pos-rlt pull-left">
+              <a id="campaign-video-tutorial" onclick="workflowVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
+                 <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+              </a>
                <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-campaign'}}</a>
                <a id="campaign-stats" class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
                <ul class="dropdown-menu pull-right">
                   <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> {{agile_lng_translate 'campaigns' 'compare-campaigns'}}</a></li>
                </ul>
-               <a id="campaign-video-tutorial" onclick="workflowVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-left: 3px; line-height: 1px;">
-                 <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
-                </a>
+               
             </div>
          </div>
       </div>

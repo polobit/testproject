@@ -149,7 +149,7 @@ $(function(){
 				if(recent_view.collection.length==0){
 					// default text, when list is empty.
 					$(".recent-menu-list").remove();
-					$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
+					$('#recent-menu>ul').html('<li class="list-group-item no-recent-items" style="border: none;"><div class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</div></li>');
 					hideTransitionBar();
 				}else{
 					$(".recent-menu-list").remove();

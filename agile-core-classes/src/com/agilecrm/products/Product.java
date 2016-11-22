@@ -45,6 +45,9 @@ public class Product
     
     @NotSaved(IfDefault.class)
     private String description = null;
+    
+    @NotSaved(IfDefault.class)
+    private String sku = null;
 
     /**
      * Created time of product
@@ -105,6 +108,14 @@ public class Product
     {
 	return name;
     }
+    
+    /**
+     * @return the sku
+     */
+    public String getSku()
+    {
+	return sku;
+    }
 
     /**
      * @return the created_time
@@ -143,6 +154,14 @@ public class Product
 	this.id = id;
     }
 
+    /**
+     * @param sku
+     *            the sku to set
+     */
+    public void setSku(String sku)
+    {
+	this.sku = sku;
+    }
 
     /**
      * @param updated_time

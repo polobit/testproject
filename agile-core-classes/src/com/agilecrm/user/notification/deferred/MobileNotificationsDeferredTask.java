@@ -1,11 +1,17 @@
 package com.agilecrm.user.notification.deferred;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
@@ -58,9 +64,13 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 	
 	// Server Key
 	// private static final String serverAPIKey = "AIzaSyAVanImbijvXcUAr6iZNVZLgSG1EeCBMzk";
-	private static final String serverAPIKey = "AIzaSyApc647aMom3kEHsTQ9m6WiL9_6iHrsl_4";
+	// private static final String serverAPIKey = "AIzaSyBjjUcXDE1NXVofpAaMXKHLlheAs0enVMI";
+	private static final String serverAPIKey = "AIzaSyBjIGs-PFoP0OtUvJcqJm5x04b12ygxbn8";
 	public static final String MESSAGE_KEY = "message";
 
+	public MobileNotificationsDeferredTask(){
+	}
+	
 	/**
 	 * Constructs a new {@link MobileNotificationsDeferredTask}.
 	 * 
@@ -173,7 +183,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 		return serverURL;
 	}
 	
-	private void sendMessageToAndriod(String regId, String data)
+	public void sendMessageToAndriod(String regId, String data)
 	{
 		try
 		{
@@ -186,7 +196,7 @@ public class MobileNotificationsDeferredTask implements DeferredTask {
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 
 	}

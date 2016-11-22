@@ -2006,7 +2006,7 @@ public class PortletUtil {
 		    JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 		    portlet.settings=json;
 		}
-		if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Marketing Blog") && !portlet.name.equalsIgnoreCase("Webstat Visits") && !portlet.name.equalsIgnoreCase("Marketing Onboarding") && !portlet.name.equalsIgnoreCase("Referralurl stats"))
+		if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Marketing Blog") && !portlet.name.equalsIgnoreCase("Marketing Onboarding"))
 			added_portlets.add(portlet);
 	    }
 	    
