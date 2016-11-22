@@ -737,21 +737,25 @@ function show_bulk_owner_change_page()
 	                      {
 	                            
 		                      showModalConfirmation(
-		                                      "Campaigns Alert",
-		                                      "You cannot send campaign emails more than 50 without proper DKIM and SPF setup.",
+		                                      "Add to Campaign",
+		                                      "Please configure DKIM and SPF settings to send campaign emails to more than 50 contacts.",
 		                                       function()
 		                                      {
-		                                              Backbone.history.navigate("analytics-code", { trigger : true })
+		                                      		  enable_save_button(saveButton);
+		                                              Backbone.history.navigate("analytics-code", { trigger : true });
+
 		                                      },  function()
 		                                      {
-		                                              // No callback
-		                                              return;
+		                                      		enable_save_button(saveButton);
+
+		                                            Backbone.history.navigate("contacts", { trigger : true });
+		                                           
 		                                      }, function()
 		                                      {
-		                                              return;
-		                                      },"Go to DKIM settings", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+
+		                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 		                      				
-		                      				return;
+		                      	return;
 	                  		}
 
 	                  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
@@ -763,7 +767,9 @@ function show_bulk_owner_change_page()
 								enable_save_button(saveButton);
 							}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
 		              	}, 
-		              	function(){//error
+		              	function(){
+
+		              	//error
 
 						});
 				}
