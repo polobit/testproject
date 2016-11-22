@@ -4941,6 +4941,7 @@ ul#recent-menu-model-list li:nth-child(even)
     color: green;
     margin-right: 5px;
 }
+
 .form-margin
 {
   margin-left: -85px !important; 
@@ -4971,3 +4972,36 @@ border-top: 0px !important;
  .products_deals tr>td:last-child {
     border-right: 0!important;
 }
+
+.no-recent-items{
+  border: 0px !important;
+}
+
+.recent-view-line-height
+{
+  line-height: 1.27;
+}
+.recent-view-document-icon{
+  font-size:20px;vertical-align: middle;display: inline-block;margin-left: 7px;
+  opacity: 0.6
+}
+.recent-view-background-color{
+  height:30px;width:30px;background-color: gainsboro;border-radius: 3px;line-height: 27px;
+}
+.recent-view-comany-style{
+  margin-left:3px; vertical-align: middle;display: inline-block;height: 25px;width: 25px
+}
+.recent-top{
+  margin-top: -2px;
+}
+.rectview-deal-icon{
+  font-size:20px;vertical-align: middle;display: inline-block;
+  opacity: 0.7;
+}
+@media (max-width: 1024px) and (min-width: 768px){
+.navbar-nav li a recent-view{
+ padding-left: 0px !important; padding-right: 0px !important;
+
+}
+}
+
