@@ -476,7 +476,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	}
 	$(".appaside.dropdownnavbar").on("click",function(e)
 	{
-		
+		e.stopPropagation();
 		if($(this).hasClass("agile-menuactive"))
 		{
 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
@@ -493,9 +493,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$(".appaside.dropdownnavbar ul li").on("click",function(e)
 	{
 		e.stopPropagation();
+		if(agile_is_mobile_browser()){
+			$("#mobile-menu").trigger("click",function(e){
+			});
+		}
+		else
+		{
 		$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
 		$(this).addClass("agile-menuactive");
 		$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+	}
 	});
 	// initializing need help popover for header page
    $(".need_help").popover({ 

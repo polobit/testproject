@@ -1408,7 +1408,7 @@ body {
     bottom: 0;
     z-index: 1010;
     display: block !important;
-    width: 75%;
+    width: 65%!important;
     overflow-x: hidden;
     overflow-y: auto;
     visibility: visible;
