@@ -7,6 +7,11 @@
     $('.agile-tooltip').tooltip({
         container: 'body'
     });
+    $('input#youtubeID').focus(function(){
+        $('input#youtubeID').addClass("margin-bottom-20");
+        $("#error-msg").next().css("margin-top","");
+        $("#error-msg").hide();
+    });
 
     //show edit form option when select any form
      $('#agileform_id').change(function(e){

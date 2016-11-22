@@ -554,8 +554,19 @@
 
                 if( $('input#youtubeID').val() !== '' ) {
 
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+$('#video_Tab input#youtubeID').val());
-
+                    var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                    var ytMatch = $('input#youtubeID').val().match(ytRegExp);
+                    if (ytMatch && ytMatch[1].length === 11) {
+                        var youtubeId = ytMatch[1];
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
+                    }
+                    else{
+                        $('input#youtubeID').removeClass("margin-bottom-20");
+                        $("#error-msg").next().css("margin-top","6px");
+                        $("#error-msg").show();
+                        return;
+                    }
+                    
                 } else if( $('input#vimeoID').val() !== '' ) {
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
@@ -920,6 +931,11 @@
             $('a#video_Link').click();
             $('a#default-tab1').css("display","none");
 
+            if($("#error-msg").css("display")!=="none"){
+                $('input#youtubeID').addClass("margin-bottom-20");
+                $("#error-msg").next().css("margin-top","");
+                $("#error-msg").hide();
+            }
             //inject current video ID,check if we're dealing with Youtube or Vimeo or Recorded video
 
             if( $(el).prev().attr('data-video').indexOf("vimeo.com") > -1 ) {//vimeo
@@ -933,10 +949,10 @@
             } else if( $(el).prev().attr('data-video').indexOf("youtube.com") > -1 ) {//youtube
 
                 //temp = $(el).prev().attr('src').split('/');
-                var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-                matchResults = $(el).prev().attr('data-video').match(regExp);
+               // var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+               // matchResults = $(el).prev().attr('data-video').match(regExp);
 
-                $('#video_Tab input#youtubeID').val( matchResults[1] );
+                $('#video_Tab input#youtubeID').val("https:"+$(el).prev().attr('data-video'));
                 $('#video_Tab input#vimeoID').val('');
                 $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
