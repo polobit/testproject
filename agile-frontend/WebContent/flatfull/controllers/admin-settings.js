@@ -285,10 +285,16 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 			$('#account-pref').html($(template_ui));
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
+			var show_sso_form = _agile_get_prefs("show-sso-form");
+
 			var view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
 			postRenderCallback : function()
 			{
-				
+				if(show_sso_form){
+					$(".showsso").removeClass("hide");
+					$(".sso-btn").addClass("hide");
+				}
+				showSSO();	
 			},saveCallback : function(){
 				console.log("saveCallback");
 				App_Admin_Settings.ssoLoginSettings();
@@ -1831,3 +1837,11 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 	},
 	
 });
+
+function showSSO(){
+	$(".enale-sso").on("click",function(){
+		$(".showsso").removeClass("hide");
+		$(".sso-btn").addClass("hide");
+		_agile_set_prefs("show-sso-form","true");
+	});
+}
