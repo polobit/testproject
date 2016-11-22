@@ -793,7 +793,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			}
 			
 			// Set in cache
-			if(isWhiteLabelled)
+			if(isWhiteLabelled != null && isWhiteLabelled)
 				CacheUtil.setCache(KEY, isWhiteLabelled);
 			
 			return isWhiteLabelled;

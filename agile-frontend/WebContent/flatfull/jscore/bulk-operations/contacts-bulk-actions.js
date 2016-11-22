@@ -683,10 +683,7 @@ function show_bulk_owner_change_page()
  					try
  					{
  						workflows_collection = collection.toJSON();
- 					 	console.debug("---------------------------------------");
- 						console.debug(workflows_collection);
-
- 						emails_workflows = get_email_workflows(workflows_collection);
+ 					 	emails_workflows = get_email_workflows(workflows_collection);
  					}
  					catch(err)
  					{
@@ -728,7 +725,7 @@ function show_bulk_owner_change_page()
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 
-				if(selected_count > 50 && emails_workflows.hasOwnProperty(workflow_id))
+				if(selected_count > 500 && emails_workflows.hasOwnProperty(workflow_id))
 				{
 					accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
               		function(response){ // success
@@ -752,7 +749,7 @@ function show_bulk_owner_change_page()
 		                                           
 		                                      }, function()
 		                                      {
-
+		                                      	enable_save_button(saveButton);
 		                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 		                      				
 		                      	return;
