@@ -6,7 +6,7 @@ import com.thirdparty.ecommerce.Product;
 
 public class Order
 {
-    public long id;
+    public String id;
     public String status;
     public String billingAddress;
     public String shippingAddress;

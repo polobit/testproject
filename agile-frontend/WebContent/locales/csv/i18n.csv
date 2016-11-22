@@ -5852,5 +5852,4 @@ specialchar-typeahead.query-message,Search input contains unsupported characters
 documents.no-products,Note: You do not have any products currently. Configure them,
 products.product-name,Product Name,
 landingpage-builder.refresh-form-tooltip,Click to refresh form list,
-landingpage-builder.edit-form-tooltip,Click to edit this form,
-
+landingpage-builder.edit-form-tooltip,Click to edit this form,documents.name,Name,
