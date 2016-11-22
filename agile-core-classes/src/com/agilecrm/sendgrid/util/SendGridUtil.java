@@ -784,7 +784,8 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 				
 				System.out.println("JSON is " + json);
 				
-				if(json.has("valid"))
+				// If valid is true then add in cache
+				if(json.has("valid") && json.getBoolean("valid"))
 				{
 					isWhiteLabelled = json.getBoolean("valid");
 					break;
