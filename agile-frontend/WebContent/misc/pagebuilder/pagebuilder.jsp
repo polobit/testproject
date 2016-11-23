@@ -191,7 +191,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <li><a href="#" id="saveTemplate" data-toggle="modal" data-siteid="6"><span class="fui-arrow-right"></span> Save page template</a></li>
                     </ul> -->
                 </div>
-                <div class="col-md-5" id="lp-save-msg" style="color: white; text-align: center; float: right; margin-top: 7px; display:none; color: #24bfa0;">Landing page saved.</div>
+                <div class="col-md-4" id="lp-save-msg" style="color: white; text-align: left; float: right; margin-top: 7px; display:none; color: #24bfa0;">Landing page saved.</div>
                 <ul class="nav nav-pills nav-inverse pull-left responsiveToggle" id="responsiveToggle">
                     <li>
                         <a href="" data-responsive="mobile">
