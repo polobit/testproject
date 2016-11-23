@@ -778,6 +778,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
     %>
     
     <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.VISITORS)){
+    %>
+   <li id="segmentationmenu">
+    <a  href="#visitors">
+       <i class="icon-eye"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
+    </a>
+  </li>
+   <%
+          }
+    %>
+
+    <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu" class="MarketingDashboard-activitiesnavbar">
@@ -799,7 +812,6 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li> 
 
-  
   <li id="tasksmenu" class="hide">
     <a class="agile-menu-dropdown-aside" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
