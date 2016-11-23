@@ -771,7 +771,7 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 				//officeEvents.push(obj);				
 				renderOfficeEvents(officeEvents, obj, el);								
 			}		
-			addEventSourceToCalendar('office', officeEvents);
+			//addEventSourceToCalendar('office', officeEvents);
 			$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_office" + $(el).attr('id')]);
 			var events_clone = officeEvents.slice(0);
 			functions["event_mini_office" + $(el).attr('id')] = function(start, end, callback)
