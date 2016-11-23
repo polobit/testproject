@@ -305,8 +305,11 @@ public class SubscriptionUtil
     
     public static boolean isSubscriptionDeleted(){
     	Subscription subscription = getSubscription();
-    	if(subscription.status != null && subscription.status.equals(BillingStatus.SUBSCRIPTION_DELETED))
+    	System.out.println("subscription:::"+subscription);
+    	if(subscription.status != null && subscription.status.equals(BillingStatus.SUBSCRIPTION_DELETED)){
+    		System.out.println("subscriptionstatus is SUBSCRIPTION_DELETED");
 			return true;
+    	}
     	return false;
     }
 }

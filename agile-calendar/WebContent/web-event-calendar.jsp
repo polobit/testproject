@@ -174,6 +174,7 @@ if(scheduleid.contains(",")){
 		out.print("Sorry, user is not enrolled with Agile CRM.");
 		return;
 	   }
+	   System.out.println("Fetching subscriptionFromCalendalModule");
 	   if(SubscriptionUtil.isSubscriptionDeleted()){
 		   out.print("Sorry, Agile CRM account of this user has been blocked");
 		   return;
