@@ -599,7 +599,8 @@
             if($(styleeditor.activeElement.element).prop('tagName')==="IMG"){
 
                     var image_url=$('.imageFileTab').find('input#imageURL').val();
-                    if(image_url.match(/\.(jpeg|jpg|gif|png|svg)$/) === null){
+                   
+                    if( image_url.match("^(http|https)://")===null|| image_url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
                         $('input#imageURL').css("margin-bottom","0px");
                         $("#error-img-msg").next().css("margin-top","6px");
                         $("#error-img-msg").show();
