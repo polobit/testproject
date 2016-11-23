@@ -1398,8 +1398,8 @@
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
-				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" 
-					style="display:none; line-height: 1px;float:left;"   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" {{#is_mobile}} style="display:none; line-height: 1px;" {{else}} style="display:none; line-height: 1px;float:left;margin-right:3px" {{/is_mobile}}
+					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
 					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
 				</a>
 				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">

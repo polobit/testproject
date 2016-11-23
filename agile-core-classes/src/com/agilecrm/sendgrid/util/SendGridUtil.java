@@ -18,11 +18,13 @@ import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.lib.SendGridException;
@@ -639,14 +641,18 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		return response;
 	
 }
+
 	
 	public static void main(String asd[]){
-		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
+//		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
+//		
+//		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
+//		lt.add(mt);
+//		
+//		sendSendGridMails(lt, null);
 		
-		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
-		lt.add(mt);
 		
-		sendSendGridMails(lt, null);
+		getAllWhiteLabelDomains(null);
 	}
 	
 	/**
@@ -692,4 +698,115 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 	    }
 	    return result;
 	}
+	
+	private static String getAllWhiteLabelDomains(String username, String password){
+		String response = null, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+		
+		try
+		{
+		   response = HTTPUtil.accessURLUsingAuthentication(url, username, password,"GET", null, false, "application/json", "application/json");
+		   
+		   System.out.println("response " + response);
+		} 
+		catch (Exception e)
+		{						
+			System.out.println("Error occured while getting sendgrid whitelabel "+e.getMessage());
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return response;
+	}
+	
+	public static String getAllWhiteLabelDomains(EmailGateway emailGateway)
+	{
+		String username = Globals.SENDGRID_API_USER_NAME, password = Globals.SENDGRID_API_KEY;
+		
+		if(emailGateway != null)
+		{
+			username = emailGateway.api_user;
+			password = emailGateway.api_key;
+		}
+		else // if Gateway is null
+		{
+			String domain = NamespaceManager.get();
+			
+			if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+				domain = "our";
+			
+			if(StringUtils.isNotBlank(domain))
+			{
+				username = SendGridSubUser.getAgileSubUserName(domain);
+				password = SendGridSubUser.getAgileSubUserPwd(domain);
+			}
+		}
+		
+		return getAllWhiteLabelDomains(username, password);
+	}
+	
+	public static boolean isDomainWhiteLabelled(EmailGateway emailGateway)
+	{
+		if(emailGateway != null)
+			return true;
+		
+		String domain = NamespaceManager.get();
+		
+		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+		{
+			domain = "our";
+		}
+		
+		final String KEY = "__"+ domain+"_" + "sendgrid" + "_" + "whitelabel" + "__";
+		
+		Boolean isWhiteLabelled = (Boolean) CacheUtil.getCache(KEY);
+		
+		System.out.println("Value from cache is " + isWhiteLabelled);
+		
+		if(isWhiteLabelled != null && isWhiteLabelled)
+		{
+			System.out.println("Returning from Cache " + isWhiteLabelled);
+			return isWhiteLabelled;
+		}
+		
+		String response = getAllWhiteLabelDomains(null);
+		
+		try
+		{
+			JSONArray array = new JSONArray(response);
+			
+			// if length is zero
+			if(array.length() == 0)
+				return false;
+			
+			System.out.println("Whitelabel Response is " + array);
+			for(int i=0; i< array.length(); i++)
+			{
+				JSONObject json = array.getJSONObject(i);
+				
+				System.out.println("JSON is " + json);
+				
+				// If valid is true then add in cache
+				if(json.has("valid") && json.getBoolean("valid"))
+				{
+					isWhiteLabelled = json.getBoolean("valid");
+					break;
+				}
+			}
+			
+			// Set in cache
+			if(isWhiteLabelled != null && isWhiteLabelled)
+				CacheUtil.setCache(KEY, isWhiteLabelled);
+			
+			return isWhiteLabelled;
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
 }
