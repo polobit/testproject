@@ -17,6 +17,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TransientFailureException;
+import com.thirdparty.sendgrid.SendGrid;
 
 /**
  * <code>ReportServlet</code> process reports, based on duration or report
@@ -79,12 +80,15 @@ class CheckSubscriptionRestriction implements DeferredTask{
 	@Override
 	public void run() {
 		Set<String> namespaces = NamespaceUtil.getAllNamespaces();
+		String deletedDomains = "";
 		for(String namespace : namespaces){
 			String oldNamespace = NamespaceManager.get();
 			NamespaceManager.set(namespace);
 			try{
-				if(SubscriptionUtil.isSubscriptionDeleted())
+				if(SubscriptionUtil.isSubscriptionDeleted()){
+					deletedDomains = deletedDomains + ", " + namespace;
 					continue;
+				}
 				ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
 			    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created"+namespace);
 			    // Add to queue
@@ -106,6 +110,8 @@ class CheckSubscriptionRestriction implements DeferredTask{
 				NamespaceManager.set(oldNamespace);
 			}
 		}
+		System.out.println("Sending Deleteddomainslist from ReportServlet.java");
+		SendGrid.sendMail("noreply@agilecrm.com", "agilecrm", "mogulla@agilecrm.com", null, null, "deleted domains list", null, null, deletedDomains);
 	}
 	
 }
