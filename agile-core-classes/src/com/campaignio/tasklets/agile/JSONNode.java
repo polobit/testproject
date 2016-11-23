@@ -1,10 +1,20 @@
 package com.campaignio.tasklets.agile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -194,16 +204,26 @@ public class JSONNode extends TaskletAdapter
 			else
 			    url = url + "?" + httpParams;
 
-			output = HTTPUtil.accessURLWithHeaders(url,hashmapKeyValues);
-
+			output = accessURLWithHeaders(url,hashmapKeyValues);
 			logMessage = "GET: " + url + "<br>Status: SUCCESS";
 
 		    }
 		    else
 		    {
-			output = HTTPUtil.accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);
+			output = accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);			
 			logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
 		    }
+		    
+		    if(StringUtils.isNotEmpty(output)){
+				if(output.contains("responseCode") && output.contains("responseMessage")){
+					JSONObject response = new JSONObject(output);
+					String exceptionMessage = "while processing request </br>Response Code : "
+							+ response.getInt("responseCode")
+							+ "</br>Response Message : "
+							+ response.getString("responseMessage");
+					throw new Exception(exceptionMessage);
+					}
+			}	
 
 		    JSONObject returnJSON = new JSONObject(output);
 
@@ -237,6 +257,146 @@ public class JSONNode extends TaskletAdapter
 		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_FAILURE);
 		}
 	}
+	
+	 /**
+    * Connects to the remote object to write (post) the given data and reads
+    * the response of it to return
+    * 
+    * @param postURL
+    * @param data
+    * @param hashmapKeyValues
+    * @return response of the remote object
+    * @throws Exception
+    */
+   private static String accessURLWithHeaderUsingPost(String postURL, String data,HashMap<String,String> hashmapKeyValues) throws Exception
+   {
+	// Send data
+	URL url = new URL(postURL);
+	HttpURLConnection conn = (HttpURLConnection) url.openConnection();	
+		
+	conn.setDoOutput(true);
+
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
+	conn.setConnectTimeout(600000);
+	conn.setReadTimeout(600000);
+	
+	Set<String> keys = hashmapKeyValues.keySet();
+	if(keys.size()>0){
+	    Iterator<String> iterator = keys.iterator();
+	    
+	    while(iterator.hasNext())
+	    {
+		// Construct headers
+	    String key = iterator.next();
+		conn.addRequestProperty(key,hashmapKeyValues.get(key));
+	    }
+	}
+	
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+	if (data != null)
+	{
+	    wr.write(data);
+	    wr.flush();
+	}
+
+	InputStream is = null;
+	
+   try
+   {
+   	is = conn.getInputStream();
+	
+   }
+   catch(IOException ie)
+   {
+   	System.err.println("IOException occured, getting error stream.");
+   	is = conn.getErrorStream();
+   }
+	
+	// Get the response
+	BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+	
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
+	{
+	    output += inputLine;
+	}
+
+	wr.close();
+	reader.close();
+	
+	if(((HttpURLConnection)conn).getResponseCode() >= 400){
+    	JSONObject responseMessageCode = new JSONObject();	 
+    	String responseMessage = new JSONObject(output).getString("message");
+		System.out.println("Response Code : " + ((HttpURLConnection)conn).getResponseCode());
+		System.out.println("Response Message : " + responseMessage);
+	    responseMessageCode.put("responseCode", ((HttpURLConnection)conn).getResponseCode());
+	    responseMessageCode.put("responseMessage", responseMessage);		
+		return responseMessageCode.toString();
+    }
+	return output;
+   }
+   
+   /**
+    * Connects to the remote object to write (get) the given data and reads
+    * the response of it to return
+    * 
+    * @param url
+    * @param hashmapKeyValues
+    * @return response of the remote object
+    */
+   public static String accessURLWithHeaders(String url,HashMap<String,String> hashmapKeyValues)
+   {
+	try
+	{
+	    URL yahoo = new URL(url);
+	    URLConnection conn = yahoo.openConnection();
+
+	    // Set Connection Timeout as Google AppEngine has 5 secs timeout
+	    conn.setConnectTimeout(600000);
+	    conn.setReadTimeout(600000);
+	    
+	    Set<String> keys = hashmapKeyValues.keySet();
+	    if(keys.size()>0){
+		    Iterator<String> iterator = keys.iterator();
+		    
+		    while(iterator.hasNext())
+		    {
+			// Construct headers
+		    String key = iterator.next();
+			conn.addRequestProperty(key,hashmapKeyValues.get(key));
+		    }
+	    }
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+	   		
+	    String output = "";
+	    String inputLine;
+	    while ((inputLine = reader.readLine()) != null)
+	    {
+		output += inputLine;
+	    }
+	    reader.close();	    
+	    
+	    if(((HttpURLConnection)conn).getResponseCode() >= 400){
+	    	JSONObject responseMessageCode = new JSONObject();	 
+	    	String responseMessage = new JSONObject(output).getString("message");
+			System.out.println("Response Code : " + ((HttpURLConnection)conn).getResponseCode());
+			System.out.println("Response Message : " + responseMessage);
+		    responseMessageCode.put("responseCode", ((HttpURLConnection)conn).getResponseCode());
+		    responseMessageCode.put("responseMessage", responseMessage);	   
+			return responseMessageCode.toString();
+	    }	    
+	    return output;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println(e.getMessage());
+	}
+	return null;
+   }
+   
 }
 
 
@@ -330,6 +490,5 @@ class JSONIODeferredTask implements DeferredTask
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
-	}
-	
+	}	
 }
