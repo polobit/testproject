@@ -562,15 +562,24 @@
                     }
                     else{
                         $('input#youtubeID').removeClass("margin-bottom-20");
-                        $("#error-msg").next().css("margin-top","6px");
-                        $("#error-msg").show();
+                        $("#err-youtube-msg").next().css("margin-top","6px");
+                        $("#err-youtube-msg").show();
                         return;
                     }
                     
                 } else if( $('input#vimeoID').val() !== '' ) {
-
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
-
+                    var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
+                    var vimMatch = $('input#vimeoID').val().match(vimRegExp);
+                    if (vimMatch && vimMatch[3].length){
+                        var vimeoId = vimMatch[3];
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
+                    }
+                    else{
+                        $('input#vimeoID').removeClass("margin-bottom-20");
+                        $("#err-vimeo-msg").next().css("margin-top","6px");
+                        $("#err-vimeo-msg").show();
+                        return;
+                    }
                 } else if ( videoRecord_Id !== '' ) {
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
@@ -931,18 +940,23 @@
             $('a#video_Link').click();
             $('a#default-tab1').css("display","none");
 
-            if($("#error-msg").css("display")!=="none"){
+            if($("#err-youtube-msg").css("display")!=="none"){
                 $('input#youtubeID').addClass("margin-bottom-20");
-                $("#error-msg").next().css("margin-top","");
-                $("#error-msg").hide();
+                $("#err-youtube-msg").next().css("margin-top","");
+                $("#err-youtube-msg").hide();
+            }
+            if($("#err-vimeo-msg").css("display")!=="none"){
+                $('input#vimeoID').addClass("margin-bottom-20");
+                $("#err-vimeo-msg").next().css("margin-top","");
+                $("#err-vimeo-msg").hide();
             }
             //inject current video ID,check if we're dealing with Youtube or Vimeo or Recorded video
 
             if( $(el).prev().attr('data-video').indexOf("vimeo.com") > -1 ) {//vimeo
 
-                matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
+                //matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
 
-                $('#video_Tab input#vimeoID').val( matchResults[matchResults.length-1] );
+                $('#video_Tab input#vimeoID').val("https:"+ $(el).prev().attr('data-video'));
                 $('#video_Tab input#youtubeID').val('');
                 $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
