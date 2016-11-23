@@ -978,7 +978,7 @@
 
             } else if( $(styleeditor.activeElement.element).prop('tagName') === 'IMG' ) {//image
 
-                if( $(styleeditor.activeElement.element).parent().prop('tagName') === 'A' && $.trim($(styleeditor.activeElement.element).parent().text())==="") {//delete a tag only that one is empty
+                if( $(styleeditor.activeElement.element).parent().prop('tagName') === 'A' && $.trim($(styleeditor.activeElement.element).parent().text())==="") {//delete only image if link text is empty
 
                     toDel = $(styleeditor.activeElement.element).parent();
 
