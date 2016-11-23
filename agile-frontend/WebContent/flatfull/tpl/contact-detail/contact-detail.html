@@ -352,6 +352,7 @@
 			</div>
 			</div>
 
+			
 
 <div class="wrapper text-left m-b-sm p-none">
 <div class="panel panel-default m-b-none">
@@ -663,6 +664,17 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 			{{/getContactCustomPropertiesExclusively}}
 
 			<div class="clearfix"></div>
+			{{#if source}}
+			{{#if_equals source 'manual'}}{{else}}
+				<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+					<div class="panel panel-default m-b-none">
+				    	<div class="panel-body">
+							<small class="text-muted text-base">{{agile_lng_translate 'portlets' 'source'}}</small>
+							<div class="text-cap">{{source}}</div>
+				    	</div>
+				   	</div>
+				</div>
+			{{/if_equals}}{{/if}}
 
 			{{#property_is_exists "address" properties}} 
 			
@@ -1380,7 +1392,18 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 					{{/getContactCustomPropertiesExclusively}}
 									
 									<div class="clearfix"></div>
-
+					{{#if source}}
+					{{#if_equals source 'manual'}}{{else}}
+						<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+							<div class="panel panel-default m-b-none">
+						    	<div class="panel-body">
+									<small class="text-muted text-base">{{agile_lng_translate 'portlets' 'source'}}</small>
+									<div class="text-cap">{{source}}</div>
+						    	</div>
+						   	</div>
+						</div>
+					{{/if_equals}}{{/if}}
+							
 			{{#property_is_exists "address" properties}} 
 				{{#property_json_is_not_empty "address" properties}}
 				

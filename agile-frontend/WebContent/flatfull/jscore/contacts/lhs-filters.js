@@ -371,11 +371,11 @@ $('#' + container_id).on('custom_blur keyup', '#lhs-contact-filter-form #RHS inp
 		if(currVal == ""){
 		return;
 	    }
-		var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
+	    var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
 	    if (!regex.test(currVal)) {
-            showAlertModal("tag_name_restriction");
             return;
         }
+        
 		if (prevVal == currVal)
 		{
 			return;
@@ -822,10 +822,13 @@ function bindChangeEvent(ele){
 	if(currVal == ""){
 		return;
 	}
-	var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
+	/*var regex = new RegExp("^[a-zA-Z0-9_ ]+$");
 	 if (!regex.test(currVal)) {
         showAlertModal("tag_name_restriction");
         return;
+     }*/
+     if(!isValidTag(currVal,true)){
+     	return;
      }
 	if (prevVal == currVal)
 	{
