@@ -116,74 +116,9 @@ function initializeWidgetSettingsListeners(){
 	$('#prefs-tabs-content .acl_widget').off('click');
 	$('#prefs-tabs-content').on('click', '.acl_widget', function(e){
 		// Fetching widget ID.
-		var widgetData = $(this).attr('widget-data');		
-		var that = $(this);
-		$.getJSON( "core/api/users/agileusers", function(data){	
-			var result = {}; 
-			result.widget = JSON.parse(widgetData);							
-			var userList = JSON.stringify(result.widget.listOfUsers);					
-			for(var i=0; i < data.length ; i++){	
-				var obj = data[i];		
-				if(obj){
-					if(userList){
-						if(userList.indexOf(obj.id) > 0){
-							obj.isChecked = true;
-							data[i] = obj;
-					    } else {
-					    	data[i] = obj;
-					    }
-					}												
-				}		
-			}
+		var widgetData = $(this).attr('widget-data');				
+		getListOfWidgetUsers(widgetData);
 
-			result.data = data;
-
-			getTemplate('widget-acls-modal-content', result , undefined, function(template_ui){
-  				$("#widget-acls-modal").html(template_ui).modal('show');    					
-
-  				$('#widget-acls-modal').off('click', '.agileUserChk_all');
-				$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){
-					if($(this).is(":checked")){
-						$('#widget-acls-modal .agileUserChk').prop('checked',true);
-					}else{
-						$('#widget-acls-modal .agileUserChk').prop('checked',false);
-					}					
-				});
-
-  				$('#widget-acls-modal').off('click', '.widget_acl_save');
-				$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){					
-					var widgetID = $(this).attr('widget-id');
-					var widget = result.widget;
-
-					var newUserList = [];
-					$('input:checkbox[name=agileUserChk]:checked').each(function(e){
-       					newUserList.push($(this).val());
-    				});
-
-					widget.listOfUsers = newUserList;
-
-					$.ajax({
-						type : 'POST',
-						url : '/core/api/widgets/saveWidgetPrivilages',
-						data : JSON.stringify(widget),						
-						success: function(resultData){
-							var widgetData = result.widget;
-							widgetData.listOfUsers = widget.listOfUsers;
-
-							that.attr('widget-data',JSON.stringify(widgetData));
-							console.log('Widget ACL updated');
-							Widgets_View = undefined;							
-							$("#widget-acls-modal").html(template_ui).modal('hide');
-							showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'widget-updated'}}", "bottomRight");
-						},error: function(){
-							showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widget-updated-failed'}}", "bottomRight");
-						}
-					});
-																							
-				});
-  											
-  			});					
-		});
 	});	
 
 	// Deleting widget
@@ -271,35 +206,119 @@ function initializeWidgetSettingsListeners(){
 }
 
 
-function delete_widget(widget_name)
-{
+function delete_widget(widget_name){
 	/*
 	 * Sends Delete request with widget name as path parameter, and on
 	 * success fetches the widgets to reflect the changes is_added, to show
 	 * add widget in the view instead of delete option
 	 */
-	$.ajax({ type : 'DELETE', url : '/core/api/widgets?widget_name=' + widget_name, contentType : "application/json; charset=utf-8",
-
-	success : function(data)
-	{
-
-		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set({'is_added': false}, {silent : true}).unset("prefs");
-		update_collection(widget_name);
-		location.reload();
-		
-	}, dataType : 'json' });
+	$.ajax({
+		type : 'DELETE',
+		url : '/core/api/widgets?widget_name=' + widget_name,
+		contentType : "application/json; charset=utf-8",
+		dataType : 'json',
+		success : function(data){
+			App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set({'is_added': false}, {silent : true}).unset("prefs");
+			update_collection(widget_name);
+			location.reload();
+		}
+	});
 
 }
 
-function update_collection(widget_name)
-{
+function update_collection(widget_name){
 	/*
 	 * If Widgets_View is defined, remove widgets from widget collection
 	 */
-	if (Widgets_View && Widgets_View.collection)
-	{
+	if (Widgets_View && Widgets_View.collection){
 		// Fetch widget from collection based on widget_name
 		var model = Widgets_View.collection.where({ name : widget_name });
 		Widgets_View.collection.remove(model);
 	}
+}
+
+function loadACLModalBindings(result, template_ui){
+	$('#widget-acls-modal').off('click', '.agileUserChk_all');
+	$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){
+		if($(this).is(":checked")){
+			$('#widget-acls-modal .agileUserChk').prop('checked',true);
+		}else{
+			$('#widget-acls-modal .agileUserChk').prop('checked',false);
+		}					
+	});
+
+	$('#widget-acls-modal').off('click', '.widget_acl_save');
+	$('#widget-acls-modal').on('click', '.widget_acl_save', function(e){					
+		var widgetID = $(this).attr('widget-id');
+		var widget = result.widget;
+
+		var newUserList = [];
+		$('input:checkbox[name=agileUserChk]:checked').each(function(e){
+				newUserList.push($(this).val());
+		});
+
+		widget.listOfUsers = newUserList;
+
+		$.ajax({
+			type : 'POST',
+			url : '/core/api/widgets/saveWidgetPrivilages',
+			data : JSON.stringify(widget),						
+			success: function(resultData){				
+				//console.log('Widget ACL updated');
+				Widgets_View = undefined;							
+				$("#widget-acls-modal").html(template_ui).modal('hide');
+				showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'widget-updated'}}", "bottomRight");
+			},error: function(){
+				showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widget-updated-failed'}}", "bottomRight");
+			}
+		});																				
+	});
+}
+
+function getUsersInDomain(widgetData){
+	$.getJSON("core/api/users/agileusers", function(data){
+		var result = {};
+		result.widget = widgetData;							
+		var userList = widgetData.listOfUsers;				
+		for(var i=0; i < data.length ; i++){	
+			var obj = data[i];	
+			//console.log("Obj ** : "+ i );
+			//console.log(obj);
+			if(obj){
+				if(userList){
+					//console.log("Userist: "+userList);
+					if(userList.indexOf(obj.id) > -1){
+						//console.log(obj.id);
+						obj.isChecked = true;
+						data[i] = obj;
+				    } else {
+				    	data[i] = obj;
+				    }
+				}												
+			}		
+		}
+
+		result.data = data;
+
+		//console.log("Modal data **** ");
+		//console.log(result);
+
+		getTemplate('widget-acls-modal-content', result, undefined, function(template_ui){
+			$("#widget-acls-modal").html(template_ui).modal('show');
+			loadACLModalBindings(result, template_ui);							
+		});
+	});
+}
+
+function getListOfWidgetUsers(widgetData){
+	if(widgetData){
+		var widgetObject = JSON.parse(widgetData);	
+		var url = "/core/api/widgets/getWidgetUsersIds/"+widgetObject.id+"/"+widgetObject.name;
+		$.getJSON(url, function(data){	
+			if(widgetObject){
+				widgetObject.listOfUsers = data;		
+				getUsersInDomain(widgetObject);
+			}
+		});
+	}				
 }
