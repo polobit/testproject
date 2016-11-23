@@ -237,7 +237,7 @@ function update_collection(widget_name){
 	}
 }
 
-function loadACLModalBindings(result, template_ui){
+function loadACLModalBindings(result){
 	$('#widget-acls-modal').off('click', '.agileUserChk_all');
 	$('#widget-acls-modal').on('click', '.agileUserChk_all', function(e){
 		if($(this).is(":checked")){
@@ -266,7 +266,7 @@ function loadACLModalBindings(result, template_ui){
 			success: function(resultData){				
 				//console.log('Widget ACL updated');
 				Widgets_View = undefined;							
-				$("#widget-acls-modal").html(template_ui).modal('hide');
+				$("#widget-acls-modal").modal('hide');
 				showNotyPopUp("success" , "{{agile_lng_translate 'widgets' 'widget-updated'}}", "bottomRight");
 			},error: function(){
 				showNotyPopUp("error" , "{{agile_lng_translate 'widgets' 'widget-updated-failed'}}", "bottomRight");
@@ -276,37 +276,37 @@ function loadACLModalBindings(result, template_ui){
 }
 
 function getUsersInDomain(widgetData){
-	$.getJSON("core/api/users/agileusers", function(data){
-		var result = {};
-		result.widget = widgetData;							
-		var userList = widgetData.listOfUsers;				
-		for(var i=0; i < data.length ; i++){	
-			var obj = data[i];	
-			//console.log("Obj ** : "+ i );
-			//console.log(obj);
-			if(obj){
-				if(userList){
-					//console.log("Userist: "+userList);
-					if(userList.indexOf(obj.id) > -1){
-						//console.log(obj.id);
-						obj.isChecked = true;
-						data[i] = obj;
-				    } else {
-				    	data[i] = obj;
-				    }
-				}												
-			}		
-		}
+	var result = {};
+	result.widget = widgetData;							
+	var userList = widgetData.listOfUsers;
 
-		result.data = data;
+	getTemplate('widget-acls-modal-content', result, undefined, function(modal_ui){
+		$("#widget-acls-modal").html(modal_ui).modal('show');
+		$.getJSON("core/api/users/agileusers", function(data){
+							
+			for(var i=0; i < data.length ; i++){	
+				var obj = data[i];	
+				//console.log("Obj ** : "+ i );
+				//console.log(obj);
+				if(obj){
+					if(userList){
+						//console.log("Userist: "+userList);
+						if(userList.indexOf(obj.id) > -1){
+							//console.log(obj.id);
+							obj.isChecked = true;
+							data[i] = obj;
+					    } else {
+					    	data[i] = obj;
+					    }
+					}												
+				}		
+			}
 
-		//console.log("Modal data **** ");
-		//console.log(result);
-
-		getTemplate('widget-acls-modal-content', result, undefined, function(template_ui){
-			$("#widget-acls-modal").html(template_ui).modal('show');
-			loadACLModalBindings(result, template_ui);							
+			getTemplate('widget-acls-body-content', data, undefined, function(body_ui){
+				$("#widget-acls-modal .modal-body").html(body_ui);
+			});			
 		});
+		loadACLModalBindings(result);
 	});
 }
 
