@@ -361,11 +361,11 @@ function callToNumber(to,from,widgetName,contact,dialler){
 	
 	dialled.using = dialler; //Needed to know if dialled from dialler or contact-detail or from campaign
 	
-	 if(dialled.using == "dialler"){
-		  $("#direct-dialler-div").hide();
-	  }
+	if(dialled.using == "dialler"){
+		$("#direct-dialler-div").hide();
+	}
 	
-try{
+	try{
 		if(widgetName == "Twilio"){
 			dialFromTwilio(to,from,contact)
 		}else if(widgetName == "Bria"){
@@ -374,15 +374,23 @@ try{
 			dialFromSip(to,from,contact)
 		}else if(widgetName == "Skype"){
 			dialFromSkype(to,from,contact)
-		}
-	
-}catch(e){
-	console.log("error occured in calltonumber function " + e);
-	 $("#direct-dialler-div").show();
-	 dialled.using = "default";
-}	 
-	
-}	
+		}else if(widgetName == "AppCalling"){
+			dialFromMobileAPP(to, from, contact);
+		}		
+	}catch(e){
+		console.log("error occured in calltonumber function " + e);
+		 $("#direct-dialler-div").show();
+		 dialled.using = "default";
+	}	 
+}
+
+function dialFromMobileAPP(to, from, contact){
+	if (checkForActiveCall()){
+		alert("Already on call.");
+		return;
+	}
+	appDialer(to, contact);
+}
 
 function dialFromTwilio(to,from,contact){
 	if (checkForActiveCall())

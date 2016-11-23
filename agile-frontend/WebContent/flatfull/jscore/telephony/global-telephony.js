@@ -7,10 +7,17 @@ var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 var callJar = {"running" : false};
-$(function()
-{
-//	initToPubNub();
+
+function appCallingSetup(){
+	head.js(LIB_PATH + 'widgets/appcalling.js', function(){
+		console.log("App Calling js file loaded");
+	});
+}
+
+$(function(){
+	//initToPubNub();
 	globalCallWidgetSet();
+	appCallingSetup();
 });
 
 function getContactImage(number, type, callback)
