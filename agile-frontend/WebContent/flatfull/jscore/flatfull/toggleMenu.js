@@ -485,6 +485,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
 		 $(this).addClass("agile-menuactive");
 		 var dashboardName = $(this).attr("data-dashboard");
+		 var serviceName = $(this).attr("data-service-name");
 			if(!dashboardName)
  				 dashboardName = "dashboard";
 			 _agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
