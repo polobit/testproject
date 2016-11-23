@@ -38,6 +38,16 @@ if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_L
 }
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "register");
+String password = request.getParameter("password");
+String email = request.getParameter("email");
+String name = request.getParemeter("name");
+UserInfo userInfo = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+if(userInfo != null){
+		name = userInfo.getName();
+		email = userInfo.getEmail();
+		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+}
+
 
 %>
 <!DOCTYPE html>
@@ -326,10 +336,10 @@ if(isSafari && isWin)
 </div>
 </div>
 
-<input type='hidden' id="login_email" name='email' value="<%=request.getParameter("email")%>"></input>
-<input type='hidden' id="user_name" name='name' value="<%=request.getParameter("name")%>"></input>
+<input type='hidden' id="login_email" name='email' value="<%=email%>"></input>
+<input type='hidden' id="user_name" name='name' value="<%=name%>"></input>
 <input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
-<input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
+<input type="password" class="hide" name='password' id="password" value="<%=password%>"></input>
 
 <!-- Origin Name -->
 <%

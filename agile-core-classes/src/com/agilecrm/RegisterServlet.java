@@ -167,6 +167,8 @@ public class RegisterServlet extends HttpServlet
 	    if (DomainUserUtil.count() == 0)
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
+		if(domainUser == null)
+			return;
 
 		response.sendRedirect(VersioningUtil.getLoginUrl(domainUser.domain, request));
 		return;
@@ -584,9 +586,11 @@ public class RegisterServlet extends HttpServlet
 	// Get Domain
 	String domain = NamespaceManager.get();
 	if (StringUtils.isEmpty(domain)) {
-		response.sendRedirect("/choose-domain?type=oauth&to=register");
+		request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
 		return null;
 	}
+	String isOAUTH = (String)request.getSession().getAttribute("REGISTER_FROM_OAUTH");
+
 	
 	/*if (StringUtils.isEmpty(domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
