@@ -70,7 +70,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"js-security" : "jsSecuritySettings",
 
 	/* SSO Login */
-	"sso-login" : "ssoLoginSettings"
+	"sso-login" : "ssoLoginSettings",
+
+	"api-analytics" : "apiAnalyticsCode",
 
 
 	},
@@ -697,6 +699,68 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 	},
 
+	apiAnalyticsCode : function(id)
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+
+			head.js(LIB_PATH + 'lib/prettify-min.js', function()
+			{
+				var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-analytics-model", postRenderCallback : function(el)
+				{
+
+					
+					$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
+					$('#content').find('#AdminPrefsTab .select').removeClass('select');
+					$('#content').find('.api-analytics-code-tab').addClass('select');
+					// prettyPrint();
+					if (id)
+					{
+						$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
+					}
+
+					// initZeroClipboard("api_track_webrules_code_icon",
+					// "api_track_webrules_code");
+					// initZeroClipboard("api_key_code_icon", "api_key_code");
+					// initZeroClipboard("api_track_code_icon", "api_track_code");
+
+					try
+					{
+						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
+							$("#tracking-webrules, .tracking-webrules-tab").hide();
+						else
+							$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+					}
+					catch (e)
+					{
+						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+					}
+
+					prettify_api_add_events();
+					// initializeRegenerateKeysListeners();
+
+				} });
+			});
+
+		}, "#content");
+
+		
+	},
+
 	/**
 	 * Shows API-KEY. Loads minified prettify.js to prettify the view
 	 */
@@ -727,7 +791,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				} });
 				$('#content').find('#admin-prefs-tabs-content').html(view.el);
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
-				$('#content').find('.analytics-code-tab').addClass('select');
+				$('#content').find('.api-analytics-code-tab').addClass('select');
 				$(".active").removeClass("active");
 			});
 		}, "#content");
