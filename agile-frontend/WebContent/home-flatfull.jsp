@@ -611,7 +611,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <%
           if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
         %>
-        <li id="activitiesmenu">
+        <li id="activitiesmenu" class="SalesDashboard-activitiesnavbar">
         <a  href="#navbar-activities">
           <i class="icon-speedometer icon-white"></i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
@@ -623,7 +623,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
       %>
-    <li id="reportsmenu">
+    <li id="reportsmenu" class="SalesDashboard-reportsnavbar">
       <a  href="#navbar-reports">
         <i class="icon-bar-chart icon-white"></i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
@@ -656,7 +656,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <li id="home_dashboard" class="MarketingDashboard-home">
 
-    <a class="agile-menu-dropdown-aside MarketingDashboard-home"  href="#navigate-dashboard/MarketingDashboard">
+    <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/MarketingDashboard">
       <i class="icon icon-home"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
@@ -769,7 +769,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
-    <li id="activitiesmenu">
+    <li id="activitiesmenu" class="MarketingDashboard-activitiesnavbar">
     <a class="agile-menu-dropdown-aside" href="#navbar-activities">
       <i class="icon-speedometer icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
@@ -781,7 +781,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
-  <li id="reportsmenu">
+  <li id="reportsmenu" class="MarketingDashboard-reportsnavbar">
     <a class="agile-menu-dropdown-aside" href="#navbar-reports">
       <i class="icon-bar-chart icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
@@ -818,18 +818,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
       </a>
       <ul class="nav nav-sub dk" style="display:block;" > 
   
-  
-  
-
   <li id="home_dashboard" class="Dashboard-home">
     <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/Dashboard" >
       <i class="icon icon-home"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
-
-
-   <%
+<%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
   <li id="contactsmenu">
@@ -913,7 +908,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
-    <li id="activitiesmenu">
+    <li id="activitiesmenu" class="dashboard-activitiesnavbar">
     <a class="agile-menu-dropdown-aside" href="#navbar-activities">
       <i class="icon-speedometer icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
@@ -925,7 +920,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
-  <li id="reportsmenu">
+  <li id="reportsmenu" class="dashboard-reportsnavbar">
     <a class="agile-menu-dropdown-aside" href="#navbar-reports">
       <i class="icon-bar-chart icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>

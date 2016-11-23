@@ -109,6 +109,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		
 		if(!dashboard_name){
 			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
 			if(selected_id == "Dashboard")
@@ -176,7 +177,8 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		$("#home_dashboard").addClass("active");
+		
+		$("."+dashboard_name+"-home").addClass("agile-menuactive")
 
 	},
 	

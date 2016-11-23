@@ -488,6 +488,20 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 			if(!dashboardName)
  				 dashboardName = "dashboard";
 			 _agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+			 var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = serviceName;
+
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
 			 return;
 	});
 	$(".appaside.dropdownnavbar ul li").on("click",function(e)
