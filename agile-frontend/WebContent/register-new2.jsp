@@ -5,6 +5,8 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
+<%@page import="com.agilecrm.session.UserInfo"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -40,7 +42,7 @@ if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_L
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "register");
 String password = request.getParameter("password");
 String email = request.getParameter("email");
-String name = request.getParemeter("name");
+String name = request.getParameter("name");
 UserInfo userInfo = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 if(userInfo != null){
 		name = userInfo.getName();
