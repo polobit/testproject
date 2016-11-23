@@ -1060,3 +1060,6 @@ li.element {
 .modal-backdrop{
 	position: absolute;
 }
+.agile-link:hover{
+	cursor: pointer;
+}

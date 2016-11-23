@@ -1970,9 +1970,21 @@
                        // $('#successModal .modal-body').html(_AGILE_LOCALE_JSON['saved-successfully'] + "!");
                         
                         $("#lp-save-msg").show();
-                        $("#lp-save-msg").fadeOut(8000);
+                        $("#lp-save-msg").fadeOut(7000);
                         if(localStorage.getItem("lp-instruct-popup")!=="true"){
-                            $("#popup-msg").fadeOut(8000);
+                            
+                            $('.lp-view-link').attr("href",window.location.origin+"/landing/"+res.id);
+                            $('.lp-publish-link').attr("href",window.location.origin+"/#landing-page-settings/"+res.id);
+                            if(reqMethod === "POST"){
+                                $('.close-popup').attr("href",window.location.origin+"/#landing-pages"); 
+                                $('.close-popup').removeAttr("data-dismiss");
+                            }         
+                            else{
+                                $('.close-popup').removeAttr("href");
+                                $('.close-popup').attr("data-dismiss","modal");
+                            }
+                            $("#success-msg").show();
+                            $("#success-msg").fadeOut(3000);                            
                             $('#instructionModal').modal('show');
                         }
                                        

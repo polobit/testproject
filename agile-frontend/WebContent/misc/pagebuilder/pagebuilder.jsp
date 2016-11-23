@@ -2357,7 +2357,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 
                 <div class="modal-header">
                     <h3 class="modal-title">
-                        <label id="popup-msg" style="margin:5px; color: green;">
+                        <label id="success-msg" style="margin:5px; color: green;">
                             <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 
                         </label>
                     </h3>
@@ -2367,10 +2367,20 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                 </div>      
                 <div class="modal-body" style="text-align: center;">
-                    <a href="<%=MAIN_URL%>#landing-page-settings/<%=pageId%>" style="color:#34495e;">
-                        <i class="fa fa-cloud-upload fa-4x" ></i></a>
-                    <br>
-                           Publish                    
+                    <fieldset> 
+                        <div class="control-group form-group">
+                            <div class="col-xs-6 col-sm-7 text-center">
+                                <a  class="lp-view-link agile-link" target="_blank" style="color:#34495e;">
+                                    <i class="fa fa-eye fa-4x"></i><br> Preview
+                                </a>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 text-center" style="margin-top:2px;">
+                                <a class="lp-publish-link agile-link" target="_blank" style="color:#34495e;">
+                                    <i class="fa fa-cloud-upload fa-4x" ></i><br>Publish
+                                </a>
+                            </div>
+                        </div>  
+                    </fieldset>             
                                                                     
                 </div><!-- /.modal-body -->
                                 
@@ -2378,7 +2388,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
                         <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false">Don't show me again</label>
                     </div>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
+                    <a type="button" class="btn btn-default close-popup" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></a>
                 </div>
                 
             </div><!-- /.modal-content -->
