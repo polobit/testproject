@@ -31,7 +31,23 @@ $(function(){
 			//globalTwilioIOSetup();
 		}
 	}, 10000); // 15 sec
-    
+
+     $('body').off('click', '.noty_twilio_transefer');
+    $('body').on('click', '.noty_twilio_transefer', function(e){
+		e.preventDefault();
+		var callsid = globalconnection.parameters.CallSid;
+		var form = Verfied_Number;
+		var to = "+919908164425";
+		$.post( "/core/api/widgets/twilio/transferCall", {
+			callSid:callsid,
+			direction:TWILIO_CALLTYPE,
+			From: form,
+			To: to						
+		},function(data){
+			alert(data);
+		});
+	});
+
     $('body').off('click', '.noty_twilio_mute');
 	$('body').on('click', '.noty_twilio_mute', function(e)
 			{
@@ -704,8 +720,8 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 	else if (twilioNumbers.length != 0 && verifiedNumbers.length == 0)
 	{
 		// Add note at bottom you do not have verified #
-		$("#note-number-not-available").html("{{agile_lng_translate 'twill' 'invalid-twilio-numbers'}}");
-		$("#note-number-not-available").show();
+		//$("#note-number-not-available").html("{{agile_lng_translate 'twill' 'invalid-twilio-numbers'}}");
+		//$("#note-number-not-available").show();
 
 		// If no numbers
 		if (!twilioNumbers[0].PhoneNumber)
@@ -726,7 +742,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		$("#save_prefs").show();
 
 		// Hide twilio from numbers list
-		$("#twilio_from_numbers").hide();
+		$("#twilio_from_numbers").show();
 
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
@@ -867,7 +883,8 @@ function addTwilioNumbersInUI(result)
 	});
 
 	//optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
-	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	if(result.length == 0)
+		phoneNumberHtml = phoneNumberHtml + optionHtml;	
 	
 	// Add verified number in list
 	$("#twilio_number").html(phoneNumberHtml);
@@ -900,11 +917,13 @@ function addVerifiedCallerIdInUI(result,result1)
 			optionHtml = '<option value="+' + numArry[i] + '">+' + numArry[i] + '</option>';
 			phoneNumberHtml = phoneNumberHtml + optionHtml;
 		}
+		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	}
 
 	//optionHtml = '<option data="" value="">{{agile_lng_translate "widgets" "none"}}</option>';
-	phoneNumberHtml = phoneNumberHtml + optionHtml;
-	
+	if(result.length == 0 && result1.length == 0)
+		phoneNumberHtml = phoneNumberHtml + optionHtml;
+
 	// Add verified number in list
 	$("#twilio_from_number").html(phoneNumberHtml);
 }

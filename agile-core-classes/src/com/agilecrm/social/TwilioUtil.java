@@ -1269,4 +1269,49 @@ public class TwilioUtil
  		
  	    }
 	}    
+ 	
+ 	
+ 	/**
+	 * Call Transfer
+	 * 
+	 * @author Rajesh
+	 * @created 23-Nov-2016
+	 * 
+	 */
+ 	
+	public static String transferCall(Widget widget, String from, String to, String callSid)
+			throws JSONException, Exception
+	{
+		String status = "400";
+		try
+		{
+			System.out.println("In transfer call method");
+			String account_sid = widget.getProperty("twilio_acc_sid");
+			String auth_token = widget.getProperty("twilio_auth_token");
+			
+			TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+			String record = widget.getProperty("twilio_record");
+			
+			Map<String, String> params = new HashMap<String, String>();
+				params.put("From",from);
+				params.put("To", to);
+				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+callSid, "POST", params);
+				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
+				JSONObject callResponse = responseTextJson.getJSONObject("Call");
+				if(callResponse == null){
+					callResponse = responseTextJson.getJSONObject("RestException");
+				}
+				if(callResponse != null){
+					status = callResponse.getString("Status");
+				}
+				System.out.println("status for adding in conference is " + status);
+				return status;
+		}
+		catch (Exception e)
+		{
+			System.out.println( "Error occured in adding call to conference" + e.getMessage());
+		}
+		return status;
+	}
 }

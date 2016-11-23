@@ -691,5 +691,31 @@ public class TwilioWidgetsAPI
 		}
 	}
 	
-	
+	/**
+	 * @author Rajesh 23/11/16
+	 * it will take the call sid and transfer the callsid to another twiml
+	 * @return sucess message
+	 */
+	@Path("transferCall")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public JSONObject transferCall(@FormParam("callSid") String callSid,@FormParam("direction") String direction,@FormParam("From") String from, @FormParam("To") String to){
+		try{
+			JSONObject response = new JSONObject();
+			response.put("modifyStatus", "");
+			response.put("conferenceStatus", "");
+			
+			Widget widget = WidgetUtil.getWidget("TwilioIO");
+			//System.out.println("in modifying call - >" + callSid + "--" + conferenceName + "--" + direction );
+			String status = TwilioUtil.transferCall(widget, from, to, callSid);
+			response.put("modifyStatus", status);
+			System.out.println(response+"=========");
+			return response;
+			
+		}catch (Exception e)
+		{
+		    throw ExceptionUtil.catchWebException(e);
+		}	
+	}
 }

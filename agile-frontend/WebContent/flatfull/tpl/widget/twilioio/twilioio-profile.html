@@ -119,11 +119,9 @@
 </div>              
 		 </fieldset>
 <br>
-    <label class="control-label"><a href="#voicemail" class="text-info">{{agile_lng_translate 'widgets' 'manage-voicemails'}}</a>
-      <span class="v-top">         
-      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'manage-voicemails-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
-      </span>
-    </label>
+    
+    <a href="#voice-mail-add" class="voice-mail-add text-info">{{agile_lng_translate 'widgets' 'manage-voicemails'}}</a><br/>
+    <span style="font-size: 10px;">{{agile_lng_translate 'widgets' 'manage-voicemails-tooltip'}}</span>
     </form>
 </div>
 </script>
@@ -165,8 +163,8 @@
 <div class="btn-group dropup pull-left">
 <button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">{{agile_lng_translate 'widgets' 'leave-voicemail'}}</button>
 {{#ifCond length "greaterthan" 1}}
-<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
-<ul class="dropdown-menu text-left text-base">
+<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret" style="border-top: 4px solid;border-bottom:0px;"></span></button>
+<ul class="dropdown-menu text-left text-base" style="position: relative;z-index:10000;">
 {{#each this}}
 <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
 {{/each}}

@@ -134,8 +134,11 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 	newVoiceMail.url = 'core/api/voicemails';
 	newVoiceMail.save(json, {
 		success : function(data) {
-		App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
-		App_VoiceMailRouter.VoiceMailCollectionView.render(true);
+			var msgType = "success";
+			msg = "Voice mail has been saved succesfully";
+			showNotyPopUp(msgType , msg, "bottomRight");
+		/*App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
+		App_VoiceMailRouter.VoiceMailCollectionView.render(true);*/
 		enable_save_button($(saveBtn));
 		
 		if(form_id)
