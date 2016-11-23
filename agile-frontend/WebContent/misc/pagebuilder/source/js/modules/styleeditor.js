@@ -564,6 +564,11 @@
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
                 }
+                 //image under video section
+                    if($(styleeditor.activeElement.element).siblings("IMG")!==0){
+                        var url=$('.imageFileTab').find('input#imageURL').val();
+                        $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
+                    }
 
                 /* SANDBOX */
 
@@ -579,7 +584,7 @@
 
                         $('#'+styleeditor.activeElement.sandbox).contents().find('#'+elementID).prev().attr('src', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
 
-                    } 
+                    }                  
 
                 }
 
@@ -604,6 +609,21 @@
 
                 styleeditor._oldForm[window.current_agileform]=current_element;                
                 styleeditor.loadAgileCRMFormInLandingPage(form_id);
+            }
+
+            //direct url pass for image
+            if($(styleeditor.activeElement.element).prop('tagName')==="IMG"){
+
+                    var image_url=$('.imageFileTab').find('input#imageURL').val();
+                   
+                    if( image_url.match("^(http|https)://")===null|| image_url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
+                        $('input#imageURL').css("margin-bottom","0px");
+                        $("#error-img-msg").next().css("margin-top","6px");
+                        $("#error-img-msg").show();
+                        return;
+                    }
+                    $(styleeditor.activeElement.element).attr('src',decodeURIComponent(image_url));
+            
             }
 
             $('#detailsAppliedMessage').fadeIn(600, function(){
@@ -871,8 +891,17 @@
                 $("a#img_Link").parent().addClass("active");
             }      
 
-            //set the current SRC
-            $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
+           
+            if($("#error-img-msg").css("display")!=="none"){
+                $('input#imageURL').css("margin-bottom","");
+                $("#error-img-msg").next().css("margin-top","");
+                $("#error-img-msg").hide();
+            }
+            //set the current SRC 
+            if($(el).siblings("IMG").length!==0)
+                $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));            
+            else 
+                $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
 
             //reset the file upload
             $('.imageFileTab').find('a.fileinput-exists').click();

@@ -103,4 +103,6 @@
     "form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'form-tooltip'}}",
     "refresh-form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'refresh-form-tooltip'}}",
     "edit-form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'edit-form-tooltip'}}",
+    "image-url" : "{{agile_lng_translate 'landingpage-builder' 'image-url'}}",
+    "enter-image-url" : "{{agile_lng_translate 'landingpage-builder' 'enter-image-url'}}",
 }

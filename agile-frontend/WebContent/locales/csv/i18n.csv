@@ -5868,3 +5868,5 @@ documents.newdocuments-helptext-paragraph2,EDocuments can also be created&#44 ma
 addon.addon-payment,Add-on Payment,
 addon.addon,Add-on,
 prefs-settings.event-reminders,Event Reminders,
+landingpage-builder.image-url,Enter image path,,
+landingpage-builder.enter-image-url,Enter an image Url ,,

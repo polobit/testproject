@@ -30,4 +30,10 @@
             }    
         });
     });
+    
+    $('input#imageURL').focus(function(){
+        $('input#imageURL').css("margin-bottom","");
+        $("#error-img-msg").next().css("margin-top","");
+        $("#error-img-msg").hide();
+    });
 }());
