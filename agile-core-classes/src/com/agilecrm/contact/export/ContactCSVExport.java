@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Category;
@@ -265,8 +266,14 @@ public class ContactCSVExport
 		    	try{
 			    	Integer index = indexMap.get(field.name + " Name");
 			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
-			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
-			    		if (contacts.size() > 0) {
+			    		List<Contact> contacts = null;
+			    		try {
+			    			contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
+						} catch (Exception e) {
+							System.out.println("Exception occured while converting contact and company type custom fields JSON string to array");
+							e.printStackTrace();
+						}
+			    		if (contacts != null && contacts.size() > 0) {
 			    			StringBuilder contactName = new StringBuilder("[");
 				    		for(Contact cont : contacts){
 				    			if(cont.type.equals(Contact.Type.PERSON)){
