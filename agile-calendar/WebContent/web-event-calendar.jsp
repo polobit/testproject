@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -172,6 +173,10 @@ if(scheduleid.contains(",")){
 	   {
 		out.print("Sorry, user is not enrolled with Agile CRM.");
 		return;
+	   }
+	   if(SubscriptionUtil.isSubscriptionDeleted()){
+		   out.print("Sorry, Agile CRM account of this user has been blocked");
+		   return;
 	   }
 
 	UserPrefs userPrefs = UserPrefsUtil.getUserPrefs(agileUser);
