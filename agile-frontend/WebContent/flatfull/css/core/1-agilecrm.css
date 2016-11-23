@@ -4938,3 +4938,7 @@ ul#recent-menu-model-list li:nth-child(even)
 .app-aside-dock .leftcol-menu-expanded{
   display:block!important;
 }
+.agile-menuactive a
+{
+    color: #fff;
+}
