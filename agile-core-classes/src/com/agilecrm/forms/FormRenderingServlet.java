@@ -48,8 +48,6 @@ public class FormRenderingServlet extends HttpServlet
 	    htmlBody = updateMethodType(htmlBody);
 	    String htmlHeading = "<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<title>Form</title>\n</head>\n<body>\n<div id=\"agileFormHolder\" style=\"margin:0 auto;width:450px\">\n";
 	    String htmlButtom = "\n<script>var agform = document.getElementById(\"agile-form\");agform.onsubmit=function(){console.log(\"Submit button processing hitting\");document.getElementsByClassName(\"agile-button\")[0].innerHTML=\"Processing...\";document.getElementsByClassName(\"agile-button\")[0].disabled=true;}</script>\n</div>\n</body>\n</html>";
-	    htmlBody = StringUtils.replaceOnce(htmlBody, "<form","<form onsubmit=function(){console.log(\"Submit button processing hitting\");document.getElementsByClassName(\"agile-button\")[0].innerHTML=\"Processing...\";document.getElementsByClassName(\"agile-button\")[0].disabled=true;");
-		   
 	    /**
 	     * putting the validation for the recaptcha validation 
 	     * at server side for permanent link
@@ -65,7 +63,7 @@ public class FormRenderingServlet extends HttpServlet
 		    String captchaValidator = "var agileGCaptchaOnSuccess=function(a){var b=document.getElementById('captcha-error-msg');b.parentNode.removeChild(b)}; function validateCaptcha(){var a=grecaptcha.getResponse();if(0==a.length){var b=document.getElementsByClassName(\"g-recaptcha\")[0],c=document.createElement(\"p\");return c.setAttribute(\"id\",\"captcha-error-msg\"),c.innerHTML=\"<span style='color:red;font-size: small;'>Please verify that you are not a robot.</span>\",null==document.getElementById(\"captcha-error-msg\")&&b.appendChild(c),!1}return!0}";
 		    htmlBody = StringUtils.replace(htmlBody, tempReplace, captchaValidator);
 		    
-		    htmlBody = StringUtils.replaceOnce(htmlBody, "<form","function(){console.log(\"Submit button processing hitting\");document.getElementsByClassName(\"agile-button\")[0].innerHTML=\"Processing...\";document.getElementsByClassName(\"agile-button\")[0].disabled=true;return validateCaptcha();}");
+		    htmlBody = StringUtils.replaceOnce(htmlBody, "<form","<form onsubmit='return validateCaptcha()'");
 		    
 		    htmlBody = StringUtils.replaceOnce(htmlBody, recaptchaGateway.site_key, RecaptchaGatewayUtil.GOOGLE_RECAPTCHA_DATA_SITE_KEY);
 		    
