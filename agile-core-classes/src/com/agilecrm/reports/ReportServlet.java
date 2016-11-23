@@ -84,7 +84,7 @@ class CheckSubscriptionRestriction implements DeferredTask{
 			NamespaceManager.set(namespace);
 			try{
 				if(SubscriptionUtil.isSubscriptionDeleted())
-					return;
+					continue;
 				ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(namespace, duration);
 			    System.out.println("In ReportServlet doGet method after ReportsDeferredTask created"+namespace);
 			    // Add to queue

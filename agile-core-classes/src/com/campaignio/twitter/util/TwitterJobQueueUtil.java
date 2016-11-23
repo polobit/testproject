@@ -160,7 +160,7 @@ public class TwitterJobQueueUtil
 	    try
 	    {
 	    if(SubscriptionUtil.isSubscriptionDeleted())
-	    	return;
+	    	continue;
 		List<TwitterJob> twitterJobs = twitterQueue.twitter_jobs;
 
 		System.out.println("Queue " + twitterJobs.size());

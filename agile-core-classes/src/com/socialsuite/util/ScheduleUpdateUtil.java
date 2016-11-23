@@ -33,8 +33,10 @@ public class ScheduleUpdateUtil
 
 			// Sets namespace for log.
 			NamespaceManager.set(update.namespace);
-			if(SubscriptionUtil.isSubscriptionDeleted())
-				return;
+			if(SubscriptionUtil.isSubscriptionDeleted()){
+				updates.remove(0);
+				continue;
+			}
 			// Create temp stream.
 			Stream stream = new Stream();
 			stream.domain_user_id = update.domain_user_id;
