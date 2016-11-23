@@ -4935,3 +4935,6 @@ ul#recent-menu-model-list li:nth-child(even)
 {
       padding-top: 8px !important;
 }
+.app-aside-dock .leftcol-menu-expanded{
+  display:block!important;
+}
