@@ -147,7 +147,6 @@ var Workflow_Model_Events = Base_Model_View.extend({
             $("#workflow-msg").html($save_info).show().fadeOut(3000);
             return false;
         }
-
         var name = $('#workflow-name').val();
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
@@ -211,12 +210,19 @@ var Workflow_Model_Events = Base_Model_View.extend({
             App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
             App_Workflows.workflow_model.set("is_disabled", is_disabled);
             App_Workflows.workflow_model.set("access_level", access_permission);
+
+            var are_all_Nodes_Active = all_nodes_active(designerJSON);
             
             App_Workflows.workflow_model.save({}, {success: function(){
                 
                 enable_save_button($clicked_button);
-                
-                show_campaign_save(e);
+                //Verifying any nodes are non-connected
+                if(are_all_Nodes_Active){
+                    show_campaign_save(e);
+                }
+                else{
+                    show_campaign_save(e,null,null,"{{agile_lng_translate 'campaigns'  'non-connected-nodes-saved'}}");   
+                }
 
                 if(callback)
                     callback();
@@ -369,7 +375,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                    var iframe = document.getElementById("designer");
                    iframe.src = iframe.src;
 
-                   show_campaign_save(e, "Restored workflow successfully.");
+                   show_campaign_save(e, "{{agile_lng_translate 'campaigns'  'non-connected-nodes-saved'}}");
                 }, 
                 error: function() {
                    show_campaign_save(e, "Backup of earlier version is not available.", "red");
@@ -487,15 +493,23 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
     workflowJSON.was_disabled = was_disabled;
     workflowJSON.access_level = access_level;
     
+    var is_node_active = all_nodes_active(designerJSON);
     var workflow = new Backbone.Model(workflowJSON);
     App_Workflows.workflow_list_view.collection.create(workflow,{
             success:function(){  
 
                 // Removes disabled attribute of save button
                 enable_save_button($clicked_button);
+                //Verifying any nodes are non-connected
+                if(is_node_active){
+                    show_campaign_save(e);
+                }
+                else{
+                    show_campaign_save(e,null,null,"Some nodes are not connected.");   
+                }
                 
                 // Shows Campaign save message
-                show_campaign_save(e);
+                //show_campaign_save(e);
 
                 // $('#workflowform').find('#save-workflow').removeAttr('disabled');
                 
@@ -616,7 +630,7 @@ function fill_logs_slate(id, type)
 
 }
 
-function show_campaign_save(e,message,color)
+function show_campaign_save(e,message,color,alertMsg)
 {
     // Campaign save message
     var save_info;
@@ -624,9 +638,13 @@ function show_campaign_save(e,message,color)
         save_info = '<span style="color: green;">'+message+'</span>';
     else
     {
-       save_info = '<span style="color: green;">{{agile_lng_translate "campaigns" "saved"}}</span>';
+        if(alertMsg)
+            save_info = '<span style="color: green;">'+alertMsg+'{{agile_lng_translate "campaigns" "saved"}}</span>';
+       else
+            save_info = '<span style="color: green;">{{agile_lng_translate "campaigns" "saved"}}</span>';
+       
        //Show popup modal for adding campaign in trigger or contac
-        showCampaignPopup(e);
+        showCampaignPopup(e,alertMsg);
        
     }
 
@@ -725,7 +743,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
      *
      **/
    
-     function showCampaignPopup(e)
+     function showCampaignPopup(e,alertMsg)
      {
          e.preventDefault();
 
@@ -738,7 +756,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
             while($("#workflow-save-popup").length)
                   $("#workflow-save-popup").remove();
 
-            workflow_alerts("{{agile_lng_translate 'landingpages' 'next-action'}} ", "null" , "workflow-save-popup-modal", function(el){
+            workflow_alerts("{{agile_lng_translate 'landingpages' 'next-action'}}" , alertMsg , "workflow-save-popup-modal", function(el){
                
                 window.setTimeout(function () {   $(el).find("#popup-msg").fadeOut(8000); }, 500); 
             });
@@ -1108,4 +1126,64 @@ function showHelpVideoModal(data){
                 });
 
     }, null);
+}
+
+function all_nodes_active(designerJSON){
+    
+    var nodes  = JSON.parse(designerJSON).nodes;
+    var is_active = true;
+    var hangup_nodes = 0;
+    var multiNodes_States_HangUp = 0;
+    var no_OfNode_States = 0;
+    
+    try{
+        $.each(nodes,function(node_name,node_value){
+            
+            var node_states= node_value.States;
+            var node_value_length = node_states.length;
+
+            if(node_value.displayname == "Start"){
+                    if(node_states[0].start == "hangup"){
+                        is_active = false;
+                        hangup_nodes++;
+                    }
+                    
+            }
+                else {
+                    
+                     if(node_value_length == 1){
+                            $.each(node_states[0], function(key, value) {
+                                if(value == "hangup"){
+                                    hangup_nodes++;
+                                }
+                                return;
+                            });
+                         }
+                         else{
+                                $.each(node_states, function(key, value) {
+                                     no_OfNode_States++;
+                                    $.each(value,function(key,value){
+
+                                        if(value == "hangup")
+                                            multiNodes_States_HangUp++;
+                                    });
+                                    
+                                });
+                                if(no_OfNode_States == multiNodes_States_HangUp){
+                                    hangup_nodes++;
+                                }
+                        }
+                        
+                }
+        
+        });
+        if(hangup_nodes>1){
+            is_active = false;
+        }
+    }
+    catch(err){
+        return is_active;
+    }
+
+    return is_active;
 }
