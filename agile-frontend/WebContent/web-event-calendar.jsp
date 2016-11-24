@@ -55,7 +55,6 @@ boolean multiple_users=false;
 Boolean userAvailable = false;
 Boolean emailAvailable = false;
 
-
 String [] slots_array=null;
 List<JSONArray> business_hours_array=new ArrayList<JSONArray>();
 List<List<String>> profile_list=new ArrayList<List<String>>();
@@ -163,8 +162,8 @@ if(scheduleid.contains(",")){
 		System.out.println("Domain user " + domainUser);
 		System.out.println("Fetching subscriptionFromCalendalModule");
 	   	if(SubscriptionUtil.isSubscriptionDeleted()){
-		   out.print("Sorry, Agile CRM account of this user has been blocked");
-		   return;
+	   		request.getRequestDispatcher("not_available.jsp").forward(request, response);
+			return;
 	   	}
 		if (domainUser != null)
 		{
