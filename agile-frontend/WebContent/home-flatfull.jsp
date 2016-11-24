@@ -317,6 +317,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 %>
     #personModal #import-link{display: none!important;}
 <%}%>
+<%
+   if(MobileUADetector.isiPhone(request.getHeader("user-agent"))){
+%>
+    a[href="#subscribe"] {display: none!important;}
+<%}%>
 </style>
 <!--  responsive table js -->
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
