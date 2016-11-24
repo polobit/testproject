@@ -2032,6 +2032,9 @@ display: block!important;
     float: none !important;
     margin-right: 0px !important;
   }
+  .sso-text-style{
+        width:100%;
+  }
   #learn-workflows h4,#learn-forms h4,#learn-email-templates h4,#learn-push-notify h4,#setup-instructions h4{
     font-size: 14px !important;
   }
