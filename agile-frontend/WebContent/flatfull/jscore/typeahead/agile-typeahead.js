@@ -724,6 +724,10 @@ $("body").on("click", '#remove_tag', function(event)
 		$('#sendEmailInviteBlock').html('');
 	}
 });
+$('body').on('click','a.text-white',function()
+	{
+		$(this).blur();
+});
 
 /* Customization of Type-Ahead data */
 

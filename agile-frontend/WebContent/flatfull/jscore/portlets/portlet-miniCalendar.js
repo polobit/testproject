@@ -771,7 +771,19 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 				//officeEvents.push(obj);				
 				renderOfficeEvents(officeEvents, obj, el);								
 			}		
+			//addEventSourceToCalendar('office', officeEvents);
+			$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_office" + $(el).attr('id')]);
+			var events_clone = officeEvents.slice(0);
+			functions["event_mini_office" + $(el).attr('id')] = function(start, end, callback)
+			{
+				/*if($('#calendar_container', el).fullCalendar('getView').visStart.getTime()!=start.getTime())
+					return;*/
+				callback(events_clone);
+				
+			}
 
+			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_office" + $(el).attr('id')]);
+			events_clone = [];
 			//**Add the google Events in the list of events in events_show div **/
 		var len = $(".events_show", el).find('.list').find('li').length;
 
@@ -846,7 +858,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
 					fc_event.end=(fc_event.end.getTime()-1)/1000;
-					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					//$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 					officeEvents.push(fc_event);
 				}
 				else
@@ -867,7 +879,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						//$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 						officeEvents.push(new_json);
 					}
 				}
@@ -885,7 +897,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;
-					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					//$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 					officeEvents.push(fc_event);
 				}
 				else{
@@ -905,7 +917,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						//$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 						officeEvents.push(new_json);
 					}
 				}
