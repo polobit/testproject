@@ -174,3 +174,11 @@ function uploadIconToS3ThroughBtn(file) {
         });
     }
 }
+
+// Push notification tutorials for help video
+function pushNotificationVideoPopup(){
+       var data={};
+       data.title="Push Notification Tutorial";
+       data.videourl="//www.youtube.com/embed/NcUFum-_kqE?enablejsapi=10&amp;autoplay=1";
+       showHelpVideoModal(data);
+}
