@@ -69,46 +69,17 @@ public class WidgetUtil {
 		
 		for (Widget widget : widgets) {
 			for (Widget currentWidget : currentWidgets) {
-				if (currentWidget.name.equals(widget.name)) {
+				if (currentWidget.name.equals(widget.name)) {					
+					String userID = agileUser.id.toString();
 					
+					// Removing the custom widget if it was already saved in the widget entity.
 					if(currentWidget instanceof CustomWidget){
 						Widget tempWidget = WidgetUtil.getWidget(widget.name, agileUser.id);
 						if(tempWidget != null){
 							widgets.remove(widget);
 							continue;
 						}
-					}
-					
-					String userID = agileUser.id.toString();	
-					
-					// Logic to find the admin user are active for widget or not.
-					if (dmu.is_admin) {						
-						JSONArray currentUsers = new JSONArray();
-												
-						List<JSONObject> widgetsList = WidgetUtil.getWigdetsObjectList(widget.name);
-						if(widgetsList != null){									
-							for (int i = 0; i < widgetsList.size(); i++) {
-								JSONObject widgetObj = widgetsList.get(i);																				
-								try {
-									String widgetUserID = widgetObj.getString("userID");
-									boolean isAdmin = widgetObj.getBoolean("isAdminUser");
-									boolean isActive = widgetObj.getBoolean("isActive");
-									
-									if(isAdmin){
-										if(isActive){
-											currentUsers.put(widgetUserID);
-										}
-									}else{
-										currentUsers.put(widgetUserID);
-									}																		
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}																
-							}
-							currentWidget.listOfUsers = currentUsers.toString();
-						}	
-					}
+					}					
 					
 					// Setting true to know that widget is configured.
 					widget.is_added = true;
@@ -119,7 +90,7 @@ public class WidgetUtil {
 					widget.script = currentWidget.script;
 					widget.listOfUsers = currentWidget.listOfUsers;
 					
-					//To support the old custom widget to get the logo URLs, script and webhook URLs. 
+					//To support the old custom widget and to get the logo URLs, script and webhook URLs. 
 					if(widget.widget_type.equals(WidgetType.CUSTOM)){
 						Widget customWidget = null;
 						

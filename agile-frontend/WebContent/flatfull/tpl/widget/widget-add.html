@@ -759,7 +759,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{{this.widget.display_name}}</h4>
       </div>
-      <div class="modal-body p-l p-t-xs p-b-xs">
+      <div class="p-l p-t-xs p-b-xs">
 		  <span style="width:5%;">
 		  	<label class="i-checks i-checks-sm m-b-none">
 		    	<input type="checkbox" class="agileUserChk_all" value=""><i></i>
@@ -768,36 +768,10 @@
 		  <span>{{agile_lng_translate 'report-view' 'all-users'}}</span>
 	  </div>
       <div class="modal-body overflow-auto p-xs" style="max-height: 500px;">
-        	{{#if this.data.length}}
-        	<div class="row p-none m-none">
-        		{{#each this.data}}
-    				<div class="col-md-6 p-none">	    	
-    					<div class="b p-sm m-sm">			
-	    					<div class="checkbox pull-left">
-				              <label class="i-checks">
-				               {{#if isChecked}}
-				                <input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}" checked>
-				               {{else}}
-				               	<input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}">
-				               {{/if}}
-				                <i></i>				           
-				              </label>
-		            		</div>
-		    				<div class="m-r-xs agile-img">					
-								<img class="img-inital r r-2x" height="42" width="42" src="{{domainUser.ownerPic}}" title="{{domainUser.name}}">					   
-							</div>
-							<div class="text-ellipsis">
-								<a class="m-r-sm custom-link text-ellipsis">{{domainUser.name}}</a><br>
-								<div class="text-xs">{{domainUser.email}}</div>
-								 <div class="text-xs">{{epochToHumanDateInFormat domainUser.createdTime}}</div>		
-							</div>
-							<div class="clear-fix"></div>
-						</div>
-					</div>            		
-        		{{/each}}
+      		 <div class="p-l p-t-xs p-b-xs">
+        		<img id="widget_acl_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;">
+        		</img>
         	</div>
-        	{{/if}}
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</button>
@@ -805,4 +779,36 @@
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
+</script>
+
+<script id="widget-acls-body-content-template" type="text/html">
+{{#if this.length}}
+	<div class="row p-none m-none">
+		{{#each this}}
+			<div class="col-md-6 p-none">	    	
+				<div class="b p-sm m-sm">			
+					<div class="checkbox pull-left">
+		              <label class="i-checks">
+		               {{#if isChecked}}
+		                <input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}" checked>
+		               {{else}}
+		               	<input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}">
+		               {{/if}}
+		                <i></i>				           
+		              </label>
+            		</div>
+    				<div class="m-r-xs agile-img">					
+						<img class="img-inital r r-2x" height="42" width="42" src="{{domainUser.ownerPic}}" title="{{domainUser.name}}">					   
+					</div>
+					<div class="text-ellipsis">
+						<a class="m-r-sm custom-link text-ellipsis">{{domainUser.name}}</a><br>
+						<div class="text-xs">{{domainUser.email}}</div>
+						 <div class="text-xs">{{epochToHumanDateInFormat domainUser.createdTime}}</div>		
+					</div>
+					<div class="clear-fix"></div>
+				</div>
+			</div>            		
+		{{/each}}
+	</div>
+{{/if}}
 </script>
