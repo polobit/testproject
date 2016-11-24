@@ -771,7 +771,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 								<a style="display: none;" class="save_img submit" type="submit">{{agile_lng_translate 'report-add' 'save'}}</a>
 							</form>
 						</div>
-						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:13px;">
 						<div>
 								
 								
@@ -838,14 +838,14 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 										"first_name"}} '>
 						{{/contactsnamestatus}}
 					</div>
-					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;padding-right:20px; height:28px;" id ="contactName">
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-bottom:1px;height:28px;" id ="contactName">
 						<span class="text-capitalize " id="contact_name">{{contact_name_necessary this}}</span>
 							
 
 								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
 						</div>
 						
-							<div class=" m-b-xs text-cap" style="padding-right:5px;">	
+							<div class=" m-b-xs text-cap">	
 
 						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
 
@@ -882,68 +882,68 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 									{{#multiple_Property_Element "website" properties}} {{#each
 									this}} {{#if_equals subtype "TWITTER"}}
 									
-									 <span class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Twitter"
+									 <span class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Twitter"
 										href="https://twitter.com/{{getTwitterHandleByURL value}}"
 										style="text-decoration: none"> <i
 											class="{{get_social_icon "
 											TWITTER"}}    text-base text-muted tooltip_info" ></i>
 									</a>
 									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
-										class="m-r-xs"><a class="text-l-none tooltip_info" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a class="text-l-none tooltip_info" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype"
 										href="{{getSkypeURL value}}"> <i
 											class="{{get_social_icon "
 											SKYPE"}}   text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
-										class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook"
 										href="{{buildFacebookProfileURL value}}"> <i
 											class="{{get_social_icon "
 											FACEBOOK"}}   text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "LINKEDIN"}} <span
-										class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="LinkedIn"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="LinkedIn"
 										href="{{getHyperlinkFromURL value}}"> <i
 											class="{{get_social_icon "
 											LINKEDIN"}}   text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}}	{{#if_equals subtype "GOOGLE-PLUS"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Google+"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Google+"
 										href="https://plus.google.com/{{getTwitterHandleByURL value}}/" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon "
 											GOOGLE-PLUS"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}}	{{#if_equals subtype "URL"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website"
 										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon subtype}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "XING"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Xing"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Xing"
 										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon "XING"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "FEED"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Blog"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Blog"
 										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon "FEED"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "FLICKR"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Flickr"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Flickr"
 										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon "FLICKR"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "GITHUB"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="GitHub"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="GitHub"
 										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon "GITHUB"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}} {{#if_equals subtype "YOUTUBE"}} <span
-										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="YouTube"
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="YouTube"
 										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
 											class="{{get_social_icon "YOUTUBE"}} text-base text-muted tooltip_info"></i>
 									</a>
 									</span>{{else}}
-									<span class="m-r-xs"> <a
+									<span class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"> <a
 										target="_blank" href="{{getHyperlinkFromURL value}}" class="text-l-none">
 											<i class="{{get_social_icon subtype}} text-base text-muted"></i>
 									</a>
