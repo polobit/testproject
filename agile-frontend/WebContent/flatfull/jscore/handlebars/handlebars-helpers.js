@@ -1709,10 +1709,11 @@ $(function()
 									el = el.concat(val + ", ");
 								});*/
 
-								if (properties[i].subtype)
+								if (properties[i].subtype){
 									if(properties[i].subtype=="office")
 										properties[i].subtype="work";
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
+								}
 								el = el.concat('</span>&nbsp;<span id="map_view_action"></span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
