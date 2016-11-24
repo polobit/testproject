@@ -474,50 +474,55 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$("#helpcontent_popover").addClass("hide");
 	
 	}
+
+	/*saving the click event when clicking on the heading on the drop-down navbar */
 	$(".appaside.dropdownnavbar").on("click",function(e)
 	{
 		e.stopPropagation();
 		if($(this).hasClass("agile-menuactive"))
-		{
-			$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
-			return ;
-		}
+			{
+				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+				return ;
+			}
 		$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
-		 $(this).addClass("agile-menuactive");
-		 var dashboardName = $(this).attr("data-dashboard");
-		 var serviceName = $(this).attr("data-service-name");
+		$(this).addClass("agile-menuactive");
+		var dashboardName = $(this).attr("data-dashboard");
+		var serviceName = $(this).attr("data-service-name");
 			if(!dashboardName)
  				 dashboardName = "dashboard";
-			 _agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
-			 var json = {};
- 			json.id = CURRENT_DOMAIN_USER.id;
- 			json.role = serviceName;
-
- 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
- 			new Role().save( json, 
- 						{success :function(model, response){
- 							console.log("success");
- 							console.log(model);
- 							CURRENT_DOMAIN_USER = model.toJSON();
- 						}, 
- 						error: function(model, response){
-							console.log("error");
- 						}});
-			 return;
+		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+		var json = {};
+ 		json.id = CURRENT_DOMAIN_USER.id;
+ 		json.role = serviceName;
+		var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+		new Role().save( json, 
+					{success :function(model, response){
+						console.log("success");
+						console.log(model);
+						CURRENT_DOMAIN_USER = model.toJSON();
+					}, 
+					error: function(model, response){
+					console.log("error");
+					}});
+	 		return;
 	});
+	/*click event for toggling the active class when clicked on the li items */
 	$(".appaside.dropdownnavbar ul li").on("click",function(e)
 	{
 		e.stopPropagation();
-		if(agile_is_mobile_browser()){
-			$("#mobile-menu").trigger("click",function(e){
-			});
-		}
+		if(agile_is_mobile_browser())
+			{
+				$("#mobile-menu").trigger("click",function(e){
+				});
+			}
 		else
-		{
-		$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
-		$(this).addClass("agile-menuactive");
-		$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
-	}
+			{
+				$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
+				$(this).addClass("agile-menuactive");
+				$(".active").removeClass("active");
+				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+				$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+			}
 	});
 	// initializing need help popover for header page
    $(".need_help").popover({ 
@@ -617,8 +622,15 @@ function initRolehandlers(){
             });
 	});
 }
-
-
+/*for naigating to the particular routes from the navbar */
+function navbarRoutes(id){
+	
+	if(id)
+	{
+		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+	}
+		return ; 
+}
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
  	$.ajax({

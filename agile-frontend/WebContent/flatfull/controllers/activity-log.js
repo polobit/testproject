@@ -8,13 +8,14 @@ var ActivitylogRouter = Backbone.Router.extend({
     routes: {
         /* Shows page */
         "activities": "activities",
-        "navbar-activities" : "navbarActivities",
+        "navbar-activities/:id" : "navbarActivities",
         "contact-activities": "contactActivities",
         "contact-activities/:type": "contactActivities",
         "activities/campaign/:id" : "activities"
     },
     navbarActivities :function(e)
     {
+        navbarRoutes(e)
         Backbone.history.navigate("activities", {
             trigger: true
         });

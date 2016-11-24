@@ -2030,7 +2030,7 @@ display: block!important;
   margin-left: 25%;
   }
 .ticket-name, .ticket-subject{ color: #697073;max-width: 20em;}
-
+.app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span {padding-top: 10%;}
 }
 .tagsinput li {
   word-break:break-all;

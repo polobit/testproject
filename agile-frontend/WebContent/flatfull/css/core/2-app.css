@@ -1212,7 +1212,7 @@ body {
 .app-aside-folded li:active .nav-sub {
   height: auto !important;
   margin-left: 0;
-  overflow: auto;
+  overflow: hidden;
   opacity: 1;
 }
 
@@ -1565,7 +1565,7 @@ body {
     display: block;
     height: auto !important;
     margin-left: 0;
-    overflow: auto;
+    overflow: hidden;
     opacity: 1;
   }
 }
