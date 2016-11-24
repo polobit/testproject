@@ -5871,3 +5871,4 @@ prefs-settings.event-reminders,Event Reminders,
 landingpage-builder.image-url,Enter image path,,
 landingpage-builder.enter-image-url,Enter an image Url ,,
 landingpage-builder.error-image-url,Please eneter a valid image url,,
+notications.enable-notifications,Enable Notifications
