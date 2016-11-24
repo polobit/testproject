@@ -220,7 +220,7 @@ var SubscribeRouter = Backbone.Router
 			subscribe : function(id, plan)
 			{
 				if(IS_IPHONE_APP){
-					alert("No route with the name.");
+					// alert("No route with the name.");
 					return;
 				}
 

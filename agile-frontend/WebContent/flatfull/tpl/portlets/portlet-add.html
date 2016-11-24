@@ -74,8 +74,10 @@
         <li class="p-none">
         <a   href="#rss_dashlet" data-toggle="tab">{{agile_lng_translate 'portlets' 'rss-feed'}}</a>
         </li>
+        {{#isUserNotInIphone}}
         <li class="p-none">
         <a   href="#account_Info_dashlet" data-toggle= "tab">{{agile_lng_translate 'portlets' 'account-info'}}</a></li>
+        {{/isUserNotInIphone}}
         <li class="p-none">
         <a  href="#webstats_dashlet" data-toggle= "tab">{{agile_lng_translate 'menu' 'menu-visitors'}}
         </a></li>
