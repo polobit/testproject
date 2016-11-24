@@ -738,8 +738,8 @@ public class TwilioUtil
 		
 			
 		
-		//params.put("VoiceUrl", "https://our.agilecrm.com/twilioiovoice?record=" + record
-		//				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		params.put("VoiceUrl", "https://our.agilecrm.com/twilioiovoice?record=" + record
+						+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
 		
 		
 		// For Beta
@@ -751,14 +751,13 @@ public class TwilioUtil
 		 */
 
 		
-		  params.put("VoiceUrl", "https://our-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
-		  record + "&agileuserid=" + agileUserID+ "&twimleturl=" +twimletUrlToSend);
+		//  params.put("VoiceUrl", "https://our-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
+		//  record + "&agileuserid=" + agileUserID+ "&twimleturl=" +twimletUrlToSend);
 		 
 		
 		// For Version
 		
-		/*  params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		  "-dot-29-0-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
+		/*  params.put("VoiceUrl", "https://our-dot-33-3-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
 		  record + "&agileuserid=" + agileUserID + "&twimleturl=" +
 		  twimletUrlToSend);*/
 		 
