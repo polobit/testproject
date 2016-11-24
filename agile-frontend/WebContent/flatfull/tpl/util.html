@@ -2,7 +2,7 @@
 	<div class="modal-dialog">
 	    <div class="modal-content">
 			<div class="modal-header">
-				
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h3>{{title}} </h3>
 			</div>
 			<div class="modal-body">
@@ -12,7 +12,7 @@
 			</div>
 			<div class="modal-footer">
 			{{#if_equals type "alert"}}
-				<a href="#" id="success_callback" class="btn btn-sm btn-default">{{agile_lng_translate 'reputation' 'Ok'}}</a>
+				<a href="#" id="success_callback" class="btn btn-sm btn-default">{{agile_lng_translate 'admin-settings-integrations' 'ok'}}</a>
 			{{else}}
 				<a href="#" id="decline_callback" class="btn btn-sm btn-default">{{agile_lng_translate 'portlets' 'no'}}</a>
 				<a href="#" id="success_callback" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
