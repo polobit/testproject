@@ -148,7 +148,7 @@ var contacts_bulk_actions = {
 					}, function()
 					{
 						return;
-					},  "{{agile_lng_translate 'portlets' 'upgrade'}}", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+					},  _agile_get_Upgrade_text(), "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 		}
 		if (!canSendEmails(count))
 		{
@@ -231,7 +231,7 @@ var contacts_bulk_actions = {
 									}, function()
 									{
 										return;
-									},  "{{agile_lng_translate 'portlets' 'upgrade'}}", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+									},  _agile_get_Upgrade_text(), "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 						}
 						else
 						{
@@ -278,7 +278,7 @@ var contacts_bulk_actions = {
 								}, function()
 								{
 									return;
-								}, "{{agile_lng_translate 'portlets' 'upgrade'}}", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+								}, _agile_get_Upgrade_text(), "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 					}
 					else
 					{

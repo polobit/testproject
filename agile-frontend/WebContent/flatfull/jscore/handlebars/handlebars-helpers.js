@@ -8170,3 +8170,15 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 	}
 	return options.inverse(this);
 });
+
+/*
+* Helper to identify the user is in Iphone
+*/
+Handlebars.registerHelper('isUserNotInIphone', function(options)
+{
+	if(!IS_IPHONE_APP)
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
