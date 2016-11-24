@@ -193,7 +193,7 @@
 						</span>
 						</a>
 					</div>
-					<!-- <br/> -->
+					<br/>
 					<div id="workflow-unsubscribe-block" style="display:none">
 											
 					<!-- <div class="row"> -->
@@ -217,29 +217,7 @@
 								</select>
 							</div>
                     	</div>
-                        <!-- </div> 
-                        <br/>-->
-                    	<!-- <div class="row"> -->
-                         <div class="control-group form-group">
-							<label class="control-label col-sm-2">
-								<b>{{agile_lng_translate 'other' 'tags'}}:</b>
-								<!-- <span
-								style="vertical-align: text-top; margin-left: -3px"> <img
-								border="0" src="{{getS3ImagePath '/img/help.png'}}"
-								style="height: 8px; vertical-align: top" rel="popover"
-								data-placement="right"
-								data-title:" data-content="{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}"
-								id="element" data-trigger="hover" />
-							</span> -->
-							</label>
-							<div class="controls col-sm-4">
-								<input type="text" name="tag" id="unsubscribe-tag" placeholder="{{agile_lng_translate 'campaigns' 'separate-tags-with-comma'}}" class="form-control">
-							</div>
-                    	</div>
-                        <!-- </div>
- -->                        <br/><br/> <br/>
-                        <!-- <div class="row"> -->
-                         <div class="control-group form-group">
+                    	<div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-name'}}:</b>
 								<!-- <span
@@ -256,18 +234,25 @@
 								<input type="text" name="unsubscribe_name" id="unsubscribe-name" class="form-control">
 							</div>
                     	</div>
-                        <!-- </div>
-						<br/> -->
-						<!--UnSubscribe Advance Options Start -->
-						<!-- <div>
-    						<a href="#" class="text-info" id="unsubscribe-advance-option">
-    						 	<i class="icon-plus"></i>Advance Options
-	    					</a>
-   						</div> -->
-						<!--UnSubscribe Advance Options End -->
-						<!-- <br> -->
-						<!--Unsubscribe Advance Block -->
-						<!-- <div id="unsubscribe-advance-block" style="display:none"> -->	
+                        
+                        <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>{{agile_lng_translate 'other' 'tags'}}:</b>
+								<!-- <span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}"
+								id="element" data-trigger="hover" />
+							</span> -->
+							</label>
+							<div class="controls col-sm-4">
+								<input type="text" name="tag" id="unsubscribe-tag" placeholder="{{agile_lng_translate 'campaigns' 'separate-tags-with-comma'}}" class="form-control">
+							</div>
+                    	</div>
+                        <br/><br/> <br/>
+                         
 							<div class="row" id="unsubscribe-endisable-option">
 								<div class="control-group form-group">
 									<div class="controls col-sm-2">
@@ -322,10 +307,9 @@
 								</div>
 	                    	</div>
 	                        <!-- </div> -->
-							<br/><br/>
 							<!-- <div class="row"> -->
 	                         <div class="control-group form-group">
-								<label class="control-label col-sm-2">
+								<label class="control-label col-sm-2 template-block">
 									<b>{{agile_lng_translate 'campaigns' 'unsubscribe-template'}}:</b>
 									<!-- <span
 									style="vertical-align: text-top; margin-left: -3px"> <img
@@ -336,7 +320,7 @@
 									id="element" data-trigger="hover" />
 								</span> -->
 								</label>
-								<div class="controls col-sm-4">
+								<div class="controls col-sm-4 template-block">
 									<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="{{agile_lng_translate 'other' 'fill-from-template'}}" name="unsubscribe_subject"><option class="default-select" value="">{{agile_lng_translate 'campaigns' 'default-template'}}</option></select>
 								</div>
 	                    	</div>
@@ -344,9 +328,11 @@
 							<br/>
 							<br/>
 							
+							
 						</div>
 					    <!--Unsubscribe Advance Block -->
 				    <!-- </div> -->	
+				    <br>
 					<div class="row">
                      <div class="control-group form-group hidden">
 						<label class="control-label col-sm-2">
