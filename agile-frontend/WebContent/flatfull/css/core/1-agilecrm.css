@@ -5102,7 +5102,7 @@ border-top: 0px !important;
 #workflow-unsubscribe-block label.control-label.col-sm-2 {
     width: 8%!important;
     text-align: right;
-    /*margin-top: 3px;*/
+    padding-right: 7px;
 }
 #workflow-unsubscribe-block .template-block {
     margin-top: -12px;
