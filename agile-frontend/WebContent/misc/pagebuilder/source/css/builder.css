@@ -69,23 +69,14 @@ body .drop-hover {
 	z-index: 10000;
 }
 
+#loader i{
+	animation: fa-spin 1.5s infinite steps(8);
+    color: white;
+}
 #loader span {
   	color: #ecf0f1;
   	font-family: Consolas, Menlo, Monaco, monospace;
-  	font-weight: bold;
-  	font-size: 30vh;
-  	opacity: 0.8;
-}
-
-#loader span {
-  	display: inline-block;
-    -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
-          animation: pulse 0.4s alternate infinite ease-in-out;
-}
-
-#loader span:nth-child(odd) {
-     -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
+  	font-size: 1em;
 }
 @-webkit-keyframes pulse {
   to {

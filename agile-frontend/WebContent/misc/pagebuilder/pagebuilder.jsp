@@ -2205,7 +2205,11 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         </div><!-- /.modal -->
         
         <div id="loader">
-            <span>{</span><span>}</span>
+            <div>
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <br/>
+                <span>Loading...</span>
+            </div>
         </div>
     
     </div>
