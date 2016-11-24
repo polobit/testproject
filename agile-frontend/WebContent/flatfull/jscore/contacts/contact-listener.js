@@ -49,7 +49,7 @@ var timer = undefined;
 		 	});
 		}
 		 	
-		 }, 1000);
+		 }, 2000);
 });
 
 
@@ -704,14 +704,7 @@ click: function(score, evt)
 
 function popoverEnter(that,left,top,listView,campaigns_view)
 {
-
-
- 
-     
-
-			timer=setTimeout(function() {
-						 	
-						  	
+		timer=setTimeout(function() {	  	
 				if (!insidePopover)	{
 		
 					 $('.popover').remove();	
@@ -752,7 +745,7 @@ function popoverEnter(that,left,top,listView,campaigns_view)
 		 		return false;
 		 	}
 		 	}
-		 }, 1000);
+		 }, 2000);
 }
 
 function popout(that)
