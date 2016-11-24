@@ -490,6 +490,10 @@ function showNoty(type, message, position, notification_type, onCloseCallback,ti
 		return;
 	}
 
+	//Check if subscription status is deleted. If deleted don;t show notification
+	if(isSubscriptionStatusDeleted())
+		return;
+
 	// Check for html5 notification permission.
 	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
 	{
