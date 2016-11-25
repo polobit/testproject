@@ -444,7 +444,7 @@ var emailDomain = '<%=email_domain%>';
 			console.log(emailDomain);
 			
 			// Return if action is already in process 
-			if($("#send-user-request").attr("disabled"))
+			if($("#send-user-request").hasClass("disabled"))
 				return;
 
 			if(!isValidForm("#agile-useradd-form"))
@@ -507,7 +507,7 @@ var emailDomain = '<%=email_domain%>';
 				  },
 				  error: function(error){
 				  	$("#send-user-request").removeClass("disabled");
-				  	$("a.redirect-to-panel").removeClass("disabled");
+				  	$("a.redirect-to-panel").removeAttr("disabled");
 				  	console.log("error");
 				  	$("#error-area").slideDown("slow").slideDown().html(error.responseText);
 				  	setTimeout(function(){
