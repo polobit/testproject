@@ -181,6 +181,22 @@ position:fixed!important;
     position: absolute;
 
 }
+
+#domain-validation-icon{
+	position: absolute;
+    font-size: 19px;
+    top: 6px;
+    right: -30px;
+}
+.icon-check{
+	color: green;
+}
+.icon-close{
+	color: red;
+}
+#subdomain-div{
+	position: relative;
+}
 /*Ending of the animation*/
 
 
@@ -193,7 +209,8 @@ position:fixed!important;
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
-<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.4/css/intlTelInput.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
 
 <script type="text/javascript">
 var localeJSON = <%=localeJSON%>;
@@ -241,11 +258,11 @@ if(isSafari && isWin)
 <div class="form-group m-t m-b-none">
 <label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
-	<div class="input-prepend input-append input-group">
+	<div class="input-prepend input-append input-group subdomain-div">
 	<input id='subdomain' type="text" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>' name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
 	id="app_address">.agilecrm.com</span>
+	<i id="domain-validation-icon" class="icon"></i>
 	</div>
-	
 </div>
 </div>
 <div class="form-group" style="margin-bottom:25px;">
@@ -368,7 +385,7 @@ if(isSafari && isWin)
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="/flatfull/lib/bootstrap.v3.min.js"></script>
-<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.4/js/intlTelInput.min.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -412,9 +429,34 @@ $(document).ready(function(){
 }	});
 
 	$("#login_phone_number").intlTelInput({
-				utilsScript: "lib/phonenumber-lib/utils.js",
-				responsiveDropdown : true
-			});
+	  initialCountry: "auto",
+	  geoIpLookup: function(callback) {
+	    $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+	      var countryCode = (resp && resp.country) ? resp.country : "";
+	      callback(countryCode);
+	    });
+	  },
+	  utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.4/js/utils.js" // just for formatting/placeholders etc
+	});
+
+	$("#subdomain").on("blur",function(e){
+		if(agile_is_mobile_browser())
+			return;
+		if (!this.checkValidity()) {
+			$("#domain-validation-icon", form).removeClass("icon-check").addClass("icon-close");
+            return;
+        }
+        var form = $(this).closest("form");
+   		var email = $("#login_email", form).val();
+   		var domain = $(this).val();
+   		if(!email)
+   			return;
+   		isDuplicateAccount("/backend/register-check?email="+email+"&domain="+domain, form, function(data){
+   			$("#domain-validation-icon", form).removeClass("icon-close").addClass("icon-check");
+   		},function(data){
+   			$("#domain-validation-icon", form).removeClass("icon-check").addClass("icon-close");
+   		})
+	});
 	
 });
 
