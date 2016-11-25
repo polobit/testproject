@@ -347,7 +347,7 @@ a{
 
 					 <div style="margin-top:8px;display:table;width:75%;margin:15px auto;">
 		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" tabindex="2" type="submit">Invite Users</button> 
-		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  text-info text-11 pull-right  m-r" id="skip">Skip</a>
+		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  redirect-to-panel text-info text-11 pull-right  m-r" id="skip" onclick="return false;">Skip</a>
 
 
 	            	</div>
@@ -413,6 +413,13 @@ var restricted = '<%=is_restricted%>';
 var emailDomain = '<%=email_domain%>';
 
 	$(document).ready(function(e) {
+		$("a.redirect-to-panel").click(function(){
+			if($(this).attr("disabled"))
+				return false;
+			$(this).attr("disabled", "disabled");
+			window.location.href = redirectHomeURL;
+		});
+
 		 $('[data-toggle="tooltip"]').tooltip();
 
 		if(restricted == 'false'){
@@ -433,6 +440,10 @@ var emailDomain = '<%=email_domain%>';
 			var list = [];
 			console.log(restricted);
 			console.log(emailDomain);
+			
+			// Return if action is already in process 
+			if($("#send-user-request").attr("disabled"))
+				return;
 
 			if(!isValidForm("#agile-useradd-form"))
 				return;
@@ -478,9 +489,8 @@ var emailDomain = '<%=email_domain%>';
 				return;
 			}
 
-			
+			$("#send-user-request").addClass("disabled");
 
-			
 			$.ajax({
 				  url:'core/api/invited-user-emails',
 				  type:"POST",
@@ -489,11 +499,11 @@ var emailDomain = '<%=email_domain%>';
 				  dataType:"json",
 				  success: function(){
 				    console.log("success");
-				    $("#send-user-request").addClass("disabled");
 				    window.location.href = redirectHomeURL;
 				    
 				  },
 				  error: function(error){
+				  	$("#send-user-request").removeClass("disabled");
 				  	console.log("error");
 				  	$("#error-area").slideDown("slow").slideDown().html(error.responseText);
 				  	setTimeout(function(){
