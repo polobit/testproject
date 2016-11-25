@@ -492,7 +492,7 @@ var emailDomain = '<%=email_domain%>';
 			}
 
 			$("#send-user-request").addClass("disabled");
-			$("a.redirect-to-panel").addClass("disabled");
+			$("a.redirect-to-panel").attr("disabled", "disabled");
 
 			$.ajax({
 				  url:'core/api/invited-user-emails',
