@@ -267,7 +267,7 @@
                 $(overlay).hide();
                 overlay.id = 'canvasOverlay';
 
-                overlay.innerHTML = '<div class="loader"><span>{</span><span>}</span></div>';
+                overlay.innerHTML = '<div class="loader"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><br/><span>Loading...</span></div>';
 
                 document.getElementById('frameWrapper').appendChild(overlay);
 
