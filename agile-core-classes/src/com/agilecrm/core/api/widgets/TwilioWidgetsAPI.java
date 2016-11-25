@@ -22,6 +22,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -708,7 +709,7 @@ public class TwilioWidgetsAPI
 			
 			Widget widget = WidgetUtil.getWidget("TwilioIO");
 			//System.out.println("in modifying call - >" + callSid + "--" + conferenceName + "--" + direction );
-			String status = TwilioUtil.transferCall(widget, from, to, callSid);
+			String status = TwilioUtil.transferCall(widget, from, to, callSid, direction);
 			response.put("modifyStatus", status);
 			System.out.println(response+"=========");
 			return response;
@@ -717,5 +718,16 @@ public class TwilioWidgetsAPI
 		{
 		    throw ExceptionUtil.catchWebException(e);
 		}	
+	}
+	/**
+	 * Get all active twilio Users
+	 * @return
+	 */
+	@Path("getTwilioUsers")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTwiliioUsers()throws Exception{	
+		JSONArray result = TwilioUtil.getTwillioUsersAndNumbers();
+		return result.toString();
 	}
 }

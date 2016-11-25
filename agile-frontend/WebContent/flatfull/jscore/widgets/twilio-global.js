@@ -32,22 +32,58 @@ $(function(){
 		}
 	}, 10000); // 15 sec
 
-     $('body').off('click', '.noty_twilio_transefer');
+    $('body').off('click', '.noty_twilio_transefer');
     $('body').on('click', '.noty_twilio_transefer', function(e){
 		e.preventDefault();
 		var callsid = globalconnection.parameters.CallSid;
+		//var fromnumber =$("#notyCallDetails").text();
 		var form = Verfied_Number;
-		var to = "+919908164425";
+		var tonumber = document.getElementById("calltransferoptions");
+		var to = tonumber.options[tonumber.selectedIndex].value;
+
 		$.post( "/core/api/widgets/twilio/transferCall", {
 			callSid:callsid,
 			direction:TWILIO_CALLTYPE,
 			From: form,
 			To: to						
 		},function(data){
-			alert(data);
+			
 		});
 	});
+	$('body').off('click', '.noty_twilio_phone');
+    $('body').on('click', '.noty_twilio_phone', function(e){
+		e.preventDefault();
+		$.ajax({
+		  method: "GET",
+		  url: "/core/api/widgets/twilio/getTwilioUsers",
+		   success: function(data) {
+			   	var phoneNumberHtml = "<option value=''>Select Number to Transfer</option></ul>";
+				var optionHtml = "";
+				$.each(data, function(i, item){
+					optionHtml = '<option data="' + item.twillioNumber + '" value="' + item.twillioNumber + '">' + item.username +' ('+item.twillioNumber + ')</option>';
+					phoneNumberHtml = phoneNumberHtml + optionHtml;
+				});
+				if(data.length > 0){
+					$("#calltransferdiv").show();
+					$(".calltransferoptions").html(phoneNumberHtml);
+				}
+		   }
+		});
+	});
+	
 
+    $('body').off('click', '.noty_twilio_add_contact');
+    $('body').on('click', '.noty_twilio_add_contact', function(e){
+    	e.preventDefault();
+    	var jsonObj = {};
+    	if(!TWILIO_CONTACT_ID){
+	    	var phone_number = $("#notyCallDetails").text();
+			jsonObj['phoneNumber'] = phone_number;
+			return showContactMergeOption(jsonObj);
+		}else{
+			alert("contact already exists");
+		}
+	});
     $('body').off('click', '.noty_twilio_mute');
 	$('body').on('click', '.noty_twilio_mute', function(e)
 			{
@@ -1130,7 +1166,7 @@ function initTwilioListeners()
 							return;
 						}
 						
-						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","title":""},{"id":"", "class":"btn btn-sm btn-danger noty_twilio_hangup","title":"Hangup"}];
+						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone icon-phone","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","title":""},{"id":"", "class":"btn btn-sm btn-danger noty_twilio_hangup","title":"Hangup"}];
 						showDraggableNoty("Twilioio", TWILIO_CONTACT, "connected", To_Number, btns);
 						
 						/*showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
@@ -1381,7 +1417,7 @@ Twilio.Device.disconnect(function(conn){
 						searchForContact(To_Number, function(name){
 								To_Name = name;
 
-								var btns = [{"id":"", "class":"btn btn-primary noty_twilio_answer","title":"{{agile_lng_translate 'calls' 'answer'}}"},{"id":"","class":"btn btn-danger noty_twilio_ignore","title":"{{agile_lng_translate 'contacts-view' 'ignore'}}"}];
+								var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone icon-phone","title":""},{"id":"", "class":"btn btn-primary noty_twilio_answer","title":"{{agile_lng_translate 'calls' 'answer'}}"},{"id":"","class":"btn btn-danger noty_twilio_ignore","title":"{{agile_lng_translate 'contacts-view' 'ignore'}}"}];
 								showDraggableNoty("Twilioio", TWILIO_CONTACT, "incoming", To_Number, btns);
 								
 								/*showCallNotyPopup("incoming", "Twilio",

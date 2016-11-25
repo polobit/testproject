@@ -19,10 +19,14 @@ import org.json.XML;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.campaignio.tasklets.sms.SendMessage;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestException;
@@ -1279,7 +1283,7 @@ public class TwilioUtil
 	 * 
 	 */
  	
-	public static String transferCall(Widget widget, String from, String to, String callSid)
+	public static String transferCall(Widget widget, String from, String to, String callSid, String direction)
 			throws JSONException, Exception
 	{
 		String status = "400";
@@ -1293,10 +1297,36 @@ public class TwilioUtil
 			String record = widget.getProperty("twilio_record");
 			
 			Map<String, String> params = new HashMap<String, String>();
+			String childCallSid = "";
+
+			// we only need the to number to forward so we find the call sid which have to number
+			if(direction.equalsIgnoreCase("Outgoing")){
+				params.put("ParentCallSid", callSid);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json",
+						"GET", params);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				JSONArray calls = responseTextJson.getJSONArray("calls");
+				JSONObject call = (JSONObject) calls.get(0);
+				childCallSid = call.getString("sid");
+				System.out.println("child call sid is " +  childCallSid);
+			}else{
+				childCallSid = callSid;
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
+						+ callSid + ".json", "GET", null);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				childCallSid = responseTextJson.getString("parent_call_sid");
+			}
+			
+			
+			//Map<String, String> params = new HashMap<String, String>();
 				params.put("From",from);
 				params.put("To", to);
-				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
-				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+callSid, "POST", params);
+				params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+childCallSid, "POST", params);
 				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 				JSONObject callResponse = responseTextJson.getJSONObject("Call");
 				if(callResponse == null){
@@ -1313,5 +1343,26 @@ public class TwilioUtil
 			System.out.println( "Error occured in adding call to conference" + e.getMessage());
 		}
 		return status;
+	}
+	
+	public static JSONArray getTwillioUsersAndNumbers() throws JSONException{
+		JSONArray result = null;
+		List<Widget> widgetList =  WidgetUtil.getActiveWidgetsByName("TwilioIO");
+		if(widgetList != null){
+			result = new JSONArray();
+			for (Widget widget : widgetList) {
+				JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
+				
+				AgileUser agileUser = AgileUser.getCurrentAgileUser(widget.getUserID());
+				DomainUser domainUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);			
+				JSONObject object = new JSONObject();
+				object.put("username", domainUser.name);
+				object.put("domainUserId", domainUser.id);
+				object.put("twillioNumber", widgetPrefs.get("twilio_number"));					
+				result.put(object);
+			}
+		}
+		return result;
+		
 	}
 }
