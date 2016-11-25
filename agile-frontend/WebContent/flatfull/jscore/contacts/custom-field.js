@@ -330,7 +330,7 @@ function showCustomFieldModel(data)
 			setTimeout(function(){
 				$('#duplicate-custom-field-err').addClass("hide");
 				$('#duplicate-custom-field-type-err').addClass("hide");
-			},3000);
+			},5000);
 
 		}		
 
