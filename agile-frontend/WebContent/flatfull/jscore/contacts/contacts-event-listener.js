@@ -34,6 +34,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 
     	'click #lhs-customfilters-header' : 'toggleMobileCustomFilters',
     	'click #lhs-company-customfilters-header' : 'toggleMobileCustomFilters',
+    	'mouseover .bulk-action-wrapper' : 'showTooltipOnHoverBulkAction',
 
     },
 
@@ -443,7 +444,18 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
             _agile_set_prefs("companiesFilterStatus", "display:none");
             $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-filters'}}").tooltip("hide");
         }
-    }
+    },
+
+    showTooltipOnHoverBulkAction: function(e){
+    	var bulk_disable = $(e.currentTarget).children(".disabled");
+    	if(bulk_disable.length>0)
+    	{
+    		$(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'contacts' 'select-contact-bulk'}}").tooltip("show");
+    	}
+    	else
+    		$(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'contacts' 'select-contact-bulk'}}").tooltip("hide");
+    		//$('.tooltip').remove();
+    },
 
    
 });

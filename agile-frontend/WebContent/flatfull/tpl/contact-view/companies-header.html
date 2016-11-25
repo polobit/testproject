@@ -95,15 +95,27 @@
 				                	<input type="checkbox" class="thead_check">
 				                	<i></i>                
 				          		</label>
-							</span>							
+							</span>	
+							<div class="inline-block bulk-action-wrapper">						
 							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+							</div>
+							<div class="inline-block bulk-action-wrapper">
 							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>	
-							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'send-email'}}</button>	
+							</div>
+							<div class="inline-block bulk-action-wrapper">
+							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
+							</div>
+							<div class="inline-block bulk-action-wrapper">	
 							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
+							</div>
 							{{#hasScope "EXPORT_CONTACTS"}}
+							<div class="inline-block bulk-action-wrapper">
 								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'export-as-csv'}}</button>
-							{{/hasScope}}				    
+							</div>
+							{{/hasScope}}	
+							<div class="inline-block bulk-action-wrapper">			    
 							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'delete'}}</button>
+							</div>
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
 					    		<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
                 				<ul class="pull-right dropdown-menu  p-l filter-dynamic-scrollbar"  role="menu" style="overflow-y:auto;max-height:500px">
