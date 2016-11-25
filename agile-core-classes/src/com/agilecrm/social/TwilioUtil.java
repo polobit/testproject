@@ -730,11 +730,18 @@ public class TwilioUtil
 		 */
 
 		// For Main
-
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
-				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
-
-
+		
+		// dut to domain issue we are hard coding the domain to our which will work for all the domain....
+		// this changed is being done in one more file name named voicecallutil.java
+		//--params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
+		//--		+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		
+			
+		
+		params.put("VoiceUrl", "https://our.agilecrm.com/twilioiovoice?record=" + record
+						+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		
+		
 		// For Beta
 		/*
 		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
@@ -743,12 +750,16 @@ public class TwilioUtil
 		 * twimletUrlToSend);
 		 */
 
+		
+		//  params.put("VoiceUrl", "https://our-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
+		//  record + "&agileuserid=" + agileUserID+ "&twimleturl=" +twimletUrlToSend);
+		 
+		
 		// For Version
 		
-		 // params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		 //"-dot-32-6-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
-		 // record + "&agileuserid=" + agileUserID + "&twimleturl=" +
-		 // twimletUrlToSend);
+		/*  params.put("VoiceUrl", "https://our-dot-33-3-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
+		  record + "&agileuserid=" + agileUserID + "&twimleturl=" +
+		  twimletUrlToSend);*/
 		 
 
 		params.put("VoiceMethod", "GET");

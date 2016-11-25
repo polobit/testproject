@@ -707,8 +707,10 @@ var SubscribeRouter = Backbone.Router
 						showNotyPopUp("information", "You have successfully updated your Add-on subscription.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
-					}, form_custom_validate : function(){
-						return true;
+					},saveAuth : function(el){
+						var btn = $(".save", el);
+						disable_save_button(btn);
+						addonPaymentPreprocess(el, "core/api/addon/aclRestriction");
 					}
 				});
 				$("#acl-addon-content").html(acl_addon_model_view.render().el);
@@ -730,12 +732,15 @@ var SubscribeRouter = Backbone.Router
 						showNotyPopUp("information", "You have successfully updated your Add-on subscription.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
-					}, form_custom_validate : function(){
-						if(ADDON_INFO && ADDON_INFO.campaignInfo && ADDON_INFO.campaignInfo.quantity && ADDON_INFO.campaignInfo.quantity == $('.campaign_quantity').val()){
+					},saveAuth : function(el){
+						var btn = $(".save", el);
+						disable_save_button(btn);
+						if(ADDON_INFO && ADDON_INFO.campaignInfo && ADDON_INFO.campaignInfo.quantity && ADDON_INFO.campaignInfo.quantity == $('.campaign_quantity:first', el).val()){
 							showAlertModal("change_campaigns_addon");
-							return false;
+							enable_save_button(btn);
+							return;
 						}
-						return true;
+						addonPaymentPreprocess(el, "core/api/addon/campaignRestriction");
 					}
 				});
 				$("#campaign-addon-content").html(campaign_addon_model_view.render().el);
@@ -757,12 +762,15 @@ var SubscribeRouter = Backbone.Router
 						showNotyPopUp("information", "You have successfully updated your Add-on subscription.", "top");
 					}, errorCallback : function(data){
 						showNotyPopUp("warning", data.responseText, "top");
-					}, form_custom_validate : function(){
-						if(ADDON_INFO && ADDON_INFO.triggerInfo && ADDON_INFO.triggerInfo.quantity && ADDON_INFO.triggerInfo.quantity == $('.campaign_quantity').val()){
+					},saveAuth : function(el){
+						var btn = $(".save", el);
+						disable_save_button(btn);
+						if(ADDON_INFO && ADDON_INFO.triggerInfo && ADDON_INFO.triggerInfo.quantity && ADDON_INFO.triggerInfo.quantity == $('.trigger_quantity:first', el).val()){
 							showAlertModal("change_triggers_addon");
-							return false;
+							enable_save_button(btn);
+							return;
 						}
-						return true;
+						addonPaymentPreprocess(el, "core/api/addon/triggerRestriction");
 					}
 				});
 				$("#trigger-addon-content").html(trigger_addon_model_view.render().el);

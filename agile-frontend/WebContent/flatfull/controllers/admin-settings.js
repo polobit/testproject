@@ -4,6 +4,7 @@
  * 
  */
 var view = {};
+var SHOW_SSO_FORM = false;
 var AdminSettingsRouter = Backbone.Router.extend({
 	routes : {
 	/* Admin-Settings */
@@ -285,21 +286,37 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 			$('#account-pref').html($(template_ui));
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
-			var view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
-			postRenderCallback : function()
+			//var show_sso_form = _agile_get_prefs("show-sso-form");
+
+			that.view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
+			postRenderCallback : function(data)
 			{
+				var resp = that.view.model.toJSON();
+				showSSO();
+				if(resp.url != undefined && resp.url != null){
+					$(".showsso").removeClass("hide");
+					$(".sso-btn").addClass("hide");
 				
-			},saveCallback : function(){
+				}
+				else{
+					if(SHOW_SSO_FORM){
+						$(".showsso").removeClass("hide");
+						$(".sso-btn").addClass("hide");
+					}
+				}
+				
+			},saveCallback : function(data){
 				console.log("saveCallback");
 				App_Admin_Settings.ssoLoginSettings();
 				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
+				SHOW_SSO_FORM = false;
 				App_Admin_Settings.ssoLoginSettings();
 			} });
 			
-			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(that.view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
@@ -1831,3 +1848,11 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 	},
 	
 });
+
+function showSSO(){
+	$(".enale-sso").on("click",function(){
+		$(".showsso").removeClass("hide");
+		$(".sso-btn").addClass("hide");
+		SHOW_SSO_FORM = true;
+	});
+}

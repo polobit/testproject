@@ -883,6 +883,9 @@ function modelDelete(model, targetEl, callback){
 		model.collection.remove(model);
 	}
 
+	// Gets the id of the entity
+	var entity_id = $(targetEl).attr('id');
+
 	if (model && model.toJSON().type == "WEB_APPOINTMENT" && parseInt(model.toJSON().start) > parseInt(new Date().getTime() / 1000))
 	{
 		web_event_title = model.toJSON().title;
@@ -901,9 +904,6 @@ function modelDelete(model, targetEl, callback){
 		$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + entity_id + "'/>");
 		return;
 	}
-
-	// Gets the id of the entity
-	var entity_id = $(targetEl).attr('id');
 
 	// Gets the url to which delete request is to be sent
 	var entity_url = $(targetEl).attr('url');

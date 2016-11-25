@@ -135,7 +135,7 @@ public class MailgunUtil {
 			return null;
 
 		MailDeferredTask message = task.get(0);
-		if (message.fromName.isEmpty())
+		if (StringUtils.isNotEmpty(message.fromName))
 			message.fromEmail = message.fromName + " <" + message.fromEmail
 					+ ">";
 		String fromAddress = message.fromEmail;
