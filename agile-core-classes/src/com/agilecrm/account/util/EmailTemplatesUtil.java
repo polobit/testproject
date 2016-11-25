@@ -1,6 +1,8 @@
 package com.agilecrm.account.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -46,7 +48,54 @@ public class EmailTemplatesUtil
 	 */
 	public static List<EmailTemplates> getAllEmailTemplates()
 	{
+		return getAllEmailTemplates(null);
+	}
+	
+	
+	/**
+	 * Gets EmailTemplates with respect to emailTemplate_category_id.
+	 * 
+	 * @param category_id
+	 *            - EmailTemplateCategory id.
+	 * @return EmailTemplates List
+	 */
+	public static List<EmailTemplates> getAllEmailTemplates(Long category_id)
+	{
+		if(category_id != null && category_id != 0L){
+			try {
+				return dao.ofy().query(EmailTemplates.class).filter("emailTemplate_category_id",category_id).list();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
 		return dao.fetchAll();
+	}
+	
+	/**
+	 * Returns list of emailTemplates based on page size & category.
+	 * 
+	 * @param max
+	 *            Maximum number of emailTemplates list based on page size query
+	 *            param.
+	 * @param cursor
+	 *            Cursor string that points the list that exceeds page_size.
+	 * @param category_id
+	 *            EmailTemplateCategory id.
+	 * @return Returns list of emailTemplates with respective to page size,
+	 *         cursor and category.
+	 */
+	
+	public static List<EmailTemplates> getAllEmailTemplates(int max, String cursor, Long category_id)
+	{
+		if(category_id != null && category_id != 0L){
+			Map map = new HashMap();
+			map.put("emailTemplate_category_id", category_id);
+			return dao.fetchAll(max, cursor, map);
+		}
+		
+		return dao.fetchAll(max, cursor);
 	}
 	
 	

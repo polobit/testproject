@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
@@ -31,15 +32,30 @@ import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 public class EmailTemplatesPrefsAPI
 {
 	/**
-	 * Gets all EmailTemplates. This method is called if TEXT_PLAIN is request
+	 * Gets list of emailTemplates based on query parameters page-size, cursor and categoryId.
+	 * At first only the list of emailTemplates with the page_size are retrieved, when
+	 * cursor scroll down, rest of emailTemplates are retrieved. This method is
+	 * called if TEXT_PLAIN is request.
+	 * 
+	 * @param count
+	 *            Number of emailTemplates for a page.
+	 * @param cursor
+	 *            Points the rest of emailTemplates that are over the limit.
+	 *@param categoryId
+	 *            EmailTemplateCategory id.
 	 * 
 	 * @return EmailTemplates List.
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<EmailTemplates> getAllEmailTemplates()
-	{
-		return EmailTemplatesUtil.getAllEmailTemplates();
+	public List<EmailTemplates> getAllEmailTemplates(@QueryParam("page_size") String count,
+					@QueryParam("cursor") String cursor, @QueryParam("category_id") Long categoryId)
+	{	
+		if(count != null){
+			return EmailTemplatesUtil.getAllEmailTemplates(Integer.parseInt(count), cursor, categoryId);
+		}
+		
+		return EmailTemplatesUtil.getAllEmailTemplates(categoryId);
 	}
 
 	/**
