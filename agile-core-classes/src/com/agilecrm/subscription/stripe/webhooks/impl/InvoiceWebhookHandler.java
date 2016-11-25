@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.agilecrm.addon.AddOnInfo.AddOnStatus;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.Subscription.BlockedEmailType;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -373,6 +374,11 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    System.out.println("quantity " + count);
 	    if (count == 0)
 		count = 1;
+	    
+	    if(getEvent().getRequest() != null && count > 10 && !SubscriptionUtil.isCostlyUser()){
+	    	SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.SUBSCRIPTION, count);
+	    	return;
+	    }
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
 
 	    System.out.println("events : " + getEvent().getData());

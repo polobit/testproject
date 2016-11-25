@@ -44,6 +44,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -524,6 +525,8 @@ public class SubscriptionApi {
 	{
 		Subscription subscription = SubscriptionUtil.getSubscription();
 		try {
+			if(SubscriptionUtil.isEmailsPurchaseStatusBlocked(subscription))
+				throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKED);
 			subscription.purchaseEmailCredits(quantity);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
