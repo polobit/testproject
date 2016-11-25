@@ -4935,8 +4935,13 @@ ul#recent-menu-model-list li:nth-child(even)
 {
       padding-top: 8px !important;
 }
-.app-aside-dock .leftcol-menu-expanded{
+.app-aside-folded .leftcol-menu-expanded{
   display:block!important;
+  padding-top:0px!important;
+}
+.app-aside-folded .leftcol-menu-folded{
+  display:block!important;
+  padding-top:0px!important;
 }
 .agile-menuactive>a
 {
@@ -4946,4 +4951,8 @@ ul#recent-menu-model-list li:nth-child(even)
 {
       color: #141719;
         background-color: #f6f8f8;
+}
+.bg-white .agile-menuactive>a
+{
+  color: #363f44!important;
 }
