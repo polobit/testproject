@@ -417,6 +417,8 @@ var emailDomain = '<%=email_domain%>';
 			if($(this).attr("disabled"))
 				return false;
 			$(this).attr("disabled", "disabled");
+			$("#send-user-request").addClass("disabled");
+
 			window.location.href = redirectHomeURL;
 		});
 
@@ -490,6 +492,7 @@ var emailDomain = '<%=email_domain%>';
 			}
 
 			$("#send-user-request").addClass("disabled");
+			$("a.redirect-to-panel").addClass("disabled");
 
 			$.ajax({
 				  url:'core/api/invited-user-emails',
