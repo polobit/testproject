@@ -802,6 +802,11 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		{
 			e.printStackTrace();
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception occured while getting DKIM settings " + ExceptionUtils.getFullStackTrace(e));
+		}
 		
 		return false;
 	}
