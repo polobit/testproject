@@ -507,6 +507,7 @@ var emailDomain = '<%=email_domain%>';
 				  },
 				  error: function(error){
 				  	$("#send-user-request").removeClass("disabled");
+				  	$("a.redirect-to-panel").removeClass("disabled");
 				  	console.log("error");
 				  	$("#error-area").slideDown("slow").slideDown().html(error.responseText);
 				  	setTimeout(function(){
