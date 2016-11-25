@@ -118,6 +118,7 @@ function subscribeToPubNub(domain)
 			
 			// shows call notification
 			if(message.type == "CALL"){
+				message.type = "PERSON";
 				getTemplate('call-notification', message, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
