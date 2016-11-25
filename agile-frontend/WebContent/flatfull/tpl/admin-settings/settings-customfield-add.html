@@ -5,7 +5,11 @@
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
+         {{#if id}}
+         <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'admin-settings-custom-fields' 'edit-custom-field'}}</h3>
+         {{else}}
         <h3 class="modal-title"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'admin-settings-custom-fields' 'add-custom-field'}}</h3>
+        {{/if}}
     </div>
     <div class="modal-body">
         <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
@@ -181,7 +185,7 @@
     </div>
     <div class="modal-footer form-actions">
         <span style="color:#B94A48;" id="duplicate-custom-field-err" class="hide text-base"></span>
-        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="customfield_validate">{{agile_lng_translate 'modals' 'save'}}</a>
     </div>
 </div>
 </div>
