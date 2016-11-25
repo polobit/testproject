@@ -89,6 +89,7 @@ public class EmailTemplatesPrefsAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public EmailTemplates updateEmailTemplate(EmailTemplates email)
 	{
+		email.updated_time = System.currentTimeMillis()/1000;
 		email.save();
 		return email;
 	}
