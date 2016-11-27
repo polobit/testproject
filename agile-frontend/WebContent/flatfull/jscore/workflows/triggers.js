@@ -486,7 +486,7 @@ function openVerifyEmailModal(el) {
 
 	if (selected == 'verify_email')
 	{	
-		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'verify-new-email'}}", undefined,
+		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'from-email-verification'}}", undefined,
 				"workflow-verify-email-modal"
 
 				, function(modal) {
