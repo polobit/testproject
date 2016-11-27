@@ -652,14 +652,24 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 	}	
 }
 
+/*$('body').on('click','#firstLi',function(e){
+	 $('html, body').animate({
+        scrollTop: $("#A").offset().top
+    }, 2000);
+});*/
 
+$('body').on('click','.searchbychar',function(event){
+  	event.preventDefault();
+    var target = "#" + this.getAttribute('data-target');
+    $(".searchbychar").removeClass("hightlight-select-anchor");
+    if($(target).offset() != undefined){
+    	$(this).addClass("hightlight-select-anchor");
+	    $('html, body').animate({
+	        scrollTop: $(target).offset().top - ($('body').find('#navbar').height() + $("#aside").height())
+	    }, "fast");
+    /*$("body,#content").animate({ scrollTop: $(target).offset().top }, "fast");
+    $(target).focus();*/
+	}
+});
 
-
-
-
-
-	
-	
-	
-	
 	

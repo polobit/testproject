@@ -3151,7 +3151,7 @@ $(function()
 							
 
 
-							html_temp += "<div class='row b-b p-b-md' id='"+key[i]+"'><div class='col-md-1 p-t' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
+							html_temp += "<div class='row b-b p-b-md' id='"+keys[i]+"'><div class='col-md-1 p-t' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
 
 						console.log(html_temp);
 						return new Handlebars.SafeString(html_temp);
@@ -5077,7 +5077,7 @@ $(function()
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
-							html_temp += "<div class='row b-b p-b-md' id='"+keys[i]+"'><div class='col-md-1' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
+							html_temp += "<div class='row b-b p-b-md container-fluid' id='"+keys[i]+"'><div class='col-md-1' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
 
 						console.log(html_temp);
 						return new Handlebars.SafeString(html_temp);

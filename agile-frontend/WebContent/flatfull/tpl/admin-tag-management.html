@@ -7,7 +7,48 @@
 
 <script id="tag-management-collection-template" type="text/html">
 <div class='row'>
-	<div class="pull-right m-b-md ">
+	<div id="searchbycharacter " class="pull-left searchbycharacterdiv col-md-9">
+		<div id="tag-a"><a class="searchbychar"   href="#" data-target="A"> A </a> </div>
+	    <div id="tag-b"><a class="searchbychar" href="#" data-target="B">B</a> </div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="C">C</a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="D"> D </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="E"> E </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="F"> F </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="G"> G </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="H"> H </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="I"> I </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="J"> J </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="K"> K </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="L"> L </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="M"> M </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="N"> N </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="O"> O </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="P"> P </a></div>
+	    <div id="tag-alpha" style="border-right: none;"><a class="searchbychar" href="#"  data-target="Q"> Q </a></div>
+	  
+	  <div class="tagelement-center">
+	    <div id="tag-alpha" style="border-left: none;"><a class="searchbychar" href="#"  data-target="R"> R </a></div>
+	     <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="S"> S </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="T"> T </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="U"> U </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="V"> V </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="W"> W </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="X"> X </a></div>
+	    <div id="tag-alpha"><a class="searchbychar" href="#"  data-target="Y"> Y </a></div>
+	    <div id="tag-alpha-z"><a class="searchbychar" href="#"  data-target="Z"> Z </a></div>
+	  </div>
+	</div> 
+	<!-- <div>
+	<ul>
+		<li><a href="#A" id="firstLi">A</a></li>
+			          <li><a href="#B">B</a></li>
+			          <li><a href="#J">J</a></li>
+			          <li><a href="#L">L</a></li>
+			          <li><a href="#S">S</a></li>
+
+	</ul>
+	</div> -->
+	<div class="pull-right m-b-md col-md-3">
 		<div class=" pull-left m-r-xs" style="display:inline;">
 			
 		</div>
@@ -28,14 +69,22 @@
 	  		{{agile_lng_translate 'widgets' 'tag-note-desc'}}
 	 	</div>-->
 	</div>
+
+
 	<div class="col-md-3 data-block pull-right m-t-md m-r-n-md">
 	  		<h4>{{agile_lng_translate 'other' 'important'}}</h4> <p>{{agile_lng_translate 'Tags-management' 'chenges-in-tag-management'}}</p>
 	 	</div>
-<div class="control-group form-group col-md-9"> 
-<div><h4>sdfasdfa</h4></div> 
+	 	<!--<ul class="nav navbar-nav">
+			          <li><a href="#A" id="firstLi">A</a></li>
+			          <li><a href="#B">B</a></li>
+			          <li><a href="#J">J</a></li>
+			          <li><a href="#L">L</a></li>
+			          <li><a href="#S">S</a></li>
+	    </ul>-->
+<div class="control-group form-group col-md-9 tag-collection-ids"> 
 {{tagManagementCollectionSetup this}}	 
                     <div id="milestone-values" class="milestone-ul-list1">
-						<ul class="tags-management tag-cloud" id="tag-management-model-list" style="list-style:none;width:50%"></ul>
+						<ul class="tags-management tag-cloud " id="tag-management-model-list" style="list-style:none;width:50%"></ul>
                     </div>
 
 <div class="clearfix"></div>
