@@ -253,7 +253,7 @@ if(isSafari && isWin)
 		<div class="col-lg-6 col-lg-offset-3 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
-<div class="panel-heading text-center"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "time-to-configure")%> </div>
+<div class="panel-heading text-center text-lg" style="opacity:0.67"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "time-to-configure")%> </div>
 <div class="panel-body">
 <div class="form-group m-t m-b-none">
 <label class="col-sm-3 control-label">&nbsp;</label>
@@ -275,7 +275,7 @@ if(isSafari && isWin)
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></label>
 <div class="col-sm-6">
 	<select class="form-control required" required  name="plan_type" data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
-											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></option>
+											<option value="" select="selected" disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-plan")%></option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
@@ -292,12 +292,10 @@ if(isSafari && isWin)
 </div>
 </div>
 
-<div class="form-group m-b-xs" style="margin-top: 18px;">
-<div class="col-sm-offset-3 col-sm-9 text-base"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-helptext")%> </div>
-</div>
+
 <div class="form-group m-b-none">
 <label class="col-sm-3 control-label"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-and-company")%></label>
-<div class="col-sm-3 m-b">
+<div class="col-sm-3 m-b-xs">
 <select class="form-control required" required  name="role" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "role")%></option>
 											<option value="CEO"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ceo")%></option>
@@ -314,7 +312,7 @@ if(isSafari && isWin)
 											<option value="Other"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "other")%></option>
 								  </select>
 </div>
-<div class="col-sm-3 m-b">
+<div class="col-sm-3 m-b-xs">
 	<select class="form-control required"  name="company_type" required  data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-type")%></option>
 											<option value="B2B"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "b2b")%></option>
@@ -328,7 +326,9 @@ if(isSafari && isWin)
 											<option value="Other"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "other")%></option>
 								  </select>
 </div>
-
+<div class="form-group m-b">
+<div class="col-sm-offset-3 col-sm-9 text-base" style="padding-left:24px;"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-helptext")%> </div>
+</div>
 </div>
 
 <div class="form-group">

@@ -19,6 +19,7 @@
  	"domain-name-validation": "{{agile_lng_translate 'register' 'domain-name-validation'}}",
  	"domain-name-helptext": "{{agile_lng_translate 'register' 'domain-name-helptext'}}",
  	"choose-plan": "{{agile_lng_translate 'register' 'choose-plan'}}",
+ 	"select-plan":"{{agile_lng_translate 'register' 'select-plan'}}",
  	"users": "{{agile_lng_translate 'admin-settings' 'users'}}",
  	"role-helptext": "{{agile_lng_translate 'register' 'role-helptext'}}",
  	"role-and-company": "{{agile_lng_translate 'register' 'role-and-company'}}",

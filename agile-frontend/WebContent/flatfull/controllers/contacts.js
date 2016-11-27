@@ -1716,7 +1716,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a class="text-white " href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
