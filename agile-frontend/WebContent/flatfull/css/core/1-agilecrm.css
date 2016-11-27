@@ -4940,7 +4940,7 @@ ul#recent-menu-model-list li:nth-child(even)
   padding-top:0px!important;
 }
 .app-aside-folded .leftcol-menu-folded{
-  display:block!important;
+  display:none!important;
   padding-top:0px!important;
 }
 .agile-menuactive>a
