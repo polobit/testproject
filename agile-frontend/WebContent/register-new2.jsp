@@ -287,7 +287,7 @@ if(isSafari && isWin)
 <div class="form-group">
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%></label>
 <div class="col-sm-6">
-<input class="field required form-control number" name="users_count" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" type="number" pattern="\d*" min="1" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%>' autocapitalize="off">
+<input class="field required form-control number" name="users_count" value="10" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" type="number" pattern="\d*" min="1" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%>' autocapitalize="off">
 
 </div>
 </div>
@@ -405,9 +405,9 @@ $(document).ready(function(){
 
 	// Set domain name error title
 	$("#subdomain").attr("data-title", localeJSON["domain-name-validation"]);
-
 	// Set selected plan name
-	if(selected_plan_type){
+	 if(selected_plan_type && selected_plan_type !== "null" && selected_plan_type !== "undefined")
+	 {
         $("select[name='plan_type']").val(selected_plan_type);
 	}
 

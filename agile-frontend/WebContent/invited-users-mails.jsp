@@ -345,7 +345,7 @@ a{
 
 					</form>
 
-					 <div style="margin-top:8px;display:table;width:75%;margin:15px auto;">
+					 <div style="margin-top:8px;display:table;width:75%;margin:15px auto;" class="m-b-none">
 		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" tabindex="2" type="submit">Invite Users</button> 
 		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  redirect-to-panel text-info text-11 pull-right  m-r" id="skip" onclick="return false;">Skip</a>
 
