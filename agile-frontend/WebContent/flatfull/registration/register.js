@@ -189,3 +189,8 @@ function showDomainErrorMessage(error)
 {
 	$("#error-area").slideDown("slow").slideDown().html(error.error);
 }
+
+function agile_is_mobile_browser(){
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  
+ }
