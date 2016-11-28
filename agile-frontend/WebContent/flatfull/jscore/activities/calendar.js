@@ -428,6 +428,11 @@ function showCalendar(users)
 						 */
 						select : function(start, end, allDay)
 						{
+							//If immediate click is performed after a click, don't show the modal. It has been alreday shown.
+							if($("#form-opened-time", $('#activityModal')).length > 0 && (new Date().getTime() - 2000) < $("#form-opened-time", $('#activityModal')).val())
+							{
+								return;
+							}
 							// Show a new event
 							$('#activityModal').html(getTemplate("new-event-modal")).modal('show');
 							highlight_event();
@@ -453,6 +458,7 @@ function showCalendar(users)
 								$('#event-time-2').val(
 										(end.getHours() < 10 ? "0" : "") + end.getHours() + ":" + (end.getMinutes() < 10 ? "0" : "") + end.getMinutes());
 							}
+							$("#form-opened-time", $('#activityModal')).val(new Date().getTime());
 
 						},
 						/**
@@ -543,6 +549,11 @@ function showCalendar(users)
 						 */
 						eventClick : function(event)
 						{
+							//If immediate click is performed after a click, don't show the modal. It has been alreday shown.
+							if($("#form-opened-time", $('#updateActivityModal')).length > 0 && (new Date().getTime() - 2000) < $("#form-opened-time", $('#updateActivityModal')).val())
+							{
+								return;
+							}
 							event = revertEventColorBasedOnPriority(event);
 
 							if (isNaN(event.id))
@@ -617,6 +628,8 @@ function showCalendar(users)
 
 							// Fills owner select element
 							populateUsersInUpdateActivityModal(event);
+
+							$("#form-opened-time", $('#updateActivityModal')).val(new Date().getTime());
 
 							// initializeEventModelEvents();
 							return false;
