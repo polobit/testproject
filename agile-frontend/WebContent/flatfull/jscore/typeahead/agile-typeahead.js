@@ -90,7 +90,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								type_url = '&' + urlParams;
 								searchParams = urlParams ;
 							}
-							if(/[~\+=\-\[\]\\,/{}|\\""():<>\?]/g.test(query) || $.trim(query) == ''){
+							if(!isQueryTextSearchValid(query)){
 								var txt = '<b>{{agile_lng_translate "specialchar-typeahead" "query-message"}}</b>' ;
 								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 								that.render();
@@ -986,4 +986,50 @@ function get_tag_item_json(items, items_temp, type){
 
 	console.log(tag_item_json);
 	return tag_item_json;
+}
+function isQueryTextSearchValid(query){
+
+	if($.trim(query) == '')
+		return false
+	if($.trim(query) == 'OR' || $.trim(query) == 'AND')
+		return false
+	if(query.indexOf('<') >= 0 || query.indexOf('>') >= 0 || query.indexOf(',') >= 0 || query.indexOf(':') >= 0 || query.indexOf('=') >= 0 || query.indexOf('~') >= 0) 
+		return false
+
+	if(query.startsWith('++') || query.startsWith('-') )
+	  	return false
+
+	if(query.startsWith('/\/') && !query.startsWith('/\\/'))
+		return false
+
+	if(query.endsWith('/\/') && !query.endsWith('/\\/'))
+		return false
+
+	if(query.startsWith('(') && !query.endsWith(')') )
+		return false
+
+	else if(!query.startsWith('(') && query.endsWith(')') )
+		return false
+
+	else if(query.startsWith('(') && query.endsWith(')'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		if(b.indexOf('(') >= 0 || b.indexOf(')') >= 0 )
+			return false 
+	}
+	if(query.startsWith('"') && !query.endsWith('"') )
+		return false
+
+	else if(!query.startsWith('"') && query.endsWith('"') )
+		return false
+
+	else if(query.startsWith('"') && query.endsWith('"'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		if(b.indexOf('"') >= 0)
+			return false 
+	}
+	return true 
 }
