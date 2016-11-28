@@ -766,6 +766,8 @@ public class SendgridInboundParser extends HttpServlet
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 		
+		System.out.println("Header map: " + new JSONObject(map).toString());
+		
 		return map;
 	}
 }
