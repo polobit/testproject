@@ -371,6 +371,6 @@ public class WorkflowUtil
 	    	list.add(userId);
 	    	map.put("access_level IN ", list);
 	    }
-	    return partialDAO.listByProperty(map,"name_dummy");	    	
+	    return partialDAO.listByProperty(map);	    	
 	}
 }
