@@ -691,9 +691,10 @@ var SettingsRouter = Backbone.Router
 
 						if (that.emailTemplatesListView && that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length > 0)
 		                {
-		                	if(typeof Email_Template_Category == "undefined"){
-		                		$("#content").find("#prefs-table-content").html(that.emailTemplatesListView.render(true).el);
-		                    	return;
+		                	if(typeof Email_Template_Category == "undefined" && typeof Refresh_Email_Template == "undefined"){
+	                			$("#content").find("#prefs-table-content").html(that.emailTemplatesListView.render(true).el);
+	                    		return;
+		                		
 		                	}else if(!no_load && typeof Email_Template_Category != "undefined"){
 		                		if(typeof Refresh_Email_Template == "undefined"){
 		                			$("#content").find("#prefs-table-content").html(that.emailTemplatesListView.render(true).el);
