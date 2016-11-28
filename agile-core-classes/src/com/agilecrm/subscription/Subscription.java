@@ -20,6 +20,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -329,7 +330,12 @@ public class Subscription implements Serializable{
 
 	private Subscription createNewEmailSubscription() throws Exception {
 		emailPlan.plan_id = SubscriptionUtil.getEmailPlan(emailPlan.quantity);
-		return createNewSubscription(emailPlan);
+		Subscription subscription = createNewSubscription(emailPlan);
+		if(emailPlan.quantity > 10 && !SubscriptionUtil.isCostlyUser()){
+			SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.CREDIT, emailPlan.quantity * 1000);
+			throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
+		}
+		return subscription;
 	}
 
 	private Subscription createNewSubscription(Plan plan) throws Exception {
@@ -545,7 +551,7 @@ public class Subscription implements Serializable{
 			throw new Exception("Payment failed. Please try again.");
 		if(quantity > 10 && !SubscriptionUtil.isCostlyUser()){
 			SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.CREDIT, quantity * 1000);
-			throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
+			throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
 		}
 		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);

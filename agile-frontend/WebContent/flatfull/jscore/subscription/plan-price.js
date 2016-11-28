@@ -862,9 +862,12 @@ $(function(){
 				setTimeout(function(){ 
 					document.location.reload();
 				}, 1000);				
-			},error: function(response){
+			},error: function(data){
 				$form.closest(".modal").modal("hide");
-				showNotyPopUp("warning", response.responseText, "top"); 
+				if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION")
+					showAlertModal("email-purchase-limit");
+				else
+					showNotyPopUp("warning", data.responseText, "top"); 
 			}
 		});
 	});

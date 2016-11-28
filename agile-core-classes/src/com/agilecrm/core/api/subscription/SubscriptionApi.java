@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONException;
 
 import net.sf.json.JSONObject;
 
@@ -34,6 +35,8 @@ import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDefe
 import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException.Type;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -156,6 +159,16 @@ public class SubscriptionApi {
 			queue.add(TaskOptions.Builder.withPayload(task));
 
 			return subscribe;
+		}catch (EmailPurchaseLimitCrossedException e){
+			org.json.JSONObject json = new org.json.JSONObject();
+			try {
+				json.put("type", Type.BULK_EMAIL_PURCHASE_EXCEPTION);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(json.toString())
+					.build());
 		} catch (PlanRestrictedException e) {
 			throw e;
 		} catch (WebApplicationException e) {
@@ -223,31 +236,20 @@ public class SubscriptionApi {
 	 * @param plan
 	 *            {@link Plan}
 	 * @return
+	 * @throws Exception 
 	 */
 	@Path("/change-email-plan")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Subscription addEmailPlan(Plan plan) {
-		try {
-			DomainUser user = DomainUserUtil.getCurrentDomainUser();
-			if (!user.is_admin)
-			{
-				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
-			}
-			// Return updated subscription object
-			return SubscriptionUtil.createEmailSubscription(plan);
-		} catch (PlanRestrictedException e) {
-			System.out.println("excpetion plan exception");
-			throw e;
-		} catch (WebApplicationException e) {
-			throw e;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+	public Subscription addEmailPlan(Plan plan) throws Exception{
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		if (!user.is_admin)
+		{
+			throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
 		}
+		// Return updated subscription object
+		return SubscriptionUtil.createEmailSubscription(plan);
 
 	}
 
@@ -528,6 +530,16 @@ public class SubscriptionApi {
 			if(SubscriptionUtil.isEmailsPurchaseStatusBlocked(subscription))
 				throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKED);
 			subscription.purchaseEmailCredits(quantity);
+		}catch (EmailPurchaseLimitCrossedException e){
+			org.json.JSONObject json = new org.json.JSONObject();
+			try {
+				json.put("type", Type.BULK_EMAIL_PURCHASE_EXCEPTION);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(json.toString())
+					.build());
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())

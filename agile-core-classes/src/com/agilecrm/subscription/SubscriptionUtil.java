@@ -14,8 +14,10 @@ import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.Subscription.BlockedEmailType;
 import com.agilecrm.subscription.Subscription.EmailPurchaseStatus;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
@@ -156,7 +158,10 @@ public class SubscriptionUtil
 	// Saves new subscription information
 	if (subscription.fetchBillingDataJSONObject() != null)
 	    subscription.save();
-
+	if(plan.quantity > 10 && !isCostlyUser()){
+		blockEmailPurchasing(BlockedEmailType.CREDIT, plan.quantity * 1000);
+		throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
+	}
 	return subscription;
     }
 
@@ -355,7 +360,7 @@ public class SubscriptionUtil
     
     public static boolean isCostlyUser(){
     	Subscription subscription = getSubscription();
-    	if(subscription.plan != null && subscription.plan.getPlanInterval() != null && (subscription.plan.getPlanInterval().toLowerCase().equals("yearly") || subscription.plan.getPlanInterval().toLowerCase().equals("biennial")))
+    	if(subscription.plan != null && !PlanType.FREE.equals(subscription.plan.plan_type) && subscription.plan.getPlanInterval() != null && (subscription.plan.getPlanInterval().toLowerCase().equals("yearly") || subscription.plan.getPlanInterval().toLowerCase().equals("biennial")))
     		return true;
     	return false;
     }

@@ -199,7 +199,12 @@ var SubscribeRouter = Backbone.Router
 
 				}, errorCallback : function(data)
 				{
-					showNotyPopUp("warning", data.responseText, "top");
+					if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
+						showAlertModal("email-purchase-limit");
+						window.location.href="#subscribe"
+					}
+					else	
+						showNotyPopUp("warning", data.responseText, "top");
 				}
 				/*
 				 * prePersist : function(el) { console.log(el); }
