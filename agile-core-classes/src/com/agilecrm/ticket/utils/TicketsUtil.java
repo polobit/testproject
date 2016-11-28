@@ -1024,6 +1024,6 @@ public class TicketsUtil
 	{
 		if( StringUtils.isBlank(messageID) )	return null;
 		
-		return Tickets.ticketsDao.getByProperty("references", messageID);
+		return Tickets.ticketsDao.getByProperty("references in ", messageID);
 	}
 }
