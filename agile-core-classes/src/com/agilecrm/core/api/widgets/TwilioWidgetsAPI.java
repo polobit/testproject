@@ -711,7 +711,6 @@ public class TwilioWidgetsAPI
 			//System.out.println("in modifying call - >" + callSid + "--" + conferenceName + "--" + direction );
 			String status = TwilioUtil.transferCall(widget, from, to, callSid, direction);
 			response.put("modifyStatus", status);
-			System.out.println(response+"=========");
 			return response;
 			
 		}catch (Exception e)

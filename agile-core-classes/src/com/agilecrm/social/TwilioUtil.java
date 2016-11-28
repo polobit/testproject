@@ -1057,6 +1057,8 @@ public class TwilioUtil
 			}
 			
 				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+			//params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+			
 				params.put("Method", "POST");
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/" +childCallSid, "POST", params);
 				System.out.println("respomse for modify call is -" + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
@@ -1325,7 +1327,7 @@ public class TwilioUtil
 			//Map<String, String> params = new HashMap<String, String>();
 				params.put("From",from);
 				params.put("To", to);
-				params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+childCallSid, "POST", params);
 				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 				JSONObject callResponse = responseTextJson.getJSONObject("Call");
@@ -1358,7 +1360,8 @@ public class TwilioUtil
 				JSONObject object = new JSONObject();
 				object.put("username", domainUser.name);
 				object.put("domainUserId", domainUser.id);
-				object.put("twillioNumber", widgetPrefs.get("twilio_number"));					
+				object.put("twillioNumber", widgetPrefs.get("twilio_number"));	
+				object.put("domainusernumber", domainUser.phone);	
 				result.put(object);
 			}
 		}
