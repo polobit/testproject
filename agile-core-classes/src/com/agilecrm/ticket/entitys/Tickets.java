@@ -351,6 +351,9 @@ public class Tickets extends Cursor implements Serializable
 	 */
 	@NotSaved
 	public TicketNotesPartial last_ticket_notes = null;
+	
+	@NotSaved(IfDefault.class)
+	public List<String> references = null;
 
 	/**
 	 * Default constructor
@@ -719,6 +722,20 @@ public class Tickets extends Cursor implements Serializable
 				labels.add(key.getId());
 			}
 		}
+		
+		if( references == null )	references = new ArrayList<>();
+	}
+	
+	/**
+	 * Add a reference
+	 * 
+	 * @param reference
+	 */
+	public void addReference(String reference)
+	{
+		if( this.references == null )	this.references = new ArrayList<>();
+		
+		this.references.add(reference);
 	}
 
 	/**

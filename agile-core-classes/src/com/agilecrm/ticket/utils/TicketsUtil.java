@@ -1018,4 +1018,12 @@ public class TicketsUtil
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
 	}
+	
+	
+	public static Tickets getTicketByEmailMessageID(String messageID)
+	{
+		if( StringUtils.isBlank(messageID) )	return null;
+		
+		return Tickets.ticketsDao.getByProperty("reference", messageID);
+	}
 }
