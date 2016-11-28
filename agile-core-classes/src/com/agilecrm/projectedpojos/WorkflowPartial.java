@@ -1,5 +1,7 @@
 package com.agilecrm.projectedpojos;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,14 +28,13 @@ public class WorkflowPartial extends ProjectionEntityParse
     {
 	System.out.println("postProcess");
 	// Now sort by name.
-	// Collections.sort(workflows, new Comparator<WorkflowPartial>()
-	// {
-	// public int compare(WorkflowPartial one, WorkflowPartial other)
-	// {
-	// return
-	// one.name.trim().toLowerCase().compareTo(other.name.trim().toLowerCase());
-	// }
-	// });
+	Collections.sort(workflows, new Comparator<WorkflowPartial>()
+	{
+	    public int compare(WorkflowPartial one, WorkflowPartial other)
+	    {
+		return one.name.trim().toLowerCase().compareTo(other.name.trim().toLowerCase());
+	    }
+	 });
 	return workflows;
     }
 }
