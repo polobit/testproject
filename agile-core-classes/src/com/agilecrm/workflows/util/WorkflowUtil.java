@@ -1,5 +1,6 @@
 package com.agilecrm.workflows.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.projectedpojos.WorkflowPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -41,6 +44,11 @@ public class WorkflowUtil
 	 * Initialize DataAccessObject.
 	 */
 	private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
+	
+	 /**
+	  * ObjectifyDao of WorkflowPartial.
+	  */
+	private static PartialDAO<WorkflowPartial> partialDAO = new PartialDAO<WorkflowPartial>(WorkflowPartial.class);
 
 	/**
 	 * Locates workflow based on id.
@@ -345,5 +353,24 @@ public class WorkflowUtil
 	    		}
 	    	}
 	    	return maxNodes;
+	}
+	
+	/**
+	 * This method is responsible for fetching partial workflows.
+	 * Each Partial workflow contains 
+	 * @return
+	 */
+	public static List<WorkflowPartial> getAllPartialWorkflows()
+	{
+	    Map<String,Object> map = new HashMap<String,Object>();
+	    Long userId = DomainUserUtil.getCurentUserId();
+	    if(userId != null)
+	    {
+	    	List<Long> list = new ArrayList<Long>();
+	    	list.add(1L);
+	    	list.add(userId);
+	    	map.put("access_level IN ", list);
+	    }
+	    return partialDAO.listByProperty(map,"name_dummy");	    	
 	}
 }

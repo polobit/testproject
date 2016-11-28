@@ -670,7 +670,7 @@ var WorkflowsRouter = Backbone.Router
 
 								if (campaign_id)
 								{
-									fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
+									fillSelect('campaign-select', '/core/api/workflows/partial', 'workflow', function(id)
 									{
 										$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
 									}, optionsTemplate, false, el);
@@ -691,7 +691,7 @@ var WorkflowsRouter = Backbone.Router
 									 * @param optionsTemplate-
 									 *            to fill options with workflows
 									 */
-									fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
+									fillSelect('campaign-select', '/core/api/workflows/partial', 'workflow', 'no-callback', optionsTemplate, false, el);
 								}
 							},
 							saveCallback : function() {
@@ -1406,7 +1406,7 @@ var WorkflowsRouter = Backbone.Router
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						// fill workflows
-						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						fillSelect('campaign-reports-select', '/core/api/workflows/partial', 'workflow', function fillCampaign()
 						{
 							if(id)
 							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');
