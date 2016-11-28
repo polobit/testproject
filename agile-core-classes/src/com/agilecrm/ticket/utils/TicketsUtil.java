@@ -41,6 +41,7 @@ import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>TicketUtil</code> is a utility class to provide CRUD operations on
@@ -1024,6 +1025,10 @@ public class TicketsUtil
 	{
 		if( StringUtils.isBlank(messageID) )	return null;
 		
-		return Tickets.ticketsDao.getByProperty("references in ", messageID);
+		Query<Tickets> q = Tickets.ticketsDao.ofy().query(Tickets.class);
+		
+		q.filter("references", messageID);
+		
+		return Tickets.ticketsDao.fetch(q);
 	}
 }
