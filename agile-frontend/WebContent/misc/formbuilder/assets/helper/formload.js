@@ -1,7 +1,7 @@
 define([
 		'jquery', 'underscore', 'backbone', 'helper/pubsub', 'collections/my-form-snippets', 'views/my-form'], function($, _, Backbone, PubSub, MyFormSnippetsCollection, MyFormView)
 {
-	return { agile_form_load : function()
+	return { agile_form_load : function(fields)
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
 		
@@ -42,7 +42,7 @@ define([
 			    		  }
 			    	  }
 				} else {
-					$.getJSON( "/core/api/custom-fields", function(fields) {
+					if(fields) {
 
 					for ( var j = 0; j < saveform.length; j++){
 
@@ -134,7 +134,7 @@ define([
 
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
-				});
+		}
 				}
 				
 			}
