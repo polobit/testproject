@@ -5874,3 +5874,5 @@ landingpage-builder.error-image-url,Please enter a valid image url,,,,,,,,,,,,,,
 sso.ssoheading,Single Sign-On (SSO) Authentication.,Autenticación de inicio de sesión único (SSO).,,,,,,,,,,,,,
 sso.authenticationtext,Single sign-on is a session and user authentication service that permits a user to use one set of login credentials (e.g.&#44 user name and password) to access multiple applications.,El inicio de sesión único es un servicio de autenticación de sesión y usuario que permite al usuario utilizar un conjunto de credenciales de inicio de sesión (por ejemplo&#44 nombre de usuario y contraseña) para acceder a varias aplicaciones.,,,,,,,,,,,,,
 notications.enable-notifications,Enable Notifications
+admin-settings-custom-fields.custom-field-searchable-warning,* ‘Searchable’ must be checked for a custom field to be sortable and searchable.
+admin-settings-custom-fields.edit-custom-field,Edit Custom Field,
