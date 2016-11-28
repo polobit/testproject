@@ -28,6 +28,7 @@
 
         addThumbnail :function(thumbnail,element){
             $(element).siblings("IMG").attr("src",thumbnail);
+            $('.imageFileTab').find('input#imageURL').val(thumbnail);
         }
     };
 
