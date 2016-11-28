@@ -342,10 +342,11 @@ public class SendgridInboundParser extends HttpServlet
 
 		if (isNewTicket)
 		{
-			ArrayList<String> references = new ArrayList<>();
+			ArrayList<String> references = null;
 			
 			if( headers.containsKey("Message-ID") )	
 			{
+				references = new ArrayList<>();
 				references.add(headers.get("Message-ID"));
 			}
 

@@ -1025,6 +1025,8 @@ public class TicketsUtil
 	{
 		if( StringUtils.isBlank(messageID) )	return null;
 		
+		System.out.println("Searching Ticket with Reference: " + messageID);
+		
 		Query<Tickets> q = Tickets.ticketsDao.ofy().query(Tickets.class);
 		
 		q.filter("references", messageID);
