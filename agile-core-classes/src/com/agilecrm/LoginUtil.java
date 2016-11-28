@@ -158,7 +158,7 @@ public class LoginUtil {
 		}
 	}
 
-	public boolean hasValidUserTimezone() {
+	private boolean hasValidUserTimezone() {
 		UserPrefs user_prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
 		System.out.println("user_prefs in setUserInfoTimezone --------------- " + user_prefs);
 		if (user_prefs == null || StringUtils.isEmpty(user_prefs.timezone) || "UTC".equals(user_prefs.timezone))
@@ -167,7 +167,7 @@ public class LoginUtil {
 		return true;
 	}
 
-	public boolean hasValidAccountTimezone(){
+	private boolean hasValidAccountTimezone(){
     	 // Set timezone in account prefs.
 	    AccountPrefs accPrefs = AccountPrefsUtil.getAccountPrefs();
 	    if(accPrefs == null || (StringUtils.isEmpty(accPrefs.timezone) || "UTC".equals(accPrefs.timezone)
@@ -177,7 +177,15 @@ public class LoginUtil {
 	    return true;
     }
 	
-	public boolean hasValidCalendarPrefs(DomainUser domainUser){
+	private boolean hasValidCalendarPrefs(DomainUser domainUser){
 		return (OnlineCalendarUtil.getCalendarPrefs(domainUser.id) != null);
-   }
+	}
+	
+	// Check and save missed ones
+	public void saveMiscPrefs(HttpServletRequest req, DomainUser domainUser){
+		if(!hasValidCalendarPrefs(domainUser) || !hasValidAccountTimezone() 
+	    		|| !hasValidUserTimezone()) {
+	    	setMiscValuesAtLogin(req, domainUser);
+	    }
+	}
 }
