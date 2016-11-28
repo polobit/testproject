@@ -84,7 +84,6 @@ public class HomeServlet extends HttpServlet
 	
 	// Delete first time user session attribute
 	req.getSession().removeAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
-	
 
 	// It load defaults. If request is for the first user in the domain then
 	// default are created or else only tour cookie is set

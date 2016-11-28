@@ -297,12 +297,6 @@ public class RegisterServlet extends HttpServlet
 	// New user param to save defaults
 	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
 	
-	// New user param to save defaults
-	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
-	
-	// New user param to save defaults
-	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
-	
 	// Set misc values at Register before sending user to home page.
 	new LoginUtil().setMiscValuesAtLogin(request, domainUser);
 	
@@ -317,8 +311,9 @@ public class RegisterServlet extends HttpServlet
 	request.getSession().setAttribute("Email", email);
 	
 	request.getSession().setAttribute("RedirectionHomeURL", redirectionURL);
-
 	request.setAttribute("redirectionurl", redirectionURL);
+	
+	// Hide invite users from mobile
 	if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 		response.sendRedirect(redirectionURL);
 	}
