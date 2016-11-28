@@ -153,6 +153,17 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "regi
 .font-18{
 	font-size: 18px;
 }
+.login-position-fixed{
+position: fixed !important;width: 100% !important;top: 0px !important;
+z-index: 3;
+}
+.error {
+	color: white !important;
+	background-color: #c74949 !important;
+  border-color: #c74949 !important;
+}
+
+
 </STYLE>
 
 <script type="text/javascript">
@@ -193,11 +204,20 @@ if(isSafari && isWin)
 </head>
 <body class="overlay">
 
-  <div id="error-area" class="error-top-view">
-    <%if(StringUtils.isNotEmpty(errorMessage)){
-        out.println(errorMessage);
-    }%>
-  </div>
+	<%if(StringUtils.isNotEmpty(errorMessage)){
+		if(StringUtils.equalsIgnoreCase("Sorry, we could not recognized the email ID registered with any of the Google App.",errorMessage)){
+		%>
+		<div  class="alert error login-position-fixed text-center m-b-none">
+    			<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=errorMessage%> 
+    		</div>
+    	<%}else{%>
+    	<div id="error-area" class="error-top-view">
+             <%=errorMessage%>
+          </div>
+    	<%}}%>
+	
+    
+ 
 <div class="app app-header-fixed app-aside-fixed transparant">
 	<!-- Language -->
 	<div class="lang-identifier">
@@ -287,7 +307,7 @@ if(isSafari && isWin)
 			<div id="openid_btns" class="login-social-btns">
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					<a title="Sign in using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white font-11"><i class="fa fa-google"></i>Sign in using <span class="text-info-color">Google Apps</span></a>
+					<a title="Sign in using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white font-11"><i class="fa fa-google"></i>Register using Google Apps</a>
 					
 
 			</div>
@@ -295,11 +315,11 @@ if(isSafari && isWin)
 <div class="text-center text-white m-t m-b">
 	<div>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
-		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><span class="text-info-color"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></span></a></small>
+		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a></small>
 	</div>
 	<div>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%>
-		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><span class="text-info-color"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</span></a></small> 
+		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a></small> 
 	</div>
 </div>
 					

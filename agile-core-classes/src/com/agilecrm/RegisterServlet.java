@@ -260,8 +260,14 @@ public class RegisterServlet extends HttpServlet
 
 	email = email.toLowerCase();
 
+	
+
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
+	
+	if(password == null){
+		password = "";
+	}
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 	// when domain created we are storing timezone in domain level
