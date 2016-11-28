@@ -342,13 +342,18 @@ public class SendgridInboundParser extends HttpServlet
 
 		if (isNewTicket)
 		{
+			ArrayList<String> references = new ArrayList<>();
+			
+			if( headers.containsKey("Message-ID") )	
+			{
+				references.add(headers.get("Message-ID"));
+			}
+
 			// Creating new Ticket in Ticket table
 			ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1], json.getString("subject"), ccEmails,
 					plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
-					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
+					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>(), references);
 			
-			if( headers.containsKey("Message-ID") )	ticket.addReference(headers.get("Message-ID"));
-
 			TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
 		}
 		else
