@@ -188,6 +188,7 @@ form .popover form {
 
 .agile-height-default {
 	padding: 6px 12px !important;
+	width: 100%;
 }
 
 .agile-height-large {
