@@ -324,7 +324,7 @@ public class SendgridInboundParser extends HttpServlet
 		boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
 		String subject = json.getString("subject");
 		
-		if( isNewTicket && subject.startsWith("Re:") )
+		if( isNewTicket && subject.toLowerCase().startsWith("re:") )
 		{
 			if( headers.containsKey("In-Reply-To") )
 			{
