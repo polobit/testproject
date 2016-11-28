@@ -1206,7 +1206,8 @@ function initializeAddPortletsListeners() {
 							"RevenueGraph" : "left",
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
-							"Campaignstats" : "",
+							//"Campaignstats" : "",
+							"Campaigngraph" : "left",
 							"LostDealAnalysis" : "left",
 							"Referralurlstats" :"left"
 						};
