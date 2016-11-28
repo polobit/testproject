@@ -15,6 +15,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.addon.AddOn;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
@@ -25,11 +26,15 @@ import com.agilecrm.session.SessionCache;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.deferred.RegisterTask;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.OnlineCalendarUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.Defaults;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>HomeServlet</code> handles request after login/new registration and
@@ -84,7 +89,6 @@ public class HomeServlet extends HttpServlet
 	
 	// Delete first time user session attribute
 	req.getSession().removeAttribute(RegisterServlet.IS_NEWLY_REGISTERED_USER_ATTR);
-	
 
 	// It load defaults. If request is for the first user in the domain then
 	// default are created or else only tour cookie is set
@@ -101,7 +105,7 @@ public class HomeServlet extends HttpServlet
      * 
      * @param resp
      */
-    private void loadDefaults(HttpServletResponse resp)
+    private void loadDefaults(HttpServletRequest req, HttpServletResponse resp)
     {
 
 	// Sets cookie to show page tour
@@ -109,8 +113,14 @@ public class HomeServlet extends HttpServlet
 
 	// Check if user registered is the first user in the domain, if user is
 	// first user then default contact, deals, tasks, etc are created
-	if (DomainUserUtil.count() == 1)
-	    new Defaults();
+	if (DomainUserUtil.count() == 1){
+		// new Defaults();
+		// Create a async task to create default entities (Since it is taking much time to execute)
+		RegisterTask task = new RegisterTask(NamespaceManager.get(), SessionManager.get());
+		QueueFactory.getDefaultQueue().add(TaskOptions.Builder.withPayload(task));
+	}
+	   
+		
     }
 
     /**
@@ -240,10 +250,7 @@ public class HomeServlet extends HttpServlet
     	    setLoggedInTime(req, domainUser);
     	    
     	    LoginUtil loginUtil = new LoginUtil();
-    	    if(!loginUtil.hasValidCalendarPrefs(domainUser) || !loginUtil.hasValidAccountTimezone() 
-    	    		|| !loginUtil.hasValidUserTimezone()) {
-    	    	loginUtil.setMiscValuesAtLogin(req, domainUser);
-    	    }
+    	    loginUtil.saveMiscPrefs(req, domainUser);
     	    
     	    try {
     	    	domainUser.save();
