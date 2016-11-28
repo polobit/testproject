@@ -812,9 +812,9 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                 <div class="modal-body" align="center">
                     <div class="btn-group  previewActions">
                         <a class="btn btn-default btn-sm active" href="#"
-                            data-val="iphone"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "smartphone") %></a> <a
-                            class="btn btn-default btn-sm " href="#" data-val="smalltablet"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tablet") %></a>
-                        <a class="btn btn-default btn-sm " href="#" data-val="ipad"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ipad") %></a>
+                            data-val="iphone"><i class="fa fa-mobile fa-2x"></i></a> <a
+                            class="btn btn-default btn-sm " href="#" data-val="smalltablet"><i class="fa fa-tablet fa-2x" aria-hidden="true"></i></a>
+                        <a class="btn btn-default btn-sm " href="#" data-val="ipad"><i class="fa fa-desktop  fa-2x" aria-hidden="true"></i></a>
                     </div>
                     <button type="button" class="close" data-dismiss="modal"
                         aria-label="Close">
