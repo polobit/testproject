@@ -759,7 +759,7 @@ public class SendgridInboundParser extends HttpServlet
 				
 				if( index == -1 )	continue;
 				
-				map.put(header.substring(0, index).trim(), header.substring(index).trim());
+				map.put(header.substring(0, index).trim(), header.substring(index+1).trim());
 			}
 			
 		} catch (JSONException e) {
