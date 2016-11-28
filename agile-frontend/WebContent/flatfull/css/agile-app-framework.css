@@ -10285,6 +10285,9 @@ left:0;
 .app-aside-folded:not(.app-aside-dock) .navi > ul > li#web-rules-menu a span,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#planView a span{
 	padding-top:10%;
 }
+.app-aside-folded:not(.app-aside-dock) .navi > ul > li#web-rules-menu a span.navbar_due_tasks,.app-aside-folded:not(.app-aside-dock) .navi > ul > li#planView a span{
+	padding-top:0%;
+}
 
 /* ending css transition for aside menu hover effect*/
 }

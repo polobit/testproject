@@ -4955,4 +4955,10 @@ ul#recent-menu-model-list li:nth-child(even)
 .bg-white .agile-menuactive>a
 {
   color: #363f44!important;
+   background-color: #f6f8f8;
+}
+.bg-dark .agile-menuactive>a
+{
+  color: #fff;
+  background-color: #2e3344;
 }

@@ -487,7 +487,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   {
     out.print("hide adminPanel");
   }
-  %>">
+  %>" style="z-index:3;">
           <div class="">
         <div class="navi-wrap">
   
@@ -506,7 +506,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           </a>
     <ul class="nav nav-sub dk" style="display:block;" >
       <li id="home_dashboard" class="SalesDashboard-home">
-        <a  href="#navigate-dashboard/SalesDashboard" class="menu-service-select" >
+        <a  href="#navigate-dashboard/SalesDashboard">
           <i class="icon icon-home"></i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
@@ -533,7 +533,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
             }
         %>
             <li id="companiesmenu">
-              <a  href="#companies">
+              <a  href="#companies" style="margin-left:2px;">
                 <i class="icon icon-building"></i>
                 <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
               </a>
@@ -717,7 +717,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>
   <li id="landing-pages-menu">
-    <a class="agile-menu-dropdown-aside" href="#landing-pages">
+    <a class="agile-menu-dropdown-aside" href="#landing-pages" style="margin-left:2px;"> 
       <i class="fa fa-file-code-o"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
     </a>

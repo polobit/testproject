@@ -19,8 +19,8 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"dashboard" : "dashboard",
 
-		"navigate-dashboard" : "navigateDashboard", 
-		"navigate-dashboard/:id" : "navigateDashboard",
+		"navigate-dashboard/:id" : "navigateDashboard", 
+		
 		// "dashboard-test": "dashboard",
 
 		/* Contacts */
@@ -91,6 +91,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// Call dashboard route
 		if(id)
 		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+		
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -107,9 +108,20 @@ var ContactsRouter = Backbone.Router.extend({
             });
             return;
 		}
-
-		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		var role = CURRENT_DOMAIN_USER.role;
+		//var dashboard_name = menuServiceDashboard(role);
 		
+		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(isNaN(dashboard_name)){
+			dashboard_name = menuServiceDashboard(role);	
+		}
+		else{
+				dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		}
+
+		
+
+
 		if(!dashboard_name){
 			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
 			if(selected_id == "Dashboard")
@@ -126,7 +138,8 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-
+		$(".nav.nav-sub li").removeClass("agile-menuactive")
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -177,10 +190,9 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
+		//$("#home_dashboard").addClass("active");
 		
-		$("."+dashboard_name+"-home").addClass("agile-menuactive")
-
-	},
+		},
 	
 	/**
 	 * Fetches all the contacts (persons) and shows as list, if tag_id
@@ -1005,9 +1017,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
              
              // Gets the domain name from the contacts of the custom fields.
                var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
+               var email;
                if(contactId == currentContactJson.id){
 					var properties = currentContactJson.properties;
-					var email;
+					
 					$.each(properties,function(id, obj){
 						if(obj.name == "email"){
 							email = obj.value;
@@ -1015,6 +1028,15 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 						}
 					});
 			   }
+
+			   if(App_Companies.companyDetailView){
+			      var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			      var tempId = id;
+			      id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+			        if(id && id == compEmailTemp){
+				        email = tempId;
+			        }
+		        }
               
               this.sendEmail(email, subject, body, cc, bcc, true,id_type);
               return;
@@ -1574,6 +1596,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 		
 		if(App_Companies.companyDetailView){
 			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
 			if(id && id == compEmailTemp){
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
@@ -1832,6 +1855,7 @@ function addTypeCustomData(contactId, el){
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 	
 }
+
 function confirmandVerifyEmail()
 {
 	var options = {};
@@ -1862,4 +1886,19 @@ function confirmandVerifyEmail()
 				}
 				rearrange_from_email_options($select, data);
 			});
+
+}
+
+function menuServiceDashboard(role){
+		switch(role){
+			case 'SALES':
+			    return "SalesDashboard"
+			    break;
+			case 'MARKETING':
+				return "MarketingDashboard";
+				break;
+			case 'SERVICE' :
+				return "Dashboard";
+				break;
+		}
 }
