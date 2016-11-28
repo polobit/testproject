@@ -53,22 +53,28 @@ $(function(){
 	$('body').off('click', '.noty_twilio_phone');
     $('body').on('click', '.noty_twilio_phone', function(e){
 		e.preventDefault();
-		$.ajax({
-		  method: "GET",
-		  url: "/core/api/widgets/twilio/getTwilioUsers",
-		   success: function(data) {
-			   	var phoneNumberHtml = "<option value=''>Select Number to Transfer</option></ul>";
-				var optionHtml = "";
-				$.each(data, function(i, item){
-					optionHtml = '<option data="' + item.twillioNumber + '" value="' + item.twillioNumber + '">' + item.username +' ('+item.twillioNumber + ')</option>';
-					phoneNumberHtml = phoneNumberHtml + optionHtml;
-				});
-				if(data.length > 0){
-					$("#calltransferdiv").show();
-					$(".calltransferoptions").html(phoneNumberHtml);
-				}
-		   }
-		});
+		if(!$("#calltransferdiv").is(":visible")){
+			$.ajax({
+			  method: "GET",
+			  url: "/core/api/widgets/twilio/getTwilioUsers",
+			   success: function(data) {
+				   	var phoneNumberHtml = "<option value=''>Select Number to Transfer</option></ul>";
+					var optionHtml = "";
+					$.each(data, function(i, item){
+						optionHtml = '<option data="' + item.twillioNumber + '" value="' + item.twillioNumber + '">' + item.username +' ('+item.twillioNumber + ')</option>';
+						phoneNumberHtml = phoneNumberHtml + optionHtml;
+					});
+					if(data.length > 0){
+						$("#calltransferdiv").show();
+						$(".calltransferoptions").html(phoneNumberHtml);
+						//$(".voice-buttons").css({"height":"100px;"});
+					}
+			   }
+			});
+		}else{
+			$("#calltransferdiv").hide();
+			$(".voice-buttons").css({"height":"45px;"});
+		}
 	});
 	
 

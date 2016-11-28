@@ -3,7 +3,7 @@
 <div>
 	<div class="text-xs" style="padding: 0px;">
 
-		<div class="col-lg-12  drag-pop-div" style="padding:0px;width: 350px;background: white;"> 
+		<div class="col-lg-12  drag-pop-div" style="padding:0px;width: 350px;background: white;height:198px;"> 
 
 			<div class="panel panel-default" style="border-bottom: none;margin-bottom: 0px;">
 
@@ -49,15 +49,16 @@
 					</div>
 				</div>
 				<div class="clearfix"></div>
-				<div class="col-lg-12" id="calltransferdiv" style="display:none;padding: 5px;">
+				<div class="col-lg-12" id="calltransferdiv" style="display:none;padding: 5px;border-bottom: solid 1px #d6e6f4;">
 					<div class="col-lg-6" style = "padding: 0px;">
-					<select name="account" id="calltransferoptions" class="calltransferoptions form-control m-b pull-left"></select></div>
+					<select name="account" id="calltransferoptions" class="calltransferoptions form-control pull-left" style="margin-bottom: 3px;"></select></div>
 					<div class="col-lg-6" style = "padding: 0px;"><a href="#" class="noty_twilio_transefer btn btn-sm btn-primary pull-right">Transfer</a></div>
 				</div>
 				{{#if_equals msg.buttons.length "0"}}
 				
 				{{else}}
-					<div class="panel-body noty_buttons" id="panel-body1" style="height: auto;padding: 5px;">
+					<div class="clearfix"></div>
+					<div class="panel-body noty_buttons voice-buttons" id="panel-body1" style="height: 45px;padding: 5px;">
 						
 						<div class="col-lg-5" id="call-noty-l1" class = "call-voicemail" style = "padding: 0px;margin-top: 5px;">
 						</div>
