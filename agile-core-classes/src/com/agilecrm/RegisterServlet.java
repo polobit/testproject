@@ -622,7 +622,7 @@ public class RegisterServlet extends HttpServlet
 	domainUser.setInfo(DomainUser.COUNTRY, request.getHeader("X-AppEngine-Country"));
 	domainUser.setInfo(DomainUser.CITY, request.getHeader("X-AppEngine-City"));
 	domainUser.setInfo(DomainUser.LAT_LONG, request.getHeader("X-AppEngine-CityLatLong"));
-	
+	domainUser.pic = "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/48.png";
 	
 	// Set Role
 	domainUser.role = DomainUserUtil.getDomainUserRole(((String) request.getParameter(RegistrationGlobals.USER_ROLE)));
