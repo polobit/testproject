@@ -747,7 +747,7 @@ public class SendgridInboundParser extends HttpServlet
 			
 			if( StringUtils.isBlank(headerStr) )	return map;
 			
-			StringTokenizer headers = new StringTokenizer(headerStr, "\\n");
+			StringTokenizer headers = new StringTokenizer(headerStr, "\n");
 			String header;
 			int index;
 			
