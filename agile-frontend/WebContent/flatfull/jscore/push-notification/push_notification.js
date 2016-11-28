@@ -49,7 +49,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
          	  $('#prev-notification-icon').attr('src', $('#notification-icon').val());
 
          	  if($("#prev-notification-icon").attr("src")=="")
-         	  	 $('#prev-notification-icon').attr('src', 'https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png');
+         	  	 $('#prev-notification-icon').attr('src', 'http://agilecrm.s3.amazonaws.com/agile-crm-logo.png');
 				
 			},
       enablePushNotification: function(e)
@@ -113,7 +113,7 @@ function sendPushNotification(){
   var json = serializeForm("notificationForm");
 
   if(json.notificationIcon =="" || json.notificationIcon==undefined )
-     json.notificationIcon = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";
+     json.notificationIcon = "http://agilecrm.s3.amazonaws.com/agile-crm-logo.png";
   show_desktop_notification(json.notificationIcon, json.notificationTitle, json.notificationMessage, json.notificationLink);
   
 
