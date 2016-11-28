@@ -4939,57 +4939,79 @@ ul#recent-menu-model-list li:nth-child(even)
   padding-left: 135px;
 }
 #tag-a{
-  font-size: 25px;
+  /*font-size: 25px;*/
+  font-size: 20px;
   opacity: 0.75;
-  border-right:1px solid #dadada;
-  padding-right: 10px;
+  /*border-right:1px solid #dadada;
+  padding-right: 10px;*/
   float: left;
   line-height: 19px;
-  margin-top: 10px;
+ /* margin-top: 10px;*/
+  background-color: #fff;
+  padding: 5px 10px 7px 10px;
+  border-radius: 2px;
 }
 /*:target {
    padding-top: 150px;
 }*/
 #tag-b{
    float: left;
-    font-size: 25px;
-    padding-left: 9px;
+    /*font-size: 25px;*/
+    font-size: 20px;
+  /*  padding-left: 9px;
     border-left: 1px solid #fff;
     border-right: 1px solid #dadada;
-    padding-right: 9px;
+    padding-right: 9px;*/
     opacity: 0.75;
     line-height: 19px;
-     margin-top: 10px;
+    /* margin-top: 10px;*/
+    background-color: #fff;
+    padding: 5px 10px 7px 10px;
+    border-radius: 2px;
+    margin-left: 3px;
 }
 #tag-alpha{
     float: left;
-    border-right: 1px solid #dadada;
-    border-left: 1px solid #fff;
-    font-size: 25px;
-    padding-left: 9px;
-    padding-right: 9px;
+   /* border-right: 1px solid #dadada;
+    border-left: 1px solid #fff;*/
+    font-size: 20px;
+   /* padding-left: 9px;
+    padding-right: 9px;*/
     opacity: 0.75;
     line-height: 19px;
-     margin-top: 10px;
+   /*  margin-top: 10px;*/
+     background-color: #fff;
+    padding: 5px 10px 7px 10px;
+    border-radius: 2px;
+    margin-left: 3px;
 }
 #tag-alpha-z{
    float: left;
-    font-size: 25px;
-    border-left: 1px solid #fff;
+    font-size: 20px;
+  /*  border-left: 1px solid #fff;
     padding-left: 9px;
-    padding-right: 9px;
+    padding-right: 9px;*/
     opacity: 0.75;
     line-height: 19px;
-     margin-top: 10px;
+    /* margin-top: 10px;*/
+     background-color: #fff;
+    padding: 5px 10px 7px 10px;
+    border-radius: 2px;
+    margin-left: 3px;
 }
 .hightlight-select-anchor{
-  border-bottom: 2px solid #7266ba;
+    color: #f4f3f9 !important;
+    background-color: #7266ba !important;
 }
 .tagelement-center{
   margin:0px auto;
   padding-top: 15px;
   padding-bottom: 15px;
-  padding-left: 100px;
+  padding-left: 20px;
   padding-right: 100px;
   display: table;
+}
+.searchbychar:hover{
+    color: #f4f3f9 !important;
+    background-color: #7266ba !important;
 }
