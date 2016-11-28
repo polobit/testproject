@@ -3,6 +3,34 @@
 
     var appUI = require('./ui.js').appUI;
    
+    var customAgileEvents={
+
+        //craete thumbnail for vimeo
+        createVimeoThumbnail :function(id, element){
+
+            $.ajax({
+                url: 'https://vimeo.com/api/v2/video/' + id + '.json',
+                dataType: 'jsonp',
+                success: function(data) {
+                    //console.log("vimeo success");
+                    customAgileEvents.addThumbnail(data[0].thumbnail_large,element);
+                },
+                error: function(data) {
+                    console.log("vimeo error");
+                }
+            });
+        },
+        
+        //craete thumbnail for youtube
+        createYoutubeThumbnail :function (id,element) {
+            customAgileEvents.addThumbnail("http://i2.ytimg.com/vi/" + id + "/maxresdefault.jpg",element);       
+        },
+
+        addThumbnail :function(thumbnail,element){
+            $(element).siblings("IMG").attr("src",thumbnail);
+        }
+    };
+
     //tooltip for form and video
     $('.agile-tooltip').tooltip({
         container: 'body'
@@ -51,4 +79,6 @@
         $("#error-img-msg").next().css("margin-top","");
         $("#error-img-msg").hide();
     });
+     exports.customAgileEvents = customAgileEvents;
+
 }());

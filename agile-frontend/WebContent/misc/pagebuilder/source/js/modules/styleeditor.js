@@ -6,6 +6,7 @@
     var bConfig = require('./config.js');
     var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
+    var customAgileEvents = require('./pagebuilderEventlistner.js').customAgileEvents;
     
     var styleeditor = {
 
@@ -574,6 +575,9 @@
                     if (ytMatch && ytMatch[1].length === 11) {
                         var youtubeId = ytMatch[1];
                         $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
+                        customAgileEvents.createYoutubeThumbnail(youtubeId,$(styleeditor.activeElement.element));
+                            
+                    
                     }
                     else{
                         $('input#youtubeID').removeClass("margin-bottom-20");
@@ -588,6 +592,7 @@
                     if (vimMatch && vimMatch[3].length){
                         var vimeoId = vimMatch[3];
                         $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
+                        customAgileEvents.createVimeoThumbnail(vimeoId,$(styleeditor.activeElement.element));
                     }
                     else{
                         $('input#vimeoID').removeClass("margin-bottom-20");
