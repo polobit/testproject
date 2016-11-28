@@ -72,7 +72,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* SSO Login */
 	"sso-login" : "ssoLoginSettings",
 
-	"api-analytics" : "apiAnalyticsCode",
+	"api-analytics" : "apiAnalyticsCode","api-analytics/:id" : "apiAnalyticsCode",
 
 
 	},
