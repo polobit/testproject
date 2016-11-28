@@ -45,7 +45,7 @@
 								<tr>
 									<th data-resizable-column-id="form_title" class="text-ellipsis">Name</th>
 									<th data-resizable-column-id="title" class="text-ellipsis">Title</th>
-									<th data-resizable-column-id="last_modified" class="text-ellipsis">Modified Time</th>
+									<th data-resizable-column-id="last_modified" class="text-ellipsis"></th>
 								</tr>
 							</thead>
 						<tbody id="push-notification-model-list" class="agile-edit-row" route="push-notification-edit/"></tbody>
@@ -80,7 +80,14 @@
 			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
 				<small class="edit-hover text-muted">
 					<i class="fa fa-clock-o m-r-xs"></i>
+					{{#if updated_time}}
+					<span><em>{{agile_lng_translate 'campaigns' 'modified'}}</em>&nbsp;</span>
 					<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+
+					{{else}}
+					<span><em>{{agile_lng_translate 'campaigns' 'created'}}</em>&nbsp;</span>
+					<time class="form-modified-time" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+					{{/if}}
 				</small>
 			</span>
 	</td>
@@ -199,7 +206,7 @@
       <div class="overflow-hidden" style="margin: 16px; margin-left: 25px; margin-right: 25px; box-shadow: 1px 1px 20px 0px #afaaaa;">
                 <div class="notification-demo">
                     <div class="row" style="padding: 3px;">
-                       <div class="col-md-3 col-xs-3" style="width: 22%">
+                       <div class="col-md-3 col-xs-3" style="width: 20%">
                             <img id="prev-notification-icon" class="js-custom-notifications-image" src="http://agilecrm.s3.amazonaws.com/agile-crm-logo.png" alt="" style="width: 130%;">
                         </div>
                             <div class="col-md-9 col-xs-9" style="padding-left: 20px; letter-spacing:0.4px; ">
@@ -212,10 +219,10 @@
 								    color: gray;
 								    ">&times</span>
                                 <p style="margin-top:5px; font-size:17.2px; font-family: Ubuntu Mono, Arial, sans-serif;
-                                 color: #0e0e0e;" id = "prev-notification-title" class="h4">Push notification is live 1
+                                 color: #0e0e0e;" id = "prev-notification-title" class="h4">Push notification
                                 </p>
 
-                                <p style="line-height:1.2; font-family: Ubuntu Mono, Arial, sans-serif; margin-top:6px;color: #0e0e0e;" id="prev-notification-message" class="h5 p-b-sm">Engage with your customers on and off the webpage through push notifications. 
+                                <p style="line-height:1.2; font-family: Ubuntu Mono, Arial, sans-serif; margin-top:6px;color: #0e0e0e;" id="prev-notification-message" class="h5 p-b-sm">Engage with your customers on and off the web page through push notifications. 
                                 </p>
                                 <span style="float: right; margin-left: -22px; margin-top: -5px; font-size:17px">
                                   <i class="fa fa-cog" aria-hidden="true" style=" margin-right: -10px;"></i>

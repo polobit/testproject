@@ -25,7 +25,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 				$("#prev-notification-title").text($("#notification-title").val());
 
 				if($("#prev-notification-title").text()=="")
-					 $("#prev-notification-title").text("Push notification is live");
+					 $("#prev-notification-title").text("Push notification");
 			},
 			
 			notificationMessageAdd: function(e)
@@ -33,7 +33,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 				$("#prev-notification-message").text($("#notification-message").val());
 
 				if($("#prev-notification-message").text()=="")
-					 $("#prev-notification-message").text("Engage with your customers on and off the webpage through push notifications.");
+					 $("#prev-notification-message").text("Engage with your customers on and off the web page through push notifications.");
 			},
 
 			uploadNotificationIcon: function(e)

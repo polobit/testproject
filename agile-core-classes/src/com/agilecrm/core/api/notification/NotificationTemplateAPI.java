@@ -97,6 +97,7 @@ public class NotificationTemplateAPI
 		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry, Notification Template with the same name already exist.").build());
 		}
+		notificationTemplate.updated_time = System.currentTimeMillis() / 1000;
 		NotificationTemplate.dao.put(notificationTemplate);	   
 	   return notificationTemplate;
 	
