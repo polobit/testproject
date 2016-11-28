@@ -492,34 +492,34 @@
 </div>
 						
 					
-							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-right:20px; text-transform: capitalize;">
+							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="text-transform: capitalize;">
 
 								<div id="company-Input"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
-								<div class="text-ellipsis"id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
+								<div class="text-ellipsis p-l-md p-r-md"id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
 								<div class="clearfix"></div>
-								{{#if_propertyName "url"}}</br>
+								{{#if_propertyName "url"}}
 
-									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+									<div><a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a></div>
 
 								{{/if_propertyName}}
 								
 								<div class=" text-center m-b-xs text-muted  text-ellipsis" style="font-size:13px;">
 									{{#property_is_exists "website" properties}}
 									{{#multiple_Company_Property_Element "website" properties}} {{#each
-									this}} {{#if_equals subtype "TWITTER"}} <span class="m-r-xs"><a target="_blank"
+									this}} {{#if_equals subtype "TWITTER"}} <span class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank"
 										href="https://twitter.com/{{getTwitterHandleByURL value}}"
 										style="text-decoration: none" class="text-muted"> <i
 											class="{{get_social_icon "
 											TWITTER"}}" ></i>
 									</a>
 									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
-										style="margin-right: 5px"><a target="_blank"
+										style="{{#if_greater @index "1"}}margin-left: 5px{{/if_greater}}"><a target="_blank"
 										href="{{getSkypeURL value}}"
 										style="text-decoration: none" class="text-muted"> <i
 											class="{{get_social_icon "
 											SKYPE"}}"></i>
 									</a>
-									</span>{{else}} <span style="margin-right: 5px"> <a
+									</span>{{else}} <span style="{{#if_greater @index "1"}}margin-left: 5px{{/if_greater}}"> <a
 										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none" class="text-muted">
 											<i class="{{get_social_icon subtype}}"></i>
 									</a>
