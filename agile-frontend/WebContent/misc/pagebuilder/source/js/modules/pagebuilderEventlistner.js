@@ -9,8 +9,8 @@
     });
     $('input#youtubeID').focus(function(){
         $('input#youtubeID').addClass("margin-bottom-20");
-        $("#error-msg").next().css("margin-top","");
-        $("#error-msg").hide();
+        $("#err-youtube-msg").next().css("margin-top","");
+        $("#err-youtube-msg").hide();
     });
     $('input#vimeoID').focus(function(){
         $('input#vimeoID').addClass("margin-bottom-20");

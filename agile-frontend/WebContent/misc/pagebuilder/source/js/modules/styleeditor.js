@@ -584,11 +584,16 @@
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
                 }
+                else
+                    $(styleeditor.activeElement.element).prev().attr('data-video', "");
+
                  //image under video section
                     if($(styleeditor.activeElement.element).siblings("IMG")!==0){
                         var url=$('.imageFileTab').find('input#imageURL').val();
                         $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
                     }
+               
+
 
                 /* SANDBOX */
 
