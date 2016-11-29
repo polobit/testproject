@@ -297,7 +297,10 @@
 						<div>
 							<div style="display:inline;display:none;width: 85%;left: 8%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade alert widget-alert fade in p-xs m-b-xs pos-abs">
 								{{#isUserNotInIphone}}
-								{{agile_lng_translate 'widgets' 'requires-regular-or-pro-plan'}} <strong><a href="#subscribe-plan" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>.
+									{{agile_lng_translate 'widgets' 'requires-regular-or-pro-plan'}} 
+									<strong><a href="#subscribe-plan" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>.
+								{{else}}
+									You cannot add Please contact suport
 								{{/isUserNotInIphone}}
 							</div>
 						</div>
@@ -306,7 +309,10 @@
 						<div>
 							<div class="alert widget-alert fade in {{name}}-upgrade p-xs m-b-xs pos-abs" style="display:inline;display:none;width: 85%;left: 8%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;">
 								{{#isUserNotInIphone}}
-								{{agile_lng_translate 'contact-details' 'please'}} <strong><a href="#subscribe-plan" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-add-more-widgets'}}
+									{{agile_lng_translate 'contact-details' 'please'}} 
+									<strong><a href="#subscribe-plan" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-add-more-widgets'}}
+								{{else}}
+									You cannot add Please contact suport
 								{{/isUserNotInIphone}}
 							</div>
 						</div>

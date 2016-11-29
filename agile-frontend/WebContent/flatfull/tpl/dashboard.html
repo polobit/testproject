@@ -41,8 +41,7 @@
 </script>
 
 <script id="user-billing-template" type="text/html">
-{{#isUserNotInIphone}}
-<div class="m-b-sm p" style="background-color: #F8F8B9;">
+<div class="m-b-sm p hideInIphone" style="background-color: #F8F8B9;">
 {{#if_equals users_count "2"}}
 	<h3 class="text-lg">{{agile_lng_translate 'portlets' 'you-are-out-of-users'}}</h3>
 	<p class="p-t-sm">
@@ -60,7 +59,6 @@
 		<a class="text-u-l" href="#subscribe">{{agile_lng_translate 'portlets' 'please-upgrade-your-account'}}</a> {{agile_lng_translate 'portlets' 'to-create-more-users-it-takes-only-10-seconds'}}
 	</p>
 </div>
-{{/isUserNotInIphone}}
 </script>
 
 <script id="dashboard-account-info-template" type="text/html">

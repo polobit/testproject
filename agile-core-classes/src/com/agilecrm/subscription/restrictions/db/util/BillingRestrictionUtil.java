@@ -41,7 +41,7 @@ public class BillingRestrictionUtil {
 	public static enum ErrorMessages {
 		Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow(
 				"Campaigns limit reached"), REPORT(
-				"For reports in excess of 7 days, please <a href=\"#subscribe\">upgrade</a> to Regular or Enterprise plan."), NOT_DOWNGRADABLE(
+				"For reports in excess of 7 days<span class=\"hideInIphone\">, please <a href=\"#subscribe\">upgrade</a> to Regular or Enterprise plan</span>."), NOT_DOWNGRADABLE(
 				"Sorry, you cannot downgrade your plan. Please contact our <a class='text-info' href='https://our.agilecrm.com/calendar/Raja_Shekar,Natesh,Abhishek_Pandey' target='_blank'>Support</a> team."), Trigger(
 				"Triggers limit reached"), Reports(
 				"Email Reports limit reached");

@@ -321,6 +321,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
    if(MobileUADetector.isiPhone(request.getHeader("user-agent"))){
 %>
     a[href="#subscribe"] {display: none!important;}
+    .hideInIphone {display: none!important;}
 <%}%>
 </style>
 <!--  responsive table js -->
