@@ -744,8 +744,7 @@ public class RegisterServlet extends HttpServlet
     }
     
     public static void main(String[] args) {
-    	String email = "info@mpagenciadigital.com.br";
-    	String emailType = (email.split("@")[1]).split("\\.")[0];
-    	System.out.println(emailType);
+		String password = null;
+		System.out.println(StringUtils.isEmpty(password));
 	}
 }
