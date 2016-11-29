@@ -29,7 +29,10 @@
 <%@page import="java.util.Arrays"%>
 
 <%
-
+if(SubscriptionUtil.isSubscriptionDeleted()){
+	request.getRequestDispatcher("not_available.jsp").forward(request, response);
+	return;
+}
 // User Language 
 String _LANGUAGE = "en", _LANGUAGE_USER = "en";
 
@@ -161,11 +164,6 @@ if(scheduleid.contains(",")){
 		}
 
 		System.out.println("Domain user " + domainUser);
-		System.out.println("Fetching subscriptionFromCalendalModule");
-	   	if(SubscriptionUtil.isSubscriptionDeleted()){
-	   		request.getRequestDispatcher("not_available.jsp").forward(request, response);
-			return;
-	   	}
 		if (domainUser != null)
 		{
      	userAvailable = true;
