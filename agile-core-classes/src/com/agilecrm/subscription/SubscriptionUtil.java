@@ -339,8 +339,8 @@ public class SubscriptionUtil
     	subscription.setPendingEmailsCount(pendingEmailsCount);
     	subscription.save();
     	DomainUser user = DomainUserUtil.getCurrentDomainUser();
-    	String text = user.domain + " is trying to purchase more than 10000 emails so that we blocked this users email purchasing. You can release this domain from admin panel.";
-    	SendGrid.sendMail("venkat@agilecrm.com", user.domain, "mogulla@agilecrm.com,narmada@agilecrm.com", null, null, "Email Purchasing Blocked", null, null, text);
+    	String text = "Below are the details who subscribed or purchased emails:<br><br>Domain: "+user.domain+"<br>Username: "+user.email+"Emails type: EMAIL "+type.toString();
+    	SendGrid.sendMail(user.email, user.domain, "mogulla@agilecrm.com,narmada@agilecrm.com", null, null, "Email Subscription - Spam Checking", null, null, text);
     	return subscription;
     }
     

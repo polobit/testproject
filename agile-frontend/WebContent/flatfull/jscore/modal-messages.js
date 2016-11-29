@@ -296,9 +296,5 @@ var MODAL_MESSAGES = {
 	"delete_lead" : {
 		"title": "{{agile_lng_translate 'leads-view' 'delete-lead'}}",
 		"message" : GLOBAL_MODAL_MESSAGES.global_delete
-	},
-	"email-purchase-limit" : {
-		"title" : "Purchase Emails",
-		"message" : "Your payment process has completed but we will add emails in few minutes."
 	}
 };

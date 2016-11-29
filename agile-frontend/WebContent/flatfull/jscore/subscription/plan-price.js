@@ -853,6 +853,7 @@ $(function(){
 		if(!isValidForm($form))
 			return;
 		$(this).attr("disabled", "disabled").html("{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
+		var that = this;
 		var credits_count = $form.find("#email_credits_count").val();
 		$.ajax({url:'core/api/subscription/purchaseEmailCredits?quantity='+credits_count,
 			type:'POST',
@@ -863,11 +864,14 @@ $(function(){
 					document.location.reload();
 				}, 1000);				
 			},error: function(data){
-				$form.closest(".modal").modal("hide");
-				if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION")
-					showAlertModal("email-purchase-limit");
-				else
+				if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
+					$("#purchase-credits-info-modal .modal-body").html("Thanks for your payment.<br><br>We serious about spam and validate your account before you start using it. Please bare with us, our support team will validate your account and release your purchased email credits soon.<br><br>Feel free to contact our support for quick response.");
+					$(that).hide();
+				}
+				else{
+					$form.closest(".modal").modal("hide");
 					showNotyPopUp("warning", data.responseText, "top"); 
+				}
 			}
 		});
 	});
