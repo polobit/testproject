@@ -425,7 +425,7 @@ function isIE() {
           
           <% } %>
        
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed 
+<div id="wrap" class="app app-aside-folded-inactive app-aside-fixed app-header-fixed 
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
   out.print("app-aside-dock ");
