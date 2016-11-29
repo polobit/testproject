@@ -1,5 +1,6 @@
 package com.agilecrm.util.exceptions;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -29,7 +30,7 @@ public class AgileExceptionUtil {
 	static final String ERRORS_EMAIL_FROM = "noreply@agilecrm.com";
 	static final String ERRORS_EMAIL_FROM_NAME = "Application Error";
 
-	public static void handleException(Exception e, HttpServletRequest request) {
+	public static void handleException(Exception e, ServletRequest request) {
 		System.out.println("Handle Exceptions");
 
 		// Check to proceed with email
@@ -40,8 +41,9 @@ public class AgileExceptionUtil {
 			// Add email task to Queue
 			Queue queue = QueueFactory.getQueue(AgileQueues.AGILE_APP_ERRORS_QUEUE);
 			String exceptionMessage = e.getMessage();
-			if(request != null && request.getRequestURI() != null)
-				exceptionMessage += "("+request.getRequestURI()+")";
+			HttpServletRequest req = (HttpServletRequest) request;
+			if(request != null && req.getRequestURI() != null)
+				exceptionMessage += "("+req.getRequestURI()+")";
 			AgileExceptionEmail task = new AgileExceptionEmail(exceptionMessage, ExceptionUtils.getFullStackTrace(e),
 					getToEmail(e));
 			queue.add(TaskOptions.Builder.withPayload(task));

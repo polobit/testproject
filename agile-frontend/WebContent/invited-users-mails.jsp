@@ -444,10 +444,10 @@ var emailDomain = '<%=email_domain%>';
 		if(restricted == 'false'){
 			if(emailDomain != ''){
 			console.log($("#sales-form-group"));
-			/*$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
+			$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
 			$("#support-form-group").find('input').val("support@"+emailDomain+".com");
 			$("#marketing-form-group").find('input').val("info@"+emailDomain+".com");
-*/		}
+		}
 		}
 
 		$("#send-user-request").on("click",function(e){

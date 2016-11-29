@@ -234,7 +234,7 @@ $('#' + container_id).on('click', 'a.filter-multiple-add-lhs', function(e)
 	}
 	scramble_filter_input_names(htmlContent);
 	$(htmlContent).appendTo('#' + fieldName + '-lhs-filter-table');
-	$('#' + fieldName + '-lhs-filter-table').find("div.lhs-contact-filter-row:last").find('#RHS:visible').find(':not(input.date)').focus();
+	$('#' + fieldName + '-lhs-filter-table').find("div.lhs-contact-filter-row:last").find('#RHS:visible').find(':not(input.date,.filters-tags-typeahead)').focus();
 });
 
 $('#' + container_id).off('click', 'i.filter-tags-multiple-remove-lhs');
@@ -317,7 +317,7 @@ $('#' + container_id).on('click', '#lhs-filters-header', function(e)
 	e.preventDefault();
 	$(this).find('i').toggleClass('fa-plus-square-o').toggleClass('fa-minus-square-o');
 	$(this).next().toggleClass('hide');
-	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date)').focus();
+	$(this).next().find('.lhs-contact-filter-row:visible').find('#RHS').filter(visibleFilter).find(':not(input.date,.filters-tags-typeahead)').focus();
 });
 
 $('#' + container_id).off('change', '#lhs-contact-filter-form select[name="CONDITION"]');
@@ -344,7 +344,7 @@ $('#' + container_id).on('change', '#lhs-contact-filter-form select[name="CONDIT
 	}
 	$(this).parent().find('div.condition_container').addClass('hide');
 	$(this).parent().find('div.condition_container.' + selected).removeClass('hide');
-	$(this).parent().find('div.condition_container.' + selected).find('#RHS :not(input.date)').focus();
+	$(this).parent().find('div.condition_container.' + selected).find('#RHS :not(input.date,.filters-tags-typeahead)').focus();
 	var rhs = $(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().val();
 	if ($(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_contact') || 
 		$(this).parent().find('div.condition_container.' + selected).find('#RHS').children().first().hasClass('custom_company'))

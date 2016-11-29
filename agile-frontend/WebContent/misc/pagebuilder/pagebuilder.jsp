@@ -2474,7 +2474,7 @@ function showAgileCRMForm(formJson,formHolderId) {
                 var iframe_id=iframe.getAttribute("id");
                 var replace_form_class=$('#'+iframe_id).contents().find('.agile_crm_form_embed');
                 try{
-                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0)){
+                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0  && replace_form_class.length===0)){
                     if(window.current_agileform!=null){
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
