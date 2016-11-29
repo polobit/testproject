@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.exception.SearchQueryException;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
@@ -117,10 +118,17 @@ public class QueryDocument<T> implements QueryInterface
 				typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
 			}
 		}
-	
-		Collection<T> entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);		
+		
+		Collection<T> entities =  null ;
+		try
+		{
+			entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);		
+		}
+		catch(Exception e){
+			throw new SearchQueryException("Search input is not supported. Please try again.");
+		}
 		try{			
-			if(typeField != null){
+			if(typeField != null && entities != null){
 				String localKeyword = keyword.toLowerCase();			
 				
 				ArrayList<Object> mainList = new ArrayList<Object>();
