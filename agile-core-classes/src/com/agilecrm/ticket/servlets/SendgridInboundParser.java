@@ -329,6 +329,7 @@ public class SendgridInboundParser extends HttpServlet
 			if( headers.containsKey("In-Reply-To") )
 			{
 				String originalMessageID = headers.get("In-Reply-To");
+				String ref = headers.get("Message-ID");
 				
 				ticket = TicketsUtil.getTicketByEmailMessageID(originalMessageID);
 				
@@ -336,6 +337,7 @@ public class SendgridInboundParser extends HttpServlet
 				{
 					isNewTicket = false;
 					ticketID = ticket.id.toString();
+					if( StringUtils.isNotBlank(ref) )	ticket.addReference(ref);
 				}
 			}
 		}
