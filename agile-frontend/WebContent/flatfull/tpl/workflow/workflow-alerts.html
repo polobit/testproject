@@ -80,23 +80,25 @@
 			<h3 class="modal-title"><i class="icon-edit"></i> {{title}} </h3>
 		</div>
 		<div class="modal-body">
-			<span>
+			<span class="verification-msg">
 				{{agile_lng_translate 'Verify-email' 'encourage-msg'}}
 			</span>
 				<form id="verify-email-form">
 					<fieldset>            
                 		<div class="control-group form-group m-t">
-                    		<label class="control-label col-sm-3 m-t-xs text-right">
-	                    		<b>{{agile_lng_translate 'emails' 'from-email'}}</b> 
-	                    		<span class="field_req">*</span>
-                    		</label>
-		                	<div class="col-sm-7">
-		                    	<div class="control-group">
-		                        	<span class="controls">
-		                        		<input name="email" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'emails' 'enter-the-from-email-address'}}" value="{{email}}" autofocus>
-		                        	</span>
-		                    	</div>
-		                	</div>
+	                		<div class="email-verification-fields">
+	                    		<label class="control-label  col-sm-3 m-t-xs text-right">
+		                    		<b>{{agile_lng_translate 'emails' 'from-email'}}</b> 
+		                    		<span class="field_req">*</span>
+	                    		</label>
+			                	<div class="col-sm-7">
+			                    	<div class="control-group">
+			                        	<span class="controls">
+			                        		<input name="email" class="email form-control required" type="text" placeholder="{{agile_lng_translate 'emails' 'enter-the-from-email-address'}}" value="{{email}}" autofocus>
+			                        	</span>
+			                    	</div>
+			                	</div>
+			                </div>
 		                    <div class="row">
 								<span id="alert-msg"></span>
 	                    	</div>
@@ -107,7 +109,8 @@
 		<div class="modal-footer">
 			<span class="m-r-xs"></span>
  			<button type="button" class="btn btn-danger" data-dismiss="modal" id="verify-ignore" style="display:none;">{{agile_lng_translate 'contacts-view' 'ignore'}}</button>
-			<a href="#" class="btn btn-sm btn-primary" id="verify-email-send">{{agile_lng_translate 'campaigns' 'send-verification-email'}}</a>
+			<a href="#" class="btn btn-sm btn-primary" id="verify-email-send">
+			{{agile_lng_translate 'email' 'send-verification-email-text'}}</a>
 		</div>
 	</div>
 </div>
