@@ -442,6 +442,7 @@ function showDraggablePopup(param){
 	var popup = $(getTemplate("call-noty",param));
 	$("#draggable_noty .draggable_noty_info").html(popup);
 	$("#draggable_noty").css({'left':x,'top': y});
+	$(".icon-call-out").css({'font-size':'16px'});
 	$("#draggable_noty").show();
 	$("#draggable_noty").draggableTouch();
 	
