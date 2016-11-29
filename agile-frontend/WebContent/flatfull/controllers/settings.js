@@ -700,7 +700,13 @@ var SettingsRouter = Backbone.Router
 								{
 									agileTimeAgoWithLngConversion($("time.campaign-created-time", el));
 
-								} });
+								},
+                                appendItemCallback : function(el)
+					            {
+						               $("time.campaign-created-time", el).timeago();
+
+					             }
+								 });
 
 								that.emailTemplatesListView.collection.fetch();
 								$('#prefs-table-content').html(that.emailTemplatesListView.el);
