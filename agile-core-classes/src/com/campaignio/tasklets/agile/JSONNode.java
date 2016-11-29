@@ -11,6 +11,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -179,8 +180,8 @@ public class JSONNode extends TaskletAdapter
 		    }
 
 		    System.out.println(httpParams);
-
-		    String output;
+		    
+		    Map<String, Object> output = null;
 		    
 		    HashMap<String,String> hashmapKeyValues = new HashMap<String,String>();
 		    
@@ -214,18 +215,25 @@ public class JSONNode extends TaskletAdapter
 			logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
 		    }
 		    
-		    if(StringUtils.isNotEmpty(output)){
-				if(output.contains("responseCode") && output.contains("responseMessage")){
-					JSONObject response = new JSONObject(output);
-					String exceptionMessage = "while processing request </br>Response Code : "
-							+ response.getInt("responseCode")
-							+ "</br>Response Message : "
-							+ response.getString("responseMessage");
-					throw new Exception(exceptionMessage);
-					}
-			}	
+		    String finalOutput = "";
+		    
+		    if(output != null){
+			    	Response response = (Response)output.get("response");
+			    	System.out.println(response.getMessage());
+			    	if(response.getCode() >= 400){
+			    		String exceptionMessage = "while processing request </br>Response Code: "
+								+ response.getCode()
+								+ "</br>Response Message: "
+								+ response.getMessage();
+						throw new Exception(exceptionMessage);
+			    	}
+			    	else
+			    	{
+			    		finalOutput = response.getMessage();
+			    	}
+				}
 
-		    JSONObject returnJSON = new JSONObject(output);
+		    JSONObject returnJSON = new JSONObject(finalOutput);
 
 		    // Iterate through all keys and add to data
 		    Iterator it = returnJSON.keys();
@@ -268,7 +276,7 @@ public class JSONNode extends TaskletAdapter
     * @return response of the remote object
     * @throws Exception
     */
-   private static String accessURLWithHeaderUsingPost(String postURL, String data,HashMap<String,String> hashmapKeyValues) throws Exception
+   private static Map<String, Object> accessURLWithHeaderUsingPost(String postURL, String data,HashMap<String,String> hashmapKeyValues) throws Exception
    {
 	// Send data
 	URL url = new URL(postURL);
@@ -323,18 +331,8 @@ public class JSONNode extends TaskletAdapter
 	}
 
 	wr.close();
-	reader.close();
-	
-	if(((HttpURLConnection)conn).getResponseCode() >= 400){
-    	JSONObject responseMessageCode = new JSONObject();	 
-    	String responseMessage = new JSONObject(output).getString("message");
-		System.out.println("Response Code : " + ((HttpURLConnection)conn).getResponseCode());
-		System.out.println("Response Message : " + responseMessage);
-	    responseMessageCode.put("responseCode", ((HttpURLConnection)conn).getResponseCode());
-	    responseMessageCode.put("responseMessage", responseMessage);		
-		return responseMessageCode.toString();
-    }
-	return output;
+	reader.close();	
+	return responseMap(((HttpURLConnection)conn).getResponseCode(), output);
    }
    
    /**
@@ -345,7 +343,7 @@ public class JSONNode extends TaskletAdapter
     * @param hashmapKeyValues
     * @return response of the remote object
     */
-   public static String accessURLWithHeaders(String url,HashMap<String,String> hashmapKeyValues)
+   public static Map<String, Object> accessURLWithHeaders(String url,HashMap<String,String> hashmapKeyValues)
    {
 	try
 	{
@@ -376,18 +374,10 @@ public class JSONNode extends TaskletAdapter
 	    {
 		output += inputLine;
 	    }
-	    reader.close();	    
+	    reader.close();	
+	    return responseMap(((HttpURLConnection)conn).getResponseCode(), output);
 	    
-	    if(((HttpURLConnection)conn).getResponseCode() >= 400){
-	    	JSONObject responseMessageCode = new JSONObject();	 
-	    	String responseMessage = new JSONObject(output).getString("message");
-			System.out.println("Response Code : " + ((HttpURLConnection)conn).getResponseCode());
-			System.out.println("Response Message : " + responseMessage);
-		    responseMessageCode.put("responseCode", ((HttpURLConnection)conn).getResponseCode());
-		    responseMessageCode.put("responseMessage", responseMessage);	   
-			return responseMessageCode.toString();
-	    }	    
-	    return output;
+	    
 	}
 	catch (Exception e)
 	{
@@ -397,6 +387,43 @@ public class JSONNode extends TaskletAdapter
 	return null;
    }
    
+   private static Map<String, Object> responseMap(int responseCode, String responseMessage) throws JSONException
+   {
+	   Map<String, Object> response = new HashMap<String, Object>();   
+	   
+	   Response responseInner = new Response();
+	   responseInner.setCode(responseCode);
+	   JSONObject jsonObject = new JSONObject(responseMessage);
+	   if(jsonObject.has("message")){
+		   responseInner.setMessage(jsonObject.getString("message"));
+	   }else	   
+		   responseInner.setMessage(responseMessage);
+	   
+	   response.put("response", responseInner);
+	   
+	   return response;
+   }
+}
+
+class Response
+{
+	   int code;
+	   String message;
+	   
+	   public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	   
+	   
 }
 
 
