@@ -24,7 +24,7 @@
  	"role-helptext": "{{agile_lng_translate 'register' 'role-helptext'}}",
  	"role-and-company": "{{agile_lng_translate 'register' 'role-and-company'}}",
  	"ceo": "{{agile_lng_translate 'register' 'ceo'}}",
- 	
+ 	"domain-name-helpmsg" : "{{agile_lng_translate 'register' 'domain-name-helpmsg'}}"
  	"vp": "{{agile_lng_translate 'register' 'vp'}}",
  	"vp-sales": "{{agile_lng_translate 'register' 'vp-sales'}}",
  	"vp-marketing": "{{agile_lng_translate 'register' 'vp-marketing'}}",

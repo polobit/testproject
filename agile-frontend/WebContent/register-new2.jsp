@@ -267,7 +267,7 @@ if(isSafari && isWin)
 </div>
 <div class="form-group" style="margin-bottom:25px;">
 <div class="col-sm-offset-3 col-sm-8 m-t-xs">	
-<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain-name-helptext")%>
+<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain-name-helpmsg")%>
 	</div>
 </div>
 <div class="line line-dashed b-b line-lg"></div>
