@@ -219,6 +219,7 @@ public class JSONNode extends TaskletAdapter
 		    
 		    if(output != null){
 			    	Response response = (Response)output.get("response");
+			    	System.out.println("Response : " + response);
 			    	if(response.getCode() >= 400){
 			    		String exceptionMessage = "while processing request </br>Response Code: "
 								+ response.getCode()
@@ -385,17 +386,26 @@ public class JSONNode extends TaskletAdapter
 	return null;
    }
    
-   private static Map<String, Object> responseMap(int responseCode, String responseMessage) throws JSONException
+   private static Map<String, Object> responseMap(int responseCode, String responseMessage)
    {
 	   Map<String, Object> response = new HashMap<String, Object>();   
 	   
 	   Response responseInner = new Response();
 	   responseInner.setCode(responseCode);
-	   JSONObject jsonObject = new JSONObject(responseMessage);
-	   if(jsonObject.has("message")){
-		   responseInner.setMessage(jsonObject.getString("message"));
-	   }else	   
+	   
+	   try{
+		   JSONObject jsonObject = new JSONObject(responseMessage);
+		   
+		   if(jsonObject.has("message"))
+			   responseInner.setMessage(jsonObject.getString("message"));
+		   else	   
+			   responseInner.setMessage(responseMessage);
+		   
+	   }catch (Exception e) {
+		   e.printStackTrace();
+		   System.err.println(e.getMessage());
 		   responseInner.setMessage(responseMessage);
+	   }
 	   
 	   response.put("response", responseInner);
 	   
@@ -422,7 +432,13 @@ class Response
 
 	public void setMessage(String message) {
 		this.message = message;
-	}	   
+	}
+
+	@Override
+	public String toString() {
+		return "Response [code=" + code + ", message=" + message + "]";
+	}
+	
 }
 
 /**
