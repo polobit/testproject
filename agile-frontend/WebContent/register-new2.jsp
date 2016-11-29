@@ -275,7 +275,7 @@ if(isSafari && isWin)
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></label>
 <div class="col-sm-6">
 	<select class="form-control required" required  name="plan_type" data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
-											<option value="" select="selected" disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-plan")%></option>
+											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-plan")%></option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>

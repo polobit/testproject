@@ -235,8 +235,9 @@ a{
 		<div class="row"></div><br/>
 		<div class="row" >
 			<div class="align-center m-b-xs"style="font-size:18px;"> Congratulations, you have signed up successfully!</div>
-			<div class="align-center"style="margin-bottom:15px;font-size: 16px;">
-			  Invite your colleagues and enjoy Agile CRM's extensive features.
+			<div class="align-center m-b-xs text-md">
+			  Invite your colleagues for successful CRM implementation.
+
 			</div>
 		<div class="col-sm-5" style="float: none !important;margin: 0 auto;">
 			<div class='well'>
@@ -277,67 +278,83 @@ a{
 					<a id="another-user-add-sales" class=" add-user text-info text-11 text-right block m-t-n-sm " style="padding-right: 38px;"><img src='flatfull/img/addInviteUser.svg' style="height:12px;margin-top:-4px;"> <span>Add User</span>
 	            	</a>
 	            	</div>
-
-	            	<div id="support_team">
-
-	            	<div class="control-group align-center m-b-xs">
-					<label class="control-label " style="font-weight: 600;color: #736f6f;">Support</label>
-					<div class="control-group"> 
-									      
-					</div>
-					</div>
-
-					
-					<div class="control-group form-group users">
-					<label class="control-label col-sm-3">User <span class="number">1</span></label>
-					<div class="control-group col-sm-8 removeUser pos-rlt" id="support-form-group"> 
-									         <span class="controls"> <input name="temp3" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  type="email" class=" form-control input-style "   placeholder="Email Address"> </span> 
-									         <a class="remove-user pos-abs hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
+					<div id="marketing_team">
+	            		<div class="control-group align-center m-b-xs">
+							<label class="control-label" style="font-weight: 600;color: #736f6f;">Marketing
+							</label>
+							<div class="control-group "> 
+							</div>
+						</div>
+						<div class="control-group form-group users">
+							<label class="control-label col-sm-3">User 
+								<span class="number">1</span>
+							</label>
+							<div class="control-group col-sm-8 removeUser pos-rlt" id="marketing-form-group"> 
+								<span class="controls"> 
+									<input name="temp5" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"   placeholder="Email Address"> 
+								</span> 
+								<a class="remove-user pos-abs hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;
+								</a>
 									        
+							</div>
+						</div>
+						<div class="control-group form-group users">
+							<label class="control-label col-sm-3">User 
+								<span class="number">2</span>
+							</label>
+							<div class="control-group col-sm-8 removeUser pos-rlt"> 
+								<span class="controls"> 
+									<input name="temp6" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> 
+								</span>
+								<a class="remove-user pos-abs"  title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;
+								</a>
+									        
+							</div>
+						</div>
+						<div id="newuser_marketing">
+						</div>
+						<a id="another-user-add-marketing" class="add-user  text-info text-11 text-right block m-t-n-sm " style="padding-right: 38px;"><img style="height:12px;margin-top:-4px;" src='flatfull/img/addInviteUser.svg' > <span>Add User</span>
+	            		</a>
 					</div>
-					</div>
-					<div class="control-group form-group users ">
-					<label class="control-label col-sm-3">User <span class="number">2</span></label>
-					<div class="control-group col-sm-8 removeUser pos-rlt"> 
-									         <span class="controls"> <input name="temp4"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span>
-									           <a class="remove-user pos-abs"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
+					<div id="support_team">
+						<div class="control-group align-center m-b-xs">
+							<label class="control-label " style="font-weight: 600;color: #736f6f;">Support
+							</label>
+							<div class="control-group"> 
+							</div>
+						</div>
+						<div class="control-group form-group users">
+							<label class="control-label col-sm-3">User 
+								<span class="number">1</span>
+							</label>
+							<div class="control-group col-sm-8 removeUser pos-rlt" id="support-form-group"> 
+								<span class="controls"> 
+									<input name="temp3" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  type="email" class=" form-control input-style "   placeholder="Email Address"> 
+								</span> 
+								<a class="remove-user pos-abs hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;
+								</a>
+									        
+							</div>
+						</div>
+						<div class="control-group form-group users ">
+							<label class="control-label col-sm-3">User 
+								<span class="number">2</span>
+							</label>
+							<div class="control-group col-sm-8 removeUser pos-rlt"> 
+								<span class="controls"> 
+									<input name="temp4"  type="email" class=" form-control input-style " pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> 
+								</span>
+								<a class="remove-user pos-abs"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;
+								</a>
 									         
-					</div>
-					</div>
-					<div id="newuser_support"></div>
-					<a id="another-user-add-support" class="add-user text-info text-11 text-right block m-t-n-sm" style="padding-right: 38px;"><img style="height:12px;margin-top:-4px;" src='flatfull/img/addInviteUser.svg'> <span>Add User</span>
-	            	</a>
+							</div>
+						</div>
+						<div id="newuser_support">
+						</div>
+						<a id="another-user-add-support" class="add-user text-info text-11 text-right block m-t-n-sm" style="padding-right: 38px;"><img style="height:12px;margin-top:-4px;" src='flatfull/img/addInviteUser.svg'> 
+							<span>Add User</span>
+            			</a>
 	            	</div>
-	            	<div id="marketing_team">
-	            	<div class="control-group align-center m-b-xs">
-					<label class="control-label" style="font-weight: 600;color: #736f6f;">Marketing</label>
-					<div class="control-group "> 
-									      
-					</div>
-					</div>
-					
-					<div class="control-group form-group users">
-					<label class="control-label col-sm-3">User <span class="number">1</span></label>
-					<div class="control-group col-sm-8 removeUser pos-rlt" id="marketing-form-group"> 
-									         <span class="controls"> <input name="temp5" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"   placeholder="Email Address"> </span> 
-									         <a class="remove-user pos-abs hide"   title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
-									        
-					</div>
-					</div>
-					<div class="control-group form-group users">
-					<label class="control-label col-sm-3">User <span class="number">2</span></label>
-					<div class="control-group col-sm-8 removeUser pos-rlt"> 
-									         <span class="controls"> <input name="temp6" type="email" class=" form-control input-style" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"  placeholder="Email Address"> </span>
-									           <a class="remove-user pos-abs"  title="Close" data-placement="bottom" style="position:absolute;top:6px;right:0px">&times;</a>
-									        
-					</div>
-					</div>
-
-					<div id="newuser_marketing">
-					</div>
-					<a id="another-user-add-marketing" class="add-user  text-info text-11 text-right block m-t-n-sm " style="padding-right: 38px;"><img style="height:12px;margin-top:-4px;" src='flatfull/img/addInviteUser.svg' > <span>Add User</span>
-	            	</a>
-					</div>
 					<div class="line line-lg " style="margin-top: 11px;border-bottom: 1px solid #E2DCDC"></div>
 					
 					 <button id="send-user-request-enter" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs hide" tabindex="2" type="submit">Invite Users</button> 
@@ -345,7 +362,7 @@ a{
 
 					</form>
 
-					 <div style="margin-top:8px;display:table;width:75%;margin:15px auto;" class="m-b-none">
+					 <div style="display:table;width:75%;margin:15px auto;" class="m-b-none">
 		              <button id="send-user-request" style="width:40%;padding: 10px 0px 10px 0px;" class="btn btn-lg btn-primary pull-right text-xs" tabindex="2" type="submit">Invite Users</button> 
 		              <a href="<%=redirectHomeURL%>"  tabindex="1" style="padding: 10px 0px 10px 0px;" class="inline-block  redirect-to-panel text-info text-11 pull-right  m-r" id="skip" onclick="return false;">Skip</a>
 
@@ -427,10 +444,10 @@ var emailDomain = '<%=email_domain%>';
 		if(restricted == 'false'){
 			if(emailDomain != ''){
 			console.log($("#sales-form-group"));
-			$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
+			/*$("#sales-form-group").find('input').val("sales@"+emailDomain+".com");
 			$("#support-form-group").find('input').val("support@"+emailDomain+".com");
 			$("#marketing-form-group").find('input').val("info@"+emailDomain+".com");
-		}
+*/		}
 		}
 
 		$("#send-user-request").on("click",function(e){
