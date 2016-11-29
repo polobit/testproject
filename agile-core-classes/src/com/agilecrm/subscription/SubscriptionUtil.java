@@ -306,4 +306,26 @@ public class SubscriptionUtil
 
 	return plan;
     }
+    
+    public static boolean isSubscriptionDeleted(){
+    	Subscription subscription = getSubscription();
+    	System.out.println("subscription:::"+subscription);
+    	if(subscription.status != null && subscription.status.equals(BillingStatus.SUBSCRIPTION_DELETED)){
+    		System.out.println("subscriptionstatus is SUBSCRIPTION_DELETED");
+			return true;
+    	}
+    	return false;
+    }
+    
+    public static boolean isSubscriptionDeleted(String namespace){
+    	if(namespace == null)
+    		return true;
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    		NamespaceManager.set(namespace);
+    		return isSubscriptionDeleted();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
 }

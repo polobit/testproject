@@ -704,14 +704,7 @@ click: function(score, evt)
 
 function popoverEnter(that,left,top,listView,campaigns_view)
 {
-
-
- 
-     
-
-			timer=setTimeout(function() {
-						 	
-						  	
+		timer=setTimeout(function() {	  	
 				if (!insidePopover)	{
 		
 					 $('.popover').remove();	

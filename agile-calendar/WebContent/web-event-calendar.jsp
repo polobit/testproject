@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -28,7 +29,10 @@
 <%@page import="java.util.Arrays"%>
 
 <%
-
+if(SubscriptionUtil.isSubscriptionDeleted()){
+	request.getRequestDispatcher("not_available.jsp").forward(request, response);
+	return;
+}
 // User Language 
 String _LANGUAGE = "en", _LANGUAGE_USER = "en";
 
@@ -160,7 +164,6 @@ if(scheduleid.contains(",")){
 		}
 
 		System.out.println("Domain user " + domainUser);
-
 		if (domainUser != null)
 		{
      	userAvailable = true;

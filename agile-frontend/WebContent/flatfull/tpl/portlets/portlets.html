@@ -1395,13 +1395,30 @@
 				<!--<a href="#" id="tutotial_modal" class="btn btn-default btn-sm  pos-rlt  dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help">
 					<i class="fa fa-graduation-cap"></i>
 				</a>-->
+			{{#is_mobile}}
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" style="display:none; line-height: 1px;" 
+					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
+				</a>
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
+				</a>
+			{{else}}
+				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
+				</a>
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip"  style="display:none; line-height: 1px;float:left;margin-right:3px" 
+					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
+				</a>
+			{{/is_mobile}}	
+				<!-- <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
 				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" {{#is_mobile}} style="display:none; line-height: 1px;" {{else}} style="display:none; line-height: 1px;float:left;margin-right:3px" {{/is_mobile}}
 					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
 					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
-				</a>
+				</a> -->
 				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> Add/Edit Dashboard
 				</a> -->

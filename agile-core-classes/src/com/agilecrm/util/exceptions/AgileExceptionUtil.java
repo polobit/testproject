@@ -1,5 +1,7 @@
 package com.agilecrm.util.exceptions;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.AgileQueues;
@@ -14,7 +16,7 @@ import com.thirdparty.sendgrid.SendGrid;
 public class AgileExceptionUtil {
 
 	// To Emails
-	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@invox.com,govind@invox.com";
+	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@invox.com,govind@invox.com,venkat@agilecrm.com";
 	static final String SALES_TEAM_ERRORS_EMAILS = "subrahmanyam@invox.com,sankar@agilecrm.com";
 	static final String MA_TEAM_ERRORS_EMAILS = "naresh@agilecrm.com,ramesh@agilecrm.com";
 	static final String TICKET_TEAM_ERRORS_EMAILS = "rohit@agilecrm.com,sreedevi@agilecrm.com";
@@ -27,7 +29,7 @@ public class AgileExceptionUtil {
 	static final String ERRORS_EMAIL_FROM = "noreply@agilecrm.com";
 	static final String ERRORS_EMAIL_FROM_NAME = "Application Error";
 
-	public static void handleException(Exception e) {
+	public static void handleException(Exception e, HttpServletRequest request) {
 		System.out.println("Handle Exceptions");
 
 		// Check to proceed with email
@@ -37,7 +39,10 @@ public class AgileExceptionUtil {
 		try {
 			// Add email task to Queue
 			Queue queue = QueueFactory.getQueue(AgileQueues.AGILE_APP_ERRORS_QUEUE);
-			AgileExceptionEmail task = new AgileExceptionEmail(e.getMessage(), ExceptionUtils.getFullStackTrace(e),
+			String exceptionMessage = e.getMessage();
+			if(request != null && request.getRequestURI() != null)
+				exceptionMessage += "("+request.getRequestURI()+")";
+			AgileExceptionEmail task = new AgileExceptionEmail(exceptionMessage, ExceptionUtils.getFullStackTrace(e),
 					getToEmail(e));
 			queue.add(TaskOptions.Builder.withPayload(task));
 		} catch (Exception e2) {
@@ -45,7 +50,7 @@ public class AgileExceptionUtil {
 	}
 
 	static boolean proceedToEmail(Exception e) {
-		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()) || e instanceof PlanRestrictedException)
+		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()))
 			return false;
 
 		return true;

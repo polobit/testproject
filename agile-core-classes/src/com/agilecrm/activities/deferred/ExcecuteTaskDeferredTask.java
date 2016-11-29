@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.activities.TaskReminder;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
@@ -57,6 +58,8 @@ public class ExcecuteTaskDeferredTask implements DeferredTask
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(domain);
 	System.out.println("Domain_taskreminder"+domain);
+	if(SubscriptionUtil.isSubscriptionDeleted())
+		return;
 	List<DomainUser> domainUsers = DomainUserUtil.getUsers(domain);
 	System.out.println("Domain_taskreminder_users"+domainUsers);
 	if (domainUsers == null)

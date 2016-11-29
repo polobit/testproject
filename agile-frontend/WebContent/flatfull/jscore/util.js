@@ -878,6 +878,17 @@ function getMaximumPageSize(){
 	return CURRENT_USER_PREFS.page_size;
 }
 
+function isDevelomentMode(){
+	var url = window.location.href;
+	if(!url)
+		return true;
+
+	if(url.indexOf("localhost:88") > -1 || url.indexOf("agilecrmbeta") > -1)
+		return true;
+	
+	return false;
+}
+
 function serializeForms(el){
 	var isValid, json;
 	// Initialize variable json as a map
@@ -925,4 +936,10 @@ function serializeForms(el){
 		json = serializeForm($("form", el).attr("id"));
 	}
 	return json;
+}
+
+function isSubscriptionStatusDeleted(){
+	if(USER_BILLING_PREFS.status && (USER_BILLING_PREFS.status == "SUBSCRIPTION_DELETED" || USER_BILLING_PREFS.status == "SUB&#x73;criptION_DELETED"))
+		return true;
+	return false;
 }

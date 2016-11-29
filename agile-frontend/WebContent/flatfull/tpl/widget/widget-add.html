@@ -348,16 +348,16 @@
        {{#is_mobile}}
 
        <li><a href="#call-tab" data-toggle="tab" class="b-l-none"><i class="icon icon-call-in"></i></a></li>
+       	<li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
        	 <li><a href="#support-tab" data-toggle="tab"><i class="icon icon-support"></i></a></li>
        	 <li><a href="#billing-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a></li>
-       	 <li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
        	 <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i></a></li>
          <li><a href="#custom-widget-tab" data-toggle="tab"><i class="icon icon-drawer"></i></a></li>
        {{else}}
        	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_lng_translate 'widgets' 'telephony'}}</a></li>
+       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
        	 <li><a href="#support-tab" data-toggle="tab">{{agile_lng_translate 'help' 'support'}}</a></li>
        	 <li><a href="#billing-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'billing'}}</a></li>
-       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
        	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
        	 </a></li>
          <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'custom'}}</a></li>
@@ -369,14 +369,19 @@
 		<div class="tab-pane" id="call-tab">
 			<div id="call" class="row"></div>
 		</div>
+		<div class="tab-pane" id="social-tab">
+			<div id="social" class="row"></div>
+		</div>
 		<div class="tab-pane" id="support-tab">
-			<div id="support" class="row"></div>
+			<div id="support" class="row">
+				<div id="support_plan_alert_info" class="alert alert-info col-md-12" role="alert" style=""> 
+				  <a href="#" id="menu-suport-service-select" class="menu-suport-service-select text-info font-bold" data-service-name="SERVICE" data-dashboard="dashboard" onclick="javascript:gotoService(event,'SERVICE','dashboard');"><span>{{agile_lng_translate 'widgets' 'try-out-helpdesk'}}</span></a>
+				  <span class="support_plan_strip_close p-l-sm c-p pull-right" onclick="javascript:closesupportnoty();">×</span>
+				</div>
+			</div>
 		</div>
 		<div class="tab-pane" id="billing-tab">
 			<div id="billing" class="row"></div>
-		</div>
-		<div class="tab-pane" id="social-tab">
-			<div id="social" class="row"></div>
 		</div>
 		<div class="tab-pane" id="ecommerce-tab">
 			<div id="ecommerce" class="row"></div>

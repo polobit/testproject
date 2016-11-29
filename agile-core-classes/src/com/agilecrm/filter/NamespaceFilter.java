@@ -344,7 +344,7 @@ public class NamespaceFilter implements Filter
 		}
 		catch(Exception e)
 		{
-			AgileExceptionUtil.handleException(e);
+			AgileExceptionUtil.handleException(e, request);
 			throw e;
 		}
     }
