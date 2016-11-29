@@ -60,7 +60,7 @@ function setupLhsFilters(cel, is_company)
 			setTimeout(function(){
 				fillSelect('owner_select', '/core/api/users/partial', undefined, function()
 				{
-					fillSelect('campaign_select_master', '/core/api/workflows', undefined, function()
+					fillSelect('campaign_select_master', '/core/api/workflows/partial', undefined, function()
 					{
 						// loading image is added to hidden select by fillselect
 						// remove it manually.

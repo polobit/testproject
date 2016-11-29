@@ -161,7 +161,7 @@ var ReportsRouter = Backbone.Router
 					{
 						initializeReportsListeners();
 						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
-						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
+						fillSelect('campaign-select', '/core/api/workflows/partial', 'workflow', function(id)
 							{
 								//$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
 							}, optionsTemplate, false, el);
@@ -214,7 +214,7 @@ var ReportsRouter = Backbone.Router
 						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
 
 
-						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						fillSelect('campaign-select', '/core/api/workflows/partial', 'workflow', function fillCampaign()
 						{
 							var value = report.toJSON();
 							if (value)
