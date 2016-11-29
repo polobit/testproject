@@ -5930,7 +5930,7 @@ $(function()
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "ref-url-stats";
+ 			portlet_name = "ref-url-name";
  		else if (p_name == 'Lost Deal Analysis')
 			portlet_name = "deals-lost-reason";
 		else if (p_name== 'Revenue Graph')
@@ -6722,7 +6722,7 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	else if (p_name == 'Campaign stats')
 		description = 'campaign-stats-desc'
 	else if (p_name == 'Campaign graph')
-		description = 'campaign-graph-desc'
+		description = 'campaign-graph-dshlet'
 	else if(p_name == 'Deal Goals')
 		description = 'deal-goals-desc'
 	else if(p_name == 'Incoming Deals')
@@ -6732,9 +6732,9 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	else if(p_name == 'Average Deviation')
 		description = 'average-deviation-desc'
 	else if (p_name== 'Webstat Visits')
-		description = 'webstat-visits-desc';
+		description = 'webstat-visits-dshlet';
 	else if(p_name == 'Referralurl stats')
-		description = 'top-ref-url-desc'
+		description = 'ref-url-dshlet'
 
 	return _agile_get_translated_val("portlets", description);
 });
