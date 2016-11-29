@@ -18,7 +18,7 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
-
+		"navigate-dashboard" : "navigateDashboard",
 		"navigate-dashboard/:id" : "navigateDashboard", 
 		
 		// "dashboard-test": "dashboard",
