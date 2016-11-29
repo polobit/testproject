@@ -3098,6 +3098,11 @@ table.hide-head-checkbox th label.i-checks {
   position: fixed;
   height: 100vh;
 }
+.app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span.navbar_due_tasks.tasks-span-top
+{
+  padding-top: 0%!important; 
+}
+
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip

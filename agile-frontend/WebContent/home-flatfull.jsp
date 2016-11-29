@@ -535,7 +535,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li id="companiesmenu">
               <a  href="#companies" style="margin-left:2px;">
                 <i class="icon icon-building"></i>
-                <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
+                <span ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
               </a>
             </li>
         <%
