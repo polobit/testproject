@@ -35,7 +35,6 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.repackaged.com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 
 /**

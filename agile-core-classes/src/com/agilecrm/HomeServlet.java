@@ -92,7 +92,7 @@ public class HomeServlet extends HttpServlet
 
 	// It load defaults. If request is for the first user in the domain then
 	// default are created or else only tour cookie is set
-	loadDefaults(resp);
+	loadDefaults(req, resp);
 
 	// Redirect back to home servlet.
 	redirectBack(req, resp);
