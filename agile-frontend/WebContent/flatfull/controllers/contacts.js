@@ -1859,7 +1859,7 @@ function addTypeCustomData(contactId, el){
 function confirmandVerifyEmail()
 {
 	var options = {};
-	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+	options["{{agile_lng_translate 'verification' 'add-new'}}"] = "verify_email";
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',
