@@ -5887,4 +5887,8 @@ verification.add-new,&#43 Add New,,,,,,,,,,,,,,,,,,,,,,,
 widgets.try-out-helpdesk,Try out our helpdesk beta,,,,,,,,,,,,,,,,,,,,,,,
 tickets.feedback-assignee,Assignee,,
 tickets.feedback-time,Created Time,,
+portlets.ref-url-dshlet,Quick view of top 5 referrals for your website visitors traffic.,,
+portlets.webstat-visits-dshlet,See the percentage of known and unknown visits on your website.,,
+portlets.ref-url-name,Referral Stats,,
+portlets.campaign-graph-dshlet,See the percentage of active&#44;  completed and removed subscribers in campaigns.,,
 
