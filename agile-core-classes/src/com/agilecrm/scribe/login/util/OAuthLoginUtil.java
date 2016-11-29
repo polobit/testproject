@@ -157,9 +157,9 @@ public class OAuthLoginUtil
 	    // based on session info set
 	    // Allow only google Apps accounts and throw an error to gmail accounts
 	    String registerPage = "/register?type=oauth";
-	    if(userInfo != null && userInfo.getEmail().contains("@gmail"))
+	  /*  if(userInfo != null && userInfo.getEmail().contains("@gmail"))
 	    	registerPage += "&oauth_error=" + LoginUtil.GOOGLE_APPS_INVALID_EMAIL_ERROR;
-	    
+	    */
 	    req.getSession().setAttribute("return_url", registerPage);
 	    return;
 	}

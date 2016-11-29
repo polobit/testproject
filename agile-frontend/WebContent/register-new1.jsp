@@ -18,12 +18,12 @@ pageEncoding="UTF-8"%>
 		response.sendRedirect("/register");
 		return;
 	}
-/*
+
  	if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}*/
+	}
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -50,9 +50,11 @@ String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", 
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 // Error Message
-String errorMessage = request.getParameter("error");
+/*String errorMessage = request.getParameter("error");
 if(StringUtils.isBlank(errorMessage))
-		errorMessage = "";
+		errorMessage = "";*/
+
+String errorMessage = "";
 
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
@@ -204,7 +206,7 @@ if(isSafari && isWin)
 </head>
 <body class="overlay">
 
-	<%if(StringUtils.isNotEmpty(errorMessage)){
+	<!-- <%if(StringUtils.isNotEmpty(errorMessage)){
 		if(StringUtils.equalsIgnoreCase("Sorry, we could not recognized the email ID registered with any of the Google App.",errorMessage)){
 		%>
 		<div  class="alert error login-position-fixed text-center m-b-none">
@@ -214,7 +216,13 @@ if(isSafari && isWin)
     	<div id="error-area" class="error-top-view">
              <%=errorMessage%>
           </div>
-    	<%}}%>
+    	<%}}%> -->
+
+    	 <div id="error-area" class="error-top-view">
+		    <%if(StringUtils.isNotEmpty(errorMessage)){
+		        out.println(errorMessage);
+		    }%>
+		 </div>
 	
     
  
@@ -307,9 +315,8 @@ if(isSafari && isWin)
 			<div id="openid_btns" class="login-social-btns">
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					<a title="Sign in using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white font-11"><i class="fa fa-google"></i>Register using Google Apps</a>
+					<a title="Sign in using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white font-11"><i class="fa fa-google"></i>Sign Up using Google Apps</a>
 					
-
 			</div>
 </form>
 <div class="text-center text-white m-t m-b">
