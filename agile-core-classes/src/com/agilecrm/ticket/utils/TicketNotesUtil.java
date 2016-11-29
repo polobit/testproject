@@ -357,16 +357,35 @@ public class TicketNotesUtil
 		JSONArray json = new JSONArray();
 		
 		Map<String, Object> map =  new HashMap<String, Object>(); 
+		
 		map.put("created_by", CREATED_BY.AGENT);
-		map.put("created_time >", startTime);
-		map.put("created_time <", endTime);
+		map.put("feedback_time >", startTime);
+		map.put("feedback_time <", endTime);
 		map.put("feedback_flag", true);
+		
 		if(StringUtils.isNotEmpty(feedback))
 			map.put("feed_back",feedback);	
+
+		Map<String, Object> map2 =  new HashMap<String, Object>(); 
+		
+		map2.put("created_by", CREATED_BY.AGENT);
+		map2.put("created_time >", startTime);
+		map2.put("created_time <", endTime);
+		map2.put("feedback_flag", true);
+
+		List<TicketNotes> ticketnotes2 = TicketNotes.ticketNotesDao.listByProperty(map2);
+		
 		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
 		
+		ticketnotes.addAll(ticketnotes2);
 		
-			for(TicketNotes tn: ticketnotes ){
+		Set<TicketNotes> hs = new HashSet<>();
+		
+		hs.addAll(ticketnotes);
+		ticketnotes.clear();
+		ticketnotes.addAll(hs);
+		
+		for(TicketNotes tn: ticketnotes ){
 				
 				if(group != 0){
 					if(tn.group_id.longValue()!=group)
@@ -382,7 +401,8 @@ public class TicketNotesUtil
 				jsonobject.append("note", tn.html_text);
 				jsonobject.append("feedback_comment", tn.feedback_comment);
 				jsonobject.append("feedback", tn.feed_back);
-				jsonobject.append("created_time", tn.created_time);
+				jsonobject.append("created_time", tn.feedback_time);
+		
 				Long ticketfeedback_id = tn.ticket_id;		
 				
 				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
