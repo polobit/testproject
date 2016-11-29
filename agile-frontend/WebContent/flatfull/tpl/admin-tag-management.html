@@ -7,71 +7,37 @@
 
 <script id="tag-management-collection-template" type="text/html">
 <div class='row'>
-	{{#is_mobile}}
-	<div id="searchbycharacter " class="pull-left searchbycharacterdiv col-md-9 col-xs-12">
-		<a class="searchbychar" id="tag-a"   href="#" data-target="A"> A </a>
-	    <a class="searchbychar" id="tag-b" href="#" data-target="B">B</a>
-		<a class="searchbychar" href="#" id="tag-alpha" data-target="C">C</a>
-	   <a class="searchbychar" id="tag-alpha"  href="#"  data-target="D"> D </a>
-	    <a class="searchbychar" id="tag-alpha" href="#"  data-target="E"> E </a>
-	   <a class="searchbychar" id="tag-alpha" href="#"  data-target="F"> F </a>
-	    <a class="searchbychar" id="tag-alpha" href="#"  data-target="G"> G </a>
-	   <a class="searchbychar" id="tag-alpha" href="#"  data-target="H"> H </a>
-	    <a class="searchbychar" id="tag-alpha" href="#"  data-target="I"> I </a>
-	    <a class="searchbychar mobile-tagkeyj" id="tag-alpha" href="#"  data-target="J"> J </a>
-	    <a class="searchbychar mobile-tagkeys" id="tag-alpha" href="#"  data-target="K"> K </a>
-	    <a class="searchbycha mobile-tagKey" id="tag-alpha"href="#"  data-target="L"> L </a>
-	    <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="M"> M </a>
-	   <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="N"> N </a>
-	    <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="O"> O </a>
-	   <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="P"> P </a>
-	   <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="Q"> Q </a>
-	    <a class="searchbychar mobile-tagKey" id="tag-alpha"  href="#"  data-target="R"> R </a>
-	     <a class="searchbychar mobile-tagKeyS" href="#" id="tag-alpha"  data-target="S"> S </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="T"> T </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="U"> U </a>
-	   <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="V"> V </a>
-	   <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="W"> W </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"   data-target="X"> X </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="Y"> Y </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha-z" data-target="Z"> Z </a>
-	  
-	</div>
 
-
-	{{else}}
-	<div id="searchbycharacter " class="pull-left searchbycharacterdiv col-md-9 col-xs-12">
-		<a class="searchbychar" id="tag-a"   href="#" data-target="A"> A </a>
-	    <a class="searchbychar" id="tag-b" href="#" data-target="B">B</a>
-		<a class="searchbychar" href="#" id="tag-alpha" data-target="C">C</a>
-	   <a class="searchbychar" id="tag-alpha"  href="#"  data-target="D"> D </a>
-	    <a class="searchbychar" id="tag-alpha" href="#"  data-target="E"> E </a>
-	   <a class="searchbychar" id="tag-alpha" href="#"  data-target="F"> F </a>
-	    <a class="searchbychar" id="tag-alpha" href="#"  data-target="G"> G </a>
-	   <a class="searchbychar" id="tag-alpha" href="#"  data-target="H"> H </a>
-	    <a class="searchbychar" id="tag-alpha" href="#"  data-target="I"> I </a>
-	    <a class="searchbychar mobile-tagkeyj" id="tag-alpha" href="#"  data-target="J"> J </a>
-	    <a class="searchbychar mobile-tagkeys" id="tag-alpha" href="#"  data-target="K"> K </a>
-	    <a class="searchbycha mobile-tagKey" id="tag-alpha"href="#"  data-target="L"> L </a>
-	    <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="M"> M </a>
-	   <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="N"> N </a>
-	    <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="O"> O </a>
-	   <a class="searchbychar mobile-tagKey" id="tag-alpha" href="#"  data-target="P"> P </a>
-	   <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="Q"> Q </a>
-	  
-	  <div class="tagelement-center">
-	    <a class="searchbychar mobile-tagKey" id="tag-alpha"  href="#"  data-target="R"> R </a>
-	     <a class="searchbychar mobile-tagKeyS" href="#" id="tag-alpha"  data-target="S"> S </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="T"> T </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="U"> U </a>
-	   <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="V"> V </a>
-	   <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="W"> W </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"   data-target="X"> X </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha"  data-target="Y"> Y </a>
-	    <a class="searchbychar mobile-tagKey" href="#" id="tag-alpha-z" data-target="Z"> Z </a>
-	  </div>
+	<div id="searchbycharacter " class=" inline-block text-center searchbycharacterdiv tag-div col-md-9 col-xs-12">
+				<a class="searchbychar tag-alpha"    href="#" data-target="A"> A </a>
+				<a class="searchbychar tag-alpha" href="#" data-target="B">B</a>
+				<a class="searchbychar tag-alpha" href="#" data-target="C">C</a>
+				<a class="searchbychar tag-alpha"   href="#"  data-target="D"> D </a>
+				<a class="searchbychar tag-alpha" href="#"  data-target="E"> E </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="F"> F </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="G"> G </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="H"> H </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="I"> I </a>
+				<a class="searchbychar tag-alpha "  href="#"  data-target="J"> J </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="K"> K </a>
+				<a class="searchbychar tag-alpha" href="#"  data-target="L"> L </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="M"> M </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="N"> N </a>
+				<a class="searchbychar tag-alpha "  href="#"  data-target="O"> O </a>
+				<a class="searchbychar tag-alpha"  href="#"  data-target="P"> P </a>
+				<a class="searchbychar tag-alpha" href="#"   data-target="Q"> Q </a>
+				<a class="searchbychar tag-alpha"   href="#"  data-target="R"> R </a>
+				<a class="searchbychar tag-alpha" href="#"  data-target="S"> S </a>
+				<a class="searchbychar tag-alpha" href="#"   data-target="T"> T </a>
+				<a class="searchbychar tag-alpha" href="#"  data-target="U"> U </a>
+				<a class="searchbychar tag-alpha" href="#"  data-target="V"> V </a>
+				<a class="searchbychar tag-alpha" href="#" data-target="W"> W </a>
+				<a class="searchbychar tag-alpha " href="#"   data-target="X"> X </a>
+				<a class="searchbychar tag-alpha" href="#"   data-target="Y"> Y </a>
+				<a class="searchbychar tag-alpha" href="#"  data-target="Z"> Z </a>
+	
 	</div>
-	{{/is_mobile}} 
+	
 	<!-- <div>
 	<ul>
 		<li><a href="#A" id="firstLi">A</a></li>

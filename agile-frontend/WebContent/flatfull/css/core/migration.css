@@ -2002,8 +2002,8 @@ display: block!important;
 
 .searchbycharacterdiv
 {
-  padding-left:28px !important;
-  padding-bottom: 10px;
+  padding: 0px !important;
+  margin-bottom: 10px;
 }
 .mobile-tagkeys{
       margin-top: 3px;
