@@ -16,7 +16,7 @@ import com.thirdparty.sendgrid.SendGrid;
 public class AgileExceptionUtil {
 
 	// To Emails
-	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@invox.com,govind@invox.com";
+	static final String CORE_TEAM_ERRORS_EMAILS = "mogulla@invox.com,govind@invox.com,venkat@agilecrm.com";
 	static final String SALES_TEAM_ERRORS_EMAILS = "subrahmanyam@invox.com,sankar@agilecrm.com";
 	static final String MA_TEAM_ERRORS_EMAILS = "naresh@agilecrm.com,ramesh@agilecrm.com";
 	static final String TICKET_TEAM_ERRORS_EMAILS = "rohit@agilecrm.com,sreedevi@agilecrm.com";
@@ -50,7 +50,7 @@ public class AgileExceptionUtil {
 	}
 
 	static boolean proceedToEmail(Exception e) {
-		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()) || e instanceof PlanRestrictedException)
+		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()))
 			return false;
 
 		return true;
