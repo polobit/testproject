@@ -3102,7 +3102,9 @@ table.hide-head-checkbox th label.i-checks {
 {
   padding-top: 0%!important; 
 }
-
+.app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed {
+  top:50px;
+}
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip

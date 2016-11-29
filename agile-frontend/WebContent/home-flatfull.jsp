@@ -449,7 +449,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 <!-- Including header(Navigation Bar) page -->
   <%@ include file="flatfull/header.html"%>
 
- <aside id="aside" class="app-aside hidden-xs 
+ <aside id="aside" class="app-aside aside-menu-fixed hidden-xs 
  <%
   switch (Integer.parseInt(currentUserPrefs.theme)) {
     case 1:  out.print("bg-black ");
