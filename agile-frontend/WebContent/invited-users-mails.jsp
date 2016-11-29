@@ -236,7 +236,7 @@ a{
 		<div class="row" >
 			<div class="align-center m-b-xs"style="font-size:18px;"> Congratulations, you have signed up successfully!</div>
 			<div class="align-center"style="margin-bottom:15px;font-size: 16px;">
-			  Invite your colleagues and enjoy Agile CRM's extensive features.
+			 Invite your colleagues for successful CRM implementation.
 			</div>
 		<div class="col-sm-5" style="float: none !important;margin: 0 auto;">
 			<div class='well'>

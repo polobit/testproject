@@ -249,7 +249,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   left: 0;
   right: 0;
   margin: 0px auto;
-  width: 280px;
+  width: 420px;
 }
 .menuHelpPopover
 {
@@ -341,9 +341,10 @@ function isIE() {
 </div>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
-   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "you-are-currently-on-free-plan") %>.
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-msg") %>.
   </span>
   <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-message") %>.
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
 
@@ -1404,8 +1405,8 @@ var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
         <div class="modal-content">
         <div class="modal-header">
           <button class="close" onClick="closeVideo()">&times;</button>
-          <h3 id="myModalLabel">Welcome to Agile CRM</h3>
-          <small>Here is a short video which explains the steps to get started with Agile. We recommend you watch it.</small>
+          <h3 id="myModalLabel">Sell, Market and Service like Fortune 500</h3>
+          <small>Getting started with Agile CRM is simple. We made this video for you.</small>
         </div>      
         <div class="modal-body">
               <div class="embed-responsive embed-responsive-16by9">
