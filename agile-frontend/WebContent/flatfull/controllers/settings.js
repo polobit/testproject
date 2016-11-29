@@ -759,9 +759,16 @@ var SettingsRouter = Backbone.Router
 					$("#content").find(".col").hide();
 					$("#content").find(".prefs-title").html("Add Email Template");
 
+					Old_Editor_Count = 0;
+
 					var view = new Email_Template_Events({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
+						Old_Editor_Count ++;
+						if(Old_Editor_Count > 1){
+							Refresh_Email_Template = true;
+            				Selected_Email_Template_Category = "";
+						}
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
