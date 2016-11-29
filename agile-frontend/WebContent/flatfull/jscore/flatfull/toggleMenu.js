@@ -392,6 +392,19 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$('#searchText').on('keydown', function(e){
 
 		if(e.keyCode == 13){
+			var query = $("#searchText").val();
+			if(!isQueryTextSearchValid(query))
+			{	
+				setTimeout(function(){  
+					console.log('aawdvasd');
+					var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+					$(".dashboard-search-scroll-bar").empty();
+					$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+					$("#searchText").val(query);
+					$(".dashboard-search-scroll-bar").show();
+				}, 100);
+				return false;
+			}			
 			$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 			$('.searchicon-dropdown').removeClass('open');
 			//$("#search-results").trigger("click");

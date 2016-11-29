@@ -91,7 +91,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								searchParams = urlParams ;
 							}
 							if(!isQueryTextSearchValid(query)){
-								var txt = '<b>{{agile_lng_translate "specialchar-typeahead" "query-message"}}</b>' ;
+								var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
 								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 								that.render();
 								return false;
@@ -198,6 +198,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 * the data
 								 */
 								process(items_list);
+							})
+							.success(function() {})
+							.error(function(data) 
+							{	
+								var txt = '<b>Unable to Process the Query.Please try again.</b>' ;
+								if(data.responseText)
+									txt = '<b>'+data.responseText +'</b>';
+								$('.dashboard-search-scroll-bar').html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 							});
 						},
 						showLoading : function(self)
@@ -333,6 +341,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (!items)
 								{
+									var query = $("#searchText").val();
+									if(!isQueryTextSearchValid(query))
+									{
+										var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+										$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+										$(".dashboard-search-scroll-bar").show();
+										return;
+									}
 									showSearchResults(); // fails
 									// automatically for
 									// non main search
@@ -988,15 +1004,15 @@ function get_tag_item_json(items, items_temp, type){
 	return tag_item_json;
 }
 function isQueryTextSearchValid(query){
-
-	if($.trim(query) == '')
+	query = query.trim();
+	if(query == '')
 		return false
-	if($.trim(query) == 'OR' || $.trim(query) == 'AND')
+	if(query == 'OR' || query == 'AND' || query == '()')
 		return false
 	if(query.indexOf('<') >= 0 || query.indexOf('>') >= 0 || query.indexOf(',') >= 0 || query.indexOf(':') >= 0 || query.indexOf('=') >= 0 || query.indexOf('~') >= 0) 
 		return false
 
-	if(query.startsWith('++') || query.startsWith('-') )
+	if(query.startsWith('++') || query.startsWith('--')  || query.startsWith(')') || query.endsWith('(') )
 	  	return false
 
 	if(query.startsWith('/\/') && !query.startsWith('/\\/'))
@@ -1004,19 +1020,19 @@ function isQueryTextSearchValid(query){
 
 	if(query.endsWith('/\/') && !query.endsWith('/\\/'))
 		return false
-
+	if(query.indexOf('(') >= 0 && !query.startsWith('('))
+		return false
+	if(query.indexOf(')') >= 0 && !query.endsWith(')'))
+		return false	
 	if(query.startsWith('(') && !query.endsWith(')') )
 		return false
-
 	else if(!query.startsWith('(') && query.endsWith(')') )
 		return false
-
 	else if(query.startsWith('(') && query.endsWith(')'))
 	{
 		var a = query.slice(1);
 		var b = a.slice(0,-1);
-		if(b.indexOf('(') >= 0 || b.indexOf(')') >= 0 )
-			return false 
+		return isQueryTextSearchValid(b) 
 	}
 	if(query.startsWith('"') && !query.endsWith('"') )
 		return false
