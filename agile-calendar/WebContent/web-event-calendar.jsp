@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -160,7 +161,11 @@ if(scheduleid.contains(",")){
 		}
 
 		System.out.println("Domain user " + domainUser);
-
+		System.out.println("Fetching subscriptionFromCalendalModule");
+	   	if(SubscriptionUtil.isSubscriptionDeleted()){
+	   		request.getRequestDispatcher("not_available.jsp").forward(request, response);
+			return;
+	   	}
 		if (domainUser != null)
 		{
      	userAvailable = true;

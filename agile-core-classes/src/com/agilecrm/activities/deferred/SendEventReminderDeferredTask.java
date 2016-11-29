@@ -20,6 +20,7 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -270,6 +271,11 @@ public class SendEventReminderDeferredTask implements DeferredTask
 		    map.put("events", eventListMap);
 
 		    String language = LanguageUtil.getUserLanguageFromEmail(domainuser.email);
+		    
+		    //Check if subscription is deleted
+		    if(SubscriptionUtil.isSubscriptionDeleted(domainuser.domain))
+		    	return;
+		    
 		    // Sends mail to the domain user.
 		    SendMail.sendMail(domainuser.email, "Event Reminder: " + event.title + " - " + event.date,
 			    SendMail.START_EVENT_REMINDER, map, language);

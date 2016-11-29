@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -53,7 +54,6 @@ JSONObject single_user_map_object=new JSONObject();
 boolean multiple_users=false;
 Boolean userAvailable = false;
 Boolean emailAvailable = false;
-
 
 String [] slots_array=null;
 List<JSONArray> business_hours_array=new ArrayList<JSONArray>();
@@ -160,7 +160,11 @@ if(scheduleid.contains(",")){
 		}
 
 		System.out.println("Domain user " + domainUser);
-
+		System.out.println("Fetching subscriptionFromCalendalModule");
+	   	if(SubscriptionUtil.isSubscriptionDeleted()){
+	   		request.getRequestDispatcher("not_available.jsp").forward(request, response);
+			return;
+	   	}
 		if (domainUser != null)
 		{
      	userAvailable = true;
