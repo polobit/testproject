@@ -312,4 +312,16 @@ public class SubscriptionUtil
     	}
     	return false;
     }
+    
+    public static boolean isSubscriptionDeleted(String namespace){
+    	if(namespace == null)
+    		return true;
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    		NamespaceManager.set(namespace);
+    		return isSubscriptionDeleted();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
 }
