@@ -19,11 +19,11 @@ pageEncoding="UTF-8"%>
 		return;
 	}
 
- 	if(RegisterUtil.isWrongURL(request))
+ 	/*if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}
+	}*/
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -163,6 +163,9 @@ z-index: 3;
 	color: white !important;
 	background-color: #c74949 !important;
   border-color: #c74949 !important;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 
@@ -311,15 +314,16 @@ if(isSafari && isWin)
 </form>
 
 
-<form id='oauth' name='oauth' method='post' class="pad-top-10 text-alignment" action="/register">
+<form id='oauth' name='oauth' method='post' class="text-alignment m-t" action="/register">
 			<div id="openid_btns" class="login-social-btns">
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					<a title="Sign in using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white font-11"><i class="fa fa-google"></i>Sign Up using Google Apps</a>
+					<small class="text-white">Sign up using <small>
+					<a title="Sign up using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white"><i class="fa fa-google"></i><small>Google Apps</small></a>
 					
 			</div>
 </form>
-<div class="text-center text-white m-t m-b">
+<div class="text-center text-white m-b">
 	<div>
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
 		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a></small>
