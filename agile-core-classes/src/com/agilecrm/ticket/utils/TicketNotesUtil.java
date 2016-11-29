@@ -402,6 +402,7 @@ public class TicketNotesUtil
 				jsonobject.append("feedback_comment", tn.feedback_comment);
 				jsonobject.append("feedback", tn.feed_back);
 				jsonobject.append("created_time", tn.feedback_time);
+				jsonobject.append("note_created_time", tn.created_time);
 		
 				Long ticketfeedback_id = tn.ticket_id;		
 				
