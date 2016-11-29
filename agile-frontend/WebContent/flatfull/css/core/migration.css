@@ -2054,7 +2054,7 @@ display: block!important;
   #browseBtn {
     margin-left: 15px !important;
   }
-  .agile-table td>div.table-resp{
+  #settings-email-templates-model-list td>div.table-resp{
     width: 100% !important;
   }
   .landingpages-beta-tag{
@@ -2152,7 +2152,13 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
   #change_pswd_btns a#saveNewPassword{
     margin-left: 5px !important;
   }
-  .agile-table td>div.table-resp{
+  #landingpages-model-list td>div.table-resp{
+    width: 100% !important;
+  }
+  #push-notification-model-list td>div.table-resp{
+    width: 100% !important;
+  }
+  #voice-mail-model-list td>div.table-resp{
     width: 100% !important;
   }
   #learn-voicemail h4{
@@ -2182,7 +2188,7 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 
 /*Start of Admins Settings Users Tab Responsive UI CSS*/
 
- .agile-table td>div.table-resp{
+ #forms-model-list td>div.table-resp{
   width: 100% !important;
  }
 
