@@ -89,14 +89,14 @@
                       <small class="edit-hover text-muted"> 
                       <i class="fa fa-clock-o"></i>
                       <span><em>
-                           {{agile_lng_translate 'campaigns' 'modified'}}</em> </span><time class="created_time time-ago" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+                           {{agile_lng_translate 'campaigns' 'modified'}}</em> </span><time class="campaign-created-time b-b-dotted" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
                            </small>
                       </div>
                      {{else}}
                         <div class="text-muted table-resp text-xs text-ellipsis">
                         <small class="edit-hover text-muted"> 
                          <i class="fa fa-clock-o"></i>
-                           {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time> 
+                           {{agile_lng_translate 'campaigns' 'created'}} <time class="campaign-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time> 
                            </small>
                       </div>
                     {{/if}}
@@ -119,14 +119,14 @@
               <div class="text-muted table-resp text-xs"> 
               <small class="edit-hover text-muted"> 
               <i class="fa fa-clock-o m-r-xs"></i><span><em>
-        	       {{agile_lng_translate 'campaigns' 'modified'}} </em></span><time class="created_time time-ago" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time> 
+        	       {{agile_lng_translate 'campaigns' 'modified'}} </em></span><time class="campaign-created-time b-b-dotted" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time> 
                    </small>
               </div>
               {{else}}
                <div class="text-muted table-resp text-xs"> 
                <small class="edit-hover text-muted"> 
                <i class="fa fa-clock-o m-r-xs"></i><span><em>
-                   {{agile_lng_translate 'campaigns' 'created'}} </em></span> <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time> 
+                   {{agile_lng_translate 'campaigns' 'created'}} </em></span> <time class="campaign-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time> 
                    </small>
               </div>
            {{/if}}
