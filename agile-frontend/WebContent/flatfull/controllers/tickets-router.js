@@ -133,7 +133,6 @@
 			individual_tag_name : 'tr',
 			sort_collection : true, 
 			sortKey : 'feedback_time',
-			descending : true,
 			postRenderCallback:function(el,model){		
 				includeTimeAgo(el);
 			
