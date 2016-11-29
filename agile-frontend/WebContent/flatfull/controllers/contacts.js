@@ -91,7 +91,31 @@ var ContactsRouter = Backbone.Router.extend({
 		// Call dashboard route
 		if(id)
 		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
-		
+
+		var presentrole = roleofuser(id);
+		if(CURRENT_DOMAIN_USER.role != presentrole )
+		{
+			CURRENT_DOMAIN_USER.role = presentrole;
+			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = presentrole;
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 							// Call dashboard route
+					 		Backbone.history.navigate("#navigate-dashboard", {
+					                trigger: true
+					            });
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+
+		}
+
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -138,7 +162,8 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-		$(".nav.nav-sub li").removeClass("agile-menuactive")
+		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		$(".nav.nav-sub li").removeClass("active");
 		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
@@ -1899,6 +1924,20 @@ function menuServiceDashboard(role){
 				break;
 			case 'SERVICE' :
 				return "Dashboard";
+				break;
+		}
+}
+function roleofuser(dashboard)
+{
+	witch(dashboard){
+			case 'SalesDashboard':
+			    return "SALES"
+			    break;
+			case 'MarketingDashboard':
+				return "MARKETING";
+				break;
+			case 'Dashboard' :
+				return "SERVICE";
 				break;
 		}
 }
