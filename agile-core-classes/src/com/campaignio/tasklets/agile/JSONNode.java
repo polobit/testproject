@@ -219,7 +219,6 @@ public class JSONNode extends TaskletAdapter
 		    
 		    if(output != null){
 			    	Response response = (Response)output.get("response");
-			    	System.out.println(response.getMessage());
 			    	if(response.getCode() >= 400){
 			    		String exceptionMessage = "while processing request </br>Response Code: "
 								+ response.getCode()
@@ -375,8 +374,7 @@ public class JSONNode extends TaskletAdapter
 		output += inputLine;
 	    }
 	    reader.close();	
-	    return responseMap(((HttpURLConnection)conn).getResponseCode(), output);
-	    
+	    return responseMap(((HttpURLConnection)conn).getResponseCode(), output);	    
 	    
 	}
 	catch (Exception e)
@@ -407,25 +405,25 @@ public class JSONNode extends TaskletAdapter
 
 class Response
 {
-	   int code;
-	   String message;
-	   
-	   public int getCode() {
+	int code;
+	String message;
+
+	public int getCode() {
 		return code;
 	}
+
 	public void setCode(int code) {
 		this.code = code;
 	}
+
 	public String getMessage() {
 		return message;
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
-	}
-	   
-	   
+	}	   
 }
-
 
 /**
  * <code>JSONIODeferredTask</code> is the deferred class that executes actual JSONIO node
