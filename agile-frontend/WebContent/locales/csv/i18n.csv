@@ -5885,3 +5885,6 @@ Verify-email.encourage-msg,We encourage you to use a From email address at a dom
 register.domain-name-helpmsg,This is where you and your users will login to your account,,,,,,,,,,,,,,,,,,,,,,,
 verification.add-new,&#43 Add New,,,,,,,,,,,,,,,,,,,,,,,
 widgets.try-out-helpdesk,Try out our helpdesk beta,,,,,,,,,,,,,,,,,,,,,,,
+tickets.feedback-assignee,Assignee,,
+tickets.feedback-time,Created Time,,
+
