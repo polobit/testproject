@@ -3098,6 +3098,11 @@ table.hide-head-checkbox th label.i-checks {
   position: fixed;
   height: 100vh;
 }
+.app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span.navbar_due_tasks.tasks-span-top
+{
+  padding-top: 0%!important; 
+}
+
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
@@ -5008,4 +5013,35 @@ border-top: 0px !important;
 .sso-text-style{
   margin:auto;
   width: 450px;
+}
+.agile-menu-dropdown-aside
+{
+      padding-top: 8px !important;
+}
+.app-aside-folded .leftcol-menu-expanded{
+  display:block!important;
+  padding-top:0px!important;
+}
+.app-aside-folded .leftcol-menu-folded{
+  display:none!important;
+  padding-top:0px!important;
+}
+.agile-menuactive>a
+{
+    color: #fff;
+}
+.bg-light .agile-menuactive>a
+{
+      color: #141719;
+        background-color: #f6f8f8;
+}
+.bg-white .agile-menuactive>a
+{
+  color: #363f44!important;
+   background-color: #f6f8f8;
+}
+.bg-dark .agile-menuactive>a
+{
+  color: #fff;
+  background-color: #2e3344;
 }
