@@ -7,6 +7,16 @@
     $('.agile-tooltip').tooltip({
         container: 'body'
     });
+    $('input#youtubeID').focus(function(){
+        $('input#youtubeID').addClass("margin-bottom-20");
+        $("#err-youtube-msg").next().css("margin-top","");
+        $("#err-youtube-msg").hide();
+    });
+    $('input#vimeoID').focus(function(){
+        $('input#vimeoID').addClass("margin-bottom-20");
+        $("#err-vimeo-msg").next().css("margin-top","");
+        $("#err-vimeo-msg").hide();
+    });
 
     //show edit form option when select any form
      $('#agileform_id').change(function(e){

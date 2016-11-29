@@ -1975,18 +1975,18 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <!-- /tabs -->
                 <div class="tab-pane videoTab" id="video_Tab">
                     
-                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-id")%>:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-id")%>" value="">
-                    
+                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-url")%>" value="">
+                    <span id="err-youtube-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
                     
-                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-id")%>:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-url")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-id")%>" value="">
-
+                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-url")%>" value="">
+                     <span id="err-vimeo-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>

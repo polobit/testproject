@@ -554,21 +554,46 @@
 
                 if( $('input#youtubeID').val() !== '' ) {
 
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+$('#video_Tab input#youtubeID').val());
-
+                    var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                    var ytMatch = $('input#youtubeID').val().match(ytRegExp);
+                    if (ytMatch && ytMatch[1].length === 11) {
+                        var youtubeId = ytMatch[1];
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
+                    }
+                    else{
+                        $('input#youtubeID').removeClass("margin-bottom-20");
+                        $("#err-youtube-msg").next().css("margin-top","6px");
+                        $("#err-youtube-msg").show();
+                        return;
+                    }
+                    
                 } else if( $('input#vimeoID').val() !== '' ) {
-
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
-
+                    var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
+                    var vimMatch = $('input#vimeoID').val().match(vimRegExp);
+                    if (vimMatch && vimMatch[3].length){
+                        var vimeoId = vimMatch[3];
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
+                    }
+                    else{
+                        $('input#vimeoID').removeClass("margin-bottom-20");
+                        $("#err-vimeo-msg").next().css("margin-top","6px");
+                        $("#err-vimeo-msg").show();
+                        return;
+                    }
                 } else if ( videoRecord_Id !== '' ) {
 
                     $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
                 }
+                else
+                    $(styleeditor.activeElement.element).prev().attr('data-video', "");
+
                  //image under video section
                     if($(styleeditor.activeElement.element).siblings("IMG")!==0){
                         var url=$('.imageFileTab').find('input#imageURL').val();
                         $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
                     }
+               
+
 
                 /* SANDBOX */
 
@@ -920,23 +945,33 @@
             $('a#video_Link').click();
             $('a#default-tab1').css("display","none");
 
+            if($("#err-youtube-msg").css("display")!=="none"){
+                $('input#youtubeID').addClass("margin-bottom-20");
+                $("#err-youtube-msg").next().css("margin-top","");
+                $("#err-youtube-msg").hide();
+            }
+            if($("#err-vimeo-msg").css("display")!=="none"){
+                $('input#vimeoID').addClass("margin-bottom-20");
+                $("#err-vimeo-msg").next().css("margin-top","");
+                $("#err-vimeo-msg").hide();
+            }
             //inject current video ID,check if we're dealing with Youtube or Vimeo or Recorded video
 
             if( $(el).prev().attr('data-video').indexOf("vimeo.com") > -1 ) {//vimeo
 
-                matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
+                //matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
 
-                $('#video_Tab input#vimeoID').val( matchResults[matchResults.length-1] );
+                $('#video_Tab input#vimeoID').val("https:"+ $(el).prev().attr('data-video'));
                 $('#video_Tab input#youtubeID').val('');
                 $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
             } else if( $(el).prev().attr('data-video').indexOf("youtube.com") > -1 ) {//youtube
 
                 //temp = $(el).prev().attr('src').split('/');
-                var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-                matchResults = $(el).prev().attr('data-video').match(regExp);
+               // var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+               // matchResults = $(el).prev().attr('data-video').match(regExp);
 
-                $('#video_Tab input#youtubeID').val( matchResults[1] );
+                $('#video_Tab input#youtubeID').val("https:"+$(el).prev().attr('data-video'));
                 $('#video_Tab input#vimeoID').val('');
                 $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
