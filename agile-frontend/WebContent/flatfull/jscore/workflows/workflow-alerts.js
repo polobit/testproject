@@ -137,10 +137,12 @@ function send_verify_email(el)
 				$('#verify-email-send').removeAttr('disabled');
 
 			     // Hide form elements
+			     $(".verification-msg").hide();
+			     
 			     $('#verify-email-form').find('div.row div').hide();
-			     $('#verify-email-form').find('div.row input').val(json.email);
-
-			     $('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'>{{agile_lng_translate 'emails' 'verification-sent'}} &#39;"+json.email+"&#39;. {{agile_lng_translate 'emails' 'verification-process'}}</p>");
+			     $('#verify-email-form').find('input').val(json.email);
+			     $(".email-verification-fields").hide();
+			     $('#verify-email-form').find('div span#alert-msg').html("<p class='m-l'>{{agile_lng_translate 'emails' 'verification-sent'}} &#39;"+json.email+"&#39;. {{agile_lng_translate 'emails' 'verification-process'}}</p>");
 			     $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 
 			},
@@ -151,10 +153,12 @@ function send_verify_email(el)
 				if(response.responseText == 'Email not verified yet.')
 				{
 					// Hide form elements
+					$(".verification-msg").hide();
+			    
 					$('#verify-email-form').find('div.row div').hide();
 					$('#verify-email-form').find('div.row input').val(json.email);
-			     
-					$('#verify-email-form').find('div.row span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; {{agile_lng_translate 'emails' 'email-not-verified-error'}}</p>");
+			     	 $(".email-verification-fields").hide()
+					$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l'> &#39;"+json.email+"&#39; {{agile_lng_translate 'emails' 'email-not-verified-error'}}</p>");
 					$('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 					
 //					$("#verify-ignore").show();
