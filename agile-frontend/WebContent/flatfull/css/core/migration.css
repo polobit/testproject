@@ -2405,7 +2405,7 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
     opacity: 0.4;
 }
 .admin-setting-icon a{
- width:calc(100% / 5);
+ width:calc(100% / 6);
  padding: 10px 0;
  text-align: center;
  opacity: 0.4;

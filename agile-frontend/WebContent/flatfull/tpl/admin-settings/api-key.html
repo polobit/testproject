@@ -37,14 +37,78 @@
                         </div>
                      </div>
                   </div>
+                 
+              
+              
                   <div class="panel panel-default">
+                     <div id="">
+                        <div class="panel-heading" role="tab" id="">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">{{agile_lng_translate 'admin-settings-integrations' 'webhooks'}}</a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-webhook" aria-expanded="true">
+                           <div id="webhook-accordian-template"></div></div></div></div>
+
+   
+
+                  <div class="panel panel-default">
+                     <div id="">
+                        <div class="panel-heading" role="tab" id="">
+                           <div class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'js-api-security'}}</a>
+                           </div>
+                        </div>
+                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-js-security" aria-expanded="true">
+                        <div id="js-security-accordian-template"></div>
+                        </div>
+                     </div>
+                  </div>         
+                           
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col w-md">
+      <div class="data-block">
+         <div class="p-l p-r">
+            <h4 class="m-t-none">
+               {{agile_lng_translate 'menu' 'help'}}
+            </h4>
+            <p>{{agile_lng_translate 'admin-settings-api-analytics' 'desc-1'}}</p>
+            {{agile_lng_translate 'admin-settings-api-analytics' 'desc-2'}}<br/>
+            <ul class="p-l-md">
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'java'}} - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'javascript'}} - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'php'}} - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+               <li>{{agile_lng_translate 'admin-settings-api-analytics' '.net'}} - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
+            </ul>
+            {{agile_lng_translate 'admin-settings-api-analytics' 'we-will-be-publishing-api'}}
+   
+  
+   
+   
+  
+         </div>
+      </div>
+   </div>
+</script>
+
+<script id="admin-settings-analytics-model-template" type="text/html">
+ <div class="col">
+      <div class="hbox h-auto m-b-lg">
+         <div class="tab-content">
+            <div id="analytics-accordion">
+               <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                     <div class="panel panel-default">
                      <div id="settings-analytics">
                         <div class="panel-heading" role="tab" id="headingTwo">
                            <div class="panel-title">
                               <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#analytics-code">{{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code'}}</a>
                            </div>
                         </div>
-                        <div class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" id="analytics-code">
+                        <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo" id="analytics-code">
                            <div class="panel-body" id="api-accordion">
                               <div class="tab-pane" id="analytics">
                                  <p>{{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code-desc'}} <b>&lt;/BODY&gt;</b> {{agile_lng_translate 'admin-settings-api-analytics' 'analytics-code-desc-1'}}</p>
@@ -119,7 +183,7 @@
                         </div>
                      </div>
                   </div>
-                  <!-- Allowed domains template -->
+                      <!-- Allowed domains template -->
                   <div class="panel panel-default">
                      <div id="settings-allowed-domains">
                         <div class="panel-heading" role="tab" id="headingTwo">
@@ -149,7 +213,7 @@
                      </div>
                   </div>
                   <!-- end of Allowed Domains template -->
-              <!-- Blocked IP's template -->
+                  <!-- Blocked IP's template -->
                   <div class="panel panel-default">
                      <div id="settings-blocked-ips">
                         <div class="panel-heading" role="tab" id="headingTwo">
@@ -184,17 +248,7 @@
                      </div>
                   </div>
                   <!-- end of Blocked IPs template -->
-                  <div class="panel panel-default">
-                     <div id="">
-                        <div class="panel-heading" role="tab" id="">
-                           <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-webhook"id="webhook_accordian">{{agile_lng_translate 'admin-settings-integrations' 'webhooks'}}</a>
-                           </div>
-                        </div>
-                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-webhook" aria-expanded="true">
-                           <div id="webhook-accordian-template"></div></div></div></div>
-
-   <!-- Sendgrid white labled verification-->
+                  <!-- Sendgrid white labled verification-->
                    <div class="panel panel-default">
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
@@ -221,51 +275,26 @@
                    </div>   
                 </div>  
                   </div></div></div>
-
-                  <div class="panel panel-default">
-                     <div id="">
-                        <div class="panel-heading" role="tab" id="">
-                           <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-js-security"id="js-security_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'js-api-security'}}</a>
-                           </div>
-                        </div>
-                        <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-js-security" aria-expanded="true">
-                        <div id="js-security-accordian-template"></div>
-                        </div>
-                     </div>
-                  </div>         
-                           
+                  <!-- End of sendgrid-whitelabel -->
                </div>
             </div>
-         </div>
+          </div>
       </div>
-   </div>
-   <div class="col w-md">
+ </div>
+ <div class="col w-md">
       <div class="data-block">
          <div class="p-l p-r">
             <h4 class="m-t-none">
-               {{agile_lng_translate 'menu' 'help'}}
+             {{agile_lng_translate 'admin-settings-api-analytics' 'allowed-domains'}}
             </h4>
-            <p>{{agile_lng_translate 'admin-settings-api-analytics' 'desc-1'}}</p>
-            {{agile_lng_translate 'admin-settings-api-analytics' 'desc-2'}}<br/>
-            <ul class="p-l-md">
-               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'java'}} - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
-               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'javascript'}} - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
-               <li>{{agile_lng_translate 'admin-settings-api-analytics' 'php'}} - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
-               <li>{{agile_lng_translate 'admin-settings-api-analytics' '.net'}} - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">{{agile_lng_translate 'contact-edit' 'github'}}</a></li>
-            </ul>
-            {{agile_lng_translate 'admin-settings-api-analytics' 'we-will-be-publishing-api'}}
-   
-   <h4 class="m-t-md">
-    {{agile_lng_translate 'admin-settings-api-analytics' 'allowed-domains'}}
-   </h4>
-   <p>{{agile_lng_translate 'admin-settings-api-analytics' 'helptext-domain'}}: <b>https://www.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'helptext-subdomain'}}: <b>https://test.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'helptext-hostname'}} <b>example.com</b>.</p>
-   <p>{{agile_lng_translate 'admin-settings-api-analytics' 'desc-subdomain'}}: <b>https://test.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'desc-pl-add'}} <b>test.example.com</b> {{agile_lng_translate 'others' 'or'}} <b>*.example.com</b>.</p>
-   
-   <h4 class="m-t-md">{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters'}}</h4>
+            <p>{{agile_lng_translate 'admin-settings-api-analytics' 'helptext-domain'}}: <b>https://www.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'helptext-subdomain'}}: <b>https://test.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'helptext-hostname'}} <b>example.com</b>.</p>
+            <p>{{agile_lng_translate 'admin-settings-api-analytics' 'desc-subdomain'}}: <b>https://test.example.com</b> {{agile_lng_translate 'admin-settings-api-analytics' 'desc-pl-add'}} <b>test.example.com</b> {{agile_lng_translate 'others' 'or'}} <b>*.example.com</b>.</p>
+             <h4 class="m-t-md">{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters'}}</h4>
                <p>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-IP'}} {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-as-eg'}}: <b>192.168.1.1</b> {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-range'}} <b>"*"</b> {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-as'}} <b>192.168.1.* | 192.168.*.* | 192.*.*.*</b></p>
                <p>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-2'}} <b>*.*.*.*</b></p>
          </div>
       </div>
-   </div>
+ </div>
+     
+
 </script>
