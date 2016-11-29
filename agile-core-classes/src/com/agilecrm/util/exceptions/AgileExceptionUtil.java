@@ -41,9 +41,12 @@ public class AgileExceptionUtil {
 			// Add email task to Queue
 			Queue queue = QueueFactory.getQueue(AgileQueues.AGILE_APP_ERRORS_QUEUE);
 			String exceptionMessage = e.getMessage();
-			HttpServletRequest req = (HttpServletRequest) request;
-			if(request != null && req.getRequestURI() != null)
-				exceptionMessage += "("+req.getRequestURI()+")";
+			if(request != null){
+				HttpServletRequest req = (HttpServletRequest) request;
+				if(req != null && req.getRequestURI() != null)
+					exceptionMessage += "("+req.getRequestURI()+")";
+			}
+			
 			AgileExceptionEmail task = new AgileExceptionEmail(exceptionMessage, ExceptionUtils.getFullStackTrace(e),
 					getToEmail(e));
 			queue.add(TaskOptions.Builder.withPayload(task));

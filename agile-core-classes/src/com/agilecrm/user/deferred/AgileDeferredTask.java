@@ -12,7 +12,7 @@ public abstract class AgileDeferredTask implements DeferredTask {
 			return;
 		
 		// Send email to Devs
-		AgileExceptionUtil.handleException(exception);
+		AgileExceptionUtil.handleException(exception, null);
 	}
 	
 	public void handleException(Exception exception){
