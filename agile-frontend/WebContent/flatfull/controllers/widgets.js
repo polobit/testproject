@@ -479,7 +479,7 @@ function gotoService(e,service,dashboard){
         console.log(model);
         CURRENT_DOMAIN_USER = model.toJSON();
         // Call dashboard route
-        Backbone.history.navigate("#navigate-dashboard", {
+        Backbone.history.navigate("#", {
                 trigger: true
             });
     }, 
