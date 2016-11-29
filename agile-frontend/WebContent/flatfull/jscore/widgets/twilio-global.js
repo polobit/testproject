@@ -48,7 +48,16 @@ $(function(){
 				From: form,
 				To: to						
 			},function(data){
-				
+				data  = JSON.parse(data);
+				var modifyStatus = data.modifyStatus;
+				if(modifyStatus == "in-progress"){
+
+				}else{
+					$("#globalModal").html(getTemplate("callInfoModalAlert"));
+					$(".call-modal-body","#globalModal").html("{{agile_lng_translate 'twill' 'error-start-conference'}}");
+					$("#globalModal").modal('show');
+					return;
+				}
 			});
 		}else{
 			var tonumber = document.getElementById("calltransferoptions");
