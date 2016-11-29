@@ -373,4 +373,34 @@ public class WorkflowUtil
 	    }
 	    return partialDAO.listByProperty(map);	    	
 	}
+	
+	public static List<WorkflowPartial> getAllPartialWorkflows(Long allowCampaign)
+	{
+	    Map<String,Object> map = new HashMap<String,Object>();
+	    Long userId = DomainUserUtil.getCurentUserId();
+	    if(userId != null)
+	    {
+	    	List<Long> list = new ArrayList<Long>();
+	    	list.add(1L);
+	    	list.add(userId);
+	    	map.put("access_level IN ", list);
+	    }
+	    List<WorkflowPartial> partialWorkflows =  partialDAO.listByProperty(map);
+	
+	    boolean idPresent = false;
+	    for(WorkflowPartial workflowPartial : partialWorkflows){
+		  if(workflowPartial.id.equals(allowCampaign))
+			  idPresent = true;
+	    }
+	    if(!idPresent)
+	    {
+		Workflow workflow = WorkflowUtil.getWorkflow(allowCampaign);
+		if(workflow!=null)
+		{
+		    WorkflowPartial wp = new WorkflowPartial(workflow.id,workflow.name);
+		    partialWorkflows.add(wp);
+		}
+	    }
+	    return partialWorkflows;	    
+	}
 }

@@ -655,8 +655,11 @@ public class WorkflowsAPI {
      @Path("/partial")
      @GET
      @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-     public List<WorkflowPartial> getPartialWorkflows(){	
-	 return WorkflowUtil.getAllPartialWorkflows();		
+     public List<WorkflowPartial> getPartialWorkflows(@QueryParam("allow_campaign") Long allowCampaign){
+	 if(allowCampaign == null)
+	     return WorkflowUtil.getAllPartialWorkflows();
+	 else
+	     return WorkflowUtil.getAllPartialWorkflows(allowCampaign);
      }
 
 }

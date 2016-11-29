@@ -865,7 +865,7 @@ var WorkflowsRouter = Backbone.Router
 								 * @param optionsTemplate-
 								 *            to fill options with workflows
 								 */
-								fillSelect('email-tracking-campaign-id', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
+								fillSelect('email-tracking-campaign-id', '/core/api/workflows/partial?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
 								{
 									$('#email-tracking-campaign-id option:first').after('<option value="0">{{agile_lng_translate "subscriber_type" "all"}}</option>');
 
@@ -931,7 +931,7 @@ var WorkflowsRouter = Backbone.Router
 						 * @param optionsTemplate-
 						 *            to fill options with workflows
 						 */
-						fillSelect('campaign-select', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().campaign_id, 'workflow', function fillCampaign()
+						fillSelect('campaign-select', '/core/api/workflows/partial?allow_campaign=' + currentTrigger.toJSON().campaign_id, 'workflow', function fillCampaign()
 						{
 							var value = currentTrigger.toJSON();
 							if (value)

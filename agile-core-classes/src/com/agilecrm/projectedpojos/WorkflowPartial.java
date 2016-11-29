@@ -16,6 +16,17 @@ public class WorkflowPartial extends ProjectionEntityParse
     public Long id;
 
     public String name;
+    
+    public WorkflowPartial()
+    {
+	super();
+    }
+    
+    public WorkflowPartial(Long id,String name)
+    {
+	this.id = id;
+	this.name = name;
+    }
 
     public WorkflowPartial parseEntity(Entity entity)
     {
@@ -24,6 +35,7 @@ public class WorkflowPartial extends ProjectionEntityParse
 	return this;
     }
 
+    /*
     public List<Object> postProcess(List workflows)
     {
 	System.out.println("postProcess");
@@ -37,4 +49,5 @@ public class WorkflowPartial extends ProjectionEntityParse
 	 });
 	return workflows;
     }
+    */
 }
