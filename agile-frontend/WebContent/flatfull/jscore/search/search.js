@@ -18,7 +18,8 @@ function showSearchResults()
 	 * separate page.
 	 */
 	var query_text = $("#searchText").val();
-
+	if($.trim(query_text) == '')
+    	return;
 	// If keyword/input field is empty returns with out querying
 	if(!isQueryTextSearchValid(query_text))
 	{
@@ -184,6 +185,8 @@ $(function()
 	$('body').on('click', '#search-results', function(e)
 	{
 		var query = $("#searchText").val();
+		if($.trim(query) == '')
+    		return;
 		if(!isQueryTextSearchValid(query))
 		{
 			var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;

@@ -393,6 +393,8 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 		if(e.keyCode == 13){
 			var query = $("#searchText").val();
+			if ($.trim(query) == '')
+    			return;
 			if(!isQueryTextSearchValid(query))
 			{	
 				setTimeout(function(){
