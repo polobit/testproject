@@ -10,6 +10,8 @@ import org.scribe.exceptions.OAuthException;
 import com.agilecrm.subscription.limits.PlanLimits;
 
 public class ExceptionUtil {
+	public static String EMAILS_PURCHASE_BLOCKED= "Sorry. We already have one Email Purchase request in processing stage. Please contact our customer support for any queries.";
+	public static String EMAILS_PURCHASE_BLOCKING = "Blocking email adding";
 	public static WebApplicationException catchWebException(Exception exception) {
 		// Check for the Socket Timeout Exception.
 		if (exception instanceof SocketTimeoutException) {

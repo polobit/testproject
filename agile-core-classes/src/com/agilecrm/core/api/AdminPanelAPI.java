@@ -741,6 +741,19 @@ public class AdminPanelAPI
 		}
 	}
     
-    
-    
+    @Path("/release_email_account")
+    @POST
+    public void releaseEmailAcount(@QueryParam("d") String domainname){
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    	NamespaceManager.set(domainname);
+    	SubscriptionUtil.releaseEmailPurchasing();
+    	}catch(Exception e){
+    		throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
 }
