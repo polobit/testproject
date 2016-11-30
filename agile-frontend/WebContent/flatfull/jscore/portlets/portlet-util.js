@@ -1679,7 +1679,7 @@ var portlet_utility = {
 			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
-				url : '/core/api/workflows',
+				url : '/core/api/workflows/partial',
 				dataType : 'json',
 				success : function(data) {
 					$.each(data, function(index, campaignfilter) {
