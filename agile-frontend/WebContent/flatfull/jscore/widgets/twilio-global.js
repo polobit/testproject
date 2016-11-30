@@ -50,11 +50,11 @@ $(function(){
 			var modifyStatus = data.modifyStatus;
 			if(modifyStatus == "in-progress"){
 				var msgType = "success";
-				var msg = "Call transfered successfully";
+				var msg = "{{agile_lng_translate 'twill' 'success-start-transfer'}}";
 				showNotyPopUp(msgType , msg, "bottomRight");
 			}else{
 				$("#globalModal").html(getTemplate("callInfoModalAlert"));
-				$(".call-modal-body","#globalModal").html("{{agile_lng_translate 'twill' '.error-start-transfer'}}");
+				$(".call-modal-body","#globalModal").html('{{agile_lng_translate "twill" "error-start-transfer"}}');
 				$("#globalModal").modal('show');
 				return;
 			}
