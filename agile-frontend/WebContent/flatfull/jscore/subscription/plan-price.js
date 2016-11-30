@@ -864,8 +864,14 @@ $(function(){
 					document.location.reload();
 				}, 1000);				
 			},error: function(data){
-				if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
-					$("#purchase-credits-info-modal .modal-body").html("Thanks for your payment.<br><br>We serious about spam and validate your account before you start using it. Please bare with us, our support team will validate your account and release your purchased email credits soon.<br><br>Feel free to contact our support for quick response.");
+				var responseJSON = undefined;
+				try{
+					responseJSON = JSON.parse(data.responseText);
+				}catch(e){
+					console.log(e); //error in the above string(in this case,yes)!
+				}
+				if(responseJSON && responseJSON.type && responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
+					$("#purchase-credits-info-modal .modal-body").html("Thanks for your payment.<br>We serious about spam and validate your account before you start using it. Please bare with us, our support team will validate your account and release your purchased email credits soon.<br>Feel free to contact our support for quick response.");
 					$(that).hide();
 				}
 				else{

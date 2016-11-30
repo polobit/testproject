@@ -200,7 +200,7 @@ var SubscribeRouter = Backbone.Router
 				}, errorCallback : function(data)
 				{
 					if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
-						showAlertModal("Thanks for your payment.<br><br>We serious about spam and validate your account before you start using it. Please bare with us, our support team will validate your account and release your subscribed emails soon.<br><br>Feel free to contact our support for quick response.", "alert", undefined, undefined, "Email Subscription");
+						showAlertModal("Thanks for your payment.<br>We serious about spam and validate your account before you start using it. Please bare with us, our support team will validate your account and release your subscribed emails soon.<br>Feel free to contact our support for quick response.", "alert", undefined, undefined, "Email Subscription");
 						window.location.href="#subscribe"
 					}
 					else	
