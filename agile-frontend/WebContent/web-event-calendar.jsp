@@ -29,10 +29,7 @@
 <%@page import="java.util.Arrays"%>
 
 <%
-if(SubscriptionUtil.isSubscriptionDeleted()){
-	request.getRequestDispatcher("not_available.jsp").forward(request, response);
-	return;
-}
+boolean isSubscriptionDeleted = SubscriptionUtil.isSubscriptionDeleted();
 // User Language 
 String _LANGUAGE = "en", _LANGUAGE_USER = "en";
 
@@ -234,6 +231,9 @@ if(scheduleid.contains(",")){
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%if(isSubscriptionDeleted) {%>
+<%@ include file="not_available.jsp"%>
+<%}else{ %>
 <html>
 <head>
 <% 
@@ -1385,3 +1385,4 @@ var LOCALES_JSON = <%=localeJSON%>;
 </body>
 
 </html>
+<%} %>

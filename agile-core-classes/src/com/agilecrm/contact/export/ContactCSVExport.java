@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
-import com.agilecrm.activities.Category;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
-import com.amazonaws.services.route53domains.model.ContactType;
 
 /**
  * <code>ContactCSVExport</code> handles building CSV file for obtained
@@ -265,8 +264,20 @@ public class ContactCSVExport
 		    	try{
 			    	Integer index = indexMap.get(field.name + " Name");
 			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
-			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
-			    		if (contacts.size() > 0) {
+			    		JSONArray customFieldsArray = null;
+			    		try {
+			    			JSONParser parser = new JSONParser();
+			    			customFieldsArray = (JSONArray)parser.parse(field.value);
+						} catch (Exception e) {
+							System.out.println("Exception occured while converting contact and company type custom fields JSON string to array");
+							e.printStackTrace();
+						}
+			    		List<Contact> contacts = null;
+			    		if(customFieldsArray != null && customFieldsArray.size() > 0)
+			    		{
+			    			contacts = ContactUtil.getContactsBulk(new org.json.JSONArray(customFieldsArray.toJSONString())) ;
+			    		}
+			    		if (contacts != null && contacts.size() > 0) {
 			    			StringBuilder contactName = new StringBuilder("[");
 				    		for(Contact cont : contacts){
 				    			if(cont.type.equals(Contact.Type.PERSON)){

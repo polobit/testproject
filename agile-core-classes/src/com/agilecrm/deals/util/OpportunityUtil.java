@@ -2389,9 +2389,11 @@ public class OpportunityUtil
 	List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 	JSONObject sourcecount = new JSONObject();
 	sourcecount.put("0", type.equalsIgnoreCase("deals") ? 0 : 0.0);
+	if(sources != null){
 	for (Category source : sources)
 	{
 	    sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
+	}
 	}
 	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
@@ -2408,11 +2410,13 @@ public class OpportunityUtil
 		 * Date(opportunity.close_date * 1000));
 		 */
 		Long source_id = opportunity.getDeal_source_id();
-		List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-		for (Category source_temp : sources_id)
+		//List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+		if(sources != null){
+		for (Category source_temp : sources)
 		{
 		    if (source_temp.getId().toString().equals(source_id.toString()))
 			flag_reason = false;
+		}
 		}
 		if (flag_reason)
 		    source_id = 0L;
@@ -2470,7 +2474,7 @@ public class OpportunityUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("Exception :" + e);
+		System.out.println("Exception :" + e.getMessage());
 	    }
 	}
 	return newDealsObject;

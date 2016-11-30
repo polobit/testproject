@@ -6078,3 +6078,66 @@ subscription-email.plan-changed,Plan Changed,plan cambió
 payment-fail-email.unfortunately-your-account-cancelled,Unfortunately&#44; your account is cancelled,Por desgracia&#44; su cuenta es cancelada
 verify-email.click-link-to-verify,Thanks for signing up. Please click the link below to verify your email.,Gracias por registrarte. Por favor&#44; haga clic en el siguiente enlace para verificar su correo electrónico.
 campaigns.triggers-title,Triggers,
+
+contacts-view.import-upto-10&#44,000-deals-from-a-CSV-file
+prefs-online-calendar.In Person&#44, Phone&#44
+tickets.Last&nbsp,Updated&nbsp
+tickets.Requester&nbsp,Name
+tickets.Assigned&nbsp,Date
+tickets.Created&nbsp,Date
+tickets.Ticket&nbsp,Type
+tickets.Closed&nbsp,Date
+tickets.Due&nbsp,Date
+landingpage-builder.page-header-inf,Additional code specifically to this page
+tickets.feedback-assignee,Assignee
+tickets.feedback-time,Created Time
+admin-settings-custom-fields.text-area-desc-new,Text area - A large text input field
+admin-settings-custom-fields.formula-desc-new,Formula - An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. Mustache conditions can be used here.
+modals.phone-number-ext, Phone Number
+validation-msgs.Pls-enter-a-valid-ext-no, Invalid extension. Extension can contain only numbers or * or #
+portlets.no-user-activities,No User Activities Found
+portlets.no-tasks-found,No Tasks Found
+portlets.no-deals-goals-set-new,No Deals Goals Set 
+portlets.no-revenue-goals-set-new,No Revenue Goals Set
+portlets.no-pending-deals,No Pending Deals
+calls.duration-secs-new,Call Duration (Min)
+calls.avg-duration-secs-new,Average Call Duration (Min)
+contacts-view.manage-filters,Manage Filter
+portlets.+add-new,#NAME?
+landingpage-builder.page-script-applied,Script applied specifically to this page (JavaScript)
+landingpage-builder.page-js,Page JS
+admin-settings-users.updated-time,Updated Time
+admin-settings-users.status,Status
+admin-settings-deals.manage-tracks,Manage Tracks
+landingpage-builder.recorded-video,Recorded Video
+landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39
+landingpage-builder.form-tooltip,Select/Add agile form in landing page
+specialchar-typeahead.notallowed-apclchars,Search query characters result in server exception. Please try again
+specialchar-typeahead.query-spclchars,Search query characters will result in server exception. Please try again
+validation-msgs.card-expired,Expiration date must be in future
+specialchar-typeahead.query-message,Search input contains unsupported characters. Please try again.
+documents.no-products,You do not have any products currently. Configure them
+products.product-name,Product Name
+landingpage-builder.refresh-form-tooltip,Click to refresh form list
+landingpage-builder.edit-form-tooltip,Click to edit this form
+documents.name,Name
+ticketlabel.lable-name,Name
+dealgoal.goalcount,Goal Count
+products.sku,Product Code
+products.product-qty-new,Qty.
+products.product-price-new,Unit Price
+documents.newdocuments-helptext-para1,Documents help you to manage your PDFs
+documents.newdocuments-helptext-para2,EDocuments can also be created
+prefs-settings.new-ticket,New Ticket
+prefs-settings.new-call,Call
+documents.newdocuments-helptext-paragraph1,Documents help you to manage your PDFs&#44 presentations&#44 quotes&#44 proposals and so on in Agile CRM. Agile CRM allows you to add&#44 manage and delete your Documents. Documents can be uploaded from your local drive or Google Drive. Documents can be attached to contacts or companies or deals.
+documents.newdocuments-helptext-paragraph2,EDocuments can also be created&#44 managed and sent in Agile CRM. Personalize and customize EDocuments for every scenario in the sales cycle. EDocuments can be built from existing templates or custom built for required sales scenario.
+addon.addon-payment,Add-on Payment
+addon.addon,Add-on
+prefs-settings.event-reminders,Event Reminders
+landingpage-builder.image-url,Enter image path
+landingpage-builder.enter-image-url,Enter an image Url 
+landingpage-builder.error-image-url,Please enter a valid image url
+sso.ssoheading,Single Sign-On (SSO) Authentication.
+sso.authenticationtext,Single sign-on is a session and user authentication service that permits a user to use one set of login credentials (e.g.&#44 user name and password) to access multiple applications.
+notications.enable-notifications,Enable Notifications

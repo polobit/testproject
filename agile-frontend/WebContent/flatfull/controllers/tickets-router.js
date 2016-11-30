@@ -132,8 +132,8 @@
 			isNew : true,
 			individual_tag_name : 'tr',
 			sort_collection : true, 
-			sortKey : 'feedback_time',
-			descending : true,
+			sortKey : 'created_time',
+			descending: true,
 			postRenderCallback:function(el,model){		
 				includeTimeAgo(el);
 			
