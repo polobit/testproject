@@ -245,6 +245,7 @@ if(message.state == "connected"){
 	if(widgetype !=  "skype"){
 		if(widgetype ==  "TwilioIO"){
 			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""});
+			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voice_mail","popover-date":"Voicemail","title":""});
 			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out ","popover-date":"Transfer call","title":""});
 		}
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","popover-date":"Mute","title":""});
@@ -450,7 +451,7 @@ function showDraggablePopup(param){
 	$(".icon-call-out").css({'font-size':'16px'});
 	$("#draggable_noty").show();
 	$("#draggable_noty").draggableTouch();
-	$(".noty_twilio_voicemail").html("<img src='../widgets/voicemail.png' style='width: 15px;' />");
+	$(".noty_twilio_voice_mail").html("<img src='../widgets/voicemail.png' style='width: 15px;' />");
 
 	$("#draggable_noty").bind("dragstart", function(e, pos) {
 	 flag = true;
@@ -519,10 +520,13 @@ function makeDraggableDialpad(templateName, param, ele){
 }
 
 function makeDraggableVoicemail(widgetName){
-	
-	accessUrlUsingAjax("core/api/voicemails", function(resp){
 
-			$('#call-noty-l1').html($(getTemplate("twilioio-voicemail",resp)));
+	accessUrlUsingAjax("core/api/voicemails", function(resp){
+		if(resp.length > 0){
+			$("#draggable_noty #call-noty-l1").html($(getTemplate("twilioio-voicemail",resp)));
+		}else{
+			$("#draggable_noty #call-noty-l1").html("<a href='#voice-mail-add' class='voice-mail-add btn btn-default btn-sm btn-addon' id='addEmailTemplate'>Add Voicemail</a>");
+		}
 
 	});
 	

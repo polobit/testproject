@@ -162,7 +162,6 @@
 {{#if this}}
   <div class="btn-group" role="group" aria-label="">
     <div class="btn-group" role="group">
-    {{#ifCond length "greaterthan" 1}}
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-length="{{length}}" data-src="{{this.0.extension}}">
         Send voicemail
         <span class="caret"></span>
@@ -172,7 +171,6 @@
         <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
       {{/each}}
       </ul>
-      {{/ifCond}}
     </div>
   </div>
 {{/if}}

@@ -140,7 +140,7 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 		/*App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
 		App_VoiceMailRouter.VoiceMailCollectionView.render(true);*/
 		enable_save_button($(saveBtn));
-		
+		makeDraggableVoicemail();
 		if(form_id)
 		{
 			$('#' + form_id).find("#network_type").val("");
