@@ -853,6 +853,7 @@ $(function(){
 		if(!isValidForm($form))
 			return;
 		$(this).attr("disabled", "disabled").html("{{agile_lng_translate 'plan-and-upgrade' 'processing'}}");
+		var that = this;
 		var credits_count = $form.find("#email_credits_count").val();
 		$.ajax({url:'core/api/subscription/purchaseEmailCredits?quantity='+credits_count,
 			type:'POST',
@@ -862,9 +863,25 @@ $(function(){
 				setTimeout(function(){ 
 					document.location.reload();
 				}, 1000);				
-			},error: function(response){
-				$form.closest(".modal").modal("hide");
-				showNotyPopUp("warning", response.responseText, "top"); 
+			},error: function(data){
+				var responseJSON = undefined;
+				try{
+					responseJSON = JSON.parse(data.responseText);
+				}catch(e){
+					console.log(e); //error in the above string(in this case,yes)!
+				}
+				if(responseJSON && responseJSON.type && responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
+					getTemplate("emails-limit-crossed-message",{} , undefined, function(template_ui){
+						if(!template_ui)
+							return;
+						$("#purchase-credits-info-modal .modal-body").html($(template_ui));
+						$(that).hide();
+					}, null);
+				}
+				else{
+					$form.closest(".modal").modal("hide");
+					showNotyPopUp("warning", data.responseText, "top"); 
+				}
 			}
 		});
 	});

@@ -1,5 +1,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
 <%
 /*
 It checks if any user exists in that domain,
@@ -10,11 +11,17 @@ String success = "";
 //If Email is present
 
 String domain = request.getParameter("subdomain");
+String type = request.getParameter("type");
 if(!StringUtils.isEmpty(domain))
 {
     System.out.println(DomainUserUtil.count());
 	if(DomainUserUtil.count(domain.toLowerCase()) == 0)
 	{
+		if(type != null && type.equalsIgnoreCase("oauth")){
+		 	NamespaceManager.set(domain);
+			response.sendRedirect("/register?type=oauth");
+			return;
+		}
 	    success = "Creating " + domain;
 		response.sendRedirect("https://" + domain + ".agilecrm.com/register");
 		return;

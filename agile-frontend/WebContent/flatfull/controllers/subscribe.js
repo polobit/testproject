@@ -199,7 +199,12 @@ var SubscribeRouter = Backbone.Router
 
 				}, errorCallback : function(data)
 				{
-					showNotyPopUp("warning", data.responseText, "top");
+					if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
+						showAlertModal("<p>Thank you for Payment.</p><p>We are processing your request. Emails purchased will be credited to your account with in 24 Hours.</p><p>Please contact our customer support for any queries.</p>", "alert", undefined, undefined, "Email Subscription");
+						window.location.href="#subscribe"
+					}
+					else	
+						showNotyPopUp("warning", data.responseText, "top");
 				}
 				/*
 				 * prePersist : function(el) { console.log(el); }

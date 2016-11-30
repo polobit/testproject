@@ -18,8 +18,10 @@ function showSearchResults()
 	 * separate page.
 	 */
 	var query_text = $("#searchText").val();
-	if($.trim(query_text) == '')
-    	return;
+	if ($.trim(query_text) == ''){
+		$(".dashboard-search-scroll-bar").hide();
+		return;
+	}
 	// If keyword/input field is empty returns with out querying
 	if(!isQueryTextSearchValid(query_text))
 	{
@@ -185,8 +187,10 @@ $(function()
 	$('body').on('click', '#search-results', function(e)
 	{
 		var query = $("#searchText").val();
-		if($.trim(query) == '')
-    		return;
+		if ($.trim(query) == ''){
+			$(".dashboard-search-scroll-bar").hide();
+			return;
+		}
 		if(!isQueryTextSearchValid(query))
 		{
 			var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;

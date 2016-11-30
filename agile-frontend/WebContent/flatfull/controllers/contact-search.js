@@ -18,8 +18,10 @@ var ContactSearchRouter = Backbone.Router.extend({
 	{
 		try{query = query.trim();}catch(e){}
 
-		if($.trim(query) == '')
-    		return;
+		if ($.trim(query) == ''){
+			$(".dashboard-search-scroll-bar").hide();
+			return;
+		}
     	if(!isQueryTextSearchValid(query)){    		
 			var txt = '<div id="search-results-container"><div class="wrapper-md lter bg-light b-b"><div class="row"><div class="col-md-12"><div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3 pull-left">{{agile_lng_translate "specialchar-typeahead" "error-input"}}</div><div class="pull-right"><div class="btn-group" id="view-list"></div><div class="btn-group right" id="filter-list"></div></div><div class="clearfix"></div></div></div></div></div>' ;
 			$("#content").html(txt);
