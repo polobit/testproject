@@ -339,8 +339,8 @@ public class SubscriptionUtil
     	subscription.setPendingEmailsCount(pendingEmailsCount);
     	subscription.save();
     	DomainUser user = DomainUserUtil.getCurrentDomainUser();
-    	String text = "Below are the details who subscribed or purchased emails:<br><br>Domain: "+user.domain+"<br>Username: "+user.email+"Emails type: EMAIL "+type.toString();
-    	SendGrid.sendMail(user.email, user.domain, "mogulla@agilecrm.com,narmada@agilecrm.com", null, null, "Email Subscription - Spam Checking", null, null, text);
+    	String html = "Below are the details who subscribed or purchased emails:<br><br>Domain: "+user.domain+"<br>Username: "+user.email+"<br>Emails type: EMAIL "+type.toString();
+    	SendGrid.sendMail(user.email, user.domain, "mogulla@agilecrm.com,narmada@agilecrm.com", null, null, "Email Subscription - Spam Checking", null, html, null);
     	return subscription;
     }
     
