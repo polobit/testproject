@@ -871,8 +871,12 @@ $(function(){
 					console.log(e); //error in the above string(in this case,yes)!
 				}
 				if(responseJSON && responseJSON.type && responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
-					$("#purchase-credits-info-modal .modal-body").html("Thanks for your payment.<br>We serious about spam and validate your account before you start using it. Please bare with us, our support team will validate your account and release your purchased email credits soon.<br>Feel free to contact our support for quick response.");
-					$(that).hide();
+					getTemplate("emails-limit-crossed-message",{} , undefined, function(template_ui){
+						if(!template_ui)
+							return;
+						$("#purchase-credits-info-modal .modal-body").html($(template_ui));
+						$(that).hide();
+					}, null);
 				}
 				else{
 					$form.closest(".modal").modal("hide");
