@@ -110,27 +110,27 @@ var ContactSearchRouter = Backbone.Router.extend({
 									if(data.url && data.url.endsWith('person'))
 									{
 										$('#search-results-container').find('#search_content_person').html(getTemplate("search-collection" , {}));
-										$("#search_content_person").find('#search-query-heading').html('Search query is not supported for <b>Contacts </b>');
+										$("#search_content_person").find('#search-query-heading').html('Search query is not supported in <b>Contacts </b>');
 									}
 									else if(data.url && data.url.endsWith('company'))
 									{
 										$('#search-results-container').find('#search_content_company').html(getTemplate("search-collection" , {}));
-										$("#search_content_company").find('#search-query-heading').html('Search query is not supported for <b>Companies </b>');
+										$("#search_content_company").find('#search-query-heading').html('Search query is not supported in <b>Companies </b>');
 									}
 									else if(data.url && data.url.endsWith('document'))
 									{
 										$('#search-results-container').find('#search_content_document').html(getTemplate("search-collection" , {}));
-										$("#search_content_document").find('#search-query-heading').html('Search query is not supported for <b>Documents </b>');
+										$("#search_content_document").find('#search-query-heading').html('Search query is not supported in <b>Documents </b>');
 									}
 									else if(data.url && data.url.endsWith('opportunity'))
 									{
 										$('#search-results-container').find('#search_content_opportunity').html(getTemplate("search-collection" , {}));
-										$("#search_content_opportunity").find('#search-query-heading').html('Search query is not supported for <b>Deals </b>');
+										$("#search_content_opportunity").find('#search-query-heading').html('Search query is not supported in <b>Deals </b>');
 									}
 									else if(data.url && data.url.endsWith('tickets'))
 									{
 										$('#search-results-container').find('#search_content_tickets').html(getTemplate("search-collection" , {}));
-										$("#search_content_tickets").find('#search-query-heading').html('Search query is not supported for <b>Tickets </b>');
+										$("#search_content_tickets").find('#search-query-heading').html('Search query is not supported in <b>Tickets </b>');
 									}					
 
 								}

@@ -395,14 +395,13 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 			var query = $("#searchText").val();
 			if(!isQueryTextSearchValid(query))
 			{	
-				setTimeout(function(){  
-					console.log('aawdvasd');
+				setTimeout(function(){
 					var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
 					$(".dashboard-search-scroll-bar").empty();
 					$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 					$("#searchText").val(query);
 					$(".dashboard-search-scroll-bar").show();
-				}, 100);
+				}, 200);
 				return false;
 			}			
 			$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});

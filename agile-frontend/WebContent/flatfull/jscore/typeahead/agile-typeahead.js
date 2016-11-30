@@ -204,7 +204,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 							{	
 								var txt = '<b>Unable to Process the Query.Please try again.</b>' ;
 								if(data.responseText)
-									txt = '<b>'+data.responseText +'</b>';
+									txt = data.responseText ;
 								$('.dashboard-search-scroll-bar').html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 							});
 						},
