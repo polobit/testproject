@@ -615,7 +615,7 @@ function initRolehandlers(){
  							console.log(model);
  							CURRENT_DOMAIN_USER = model.toJSON();
  							// Call dashboard route
-					 		Backbone.history.navigate("#navigate-dashboard", {
+					 		Backbone.history.navigate("#navigate-dashboard/"+dashboardName, {
 					                trigger: true
 					            });
  						}, 

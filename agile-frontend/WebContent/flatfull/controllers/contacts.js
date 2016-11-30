@@ -90,8 +90,29 @@ var ContactsRouter = Backbone.Router.extend({
 	navigateDashboard : function(id){
 		// Call dashboard route
 		if(id)
+		{
 		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
-		
+
+		var prevrole = menuServicerole(id);
+		if(CURRENT_DOMAIN_USER.role != prevrole)
+		{
+			CURRENT_DOMAIN_USER.role = prevrole ;
+			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = prevrole;
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save(json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 							// Call dashboard route
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+		}
+	}
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -1899,6 +1920,19 @@ function menuServiceDashboard(role){
 				break;
 			case 'SERVICE' :
 				return "Dashboard";
+				break;
+		}
+}
+function menuServicerole(dashboard){
+		switch(dashboard){
+			case 'SalesDashboard':
+			    return "SALES"
+			    break;
+			case 'MarketingDashboard':
+				return "MARKETING";
+				break;
+			case 'Dashboard' :
+				return "SERVICE";
 				break;
 		}
 }

@@ -249,7 +249,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   left: 0;
   right: 0;
   margin: 0px auto;
-  width: 420px;
+  width: 429px;
 }
 .menuHelpPopover
 {
@@ -341,10 +341,10 @@ function isIE() {
 </div>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
-   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-msg") %>.
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-msg") %>
   </span>
   <a href="#subscribe" class="text-info font-bold" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "noty-upgrade") %></a>
-   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-message") %>.
+   <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-message") %>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
 

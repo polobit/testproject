@@ -5896,3 +5896,5 @@ email.send-verification-email-text,Send Verification Email,,,,,,,,,,,,,,,,,,,,,,
 widgets.try-out-helpdesk,We have launched our new HelpDesk.,,,,,,,,,,,,,,,,,,,,,,,
 widgets.try-out-helpdesk-link,Try out the beta now.,,,,,,,,,,,,,,,,,,,,,,,
 specialchar-typeahead.error-input,Search input is not supported. Please try again.,,,,,,,,,,,,,,,,,,,,,,,
+admin-settings-custom-fields.custom-field-searchable-warning-new,‘Searchable’ must be checked for a custom field to be sortable and searchable.,
+
