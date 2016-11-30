@@ -328,7 +328,7 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
                                 <div class="col-xs-4" style="float: right">
 
-                                    <a class="btn btn-warning btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
+                                    <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
                                 </div>
 
                             </div>
