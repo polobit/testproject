@@ -318,7 +318,7 @@ if(isSafari && isWin)
 
 
 <form id='oauth' name='oauth' method='post' class="text-alignment m-t" action="/register">
-			<div id="openid_btns" class="login-social-btns">
+			<div id="openid_btns" class="login-social-btns hide">
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
 					<small class="text-white">Sign up using <small>
