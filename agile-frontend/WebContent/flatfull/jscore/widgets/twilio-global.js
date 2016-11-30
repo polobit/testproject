@@ -15,6 +15,7 @@ TWILIO_DIRECTION = "";
 TWILIO_CALLED_NO = "";
 TWILIO_IS_VOICEMAIL = false;
 var TWILIO_CONTACT ;
+var calltransfer = false;
 
 function initializeTwilioGlobalListeners(){
 	
@@ -32,98 +33,64 @@ $(function(){
 		}
 	}, 10000); // 15 sec
 
-    $('body').off('click', '.noty_twilio_transefer');
-    $('body').on('click', '.noty_twilio_transefer', function(e){
+    $('body').off('click', '.twiliousers');
+    $('body').on('click', '.twiliousers', function(e){
 		e.preventDefault();
-		var textdisplay = $(this).text();
-		if(textdisplay == 'Transfer'){
-			var callsid = globalconnection.parameters.CallSid;
-			var form = Verfied_Number;
-			var tonumber = document.getElementById("calltransferoptions");
-			var to = tonumber.options[tonumber.selectedIndex].value;
-
-			$.post( "/core/api/widgets/twilio/transferCall", {
-				callSid:callsid,
-				direction:TWILIO_CALLTYPE,
-				From: form,
-				To: to						
-			},function(data){
-				data  = JSON.parse(data);
-				var modifyStatus = data.modifyStatus;
-				if(modifyStatus == "in-progress"){
-					var msgType = "success";
-					var msg = "Call transfered successfully";
-					showNotyPopUp(msgType , msg, "bottomRight");
-				}else{
-					$("#globalModal").html(getTemplate("callInfoModalAlert"));
-					$(".call-modal-body","#globalModal").html("{{agile_lng_translate 'twill' '.error-start-transfer'}}");
-					$("#globalModal").modal('show');
-					return;
-				}
-			});
-		}else{
-			var tonumber = document.getElementById("calltransferoptions");
-			var to = tonumber.options[tonumber.selectedIndex].value;
-
-			var contactToCall  = agile_crm_get_contact();
-			if (checkForActiveCall()){
-				var jsonParam = {};
-				jsonParam['number'] = to;
-				jsonParam['contact'] = contactToCall;
-				confirmConferenceCallToDial(jsonParam);
+		calltransfer = true;
+		var callsid = globalconnection.parameters.CallSid;
+		var form = Verfied_Number;
+		var to = $(this).attr("data-src");
+		$.post( "/core/api/widgets/twilio/transferCall", {
+			callSid:callsid,
+			direction:TWILIO_CALLTYPE,
+			From: form,
+			To: to						
+		},function(data){
+			data  = JSON.parse(data);
+			var modifyStatus = data.modifyStatus;
+			if(modifyStatus == "in-progress"){
+				var msgType = "success";
+				var msg = "Call transfered successfully";
+				showNotyPopUp(msgType , msg, "bottomRight");
+			}else{
+				$("#globalModal").html(getTemplate("callInfoModalAlert"));
+				$(".call-modal-body","#globalModal").html("{{agile_lng_translate 'twill' '.error-start-transfer'}}");
+				$("#globalModal").modal('show');
 				return;
 			}
+		});
+	});
+	$('body').off('click', '.twiliousersconf');
+    $('body').on('click', '.twiliousersconf', function(e){
+		e.preventDefault();
+		var callsid = globalconnection.parameters.CallSid;
+		var form = Verfied_Number;
+		var to = $(this).attr("data-src");
+
+		var contactToCall  = agile_crm_get_contact();
+		if (checkForActiveCall()){
+			var jsonParam = {};
+			jsonParam['number'] = to;
+			jsonParam['contact'] = contactToCall;
+			confirmConferenceCallToDial(jsonParam);
+			return;
 		}
 	});
 	$('body').off('click', '.noty_twilio_phone');
     $('body').on('click', '.noty_twilio_phone', function(e){
 		e.preventDefault();
-		$.ajax({
-		  method: "GET",
-		  url: "/core/api/widgets/twilio/getTwilioUsers",
-		   success: function(data) {
-		   		$(".noty_twilio_transefer").text("Transfer");
+		makeDraggableTransfer();
+	});
 
-			   	var phoneNumberHtml = "<option value=''>Select number</option></ul>";
-				var optionHtml = "";
-				$.each(data, function(i, item){
-					optionHtml = '<option data="' + item.twillioNumber + '" value="' + item.twillioNumber + '">' + item.username +' ('+item.twillioNumber + ')</option>';
-					if(item.domainusernumber)
-						optionHtml += '<option data="' + item.domainusernumber + '" value="' + item.domainusernumber + '">' + item.username +' ('+item.domainusernumber + ')</option>';
-
-					phoneNumberHtml = phoneNumberHtml + optionHtml;
-				});
-				if(data.length > 0){
-					$("#calltransferdiv").show();
-					$(".calltransferoptions").html(phoneNumberHtml);
-				}
-		   }
-		});
+	$('body').off('click', '.noty_twilio_voicemail');
+    $('body').on('click', '.noty_twilio_voicemail', function(e){
+		e.preventDefault();
+		makeDraggableVoicemail();
 	});
 	$('body').off('click', 'noty_twilio_conf');
     $('body').on('click', '.noty_twilio_conf', function(e){
 		e.preventDefault();
-		$.ajax({
-		  method: "GET",
-		  url: "/core/api/widgets/twilio/getTwilioUsers",
-		   success: function(data) {
-		   		$(".noty_twilio_transefer").text("Add number");
-		   		
-			   	var phoneNumberHtml = "<option value=''>Select number</option></ul>";
-				var optionHtml = "";
-				$.each(data, function(i, item){
-					optionHtml = '<option data="' + item.twillioNumber + '" value="' + item.twillioNumber + '">' + item.username +' ('+item.twillioNumber + ')</option>';
-					if(item.domainusernumber)
-						optionHtml += '<option data="' + item.domainusernumber + '" value="' + item.domainusernumber + '">' + item.username +' ('+item.domainusernumber + ')</option>';
-					
-					phoneNumberHtml = phoneNumberHtml + optionHtml;
-				});
-				if(data.length > 0){
-					$("#calltransferdiv").show();
-					$(".calltransferoptions").html(phoneNumberHtml);
-				}
-		   }
-		});
+		makeDraggableConference();
 	});
 	
     $('body').off('click', '.noty_twilio_add_contact');
@@ -224,7 +191,7 @@ $(function(){
 		if(CALL_CAMPAIGN.start){
 				CALL_CAMPAIGN.state = "START";
 				dialNextCallManually();			
-	}
+		}
 	});
 
     $('body').off('click', '.noty_twilio_cancel');
@@ -1220,7 +1187,7 @@ function initTwilioListeners()
 							return;
 						}
 						
-						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out","popover-date":"Transfer call","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","popover-date":"Mute","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","popover-date":"Unmute","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","popover-date":"Dialpad","title":""},{"id":"", "class":"btn btn-sm btn-danger noty_twilio_hangup","title":"Hangup"}];
+						var btns = [{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voicemail","popover-date":"Voicemail","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out","popover-date":"Transfer call","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_mute icon-microphone","popover-date":"Mute","title":""},{"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_unmute icon-microphone-off","popover-date":"Unmute","title":""},{"id":"", "class":"btn btn-xs btn-default noty_twilio_dialpad icon-th","popover-date":"Dialpad","title":""},{"id":"", "class":"btn btn-sm btn-danger fa fa-headphones cam-call-icon noty_twilio_hangup","popover-date":"Hangup","title":""}];
 						showDraggableNoty("Twilioio", TWILIO_CONTACT, "connected", To_Number, btns);
 						
 						/*showCallNotyPopup("connected", "Twilio", Twilio_Call_Noty_IMG+'<span class="noty_contact_details"><b>On call  </b>' + To_Number +'<br><a href="#contact/'+TWILIO_CONTACT_ID+'" style="color: inherit;">' + To_Name + '</a><br></span><div class="clearfix"></div>', false);*/
@@ -1341,12 +1308,16 @@ Twilio.Device.disconnect(function(conn){
 				}catch(e){
 				}*/
 
+				if(calltransfer)
+					isParent = "false";
+
 				var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
 				console.log(ApiCallUrl);
 				if(!widgetDetails)
 					return;
 
 				twilioApiRequest(ApiCallUrl, function(data){
+						calltransfer = false;
 						var callDetails  = data;
 						console.log("Call Details : isParent " + isParent);
 						console.log(callDetails);

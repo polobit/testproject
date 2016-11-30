@@ -160,16 +160,67 @@
 
 <script id="twilioio-voicemail-template" type="text/html">
 {{#if this}}
-<div class="btn-group dropup pull-left">
-<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">{{agile_lng_translate 'widgets' 'leave-voicemail'}}</button>
-{{#ifCond length "greaterthan" 1}}
-<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret" style="border-top: 4px solid;border-bottom:0px;"></span></button>
-<ul class="dropdown-menu text-left text-base" style="position: relative;z-index:10000;">
-{{#each this}}
-<li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
-{{/each}}
-</ul>
-{{/ifCond}}
-</div>
+  <div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+    {{#ifCond length "greaterthan" 1}}
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-length="{{length}}" data-src="{{this.0.extension}}">
+        Send voicemail
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+      {{#each this}}
+        <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
+      {{/each}}
+      </ul>
+      {{/ifCond}}
+    </div>
+  </div>
 {{/if}}
 </script>
+
+<script id="twilioio-users-template" type="text/html">
+  <div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select number
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+      {{#each this}}
+        <li>
+          <a href="#" data-src="{{twillioNumber}}" class="twiliousers">{{username}}({{twillioNumber}})</a>
+        </li>
+        {{/each}}
+        {{#each this}}
+          <li>
+          {{#if this.domainusernumber}}
+            <a href="#" data-src="{{domainusernumber}}" class="twiliousers">{{username}}({{domainusernumber}})</a>
+          {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</script>
+<script id="twilioio-users-conference-template" type="text/html">
+  <div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select number
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+      {{#each this}}
+        <li>
+        {{#if this.domainusernumber}}
+          <a href="#" data-src="{{domainusernumber}}" class="twiliousersconf">{{username}}({{domainusernumber}})</a>
+        {{else}}
+          <a href="#" data-src="{{twillioNumber}}" class="twiliousersconf">{{username}}({{twillioNumber}})</a>
+        {{/if}}
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</script>
+
