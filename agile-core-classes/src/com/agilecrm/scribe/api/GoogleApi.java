@@ -38,6 +38,12 @@ public class GoogleApi extends DefaultApi20
 	 */
 	private static final String REDIRECT_URL = "https://my.agilecrm.com/backend/googleservlet";
 
+	private static final String GMAIL_SEND_REDIRECT_URI = "https://null-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/googleservlet";
+	
+	public static final String RAMESHWEBKEY_BETA_CLIENT_ID = "492662354647-0lcau95v3nj53ie97fo7usnchhr0joap.apps.googleusercontent.com";
+	public static final String RAMESHWEBKEY_BETA_SECRET_KEY = "NNfKgAleLw19xbKPioGYI0XI";
+	
+	
 	/**
 	 * Returns access token URL of Google
 	 */
@@ -51,6 +57,11 @@ public class GoogleApi extends DefaultApi20
 	public static String getRedirectURL()
 	{
 		return REDIRECT_URL;
+	}
+
+	public static String getGmailSendRedirectURI()
+	{
+		return GMAIL_SEND_REDIRECT_URI;
 	}
 
 	public Verb getAccessTokenVerb()
@@ -68,24 +79,29 @@ public class GoogleApi extends DefaultApi20
 	@Override
 	public String getAuthorizationUrl(OAuthConfig config)
 	{
-
+		String oauthScope = config.getScope();
+		
 		if (config.getCallback() != null)
 			System.out.println("called api " + OAuthEncoder.encode(config.getCallback()));
 
-		// For OAuth2 Authorization for profile, we do not have offline every
-		// time
+		// For OAuth2 Authorization for profile, we do not have offline every time
 		String url = AUTHORIZE_URL;
-		if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE)
-				|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE))
+		
+		if (oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE)
+				|| oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE))
 			url = AUTHORIZE_URL_AUTO_PROMPT_TYPE;
 
-		else if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CONTACTS_SCOPE)
-				|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CALENDAR_SCOPE)
-				|| config.getScope().equalsIgnoreCase(ScribeServlet.GMAIL_SCOPE)
-				|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_PLUS_OAUTH2_SCOPE))
+		else if (oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_CONTACTS_SCOPE)
+				|| oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_CALENDAR_SCOPE)
+				|| oauthScope.equalsIgnoreCase(ScribeServlet.GMAIL_SCOPE)
+				|| oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_PLUS_OAUTH2_SCOPE))
 			url = AUTHORIZE_URL_GOOGLE_APPS;
 
-		return String.format(url, config.getApiKey(), OAuthEncoder.encode(config.getScope()),
+		else if(oauthScope.equalsIgnoreCase(ScribeServlet.GMAIL_SEND_SCOPE)) 
+			return String.format(url, config.getApiKey(), OAuthEncoder.encode(oauthScope),
+					OAuthEncoder.encode(config.getCallback()), OAuthEncoder.encode(GMAIL_SEND_REDIRECT_URI));
+		
+		return String.format(url, config.getApiKey(), OAuthEncoder.encode(oauthScope),
 				OAuthEncoder.encode(config.getCallback()), OAuthEncoder.encode(REDIRECT_URL));
 	}
 }

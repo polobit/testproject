@@ -4,6 +4,9 @@
  */
 package com.agilecrm.scribe.util;
 
+import static com.agilecrm.scribe.ScribeServlet.GMAIL_SEND_SCOPE;
+import static com.agilecrm.scribe.ScribeServlet.SERVICE_TYPE_GMAIL_SEND;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -38,11 +41,14 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.scribe.api.FacebookApi;
+import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.scribe.api.StripeApi;
 import com.agilecrm.scribe.api.XeroApi;
 import com.agilecrm.scribe.login.util.OAuthLoginUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.SocialPrefs;
+import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -181,6 +187,14 @@ public class ScribeUtil {
 					XeroApi.class, callback, Globals.XERO_API_KEY,
 					Globals.XERO_CLIENT_ID, null);
 
+		/**
+		 * create service for GMail outbound
+		 */
+		else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_GMAIL_SEND))
+			service = getSpecificService(req, SERVICE_TYPE_GMAIL_SEND, GoogleApi.class, callback,
+					GoogleApi.RAMESHWEBKEY_BETA_CLIENT_ID, GoogleApi.RAMESHWEBKEY_BETA_SECRET_KEY, 
+					GMAIL_SEND_SCOPE);  
+			
 		// Creates a Service, specific to Gmail
 		else
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GMAIL,
@@ -257,18 +271,15 @@ public class ScribeUtil {
 	 *            refresh token
 	 * @throws IOException
 	 */
-	public static Long saveTokens(HttpServletRequest req,
-			HttpServletResponse resp, OAuthService service, String serviceName,
-			Token accessToken, String code) throws IOException, Exception {
+	public static Long saveTokens(HttpServletRequest req, HttpServletResponse resp,
+			OAuthService service, String serviceName, Token accessToken, String code) throws IOException, Exception {
 
 		Long widgetID = null;
 
-		String isForAll = String.valueOf(req.getSession().getAttribute(
-				"isForAll"));
+		String isForAll = String.valueOf(req.getSession().getAttribute("isForAll"));
 
 		// We use Scribe for OAuth2 Authentication as well
-		if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_OAUTH_LOGIN)) {
+		if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_OAUTH_LOGIN)) {
 			System.out.println("OAUTH2 AUTHENTICATED ");
 			OAuthLoginUtil.login(req, resp, code, service);
 			return widgetID;
@@ -276,7 +287,7 @@ public class ScribeUtil {
 
 		// Get Agile User
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
-		if (agileUser == null) {
+		if(agileUser == null) {
 			System.out.println("Cannot find Agile User");
 			return widgetID;
 		}
@@ -286,54 +297,58 @@ public class ScribeUtil {
 		 * plugin_id in session and widget is updated with new token key and
 		 * secret key
 		 */
-		if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER)
-				|| serviceName
-						.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN)) {
+		if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER)
+				|| serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN)) {
 			widgetID = saveLinkedInOrTwitterPrefs(req, accessToken, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL)) {
 			// If Service type is Gmail, save preferences in social prefs
 			saveGmailPrefs(code, service, agileUser, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_PLUS)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL_SEND)) {
+			// If Service type is Gmail_send, save preferences in GmailSend prefs
+			saveGmailSendPrefs(code, service, agileUser, isForAll, GMAIL_SEND_SCOPE, 
+					SocialPrefs.Type.GMAILSEND);
+		}
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_PLUS)) {
 			// widget gmail.
 			widgetID = saveGooglePlusPrefs(req, code, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE)) {
 			/*
 			 * if service type is stripe, we post the code and get the access
 			 * token and widget is updated with new access token and refresh
 			 * token
 			 */
 			widgetID = saveStripePrefs(req, code, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE)) {
 			/*
 			 * if service type is google, we post the code and get the access
 			 * token and ContactPrefs object is saved with new access token and
 			 * refresh token
 			 */
 			saveGooglePrefs(code, null, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR)) {
 			saveGoogleCalenderPrefs(code, null, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE)) {
-			String returnURL = (String) req.getSession().getAttribute(
-					"return_url");
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE)) {
+			String returnURL = (String) req.getSession().getAttribute("return_url");
 			// Appends code in return url
 			returnURL = returnURL + "&code=" + code;
 			req.getSession().setAttribute("return_url", returnURL);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT)) {
 			saveStripeImportPref(req, accessToken, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK)) {
 			widgetID = saveFacebookPrefs(req, code, service, isForAll);
-		} else if (serviceName
-				.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY)) {
 			saveShopifyPrefs(req, code, isForAll);
-		} else if (serviceName.equalsIgnoreCase(ScribeServlet.XERO_SERVICE)) {
+		} 
+		else if(serviceName.equalsIgnoreCase(ScribeServlet.XERO_SERVICE)) {
 			saveXeroPrefs(req, accessToken, isForAll);
 		}
 
@@ -505,6 +520,53 @@ public class ScribeUtil {
 		gmailPrefs.save();
 	}
 
+	/**
+	 * If Service type is GMail_send, GmailSendPrefs object is created in database with
+	 * the tokens
+	 * 
+	 * @param accessToken
+	 *            {@link String} access token after OAuth
+	 * @param service
+	 *            configured {@link OAuthService}
+	 * @param agileUser
+	 *            current {@link AgileUser}
+	 * @throws IOException
+	 */
+	public static void saveGmailSendPrefs(String code, OAuthService service, AgileUser agileUser, 
+			String isForAll, String scope, com.agilecrm.user.SocialPrefs.Type type) 
+					throws IOException {
+		HashMap<String, Object> tokenMap = GoogleServiceUtil.exchangeOauthTokenForAccessTokens(code, scope);
+		System.out.println(tokenMap);
+		
+		String accessToken = (String) tokenMap.get("access_token");
+		String refreshToken = (String) tokenMap.get("refresh_token");
+		System.out.println("accessToken :: " + accessToken + " - refreshToken :: " + refreshToken);
+		
+		if(accessToken == null) return;
+		
+		Token tokenObj = new Token(accessToken, "dummy");
+		System.out.println("tokenObj :: " + tokenObj);
+		System.out.println("service :: " + service);
+		
+		OAuthRequest oAuthReq = new OAuthRequest(Verb.GET, "https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
+		service.signRequest(tokenObj, oAuthReq);
+		System.out.println("AuthUrl :: " + service.getAuthorizationUrl(tokenObj));
+		
+		Response response = oAuthReq.send();
+		String respBody = response.getBody();
+		System.out.println("Response Body :: " + respBody);
+
+		HashMap<String, String> properties = new ObjectMapper()
+				.readValue(respBody, new TypeReference<HashMap<String, String>>() { });
+		System.out.println("properties :: " + properties);
+
+		// save GMail prefs in db
+		System.out.println("Saving GmailSend Prefs");
+		GmailSendPrefs gmailPrefs = new GmailSendPrefs(agileUser, type, code, accessToken, 
+				refreshToken, "v2", properties, String.valueOf(tokenMap.get("expires_in")));
+		GmailSendPrefsUtil.save(gmailPrefs);
+	}
+	
 	/**
 	 * If service type is stripe, we make a post request with the code and get
 	 * the access token,widget is fetched by plugin_id in session and is updated
