@@ -159,7 +159,7 @@ public class SubscriptionUtil
 	if (subscription.fetchBillingDataJSONObject() != null)
 	    subscription.save();
 	if(plan.quantity > 10 && !isCostlyUser()){
-		blockEmailPurchasing(BlockedEmailType.CREDIT, plan.quantity * 1000);
+		blockEmailPurchasing(BlockedEmailType.SUBSCRIPTION, plan.quantity * 1000);
 		throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
 	}
 	return subscription;
@@ -362,7 +362,7 @@ public class SubscriptionUtil
     	subscription.save();
     	DomainUser user = DomainUserUtil.getCurrentDomainUser();
     	String html = "Below are the details who subscribed or purchased emails:<br><br>Domain: "+user.domain+"<br>Username: "+user.email+"<br>Emails type: EMAIL "+type.toString();
-    	SendGrid.sendMail(user.email, user.domain, "mogulla@agilecrm.com,narmada@agilecrm.com", null, null, "Email Subscription - Spam Checking", null, html, null);
+    	SendGrid.sendMail(user.email, user.domain, "care@agilecrm.com,mogulla@agilecrm.com,venkat@agilecrm.com", null, null, "Email Subscription - Spam Checking", null, html, null);
     	return subscription;
     }
     
