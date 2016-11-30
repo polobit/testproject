@@ -99,7 +99,7 @@
     "upload" : "{{agile_lng_translate 'landingpage-builder' 'upload'}}",
     "add-form" : "{{agile_lng_translate 'form-builder' 'add-form'}}",
     "recorded-video" : "{{agile_lng_translate 'landingpage-builder' 'recorded-video'}}",
-    "recorded-video-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'recorded-video-tooltip'}}",
+    "recorded-video-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'recordedvideo-tooltip'}}",
     "form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'form-tooltip'}}",
     "refresh-form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'refresh-form-tooltip'}}",
     "edit-form-tooltip" : "{{agile_lng_translate 'landingpage-builder' 'edit-form-tooltip'}}",
