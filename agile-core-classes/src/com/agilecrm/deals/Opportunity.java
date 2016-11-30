@@ -998,14 +998,16 @@ public class Opportunity extends Cursor implements Serializable
 	if (this.notes != null)
 	{
 	    // Create list of Note keys
-		try{
+		
 	    for (String note_id : this.notes)
 	    {
-		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    	try{
+		       this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    	}catch(Exception e){
+	    		System.out.println("Exception in id conversion: "+e.getMessage());
+	    	}
 	    }
-	}catch(Exception e){
-		System.out.println("Exception in id conversion: "+e.getMessage());
-	}
+	
 	    this.notes = null;
 	}
 
