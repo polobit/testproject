@@ -139,22 +139,21 @@
 							</span>
 							<div class="inline-block bulk-action-wrapper">
 							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
-						    </div>
-						    <div class="inline-block bulk-action-wrapper">
+						    
 						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
-						    </div>
+						    
 						    {{#hasMenuScope 'CAMPAIGN'}}
-						    <div class="inline-block bulk-action-wrapper">
+						   
 						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
-						    </div>
+						   
 						    {{/hasMenuScope}}
-						    <div class="inline-block bulk-action-wrapper">
+						    
 						    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
-						    </div>
-						    <div class="inline-block bulk-action-wrapper">
+						   
+						   
 						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
-						    </div>
-						    <div class="dropdown inline-block bulk-action-wrapper">
+						   
+						    <div class="dropdown inline-block">
 						     <button class="btn btn-default btn-sm disabled txt-small  dropdown-toggle"  data-toggle="dropdown">More  <span class="caret m-l-xs" ></span>
 							</button>
 							 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -174,6 +173,7 @@
 							 </li>
 							 {{/hasRestrictedMenuScope}}
 							 </ul>
+							 </div>
 							 </div>
 						    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 								<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">

@@ -448,13 +448,20 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 
     showTooltipOnHoverBulkAction: function(e){
     	var bulk_disable = $(e.currentTarget).children(".disabled");
+    	var message="{{agile_lng_translate 'contacts' 'select-contact-bulk-message'}}";
+    	if (company_util.isCompanyContact())
+    		message="{{agile_lng_translate 'contacts' 'select-contact-bulk-message'}}";
+    	else if (company_util.isCompany())
+    		message="{{agile_lng_translate 'contacts' 'select-company-bulk-message'}}";
     	if(bulk_disable.length>0)
     	{
-    		$(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'contacts' 'select-contact-bulk'}}").tooltip("show");
+    		$(e.currentTarget).attr("data-original-title", message).tooltip("show");
     	}
     	else
-    		$(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'contacts' 'select-contact-bulk'}}").tooltip("hide");
-    		//$('.tooltip').remove();
+    		{
+    			$(e.currentTarget).tooltip("hide");
+    			$(e.currentTarget).removeAttr("data-original-title");
+    		}
     },
 
    
