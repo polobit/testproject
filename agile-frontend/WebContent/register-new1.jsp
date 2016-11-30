@@ -19,11 +19,11 @@ pageEncoding="UTF-8"%>
 		return;
 	}
 
- 	/*if(RegisterUtil.isWrongURL(request))
+ 	if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	}*/
+	}
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
@@ -168,6 +168,9 @@ a:hover {
     text-decoration: underline;
 }
 
+.text-top{
+	margin-top: 3px;
+}
 
 </STYLE>
 
@@ -324,11 +327,11 @@ if(isSafari && isWin)
 			</div>
 </form>
 <div class="text-center text-white m-b">
-	<div>
+	<div class="text-top">
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
 		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a></small>
 	</div>
-	<div>
+	<div class="text-top">
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%>
 		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a></small> 
 	</div>
