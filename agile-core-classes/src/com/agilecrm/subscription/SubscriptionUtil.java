@@ -159,7 +159,7 @@ public class SubscriptionUtil
 	if (subscription.fetchBillingDataJSONObject() != null)
 	    subscription.save();
 	if(plan.quantity > 10 && !isCostlyUser()){
-		blockEmailPurchasing(BlockedEmailType.CREDIT, plan.quantity * 1000);
+		blockEmailPurchasing(BlockedEmailType.SUBSCRIPTION, plan.quantity * 1000);
 		throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
 	}
 	return subscription;
