@@ -64,7 +64,7 @@ public class SendGridUtil
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
 	
      // 
-     private static final String[] blockedBodyStringList = new String[] { "paypal", "unknown device"};
+     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "paypal", "unknown device"};
      private static final String[] blockedSubjectStringList = new String[] {"unknown device"};
 
     /**
@@ -810,6 +810,9 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		
 		return false;
 	}
+	
+	
+	
 	
 	
 	
