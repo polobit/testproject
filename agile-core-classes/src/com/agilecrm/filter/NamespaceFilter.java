@@ -77,6 +77,9 @@ public class NamespaceFilter implements Filter
 	// If it is choose domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains("choose-domain"))
 	    return true;
+	
+	if (((HttpServletRequest) request).getRequestURI().contains("oauth"))
+	    return true;
 
 	// If it is enter domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains("enter-domain"))
