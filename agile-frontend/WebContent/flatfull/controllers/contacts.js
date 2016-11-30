@@ -18,8 +18,13 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
+		
 		"navigate-dashboard" : "navigateDashboard",
+		
 		"navigate-dashboard/:id" : "navigateDashboard", 
+		
+		//clicking on the dashboard icon
+		"navbar-dashboard" : "homeDashboard",
 		
 		// "dashboard-test": "dashboard",
 
@@ -86,33 +91,29 @@ var ContactsRouter = Backbone.Router.extend({
 	salesforceImport : function(){
          App_Datasync.salesforce();
 	},
-
+	homeDashboard : function(){
+		var newRole = $(".appaside.agile-menuactive").attr("data-service-name");
+		
+		if(CURRENT_DOMAIN_USER.role != newRole )
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, menuServiceDashboard(newRole));
+			updateDashboardRole(newRole);
+		}
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
 	navigateDashboard : function(id){
 		// Call dashboard route
 		if(id)
 		{
-		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
-
-		var prevrole = menuServicerole(id);
-		if(CURRENT_DOMAIN_USER.role != prevrole)
-		{
-			CURRENT_DOMAIN_USER.role = prevrole ;
-			var json = {};
- 			json.id = CURRENT_DOMAIN_USER.id;
- 			json.role = prevrole;
- 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
- 			new Role().save(json, 
- 						{success :function(model, response){
- 							console.log("success");
- 							console.log(model);
- 							CURRENT_DOMAIN_USER = model.toJSON();
- 							// Call dashboard route
- 						}, 
- 						error: function(model, response){
-							console.log("error");
- 						}});
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+			var prevrole = menuServicerole(id);
+			if(CURRENT_DOMAIN_USER.role != prevrole)
+			{
+				updateDashboardRole(prevrole);
+			}
 		}
-	}
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -159,7 +160,8 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-		$(".nav.nav-sub li").removeClass("agile-menuactive")
+		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		$(".nav.nav-sub li").removeClass("active");
 		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {

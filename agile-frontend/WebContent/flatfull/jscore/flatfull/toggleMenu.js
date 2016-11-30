@@ -727,6 +727,24 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 			break;
 	}	
 }
+function updateDashboardRole(prevrole)
+{
+	CURRENT_DOMAIN_USER.role = prevrole ;
+			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = prevrole;
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save(json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 							// Call dashboard route
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+}
 
 
 
