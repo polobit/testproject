@@ -4,12 +4,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.CategoriesUtil;
@@ -23,7 +23,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>DealCSVExport</code> handles building CSV file for obtained Deals.
@@ -124,23 +123,35 @@ public class DealCSVExport
 			if(index){
 				// this is either contact or company type
 				//fetch the conntact r company
-			List<Contact> customContacts = ContactUtil.getContactsBulk(new JSONArray(field.value));
-			if(customContacts.size() > 0){
-				StringBuffer nameString = new StringBuffer("[");
-				for(Contact cont : customContacts){
-					if(cont.type.equals(Contact.Type.PERSON)){
-						nameString.append(cont.first_name);
-						nameString.append(cont.last_name);
-						
-					}else{
-						nameString.append(cont.name);
-					}
-					nameString.append(",");
+				JSONArray customFieldsArray = null;
+	    		try {
+	    			JSONParser parser = new JSONParser();
+	    			customFieldsArray = (JSONArray)parser.parse(field.value);
+				} catch (Exception e) {
+					System.out.println("Exception occured while converting contact and company type custom fields JSON string to array");
+					e.printStackTrace();
 				}
-				nameString.replace(nameString.length()-1, nameString.length(), "");
-				nameString.append("]");
-				str[indexMap.get(field.name+" Name")] = nameString.toString();
-			}
+				List<Contact> customContacts = null;//ContactUtil.getContactsBulk(new JSONArray(field.value));
+				if(customFieldsArray != null && customFieldsArray.size() > 0)
+				{
+					customContacts = ContactUtil.getContactsBulk(new org.json.JSONArray(customFieldsArray.toJSONString()));
+				}
+				if(customContacts != null && customContacts.size() > 0){
+					StringBuffer nameString = new StringBuffer("[");
+					for(Contact cont : customContacts){
+						if(cont.type.equals(Contact.Type.PERSON)){
+							nameString.append(cont.first_name);
+							nameString.append(cont.last_name);
+							
+						}else{
+							nameString.append(cont.name);
+						}
+						nameString.append(",");
+					}
+					nameString.replace(nameString.length()-1, nameString.length(), "");
+					nameString.append("]");
+					str[indexMap.get(field.name+" Name")] = nameString.toString();
+				}
 			}
 		}catch(Exception e){
 		}
