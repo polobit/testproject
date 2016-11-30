@@ -870,7 +870,7 @@ Proceed to Trial
 	<div class="modal-dialog">
 	    <div class="modal-content">
 			<div class="modal-header">
-	            <button class="close" data-dismiss="modal">x</button>
+	            <button class="close" data-dismiss="modal">&times;</button>
 				<h3 class="modal-title">{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}</h3>
 			</div>
 			<div class="modal-body help-text">
@@ -944,4 +944,10 @@ Proceed to Trial
 			</div>
 		</div>
 	</div>
+</script>
+
+<script id="emails-limit-crossed-message-template" type="text/html">
+  <p>{{agile_lng_translate "plan" "thanks-for-payment"}}</p>
+  <p>{{agile_lng_translate "plan" "emails-request-processing"}}</p>
+  <p>{{agile_lng_translate "plan" "please-contact-our-support"}}</p>
 </script>

@@ -20,6 +20,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -30,6 +31,7 @@ import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.ClickDeskEncryption;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.googlecode.objectify.annotation.Cached;
@@ -94,6 +96,20 @@ public class Subscription implements Serializable{
 	public static enum BillingStatus {
 		BILLING_FAILED_0, BILLING_FAILED_1, BILLING_FAILED_2, BILLING_FAILED_3, BILLING_SUCCESS, BILLING_PAUSED, SUBSCRIPTION_DELETED
 	};
+	
+	/**
+	 *	Emails blocking status
+	 */
+	public static enum EmailPurchaseStatus {
+		BLOCKED, RELEASED
+	}
+	
+	/**
+	 * Emails type
+	 */
+	public static enum BlockedEmailType{
+		SUBSCRIPTION, CREDIT
+	}
 
 	/**
 	 * The status {@link Enum} type variable holds status of Subscription status
@@ -106,6 +122,24 @@ public class Subscription implements Serializable{
 	 */
 	@NotSaved(IfDefault.class)
 	public BillingStatus emailStatus;
+	
+	/**
+	 * type of email purchase status if BLOCKED emails will not be added.
+	 */
+	@NotSaved(IfDefault.class)
+	private EmailPurchaseStatus  emailpurchaseStatus;
+	
+	/**
+	 * Type of email blocked
+	 */
+	@NotSaved(IfDefault.class)
+	private BlockedEmailType blockedEmailtype;
+	
+	/**
+	 * count of emails blocked while purchasing
+	 */
+	@NotSaved(IfDefault.class)
+	private int pendingEmailsCount;
 
 	/** The created_time variable represents when subscription object is created */
 	@NotSaved(IfDefault.class)
@@ -238,6 +272,48 @@ public class Subscription implements Serializable{
 	}
 
 	/**
+	 * @return the emailpurchaseStatus
+	 */
+	public EmailPurchaseStatus getEmailpurchaseStatus() {
+		return emailpurchaseStatus;
+	}
+
+	/**
+	 * @param emailpurchaseStatus the emailpurchaseStatus to set
+	 */
+	public void setEmailpurchaseStatus(EmailPurchaseStatus emailpurchaseStatus) {
+		this.emailpurchaseStatus = emailpurchaseStatus;
+	}
+
+	/**
+	 * @return the blockedEmailtype
+	 */
+	public BlockedEmailType getBlockedEmailtype() {
+		return blockedEmailtype;
+	}
+
+	/**
+	 * @param blockedEmailtype the blockedEmailtype to set
+	 */
+	public void setBlockedEmailtype(BlockedEmailType blockedEmailtype) {
+		this.blockedEmailtype = blockedEmailtype;
+	}
+
+	/**
+	 * @return the pendingEmailsCount
+	 */
+	public int getPendingEmailsCount() {
+		return pendingEmailsCount;
+	}
+
+	/**
+	 * @param pendingEmailsCount the pendingEmailsCount to set
+	 */
+	public void setPendingEmailsCount(int pendingEmailsCount) {
+		this.pendingEmailsCount = pendingEmailsCount;
+	}
+
+	/**
 	 * Creates a Customer in respective {@link Gateway} and store customer
 	 * details in {@link Subscription} object
 	 * 
@@ -254,7 +330,12 @@ public class Subscription implements Serializable{
 
 	private Subscription createNewEmailSubscription() throws Exception {
 		emailPlan.plan_id = SubscriptionUtil.getEmailPlan(emailPlan.quantity);
-		return createNewSubscription(emailPlan);
+		Subscription subscription = createNewSubscription(emailPlan);
+		if(emailPlan.quantity > 10 && !SubscriptionUtil.isCostlyUser()){
+			SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.CREDIT, emailPlan.quantity * 1000);
+			throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
+		}
+		return subscription;
 	}
 
 	private Subscription createNewSubscription(Plan plan) throws Exception {
@@ -468,6 +549,10 @@ public class Subscription implements Serializable{
 		boolean isPaid = getAgileBilling().purchaseEmailCredits(fetchBillingDataJSONObject(), quantity);
 		if(!isPaid)
 			throw new Exception("Payment failed. Please try again.");
+		if(quantity > 10 && !SubscriptionUtil.isCostlyUser()){
+			SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.CREDIT, quantity * 1000);
+			throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
+		}
 		BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
 		restriction.incrementEmailCreditsCount((quantity*1000) - decrementCount);
 		restriction.save();
