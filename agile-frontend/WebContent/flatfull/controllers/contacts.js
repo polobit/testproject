@@ -159,7 +159,8 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-		$(".nav.nav-sub li").removeClass("agile-menuactive")
+		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		$(".nav.nav-sub li").removeClass("active");
 		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
