@@ -393,8 +393,10 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 		if(e.keyCode == 13){
 			var query = $("#searchText").val();
-			if ($.trim(query) == '')
-    			return;
+			if ($.trim(query) == ''){
+				$(".dashboard-search-scroll-bar").hide();
+				return;
+			}
 			if(!isQueryTextSearchValid(query))
 			{	
 				setTimeout(function(){
