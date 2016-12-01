@@ -60,7 +60,7 @@ public class SMTPPrefsUtil {
 	public static SMTPPrefs getPrefs(AgileUser user, String fromEmail) {
 		Objectify ofy = ObjectifyService.begin();
 		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
-		return ofy.query(SMTPPrefs.class).ancestor(agileUserKey).filter("email", fromEmail).get();
+		return ofy.query(SMTPPrefs.class).ancestor(agileUserKey).filter("user_name", fromEmail).get();
 	}
 
 	/**
