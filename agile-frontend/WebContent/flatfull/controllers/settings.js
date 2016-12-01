@@ -698,9 +698,15 @@ var SettingsRouter = Backbone.Router
 								that.emailTemplatesListView = new Base_Collection_View({ url : currUrl, restKey : "emailTemplates",
 								templateKey : 'settings-email-templates', individual_tag_name : 'tr', postRenderCallback : function(el)
 								{
-									agileTimeAgoWithLngConversion($(".created_time", el));
+									agileTimeAgoWithLngConversion($("time.campaign-created-time", el));
 
-								} });
+								},
+                                appendItemCallback : function(el)
+					            {
+						               $("time.campaign-created-time", el).timeago();
+
+					             }
+								 });
 
 								that.emailTemplatesListView.collection.fetch();
 								$('#prefs-table-content').html(that.emailTemplatesListView.el);
