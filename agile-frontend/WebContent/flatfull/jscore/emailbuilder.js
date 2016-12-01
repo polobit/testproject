@@ -304,9 +304,12 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
             $("#nameoftemplate-msg",parent.document).html(html).show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
             $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
+
+            Refresh_Email_Template = true;
+            Selected_Email_Template_Category = data.emailTemplate_category_id;
+            
             if(requestType == "post") {
                 window.location.hash = "email-templates";
-                Refresh_Email_Template = true;
             }
         },
     });

@@ -66,7 +66,7 @@ public class EmailTemplateCategoryAPI {
 			if (EmailTemplateCategoryUtil.getEmailTemplateCategoryNameCount(emailTemplateCategory.name) > 0){
 				System.out.println("Duplicate EmailTemplateCategory found");
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Sorry, Same kind of name already exists.").build());
+						.entity("Sorry, same kind of name already exists.").build());
 			}
 		}
 		emailTemplateCategory.save();
