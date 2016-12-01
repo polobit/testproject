@@ -337,7 +337,6 @@
                 var newStyleEl = $('#styleElTemplate').clone();
                 newStyleEl.attr('id', '');
                 newStyleEl.find('.control-label').text( bConfig.editableItems[theSelector][x]+":" );
-
                 if( theSelector + " : " + bConfig.editableItems[theSelector][x] in bConfig.editableItemOptions) {//we've got a dropdown instead of open text input
 
                     newStyleEl.find('input').remove();
@@ -376,10 +375,14 @@
                             $('#imageModal').modal('show');
                             $('#imageModal .image button.useImage').unbind('click');
                         
-                            console.log("hi");
-                        });
+                            //console.log("hi");
+                        });                                             
+
 
                     } else if( bConfig.editableItems[theSelector][x].indexOf("color") > -1 ) {
+
+                        if( bConfig.editableItems[theSelector][x] === 'background-color' )
+                            $(newStyleEl).css('margin-top','15px');
 
                         if( $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== 'transparent' && $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== 'none' && $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== '' ) {
 
@@ -414,7 +417,14 @@
                     newStyleEl.css('display', 'block'); 
 
                 $('#styleElements').append( newStyleEl );
-
+                if(bConfig.editableItems[theSelector][x] === 'background-image'){
+                    //add remove icon in background image
+                    var removeIcon=styleeditor.addRemoveIcon(newStyleEl);
+                    $('#styleElements').append(removeIcon);
+                    $('.remove-icon').tooltip({
+                        container: 'body'
+                    });
+                }
                 $('#styleEditor form#stylingForm').height('auto');
 
             }
@@ -1354,6 +1364,16 @@
              var script = document.createElement('script');
             script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
             document.body.appendChild(script);  
+        },
+        addRemoveIcon: function(el){
+            $(el).css('margin-bottom','0px');
+            var icon=$('<a class="right agile-tooltip remove-icon" data-placement="right" data-original-title="Click to remove background image"></a>');
+            icon.append('<i class="fa fa-trash right" style="color: #bdc3c7;"></i>');
+            $(icon).off('click');
+            $(icon).on('click', function(event){
+                $(event.currentTarget).prev().find('input').val("none");
+            });
+            return icon;
         }
 
     };

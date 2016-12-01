@@ -328,6 +328,7 @@ header .slick:hover .slide {
 	height: 35px;
 	background: #fff;
 	padding: 6px;
+	margin-top:5px;
 }
 
 .styleEditor .form-group .sp-preview {
@@ -1072,7 +1073,7 @@ li.element {
    max-width:none;
 }
 
-#refresh-formlist .agile-tooltip:hover{
+.agile-tooltip:hover{
 	cursor:pointer;
 }
 
