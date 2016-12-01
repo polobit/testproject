@@ -1,6 +1,38 @@
 var fullContactObjects = {};
 
-function loadFullContactData(apikey, emailID){	
+
+function updateContactProperties(newProperties){
+	// Reads current contact model form the contactDetailView
+	var contact_model = App_Contacts.contactDetailView.model;
+	var contactId = contact_model.id;
+	// Gets properties list field from contact
+	var properties = contact_model.get('properties');
+
+	$.each(newProperties, function(index,value){
+		console.log("contact details : *** " + value)
+		properties.push(value);
+	});
+
+	contact_model.set("properties", properties);
+	console.log(newProperties);
+	//contact_model.url = "core/api/contacts";
+	console.log(contact_model);
+	
+	// Save updated contact model
+	//contact_model.save();
+	var model = new Backbone.Model();
+	model.url = "core/api/contacts";
+	model.save(contact_model.toJSON(), {
+		success : function(data){
+			if(data){				
+				App_Contacts.contactDetailView.model = data;
+				App_Contacts.contactDetailView.render(true);
+			}
+		}
+	});
+}
+
+function loadFullContactData(apikey, emailID, autoProfiling){	
 	head.js('/flatfull/lib/jquery.fullcontact.2.2.js', function(){		
 		//emailID = "bart@fullcontact.com";
 		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){	
@@ -219,39 +251,13 @@ function loadFullContactData(apikey, emailID){
 
  						$('#FullContact').html("<div class='p-sm'><p> New data - "+displayData+"</p></div>");
 
- 						showAlertModal(_agile_get_translated_val('widgets', 'Fullcontact-newdata') + " <p>New data - " + displayData + "</p>", "confirm", function(){
-							// Reads current contact model form the contactDetailView
-							var contact_model = App_Contacts.contactDetailView.model;
-							var contactId = contact_model.id;
-							// Gets properties list field from contact
-							var properties = contact_model.get('properties');
-
-							$.each(newProperties, function(index,value){
-								console.log("contact details : *** " + value)
-								properties.push(value);
-							});
-
-							contact_model.set("properties", properties);
-							console.log(newProperties);
-							//contact_model.url = "core/api/contacts";
-							console.log(contact_model);
-							
-							// Save updated contact model
-							//contact_model.save();
-							var model = new Backbone.Model();
-							model.url = "core/api/contacts";
-							model.save(contact_model.toJSON(), 
-							{
-								success : function(data)
-								{
-									if(data)
-									{
-										App_Contacts.contactDetailView.model = data;
-										App_Contacts.contactDetailView.render(true);
-									}
-								}
-							});	
-						},undefined, "FullContact"); 						
+ 						if(autoProfiling && autoProfiling == true){ 							
+							updateContactProperties(newProperties);							
+ 						}else{
+ 							showAlertModal(_agile_get_translated_val('widgets', 'Fullcontact-newdata') + " <p>New data - " + displayData + "</p>", "confirm", function(){
+								updateContactProperties(newProperties);
+							},undefined, "FullContact");
+ 						} 						 						
 
 					}else{													
 						$('#FullContact').html("<div class='p-sm'>"+_agile_get_translated_val('widgets', 'Fullcontact-nodata')+"</div>");															
@@ -277,6 +283,7 @@ function startFullContactWidget(contact_id){
 	var fullcontact_widget = agile_crm_get_widget(FULLCONTACT_PLUGIN_NAME);
 	var fullcontact_widget_prefs = JSON.parse(fullcontact_widget.prefs);
 	FULLCONTACT_Plugin_Id = fullcontact_widget.id;
+	var autoProfiling = fullcontact_widget_prefs["autoProfiling"];
 	var fcApiKey = fullcontact_widget_prefs["fullcontact_apikey"];
 	var contact_email = agile_crm_get_contact_property('email');
 
@@ -284,7 +291,7 @@ function startFullContactWidget(contact_id){
 	console.log(fullcontact_widget);
 
 	if(contact_email){		
-		loadFullContactData(fcApiKey, contact_email);
+		loadFullContactData(fcApiKey, contact_email, autoProfiling);
 	}else{								
 		$('#FullContact').html('<div class="p-sm">'+ _agile_get_translated_val('widgets', 'Fullcontact-email-required')+'</div>');	
 	}
