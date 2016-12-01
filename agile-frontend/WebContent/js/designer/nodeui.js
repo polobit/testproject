@@ -55,6 +55,11 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     if(jsonData != undefined && jsonData != "/json/nodes/email/send_email.jsp")
 	    $("#nodeui").deserialize(jsonData);
     
+    //Select default empty in selecte merged filed
+     if(jsonData != undefined && nodeJSONDefinition.name == "Send Email"){
+	      $("#nodeui").find("[name=merge_fields]").val("");
+    }
+
     // Set node name field
     if( nodeId == undefined || nodeId == null ) {    
   		$("#nodeui").find("[name=nodename]").val(nodeJSONDefinition.name);

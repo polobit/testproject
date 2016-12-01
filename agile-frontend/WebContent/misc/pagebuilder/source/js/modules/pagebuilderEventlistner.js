@@ -18,6 +18,11 @@
         $("#err-vimeo-msg").hide();
     });
 
+    $(document).keyup(function(e) {
+        if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
+            $("#styleEditor").css("left","-300px");           
+    });
+
     //show edit form option when select any form
      $('#agileform_id').change(function(e){
      	if($(e.target).val()!=="default"){

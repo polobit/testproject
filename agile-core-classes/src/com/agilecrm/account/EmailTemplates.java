@@ -97,6 +97,12 @@ public class EmailTemplates
 	 */
 	public Long created_time = 0L;
 	
+	/**
+	 * Email-template updated time (in epoch).
+	 */
+	@NotSaved(IfDefault.class)
+	public Long updated_time = 0L;
+	
 	public Set access_level = new HashSet();
 	
 	/**

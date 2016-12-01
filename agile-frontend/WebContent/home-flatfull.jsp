@@ -811,7 +811,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           <i class="fa fa-fw fa-angle-right text"></i>
           <i class="fa fa-fw fa-angle-down text-active"></i>
         </span>
-        <i class="icon-book-open icon"></i>
+        <i class="icon-support icon"></i>
         <span class="font-bold">Service</span>
       </a>
       <ul class="nav nav-sub dk" style="display:block;" > 

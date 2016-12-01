@@ -49,7 +49,7 @@ var timer = undefined;
 		 	});
 		}
 		 	
-		 }, 1000);
+		 }, 1500);
 });
 
 
@@ -745,7 +745,7 @@ function popoverEnter(that,left,top,listView,campaigns_view)
 		 		return false;
 		 	}
 		 	}
-		 }, 1000);
+		 }, 1500);
 }
 
 function popout(that)
