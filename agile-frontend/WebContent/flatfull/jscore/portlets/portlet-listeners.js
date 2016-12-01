@@ -1162,7 +1162,7 @@ function initializeAddPortletsListeners() {
 	//$('#ms-category-list', elData).remove();
 
 
-	$('.col-md-3')
+	$('.col-md-4')
 			.on(
 					"mouseenter",
 					'.show_screeshot',
