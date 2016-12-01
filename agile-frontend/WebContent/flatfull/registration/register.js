@@ -78,8 +78,10 @@ function getRegisterURL(domain)
 		url = "https://" + domain + ".agilecrm.com/register";
 	else		
 		url = "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com/register";
-	if(parameters)
+	if(parameters){
 		url = url+"?"+parameters;
+		url = url.replace("type=oauth", "type=agile");
+	}
 	return url;
 }
 
