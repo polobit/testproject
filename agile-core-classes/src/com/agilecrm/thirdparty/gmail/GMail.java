@@ -1,26 +1,54 @@
 package com.agilecrm.thirdparty.gmail;
 
-import java.io.ByteArrayInputStream;
+import static javax.mail.Message.RecipientType.BCC;
+import static javax.mail.Message.RecipientType.CC;
+import static javax.mail.Message.RecipientType.TO;
+import static org.apache.commons.lang.StringEscapeUtils.escapeJava;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.ws.rs.core.MediaType;
+import javax.activation.DataHandler;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
-import com.agilecrm.file.readers.BlobFileInputStream;
-import com.agilecrm.file.readers.DocumentFileInputStream;
-import com.agilecrm.file.readers.IFileInputStream;
+import com.agilecrm.scribe.api.GoogleApi;
+import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.SMTPPrefs;
+import com.agilecrm.user.util.GmailSendPrefsUtil;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Base64;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.Gmail.Users;
+import com.google.api.services.gmail.Gmail.Users.Messages;
+import com.google.api.services.gmail.Gmail.Users.Messages.Send;
+import com.google.api.services.gmail.model.Message;
 import com.google.appengine.api.blobstore.BlobKey;
-import com.sun.jersey.multipart.BodyPart;
-import com.sun.jersey.multipart.file.StreamDataBodyPart;
+import com.thirdparty.sendgrid.SendGrid;
+
 
 /**
  * GMail is the class for sending personal mails using SMTP initially via GMail
@@ -30,6 +58,16 @@ import com.sun.jersey.multipart.file.StreamDataBodyPart;
  */
 public class GMail {
 
+	//private static final String SMTP_URL ="http://localhost:8081/agile-smtp/smtpMailSender";
+	//private static final String SMTP_URL ="http://54.87.153.50:8080/agile-smtp/smtpMailSender";	// exchange server
+	private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp/smtpMailSender";		// SMTP server
+
+    private static String applicationName = "gmail_oauth2";
+	
+	private static JsonFactory JSON_FACTORY = new JacksonFactory();
+    private static HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    
+    
 	/**
 	 * Core method to be called from EmailGatewayUtil to invoke agile-smtp SMTPMailSender
 	 * to send personal mails using SMTP 
@@ -47,33 +85,18 @@ public class GMail {
 	 * @param attachments
 	 */
     public static void sendMail(SMTPPrefs smtpPrefs, String to, String cc, String bcc, 
-    		String subject, String replyTo, String html, String text, List<Long> documentIds, 
-    		List<BlobKey> blobKeys, String[] attachments) {
+    		String subject, String replyTo, String fromName, String html, String text, 
+    		List<Long> documentIds, List<BlobKey> blobKeys, String[] attachments) {
         
-    	// Prepare URL for SMTP (agile-smtp on EC2)
-    	//String smtpURL = "http://localhost:8081/agile-smtp/smtpMailSender";
-    	String smtpURL ="http://54.87.153.50:8080/agile-smtp/smtpMailSender";
-
     	try {
-	    	String[] attachFile = getAttachment(documentIds, blobKeys, attachments);
+    		String[] attachFile = {"","",""}; 	//getAttachment(documentIds, blobKeys, attachments);
 	    	
-	    	String data = "";
-	    	
-	    	// Prepare metadata for POST req with attachment
-	    	if((documentIds != null && documentIds.size() == 0) 
-	    			&& (blobKeys != null && blobKeys.size() == 0)
-	    			&& (attachments != null && attachments.length == 0)) 
-	    		data = getSMTPPostParams(smtpPrefs, to, cc, bcc, subject, replyTo, html, text,
-	    				"", "", "");
-	    		
-	    	else
-	    		data = getSMTPPostParams(smtpPrefs, to, cc, bcc, subject, replyTo, html, text,
-	    				attachFile[0], attachFile[1], attachFile[2]);
-
+	    	String data = getSMTPPostParams(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
+	    			html, text, attachFile[0], attachFile[1], attachFile[2]);
 	    	
     		// making servlet call through HttpURLConnection
-    		String response = HTTPUtil.accessURLUsingPost(smtpURL, data);
-			System.out.println("HTTPUtil.accessURLUsingPost ++ " + response);
+    		String response = HTTPUtil.accessURLUsingPost(SMTP_URL, data);
+			System.out.println("SMTP response ++ " + response);
 		} 
     	catch(Exception e) {
 			e.printStackTrace();
@@ -81,6 +104,215 @@ public class GMail {
     }
     
     /**
+	 * Core method to be called from EmailGatewayUtil to invoke sendByGmailAPI
+	 * to send personal mails using Oauth for Gmail 
+	 */
+    public static void sendMail(GmailSendPrefs gmailPrefs, String to, String cc, String bcc, 
+    		String subject, String replyTo, String fromName, String html, String text, 
+    		List<Long> documentIds, List<BlobKey> blobKeys, String[] attachments) {
+    	
+    	System.out.println("sendMail +++GmailSendPrefs in Gmail.java");
+    	
+    	String from = gmailPrefs.email;
+    	try {
+    		String[] attachFile = {"","",""}; 	//getAttachment(documentIds, blobKeys, attachments);
+
+			if(gmailPrefs.refresh_token == null || gmailPrefs.token == null) {
+				throw new Exception();
+			}
+
+    		Credential gcredential = new GoogleCredential
+    				.Builder()
+    				.setTransport(HTTP_TRANSPORT)
+    				.setJsonFactory(JSON_FACTORY)
+    				.setClientSecrets(GoogleApi.SMTP_OAUTH_CLIENT_ID, GoogleApi.SMTP_OAUTH_CLIENT_SECRET)
+    				.build()
+    				.setAccessToken(gmailPrefs.token)
+    				.setRefreshToken(gmailPrefs.refresh_token);
+    		
+    		if(gmailPrefs.expires_at == null || gmailPrefs.expires_at < System.currentTimeMillis()) {
+				gcredential.refreshToken();
+				gmailPrefs.refresh_token = gcredential.getRefreshToken();
+				gmailPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
+				//prefsUpdated = true;
+				GmailSendPrefsUtil.save(gmailPrefs);
+    		}
+    		
+			System.out.println("2222 accessToken :: " + gmailPrefs.token + " -- refreshToken :: " + gmailPrefs.refresh_token);
+			System.out.println("expires at :: " + gmailPrefs.expires_at + " -- Current time:: " + System.currentTimeMillis());
+			
+			//if(prefsUpdated) GmailSendPrefsUtil.save(gmailPrefs);
+			
+			sendByGmailAPI(to, cc, bcc, subject, fromName, html, from, gmailPrefs.name, attachFile, 
+					gcredential);
+    	}
+    	catch(Exception e) {
+			System.err.println(e.getMessage());
+			String errorResp = ExceptionUtils.getFullStackTrace(e);
+			if((errorResp.contains("invalid_grant") && errorResp.contains("Token has been revoked"))
+					|| errorResp.contains("Invalid Credentials") 
+					|| errorResp.contains("Problems while creating connection")){
+				System.out.println("invalid_grant111");
+				sendReconfigureMail(gmailPrefs, from);
+			}
+			else if(gmailPrefs.refresh_token == null || gmailPrefs.token == null) {
+				System.out.println("accessToken :: " + gmailPrefs.token 
+						+ " -- refreshToken :: " + gmailPrefs.refresh_token);
+				sendReconfigureMail(gmailPrefs, from);
+			}
+		}
+    }
+    
+    /**
+     * We need to ask user to reconfigure oauth settings in case of authentication failure.
+     * This would happen when user deletes AgileCRM app auth settings from Gmail Account.
+     * 
+     * @param gmailPrefs
+     * @param from
+     */
+	private static void sendReconfigureMail(GmailSendPrefs gmailPrefs, String from) {
+		//Delete the gmail account prefs so that outbound widget configuration is deleted.
+		System.out.println("Deleting GmailSendPrefs...");
+		gmailPrefs.delete();
+		
+		//Send email to the sender.
+		System.out.println("Sending mail to sender to reconfigure Oauth...");
+		String subj = "Reconfigure Gmail Account";
+		String content = EmailUtil.emailTemplate("It seems you have revoked the access for "
+				+ "Agile CRM from sending emails through Gmail SMTP. <br>"
+				+ "Please reconfigure your Gmail SMTP account in Agile CRM again in <br>"
+				+ "Preferences -> Email -> Outbound.<br><br>");
+
+		SendGrid.sendMail("noreply@agilecrm.com", "Agile CRM", from, null, null, subj, null, content, null);
+	}
+
+	/**
+	 * This method is used to send Oauth emails using Gmail API.
+	 *
+	 */
+	private static void sendByGmailAPI(String to, String cc, String bcc, String subject,
+			String fromName, String html, String from, String name, String[] attachFile, 
+			Credential gcredential) 
+					throws MessagingException, IOException, Exception {
+		Gmail service = new Gmail
+				.Builder(HTTP_TRANSPORT, JSON_FACTORY, gcredential)
+				.setApplicationName(applicationName)
+				.build();
+		
+		Message message = null;
+		
+		if(StringUtils.isBlank(attachFile[0])) {
+			message = createMimeMessage(to, cc, bcc, from, subject, fromName, name, html, attachFile);	
+		}
+		else if("document".equalsIgnoreCase(attachFile[0])) {
+			message = createEmailWithDocument(to, cc, bcc, from, subject, fromName, name, html, attachFile); 
+		}
+		/*else if("blobkey".equalsIgnoreCase(attachFile[0])) {
+			message = createEmailWithBlobkey(to, cc, bcc, from, subject, fromName, html, attachFile); 
+		}*/
+		
+		if(message == null) return;
+		
+		//Message message = createMessageWithEmail(email);
+		System.out.println("+++Message created. Sending.....");
+		
+		Users users = service.users();
+		Messages msgs = users.messages();
+		Send send = msgs.send("me", message);
+		message = send.execute();
+
+		System.out.println("+++Message Id: " + message.getId());
+		System.out.println("+++Message String: " + message.toPrettyString());
+		System.out.println((message.getId() != null) ? "+++success+++" : "+++failed+++");
+	}
+
+    /**
+     * create a mimemessage with plain text, if no attachment.
+     *
+     */
+	private static Message createMimeMessage(String to, String cc, String bcc, 
+			String from, String subject, String fromName, String name, String body, 
+			String[] attachFile) {
+		try {
+			Properties props = new Properties();
+			Session session = Session.getDefaultInstance(props, null);
+			
+			MimeMessage message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(from));
+			message.addRecipients(TO, InternetAddress.parse(to, false));
+            message.addRecipients(CC, InternetAddress.parse(cc, false));
+            message.addRecipients(BCC, InternetAddress.parse(bcc, false));
+           // String encodedSubject = new String(subject.getBytes("UTF-8"),"UTF-8");
+			message.setSubject(subject, "UTF-8");
+			message.setContent(body, "text/html; charset=UTF-8");
+			
+			return createMessageWithEmail(message);
+		} 
+		catch(MessagingException ex) {
+			Logger.getLogger(GMail.class.getName()).log(Level.SEVERE, null, ex);
+			return null;
+		} 
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+    
+	/**
+	 * Builds Message object with Mime content to be delivered.
+	 * @param emailContent
+	 * @return
+	 * @throws MessagingException
+	 * @throws IOException
+	 */
+	private static Message createMessageWithEmail(MimeMessage emailContent) 
+			throws MessagingException, IOException {
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		emailContent.writeTo(buffer);
+		byte[] bytes = buffer.toByteArray();
+		
+		Message message = new Message();
+		message.setRaw(Base64.encodeBase64URLSafeString(bytes));
+		return message;
+	}
+	
+	/**
+	 * create a mimemessage with text body and attachment.
+	 *
+	 */
+	private static Message createEmailWithDocument(String to, String cc, String bcc, 
+			String from, String subject, String fromName, String name, String bodyText, 
+			String[] attachFile) throws MessagingException, IOException, Exception {
+		
+		String fileName = attachFile[1];
+		
+		MimeMessage emailMsg = new MimeMessage(Session.getDefaultInstance(new Properties(), null));
+
+		emailMsg.setSender(new InternetAddress(from));
+		emailMsg.addRecipients(TO, InternetAddress.parse(to, false));
+		emailMsg.addRecipients(CC, InternetAddress.parse(cc, false));
+		emailMsg.addRecipients(BCC, InternetAddress.parse(bcc, false));
+		emailMsg.setSubject(subject);
+
+		Multipart multipart = new MimeMultipart();
+		
+		MimeBodyPart bodyPart = new MimeBodyPart();
+		bodyPart.setContent(bodyText, "text/html; charset=UTF-8");
+		multipart.addBodyPart(bodyPart);
+
+		MimeBodyPart attachPart = new MimeBodyPart();
+		attachPart.setFileName(fileName);
+		attachPart.setContent(fileName, "application/octet-stream");
+		attachPart.setDataHandler(new DataHandler(new URL(attachFile[2])));
+		multipart.addBodyPart(attachPart);
+		
+		emailMsg.setContent(multipart);
+
+		return createMessageWithEmail(emailMsg);
+	}
+    
+
+	/**
      * This method builds the attachment part to be available for sending to SMTP servlet.
      * 
      * @param documentIds
@@ -98,43 +330,19 @@ public class GMail {
 	    	Document document = DocumentUtil.getDocument(documentIds.get(0));
 			String fileName = document.extension;
 			String docUrl = document.url;
-	
-			if(StringUtils.isEmpty(document.url) || StringUtils.isEmpty(document.extension))
-				return null;
-	
-			IFileInputStream documentStream = new DocumentFileInputStream(fileName, docUrl);
-			InputStream is = documentStream.getInputStream();
-			String fileNameWithExtension = documentStream.getFileName();
 
 			returnStr[0] = "document";
-			returnStr[1] = fileNameWithExtension;
-			returnStr[2] = IOUtils.toString(is);
-			
-			return returnStr;
+			returnStr[1] = fileName;
+			returnStr[2] = docUrl;
     	}
-    	else if(blobKeys != null && blobKeys.size() > 0) {
-    		IFileInputStream blobStream = new BlobFileInputStream(blobKeys.get(0));
-    		InputStream is = blobStream.getInputStream();
-			String fileNameWithExtension = blobStream.getFileName();
-			
-			StreamDataBodyPart streamDataBodyPart = new StreamDataBodyPart("attachment", is, fileNameWithExtension);
-			streamDataBodyPart.setMediaType(MediaType.APPLICATION_OCTET_STREAM_TYPE);
-
-			BodyPart bodyPart = (BodyPart) streamDataBodyPart;
+    	else {
+    		returnStr[0] = "";
+			returnStr[1] = "";
+			returnStr[2] = "";
     	}
-    	else if (attachments.length == 3) {
-			String fileName = attachments[1];
-			String fileContent = attachments[2];
-
-			InputStream is = new ByteArrayInputStream(fileContent.getBytes());
-
-			StreamDataBodyPart streamDataBodyPart = new StreamDataBodyPart("attachment", is, fileName);
-			streamDataBodyPart.setMediaType(MediaType.APPLICATION_OCTET_STREAM_TYPE);
-
-			BodyPart bodyPart = (BodyPart) streamDataBodyPart;
-    	}
-    	return null;
+    	return returnStr;
 	}
+
 
 	/**
      * Prepares the URL for SMTP server with desired parameters
@@ -152,7 +360,7 @@ public class GMail {
      * @return
      */
 	private static String getSMTPPostParams(SMTPPrefs smtpPrefs, String to, String cc, String bcc, 
-			String subject, String replyTo, String html, String text, //InputStream instr) { 
+			String subject, String replyTo, String fromName, String html, String text, 
 			String fileSource, String fileName, String fileStream) {
 
 		StringBuffer url = new StringBuffer();
@@ -173,9 +381,10 @@ public class GMail {
 			url.append("&to=" + URLEncoder.encode(to, "UTF-8"));
 			url.append("&cc=" + ((cc != null) ? URLEncoder.encode(cc, "UTF-8"):null));
 			url.append("&bcc=" + ((bcc != null) ? URLEncoder.encode(bcc, "UTF-8"):null));
+			url.append("&from_name=" + ((fromName != null) ? URLEncoder.encode(fromName, "UTF-8"):null));
 			
 			url.append("&subject=" + ((subject != null) ? URLEncoder.encode(subject, "UTF-8"):null));
-			url.append("&html=" + ((html != null) ? URLEncoder.encode(html, "UTF-8"):null));
+			url.append("&html=" + ((html != null) ? URLEncoder.encode(escapeJava(html), "UTF-8"):null));
 			url.append("&text=" + ((text != null) ? URLEncoder.encode(text, "UTF-8"):null));
 			
 			url.append("&file_source=" + ((fileSource != null) ? URLEncoder.encode(fileSource, "UTF-8"):null));

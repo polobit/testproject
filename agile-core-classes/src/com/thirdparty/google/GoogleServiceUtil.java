@@ -232,4 +232,47 @@ public class GoogleServiceUtil
 
 	return properties;
     }
+    
+    /**
+     * This method is similar to exchangeAuthTokenForAccessToken().
+     * For any changes regading Gmail outbound functionality, in order to not to disturb the 
+     * existing method, this will be used, especially for client id/secrets.
+     * 
+     * @param authToken
+     * @param scope
+     * @return
+     */
+    public static HashMap<String, Object> exchangeOauthCodeForSMTPAccessTokens(String authToken, 
+    		String scope) {
+		System.out.println("In google exchangeOauthTokenForAccessTokens");
+		
+		HashMap<String, Object> properties;
+		if(scope == null) scope = "";
+	
+		// Make a post request and retrieve tokens
+		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
+	
+		oAuthRequest.addBodyParameter("client_id", GoogleApi.SMTP_OAUTH_CLIENT_ID);
+		oAuthRequest.addBodyParameter("client_secret", GoogleApi.SMTP_OAUTH_CLIENT_SECRET);
+		
+		oAuthRequest.addBodyParameter("scope", scope);
+		oAuthRequest.addBodyParameter("redirect_uri", GoogleApi.getRedirectURL());
+
+		oAuthRequest.addBodyParameter("code", authToken);
+		oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+	
+		try {
+			Response response = oAuthRequest.send();
+			// Creates HashMap from response JSON string
+		    properties = new ObjectMapper().readValue(response.getBody(), 
+		    		new TypeReference<HashMap<String, Object>>() { });
+		}
+		catch (IOException e) {
+		    e.printStackTrace();
+		    properties = new HashMap<String, Object>();
+		}
+	
+		return properties;
+    }
+
 }
