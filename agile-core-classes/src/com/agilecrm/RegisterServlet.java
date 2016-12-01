@@ -105,6 +105,9 @@ public class RegisterServlet extends HttpServlet
 		
 	    if (type != null)
 	    {
+	    // Validates Oauth Request
+	    validateOauthRequest(request);
+	    
 		if (type.equalsIgnoreCase("oauth"))
 		{
 		    registerOAuth(request, response);
@@ -119,8 +122,15 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		String mssg = "";
+		try {
+			mssg = e.getMessage();
+			mssg = URLEncoder.encode(mssg);
+		} catch (Exception e2) {
+		}
+		
 	    // Send to Login Page
-	    request.getRequestDispatcher("register-new1.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(
+	    request.getRequestDispatcher("register-new1.jsp?error=" + mssg).forward(
 		    request, response);
 	    return;
 	}
@@ -138,7 +148,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }
-
+    
     /**
      * If the user is registering using Oauth, it first checks if user
      * information already exists. Domain user is created and it is redirected
@@ -164,6 +174,8 @@ public class RegisterServlet extends HttpServlet
 	    if (DomainUserUtil.count() == 0)
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
+		if(domainUser == null)
+			return;
 
 		response.sendRedirect(VersioningUtil.getLoginUrl(domainUser.domain, request));
 		return;
@@ -255,8 +267,14 @@ public class RegisterServlet extends HttpServlet
 
 	email = email.toLowerCase();
 
+	
+
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
+	
+	if(password == null){
+		password = "";
+	}
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 	// when domain created we are storing timezone in domain level
@@ -575,9 +593,16 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Domain
 	String domain = NamespaceManager.get();
-	if (StringUtils.isEmpty(domain))
+	if (StringUtils.isEmpty(domain)) {
+		request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
+		return null;
+	}
+	String isOAUTH = (String)request.getSession().getAttribute("REGISTER_FROM_OAUTH");
+
+	
+	/*if (StringUtils.isEmpty(domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-		throw new Exception("Invalid Domain. Please go to choose domain.");
+		throw new Exception("Invalid Domain. Please go to choose domain.");*/
 
 	// Get Domain User with this name, password - we do not check for domain
 	// for validity as it is verified in AuthFilter
@@ -736,6 +761,24 @@ public class RegisterServlet extends HttpServlet
 	{
 	    System.out.println("Exception in setting timezone in account prefs.");
 	}
+    }
+    
+    private void validateOauthRequest(HttpServletRequest request) throws Exception{
+    	String oauthError = request.getParameter("oauth_error");
+    	if(StringUtils.isBlank(oauthError))
+    		return;
+    	
+    	// Delete session from request
+    	deleteSessionFromRequestScope(request);
+    	
+    	throw new Exception(oauthError);
+    }
+    
+    public static void deleteSessionFromRequestScope(HttpServletRequest request){
+    	try {
+    		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+		} catch (Exception e) {
+		}
     }
     
     public static void main(String[] args) {

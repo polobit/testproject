@@ -1903,7 +1903,7 @@ function confirmandVerifyEmail()
 					if(typeof(ownerEmail) !== "undefined")
 						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
 					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select Email -</option>");
 						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
 					}
 				}
