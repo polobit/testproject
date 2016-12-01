@@ -365,7 +365,9 @@ public class TicketNotesUtil
 		
 		if(StringUtils.isNotEmpty(feedback))
 			map.put("feed_back",feedback);	
-
+		
+		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
+		
 		Map<String, Object> map2 =  new HashMap<String, Object>(); 
 		
 		map2.put("created_by", CREATED_BY.AGENT);
@@ -373,9 +375,10 @@ public class TicketNotesUtil
 		map2.put("created_time <", endTime);
 		map2.put("feedback_flag", true);
 
-		List<TicketNotes> ticketnotes2 = TicketNotes.ticketNotesDao.listByProperty(map2);
+		if(StringUtils.isNotEmpty(feedback))
+			map2.put("feed_back",feedback);
 		
-		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
+		List<TicketNotes> ticketnotes2 = TicketNotes.ticketNotesDao.listByProperty(map2);
 		
 		ticketnotes.addAll(ticketnotes2);
 		
