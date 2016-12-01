@@ -216,6 +216,30 @@ function initializeAdminpanelListner(el){
 			}
 		
 		});
+
+		$("#admin-panel-listners .unblock_email_purchasing").off("click");
+		$("#admin-panel-listners").on("click", '.unblock_email_purchasing', function(e) { 
+			
+			e.preventDefault();	
+			var domain = $(this).attr("domain");
+			var that = this;
+			if(domain){
+				$.ajax({
+					url: '/core/api/admin_panel/release_email_account?d='+domain, 
+					type : 'POST',
+					success : function(data)
+					{	
+						showNotyPopUp("information", "Domain email purchasing released successfully.", "top");
+						$(that).closest("div").hide();
+					},
+					error : function(data)
+					{
+						showNotyPopUp("warning", data.responseText, "top");
+					}
+				});
+			}
+		
+		});
 		
 		
 		$("#admin-panel-listners").on("click", '#delete_userplan', function(e) { 

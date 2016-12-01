@@ -393,8 +393,10 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 
 		if(e.keyCode == 13){
 			var query = $("#searchText").val();
-			if ($.trim(query) == '')
-    			return;
+			if ($.trim(query) == ''){
+				$(".dashboard-search-scroll-bar").hide();
+				return;
+			}
 			if(!isQueryTextSearchValid(query))
 			{	
 				setTimeout(function(){
@@ -606,29 +608,12 @@ function initRolehandlers(){
  				 dashboardName = "dashboard";
 
  			// Update user with the current service
- 			var json = {};
- 			json.id = CURRENT_DOMAIN_USER.id;
- 			json.role = serviceName;
-
- 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
- 			new Role().save( json, 
- 						{success :function(model, response){
- 							console.log("success");
- 							console.log(model);
- 							CURRENT_DOMAIN_USER = model.toJSON();
- 							// Call dashboard route
-					 		Backbone.history.navigate("#navigate-dashboard/"+dashboardName, {
-					                trigger: true
-					            });
- 						}, 
- 						error: function(model, response){
-							console.log("error");
- 						}});
-
  			// Close popup
+ 			if(CURRENT_DOMAIN_USER.role != serviceName)
+ 				updateDashboardRole(serviceName);
+
  			// $("div.app-content-body div:first-child").click();
  			$(this).parents(".popover").popover('hide');
-
  			// Update dashboard name here
  			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
 
@@ -642,7 +627,7 @@ function initRolehandlers(){
  			/*$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 */
  			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard", {
+ 			Backbone.history.navigate("#navigate-dashboard/"+dashboardName, {
                 trigger: true
             });
 	});

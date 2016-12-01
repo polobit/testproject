@@ -447,5 +447,22 @@ public class BillingRestrictionUtil {
 		
 	}
 	
+	public static void setPaidEmailsCount(int count){
+		BillingRestriction restriction = getBillingRestrictionFromDB();
+		if (restriction.one_time_emails_count < 0)
+		    restriction.one_time_emails_count = 0;
+
+		restriction.one_time_emails_count += (count * 1000);
+		restriction.max_emails_count = restriction.one_time_emails_count;
+		restriction.isNewEmailPlanUpgrade = true;
+		restriction.save();
+	}
+	
+	public static void addEmailCredits(int count){
+		BillingRestriction restriction = getBillingRestrictionFromDB();
+		restriction.incrementEmailCreditsCount(count);
+		restriction.save();
+	}
+	
 }
 

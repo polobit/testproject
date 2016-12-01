@@ -11,6 +11,7 @@ import org.scribe.builder.api.YahooApi;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.LoginServlet;
+import com.agilecrm.LoginUtil;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.scribe.api.LinkedinAPI;
 import com.agilecrm.scribe.login.serviceproviders.GoogleLoginService;
@@ -123,7 +124,8 @@ public class OAuthLoginUtil
 	    throws IOException
     {
 	// email = getEmail(service, code);
-
+    String sessionDomain = getSessionDomainName(req);
+    
 	UserInfo userInfo = getUserInfo(req, resp, service, code);
 	DomainUser domainUser = null;
 
@@ -154,12 +156,20 @@ public class OAuthLoginUtil
 	    }
 	    // Oauth should be set as query parameter so it creates new account
 	    // based on session info set
-	    req.getSession().setAttribute("return_url", "/register?type=oauth");
+	    // Allow only google Apps accounts and throw an error to gmail accounts
+	    String registerPage = "/register?type=oauth";
+	  /*  if(userInfo != null && userInfo.getEmail().contains("@gmail"))
+	    	registerPage += "&oauth_error=" + LoginUtil.GOOGLE_APPS_INVALID_EMAIL_ERROR;
+	    */
+	    req.getSession().setAttribute("return_url", registerPage);
 	    return;
 	}
 
 	// If the namespace is different, redirect to the correct domain
 	String domain = NamespaceManager.get();
+	if(StringUtils.isBlank(domain))
+		domain = sessionDomain;
+	
 	System.out.println(domainUser + " " + domain);
 
 	// If return url contains gmail?command= then request is to associate
@@ -170,8 +180,8 @@ public class OAuthLoginUtil
 	    return;
 	}
 
-	if (domainUser != null && domainUser.domain != null && domain != null
-		&& !domain.equalsIgnoreCase(domainUser.domain))
+	if (domainUser != null && domainUser.domain != null 
+		&& !(domainUser.domain).equalsIgnoreCase(domain))
 	{
 	    // String path = "https://" + domainUser.domain +
 	    // ".agilecrm.com/scribe?service=" +
@@ -246,4 +256,16 @@ public class OAuthLoginUtil
 	request.getSession().setAttribute("oauth.service", serviceName);
 	return loginService.getService();
     }
+    
+    private static String getSessionDomainName(HttpServletRequest req){
+    	String domain = null;
+    	try {
+    		domain = (String) req.getSession().getAttribute("oauth_login_namespace");
+        	req.getSession().removeAttribute("oauth_login_namespace");
+        	return domain;
+		} catch (Exception e) {
+		}
+    	return domain;
+    }
+    
 }

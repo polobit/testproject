@@ -397,7 +397,7 @@ function isIE() {
 
                 <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard' ><i class='thumb background-img-marketing' ></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span></a></li>
 
-                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard' ><i class='thumb background-img-service'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
+                <li class='pull-left m-b-sm'><a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='Dashboard' ><i class='thumb background-img-service'></i> <span class='block'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span></a></li>
 
                 </ul>
                 </div>
@@ -811,7 +811,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           <i class="fa fa-fw fa-angle-right text"></i>
           <i class="fa fa-fw fa-angle-down text-active"></i>
         </span>
-        <i class="icon-book-open icon"></i>
+        <i class="icon-support icon"></i>
         <span class="font-bold">Service</span>
       </a>
       <ul class="nav nav-sub dk" style="display:block;" > 

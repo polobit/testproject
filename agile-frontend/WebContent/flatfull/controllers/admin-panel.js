@@ -79,6 +79,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 				$(el).find(".unblock_user").closest("div").show();
 				$(el).find(".unblock_user").attr("domain", domainname);
 			}
+			if(data && data.emailpurchaseStatus && data.emailpurchaseStatus == "BLOCKED"){
+				$(el).find(".unblock_email_purchasing").closest("div").show();
+				$(el).find(".unblock_email_purchasing").attr("domain", domainname);
+			}
 
 
 		}, error : function(response)

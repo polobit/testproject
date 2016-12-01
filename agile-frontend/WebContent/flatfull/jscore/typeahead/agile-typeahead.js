@@ -90,8 +90,10 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								type_url = '&' + urlParams;
 								searchParams = urlParams ;
 							}
-							if($.trim(query) == '')
-    							return;
+							if ($.trim(query) == ''){
+								$(".dashboard-search-scroll-bar").hide();
+								return;
+							}
 							if(!isQueryTextSearchValid(query)){
 								var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
 								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
@@ -344,8 +346,10 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								if (!items)
 								{
 									var query = $("#searchText").val();
-									if($.trim(query) == '')
-    									return;
+									if ($.trim(query) == ''){
+										$(".dashboard-search-scroll-bar").hide();
+										return;
+									}
 									if(!isQueryTextSearchValid(query))
 									{
 										var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;

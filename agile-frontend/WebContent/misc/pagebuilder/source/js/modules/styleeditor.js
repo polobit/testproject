@@ -43,6 +43,11 @@
             });
 
             publisher.subscribe('onBlockLoaded', function (block) {
+                //hide lhs popup when click on ESC
+                $(block.frameDocument).keyup(function(e) {
+                    if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
+                        $("#styleEditor").css("left","-300px");           
+                });
                 styleeditor.setupCanvasElements(block);
             });
 
