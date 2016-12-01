@@ -1992,6 +1992,18 @@ $(function()
 		return " ";
 	});
 
+	Handlebars.registerHelper("getPushNotificationHost", function(options)
+	{
+
+		var url = window.location.host;
+
+		if(url.length>28)
+		{
+			url = ".." + url.substring(url.length - 28);
+		}
+		return url;
+	});
+
 	Handlebars.registerHelper("getBase64Domain", function()
 			{
 				return window.btoa(window.location.host.split(".")[0]);

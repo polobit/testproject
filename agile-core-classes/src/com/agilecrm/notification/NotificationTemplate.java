@@ -28,7 +28,7 @@ public class NotificationTemplate
      */
     @Indexed
     @NotSaved(IfDefault.class)
-    public Long updated_time = System.currentTimeMillis() / 1000;
+    public Long updated_time = 0L;
 
 
     /**
@@ -70,6 +70,13 @@ public class NotificationTemplate
      */
     @NotSaved(IfDefault.class)
     public String push_param = null;
+    
+
+    /**
+     * Created time of  Push Notification 
+     */
+    @NotSaved(IfDefault.class)
+    public long created_time = System.currentTimeMillis() / 1000;
 
     public static ObjectifyGenericDao<NotificationTemplate> dao = new ObjectifyGenericDao<NotificationTemplate>(NotificationTemplate.class);
 
@@ -91,7 +98,6 @@ public class NotificationTemplate
 
     public void save()
     {
-    	this.updated_time = System.currentTimeMillis() / 1000;
     	dao.put(this);
     }
     
