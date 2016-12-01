@@ -33,9 +33,6 @@ public class GmailSendPrefs {
 	@Id
 	public Long id;
 
-	/*@NotSaved(IfDefault.class)
-	public String user_name = null;*/
-
 	 /**
      * Social group token.
      */

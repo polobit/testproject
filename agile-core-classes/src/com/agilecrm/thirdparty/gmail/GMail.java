@@ -179,8 +179,8 @@ public class GMail {
 		System.out.println("Sending mail to sender to reconfigure Oauth...");
 		String subj = "Reconfigure Gmail Account";
 		String content = EmailUtil.emailTemplate("It seems you have revoked the access for "
-				+ "Agile CRM from sending emails through Gmail SMTP. "
-				+ "Please reconfigure your Gmail SMTP account in Agile CRM again in <br><br>"
+				+ "Agile CRM from sending emails through Gmail SMTP. <br>"
+				+ "Please reconfigure your Gmail SMTP account in Agile CRM again in <br>"
 				+ "Preferences -> Email -> Outbound.<br><br>");
 
 		SendGrid.sendMail("noreply@agilecrm.com", "Agile CRM", from, null, null, subj, null, content, null);
