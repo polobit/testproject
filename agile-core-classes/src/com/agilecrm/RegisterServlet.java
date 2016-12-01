@@ -122,8 +122,15 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		String mssg = "";
+		try {
+			mssg = e.getMessage();
+			mssg = URLEncoder.encode(mssg);
+		} catch (Exception e2) {
+		}
+		
 	    // Send to Login Page
-	    request.getRequestDispatcher("register-new1.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(
+	    request.getRequestDispatcher("register-new1.jsp?error=" + mssg).forward(
 		    request, response);
 	    return;
 	}
