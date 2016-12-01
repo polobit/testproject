@@ -130,7 +130,7 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     {
 	String company = null;
 	ContactField field = null;
-	if (defaultAddress.containsKey("company"))
+	if (defaultAddress!=null && defaultAddress.containsKey("company"))
 	{
 	    company = defaultAddress.get("company");
 	    field = new ContactField(Contact.COMPANY, company, "office");

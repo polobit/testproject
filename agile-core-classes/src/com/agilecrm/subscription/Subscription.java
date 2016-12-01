@@ -332,7 +332,7 @@ public class Subscription implements Serializable{
 		emailPlan.plan_id = SubscriptionUtil.getEmailPlan(emailPlan.quantity);
 		Subscription subscription = createNewSubscription(emailPlan);
 		if(emailPlan.quantity > 10 && !SubscriptionUtil.isCostlyUser()){
-			SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.CREDIT, emailPlan.quantity * 1000);
+			SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.SUBSCRIPTION, emailPlan.quantity * 1000);
 			throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
 		}
 		return subscription;

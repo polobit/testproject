@@ -306,6 +306,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
             $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
             if(requestType == "post") {
                 window.location.hash = "email-templates";
+                Refresh_Email_Template = true;
             }
         },
     });

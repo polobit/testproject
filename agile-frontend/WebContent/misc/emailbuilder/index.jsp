@@ -212,7 +212,7 @@ var localeJSON = <%=localeJSON%>;
 
                             <hr/>
                             <div class="text text-right">
-                                <a class="btn btn-info" id="confirm-font-properties"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
+                                <a class="btn btn-primary" id="confirm-font-properties"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
                             </div>
                         </div>
 
@@ -328,7 +328,7 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
                                 <div class="col-xs-4" style="float: right">
 
-                                    <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
+                                    <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
                                 </div>
 
                             </div>
@@ -788,7 +788,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                 </div>
 
                 <div class="text text-right" style="margin-top: 5px">
-                    <a href="#" id="saveElement" class="btn btn-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "done") %></a>
+                    <a href="#" id="saveElement" class="btn btn-primary"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "done") %></a>
                 </div>
             </div>
             <!-- END SETTINGS -->
