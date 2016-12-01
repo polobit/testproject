@@ -24,9 +24,16 @@ function updateContactProperties(newProperties){
 	model.url = "core/api/contacts";
 	model.save(contact_model.toJSON(), {
 		success : function(data){
-			if(data){				
+			if(data){
+				console.log("fullcontact Updated **** ");
 				App_Contacts.contactDetailView.model = data;
-				App_Contacts.contactDetailView.render(true);
+
+				var contactDetailsBlock = new Base_Model_View({ 
+					template : "contact-details-block",					
+					data : App_Contacts.contactDetailView.model					
+				});
+				var block_el = contactDetailsBlock.render(true).el;
+      			$('#contact-details-block').html($(block_el));  			  				
 			}
 		}
 	});
