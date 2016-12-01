@@ -176,7 +176,7 @@ public class OAuthLoginUtil
 	    return;
 	}
 
-	if (domainUser != null && domainUser.domain != null  
+	if (domainUser != null && domainUser.domain != null && domain != null 
 		&& !(domainUser.domain).equalsIgnoreCase(domain))
 	{
 	    // String path = "https://" + domainUser.domain +
