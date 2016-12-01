@@ -79,10 +79,9 @@ public class JSAPIFilter implements Filter
 		if (domainUser != null)
 		    userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
 
-		if(userInfo != null){
+		if(userInfo != null && domainUser != null){
 		    userInfo.setJsrestricted_propertiess(domainUser.jsrestricted_propertiess);
 		    userInfo.setJsrestricted_scopes(domainUser.jsrestricted_scopes);
-				    
 		}
 		
 		SessionManager.set(userInfo);
