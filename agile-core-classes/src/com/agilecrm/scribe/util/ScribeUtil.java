@@ -192,7 +192,7 @@ public class ScribeUtil {
 		 */
 		else if (serviceType.equalsIgnoreCase(SERVICE_TYPE_GMAIL_SEND))
 			service = getSpecificService(req, SERVICE_TYPE_GMAIL_SEND, GoogleApi.class, callback,
-					GoogleApi.RAMESHWEBKEY_BETA_CLIENT_ID, GoogleApi.RAMESHWEBKEY_BETA_SECRET_KEY, 
+					GoogleApi.SMTP_OAUTH_CLIENT_ID, GoogleApi.SMTP_OAUTH_CLIENT_SECRET, 
 					GMAIL_SEND_SCOPE);  
 			
 		// Creates a Service, specific to Gmail
@@ -535,7 +535,7 @@ public class ScribeUtil {
 	public static void saveGmailSendPrefs(String code, OAuthService service, AgileUser agileUser, 
 			String isForAll, String scope, com.agilecrm.user.SocialPrefs.Type type) 
 					throws IOException {
-		HashMap<String, Object> tokenMap = GoogleServiceUtil.exchangeOauthTokenForAccessTokens(code, scope);
+		HashMap<String, Object> tokenMap = GoogleServiceUtil.exchangeOauthCodeForSMTPAccessTokens(code, scope);
 		System.out.println(tokenMap);
 		
 		String accessToken = (String) tokenMap.get("access_token");

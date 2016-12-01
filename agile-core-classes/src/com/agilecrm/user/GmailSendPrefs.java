@@ -33,8 +33,8 @@ public class GmailSendPrefs {
 	@Id
 	public Long id;
 
-	@NotSaved(IfDefault.class)
-	public String user_name = null;
+	/*@NotSaved(IfDefault.class)
+	public String user_name = null;*/
 
 	 /**
      * Social group token.
@@ -107,7 +107,7 @@ public class GmailSendPrefs {
 		
 		this.socialId = properties.get("id");
 		this.picture = properties.get("pic");
-		this.user_name = properties.get("name");
+		this.name = properties.get("name");
 
 		if(properties.containsKey("email")) this.email = properties.get("email");
 		if(properties.containsKey("picture")) this.picture = properties.get("picture");

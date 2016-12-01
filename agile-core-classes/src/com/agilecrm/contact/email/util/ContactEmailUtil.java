@@ -794,7 +794,7 @@ public class ContactEmailUtil
 		    {
 				List<String> userNames = new ArrayList<String>();
 				for (GmailSendPrefs prefs : gmailSendPrefsList)
-				    userNames.add(prefs.user_name);
+				    userNames.add(prefs.name);
 				emailPrefs.setGmailSendUserNames(userNames);
 				hasEmailAccountsConfigured = true;
 		    }

@@ -242,7 +242,7 @@ public class GoogleServiceUtil
      * @param scope
      * @return
      */
-    public static HashMap<String, Object> exchangeOauthTokenForAccessTokens(String authToken, 
+    public static HashMap<String, Object> exchangeOauthCodeForSMTPAccessTokens(String authToken, 
     		String scope) {
 		System.out.println("In google exchangeOauthTokenForAccessTokens");
 		
@@ -252,12 +252,11 @@ public class GoogleServiceUtil
 		// Make a post request and retrieve tokens
 		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
 	
-		oAuthRequest.addBodyParameter("client_id", GoogleApi.RAMESHWEBKEY_BETA_CLIENT_ID);
-		oAuthRequest.addBodyParameter("client_secret", GoogleApi.RAMESHWEBKEY_BETA_SECRET_KEY);
+		oAuthRequest.addBodyParameter("client_id", GoogleApi.SMTP_OAUTH_CLIENT_ID);
+		oAuthRequest.addBodyParameter("client_secret", GoogleApi.SMTP_OAUTH_CLIENT_SECRET);
 		
 		oAuthRequest.addBodyParameter("scope", scope);
-		//oAuthRequest.addBodyParameter("redirect_uri", GoogleApi.getRedirectURL());
-		oAuthRequest.addBodyParameter("redirect_uri", GoogleApi.getGmailSendRedirectURI());
+		oAuthRequest.addBodyParameter("redirect_uri", GoogleApi.getRedirectURL());
 
 		oAuthRequest.addBodyParameter("code", authToken);
 		oAuthRequest.addBodyParameter("grant_type", "authorization_code");

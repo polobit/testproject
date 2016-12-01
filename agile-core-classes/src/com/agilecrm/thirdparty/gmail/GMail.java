@@ -125,7 +125,7 @@ public class GMail {
     				.Builder()
     				.setTransport(HTTP_TRANSPORT)
     				.setJsonFactory(JSON_FACTORY)
-    				.setClientSecrets(GoogleApi.RAMESHWEBKEY_BETA_CLIENT_ID, GoogleApi.RAMESHWEBKEY_BETA_SECRET_KEY)
+    				.setClientSecrets(GoogleApi.SMTP_OAUTH_CLIENT_ID, GoogleApi.SMTP_OAUTH_CLIENT_SECRET)
     				.build()
     				.setAccessToken(gmailPrefs.token)
     				.setRefreshToken(gmailPrefs.refresh_token);
@@ -143,7 +143,8 @@ public class GMail {
 			
 			//if(prefsUpdated) GmailSendPrefsUtil.save(gmailPrefs);
 			
-			sendByGmailAPI(to, cc, bcc, subject, fromName, html, from, attachFile, gcredential);
+			sendByGmailAPI(to, cc, bcc, subject, fromName, html, from, gmailPrefs.name, attachFile, 
+					gcredential);
     	}
     	catch(Exception e) {
 			System.err.println(e.getMessage());
@@ -177,10 +178,10 @@ public class GMail {
 		//Send email to the sender.
 		System.out.println("Sending mail to sender to reconfigure Oauth...");
 		String subj = "Reconfigure Gmail Account";
-		String content = EmailUtil.emailTemplate("It seems you have revoked the access from "
-				+ "Agile CRM for sending emails through gmail smtp.<br>"
-				+ "Please reconfigure your gmail smtp account in Agile CRM again in preferences "
-				+ "--> Email --> Outbound<br>");
+		String content = EmailUtil.emailTemplate("It seems you have revoked the access for "
+				+ "Agile CRM from sending emails through Gmail SMTP. "
+				+ "Please reconfigure your Gmail SMTP account in Agile CRM again in <br><br>"
+				+ "Preferences -> Email -> Outbound.<br><br>");
 
 		SendGrid.sendMail("noreply@agilecrm.com", "Agile CRM", from, null, null, subj, null, content, null);
 	}
@@ -190,7 +191,8 @@ public class GMail {
 	 *
 	 */
 	private static void sendByGmailAPI(String to, String cc, String bcc, String subject,
-			String fromName, String html, String from, String[] attachFile, Credential gcredential) 
+			String fromName, String html, String from, String name, String[] attachFile, 
+			Credential gcredential) 
 					throws MessagingException, IOException, Exception {
 		Gmail service = new Gmail
 				.Builder(HTTP_TRANSPORT, JSON_FACTORY, gcredential)
@@ -200,10 +202,10 @@ public class GMail {
 		Message message = null;
 		
 		if(StringUtils.isBlank(attachFile[0])) {
-			message = createMimeMessage(to, cc, bcc, from, subject, fromName, html, attachFile);	
+			message = createMimeMessage(to, cc, bcc, from, subject, fromName, name, html, attachFile);	
 		}
 		else if("document".equalsIgnoreCase(attachFile[0])) {
-			message = createEmailWithDocument(to, cc, bcc, from, subject, fromName, html, attachFile); 
+			message = createEmailWithDocument(to, cc, bcc, from, subject, fromName, name, html, attachFile); 
 		}
 		/*else if("blobkey".equalsIgnoreCase(attachFile[0])) {
 			message = createEmailWithBlobkey(to, cc, bcc, from, subject, fromName, html, attachFile); 
@@ -229,7 +231,8 @@ public class GMail {
      *
      */
 	private static Message createMimeMessage(String to, String cc, String bcc, 
-			String from, String subject, String fromName, String body, String[] attachFile) {
+			String from, String subject, String fromName, String name, String body, 
+			String[] attachFile) {
 		try {
 			Properties props = new Properties();
 			Session session = Session.getDefaultInstance(props, null);
@@ -239,7 +242,8 @@ public class GMail {
 			message.addRecipients(TO, InternetAddress.parse(to, false));
             message.addRecipients(CC, InternetAddress.parse(cc, false));
             message.addRecipients(BCC, InternetAddress.parse(bcc, false));
-			message.setSubject(subject);
+           // String encodedSubject = new String(subject.getBytes("UTF-8"),"UTF-8");
+			message.setSubject(subject, "UTF-8");
 			message.setContent(body, "text/html; charset=UTF-8");
 			
 			return createMessageWithEmail(message);
@@ -277,8 +281,8 @@ public class GMail {
 	 *
 	 */
 	private static Message createEmailWithDocument(String to, String cc, String bcc, 
-			String from, String subject, String fromName, String bodyText, String[] attachFile) 
-					throws MessagingException, IOException, Exception {
+			String from, String subject, String fromName, String name, String bodyText, 
+			String[] attachFile) throws MessagingException, IOException, Exception {
 		
 		String fileName = attachFile[1];
 		

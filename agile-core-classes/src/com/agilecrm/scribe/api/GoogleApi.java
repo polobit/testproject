@@ -38,10 +38,10 @@ public class GoogleApi extends DefaultApi20
 	 */
 	private static final String REDIRECT_URL = "https://my.agilecrm.com/backend/googleservlet";
 
-	private static final String GMAIL_SEND_REDIRECT_URI = "https://null-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/googleservlet";
+	//private static final String GMAIL_SEND_REDIRECT_URI = "https://null-dot-sandbox-dot-agilecrmbeta.appspot.com/backend/googleservlet";
 	
-	public static final String RAMESHWEBKEY_BETA_CLIENT_ID = "492662354647-0lcau95v3nj53ie97fo7usnchhr0joap.apps.googleusercontent.com";
-	public static final String RAMESHWEBKEY_BETA_SECRET_KEY = "NNfKgAleLw19xbKPioGYI0XI";
+	public static final String SMTP_OAUTH_CLIENT_ID = "661717543880-g26bbqut6i87kn181i6erosjss3o4crm.apps.googleusercontent.com";
+	public static final String SMTP_OAUTH_CLIENT_SECRET = "JbZnM_J03AgSjXJGe3izwJeO";
 	
 	
 	/**
@@ -57,11 +57,6 @@ public class GoogleApi extends DefaultApi20
 	public static String getRedirectURL()
 	{
 		return REDIRECT_URL;
-	}
-
-	public static String getGmailSendRedirectURI()
-	{
-		return GMAIL_SEND_REDIRECT_URI;
 	}
 
 	public Verb getAccessTokenVerb()
@@ -97,10 +92,6 @@ public class GoogleApi extends DefaultApi20
 				|| oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_PLUS_OAUTH2_SCOPE))
 			url = AUTHORIZE_URL_GOOGLE_APPS;
 
-		else if(oauthScope.equalsIgnoreCase(ScribeServlet.GMAIL_SEND_SCOPE)) 
-			return String.format(url, config.getApiKey(), OAuthEncoder.encode(oauthScope),
-					OAuthEncoder.encode(config.getCallback()), OAuthEncoder.encode(GMAIL_SEND_REDIRECT_URI));
-		
 		return String.format(url, config.getApiKey(), OAuthEncoder.encode(oauthScope),
 				OAuthEncoder.encode(config.getCallback()), OAuthEncoder.encode(REDIRECT_URL));
 	}
