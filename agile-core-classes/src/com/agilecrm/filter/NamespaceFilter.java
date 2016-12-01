@@ -80,7 +80,7 @@ public class NamespaceFilter implements Filter
 	
 
 	System.out.println("login oauth = "+ request.getParameter("loginoauth") );
-	if (((HttpServletRequest) request).getRequestURI().contains("oauth") && request.getParameter("loginoauth") == null)
+	if (((HttpServletRequest) request).getRequestURI().contains("oauth") && request.getParameter("loginoauth") != null)
 	    return true;
 
 	/*if (((HttpServletRequest) request).getRequestURI().contains("oauth"))
