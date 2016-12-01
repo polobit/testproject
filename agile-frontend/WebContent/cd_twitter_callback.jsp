@@ -6,7 +6,6 @@
 <%@page import="com.agilecrm.user.Referer"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
-<%@page import="com.agilecrm.util.NamespaceUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -94,11 +93,44 @@ if(referralObj != null){
 	   out.println("<div style='text-align: center;font-size: large;'>Oops.. Twitter says you are too fast for it to serve you. Please try again after few minutes. <br><button class=\"btn\" style='font-size: initial;' onclick='window.close();return false;'>Close</button></div>");	   
 	   return;
 }
-
-String host = request.getServerName();
-if(host.contains("-dot-")) {
-  response.sendRedirect("https://" + NamespaceUtil.getNamespaceFromURL(host) + ".agilecrm.com/cd_twitter_callback_redirect.jsp?referral_type=" + referralType + "&token=" + accessToken.getToken() + "&tokenSecret=" + accessToken.getSecret() + "&account=" + twitter.getScreenName() + "&profileImgUrl=" + user.getOriginalProfileImageURLHttps());
-  return;
-}
-
 %>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Please Wait</title>
+
+<script type="text/javascript" src="lib/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+$(function()
+{	
+	var referral_type = "<%=referralType%>";
+ 	var token = "<%=accessToken.getToken()%>";
+	var tokenSecret = "<%=accessToken.getSecret()%>";
+	var account = "<%=twitter.getScreenName()%>";
+	
+	// Fetches profile image url
+	var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
+	if(referral_type != null && referral_type != "null")
+		window.opener.trackReferrals(referral_type); 
+	else
+		window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
+	window.close();
+});
+
+
+</script>
+
+</head>
+
+
+<body>
+
+Please wait, <%=twitter.getScreenName()%>
+
+</body>
+</html>
