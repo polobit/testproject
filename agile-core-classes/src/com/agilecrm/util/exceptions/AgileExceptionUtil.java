@@ -55,7 +55,7 @@ public class AgileExceptionUtil {
 	}
 
 	static boolean proceedToEmail(Exception e) {
-		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()))
+		if (VersioningUtil.isDevelopmentEnv() || "agilecrmbeta".equals(VersioningUtil.getApplicationAPPId()) || e instanceof IllegalStateException)
 			return false;
 
 		return true;
