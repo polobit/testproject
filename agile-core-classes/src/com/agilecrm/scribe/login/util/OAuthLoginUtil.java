@@ -124,7 +124,8 @@ public class OAuthLoginUtil
 	    throws IOException
     {
 	// email = getEmail(service, code);
-
+    String sessionDomain = getSessionDomainName(req);
+    
 	UserInfo userInfo = getUserInfo(req, resp, service, code);
 	DomainUser domainUser = null;
 
@@ -166,6 +167,9 @@ public class OAuthLoginUtil
 
 	// If the namespace is different, redirect to the correct domain
 	String domain = NamespaceManager.get();
+	if(StringUtils.isBlank(domain))
+		domain = sessionDomain;
+	
 	System.out.println(domainUser + " " + domain);
 
 	// If return url contains gmail?command= then request is to associate
@@ -176,7 +180,7 @@ public class OAuthLoginUtil
 	    return;
 	}
 
-	if (domainUser != null && domainUser.domain != null  
+	if (domainUser != null && domainUser.domain != null 
 		&& !(domainUser.domain).equalsIgnoreCase(domain))
 	{
 	    // String path = "https://" + domainUser.domain +
@@ -252,4 +256,16 @@ public class OAuthLoginUtil
 	request.getSession().setAttribute("oauth.service", serviceName);
 	return loginService.getService();
     }
+    
+    private static String getSessionDomainName(HttpServletRequest req){
+    	String domain = null;
+    	try {
+    		domain = (String) req.getSession().getAttribute("oauth_login_namespace");
+        	req.getSession().removeAttribute("oauth_login_namespace");
+        	return domain;
+		} catch (Exception e) {
+		}
+    	return domain;
+    }
+    
 }

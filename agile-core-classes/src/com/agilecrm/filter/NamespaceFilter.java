@@ -78,14 +78,8 @@ public class NamespaceFilter implements Filter
 	if (((HttpServletRequest) request).getRequestURI().contains("choose-domain"))
 	    return true;
 	
-
-	System.out.println("login oauth = "+ request.getParameter("loginoauth") );
-	if (((HttpServletRequest) request).getRequestURI().contains("oauth") && request.getParameter("loginoauth") != null)
+	if (((HttpServletRequest) request).getRequestURI().contains("oauth") && ((HttpServletRequest) request).getParameter("loginoauth") == null)
 	    return true;
-
-	/*if (((HttpServletRequest) request).getRequestURI().contains("oauth"))
-	    return true;*/
-
 
 	// If it is enter domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains("enter-domain"))
