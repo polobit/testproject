@@ -17,6 +17,10 @@
  	"signin-with-google": "{{agile_lng_translate 'login' 'signin-with-google'}}",
  	"signin-with-yahoo": "{{agile_lng_translate 'login' 'signin-with-yahoo'}}",
  	"signUp": "{{agile_lng_translate 'login' 'signUp'}}",
+ 	"signin-using": "{{agile_lng_translate 'login' 'signin-using'}}",
+ 	"signin-using-google": "{{agile_lng_translate 'login' 'signin-using-google'}}",
+ 	"signin-using-yahoo": "{{agile_lng_translate 'login' 'signin-using-yahoo'}}",
+
 
  	// Custom validations
  	"invalid-default": "{{agile_lng_translate 'html5Validations' 'invalid-default'}}",

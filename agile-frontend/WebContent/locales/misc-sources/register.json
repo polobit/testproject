@@ -49,6 +49,8 @@
  	"phone-number": "{{agile_lng_translate 'widgets' 'phone-number'}}",
  	"pnone-num-validation": "{{agile_lng_translate 'register' 'pnone-num-validation'}}",
  	"get-started": "{{agile_lng_translate 'web-rules' 'get-started'}}",
+ 	"sign-In": "{{agile_lng_translate 'login' 'sign-In'}}",
+ 	"signup-Using": "{{agile_lng_translate 'register' 'signup-Using'}}",
 
  	// Custom validations
  	"invalid-select-one": "{{agile_lng_translate 'html5Validations' 'invalid-select-one'}}",
