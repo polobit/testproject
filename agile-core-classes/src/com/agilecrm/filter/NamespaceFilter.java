@@ -78,9 +78,6 @@ public class NamespaceFilter implements Filter
 	if (((HttpServletRequest) request).getRequestURI().contains("choose-domain"))
 	    return true;
 	
-	if (((HttpServletRequest) request).getRequestURI().contains("oauth") && ((HttpServletRequest) request).getParameter("loginoauth") == null)
-	    return true;
-
 	// If it is enter domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains("enter-domain"))
 	    return true;
@@ -132,6 +129,9 @@ public class NamespaceFilter implements Filter
 	// If request is from register and domain is "my", request is forwarded
 	// to register jsp without setting domain
 	if (((HttpServletRequest) request).getRequestURI().contains("/register") && "my".equals(subdomain))
+	    return true;
+	
+	if (((HttpServletRequest) request).getRequestURI().contains("/oauth") && "my".equals(subdomain))
 	    return true;
 
 	// If my or any special domain - support etc, choose subdomain
