@@ -97,8 +97,10 @@ function saveCallNoteKnolarity(event){
 	    	}
 	    });
 	}else {
+		console.log("Outgoing *** ");
 		if(cntId){
-			if( state == "answered"){
+			console.log("cntId *** "+ state);
+			if(state == "answered"){
 				twilioIOSaveContactedTime(cntId);
 				accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
 					var json = resp;
@@ -124,6 +126,9 @@ function saveCallNoteKnolarity(event){
 					"status": state, 
 					"duration" : callDuration
 				};
+
+				console.log("Note ***** ");
+				console.log(note);
 				autosaveNoteByUser(note,call,"/core/api/widgets/knowlarity");
 			}
 		}else{
@@ -149,6 +154,8 @@ function saveCallNoteKnolarity(event){
     		return showContactMergeOption(jsonObj);
 		}
 	}
+
+	showBriaCallNoty({});
 }
 
 
