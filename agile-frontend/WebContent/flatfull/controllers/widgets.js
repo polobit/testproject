@@ -375,7 +375,7 @@ var WidgetsRouter = Backbone.Router
              *
              */
             Android : function(id){
-                addConfigurableWidget(id, "Android", "appcalling-login");
+                addConfigurableWidget(id, "Android", "android-login");
             },
 
             /**

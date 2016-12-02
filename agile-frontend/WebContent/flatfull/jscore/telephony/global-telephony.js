@@ -2,14 +2,14 @@ var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "AppCalling" : "AppCalling"};
+var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android"};
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 var callJar = {"running" : false};
 
-function appCallingSetup(){
-	head.js(LIB_PATH + 'widgets/appcalling.js', function(){
+function androidSetup(){
+	head.js(LIB_PATH + 'widgets/android.js', function(){
 		console.log("App Calling js file loaded");
 	});
 }
@@ -17,7 +17,7 @@ function appCallingSetup(){
 $(function(){
 	//initToPubNub();
 	globalCallWidgetSet();
-	appCallingSetup();
+	androidSetup();
 });
 
 function getContactImage(number, type, callback)

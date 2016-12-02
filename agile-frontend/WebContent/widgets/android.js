@@ -7,32 +7,32 @@ function appDialer(to, contact){
 	 		url : requestURL,
 	 		type : "GET",	 		
 	 		success : function(result) {
-	 			console.log("AppCalling *** success : "+ JSON.stringify(result));						
+	 			console.log("android *** success : "+ JSON.stringify(result));						
 	 			//{{agile_lng_translate 'other' 'cancel'}}			
 	 			console.log(to + " : "+ contact);				
 	 		},
 	 		error : function(result) {
-	 			console.log("AppCalling *** error : "+ JSON.stringify(result));								
+	 			console.log("android *** error : "+ JSON.stringify(result));								
 	 		}
 	 	});
  	}
 }
 
-function startAppCallingWidget(contact_id){
-	APPCALLING_PLUGIN_NAME = "AppCalling";
+function startAndroidWidget(contact_id){
+	ANDROID_PLUGIN_NAME = "Android";
 
-	APPCALLING_UPDATE_LOAD_IMAGE = '<center><img id="appcalling_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	ANDROID_UPDATE_LOAD_IMAGE = '<center><img id="android_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
-	var appcalling_widget = agile_crm_get_widget(APPCALLING_PLUGIN_NAME);
+	var android_widget = agile_crm_get_widget(ANDROID_PLUGIN_NAME);
 
-	console.log(appcalling_widget);
+	console.log(android_widget);
 
-	APPCALLING_Plugin_Id = appcalling_widget.id;	
+	ANDROID_Plugin_Id = android_widget.id;	
 	
-	$('#AppCalling').html("No Logs");
+	$('#Android').html("No Logs");
 
-	$(".contact-make-call-div").off("click", ".AppCalling_call");
- 	$(".contact-make-call-div").on("click", ".AppCalling_call", function(e){
+	$(".contact-make-call-div").off("click", ".Android_call");
+ 	$(".contact-make-call-div").on("click", ".Android_call", function(e){
  		e.preventDefault();
  		e.stopPropagation();
  		var contactDetailsObj = agile_crm_get_contact();

@@ -21,7 +21,7 @@ function appDialer(to, contact){
 function startAndroidWidget(contact_id){
 	ANDROID_PLUGIN_NAME = "Android";
 
-	APPCALLING_UPDATE_LOAD_IMAGE = '<center><img id="android_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	ANDROID_UPDATE_LOAD_IMAGE = '<center><img id="android_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	var android_widget = agile_crm_get_widget(ANDROID_PLUGIN_NAME);
 
