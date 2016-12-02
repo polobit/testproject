@@ -374,7 +374,7 @@ function callToNumber(to,from,widgetName,contact,dialler){
 			dialFromSip(to,from,contact)
 		}else if(widgetName == "Skype"){
 			dialFromSkype(to,from,contact)
-		}else if(widgetName == "AppCalling"){
+		}else if(widgetName == "android"){
 			dialFromMobileAPP(to, from, contact);
 		}		
 	}catch(e){
@@ -537,8 +537,8 @@ function getIcon(widgetName){
 		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >Bria";
 	}else if(widgetName == "Skype"){
 		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
-	}else if(widgetName == "AppCalling"){
-		icon = "<img src='/img/plugins/appcalling-sm-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='AppCalling' >AppCalling";
+	}else if(widgetName == "Android"){
+		icon = "<img src='/img/plugins/android-sm-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Android' >Android";
 	}
 	return icon;
 }

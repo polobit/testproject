@@ -42,8 +42,8 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
-                "AppCalling" : "AppCalling",
-                "AppCalling/:id" : "AppCalling",
+                "Android" : "Android",
+                "Android/:id" : "Android",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
@@ -374,8 +374,8 @@ var WidgetsRouter = Backbone.Router
             /**
              *
              */
-            AppCalling : function(id){
-                addConfigurableWidget(id, "AppCalling", "appcalling-login");
+            Android : function(id){
+                addConfigurableWidget(id, "Android", "appcalling-login");
             },
 
             /**

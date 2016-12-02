@@ -174,11 +174,11 @@ public class DefaultWidgets {
 				 "/widgets/klout.js", "widgets/klout-lg-logo.png",
 				 "widgets/klout-md-logo.png", null, WidgetType.SOCIAL));
 		widgets.add(new Widget(
-				 "AppCalling",
-				 "AppCalling",
+				 "Android",
+				 "Android",
 				 "Now you make Outbound calls and get Inbound calls from App",
-				 "/widgets/appcalling.js", "widgets/appcalling-lg-logo.png",
-				 "widgets/appcalling-sm-logo.png", null, WidgetType.CALL));
+				 "/widgets/android.js", "widgets/android-lg-logo.png",
+				 "widgets/android-sm-logo.png", null, WidgetType.CALL));
 		
 
 		System.out.println("Default widgets ");
