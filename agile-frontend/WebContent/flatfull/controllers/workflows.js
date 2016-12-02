@@ -1406,7 +1406,7 @@ var WorkflowsRouter = Backbone.Router
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						// fill workflows
-						fillSelect('campaign-reports-select', '/core/api/workflows/partial', 'workflow', function fillCampaign()
+					   fillSelect('campaign-reports-select', '/core/api/workflows/partial', 'workflow', function fillCampaign()
 						{
 							if(id)
 							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');

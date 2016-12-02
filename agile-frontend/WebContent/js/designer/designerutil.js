@@ -166,7 +166,7 @@ function getCampaignList(type) {
 
 	var workflows = $.ajax({
 		type : "GET",
-		url : '/core/api/workflows',
+		url : '/core/api/workflows/partial',
 		async : false,
 		dataType : 'json'
 	}).responseText;
