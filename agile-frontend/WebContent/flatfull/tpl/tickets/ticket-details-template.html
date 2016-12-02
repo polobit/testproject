@@ -556,9 +556,9 @@
 <div class="inline">
     <div class="thumb-sm">
       {{#if properties}}
-      <img src="{{gravatarurl properties 24}}" class="r-5x" onerror="image_error(this);"> {{{get_status_label status}}}
+      <img src="{{gravatarurl properties 24}}" class="r-5x" onerror="image_error(this);"> {{{get_status_label_details status}}}
       {{else}}
-      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{getInitials requester_name}}"> {{{get_status_label status}}}
+      <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{getInitials requester_name}}"> {{{get_status_label_details status}}}
       {{/if}}
     </div>
     <div style="max-width: 210px; margin:auto;">

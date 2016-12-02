@@ -715,6 +715,24 @@ Handlebars.registerHelper('return_feedback_title', function(feedback,options) {
 	return feedback_title;        
 	
 });
+
+Handlebars.registerHelper('get_status_label_details', function(status, options) {
+
+	switch(status){
+		case 'NEW':
+			return '<span class="label status_label label-warning cus-pad">N</span>';
+			break;
+		case 'OPEN':
+			return '<span class="label status_label label-danger cus-pad">O</span>';
+			break;
+		case 'PENDING':
+			return '<span class="label status_label label-info cus-pad">P</span>';
+			break;
+		case 'CLOSED':
+			return '<span class="label status_label label-success cus-pad">C</span>';
+			break;
+	}
+});
 /** End of ticketing handlebars* */
 
 function get_ticket_translated_text(module, key){

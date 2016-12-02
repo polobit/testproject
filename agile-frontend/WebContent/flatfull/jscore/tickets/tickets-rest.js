@@ -25,6 +25,34 @@ var Tickets_Rest={
 				 if(status != "NEW")
                      $('.ticket_status option[value="NEW"]').hide()
 
+                var $satusLabel = $(".status_label"); 
+				
+				switch(status){
+					case 'NEW':
+						$satusLabel.html("N");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-warning");
+						break;
+
+					case 'OPEN':
+						$satusLabel.html("O");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-danger");
+						break;
+
+					case 'PENDING':
+						$satusLabel.html("P");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-info");
+						break;
+
+					case 'CLOSED':
+						$satusLabel.html("C");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-success");
+						break;			
+				}
+
 				if(status != "CLOSED")
 				{
 				    $(".ticket-addnote-close").removeAttr("disabled");
