@@ -5914,3 +5914,9 @@ contact-details.sync-message,Update will 'resync' your entire data to make it se
 contact-edit.click-here,here
 contact-details.to-update-contact-company,to update contacts and companies data. Click
 contact-details.to-update-deals,to update deals data. 
+tickets.new_status,New,,,,,,,,,,,,,
+tickets.closed_status,Closed,,,,,,,,,,,,,
+tickets.pending_status,Pending,,,,,,,,,,,,,
+tickets.open_status,Open,,,,,,,,,,,,,
+tickets.not-favourate,Remove Favourite,,,,,,,,,,,,,
+tickets.mark-as-favourate,Add Favourite,,,,,,,,,,,,,
