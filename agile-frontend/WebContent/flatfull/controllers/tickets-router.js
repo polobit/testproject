@@ -455,8 +455,14 @@
 		 				//Render template with contact details
 		 				if(Ticket_Utils.Current_Ticket_Contact &&
 		 					!$.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON())){
+
+		 					var json = Ticket_Utils.Current_Ticket_Contact.toJSON();
+
+		 					json.status = data.status;
+
 		 					$('#ticket-contact-details', el).html(
-		 						getTemplate('ticket-contact', Ticket_Utils.Current_Ticket_Contact.toJSON()));
+
+		 						getTemplate('ticket-contact', json));
 		 				}else{
 		 					
 		 					$('#ticket-contact-details', el).html(
