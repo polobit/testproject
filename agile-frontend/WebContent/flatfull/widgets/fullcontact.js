@@ -47,9 +47,9 @@ function updateContactProperties(newProperties, resetSocialWidgets){
 	      					if(value){
 		  						if(value == "Google+"){
 		  							value = "GooglePlus";
-		  						}
-		  						$('#'+value).html();
-		  						eval("start" + value + "Widget")(currentContactId);
+		  							$('#'+value).html('');
+		  							eval("start" + value + "Widget")(currentContactId);
+		  						}		  						
 	      					}      					      		
 						});	
 	      			}		
@@ -177,9 +177,13 @@ function loadFullContactData(apikey, emailID, autoProfiling){
 					}
 
 					if(socialProfilesArray){
-						var fullSocialArray = ["youtube", "github", "facebook", "google", "xing"];
-						var agileSocialArray = ["YOUTUBE", "GITHUB", "FACEBOOK", "GOOGLE-PLUS", "XING"];	
-						var flagText = ["Youtube", "Github", "Facebook", "Google+", "xing"];					
+						// var fullSocialArray = ["youtube", "github", "facebook", "google", "xing"];
+						// var agileSocialArray = ["YOUTUBE", "GITHUB", "FACEBOOK", "GOOGLE-PLUS", "XING"];	
+						// var flagText = ["Youtube", "Github", "Facebook", "Google+", "xing"];					
+
+						var fullSocialArray = ["youtube", "github", "google", "xing"];
+						var agileSocialArray = ["YOUTUBE", "GITHUB", "GOOGLE-PLUS", "XING"];	
+						var flagText = ["Youtube", "Github", "Google+", "xing"];
 
 						$.each(socialProfilesArray, function (index,value) {
 							var webValue = value;
