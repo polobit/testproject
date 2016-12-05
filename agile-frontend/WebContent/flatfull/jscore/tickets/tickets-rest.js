@@ -189,6 +189,12 @@ var Tickets_Rest={
 					$('.ticket_change_slatime').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
 					$(".ticket_status").val("CLOSED");
+					
+					var $satusLabel = $(".status_label");
+					$satusLabel.html("C");
+					$satusLabel.removeAttr("class");
+					$satusLabel.attr("class","label status_label label-success");
+
 				}	
 			}
 			else
