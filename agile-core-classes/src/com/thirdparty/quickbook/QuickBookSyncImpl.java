@@ -228,9 +228,13 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			// get last item contains total info
 			int lastIndex = items.length() - 1;
 			JSONObject totalPriceDetail = (JSONObject) items.get(lastIndex);
-			note.description += "\n Total Price :" + totalPriceDetail.get("Amount") + " ("
-				+ currencyRef.get("value") + ")";
-
+				if(note.description == null){
+					note.description = "\n Total Price :" + totalPriceDetail.get("Amount") + " ("
+							+ currencyRef.get("value") + ")";
+				}else{
+					note.description += "\n Total Price :" + totalPriceDetail.get("Amount") + " ("
+						+ currencyRef.get("value") + ")";
+				}
 		    }
 		    
 		    JSONObject metaItems = (JSONObject) invoice.get("MetaData");
