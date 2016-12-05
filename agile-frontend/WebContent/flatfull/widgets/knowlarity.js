@@ -3,6 +3,9 @@ var NOWLARITY_PREVIOUS_EVENT;
 
 function saveCallNoteKnolarity(event){
 
+	console.log("Event data : **** ");
+	console.log(event);
+
 	var callDirection = event.call_direction;
 	var eventType = event.event_type;
 	var type = event.type;
@@ -19,8 +22,11 @@ function saveCallNoteKnolarity(event){
 
 
 	var noteSub = callDirection + " Call - " + state;
-	
-	var cntId = globalCall.contactedContact.id; // agilecrm DB ID
+	var cntId;
+
+	if(globalCall && globalCall.contactedContact){
+		cntId = globalCall.contactedContact.id; // agilecrm DB ID
+	}
 
 	var call = { 
 		"direction" : callDirection,
@@ -155,7 +161,15 @@ function saveCallNoteKnolarity(event){
 		}
 	}
 
-	showBriaCallNoty({});
+	var message = {
+		state : "connecting",
+		number : "+918919198785",
+		callId : "+919908164425",
+		displayName : "Premnath",
+		callType : ""
+	}	
+
+	//saveCallNoteOzonetel(message);	
 }
 
 
