@@ -9,6 +9,17 @@
 						</input>
 					</div>
 				</div>
+				<div class="checkbox pull-left m-t-none">
+		            <label class="i-checks">
+		               {{#if_checked_autoProfile autoProfiling false}}
+		               		<input type="checkbox" class="autoProfiling" name="autoProfiling" value="{{id}}">
+		               {{else}}
+		               		<input type="checkbox" class="autoProfiling" name="autoProfiling" value="{{id}}" checked>
+		               {{/if_checked_autoProfile}}
+		               <i></i>		           
+		            </label> Auto profiling
+            	</div>
+            	<div class="clearfix"></div>
 				<div class="text-center">		
 					<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
 					<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">Save</a>
