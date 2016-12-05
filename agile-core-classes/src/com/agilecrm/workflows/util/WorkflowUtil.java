@@ -395,11 +395,11 @@ public class WorkflowUtil
 	    if(!idPresent)
 	    {
 		Workflow workflow = WorkflowUtil.getWorkflow(allowCampaign);
-		if(workflow!=null)
-		{
-		    WorkflowPartial wp = new WorkflowPartial(workflow.id,workflow.name);
-		    partialWorkflows.add(wp);
-		}
+//		if(workflow!=null)
+//		{
+//		    WorkflowPartial wp = new WorkflowPartial(workflow.id,workflow.name);
+//		    partialWorkflows.add(wp);
+//		}
 	    }
 	    return partialWorkflows;	    
 	}

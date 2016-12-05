@@ -17,21 +17,25 @@ public class WorkflowPartial extends ProjectionEntityParse
 
     public String name;
     
+    public boolean is_disabled;
+    
     public WorkflowPartial()
     {
 	super();
     }
     
-    public WorkflowPartial(Long id,String name)
+    public WorkflowPartial(Long id,String name,boolean is_disabled)
     {
 	this.id = id;
 	this.name = name;
+	this.is_disabled = is_disabled;
     }
 
     public WorkflowPartial parseEntity(Entity entity)
     {
 	id = entity.getKey().getId();
 	name = (String) getPropertyValue(entity, "name");
+	is_disabled = (boolean) getPropertyValue(entity, "is_disabled");
 	return this;
     }
 
