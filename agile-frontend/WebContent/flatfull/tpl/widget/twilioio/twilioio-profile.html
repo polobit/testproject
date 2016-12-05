@@ -45,7 +45,7 @@
 
 <script id="twilioio-login-template" type="text/html">
 <div>
-	<form  id="twilioio_login_form" name="twilioio_login_form" method="post">
+	<form autocomplete="off" id="twilioio_login_form" name="twilioio_login_form" method="post" >
     	<fieldset>
               <input type="hidden" id="twilio_number_sid" value="" name="twilio_number_sid"></input>
 		      <p class="m-t-sm">
@@ -59,12 +59,14 @@
                 </label>                
 				<div class="control-group form-group">
                      <div class="controls">
-                         <input type="text" id="twilio_acc_sid" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'account-sid-validation'}}" value="" name="twilio_acc_sid" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}" autocomplete="off" minlength= "34" maxlength= "34" required></input>
+                        <input type="text" id=""  value="" name="twilio_acc_sid" style="display:none" />
+                         <input autocomplete="off" type="text" id="twilio_acc_sid"  value="" name="twilio_acc_sid" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'account-sid-validation'}}" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  minlength= "34" maxlength= "34" required></input>
                      </div>
                 </div>
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'auth-token-validation'}}" value="" name="twilio_auth_token" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'auth-token'}}" autocomplete="off" minlength= "32" maxlength= "32" required></input>
+                          <input type="password" style="display:none" />
+                          <input autocomplete="off"  type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'auth-token-validation'}}" value="" name="twilio_auth_token" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'auth-token'}}" minlength= "32" maxlength= "32" required></input>
                      </div>
                 </div>            
 

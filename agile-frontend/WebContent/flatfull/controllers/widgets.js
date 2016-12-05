@@ -444,6 +444,11 @@ function renderWidgetView(templateName, url, model, renderEle){
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
+            $( "#twilioio_login_form .question-tag" ).hover(function() {
+                setTimeout(function(){ 
+                    $(".popover").addClass("col-md-12"); //.css({"top":"0px"});
+                }, 10);
+            });
         }
     });
     var output = widgetModel.render().el;
