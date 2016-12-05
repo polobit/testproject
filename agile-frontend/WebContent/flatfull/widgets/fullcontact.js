@@ -1,7 +1,7 @@
 var fullContactObjects = {};
 
 
-function updateContactProperties(newProperties){
+function updateContactProperties(newProperties, resetSocialWidgets){
 	// Reads current contact model form the contactDetailView
 	var contact_model = App_Contacts.contactDetailView.model;
 	var contactId = contact_model.id;
@@ -25,15 +25,35 @@ function updateContactProperties(newProperties){
 	model.save(contact_model.toJSON(), {
 		success : function(data){
 			if(data){
-				console.log("fullcontact Updated **** ");
-				App_Contacts.contactDetailView.model = data;
+				console.log("Contact ID ****** ");				
 
-				var contactDetailsBlock = new Base_Model_View({ 
-					template : "contact-details-block",					
-					data : App_Contacts.contactDetailView.model					
-				});
-				var block_el = contactDetailsBlock.render(true).el;
-      			$('#contact-details-block').html($(block_el));  			  				
+				var currentContactId = App_Contacts.contactDetailView.model.id;
+				console.log(currentContactId + " : "+ contactId);
+				if(currentContactId && contactId == currentContactId){
+					console.log("fullcontact Updated **** ");
+					App_Contacts.contactDetailView.model = data;
+
+					var contactDetailsBlock = new Base_Model_View({ 
+						template : "contact-details-block",					
+						data : App_Contacts.contactDetailView.model					
+					});
+
+					var block_el = contactDetailsBlock.render(true).el;
+	      			$('#contact-details-block').html($(block_el));  	
+	      			console.log("Reset widgets ***** ");
+	      			console.log(resetSocialWidgets);
+	      			if(resetSocialWidgets && resetSocialWidgets.length > 0){
+	      				$.each(resetSocialWidgets, function(index,value){
+	      					if(value){
+		  						if(value == "Google+"){
+		  							value = "GooglePlus";
+		  						}
+		  						$('#'+value).html();
+		  						eval("start" + value + "Widget")(currentContactId);
+	      					}      					      		
+						});	
+	      			}		
+				}				  				
 			}
 		}
 	});
@@ -42,7 +62,8 @@ function updateContactProperties(newProperties){
 function loadFullContactData(apikey, emailID, autoProfiling){	
 	head.js('/flatfull/lib/jquery.fullcontact.2.2.js', function(){		
 		//emailID = "bart@fullcontact.com";
-		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){	
+		$.fullcontact.emailLookup(apikey, emailID, function(contactObj){
+			var resetSocialWidgets = [];	
 			console.log("fullContactData **** ");
 			console.log(contactObj);
 			if(contactObj){	
@@ -168,7 +189,15 @@ function loadFullContactData(apikey, emailID, autoProfiling){
 								var webData = getPropertyValueBySubtype(properties, "website", agileKey);
 								if(!webData){
 									if(agileKey && agileKey != null){
-										resultArray.push(flagText[arrayIndex]);								
+										var flagTemp = flagText[arrayIndex];
+										//if(flagTemp && (flagTemp == "Facebook" || flagTemp == "Google+")){
+										if(flagTemp && flagTemp == "Google+"){
+											resetSocialWidgets.push(flagTemp);
+											var changeURL = webValue.url;											
+    										var res = changeURL.replace("https://plus.google.com/", "");
+											webValue.url = res;
+										}
+										resultArray.push(flagTemp);								
 										newProperties.push(setPropertyForContact("website", webValue.url, agileKey, "SYSTEM"));
 									}
 								}
@@ -178,17 +207,17 @@ function loadFullContactData(apikey, emailID, autoProfiling){
 
 					if(websitesArray){
 						var web_url = getPropertyValueBySubtype(properties, "website", "URL");
-							if(!web_url){
-								var websiteURL;
-								if(websitesArray.length > 0){
-									websiteURL = websitesArray[0].url;
-								}
-
-								if(websiteURL){
-									resultArray.push("Website");	
-									newProperties.push(setPropertyForContact("website", websiteURL, "URL", "SYSTEM"));
-								}
+						if(!web_url){
+							var websiteURL;
+							if(websitesArray.length > 0){
+								websiteURL = websitesArray[0].url;
 							}
+
+							if(websiteURL){
+								resultArray.push("Website");	
+								newProperties.push(setPropertyForContact("website", websiteURL, "URL", "SYSTEM"));
+							}
+						}
 					}
 
 					if(chatsArray){
@@ -259,10 +288,10 @@ function loadFullContactData(apikey, emailID, autoProfiling){
  						$('#FullContact').html("<div class='p-sm'><p> New data - "+displayData+"</p></div>");
 
  						if(autoProfiling && autoProfiling == true){ 							
-							updateContactProperties(newProperties);							
+							updateContactProperties(newProperties, resetSocialWidgets);							
  						}else{
  							showAlertModal(_agile_get_translated_val('widgets', 'Fullcontact-newdata') + " <p>New data - " + displayData + "</p>", "confirm", function(){
-								updateContactProperties(newProperties);
+								updateContactProperties(newProperties, resetSocialWidgets);
 							},undefined, "FullContact");
  						} 						 						
 
