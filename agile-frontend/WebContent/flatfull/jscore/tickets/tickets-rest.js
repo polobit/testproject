@@ -29,25 +29,25 @@ var Tickets_Rest={
 				
 				switch(status){
 					case 'NEW':
-						$satusLabel.html("N");
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'new_status'}}");
 						$satusLabel.removeAttr("class");
 						$satusLabel.attr("class","label status_label label-warning");
 						break;
 
 					case 'OPEN':
-						$satusLabel.html("O");
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'open_status'}}");
 						$satusLabel.removeAttr("class");
 						$satusLabel.attr("class","label status_label label-danger");
 						break;
 
 					case 'PENDING':
-						$satusLabel.html("P");
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'pending_status'}}");
 						$satusLabel.removeAttr("class");
 						$satusLabel.attr("class","label status_label label-info");
 						break;
 
 					case 'CLOSED':
-						$satusLabel.html("C");
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'closed_status'}}");
 						$satusLabel.removeAttr("class");
 						$satusLabel.attr("class","label status_label label-success");
 						break;			
@@ -191,7 +191,7 @@ var Tickets_Rest={
 					$(".ticket_status").val("CLOSED");
 					
 					var $satusLabel = $(".status_label");
-					$satusLabel.html("C");
+					$satusLabel.html("{{agile_lng_translate 'tickets' 'closed_status'}}");
 					$satusLabel.removeAttr("class");
 					$satusLabel.attr("class","label status_label label-success");
 
