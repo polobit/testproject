@@ -5910,3 +5910,7 @@ login.signin-using-google,Sign in using Google Apps,Iniciar sesión con Google A
 login.signin-using-yahoo,Sign in using Yahoo,Iniciar sesión con Yahoo,,,,,,,,,,,,
 login.sign-In,Sign in,Registrarse,,,,,,,,,,,,
 register.signup-Using,Sign up using,Registrarse usando,,,,,,,,,,,,
+contact-details.sync-message,Update will 'resync' your entire data to make it searchable. This may be needed in some extreme scenarios. For instance&#44 you made an existing custom field searchable. Update can be used only once in a month. Click
+contact-edit.click-here,here
+contact-details.to-update-contact-company,to update contacts and companies data. Click
+contact-details.to-update-deals,to update deals data. 
