@@ -540,7 +540,7 @@ public class SendgridInboundParser extends HttpServlet
 		
 		if( underscoreIndex != -1 )
 		{
-			int hyphenIndex = temp.lastIndexOf("-", underscoreIndex);
+			int hyphenIndex = temp.indexOf("-", underscoreIndex);
 			
 			toAddressArray[0] = temp.substring(0, underscoreIndex);
 			
