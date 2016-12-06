@@ -239,9 +239,9 @@ public class GMail {
 			
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
-			message.addRecipients(TO, InternetAddress.parse(to, false));
-            message.addRecipients(CC, InternetAddress.parse(cc, false));
-            message.addRecipients(BCC, InternetAddress.parse(bcc, false));
+			message.addRecipients(TO, InternetAddress.parse(escapeJava(to), false));
+            message.addRecipients(CC, InternetAddress.parse(escapeJava(cc), false));
+            message.addRecipients(BCC, InternetAddress.parse(escapeJava(bcc), false));
            // String encodedSubject = new String(subject.getBytes("UTF-8"),"UTF-8");
 			message.setSubject(subject, "UTF-8");
 			message.setContent(body, "text/html; charset=UTF-8");
