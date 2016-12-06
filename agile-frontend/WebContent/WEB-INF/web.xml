@@ -1588,4 +1588,12 @@
         <servlet-name>OpenDocumentViewer</servlet-name>
         <url-pattern>/sendemail/*</url-pattern>
  </servlet-mapping>
+ <servlet>
+        <servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<servlet-class>com.agilecrm.DeleteDuplicateMilestoneServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<url-pattern>/backend/cron/delete-duplicate-servlet</url-pattern>
+	</servlet-mapping>
 </web-app>
