@@ -8189,11 +8189,3 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 Handlebars.registerHelper('renderTemplate', function(key, data){
 	return getTemplate(key, data);
 });
-
-Handlebars.registerHelper('if_checked_autoProfile', function(value, target, options){
-	if(!value || value == target){
-		return options.fn(this);
-	}else{
-		return options.inverse(this);
-	}
-});

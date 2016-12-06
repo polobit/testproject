@@ -12,16 +12,27 @@ function saveCallNoteKnolarity(event){
 	var callType = event.Call_Type;
 	var agentNumber = event.agent_number;		
 	var knowlarityNumber = event.knowlarity_number;
-	var customerNumber = event.caller;
+	var customerNumber = event.caller_id;
 	var state = event.business_call_type;
 	var callDuration = 0;
+
+	console.log("callDirection : in knowlarity_load "+callDirection);
 
 	if(event.call_duration){
 		callDuration = event.call_duration;
 	}
 
+	if(state){
+		if(state == "Phone"){
+			state = "answered";
+		}else if(state == "Agent Missed"){
+			state = "failed";
+		}else if(state == "Customer Missed"){
+			state = "busy";
+		}
+	}
 
-	var noteSub = callDirection + " Call - " + state;
+	var noteSub = callType + " Call - " + state;
 	var cntId;
 
 	if(globalCall && globalCall.contactedContact){
@@ -29,7 +40,7 @@ function saveCallNoteKnolarity(event){
 	}
 
 	var call = { 
-		"direction" : callDirection,
+		"direction" : callType,
 		"phone" : customerNumber,
 		"status" : state, 
 		"duration" : callDuration, 
@@ -39,17 +50,16 @@ function saveCallNoteKnolarity(event){
 	var data = {};
 	data.url = "/core/api/widgets/knowlarity/";
 	data.subject = noteSub;
-	data.number = number;
+	data.number = customerNumber;
 	data.callType = "inbound";	
 	data.duration = callDuration;
 	data.contId = null;
 	data.contact_name = "";
 	data.widget = "Knowlarity";
 
-	if(callDirection == "Incoming"){
-		var number = customerNumber;
+	if(callType == "Incoming"){		
 
-	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
+	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(responseJson){
 	    	if(!responseJson){
 	    		alert("not json");
 
@@ -68,7 +78,7 @@ function saveCallNoteKnolarity(event){
 	    		CallLogVariables.status = state;
 
 	    		var jsonObj = {};
-	    		jsonObj['phoneNumber'] = number;
+	    		jsonObj['phoneNumber'] = customerNumber;
 
 	    		return showContactMergeOption(jsonObj);	    		
 	    	}
@@ -83,7 +93,7 @@ function saveCallNoteKnolarity(event){
 	    	}else{    
 
 	    		var call = { 
-					"direction" : callDirection,
+					"direction" : callType,
 					"phone" : customerNumber,
 					"status" : state, 
 					"duration" : callDuration, 
@@ -104,6 +114,7 @@ function saveCallNoteKnolarity(event){
 	    });
 	}else {
 		console.log("Outgoing *** ");
+
 		if(cntId){
 			console.log("cntId *** "+ state);
 			if(state == "answered"){
@@ -123,6 +134,7 @@ function saveCallNoteKnolarity(event){
 					showDynamicCallLogs(data);
 				});
 			}else{
+
 				var note = {
 					"subject" : noteSub, 
 					"message" : "", 
@@ -140,7 +152,7 @@ function saveCallNoteKnolarity(event){
 		}else{
 			resetCallLogVariables();
     		
-    		if(message.state == "answered") {    			
+    		if(state == "answered") {    			
     			data.callType = "outbound-dial";
     			data.status = "answered";    			
     			data.contId = null;
@@ -156,20 +168,10 @@ function saveCallNoteKnolarity(event){
     		CallLogVariables.status = state;
 
     		var jsonObj = {};
-    		jsonObj['phoneNumber'] = message.contact_number;
+    		jsonObj['phoneNumber'] = customerNumber;
     		return showContactMergeOption(jsonObj);
 		}
-	}
-
-	var message = {
-		state : "connecting",
-		number : "+918919198785",
-		callId : "+919908164425",
-		displayName : "Premnath",
-		callType : ""
 	}	
-
-	//saveCallNoteOzonetel(message);	
 }
 
 
@@ -201,7 +203,7 @@ function changeCallNotyBasedOnStatus(event){
 						KNOWLARITY_PREVIOUS_EVENT = "CUSTOMER_CALL";
 						var json = {"callId": agentNumber};				
 						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];							
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "ringing", globalCall.callNumber, btns, json);					
+						showDraggableNoty("Knowlarity", globalCall.contactedContact, "ringing", globalCall.callNumber, btns, json, callDirection);					
 					}else if(eventType == "BRIDGE"){
 						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";
 						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
@@ -216,37 +218,36 @@ function changeCallNotyBasedOnStatus(event){
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "failed", globalCall.callNumber, btns);					
 					}
 				}
-			}
-			// else if(callDirection == "Inbound"){
-			// 	if(eventType){			
-			// 		if(eventType == "ORIGINATE"){
-			// 			KNOWLARITY_PREVIOUS_EVENT = "ORIGINATE"; 
-			// 			searchForContactImg(customerNumber, function(currentContact){
-			// 				if(!currentContact){
-			// 					globalCall.contactedContact = {};
-			// 					globalCall.contactedId = "";
-			// 				}else{
-			// 					globalCall.contactedContact = currentContact;
-			// 					globalCall.contactedId = currentContact.id;
-			// 				}
+			}else if(callDirection == "Inbound"){
+				if(eventType){			
+					if(eventType == "ORIGINATE"){
+						KNOWLARITY_PREVIOUS_EVENT = "ORIGINATE"; 
+						searchForContactImg(customerNumber, function(currentContact){
+							if(!currentContact){
+								globalCall.contactedContact = {};
+								globalCall.contactedId = "";
+							}else{
+								globalCall.contactedContact = currentContact;
+								globalCall.contactedId = currentContact.id;
+							}
 							
-			// 				globalCall.callNumber = customerNumber;
+							globalCall.callNumber = customerNumber;
 
-			// 				var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
-			// 				var json = {"callId": customerNumber};
-			// 				showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
-			// 			});									
-			// 		}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
-			// 			KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
-			// 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
-			// 			showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
-			// 		}else if(KNOWLARITY_PREVIOUS_EVENT && KNOWLARITY_PREVIOUS_EVENT == "BRIDGE" && eventType == "HANGUP"){
-			// 			KNOWLARITY_PREVIOUS_EVENT = "HANGUP";
-			// 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
-			// 			showDraggableNoty("Knowlarity", globalCall.contactedContact, "answered", globalCall.callNumber, btns);						
-			// 		}
-			// 	}	
-			// }
+							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
+							var json = {"callId": customerNumber};
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
+						});									
+					}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
+						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
+						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
+					}else if(KNOWLARITY_PREVIOUS_EVENT && KNOWLARITY_PREVIOUS_EVENT == "BRIDGE" && eventType == "HANGUP"){
+						KNOWLARITY_PREVIOUS_EVENT = "HANGUP";
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_twilio_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];	
+						showDraggableNoty("Knowlarity", globalCall.contactedContact, "answered", globalCall.callNumber, btns);						
+					}
+				}	
+			}
 		}
 
 		if(callType && type && type == "CDR"){
