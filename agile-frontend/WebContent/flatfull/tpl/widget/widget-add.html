@@ -553,21 +553,25 @@
        <ul class="nav nav-tabs">
        	 {{#is_mobile}}
        	 	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none"><i class="icon icon-call-in"></i></a></li>
+       	 	 <li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
 	       	 <li><a href="#support-tab" data-toggle="tab"><i class="icon icon-support"></i></a></li>
-	       	 <li><a href="#billing-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a></li>
-	       	 <li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
-	       	 <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i>
-	       	 </a></li>
-	         <li><a href="#custom-widget-tab" data-toggle="tab"><i class="icon icon-drawer"></i></a>
+	       	 <li><a href="#billing-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a></li>	       	 
+	       	 <li>
+	       	 	<a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i></a>
+	       	 </li>
+	         <li>
+	         	<a href="#custom-widget-tab" data-toggle="tab"><i class="icon icon-drawer"></i></a>
 	         </li>
        	 {{else}}
 	       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_lng_translate 'widgets' 'telephony'}}</a></li>
-	       	 <li><a href="#support-tab" data-toggle="tab">{{agile_lng_translate 'help' 'support'}}</a></li>
-	       	 <li><a href="#billing-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'billing'}}</a></li>
 	       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
-	       	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
-	       	 </a></li>
-	         <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+	       	 <li><a href="#support-tab" data-toggle="tab">{{agile_lng_translate 'help' 'support'}}</a></li>
+	       	 <li><a href="#billing-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'billing'}}</a></li>	       	
+	       	 <li>
+	       	 	<a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}</a>
+	       	 </li>
+	         <li>
+	         	<a href="#custom-widget-tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'custom'}}</a>
 	         </li>
        	 {{/is_mobile}}
        </ul>
