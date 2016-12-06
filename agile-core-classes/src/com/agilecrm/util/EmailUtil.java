@@ -201,7 +201,7 @@ public class EmailUtil
 	
 	String trackingImage = "<div class=\"ag-img\"><img src="
 	        + trackURL + "?" + queryParams
-	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
+	        + " nosend=\"1\" alt='' style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }

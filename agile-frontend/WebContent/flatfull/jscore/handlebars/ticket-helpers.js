@@ -720,16 +720,16 @@ Handlebars.registerHelper('get_status_label_details', function(status, options) 
 
 	switch(status){
 		case 'NEW':
-			return '<span class="label status_label label-warning cus-pad">{{agile_lng_translate "tickets" "new_status"}}</span>';
+			return '<span class="label status_label label-warning cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "new_status"}}</span>';
 			break;
 		case 'OPEN':
-			return '<span class="label status_label label-danger cus-pad">{{agile_lng_translate "tickets" "open_status"}}</span>';
+			return '<span class="label status_label label-danger cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "open_status"}}</span>';
 			break;
 		case 'PENDING':
-			return '<span class="label status_label label-info cus-pad">{{agile_lng_translate "tickets" "pending_status"}}</span>';
+			return '<span class="label status_label label-info cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "pending_status"}}</span>';
 			break;
 		case 'CLOSED':
-			return '<span class="label status_label label-success cus-pad">{{agile_lng_translate "tickets" "closed_status"}}</span>';
+			return '<span class="label status_label label-success cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "closed_status"}}</span>';
 			break;
 	}
 });
