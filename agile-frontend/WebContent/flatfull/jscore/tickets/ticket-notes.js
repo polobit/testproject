@@ -213,8 +213,17 @@ var Tickets_Notes = {
 		Ticket_Utils.loadTextExpander(function()
 		{	
 			try{
+				
 				$('textarea#reply_textarea', $container).TextAreaExpander({'padding' : '8px 8px 1px 8px' });
 				$('textarea#reply_textarea', $container).css({'height':'60px'});
+			
+				if(!$('textarea#reply_textarea').hasClass('textareaclass')){
+		 	
+		 			$('textarea#reply_textarea').focus(function(){
+
+		 				$('textarea#reply_textarea').addClass('textareaclass');
+		 			}); 
+		 		}
 			}catch(e){}
 		});
 

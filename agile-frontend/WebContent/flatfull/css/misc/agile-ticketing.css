@@ -610,3 +610,6 @@ form#new-ticket ul.chosen-choices {
 .color_red{
   color:red;
 }
+.textareaclass{
+  overflow-y:auto !important;
+}
