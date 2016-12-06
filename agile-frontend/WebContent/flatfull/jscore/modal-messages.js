@@ -84,6 +84,18 @@ var MODAL_MESSAGES = {
 		"title": "{{agile_lng_translate 'account' 'delete-subscription'}}",
 		"message" : "{{agile_lng_translate 'account' 'delete-subscription-confirm'}}"
 	},
+	"delete_acl_subscription" : {
+		"title": "{{agile_lng_translate 'account' 'cancel-addons'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-acl-subscription-confirm'}}"
+	},
+	"delete_campaigns_subscription" : {
+		"title": "{{agile_lng_translate 'account' 'cancel-addons'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-campaigns-subscription-confirm'}}"
+	},
+	"delete_triggers_subscription" : {
+		"title": "{{agile_lng_translate 'account' 'cancel-addons'}}",
+		"message" : "{{agile_lng_translate 'account' 'delete-triggers-subscription-confirm'}}"
+	},
 	"delete_rule" : {
 		"title": "{{agile_lng_translate 'webrule' 'delete'}}",
 		"message" : "{{agile_lng_translate 'webrule' 'delete-confirm'}}"
@@ -189,9 +201,13 @@ var MODAL_MESSAGES = {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
 		"message" : "{{agile_lng_translate 'billing' 'plan-change-select'}}"
 	},
-	"change_addon" : {
+	"change_campaigns_addon" : {
 		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
-		"message" : "{{agile_lng_translate 'billing' 'addon-change-select'}}"
+		"message" : "{{agile_lng_translate 'billing' 'campaigns-addon-change-select'}}"
+	},
+	"change_triggers_addon" : {
+		"title": GLOBAL_MODAL_MESSAGES.global_error_title,
+		"message" : "{{agile_lng_translate 'billing' 'triggers-addon-change-select'}}"
 	},
 	"social_access" : {
 		"title": "{{agile_lng_translate 'social' 'access'}}",
@@ -277,4 +293,8 @@ var MODAL_MESSAGES = {
 		"title": "{{agile_lng_translate 'sync' 'all-contacts'}}",
 		"message" : "{{agile_lng_translate 'sync' 'sync-all-continue'}}"
 	},
+	"delete_lead" : {
+		"title": "{{agile_lng_translate 'leads-view' 'delete-lead'}}",
+		"message" : GLOBAL_MODAL_MESSAGES.global_delete
+	}
 };

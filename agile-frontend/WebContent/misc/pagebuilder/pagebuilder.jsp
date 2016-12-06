@@ -244,7 +244,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         
         <div id="styleEditor" class="styleEditor">
         
-            <a href="#" class="close"><span class="fui-cross-circle"></span></a>
+            <a title=" Press Esc to close" href="#" class="close"><span class="fui-cross-circle"></span></a>
             
             <h3><span class="fui-new"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "detail-editor")%></h3>
             
@@ -259,7 +259,10 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <li style="display: none;"><a href="#image_Tab" id="img_Link"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "Image")%></a></li>
                 <li style="display: none;"><a href="#icon_Tab" id="icon_Link"><span class="fa fa-flag"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "icons")%></a></li>
                 <li style="display: none;"><a href="#video_Tab" id="video_Link"><span class="fa fa-youtube-play"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "video")%></a></li>
-                <li style="display: none;"><a href="#agileform_Tab" id="agileform_link"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-form")%></a></li>
+                <li style="display: none;">
+                    <a href="#agileform_Tab" id="agileform_link" class="agile-tooltip" data-placement="right" data-original-title=" <%=LanguageUtil.getLocaleJSONValue(localeJSON, "form-tooltip")%>" ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-form")%>
+                <sup style="font-size: 9px;color: #337ab7;">?</sup></a>
+                </li>
             </ul><!-- /tabs -->
             
             <div class="tab-content">
@@ -316,22 +319,35 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <!-- /tabs -->
                 <div class="tab-pane imageFileTab" id="image_Tab">
                     
-                    <!--<label>Enter image path:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
-                    <input type="text" class="form-control" id="imageURL" placeholder="Enter an image URL" value="">
-                    
+                    <input type="text" class="form-control" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
+                    <span id="error-img-msg" style="font-size: 12px;color:#f05050; display:none;">
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "error-image-url")%>
+                    </span>
+                                 
                     <p class="text-center or">
-                        <span>OR</span>
-                    </p>-->
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
                     
-                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "open-img-lib")%></a>
+                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a>
                     
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
-                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block ">
                         <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
-                    </select>            
+                    </select> 
+                      <div  class="margin-bottom-20" id="refresh-formlist"  style="padding: 3px 0px 5px;" >
+                        <a class="right agile-tooltip refresh-formlist"  data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "refresh-form-tooltip")%>">
+                        <i class="fa fa-refresh" aria-hidden="true" style="color: #bdc3c7;"></i></a>
+                        <a class="agile-tooltip edit-form right"  target="_new" style="margin-right: 5px; display:none;" data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-form-tooltip")%>" >
+                        <i class="fa fa-edit" style="color: #bdc3c7;"></i></a>
+                    </div>
+		           <p class="text-center or">
+                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
+                    <a target="_new"    href="<%=MAIN_URL%>#form-builder-templates" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20" id="addnew-formlink"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-form")%></a>
                 </div> 
                 
                 <!-- /tabs -->
@@ -1959,23 +1975,26 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <!-- /tabs -->
                 <div class="tab-pane videoTab" id="video_Tab">
                     
-                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-id")%>:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-id")%>'' value="">
-                    
+                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-url")%>" value="">
+                    <span id="err-youtube-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
                     
-                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-id")%>:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-url")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder=''<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-id")%>'' value="">
-
+                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-url")%>" value="">
+                     <span id="err-vimeo-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
-                        <span>OR</span>
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
 
-                    <label>Your Video:</label>
+                    <label class="agile-tooltip" data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "recorded-video-tooltip")%>">
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "recorded-video")%>:
+                     <sup style="font-size: 9px;color: #337ab7;">?</sup>
+                    </label>
                     
                     <select id="videoRecordId" name="videoRecordlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
                         <option value="">Select Video</option>
@@ -1995,7 +2014,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         
             <div class="sideButtons clearfix">
                 <button type="button" class="btn btn-inverse btn-embossed btn-xs" id="cloneElementButton"><span class="fui-windows"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "clone")%></button>
-                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
+                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton" style="display:none;"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
                 <button type="button" class="btn btn-danger btn-embossed btn-xs" data-target="#deleteElement" data-toggle="modal" id="removeElementButton"><span class="fui-cross-inverted"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "remove")%></button>
             </div>
                                                     
@@ -2013,7 +2032,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></span></button>
-                        <h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "img-library")%></h4>
+                        <h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></h4>
                     </div>
                     <div class="modal-body">
                                             
@@ -2029,7 +2048,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                             
                             <ul class="nav nav-tabs nav-append-content">
                                 <!-- <li><a href="#myImagesTab">My Images</a></li> -->
-                                <li id="uploadTabLI" class="active"><a href="#uploadTab"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a></li>
+                                <li id="uploadTabLI" class="active"><a href="#uploadTab"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview")%></a></li>
                                 <!-- <li><a href="#adminImagesTab">Other Images</a></li> -->                            </ul> <!-- /tabs -->
                             
                             <div class="tab-content">
@@ -2051,21 +2070,21 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                     
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
-                                            <div>
+                                             <button type="button" class="btn btn-primary btn-embossed btn-wide upload  fileinput-exists" id="uploadImageButton"><span class="fui-upload"></span> 
+                                                <%=LanguageUtil.getLocaleJSONValue(localeJSON, 
+                                                "upload")%></button>
+                                            <div style="float:right;">
                                                 <span class="btn btn-primary btn-embossed btn-file">
                                                     <span class="fileinput-new"><span class="fui-image"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-img")%></span>
                                                     <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "change")%></span>
                                                     <input type="file" name="imageFile" id="imageFile">
                                                 </span>
-                                                <a href="#" class="btn btn-primary btn-embossed fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "remove")%></a>
                                             </div>
                                         </div>
                                     
                                     </form>
                                     
-                                    <hr>
-                                    
-                                    <button type="button" class="btn btn-primary btn-embossed btn-wide upload btn-block disabled" id="uploadImageButton"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></button>
+                                   
                                 
                                 </div><!-- /.tab-pane -->
                             
@@ -2186,7 +2205,11 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         </div><!-- /.modal -->
         
         <div id="loader">
-            <span>{</span><span>}</span>
+            <div>
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <br/>
+                <span>Loading...</span>
+            </div>
         </div>
     
     </div>
@@ -2245,7 +2268,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
     <div class="form-group">
       <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header")%>:</label>
       <div class="col-sm-9">
-        <textarea class="form-control" id="pageData_headerIncludes" name="pageData_headerIncludes" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header-info")%> <head> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "head-section")%>'></textarea>
+        <textarea class="form-control" id="pageData_headerIncludes" name="pageData_headerIncludes" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header-inf")%>' <head> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "head-section")%>></textarea>
       </div>
     </div>
     
@@ -2253,6 +2276,13 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
       <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css")%>:</label>
       <div class="col-sm-9">
         <textarea class="form-control" id="pageData_headerCss" name="pageData_headerCss" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css-applied")%>'></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-js")%>:</label>
+      <div class="col-sm-9">
+        <textarea class="form-control" id="pageData_headerJs" name="pageData_headerJs" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-script-applied")%>'></textarea>
       </div>
     </div>
     
@@ -2448,7 +2478,7 @@ function showAgileCRMForm(formJson,formHolderId) {
                 var iframe_id=iframe.getAttribute("id");
                 var replace_form_class=$('#'+iframe_id).contents().find('.agile_crm_form_embed');
                 try{
-                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0)){
+                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0  && replace_form_class.length===0)){
                     if(window.current_agileform!=null){
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");

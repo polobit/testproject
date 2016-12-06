@@ -267,7 +267,7 @@
                 $(overlay).hide();
                 overlay.id = 'canvasOverlay';
 
-                overlay.innerHTML = '<div class="loader"><span>{</span><span>}</span></div>';
+                overlay.innerHTML = '<div class="loader" style="margin-top:25%;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><br/><span>Loading...</span></div>';
 
                 document.getElementById('frameWrapper').appendChild(overlay);
 
@@ -305,7 +305,8 @@
             meta_description: page.meta_description || '',
             meta_keywords: page.meta_keywords || '',
             header_includes: page.header_includes || '',
-            page_css: page.page_css || ''
+            page_css: page.page_css || '',
+            page_js: page.page_js || ''
         };
                 
         this.pageMenuTemplate = '<a href="" class="menuItemLink">page</a><span class="pageButtons"><a href="" class="fileEdit fui-new"></a><a href="" class="fileDel fui-cross"><a class="btn btn-xs btn-primary btn-embossed fileSave fui-check" href="#"></a></span></a></span>';
@@ -340,6 +341,7 @@
             site.inputPageSettingsMetaKeywords.value = this.pageSettings.meta_keywords;
             site.inputPageSettingsIncludes.value = this.pageSettings.header_includes;
             site.inputPageSettingsPageCss.value = this.pageSettings.page_css;
+            site.inputPageSettingsPageJs.value = this.pageSettings.page_js;
                           
             //trigger custom event
             // $('body').trigger('changePage');
@@ -1654,6 +1656,7 @@
         inputPageSettingsMetaKeywords: document.getElementById('pageData_metaKeywords'),
         inputPageSettingsIncludes: document.getElementById('pageData_headerIncludes'),
         inputPageSettingsPageCss: document.getElementById('pageData_headerCss'),
+        inputPageSettingsPageJs: document.getElementById('pageData_headerJs'),
         
         buttonSubmitPageSettings: document.getElementById('pageSettingsSubmittButton'),
         
@@ -1681,7 +1684,8 @@
                                 "meta_description": respData.description,
                                 "meta_keywords": respData.tags,
                                 "header_includes": respData.header_includes,
-                                "page_css": respData.css
+                                "page_css": respData.css,
+                                "page_js": respData.js
                             }
                         },
                         "is_admin": 1
@@ -1715,7 +1719,8 @@
                                 "meta_description": respDataCopy.description,
                                 "meta_keywords": respDataCopy.tags,
                                 "header_includes": respDataCopy.header_includes,
-                                "page_css": respDataCopy.css
+                                "page_css": respDataCopy.css,
+                                "page_js": respDataCopy.js
                             }
                         },
                         "is_admin": 0
@@ -1924,7 +1929,7 @@
                 "tags": serverData.pages["index"]["pageSettings"]["meta_keywords"],
                 "description": serverData.pages["index"]["pageSettings"]["meta_description"],
                 "header_includes": serverData.pages["index"]["pageSettings"]["header_includes"],
-                "js": "",
+                "js":serverData.pages["index"]["pageSettings"]["page_js"],
                 "elements_css": "",
                 "version": 2.0
             };
@@ -2126,6 +2131,8 @@
             site.activePage.pageSettings.meta_keywords = site.inputPageSettingsMetaKeywords.value;
             site.activePage.pageSettings.header_includes = site.inputPageSettingsIncludes.value;
             site.activePage.pageSettings.page_css = site.inputPageSettingsPageCss.value;
+            site.activePage.pageSettings.page_js = site.inputPageSettingsPageJs.value;
+
                         
             site.setPendingChanges(true);
             

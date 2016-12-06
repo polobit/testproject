@@ -248,7 +248,7 @@
   			</button>
 			<ul id="deal-filter-list-model-list" class="pull-right dropdown-menu" role="menu">
 				<li>
-					<a href="#deal-filters">{{agile_lng_translate 'contacts-view' 'add-edit-filter'}}</a>
+					<a href="#deal-filters">{{agile_lng_translate 'leads-view' 'manage-filters'}}</a>
 				</li>
 			</ul>
 		</div>
@@ -257,14 +257,14 @@
 </script>
 
 <script id="deal-filter-list-collection-template" type="text/html">
-<div class="btn-group" id="filters-tour-step">
-	<button class="btn btn-default btn-sm filter-dropdown ">
+<div class="" id="filters-tour-step">
+	<!-- <button class="btn btn-default btn-sm filter-dropdown ">
 		<i class="icon-filter" style="margin-right:3px"></i>
-	</button>
-	<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	</button> -->
+	<button class="btn btn-sm dropdown-toggle no-shadow bg-transparent b-n p-l-xs p-r-xs p-t-none" data-toggle="dropdown" aria-expanded="false">
 		<span class="caret"></span>
 		</button>
-	<ul id="deal-filter-list-model-list" class="pull-right dropdown-menu filter-dynamic-scrollbar" role="menu" style="max-height:540px;overflow-y:auto">
+	<ul id="deal-filter-list-model-list" class="dropdown-menu filter-dynamic-scrollbar" role="menu" style="max-height:540px;overflow-y:auto">
 		<li>
 			<a href='javascript:void(0)' class='default_deal_filter'>{{agile_lng_translate 'subscriber_type' 'all'}}</a>
 		</li>
@@ -273,8 +273,7 @@
 		</li>
 		<li class='divider'></li>
 		<li>
-			<a href='#deal-filters'>{{agile_lng_translate 'contacts-view' 'add-edit-filter'}}&nbsp;&nbsp;
-				<span class='label bg-danger'>{{agile_lng_translate 'deal-view' 'beta'}}</span>
+			<a href='#deal-filters'>{{agile_lng_translate 'leads-view' 'manage-filters'}}
 			</a>
 		</li>
 		{{#if this.length}}

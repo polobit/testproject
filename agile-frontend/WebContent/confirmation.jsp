@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.twilio.sdk.resource.instance.Trigger"%>
 <%@page import="com.agilecrm.workflows.triggers.util.EmailTrackingTriggerUtil"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
@@ -341,43 +344,54 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String campaign_name = request.getParameter("c_name");
 			    String unsubscribeEmail = request.getParameter("unsubscribe_email");
 			    String unsubscribeName = request.getParameter("unsubscribe_name");
-
-			    String hiddenEmail = request.getParameter("he"); hiddenEmail = StringUtils.isBlank(hiddenEmail) ? "" : hiddenEmail;
 			    
-			    // To Fix trailing space email getting trimmed issue
-			    if(StringUtils.equalsIgnoreCase(email.trim(), hiddenEmail.trim()))
-			    	email = hiddenEmail;
-
-			    String is_unsubscribe_email_disabled = request.getParameter("is_unsubscribe_email_disabled");
-			    System.out.println("Is Unsubscribe Email Disabled :"+is_unsubscribe_email_disabled);
+			    String namespace = request.getParameter("ns");
 			    
-			    String unsubscribe_subject = request.getParameter("unsubscribe_subject");
-			    System.out.println("Unsubscribe subject"+unsubscribe_subject);
+			    String oldNamespace = NamespaceManager.get();
 			    
-			    // Used to send as from name in confirmation email
-			    String company = request.getParameter("company");
-
-			    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
-
-			    Contact contact = ContactUtil.searchContactByEmail(email);
-
-			    String msg = "You are successfully unsubscribed. Thank you.";
-
-			    if (contact == null)
-			    {
-					msg = "The given email does not match any in our database.";
-			%>
-			<h2>Error</h2>
-			<p><%=msg%></p>
-			<%
-			    } // End of if
-			    else
-			    {
-			%>
-			<h2>Confirmation</h2>
-			<p><%=msg%></p>
-			<%
 			    try
+			    {
+					System.out.println("Namespace is " + namespace);
+				
+					if(StringUtils.isNotBlank(namespace) && !StringUtils.equalsIgnoreCase(namespace, "null"))
+					    NamespaceManager.set(namespace);
+					
+				    String hiddenEmail = request.getParameter("he"); hiddenEmail = StringUtils.isBlank(hiddenEmail) ? "" : hiddenEmail;
+				    
+				    // To Fix trailing space email getting trimmed issue
+				    if(StringUtils.equalsIgnoreCase(email.trim(), hiddenEmail.trim()))
+				    	email = hiddenEmail;
+	
+				    String is_unsubscribe_email_disabled = request.getParameter("is_unsubscribe_email_disabled");
+				    System.out.println("Is Unsubscribe Email Disabled :"+is_unsubscribe_email_disabled);
+				    
+				    String unsubscribe_subject = request.getParameter("unsubscribe_subject");
+				    System.out.println("Unsubscribe subject"+unsubscribe_subject);
+				    
+				    // Used to send as from name in confirmation email
+				    String company = request.getParameter("company");
+	
+				    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
+	
+				    Contact contact = ContactUtil.searchContactByEmail(email);
+	
+				    String msg = "You are successfully unsubscribed. Thank you.";
+
+				    if (contact == null)
+				    {
+						msg = "The given email does not match any in our database.";
+						%>
+						<h2>Error</h2>
+						<p><%=msg%></p>
+						<%
+				    } // End of if
+				    else
+				    {
+						%>
+						<h2>Confirmation</h2>
+						<p><%=msg%></p>
+						<%
+			    	try
 					{
 					    String contactId = contact.id.toString();
 
@@ -435,6 +449,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					 
 					    String domain = NamespaceManager.get();
 					    String fromEmail = "noreply@agilecrm.com";
+					    String language = UserPrefs.DEFAULT_LANGUAGE;
 					    
 					    // From email as given in Workflow
 					    if(StringUtils.isNotBlank(unsubscribeEmail) && !StringUtils.equalsIgnoreCase(unsubscribeEmail, "null"))
@@ -445,11 +460,14 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    {
 					    	DomainUser owner = DomainUserUtil.getDomainOwner(domain);
 						    
-							if(owner != null)
+							if(owner != null) {
 								fromEmail = owner.email;
+								language = LanguageUtil.getUserLanguageFromDomainUser(owner);
+							}
+								
 						}
 					    
-					    map.put("domain", domain);
+					    map.put("domain", AliasDomainUtil.getCachedAliasDomainName(domain));
 					    
 					    map.put("campaign_id", campaignId);
 					    map.put("email", email);
@@ -507,7 +525,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
-								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company);
+								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
 								System.out.println("Email sent successfully...");
 							}
 						}
@@ -516,13 +534,22 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					{
 					    e.printStackTrace();
 					    System.err.println("Exception occured while confirmation " + e.getMessage());
-					}
-			
-			%>
-
-			<%
+					}			
+					%>		
+					<%
 			    } // End of else
+				
+			 }// End of try
+		     catch(Exception e)
+			 {
+			     System.err.println(e.getMessage());
+			 }
+			 finally
+			 {
+			     NamespaceManager.set(oldNamespace);
+			 }
 			%>
+			
 		</div>
 	</div>
 	<br />

@@ -103,7 +103,16 @@ function initializeEmailBuilderListeners() {
                 // refresh category list  on modal hide
                 $("#emailbuilder-templates-category-modal").on("hidden.bs.modal", function(e){
                     e.preventDefault();
-                    getEmailTemplateCategories(currentCtgObj);
+                    /*getEmailTemplateCategories(currentCtgObj);*/
+
+                    var emailTempCtgId = _agile_get_prefs("emailTempCtg_id");
+
+                    if(!emailTempCtgId || emailTempCtgId == null || emailTempCtgId == "0") {
+                        emailTempCtgId = "";
+                        _agile_set_prefs('emailTempCtg_id', emailTempCtgId);
+                    }
+
+                    $('select#emailTemplate-category-select').val(emailTempCtgId);
                 });
 
             });
@@ -122,7 +131,7 @@ function initializeEmailBuilderListeners() {
                 $(this).removeAttr("data-id");
                 emailTemplateCtg.saveEmailTemplateCategory(ctgyName.trim());
             } else {
-                $(".emailTemplCategoryFormMsgHolder").html("Name field is required.");
+                $(".emailTemplCategoryFormMsgHolder").html("{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}");
             }
         }
     });
@@ -225,6 +234,17 @@ var emailTemplateCtg = {
                 $("#emailTemplCtgySaveBtn").text("Save");
                 $("#emailTemplCtgySaveBtn").prop('disabled', false);
                 $("#emailTemplCtgySaveBtn").attr("data-id", "new");
+                $("#emailTemplate-category-select option:first").after("<option value='"+data.id+"'>"+data.name+"</option>");
+                _agile_set_prefs('emailTempCtg_id', data.id);
+
+                if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
+                    var size = Object.keys(Email_Template_Category).length;
+                    var tempObj = {};
+                    tempObj["id"] = data.id;
+                    tempObj["name"] = data.name;
+
+                    Email_Template_Category[size] = tempObj; 
+                }
                 $("#emailbuilder-templates-category-modal").modal("hide");
             },
             error:function(response){
@@ -268,7 +288,7 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
     if(templateId) {
         var requestType = "put";
         template["id"] = templateId;
-        message = "{{agile_lng_translate 'emailbuilder' 'updated'}}";
+        /*message = "{{agile_lng_translate 'emailbuilder' 'updated'}}";*/
     }
 
     $.ajax({
@@ -278,9 +298,16 @@ function saveEmailTemplateFromBuilder(fullSource,builderSource) {
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+            var html = '<span style="color: green;">'+message+'</span>';
+            if(!agile_is_mobile_browser())
+                html = '<br/>'+html;
+            $("#nameoftemplate-msg",parent.document).html(html).show().fadeOut(3000);
             $(".saveEmailBuilderButton",parent.document).prop("disabled",false);
             $(".saveEmailBuilderButtonText",parent.document).html("{{agile_lng_translate 'modals' 'save'}}");
+
+            Refresh_Email_Template = true;
+            Selected_Email_Template_Category = data.emailTemplate_category_id;
+            
             if(requestType == "post") {
                 window.location.hash = "email-templates";
             }
@@ -311,7 +338,10 @@ function sendTestEmailTemplate(fullSource,builderSource) {
             url: 'core/api/emails/send-test-email',    
             data: template,
             success: function (data) {
-                $("#nameoftemplate-msg",parent.document).html('<br><span style="color: green;">'+message+'</span>').show().fadeOut(3000);
+                var html = '<span style="color: green;">'+message+'</span>';
+                if(!agile_is_mobile_browser())
+                html = '<br/>'+html;
+                $("#nameoftemplate-msg",parent.document).html(html).show().fadeOut(3000);
             
             },
         });

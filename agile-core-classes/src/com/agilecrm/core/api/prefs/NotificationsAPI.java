@@ -76,6 +76,7 @@ public class NotificationsAPI
 	    notifications.call = notify.call;
 
 	    notifications.notification_sound = notify.notification_sound;
+	    notifications.push_mobile_notification = notify.push_mobile_notification;
 
 	    notifications.save();
 	    return notifications;

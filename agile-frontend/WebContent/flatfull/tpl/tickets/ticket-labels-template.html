@@ -5,7 +5,7 @@
         <div class="text-center padder-v">
             <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-labels'}}</h4>
             <div class="m-b-xs text-muted">
-                {{agile_lng_translate 'tickets' 'create-lables-to-streamline-your-tickets'}}<small>
+                {{agile_lng_translate 'tickets' 'create-lables-to-streamline-your-tickets'}}
             </div>
             <div>
                 <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
@@ -14,6 +14,8 @@
             </div>
         </div>
     </div>
+</div>
+<div class="col w-md  wrapper pos-rlt  p-t-none">
 </div>
 {{/unless}}
 {{#if this.length}}
@@ -35,7 +37,7 @@
 
     {{else}}
 
-    <div class="panel panel-default wrapper p-b-xs">
+    <div class="col panel wrapper">
         <div class="pull-right m-b-2">
             <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
             <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
@@ -47,7 +49,7 @@
                 <thead>
                     <tr>
                         <th data-resizable-column-id="hide" class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>
-                        <th data-resizable-column-id="label">{{agile_lng_translate 'contacts-view' 'label'}}</th>
+                        <th data-resizable-column-id="label">{{agile_lng_translate 'ticketlabel' 'lable-name'}}</th>
                         <th data-resizable-column-id="">&nbsp;</th>
                     </tr>
                 </thead>
@@ -55,6 +57,8 @@
         </table>
         </div>
     
+    </div>
+    <div class="col w-md  wrapper pos-rlt  p-t-none">
     </div>
     {{/is_mobile}}
 {{/if}}

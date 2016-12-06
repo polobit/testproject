@@ -194,7 +194,7 @@ function validateCompanyName(value){
 
           if(agile_crm_is_model_property_changed("last_name", lastName)){
                // Update last name
-               agile_crm_update_contact("last_name", lastName,function(contact_model){
+               agile_crm_update_contact_render("last_name", lastName,function(contact_model){
                 
                 if(model_id != contact_model.id)
                 return;
@@ -231,7 +231,10 @@ function fill_owners(el, data, callback){
 	var optionsTemplate = "<li><a href='javascript:void(0)' class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
 	if(company_util.isCompany())
 		optionsTemplate = "<li><a href='javascript:void(0)' class='company-owner-list' data='{{id}}'>{{name}}</a></li>";
-	
+	else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+  {
+    optionsTemplate = "<li><a href='javascript:void(0)' class='lead-owner-list' data='{{id}}'>{{name}}</a></li>";
+  }
     fillSelect('contact-detail-owner','/core/api/users/partial', 'domainUsers', callback, optionsTemplate, true); 
 }
 
@@ -300,10 +303,16 @@ function contact_detail_view_navigation(id, contact_list_view, el){
     	previous_contact_id = contact_collection.at(current_index - 1).id
     }
 
+    var route = "contact";
+    if(Current_Route && Current_Route == "lead/" + id)
+    {
+      route = "lead";
+    }
+
     if(previous_contact_id != null)
-    	$('.navigation', el).append('<a style="float:left;" href="#contact/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
+    	$('.navigation', el).append('<a style="float:left;" href="#'+route+'/' + previous_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-left"></i></a>');
     if(next_contact_id != null)
-    	$('.navigation', el).append('<a style="float:right;" href="#contact/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
+    	$('.navigation', el).append('<a style="float:right;" href="#'+route+'/'+ next_contact_id + '" class="" onclick="clearContactWidetQueues(' + id + ')"><i class="icon icon-chevron-right"></i></a>');
 	
 }
 
@@ -440,6 +449,25 @@ var Contact_Details_Model_Events = Base_Model_View.extend({
     'keydown #company-inline-input' : 'companyNameChange' ,
     'click #company-contacts .contactcoloumn' : 'addOrRemoveContactCompanyColumns',
     'click #contactCompanyTabelView' : 'toggleCustomFieldsForContacts',
+      /** Leads events **/
+      'click #contactDetailsTab a[href="#leads-notes"]' : 'openLeadNotes',
+      'click #contactDetailsTab a[href="#leads-events"]' : 'openLeadEvents',
+      'click #contactDetailsTab a[href="#leads-tasks"]' : 'openLeadTasks',
+      'click #contactDetailsTab a[href="#leads-deals"]' : 'openLeadDeals',
+      'click #contactDetailsTab a[href="#leads-time-line"]' : 'openLeadTimeline',
+      'click #contactDetailsTab a[href="#leads-mail"]' : 'openLeadMails',
+      'click #contactDetailsTab a[href="#leads-documents"]' : 'openLeadDocs',
+      'click .remove-lead-tags' : 'removeLeadTags',
+      'click #lead-actions-delete' : 'leadDelete',
+      'click #lead-add-tags' : 'onAddLeadTags',
+      'click #lead-score-increase, #lead-score-decrease' : 'increaseOrDecreaseLeadScore',
+      'click #lead-leadscore' : 'onGetLeadScorebox',
+      'focusout #lead-scorebox' : 'getLeadScore',
+      'keyup  #lead-scorebox' : 'leadScoreValEnter',
+      'click #leadName'  : 'toggleLeadsInlineEditFields',
+      'keydown #lead-input-firstname' : 'leadNameChange',
+      'keydown  #lead-input-lastname' : 'leadNameChange',
+      'click .lead-owner-list' : 'onChangeLeadOwnerSelected',
     },
     
     
@@ -568,6 +596,10 @@ show and hide the input for editing the contact name and saving that
     {
       $('#email-type-select', App_Companies.companyDetailView.el).html($(targetEl).html());
     }
+    else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+    {
+      $('#email-type-select', App_Leads.leadDetailView.el).html($(targetEl).html());
+    }
     else
     {
       $('#email-type-select', App_Contacts.contactDetailView.el).html($(targetEl).html());
@@ -582,6 +614,10 @@ show and hide the input for editing the contact name and saving that
 		if(Current_Route && Current_Route.indexOf("company/") == 0)
     {
       company_detail_tab.load_company_mail(url, email_server);
+    }
+    else if(Current_Route && Current_Route.indexOf("lead/") == 0)
+    {
+      App_Leads.leadDetails.loadMails(url, email_server);
     }
     else
     {
@@ -1114,6 +1150,7 @@ enterCompanyScore: function(e){
 	    
 	     // Changes score in UI
 	     $('#lead-cscore').text(add_score);
+       $("#lead-cscore").attr("title",add_score);
        
 	    App_Companies.companyDetailView.model.set({'lead_score': add_score}, {silent: true});
 	 	var contact_model =  App_Companies.companyDetailView.model.toJSON();
@@ -1179,6 +1216,7 @@ enterCompanyScore: function(e){
 			
 		 	// Changes score in UI
 		 	 $('#lead-cscore').text(sub_score);
+       $("#lead-cscore").attr("title",sub_score);
 			
 		 // Changes lead_score of the contact and save it.
 		 App_Companies.companyDetailView.model.set({'lead_score': sub_score}, {silent: true});
@@ -1588,7 +1626,8 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck){
+
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
       showAlertModal("number_validation", undefined, function(){
         scoreboxval=prvs;
         setleadScoreStyles(scoreboxval);
@@ -1623,10 +1662,10 @@ updateScoreValue :function(){
 					}
 				});							
 		}
-		if (isNaN(scoreboxval)|| scoreboxval!=decemialcheck||(scoreboxval<0)){
+		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
       showAlertModal("number_validation", undefined, function(){
         scoreboxval=prvs;
-        setleadScoreStyles(scoreboxval);
+        setleadCScoreStyles(scoreboxval);
       });
       return;
 		}
@@ -1635,7 +1674,7 @@ updateScoreValue :function(){
 				scoreboxval=prvs;
 			}
 		}
-		setleadScoreStyles(scoreboxval)
+		setleadCScoreStyles(scoreboxval)
 	},
 
   addOrRemoveContactCompanyColumns :function(e){
@@ -1684,6 +1723,359 @@ updateScoreValue :function(){
     getContactofCompanies(App_Companies.contactCompanyViewModel, $("#contacts-listener-container"));
 
     },
+  openLeadNotes :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("notes");
+    App_Leads.leadDetails.loadNotes();
+  },
+
+  openLeadTasks :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("tasks");
+    App_Leads.leadDetails.loadTasks();
+  },
+
+  openLeadEvents :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("events");
+    App_Leads.leadDetails.loadEvents();
+  },
+
+  openLeadDeals :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("deals");
+    App_Leads.leadDetails.loadDeals();
+  },
+
+  openLeadTimeline :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("time-line");
+    App_Leads.leadDetails.loadTimeline();
+  },
+
+  openLeadMails :  function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("mail");
+    App_Leads.leadDetails.loadMails();
+  },
+
+  openLeadDocs : function(e)
+  {
+    e.preventDefault();
+    App_Leads.leadDetails.saveLeadTabPosition("documents");
+    App_Leads.leadDetails.loadDocs();
+  },
+
+  removeLeadTags :  function(e){
+    e.preventDefault();
+    var targetEl = $(e.currentTarget);
+
+    var tag = $(targetEl).attr("tag");
+    //removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
+    console.log($(targetEl).closest("li").parent('ul').append(getRandomLoadingImg()));
+    
+      var json = App_Leads.leadDetailView.model.toJSON();
+      
+      // Returns contact with deleted tag value
+      json = delete_contact_tag(json, tag);
+      var that = targetEl;
+      
+      // Unbinds click so user cannot select delete again
+      $(targetEl).unbind("click");
+      
+        var contact = new Backbone.Model();
+        contact.url = 'core/api/contacts';
+        contact.save(json, {
+          success: function(data)
+            {             
+              $(that).closest("li").parent('ul').find('.loading').remove();
+              $(that).closest("li").remove();
+              
+            // Updates to both model and collection
+              App_Leads.leadDetailView.model.set(data.toJSON(), {silent : true});
+              
+            //  App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+              
+              // Also deletes from Tag class if no more contacts are found with this tag
+
+             //Check if any deals are having the tag.If yes dont remove it from the app
+              $.ajax({
+                url: 'core/api/opportunity/based/tags?tag=' + tag,
+                type: 'GET',
+                success: function(data)
+                { 
+                  console.log(data);
+                  if(data == "fail"){
+                      // Also deletes from Tag class if no more contacts are found with this tag
+                    $.ajax({
+                      url: 'core/api/tags/' + tag,
+                      type: 'DELETE',
+                      success: function()
+                      {
+                      if(tagsCollection)
+                        tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+                      }
+                    });
+                  }
+                }
+              });
+            }
+        });
+  },
+
+  leadDelete :  function(e)
+  { 
+    e.preventDefault();
+    showAlertModal("delete_lead", "confirm", function(){
+        App_Leads.leadDetailView.model.url = "core/api/contacts/" + App_Leads.leadDetailView.model.id;
+        App_Leads.leadDetailView.model.destroy({success: function(model, response) {
+          if(App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 1)
+          {
+            App_Leads.leadsListView.collection.remove(model.id);
+          }
+          Backbone.history.navigate("leads",{trigger: true});
+        }});
+    });
+  },
+
+  onAddLeadTags : function(e){
+    e.preventDefault();
+    
+    // Add Tags
+    var new_tags = get_new_tags('addTags');
+    if(new_tags)new_tags=new_tags.trim();
+    
+    if(!new_tags || new_tags.length<=0 || (/^\s*$/).test(new_tags))
+    {
+      console.log(new_tags);
+      return;
+    }
+    if (!isValidTag(new_tags, true)) {
+      return;
+    }
+    $('#add-tags').css("display", "block");
+    $("#addTagsForm").css("display", "none");
+    console.log(new_tags);
+    
+    if(new_tags) {
+      var json = App_Leads.leadDetailView.model.toJSON();
+          
+        
+        // Reset form
+        $('#addTagsForm input').each (function(){
+          $(e.currentTarget).val("");
+        });
+        
+        // Checks if tag already exists in contact
+      if($.inArray(new_tags, json.tags) >= 0)
+        return;
+      acl_util.canAddTag(new_tags.toString(),function(respnse){
+          json.tagsWithTime.push({"tag" : new_tags.toString()});
+          
+          // Save the contact with added tags
+          var contact = new Backbone.Model();
+            contact.url = 'core/api/contacts';
+            contact.save(json,{
+              success: function(data){
+                
+                addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
+                
+                // Get all existing tags of the contact to compare with the added tags
+                var old_tags = [];
+                $.each($('#added-tags-ul').children(), function(index, element){
+                  old_tags.push($(element).attr('data'));
+                });
+                
+                // Updates to both model and collection
+                App_Leads.leadDetailView.model.set(data.toJSON(), {silent : true});
+                
+                // Append to the list, when no match is found 
+                if ($.inArray(new_tags, old_tags) == -1) {
+                  var template = Handlebars.compile('<li  class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs c-default" style="color:#363f44" data="{{name}}"><span><span class="m-r-xs custom-color" style="color:#363f44">{{name}}</span><a class="close remove-tags" id="{{name}}" tag="{{name}}">&times</a></span></li>');
+
+                  // Adds contact name to tags ul as li element
+                  $('#added-tags-ul').append(template({name : new_tags}));
+                  $.each(data.get("tagsWithTime"), function(e, d) {
+                    if (d.tag == new_tags) {
+                      $('#added-tags-ul').find("li[data='"+new_tags+"']").attr('title',epochToHumanDate("mmmm dd, yyyy 'at' hh:MM tt",d.createdTime));
+                    }
+                  });
+                }
+                
+                console.log(new_tags);
+                // Adds the added tags (if new) to tags collection
+                tagsCollection.add(new BaseModel({"tag" : new_tags}));
+              },
+              error: function(model,response){
+                console.log(response);
+                showAlertModal(response.responseText, undefined, undefined, undefined, "Error");
+              }
+            });
+      });
+    }
+  },
+
+  increaseOrDecreaseLeadScore :  function(e){
+    e.preventDefault();
+    
+    var score = parseInt($('#lead-leadscore').text());
+    
+    if($(e.currentTarget).attr("id") == "lead-score-increase")
+    {
+      score = score + 1;
+    }
+    else
+    {
+      score = score - 1;
+    }
+    
+    // Changes score in UI
+    $('#lead-leadscore').text(score);
+    $("#lead-leadscore").attr("title",score);
+    App_Leads.leadDetailView.model.set({'lead_score': score}, {silent: true});
+    var lead_model =  App_Leads.leadDetailView.model.toJSON();
+    
+    var new_model = new Backbone.Model();
+    new_model.url = 'core/api/contacts';
+    new_model.save(lead_model,{
+      success: function(model){
+
+      }
+    });        
+  },
+
+  onGetLeadScorebox:  function(e){
+    e.preventDefault();
+    $("#lead-scorebox").removeClass("hide");
+    $("#lead-leadscore").addClass("hide");
+    $("#lead-scorebox").val($("#lead-leadscore").text());
+    $("#lead-scorebox").focus();
+  },
+
+  getLeadScore : function(e)
+  {
+    e.preventDefault();
+    this.updateLeadScoreValue();
+  },
+
+  leadScoreValEnter : function(e)
+  {
+    e.preventDefault();
+    if(e.keyCode == 13)
+    {
+        this.updateLeadScoreValue();
+    }
+  },
+
+  updateLeadScoreValue : function()
+  {
+    var scoreboxval = parseInt($("#lead-scorebox").val());
+    var decimalcheck = $("#lead-scorebox").val();
+    var lead_model =  App_Leads.leadDetailView.model.toJSON();
+    var prvs = ((lead_model.lead_score) ? lead_model.lead_score : 0);
+    if ((scoreboxval != prvs && (decimalcheck % 1 == 0)) || $("#lead-scorebox").val() == "")
+    { 
+      if($("#lead-scorebox").val()=="")
+      {
+        scoreboxval = 0;
+      }         
+      App_Leads.leadDetailView.model.set({'lead_score': scoreboxval}, {silent: true});
+      var lead_model =  App_Leads.leadDetailView.model.toJSON();     
+      var new_model = new Backbone.Model();
+      new_model.url = 'core/api/contacts';
+      new_model.save(lead_model,{
+      success: function(model){
+          }
+        });             
+    }
+    if(isNaN(scoreboxval)|| scoreboxval != decimalcheck)
+    {
+      showAlertModal("number_validation", undefined, function()
+      {
+        scoreboxval = prvs;
+        setStyleForLeadScore(scoreboxval);
+      });
+      return;
+    }
+    else
+    {
+      if(scoreboxval== prvs)
+      {
+        scoreboxval=prvs;
+      }
+    }
+    setStyleForLeadScore(scoreboxval);
+  },
+
+  toggleLeadsInlineEditFields :function(e)
+  { 
+    $("#leadName").toggleClass("hidden");
+    $("#lead-input").toggleClass("hidden");
+    console.log(this);
+    if(!$("#lead-input").hasClass("hidden"))
+    {
+      $("#lead-input-lastname").focus(); 
+    }
+  },
+
+  leadNameChange : function(e)
+  {
+    if(e.keyCode == 13)
+    {
+      inlineLeadNameChange(e);
+    }
+  },
+
+  onChangeLeadOwnerSelected : function(e){
+    e.preventDefault();
+    var targetEl = $(e.currentTarget);
+
+    $('#change-owner-ul').css('display', 'none');
+    
+    // Reads the owner id from the selected option
+    var new_owner_id = $(targetEl).attr('data');
+    var new_owner_name = $(targetEl).text();
+    var current_owner_id = $('#contact-owner').attr('data');
+    
+    // Returns, if same owner is selected again 
+    if(new_owner_id == current_owner_id)
+    {
+      // Showing updated owner
+      show_owner();
+      return;
+    }
+    
+    var contactModel = new BaseModel();
+    contactModel.url = '/core/api/contacts/change-owner/' + new_owner_id + "/" + App_Leads.leadDetailView.model.get('id');
+    contactModel.save(App_Leads.leadDetailView.model.toJSON(), 
+    {
+      success: function(model)
+      {
+        // Replaces old owner details with changed one
+        $('#contact-owner').text(new_owner_name);
+        $('#contact-owner').attr('data', new_owner_id);
+        
+        // Showing updated owner
+        show_owner(); 
+        App_Leads.leadDetailView.model = model;
+
+        //If user doesn't have view contacts permissions and owner is not current user, navigate to leads page.
+        if(!hasScope("VIEW_CONTACTS") && model && model.get("owner") && model.get("owner").id != CURRENT_DOMAIN_USER.id)
+        {
+          LEADS_HARD_RELOAD = true;
+          Backbone.history.navigate( "leads", { trigger : true });
+        }
+    
+    }});
+         
+  }, 
+
 });
 
 $(function(){
@@ -1782,11 +2174,73 @@ function epochToHumanDate(format,date)
 
 }
 function setleadScoreStyles(scoreboxval){
-  $('#lead-score').attr("data-original-title", scoreboxval);
-  $('#lead-score').text(scoreboxval).removeClass("hide");
-  $("#scorebox").addClass("hide").val(scoreboxval);
-  $("#lead-score").attr("title",scoreboxval);
+  $("#scorebox").addClass("hide");
+  $('#lead-contactscore').attr("data-original-title", scoreboxval);
+  $('#lead-contactscore').text(scoreboxval).removeClass("hide");
+  //$("#scorebox").addClass("hide").val(scoreboxval);
+  $("#lead-contactscore").attr("title",scoreboxval);
+}
+function setleadCScoreStyles(scoreboxval){
+  $("#cscorebox").addClass("hide");
+  $('#lead-cscore').attr("data-original-title", scoreboxval);
+  $('#lead-cscore').text(scoreboxval).removeClass("hide");
+  //$("#cscorebox").addClass("hide").val(scoreboxval);
+  $("#lead-cscore").attr("title",scoreboxval);
+}
+function setStyleForLeadScore(scoreboxval){
+  $('#lead-leadscore').attr("data-original-title", scoreboxval);
+  $('#lead-leadscore').text(scoreboxval).removeClass("hide");
+  $("#lead-scorebox").addClass("hide").val(scoreboxval);
+  $("#lead-leadscore").attr("title",scoreboxval);
 }
 
+function inlineLeadNameChange(e,data)
+{
+  // Get actual name
+  var first = $("#lead-input-firstname").val();
+  var last  = $("#lead-input-lastname").val();
+  firstName =first.trim();
+  lastName =last.trim();
+  if(!firstName)
+  {
+    $("#lead-input-firstname").addClass("error-inputfield");
+    return;
+  }
+  if(agile_crm_is_model_property_changed("first_name", firstName)){
+    // Update first name
+    var model_id = App_Leads.leadDetailView.model.toJSON().id;
+    agile_crm_update_contact("first_name", firstName, function(contact_model)
+    {
+      if(model_id != contact_model.id) return;
 
-    
+      $("#lead-input").addClass("hidden");
+      $("#leadName").text(firstName+" "+lastName ).removeClass("hidden");
+      $("#leadName").addClass("text-capitalize ");
+      $("#lead-input-firstname" ).removeClass("error-inputfield");
+      $("#lead-input-lastname" ).removeClass("error-inputfield");  
+      return;
+    });
+  }
+
+  if(agile_crm_is_model_property_changed("last_name", lastName)){
+      // Update last name
+      agile_crm_update_contact("last_name", lastName,function(contact_model)
+      {
+        if(model_id != contact_model.id) return;
+
+        $("#lead-input").addClass("hidden");
+        $("#leadName").text(firstName+" "+lastName ).removeClass("hidden");
+        $("#leadName").addClass("text-capitalize ");
+        $("#lead-input-firstname").removeClass("error-inputfield");
+        $("#lead-input-lastname").removeClass("error-inputfield");
+        return ;
+      });
+  }
+
+  // Toggle fields
+  $("#lead-input").addClass("hidden");
+  $("#leadName").text(firstName+" "+lastName).removeClass("hidden");
+  $("#leadName").addClass("text-capitalize ");
+  $("#lead-input-firstname").removeClass("error-inputfield");
+  $("#lead-input-lastname").removeClass("error-inputfield"); 
+}    

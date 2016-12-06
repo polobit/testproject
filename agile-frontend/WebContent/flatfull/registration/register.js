@@ -78,8 +78,10 @@ function getRegisterURL(domain)
 		url = "https://" + domain + ".agilecrm.com/register";
 	else		
 		url = "https://" + domain + "-dot-" + version + "-dot-"+applicationId + ".appspot.com/register";
-	if(parameters)
+	if(parameters){
 		url = url+"?"+parameters;
+		url = url.replace("type=oauth", "type=agile");
+	}
 	return url;
 }
 
@@ -189,3 +191,8 @@ function showDomainErrorMessage(error)
 {
 	$("#error-area").slideDown("slow").slideDown().html(error.error);
 }
+
+function agile_is_mobile_browser(){
+   return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  
+ }

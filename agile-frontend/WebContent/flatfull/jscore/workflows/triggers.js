@@ -335,13 +335,15 @@ function populate_owners_in_trigger(trigger_form, owner_select_id, trigger_owner
 
 function populate_call_trigger_options(trigger_form, triggerJSON)
 {
-	
+	getStatusForTriggers(trigger_form, function(){
 	trigger_form.find('div#CALL').closest('div.control-group').css('display', '');
 	
 	if(triggerJSON && triggerJSON["call_disposition"])
-		trigger_form.find('div#CALL select').find('option[value="' + triggerJSON["call_disposition"] + '"]').attr('selected', 'selected').trigger('change');
+		//trigger_form.find('select#').find('option[value="' + triggerJSON["call_disposition"] + '"]').attr('selected', 'selected').trigger('change');
 	
-	getStatusForTriggers(trigger_form);
+	trigger_form.find('select#' + "call_disposition").val(triggerJSON["call_disposition"]).attr('selected', 'selected').trigger('change');
+	
+});
 }
 function populate_sms_trigger_options(trigger_form, triggerJSON)
 {	
@@ -484,7 +486,7 @@ function openVerifyEmailModal(el) {
 
 	if (selected == 'verify_email')
 	{	
-		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'verify-new-email'}}", undefined,
+		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'from-email-verification'}}", undefined,
 				"workflow-verify-email-modal"
 
 				, function(modal) {
@@ -549,7 +551,7 @@ function resetAndFillFromSelect(selected_val) {
 	$('#from_email').empty();
 
 	var options = {};
-	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+	options["{{agile_lng_translate 'verification' 'add-new'}}"] = "verify_email";
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',
@@ -878,7 +880,7 @@ function getFormNameCellIDForFormSubmitTriggers(formID)
 	return formID + "_formNameField";
 }
 
-function getStatusForTriggers(trigger_form){
+function getStatusForTriggers(trigger_form, callback){
 	try{
 		trigger_form.find('div#CALL #status-wait').html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 40px;"></img>');
 		getTelephonyStatus(function(status){
@@ -889,6 +891,10 @@ function getStatusForTriggers(trigger_form){
 			});
 			trigger_form.find('div#CALL').find("select[name='call_disposition']").append(statusHtml);
 			trigger_form.find('div#CALL #status-wait').html("");
+
+			if (callback && typeof (callback) === "function"){
+					callback();
+		}
 		});
 	}catch(e){}
 }

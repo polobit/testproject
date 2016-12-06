@@ -17,10 +17,14 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONObject;
+
 import com.agilecrm.addon.AddOn;
 import com.agilecrm.addon.AddOnInfo.AddOnStatus;
 import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.stripe.model.Invoice;
 
 /**
  * Extra payment addons for users
@@ -81,7 +85,8 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOnUtil.checkForCreditCard();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
-			if(addOn.getAclUsers().size() == 0)
+			addOn.aclInfo.quantity = addOn.getAclUsers().size();
+			if(addOn.aclInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
 			if(dbAddOn.getAclUsers().size() != addOn.getAclUsers().size()){
 				boolean proration = true;
@@ -102,7 +107,7 @@ public class AddOnAPI implements Serializable{
 			dbAddOn.save();
 			return dbAddOn;
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -125,8 +130,7 @@ public class AddOnAPI implements Serializable{
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(addOn.campaignInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
-			if(!AddOnUtil.canDowngradeCampaigns(addOn.campaignInfo.quantity))
-				throw new Exception("you cannot do this action until you delete the extra campaigns");
+			
 			if(dbAddOn.campaignInfo.quantity != addOn.campaignInfo.quantity){
 				boolean proration = true;
 				if(addOn.campaignInfo.quantity < dbAddOn.campaignInfo.quantity)
@@ -140,7 +144,7 @@ public class AddOnAPI implements Serializable{
 			dbAddOn.save();
 			return dbAddOn;
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -163,8 +167,6 @@ public class AddOnAPI implements Serializable{
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(addOn.triggerInfo.quantity == 0)
 				throw new Exception("Sorry, Can not process your request with 0 quantity");
-			if(!AddOnUtil.canDowngradeCampaigns(addOn.triggerInfo.quantity))
-				throw new Exception("you cannot do this action until you delete the extra triggers");
 			if(dbAddOn.triggerInfo.quantity != addOn.triggerInfo.quantity){
 				boolean proration = true;
 				if(addOn.triggerInfo.quantity < dbAddOn.triggerInfo.quantity)
@@ -178,7 +180,7 @@ public class AddOnAPI implements Serializable{
 			dbAddOn.save();
 			return dbAddOn;
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -204,7 +206,7 @@ public class AddOnAPI implements Serializable{
 			dbAddOn.aclInfo.subscriptionId = null;
 			dbAddOn.save();
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -223,14 +225,14 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(!AddOnUtil.canDowngradeCampaigns(0))
-				throw new Exception("you cannot do this action until you delete the extra campaigns");
+				throw new Exception("Sorry, we are unable to process your request for canceling your Campaigns Add-on subscription. Delete extra campaigns from your account & try again.");
 			if(dbAddOn.campaignInfo.subscriptionId != null)
 				StripeUtil.cancelAddOnSubscription(dbAddOn.campaignInfo.subscriptionId);
 			dbAddOn.campaignInfo.quantity = 0;
 			dbAddOn.campaignInfo.subscriptionId = null;
 			dbAddOn.save();
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -249,20 +251,123 @@ public class AddOnAPI implements Serializable{
 			AddOnUtil.checkForPriviliges();
 			AddOn dbAddOn = AddOnUtil.getAddOn();
 			if(!AddOnUtil.canDowngradeCampaigns(0))
-				throw new Exception("you cannot do this action until you delete the extra triggers");
+				throw new Exception("Sorry, we are unable to process your request for canceling your Triggers Add-on subscription. Delete extra triggers from your account & try again.");
 			if(dbAddOn.triggerInfo.subscriptionId != null)
 				StripeUtil.cancelAddOnSubscription(dbAddOn.triggerInfo.subscriptionId);
 			dbAddOn.triggerInfo.quantity = 0;
 			dbAddOn.triggerInfo.subscriptionId = null;
 			dbAddOn.save();
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 	}
 	
+	/**
+	 * Check downgrade conditions and if everything fine fetch the upcoming invoice for proration amount 
+	 * @param addOn
+	 * @return Invoice
+	 */
+	@POST
+	@Path("/aclRestriction")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Invoice checkAclRestriction(AddOn addOn){
+		try{
+			AddOnUtil.checkForPriviliges();
+			AddOnUtil.checkForCreditCard();
+			AddOn dbAddOn = AddOnUtil.getAddOn();
+			addOn.aclInfo.quantity = addOn.getAclUsers().size();
+			if(addOn.aclInfo.quantity == 0)
+				throw new Exception("Sorry, Can not process your request with 0 quantity");
+				
+			if(dbAddOn.aclInfo.subscriptionId == null)
+				return null;
+			
+			Invoice invoice = StripeUtil.getupcomingInvoice(addOn.aclInfo, dbAddOn.aclInfo);
+			System.out.println("invoice Object for proration:::" +invoice);
+			return invoice;
+			
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 	
+	/**
+	 * Check downgrade conditions and if everything fine fetch the upcoming invoice for proration amount 
+	 * @param addOn
+	 * @return Invoice
+	 */
+	@POST
+	@Path("/campaignRestriction")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Invoice checkCampaignRestriction(AddOn addOn){
+		try{
+			AddOnUtil.checkForPriviliges();
+			AddOnUtil.checkForCreditCard();
+			AddOn dbAddOn = AddOnUtil.getAddOn();
+			
+			if(addOn.campaignInfo.quantity == 0)
+				throw new Exception("Sorry, Can not process your request with 0 quantity");
+			
+			if(addOn.campaignInfo.quantity < dbAddOn.campaignInfo.quantity && !AddOnUtil.canDowngradeCampaigns(addOn.campaignInfo.quantity))
+					throw new Exception("Sorry, we are unable to process your request for downgrading your Campaigns Add-on subscription. Delete extra campaigns from your account & try again.");
+			
+			if(dbAddOn.campaignInfo.subscriptionId == null)
+				return null;
+			
+			Invoice invoice = StripeUtil.getupcomingInvoice(addOn.campaignInfo, dbAddOn.campaignInfo);
+			System.out.println("invoice Object for proration:::" +invoice);
+			return invoice;
+			
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	/**
+	 * Check downgrade conditions and if everything fine fetch the upcoming invoice for proration amount 
+	 * @param addOn
+	 * @return Invoice
+	 */
+	@POST
+	@Path("/triggerRestriction")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Invoice checkTriggerRestriction(AddOn addOn){
+		try{
+			AddOnUtil.checkForPriviliges();
+			AddOnUtil.checkForCreditCard();
+			AddOn dbAddOn = AddOnUtil.getAddOn();
+			
+			if(addOn.triggerInfo.quantity == 0)
+				throw new Exception("Sorry, Can not process your request with 0 quantity");
+			
+			if(addOn.triggerInfo.quantity < dbAddOn.triggerInfo.quantity && !AddOnUtil.canDowngradeTriggers(addOn.triggerInfo.quantity))
+					throw new Exception("Sorry, we are unable to process your request for canceling your Triggers Add-on subscription. Delete extra triggers from your account & try again.");
+			
+			if(dbAddOn.triggerInfo.subscriptionId == null)
+				return null;
+			
+			Invoice invoice = StripeUtil.getupcomingInvoice(addOn.triggerInfo, dbAddOn.triggerInfo);
+			System.out.println("invoice Object for proration:::" +invoice);
+			return invoice;
+			
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 	
 }

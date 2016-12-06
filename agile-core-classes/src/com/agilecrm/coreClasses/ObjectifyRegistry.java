@@ -7,6 +7,7 @@ import com.agilecrm.affiliate.AffiliateDeal;
 import com.agilecrm.addon.AddOn;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
+import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.user.InvitedUser;
 import com.agilecrm.user.SMTPPrefs;
@@ -33,10 +34,13 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(Affiliate.class);
 		ObjectifyService.register(AffiliateDetails.class);
 		ObjectifyService.register(AffiliateDeal.class);
+		
 		ObjectifyService.register(WorkflowBackup.class);		
 		ObjectifyService.register(EmailTemplateCategory.class);
 		ObjectifyService.register(VideoRecord.class);
 		ObjectifyService.register(SMTPPrefs.class);
+		// Agile Push 
+		ObjectifyService.register(AgileUserPushNotificationId.class);
 		
 		ObjectifyService.register(DocumentTemplates.class);
 		ObjectifyService.register(Product.class);

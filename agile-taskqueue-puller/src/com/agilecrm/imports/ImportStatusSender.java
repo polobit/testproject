@@ -6,6 +6,7 @@ import java.util.Map;
 import com.agilecrm.contact.upload.blob.status.specifications.StatusProcessor;
 import com.agilecrm.contact.upload.blob.status.specifications.StatusSender;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
@@ -27,7 +28,10 @@ public class ImportStatusSender implements StatusSender
 
 	// TODO Auto-generated method stub
 	System.out.println("Email to be sent to email");
+	String tempDomain = domainUser.domain;
+	domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
 	SendMail.sendMail(domainUser.email, "CSV Import Delay", SendMail.CSV_IMPORT_DELAY_NOTIFICATION,
 		new Object[] { domainUser });
+	domainUser.domain = tempDomain;
     }
 }

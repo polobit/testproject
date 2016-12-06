@@ -34,6 +34,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.FailedContactBean;
 import com.agilecrm.util.JSONUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -592,15 +593,17 @@ public class SalesforceSync extends OneWaySyncService
 	
 	if (user != null)
 	{
-
+		// Get user prefs language
+	    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+	    
 	    int emailRequired = syncStatus.get(ImportStatus.EMAIL_REQUIRED);
 	    if (emailRequired == 0)
 		syncStatus.remove(ImportStatus.EMAIL_REQUIRED);
 
-	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
+	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus }, language);
 
 	    SendMail.sendMail("govind@agilecrm.com", notificationSubject + " - " + user.domain,
-		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
+		    NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus }, language);
 	}
     }
 

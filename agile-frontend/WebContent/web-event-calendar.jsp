@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.subscription.SubscriptionUtil"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="org.jsoup.Jsoup"%>
 <%@page import="com.agilecrm.util.VersioningUtil"%>
@@ -28,7 +29,7 @@
 <%@page import="java.util.Arrays"%>
 
 <%
-
+boolean isSubscriptionDeleted = SubscriptionUtil.isSubscriptionDeleted();
 // User Language 
 String _LANGUAGE = "en", _LANGUAGE_USER = "en";
 
@@ -53,7 +54,6 @@ JSONObject single_user_map_object=new JSONObject();
 boolean multiple_users=false;
 Boolean userAvailable = false;
 Boolean emailAvailable = false;
-
 
 String [] slots_array=null;
 List<JSONArray> business_hours_array=new ArrayList<JSONArray>();
@@ -160,7 +160,6 @@ if(scheduleid.contains(",")){
 		}
 
 		System.out.println("Domain user " + domainUser);
-
 		if (domainUser != null)
 		{
      	userAvailable = true;
@@ -232,6 +231,9 @@ if(scheduleid.contains(",")){
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%if(isSubscriptionDeleted) {%>
+<%@ include file="not_available.jsp"%>
+<%}else{ %>
 <html>
 <head>
 <% 
@@ -1383,3 +1385,4 @@ var LOCALES_JSON = <%=localeJSON%>;
 </body>
 
 </html>
+<%} %>

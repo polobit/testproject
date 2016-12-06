@@ -318,13 +318,30 @@ function setupDealsTracksList(cel){
 			$('#deals-tracks',$("#opportunity-listners")).show();
 			setTimeout(function(){
 				$('#deals-tracks .filter-dropdown', $("#opportunity-listners")).append(Handlebars.compile('{{name}}')({name : track_name}));
+				
+				//If current plan is regular or enterprise, show add track option
+				if(tracksArray.length<=1 && _billing_restriction && _billing_restriction.currentLimits && _billing_restriction.currentLimits.addTracks)
+				{
+					$('#deals-tracks',cel).find("ul > li:first").hide();
+					$('#deals-tracks',cel).find("ul > li:first").before("<li><a href='#milestones'>{{agile_lng_translate 'admin-settings-deals' 'manage-tracks'}}</a></li>");
+				}
+				else if(_billing_restriction && _billing_restriction.currentLimits && _billing_restriction.currentLimits.addTracks)
+				{
+					$('#deals-tracks',cel).find("ul > li:first").before("<li><a href='#milestones'>{{agile_lng_translate 'admin-settings-deals' 'manage-tracks'}}</a></li><li class='divider'></li>");
+				}
 			}, 100);
 			startGettingDeals();
 			setupTracksAndMilestones($('#opportunity-listners'));
 
 			// Hide the track list if there is only one pipeline.
-			if(tracksArray.length<=1)
-				$('#deals-tracks',cel).hide();
+			if(tracksArray.length <= 1)
+			{
+				if(!_billing_restriction || (_billing_restriction && !_billing_restriction.currentLimits) || (_billing_restriction && _billing_restriction.currentLimits && !_billing_restriction.currentLimits.addTracks))
+				{
+					$('#deals-tracks',cel).hide();
+				}
+			}
+				
 			
 			
 		}});
@@ -656,6 +673,7 @@ function serialize_deal_products(form_id)
 }
 function populate_deal_products(el, value,form_id){
 	var me=this;
+	
 	me._el=el;
 	me._value=value;
 	App_Deal_Details.savedproducts=value?value.products:null;
@@ -681,10 +699,17 @@ function populate_deal_products(el, value,form_id){
 	$(".toggleHead",form_id).find('i').addClass('icon-plus-sign');	
 
 	if($("#discount_type",form_id).val()==""  )
-		$("#discount_type",form_id).val("Value");
+		$("#discount_type",form_id).val("Percent");
+
 	$("#discount_type_btn span:first-child",form_id).text($("#discount_type",form_id).val());
 	//Init
-
+	$(".discounttype-input-group-btn ul li").click(function(e){
+		if($(this).text() == "Percent"){
+			$("#discount_value").attr("placeholder","Enter percent");
+		}else if($(this).text() == "Value"){
+			$("#discount_value").attr("placeholder","Enter Value");
+		}
+	});
 	$(".modal-body").on(
 			"click",form_id,
 			function(e)
@@ -699,6 +724,16 @@ function populate_deal_products(el, value,form_id){
 					$(".discounttype-input-group-btn",me._form_id).removeClass("open");
 				}	
 			});
+
+	/*$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0){
+			$("#showtoggle").show();
+		}else{
+			$("#showtoggle").hide();
+		}
+	});*/
 	$(form_id).on(
 			"click",".toggleHead",
 			function(e)
@@ -714,7 +749,7 @@ function populate_deal_products(el, value,form_id){
 				return;
 				App_Deal_Details.deal_products_collection_view=new Base_Collection_View({ url : '/core/api/products', 
 					templateKey : "deal-products",
-					individual_tag_name : 'tr',className:'deal-products_tr',sort_collection : false,
+					individual_tag_name : 'tr',className:'deal-products_tr',sort_collection : true,sortKey : 'name',
 					errorCallback:function(e)
 					{
 						console.log(e)
@@ -853,15 +888,22 @@ function populate_deal_products(el, value,form_id){
 								}	
 							}
 						}
-						if(bProductsFound==false)
-						{
-
-							var sHTML='<tr><td colspan="6"><center>{{agile_lng_translate 'products' 'product-not-setup'}}</center></td></tr>';
-							$("#deal-products-model-list").append(sHTML);
+						if(bProductsFound==false){
+							//$("#showproducts").hide();
+						}else{
+							//$("#showproducts").show();
 						}
+						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
+							if($(value).is(":checked"))			
+							{	
+								$('#discount_type_btn',me._form_id).removeClass('disabled');
+								$('#discount_value',me._form_id).removeAttr('disabled');
+								return false;
+							}	
+						});
 					}
 				});
-				
+
 				App_Deal_Details.deal_products_collection_view.render(); 
 				$("#deal_products_div",el).append(App_Deal_Details.deal_products_collection_view.el);
 			}	
@@ -883,6 +925,8 @@ function populate_deal_products(el, value,form_id){
 								//$(value).trigger("click")
 							}	
 						});
+						$('#discount_type_btn',me._form_id).removeClass('disabled');
+						$('#discount_value',me._form_id).removeAttr('disabled');
 					}
 					else
 					{
@@ -898,6 +942,9 @@ function populate_deal_products(el, value,form_id){
 								//$(value).trigger("click")
 							}	
 						});
+						$('#discount_type_btn',me._form_id).addClass('disabled');
+						$('#discount_value',me._form_id).attr('disabled','disabled');
+						$('#discount_value',me._form_id).val('');
 					}
 					me.calculateGrandTotal();
 				}
@@ -947,12 +994,30 @@ function populate_deal_products(el, value,form_id){
 						{
 							objModel.set("isChecked",true)	
 						}
+						$('#discount_type_btn',me._form_id).removeClass('disabled');
+						$('#discount_value',me._form_id).removeAttr('disabled');
 						
 					}
 					else
 					{
 						objModel.set("isChecked",false)	
 						var id=objData.get('id')
+
+						var product_selected=false;
+						$(".dealproducts_td_checkbox",me._form_id).each(function(index,value){
+							if($(value).is(":checked"))			
+							{	
+								product_selected=true;
+								return false;
+							}	
+						});
+							if(!product_selected)
+							{
+								$('#discount_type_btn',me._form_id).addClass('disabled');
+								$('#discount_value',me._form_id).attr('disabled','disabled');
+								$('#discount_value',me._form_id).val('');
+							}
+						
 					}
 					me.calculateGrandTotal();
 				}
@@ -1042,6 +1107,7 @@ function populate_deal_products(el, value,form_id){
 				}
 				this.calculateGrandTotal=function ()
 				{
+					if(ValidateDealDiscountAmt(me._form_id)){
 				//	var currentDeal = App_Deal_Details.dealDetailView.model	
 					var iTotal=0;
 					for(var key in App_Deal_Details.deal_products_collection_view.collection.models)
@@ -1054,10 +1120,13 @@ function populate_deal_products(el, value,form_id){
 						if(App_Deal_Details.deal_products_collection_view.collection.models[key].get("isChecked"))
 							iTotal+=parseFloat(iQtyPriceTotal);		
 					}
+					var selected = iTotal;
 					var iDiscountAmt=0;
-					if($("#apply_discount",me._form_id).is(':checked'))
-					{
-						iDiscountAmt=$("#discount_value",me._form_id).val();
+					//if($("#apply_discount",me._form_id).is(':checked'))
+					//{
+						var val= $("#discount_value",me._form_id).val();
+					if(val){
+						iDiscountAmt= val; 
 						if(iDiscountAmt=="")
 							iDiscountAmt=0
 						if(iDiscountAmt!=null && iDiscountAmt!=undefined )
@@ -1067,19 +1136,29 @@ function populate_deal_products(el, value,form_id){
 									iDiscountAmt=(iTotal *  iDiscountAmt)/100;
 								}
 							}
-					}
+
+							$("input[name='discount_type']",$(me._form_id)).val($(".discounttype-input-group-btn span",me._form_id).eq(0).text());
+						}
+					//}
+
 					if(iDiscountAmt.toFixed)
 						iDiscountAmt=iDiscountAmt.toFixed(2)
 					$("input[name='discount_amt']",$(me._form_id)).val(iDiscountAmt);
 					iTotal-=iDiscountAmt
+
 					if(iTotal.toFixed)
 						iTotal=iTotal.toFixed(2)
 					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
 						$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
 					else
-						$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+						{
+							if(selected>0)
+							$("input[name='expected_value']",$(me._form_id)).val(iTotal);
+							else
+							$("input[name='expected_value']",$(me._form_id)).val(0);	
+						}
+					}
 					
-					ValidateDealDiscountAmt(me._form_id);
 				}
 				
 }
@@ -1088,6 +1167,8 @@ function ValidateDealDiscountAmt(_form_id)
 {
 	
 	var iTotal=0;
+	if($("#discount_value").is(':disabled'))
+		return true;
 	try{
 		var iDiscountValue=$("#discount_value",_form_id).val();
 		$(".calculation-error-status",_form_id).html("")
@@ -1097,8 +1178,10 @@ function ValidateDealDiscountAmt(_form_id)
 				$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-should-be-numeric'}}")
 				return false;
 			}
-		if($("#apply_discount",_form_id).is(':checked'))
-		{
+
+		if(iDiscountValue){
+		//if($("#apply_discount",_form_id).is(':checked'))
+		//{
 			
 			var RE = /^-{0,1}\d*\.{0,1}\d+$/;
 			if( !(RE.test(iDiscountValue)) )
@@ -1144,6 +1227,9 @@ function ValidateDealDiscountAmt(_form_id)
 						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'atleast-one-product-should-select'}}")
 						return false;		
 					}
+					if($(".discounttype-input-group-btn span",_form_id).eq(0).text()=="Percent")
+						iDiscountValue=(iTotal *  iDiscountValue)/100;
+					
 					if(parseFloat(iDiscountValue)>parseFloat(iTotal))
 					{
 						$(".calculation-error-status",_form_id).html("{{agile_lng_translate 'products' 'discount-value-greater-total-product-value'}}")

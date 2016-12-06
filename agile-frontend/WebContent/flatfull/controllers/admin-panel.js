@@ -79,6 +79,10 @@ var AdminPanelRouter = Backbone.Router.extend({
 				$(el).find(".unblock_user").closest("div").show();
 				$(el).find(".unblock_user").attr("domain", domainname);
 			}
+			if(data && data.emailpurchaseStatus && data.emailpurchaseStatus == "BLOCKED"){
+				$(el).find(".unblock_email_purchasing").closest("div").show();
+				$(el).find(".unblock_email_purchasing").attr("domain", domainname);
+			}
 
 
 		}, error : function(response)
@@ -111,7 +115,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				}
 
 				else
-					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
+					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id, domainname);
 
 			}, $(el).find('#planinfo'));
 
@@ -134,10 +138,12 @@ var AdminPanelRouter = Backbone.Router.extend({
 	},
 
 	// gets collection of charges of aa paricular customer based on
-	get_collection_of_charges_for_customer_from_adminpanel : function(el, customerid)
+	get_collection_of_charges_for_customer_from_adminpanel : function(el, customerid, domainname)
 	{
-		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",
-
+		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",postRenderCallback : function(el)
+		{
+			$("tabel",el).attr("domain",domainname);
+		},
 		individual_tag_name : 'tr', sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
 

@@ -91,8 +91,17 @@ public class PortletUtil {
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			
 			allPortlets.add(new Portlet("Filter Based",PortletType.CONTACTS));
-			allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
+			//allPortlets.add(new Portlet("Emails Opened",PortletType.CONTACTS));
 			allPortlets.add(new Portlet("Growth Graph",PortletType.CONTACTS));
+
+			/*if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(PortletType.MARKETING)){
+			    	allPortlets.add(new Portlet("Emails Opened",PortletType.MARKETING));
+			    	allPortlets.add(new Portlet("Campaign stats",PortletType.MARKETING));
+				allPortlets.add(new Portlet("Campaign graph",PortletType.MARKETING));
+				allPortlets.add(new Portlet("Referralurl stats",PortletType.MARKETING));
+				allPortlets.add(new Portlet("Webstat Visits",PortletType.MARKETING));
+
+			}*/
 			
 			if(domainUser!=null && domainUser.menu_scopes!=null && domainUser.menu_scopes.contains(NavbarConstants.DEALS)){
 				allPortlets.add(new Portlet("Pending Deals",PortletType.DEALS));
@@ -121,15 +130,21 @@ public class PortletUtil {
 				allPortlets.add(new Portlet("Leaderboard",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Calls Per Person",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("User Activities",PortletType.USERACTIVITY));
-				allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
+				/*allPortlets.add(new Portlet("Campaign stats",PortletType.USERACTIVITY));
 				allPortlets.add(new Portlet("Campaign graph",PortletType.USERACTIVITY));
-				allPortlets.add(new Portlet("Referralurl stats",PortletType.USERACTIVITY));
+				allPortlets.add(new Portlet("Referralurl stats",PortletType.USERACTIVITY));*/
 			}
 			
 			allPortlets.add(new Portlet("Agile CRM Blog",PortletType.RSS));
 			allPortlets.add(new Portlet("Account Details",PortletType.ACCOUNT));
-			allPortlets.add(new Portlet("Webstat Visits",PortletType.WEBSTATS));
 			
+			//allPortlets.add(new Portlet("Webstat Visits",PortletType.WEBSTATS));
+			allPortlets.add(new Portlet("Emails Opened",PortletType.MARKETING));
+		    	allPortlets.add(new Portlet("Campaign stats",PortletType.MARKETING));
+			allPortlets.add(new Portlet("Campaign graph",PortletType.MARKETING));
+			allPortlets.add(new Portlet("Referralurl stats",PortletType.MARKETING));
+			allPortlets.add(new Portlet("Webstat Visits",PortletType.MARKETING));
+
 			//setIsAddedStatus(allPortlets);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -791,11 +806,11 @@ public class PortletUtil {
 		
 		CategoriesUtil categoriesUtil = new CategoriesUtil();
 		List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
-		CallStatusCountMap.put(Call.ANSWERED,0);
-		CallStatusCountMap.put(Call.BUSY,0);
-		CallStatusCountMap.put(Call.FAILED,0);
-		CallStatusCountMap.put(Call.VOICEMAIL,0);
-		CallStatusCountMap.put(Call.Missed,0);
+		//CallStatusCountMap.put(Call.ANSWERED,0);
+		//CallStatusCountMap.put(Call.BUSY,0);
+		//CallStatusCountMap.put(Call.FAILED,0);
+		//CallStatusCountMap.put(Call.VOICEMAIL,0);
+		//CallStatusCountMap.put(Call.Missed,0);
 		for(Category category : categories){
 			CallStatusCountMap.put(category.getLabel().toLowerCase(), 0);
 		}
@@ -866,6 +881,7 @@ public class PortletUtil {
 			//Added dummy portlet for recognizing whether Agile CRM Blog 
 			//portlet is deleted by user or not
 			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			MilestoneUtil.getMilestones();
 			categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
 			Portlet dummyPortlet = new Portlet("Dummy Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.DashBoard.toString());			
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,3,3,1,1,Portlet.PortletRoute.DashBoard.toString());
@@ -1871,11 +1887,11 @@ public class PortletUtil {
 		colors.put(Call.VOICEMAIL, "#7266ba");
 		colors.put(Call.FAILED, "#f05050");
 		
-		CallStatusCountMap.put(Call.ANSWERED,0);
-		CallStatusCountMap.put(Call.BUSY,0);
-		CallStatusCountMap.put(Call.FAILED,0);
-		CallStatusCountMap.put(Call.VOICEMAIL,0);
-		CallStatusCountMap.put(Call.Missed,0);
+		//CallStatusCountMap.put(Call.ANSWERED,0);
+		//CallStatusCountMap.put(Call.BUSY,0);
+		//CallStatusCountMap.put(Call.FAILED,0);
+		//CallStatusCountMap.put(Call.VOICEMAIL,0);
+		//CallStatusCountMap.put(Call.Missed,0);
 		
 		int lc=0;
 		for(Category category : categories){
@@ -1938,14 +1954,15 @@ public class PortletUtil {
  public static void addDefaultMarketingPortlets(){
 	try {
 		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		MilestoneUtil.getMilestones();
 		categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
-	    Portlet onboardingMarketingPortlet = new Portlet("Marketing Onboarding",PortletType.CONTACTS,3,1,1,3,Portlet.PortletRoute.MarketingDashboard.toString());
-	    Portlet dummyMarketiPortlet = new Portlet("Dummy Marketing Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	  //  Portlet onboardingMarketingPortlet = new Portlet("Marketing Onboarding",PortletType.CONTACTS,3,1,1,3,Portlet.PortletRoute.MarketingDashboard.toString());
+	   // Portlet dummyMarketiPortlet = new Portlet("Dummy Marketing Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignStatsMarketingPortlet = new Portlet("Campaign stats",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet campaignGraphMarketingPortlet = new Portlet("Campaign graph",PortletType.USERACTIVITY,2,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    /*Portlet webstatVisitsMarketingPortlet = new Portlet("Webstat Visits",PortletType.USERACTIVITY,1,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    Portlet referralurlStatsMarketingPortlet = new Portlet("Referralurl stats",PortletType.USERACTIVITY,2,2,1,1,Portlet.PortletRoute.MarketingDashboard.toString());*/
-	    Portlet emailOpenedMarketingPortlet = new Portlet("Emails Opened",PortletType.USERACTIVITY,1,3,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
+	    Portlet emailOpenedMarketingPortlet = new Portlet("Emails Opened",PortletType.USERACTIVITY,3,1,1,1,Portlet.PortletRoute.MarketingDashboard.toString());
 	    
 	    JSONObject campaignStatsMarketingPortletJSON = new JSONObject();
 	    campaignStatsMarketingPortletJSON.put("duration","yesterday");
@@ -1976,8 +1993,8 @@ public class PortletUtil {
 		emailOpenedMarketingPortlet.save();
 		//webstatVisitsMarketingPortlet.save();
 		//referralurlStatsMarketingPortlet.save();
-		dummyMarketiPortlet.save();		
-		onboardingMarketingPortlet.save();
+		//dummyMarketiPortlet.save();		
+		//onboardingMarketingPortlet.save();
 		
 		
 	} catch (Exception e) {
@@ -2006,9 +2023,10 @@ public class PortletUtil {
 		    JSONObject json=(JSONObject)JSONSerializer.toJSON(portlet.prefs);
 		    portlet.settings=json;
 		}
-		if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Marketing Blog"))
+		if(portlet.name!=null && !portlet.name.equalsIgnoreCase("Dummy Marketing Blog") && !portlet.name.equalsIgnoreCase("Marketing Onboarding"))
 			added_portlets.add(portlet);
 	    }
+	    
 	}
 	
 	return added_portlets;
@@ -2063,6 +2081,7 @@ public class PortletUtil {
 		try 
 		{
 			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			MilestoneUtil.getMilestones();
 			categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
 			Portlet dummySalesPortlet = new Portlet("Dummy Sales Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
 			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());

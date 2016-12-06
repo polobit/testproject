@@ -148,10 +148,6 @@ public class AgileWebhookAPI
     public Webhook saveWebhookDeveloper(Webhook webhook) {
 	try {
 	    String domain = NamespaceManager.get();
-	    Subscription sub = SubscriptionUtil.getSubscription();
-	    System.out.println("plan name = " + sub.plan.getPlanName());
-	    if (sub.plan.getPlanName().equals("ENTERPRISE")
-		    || sub.plan.getPlanName().equals("PRO")) {
 
 		Webhook whook = WebhookTriggerUtil.getWebhook();
 		if (whook != null) {
@@ -165,10 +161,7 @@ public class AgileWebhookAPI
 		webhook.save();
 
 		return webhook;
-	    } else {
-		throw new Exception(
-			"Please upgrade to Enterprise plan to use this feature.");
-	    }
+	    
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    System.out.println(e.getMessage());

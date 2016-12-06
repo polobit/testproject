@@ -109,6 +109,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				{
 					enableWebrulesSorting(el);
 				}
+				el.find('[data-toggle="tooltip"]').tooltip();
 			} });
 
 		this.webrules.collection.fetch();

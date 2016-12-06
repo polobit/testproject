@@ -46,7 +46,7 @@ define(
 						addAgileApi(formJSON, api, function(json)
 						{
 							if(formNumber){
-								formLoad.agile_form_load();
+								formLoad.agile_form_load(fields);
 							}
 							else{
 								if(typeof formTemplate != "undefined") {

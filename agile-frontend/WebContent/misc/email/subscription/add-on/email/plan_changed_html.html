@@ -38,7 +38,7 @@
 			  <tbody>
 				<tr>
 				 <td width="388" valign="bottom">
-		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Your Agile CRM plan has changed</h2>
+		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">{{agile_lng_translate 'subscription-email' 'plan-has-changed'}}</h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
 				
@@ -64,26 +64,26 @@
 	  <tr>
 	   <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Lucida Grande,verdana">
 		  <br/>
-		 Dear {{user_name}},
+		 {{agile_lng_translate 'welcome-email' 'dear'}} {{user_name}},
          <br/>
          <br/>
-         <b>Plan Changed</b><br/>
-        We would like to notify you of a change in your Agile CRM Email pack Subscription. You have either changed the subscription or this change has been done as per your request to our support team.<br/>
+         <b>{{agile_lng_translate 'subscription-email' 'plan-changed'}}</b><br/>
+        {{agile_lng_translate 'subscription-email' 'plan-changed-done-by-you-or-support-team'}}<br/>
 <br/>
-<b>Plan Details</b><br/>
-         Old Plan : {{quantity}} X 1000 emails<br/>
-         New Plan : {{current_quantity}} X 1000 emails<br/>
+<b>{{agile_lng_translate 'subscription-email' 'plan-details'}}</b><br/>
+         {{agile_lng_translate 'subscription-email' 'old-plan'}} : {{quantity}} X 1000 {{agile_lng_translate 'plan-and-upgrade' 'emails'}}<br/>
+         {{agile_lng_translate 'subscription-email' 'new-plan'}} : {{current_quantity}} X 1000 {{agile_lng_translate 'plan-and-upgrade' 'emails'}}<br/>
 <br/>
-<b>Have questions or need help?</b><br/>
-Drop us an <a  href="mailto:billing@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
+<b>{{agile_lng_translate 'verify-email' 'having-questions'}}</b><br/>
+{{agile_lng_translate 'verify-email' 'drop-us-an'}} <a  href="mailto:billing@agilecrm.com" target="_blank">{{agile_lng_translate 'verify-email' 'email'}}</a> or <b>{{agile_lng_translate 'account-email' 'CALL-TOLL-FREE'}}</b> 1-800-980-0729<br/>
 <br/>
-Thanks for being a valued customer.
+{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}
 <br/>
 <br/>
-The crew at AgileCRM<br/>
+{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}<br/>
 <a href="https://www.agilecrm.com" target="_blank">https://www.agilecrm.com</a><br/>
 <br/>
-<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>Built with love for small businesses</i></span>
+<span style="font-style:normal;font-family:tahoma,sans-serif;color:#999999"><i>{{agile_lng_translate 'verify-email' 'built-for-smbs'}}</i></span>
 <br/>
 <br/>
         </td>

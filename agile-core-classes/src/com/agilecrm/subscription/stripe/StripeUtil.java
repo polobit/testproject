@@ -15,6 +15,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.json.JSONException;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOnInfo;
 import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
@@ -469,40 +470,28 @@ public class StripeUtil {
 			subscription= getStripeSubscriptionById(subscriptionId);
 		if(subscription == null){
 			System.out.println("creating subscription with plan:"+planId+" quantity:"+quantity);
-			com.stripe.model.Subscription newSub = cust.createSubscription(params);
-			Map<String, Object> invoiceParams = new HashMap<String, Object>();
-			invoiceParams.put("customer", cust.getId());
-			invoiceParams.put("subscription", newSub.getId());
-
-			try {
-				// Creates invoice for plan upgrade and charges customer
-				// immediately
-				Invoice invoice = Invoice.create(invoiceParams);
-				if (invoice != null && invoice.getSubscription().equals(newSub.getId()))
-					invoice.pay();
-			} catch (Exception e) {
-			}
-			System.out.println("Subscription created");
-			return newSub;
+			subscription = cust.createSubscription(params);
 		}else{
 			System.out.println("updating subscription with plan:"+planId+" quantity:"+quantity);
 			System.out.println("Old plandetails::: plan:"+subscription.getId()+" quantity:"+quantity);
-			com.stripe.model.Subscription updatedSub = subscription.update(params);
+			subscription = subscription.update(params);
 			System.out.println("Subscription updated");
-			Map<String, Object> invoiceParams = new HashMap<String, Object>();
-			invoiceParams.put("customer", cust.getId());
-			invoiceParams.put("subscription", updatedSub.getId());
-
-			try {
-				// Creates invoice for plan upgrade and charges customer
-				// immediately
-				Invoice invoice = Invoice.create(invoiceParams);
-				if (invoice != null && invoice.getSubscription().equals(updatedSub.getId()))
-					invoice.pay();
-			} catch (Exception e) {
-			}
-			return updatedSub;
 		}
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		invoiceParams.put("customer", cust.getId());
+		invoiceParams.put("subscription", subscription.getId());
+
+		// Creates invoice for plan upgrade and charges customer
+		// immediately
+		Invoice invoice = null;
+		try{
+			invoice = Invoice.create(invoiceParams);
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		if (invoice != null && invoice.getSubscription().equals(subscription.getId()) && !invoice.getPaid())
+			invoice.pay();
+		return subscription;
 		
 	}
 	
@@ -552,5 +541,24 @@ public class StripeUtil {
 		System.out.println("Subscription Deleted");
 	}
 	
+	public static Invoice getupcomingInvoice(AddOnInfo addonInfo, AddOnInfo dbAddonInfo) throws Exception{
+		Customer customer = getStripeCustomer();
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		invoiceParams.put("subscription", dbAddonInfo.subscriptionId);
+		invoiceParams.put("customer", customer.getId());
+		invoiceParams.put("subscription_quantity", addonInfo.quantity);
+		boolean proration = false;
+		if(addonInfo.quantity > dbAddonInfo.quantity)
+			proration = true;
+		invoiceParams.put("subscription_prorate", proration);
+		invoiceParams.put("subscription_plan", dbAddonInfo.planId);
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(StripeUtil.getStripeApiKey());
+		builder.setStripeVersion("2015-10-16");
+		RequestOptions options = builder.build();
+		Invoice invoice = Invoice.upcoming(invoiceParams, options);
+		System.out.println("Invoice===  "+invoice);
+		return invoice;
+	}
 	
 }

@@ -42,8 +42,11 @@ function isValidForm(form) {
 			var month = $(element).siblings('select.exp_month')
 					.val(), year = value;
 
+			//current date
+			var current_date = new Date().getTime()
+
 			// date selected
-			var date = new Date().setFullYear(year, month - 1);
+			var selected_date = new Date().setFullYear(year, month - 1);
 
 			// Get number of milliseconds per day
 			var one_day = 1000 * 60 * 60 * 24;
@@ -52,8 +55,8 @@ function isValidForm(form) {
 			// if number of days are greater than 90 then returns
 			// true
 			return this.optional(element)
-					|| (((date - new Date().getTime()) / one_day) > 90);
-		}, "{{agile_lng_translate 'validation-msgs' 'card-3months-valid'}}");
+					|| (((selected_date - current_date) / one_day) >= 0);
+		}, "{{agile_lng_translate 'validation-msgs' 'card-expired'}}");
 	
 	// Validates multiple emails separated by comma entered in textbox
 	jQuery.validator.addMethod("multipleEmails", function(value, element) {
@@ -277,32 +280,11 @@ function isValidForm(form) {
 
 	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
 		var labelJson = [];
-		labelJson.cases = 'title,owner_id,status,description' ;
-		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags' ;
-		labelJson.deal = 'name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
-		var scope = $("#textModalForm").find("input[name='scope']").val();
-		var i;
-		if(scope && (scope == "CONTACT" || scope == "COMPANY")){
-			var array = labelJson.contact.split(',');
-			for(i=0 ; i < array.length ; i++){
-				if(value.toLowerCase() == array[i])
-					return false;
-			}
-		}
-		else if(scope && scope == "DEAL"){
-			var array = labelJson.deal.split(',');
-			for(i=0 ; i < array.length ; i++){
-				if(value.toLowerCase() == array[i])
-					return false;
-			}	
-		}
-		else if(scope && scope == "CASE"){
-			var array = labelJson.cases.split(',');
-			for(i=0 ; i < array.length ; i++){
-				if(value.toLowerCase() == array[i])
-					return false;
-			}
-
+		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags,first_name,last_name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
+		var array = labelJson.contact.split(',');
+		for(var i=0 ; i < array.length ; i++){
+			if(value.toLowerCase() == array[i])
+				return false;
 		}
 		return true;
 	},"{{agile_lng_translate 'validation-msgs' 'system-fields'}}");
@@ -335,6 +317,25 @@ function isValidForm(form) {
  					return false;
  		}
  	},"{{agile_lng_translate 'validation-msgs' 'verify-email'}}");
+	
+	
+	// Phone number validation with extension
+	jQuery.validator.addMethod("phone-ext", function(value, element){
+		if(this.optional(element))
+			return true;
+		
+			var regE1 = new RegExp("^(.*[;]+.*)$");
+			var regE2 = new RegExp("^(.+[\;][0-9\*\#]+)$");
+			if(regE1.test(value)){
+				if(regE2.test(value)){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return true;
+			}
+		},_agile_get_translated_val("validation-msgs",'Pls-enter-a-valid-ext-no'));	
 
 	jQuery.validator.addMethod("month_date", function(value, element){
 		if(value=="")
@@ -366,6 +367,15 @@ function isValidForm(form) {
 		}
 		return true;
 	}, _agile_get_translated_val("validation-msgs",'url'));
+	
+	//Number validation for Deals by trimming
+	jQuery.validator.addMethod("number_with_trim", function(value, element){
+		
+		if(value=="")
+			return false;
+		
+		return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value.trim());
+	}," Please enter a valid number.");
     
 	$(form).validate({
 		ignoreTitle: true,

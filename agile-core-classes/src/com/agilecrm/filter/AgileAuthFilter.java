@@ -121,6 +121,7 @@ public class AgileAuthFilter implements Filter
 	    // Remove user info from session, redirect to auth-failed.jsp.
 	    SessionManager.set((UserInfo) null);
 	    httpResponse.sendRedirect("error/auth-failed.jsp");
+	    return;
 	}
 
 	setAccessScopes(request, domainUser);

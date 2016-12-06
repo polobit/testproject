@@ -452,7 +452,7 @@ function minicalendar(el)
 		            			   });
 		            		   }
 		            		   else if(!App_Portlets.refetchEvents){
-		            			   $(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
+		            			   $(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add-new"}}</a></div>');
 		            		   }
 		            	   }
 
@@ -474,7 +474,7 @@ function loadingGoogleEvents(el,startTime,endTime){
 				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 				{
 					var date=new Date();
-					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
+					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add-new"}}</a></div>');
 				}
 			},7000);
 			_agile_delete_prefs('current_date_calendar');
@@ -590,7 +590,7 @@ function googledata(el,response,startTime,endTime)
 				endDate=new Date(cookie_date.getFullYear(), cookie_date.getMonth(), cookie_date.getDate(),23,59,59);
 
 			}
-			if(ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
+			if(ev.start && ev.start.getTime() >= (todayDate.getTime()) && ev.start.getTime() <= (endDate.getTime())) 
 			{	
 				var event_list='<li class="p-t-xs p-r-xs" style="color:'+ev.color+'"><span style="color : #58666e" class="text-cap word-break"><a class="minical-portlet-event" id='+ev.id+' data-date='+date.getTime()+'>'+ev.title+'</a><br><small class="block m-t-n-xxs">'+ ev.start.format('HH:MM') + ' </small></span></li>';
 				if(len!=0){
@@ -620,7 +620,7 @@ function googledata(el,response,startTime,endTime)
 				//_agile_delete_prefs('current_date_calendar');
 				if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 				{
-					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
+					$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add-new"}}</a></div>');
 				}
 			},7000);
 		});
@@ -631,7 +631,7 @@ function googledata(el,response,startTime,endTime)
 		if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 		{
 			var date=new Date();
-			$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
+			$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add-new"}}</a></div>');
 		}
 }
 
@@ -771,7 +771,19 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 				//officeEvents.push(obj);				
 				renderOfficeEvents(officeEvents, obj, el);								
 			}		
+			//addEventSourceToCalendar('office', officeEvents);
+			$('#calendar_container', el).fullCalendar('removeEventSource', functions["event_mini_office" + $(el).attr('id')]);
+			var events_clone = officeEvents.slice(0);
+			functions["event_mini_office" + $(el).attr('id')] = function(start, end, callback)
+			{
+				/*if($('#calendar_container', el).fullCalendar('getView').visStart.getTime()!=start.getTime())
+					return;*/
+				callback(events_clone);
+				
+			}
 
+			$('#calendar_container',el).fullCalendar('addEventSource', functions["event_mini_office" + $(el).attr('id')]);
+			events_clone = [];
 			//**Add the google Events in the list of events in events_show div **/
 		var len = $(".events_show", el).find('.list').find('li').length;
 
@@ -810,7 +822,7 @@ function getOfficeEvents(el, startDateTime, endDateTime){
 			//_agile_delete_prefs('current_date_calendar');
 			if($(el).find('.list').find('li').length==0 && $(el).find('.portlet-calendar-error-message').length==0)
 			{
-				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add"}}</a></div>');
+				$(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add-new"}}</a></div>');
 			}
 		},7000);				
 		}else{			
@@ -846,7 +858,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 				{
 					fc_event.start=fc_event.start.getTime()/1000;
 					fc_event.end=(fc_event.end.getTime()-1)/1000;
-					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					//$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 					officeEvents.push(fc_event);
 				}
 				else
@@ -867,7 +879,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						//$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 						officeEvents.push(new_json);
 					}
 				}
@@ -885,7 +897,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 				if(a==0){
 					fc_event.start=fc_event.startDate.getTime()/1000;
 					fc_event.end=fc_event.end.getTime()/1000;
-					$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
+					//$('#calendar_container',el).fullCalendar('renderEvent',fc_event);
 					officeEvents.push(fc_event);
 				}
 				else{
@@ -905,7 +917,7 @@ function renderOfficeEvents(officeEvents, fc_event, el)
 							new_json.end=fc_event.end.getTime()/1000;
 						}
 						console.log(new_json);
-						$('#calendar_container',el).fullCalendar('renderEvent',new_json);
+						//$('#calendar_container',el).fullCalendar('renderEvent',new_json);
 						officeEvents.push(new_json);
 					}
 				}

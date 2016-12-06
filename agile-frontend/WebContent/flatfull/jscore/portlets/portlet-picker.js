@@ -23,6 +23,7 @@ function organize_portlets(base_model) {
 
 	var containerJSON = {
 		"CONTACTS" : "contacts",
+		"MARKETING":"marketing",
 		"DEALS" : "deals",
 		"TASKSANDEVENTS" : "taksAndEvents",
 		"USERACTIVITY" : "userActivity",
@@ -43,6 +44,7 @@ function set_p_portlets(base_model,model_list_element_fragment_portlets) {
 	console.log("collection----" + Portlets_View.collection.length);
 	var routeJSON = {
 		"Contacts" : "contacts",
+		"Marketing":"marketing",
 		"Deals" : "deals",
 		"Tasks" : "tasks",
 		"Events" : "calendar",

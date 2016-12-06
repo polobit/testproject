@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.exception.SearchQueryException;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -266,5 +267,45 @@ public class AppengineSearch<T>
     public void bulkDelete(String... ids)
     {
     	builder.bulkDelete(ids);
+    }
+    
+    /**
+     * Gets top 10 contacts and top 5 companies with search keyword
+     * @param {String} keyword
+     * 					search keyword to get results
+     * @param {Integer} count
+     * 					maximum count to fetch results
+     * @param {Integer} cursor
+     * 
+     * @return {Collection}
+     */
+    @SuppressWarnings("unchecked")
+	public Collection getContactsSearchResults(String keyword, Integer count, String cursor)
+    {
+    	try 
+    	{
+    		List<Contact> companiesList  = (List<Contact>) query.simpleSearchWithType(keyword, 5, cursor, Contact.Type.COMPANY.toString());
+    		List<Contact> contactsList  = (List<Contact>) query.simpleSearchWithType(keyword, count, cursor, Contact.Type.PERSON.toString());
+
+    		List<Contact> searchResults = new ArrayList<Contact>();
+    		if(companiesList != null && companiesList.size() > 0)
+    		{
+    			searchResults.addAll(companiesList);
+    		}
+    		if(contactsList != null && contactsList.size() > 0)
+    		{
+    			searchResults.addAll(contactsList);
+    		}
+    		
+    		return searchResults;
+		}
+    	catch(SearchQueryException sqe){
+    		throw new SearchQueryException("Search input is not supported. Please try again.");
+    	}
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
     }
 }

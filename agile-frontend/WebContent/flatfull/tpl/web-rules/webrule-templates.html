@@ -5,25 +5,75 @@
     <div class="col-md-12">
       <div class="pull-left">      
         <div class="btn-group">
-          <h1 class="m-n font-thin h3 text-black pull-left c-p">{{agile_lng_translate 'web-rules' 'templates'}}</h1>          
+          <h1 class="m-n font-thin h3 text-black pull-left c-p">{{agile_lng_translate 'web-rules' 'add-new'}}</h1>          
         </div>
         <div class="text-ellipsis" style="max-width:300px;">
           <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
         </div>        
       </div>
-       <div class="pull-right">
+       <div class="pull-right add-campaign-btn">
             <a href="#webrules-add" class="btn btn-default btn-sm btn-addon">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+
        </div>
        <div class="clearfix"></div>
+
      </div>
 </div>
 </div>
 
 
 
-<div class="tab-container wrapper-md dash_tabview">
+<div class="tab-container wrapper-md dash_tabview {{#is_mobile}}webrules-tabview{{/is_mobile}}">
     <div class="tabs" id="webrules-tabs-content">
     <div class="tab-container m-b-none">
+
+  {{#is_mobile}}
+    <ul class="nav nav-tabs webrules-sub-tabs">
+
+       <li class="p-none active">
+       <a  href="#email_form" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Email Form'}}" >
+       <i class="icon icon-envelope"></i>
+       </a>
+       </li>
+       <li class="p-none ">
+       <a  href="#conformation" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Confirmation'}}" >
+       <i class="icon icon-check"></i>
+       </a>
+       </li>
+       <li class="p-none ">
+       <a  href="#information" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Information'}}" >
+       <i class="icon icon-info"></i>
+       </a>
+       </li>
+       <li class="p-none ">
+       <a  href="#schedule_meeting" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Schedule Meeting'}}" >
+       <i class="icon icon-calendar"></i>
+       </a>
+       </li>
+       <li class="p-none ">
+       <a  href="#survey_templet" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Survey'}}">
+       <i class="icon icon-note"></i>
+       </a>
+       </li>
+       <li class="p-none ">
+       <a  href="#calling_webrule" data-toggle="tab" title="{{agile_lng_translate 'admin-settings-tasks' 'call'}}">
+       <i class="icon icon-call-out"></i>
+       </a>
+       </li>
+        <li class="p-none ">
+       <a  href="#service_template" data-toggle="tab" title="{{agile_lng_translate 'campaigns' 'service'}}">
+       <i class="icon icon-support"></i>
+       </a>
+       </li>
+        <li class="p-none ">
+       <a  href="#pushnoty_template" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Pushnoty'}}">
+       <i class="icon icon-bell"></i>
+       </a>
+       </li>
+   </ul>
+
+   {{else}}
+
     <ul class="nav nav-tabs ">
 
        <li class="p-none active">
@@ -43,6 +93,8 @@
         <li class="p-none ">
        <a  href="#pushnoty_template" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Pushnoty'}}</a></li>
    </ul>
+  {{/is_mobile}}
+
 </div>
 </div>
 
@@ -421,7 +473,7 @@
         <!-- Thumbnail and Title -->
         <div>
            <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="pushnoty_template" href="misc/modal-templates/pushnoty/images/pushnoty.png" title="help-webrule" data-link="pushnoty/pushnoty.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/pushnoty/images/pushnoty.png" alt="Template image"></a>
+            <a class="web_fancybox" id="pushnoty_template" href="misc/modal-templates/pushnoty/images/pushnoty.png?v=1" title="help-webrule" data-link="pushnoty/pushnoty.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/pushnoty/images/pushnoty.png" alt="Template image"></a>
            </div>
         </div>
         <!-- Add button -->

@@ -13,8 +13,11 @@ function initializeDomainsearchListner(el){
             });
 	
 	});
-	
-	
+
+}
+
+$(document).ready(function(){
+
 	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
@@ -26,8 +29,8 @@ function initializeDomainsearchListner(el){
             });
 	
 	});
+});
 
-}
 
 
 function initializeAdminpanelListner(el){
@@ -41,6 +44,8 @@ function initializeAdminpanelListner(el){
 		var $that = $(this);
 		showAlertModal("delete_user", "confirm", function(){
 			var id = $that.closest('a').attr("data");
+			var domain = $that.closest('a').attr("domain");
+			var email = $that.closest('a').attr("email");
 			$.ajax({
 				url: '/core/api/admin_panel/deleteuser?id='+id, 
 				type : 'DELETE',
@@ -77,6 +82,18 @@ function initializeAdminpanelListner(el){
 		 * If user clicks on delete, delete request is sent to
 		 * "core/api/admin/delete/namespace"
 		 */
+	$("#admin-panel-listners").on("click", '.agentLogin', function(e) 
+	{
+		var domain = $(this).attr("domain");
+		$.ajax({
+				type : "post",
+				url : "core/api/admin_panel/logintodomain?d=" + domain,
+				success : function(data)
+				{
+					console.log("loged in domain");
+				}
+			});
+	});
 	$("#admin-panel-listners").on("click", '.delete-namespace', function(e) {
 			
 					e.preventDefault();
@@ -133,6 +150,7 @@ function initializeAdminpanelListner(el){
 			var amount = $("#amount").val();
 			var totalamount = $(".totamount").val();
 			var chargeid=$("#hchargeid").val();
+			var domain = window.location.hash.split("#getDomainUserDetails/")[1];
 			if(parseFloat(amount) <= 0)
 			{
 				
@@ -151,7 +169,7 @@ function initializeAdminpanelListner(el){
 			amount = 100*amount;
 			amount = parseInt(amount.toPrecision(12));	
 			$.ajax({
-				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount, 
+				url: '/core/api/admin_panel/applypartialrefund?chargeid='+chargeid+'&amount='+amount+'&domain='+domain, 
 				type : 'GET',
 				success : function(data)
 				{	
@@ -198,6 +216,30 @@ function initializeAdminpanelListner(el){
 			}
 		
 		});
+
+		$("#admin-panel-listners .unblock_email_purchasing").off("click");
+		$("#admin-panel-listners").on("click", '.unblock_email_purchasing', function(e) { 
+			
+			e.preventDefault();	
+			var domain = $(this).attr("domain");
+			var that = this;
+			if(domain){
+				$.ajax({
+					url: '/core/api/admin_panel/release_email_account?d='+domain, 
+					type : 'POST',
+					success : function(data)
+					{	
+						showNotyPopUp("information", "Domain email purchasing released successfully.", "top");
+						$(that).closest("div").hide();
+					},
+					error : function(data)
+					{
+						showNotyPopUp("warning", data.responseText, "top");
+					}
+				});
+			}
+		
+		});
 		
 		
 		$("#admin-panel-listners").on("click", '#delete_userplan', function(e) { 
@@ -205,7 +247,8 @@ function initializeAdminpanelListner(el){
 			showAlertModal("delete_subscription", "confirm", function(){
 				var sub_id = $("#delete_userplan").attr("sub_id");
 				var cus_id = $("#delete_userplan").attr("cus_id");
-				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id,
+				var domain = window.location.hash.split("#getDomainUserDetails/")[1];
+				$.ajax({url : 'core/api/admin_panel/deletesubscription?subscription_id='+sub_id+'&cus_id='+cus_id+'&e='+domain,
 					type : 'DELETE',
 					
 					success: function()

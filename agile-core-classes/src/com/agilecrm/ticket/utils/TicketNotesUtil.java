@@ -40,6 +40,7 @@ import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -277,12 +278,12 @@ public class TicketNotesUtil
 		{
 			// No template is chosen so returning default template html content
 			if (group.template_id == null)
-				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
 
 			dataJSON.put("ticket_comments",
-					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 			dataJSON.put("ticket_footer",
-					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 
 			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
 
@@ -351,21 +352,43 @@ public class TicketNotesUtil
 	}
 
 	
-	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws JSONException, EntityNotFoundException{
+	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws Exception{
 		
 		JSONArray json = new JSONArray();
 		
 		Map<String, Object> map =  new HashMap<String, Object>(); 
+		
 		map.put("created_by", CREATED_BY.AGENT);
-		map.put("created_time >", startTime);
-		map.put("created_time <", endTime);
+		map.put("feedback_time >", startTime);
+		map.put("feedback_time <", endTime);
 		map.put("feedback_flag", true);
+		
 		if(StringUtils.isNotEmpty(feedback))
 			map.put("feed_back",feedback);	
+		
 		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
 		
+		Map<String, Object> map2 =  new HashMap<String, Object>(); 
 		
-			for(TicketNotes tn: ticketnotes ){
+		map2.put("created_by", CREATED_BY.AGENT);
+		map2.put("created_time >", startTime);
+		map2.put("created_time <", endTime);
+		map2.put("feedback_flag", true);
+
+		if(StringUtils.isNotEmpty(feedback))
+			map2.put("feed_back",feedback);
+		
+		List<TicketNotes> ticketnotes2 = TicketNotes.ticketNotesDao.listByProperty(map2);
+		
+		ticketnotes.addAll(ticketnotes2);
+		
+		Set<TicketNotes> hs = new HashSet<>();
+		
+		hs.addAll(ticketnotes);
+		ticketnotes.clear();
+		ticketnotes.addAll(hs);
+		
+		for(TicketNotes tn: ticketnotes ){
 				
 				if(group != 0){
 					if(tn.group_id.longValue()!=group)
@@ -381,12 +404,33 @@ public class TicketNotesUtil
 				jsonobject.append("note", tn.html_text);
 				jsonobject.append("feedback_comment", tn.feedback_comment);
 				jsonobject.append("feedback", tn.feed_back);
-				jsonobject.append("created_time", tn.created_time);
+				jsonobject.append("created_time", tn.feedback_time);
+				jsonobject.append("note_created_time", tn.created_time);
+		
 				Long ticketfeedback_id = tn.ticket_id;		
-				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
-				jsonobject.append("ticket_subject", ticket.subject);
 				
+				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
+				
+				jsonobject.append("ticket_subject", ticket.subject);
 				jsonobject.append("contact_id", ticket.contactID);
+												
+				String assignee_name;
+		
+				
+				try{
+						Long assigneeid = (tn.assignee_id);
+						  
+						String agentName = DomainUserUtil.getDomainUser((assigneeid)).name;
+						
+						assignee_name = agentName;
+				}
+
+				catch(Exception e){
+					
+					assignee_name = "";
+				}
+					
+				jsonobject.append("assignee_name",assignee_name );
 				
 				Contact contact = ContactUtil.getContact(ticket.contactID);
 				

@@ -9,11 +9,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.CookieUtil;
 import com.agilecrm.util.FileStreamUtil;
+import com.google.appengine.api.NamespaceManager;
 
 public class LanguageUtil {
 
@@ -45,7 +53,7 @@ public class LanguageUtil {
 
 		try {
 			JSONObject localesJSON = new JSONObject();
-			String str = FileStreamUtil.readResource(application.getRealPath("/") + "/" + NON_APPLICATION_ROOT_PATH
+			String str = FileStreamUtil.readResource(NON_APPLICATION_ROOT_PATH
 					+ language + "/" + serviceName + ".json");
 			str = str.replace("var _Agile_Resources_Json =", "").trim();
 
@@ -147,4 +155,69 @@ public class LanguageUtil {
 		return _LANGUAGE;
 	}
 	
+	/**
+	 * Gets the User's defined language from Session Scope
+	 * @return
+	 */
+	public static String getUserLanguageFromSession() {
+		UserInfo info = SessionManager.get();
+		if(info == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(info.getDomainId());
+		return getAgileUserLanguage(agileUser);
+	}
+	
+	static String getAgileUserLanguage(AgileUser agileUser){
+		if(agileUser == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		UserPrefs prefs = UserPrefsUtil.getUserPrefs(agileUser);
+		if(prefs == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		return prefs.language;
+	}
+	
+	/**
+	 * Gets the User's defined language from Email
+	 * @return
+	 */
+	public static String getUserLanguageFromEmail(String email) {
+		if(StringUtils.isBlank(email))
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		DomainUser user = DomainUserUtil.getDomainUserFromEmail(email);
+		if(user == null)
+			return UserPrefs.DEFAULT_LANGUAGE;
+		
+		String oldNamespace = NamespaceManager.get();
+		
+		try {
+			NamespaceManager.set(user.domain);
+			
+			AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(user.id);
+			return getAgileUserLanguage(agileUser);
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		} finally {
+			NamespaceManager.set(oldNamespace);
+		}
+		
+		return UserPrefs.DEFAULT_LANGUAGE;
+	}
+	
+	/**
+	 * Gets the User's defined language from Email
+	 * @return
+	 */
+	public static String getUserLanguageFromDomainUser(DomainUser user) {
+		
+		// Get user prefs language
+	    String language = UserPrefs.DEFAULT_LANGUAGE;
+	    if(user != null)
+	    	language = LanguageUtil.getUserLanguageFromEmail(user.email);
+	    
+	    return language;
+	}
 }

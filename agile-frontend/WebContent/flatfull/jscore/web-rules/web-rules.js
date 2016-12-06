@@ -257,7 +257,7 @@ function loadTinyMCE(name)
 {
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
 	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name',strWindowFeatures);
-	if (window.focus)
+	if (window.focus && newwindow)
 	{
 		newwindow.focus();
 	}
@@ -422,4 +422,11 @@ function merge_webrules_jsons(target, object1, object2)
             }
         });
     }
+}
+
+function webruleVideoPopup(){
+       var data={};
+       data.title="Web Rules Tutorial";
+       data.videourl="//www.youtube.com/embed/NcUFum-_kqE?enablejsapi=10&amp;autoplay=1";
+       showHelpVideoModal(data);
 }

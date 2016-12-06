@@ -4,7 +4,7 @@
  */
 
 // All Routers are global
-var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp, App_Portlets, App_VoiceMailRouter,App_Deal_Details, App_Forms, App_ACL, App_Webpages, App_PushNotification;
+var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp, App_Portlets, App_VoiceMailRouter,App_Deal_Details, App_Forms, App_ACL, App_Webpages, App_PushNotification, App_Leads, App_Leads_Bulk_Actions;
 var Collection_View = {};
 $(function()
 {
@@ -46,6 +46,8 @@ $(function()
 	App_VisitorsSegmentation=new VisitorsSegmentationRouter();
 	App_PushNotification = new PushNotificationRouter();
 	App_Affiliate = new AffiliateRouter();
+	App_Leads=new LeadsRouter();
+	App_Leads_Bulk_Actions = new LeadsBulkActionRouter();
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
 
@@ -177,13 +179,32 @@ function clickdesk_livechat_get_current_status(callback){
 
 function agile_toggle_chat_option_on_status(){
 	clickdesk_livechat_get_current_status(function(status){
-		var $li = $("#clickdesk_live_chat").closest("li");
-		$li.removeClass("none block");
-		
+		//var $li = $("#clickdesk_live_chat").closest("li");
+		var $li = $("#clickdesk_live_chat").find(".chat-bubble");
+		//$li.removeClass("none block");
+
+    	if(status == "online"){
+    		
+    		$(".chat-with-us").removeClass("hide");
+	    	//$(".support,.product-updates,.affiliate-link").addClass("col-md-4").removeClass("col-md-3");
+	    	$(".support,.product-updates,.affiliate-link").removeClass("col-md-4").addClass("col-md-3");
+    		
+    	}
+	    else {
+	    	$(".chat-with-us").addClass("hide");
+	    	$(".support,.product-updates,.affiliate-link").addClass("col-md-4").removeClass("col-md-3");
+	    }	
+
+    });
+}
+
+function check_online__chat_status(callback){
+	clickdesk_livechat_get_current_status(function(status){
+		var online_status = false;
     	if(status == "online")
-	    	$li.addClass("block");
-	    else 
-	    	$li.addClass("none");
+	    	online_status = true;
+	    callback(online_status)
+
     });
 }
 

@@ -57,11 +57,7 @@
 			<h4 class="m-t-none">{{agile_lng_translate 'admin-settings-deals' 'what-are-tracks-and-milestones'}}</h4>			
 			<p>{{agile_lng_translate 'admin-settings-deals' 'tracks-and-milestones-desc-1'}}</p>
 			<br/>
-<<<<<<< HEAD
-			<p>Milestones define the status of deals in a particular track. You can create any number of custom milestones in a track. Common milestones include 'New', 'In Progress',  'Won' or  'Lost'. When you associate a deal with a track, that deal will typically need to go through all of the track''s milestones to be completed or finalized.</p>
-=======
 			<p>{{agile_lng_translate 'admin-settings-deals' 'tracks-and-milestones-desc-2'}}</p>
->>>>>>> sandbox_live
 		</div>
 	</div>
 </div>
@@ -134,7 +130,7 @@
 </script>
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
-<div class="col panel wrapper b-t">
+<div class="col panel wrapper b-t" style="width: 100%">
 <form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-reason'}}</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -189,7 +185,7 @@
 </script>
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
-<div class="panel wrapper col b-t">
+<div class="panel wrapper col b-t" style="width: 100%">
 <form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-source'}}</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -248,7 +244,7 @@
 </script>
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
-<div class="panel wrapper col b-t goaltab-main">
+<div class="panel wrapper col b-t goaltab-main" style="width: 100%">
    <div class="text-right">
       <ul class="list-inline text-sm m-b-xs">
          <li>
@@ -281,7 +277,7 @@
                      <tr>
                         <th style="width:5%"></th>
                         <th style="width:35%">{{agile_lng_translate 'portlets' 'user'}}</th>
-                        <th style="width:30%">{{agile_lng_translate 'portlets' 'goals'}}</th>
+                        <th style="width:30%">{{agile_lng_translate 'dealgoal' 'goalcount'}}</th>
                         <th style="width:30%">{{agile_lng_translate 'deal-goals' 'goal-value'}}</th>
                      </tr>
                   </thead>

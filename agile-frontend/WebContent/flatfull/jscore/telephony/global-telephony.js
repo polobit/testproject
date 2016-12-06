@@ -6,6 +6,8 @@ var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "S
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
+var callJar = {"running" : false};
+
 var KnowlarityWidgetPrefs;
 var knowlaritySource;
 
@@ -360,28 +362,7 @@ function sendTestCommand()
 						sendTestCommand();
 						return;
 					}
-					
-					var image = new Image();
-
-					var domain = CURRENT_DOMAIN_USER['domain'];
-					var id = CURRENT_DOMAIN_USER['id'];
-
-					var command = "testConnection";
-					var number = "";
-					var callid = "";
-
-					image.onload = function(png)
-					{
-						console.log("test sucess");
-						window.focus();
-					};
-					image.onerror = function(png)
-					{
-						showCallNotyMessage("Executable file is not running");
-					};
-					image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
-
-					
+					sendTestCommandToClient();
 				}, 5000);
 		
 	
@@ -523,8 +504,14 @@ function handleCallRequest(message)
 				closeCallNoty(true);
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
+				return;
 			}
+			var message ={};
+			message["data"] = "";
+			handleLogsForBria(message);		
 			
+			
+			showCallNotyMessage("Bria is not running");
 			return;
 		}
 		showBriaCallNoty(message);
@@ -599,8 +586,12 @@ function handleCallRequest(message)
 				showCallNotyMessage("Skype is not running");
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
+				return;
 			}
-			
+			var message ={};
+			message["data"] = "";
+			handleLogsForSkype(message);
+			showCallNotyMessage("Skype is not running");
 			return;
 		}
 		showSkypeCallNoty(message);
@@ -831,4 +822,38 @@ function showEditContactPage(contact, callback){
 				else
 					deserialize_contact(contact, 'continue-contact', callback);
 			}, contact.type);
+}
+
+
+function sendTestCommandToClient(callback){
+	var image = new Image();
+
+	var domain = CURRENT_DOMAIN_USER['domain'];
+	var id = CURRENT_DOMAIN_USER['id'];
+
+	var command = "testConnection";
+	var number = "";
+	var callid = "";
+
+	image.onload = function(png)
+	{
+		callJar.running = true;
+		console.log("test sucess");
+		window.focus();
+		if (callback && typeof (callback) === "function")
+			callback();	
+		
+	};
+	image.onerror = function(png)
+	{
+		callJar.running = false;
+		if (callback && typeof (callback) === "function"){
+			callback();
+		}else{
+			showCallNotyMessage("Executable file is not running");
+		}
+	};
+	image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
+
+
 }

@@ -1,26 +1,30 @@
 package com.agilecrm.user.notification.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgilePushQueuesUtil;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
+import com.agilecrm.user.notification.deferred.MobileNotificationsDeferredTask;
 import com.agilecrm.user.notification.deferred.NotificationsDeferredTask;
+import com.agilecrm.user.push.AgileUserPushNotificationId;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.JSONUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -59,11 +63,13 @@ public class NotificationPrefsUtil
      */
     public static NotificationPrefs getNotificationPrefs(AgileUser agileUser)
     {
+    	System.out.println("domain = " + NamespaceManager.get());
 	Objectify ofy = ObjectifyService.begin();
 	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
 	NotificationPrefs notifications = ofy.query(NotificationPrefs.class).ancestor(userKey).get();
 
+	System.out.println("notifications = " + notifications);
 	if (notifications == null)
 	    return getDefaultNotifications(agileUser);
 
@@ -108,20 +114,31 @@ public class NotificationPrefsUtil
 	JSONObject json = optimizeObjectForNotification(type, object, customValue);
 
 	// If domain is empty return
-	if (StringUtils.isEmpty(domain) || json == null)
+	if (json == null || (!VersioningUtil.isDevelopmentEnv() && StringUtils.isEmpty(domain)))
 	    return;
 	
 	// Verifies for duplicate notifications in Backend modules
 	if(!isValid(type, customValue, domain))
 		return;
-
+	
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(domain, json.toString());
 	PullQueueUtil.addToPullQueue(AgileQueues.NOTIFICATION_PULL_QUEUE,
 	notificationsDeferredTask, null);
+	
+	// Add Mobile Notofication
+	if(AgileUserPushNotificationId.getNotifiersCount(domain) == 0)
+		 return;
+	
+	JSONObject pushMessageJSON = optimizeObjectForMobileNotification(json, domain, type);
+	System.out.println("pushMessageJSON= " + pushMessageJSON);
+	
+	MobileNotificationsDeferredTask mobileTask = new MobileNotificationsDeferredTask("GCM", pushMessageJSON.toString(), domain, json.toString());
+	AgilePushQueuesUtil.addTask("mobile-notification-queue", mobileTask);
 
 	//Queue queue = QueueFactory.getQueue("notification-queue");
 	//queue.addAsync(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
+   
 
 	/**
 	 * Returns boolean value
@@ -295,8 +312,11 @@ public class NotificationPrefsUtil
 	    json.put("type", contactJSON.getString("type"));
 	    json.put("properties", getContactProperties(contactJSON));
 
-	    if (contactJSON.has("owner") && !contactJSON.isNull("owner"))
-		json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
+	    if (contactJSON.has("owner") && !contactJSON.isNull("owner")){
+	    	json.put("owner_name", contactJSON.getJSONObject("owner").getString("name"));
+	    	json.put("owner_id", contactJSON.getJSONObject("owner").getString("id"));
+	    }
+			
 
 	    return json;
 	}
@@ -367,7 +387,17 @@ public class NotificationPrefsUtil
 	    json.put("id", dealJSON.getString("id"));
 	    json.put("name", dealJSON.getString("name"));
 	    json.put("entity_type", dealJSON.getString("entity_type"));
-	    json.put("owner_name", dealJSON.getJSONObject("owner").getString("name"));
+	    // json.put("owner_name", dealJSON.getJSONObject("owner").getString("name"));
+	    
+	    try {
+	    	if(dealJSON.has("owner_id") && dealJSON.has("owner_id")){
+		    	DomainUser user = DomainUserUtil.getDomainUser(dealJSON.getLong("owner_id"));
+		    	if(user != null)
+		    		json.put("owner_name", user.name);
+		    }
+		} catch (Exception e) {
+		}
+	    
 	    return json;
 	}
 	catch (Exception e)
@@ -376,5 +406,306 @@ public class NotificationPrefsUtil
 	    return null;
 	}
 
+    }
+    
+    
+    /**
+     * Optimizes object size that is sent in notification. PubNub restricts size
+     * of object that is sent based on billable, so sending only required
+     * content.
+     * 
+     * @param type
+     *            - notification type.
+     * @param object
+     *            - Object that is sent.
+     * @param customValue
+     *            - custom value like tag-name, url clicked etc.
+     * @return JSONObject
+     */
+    private static JSONObject optimizeObjectForMobileNotification(JSONObject json, String domain, Type type)
+    {
+
+    JSONObject notificationJSON = new JSONObject();
+	try
+	{
+		notificationJSON.put("title", getTitle(json.getString("notification")));
+
+	    // Insert notification-type into json
+		JSONObject dataJSON = getMobileNotificationMessage(json, domain);
+		notificationJSON.put("message", JSONUtil.getJSONValue(dataJSON, "message"));
+		if(type != null)
+			notificationJSON.put("type", type.toString());
+		
+		if(dataJSON.has("pushURL"))
+			notificationJSON.put("url", JSONUtil.getJSONValue(dataJSON, "pushURL"));
+
+	    System.out.println("optimizeObjectForMobileNotification: " + json);
+	    return notificationJSON;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got exception while optimising notification " + e.getMessage());
+	    return null;
+	}
+
+    }
+    
+    /**
+     * Optimizes object size that is sent in notification. PubNub restricts size
+     * of object that is sent based on billable, so sending only required
+     * content.
+     * 
+     * @param type
+     *            - notification type.
+     * @param object
+     *            - Object that is sent.
+     * @param customValue
+     *            - custom value like tag-name, url clicked etc.
+     * @return JSONObject
+     * @throws JSONException 
+     */
+    private static JSONObject getMobileNotificationMessage(JSONObject json, String domainName) throws JSONException
+    {
+    // Response fields
+    JSONObject dataJSON = new JSONObject();
+    String pushURL = "", hostName = VersioningUtil.getHostURLByApp(domainName);
+    
+    System.out.println("json = " + json);
+	String mssg = "", customVal = "";
+	JSONObject customJSON = new JSONObject();
+	if(!json.has("notification")){
+		return dataJSON.put("message", mssg);
+	}
+		  
+	
+	String type = JSONUtil.getJSONValue(json, "type");
+	String notification = JSONUtil.getJSONValue(json, "notification");
+	switch (notification) {
+	case "DEAL_CREATED":
+		mssg  = "'" + JSONUtil.getJSONValue(json, "name") + "' Deal Created" + addOwnerInfo(json);
+		pushURL = hostName + "#deals/" + JSONUtil.getJSONValue(json, "id");
+		break;
+	
+	case "DEAL_CLOSED":
+		mssg = "'" + JSONUtil.getJSONValue(json, "name") + "' Deal Closed" + addOwnerInfo(json);
+		break;
+		
+	case "TAG_ADDED":
+		mssg = "'" + JSONUtil.getJSONValue(json, "custom_value") + "' Tag has been Added" + addOwnerInfo(json);
+		break;
+	
+	case "TAG_DELETED":
+		mssg = "'" + JSONUtil.getJSONValue(json, "custom_value") + "' Tag has been Deleted" + addOwnerInfo(json);
+		break;
+
+	case "CONTACT_ADDED": 
+		if(StringUtils.equalsIgnoreCase(type, "PERSON"))
+			mssg = getContactName(json) +  " Contact Added" + addOwnerInfo(json);
+		else 
+			mssg = "'" + getContactPropertyValue(json, "name") + "' Company Added" + addOwnerInfo(json);
+		pushURL = hostName + "#contacts/" + JSONUtil.getJSONValue(json, "id");
+		break;
+	
+	case "CONTACT_DELETED": 
+		if(StringUtils.equalsIgnoreCase(type, "PERSON"))
+			mssg = getContactName(json) + " Contact Deleted" + addOwnerInfo(json);
+		else 
+			mssg = "'" + getContactPropertyValue(json, "name") + "' Company Deleted" + addOwnerInfo(json);
+		break;
+		
+	case "CAMPAIGN_NOTIFY":
+		mssg  = getContactName(json);
+		try {
+			customVal = JSONUtil.getJSONValue(json, "custom_value");
+			try {
+				mssg += new JSONObject(customVal).getString("msg");
+			} catch (Exception e) {
+				mssg += customVal;
+			}
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		break;
+	
+	case "CLICKED_LINK":
+		customVal = JSONUtil.getJSONValue(json, "custom_value");
+		try {
+			customJSON = new JSONObject(customVal);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		if(!customJSON.has("workflow_name"))
+			mssg = getContactName(json) + "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "'";
+		else
+			mssg = getContactName(json) + "clicked link '" + JSONUtil.getJSONValue(customJSON, "url_clicked") + "' of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
+		pushURL = hostName + "#contacts/" + JSONUtil.getJSONValue(json, "id");
+		break;
+		
+	case "OPENED_EMAIL":
+		customVal = JSONUtil.getJSONValue(json, "custom_value");
+		try {
+			customJSON = new JSONObject(customVal);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		if(customJSON.has("workflow_name"))
+			mssg = getContactName(json) + "opened email of campaign '" + JSONUtil.getJSONValue(customJSON, "workflow_name") + "'";
+		else
+			mssg = getContactName(json) + "opened email with subject '" + JSONUtil.getJSONValue(customJSON, "email_subject") + "'";
+		pushURL = hostName + "#contacts/" + JSONUtil.getJSONValue(json, "id");
+		break;
+		
+	/*
+	{{#IS_BROWSING}}
+		{{/IS_BROWSING}}
+	{{#EVENT_REMINDER}}
+	  Coming up at '{{title}}' {{epochToHumanDate "h:MM TT" start}}
+	{{/EVENT_REMINDER}}
+		break; */
+
+	default:
+		break;
+	}
+	
+	dataJSON.put("message", mssg);
+	if(StringUtils.isNotBlank(pushURL))
+		dataJSON.put("pushURL", pushURL);
+	
+	return dataJSON;
+    }
+    
+    private static String addOwnerInfo(JSONObject json) {
+    	if(true)
+    		return "";
+    	
+    	String userName = "";
+    	if(json.has("current_user_name"))
+    		userName = JSONUtil.getJSONValue(json, "current_user_name");
+    	else if(json.has("owner_name"))
+    		userName = JSONUtil.getJSONValue(json, "owner_name");
+    	
+    	
+    	if(StringUtils.isNotBlank(userName))
+    		return  " by " + userName;
+    	
+    	return "";
+    }
+    
+    private static String getContactPropertyValue(JSONObject contactJSON, String key){
+    	
+    	try {
+    		JSONArray properties = contactJSON.getJSONArray("properties");
+        	for (int i = 0; i < properties.length(); i++) {
+        		JSONObject field = properties.getJSONObject(i);
+    			if(field.getString("name").equalsIgnoreCase(key))
+    				  return field.getString("value");
+    		}
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	return "";
+    }
+    
+    private static String getContactName(JSONObject json){
+    	try {
+    		return "'" + getContactPropertyValue(json, "first_name") + " " + getContactPropertyValue(json, "last_name") + "' ";
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	return "";
+    }
+    
+    public static boolean isNotificationEnabledToSend(NotificationPrefs prefs, JSONObject messageJSON, String raw_message, AgileUser agileUser) {
+    	System.out.println("isNotificationEnabledToSend = " + messageJSON);
+    	
+    	if(messageJSON == null || !messageJSON.has("type"))
+    		  return false;
+    	
+    	if(prefs == null || !prefs.control_notifications || !prefs.push_mobile_notification)
+    		return false;
+    	
+    	System.out.println("type = " + prefs);
+    	
+    	String type = JSONUtil.getJSONValue(messageJSON, "type");
+    	if(StringUtils.isBlank(type))
+    		 return false;
+
+    	if(type.equalsIgnoreCase("DEAL_CREATED"))
+    		return prefs.deal_created;
+    	
+    	if(type.equalsIgnoreCase("DEAL_CLOSED"))
+  		  	return prefs.deal_closed;
+    	
+    	if(type.equalsIgnoreCase("TAG_ADDED"))
+  		  	return prefs.tag_added;
+    	
+    	if(type.equalsIgnoreCase("TAG_DELETED"))
+  		  	return prefs.tag_deleted;
+    	
+    	if(type.equalsIgnoreCase("CONTACT_ADDED"))
+  		  	return prefs.contact_added;
+    	
+    	if(type.equalsIgnoreCase("CONTACT_DELETED"))
+  		  	return prefs.contact_deleted;
+    	
+    	if(type.equalsIgnoreCase("CAMPAIGN_NOTIFY"))
+  		  	return true;
+    	
+    	if(type.equalsIgnoreCase("CLICKED_LINK")){
+    		return conditionalCheckWithOptions(prefs.link_clicked, raw_message, agileUser);
+    	}
+    	
+    	if(type.equalsIgnoreCase("OPENED_EMAIL")){
+    		return conditionalCheckWithOptions(prefs.email_opened, raw_message, agileUser);
+    	}
+    	
+    	return true;
+    }
+    
+    private static String getTitle(String title){
+    	if(StringUtils.isBlank(title))
+    		return title;
+    	
+    	title = title.replace(" ", "_").toUpperCase();
+    	
+    	switch (title) {
+	    	case "CLICKED_LINK":
+	    		title = "LINK CLICKED";
+	    		break;
+	    		
+	    	case "OPENED_EMAIL":
+	    		title = "EMAIL OPENED";
+	    		break;
+    	}
+    	
+    	return StringUtils.capitaliseAllWords(title.replace("_", " ").toLowerCase());
+    }
+    
+    private static boolean conditionalCheckWithOptions(String condition, String raw_message, AgileUser agileUser){
+    	if(agileUser == null || raw_message == null)
+    		  return true;
+    	
+    	if(condition.equals("ANY_CONTACT"))
+			return true;
+    	
+    	try {
+    		JSONObject rawJSON = new JSONObject(raw_message);
+			Long ownerId = rawJSON.getLong("owner_id");
+			
+			if(condition.equals("CONTACT_ASSIGNED"))
+				  return agileUser.domain_user_id.equals(ownerId);
+			
+			if(condition.equals("CONTACT_ASSIGNED_AND_STARRED")){
+				int star_value = Integer.parseInt(rawJSON.getString("star_value"));
+				
+				return (agileUser.domain_user_id.equals(ownerId) && star_value > 0);
+			}	
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	return true;
     }
 }

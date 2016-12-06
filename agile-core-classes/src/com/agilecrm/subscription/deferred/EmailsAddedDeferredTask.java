@@ -6,6 +6,7 @@ import java.util.Map;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
@@ -32,7 +33,11 @@ public class EmailsAddedDeferredTask implements DeferredTask {
 		System.out.println("Domain is "+owner.domain+" and email is "+owner.email);
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("user_name",owner.name);
-		SendMail.sendMail(owner.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, data);
+		
+		// Get user prefs language
+	    String language = LanguageUtil.getUserLanguageFromEmail(owner.email);
+	    
+		SendMail.sendMail(owner.email, SendMail.FREE_EMAILS_UPDATED_SUBJECT, SendMail.FREE_EMAILS_UPDATED, data, language);
 	}
 	
 	/**

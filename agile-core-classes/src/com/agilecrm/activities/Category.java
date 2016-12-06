@@ -59,6 +59,12 @@ public class Category
      * Updated time of category
      */
     private Long updated_time = 0L;
+    
+    /**
+     * Updated time of category
+     */
+    @NotSaved(IfDefault.class)
+    private Boolean is_conversion_flag = false;
 
     /**
      * Type of the entity to which this category belongs.
@@ -66,7 +72,7 @@ public class Category
      */
     public static enum EntityType
     {
-	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT, DEAL_LOST_REASON, DEAL_SOURCE, TELEPHONY_STATUS
+	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT, DEAL_LOST_REASON, DEAL_SOURCE, TELEPHONY_STATUS, LEAD_STATUS, LEAD_SOURCE
     }
 
     public static final String SPACE = "_SPACE_";
@@ -203,6 +209,22 @@ public class Category
     }
 
     /**
+	 * @return the is_conversion_flag
+	 */
+	public Boolean getIs_conversion_flag()
+	{
+	return is_conversion_flag;
+	}
+
+	/**
+	 * @param is_conversion_flag the is_conversion_flag to set
+	 */
+	public void setIs_conversion_flag(Boolean is_conversion_flag)
+	{
+	this.is_conversion_flag = is_conversion_flag;
+	}
+
+	/**
      * Assigns created time for the new one, creates task related contact keys
      * list with their ids and owner key with current agile user id.
      */

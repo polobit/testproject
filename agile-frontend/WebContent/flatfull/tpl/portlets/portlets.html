@@ -141,7 +141,7 @@
 	</table>
 {{else}}
 	<div class="portlet-error-message">
-      {{agile_lng_translate 'portlets' 'no-deals-pending'}}
+      {{agile_lng_translate 'portlets' 'no-pending-deals'}}
 	</div>
 {{/if}}
 </script>
@@ -185,7 +185,7 @@
 </div>
 {{else}}
 <div class="portlet-error-message">
-	{{agile_lng_translate 'portlets' 'no-tasks'}}
+	{{agile_lng_translate 'portlets' 'no-tasks-found'}}
 </div>
 {{/if}}
 </script>
@@ -1363,9 +1363,9 @@
 						{{#getCurrentUserDashboards 'dashboard'}}{{/getCurrentUserDashboards}}
 					</ul>
 				</div>
-				<div class="text-ellipsis" style="max-width:300px;">
+				<!-- <div class="text-ellipsis" style="max-width:300px;">
 					<small class="text-muted" id="dashboard-desc" title="{{#if description}}{{description}}{{/if}}">{{#if description}}{{description}}{{else}}{{agile_lng_translate 'portlets' 'welcome-msg'}}{{/if}}</small>
-				</div>
+				</div> -->
 		{{/is_mobile}}		
 			</div>
 			<div class="pull-right">
@@ -1395,13 +1395,30 @@
 				<!--<a href="#" id="tutotial_modal" class="btn btn-default btn-sm  pos-rlt  dashboart_tooltip" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help">
 					<i class="fa fa-graduation-cap"></i>
 				</a>-->
+			{{#is_mobile}}
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" style="display:none; line-height: 1px;" 
+					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
+				</a>
 				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
-				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" 
-					style="display:none; line-height: 1px;"   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+			{{else}}
+				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
+				</a>
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip"  style="display:none; line-height: 1px;float:left;margin-right:3px" 
+					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
 					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
 				</a>
+			{{/is_mobile}}	
+				<!-- <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
+				</a>
+				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip" {{#is_mobile}} style="display:none; line-height: 1px;" {{else}} style="display:none; line-height: 1px;float:left;margin-right:3px" {{/is_mobile}}
+					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
+					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
+				</a> -->
 				<!-- <a href="#dashboards" id="dashboards" class="btn btn-default btn-sm btn-addon dashboards add-stream-tab pos-rlt">
 					<i class="icon icon-plus-sign"></i> Add/Edit Dashboard
 				</a> -->
@@ -1443,7 +1460,7 @@
 <div class="row">
 				<label class="control-label  col-xs-2 p-t-none font-bold">{{agile_lng_translate 'portlets' 'plan'}}</label>
 				<div class="control-label text-left col-xs-8 p-t-none">
-					 {{agile_lng_translate 'portlets' 'free'}} <small class="p-l-xs">{{ucfirst Plan_Interval}} </small>(<a href="#subscribe" class="text-sm text-info">{{agile_lng_translate 'portlets' 'change'}}</a>)<br>
+					 {{Plan}} <small class="p-l-xs">{{ucfirst Plan_Interval}} </small>(<a href="#subscribe" class="text-sm text-info">{{agile_lng_translate 'portlets' 'change'}}</a>)<br>
 						{{Count}} {{agile_lng_translate 'portlets' 'users'}}
 					{{#if Email}}
 							 {{numberWithCommas Email}} {{agile_lng_translate 'portlets' 'emails-per-month'}}
@@ -1510,7 +1527,7 @@
 </div>
 {{else}}
 <div class="portlet-error-message">
-     {{agile_lng_translate 'portlets' 'no-customer-activities'}}
+     {{agile_lng_translate 'portlets' 'no-user-activities'}}
 	</div>
 {{/if}}
 
@@ -2181,11 +2198,23 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small></div>
 {{/if_equals}}
 
+{{#if_equals "LEAD_CREATE" activity_type}}
+{{agile_lng_translate 'leads-view' 'created-a-new-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}" class="popover_contact">{{label}}
+</a>{{else}}'{{label}}'{{/if}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+ <i class="icon-user"></i>{{#unless this.entityObject}}{{agile_lng_translate 'leads-view' 'lead-deleted-later'}} {{/unless}}{{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom1}}.
+</small>  
+{{/if_equals}}
+
 {{#if_equals "CONTACT_DELETE" activity_type}}
  {{agile_lng_translate 'contacts-view' 'deleted-contact'}}'{{label}}'
 {{/if_equals}}
 {{#if_equals "COMPANY_DELETE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'deleted-company'}} '{{label}}'
+{{/if_equals}}
+
+{{#if_equals "LEAD_DELETE" activity_type}}
+{{agile_lng_translate 'leads-view' 'deleted-lead'}} '{{label}}'
 {{/if_equals}}
 
 {{#if_equals "CONTACT_IMPORT" activity_type}}
@@ -2202,10 +2231,17 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small></div>
 {{/if_equals}}
 
+{{#if_equals "LEAD_IMPORT" activity_type}}
+{{agile_lng_translate 'contacts-view' 'imported'}}  {{custom1}} {{agile_lng_translate 'menu' 'leads'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<i class="icon-user"></i> {{custom2}} {{agile_lng_translate 'leads-view' 'leads-were-updated-during-the-import'}}{{/if}} 
+</small>  
+{{/if_equals}}
+
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
-{{#if custom2}}<span> target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+{{#if custom2}}<span> <a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
 {{/if_equals}}
 {{#if_equals "COMPANY_EXPORT" activity_type}}
@@ -2218,6 +2254,15 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <small class="activities_second_line m-t-none text-sm">
 {{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
+{{/if_equals}}
+
+{{#if_equals "LEAD_EXPORT" activity_type}}
+{{#if_equals "1" custom1}}
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+{{else}}
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'menu' 'leads'}} 
+<br/>
+{{/if_equals}}	
 {{/if_equals}}
 
 {{#if_equals "CONTACT_OWNER_CHANGE" activity_type}}
@@ -2260,10 +2305,27 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'removed'}}
 </small>
 {{/if_equals}}
+{{else}}
+
+{{#if_equals "leads" label}}
+{{#if_equals "ADD_TAG" custom1}}
+{{agile_lng_translate 'contacts-view' 'added-tag-to'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'added'}}
+</small>
+{{/if_equals}}
+
+
+{{#if_equals "REMOVE_TAG" custom1}}
+{{agile_lng_translate 'contacts-view' 'removed-tags-from'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag"></i> {{removeDoubleCoutes custom2}} {{agile_lng_translate 'contacts-view' 'removed'}}
+</small>
+{{/if_equals}}
 
 
 
-{{#if_equals "SEND_EMAIL_BULK" custom1}}
+<!-- {{#if_equals "SEND_EMAIL_BULK" custom1}}
 
 {{#if_equals "1" custom3}}	
 {{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'menu' 'email'}}<br/>
@@ -2276,7 +2338,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <i class="icon-tag"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
 </small>
 {{/if_equals}}
-{{/if_equals}}
+{{/if_equals}} -->
 
 
 {{else}}
@@ -2294,6 +2356,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <small class="activities_second_line m-t-none text-sm text-ellipsis">
 <i class="icon-tag"></i> {{removeDoubleCoutes custom2}}  {{agile_lng_translate 'contacts-view' 'removed'}}
 </small>
+{{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
 
@@ -2326,6 +2389,19 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small></div>
 {{/if_equals}}
 {{else}}
+{{#if_equals "leads" label}}
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'contacts-view' 'sent-a-email-to'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'contacts-view' 'sent-a-bulk-email-to'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
+{{/if_equals}}
+{{else}}
 {{#if_equals "1" custom3}}
 {{agile_lng_translate 'contacts-view' 'sent-a-email-to'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'Company'}}<br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
@@ -2336,6 +2412,24 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
 <i class="icon-envelope-alt"></i> Email subject - <a href="" class="email-details" data={{id}}>{{custom4}}</a>
 </small></div>
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "SEND_EMAIL_BULK" custom1}}
+
+{{#if_equals "contacts" label}}	
+{{#if_equals "1" custom3}}	
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} <span style="text-transform: lowercase;">{{agile_lng_translate 'menu' 'email'}}</span><br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a>
+</small> 
+{{else}}
+{{agile_lng_translate 'social' 'Sent'}} {{custom3}} {{agile_lng_translate 'plan-and-upgrade' 'emails'}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-envelope-alt"></i> {{agile_lng_translate 'contacts-view' 'email-subject'}}- <a href="" class="email-details" data={{id}}>{{custom4}}</a> 
+</small>
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
@@ -2356,6 +2450,20 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{/if_equals}}
 {{else}}
 
+{{#if_equals "leads" label}}
+{{#if_equals "1" custom3}}
+{{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'lead-assigned-to'}} {{custom2}}.
+</small>
+{{else}}
+	{{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'companies-view' 'companies'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'leads-assigned-to'}} {{custom2}}.
+</span>
+{{/if_equals}}
+{{else}}
+
 {{#if_equals "1" custom3}}
 {{agile_lng_translate 'contacts-view' 'changed-owner-for'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'Company'}} <br/>
 <div class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"><small>
@@ -2369,6 +2477,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
+{{/if_equals}}
 
 {{#if_equals "DELETE" custom1}}
 	
@@ -2379,10 +2488,18 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
     {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'portlets' 'contacts'}}
 {{/if_equals}}
 {{else}}
+{{#if_equals "leads" label}}	
+{{#if_equals "1" custom3}}
+		{{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}}
+{{else}}	
+    {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}}
+{{/if_equals}}
+{{else}}
 {{#if_equals "1" custom3}}
 		{{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'contacts-view' 'Company'}}
 {{else}}	
     {{agile_lng_translate 'contacts-view' 'deleted'}} {{custom3}} {{agile_lng_translate 'companies-view' 'companies'}}
+{{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
 {{/if_equals}}
@@ -2412,6 +2529,22 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small></div>
 {{/if_equals}}
 
+{{#if_equals "LEAD_TAG_ADD" activity_type}}
+{{agile_lng_translate 'leads-view' 'added-a-tag-to-lead'}} {{#if this.entityObject}}<a href="#lead/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}}<br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} {{agile_lng_translate 'contacts-view' 'added'}}{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} 
+{{/unless}}
+</small>
+{{/if_equals}}
+
+{{#if_equals "LEAD_TAG_REMOVE" activity_type}}
+{{agile_lng_translate 'leads-view' 'removed-a-tag-from-lead'}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{label}}</a>{{else}}'{{label}}'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-tag icon-white"></i> {{removeDoubleCoutes custom1}} {{agile_lng_translate 'contacts-view' 'removed'}}{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'contact-deleted-later'}} 
+{{/unless}}
+</small>
+{{/if_equals}}
+
 {{#if_equals "CALL" activity_type}}
 {{#if_equals "incoming" custom2}}
 {{agile_lng_translate 'campaigns' 'call-from'}} {{#if entity_id}}<a href="#contact/{{entity_id}}"> {{label}}</a>{{else}} {{label}}{{/if}}{{#if_equals "company_entity" this.entityObject.entity_type}} ({{agile_lng_translate 'contacts-view' 'Company'}}) {{else}} ({{agile_lng_translate 'contact-details' 'Contact'}}) {{/if_equals}}<br/>
@@ -2423,6 +2556,20 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{agile_lng_translate 'contacts-view' 'called'}}{{#if entity_id}}<a href="#contact/{{entity_id}}"> {{label}}</a>{{else}} {{label}}{{/if}}{{#if_equals "company_entity" this.entityObject.entity_type}} ({{agile_lng_translate 'contacts-view' 'Company'}}) {{else}} ({{agile_lng_translate 'contact-details' 'Contact'}}) {{/if_equals}}<br/>
 <small class="activities_second_line m-t-none text-sm">
 <i class="icon-phone"></i> {{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{else}} 0s{{/if}} (<span style="text-transform: capitalize;">{{#if custom1}}{{custom1}}{{else}}Manual{{/if}}</span>)
+</small>
+{{/if_equals}}
+{{/if_equals}}
+
+{{#if_equals "CHANGE_LEAD_STATUS" custom1}}
+{{#if_equals "1" custom3}}
+{{agile_lng_translate 'leads-view' 'changed-status-for'}} {{custom3}} {{agile_lng_translate 'menu' 'lead'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'status-changed-to'}} {{custom2}}.
+</small>
+{{else}}
+	{{agile_lng_translate 'leads-view' 'changed-status-for'}} {{custom3}} {{agile_lng_translate 'menu' 'leads'}} <br/>
+<small class="activities_second_line m-t-none text-sm">
+<i class="icon-user icon-white"></i> {{agile_lng_translate 'leads-view' 'status-changed-to'}} {{custom2}}.
 </small>
 {{/if_equals}}
 {{/if_equals}}
@@ -2590,7 +2737,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <script id="portlets-campaign-stats-report-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis campaign_stats_header" style="width:70%;"></span>
+				<span class="pull-left inline-block text-ellipsis campaign_stats_header" style="width:70%;">{{agile_lng_translate 'campaigns' 'all-campaigns-stats'}}</span>
 				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small> 
@@ -2637,7 +2784,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 <script id="portlets-campaign-graph-report-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
-				<span class="pull-left inline-block text-ellipsis campaign_graph_header" style="width:70%;"></span>
+				<span class="pull-left inline-block text-ellipsis campaign_graph_header" style="width:70%;">{{agile_lng_translate 'campaigns' 'all-campaigns'}}</span>
 				 <small class="pull-right text-right p-t-xs portlet-header-small-text text-ellipsis" style="width: 30%;">
 					{{get_portlet_duration settings.duration}}
 				</small> 
@@ -3021,7 +3168,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
     	</div>
         <div class="modal-body">
             <div id="workflow-video-dashboard" style="text-align: center;">
-                <iframe style="width:100%;" height="345" src="//www.youtube.com/embed/aBUQVVXrf2I?enablejsapi=10&autoplay=1" frameborder="0" allowfullscreen></iframe>
+                <iframe style="width:100%;" height="345" src="//www.youtube.com/embed/KP8feLANFZA?enablejsapi=10&autoplay=1" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
     </div>

@@ -14,7 +14,19 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'name'}} <span class="field_req">*</span></label> 
                     <div class="controls col-sm-7">
-                        <input name="name" type="text" field="pipeline" maxlength="400" class="required noSpecialChars form-control" id="product_name" placeholder="{{agile_lng_translate 'products' 'product'}}" />
+                        <input name="name" type="text" field="pipeline" maxlength="400" class="required noSpecialChars form-control" id="product_name" placeholder="{{agile_lng_translate 'products' 'product-name'}}" />
+                    </div>
+                </div>
+                 <div class="control-group form-group" >
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'products' 'product-price-new'}} <span class="field_req">*</span></label>
+                    <div class="controls col-sm-7">
+                       <input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price-new'}}" min="0" max="2147483647"/> 
+                    </div>
+                </div>
+                 <div class="control-group form-group">
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'products' 'sku'}} <span class="field_req"></span></label> 
+                    <div class="controls col-sm-7">
+                        <input name="sku" type="text" field="pipeline" maxlength="400" class="form-control" id="sku" placeholder="{{agile_lng_translate 'products' 'sku'}}" />
                     </div>
                 </div>
                 
@@ -22,12 +34,6 @@
                     <label class="control-label col-sm-3">{{agile_lng_translate 'misc-keys' 'description'}} </label>
                     <div class="controls col-sm-7">
                          <textarea id="pdescription" rows="3" maxlength="400" name="description" class="isNotHackScript form-control" placeholder="{{agile_lng_translate 'misc-keys' 'description'}}"></textarea>
-                    </div>
-                </div>
-                 <div class="control-group form-group" >
-                    <label class="control-label col-sm-3">{{agile_lng_translate 'products' 'product-price'}} <span class="field_req">*</span></label>
-                    <div class="controls col-sm-7">
-                       <input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price'}}" min="0" max="2147483647"/> 
                     </div>
                 </div>
                 <div class="control-group form-group">

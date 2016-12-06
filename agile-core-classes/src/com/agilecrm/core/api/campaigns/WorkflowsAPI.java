@@ -33,10 +33,12 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -567,7 +569,7 @@ public class WorkflowsAPI {
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("verification_link",
-					VersioningUtil.getHostURLByApp(NamespaceManager.get()));
+					VersioningUtil.getHostURLByApp(AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get())));
 
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			map.put("campaignId", workflow_id);
@@ -575,11 +577,13 @@ public class WorkflowsAPI {
 			map.put("type", "Workflow");
 			map.put("senderName", domainUser.name);
 			map.put("senderId", domainUser.id.toString());
-			map.put("senderDomain", domainUser.domain);
-
+			map.put("senderDomain", AliasDomainUtil.getCachedAliasDomainName(domainUser.domain));
+			
+			//Get user prefs language
+			String language = LanguageUtil.getUserLanguageFromEmail(recEmail);
 			SendMail.sendMail(recEmail, SendMail.SHARE_CAMPAIGN_SUBJECT,
 					SendMail.SHARE_CAMPAIGN_CONFIRMATION, map,
-					domainUser.email, domainUser.name);
+					domainUser.email, domainUser.name, language);
 
 		} catch (Exception e) {
 			e.printStackTrace();

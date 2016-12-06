@@ -1,11 +1,12 @@
 <script id="trigger-add-template" type="text/html">
 <div class="wrapper-md bg-light lter b-b">
 
-  {{#if id}}
+                      {{#if id}}
                        <h3 class="h3 font-thin">{{agile_lng_translate 'campaigns' 'edit-trigger'}}</h3>
                     {{else}}
-                        <h3 class="h3 font-thin"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}</h3>
+                        <h3 class="h3 font-thin">{{agile_lng_translate 'campaigns' 'add-trigger'}}</h3>
                     {{/if}} 
+
 </div>
 <div class="wrapper-md">
 <div class="row">
@@ -96,7 +97,7 @@
 							
                         <div class="control-group form-group" style="display:none;">
                             <div id="RHS" name="RHS">
-                                <label class="control-label REPLY_SMS TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-sm-4"></label>
+                                <label class="control-label REPLY_SMS TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE EMAIL_OPENED col-xs-4 col-sm-4"></label>
                                 <div class="controls col-sm-8">
                                 	<div id="keyword-tooltip" class="controls col-sm-8" style="margin-bottom: -19px; margin-left: 223px;display:none;">        
                                 	    <img border="0" src="//doxhze3l6s7v9.cloudfront.net/app/static//img/help.png" style="height: 7px; margin-top: -30px;" rel="popover" data-placement="right" data-title:"="" data-content="{{agile_lng_translate 'campaigns' 'keyword-tooltip'}}" id="element" data-trigger="hover" "="" data-original-title="" title="">  
@@ -115,9 +116,9 @@
 							<div id="CALL">
 								<label class="control-label INBOUND_CALL OUTBOUND_CALL"></label>
 								<div class="controls col-sm-offset-4 col-sm-8">	
-									<select name="call_disposition" class="required form-control w-md">
+									<select id= "call_disposition" name="call_disposition" class="required form-control w-md">
 										<option value="" class="INBOUND_CALL OUTBOUND_CALL">{{agile_lng_translate 'campaigns' 'select-call-status'}}</option>
-										<option value="ALL" class="INBOUND_CALL OUTBOUND_CALL">{{agile_lng_translate 'contacts-view' 'all'}}</option>			
+										<option value="ALL" class="INBOUND_CALL OUTBOUND_CALL">{{agile_lng_translate 'contacts-view' 'all'}}</option>										
 									</select>
 								</div>
 									<span id="status-wait"></span>	
@@ -279,7 +280,7 @@
                             </div>
                         </div>
 						<div class="line line-bg b-b"></div>
-                        <div class="form-actions col-sm-offset-4 col-sm-8">          							
+                        <div class="form-actions trigger-save-btns col-sm-offset-4 col-sm-8">          							
                             <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
 							<a href="#" id="trigger-cancel" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
                         </div>
@@ -288,7 +289,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="wrapper">
+            <div class="triggers-right-body">
                 <h4 class="m-t-none font-thin">
                     {{agile_lng_translate 'campaigns' 'triggers'}}
                 </h4>
@@ -305,7 +306,15 @@
     <div class="wrapper-md lter bg-light b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <h3 class="pull-left font-thin h3">{{agile_lng_translate 'campaigns' 'triggers'}}</h3>
+               <div class="pull-left"> 
+		            <div class="btn-group">
+		                <h1 class="m-n font-thin h3 text-black c-p">{{agile_lng_translate 'triggers' 'add-new'}}</h1>          
+		            </div>
+		            <div class="text-ellipsis" style="max-width:300px;">
+		                <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
+		            </div>
+		        </div>  
+
                 <div class="">
                     <input id="campaign-id" class="hide">
                 </div>
@@ -317,6 +326,60 @@
 <div class="tab-container p-t-sm">
 
 <!-- Tabs for Triggers -->
+{{#is_mobile}}
+
+	<ul class="nav nav-tabs triggers-sub-tabs" id="subTab">
+	<li role="presentation" class="active" data-tab="1">
+	<a href="#contact" role="tab" name="tab1" data-toggle="tab" aria-control="tab1" id="tab1" title="{{agile_lng_translate 'contacts-view' 'contact'}}">
+	<i class="icon icon-user"></i>
+	</a>
+	</li>
+	<li role="presentation" data-tab="2">
+	<a href="#deal" name="tab2" aria-control="tab2" role="tab" data-toggle="tab" id="tab2" title="{{agile_lng_translate 'menu' 'deal'}}">
+	<i class="fa fa-money"></i>
+	</a>
+	</li>
+	<li role="presentation" data-tab="3">
+	<a href="#emailEvent" role="tab" name="tab3" data-toggle="tab" aria-control="tab3" id="tab3" title="{{agile_lng_translate 'campaigns' 'email-event'}}">
+	<i class="icon icon-envelope"></i>
+	</a>
+	</li>
+	<li role="presentation" data-tab="4">
+	<a href="#call" role="tab" name="tab4" data-toggle="tab" aria-control="tab4" id="tab4" title="{{agile_lng_translate 'campaigns' 'call'}}">
+	<i class="icon icon-call-out"></i>
+	</a>
+	</li>
+	<li role="presentation" data-tab="5">
+	<a href="#calendar" name="tab6" aria-control="tab5" role="tab" data-toggle="tab" id="tab5" title="{{agile_lng_translate 'portlets' 'calendar'}}">
+	<i class="icon icon-calendar"></i>
+	</a>
+	</li>
+	<li role="presentation" data-tab="6">
+	<a href="#timer" role="tab" name="tab6" data-toggle="tab" aria-control="tab6" id="tab6" title="{{agile_lng_translate 'campaigns' 'timer'}}">
+	<i class="icon icon-clock"></i>
+	</a>
+	</li>
+	<li role="presentation" data-tab="7">
+	<a href="#thirdPartyint" name="tab7" aria-control="tab7" role="tab" data-toggle="tab" id="tab7" title="{{agile_lng_translate 'campaigns' 'third-party-integrations'}}">
+	<i class="icon icon-puzzle"></i>
+	</a>
+	</li>
+
+	<li role="presentation" data-tab="8">
+	<a href="#form" name="tab8" aria-control="tab8" role="tab" data-toggle="tab" id="tab8" title="{{agile_lng_translate 'campaigns' 'form'}}">
+	<i class="icon icon-doc"></i>
+	</a>
+	</li>
+
+	<li role="presentation" data-tab="9">
+	<a href="#service" name="tab9" aria-control="tab9" role="tab" data-toggle="tab" id="tab9" title="{{agile_lng_translate 'campaigns' 'service'}}">
+	<i class="icon icon-support"></i>
+	</a>
+	</li>
+	</ul>
+
+{{else}}
+
 <ul class="nav nav-tabs" id="subTab">
 										    <li role="presentation" class="active" data-tab="1">
 												<a href="#contact" role="tab" name="tab1" data-toggle="tab" aria-control="tab1" id="tab1">{{agile_lng_translate 'contacts-view' 'contact'}}</a>
@@ -351,6 +414,8 @@
 												<a href="#sms" name="tab10" aria-control="tab10"role="tab" data-toggle="tab" id="tab10">{{agile_lng_translate 'campaigns' 'sms_trigger'}}</a>
 											</li>
 </ul>
+
+{{/is_mobile}}
 
             <div class="tab-content" style=" display: block;">
 <!-- Start of tab-pane - contact -->

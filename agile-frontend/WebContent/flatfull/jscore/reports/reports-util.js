@@ -278,7 +278,7 @@ call_reports : function(url,reportType,graphOn){
 				    tempData.data=averageCallList;
 				    tempData.showInLegend=false;
 				    series[0]=tempData;
-				    text="{{agile_lng_translate 'calls' 'avg-duration-secs'}}";
+				    text="{{agile_lng_translate 'calls' 'avg-duration-secs-new'}}";
 				    colors=['green'];
 			}
 			else
@@ -297,7 +297,7 @@ call_reports : function(url,reportType,graphOn){
 				tempData.data=callsDurationInMinsList;
 				tempData.showInLegend=false;
 				series[0]=tempData;
-				text="{{agile_lng_translate 'calls' 'duration-secs'}}";
+				text="{{agile_lng_translate 'calls' 'duration-secs-new'}}";
 				colors=['green'];
 			}
 			portlet_graph_utility.callsPerPersonBarGraph(selector,domainUsersList,series,totalCallsCountList,callsDurationList,text,colors,domainUserImgList,undefined,averageCallList_temp);
@@ -586,6 +586,8 @@ getRepPerformanceLog : function(url) {
 	                             reports_list = "service-reports"
 	                             break;
 	                     }
+	                     $(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
+                    	$("."+dashboard_name+"-reportsnavbar").addClass("agile-menuactive")
 	                     getTemplate(reports_list, {}, undefined, function(template) {
 	                         if (!template)
 	                             return;
@@ -616,7 +618,7 @@ getRepPerformanceLog : function(url) {
 				initializeReportsListeners();
 				hideTransitionBar();
 				$(".active").removeClass("active");
-				$("#reportsmenu").addClass("active");
+				
 				var tab_id=$('a[href="'+window.location.hash+'"]').parents('.tab-pane').attr('id');
 				if(tab_id!=undefined){
 						tab_id=$('a[href="#'+tab_id+'"]').parents('.maintab').find('a').attr("href").substring(1);

@@ -1,60 +1,60 @@
 <script id="settings-email-templates-collection-template" type="text/html">
-    <div class="col" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
-	<div class="hbox h-auto m-b-lg">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates'}}</div>
-			<div class="pull-right">
-            	<a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
-           		 <span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'menu' 'new'}}</a>
-			</div>
-            <div class="pull-right">
-                <div class="col-sm-12" style="padding-left: 0;">
-                     <select id="emailTemplate-category-select" style="margin-bottom: -1px;" name="emailTemplate-category-select" class="form-control">
-                    </select>
-                </div> 
+    <div class="col-md-9" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
+        <div class="hbox h-auto {{#is_mobile}} {{else}} m-b-lg {{/is_mobile}}">
+            <div class="panel panel-default">
+                <div class="panel-heading {{#is_mobile}} b-n {{/is_mobile}}">
+                    <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates-list'}}</div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div id="slate"></div>
+                {{#if this.length}}
+                {{#is_mobile}}
+                    <div id="email-template-div-id">
+                        <table class="table panel m-b-none agile-table email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
+                            <tbody id="settings-email-templates-model-list" route="email">
+                            </tbody>
+                        </table>
+                    </div>
+                {{else}}
+                    <div class="table-responsive" id="email-template-div-id">
+                        <table class="table table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
+                           
+                            <thead>
+                                <tr>
+                                    <th class="hide">Id</th>                    
+                                    <th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{agile_lng_translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
+                                    {{#is_mobile}}
+                                    {{else}}
+                                    <th style="width:30%;">{{agile_lng_translate 'other' 'subject'}}</th>
+                                    <th style="width:40%;"></th>
+                                    {{/is_mobile}}
+                                </tr>
+                            </thead>
+                            <tbody id="settings-email-templates-model-list" route="email">
+                            </tbody>
+                        </table>
+                    </div>
+                {{/is_mobile}}
+                {{/if}}
+
             </div>
-			<div class="clearfix"></div>
         </div>
-   
-	<div id="slate"></div>
-	{{#if this.length}}
-    <div class="table-responsive">
-        <table class="table table-striped showCheckboxes panel agile-table table-layout-mob-view email-mobile-view-templates {{#is_mobile}}emailTemplates{{/is_mobile}}"  url="core/api/email/templates/bulk">
-           
-            <thead>
-                <tr>
-                    <th class="hide">Id</th>                    
-					<th style="width:30%;" class="{{#is_mobile}} namethead {{/is_mobile}}">{{agile_lng_translate 'other' 'name'}} {{#is_mobile}} & Subject {{/is_mobile}} </th>
-                    {{#is_mobile}}
-                    {{else}}
-                    <th style="width:30%;">{{agile_lng_translate 'other' 'subject'}}</th>
-                    <th style="width:40%;"></th>
-                    {{/is_mobile}}
-                </tr>
-            </thead>
-            <tbody id="settings-email-templates-model-list" route="emailbuilder/">
-            </tbody>
-        </table>
-     </div>
-	{{/if}}
-	
     </div>
-</div>
-</div>
-    <div class="col w-md {{#is_mobile}} w-full {{/is_mobile}}">
+
+    <div class="col-md-3 {{#is_mobile}} w-full {{/is_mobile}}">
         <div class="data-block">
-        <div class="p-l p-r">
-            <h4 class="m-t-none">
-                {{agile_lng_translate 'preferences' 'email-templates'}}
-            </h4>
-            
-            <p>
-                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
-            </p>
-            <p>
-                {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
-            </p>
+            <div class="{{#is_mobile}} p-l-none {{/is_mobile}}" id="learn-email-templates">
+                <h4 class="m-t-none">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                </h4>
+                
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                </p>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                </p>
            </div>
         </div>
     </div>
@@ -62,29 +62,118 @@
 </script>
 
  <script id="settings-email-templates-model-template" type="text/html">
-    <td class='data hide' data='{{id}}'></td>
-    <td>
-		<div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
-    		{{name}}
-            {{#is_mobile}}
-            <br>
-            {{subject}}
-            {{/is_mobile}}
-    	</div>
-    </td>
     {{#is_mobile}}
+        {{#if is_template_built_using_builder}}
+            <td class='data hide' data='builder/{{id}}'></td>
+        {{else}}
+            <td class='data hide' data='-template/{{id}}'></td>
+        {{/if}}
+        <td>
+            <div class="table-resp {{#is_mobile}} text-ellipsis {{/is_mobile}}" {{#is_mobile}} style="width:63vw;" {{/is_mobile}}>
+                <div class="text-base text-ellipsis">{{name}}</div>
+                <div class="text-muted text-xs text-ellipsis">
+                    {{#if updated_time}}
+                      <div class="text-muted table-resp text-xs text-ellipsis"> 
+                      <small class="edit-hover text-muted"> 
+                      <i class="fa fa-clock-o"></i>
+                      <span><em>
+                           {{agile_lng_translate 'campaigns' 'modified'}}</em> </span><time class="campaign-created-time b-b-dotted" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+                           </small>
+                      </div>
+                     {{else}}
+                        <div class="text-muted table-resp text-xs text-ellipsis">
+                        <small class="edit-hover text-muted"> 
+                         <i class="fa fa-clock-o"></i>
+                           {{agile_lng_translate 'campaigns' 'created'}} <time class="campaign-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time> 
+                           </small>
+                      </div>
+                    {{/if}}
+                </div>
+                <div class="text-sm text-ellipsis">{{subject}}</div>
+            </div>
+        </td>
     {{else}}
-    <td>
-    	<div class="table-resp">
-    		{{subject}}
-    	</div>
-    </td>   
-    <td class="text-muted" style="color: #b2b0b1;">
-       {{#if created_time}}
-          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       {{agile_lng_translate 'campaigns' 'created'}} <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> {{agile_lng_translate 'contact-details' 'by'}} {{emailTemplateOwner.name}}
-          </div>
-       {{/if}}
-    </td>
+        {{#if is_template_built_using_builder}}
+            <td class='data hide' data='builder/{{id}}'></td>
+        {{else}}
+            <td class='data hide' data='-template/{{id}}'></td>
+        {{/if}}
+        <td>
+            <div class="table-resp">{{name}}</div>
+        </td>
+        <td>
+        	<div class="table-resp">
+        		{{subject}}
+        	</div>
+        </td>   
+        <td class="text-muted" style="color: #b2b0b1;">
+           {{#if updated_time}}
+              <div class="text-muted table-resp text-xs"> 
+              <small class="edit-hover text-muted"> 
+              <i class="fa fa-clock-o m-r-xs"></i><span><em>
+        	       {{agile_lng_translate 'campaigns' 'modified'}} </em></span><time class="campaign-created-time b-b-dotted" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time> 
+                   </small>
+              </div>
+              {{else}}
+               <div class="text-muted table-resp text-xs"> 
+               <small class="edit-hover text-muted"> 
+               <i class="fa fa-clock-o m-r-xs"></i><span><em>
+                   {{agile_lng_translate 'campaigns' 'created'}} </em></span> <time class="campaign-created-time b-b-dotted" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time> 
+                   </small>
+              </div>
+           {{/if}}
+        </td>
     {{/is_mobile}}
+</script>
+
+<script id="settings-email-templates-top-header-template" type="text/html">
+<div>
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="btn-toolbar m-l-none pos-rlt">
+            <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
+                <div class="">
+                    <h4 class="inline-block m-n">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                    <div class="inline-block" id="filter-email-ctg-div" data-id="new">
+                      <button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none p-l-xs p-r-xs" data-toggle="dropdown" aria-expanded="false">
+                       <span class="icon-filter"></span>
+                       </button>
+                       <ul class="dropdown-menu " id="email_ctg_ui_menu" role="menu">
+                          <!-- populated dynamically --> 
+                        </ul>
+                    </div>
+                    <span id="email-ctg-type-label" class=""></span>
+                    </h4>
+                    <br>
+                </div>
+            </div>
+            {{#is_mobile}}
+                <div class="text-center">  
+                     <div>
+                         <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" 
+                         id="addEmailTemplate">
+                            <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'other' 'add'}}&nbsp;{{agile_lng_translate 'tickets' 'email-template'}}</a>
+                    </div>
+                </div>
+            {{else}}
+                <div class="pull-right">  
+                     <div>
+                         <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" 
+                         id="addEmailTemplate">
+                            <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'other' 'add'}}&nbsp;{{agile_lng_translate 'tickets' 'email-template'}}</a>
+                    </div>
+                </div>
+            {{/is_mobile}} 
+        </div>
+        
+    </div>
+        
+    <div class="hbox hbox-auto-xs hbox-auto-sm bg-light {{#is_mobile}} prefs-mobile-view {{/is_mobile}}">
+        <div class="wrapper-md">
+            <div class="row">
+                <div id="prefs-tabs-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </script>

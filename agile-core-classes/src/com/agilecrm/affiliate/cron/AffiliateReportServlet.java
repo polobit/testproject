@@ -22,6 +22,7 @@ import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.affiliate.util.AffiliateUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.email.SendMail;
@@ -110,7 +111,7 @@ public class AffiliateReportServlet extends HttpServlet {
       	}
       	finalMap.put("details", list);
       	String month = new SimpleDateFormat("MMM").format(calendar.getTime());
-      	SendMail.sendMail("mogulla@agilecrm.com", SendMail.AFFILIATE_REPORT_SUBJECT+month, SendMail.AFFILIATE_REPORT, finalMap);
+      	SendMail.sendMail("mogulla@agilecrm.com", SendMail.AFFILIATE_REPORT_SUBJECT+month, SendMail.AFFILIATE_REPORT, finalMap, UserPrefs.DEFAULT_LANGUAGE);
 	}
 
 }

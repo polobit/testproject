@@ -31,6 +31,8 @@
     <a class="text-cap">{{name}}</a>
   </div>
 </td>
+<td value="{{expected_value}}"><div class="text-ellipsis" style="width:7em">{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
+<td><div class="text-ellipsis" style="width:10em">{{milestone}} ({{probability}}%) </div></td>
 <td>
 <div  style="width:10em">
   <div class="inline-block no-wrap overflow-hidden" style="width:9em;">
@@ -48,8 +50,6 @@
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </div>
 </td>
-<td value="{{expected_value}}"><div class="text-ellipsis" style="width:10em">{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
-<td><div class="text-ellipsis" style="width:5em">{{milestone}} ({{probability}}%) </div></td>
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis" style="width:5em">
@@ -115,10 +115,10 @@
            {{else}}
           <thead>
                         <tr>
-                            <th>{{agile_lng_translate 'deal-view' 'opportunity'}}</th>
-                            <th>{{agile_lng_translate 'deal-view' 'related-to'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'name'}}</th>
                             <th>{{agile_lng_translate 'deal-view' 'value'}}</th>
                             <th>{{agile_lng_translate 'deal-view' 'milestone'}}</th>
+                            <th>{{agile_lng_translate 'deal-view' 'related-to'}}</th>
                             <th>{{agile_lng_translate 'deal-view' 'close-date'}}</th>
                             <th>{{agile_lng_translate 'deal-view' 'owner'}}</th>
                         </tr>

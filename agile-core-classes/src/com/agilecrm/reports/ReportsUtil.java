@@ -55,10 +55,12 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -144,7 +146,7 @@ public class ReportsUtil {
 	    System.out.println("Before sendMail in sendReportsToUsers of ReportsUtil"); 
 	    // Send reports email
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
-		    new Object[] { results, fieldsList });
+		    new Object[] { results, fieldsList }, LanguageUtil.getUserLanguageFromSession());
 		}
 	}
 
@@ -175,7 +177,7 @@ public class ReportsUtil {
 					results.put("duration",	WordUtils.capitalizeFully((report.duration.toString())));
 	
 					// Send reports email
-					SendMail.sendMail(report.sendTo, report.name + " - "+ SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,new Object[] { results, results});
+					SendMail.sendMail(report.sendTo, report.name + " - "+ SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,new Object[] { results, results}, LanguageUtil.getUserLanguageFromSession());
 			} 
 			catch (Exception e) 
 			{
@@ -367,7 +369,7 @@ public class ReportsUtil {
 				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
-			statsJSON.put("domain", NamespaceManager.get());
+			statsJSON.put("domain", AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()));
 			statsJSON.put("email_status", getTotalEmailCredit());
 
 			return statsJSON;

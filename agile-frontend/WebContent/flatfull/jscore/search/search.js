@@ -18,11 +18,19 @@ function showSearchResults()
 	 * separate page.
 	 */
 	var query_text = $("#searchText").val();
-
-	// If keyword/input field is empty returns with out querying
-	if (query_text == "")
+	if ($.trim(query_text) == ''){
+		$(".dashboard-search-scroll-bar").hide();
 		return;
-
+	}
+	// If keyword/input field is empty returns with out querying
+	if(!isQueryTextSearchValid(query_text))
+	{
+		var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+		$(".dashboard-search-scroll-bar").empty();
+		$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+		$(".dashboard-search-scroll-bar").show();
+		return false;
+	}
 	/*
 	 * If App_Contacts route is not initialized, initializes it because
 	 * typeahead can be accessed without entering in to contacts list view
@@ -54,6 +62,11 @@ function navigateToDetailsPage(data, name)
 			Backbone.history.navigate("company/" + data, { trigger : true });
 		else
 			Backbone.history.navigate("contact/" + data, { trigger : true });
+		return;
+	}
+	if (model.entity_type == "lead_entity")
+	{
+		Backbone.history.navigate("lead/" + data, { trigger : true });
 		return;
 	}
 	if(model.entity_type == "deal")
@@ -173,6 +186,19 @@ $(function()
 	 */
 	$('body').on('click', '#search-results', function(e)
 	{
+		var query = $("#searchText").val();
+		if ($.trim(query) == ''){
+			$(".dashboard-search-scroll-bar").hide();
+			return;
+		}
+		if(!isQueryTextSearchValid(query))
+		{
+			var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+			$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+			$(".dashboard-search-scroll-bar").show();
+			return;
+		}		
+		$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 		// e.preventDefault();
 		$('.searchicon-dropdown').removeClass('open');
 		showSearchResults();

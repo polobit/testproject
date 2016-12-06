@@ -11,7 +11,7 @@
           {{agile_lng_translate 'admin-settings-users' 'new-user-details'}}
           {{/if}}
       </div>
-        <form id="userForm" name="userForm" method="get" action="" class="form-horizontal">
+        <form id="userForm"  name="userForm" method="get" action="" class="form-horizontal">
         {{#if id}}
           <input type="hidden" name="id" value={{id}} >
         {{/if}}
@@ -38,7 +38,7 @@
 
 <div class="col-md-9">                      
 <div class="controls">
-                <input type="text" id="eaddress" class="email required form-control" name='email' placeholder="{{agile_lng_translate 'contacts-view' 'email-address'}}" autocapitalize="off"/> 
+                <input type="text" id="eaddress" class="email required form-control" name='email' autocomplete="new-email" placeholder="{{agile_lng_translate 'contacts-view' 'email-address'}}" autocapitalize="off"/> 
               </div>
             </div>
     </div>
@@ -47,7 +47,7 @@
               <label class="control-label col-md-3" for="password">{{agile_lng_translate 'prefs-settings' 'password'}} <span class="field_req">*</span></label> 
 <div class="col-md-9">                      
 <div class="controls">
-                <input type="password" class="required form-control" id="password" value="{{password}}" name='password' maxlength="20" minlength="4" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" autocapitalize="off"/> 
+                <input type="password" class="required form-control" id="password" value="{{password}}" autocomplete="new-password" name='password' maxlength="20" minlength="4" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" autocapitalize="off"/> 
               </div>
               
             </div>
@@ -66,7 +66,7 @@
             
 </div>
 
-
+{{#is_admin_domain}}{{else}}
 <div class="control-group form-group">
               <label class="control-label col-md-3" for="phone">{{agile_lng_translate 'other' 'phone'}}</label> 
 
@@ -102,7 +102,8 @@
               </div>
               </div>
     </div>
-
+    {{/is_admin_domain}}
+{{#is_admin_domain}}{{else}}
           <div class="control-group form-group">
 <div class="col-sm-offset-3 col-md-9">
               <div class="controls">
@@ -115,6 +116,7 @@
               </div>
             </div>
 </div>
+{{/is_admin_domain}}
 
     
             <div class="control-group form-group">
@@ -163,7 +165,102 @@
 <input type="hidden" id="owner" name='is_account_owner' value=''/><i></i> 
 {{/is_domain_owner}}
 <div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
-<div class="tab-container m-b-none">
+{{#is_admin_domain}}
+    <div class="tab-container m-b-none">
+        <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
+        </label>
+            <div class="control-group form-group">
+              <div class="controls" >
+                <div class="multiple-checkbox" name="adminPanelAccessScopes" style="margin-top: 10px;">
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="ADD_AFFILIATE_AMOUNT"  value="ADD_AFFILIATE_AMOUNT" >
+                      <i></i>Add Affiliate Amount<br/>
+                      <div style="margin-left:6px;">
+                        <small> 
+                          Add Affiliate amount to the Customer
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="LOGIN_INTO_DOMAIN"  value="LOGIN_INTO_DOMAIN"  >
+                      <i></i>Login into the Customer Domain<br/>
+                      <div style="margin-left:6px;">
+                        <small> Log in into Customer Domain
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="REFUND_AMOUNT"  value="REFUND_AMOUNT"  >
+                      <i></i>Refund the Amount<br/>
+                      <div style="margin-left:6px;">
+                        <small> Refund the amount to Customer
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="DELETE_USER"  value="DELETE_USER" >
+                      <i></i>Delete User<br/>
+                      <div style="margin-left:6px;">
+                        <small> Delete Users 
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="CANCEL_SUBPLAN"
+                    value="CANCEL_SUBPLAN">
+                      <i></i>Cancel Subscription<br/>
+                      <div style="margin-left:6px;">
+                        <small> Cancel Subscription
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="DELETE_ACCOUNT"  value="DELETE_ACCOUNT" >
+                      <i></i>Delete Account Permanently<br/>
+                      <div style="margin-left:6px;">
+                        <small> Delete Account
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="ADD_USER"  value="ADD_USER" >
+                      <i></i>Add User<br/>
+                      <div style="margin-left:6px;">
+                        <small> Add Users 
+                        </small>
+                      </div>
+                  </label>
+                 
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="AFFILIATES"  value="AFFILIATES" >
+                      <i></i>View Affiliates<br/>
+                      <div style="margin-left:6px;">
+                        <small> View Affiliates
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="ACCOUNT_RELEASE"  value="ACCOUNT_RELEASE" >
+                      <i></i>Release Account<br/>
+                      <div style="margin-left:6px;">
+                        <small> Release Account
+                        </small>
+                      </div>
+                  </label>
+                  <label class="i-checks i-checks-sm checkbox">
+                    <input type="checkbox" name="VIEW_LOGS"  value="VIEW_LOGS" >
+                      <i></i>View Admin Panel Logs<br/>
+                      <div style="margin-left:6px;">
+                        <small>View Panel Logs
+                        </small>
+                      </div>
+                  </label>
+          </div>
+        </div>
+      </div>
+    </div>
+{{/is_admin_domain}}
+<div class="tab-container m-b-none {{#is_admin_domain}} hide {{/is_admin_domain}}">
 <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}</label>
   <ul class="nav nav-tabs b-b-none">
 
@@ -178,12 +275,18 @@
     </ul>
     </div>
     <div class="tab-pane multiple-checkbox-adminprefs" name="newMenuScopes">
-    <div class="col panel wrapper b-t" style="box-shadow: inherit;">
+    <div class="col panel wrapper b-t {{#is_mobile}} m-b-none {{/is_mobile}} {{#is_admin_domain}} hide {{/is_admin_domain}}" style="box-shadow: inherit;">
     {{#is_acl_allowed id}}
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
          {{else}}
-        <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
-        </div>
+        {{#is_mobile}}
+          <div style="font-size: 12px;top: 5px;padding: 3px 10px 3px 10px;border: 1px solid #ccc;background-color: #fafafa;border-radius: 2px">
+            <span>{{toSafeString message}}</span>
+          </div>
+        {{else}}
+          <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
+          </div>
+        {{/is_mobile}}
         {{/isAllowedInCurrentPlan}}
     {{/is_acl_allowed}}
      <div class="m-l-md">
@@ -191,7 +294,7 @@
         <div class="tab-pane active" id="sales-previlages">
                 {{#unless id}}
                     <div class="control-group form-group">
-                    <div class="controls" >
+                    <div class="controls m-b" >
                         <div class="multiple-checkbox" name="newscopes" style="margin-top: 10px;">
                             <label class="i-checks i-checks-sm checkbox">
                                 <input type="checkbox" name="temp"  value="CREATE_CONTACT" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -235,7 +338,7 @@
                                     </div>
                             </label>
                             
-                              <div  class="newMenuScopesDealsdiv">
+                              <div  class="newMenuScopesDealsdiv m-t">
                             {{#if id}}
                               <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
                                     <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -287,7 +390,7 @@
                                 <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small>
                                 </div>
                             </div>
-                              <div  class="newMenuScopesCalendardiv">
+                              <div  class="newMenuScopesCalendardiv m-t">
                                 {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox">
                                   <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -348,7 +451,7 @@
                         {{else}}
                         {{#unless is_admin}}
                         <div class="control-group form-group">
-                            <div class="controls ">
+                            <div class="controls m-b ">
                                 <div class="multiple-checkbox"  name="newscopes" style="padding-top:10px">
                                         <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="temp"  value="CREATE_CONTACT" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -383,7 +486,7 @@
                                             <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'view-contacts-owned-by-other-users'}} </small></div>
                                         </label>
                                       
-                                      <div  class="newMenuScopesDealsdiv">
+                                      <div  class="newMenuScopesDealsdiv m-t">
                                         {{#if id}}
                                           <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
                                                 <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -435,7 +538,7 @@
                                        <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
                                      </div>
 
-                                      <div  class="newMenuScopesCalendardiv">
+                                      <div  class="newMenuScopesCalendardiv m-t">
                                       {{#if id}}
                                        <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -491,7 +594,7 @@
                         </div>
                     {{else}}
                     <div class="control-group form-group">
-                        <div class="controls">
+                        <div class="controls m-b">
                             <div class="multiple-checkbox"  name="newscopes" style="padding-top:10px">
                                 <label class="i-checks i-checks-sm checkbox" >
                                     <input type="checkbox" name="temp"  value="CREATE_CONTACT" disabled {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -530,7 +633,7 @@
                                     </small></div>
                                 </label>
                                
-                                  <div class="newMenuScopesDealsdiv">
+                                  <div class="newMenuScopesDealsdiv m-t">
                                     {{#if id}}
                                       <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
                                             <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -539,7 +642,7 @@
                                                 </small></div>
                                        </label>
                                     {{else}}
-                                          <label class="i-checks i-checks-sm checkbox newMenuScopesDeals">
+                                          <label class="i-checks i-checks-sm checkbox newMenuScopesDeals m-t">
                                             <input type="checkbox" name="scopes-temp" class="required" value="DEALS" id="deals-privilege" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                             {{agile_lng_translate 'portlets' 'deals'}}<br/>
                                             <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'track-sales-opportunities'}}</small>
@@ -581,7 +684,7 @@
                                     <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
                                 </div>
                                 
-                                      <div  class="newMenuScopesCalendardiv">
+                                      <div  class="newMenuScopesCalendardiv m-t">
                                       {{#if id}}
                                        <label class="i-checks i-checks-sm checkbox">
                                         <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" id="calendar-privilege" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
@@ -641,7 +744,7 @@
                     {{/unless}}
                     {{/unless}}
                     <div class="control-group form-group" style="margin-top:-20px">
-                        <div class="controls">
+                        <div class="controls ">
                             <div class="addDealToMenuScopes"  name="newMenuScopes">
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox hide">
@@ -747,7 +850,7 @@
                                
                                  
                                
-                                </label><label class="i-checks i-checks-sm checkbox">
+                                </label><label class="i-checks i-checks-sm checkbox" style="margin-top:15px;">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'activities'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'know-what-other-users-are-doing'}}
@@ -796,7 +899,7 @@
                                
                                
                                 
-                                <label class="i-checks i-checks-sm checkbox">
+                                <label class="i-checks i-checks-sm checkbox" style="margin-top:15px;">
                                     <input type="checkbox" name="scopes-temp"  class="required" value="ACTIVITY" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'portlets' 'activities'}}<br/>
                                     <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'know-what-other-users-are-doing'}}
@@ -852,10 +955,10 @@
 </div>
 <div class="form-group">
 
-            <div class="form-actions col-sm-offset-3 col-md-9">
+            <div class="form-actions col-sm-offset-3 col-md-9 {{#is_mobile}} text-center {{/is_mobile}}">
 
             <div class="form-actions">
-            <a type="reset" href='#users' class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+            <a type="reset" href='#users' class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{/is_mobile}}">{{agile_lng_translate 'other' 'cancel'}}</a>
                     <button type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                   </div>
 </div>

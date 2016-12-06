@@ -41,7 +41,7 @@ function populate_recent_menu()
 		});
 		
 	if(recent_view.collection.length==0){	// default text, when list is empty.
-		$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
+		$('#recent-menu>ul').html('<li class="list-group-item" style="border:none"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
 		hideTransitionBar();
 	}else {recent_view.render(true);
 	}			// populate elements if filled from localStorage
@@ -110,6 +110,12 @@ function modelAction(elem)
 		$('#companiesmenu').parent().find('.active').removeClass('active');
 		$('#companiesmenu').addClass('active');
 	}	
+	else if(type=='lead_entity')
+	{
+		App_Contacts.navigate("lead/"+id,{trigger:true});
+		$('#leadsmenu').parent().find('.active').removeClass('active');
+		$('#leadsmenu').addClass('active');
+	}
 	else if(type=='deal')
 	{
 		App_Deal_Details.navigate("deal/"+id,{trigger:true});
@@ -143,7 +149,7 @@ $(function(){
 				if(recent_view.collection.length==0){
 					// default text, when list is empty.
 					$(".recent-menu-list").remove();
-					$('#recent-menu>ul').html('<li class="list-group-item"><a class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</a></li>');
+					$('#recent-menu>ul').html('<li class="list-group-item no-recent-items" style="border: none;"><div class="disabled" style="color:black;">{{agile_lng_translate "activity" "no-recent"}}</div></li>');
 					hideTransitionBar();
 				}else{
 					$(".recent-menu-list").remove();

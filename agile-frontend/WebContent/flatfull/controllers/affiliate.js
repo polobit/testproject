@@ -16,6 +16,7 @@ var AffiliateRouter = Backbone.Router.extend({
 
 	showCommissionDetails : function(){
 		var that = this;
+		$("#prefsDropdownModal").modal("hide")
 		checkForAffiliateDetails(function(){
 			getTemplate('affiliate', {}, undefined, function(template_ui){
 				if(!template_ui)
@@ -74,6 +75,7 @@ var AffiliateRouter = Backbone.Router.extend({
 	},
 	showaffiliateDetails : function()
 	{
+		$("#prefsDropdownModal").modal("hide")
 		this.affiliateDetailsView = new Base_Model_View({ url : 'core/api/affiliate_details', template : "affiliate-details",
 		    postRenderCallback : function(el){
 		    	if(!$("input[name='phone']", el).val()){
@@ -106,6 +108,8 @@ var AffiliateRouter = Backbone.Router.extend({
 		var url = 'core/api/affiliate?startTime='+time.start+'&endTime='+time.end
 		var userId = CURRENT_DOMAIN_USER.id;
 		if(CURRENT_DOMAIN_USER.domain == "admin"){
+			if(!admin_affiliate_id)
+				window.location.href="#admin-affiliate";
 			userId = admin_affiliate_id;
 			url = url+"&domain="+admin_affiliate_domain;
 		}
@@ -197,6 +201,10 @@ var AffiliateRouter = Backbone.Router.extend({
 
 	listAffiliateDetails : function()
 	{
+		if(CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("AFFILIATES") ==-1)
+		{
+			 return showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
+		}
 		var that = this;
 			getTemplate('admin-affiliate-details', {}, undefined, function(template_ui){
 				if(!template_ui)

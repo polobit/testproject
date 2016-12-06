@@ -18,6 +18,9 @@
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
+{{#if_equals expected_value "0"}}
+<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{expected_value}}</div>
+{{/if_equals}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
@@ -224,6 +227,9 @@
           {{#if_contact_type "PERSON"}}
       <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
+          {{#if_contact_type "LEAD"}}
+            <a href="#lead/{{id}}" class="activate-link thumb-sm m-b-xs text-xs" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+          {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
             <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
@@ -278,6 +284,10 @@
 {{#if expected_value}}
 <div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
+{{#if_equals expected_value "0"}}
+<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{expected_value}}</div>
+{{/if_equals}}
+
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
@@ -415,7 +425,7 @@
           <div class="m-b-xs m-t-xs">      
             <ul id="deal-products-ul" class="inline v-top m-b-sm p-n">
                 {{#each products}}               
-                  <li class="deal-product inline-block btn btn-xs btn-default m-r-xs m-b-xs text-xs" style="word-break:break-all;white-space:normal;text-align:left;">
+                  <li class="deal-product inline-block btn btn-xs btn-default m-r-xs m-b-xs text-xs" style="word-break:break-all;white-space:normal;text-align:left;cursor:auto">
                     <div class="anchor m-r-xs custom-color" style="color:#363f44" >{{name}}</div>
                   </li>
                 {{/each}}
@@ -497,6 +507,9 @@
 
          <a href="#contact/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  class="img{{id}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{contact_name_necessary this}}" /></a>
 
+          {{/if_contact_type}}
+          {{#if_contact_type "LEAD"}}
+            <a href="#lead/{{id}}" class="activate-link thumb m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
                 <a href="#company/{{id}}" class="activate-link thumb m-b-xs popover_contact" data="{{id}}"> <img  class="img{{id}}" {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>

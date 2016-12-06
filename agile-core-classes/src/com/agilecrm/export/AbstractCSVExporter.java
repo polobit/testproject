@@ -16,7 +16,9 @@ import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.export.util.DealExportCSVUtil;
 import com.agilecrm.file.readers.ByteBufferBackedInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -36,6 +38,8 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
     private File file;
 
     protected abstract String[] convertEntityToCSVRow(T entity, Map<String, Integer> indexMap, int headerLength);
+    
+    protected abstract String[] convertEntityToCSVRow(T entity, Map<String, Integer> indexMap, int headerLength, Map<Long, String> source_map, Map<Long, String> status_map);
 
     public AbstractCSVExporter(EXPORT_TYPE export_type)
     {
@@ -45,11 +49,12 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	try
 	{
-		 csvWriter = new CSVWriterAgile(NamespaceManager.get() + "_" + export_type + "_" + GoogleSQL.getFutureDate()
+		 csvWriter = new CSVWriterAgile(AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()) + "_" + export_type + "_" + GoogleSQL.getFutureDate()
 				 + ".csv");
 
 	   // csvWriter = new CSVWriterAgile("local"+ "_" + export_type + "_" + GoogleSQL.getFutureDate()
 	   //	    + ".csv");
+
 	}
 	catch (IOException e)
 	{
@@ -115,6 +120,32 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
     }
 	}
     }
+    
+    public final void writeEntitesToCSV(List<T> entities, Map<Long, String> source_map, Map<Long, String> status_map)
+    {
+
+	if (entities.size() == 0)
+	{
+	    return;
+	}
+
+	if (!isHeaderAdded)
+	{
+	    csvWriter.writeNext(getHeaders());
+	    isHeaderAdded = true;
+	}
+
+	for (T entity : entities)
+	{
+        try{
+	    csvWriter.writeNext(convertEntityToCSVRow(entity, getIndexMap(), getIndexMap().size(), source_map, status_map));
+    }
+    catch(Exception e)
+    {
+        e.printStackTrace();
+    }
+	}
+    }
 
     private Map<String, Integer> getIndexMap()
     {
@@ -144,6 +175,11 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 
 	else if (export_type == EXPORT_TYPE.DEAL)
 	    return headers = DealExportCSVUtil.getCSVHeadersForDeal();
+	
+	else if (export_type == EXPORT_TYPE.LEAD)
+	{
+	    return headers = ContactExportCSVUtil.getCSVHeadersForLead();
+	}
 
 	return headers = new String[] { "" };
     }
@@ -170,7 +206,9 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	}
     public final void sendEmail(String email)
     {
-
+    // Get user prefs language
+	String language = LanguageUtil.getUserLanguageFromEmail(email);
+	    
 	HashMap<String, String> map = new HashMap<String, String>();
 	// -1 to exclude heading from count
 	map.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
@@ -178,16 +216,19 @@ public abstract class AbstractCSVExporter<T> implements Exporter<T>
 	map.put("contact_type", export_type.label);
 
 	SendMail.sendMail(email, export_type.templateSubject, export_type.templaceTemplate, map,
-		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME);
+		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, language);
     }
     
     public final void sendEmail(String email,HashMap<String, String> stats,String domain)
     {
-
+    String toEmail = "nidhi@agilecrm.com";
+    // Get user prefs language
+    String language = LanguageUtil.getUserLanguageFromEmail(toEmail);
+    	
     stats.put("count", String.valueOf(csvWriter.getNumberOfRows() - 1));
 
-	SendMail.sendMail("nidhi@agilecrm.com", "CSV Contacts Export Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
-		    new Object[] { stats});
+	SendMail.sendMail(toEmail, "CSV Contacts Export Status "+domain, SendMail.CSV_IMPORT_STATS_NOTIFICATION,
+		    new Object[] { stats}, language);
     }
 
     public static void main(String[] args)

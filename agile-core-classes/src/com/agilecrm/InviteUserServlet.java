@@ -14,6 +14,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import com.agilecrm.services.ServiceLocator;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.InvitedUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.service.DomainUserService;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.InvitedUsersUtil;
@@ -98,7 +99,7 @@ public class InviteUserServlet extends HttpServlet {
 			
 			DomainUserService domainUserService = (DomainUserService) ServiceLocator.lookupService(DomainUserService.ServiceID);
 			
-			domainUserService.sendWelcomeEmail(domainUser);
+			domainUserService.sendWelcomeEmail(domainUser, UserPrefs.DEFAULT_LANGUAGE);
 			
 			user.verification_code = "verify";
 			user.save();

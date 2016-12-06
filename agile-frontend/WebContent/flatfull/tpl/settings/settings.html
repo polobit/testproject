@@ -1,7 +1,20 @@
  <script id="settings-template" type="text/html"> 
 <div class="">
 <div class="bg-light lter b-b wrapper-md">
-<h1 class="m-n font-thin h3">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h1>
+{{#is_mobile}}
+	<h3 class="m-b-xs font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h3>
+<div id="add-new" class="text-center hide">
+     <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
+        <span><i class="icon-plus-sign"></i></span> Add Email Template</a>
+</div>
+<div class="clearfix"></div>
+{{else}}
+	<h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h3>
+	<div id="add-new" class="pull-right hide" style="margin-top:-25px">
+	     <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" id="addEmailTemplate">
+	        <span><i class="icon-plus-sign"></i></span> Add Email Template</a>
+	</div>
+{{/is_mobile}}
 </div>
    
     <!-- <div class="app-content-full  h-full enable-full-height"> -->  
@@ -15,8 +28,6 @@
 
 			<a href="#user-prefs" class="user-prefs-tab   select"><i class="icon icon-wrench"></i></a>
 			<a href="#email" class="email-tab "><i class="icon icon-envelope"></i></a>
-			<a href="#email-templates" class="email-templates-tab"><i class="icon-envelope-letter"></i></a>
-			
 			<a href="#add-widget" class="add-widget-prefs-tab"><i class="icon icon-settings"></i></a>
 			<a href="#sync" class="contact-sync-tab"><i class="icon icon-layers"></i></a>
 			<!-- <a href="#importcrm" class="contact-import-tab">Import From CRMs</a> -->
@@ -27,14 +38,13 @@
 		{{else}}
 			
 			<a href="#user-prefs" class="user-prefs-tab list-group-item  select">{{agile_lng_translate 'preferences' 'settings'}}</a>
-			<a href="#email" class="email-tab list-group-item ">{{agile_lng_translate 'other' 'email'}}</a>
-			<a href="#email-templates" class="email-templates-tab list-group-item ">{{agile_lng_translate 'preferences' 'email-templates'}}</a>
-			
+			<a href="#email" class="email-tab list-group-item ">{{agile_lng_translate 'other' 'email'}}</a>			
 			<a href="#add-widget" class="add-widget-prefs-tab list-group-item ">{{agile_lng_translate 'preferences' 'widgets'}}</a>
 			<a href="#sync" class="contact-sync-tab list-group-item ">{{agile_lng_translate 'preferences' 'data-sync'}}</a>
 			<!-- <a href="#importcrm" class="contact-import-tab list-group-item ">Import From CRMs</a> -->
             <a href="#scheduler-prefs" class="scheduler-prefs-tab list-group-item ">{{agile_lng_translate 'preferences' 'online-calendar'}}</a>
             <a href="#notification-prefs" class="notification-prefs-tab list-group-item ">{{agile_lng_translate 'preferences' 'notifications'}}</a>
+            <a href="#themeandlayout" class="list-group-item theme-and-layout">Theme and Layout</a>
 			
 
 

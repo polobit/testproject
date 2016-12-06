@@ -224,7 +224,9 @@ public class SendEmail extends TaskletAdapter
     /**
      * Unsubscribe link that is shortened
      */
-    public static String UNSUBSCRIBE_LINK = "http://unscr.be/";
+    private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
+    
+    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
 
     /*
      * (non-Javadoc)
@@ -241,7 +243,7 @@ public class SendEmail extends TaskletAdapter
     	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
     	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
     	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
-    	
+    	String replyTo = getStringValue(nodeJSON, subscriberJSON, data, REPLY_TO);
     	
     	if(StringUtils.isNotBlank(to) && !isValidEmailAddress(to)){
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
@@ -295,6 +297,19 @@ public class SendEmail extends TaskletAdapter
     	{
     		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
     			    "Email skipped since \'To\' address is invalid.",
+    			    LogType.EMAIL_SENDING_SKIPPED.toString());
+
+    		// Execute Next One in Loop
+    		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+    		return;
+    	}
+    	
+    	// If ReplyTo email invalid
+    	if(StringUtils.isNotBlank(replyTo) && !isValidEmailAddress(replyTo))
+    	{
+    		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+    			    "Email skipped since \'ReplyTo\' address is invalid.",
     			    LogType.EMAIL_SENDING_SKIPPED.toString());
 
     		// Execute Next One in Loop
@@ -767,8 +782,14 @@ public class SendEmail extends TaskletAdapter
     {
     	try
     	{
-    	    return VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "unsubscribe?e="
+    	    String unsubscribeLink = UNSUBSCRIBE_LINK;
+    	    
+    	    if(!VersioningUtil.isProductionAPP())
+    		unsubscribeLink = UNSUBSCRIBE_SANDBOX_LINK;
+    		
+    	    return unsubscribeLink + "?e="
                     + URLEncoder.encode(email, "UTF-8")
+                    + "&ns="+URLEncoder.encode(NamespaceManager.get(),"UTF-8")
                     + "&sid=" + URLEncoder.encode(subscriberId, "UTF-8")
                     + "&cid=" + URLEncoder.encode(campaignId, "UTF-8");
     	}

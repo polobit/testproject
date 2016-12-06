@@ -29,6 +29,9 @@ public class RegisterUtil
 
     public static boolean isWrongURL(HttpServletRequest request)
     {
+    if(VersioningUtil.isDevelopmentEnv())
+    	return false;
+    
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
 

@@ -16,6 +16,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 		 		'change #notification-icon' : 'changeNotificationIcon',
         'click #previewBtn' : 'sendPushNotificationPreview',
         'click #enable-notification' : 'enablePushNotification',
+      //  'click #dynamic-img-change' :'changeImageOnImageUrl',
 		    },
 
 			// Add notification title in preview
@@ -24,7 +25,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 				$("#prev-notification-title").text($("#notification-title").val());
 
 				if($("#prev-notification-title").text()=="")
-					 $("#prev-notification-title").text("Push notification is live");
+					 $("#prev-notification-title").text("Push notification");
 			},
 			
 			notificationMessageAdd: function(e)
@@ -32,7 +33,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 				$("#prev-notification-message").text($("#notification-message").val());
 
 				if($("#prev-notification-message").text()=="")
-					 $("#prev-notification-message").text("Engage with your customers on and off the webpage through push notifications.");
+					 $("#prev-notification-message").text("Engage with your customers on and off the web page through push notifications.");
 			},
 
 			uploadNotificationIcon: function(e)
@@ -48,7 +49,7 @@ var Push_Notification_Event_View = Base_Model_View.extend({
          	  $('#prev-notification-icon').attr('src', $('#notification-icon').val());
 
          	  if($("#prev-notification-icon").attr("src")=="")
-         	  	 $('#prev-notification-icon').attr('src', 'https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png');
+         	  	 $('#prev-notification-icon').attr('src', 'http://agilecrm.s3.amazonaws.com/agile-crm-logo.png');
 				
 			},
       enablePushNotification: function(e)
@@ -95,6 +96,15 @@ var Push_Notification_Event_View = Base_Model_View.extend({
 
         });
       },
+     /* changeImageOnImageUrl :function(e){
+        e.preventDefault();
+        var currentImg = e.target.src;
+        if(currentImg !="")
+          {
+             $('#notification-icon').val(currentImg);
+             $('#prev-notification-icon').attr('src',currentImg);
+       }
+      },*/
 		});
 
 
@@ -103,7 +113,7 @@ function sendPushNotification(){
   var json = serializeForm("notificationForm");
 
   if(json.notificationIcon =="" || json.notificationIcon==undefined )
-     json.notificationIcon = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";
+     json.notificationIcon = "http://agilecrm.s3.amazonaws.com/agile-crm-logo.png";
   show_desktop_notification(json.notificationIcon, json.notificationTitle, json.notificationMessage, json.notificationLink);
   
 
@@ -163,4 +173,12 @@ function uploadIconToS3ThroughBtn(file) {
             }
         });
     }
+}
+
+// Push notification tutorials for help video
+function pushNotificationVideoPopup(){
+       var data={};
+       data.title="Push Notification Tutorial";
+       data.videourl="//www.youtube.com/embed/NcUFum-_kqE?enablejsapi=10&amp;autoplay=1";
+       showHelpVideoModal(data);
 }

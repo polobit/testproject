@@ -15,7 +15,9 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.gson.Gson;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
@@ -65,7 +67,10 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 			
 				    System.out.println("********** Sending mail ***********");
 				    System.out.println(user.email);
-				    SendMail.sendMail("mogulla@invox.com", SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED, getMailDetails());
+				    // Get user prefs language
+				    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+				    
+				    SendMail.sendMail("mogulla@invox.com", SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED, getMailDetails(), language);
 				    sendMail1(SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED);
 				}
 			}catch(Exception e){
@@ -169,7 +174,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	if(prefs != null && !prefs.company_name.toLowerCase().equals("my company"))
 		details.put("company", prefs.company_name);
 	details.put("user_name", user.name);
-	details.put("domain", getDomain());
+	details.put("domain", AliasDomainUtil.getCachedAliasDomainName(getDomain()));
 	details.put("email", user.email);
 	Card card = StripeUtil.getDefaultCard(customer);
 	details.put("last4", card.getLast4());

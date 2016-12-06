@@ -111,6 +111,7 @@ public class WidgetsAPI {
 			}
 
 			JSONObject jsonObject = WidgetsAPI.checkValidDetails(widget);
+
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
 				Key<AgileUser> currentUser = new Key<AgileUser>(
@@ -522,6 +523,22 @@ public class WidgetsAPI {
 			}
 		}
 		return finalUserList.toString();
+	}
+
+	@Path("getWidgetUsersIds/{widget_id}/{widget_name}")
+	@GET
+	public String getWidgetUsersIds(@PathParam("widget_id") String widgetID,
+			@PathParam("widget_name") String widgetName) throws Exception {
+		String result = null;
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		DomainUser dmu = agileUser.getDomainUser();
+		
+		// Logic to find the admin user are active for widget or not.
+		if (dmu.is_admin) {
+			JSONArray userIdsJson = WidgetUtil.getWigdetsActiveUsersList(widgetName);
+			result = userIdsJson.toString();			
+		}		
+		return result;
 	}
 
 	public static JSONObject checkValidDetails(Widget widget) throws Exception {

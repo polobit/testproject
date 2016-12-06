@@ -35,7 +35,6 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.repackaged.com.google.gson.JsonObject;
 import com.googlecode.objectify.Key;
 
 /**
@@ -208,13 +207,14 @@ public class TicketNotesRest
 	{
 		try
 		{
-			
-			
 			System.out.println(comment);
 			String[] fbarray = comment.split("\\&", -1);
 			System.out.println(fbarray);
 		    String feed_back = (fbarray[1].split("\\=",-1)[1]);
-		    String feedback_comment = fbarray[2].split("\\=",-1)[1];
+		    String feedback_comment = (fbarray[2].split("\\=",-1)[1]);
+		    
+		    Long feedback_time = Long.parseLong((fbarray[3].split("\\=",-1)[1]));
+		    
 		    String result = java.net.URLDecoder.decode(feedback_comment, "UTF-8");
 		    
 			if (id == null)
@@ -224,6 +224,7 @@ public class TicketNotesRest
 			dbNotes.feedback_flag = true;
 			dbNotes.feed_back = feed_back;
 			dbNotes.feedback_comment = result;
+			dbNotes.feedback_time = feedback_time;
 
 					TicketNotes.ticketNotesDao.put(dbNotes);
 					}

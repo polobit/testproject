@@ -15,7 +15,12 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", {}, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));
             //fetch template categories
-            getEmailTemplateCategories();
+            _agile_set_prefs('emailTempCtg_id', "");
+            if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category != ""){
+                getEmailTemplateCategories(Selected_Email_Template_Category);
+            }else{
+                getEmailTemplateCategories();
+            }
         }, "#emailbuilder-listeners");
 	
         //hide sidebar
@@ -48,7 +53,12 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));
             //fetch template categories
-            getEmailTemplateCategories();
+            _agile_set_prefs('emailTempCtg_id', "");
+            if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category != ""){
+                getEmailTemplateCategories(Selected_Email_Template_Category);
+            }else{
+                getEmailTemplateCategories();
+            }
         }, "#emailbuilder-listeners");
 	
 	   $('html, body').animate({scrollTop: $('body').offset().top}, 500);
@@ -71,6 +81,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui));
             //fetch template categories
+            _agile_set_prefs('emailTempCtg_id', "");
             getEmailTemplateCategories();            
         }, "#emailbuilder-listeners");
 
@@ -94,6 +105,7 @@ var EmailBuilderRouter = Backbone.Router.extend({
         getTemplate("emailbuilder-add", data, undefined, function(ui){
             $("#emailbuilder-listeners").html($(ui)); 
             //fetch template categories
+            _agile_set_prefs('emailTempCtg_id', "");
             getEmailTemplateCategories();           
         }, "#emailbuilder-listeners");
 
@@ -116,15 +128,16 @@ function collapseLeftMenuInBuilder() {
     }
 }
 
-function getEmailTemplateCategories(data) {
-    var categoryObj = data;
+function getEmailTemplateCategories(selected_ctg) {
     var el = $("#emailbuilder-listeners").closest("div");
     var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
     fillSelect('emailTemplate-category-select','core/api/emailTemplate-category', 'emailTemplateCategory',  
         function fillCategory(){
             el.find("#emailTemplate-category-select option:last").after("<option value='CREATE_NEW_CATEGORY'>"+_agile_get_translated_val('others','add-new')+"</option>");
-            if(categoryObj != undefined && categoryObj.id != undefined){
-                $('select#emailTemplate-category-select').find('option[value='+categoryObj.id+']').attr("selected","selected");
+            if(selected_ctg){
+                $('select#emailTemplate-category-select').find('option[value='+selected_ctg+']').attr("selected","selected");
+                _agile_set_prefs('emailTempCtg_id', selected_ctg);
             }
         }, optionsTemplate, false, el);
 }
+    

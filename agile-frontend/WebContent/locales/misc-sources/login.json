@@ -13,6 +13,14 @@
  	"sign-up": "{{agile_lng_translate 'login' 'sign-up'}}",
  	"forgot": "{{agile_lng_translate 'login' 'forgot'}}",
  	"domain": "{{agile_lng_translate 'prefs-settings' 'domain'}}",
+ 	"signin-with": "{{agile_lng_translate 'login' 'signin-with'}}",
+ 	"signin-with-google": "{{agile_lng_translate 'login' 'signin-with-google'}}",
+ 	"signin-with-yahoo": "{{agile_lng_translate 'login' 'signin-with-yahoo'}}",
+ 	"signUp": "{{agile_lng_translate 'login' 'signUp'}}",
+ 	"signin-using": "{{agile_lng_translate 'login' 'signin-using'}}",
+ 	"signin-using-google": "{{agile_lng_translate 'login' 'signin-using-google'}}",
+ 	"signin-using-yahoo": "{{agile_lng_translate 'login' 'signin-using-yahoo'}}",
+
 
  	// Custom validations
  	"invalid-default": "{{agile_lng_translate 'html5Validations' 'invalid-default'}}",

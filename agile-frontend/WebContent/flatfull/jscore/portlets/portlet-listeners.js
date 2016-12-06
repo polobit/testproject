@@ -844,7 +844,8 @@ $('.portlet_body')
 											+ (endDate.getMinutes() < 10 ? "0"
 													: "")
 											+ endDate.getMinutes());
-
+							// Show edit modal for the event
+							$("#updateActivityModal").modal('show');
 							// Set date for update Event
 							var dateFormat = CURRENT_USER_PREFS.dateFormat;
 							$("#update-event-date-1").val(
@@ -907,8 +908,6 @@ $('.portlet_body')
 								$("#event_desc").html(desc);
 							}
 
-							// Show edit modal for the event
-							$("#updateActivityModal").modal('show');
 							return false;
 						}
 					});
@@ -1207,7 +1206,8 @@ function initializeAddPortletsListeners() {
 							"RevenueGraph" : "left",
 							"MiniCalendar" : "left",
 							"UserActivities" : "left",
-							"Campaignstats" : "",
+							//"Campaignstats" : "",
+							"Campaigngraph" : "left",
 							"LostDealAnalysis" : "left",
 							"Referralurlstats" :"left"
 						};

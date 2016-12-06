@@ -2,9 +2,25 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-            <h3 class="font-thin h3 pull-left">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
-			<a href="#form-builder-templates" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
-			<div class="clearfix"></div> 
+        {{#is_mobile}}
+        	<h3 class="font-thin h4 pull-left forms-title">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
+        	<div class="add-form-btn pull-right">
+        		<a id="form-video-tutorial" onclick="formVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="line-height: 1px;">
+                	<i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+            	</a>
+            	<a href="#form-builder-templates" class="btn btn-sm btn-default btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+        	</div>
+        	<div class="clearfix"></div>
+        {{else}}
+        	<h3 class="font-thin h3 pull-left">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
+        	<div class="pull-right">
+	        	<a id="form-video-tutorial" onclick="formVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="line-height: 1px;">
+	                <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+	            </a>
+	        	<a href="#form-builder-templates" class="btn btn-sm btn-default btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+        	</div>
+        	<div class="clearfix"></div>
+        {{/is_mobile}} 
     </div>
 </div>
 </div>
@@ -37,12 +53,23 @@
 	</div> -->
 	{{/unless}}
 	{{#if this.length}}
-	<div class="data-block">
+	{{#is_mobile}}
+		<div class="data-block">
+			<div class="data-container">
+				<div class="panel panel-default">
+				<div class="panel-heading">{{agile_lng_translate 'form-builder' 'forms-list'}}</div>
+				<table class="table c-p agile-table" url="core/api/forms/bulk">
+					<tbody id="forms-model-list" class="c-p"></tbody>
+				</table>
+				</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="data-block">
 		<div class="data-container">
 			<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'form-builder' 'forms-list'}}</div>
 			<table class="table table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
-				
 				<thead>
 					<tr>
 						<th class="text-ellipsis">{{agile_lng_translate 'form-builder' 'form-title'}}
@@ -57,27 +84,68 @@
 			</div>
 		</div>
 	</div>
+	{{/is_mobile}}
 	{{/if}}
  </div>
 
 <div class="col-md-3">
-        <div class="data-block">
-			
-            	<h4 class="h4 m-t-none m-b-sm">
-                	{{agile_lng_translate 'form-builder' 'what-are-forms'}}
-            	</h4>
-            	
-				<p>
-					{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
-				</p>
-			
-    </div>
+    <div class="data-block" id="learn-forms">
+    	{{#is_mobile}}
+	    	<h4 class="h4 m-t-none m-b-sm">
+	        	{{agile_lng_translate 'form-builder' 'what-are-forms'}}
+	    	</h4>
+			<p>
+				{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
+			</p>
+    	{{else}}
+	    	<h4 class="h4 m-t-none m-b-sm">
+	        	{{agile_lng_translate 'form-builder' 'what-are-forms'}}
+	    	</h4>
+			<p>
+				{{agile_lng_translate 'form-builder' 'forms-created-using-the'}} <a target="_blank" href="formbuilder" class="text-info">{{agile_lng_translate 'admin-settings-integrations' 'form-builder'}}</a> {{agile_lng_translate 'form-builder' 'form-builder-desc'}}
+			</p>
+    	{{/is_mobile}}
+	</div>
 </div>
 </div>
 </div>
 </script>
 
 <script id="forms-model-template" type="text/html">
+{{#is_mobile}}
+	<td class="hide"></td>
+	<td>
+		<div class="text-base table-resp"><a target="_blank" href="formbuilder?form={{id}}">{{formName}}</a></div>
+		<div class="text-xs table-resp">
+			<span class="pull-left">
+				<a target="_blank" href="formbuilder?form={{id}}">
+					<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
+						<small class="edit-hover text-muted">
+							<i class="fa fa-clock-o"></i>
+							<time class="form-modified-time" datetime="{{epochToHumanDate "" updated_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+						</small>
+					</span>
+				</a>
+			</span>
+			<span class="pull-right">
+				<div class="table-resp" id="form_report">
+					<div class="pull-left text-ellipsis">
+						<a href="#form-reports/{{id}}" class="stop-propagation">
+							<i class="icon-bar-chart"></i>
+						</a>
+					</div>
+				</div>
+	        </span>
+	        <span class="pull-right m-r">
+				<div class="table-resp" id="formcode_manager">
+					<a class="codeshare" data-formid="{{id}}">
+						<i class="fa icon-code" ></i>
+					</a>
+				</div>
+	        </span>
+		</div>
+	</td>
+{{else}}
 	<td><a target="_blank" href="formbuilder?form={{id}}"><span  style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
     <td>
 		<a target="_blank" href="formbuilder?form={{id}}">
@@ -89,17 +157,19 @@
 			</span>
 		</a>
 	</td>
-	<td>
+	<!--<td>
 		<div class="table-resp hide" id="form_report">
 			<div class="pull-right text-ellipsis">
 				<a href="#form-reports/{{id}}" class="stop-propagation"><span style="width:10%"><i class="icon-bar-chart"></i></span></a>
 			</div>
 		</div>
-	</td>
+	</td>-->
 	<td>
 	    <div class="table-resp hide" id="formcode_manager">
 		<a class="codeshare" data-formid="{{id}}"><i class="fa icon-code" ></i><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
 		</div>
 	</td>
 	</br>
+{{/is_mobile}}
 </script>
+

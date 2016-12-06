@@ -9,7 +9,7 @@ var ReportsRouter = Backbone.Router
 			routes : {
 
 			/* Reports */
-			"reports" : "reports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
+			"reports" : "reports","navbar-reports/:id" : "navbarReports", "email-reports" : "emailReportTypes", "activity-reports" : "activityReports", "activity-report-add" : "activityReportAdd",
 				"activity-report-edit/:id" : "activityReportEdit", "campaign-reports" : "campaignReports","contact-reports" : "emailReports", 
 				"report-add" : "reportAdd","campaign-report-add" : "campaignReportAdd", "campaign-report-edit/:id" : "campaignReportEdit",
 				"report-campaign-results/:id" : "campaignReportInstantResults","report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults", "report-charts/:type" : "reportCharts",
@@ -17,6 +17,14 @@ var ReportsRouter = Backbone.Router
 				"report-lossReason":"showDealsLossReason","reports-wonDeals":"showDealsWonChart","rep-reports":"showRepPerformance","report-comparison":"showComparisonReport" },
 
 
+			/*reload report from the selected dashboard name*/
+			navbarReports : function(id)
+			{
+				navbarRoutes(id)
+				 Backbone.history.navigate("reports", {
+            		trigger: true
+        			});
+			},
 			/**
 			 * Shows reports categories 
 			 */
@@ -643,6 +651,8 @@ var ReportsRouter = Backbone.Router
 	               if(reportType == 'average-calls'){
 						graphOn='average-calls';
 						$('select[id="typeCall"]').find('option[value="average-calls"]').attr("selected",true);
+						$('select[id="typeCall"]').hide();
+						$('.reports-calltype').text(_agile_get_translated_val('report-add','average-call-duration'));
 						
 					}else{
 						$('select[id="typeCall"]').find('option[value="number-of-calls"]').attr("selected",true);

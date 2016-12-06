@@ -65,6 +65,7 @@
             "deals" : "Deals",
             "documents" : "Documents",
             "tickets" : "Tickets",
-
+            "menu-leads": "Leads",
+            "lead": "Lead"
       }
 }

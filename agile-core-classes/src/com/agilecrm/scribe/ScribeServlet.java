@@ -14,6 +14,7 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.scribe.util.ScribeUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -281,6 +282,13 @@ public class ScribeServlet extends HttpServlet {
 			req.getSession().setAttribute("isForAll", isForAll);
 
 			System.out.println("Redirect URL OAuth2: " + url);
+			
+			// Add current Namespace to Session
+			String domainName = NamespaceManager.get();
+			if(serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN) && StringUtils.isNotBlank(domainName)){
+				req.getSession().setAttribute("oauth_login_namespace", domainName);
+			}
+				
 		} else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO)) {
 			System.out.println("wait");
 		} else {
@@ -442,20 +450,18 @@ public class ScribeServlet extends HttpServlet {
 					resp)) {
 				return;
 			}
-
+			
+			// return URL is retrieved from session
+			returnURL = (String) req.getSession()
+					.getAttribute("return_url");
+					
 			if (widgetID != null) {
-
-				// return URL is retrieved from session
-				returnURL = (String) req.getSession()
-						.getAttribute("return_url") + "/" + widgetID;
+				if(returnURL != null)
+					returnURL += "/" + widgetID;
+				
 				resultType = "success";
 				statusMSG = widgetName + " widget saved successfully.";
 				System.out.println("return url " + returnURL);
-			}
-
-			if (serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)) {
-				returnURL = (String) req.getSession()
-						.getAttribute("return_url");
 			}
 
 		} catch (Exception e) {
@@ -471,7 +477,7 @@ public class ScribeServlet extends HttpServlet {
 			req.getSession().setAttribute("widgetMsgType", resultType);
 			req.getSession().setAttribute("widgetMsg", statusMSG);
 		}
-
+		
 		if (returnURL != null) {
 			resp.sendRedirect(returnURL);
 		}

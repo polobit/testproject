@@ -18,41 +18,41 @@
             </tr>
             <tr>
 				<td style="line-height: 20px; font-size: 14px; font-family: sans-serif;padding: 15px 25px 25px 25px">		
-					<div style="padding-bottom:10px;font-size:14px;font-weight:bold">Total {{HashMap.type}} in CSV File: {{HashMap.TOTAL}} </div> 
-					<div style="padding-bottom:10px;font-size:14px;font-weight:bold">Successfully Saved: {{HashMap.SAVED}}</div>
+					<div style="padding-bottom:10px;font-size:14px;font-weight:bold">{{agile_lng_translate 'contacts-view' 'total'}} {{HashMap.type}} {{agile_lng_translate 'reports-email' 'in-csv-file'}}: {{HashMap.TOTAL}} </div> 
+					<div style="padding-bottom:10px;font-size:14px;font-weight:bold">{{agile_lng_translate 'import-email' 'successfully-saved'}}: {{HashMap.SAVED}}</div>
 					{{#HashMap.NEW}}
-						<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- New {{HashMap.type}}: {{HashMap.NEW}}</div>
+						<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- {{agile_lng_translate 'menu' 'new'}} {{HashMap.type}}: {{HashMap.NEW}}</div>
 						{{/HashMap.NEW}}
 						
 						{{#HashMap.MERGED}}
-							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Merged {{HashMap.type}}: {{HashMap.MERGED}}</div>
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- {{agile_lng_translate 'contacts-view' 'merged'}} {{HashMap.type}}: {{HashMap.MERGED}}</div>
 							{{/HashMap.MERGED}}
 						
 					{{#HashMap.FAILED}} 
-						 <div style="padding-bottom:10px;font-size:14px;font-weight:bold">Failed {{HashMap.type}} : {{HashMap.FAILED}}</div>
+						 <div style="padding-bottom:10px;font-size:14px;font-weight:bold">{{agile_lng_translate 'campaigns' 'failed'}} {{HashMap.type}} : {{HashMap.FAILED}}</div>
 						{{/HashMap.FAILED}}
 					 
 					{{#HashMap.TRACKMISING}} 
-							<div style="padding-bottom:10px;font-size:14px;font-weight:bold;padding-left:15px">- Wrong track value or track not found in Agile : {{HashMap.TRACKMISING}}</div>
+							<div style="padding-bottom:10px;font-size:14px;font-weight:bold;padding-left:15px">- {{agile_lng_translate 'import-email' 'wrong-track-value'}} : {{HashMap.TRACKMISING}}</div>
 						{{/HashMap.TRACKMISING}}
 					
 					{{#HashMap.NAMEMISSING}} 
-							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Deal Name is Missing : {{HashMap.NAMEMISSING}} </div>
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- {{agile_lng_translate 'import-email' 'deal-name-missing'}} : {{HashMap.NAMEMISSING}} </div>
 						{{/HashMap.NAMEMISSING}}
 					
 					{{#HashMap.MILESTONE}} 
-							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Wrong Milestone : {{HashMap.MILESTONE}} </div>
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- {{agile_lng_translate 'import-email' 'wrong-milestone'}} : {{HashMap.MILESTONE}} </div>
 						{{/HashMap.MILESTONE}}
 					
 					{{#HashMap.ACCESS_DENIED}} 
-							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- Access Denied to Create/Update : {{HashMap.ACCESS_DENIED}} </div>
+							<div style="padding-bottom:5px;font-size:14px;padding-left:15px;font-family:sans-serif">- {{agile_lng_translate 'import-email' 'acess-denied-to-create-update'}} : {{HashMap.ACCESS_DENIED}} </div>
 						{{/HashMap.ACCESS_DENIED}}
 				
 				<div style="font-family:sans-serif;font-size:14px;padding-bottom:12px">
-					Should you have any questions or need assistance, don't hesitate to get in touch with us at any time by sending an email to <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
+					{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
 				</div>
 				<div style="font-weight: bold; font-size: 12px;">
-						The Crew at Agile CRM  <br />
+						{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
 					  </div>
 					  <div><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
 				</td>

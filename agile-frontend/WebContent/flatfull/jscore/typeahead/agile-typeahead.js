@@ -90,6 +90,16 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								type_url = '&' + urlParams;
 								searchParams = urlParams ;
 							}
+							if ($.trim(query) == ''){
+								$(".dashboard-search-scroll-bar").hide();
+								return;
+							}
+							if(!isQueryTextSearchValid(query)){
+								var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+								that.render();
+								return false;
+							}
 
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
@@ -129,9 +139,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								{
 									var txt ;
 									if(!searchParams && searchUrl != "core/api/search/deals")
-										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
+										txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
 									else
-										txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>' ; 
+										txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b>' ; 
 									searchParams = "";searchUrl = "";
 
 									if (noResultText && noResultText.length)
@@ -182,6 +192,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										TYPEHEAD_TYPE[tag_name] = '#contact/';
 									else if(item.type == 'COMPANY')
 										TYPEHEAD_TYPE[tag_name] = '#company/';
+									else if(item.type == 'LEAD')
+										TYPEHEAD_TYPE[tag_name] = '#lead/';
 										
 								});
 
@@ -190,6 +202,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 * the data
 								 */
 								process(items_list);
+							})
+							.success(function() {})
+							.error(function(data) 
+							{	
+								var txt = '<b>Unable to Process the Query.Please try again.</b>' ;
+								if(data.responseText)
+									txt = data.responseText ;
+								$('.dashboard-search-scroll-bar').html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 							});
 						},
 						showLoading : function(self)
@@ -325,6 +345,18 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (!items)
 								{
+									var query = $("#searchText").val();
+									if ($.trim(query) == ''){
+										$(".dashboard-search-scroll-bar").hide();
+										return;
+									}
+									if(!isQueryTextSearchValid(query))
+									{
+										var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+										$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+										$(".dashboard-search-scroll-bar").show();
+										return;
+									}
 									showSearchResults(); // fails
 									// automatically for
 									// non main search
@@ -429,6 +461,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											}
 											else if(relContact.type == 'COMPANY'){
 												tplJSON.type_item = '#company/';
+											}
+											else if(relContact.type == 'LEAD'){
+												tplJSON.type_item = '#lead/';
 											}
 											tplJSON.tag_item = relContact.id;
 											tplJSON.item = getContactName(relContact);
@@ -713,6 +748,10 @@ $("body").on("click", '#remove_tag', function(event)
 		$('#sendEmailInviteBlock').html('');
 	}
 });
+$('body').on('click','a.text-white',function()
+	{
+		$(this).blur();
+});
 
 /* Customization of Type-Ahead data */
 
@@ -817,7 +856,7 @@ function checkEmailValidation(value)
 function getContactName(contact, prop_key)
 {
 	var name = "";
-	if (!contact.type || contact.type == 'PERSON')
+	if (!contact.type || contact.type == 'PERSON' || contact.type == 'LEAD')
 	{
 		var first_name = getPropertyValue(contact.properties, "first_name");
 		var last_name = getPropertyValue(contact.properties, "last_name");
@@ -920,6 +959,12 @@ function appendItemInResult(item)
 			$("#company-typeahead-heading", this.el).show();
 			$("#company-results", this.el).append(i);
 		}
+		if (type == "lead_entity")
+		{
+
+			$("#lead-typeahead-heading", this.el).show();
+			$("#lead-results", this.el).append(i);
+		}
 		if (type == "deal")
 		{
 			$("#deal-typeahead-heading", this.el).show();
@@ -965,4 +1010,50 @@ function get_tag_item_json(items, items_temp, type){
 
 	console.log(tag_item_json);
 	return tag_item_json;
+}
+function isQueryTextSearchValid(query){
+	query = query.trim();
+	if(query == '')
+		return false
+	if(query == 'OR' || query == 'AND' || query == '()')
+		return false
+	if(query.indexOf('<') >= 0 || query.indexOf('>') >= 0 || query.indexOf(',') >= 0 || query.indexOf(':') >= 0 || query.indexOf('=') >= 0 || query.indexOf('~') >= 0) 
+		return false
+
+	if(query.startsWith('++') || query.startsWith('--')  || query.startsWith(')') || query.endsWith('(') )
+	  	return false
+
+	if(query.startsWith('/\/') && !query.startsWith('/\\/'))
+		return false
+
+	if(query.endsWith('/\/') && !query.endsWith('/\\/'))
+		return false
+	if(query.indexOf('(') >= 0 && !query.startsWith('('))
+		return false
+	if(query.indexOf(')') >= 0 && !query.endsWith(')'))
+		return false	
+	if(query.startsWith('(') && !query.endsWith(')') )
+		return false
+	else if(!query.startsWith('(') && query.endsWith(')') )
+		return false
+	else if(query.startsWith('(') && query.endsWith(')'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		return isQueryTextSearchValid(b) 
+	}
+	if(query.startsWith('"') && !query.endsWith('"') )
+		return false
+
+	else if(!query.startsWith('"') && query.endsWith('"') )
+		return false
+
+	else if(query.startsWith('"') && query.endsWith('"'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		if(b.indexOf('"') >= 0)
+			return false 
+	}
+	return true 
 }

@@ -6,11 +6,12 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
 <div class="col-md-12">
-{{#if id}}
+
+				{{#if id}}
 				<h3 class="formheading h3 font-thin">{{agile_lng_translate 'web-rules' 'edit-web-rule'}}</h3>
 				{{else}}
 				<h3 class="formheading h3 font-thin">
-					<i class="fa fa-plus-circle"></i> {{agile_lng_translate 'web-rules' 'add-web-rule'}}
+				{{agile_lng_translate 'web-rules' 'add-web-rule'}}
 				</h3>
 				{{/if}}
 
@@ -32,9 +33,9 @@
 						</div>
 					</div>
 					{{#if id}}<input type="hidden" name="position" class="required" />{{/if}}
-					<div class="control-group form-group" id="report-settings">
+					<div class="control-group form-group m-b-xs" id="report-settings">
 						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'condition'}}</label>
-						<div class="controls col-sm-9  table-responsive" >
+						<div class="controls col-sm-9 b-n m-none" >
 							<table
 								class="bg-transparent web-rule-contact-condition-table chained-table">
 								<tbody>
@@ -82,7 +83,7 @@
 											<div id="condition" name="CONDITION" class="m-r-xs">
 												<select name="temp" class="form-control">
 													<option value="MATCHES" class="page referrer" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'contains'}}</option>
-													<option value="NOT_CONTAINS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'does-not-contain'}}</option>
+													<option value="NOT_CONTAINS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'web-rules' 'does-not-contain'}}</option>
 													<option value="EQUALS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option value="NOTEQUALS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
 													
@@ -128,7 +129,7 @@
 													<option class="user_agent" value="UA_IS">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option class="user_agent" value="UA_IS_NOT">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
 													<option class="user_agent" value="UA_CONTAINS">{{agile_lng_translate 'contacts-view' 'contains'}}</option>
-													<option class="user_agent" value="UA_NOT_CONTAINS">{{agile_lng_translate 'contacts-view' 'does-not-contain'}}</option>
+													<option class="user_agent" value="UA_NOT_CONTAINS">{{agile_lng_translate 'web-rules' 'does-not-contain'}}</option>
 									
 													<!-- shopify cart -->
 													<option value="IS_EMPTY" class="cart">{{agile_lng_translate 'web-rules' 'cart-is-empty'}}</option>
@@ -447,19 +448,19 @@
 											</div>
 										</td>
 
-										<td class="v-top">
+										<td class="v-top" style="display:flex;">
 											<i
-											class="filter-contacts-web-rule-multiple-remove filter-contacts-multiple-remove icon-remove-circle c-p text-md"
+											class="filter-contacts-web-rule-multiple-remove filter-contacts-multiple-remove icon-close c-p m-t-sm m-l-xs"
 											style="display: none;"></i>
 											<i
-											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-l-xs c-p"></i></td>
+											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-t-sm m-l-xs c-p"></i></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 			</div>
-			<div class="control-group form-group p-t-md">
+			<div class="control-group form-group">
 						<label class="control-label col-sm-2">{{agile_lng_translate 'web-rules' 'action'}}</label>
 						<div class="controls col-sm-10">
 								<div class="webrule-actions chained-table"> 
@@ -655,7 +656,7 @@
 <hr>
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
-			<div class="form-actions">
+			<div class="form-actions web-rules-actions">
 				<a href="#web-rules" class="btn btn-sm btn-default">{{agile_lng_translate 'report-add' 'close'}}</a>
 				<a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a> 
 				<small id="twilio_call_setup">Please enable your Twilio integration <a href="#integrations" class="text-info">here.</a></small>

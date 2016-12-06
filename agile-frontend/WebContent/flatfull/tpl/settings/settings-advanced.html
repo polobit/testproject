@@ -49,15 +49,17 @@
                         </div>
                     </div>
 
-                    <div class="control-group form-group pos-rlt">
+                    <div class="control-group form-group pos-rlt m-b-sm">
                         <label class="control-label col-sm-4">Name Format</label> 
                         <div class="controls col-sm-8">
                             <select name="contact_name_format" id="ContactNameSwap" class="form-control pull-left">
-                                <option name="FTL" value="FTL">First Name First , Last Name Last</option>
-                                <option name="LTF" value="LTF">First Name Last , Last Name First</option>
+                                <option name="FTL" value="FTL">First Name , Last Name</option>
+                                <option name="LTF" value="LTF">Last Name , First Name </option>
                             </select>
-                            <i class="icon-info-sign pos-abs m-l-sm m-t-sm"data-toggle="tooltip" data-container="body" data-placement="right" title="" data-original-title="  Select a name format by swapping first & last name of your contacts.
-"></i>
+		                    <div class="col-sm-12 col-xs-12  p-none">
+			                 	<span class="text-muted">Select a name format by swapping first & last name of your contacts.
+			                 	</span>
+		                 	</div>
                         </div>
                     </div>
                     <div class="control-group form-group">
@@ -65,14 +67,14 @@
             	 <span class="field_req">*</span></label> 
                 <div class="controls col-sm-8">
                 	<select name="dateFormat" id="date-format" class="required form-control">
-						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}}</option>
-                        <option value="dd/mm/yyyy">{{currentDateInFormat "dd/mm/yyyy"}}</option>
-                        <option value="mm/dd/yy">{{currentDateInFormat "mm/dd/yy"}}</option>
-                        <option value="dd/mm/yy">{{currentDateInFormat "dd/mm/yy"}}</option>
-                        <option value="mm.dd.yyyy">{{currentDateInFormat "mm.dd.yyyy"}}</option>
-                        <option value="dd.mm.yyyy">{{currentDateInFormat "dd.mm.yyyy"}}</option>
-                        <option value="mm.dd.yy">{{currentDateInFormat "mm.dd.yy"}}</option>
-                        <option value="dd.mm.yy">{{currentDateInFormat "dd.mm.yy"}}</option>
+						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}} (MM/DD/YYYY)</option>
+                        <option value="dd/mm/yyyy">{{currentDateInFormat "dd/mm/yyyy"}} (DD/MM/YYYY)</option>
+                        <option value="mm/dd/yy">{{currentDateInFormat "mm/dd/yy"}} (MM/DD/YY)</option>
+                        <option value="dd/mm/yy">{{currentDateInFormat "dd/mm/yy"}} (DD/MM/YY)</option>
+                        <option value="mm.dd.yyyy">{{currentDateInFormat "mm.dd.yyyy"}} (MM.DD.YYYY)</option>
+                        <option value="dd.mm.yyyy">{{currentDateInFormat "dd.mm.yyyy"}} (DD.MM.YYYY)</option>
+                        <option value="mm.dd.yy">{{currentDateInFormat "mm.dd.yy"}} (MM.DD.YY)</option>
+                        <option value="dd.mm.yy">{{currentDateInFormat "dd.mm.yy"}} (DD.MM.YY)</option>
                         <option value="dd M, yyyy">{{currentDateInFormat "dd M, yyyy"}}</option>
                         <option value="dd MM, yyyy">{{currentDateInFormat "dd MM, yyyy"}}</option>
                         <option value="D, dd M, yyyy">{{currentDateInFormat "D, dd M, yyyy"}}</option>
@@ -986,7 +988,8 @@
                      </select>
                  </div>
                  <div class="col-sm-offset-4 col-sm-9">
-                 	<span class="text-muted">{{agile_lng_translate 'prefs-settings' 'either-of-the-selected-days'}}</span>
+                 	<span class="text-muted"><!--{{agile_lng_translate 'prefs-settings' 'either-of-the-selected-days'}}-->Your calendar week starts with either of the selected days.
+                 	</span>
                  </div>
              </div>
                 </div>
@@ -1038,7 +1041,7 @@
                 </div>
             </div>
 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminder'}}</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminders'}}</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
@@ -1052,13 +1055,16 @@
                 <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'shortcuts'}}
                 </label>
                 <div class="controls col-sm-9">
-                    <div class="checkbox">
+                    <div class="checkbox show-shortcuts-style">
 <label class="i-checks i-checks-sm">
                     <input id="keyboard_shotcuts" type="checkbox" name="keyboard_shotcuts" /><i></i>
-                    {{agile_lng_translate 'prefs-settings' 'enable-keyboard-shortcuts'}} <a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>
-                    </label> 
+                    Enable Keyboard Shortcuts <!--<a href="#" data-dismiss="modal" class="t-l-none data-toggle="modal" id="keyboard-shortcuts"><i class="icon-info-sign"></i></a>-->
+        		<a href="#" data-dismiss="modal" class="t-l-none data-toggle block text-info text-xs"modal" id="keyboard-shortcuts" style="margin-left:7px;color:#23b7e5;">
+				Show Shortcuts</a>            
+	</label> 
 </div>      
                 </div>
+                 
             </div>
             <div class="control-group form-group hidden">
 <label class="col-sm-2">&nbsp;</label>
@@ -1072,7 +1078,7 @@
 <div class="row">
 <div class="col-md-12">
 <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-9">
+            <div class="col-sm-offset-2 col-sm-9" id="save_changes_btn">
                 <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                 <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
             </div>

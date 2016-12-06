@@ -372,3 +372,9 @@ function resetLandingPageButton(){
 	$(".saveLandingPageButton").prop("disabled",false);
     $(".saveLandingPageButtonText").html("{{agile_lng_translate 'landing-pages' 'save-page'}}");
 }
+function lpVideoPopup(){
+       var data={};
+       data.title="Landing Pages Tutorial";
+       data.videourl="//www.youtube.com/embed/WwXsiCHZ52Y?enablejsapi=10&autoplay=1";
+       showHelpVideoModal(data);
+}

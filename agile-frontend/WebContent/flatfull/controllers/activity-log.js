@@ -8,15 +8,23 @@ var ActivitylogRouter = Backbone.Router.extend({
     routes: {
         /* Shows page */
         "activities": "activities",
+        "navbar-activities/:id" : "navbarActivities",
         "contact-activities": "contactActivities",
         "contact-activities/:type": "contactActivities",
         "activities/campaign/:id" : "activities"
     },
-
+    navbarActivities :function(e)
+    {
+        navbarRoutes(e)
+        Backbone.history.navigate("activities", {
+            trigger: true
+        });
+    },
     activities: function(id) {
         if (!tight_acl.checkPermission('ACTIVITY'))
             return;
-
+        if(CURRENT_DOMAIN_USER.domain == "admin" && CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("VIEW_LOGS") == -1)
+            return  showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
         head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 
             $('#content').html("<div id='activities-listners'>&nbsp;</div>");
@@ -32,6 +40,8 @@ var ActivitylogRouter = Backbone.Router.extend({
                     $('#activities-listners').html($(template_ui));
 
                     var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+                    $(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
+                    $("."+dashboard_name+"-activitiesnavbar").addClass("agile-menuactive")
                     var activities_list;
                     if(!dashboard_name){
                         var role = CURRENT_DOMAIN_USER.role;
@@ -129,7 +139,7 @@ var ActivitylogRouter = Backbone.Router.extend({
             }, "#activities-listners");
 
             $(".active").removeClass("active");
-            $("#activitiesmenu").addClass("active");
+            
         })
     },
     contactActivities: function(id) { // begin contact activities

@@ -1,6 +1,7 @@
 var _plan_restrictions = {};
 $(function() {
-	init_acl_restriction();
+	if(_billing_restriction)
+		init_acl_restriction();
 });
 
 function init_acl_restriction()

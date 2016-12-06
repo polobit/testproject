@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.agilecrm.knowledgebase.entity.HelpcenterUser;
+import com.agilecrm.user.util.AliasDomainUtil;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
@@ -30,12 +33,16 @@ public class HelpcenterUserUtil
 
 	public static void sendVerificationEmail(HelpcenterUser user)
 	{
+		// Get user prefs language
+	    String language = UserPrefs.DEFAULT_LANGUAGE;
+	    if(user != null)
+	    	language = LanguageUtil.getUserLanguageFromEmail(user.email);
+	    
 		Map<String, String> data = new HashMap<String, String>();
-
 		try
 		{
 			data.put("name", user.name);
-			data.put("domain", NamespaceManager.get());
+			data.put("domain", AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()));
 			data.put("verify_link", VersioningUtil.getHostURLByApp(NamespaceManager.get())
 					+ "/helpcenter/verify_email?tid=" + URLEncoder.encode(user.created_time + "", "UTF-8") + "&id="
 					+ user.id);
@@ -45,6 +52,6 @@ public class HelpcenterUserUtil
 			e.printStackTrace();
 		}
 
-		SendMail.sendMail(user.email, SendMail.HELPCENTER_VERIFICATION_SUBJECT, SendMail.HELPCENTER_VERIFICATION, data);
+		SendMail.sendMail(user.email, SendMail.HELPCENTER_VERIFICATION_SUBJECT, SendMail.HELPCENTER_VERIFICATION, data, language);
 	}
 }

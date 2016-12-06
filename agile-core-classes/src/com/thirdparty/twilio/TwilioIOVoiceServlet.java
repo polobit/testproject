@@ -52,6 +52,8 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		
 		String conference = request.getParameter("conference");
 		
+		String extension = request.getParameter("extension");
+		
 		TwiMLResponse twiml = new TwiMLResponse();
 		Dial dial = new Dial();
 		try
@@ -109,7 +111,13 @@ public class TwilioIOVoiceServlet extends HttpServlet
 						c.setWaitMethod("GET");
 						dial.append(c);
 					}else{
-						dial.append(new Number(phoneNumber));
+						//dial.append(new Number(phoneNumber));
+						Number num = new Number(phoneNumber);
+						if(extension != null && !extension.equals("")){
+							num.set("sendDigits", extension);
+							System.out.println("dialing extension along with phone number ---" +  extension);
+						}
+						dial.append(num);
 					}
 					// Set callerID
 					dial.setCallerId(callerId);

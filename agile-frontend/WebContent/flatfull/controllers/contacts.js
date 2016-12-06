@@ -18,8 +18,13 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
-
-		"navigate-dashboard" : "navigateDashboard", 
+		
+		"navigate-dashboard" : "navigateDashboard",
+		
+		"navigate-dashboard/:id" : "navigateDashboard", 
+		
+		//clicking on the dashboard icon
+		"navbar-dashboard" : "homeDashboard",
 		
 		// "dashboard-test": "dashboard",
 
@@ -86,9 +91,29 @@ var ContactsRouter = Backbone.Router.extend({
 	salesforceImport : function(){
          App_Datasync.salesforce();
 	},
-
-	navigateDashboard : function(){
+	homeDashboard : function(){
+		var newRole = $(".appaside.agile-menuactive").attr("data-service-name");
+		
+		if(CURRENT_DOMAIN_USER.role != newRole )
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, menuServiceDashboard(newRole));
+			updateDashboardRole(newRole);
+		}
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
+	navigateDashboard : function(id){
 		// Call dashboard route
+		if(id)
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+			var prevrole = menuServicerole(id);
+			if(CURRENT_DOMAIN_USER.role != prevrole)
+			{
+				updateDashboardRole(prevrole);
+			}
+		}
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -105,8 +130,20 @@ var ContactsRouter = Backbone.Router.extend({
             });
             return;
 		}
-
+		var role = CURRENT_DOMAIN_USER.role;
+		//var dashboard_name = menuServiceDashboard(role);
+		
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(isNaN(dashboard_name)){
+			dashboard_name = menuServiceDashboard(role);	
+		}
+		else{
+				dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		}
+
+		
+
+
 		if(!dashboard_name){
 			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
 			if(selected_id == "Dashboard")
@@ -123,7 +160,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-
+		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		$(".nav.nav-sub li").removeClass("active");
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -174,9 +213,9 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		$("#home_dashboard").addClass("active");
-
-	},
+		//$("#home_dashboard").addClass("active");
+		
+		},
 	
 	/**
 	 * Fetches all the contacts (persons) and shows as list, if tag_id
@@ -655,6 +694,13 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		// If contact is of type lead , go to lead details page
+		if (contact.get('type') == 'LEAD')
+		{			
+			Backbone.history.navigate( "lead/"+id, { trigger : true });
+			return;
+		}
+
 		this.contactDetailView = new Contact_Details_Model_Events({ model : contact, isNew : true, template : "contact-detail", postRenderCallback : function(el)
 		{
 			
@@ -904,6 +950,9 @@ var ContactsRouter = Backbone.Router.extend({
 			template : "import-contacts",
 			postRenderCallback: function(el)
 			{
+				var leadsViewLoader = new LeadsViewLoader();
+				leadsViewLoader.setupImportView(el);
+				
 				initializeImportEvents("import-contacts-event-listener");
 
 				if(import_tab_Id) {
@@ -918,6 +967,7 @@ var ContactsRouter = Backbone.Router.extend({
 		});
 
 		$('#content').html(App_Contacts.importContacts.render().el);
+
 		
 /*
 $('#content').html('<div id="import-contacts-event-listener"></div>');
@@ -990,9 +1040,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
              
              // Gets the domain name from the contacts of the custom fields.
                var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
+               var email;
                if(contactId == currentContactJson.id){
 					var properties = currentContactJson.properties;
-					var email;
+					
 					$.each(properties,function(id, obj){
 						if(obj.name == "email"){
 							email = obj.value;
@@ -1000,6 +1051,15 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 						}
 					});
 			   }
+
+			   if(App_Companies.companyDetailView){
+			      var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			      var tempId = id;
+			      id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+			        if(id && id == compEmailTemp){
+				        email = tempId;
+			        }
+		        }
               
               this.sendEmail(email, subject, body, cc, bcc, true,id_type);
               return;
@@ -1422,7 +1482,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			_agile_delete_prefs('dynamic_contact_filter');
 		}
 
-		if(_agile_get_prefs("contacts_tag") != tag_id)
+		if(tag_id && _agile_get_prefs("contacts_tag") != tag_id)
 		{
 			CONTACTS_HARD_RELOAD = true;
 			_agile_set_prefs("contacts_tag", tag_id);
@@ -1464,6 +1524,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
+    	else if(type == "leads")
+    		countURL = App_Leads.leadsListView.options.url + "/count";
      	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
@@ -1482,6 +1544,10 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
 					if(type == "workflows")
 						  $("span.badge.bg-primary", el).html(data);
+					else if(type == "leads")
+					{
+						$('#leads-count').html(count_message);
+					}
 
 					// Reset collection
 					if(type == "contacts-company")
@@ -1491,6 +1557,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
 							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
+					}else if(type == "leads" && App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 0){
+						App_Leads.leadsListView.collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
@@ -1551,6 +1619,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 		
 		if(App_Companies.companyDetailView){
 			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
 			if(id && id == compEmailTemp){
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
@@ -1584,6 +1653,11 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 				}
 			}
 		}	
+
+		if(Current_Route && App_Leads.leadDetailView && Current_Route == "lead/"+App_Leads.leadDetailView.model.get("id"))
+		{
+			model = App_Leads.leadDetailView.model.toJSON();
+		}
 	}
 	
 //		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
@@ -1665,7 +1739,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a class="text-white " href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
@@ -1804,10 +1878,11 @@ function addTypeCustomData(contactId, el){
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 	
 }
+
 function confirmandVerifyEmail()
 {
 	var options = {};
-	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+	options["{{agile_lng_translate 'verification' 'add-new'}}"] = "verify_email";
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',
@@ -1828,10 +1903,38 @@ function confirmandVerifyEmail()
 					if(typeof(ownerEmail) !== "undefined")
 						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
 					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select Email -</option>");
 						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
 					}
 				}
 				rearrange_from_email_options($select, data);
 			});
+
+}
+
+function menuServiceDashboard(role){
+		switch(role){
+			case 'SALES':
+			    return "SalesDashboard"
+			    break;
+			case 'MARKETING':
+				return "MarketingDashboard";
+				break;
+			case 'SERVICE' :
+				return "Dashboard";
+				break;
+		}
+}
+function menuServicerole(dashboard){
+		switch(dashboard){
+			case 'SalesDashboard':
+			    return "SALES"
+			    break;
+			case 'MarketingDashboard':
+				return "MARKETING";
+				break;
+			case 'Dashboard' :
+				return "SERVICE";
+				break;
+		}
 }

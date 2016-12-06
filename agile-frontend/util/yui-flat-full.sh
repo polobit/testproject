@@ -34,6 +34,9 @@ cat ../WebContent/flatfull/jscore/tickets/base-model/*.js ../WebContent/flatfull
 cat ../WebContent/flatfull/controllers/app.js >> ../WebContent/jscore/min/flatfull/js-all-min-4.js
 
 # Stats
+if [ -e ../WebContent/stats/min/agile-min.js ]; then
+    rm ../WebContent/stats/min/agile-min.js
+fi
 cat $(find ../WebContent/stats/js ! -path ../WebContent/stats/js/agile-on-load.js -name "*.js") > ../WebContent/stats/min/agile-min.js
 cat ../WebContent/stats/js/agile-on-load.js >> ../WebContent/stats/min/agile-min.js
 #Minify

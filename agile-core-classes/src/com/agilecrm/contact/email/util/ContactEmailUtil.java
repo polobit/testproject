@@ -48,8 +48,8 @@ import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.repackaged.com.google.common.base.CharMatcher;
-import com.google.appengine.repackaged.com.google.common.base.Splitter;
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -1151,6 +1151,52 @@ public class ContactEmailUtil
 			e.printStackTrace();
 		}
 		return "";
+	}
+	
+	/**
+	 * Merges lead-emails with imap emails if exists, otherwise returns
+	 * lead-emails. Fetches lead emails of the lead with search email
+	 * and merge them with imap emails.
+	 * 
+	 * @param searchEmail
+	 *            - Lead EmailId.
+	 * @param imapEmails
+	 *            - array of imap emails obtained.
+	 * @return JSONArray
+	 */
+	public static JSONArray mergeLeadEmails(String searchEmail, JSONArray imapEmails)
+	{
+		// if email preferences are not set.
+		if (imapEmails == null)
+			imapEmails = new JSONArray();
+
+		try
+		{
+			Contact lead = ContactUtil.searchContactByEmailAndType(searchEmail, com.agilecrm.contact.Contact.Type.LEAD);
+			if(lead != null)
+			{
+				// Fetches contact emails
+				List<ContactEmail> contactEmails = getContactEmails(lead.id);
+
+				// Merge Contact Emails with obtained imap emails
+				for (ContactEmail contactEmail : contactEmails)
+				{
+					// parse email body
+					contactEmail.message = EmailUtil.parseEmailData(contactEmail.message);
+
+					ObjectMapper mapper = new ObjectMapper();
+					String emailString = mapper.writeValueAsString(contactEmail);
+					imapEmails.put(new JSONObject(emailString));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("Exception while merging emails " + e.getMessage());
+		}
+
+		return imapEmails;
 	}
 
 }

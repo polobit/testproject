@@ -439,7 +439,9 @@ function dialFromBria(to,from,contact){
 	
 	var action ={};
   	action['command'] = "startCall";
-  	action['number'] = to;
+  	var callNumber = to;
+  	generateNumberAndExtension(callNumber, action);
+  	//action['number'] = to;
   	action['callId'] = "";
 	
 	try{
@@ -471,7 +473,9 @@ function dialFromSkype(to,from,contact){
 	
 	var action ={};
   	action['command'] = "startCall";
-  	action['number'] = to;
+  	var callNumber = to;
+  	generateNumberAndExtension(callNumber, action);
+  	//action['number'] = to;
   	action['callId'] = "";
   	
 	try{

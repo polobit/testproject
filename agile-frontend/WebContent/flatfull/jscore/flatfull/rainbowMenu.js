@@ -42,6 +42,7 @@ function initializeThemeSettingsListeners(){
 	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'top')
 	{
+		$(".app").removeClass("app-aside-folded");
 		$(".app").addClass("app-aside-dock");
 		$(".fixedicons#planView,.fixedicons#helpView").removeClass('fixedicons').addClass('dockedicons');
 		

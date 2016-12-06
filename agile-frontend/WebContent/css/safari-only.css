@@ -32,3 +32,7 @@
 #define-business-hours .input-group-addon i{
 	font-size: 12px !important;
 }
+.app-aside-dock #app-aside-folded
+{
+	display:none!important;
+}

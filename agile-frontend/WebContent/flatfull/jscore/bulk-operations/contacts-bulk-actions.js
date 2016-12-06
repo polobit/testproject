@@ -183,11 +183,12 @@ var contacts_bulk_actions = {
 			}, function(element)
 			{
 			}, yes, no);
+
 			return;
 		}
 		else if (continueAction)
 		{
-			show_bulk_campaign_assign_page()
+			show_bulk_campaign_assign_page(bulkOperationContactsCount())
 		}
 	},
 
@@ -450,13 +451,7 @@ var contacts_bulk_actions = {
 
 											// Uncheck contacts table and
 											// hide bulk actions button.
-											$('body').find('#bulk-actions').css('display', 'none');
-											$('body').find('#bulk-select').css('display', 'none');
-											$('body').find('#bulk-action-btns button').addClass("disabled");
-											$('table#contacts-table').find('.thead_check').removeAttr('checked');
-											$('table#contacts-table').find('.tbody_check').removeAttr('checked');
-											$(".grid-checkboxes").find(".thead_check").removeAttr("checked");
-                                            $(".contacts-grid-view-temp").find(".tbody_check").removeAttr("checked");
+											contacts_view_loader.disableBulkActionBtns();
 
 										}, "no_noty");
 									});
@@ -534,10 +529,7 @@ var contacts_bulk_actions = {
 
 												// Uncheck contacts table and
 												// hide bulk actions button.
-												$('body').find('#bulk-actions').css('display', 'none');
-												$('body').find('#bulk-select').css('display', 'none');
-												$('table#companies,table#contacts-table').find('.thead_check').removeAttr('checked');
-												$('table#companies,table#contacts-table').find('.tbody_check').removeAttr('checked');
+												companies_view_loader.disableBulkActionBtns();
 
 											}, "no_noty");
 										});
@@ -667,7 +659,7 @@ function show_bulk_owner_change_page()
 
 	}
 
-	function show_bulk_campaign_assign_page()
+	function show_bulk_campaign_assign_page(selected_count)
 	{
 
 		load_bulk_operations_template(function(){
@@ -681,10 +673,25 @@ function show_bulk_owner_change_page()
 
 			console.log(filter);
 
+			var workflows_collection = [];
+			var emails_workflows = [];
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
 				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ({{agile_lng_translate 'campaigns' 'disabled'}}){{else}}>{{name}}{{/if}}</option>";
- 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+ 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', function(collection){
+ 					
+ 					try
+ 					{
+ 						workflows_collection = collection.toJSON();
+ 					 	emails_workflows = get_email_workflows(workflows_collection);
+ 					}
+ 					catch(err)
+ 					{
+
+ 					}
+
+
+ 				}, optionsTemplate);
 			});
 
 			// Navigate to show form
@@ -717,14 +724,63 @@ function show_bulk_owner_change_page()
 				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
-				var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
 
-				var json = {};
-				json.contact_ids = id_array;
-				postBulkOperationData(url, json, $form, undefined, function(data)
+				if(selected_count > 500 && emails_workflows.hasOwnProperty(workflow_id))
 				{
-					enable_save_button(saveButton);
-				}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+					accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
+              		function(response){ // success
+
+	                      if(!response)
+	                      {
+	                            
+		                      showModalConfirmation(
+		                                      "Add to Campaign",
+		                                      "Please configure DKIM and SPF settings to send campaign emails to more than 500 contacts.",
+		                                       function()
+		                                      {
+		                                      		  enable_save_button(saveButton);
+		                                              Backbone.history.navigate("analytics-code", { trigger : true });
+
+		                                      },  function()
+		                                      {
+		                                      		enable_save_button(saveButton);
+
+		                                            Backbone.history.navigate("contacts", { trigger : true });
+		                                           
+		                                      }, function()
+		                                      {
+		                                      	enable_save_button(saveButton);
+		                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+		                      				
+		                      	return;
+	                  		}
+
+	                  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+							var json = {};
+							json.contact_ids = id_array;
+							postBulkOperationData(url, json, $form, undefined, function(data)
+							{
+								enable_save_button(saveButton);
+							}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+		              	}, 
+		              	function(){
+
+		              	//error
+
+						});
+				}
+				else
+				{
+					var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+					var json = {};
+					json.contact_ids = id_array;
+					postBulkOperationData(url, json, $form, undefined, function(data)
+					{
+						enable_save_button(saveButton);
+					}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+				}
 			});
 		});
 		
@@ -788,7 +844,8 @@ function show_bulk_owner_change_page()
 			
 			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 			{
-				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" style="color: #363f44;" tag="{{name}}">&times</a></li>');
 			 	// Adds contact name to tags ul as li element
 			 	$('#addBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 			}	
@@ -834,13 +891,13 @@ function show_bulk_owner_change_page()
 							}, "{{agile_lng_translate 'contacts' 'add-tag-scheduled'}}");
 				}, function(error){
 					enable_save_button(saveButton);
+				return;
 				});
 			}
 			else 
 			{
 				$('#addBulkTags').focus();
 				$('.error-tags').show().delay(3000).hide(1);
-				return;
 			}
 		});
 	}
@@ -1177,7 +1234,8 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 			}
 		}else{
 			$("#bulk-action-btns button").removeClass("disabled");
-			resultCount = App_Contacts.contactsListView.collection.length;
+			if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+				resultCount = App_Contacts.contactsListView.collection.length;
 			appCount = total_available_contacts;
 
 			if (isBulk && total_available_contacts != resultCount){
@@ -1202,7 +1260,12 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	{
 		if (isBulk)
 		{
-			if(company_util.isCompany())
+			if(company_util.isCompanyContact())
+			{
+				$("#bulk-action-btns button").addClass("disabled");
+				$("#contactCompanyTabelView").removeClass("disabled");
+			}
+			else if(company_util.isCompany())
 			{
 				$("#bulk-action-btns button").addClass("disabled");
 				$("#companiesTabelView").removeClass("disabled");
@@ -1231,6 +1294,18 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 		{
 			
 				$("#bulk-action-btns button").addClass("disabled");
+			if(company_util.isCompanyContact())
+			{
+				$("#contactCompanyTabelView").removeClass("disabled");
+			}
+			else if(company_util.isCompany())
+			{
+				$("#companiesTabelView").removeClass("disabled");
+			}
+			else
+			{
+				$("#contactTabelView").removeClass("disabled");
+			}
 		}
 	}
 }
@@ -1256,14 +1331,16 @@ function getAvailableContacts()
 			current_view_contacts_count = App_Companies.companiesListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
-		 else if (App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
+		 else if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.toJSON()[0] && App_Contacts.contactsListView.collection.toJSON()[0].count)
 		{
 			//
 			current_view_contacts_count = App_Contacts.contactsListView.collection.toJSON()[0].count;
 			return current_view_contacts_count;
 		}
-	 
-	return App_Contacts.contactsListView.collection.toJSON().length;
+	if(App_Contacts.contactsListView && App_Contacts.contactsListView.collection)
+		return App_Contacts.contactsListView.collection.toJSON().length;
+	else
+		return 0;
 }
 
 /**

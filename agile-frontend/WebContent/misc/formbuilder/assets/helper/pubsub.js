@@ -41,25 +41,25 @@ var addAgileApi = function(json, api, callback)
 	agiledomain.value = window.location.hostname.split('.')[0];
 
 	var agileredirecturl = {};
-	agileredirecturl.label = "Form Action / Redirect URL";
+	agileredirecturl.label = "Form Action / Redirect URL <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='On form submission, user will be redirected to the mentioned url' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agileredirecturl.type = "input";
 	agileredirecturl.value = "#";
 
 	//adding for the inline submit
 	var agileconfirmationmsg = {};
-	agileconfirmationmsg.label = "Confirmation Message";
+	agileconfirmationmsg.label = "Confirmation Message <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' Will be displayed if Form Action/Redirect URL is not specified' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agileconfirmationmsg.type = "input";
 	agileconfirmationmsg.value = "Great! Thanks for filling out the form.";
 
 
 	var agilepreloadfields = {};
-	agilepreloadfields.label = "Preload Fields";
+	agilepreloadfields.label = "Preload Fields <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to yes, the form fields will be pre populated if info available in cookies' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agilepreloadfields.type = "select";
-	agilepreloadfields.value = [{value : false, selected : true, label : "no"}, {value : true, selected : false, label: "yes"}];
+	agilepreloadfields.value = [{value : false, selected : false, label : "no"}, {value : true, selected : true, label: "yes"}];
    // adding the tag for the TO SEND EMAIL Notification 
 
 	var formemailnotification = {};
-	formemailnotification.label = "Email Notification";
+	formemailnotification.label = "Email Notification <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to true, owner will be notified via email on form submission' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	formemailnotification.type = "select";
 	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
     //Adding the Recaptcha for the website 
@@ -71,12 +71,12 @@ var addAgileApi = function(json, api, callback)
 	agileformcaptcha.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
 	var agileformidtag = {};
-	agileformidtag.label = "Form Tags";
+	agileformidtag.label = "Form Tags <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' On form submission, tag will be added to the contact created/modified' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agileformidtag.type = "input";
 	agileformidtag.value = "";
 
 	var agiletransparentbackground = {};
-	agiletransparentbackground.label = "Transparent Background";
+	agiletransparentbackground.label = "Transparent Background <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='If set to yes, the background of your website will be applied' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agiletransparentbackground.type = "select";
 	agiletransparentbackground.value = [{value : "", selected : true, label : "no"}, {value : " agile-form-transparent", selected : false, label: "yes"}];
 
@@ -166,10 +166,24 @@ var addAgileFields = function(json, fields, callback)
 
 			}
 			else{
-			json[k][i].fields["agilefield"] = agilefield;
-
-		   }
+				json[k][i].fields["agilefield"] = agilefield;
+				if(json[k][i].title.includes('Input') || json[k][i].title.includes('Select')){
+					var reqField = json[k][i].fields["required"];
+					delete json[k][i].fields["required"];
+					json[k][i].fields["required"] = reqField;
+				}
+				else if(json[k][i].title.includes('Text') || json[k][i].title.includes('Checkbox')){
+					var reqField = json[k][i].fields["required"];
+					var checkField = json[k][i].fields["checked"];
+					delete json[k][i].fields["checked"];
+					delete json[k][i].fields["required"];
+					json[k][i].fields["checked"] = checkField;
+					json[k][i].fields["required"] = reqField;
+					
+				}
+			}
 			/*json[k][i].fields["agilefield"] = agilefield;*/
+
 		}
 	}
 	callback(json);

@@ -191,6 +191,12 @@ $(function()
     	e.preventDefault();
     	window.history.back();
     });
+
+	$('#opportunityUpdateModal, #newDealModal').off("click",".navigate-products");
+    $('#opportunityUpdateModal, #newDealModal').on("click",".navigate-products",function(e)
+	{
+				Backbone.history.navigate('products', { trigger : true });
+	});
 	
 });
 
@@ -507,7 +513,7 @@ function initializeDealListners(el){
 		_agile_delete_prefs('deal-filter-name');
 		_agile_delete_prefs('deal-filters');
 		setupDefaultDealFilters();
-		$('#opportunity-listners').find('h3').find('.remove_deal_filter').parent().remove();
+		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
         if (!_agile_get_prefs("agile_deal_view")){
             setupDealsTracksList();
         }else{

@@ -172,7 +172,7 @@
 				            {{/if_equals}}			                       
 				<a class="btn btn-sm btn-danger m-r-xs" id="delete-widget" widget-name="{{name}}">{{agile_lng_translate 'deal-view' 'delete'}}</a>	
 				{{#if_equals name "Bria"}}
-					<div class="text-center m-t-sm ">
+					<div class="text-center m-t-xs">
 							{{agile_lng_translate 'widgets' 'download'}}
 							<a href="#" class="text-info" target="_blank" id="downloadCallJar"> {{agile_lng_translate 'widgets' 'executable'}} </a>
 							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{agile_lng_translate 'widgets' 'bria-tooltip'}}"></i>
@@ -181,7 +181,7 @@
 				
 				{{#if_equals name "Skype"}}
 
-					<div class="text-center m-t-sm ">
+					<div class="text-center m-t-xs">
 							{{agile_lng_translate 'widgets' 'download'}}
 							<a href="#" class="text-info" target="_blank" id="downloadCallJar" widget-name="Skype"> {{agile_lng_translate 'widgets' 'executable'}} </a>
 							<i class="icon-question-sign m-l-xs" style="color:#A09898;" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{agile_lng_translate 'widgets' 'bria-tooltip'}}"></i>
@@ -356,16 +356,16 @@
        {{#is_mobile}}
 
        <li><a href="#call-tab" data-toggle="tab" class="b-l-none"><i class="icon icon-call-in"></i></a></li>
+       	<li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
        	 <li><a href="#support-tab" data-toggle="tab"><i class="icon icon-support"></i></a></li>
        	 <li><a href="#billing-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a></li>
-       	 <li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
        	 <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i></a></li>
          <li><a href="#custom-widget-tab" data-toggle="tab"><i class="icon icon-drawer"></i></a></li>
        {{else}}
        	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_lng_translate 'widgets' 'telephony'}}</a></li>
+       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
        	 <li><a href="#support-tab" data-toggle="tab">{{agile_lng_translate 'help' 'support'}}</a></li>
        	 <li><a href="#billing-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'billing'}}</a></li>
-       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
        	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
        	 </a></li>
          <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'custom'}}</a></li>
@@ -377,14 +377,20 @@
 		<div class="tab-pane" id="call-tab">
 			<div id="call" class="row"></div>
 		</div>
+		<div class="tab-pane" id="social-tab">
+			<div id="social" class="row"></div>
+		</div>
 		<div class="tab-pane" id="support-tab">
-			<div id="support" class="row"></div>
+			<div id="support" class="row">
+				<div id="support_plan_alert_info" class="alert alert-info col-md-12" role="alert" style=""> 
+				<span>{{agile_lng_translate 'widgets' 'try-out-helpdesk'}}</span>
+				  <a href="#" id="menu-suport-service-select" class="menu-suport-service-select text-info font-bold" data-service-name="SERVICE" data-dashboard="dashboard" onclick="javascript:gotoService(event,'SERVICE','dashboard');"><span>{{agile_lng_translate 'widgets' 'try-out-helpdesk-link'}}</span></a>
+				  <span class="support_plan_strip_close p-l-sm c-p pull-right" onclick="javascript:closesupportnoty();">×</span>
+				</div>
+			</div>
 		</div>
 		<div class="tab-pane" id="billing-tab">
 			<div id="billing" class="row"></div>
-		</div>
-		<div class="tab-pane" id="social-tab">
-			<div id="social" class="row"></div>
 		</div>
 		<div class="tab-pane" id="ecommerce-tab">
 			<div id="ecommerce" class="row"></div>
@@ -545,14 +551,25 @@
 <script id="widget-settings-template" type="text/html">
 	<div class="tab-container m-b-none widgets_inner">
        <ul class="nav nav-tabs">
-       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_lng_translate 'widgets' 'telephony'}}</a></li>
-       	 <li><a href="#support-tab" data-toggle="tab">{{agile_lng_translate 'help' 'support'}}</a></li>
-       	 <li><a href="#billing-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'billing'}}</a></li>
-       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
-       	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
-       	 </a></li>
-         <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'custom'}}</a>
-         </li>
+       	 {{#is_mobile}}
+       	 	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none"><i class="icon icon-call-in"></i></a></li>
+	       	 <li><a href="#support-tab" data-toggle="tab"><i class="icon icon-support"></i></a></li>
+	       	 <li><a href="#billing-tab" data-toggle="tab"><i class="icon icon-credit-card"></i></a></li>
+	       	 <li><a href="#social-tab" data-toggle="tab"><i class="icon icon-social-twitter"></i></a></li>
+	       	 <li><a href="#ecommerce-tab" data-toggle="tab"><i class="icon icon-basket-loaded"></i>
+	       	 </a></li>
+	         <li><a href="#custom-widget-tab" data-toggle="tab"><i class="icon icon-drawer"></i></a>
+	         </li>
+       	 {{else}}
+	       	 <li><a href="#call-tab" data-toggle="tab" class="b-l-none">{{agile_lng_translate 'widgets' 'telephony'}}</a></li>
+	       	 <li><a href="#support-tab" data-toggle="tab">{{agile_lng_translate 'help' 'support'}}</a></li>
+	       	 <li><a href="#billing-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'billing'}}</a></li>
+	       	 <li><a href="#social-tab" data-toggle="tab">{{agile_lng_translate 'widgets' 'social'}}</a></li>
+	       	 <li><a href="#ecommerce-tab" data-toggle="tab">{{agile_lng_translate 'prefs-data-sync' 'ecommerce'}}
+	       	 </a></li>
+	         <li><a href="#custom-widget-tab" data-toggle="tab">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+	         </li>
+       	 {{/is_mobile}}
        </ul>
 	</div>
 
@@ -756,7 +773,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{{this.widget.display_name}}</h4>
       </div>
-      <div class="modal-body p-l p-t-xs p-b-xs">
+      <div class="p-l p-t-xs p-b-xs">
 		  <span style="width:5%;">
 		  	<label class="i-checks i-checks-sm m-b-none">
 		    	<input type="checkbox" class="agileUserChk_all" value=""><i></i>
@@ -765,36 +782,10 @@
 		  <span>{{agile_lng_translate 'report-view' 'all-users'}}</span>
 	  </div>
       <div class="modal-body overflow-auto p-xs" style="max-height: 500px;">
-        	{{#if this.data.length}}
-        	<div class="row p-none m-none">
-        		{{#each this.data}}
-    				<div class="col-md-6 p-none">	    	
-    					<div class="b p-sm m-sm">			
-	    					<div class="checkbox pull-left">
-				              <label class="i-checks">
-				               {{#if isChecked}}
-				                <input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}" checked>
-				               {{else}}
-				               	<input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}">
-				               {{/if}}
-				                <i></i>				           
-				              </label>
-		            		</div>
-		    				<div class="m-r-xs agile-img">					
-								<img class="img-inital r r-2x" height="42" width="42" src="{{domainUser.ownerPic}}" title="{{domainUser.name}}">					   
-							</div>
-							<div class="text-ellipsis">
-								<a class="m-r-sm custom-link text-ellipsis">{{domainUser.name}}</a><br>
-								<div class="text-xs">{{domainUser.email}}</div>
-								 <div class="text-xs">{{epochToHumanDateInFormat domainUser.createdTime}}</div>		
-							</div>
-							<div class="clear-fix"></div>
-						</div>
-					</div>            		
-        		{{/each}}
+      		 <div class="p-l p-t-xs p-b-xs">
+        		<img id="widget_acl_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;">
+        		</img>
         	</div>
-        	{{/if}}
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</button>
@@ -802,4 +793,36 @@
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
+</script>
+
+<script id="widget-acls-body-content-template" type="text/html">
+{{#if this.length}}
+	<div class="row p-none m-none">
+		{{#each this}}
+			<div class="col-md-6 p-none">	    	
+				<div class="b p-sm m-sm">			
+					<div class="checkbox pull-left">
+		              <label class="i-checks">
+		               {{#if isChecked}}
+		                <input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}" checked>
+		               {{else}}
+		               	<input type="checkbox" class="agileUserChk" name="agileUserChk" value="{{id}}">
+		               {{/if}}
+		                <i></i>				           
+		              </label>
+            		</div>
+    				<div class="m-r-xs agile-img">					
+						<img class="img-inital r r-2x" height="42" width="42" src="{{domainUser.ownerPic}}" title="{{domainUser.name}}">					   
+					</div>
+					<div class="text-ellipsis">
+						<a class="m-r-sm custom-link text-ellipsis">{{domainUser.name}}</a><br>
+						<div class="text-xs">{{domainUser.email}}</div>
+						 <div class="text-xs">{{epochToHumanDateInFormat domainUser.createdTime}}</div>		
+					</div>
+					<div class="clear-fix"></div>
+				</div>
+			</div>            		
+		{{/each}}
+	</div>
+{{/if}}
 </script>

@@ -2,7 +2,7 @@
 	<div style="width:100%!important;">
             <div style="line-height:18px;font-family:Arial,sans-serif;font-size:12px;color:#555;">
                 <p style="font-weight:bold;color:#919191">
-                	Your request (#{{ticket_id}}) has been reviewed by support team.
+                	{{agile_lng_translate 'ticket-reply-email' 'your-request'}} (#{{ticket_id}}) {{agile_lng_translate 'ticket-reply-email' 'reviewed-by-team'}}
                 </p>
                 
                 
@@ -34,39 +34,39 @@
                                 </td>
                             </tr>
                         </tbody>
-                        </table>
-                    {{#count}}
-                   {{#feedback_flag}}
-                	<table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-left: 55px;">
-                     <tbody>
-                        <tr>
-              
-                        <td><div>How would you rate the support received?</div></td>
-                        </tr>    
+                   {{#count}}
+                   	{{#feedback_flag}}
+              		<table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding-left: 55px;">
+                   	 <tbody>
+                       	<tr>              
+                     	  	<td><div>{{agile_lng_translate 'ticket-reply-email' 'rate-for-ticket'}}</div></td>
+                       	</tr>    
 						<tr>
-						<td width="60%" style="padding-bottom: 2px;">
-						<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url1}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none; ">
-						<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj1-1.png" style="width:25px;float:left;" id=1 />&nbsp;</a>
-						<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url2}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
-						<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj2-1.png" style="width:25px;float:left;" id=2/>&nbsp;</a>
-						<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url3}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
-						<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj3-1.png" style="width:25px;float:left;" id=3/>&nbsp;</a>
-						<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url4}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
-						<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj4-1.png" style="width:25px;float:left;" id=4/>&nbsp;</a>
-						<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url5}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
-						<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj5-1.png" style="width:25px;float:left;" id=5/>&nbsp;</a> 
-						</td>
+							<td width="60%" style="padding-bottom: 2px;">
+								<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url1}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none; ">
+									<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj1-1.png" style="width:25px;float:left;" id=1 />&nbsp;</a>
+								<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url2}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
+									<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj2-1.png" style="width:25px;float:left;" id=2/>&nbsp;</a>
+								<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url3}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
+									<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj3-1.png" style="width:25px;float:left;" id=3/>&nbsp;</a>
+								<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url4}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
+									<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj4-1.png" style="width:25px;float:left;" id=4/>&nbsp;</a>
+								<a href="https://{{namespace}}.agilecrm.com/feedback?feedback={{url5}}" style="line-height: 25px;font-size: 12px;width:25px;text-decoration: none;">
+									<img src="https://{{namespace}}.agilecrm.com/img/agile-emoj5-1.png" style="width:25px;float:left;" id=5/>&nbsp;</a> 
+							</td>
 						</tr>
-                     </tbody>
-                 </table>
-                 {{/feedback_flag}}
-                 {{/count}}
+                    	</tbody>
+       				</table>
+               	  	{{/feedback_flag}}
+               	  {{/count}}
+                        </table>
+                    
                     {{#attachments_exists}}
                     	<table width="100%" cellpadding="0" cellspacing="0" border="0">
 	                        <tbody>
 	                            <tr>
 	                                <td width="100%">
-	                                	<span style="line-height: 25px;font-size: 14px;">Attachments:</span><br>
+	                                	<span style="line-height: 25px;font-size: 14px;">{{agile_lng_translate 'tickets' 'attachments'}}:</span><br>
 	                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed">
 	                                        <tbody>
 	                                        	{{#attachments_list}}
@@ -87,7 +87,7 @@
                {{/note_json_array}}
 				
                 <div style="color:#A8A8A8;margin:10px 0 14px 0;padding-top:8px;border-top:1px dotted #5187bd">
-                	This email is a service from {{company_name}}.{{#subscription_email}} Delivered by <a href="https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null" style="text-decoration:none" target="_blank">Agile CRM</a>{{/subscription_email}}
+                	{{agile_lng_translate 'ticket-reply-email' 'email-service-from'}} {{company_name}}.{{#subscription_email}} {{agile_lng_translate 'ticket-reply-email' 'delivered-by'}} <a href="https://www.agilecrm.com?utm_source=www.agilecrm.com?utm_source=powered-by&utm_medium=email-signature&utm_campaign=null" style="text-decoration:none" target="_blank">Agile CRM</a>{{/subscription_email}}
                </div>
                <!-- {{{tracking_img}}} -->
                <span style="font-size: 0px; min-height: 0px; max-height: 0px; line-height: 0px; color: rgb(0, 0, 0);" title="agl_tckt_id">{{ticket_id}}</span>

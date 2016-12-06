@@ -1,7 +1,7 @@
 <script id="admin-settings-users-collection-template" type="text/html">
 
 <div class="panel panel-default">
- <div class="panel-heading">
+ <div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">
 	<div class="pull-left  m-t-xs">{{agile_lng_translate 'admin-settings' 'users'}}</div>
 	<div class="pull-right">
 		<a href="#users-add" class="btn btn-sm btn-default btn-addon" id="addUser"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'admin-settings-users' 'add-user'}}</a>
@@ -10,7 +10,13 @@
  </div>
 <div class="row">
 <div class="col-md-12 col-sm-12">
-            <div class=" table-responsive"> 
+    {{#is_mobile}}  
+        <table id="users-list-table" class="table agile-table panel m-b-none" url="core/api/users/bulk">
+             <tbody id='admin-settings-users-model-list' route='user-edit/'>
+             </tbody>
+        </table>
+    {{else}}
+    	<div class=" table-responsive"> 
             <table id="users-list-table" class="table table-striped showCheckboxes agile-table panel table-layout-mob-view" url="core/api/users/bulk">
                 <thead>
                     <tr>
@@ -19,19 +25,73 @@
 						 <th style="width:20%" class="header">{{agile_lng_translate 'modals' 'email'}}</th>
                         <!-- <th style="width:20%" class="header">Created On</th>-->
                         <th style="width:20%" class="header">{{agile_lng_translate 'admin-settings-users' 'last-logged-in'}}</th>
-						 <th style="width:20%"></th> 
-						 <th style="width:15%"></th> 
+						 <th style="width:20%" class="header">{{agile_lng_translate 'admin-settings-users' 'updated-time'}}</th> 
+						 <th style="width:15%" class="header">{{agile_lng_translate 'admin-settings-users' 'status'}}</th> 
                     </tr>
                  </thead>
                  <tbody id='admin-settings-users-model-list' route='user-edit/'>
                  </tbody>
             </table>
-            </div>
-    </div>
+        </div>
+    {{/is_mobile}}
+</div>
 </div>
 </div>
 </script>
 <script id="admin-settings-users-model-template" type="text/html">
+    {{#is_mobile}}
+    <td class='data hide' data='{{id}}'></td>
+    <td class="icon-append-mobile p-r-none" style="padding: 10px 10px 10px 15px !important">
+	    <div class="table-resp" style="width:calc(100% - 0px);">
+			<div class="agile-img m-r-sm m-t-xs thumb-sm">
+			   {{#if pic}}
+		        <img class="img-inital r r-2x" src="{{pic}}"  title="{{name}}" style="border-radius:3px;" />
+			   {{else}}
+				<img class="w-full" src="{{defaultGravatarurl 50}}" title="{{name}}" style="border-radius:3px;" />
+		       {{/if}}
+		    </div>
+		    <div class="agile-thumb-view">
+		    	<span>
+					<a class="text-cap text-base custom-link pull-left text-ellipsis w-auto" style="width: calc(100% - 90px);">{{name}}</a>
+				</span>
+				<span class="pull-right">
+					{{#if is_admin}}
+						<span class="label bg-light dk text-tiny">
+						{{agile_lng_translate 'admin-settings-users' 'admin'}}
+						</span>
+					{{/if}}
+					{{#if is_account_owner}}
+						<span class="label m-l-xs bg-light dk text-tiny">
+						{{agile_lng_translate 'contact-details' 'owner'}}</span>
+					{{/if}}
+					{{#if is_disabled}}
+						<span class="label label-danger">
+						{{agile_lng_translate 'campaigns' 'disabled'}}</span>
+					{{/if}}
+				</span>
+			</div>
+			<div class="table-resp">
+				<div class="text-sm text-ellipsis">{{email}}</div>
+			</div>
+			<div class="text-muted table-resp text-xs" style="margin-left:45px;">
+				<i class="fa fa-clock-o"></i>
+				 <time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" >{{epochToDate info_json_string "logged_in_time"}}</time>
+			</div>
+			<div class="table-resp text-muted text-xs" style="margin-left:45px;">
+				<i class="fa fa-clock-o"></i>
+				{{#hasKey  info_json_string "updated_time"}}
+				<span><em>{{agile_lng_translate 'campaigns' 'modified'}}</em>&nbsp;</span>
+				 <time class="last-login-time" datetime="{{epochToDate info_json_string "updated_time"}}" >{{epochToDate info_json_string "updated_time"}}</time>
+				{{else}}
+				<span><em>{{agile_lng_translate 'campaigns' 'created'}}</em>&nbsp;</span>
+				 <time class="last-login-time" datetime="{{epochToDate info_json_string "created_time"}}" >{{epochToDate info_json_string "created_time"}}</time>
+				{{/hasKey}}
+			</div>
+	    </div>
+	</td>
+   
+    {{else}}
+
     <td class='data' data='{{id}}'>
     <div class="table-resp" style="overflow: inherit; width:100%;">
 	<div class="thumb-xs agile-img avatar" style="width:20px;">
@@ -108,7 +168,6 @@
 		</span>	
 	</td>
    <!-- <td><div class="table-resp">{{#if is_admin}}<span class="label m-r-xs bg-light dk text-tiny">Admin</span>{{/if}}{{#if is_account_owner}}<span class="label bg-light dk text-tiny">Owner</span>{{/if}}{{#if is_disabled}}<span class="label label-danger">Disabled</span>{{/if}}</div></td> -->
-    
-
+    {{/is_mobile}}
 </script>
 

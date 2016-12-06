@@ -1,8 +1,6 @@
 <script id="admin-settings-products-collection-template" type="text/html">
-
 <div class="panel">
  <div class="panel-heading">
-    
     <div class="pull-right p-t ">
         <a href="#product-add" role="button" data-toggle="modal" type="submit"  class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'products' 'add-product'}}</a>
     </div>
@@ -10,13 +8,15 @@
  </div>
     <div class="row">
         <div class="col-md-12 col-sm-12">
+        {{#if this.length}}
                     <div class=" table-responsive" style="overflow:hidden;"> 
-                    <table class="table table-striped noDelete no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url1="core/api/products/bulk?action_type=DELETE">
+                    <table class="table table-striped showCheckboxes no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url="core/api/products/bulk">
                         <thead>
                             <tr class="hide product-header">
                                 <th style="width:22%" class1="header">{{agile_lng_translate 'deal-view' 'name'}}</th>
+                                <th style="width:22%" class1="header">{{agile_lng_translate 'products' 'product-price-new'}}</th>
+                                <th style="width:22%" class1="header">{{agile_lng_translate 'products' 'sku'}}</th>
         						<th style="width:22%" class1="header">{{agile_lng_translate 'other' 'description'}}</th>
-        						<th style="width:22%" class1="header">{{agile_lng_translate 'products' 'product-price'}}</th>
                                 <th style="width:22%" class1="header">{{agile_lng_translate 'report-add' 'image'}}</th>
                                 <th style="width:8%" class="">&nbsp;</th>
                             </tr>
@@ -25,25 +25,49 @@
                          </tbody>
                     </table>
                     </div>
+                    {{else}}
+                        <div class="panel panel-default " style=" overflow-x:auto;  border:none;box-shadow: none;margin-bottom:0px;">
+                            <div class="m-l-sm" id="slate"><div class="alert bg-white " style="padding:0px;">
+                                <div class="slate-content p-md">
+                                <div class="box-left pull-left m-r-md">
+                                    <img alt="Clipboard" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/clipboard.png">
+                                </div>
+                                <div class="box-right pull-left">
+                                <h4 class="m-t-none">You do not have any products currently.</h4>
+                                <div class="text" style="padding-bottom: 5px;">Products are either goods or services that your organization deals with.</div>
+            
+                       <a href="#product-add" role="button" data-toggle="modal" type="submit"  class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'products' 'add-product'}}</a>
+            
+                    </div>
+                 </div>
+                    <div class="clearfix"></div>
+                </div></div>
+            {{/if}}
+
             </div>
         </div>
     </div>
 </script>
 <script id="admin-settings-products-model-template" type="text/html">
-    <td class='data' data='{{id}}' title="{{name}}">
-        <div class="table-resp">
+    <td class='data v-middle' data='{{id}}' title="{{name}}">
+        <div class="table-resp v-middle">
             {{name}}
         </div>
 	</td>
-	<td class='data'>
+    <td class='data v-middle'>
+        {{currencySymbol}}{{price}}
+    </td>
+    <td class='data v-middle'>
+        <div class="table-resp" title="{{sku}}">
+            {{sku}}
+        </div>
+    </td>
+	<td class='data v-middle'>
         <div class="table-resp" title="{{description}}">
             {{description}}
         </div>
 	</td>
-	<td class='data'>
-        {{currencySymbol}}{{price}}
-	</td>
-    <td class='data'>
+    <td class='data v-middle'>
         {{#if image}}
             <div class="imgholder  thumb-wrapper thumb">
                 <img class="w-full" src="{{image}}"  align="center" />
@@ -52,7 +76,7 @@
             &nbsp;
         {{/if}}    
     </td>
-   <td align="right" class="b-r-none p-l-none" style="width:10%;">
+   <td align="right" class="b-r-none p-l-none v-middle" style="width:10%;">
         <div style="visibility:hidden;">
             <a id="edit-product-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
                 <i title="Edit Product" class="task-action icon icon-edit"></i>
@@ -89,6 +113,22 @@
             					</div>
                             </div>
         				</div> 
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="pprice">{{agile_lng_translate 'products' 'product-price-new'}} <span class="field_req ">*</span></label> 
+                            <div class="col-md-9">
+                                <div class="controls">
+                                    <input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price-new'}}" min="0" max="1000000000000"/> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group form-group">
+                            <label class="control-label col-md-3" for="sku">{{agile_lng_translate 'products' 'sku'}}</label> 
+                            <div class="col-md-9">
+                                <div class="controls">
+                                    <input type="text" id="sku" name="sku" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'sku'}}" /> 
+                                </div>
+                            </div>
+                        </div>
         			  	<div class="control-group form-group">
         					<label class="control-label col-md-3" for="pdescription">{{agile_lng_translate 'other' 'description'}} </label> 
                             <div class="col-md-9">
@@ -97,14 +137,7 @@
             					</div>
                             </div>
         				</div>
-        				<div class="control-group form-group">
-        					<label class="control-label col-md-3" for="pprice">{{agile_lng_translate 'products' 'product-price'}} <span class="field_req ">*</span></label> 
-                            <div class="col-md-9">
-                           		<div class="controls">
-                                	<input type="text" id="pprice" name="price" class="required number form-control" placeholder="{{agile_lng_translate 'products' 'product-price'}}" min="0" max="1000000000000"/> 
-            					</div>
-                            </div>
-        				</div>
+        				
                         <div class="control-group form-group">
                             <label class="control-label col-md-3">Logo</label> 
                             <div class="col-md-9">

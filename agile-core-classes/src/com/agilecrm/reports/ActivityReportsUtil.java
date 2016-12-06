@@ -37,6 +37,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -1073,7 +1074,7 @@ public class ActivityReportsUtil
 	if (recordsCount != null && recordsCount > 0)
 	{
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		    reports);
+		    reports, LanguageUtil.getUserLanguageFromSession());
 	    return;
 	}
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
