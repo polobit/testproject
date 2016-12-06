@@ -216,14 +216,16 @@ var Tickets_Notes = {
 				
 				$('textarea#reply_textarea', $container).TextAreaExpander({'padding' : '8px 8px 1px 8px' });
 				$('textarea#reply_textarea', $container).css({'height':'60px'});
-			
-				if(!$('textarea#reply_textarea').hasClass('textareaclass')){
-		 	
-		 			$('textarea#reply_textarea').focus(function(){
 
-		 				$('textarea#reply_textarea').addClass('textareaclass');
-		 			}); 
-		 		}
+				if(!$('textarea#reply_textarea', $container).hasClass('textareaclass')){
+		 	
+		 			$('textarea#reply_textarea', $container).on('focus',function(){
+
+ 					$('textarea#reply_textarea', $container).addClass('textareaclass');
+ 			}); 
+ 		}
+
+			
 			}catch(e){}
 		});
 
@@ -310,6 +312,7 @@ var Tickets_Notes = {
 			Ticket_Utils.loadInsertCursor(function()
 			{	
 				$container.find("#reply_textarea").insertAtCaret(message);
+			
 			});
 		})
 	},
