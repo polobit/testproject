@@ -1072,6 +1072,8 @@
 
                 }
 
+            } else if( $(styleeditor.activeElement.element).hasClass("frameCover") ) { // To delete video block correctly
+                toDel = $(styleeditor.activeElement.element).parent(".videoWrapper");
             } else {//everything else
 
                 toDel = $(styleeditor.activeElement.element);
@@ -1115,6 +1117,11 @@
         cloneElement: function() {
 
             publisher.publish('onBeforeClone');
+
+            // To clone video block correctly
+            if( $(styleeditor.activeElement.element).hasClass("frameCover") ) {
+                $(styleeditor.activeElement.element).parent(".videoWrapper").addClass("propClone");
+            }
 
             var theClone, theClone2, theOne, cloned, cloneParent, elementID;
 
