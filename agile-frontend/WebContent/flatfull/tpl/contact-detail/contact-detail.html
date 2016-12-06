@@ -11,7 +11,7 @@
 				{{{renderTemplate "contact-details-block" this}}}
 			</div>
 		</div>
-		<div class="col bg-white tabListCenter">
+		<div class="col bg-white tabListCenter bg-none-xs">
  			<div class="vbox" style="display:inline-block">
   				<div class="row-row" style="display:block">
   					<div>
@@ -112,12 +112,12 @@
 			</div>
 		</div>
 		<div class="contact-right-widgetsview box-border  col w-lg   bg-auto contRightWidgets {{#is_mobile}} p-t-none bg-white m-b m-l m-r m-t {{else}} b-l bg-light lter {{/is_mobile}}">
-			<div class="vbox">
-   				<div class="row-row">
+			<div class="vbox inline-block">
+   				<div class="row-row" style="display:block;">
    					<div>
    						<div>	
  							<div class="wrapper">
- 								<div id="widgets" class="contact_{{id}}" style="max-width:250px"></div>
+ 								<div id="widgets" class="contact_{{id}}"></div>
 	 						</div>
 		 				</div>
 		 			</div>
