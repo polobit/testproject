@@ -567,52 +567,58 @@
             if( $(styleeditor.activeElement.element).attr('data-type') === 'video' ) {
 
                 var videoRecord_Id = $('select[id=videoRecordId]').val();
-
-                if( $('input#youtubeID').val() !== '' ) {
-
-                    var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                    var ytMatch = $('input#youtubeID').val().match(ytRegExp);
-                    if (ytMatch && ytMatch[1].length === 11) {
-                        var youtubeId = ytMatch[1];
-                        $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
-                        customAgileEvents.createYoutubeThumbnail(youtubeId,$(styleeditor.activeElement.element));
-                            
-                    
-                    }
-                    else{
-                        $('input#youtubeID').removeClass("margin-bottom-20");
-                        $("#err-youtube-msg").next().css("margin-top","6px");
-                        $("#err-youtube-msg").show();
-                        return;
-                    }
-                    
-                } else if( $('input#vimeoID').val() !== '' ) {
-                    var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
-                    var vimMatch = $('input#vimeoID').val().match(vimRegExp);
-                    if (vimMatch && vimMatch[3].length){
-                        var vimeoId = vimMatch[3];
-                        $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
-                        customAgileEvents.createVimeoThumbnail(vimeoId,$(styleeditor.activeElement.element));
-                    }
-                    else{
-                        $('input#vimeoID').removeClass("margin-bottom-20");
-                        $("#err-vimeo-msg").next().css("margin-top","6px");
-                        $("#err-vimeo-msg").show();
-                        return;
-                    }
-                } else if ( videoRecord_Id !== '' ) {
-
-                    $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
-                }
-                else
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "");
-
                  //image under video section
-                    if($(styleeditor.activeElement.element).siblings("IMG")!==0){
-                        var url=$('.imageFileTab').find('input#imageURL').val();
-                        $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
+                if($(styleeditor.activeElement.element).siblings("IMG")!==0 && $('.imageFileTab').hasClass('active')){
+                    var url=$('.imageFileTab').find('input#imageURL').val();
+                    if(url.match("^(http|https)://")===null|| url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
+                        $('input#imageURL').css("margin-bottom","0px");
+                        $("#error-img-msg").next().css("margin-top","6px");
+                        $("#error-img-msg").show();
+                        return;
                     }
-               
+                    else 
+                       $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
+                }
+                if(!$('.imageFileTab').hasClass('active')){
+                    if( $('input#youtubeID').val() !== '' ) {
+
+                        var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                        var ytMatch = $('input#youtubeID').val().match(ytRegExp);
+                        if (ytMatch && ytMatch[1].length === 11) {
+                            var youtubeId = ytMatch[1];
+                            $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
+                            customAgileEvents.createYoutubeThumbnail(youtubeId,$(styleeditor.activeElement.element));
+                                
+                        
+                        }
+                        else{
+                            $('input#youtubeID').removeClass("margin-bottom-20");
+                            $("#err-youtube-msg").next().css("margin-top","6px");
+                            $("#err-youtube-msg").show();
+                            return;
+                        }
+                        
+                    } else if( $('input#vimeoID').val() !== '' ) {
+                        var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
+                        var vimMatch = $('input#vimeoID').val().match(vimRegExp);
+                        if (vimMatch && vimMatch[3].length){
+                            var vimeoId = vimMatch[3];
+                            $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
+                            customAgileEvents.createVimeoThumbnail(vimeoId,$(styleeditor.activeElement.element));
+                        }
+                        else{
+                            $('input#vimeoID').removeClass("margin-bottom-20");
+                            $("#err-vimeo-msg").next().css("margin-top","6px");
+                            $("#err-vimeo-msg").show();
+                            return;
+                        }
+                    } else if ( videoRecord_Id !== '' ) {
+
+                        $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
+                    }
+                    else
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "");
+                }
 
 
                 /* SANDBOX */

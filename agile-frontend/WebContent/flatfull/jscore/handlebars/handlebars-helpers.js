@@ -1940,7 +1940,7 @@ $(function()
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		
+		if(data)
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
