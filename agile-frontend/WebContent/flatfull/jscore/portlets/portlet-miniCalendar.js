@@ -452,7 +452,7 @@ function minicalendar(el)
 		            			   });
 		            		   }
 		            		   else if(!App_Portlets.refetchEvents){
-		            			   $(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "portlets" "+add-new"}}</a></div>');
+		            			   $(el).find('.events_show').append('<div class="portlet-calendar-error-message">{{agile_lng_translate "portlets" "no-appointments-for-the-day"}}</div><div class="text-center"><a class="minical-portlet-event-add text-info" id='+date.getTime()+' data-date='+date.getTime()+'>{{agile_lng_translate "deal-view" "add-event"}}</a></div>');
 		            		   }
 		            	   }
 

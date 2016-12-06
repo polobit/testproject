@@ -186,7 +186,7 @@ function syncAppDatatoDeals(){
 				if(data == "success"){
 					showModalConfirmation(
 						"{{agile_lng_translate 'datasync' 'update-data'}}",
-						"{{agile_lng_translate 'datasync' 'sync-error'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled'}}",
 						function()
 						{
 							// No callback
@@ -198,8 +198,8 @@ function syncAppDatatoDeals(){
                   }
                   else if (data == "limitReached"){
                   	showModalConfirmation(
-						"Update Data",
-						"Update is allowed only once a month. Please try later.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled-error'}}",
 						function()
 						{
 							// No callback
@@ -211,8 +211,8 @@ function syncAppDatatoDeals(){
                   }
                   else{
                   	showModalConfirmation(
-						"Update Data",
-						"There seems to be an issue. Please try again later.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'sync-error'}}",
 						function()
 						{
 							// No callback
