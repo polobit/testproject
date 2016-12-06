@@ -15,6 +15,11 @@ var Ticket_Custom_Filters = {
 
 		var $container = $('#custom-filters-container');
 
+		$(".created-date-input").on('click',function(){ 
+			$(".calendar.left").show();
+			$(".calendar.right").show();
+		})
+
 		//Initializing date picker
 		Ticket_Utils.loadDateChartAndDatePicker(function()
 		{	
@@ -39,7 +44,7 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({
+			$('#created-date-input').daterangepicker({								
 				drops: 'up', 
 				locale : 
 				{  applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
@@ -60,11 +65,12 @@ var Ticket_Custom_Filters = {
 					
 					var range_array = range.split('-');
 
-					$('#clear-created-date').show();
+					//$('#clear-created-date').show();
 
 					Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
 				});
 			});
+
 
 		var options = [];
 		
