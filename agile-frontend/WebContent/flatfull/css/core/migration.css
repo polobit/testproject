@@ -2222,6 +2222,7 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 #task_tab_detail .btn:not(#send-new-mail) i {
     display: none;
 }
+
 }
 
 /*End of Mobile Device Media Query CSS(767px)*/
@@ -2501,6 +2502,7 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 .companytabListCenter .nav li a{ padding: 10px 4px !important;}
 .taskTabListCenter .nav li a{ padding-left: 12px; padding-right: 12px;}
 .grid_custom_popover .grid-sub-nav li{ width: 75px;}
+.calender-header #calendarAgendaButtons{margin-bottom: 5px;}
 }
 
 
