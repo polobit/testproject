@@ -498,7 +498,7 @@
 		</h3>
 	</div>
 	<div class="modal-body">
-		<form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post">
+		<form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post" class="form-horizontal">
 			<fieldset>
 
 				<input name="id" id="id" type="hidden" value="{{id}}" /> <input
@@ -506,17 +506,17 @@
 					value="{{created_time}}" />
 
 				<div class="control-group form-group">
-					<label class="control-label"><b>{{agile_lng_translate 'widgets' 'subject'}}</b> <span
+					<label class="control-label col-sm-3"><b>{{agile_lng_translate 'widgets' 'subject'}}</b> <span
 						class="field_req">*</span></label>
-					<div class="controls">
+					<div class="controls col-sm-7">
 						<input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject"
 							class="required form-control" />
 					</div>
 				</div>
 				
 					<div class="control-group form-group">
-						<label class="control-label"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
-						<div class="controls agiletxexpander">
+						<label class="control-label col-sm-3"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
+						<div class="controls col-sm-7 agiletxexpander">
 							<textarea rows="3" class=" form-control textarea" data-agileexpand="true" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
 								name="description" id="description"></textarea>
 						</div>
