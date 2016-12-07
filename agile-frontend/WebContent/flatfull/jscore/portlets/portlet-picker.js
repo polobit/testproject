@@ -10,7 +10,7 @@ function organize_portlets(base_model) {
 		model : base_model,
 		template : this.options.templateKey + "-model",
 		tagName : 'div',
-		className : 'col-md-3 col-sm-6 col-xs'
+		className : 'col-md-4 col-sm-6 col-xs'
 	});
 
 	// Get portlet type from model (portlet object)
