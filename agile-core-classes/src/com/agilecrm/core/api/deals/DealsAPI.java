@@ -436,6 +436,7 @@ public class DealsAPI
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
 	List<String> conIds = opportunity.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	JSONArray oppJSONArray = new JSONArray().put(opportunity.id);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
 		throw new AccessDeniedException("Deal cannot be deleted because you do not have permission to update associated contact.");
@@ -447,9 +448,11 @@ public class DealsAPI
 		
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
-		NoteUtil.deleteBulkNotes(opportunity.getNotes());
+	    	NoteUtil.deleteBulkNotes(opportunity.getNotes());
+	    
+	    DealTriggerUtil.executeTriggerForDeleteDeal(oppJSONArray);
 	    // Send Notification
-	    DealNotificationPrefsUtil.executeNotificationForDeleteDeal(new JSONArray().put(opportunity.id));
+	    DealNotificationPrefsUtil.executeNotificationForDeleteDeal(oppJSONArray);
 	    opportunity.delete();
 	}
     }
