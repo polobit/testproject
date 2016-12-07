@@ -84,22 +84,25 @@ public class ContactSMTPUtil
 		String ssl = Boolean.toString(smtpPrefs.is_secure);
 
 		String subject = "SMTP integration with Agile CRM";
-		String htmlTxt = "Congratulations... You have successfully registered your email account with SMTP integrations. "
+		String htmlTxt = EmailUtil.emailTemplate("Congratulations... You have successfully "
+				+ "registered your email account with SMTP integrations. "
 				+ "<p>Now you can send mails from Agile CRM, as if you are sending from your actual mail account."
-				+ "<p>Mails sent from Agile CRM can be seen in the Sent folder of your mail box, provided your service provider supports.";
+				+ "<p>Mails sent from Agile CRM can be seen in the Sent folder of your mail box, provided your service provider supports.");
 		
 		String data = null;
 	
 		try {
 			data = "user_name=" + URLEncoder.encode(userName, "UTF-8")
 				    + "&password=" + URLEncoder.encode(password, "UTF-8")
-				    + "&reply_to=" + URLEncoder.encode(fromEmail, "UTF-8")
+				    + "&from_name=" + URLEncoder.encode(fromEmail, "UTF-8")
+				    //+ "&reply_to=" + URLEncoder.encode(fromEmail, "UTF-8")
 				    + "&host=" + URLEncoder.encode(host, "UTF-8")
 				    + "&ssl=" + ssl
 				    + "&to=" + URLEncoder.encode(userName, "UTF-8")
 				    + "&cc=&bcc="
 				    + "&subject=" + URLEncoder.encode(subject, "UTF-8")
-				    + "&html=" + URLEncoder.encode(EmailUtil.emailTemplate(htmlTxt), "UTF-8")
+				    + "&html="
+				    + "&text=" + URLEncoder.encode(htmlTxt, "UTF-8")
 				    + "&file_source=&file_stream&file_name="
 				    + "&validate=true";
 		}

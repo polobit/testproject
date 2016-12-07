@@ -40,6 +40,7 @@ public class ScribeServlet extends HttpServlet {
 	public static final String SERVICE_TYPE_LINKED_IN = "linkedin";
 	public static final String SERVICE_TYPE_TWITTER = "twitter";
 	public static final String SERVICE_TYPE_GMAIL = "gmail";
+	public static final String SERVICE_TYPE_GMAIL_SEND = "gmail_send";
 	public static final String SERVICE_TYPE_GOOGLE = "google";
 	public static final String SERVICE_TYPE_GOOGLE_CALENDAR = "google_calendar";
 
@@ -59,6 +60,8 @@ public class ScribeServlet extends HttpServlet {
 	public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
 	public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
 	public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+	public static final String GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+
 	public static final String GOOGLE_OAUTH2_SCOPE = "email profile";
 	private static final String ZOHO_AUTH_URL = "https://accounts.zoho.com/apiauthtoken/nb/create?SCOPE=ZohoCRM/crmapi&EMAIL_ID=%s&PASSWORD=%s";
 
@@ -263,6 +266,7 @@ public class ScribeServlet extends HttpServlet {
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL_SEND)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
@@ -385,6 +389,7 @@ public class ScribeServlet extends HttpServlet {
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL_SEND)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
@@ -435,10 +440,9 @@ public class ScribeServlet extends HttpServlet {
 		System.out.println(returnURL);
 		returnURL = (String) req.getSession().getAttribute("return_url");
 
-		String widgetName = (Character.toUpperCase(serviceName.charAt(0)) + serviceName
-				.substring(1));
-		String statusMSG = "Error occurred while saving " + widgetName
-				+ " widget";
+		String widgetName = (serviceName.equalsIgnoreCase("gmail_send")) ? "Gmail"
+				: (Character.toUpperCase(serviceName.charAt(0)) + serviceName.substring(1));
+		String statusMSG = "Error occurred while saving " + widgetName + " widget";
 		String resultType = "error";
 
 		try {
