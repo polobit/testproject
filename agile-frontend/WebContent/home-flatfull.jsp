@@ -211,6 +211,13 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
+<%if(currentUserPrefs.theme.equals("15")){%>
+<link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/style.css" rel="stylesheet" />
+<%}%>
+
+
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -322,7 +329,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme");%>'>
 
 <script type="text/javascript">
 function isIE() {
@@ -379,6 +386,8 @@ function isIE() {
             case 13:  out.print("bg-white-only ");
                  break;
             case 14:  out.print("bg-dark ");
+                 break;
+            case 15:  out.print("bg-white ");
                  break;
             default:
                     break;
@@ -471,6 +480,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     case 13:  out.print("bg-dark ");
          break;
     case 14:  out.print("bg-light ");
+         break;
+     case 15:  out.print("bg-white ");
          break;
     default:
             break;

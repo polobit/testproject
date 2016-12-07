@@ -29,6 +29,10 @@ function initializeThemeSettingsListeners(){
 			type : 'PUT',
 			data : json,
 			success : function() {
+				if(true)
+				{
+					window.location.reload(true);
+				}
 				enable_save_button($(saveBtn));
 			},
 			error : function() {

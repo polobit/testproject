@@ -1339,7 +1339,6 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
-								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
