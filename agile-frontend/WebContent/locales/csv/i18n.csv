@@ -5928,3 +5928,5 @@ portlets.dashlets-help-text-message,A dashboard consists of small information co
 contacts.select-contact-bulk-message,Select one or more contacts,
 contacts.select-company-bulk-message,Select one or more companies,
 contact-edit.title,Title
+deal-view.deal-not-associated-with-any-contact,Deal is not associated with any contact.
+deal-view.all-contact-deal-are-shown-here,All contacts which are related to this deal are shown here.
