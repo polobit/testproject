@@ -61,16 +61,16 @@ public class SMTPAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public SMTPPrefs createSMTPPrefs(SMTPPrefs prefs) {
-		int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null)
+		/*int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null)
 				.getCurrentLimits().getEmailAccountLimit();
 		int smtpPrefsCount = ContactEmailUtil.getSMTPPrefsCount();
-		if(smtpPrefsCount < emailAccountLimitCount) {
+		if(smtpPrefsCount < emailAccountLimitCount) { */
 			prefs.setAgileUser(new Key<AgileUser>(AgileUser.class,
 					AgileUser.getCurrentAgileUser().id));
 			prefs.save();
 			return prefs;
-		} else
-			return null;
+		/*} else
+			return null;*/
 	}
 
 	/**
