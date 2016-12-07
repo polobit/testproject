@@ -22,8 +22,17 @@ define([
 			contentType : 'application/json',
 			data : JSON.stringify(form),
 			success: function(){
-				var url = window.location.origin + "/#forms";
-				window.location.replace(url);
+				if(formNumber){
+					$("#form_preview").removeAttr("disabled");
+					$("#form-save").attr("disabled","true");
+					var url = window.location.origin + "/forms/"+formNumber;
+					$("#form_preview").attr("href",url);
+					alert("Form saved successfuly.Click on Preview option to see the modified form.");
+				}
+				else{
+					var url = window.location.origin + "/#forms";
+					window.location.replace(url);	
+				}
 			},
 			error: function(){
 				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
