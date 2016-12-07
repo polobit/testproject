@@ -629,7 +629,6 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 	    else
 	    	selectoption= "<select style='position:relative;float:right;cursor:pointer;width: 152px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
 
-
 	$.each(options, function(name, option_value) {
 		if (typeof (option_value) == 'object') {
 			var optgroup = "<optgroup></optgroup>";
