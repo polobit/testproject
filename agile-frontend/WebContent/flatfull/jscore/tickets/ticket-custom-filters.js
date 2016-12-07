@@ -65,7 +65,7 @@ var Ticket_Custom_Filters = {
 					
 					var range_array = range.split('-');
 
-					//$('#clear-created-date').show();
+					$('#clear-created-date').show();
 
 					Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
 				});
