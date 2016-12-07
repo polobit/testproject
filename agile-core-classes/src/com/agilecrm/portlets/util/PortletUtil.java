@@ -679,8 +679,9 @@ public class PortletUtil {
 		    	end_date -= (Long.parseLong(time_zone)*60*1000);
 		    }
 			ReportsUtil.check(start_date, end_date);
-			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type).toString();
+			org.json.JSONObject tagCount=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type);
+			if(tagCount!=null)
+			growthGraphString=tagCount.toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
