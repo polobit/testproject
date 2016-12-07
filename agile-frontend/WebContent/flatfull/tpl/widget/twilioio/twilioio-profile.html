@@ -164,10 +164,9 @@
 {{#if this}}
   <div class="btn-group" role="group" aria-label="">
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-length="{{length}}" data-src="{{this.0.extension}}">
-        Send voicemail
+      <div type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-length="{{length}}" data-src="{{this.0.extension}}" style="box-shadow: none;">
         <span class="caret"></span>
-      </button>
+      </div>
       <ul class="dropdown-menu">
       {{#each this}}
         <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
@@ -181,10 +180,9 @@
 <script id="twilioio-users-template" type="text/html">
   <div class="btn-group" role="group" aria-label="">
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select number
-        <span class="caret"></span>
-      </button>
+      <div type="button" class="icon-call-out dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="box-shadow: none;">
+        <span class="caret" style="margin-top: -5px;"></span>
+      </div>
       <ul class="dropdown-menu">
       {{#each this}}
         <li>
@@ -205,10 +203,9 @@
 <script id="twilioio-users-conference-template" type="text/html">
   <div class="btn-group" role="group" aria-label="">
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select number
+      <div type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="box-shadow: none;">
         <span class="caret"></span>
-      </button>
+      </div>
       <ul class="dropdown-menu">
       {{#each this}}
         <li>

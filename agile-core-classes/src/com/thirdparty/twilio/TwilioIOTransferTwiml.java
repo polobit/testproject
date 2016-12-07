@@ -63,7 +63,7 @@ public class TwilioIOTransferTwiml extends HttpServlet {
 		 */
 		try
 		{
-			dial.setCallerId(callerId);
+			//dial.setCallerId(callerId);
 			//dial.set("record", record);
 			dial.append(new Number(phoneNumber));
 			twiml.append(dial);
