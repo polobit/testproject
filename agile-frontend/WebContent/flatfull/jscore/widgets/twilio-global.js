@@ -37,31 +37,35 @@ $(function(){
     $('body').off('click', '.twiliousers');
     $('body').on('click', '.twiliousers', function(e){
 		e.preventDefault();
-		calltransfer = true;
 		var callsid = globalconnection.parameters.CallSid;
 		var form = Verfied_Number;
 		var to = $(this).attr("data-src");
 		var trans_number = $(this).text();
-		$.post( "/core/api/widgets/twilio/transferCall", {
-			callSid:callsid,
-			direction:TWILIO_CALLTYPE,
-			From: form,
-			To: to						
-		},function(data){
-			data  = JSON.parse(data);
-			transfer_number = trans_number;
-			var modifyStatus = data.modifyStatus;
-			if(modifyStatus == "in-progress"){
-				var msgType = "success";
-				var msg = "{{agile_lng_translate 'twill' 'success-start-transfer'}}";
-				showNotyPopUp(msgType , msg, "bottomRight");
-			}else{
-				$("#globalModal").html(getTemplate("callInfoModalAlert"));
-				$(".call-modal-body","#globalModal").html('{{agile_lng_translate "twill" "error-start-transfer"}}');
-				$("#globalModal").modal('show');
-				return;
-			}
-		});
+		$("#draggable_noty div:first-child").css({"z-index":"1000"});
+		showAlertModal(_agile_get_translated_val('widgets', 'twilo-call-transfer-confirmation')+" "+trans_number, "confirm", function(){
+			$("#draggable_noty div:first-child").css({"z-index":"10000"});
+			calltransfer = true;
+			$.post( "/core/api/widgets/twilio/transferCall", {
+				callSid:callsid,
+				direction:TWILIO_CALLTYPE,
+				From: form,
+				To: to						
+			},function(data){
+				data  = JSON.parse(data);
+				transfer_number = trans_number;
+				var modifyStatus = data.modifyStatus;
+				if(modifyStatus == "in-progress"){
+					var msgType = "success";
+					var msg = "{{agile_lng_translate 'twill' 'success-start-transfer'}}";
+					showNotyPopUp(msgType , msg, "bottomRight");
+				}else{
+					$("#globalModal").html(getTemplate("callInfoModalAlert"));
+					$(".call-modal-body","#globalModal").html('{{agile_lng_translate "twill" "error-start-transfer"}}');
+					$("#globalModal").modal('show');
+					return;
+				}
+			});
+		},undefined, "Call Transfer"); 
 	});
 	$('body').off('click', '.twiliousersconf');
     $('body').on('click', '.twiliousersconf', function(e){

@@ -5865,3 +5865,4 @@ documents.newdocuments-helptext-para2,EDocuments can also be created, managed an
 twill.error-start-transfer,Problem in call transfer. Please try again.,,,,,,,,,,,,,,
 twill.success-start-transfer,Call transfered successfully.,,,,,,,,,,,,,,
 widgets.manage-voicemails,Voicemail Drops,,,,,,,,,,,,,,
+widgets.twilo-call-transfer-confirmation,Do you want to transfer call to,,,,,,,,,,,,,,
