@@ -1199,17 +1199,12 @@ function initializeAddPortletsListeners() {
 							"Referralurlstats" : updateImageS3Path("flatfull/img/dashboard_images/Refferalurl-Stats-new.png"),
 						};
 						var placements_json = {
-							"GrowthGraph" : "left",
 							"DealsFunnel" : "left",
 							"CallsPerPerson" : "left",
 							"TaskReport" : "left",
-							"RevenueGraph" : "left",
-							"MiniCalendar" : "left",
-							"UserActivities" : "left",
 							//"Campaignstats" : "",
 							"Campaigngraph" : "left",
-							"LostDealAnalysis" : "left",
-							"Referralurlstats" :"left"
+							"IncomingDeals" : "left",
 						};
 						if (placements_json[p_name]) {
 							placement = "left";
