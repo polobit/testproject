@@ -291,7 +291,7 @@ function loadFullContactData(apikey, emailID, autoProfiling){
 
  						$('#FullContact').html("<div class='p-sm'><p> New data - "+displayData+"</p></div>");
 
- 						if(autoProfiling && autoProfiling == true){ 							
+ 						if(autoProfiling == undefined || autoProfiling == true){				
 							updateContactProperties(newProperties, resetSocialWidgets);							
  						}else{
  							showAlertModal(_agile_get_translated_val('widgets', 'Fullcontact-newdata') + " <p>New data - " + displayData + "</p>", "confirm", function(){

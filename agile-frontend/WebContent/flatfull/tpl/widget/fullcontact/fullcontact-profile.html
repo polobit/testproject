@@ -12,11 +12,11 @@
 				<div class="checkbox pull-left m-t-none">
 		            <label class="i-checks">
 		            	{{#if fullcontact_apikey}}
-		            		{{#if_checked_autoProfile autoProfiling false}}
-		               			<input type="checkbox" class="autoProfiling" name="autoProfiling" value="{{id}}">
-		               		{{else}}
+		            		{{#if autoProfiling}}
 		               			<input type="checkbox" class="autoProfiling" name="autoProfiling" value="{{id}}" checked>
-		               		{{/if_checked_autoProfile}}
+		               		{{else}}
+		               			<input type="checkbox" class="autoProfiling" name="autoProfiling" value="{{id}}">
+		               		{{/if}}
 		                {{else}}
 		                	<input type="checkbox" class="autoProfiling" name="autoProfiling" value="{{id}}" checked>
 		                {{/if}}
