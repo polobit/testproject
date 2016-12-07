@@ -42,7 +42,7 @@
 				        	{{#if_equals name "Knowlarity"}}
 								<center>  
 					  				<span style="font-size: 24px;width: 135px;height: 50px; text-align:center;vertical-align: middle;">
-					  					<img src="{{logo_url}}" style="height: 47px;">
+					  					<img src="{{logo_url}}" style="height: 47px;">					  					
 					  				</span>
 								</center>  
 				        	{{else}}
@@ -70,7 +70,11 @@
 		{{#if_equals name "Skype"}}
 			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
 	 	{{else}}
-			<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
+		 	{{#if_equals name "Knowlarity"}}
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:75px"  rel="tooltip" title="{{get_widget_translation name 'content'}}">
+		 	{{else}}
+				<div class="text-flow-ellipsis line-clamp line-clamp-4 widget-text" style="height:85px"  rel="tooltip">
+			{{/if_equals}}
 		{{/if_equals}}
 	{{/if_equals}}
 		{{#if_equals widget_type "CUSTOM"}}
@@ -157,12 +161,16 @@
 		               	  {{else}}
 		               	 {{#if_equals name "Sip"}}
 		               	  <a></a>
+		               	   {{else}}
+		               	  {{#if_equals name "Knowlarity"}}
+		               	  <a></a>
 		                {{else}}
 		                	{{#isAdmin}}
                            		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
   									<i class="fa fa-users"></i>
   				   		   		</a>
   				   		    {{/isAdmin}}
+  				   		   {{/if_equals}}
   				   		   {{/if_equals}}
   				   		     {{/if_equals}}
                 {{/if_equals}}
@@ -205,10 +213,14 @@
 										{{#if_equals name "Skype"}}
 												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 											{{else}}
+										{{#if_equals name "Knowlarity"}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+											{{else}}
 								<div class="btn-group">
   									<a type="button" class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a> 
 
 								</div>
+										{{/if_equals}}
 										{{/if_equals}}
 									{{/if_equals}}
 							 {{/if_equals}}
@@ -232,11 +244,15 @@
 												{{else}}	
 												{{#if_equals name "Skype"}}
 												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+												{{else}}	
+												{{#if_equals name "Knowlarity"}}
+												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 											{{else}}																			
 											<div class="btn-group">
   												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>		
 											</div>
 												{{/if_equals}}
+											{{/if_equals}}
 											{{/if_equals}}
 										{{/if_equals}}
 									{{/if_equals}}
@@ -259,12 +275,16 @@
 											{{else}}
 												{{#if_equals name "Skype"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+											{{else}}
+												{{#if_equals name "Knowlarity"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 											{{else}}											
 												<div class="btn-group">
   													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
   												</div>
 												{{/if_equals}}
 												{{/if_equals}}
+											{{/if_equals}}
 											{{/if_equals}}
 										{{/if_equals}}
 											{{else}}
@@ -286,12 +306,16 @@
 									{{else}}
 												{{#if_equals name "Skype"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+									{{else}}
+												{{#if_equals name "Knowlarity"}}
+													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 									{{else}}	
 											<div class="btn-group">										
   												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 											</div>
 												{{/if_equals}}
 											{{/if_equals}}
+										{{/if_equals}}
 										{{/if_equals}}
 									{{/if_equals}}
 								{{else}}
@@ -326,6 +350,9 @@
 						{{else}}	
 							{{#if_equals name "Bria"}}
 								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
+						{{else}}	
+							{{#if_equals name "Knowlarity"}}
+								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
 						{{else}}
 							{{#if_equals name "Skype"}}
 								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
@@ -334,6 +361,7 @@
 								<div class="btn-group">										
   									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
 								</div>
+								{{/if_equals}}
 								{{/if_equals}}
 							{{/if_equals}}
 							{{/if_equals}}
