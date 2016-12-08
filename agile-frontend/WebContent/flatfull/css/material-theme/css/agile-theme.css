@@ -224,13 +224,13 @@ label.i-checks input{
  float: none;
  border-right:0px;
 }
-.agile-new-theme .btn.dropdown-toggle span
+:not("#bulk-action-btns") .agile-new-theme .btn.dropdown-toggle span
 {
  color: #fff!important;
 }
 .btn.dropdown-toggle:hover,
 .btn.dropdown-toggle:focus,
-.btn.dropdown-toggle:active {
+.btn.dropdown-toggle:active,.open .dropdown-toggle.{
   color: #ffffff!important;
   background-color: #067dc6;
   text-decoration: none;
@@ -246,12 +246,12 @@ label.i-checks input{
 .dropdown-menu a[href="#user-prefs"] span {
   display: block;
 }
-#contacts-view-options .contacts-view {
+#contacts-view-options .contacts-view, #chrome-extensions{
   background-color: #fff !important;
   color: #78909c !important;
 }
 
-#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active {
+#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active, #chrome-extensions:hover, #chrome-extensions:focus, #chrome-extensions:active{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
@@ -356,8 +356,8 @@ label.i-checks input{
 }
 #contacts-list-view-model-list .img-inital, #companies-list-view-model-list .img-inital{
   border-radius: 50% !important;
-  width: 42px !important;
-  height: 42px !important;
+  height: 42px!important;
+  width: 42px!important;
 }
 #contacts-list-view .table-striped>tbody>tr:nth-child(odd)>td, #companies-list-view .table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
@@ -365,8 +365,13 @@ label.i-checks input{
 #contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td, #companies-list-view .table-hover>tbody>tr:hover>td, #companies-list-view .table-hover>tbody>tr:hover>th, #companies-list-view .table-striped>tbody>tr:hover>td{
   background-color: rgba(17, 160, 248, 0.1) !important;
 }
+.img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
+  border-radius:50%!important;
+}
 table label.i-checks{
   margin-left: 8px !important;
 }
+#chrome-extensions{
+  margin-right: 10px;
+}
 
-.filters-drp-down .btn.dro
