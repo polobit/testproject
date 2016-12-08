@@ -280,11 +280,11 @@
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
          {{else}}
         {{#is_mobile}}
-          <div style="font-size: 12px;top: 5px;padding: 3px 10px 3px 10px;border: 1px solid #ccc;background-color: #fafafa;border-radius: 2px">
+          <div style="font-size: 12px;top: 5px;padding: 3px 10px 3px 10px;border: 1px solid #ccc;background-color: #fafafa;border-radius: 2px" class="hideInIphone">
             <span>{{toSafeString message}}</span>
           </div>
         {{else}}
-          <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
+          <div class="m-xs hideInIphone" style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
           </div>
         {{/is_mobile}}
         {{/isAllowedInCurrentPlan}}

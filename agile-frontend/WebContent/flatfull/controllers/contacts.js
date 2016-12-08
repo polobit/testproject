@@ -1587,7 +1587,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 			var no = _agile_get_translated_val("reputation", "Ok");
 			var upgrade_link =  _agile_get_translated_val('contact-details','please') + ' <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('portlets','upgrade')+' </a> ' + _agile_get_translated_val('billing','your-email-subscription');
 			var emialErrormsg = '<div class="m-t-xs">'+_agile_get_translated_val('billing','continue-send-emails')+', ' +_agile_get_translated_val('contact-details','please')+ '<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('plan-and-upgrade','purchase')+' </a>'+_agile_get_translated_val('plan-and-upgrade','more')+'.</div>';
-			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + emialErrormsg;
+			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + (_agile_is_user_from_iphone() ? "" : emialErrormsg);
 			
 			showModalConfirmation(title, 
 					message, 

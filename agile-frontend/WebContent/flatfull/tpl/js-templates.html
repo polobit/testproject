@@ -1,9 +1,13 @@
 <script type="text/html" id="js-upgrade-link-template">
+	{{#isUserNotInIphone}}
 	{{agile_lng_translate 'contact-details' 'please'}} <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">{{agile_lng_translate 'menu' 'upgrade'}}</a> {{agile_lng_translate 'billing' 'your-email-subscription'}}
+	{{/isUserNotInIphone}}
 </script>
 
 <script type="text/html" id="js-email-error-mssg-template">
+	{{#isUserNotInIphone}}
 	<div>{{agile_lng_translate 'billing' 'continue-send-emails'}}, {{agile_lng_translate 'contact-details' 'please'}}<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> {{agile_lng_translate 'plan-and-upgrade' 'purchase'}}</a>  {{agile_lng_translate 'plan-and-upgrade' 'more'}}.</div>
+	{{/isUserNotInIphone}}
 </script>
 
 <script type="text/html" id="js-referal-program-template">
