@@ -86,3 +86,19 @@ table td a {
 .app:before {
   background: #f4f8f9;
 }
+
+.i-switch input[type="checkbox"] {
+  position: absolute;
+}
+
+.i-checks input {
+  opacity: inherit;
+}
+
+.i-checks-sm>i {
+  display: none;
+}
+
+.i-checks {
+  padding-left: inherit;
+}
