@@ -261,10 +261,10 @@ label.i-checks input{
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
-#clear-lhs-contact-filters{
+#clear-lhs-contact-filters, #clear-lhs-company-filters{
   color: #11a0f8 !important;
 }
-#clear-lhs-contact-filters:hover, #clear-lhs-contact-filters:active, #clear-lhs-contact-filters:focus{
+#clear-lhs-contact-filters:hover, #clear-lhs-contact-filters:active, #clear-lhs-contact-filters:focus, #clear-lhs-company-filters:hover, #clear-lhs-company-filters:active, #clear-lhs-company-filters:focus{
   color: #067dc6 !important;
 }
 #lhs-contact-filter-form a#addBtn{
@@ -280,7 +280,7 @@ label.i-checks input{
 #lhs-contact-filter-form i#removeBtn:hover, #lhs-contact-filter-form i#removeBtn:active, #lhs-contact-filter-form i#removeBtn:focus{
   opacity: 1 !important;
 }
-#contacts-title h3{
+#contacts-title h3, #companies-title h3{
   font-weight: 400 !important;
   color: #7460ee !important;
   font-size: 28px !important;
@@ -292,7 +292,7 @@ label.i-checks input{
 #contact-sorter .fa-sort-desc{
   position: relative  !important;
   color: #58666e!important;
-  font-size: 12px;
+  font-size: 13px !important;
 }
 #filter-list .btn.btn-sm{
   padding: 0px !important;
@@ -315,7 +315,7 @@ label.i-checks input{
 #tagslist .panel-body{
   padding: 10px 15px !important;
 }
-#contacts-lhs-filters-toggle{
+#contacts-lhs-filters-toggle, #companies-lhs-filters-toggle{
   border-right: 0px !important;
 }
 .app-content-body{
@@ -327,42 +327,42 @@ label.i-checks input{
 .contacts-div #bulk-action-btns{
   border-right: none !important;
 }
-#contacts-list-view #contacts-table.panel,.panel{
+#contacts-list-view #contacts-table.panel,.panel, #companies-list-view #companies.panel,.panel{
   border: none !important;
 }
-#contacts-list-view{
+#contacts-list-view, #companies-list-view{
   margin-top: 20px !important;
 }
-#contacts-table thead tr{
+#contacts-table thead tr, #companies thead tr{
   background-color: #f4f8f9 !important;
 }
-#contacts-list-view .table>tbody>tr>td{
+#contacts-list-view .table>tbody>tr>td, #companies-list-view .table>tbody>tr>td{
    border-top: none !important;
    padding: 10px !important;
 }
-#contacts-list-view .table>tbody>tr{
+#contacts-list-view .table>tbody>tr, #companies-list-view .table>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
-#contacts-list-view .table>thead>tr>th{
+#contacts-list-view .table>thead>tr>th, #companies-list-view .table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
 }
-#contacts-list-view .table>thead>tr>th{
+#contacts-list-view .table>thead>tr>th, #companies-list-view .table>thead>tr>th{
   text-transform: uppercase !important;
   color: #78909c !important;
   font-size: 12px !important;
 }
-#contacts-list-view-model-list img{
+#contacts-list-view-model-list .img-inital, #companies-list-view-model-list .img-inital{
   border-radius: 50% !important;
   width: 42px !important;
   height: 42px !important;
 }
-#contacts-list-view .table-striped>tbody>tr:nth-child(odd)>td{
+#contacts-list-view .table-striped>tbody>tr:nth-child(odd)>td, #companies-list-view .table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
 }
-#contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td{
+#contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td, #companies-list-view .table-hover>tbody>tr:hover>td, #companies-list-view .table-hover>tbody>tr:hover>th, #companies-list-view .table-striped>tbody>tr:hover>td{
   background-color: rgba(17, 160, 248, 0.1) !important;
 }
 table label.i-checks{
