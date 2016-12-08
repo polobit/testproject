@@ -102,3 +102,63 @@ table td a {
 .i-checks {
   padding-left: inherit;
 }
+
+.tab-container {
+  overflow: hidden;
+  padding: 0 20px;
+  width: 100%;
+  background-color: #e7eef0 !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 4px 4px 0 0;
+}
+
+.tab-container .nav-tabs {
+  white-space: nowrap;
+  border: none;
+}
+.tab-container .nav-tabs li {
+  display: inline-block;
+  float: none;
+  margin: 0 5px;
+}
+.tab-container .nav-tabs li:first-child {
+  margin-left: 0;
+}
+.tab-container .nav-tabs li:last-child {
+  margin-right: 0;
+}
+.tab-container .nav-tabs li a {
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 20px 5px 17px 5px !important;
+  color: #78909c;
+}
+.tab-container .nav-tabs li:hover{
+  background-color: #e7eef0 !important;
+}
+.tab-container .nav-tabs li a:hover {
+  color: #7460ee;
+  border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
+  background-color: #e7eef0 !important;
+}
+.tab-container .nav-tabs li.active a {
+  background-color: transparent !important;
+  color: #7460ee;
+  font-weight: bold;
+  border: none;
+  border-bottom: 3px solid #7460ee !important;
+}
+.nav-tabs-scroll.nav-tabs-scroll-style1 .nav-tabs-scroll-controls {
+  background-color: #e7eef0;
+  padding: 12px 15px;
+  white-space: nowrap;
+  border-radius: 0 4px 0 0;
+}
+#contactDetailsTab>li>a{
+  margin-right: inherit;
+}
+#contacts-inner-tabs #next, #contacts-inner-tabs #prev {
+      padding: 20px 15px;
+}
