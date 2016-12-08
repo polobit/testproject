@@ -995,9 +995,9 @@ var portlet_utility = {
 								if (tagName != "")
 									li += "<li data='"
 											+ tagName
-											+ "' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>"
+											+ "' class='tag btn btn-xs btn-default m-r-xs m-b-xs inline-block'>"
 											+ tagName
-											+ "<a id='remove_tag' class='close m-l-xs'>&times</a></li>";
+											+ "<a id='remove_tag' class='close m-l-xs' style='color: #363f44; top: -1px'>&times</a></li>";
 							});
 			$('#' + base_model.get("id") + '-portlet-ul-tags').append(li);
 
@@ -1560,9 +1560,9 @@ var portlet_utility = {
 								if (tagName != "")
 									li += "<li data='"
 											+ tagName
-											+ "' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>"
+											+ "' class='tag btn btn-xs btn-default m-r-xs m-b-xs inline-block'>"
 											+ tagName
-											+ "<a id='remove_tag' class='close m-l-xs'>&times</a></li>";
+											+ "<a id='remove_tag' class='close m-l-xs' style='color: #363f44; top: -1px'>&times</a></li>";
 							});
 			$('#portlet-ul-tags').append(li);
 
