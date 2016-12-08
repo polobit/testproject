@@ -346,10 +346,11 @@ label.i-checks input{
   color: #78909c !important;
   font-size: 12px !important;
 }
-#contacts-list-view-model-list img{
+#contacts-list-view-model-list .img-inital{
   border-radius: 50% !important;
-  width: 42px !important;
-  height: 42px !important;
+  height: 42px!important;
+  width: 42px!important;
+  
 }
 #contacts-list-view .table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
