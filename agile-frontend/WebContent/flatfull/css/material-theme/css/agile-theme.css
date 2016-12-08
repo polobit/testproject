@@ -76,8 +76,36 @@ table td a {
    border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
   }
-
-  .b-b {
+select.form-control{
+  height:40px;
+  color: #263238;
+  background-color: #f4f8f9; 
+  background-image: inherit;
+  border:inherit;
+  border-radius: 4px;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==');
+}
+.agile-new-theme .form-control.input-group-addon
+{
+  height:40px;
+  color: #263238;
+  background-color: #f4f8f9; 
+  background-image: ;
+  border:inherit;
+  border-radius: 4px;
+  background-image: none;
+  border: 0px;
+}
+.agile-new-theme .form-control.input-group-addon span{
+      margin-left: -15px!important;
+}
+.agile-new-theme .form-control
+{
+  height:40px;
+  border: 0px;
+  background-color: #f4f8f9;
+}
+:not('.dropdown-menu') .b-b {
   border-bottom: none;
 }
 .wrapper-md {
@@ -103,10 +131,34 @@ table td a {
   padding-left: inherit;
 }
 
+label.i-checks {
+  margin: 5px 0px;
+}
+label.i-checks input{
+  margin-right: 8px;
+}
+
 #dashlet_heading .btn-group .btn.btn-sm {
   height: inherit;
     padding: 5px;
     font-size: 16px;
     line-height: 1.5!important;
 }
-    
+
+.agile-new-theme div.cc-emails-st
+{
+  border: 0px;
+} 
+.bg-white a, button.show-search-dropdown {
+  color: #11a0f8;
+}
+
+.bg-white a:hover {
+    color: #067dc6;
+}
+
+.dropdown-menu a[href="#user-prefs"] span {
+  display: block;
+}
+
+
