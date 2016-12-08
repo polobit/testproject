@@ -286,6 +286,9 @@
 {{/if}}
 
 		{{#if this.contacts}}
+		  	{{#if_equals expected_value "0"}}
+		  		<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
+            {{/if_equals}}
 			{{#if expected_value}}
 				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
 			{{/if}}
