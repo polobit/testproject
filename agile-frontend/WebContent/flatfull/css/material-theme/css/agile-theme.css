@@ -220,7 +220,7 @@ label.i-checks input{
  float: none;
  border-right:0px;
 }
-.agile-new-theme .btn.dropdown-toggle span
+:not("#bulk-action-btns") .agile-new-theme .btn.dropdown-toggle span
 {
  color: #fff!important;
 }
@@ -356,4 +356,7 @@ label.i-checks input{
 }
 #contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td{
   background-color: rgba(17, 160, 248, 0.1) !important;
+}
+.img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
+  border-radius:50%!important;
 }
