@@ -923,7 +923,8 @@ label {
 }
 .btn:hover,
 .btn:focus,
-.btn:active {
+.btn:active,
+.open .btn.dropdown-toggle {
   color: #ffffff!important;
   background-color: #067dc6;
   text-decoration: none;
