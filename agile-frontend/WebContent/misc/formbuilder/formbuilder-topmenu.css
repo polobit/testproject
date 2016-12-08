@@ -70,9 +70,9 @@ border-radius: 0px;font-size: 15px;
     padding-right: 2px;
 }
 #agile-logo:hover{
-    color:fff;
+    color:#fff!important;
 }
 #agile-logo:active{
-    color:fff;
+    color:#fff!important;
 }
 
