@@ -374,4 +374,38 @@ table label.i-checks{
 #chrome-extensions{
   margin-right: 10px;
 }
-
+.tag{ 
+  margin: 3px 2px !important;
+  line-height: 1px;
+  height: auto;
+  padding: 0px;
+  margin: 0px;
+  background-color: inherit;
+  vertical-align: middle;
+  padding: 4px 6px;
+  background-color: #f4f8f9!important;
+  color: #78909c!important;
+  border-radius: 3px;
+}
+.tag:hover{
+  color: #78909c!important;
+  background-color: #f4f8f9!important;
+}
+.tag a{
+  color: #78909c!important;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tag a.close, .tag.btn-primary .close{
+  vertical-align: middle;
+  color: #90a4ae !important;
+}
+.tag a.close:hover {
+  color: #000000!important;
+}
+ul.tags-management li.tag{
+  line-height: inherit;
+}
