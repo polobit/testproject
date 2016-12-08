@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
@@ -190,7 +192,7 @@ public class ContactExportCSVUtil
 	    StringBuilder sb = new StringBuilder();
 	    if (note.subject != null)
 		sb.append(note.subject.trim());
-	    if (note.description != null)
+	    if (note.description != null && !StringUtils.isEmpty(note.description) && !StringUtils.isBlank(note.description))
 		sb.append("\n" + note.description);
 	    // ten notes are already added in header use that index.
 	    contactData[contactData.length - 10 + count] = sb.toString();
