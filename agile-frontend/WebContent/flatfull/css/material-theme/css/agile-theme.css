@@ -288,11 +288,15 @@ label.i-checks input{
 #contact-sorter .fa-sort-desc{
   position: relative  !important;
   color: #58666e!important;
+  font-size: 12px;
 }
 #filter-list .btn.btn-sm{
   padding: 0px !important;
+}
+#filter-list .btn.btn-sm span{
   color: #58666e!important;
 }
+
 #contact-sorter .btn.btn-sm{
   padding: 0px !important;
 }
@@ -360,3 +364,5 @@ label.i-checks input{
 table label.i-checks{
   margin-left: 8px !important;
 }
+
+.filters-drp-down .btn.dro
