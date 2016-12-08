@@ -105,11 +105,15 @@ select.form-control{
   border: 0px;
   background-color: #f4f8f9;
 }
-:not('.dropdown-menu') .b-b {
+.b-b {
   border-bottom: none;
 }
+.dropdown-menu .b-b{
+  border-bottom: 1px solid #dee5e7;
+}
+
 .wrapper-md {
-  padding-bottom: 10px
+  padding-bottom: 15px
 }
 .app:before {
   background: #f4f8f9;
