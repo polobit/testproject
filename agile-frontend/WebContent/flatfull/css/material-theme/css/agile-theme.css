@@ -226,7 +226,7 @@ label.i-checks input{
 }
 .btn.dropdown-toggle:hover,
 .btn.dropdown-toggle:focus,
-.btn.dropdown-toggle:active {
+.btn.dropdown-toggle:active,.open .dropdown-toggle.{
   color: #ffffff!important;
   background-color: #067dc6;
   text-decoration: none;
