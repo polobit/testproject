@@ -161,4 +161,118 @@ label.i-checks input{
   display: block;
 }
 
+#contacts-view-options .contacts-view {
+  background-color: #fff !important;
+  color: #78909c !important;
+}
 
+#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active {
+  background-color: #fff !important;
+  color: #11a0f8 !important;
+}
+#view-list .btn.dropdown-toggle span {
+  color: #fff !important;
+}
+#lhs-contact-filter-form a#lhs-filters-header{
+  color: #263238 !important;
+}
+#clear-lhs-contact-filters{
+  color: #11a0f8 !important;
+}
+#clear-lhs-contact-filters:hover, #clear-lhs-contact-filters:active, #clear-lhs-contact-filters:focus{
+  color: #067dc6 !important;
+}
+#lhs-contact-filter-form a#addBtn{
+  color: #11a0f8 !important;
+}
+#lhs-contact-filter-form a#addBtn:hover, #lhs-contact-filter-form a#addBtn:active, #lhs-contact-filter-form a#addBtn:focus{
+  color: #067dc6 !important;
+}
+#lhs-contact-filter-form i#removeBtn{
+  color: #78909c !important;
+  opacity: 0.6 !important;
+}
+#lhs-contact-filter-form i#removeBtn:hover, #lhs-contact-filter-form i#removeBtn:active, #lhs-contact-filter-form i#removeBtn:focus{
+  opacity: 1 !important;
+}
+#contacts-title h3{
+  font-weight: 400 !important;
+  color: #7460ee !important;
+  font-size: 28px !important;
+  font-style: normal !important;
+} 
+#contact-sorter .sort-field-txt{
+  color: #263238 !important;
+}
+#contact-sorter .fa-sort-desc{
+  position: relative  !important;
+  color: #58666e!important;
+}
+#filter-list .btn.btn-sm{
+  padding: 0px !important;
+  color: #58666e!important;
+}
+#contact-sorter .btn.btn-sm{
+  padding: 0px !important;
+}
+#contact-sorter .btn.btn-sm:nth-child(2){
+  height: 35px !important;
+  margin-left: 5px !important;
+} 
+#tagslist .panel{
+  border: none !important;
+  box-shadow: none !important;
+}
+#tagslist .panel-body{
+  padding: 10px 15px !important;
+}
+#contacts-lhs-filters-toggle{
+  border-right: 0px !important;
+}
+.app-content-body{
+  background-color: #f4f8f9 !important;
+}
+#right-pane>div{
+  border-bottom: none !important;
+}
+.contacts-div #bulk-action-btns{
+  border-right: none !important;
+}
+#contacts-list-view #contacts-table.panel,.panel{
+  border: none !important;
+}
+#contacts-list-view{
+  margin-top: 20px !important;
+}
+#contacts-table thead tr{
+  background-color: #f4f8f9 !important;
+}
+#contacts-list-view .table>tbody>tr>td{
+   border-top: none !important;
+   padding: 10px !important;
+}
+#contacts-list-view .table>tbody>tr{
+  border-top: 10px solid #f4f8f9 !important;
+  background-color: #fff !important;
+}
+#contacts-list-view .table>thead>tr>th{
+  padding: 10px 15px 15px 15px !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+#contacts-list-view .table>thead>tr>th{
+  text-transform: uppercase !important;
+  color: #78909c !important;
+  font-size: 12px !important;
+}
+#contacts-list-view-model-list img{
+  border-radius: 50% !important;
+  width: 42px !important;
+  height: 42px !important;
+}
+#contacts-list-view .table-striped>tbody>tr:nth-child(odd)>td{
+  background-color: #fff !important;
+}
+#contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td{
+  background-color: rgba(17, 160, 248, 0.1) !important;
+}
