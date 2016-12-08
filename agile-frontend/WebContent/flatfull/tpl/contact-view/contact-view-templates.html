@@ -90,7 +90,7 @@
         
 			{{#if_contact_type "COMPANY"}}
         		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
+        		<div><small style="text-transform:lowercase" class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
