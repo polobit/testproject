@@ -76,8 +76,8 @@ var localeJSON = <%=localeJSON%>;
 
         <div class="row">
 
-            <div class="col-md-2" style="width:222px;">
-                <div class="sidebar-nav">
+            <div class="col-md-4 pull-right">
+                <div class="sidebar-nav" style="width:100%;margin-top:24px">
                     <div id="elements" style="position:relative;">
                         <ul class="nav nav-list accordion-group">
                             <li class="rows" id="estRows">
@@ -117,7 +117,7 @@ var localeJSON = <%=localeJSON%>;
                 </div>
             </div>
 
-            <div class="col-md-7" style="width:800px;">
+            <div class="col-md-8">
 
                 <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></a>
                 <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
