@@ -357,3 +357,6 @@ label.i-checks input{
 #contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td{
   background-color: rgba(17, 160, 248, 0.1) !important;
 }
+table label.i-checks{
+  margin-left: 8px !important;
+}
