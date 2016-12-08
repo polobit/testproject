@@ -3900,4 +3900,13 @@ table td a {
   font-family: "Maison Neue" !important;
 }
 
+.b-b {
+  border-bottom: none;
+}
+.wrapper-md {
+  padding-bottom: 10px
+}
+.app:before {
+  background: #f4f8f9;
+}
 /*#endregion */
