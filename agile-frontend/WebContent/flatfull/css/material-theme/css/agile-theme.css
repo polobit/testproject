@@ -105,3 +105,32 @@ select.form-control{
   border: 0px;
   background-color: #f4f8f9;
 }
+.b-b {
+  border-bottom: none;
+}
+.wrapper-md {
+  padding-bottom: 10px
+}
+.app:before {
+  background: #f4f8f9;
+}
+
+.i-switch input[type="checkbox"] {
+  position: absolute;
+}
+
+.i-checks input {
+  opacity: inherit;
+}
+
+.i-checks-sm>i {
+  display: none;
+}
+
+.i-checks {
+  padding-left: inherit;
+}
+.agile-new-theme div.cc-emails-st
+{
+  border: 0px;
+}
