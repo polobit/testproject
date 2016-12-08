@@ -102,3 +102,11 @@ table td a {
 .i-checks {
   padding-left: inherit;
 }
+
+#dashlet_heading .btn-group .btn.btn-sm {
+  height: inherit;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1.5!important;
+}
+    
