@@ -244,7 +244,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         
         <div id="styleEditor" class="styleEditor">
         
-            <a href="#" class="close"><span class="fui-cross-circle"></span></a>
+            <a title=" Press Esc to close" href="#" class="close"><span class="fui-cross-circle"></span></a>
             
             <h3><span class="fui-new"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "detail-editor")%></h3>
             
@@ -2014,7 +2014,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         
             <div class="sideButtons clearfix">
                 <button type="button" class="btn btn-inverse btn-embossed btn-xs" id="cloneElementButton"><span class="fui-windows"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "clone")%></button>
-                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
+                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton" style="display:none;"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
                 <button type="button" class="btn btn-danger btn-embossed btn-xs" data-target="#deleteElement" data-toggle="modal" id="removeElementButton"><span class="fui-cross-inverted"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "remove")%></button>
             </div>
                                                     
@@ -2205,7 +2205,11 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         </div><!-- /.modal -->
         
         <div id="loader">
-            <span>{</span><span>}</span>
+            <div>
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <br/>
+                <span>Loading...</span>
+            </div>
         </div>
     
     </div>

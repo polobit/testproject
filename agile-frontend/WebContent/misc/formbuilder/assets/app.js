@@ -50,7 +50,7 @@ define(
 							}
 							else{
 								if(typeof formTemplate != "undefined") {
-									templateLoad.agile_template_load(api);
+									templateLoad.agile_template_load(api,fields);
 								} else {
 									saveform = json;
 									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });

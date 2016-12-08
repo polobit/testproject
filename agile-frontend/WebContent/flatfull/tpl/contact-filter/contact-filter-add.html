@@ -239,16 +239,26 @@
 											</div>
 										</td>
 									<td>
-									<div class="m-l-sm">
+									{{#is_mobile}}
+
+									<div class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove c-p text-info text-xs"
+											>Close</i></div>
+
+									{{else}}
+									<div class="m-l-xs m-t-xs">
 										<i
 											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
+											></i></div>
+									{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
 							</table>
 								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add-condition'}}</a>
-							<br/><br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
+							<br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
 							<br/>
 							<div>{{agile_lng_translate 'report-add' 'meet-any-of-the-foll-cond'}}
 							</div>
@@ -437,10 +447,19 @@
 											</div>
 										</td>
 									<td>
-									<div  class="m-l-sm">
+									{{#is_mobile}}
+									<div  class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove c-p text-info text-xs"
+											>Close</i></div>
+
+									{{else}}
+									<div  class="m-l-xs m-t-xs">
 										<i
 											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
+											></i></div>
+									{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
@@ -583,16 +602,26 @@
 											</div>
 										</td>
 									<td>
-									<div class="m-l-sm">
+									{{#is_mobile}}
+
+									<div class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove text-info text-xs c-p"
+											>Close</i></div>
+
+									{{else}}
+									<div class="m-l-xs m-t-xs">
 										<i
 											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
+											></i></div>
+											{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
 							</table>
 						<a href="#" class="filter-companies-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add-condition'}}</a>
-							<br/><br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
+							<br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
 							<br/>
 							<div>{{agile_lng_translate 'report-add' 'meet-any-of-the-foll-cond'}}
 							</div>
@@ -722,9 +751,18 @@
 											</div>
 										</td>
 									<td>
-									<div style="margin-left:10px">
+									{{#is_mobile}}
+
+									<div class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove c-p text-info text-xs">Close</i></div>
+
+									{{else}}
+									<div class="m-l-xs m-t-xs">
 										<i
-											class="filter-contacts-multiple-remove icon-remove-circle c-p"></i></div></td>
+											class="filter-contacts-multiple-remove icon-remove-circle c-p"></i></div>
+											{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>

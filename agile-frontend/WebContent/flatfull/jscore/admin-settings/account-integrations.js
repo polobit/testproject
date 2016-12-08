@@ -167,8 +167,8 @@ function syncAppData(){
 }
 function syncAppDatatoDeals(){
 	 showModalConfirmation(
-		"Update Data",
-		"This will 'resync' your data. Do you want to continue?",
+		"{{agile_lng_translate 'datasync' 'update-data'}}",
+		"{{agile_lng_translate 'datasync' 'update-data-confirm'}}",
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
@@ -176,7 +176,7 @@ function syncAppDatatoDeals(){
 
 	 	$.ajax({
 
-			url : 'core/api/custom-fields/syncappdata?domain='+domain +'&domainusermail='+domain_user_mail,
+			url : 'core/api/custom-fields/syncappdataforDeals?domain='+domain,
 
 			type : 'GET',
 			success : function(data) {
@@ -185,8 +185,8 @@ function syncAppDatatoDeals(){
 				var no = "Ok"
 				if(data == "success"){
 					showModalConfirmation(
-						"Update Data",
-						"Update request is successfully scheduled. Status will be notified by email.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled'}}",
 						function()
 						{
 							// No callback
@@ -198,8 +198,8 @@ function syncAppDatatoDeals(){
                   }
                   else if (data == "limitReached"){
                   	showModalConfirmation(
-						"Update Data",
-						"Update is allowed only once a month. Please try later.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled-error'}}",
 						function()
 						{
 							// No callback
@@ -211,8 +211,8 @@ function syncAppDatatoDeals(){
                   }
                   else{
                   	showModalConfirmation(
-						"Update Data",
-						"There seems to be an issue. Please try again later.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'sync-error'}}",
 						function()
 						{
 							// No callback

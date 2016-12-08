@@ -1940,7 +1940,7 @@ $(function()
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		
+		if(data)
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -8184,4 +8184,16 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 		return options.fn(this);
 	}
 	return options.inverse(this);
+});
+
+Handlebars.registerHelper('renderTemplate', function(key, data){
+	return getTemplate(key, data);
+});
+
+Handlebars.registerHelper('if_checked_autoProfile', function(value, target, options){
+	if(!value || value == target){
+		return options.fn(this);
+	}else{
+		return options.inverse(this);
+	}
 });

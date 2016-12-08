@@ -9,11 +9,11 @@ import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.notification.push.PushNotificationMessage;
 import com.agilecrm.user.push.AgileUserPushNotificationId;
 import com.agilecrm.workflows.WorkflowBackup;
+import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.InvitedUser;
 import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.videorecords.VideoRecord;
 import com.googlecode.objectify.ObjectifyService;
-
 import com.agilecrm.account.DocumentTemplates;
 import com.agilecrm.products.Product;
 import com.agilecrm.contact.DocumentNote;
@@ -39,6 +39,8 @@ public class ObjectifyRegistry {
 		ObjectifyService.register(EmailTemplateCategory.class);
 		ObjectifyService.register(VideoRecord.class);
 		ObjectifyService.register(SMTPPrefs.class);
+		ObjectifyService.register(GmailSendPrefs.class);
+		
 		// Agile Push 
 		ObjectifyService.register(AgileUserPushNotificationId.class);
 		

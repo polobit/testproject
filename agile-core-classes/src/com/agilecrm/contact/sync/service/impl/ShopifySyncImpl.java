@@ -7,8 +7,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,6 +35,9 @@ import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.FailedContactBean;
 
 /**
@@ -583,7 +588,27 @@ public class ShopifySyncImpl extends OneWaySyncService
 			    note.description += "\n Total Price : " + order.get("total_price") + "("
 				    + order.get("currency") + ")" + "";
 			}
-
+			
+			String datefrom = (String) order.get("created_at");
+		    String date_format = "";
+		    UserPrefs userprefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
+		    if(userprefs.dateFormat != null){
+		    	date_format = userprefs.dateFormat;
+		    }else{
+		    	date_format = "MM/dd/yyyy";
+		    }
+		    String formatted = "";
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		    try {
+		         Date date = sdf.parse(datefrom);
+		         Calendar cal = Calendar.getInstance();
+		         cal.setTime(date);
+		         SimpleDateFormat format1 = new SimpleDateFormat(date_format.replaceAll("m", "M"));
+		         formatted = format1.format(cal.getTime());
+		     } catch (ParseException e) {
+		         e.printStackTrace();
+		     }
+		    note.description += "\n Created date : " + formatted;
 			note.addRelatedContacts(contact.id.toString());
 
 			notes.put(note.subject, note);

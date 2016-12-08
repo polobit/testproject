@@ -24,7 +24,7 @@
 						<select class="form-control" id="video-record-select" name="video-record-select">
 						<option value="">Select</option>
 						{{#each this}}
-							<option value="{{id}}">{{name}}</option>
+							<option data-thumb="{{thumb_url}}" value="{{id}}">{{name}}</option>
 						{{/each}}
 							<!-- <option value="AGILE_CREATE_NEW_VIDEO">Record new video</option> -->
 						</select>
