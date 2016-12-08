@@ -215,6 +215,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
 <link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
 <link href="flatfull/css/material-theme/css/style.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/agile-theme.css" rel="stylesheet" />
 <%}%>
 
 

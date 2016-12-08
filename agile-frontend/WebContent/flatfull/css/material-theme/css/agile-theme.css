@@ -1,0 +1,88 @@
+body, .h1, .h2, .h3, .h4, .h5,.h6  {
+  font-family: "Maison Neue" !important;
+}
+body {
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #78909c;
+  background-color: #f4f8f9;
+}
+body, * {
+  font-family: 'Maison Neue', sans-serif;
+}
+
+.btn-default {
+    color: #fff!important;
+}
+.navbar-brand i, .navbar-brand span {
+  vertical-align: inherit;
+}
+#fat-menu .dropdown-menu a[href="#user-prefs"] {
+    line-height: inherit;
+}
+
+#portlets .panel-heading {
+  border-bottom: none!important;
+}
+
+.portlet_header h4 span {
+  color: #263238!important;
+}
+
+.bg-transparent {
+  background: transparent!important;
+}
+.navbar-brand {
+  font-size: inherit;
+}
+.navbar-brand.font-bold {
+  font-weight: 500;
+}
+.navi .font-bold{
+ font-weight: 500; 
+}
+#bulk-action-btns .btn {
+  background-color: rgba(17, 160, 248, 0.1);
+  color: #11a0f8!important;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+}
+
+#bulk-action-btns .btn:hover, #bulk-action-btns .btn:focus, #bulk-action-btns .btn:active {
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+}
+#bulk-action-btns {
+  background-color: #fff!important;
+}
+table td a {
+  color: #263238;; 
+}
+.bg-light {
+  background-color: inherit!important;
+}
+.btn.dropdown-toggle span{
+  color: #58666e!important;
+}
+.btn-group>.btn-group:last-child>.btn:first-child{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  }
+  .btn-group>.btn-group:first-child>.btn:last-child, .btn-group>.btn-group:first-child>.dropdown-toggle{ 
+   border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .b-b {
+  border-bottom: none;
+}
+.wrapper-md {
+  padding-bottom: 10px
+}
+.app:before {
+  background: #f4f8f9;
+}
