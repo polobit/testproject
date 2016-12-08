@@ -246,12 +246,12 @@ label.i-checks input{
 .dropdown-menu a[href="#user-prefs"] span {
   display: block;
 }
-#contacts-view-options .contacts-view {
+#contacts-view-options .contacts-view, #chrome-extensions{
   background-color: #fff !important;
   color: #78909c !important;
 }
 
-#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active {
+#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active, #chrome-extensions:hover, #chrome-extensions:focus, #chrome-extensions:active{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
