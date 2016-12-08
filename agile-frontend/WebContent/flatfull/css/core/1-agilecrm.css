@@ -5056,3 +5056,8 @@ border-top: 0px !important;
 {
   top:-1px!important;
 }
+.support-plan-alert{
+    width: 97%;
+    margin-left: 14px;
+    padding: 8px;
+}
