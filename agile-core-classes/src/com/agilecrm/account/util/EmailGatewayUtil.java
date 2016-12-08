@@ -414,7 +414,6 @@ public class EmailGatewayUtil
 	    	
 	    	cc = ContactEmailUtil.normalizeEmailIds(cc);
 	    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
-	    	
 	    	try {
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
