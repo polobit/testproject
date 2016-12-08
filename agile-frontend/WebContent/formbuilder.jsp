@@ -45,11 +45,11 @@ String template = request.getParameter("template");
          <a id="agile-logo" class="navbar-brand navbar-color" href="#navbar-dashboard">
            <i class="glyphicon glyphicon-cloud"></i> 
          </a>
-         <span class="navbar-brand" style="font-weight: bold;">Agile Forms</span>
+         <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;">           
             <button id="form-save" class="btn btn-primary navbar-brand  navbar-color">
                <span class="glyphicon glyphicon-ok"></span> 
-               <span>Save now(!)</span>
+               <span>Save Form</span>
             </button>
             <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
                <span class="glyphicon glyphicon-eye-open"></span>
@@ -99,6 +99,11 @@ String template = request.getParameter("template");
       <!-- /container back -->
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       <script type="text/javascript">
+      if(formNumber){
+         var a = document.getElementById('form_preview');
+         a.removeAttribute("disabled");
+         a.href = window.location.origin+"/forms/"+formNumber;
+      }
          var a = document.getElementById('agile-logo');
          a.href = window.location.origin;
          var a = document.getElementById('form_back');

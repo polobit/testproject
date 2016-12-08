@@ -23,11 +23,8 @@ define([
 			data : JSON.stringify(form),
 			success: function(){
 				if(formNumber){
-					$("#form_preview").removeAttr("disabled");
-					$("#form-save").attr("disabled","true");
-					var url = window.location.origin + "/forms/"+formNumber;
-					$("#form_preview").attr("href",url);
-					alert("Form saved successfuly.Click on Preview option to see the modified form.");
+					alert("Form saved successfuly.Click on Preview option to view the updated form.");
+					$("#form-save").removeAttr("disabled");
 				}
 				else{
 					var url = window.location.origin + "/#forms";

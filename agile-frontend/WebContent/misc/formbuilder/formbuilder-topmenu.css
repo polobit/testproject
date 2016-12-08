@@ -69,5 +69,10 @@ border-radius: 0px;font-size: 15px;
 #form_preview .glyphicon,#form_back .glyphicon{
     padding-right: 2px;
 }
-
+#agile-logo:hover{
+    color:fff;
+}
+#agile-logo:active{
+    color:fff;
+}
 
