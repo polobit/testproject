@@ -357,7 +357,7 @@ $(function(){
 	    $(".twilioio-advance-settings-show").toggle();
 	    //$("#twilio_recording").toggle();
 	    $("#twilio_twimlet_url_controls").toggle();
-	    $("#twilio_twimlet_url_controls #twilio_twimlet_url").val("http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
+	    //$("#twilio_twimlet_url_controls #twilio_twimlet_url").val("http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
 	 });
 
     $('body').off('click', '#twilio_verify_settings');
@@ -1802,7 +1802,6 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 				 	// Adds contact name to tags ul as li element
 					if(callStatus == "completed") {
 						var status = "";
-						alert(calltransfer);
 						if(calltransfer){
 							status = "transferred"
 						}else{

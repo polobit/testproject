@@ -127,7 +127,6 @@ var WidgetsRouter = Backbone.Router
 
                     // Shows available widgets in the content
                     $('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
-
                 });
 
             },
@@ -449,8 +448,10 @@ function renderWidgetView(templateName, url, model, renderEle){
                     $(".popover").addClass("col-md-12"); //.css({"top":"0px"});
                 }, 10);
             });
+            $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
         }
     });
     var output = widgetModel.render().el;
     $(renderEle).html(output);
+    $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
 }
