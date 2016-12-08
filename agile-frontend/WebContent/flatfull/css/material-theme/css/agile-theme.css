@@ -327,7 +327,7 @@ label.i-checks input{
 .contacts-div #bulk-action-btns{
   border-right: none !important;
 }
-#contacts-list-view #contacts-table.panel,.panel, #companies-list-view #companies.panel,.panel{
+#contacts-list-view #contacts-table.panel, #companies-list-view #companies.panel{
   border: none !important;
 }
 #contacts-list-view, #companies-list-view{
