@@ -134,3 +134,27 @@ select.form-control{
 {
   border: 0px;
 }
+.agile-new-theme .btn-addon.btn-sm i
+{
+      margin: 0px;
+      vertical-align: baseline; 
+}
+.agile-new-theme .btn-addon i{
+ float: none;
+ border-right:0px;
+}
+.agile-new-theme .btn.dropdown-toggle span
+{
+ color: #fff!important;
+}
+.btn.dropdown-toggle:hover,
+.btn.dropdown-toggle:focus,
+.btn.dropdown-toggle:active {
+  color: #ffffff!important;
+  background-color: #067dc6;
+  text-decoration: none;
+  outline: 0 !important;
+}
+.agile-new-theme #automation-video , .agile-new-theme .help-video{
+  line-height: 41px!important;
+}
