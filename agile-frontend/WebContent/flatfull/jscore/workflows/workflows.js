@@ -144,7 +144,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
          */      
         if(!is_start_active(designerJSON)){
             var $save_info = '<span style="color: red;">{{agile_lng_translate "campaigns" "connect-start-node"}}</span>';
-            $("#workflow-msg").html($save_info).show().fadeOut(3000);
+            $("#workflow-msg").html($save_info).show().fadeOut(8000);
             return false;
         }
 
@@ -633,7 +633,7 @@ function show_campaign_save(e,message,color)
     if(color)
         save_info = $(save_info).css("color", color);
 
-    $("#workflow-msg").html(save_info).show().fadeOut(3000);
+    $("#workflow-msg").html(save_info).show().fadeOut(5000);
 }
 
 function is_start_active(designerJSON){

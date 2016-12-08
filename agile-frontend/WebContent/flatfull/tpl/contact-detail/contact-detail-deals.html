@@ -54,7 +54,7 @@
 		<div class="contact-desc-dynamic">
         
 		<div><span class="m-r-xs hide">Value : </span>
-			{{currencySymbol}}{{numberWithCommas expected_value}}  <span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
+		{{#if_equals expected_value "0"}}{{currencySymbol}}{{expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if_equals}}  <span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
 		</div>
          {{#if description}}
           <div>{{description}}</div>

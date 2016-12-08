@@ -88,6 +88,7 @@ public class MobileUADetector {
 	}
 
 	public static boolean isiPhone(String ua) {
+		// return true;
 		return getMobileOperatingSystem(ua).equals(OS_NAME.IPHONE);
 	}
 }

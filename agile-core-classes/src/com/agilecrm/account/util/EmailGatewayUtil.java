@@ -414,15 +414,15 @@ public class EmailGatewayUtil
 	    	
 	    	cc = ContactEmailUtil.normalizeEmailIds(cc);
 	    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
-	    	
-	    	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	    	
-	    	//As of now Oauth and SMTP doesn't support attachments
-	    	if((documentIds != null && documentIds.size() == 0) 
-	    			&& (blobKeys != null && blobKeys.size() == 0)
-	    			&& (attachments != null && attachments.length == 0)) {
-		    	
-	    		//Fetch the email options from user's gmail oauth preferences 
+	    	try {
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+			//As of now Oauth and SMTP doesn't support attachments
+			if((documentIds != null && documentIds.size() == 0) 
+					&& (blobKeys != null && blobKeys.size() == 0)
+					&& (attachments != null && attachments.length == 0)) {
+
+				//Fetch the email options from user's gmail oauth preferences 
 				GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
 				if(gmailPrefs != null) {
 					System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
@@ -430,24 +430,20 @@ public class EmailGatewayUtil
 							html, text, documentIds, blobKeys, attachments);
 					return;
 				}
-				
-	    		try
-	    		{
-	    			//Fetch the email options from user's SMTP preferences 
-	    			SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
-    				if(smtpPrefs != null) {
-    					System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
-    					GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
-    							html, text, documentIds, blobKeys, attachments);
-    					return;
-    				}
-	    		}
-	    		catch(Exception ex)
-	    		{
-	    			System.err.println("Exception occured while getting smtp prefs...");
-	    			System.out.println(ExceptionUtils.getFullStackTrace(ex));
-	    		}
-			}
+
+				//Fetch the email options from user's SMTP preferences 
+				SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
+				if(smtpPrefs != null) {
+					System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
+					GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
+							html, text, documentIds, blobKeys, attachments);
+					return;
+				}
+			} 
+		} catch(Exception ex) {
+			System.err.println("Exception occured while getting smtp prefs...");
+			System.out.println(ExceptionUtils.getFullStackTrace(ex));
+		}
 	
 	    	//Fetch the preferred emailgateway from account preferences
 	    	EMAIL_API preferredGateway = (emailGateway != null) ? 

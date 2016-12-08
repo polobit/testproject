@@ -114,16 +114,21 @@ public class GoogleCalenderPrefs {
 		String response = GoogleServiceUtil.refreshTokenInGoogle(refresh_token);
 
 		// Creates HashMap from response JSON string
-		HashMap<String, Object> properties = new ObjectMapper().readValue(
+		HashMap<String, Object> properties = null;
+		if(response != null){
+		 properties = new ObjectMapper().readValue(
 				response, new TypeReference<HashMap<String, Object>>() {
-				});
-		System.out.println(properties.toString());
-
-		if (properties.containsKey("access_token")) {
-			access_token = String.valueOf(properties.get("access_token"));
-			setExpiryTime(Integer.parseInt(String.valueOf(properties
+		 });
+		}
+		
+		if(properties != null){
+		     System.out.println(properties.toString());
+		     if (properties.containsKey("access_token")) {
+			 access_token = String.valueOf(properties.get("access_token"));
+			 setExpiryTime(Integer.parseInt(String.valueOf(properties
 					.get("expires_in"))));
-			save();
+			  save();
+		  }
 		}
 	}
 

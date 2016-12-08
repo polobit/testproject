@@ -66,9 +66,8 @@
                                            <li>
 												<a href="javascript:void(0)" id="campaign_access_level">
 												<i class="" style="width:20px;">&nbsp;</i>
-
-												 <span></span></a>
-												</li>
+												 <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span></a>
+													</li>
 											<li>
 												<a href="javascript:void(0)" id="campaign-restore-alert">
 												<i class="fa fa-undo" style="width:20px;">&nbsp;</i>
@@ -146,8 +145,8 @@
                                            <li>
 												<a href="javascript:void(0)" id="campaign_access_level">
 												<i class="" style="width:20px;">&nbsp;</i>
-
-												 <span></span></a>
+												 	 <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
+												 	 </a>
 												</li>
 											<li>
 												<a href="javascript:void(0)" id="campaign-restore-alert">
@@ -291,8 +290,7 @@
 						<br/>
                         <small>{{agile_lng_translate 'campaigns' 'unsubscribed-contacts-are-not-sent'}}</small>
                         <br/>
-					</div>
-
+					</div>	
 					<div class="row">
                      <div class="control-group form-group hidden">
 						<label class="control-label col-sm-2">
@@ -305,43 +303,8 @@
 							</select>
 						</div>
                 	</div>
-                    </div>
-
-                    {{#is_mobile}}
-
-                    {{else}}
-
-                    {{#if is_new}}
-                   	<div>
-						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-						<div class="left m-r-sm">
-						    <label class="btn btn-default btn-sm " id="campaign_access_level"> 
-						        <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
-						    </label>
-						</div>
-					</div>
-					{{else}}
-						<div class="btn-group left m-r-xs">
-							<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="#" id="duplicate-workflow-top">
-										<i class="fa fa-clipboard"></i> {{agile_lng_translate 'campaigns' 'create-a-copy'}}
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
-										<i class="fa fa-share-alt" style="width: 20px;"></i> {{agile_lng_translate 'campaigns' 'share-with'}}
-									</a>
-								</li>
-							</ul>
-           				</div>
-                    {{/if}}
-                    {{/is_mobile}}
-
+                    </div>				
+                    
                     <div class="save-workflow-img inline-block"></div>
                     <br />
                 </fieldset>
