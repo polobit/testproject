@@ -25,6 +25,9 @@ import com.google.appengine.api.datastore.Blob;
 public class CompressionUtil 
 {
 	
+	private static final String NEW_LINE_REPLACE = "__br__";
+	
+	
 	/**
 	 * Compress a String to a Blob object
 	 * 
@@ -72,7 +75,7 @@ public class CompressionUtil
 			GZIPInputStream is = new GZIPInputStream(new ByteArrayInputStream(bytes));
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			
-			while( (s = reader.readLine()) != null )	buf.append(s);
+			while( (s = reader.readLine()) != null )	buf.append(s + "\n");
 			
 		} catch(IOException e) {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
