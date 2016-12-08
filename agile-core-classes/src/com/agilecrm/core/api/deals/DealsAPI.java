@@ -809,7 +809,12 @@ public class DealsAPI
     public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-	return opportunity.relatedContacts();
+	if (opportunity!=null)
+	{
+	 return opportunity.relatedContacts();
+	}
+	else
+	    return null;
     }
 
     /**
