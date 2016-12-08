@@ -15,7 +15,7 @@ body, * {
     color: #fff!important;
 }
 .navbar-brand i, .navbar-brand span {
-  vertical-align: inherit;
+  vertical-align: middle;
 }
 #fat-menu .dropdown-menu a[href="#user-prefs"] {
     line-height: inherit;
@@ -76,3 +76,74 @@ table td a {
    border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
   }
+
+/*header and navbar styles*/
+
+@media (min-width:768px){
+.agile-new-theme .navbar-collapse, .agile-new-theme .app-content, .agile-new-theme .app-footer {
+    margin-left: 239px;
+}
+.agile-new-theme .app-aside-fixed .app-header .navbar-header{height: 70px; line-height: 70px; border-right: 1px solid #e7eef0;}
+.agile-new-theme .app-aside, .agile-new-theme .navbar-header, .agile-new-theme .app-aside .fixedicons{width: 239px;}
+.agile-new-theme .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
+.agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
+.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px;}
+.agile-new-theme #aside{border-right: 1px solid #e7eef0;}
+.agile-new-theme .app-aside-folded .navbar-collapse, .agile-new-theme .app-aside-folded .app-content, .agile-new-theme .app-aside-folded .app-footer {
+    margin-left: 60px;
+}
+.app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
+  padding-top: 0;
+}
+.agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi ul li .sales-nav:hover span{
+  padding-top:25% !important; 
+}
+
+}/*medis 768 end*/
+
+.agile-new-theme #navbar{box-shadow: inherit; height: 70px !important;}
+.agile-new-theme .app-header-fixed{padding-top: 70px;}
+.agile-new-theme .navbar-brand{line-height: 70px;}
+.agile-new-theme #app-aside-folded{top: 18px !important}
+.agile-new-theme .navbar-searchicon{padding: 25px 15px;}
+.agile-new-theme .grid-icon-header {
+    color: #11a0f8!important;
+    padding-bottom: 25px;
+    padding-top: 25px;
+}
+.agile-new-theme .navbar-brand i {
+    display: inline-block;
+    padding-right: 10px;
+    color: #7460ee;
+    font-size: 20px;
+}
+.agile-new-theme .navbar-brand span{
+    display: inline-block;
+    color: #263238;
+    vertical-align: middle;
+    font-weight: 600;
+    font-size: 15px;
+    margin-left: 0;
+}
+.agile-new-theme .navbar-brand{transition: inherit; -webkit-transition: inherit;}
+.agile-new-theme .free_plan_alert{top: 80px; width:440px; font-size: 12px; padding-top: 8px; padding-bottom: 8px;}
+a i, a span{vertical-align: inherit;}
+
+.agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{width: auto;}
+.agile-new-theme .agile-menu-dropdown-aside{padding-top: 0px !important}
+.agile-new-theme .navi ul.nav li a{padding-top:12px; padding-bottom: 12px; color:#78909c;}
+.agile-new-theme .nav>li>a:hover, .agile-new-theme .nav>li>a:focus{color: #11a0f8 !important; background-color: #f5fbff;}
+.agile-new-theme .navi ul.nav li a{border-left: 3px solid transparent;}
+/*.agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}*/
+.agile-new-theme .bg-white .agile-menuactive>a.agile-menu-parent-item{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
+.agile-new-theme .bg-white .agile-menuactive>a{color: #11a0f8 !important;}
+.agile-new-theme .app-aside-folded .navi>ul>li>a{padding:0px !important;}
+
+
+
+
+
+
+
+
+/*header and navbar styles end*/
