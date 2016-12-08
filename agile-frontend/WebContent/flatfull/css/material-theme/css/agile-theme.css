@@ -486,13 +486,8 @@ a i, a span{vertical-align: inherit;}
 .agile-new-theme .bg-white .agile-menuactive>a.agile-menu-parent-item{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
 .agile-new-theme .bg-white .agile-menuactive>a{color: #11a0f8 !important;}
 .agile-new-theme .app-aside-folded .navi>ul>li>a{padding:0px !important;}
-
-
-
-
-
-
-
-
 /*header and navbar styles end*/
+.app-content-full{
+  top: 70px!important;
+}
 
