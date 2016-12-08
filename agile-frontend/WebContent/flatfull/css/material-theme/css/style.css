@@ -3899,5 +3899,33 @@ table td a {
   body, .h1, .h2, .h3, .h4, .h5,.h6  {
   font-family: "Maison Neue" !important;
 }
-
+select.form-control{
+  height:40px;
+  color: #263238;
+  background-color: #f4f8f9; 
+  background-image: inherit;
+  border:inherit;
+  border-radius: 4px;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==');
+}
+.agile-new-theme .form-control.input-group-addon
+{
+  height:40px;
+  color: #263238;
+  background-color: #f4f8f9; 
+  background-image: ;
+  border:inherit;
+  border-radius: 4px;
+  background-image: none;
+  border: 0px;
+}
+.agile-new-theme .form-control.input-group-addon span{
+      margin-left: -15px!important;
+}
+.agile-new-theme .form-control
+{
+  height:40px;
+  border: 0px;
+  background-color: #f4f8f9;
+}
 /*#endregion */
