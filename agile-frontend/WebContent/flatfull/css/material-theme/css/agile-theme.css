@@ -357,3 +357,38 @@ label.i-checks input{
 #contacts-list-view .table-hover>tbody>tr:hover>td, #contacts-list-view .table-hover>tbody>tr:hover>th, #contacts-list-view .table-striped>tbody>tr:hover>td{
   background-color: rgba(17, 160, 248, 0.1) !important;
 }
+.tag{ 
+  margin: 3px 2px !important;
+  line-height: 1px;
+  height: auto;
+  padding: 0px;
+  margin: 0px;
+  background-color: inherit;
+  vertical-align: middle;
+  padding: 4px 6px;
+  background-color: #f4f8f9!important;
+  color: #78909c!important;
+  border-radius: 3px;
+}
+.tag:hover{
+  color: #78909c!important;
+  background-color: #f4f8f9!important;
+}
+.tag a{
+  color: #78909c!important;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tag a.close, .tag.btn-primary .close{
+  vertical-align: middle;
+  color: #90a4ae !important;
+}
+.tag a.close:hover {
+  color: #000000!important;
+}
+ul.tags-management li.tag{
+  line-height: inherit;
+}
