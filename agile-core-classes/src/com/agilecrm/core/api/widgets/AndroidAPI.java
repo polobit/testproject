@@ -1,0 +1,110 @@
+package com.agilecrm.core.api.widgets;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.activities.Call;
+import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.triggers.util.CallTriggerUtil;
+
+@Path("/api/widgets/android")
+public class AndroidAPI {
+	/**
+	 * Saving call info and history.
+	 * 
+	 * @author Rajesh
+	 * @created 14/11/2016
+	 * @return String
+	 */
+	@Path("savecallactivity")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivity(@FormParam("direction") String direction,
+			@FormParam("phone") String phone,
+			@FormParam("status") String status,
+			@FormParam("duration") String duration,
+			@QueryParam("note_id") Long note_id) {
+
+		if (!(StringUtils.isBlank(phone))) {
+			Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
+
+			if (direction.equalsIgnoreCase("Outgoing")
+					|| direction.equalsIgnoreCase("outbound-dial")) {
+				ActivityUtil.createLogForCalls("Android", phone, Call.OUTBOUND,
+						status.toLowerCase(), duration, note_id);
+
+				// Trigger for outbound
+				CallTriggerUtil.executeTriggerForCall(contact, "Android",
+						Call.OUTBOUND, status.toLowerCase(), duration);
+			}
+
+			if (direction.equalsIgnoreCase("Incoming")
+					|| direction.equalsIgnoreCase("Missed")
+					|| direction.equalsIgnoreCase("inbound")) {
+				ActivityUtil.createLogForCalls("Android", phone, Call.INBOUND,
+						status.toLowerCase(), duration, note_id);
+
+				// Trigger for inbound
+				CallTriggerUtil.executeTriggerForCall(contact, "Android",
+						Call.INBOUND, status.toLowerCase(), duration);
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Saving call info and history on the basis of id.
+	 * 
+	 * @author Rajesh
+	 * @created 14/11/2016
+	 * @return String
+	 */
+	@Path("savecallactivityById")
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String saveCallActivityById(@FormParam("id") Long id,
+			@FormParam("direction") String direction,
+			@FormParam("phone") String phone,
+			@FormParam("status") String status,
+			@FormParam("duration") String duration,
+			@QueryParam("note_id") Long note_id) {
+
+		if (null != id && !(StringUtils.isBlank(phone))) {
+			Contact contact = ContactUtil.getContact(id);
+			if (null == contact) {
+				return "";
+			}
+			if (direction.equalsIgnoreCase("Outgoing")
+					|| direction.equalsIgnoreCase("outbound-dial")) {
+				ActivityUtil.createLogForCalls("Android", phone, Call.OUTBOUND,
+						status.toLowerCase(), duration, contact, note_id);
+
+				// Trigger for outbound
+				CallTriggerUtil.executeTriggerForCall(contact, "Android",
+						Call.OUTBOUND, status.toLowerCase(), duration);
+			}
+
+			if (direction.equalsIgnoreCase("Incoming")
+					|| direction.equalsIgnoreCase("inbound")) {
+				ActivityUtil.createLogForCalls("Android", phone, Call.INBOUND,
+						status.toLowerCase(), duration, contact, note_id);
+
+				// Trigger for inbound
+				CallTriggerUtil.executeTriggerForCall(contact, "Android",
+						Call.INBOUND, status.toLowerCase(), duration);
+			}
+		}
+		return "";
+	}
+}
