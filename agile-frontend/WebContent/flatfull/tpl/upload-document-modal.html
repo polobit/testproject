@@ -16,6 +16,7 @@
                   <input id="id" type="hidden"/>
                   <input name="extension" id="extension" type="hidden"/>
                   <input type="hidden" name="template_type" id="template_type"/>
+                  <input type="file" id="doc-file-up" class="hidden"/>
                   <div class="control-group form-group hide {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                      <label class="control-label  col-sm-3"><b>Type </b><span
                         class="field_req">*</span></label>
@@ -62,7 +63,7 @@
                           placeholder="{{agile_lng_translate 'documents' 'deal-name'}}" class="typeahead typeahead_deals form-control"
                           data-provide="typeahead" data-mode="multiple" />
                         <div style="padding-top:2px;">
-                          <ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
+                          <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-b-none"></ul>
                         </div>
                         <div class="clearfix"></div>
                       </div>
@@ -87,6 +88,7 @@
                           </div>
                         </div>
                         </div>
+                        <div id="uploaded-doc" class="hide"></div>
                       </div>
                     </div>
                   <div class="senddoc hide">
