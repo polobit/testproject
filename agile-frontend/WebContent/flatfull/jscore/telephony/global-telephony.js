@@ -579,6 +579,9 @@ function handleCallRequest(message)
 		showSkypeCallNoty(message);
 		return;
 	
+		}else if ((message || {}).callType == "Android"){
+			
+			androidCallNoty(message);	
 		}
 }
 

@@ -1,17 +1,165 @@
+
+
+function loadAndroidEvents(){
+	$('body').off('click', '.noty_android_cancel');
+	$('body').on('click', '.noty_android_cancel', function(e){
+		e.preventDefault();
+		console.log("Android call canceld from noty");
+		closeCallNoty(true);
+	});
+}
+
+loadAndroidEvents();
+
+function saveCallNoteAndroid(message){
+
+	console.log("Event data : **** ");
+	console.log(event);
+
+	var callDirection = message.direction;
+	var state = message.state;
+	var customerNumber = message.contact_number;
+	var callDuration = message.duration;
+	var agentNumber = message.phone_no;	
+	
+
+	console.log("callDirection : in Android "+callDirection);
+
+	if(state){
+		if(state == "answered"){
+			state = "answered";
+		}else if(state == "agent_missed"){
+			state = "failed";
+		}
+	}
+
+	var noteSub = callDirection + " Call - " + state;
+	var cntId;
+
+	if(globalCall && globalCall.contactedContact){
+		cntId = globalCall.contactedContact.id; // agilecrm DB ID
+	}
+
+	var call = {
+		"direction" : callDuration,
+		"phone" : customerNumber,
+		"status" : state, 
+		"duration" : callDuration, 
+		"contactId" : cntId
+	};
+
+	var data = {};
+	data.url = "/core/api/widgets/android/";
+	data.subject = noteSub;
+	data.number = customerNumber;
+	data.callType = "inbound";	
+	data.duration = callDuration;
+	data.contId = null;
+	data.contact_name = "";
+	data.widget = "Android";
+
+	if(callDirection == "Outgoing") {
+		console.log("Outgoing *** ");
+		if(cntId){
+			console.log("cntId *** "+ state);
+			if(state == "answered"){
+				twilioIOSaveContactedTime(cntId);
+				accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
+					var json = resp;
+					if(json == null) {
+						return;
+					}
+
+					contact_name = getContactName(json);
+					
+					data.callType = "outbound-dial";
+					data.status = "answered";					
+					data.contId = cntId;
+					data.contact_name = contact_name;					
+					showDynamicCallLogs(data);
+				});
+			}else{
+
+				var note = {
+					"subject" : noteSub, 
+					"message" : "", 
+					"contactid" : cntId, 
+					"phone": customerNumber, 
+					"callType": "outbound-dial", 
+					"status": state, 
+					"duration" : callDuration
+				};
+
+				console.log("Note ***** ");
+				console.log(note);
+				autosaveNoteByUser(note, call, "/core/api/widgets/android");
+			}
+		}else{
+			resetCallLogVariables();
+    		
+    		if(state == "answered") {    			
+    			data.callType = "outbound-dial";
+    			data.status = "answered";    			
+    			data.contId = null;
+    			data.contact_name = "";    			
+    			CallLogVariables.dynamicData = data;
+    		}
+
+			CallLogVariables.subject = noteSub;
+    		CallLogVariables.callWidget = "Knowlarity";
+    		CallLogVariables.callType = "outbound-dial";
+    		CallLogVariables.phone = customerNumber;
+    		CallLogVariables.duration = callDuration;;
+    		CallLogVariables.status = state;
+
+    		var jsonObj = {};
+    		jsonObj['phoneNumber'] = customerNumber;
+    		return showContactMergeOption(jsonObj);
+		}
+	}	
+}
+
+
+
+function androidCallNoty(message){
+	if(message){
+		var callDirection = message.direction;
+		var state = message.state;
+		var customerNumber = message.contact_number;
+
+		if(callDirection){
+			if(callDirection == "Outgoing"){
+				if(state){	
+					if(state == "iniated"){
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
+						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
+					}else if(state == "CDR"){
+						closeCallNoty(true);	
+						saveCallNoteAndroid(message);
+					}
+				}
+			}
+		}
+	}	
+}
+
 function appDialer(to, contact){
 	if(to){
+		
+		globalCall.contactedContact = contact;
+		globalCall.callNumber = to;
+
 		var requestURL = "core/api/android/call?phone_number="+to;	 
 	 	console.log(requestURL);
 	 
-	 	$.ajax({	 		
+	 	$.ajax({	
 	 		url : requestURL,
 	 		type : "GET",	 		
 	 		success : function(result) {
-	 			console.log("android *** success : "+ JSON.stringify(result));						
-	 			//{{agile_lng_translate 'other' 'cancel'}}			
-	 			console.log(to + " : "+ contact);				
-	 		},
-	 		error : function(result) {
+	 			console.log("android *** success : "+ JSON.stringify(result));	 			
+	 			console.log(to + " : "+ contact);	
+	 			//androidCallNoty(result);			
+	 		},error : function(result) {
 	 			console.log("android *** error : "+ JSON.stringify(result));								
 	 		}
 	 	});
