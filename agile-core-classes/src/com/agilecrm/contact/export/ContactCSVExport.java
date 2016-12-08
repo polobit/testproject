@@ -281,8 +281,17 @@ public class ContactCSVExport
 			    			StringBuilder contactName = new StringBuilder("[");
 				    		for(Contact cont : contacts){
 				    			if(cont.type.equals(Contact.Type.PERSON)){
-				    				contactName.append(cont.first_name);
-					    			contactName.append(cont.last_name);
+				    				String fname = null ; String lname = null;
+				    				List<ContactField> prop = cont.properties ; 
+				    				for(int k=0;k<prop.size();k++){
+				    					if(prop.get(k).name.equals("first_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+				    						fname = prop.get(k).value ;
+				    					else if(prop.get(k).name.equals("last_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+				    						lname = prop.get(k).value ;
+				    				}
+				    				contactName.append(fname);
+				    				if(lname != null)
+				    					contactName.append(" "+lname);
 				    			}else{
 				    				contactName.append(cont.name);
 				    			}
