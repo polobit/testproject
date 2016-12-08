@@ -729,7 +729,7 @@ welcome.create-and-run-campaigns-on-your-contacts,Create and run automated campa
 social.search-hover-content,Relevant Tweets matching a specified Search Keyword.,Tweets relevantes que coinciden con una búsqueda por palabra clave específica
 admin-settings-integrations.you-need-a-paid-plivo-account,You need a Paid Plivo account to be able to send SMS,Usted necesita una cuenta de pago Plivo para poder enviar un SMS
 report-view.know-your-revenue-forecast,Know your revenue forecast based on your deals data.,Conocer el pronóstico de tus ingresos de acuerdo a los datos de tus ventas.
-datasync.update-data-confirm,This will update your data. Do you want to continue?,Esto actualizará sus datos. ¿Quieres continuar?
+datasync.update-data-confirm,This will 'resync' your data. Do you want to continue?,Esto actualizará sus datos. ¿Quieres continuar?
 welcome.add-reports-to-improve-customr-reention-statergies,Add reports to improve customer retention strategies,Añadir informes para mejorar las estrategias de retención de clientes
 portlets.delete-deal-goals-dashlet-confirm,Are you sure you want to delete Dashlet - Deal Goals,¿Seguro que quiere eliminar Dashlet - Objetivos de la oferta?
 acls.access-denied,Access denied to sync contacts. Please contact Admin,Acceso denegado para sincronizar los contactos. Por favor&#44; póngase en contacto con administrador
@@ -818,7 +818,7 @@ main.to-resume-services-click-below,To resume the services&#44  please click bel
 companies.no-perm-to-update,You do not have permission to update Companies.,Usted no tiene permiso para actualizar Empresas.
 prefs-data-sync.setup-contact-sync-with-quickbook,Setup contact sync with your Quickbook account.,Configure la sincronización de contactos con su cuenta de Quickbook.
 calls.campaign-exited,You have successfully exited the call campaign.,Que haya salido con éxito la campaña llamada.
-contacts-view.first-name-or-last-name-is-mandatory,Either of first name or last name is mandatory.,Tanto nombre como apellido son obligatorios.
+contacts-view.first-name-or-last-name-is-mandatory,First name is mandatory.,Tanto nombre como apellido son obligatorios.
 deal-view.deal-not-associated-with-contact,Deal is not associated with any person/contact.,El Acuerdo no está asociado a ninguna persona / contacto.
 validation-msgs.max,Please enter a value less than or equal to {0}.,Por favor&#44; introduzca un valor inferior o igual a {0}.
 companies.no-perm-to-add,You do not have permission to create Companies.,Usted no tiene permiso para crear empresas.
@@ -1211,7 +1211,7 @@ validation-msgs.ipaddress,Please enter a valid IP Address.,Por favor&#44; introd
 countries.VC,Saint Vincent and the Grenadines,San Vicente y las Granadinas
 deal-view.no-tasks-for-deal,You have no tasks for this Deal.,No tiene tareas para este acuerdo.
 theme.your-settings-are-not-saved-yet,Your settings are not saved yet.,Tu configuración no ha sido guardada todavía
-deal-view.add-related-contacts-of-selected,Add related Contacts of selected,Agregar contactos relacionados de los seleccionados
+deal-view.add-related-contacts-of-selected,Add Related Contacts of selected,Agregar contactos relacionados de los seleccionados
 contacts-view.import-contacts-from-freshbooks,Import contacts from Freshbooks.,Importar contactos de Freshbooks
 task.you-have-no-notes-for-this-task,You have no notes for this task.,No tiene notas para esta tarea.
 contacts-view.import-contacts-from-quickbooks,Import contacts from Quickbooks.,Importar contactos de QuickBooks.
@@ -1221,7 +1221,7 @@ campaigns.run-this-campaign-on-the-contact,Run this Campaign on the Contact,Ejec
 Refer-friend.invite-frinds-to-try-agilecrm,Invite friends to try Agile CRM!,Invitar a amigos a probar agile CRM!
 prefs-settings.keyboard-shortcuts-for,Keyboard Shortcuts for Agile CRM,Atajos de teclado para Agile CRM
 widgets.Towerdata-delete-message,Are you sure to delete Towerdata,¿Estás seguro de que deseas eliminar Towerdata?
-deal-view.add-related-contacts-to-campaign,Add related Contacts to Campaign,Agregar contactos relacionados a la campaña
+deal-view.add-related-contacts-to-campaign,Add Related Contacts to Campaign,Agregar contactos relacionados a la campaña
 form-builder.you-do-not-have-any-forms-saved,You do not have any Forms saved.,No tienes ningún formulario guardado.
 tickets.group-changed-to,Ticket group has been changed to,grupo de entradas se ha cambiado a
 contacts-view.deals-track-milestone-changed-to,Deals track/milestone changed to,Registro de oferta/hito cambiado a 
@@ -1451,7 +1451,7 @@ Refer-friend.love-agile-crm,Hope you love Agile CRM&#44;,Esperamos que el amor A
 contacts-view.of-the-following-conditions,of the following conditions,de las siguientes condiciones
 validation-msgs.deal_milestone_duplicated,'Milestone' already exists!,\'Milestone\' ya existe!
 widgets.enter-custom-widget-details,Enter custom widget details,Insera los detalles del widget personalizado
-deal-view.add-tag-to-related-contacts,Add Tag to related Contacts,Añadir etiqueta a contactos relacionados
+deal-view.add-tag-to-related-contacts,Add Tag to Related Contacts,Añadir etiqueta a contactos relacionados
 widgets.mail-your-calendar-feed,Mail your Calendar Feed URL,Enviar por correo su URL para el canal Calendario
 reports.sent-shortly,Report will be sent shortly,Informe se enviará en breve
 datasync.salesforce-initiated,Salesforce import initiated,Salesforce importación inició
@@ -2573,7 +2573,7 @@ admin-settings-custom-fields.link-definition,Link Definition,Definición de enla
 company-details.add-opportunity,Add Opportunity,Añadir Oportunidad
 widgets.twitter-profile,Twitter Profile,Perfil de Twitter
 contacts-view.task-related-to,Task related to,Tarea relacionada con
-admin-settings-tasks.what-are-tasks,What are Tasks?,¿Qué son las tareas?
+admin-settings-tasks.what-are-categories,What are Categories?,¿Qué son las tareas?
 campaigns.order-fulfilled,Order fulfilled,Orden satisfecha
 portlets.deals-pad-content-title,No deals found.,No se encontraron ofertas.
 modals.import-contacts,Import Contacts,Importar contactos
@@ -4501,7 +4501,7 @@ contacts-view.added,added.,Añadido.
 tickets.macros,Macros,Macros
 widgets.friend,Friend,Amigo
 admin-settings-stats.queued,Queued,En cola
-contact-edit.office,Office,Oficina
+contact-edit.work,Work,Oficina
 contact-details.detach,Detach,Despegar
 portlets.events,Events,Eventos
 tickets.labels,Labels,Etiquetas
@@ -6077,3 +6077,67 @@ welcome-email.info,Thanks for choosing Agile CRM! It's great to have you on boar
 subscription-email.plan-changed,Plan Changed,plan cambió
 payment-fail-email.unfortunately-your-account-cancelled,Unfortunately&#44; your account is cancelled,Por desgracia&#44; su cuenta es cancelada
 verify-email.click-link-to-verify,Thanks for signing up. Please click the link below to verify your email.,Gracias por registrarte. Por favor&#44; haga clic en el siguiente enlace para verificar su correo electrónico.
+campaigns.triggers-title,Triggers,
+
+contacts-view.import-upto-10&#44,000-deals-from-a-CSV-file
+prefs-online-calendar.In Person&#44, Phone&#44
+tickets.Last&nbsp,Updated&nbsp
+tickets.Requester&nbsp,Name
+tickets.Assigned&nbsp,Date
+tickets.Created&nbsp,Date
+tickets.Ticket&nbsp,Type
+tickets.Closed&nbsp,Date
+tickets.Due&nbsp,Date
+landingpage-builder.page-header-inf,Additional code specifically to this page
+tickets.feedback-assignee,Assignee
+tickets.feedback-time,Created Time
+admin-settings-custom-fields.text-area-desc-new,Text area - A large text input field
+admin-settings-custom-fields.formula-desc-new,Formula - An arithmetic formula in following format \{{number1}}*\{{number2}} - works with numerical custom fields only. Mustache conditions can be used here.
+modals.phone-number-ext, Phone Number
+validation-msgs.Pls-enter-a-valid-ext-no, Invalid extension. Extension can contain only numbers or * or #
+portlets.no-user-activities,No User Activities Found
+portlets.no-tasks-found,No Tasks Found
+portlets.no-deals-goals-set-new,No Deals Goals Set 
+portlets.no-revenue-goals-set-new,No Revenue Goals Set
+portlets.no-pending-deals,No Pending Deals
+calls.duration-secs-new,Call Duration (Min)
+calls.avg-duration-secs-new,Average Call Duration (Min)
+contacts-view.manage-filters,Manage Filter
+portlets.+add-new,#NAME?
+landingpage-builder.page-script-applied,Script applied specifically to this page (JavaScript)
+landingpage-builder.page-js,Page JS
+admin-settings-users.updated-time,Updated Time
+admin-settings-users.status,Status
+admin-settings-deals.manage-tracks,Manage Tracks
+landingpage-builder.recorded-video,Recorded Video
+landingpage-builder.recorded-video-tooltip,Shows the videos built from &#39
+landingpage-builder.form-tooltip,Select/Add agile form in landing page
+specialchar-typeahead.notallowed-apclchars,Search query characters result in server exception. Please try again
+specialchar-typeahead.query-spclchars,Search query characters will result in server exception. Please try again
+validation-msgs.card-expired,Expiration date must be in future
+specialchar-typeahead.query-message,Search input contains unsupported characters. Please try again.
+documents.no-products,You do not have any products currently. Configure them
+products.product-name,Product Name
+landingpage-builder.refresh-form-tooltip,Click to refresh form list
+landingpage-builder.edit-form-tooltip,Click to edit this form
+documents.name,Name
+ticketlabel.lable-name,Name
+dealgoal.goalcount,Goal Count
+products.sku,Product Code
+products.product-qty-new,Qty.
+products.product-price-new,Unit Price
+documents.newdocuments-helptext-para1,Documents help you to manage your PDFs
+documents.newdocuments-helptext-para2,EDocuments can also be created
+prefs-settings.new-ticket,New Ticket
+prefs-settings.new-call,Call
+documents.newdocuments-helptext-paragraph1,Documents help you to manage your PDFs&#44 presentations&#44 quotes&#44 proposals and so on in Agile CRM. Agile CRM allows you to add&#44 manage and delete your Documents. Documents can be uploaded from your local drive or Google Drive. Documents can be attached to contacts or companies or deals.
+documents.newdocuments-helptext-paragraph2,EDocuments can also be created&#44 managed and sent in Agile CRM. Personalize and customize EDocuments for every scenario in the sales cycle. EDocuments can be built from existing templates or custom built for required sales scenario.
+addon.addon-payment,Add-on Payment
+addon.addon,Add-on
+prefs-settings.event-reminders,Event Reminders
+landingpage-builder.image-url,Enter image path
+landingpage-builder.enter-image-url,Enter an image Url 
+landingpage-builder.error-image-url,Please enter a valid image url
+sso.ssoheading,Single Sign-On (SSO) Authentication.
+sso.authenticationtext,Single sign-on is a session and user authentication service that permits a user to use one set of login credentials (e.g.&#44 user name and password) to access multiple applications.
+notications.enable-notifications,Enable Notifications

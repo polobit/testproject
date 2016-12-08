@@ -1,37 +1,60 @@
 <script type="text/html" id="emailbuilder-categories-template">
 <div class="custom-animated custom-fadeInUp">
-
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
-    <div class="col-md-12">
-      <div class="pull-left"> 
-            <div class="btn-group">
-                <h1 class="m-n font-thin h3 text-black c-p">{{agile_lng_translate 'email-builder' 'add-new'}}</h1>          
-            </div>
-            <div class="text-ellipsis" style="max-width:300px;">
+       {{#is_mobile}}
+          <div class="col-md-12">
+            <h4 class="{{#is_mobile}} {{else}} pull-left {{/is_mobile}} font-thin h4 templates-title">{{agile_lng_translate 'email-builder' 'add-new'}} </h4>
+            <div class="text-ellipsis {{#is_mobile}} m-b-xs {{/is_mobile}}">
                 <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
             </div>
-          </div> 
-	   <div class="pull-right">
-            <a href="#" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'web-rules' 'create-your-own-template-desc'}}" id="bringYourCodeBtn">{{agile_lng_translate 'web-rules' 'bring-your-code'}}</a>
-            <a href="#emailbuilder-add" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'campaigns' 'start-with-an-empty-email'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
-	   </div>
-	   <div class="clearfix"></div>
-     </div>
+            <div class="pull-right">
+                <a href="#" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'web-rules' 'create-your-own-template-desc'}}" id="bringYourCodeBtn">{{agile_lng_translate 'web-rules' 'bring-your-code'}}</a>
+                <a href="#emailbuilder-add" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'campaigns' 'start-with-an-empty-email'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+       {{else}}
+          <div class="col-md-12">
+            <div class="pull-left">
+              <div class="font-thin h3">
+                {{agile_lng_translate 'email-builder' 'add-new'}} 
+              </div>
+              <div class="text-ellipsis">
+                  <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
+              </div>
+            </div>
+            <div class="pull-right">
+                <a href="#" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'web-rules' 'create-your-own-template-desc'}}" id="bringYourCodeBtn">{{agile_lng_translate 'web-rules' 'bring-your-code'}}</a>
+                <a href="#emailbuilder-add" class="btn btn-default btn-sm btn-addon" title="{{agile_lng_translate 'campaigns' 'start-with-an-empty-email'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+       {{/is_mobile}}
 </div>
 </div>
 <div class="tab-container wrapper-md dash_tabview">
     <div class="tabs" id="webrules-tabs-content">
     <div class="tab-container m-b-none">
     <ul class="nav nav-tabs ">
-
-       <li class="p-none active">
-       <a  href="#newsletters" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Newsletters'}}</a></li>
-       <li class="p-none ">
-       <a  href="#notifications" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Notifications'}}</a></li>
-       <li class="p-none ">
-       <a  href="#celebrations" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Celebrations'}}</a></li>
-       <li class="p-none ">
+       {{#is_mobile}}
+           <li class="p-none active">
+           <a  href="#newsletters" class="b-l-none" data-toggle="tab" >
+           <i class="icon icon-doc"></i></a></li>
+           <li class="p-none ">
+           <a  href="#notifications" class="b-l-none" data-toggle="tab" ><i class="icon icon-bell"></i></a></li>
+           <li class="p-none ">
+           <a  href="#celebrations" class="b-l-none" data-toggle="tab" ><i class="icon icon-playlist"></i></a></li>
+           <li class="p-none ">
+       {{else}}
+           <li class="p-none active">
+           <a  href="#newsletters" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Newsletters'}}</a></li>
+           <li class="p-none ">
+           <a  href="#notifications" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Notifications'}}</a></li>
+           <li class="p-none ">
+           <a  href="#celebrations" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Celebrations'}}</a></li>
+           <li class="p-none ">
+       {{/is_mobile}}
     </ul>
  </div>
 </div>
@@ -106,6 +129,6 @@
 
 </div>
 
-
+</div>
 </div>
 </script>

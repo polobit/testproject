@@ -486,7 +486,7 @@ function openVerifyEmailModal(el) {
 
 	if (selected == 'verify_email')
 	{	
-		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'verify-new-email'}}", undefined,
+		window.parent.workflow_alerts("{{agile_lng_translate 'emails' 'from-email-verification'}}", undefined,
 				"workflow-verify-email-modal"
 
 				, function(modal) {
@@ -551,7 +551,7 @@ function resetAndFillFromSelect(selected_val) {
 	$('#from_email').empty();
 
 	var options = {};
-	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+	options["{{agile_lng_translate 'verification' 'add-new'}}"] = "verify_email";
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',

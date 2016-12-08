@@ -31,6 +31,7 @@ import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.deferred.RenewalCreditsDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
@@ -594,6 +595,8 @@ public class BillingRestriction implements Serializable
     
     public boolean checkToUpdateFreeEmails(){
     	Subscription subscription = SubscriptionUtil.getSubscription();
+    	if(subscription.status != null && subscription.status.equals(BillingStatus.SUBSCRIPTION_DELETED))
+    		return false;
     	System.out.println("max emails count::"+this.max_emails_count);
     	if(this.max_emails_count == null || this.max_emails_count == 0 || (this.one_time_emails_count != null && this.one_time_emails_count <= 0 && subscription != null && subscription.emailPlan == null)){
 			System.out.println("last renewal time::"+this.last_renewal_time);

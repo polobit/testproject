@@ -1,10 +1,21 @@
 package com.campaignio.tasklets.agile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -169,8 +180,8 @@ public class JSONNode extends TaskletAdapter
 		    }
 
 		    System.out.println(httpParams);
-
-		    String output;
+		    
+		    Map<String, Object> output = null;
 		    
 		    HashMap<String,String> hashmapKeyValues = new HashMap<String,String>();
 		    
@@ -194,18 +205,35 @@ public class JSONNode extends TaskletAdapter
 			else
 			    url = url + "?" + httpParams;
 
-			output = HTTPUtil.accessURLWithHeaders(url,hashmapKeyValues);
-
+			output = accessURLWithHeaders(url,hashmapKeyValues);
 			logMessage = "GET: " + url + "<br>Status: SUCCESS";
 
 		    }
 		    else
 		    {
-			output = HTTPUtil.accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);
+			output = accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);			
 			logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
 		    }
+		    
+		    String finalOutput = "";
+		    
+		    if(output != null){
+			    	Response response = (Response)output.get("response");
+			    	System.out.println("Response : " + response);
+			    	if(response.getCode() >= 400){
+			    		String exceptionMessage = "while processing request </br>Response Code: "
+								+ response.getCode()
+								+ "</br>Response Message: "
+								+ response.getMessage();
+						throw new Exception(exceptionMessage);
+			    	}
+			    	else
+			    	{
+			    		finalOutput = response.getMessage();
+			    	}
+				}
 
-		    JSONObject returnJSON = new JSONObject(output);
+		    JSONObject returnJSON = new JSONObject(finalOutput);
 
 		    // Iterate through all keys and add to data
 		    Iterator it = returnJSON.keys();
@@ -237,8 +265,181 @@ public class JSONNode extends TaskletAdapter
 		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_FAILURE);
 		}
 	}
+	
+	 /**
+    * Connects to the remote object to write (post) the given data and reads
+    * the response of it to return
+    * 
+    * @param postURL
+    * @param data
+    * @param hashmapKeyValues
+    * @return response of the remote object
+    * @throws Exception
+    */
+   private static Map<String, Object> accessURLWithHeaderUsingPost(String postURL, String data,HashMap<String,String> hashmapKeyValues) throws Exception
+   {
+	// Send data
+	URL url = new URL(postURL);
+	HttpURLConnection conn = (HttpURLConnection) url.openConnection();	
+		
+	conn.setDoOutput(true);
+
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
+	conn.setConnectTimeout(600000);
+	conn.setReadTimeout(600000);
+	
+	Set<String> keys = hashmapKeyValues.keySet();
+	if(keys.size()>0){
+	    Iterator<String> iterator = keys.iterator();
+	    
+	    while(iterator.hasNext())
+	    {
+		// Construct headers
+	    String key = iterator.next();
+		conn.addRequestProperty(key,hashmapKeyValues.get(key));
+	    }
+	}
+	
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+	if (data != null)
+	{
+	    wr.write(data);
+	    wr.flush();
+	}
+
+	InputStream is = null;
+	
+   try
+   {
+   	is = conn.getInputStream();
+	
+   }
+   catch(IOException ie)
+   {
+   	System.err.println("IOException occured, getting error stream.");
+   	is = conn.getErrorStream();
+   }
+	
+	// Get the response
+	BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+	
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
+	{
+	    output += inputLine;
+	}
+
+	wr.close();
+	reader.close();	
+	return responseMap(((HttpURLConnection)conn).getResponseCode(), output);
+   }
+   
+   /**
+    * Connects to the remote object to write (get) the given data and reads
+    * the response of it to return
+    * 
+    * @param url
+    * @param hashmapKeyValues
+    * @return response of the remote object
+    */
+   public static Map<String, Object> accessURLWithHeaders(String url,HashMap<String,String> hashmapKeyValues)
+   {
+	try
+	{
+	    URL yahoo = new URL(url);
+	    URLConnection conn = yahoo.openConnection();
+
+	    // Set Connection Timeout as Google AppEngine has 5 secs timeout
+	    conn.setConnectTimeout(600000);
+	    conn.setReadTimeout(600000);
+	    
+	    Set<String> keys = hashmapKeyValues.keySet();
+	    if(keys.size()>0){
+		    Iterator<String> iterator = keys.iterator();
+		    
+		    while(iterator.hasNext())
+		    {
+			// Construct headers
+		    String key = iterator.next();
+			conn.addRequestProperty(key,hashmapKeyValues.get(key));
+		    }
+	    }
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+	   		
+	    String output = "";
+	    String inputLine;
+	    while ((inputLine = reader.readLine()) != null)
+	    {
+		output += inputLine;
+	    }
+	    reader.close();	
+	    return responseMap(((HttpURLConnection)conn).getResponseCode(), output);	    
+	    
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println(e.getMessage());
+	}
+	return null;
+   }
+   
+   private static Map<String, Object> responseMap(int responseCode, String responseMessage)
+   {
+	   Map<String, Object> response = new HashMap<String, Object>();   
+	   
+	   Response responseInner = new Response();
+	   responseInner.setCode(responseCode);
+	   
+	   try{
+		   JSONObject jsonObject = new JSONObject(responseMessage);
+		   
+		   if(jsonObject.has("message"))
+			   responseInner.setMessage(jsonObject.getString("message"));
+		   else	   
+			   responseInner.setMessage(responseMessage);
+		   
+	   }catch (Exception e) {
+		   e.printStackTrace();
+		   System.err.println(e.getMessage());
+		   responseInner.setMessage(responseMessage);
+	   }
+	   
+	   response.put("response", responseInner);
+	   
+	   return response;
+   }
 }
 
+class Response
+{
+	int code;
+	String message;
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	@Override
+	public String toString() {
+		return "Response [code=" + code + ", message=" + message + "]";
+	}
+	
+}
 
 /**
  * <code>JSONIODeferredTask</code> is the deferred class that executes actual JSONIO node
@@ -330,6 +531,5 @@ class JSONIODeferredTask implements DeferredTask
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
-	}
-	
+	}	
 }

@@ -587,7 +587,29 @@ form#new-ticket ul.chosen-choices {
   text-overflow: ellipsis;
   display: -webkit-box;
 }
-
+.color_awesome{
+ background-color:#5cb85c;
+}
+.color_good{
+ background-color:#5cb85c;
+}
+.color_awful{
+  background-color:#d9534f;
+}
+.color_bad{
+  background-color:#d9534f;
+}
+.color_ok{
+ background-color:#f0ad4e;
+}
+.feedback_label_width{
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+}
 .color_red{
   color:red;
+}
+.textareaclass{
+  overflow-y:auto !important;
 }

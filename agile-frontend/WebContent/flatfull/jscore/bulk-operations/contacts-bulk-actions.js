@@ -183,11 +183,12 @@ var contacts_bulk_actions = {
 			}, function(element)
 			{
 			}, yes, no);
+
 			return;
 		}
 		else if (continueAction)
 		{
-			show_bulk_campaign_assign_page()
+			show_bulk_campaign_assign_page(bulkOperationContactsCount())
 		}
 	},
 
@@ -658,7 +659,7 @@ function show_bulk_owner_change_page()
 
 	}
 
-	function show_bulk_campaign_assign_page()
+	function show_bulk_campaign_assign_page(selected_count)
 	{
 
 		load_bulk_operations_template(function(){
@@ -672,10 +673,25 @@ function show_bulk_owner_change_page()
 
 			console.log(filter);
 
+			var workflows_collection = [];
+			var emails_workflows = [];
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
 				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ({{agile_lng_translate 'campaigns' 'disabled'}}){{else}}>{{name}}{{/if}}</option>";
- 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
+ 				fillSelect('campaignBulkSelect', '/core/api/workflows', 'workflow', function(collection){
+ 					
+ 					try
+ 					{
+ 						workflows_collection = collection.toJSON();
+ 					 	emails_workflows = get_email_workflows(workflows_collection);
+ 					}
+ 					catch(err)
+ 					{
+
+ 					}
+
+
+ 				}, optionsTemplate);
 			});
 
 			// Navigate to show form
@@ -708,14 +724,63 @@ function show_bulk_owner_change_page()
 				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
-				var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
 
-				var json = {};
-				json.contact_ids = id_array;
-				postBulkOperationData(url, json, $form, undefined, function(data)
+				if(selected_count > 500 && emails_workflows.hasOwnProperty(workflow_id))
 				{
-					enable_save_button(saveButton);
-				}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+					accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
+              		function(response){ // success
+
+	                      if(!response)
+	                      {
+	                            
+		                      showModalConfirmation(
+		                                      "Add to Campaign",
+		                                      "Please configure DKIM and SPF settings to send campaign emails to more than 500 contacts.",
+		                                       function()
+		                                      {
+		                                      		  enable_save_button(saveButton);
+		                                              Backbone.history.navigate("analytics-code", { trigger : true });
+
+		                                      },  function()
+		                                      {
+		                                      		enable_save_button(saveButton);
+
+		                                            Backbone.history.navigate("contacts", { trigger : true });
+		                                           
+		                                      }, function()
+		                                      {
+		                                      	enable_save_button(saveButton);
+		                                      },"Configure", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+		                      				
+		                      	return;
+	                  		}
+
+	                  		var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+							var json = {};
+							json.contact_ids = id_array;
+							postBulkOperationData(url, json, $form, undefined, function(data)
+							{
+								enable_save_button(saveButton);
+							}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+		              	}, 
+		              	function(){
+
+		              	//error
+
+						});
+				}
+				else
+				{
+					var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
+
+					var json = {};
+					json.contact_ids = id_array;
+					postBulkOperationData(url, json, $form, undefined, function(data)
+					{
+						enable_save_button(saveButton);
+					}, "{{agile_lng_translate 'campaigns' 'assigned'}}");
+				}
 			});
 		});
 		
@@ -779,7 +844,8 @@ function show_bulk_owner_change_page()
 			
 			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
 			{
-				var template = Handlebars.compile('<li class="inline-block tag btn btn-xs m-r-xs m-b-xs btn-primary text-xs" data="{{name}}">{{name}}<a class="close" id="remove_tag" tag="{{name}}">&times</a></li>');
+
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{name}}">{{name}}<a class="close" id="remove_tag" style="color: #363f44;" tag="{{name}}">&times</a></li>');
 			 	// Adds contact name to tags ul as li element
 			 	$('#addBulkTags').closest(".control-group").find('ul.tags').append(template({name : tag_input}));
 			}	

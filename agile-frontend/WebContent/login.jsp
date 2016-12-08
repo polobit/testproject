@@ -404,12 +404,12 @@ if(isSafari && isWin)
 		id="mobile"
 	<% }else {  %> <%}%> >
 	<%if(!MobileUADetector.isiPhone(userAgent)) {%>
-	<div class="text-center tags-color text-white m-t m-b" >
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with")%></small> 
-		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
-		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-yahoo")%>' data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>?</small> <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%></a><br/>
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
+		<div class="text-center tags-color text-white m-t m-b" >
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using")%></small> 
+		<small><a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google Apps</a></small>&nbsp|&nbsp
+		<small><a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using-yahoo")%>' data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a></small><br/>	
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>? <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signUp")%></a></small><br/>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a></small>
 		</div>
 	<%} %>
 	</div>
@@ -429,6 +429,9 @@ if(isSafari && isWin)
 	
                   
 		<script type="text/javascript">
+		    // Save mobile device GCM Id
+		    var registrationId = '<%=registrationId%>';
+
 			// localStorage setup
 			var _agile_storage = {
 				key : "_agile_user_fingerprint",
@@ -484,6 +487,10 @@ if(isSafari && isWin)
 			});
 
 			var localeJSON = <%=localeJSON%>;
+
+			// Save mobile device Id to localstorage
+			if(registrationId)
+				 _agile_storage.set(registrationId, "_agile_GCM_Id");
 			
 		</script>
 		

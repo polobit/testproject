@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.SearchFilter;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.exception.SearchQueryException;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -297,7 +298,10 @@ public class AppengineSearch<T>
     		}
     		
     		return searchResults;
-		} 
+		}
+    	catch(SearchQueryException sqe){
+    		throw new SearchQueryException("Search input is not supported. Please try again.");
+    	}
     	catch (Exception e) 
 		{
 			e.printStackTrace();

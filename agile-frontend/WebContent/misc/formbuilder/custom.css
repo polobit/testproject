@@ -1,5 +1,5 @@
 body {
-	padding-top: 120px;
+	padding-top: 10px;
 	/* 60px to make the container go all the way to the bottom of the topbar */
 	padding-bottom: 10px;
 	position: relative;
@@ -188,6 +188,7 @@ form .popover form {
 
 .agile-height-default {
 	padding: 6px 12px !important;
+	width: 100%;
 }
 
 .agile-height-large {

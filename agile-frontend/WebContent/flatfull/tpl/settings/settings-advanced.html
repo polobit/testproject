@@ -67,14 +67,14 @@
             	 <span class="field_req">*</span></label> 
                 <div class="controls col-sm-8">
                 	<select name="dateFormat" id="date-format" class="required form-control">
-						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}}</option>
-                        <option value="dd/mm/yyyy">{{currentDateInFormat "dd/mm/yyyy"}}</option>
-                        <option value="mm/dd/yy">{{currentDateInFormat "mm/dd/yy"}}</option>
-                        <option value="dd/mm/yy">{{currentDateInFormat "dd/mm/yy"}}</option>
-                        <option value="mm.dd.yyyy">{{currentDateInFormat "mm.dd.yyyy"}}</option>
-                        <option value="dd.mm.yyyy">{{currentDateInFormat "dd.mm.yyyy"}}</option>
-                        <option value="mm.dd.yy">{{currentDateInFormat "mm.dd.yy"}}</option>
-                        <option value="dd.mm.yy">{{currentDateInFormat "dd.mm.yy"}}</option>
+						<option value="mm/dd/yyyy">{{currentDateInFormat "mm/dd/yyyy"}} (MM/DD/YYYY)</option>
+                        <option value="dd/mm/yyyy">{{currentDateInFormat "dd/mm/yyyy"}} (DD/MM/YYYY)</option>
+                        <option value="mm/dd/yy">{{currentDateInFormat "mm/dd/yy"}} (MM/DD/YY)</option>
+                        <option value="dd/mm/yy">{{currentDateInFormat "dd/mm/yy"}} (DD/MM/YY)</option>
+                        <option value="mm.dd.yyyy">{{currentDateInFormat "mm.dd.yyyy"}} (MM.DD.YYYY)</option>
+                        <option value="dd.mm.yyyy">{{currentDateInFormat "dd.mm.yyyy"}} (DD.MM.YYYY)</option>
+                        <option value="mm.dd.yy">{{currentDateInFormat "mm.dd.yy"}} (MM.DD.YY)</option>
+                        <option value="dd.mm.yy">{{currentDateInFormat "dd.mm.yy"}} (DD.MM.YY)</option>
                         <option value="dd M, yyyy">{{currentDateInFormat "dd M, yyyy"}}</option>
                         <option value="dd MM, yyyy">{{currentDateInFormat "dd MM, yyyy"}}</option>
                         <option value="D, dd M, yyyy">{{currentDateInFormat "D, dd M, yyyy"}}</option>
@@ -1041,7 +1041,7 @@
                 </div>
             </div>
 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminder'}}</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminders'}}</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
@@ -1078,7 +1078,7 @@
 <div class="row">
 <div class="col-md-12">
 <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-9">
+            <div class="col-sm-offset-2 col-sm-9" id="save_changes_btn">
                 <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                 <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
             </div>

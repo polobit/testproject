@@ -18,8 +18,13 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
-
-		"navigate-dashboard" : "navigateDashboard", 
+		
+		"navigate-dashboard" : "navigateDashboard",
+		
+		"navigate-dashboard/:id" : "navigateDashboard", 
+		
+		//clicking on the dashboard icon
+		"navbar-dashboard" : "homeDashboard",
 		
 		// "dashboard-test": "dashboard",
 
@@ -86,9 +91,29 @@ var ContactsRouter = Backbone.Router.extend({
 	salesforceImport : function(){
          App_Datasync.salesforce();
 	},
-
-	navigateDashboard : function(){
+	homeDashboard : function(){
+		var newRole = $(".appaside.agile-menuactive").attr("data-service-name");
+		
+		if(CURRENT_DOMAIN_USER.role != newRole )
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, menuServiceDashboard(newRole));
+			updateDashboardRole(newRole);
+		}
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
+	navigateDashboard : function(id){
 		// Call dashboard route
+		if(id)
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+			var prevrole = menuServicerole(id);
+			if(CURRENT_DOMAIN_USER.role != prevrole)
+			{
+				updateDashboardRole(prevrole);
+			}
+		}
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -135,7 +160,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-
+		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		$(".nav.nav-sub li").removeClass("active");
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -186,9 +213,9 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		$("#home_dashboard").addClass("active");
-
-	},
+		//$("#home_dashboard").addClass("active");
+		
+		},
 	
 	/**
 	 * Fetches all the contacts (persons) and shows as list, if tag_id
@@ -1455,7 +1482,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			_agile_delete_prefs('dynamic_contact_filter');
 		}
 
-		if(_agile_get_prefs("contacts_tag") != tag_id)
+		if(tag_id && _agile_get_prefs("contacts_tag") != tag_id)
 		{
 			CONTACTS_HARD_RELOAD = true;
 			_agile_set_prefs("contacts_tag", tag_id);
@@ -1712,7 +1739,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a class="text-white " href="#contact/' + model_json.id + '">' + name + '</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>');									
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
@@ -1754,7 +1781,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 							.closest("div.controls")
 							.find(".tags")
 							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a class="text-white" href="#contact/' + model.id + '">' + name + '</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>');
 				}
 				else  if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);
@@ -1855,7 +1882,7 @@ function addTypeCustomData(contactId, el){
 function confirmandVerifyEmail()
 {
 	var options = {};
-	options[_agile_get_translated_val('others','add-new')] = "verify_email";
+	options["{{agile_lng_translate 'verification' 'add-new'}}"] = "verify_email";
 
 	fetchAndFillSelect(
 			'core/api/account-prefs/verified-emails/all',
@@ -1876,7 +1903,7 @@ function confirmandVerifyEmail()
 					if(typeof(ownerEmail) !== "undefined")
 						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
 					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
+						$select.find("option:first").before("<option value='SELECTEMAIL'>Select Email</option>");
 						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
 					}
 				}
@@ -1895,6 +1922,19 @@ function menuServiceDashboard(role){
 				break;
 			case 'SERVICE' :
 				return "Dashboard";
+				break;
+		}
+}
+function menuServicerole(dashboard){
+		switch(dashboard){
+			case 'SalesDashboard':
+			    return "SALES"
+			    break;
+			case 'MarketingDashboard':
+				return "MARKETING";
+				break;
+			case 'Dashboard' :
+				return "SERVICE";
 				break;
 		}
 }

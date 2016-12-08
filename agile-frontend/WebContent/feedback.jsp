@@ -407,15 +407,25 @@ function changeFeedback(e,objButton){
 
       var data = document.getElementById("myTextarea").value;
       json.id = id;
-      var feedback_time = new Date().getTime();
+      
+      var feedback_time = new Date();
+      
+      feedback_time = feedback_time.getTime();
+      
       json.feed_back = feedback_rating;
+      
        var data = decodeURI(data);
+      
       data.replace(new RegExp("\\+","g"),' ');
+      
       json.feedback_comment = data;
-    
+
+      json.feedback_time = feedback_time;
+
       $.ajax({ type : 'POST', 
         url : 'feedbackapi/api/tickets/notes/feedback-comment/'+id, 
         data : json,
+        dataType : 'json',
         success:function(){
           console.log(json);  
           document.getElementById("successmessage").innerHTML = "<div style='font-size: 24px;text-align:center;vertical-align:middle;margin-top: 36px;margin-bottom: 22px;'>Submitted <i class='fa fa-check'></i></div><div style=font-size:20px;text-align:center;vertical-align:middle;margin-bottom:100px;>Your feedback submitted successfully! <br/><span style=font-size:16px;>Thank you for your time and patience.</span></div>";

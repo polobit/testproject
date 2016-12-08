@@ -330,7 +330,7 @@ function showCustomFieldModel(data)
 			setTimeout(function(){
 				$('#duplicate-custom-field-err').addClass("hide");
 				$('#duplicate-custom-field-type-err').addClass("hide");
-			},3000);
+			},5000);
 
 		}		
 
@@ -358,7 +358,13 @@ function showCustomFieldModel(data)
 				}
 
 			}
+			if(!$("#searchable").is(":checked"))
+				$('.warning-message','#custom-field-add-modal').parent().show();
 
+			}
+		else
+			{
+				$("#searchable").prop('checked', true); 
 			}
 	$("#custom-field-type").trigger("change");
 }
@@ -423,6 +429,14 @@ function bindCustomFiledChangeEvent(el){
 			//$("#searchable").prop('checked', true);
 			$("#searchable").prop('disabled', false);
 		}
+		
+	});
+
+	$('#custom-field-add-modal',el).on('click', '#searchable', function(event){
+		if(!$(this).is(":checked"))
+			$('.warning-message',el).parent().show();
+		else
+			$('.warning-message',el).parent().hide();
 		
 	});
 	

@@ -10,7 +10,7 @@ function organize_portlets(base_model) {
 		model : base_model,
 		template : this.options.templateKey + "-model",
 		tagName : 'div',
-		className : 'col-md-3 col-sm-6 col-xs'
+		className : 'col-md-4 col-sm-6 col-xs'
 	});
 
 	// Get portlet type from model (portlet object)
@@ -23,6 +23,7 @@ function organize_portlets(base_model) {
 
 	var containerJSON = {
 		"CONTACTS" : "contacts",
+		"MARKETING":"marketing",
 		"DEALS" : "deals",
 		"TASKSANDEVENTS" : "taksAndEvents",
 		"USERACTIVITY" : "userActivity",
@@ -43,6 +44,7 @@ function set_p_portlets(base_model,model_list_element_fragment_portlets) {
 	console.log("collection----" + Portlets_View.collection.length);
 	var routeJSON = {
 		"Contacts" : "contacts",
+		"Marketing":"marketing",
 		"Deals" : "deals",
 		"Tasks" : "tasks",
 		"Events" : "calendar",

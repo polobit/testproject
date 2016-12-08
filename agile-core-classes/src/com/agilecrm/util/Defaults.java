@@ -341,7 +341,7 @@ public class Defaults
      */
     private void saveDefaultDeals()
     {
-		Milestone milestone = MilestoneUtil.getDefaultMilestones();
+		Milestone milestone = MilestoneUtil.getMilestones();
 		
 		Opportunity deal = new Opportunity();
 		deal.name = "Donuts";

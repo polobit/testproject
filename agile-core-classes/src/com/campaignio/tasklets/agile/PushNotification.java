@@ -124,7 +124,7 @@ public class PushNotification extends TaskletAdapter
 			linkURL = DESTINATION_URL;
 		  
 	    if(StringUtils.isBlank(iconURL))
-	    	iconURL = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAWJAAAAJDQwNmRhNGNmLTlmNWMtNGZkMC1hZDJhLWI0ODE1NDQxMmNhNA.png";
+	    	iconURL = "http://agilecrm.s3.amazonaws.com/agile-crm-logo.png";
 	    
 		
 		String pushParam = notificationTemplate.push_param;

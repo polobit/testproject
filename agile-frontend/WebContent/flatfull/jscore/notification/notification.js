@@ -118,6 +118,7 @@ function subscribeToPubNub(domain)
 			
 			// shows call notification
 			if(message.type == "CALL"){
+				message.type = "PERSON";
 				getTemplate('call-notification', message, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
@@ -490,6 +491,10 @@ function showNoty(type, message, position, notification_type, onCloseCallback,ti
 		return;
 	}
 
+	//Check if subscription status is deleted. If deleted don;t show notification
+	if(isSubscriptionStatusDeleted())
+		return;
+
 	// Check for html5 notification permission.
 	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
 	{
@@ -719,11 +724,11 @@ function get_contact_by_email(email,callback)
 // Mobile push notification GCM Id update to server via mobile
 $(function(){
 	// Get GCM Id
-	var gmdId = _agile_get_prefs("GCM_Id");
+	var gmdId = _agile_get_prefs("_agile_GCM_Id");
 	if(!agile_is_mobile_browser() || !gmdId)
 		return;
 
-	alert(gmdId);
+	// alert(gmdId);
 
 	// Save this to Agile Server
 });

@@ -228,7 +228,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         // checking the condition for the when tweeterId is saving into the
 		// datastore
         if(isValidField(form_id +' #handle'))
-        	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
+        	properties.push({ "name" : "website", "value" :$('#handle').val().toLowerCase(), "subtype" : "TWITTER" })
 
       
 		// /give preference to autofilled company, ignore any text in textfield

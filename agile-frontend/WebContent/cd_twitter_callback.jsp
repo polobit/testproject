@@ -6,7 +6,6 @@
 <%@page import="com.agilecrm.user.Referer"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
-<%@page import="com.agilecrm.util.NamespaceUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -21,13 +20,6 @@
 <%@page import="org.scribe.model.Verifier"%>
 <%@page import="org.scribe.model.Token"%>
 <%
-
-String host = request.getServerName();
-if(host.contains("-dot-")) {
-  response.sendRedirect("https://" + NamespaceUtil.getNamespaceFromURL(host) + ".agilecrm.com/cd_twitter_callback.jsp?" + request.getQueryString());
-  return;
-}
-
 String deniedParam  = request.getParameter("denied");
 if(StringUtils.isNotBlank(deniedParam)){
     out.println("You may <a href='#' onclick='window.close();return false;'>close this window</a> and continue browsing AgileCRM Dashboard. Note that Twitter server is not responding right now, Please try again after some time.Seems something went wrong.");
@@ -48,8 +40,7 @@ String oAuthVerifier = request.getParameter("oauth_verifier");
 Verifier verifier = new Verifier(oAuthVerifier);
 
 // Get Service
-StringBuffer callbackURL = new StringBuffer();
-callbackURL.append("https://" + NamespaceUtil.getNamespaceFromURL(host) + "-dot-agile-crm-cloud.appspot.com/");
+StringBuffer callbackURL = request.getRequestURL();
 int index = callbackURL.lastIndexOf("/");
 callbackURL.replace(index, callbackURL.length(), "").append("/cd_twitter_callback.jsp");
 OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).callback(callbackURL.toString()).apiKey(Globals.TWITTER_API_KEY)

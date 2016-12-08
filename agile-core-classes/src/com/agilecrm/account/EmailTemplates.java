@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.account.util.EmailTemplatesUtil;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.user.AgileUser;
@@ -37,7 +38,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Cached
-public class EmailTemplates
+public class EmailTemplates extends Cursor
 {
 	/**
 	 * EmailTemplate Id.
@@ -96,6 +97,12 @@ public class EmailTemplates
 	 * Created time of email template
 	 */
 	public Long created_time = 0L;
+	
+	/**
+	 * Email-template updated time (in epoch).
+	 */
+	@NotSaved(IfDefault.class)
+	public Long updated_time = 0L;
 	
 	public Set access_level = new HashSet();
 	

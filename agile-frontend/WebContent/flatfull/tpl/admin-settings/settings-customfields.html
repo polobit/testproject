@@ -149,7 +149,7 @@
 </script>
 
 <script id="admin-settings-customfields-contact-model-template" type="text/html">
-	<td class="b-r-none" style="width:60%;">
+	<td class="b-r-none" style="width:55%;">
 		<div class="inline-block v-top text-ellipsis w-full table-resp">
 			{{field_label}}
 			{{#if_equals is_required true}}
@@ -158,7 +158,7 @@
 		</div>
 		<div class="inline-block v-top text-ellipsi w-full table-resp"><small>{{field_description}}</small></div> 
 	</td>
-    <td class="p-r-none b-r-none" style="width:20%;">
+    <td class="p-r-none b-r-none" style="width:30%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
 				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
@@ -166,16 +166,14 @@
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
-	<td align="right" class="b-r-none p-l-none" style="width:10%;">
+	<td align="right" class="b-r-none p-l-none v-middle" style="width:15%;">
 		<div class="m-l" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
-		</div>
-		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-contact-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-contact-custom-field'}}" class="task-action icon icon-trash"></i>
+			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 			</a>
 		</div>
 	</td>
@@ -194,7 +192,7 @@
 		</div>
 </script>
 <script id="admin-settings-customfields-company-model-template" type="text/html">
-    <td class="b-r-none" style="width:60%;">
+    <td class="b-r-none" style="width:55%;">
 		<div class="inline-block v-top text-ellipsis w-full table-resp">
 			{{field_label}}
 			{{#if_equals is_required true}}
@@ -203,7 +201,7 @@
 		</div>
 		<div class="inline-block v-top text-ellipsis w-full table-resp"><small>{{field_description}}</small></div> 
 	</td>
-    <td class="p-r-none b-r-none" style="width:20%;">
+    <td class="p-r-none b-r-none" style="width:30%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
 				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
@@ -211,16 +209,14 @@
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
-	<td align="right" class="b-r-none" style="width:10%;"> 
+	<td align="right" class="b-r-none v-middle" style="width:15%;"> 
 		<div  class="m-l-sm" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
-		</div>
-		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-company-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-company-custom-field'}}" class="task-action icon icon-trash"></i>
+			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 			</a>
 		</div>
 	</td>
@@ -240,7 +236,7 @@
 </script>
 
 <script id="admin-settings-customfields-deal-model-template" type="text/html">
-    <td class="b-r-none" style="width:60%;">
+    <td class="b-r-none" style="width:55%;">
 		<div class="inline-block v-top text-ellipsis w-full table-resp">
 			{{field_label}}
 			{{#if_equals is_required true}}
@@ -249,7 +245,7 @@
 		</div>
 		<div class="inline-block v-top text-ellipsis w-full table-resp"><small>{{field_description}}</small></div> 
 	</td>
-    <td class="p-r-none b-r-none" style="width:20%;">
+    <td class="p-r-none b-r-none" style="width:30%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
 				<span class="label m-r-xs bg-light dk text-tiny">{{agile_lng_translate 'admin-settings-custom-fields' 'searchable'}}</span>
@@ -257,17 +253,15 @@
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
-	<td align="right" class="b-r-none" style="width:10%;">
-		<div class="m-l m-b-n-xs" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
-		</div>
-		<div style="visibility:hidden;">
+	<td align="right" class="b-r-none v-middle" style="width:15%;">
+		<div class="m-l-sm" style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'edit-deal-custom-field'}}" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm" data-toggle="modal" role="button" href="#">
 				<i title="{{agile_lng_translate 'admin-settings-custom-fields' 'delete-deal-custom-field'}}" class="task-action icon icon-trash"></i>
 			</a>
+			<a class="text-l-none-hover c-p text-sm"><i title="{{agile_lng_translate 'admin-settings-custom-fields' 'drag'}}" class="icon-move"></i></a>
 		</div>
 	</td>
 	<br/>
@@ -330,7 +324,7 @@
 </script>
 
 <script id="admin-settings-customfields-lead-model-template" type="text/html">
-	<td class="b-r-none" style="width:60%;">
+	<td class="b-r-none" style="width:55%;">
 		<div class="inline-block v-top text-ellipsis w-full table-resp">
 			{{field_label}}
 			{{#if_equals is_required true}}
@@ -339,7 +333,7 @@
 		</div>
 		<div class="inline-block v-top text-ellipsi w-full table-resp"><small>{{field_description}}</small></div> 
 	</td>
-    <td class="p-r-none b-r-none" style="width:20%;">
+    <td class="p-r-none b-r-none" style="width:30%;">
 		<div class="text-right">
 			{{#if_equals searchable true}}
 				<span class="label m-r-xs bg-light dk text-tiny">Searchable</span>
@@ -347,17 +341,15 @@
 			<span class="label m-r-xs bg-light dk text-tiny">{{choose_custom_field_type field_type}}</span>
 		</div>
 	</td>
-	<td align="right" class="b-r-none p-l-none" style="width:10%;">
+	<td align="right" class="b-r-none p-l-none v-middle" style="width:10%;">
 		<div class="m-l" style="visibility:hidden;">
-			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
-		</div>
-		<div style="visibility:hidden;">
 			<a id="edit-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
 				<i title="Edit Lead Custom Field" class="task-action icon icon-edit"></i>
 			</a>
 			<a id="delete-custom-field" class="c-p t-l-none text-sm"  data-toggle="modal" role="button" href="#">
 				<i title="Delete Lead Custom Field" class="task-action icon icon-trash"></i>
 			</a>
+			<a class="text-l-none-hover c-p text-sm"><i title="Drag" class="icon-move"></i></a>
 		</div>
 	</td>
 	<br/>

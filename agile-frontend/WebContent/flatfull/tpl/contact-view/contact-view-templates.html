@@ -156,7 +156,7 @@
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:12em;" >
-    		<a class="text-cap">{{getSystemPropertyValue properties "website"}}</a>
+    		<a style="text-transform:lowercase">{{getSystemPropertyValue properties "website"}}</a>
         </div>
 	</td>
 </script>
@@ -216,7 +216,7 @@
 <script id = "contacts-custom-view-url-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:12em;" >
-		<a href="{{getSystemPropertyValue properties 'url'}}" class="text-cap">{{getSystemPropertyValue properties "url"}}</a>
+		<a style="text-transform:lowercase" href="{{getSystemPropertyValue properties 'url'}}" >{{getSystemPropertyValue properties "url"}}</a>
     </div>
 	</td>
 </script>
@@ -378,7 +378,7 @@
 							<div  class="text-lg score-view">
 							<i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
 							{{#canEditContact owner.id}}
-								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em;margin-left: 2px;margin-right: -1px;">
+								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em;margin-left:2px;margin-right: -1px;">
 									{{#if lead_score}} <span title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
 									{{else}} <span id="lead-score">0</span>&nbsp;
 									 {{/if}}

@@ -7,6 +7,7 @@ import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -49,6 +50,8 @@ public class TriggerDeferredTask implements DeferredTask
 	NamespaceManager.set(domain);
 	try
 	{
+		if(SubscriptionUtil.isSubscriptionDeleted())
+			return;
 	    List<Trigger> triggers = TriggerUtil.getTriggersByPeriod(period);
 	    for (Trigger trigger : triggers)
 	    {

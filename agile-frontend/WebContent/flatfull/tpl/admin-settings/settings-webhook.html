@@ -11,13 +11,13 @@
             <div class="row">
                 <div class="col-md-7 col-xs-12">    
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'Other' 'notify-url'}}<span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4 {{#is_mobile}} text-right {{/is_mobile}}">{{agile_lng_translate 'Other' 'notify-url'}}<span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
                             <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="{{agile_lng_translate 'Other' 'notify-url'}}">
                         </div>
                     </div>
                     <div class="form-group multiple-checkbox checkedMultiCheckbox" name="modules">
-                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'other' 'module'}}<span class="field_req">*</span></label>
+                        <label class="control-label col-sm-4 col-xs-4 {{#is_mobile}} text-right {{/is_mobile}}">{{agile_lng_translate 'other' 'module'}}<span class="field_req">*</span></label>
                         <div class="checkbox controls col-sm-8 col-xs-8">
                           <label class="i-checks i-checks-sm">
                           <input type="checkbox" value="Contact"><i></i> {{agile_lng_translate 'contact-details' 'Contact'}} 
@@ -34,7 +34,7 @@
                 <div class="clearfix"></div>
                 <div class="line ling-lg b-b"></div>
                 <div class="row">
-                <div class="col-md-7 col-xs-8">
+                <div class="col-md-7 col-xs-12">
                 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
                     {{#if id}}
                     <a href="#" type="submit" class="delete btn btn-sm btn-danger"> {{agile_lng_translate 'contact-details' 'delete'}}</a>
@@ -56,13 +56,13 @@
             <div class="row">
                 <div class="col-md-7 col-xs-12">    
                     <div class="control-group form-group">
-                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'Other' 'notify-url'}}<span class="field_req">*</span></label> 
+                        <label class="control-label col-sm-4 col-xs-4 {{#is_mobile}} text-right {{/is_mobile}}">{{agile_lng_translate 'Other' 'notify-url'}}<span class="field_req">*</span></label> 
                         <div class="controls col-sm-8 col-xs-8">
                             <input name="url" id="url" class="input-medium required form-control" type="url" value="" placeholder="{{agile_lng_translate 'Other' 'notify-url'}}" disabled>
                         </div>
                     </div>
                     <div class="form-group multiple-checkbox checkedMultiCheckbox disable " name="modules">
-                        <label class="control-label col-sm-4 col-xs-4">{{agile_lng_translate 'other' 'module'}}<span class="field_req">*</span></label>
+                        <label class="control-label col-sm-4 col-xs-4 {{#is_mobile}} text-right {{/is_mobile}}">{{agile_lng_translate 'other' 'module'}}<span class="field_req">*</span></label>
                         <div class="checkbox controls col-sm-8 col-xs-8">
                           <label class="i-checks i-checks-sm">
                           <input type="checkbox" value="Contact" disabled><i></i> {{agile_lng_translate 'contact-details' 'Contact'}} 
@@ -79,7 +79,7 @@
                 <div class="clearfix"></div>
                 <div class="line ling-lg b-b"></div>
                 <div class="row">
-                <div class="col-md-7 col-xs-8">
+                <div class="col-md-7 col-xs-12">
                 <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
                     {{#if id}}
                     <a href="#" type="submit" class="delete btn btn-sm btn-danger" disabled>{{agile_lng_translate 'contact-details' 'delete'}}</a>

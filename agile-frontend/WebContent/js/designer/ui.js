@@ -635,7 +635,7 @@ function addLabel(text, container, inputType)
 // Twitter has popup
 function openTwitter()
 {
-	var newwindow = window.open('https://' + CURRENT_DOMAIN_USER.domain + '-dot-agile-crm-cloud.appspot.com/cd_twitter.jsp','twitter','height=700,width=700,location=1');
+	var newwindow = window.open('cd_twitter.jsp','twitter','height=700,width=700,location=1');
 	if (window.focus)
 	{
 		newwindow.focus();

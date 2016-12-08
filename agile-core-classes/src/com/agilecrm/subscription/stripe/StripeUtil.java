@@ -15,6 +15,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.json.JSONException;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOnInfo;
 import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
@@ -540,5 +541,24 @@ public class StripeUtil {
 		System.out.println("Subscription Deleted");
 	}
 	
+	public static Invoice getupcomingInvoice(AddOnInfo addonInfo, AddOnInfo dbAddonInfo) throws Exception{
+		Customer customer = getStripeCustomer();
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		invoiceParams.put("subscription", dbAddonInfo.subscriptionId);
+		invoiceParams.put("customer", customer.getId());
+		invoiceParams.put("subscription_quantity", addonInfo.quantity);
+		boolean proration = false;
+		if(addonInfo.quantity > dbAddonInfo.quantity)
+			proration = true;
+		invoiceParams.put("subscription_prorate", proration);
+		invoiceParams.put("subscription_plan", dbAddonInfo.planId);
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(StripeUtil.getStripeApiKey());
+		builder.setStripeVersion("2015-10-16");
+		RequestOptions options = builder.build();
+		Invoice invoice = Invoice.upcoming(invoiceParams, options);
+		System.out.println("Invoice===  "+invoice);
+		return invoice;
+	}
 	
 }

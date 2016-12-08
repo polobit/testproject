@@ -466,7 +466,7 @@ function updateDeal(ele, editFromMilestoneView)
 				var data =value.tagsWithTime[i].tag ; 
 				$('#tags_source_deal_modal', dealForm)
 				.find(".tags")
-				.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag">&times</a></li>');
+				.append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag" style="color: #363f44">&times</a></li>');
 			} 
 	}
 	
@@ -570,10 +570,31 @@ function updateDeal(ele, editFromMilestoneView)
 			}
 		});
 
-	}, "DEAL")
+	}, "DEAL");
 
-	populate_deal_products(dealForm,value,"#opportunityUpdateForm");
-
+	$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0 || value.products.length>0){
+			$("#opportunityUpdateForm").find("#showtoggle_show").show();
+			$("#opportunityUpdateForm").find("#showproducts").show();
+			$("#opportunityUpdateForm").find('.no-products').hide();
+			$("#opportunityUpdateForm").find('.value_box').removeClass('col-sm-7').addClass('col-sm-5');
+			//$("#showtoggle_show").show();
+			//$("#showproducts").show();
+			populate_deal_products(dealForm,value,"#opportunityUpdateForm");
+			$('#discount_type_btn',dealForm).addClass('disabled');
+			$('#discount_value',dealForm).attr('disabled','disabled');
+						
+		}else{
+			$("#opportunityUpdateForm").find("#showtoggle_show").hide();
+			$("#opportunityUpdateForm").find("#showproducts").hide();
+			$("#opportunityUpdateForm").find('.no-products').show();
+			$("#opportunityUpdateForm").find('.value_box').removeClass('col-sm-5').addClass('col-sm-7');
+			//$("#showtoggle_show").hide();
+			//$("#showproducts").hide();
+		}
+	});
 	populateDealSources(dealForm, value);
 	// setup tags for the search 
 	setup_tags_typeahead();
@@ -626,7 +647,20 @@ function show_deal()
 	// Contacts type-ahead
 	agile_type_ahead("relates_to", e, contacts_typeahead);
 
-	populate_deal_products(e, undefined,"#opportunityForm");
+	$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0){
+			$("#showtoggle_show",e).show();
+			$("#showproducts",e).show();
+			populate_deal_products(e, undefined,"#opportunityForm");
+		}else{
+			$("#showtoggle_show",e).hide();
+			$("#showproducts",e).hide();
+			$('.no-products',e).show();
+			$('.value_box',e).removeClass('col-sm-5').addClass('col-sm-7');
+		}
+	});
 	
 	// Fills the pipelines list in select box.
 	populateTrackMilestones(e, undefined, undefined, function(pipelinesList)

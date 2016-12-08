@@ -392,6 +392,22 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	$('#searchText').on('keydown', function(e){
 
 		if(e.keyCode == 13){
+			var query = $("#searchText").val();
+			if ($.trim(query) == ''){
+				$(".dashboard-search-scroll-bar").hide();
+				return;
+			}
+			if(!isQueryTextSearchValid(query))
+			{	
+				setTimeout(function(){
+					var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+					$(".dashboard-search-scroll-bar").empty();
+					$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+					$("#searchText").val(query);
+					$(".dashboard-search-scroll-bar").show();
+				}, 200);
+				return false;
+			}			
 			$("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
 			$('.searchicon-dropdown').removeClass('open');
 			//$("#search-results").trigger("click");
@@ -479,6 +495,56 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 		$("#helpcontent_popover").addClass("hide");
 	
 	}
+
+	/*saving the click event when clicking on the heading on the drop-down navbar */
+	$(".appaside.dropdownnavbar").on("click",function(e)
+	{
+		e.stopPropagation();
+		if($(this).hasClass("agile-menuactive"))
+			{
+				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+				return ;
+			}
+		$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+		$(this).addClass("agile-menuactive");
+		var dashboardName = $(this).attr("data-dashboard");
+		var serviceName = $(this).attr("data-service-name");
+			if(!dashboardName)
+ 				 dashboardName = "dashboard";
+		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+		var json = {};
+ 		json.id = CURRENT_DOMAIN_USER.id;
+ 		json.role = serviceName;
+		var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+		new Role().save( json, 
+					{success :function(model, response){
+						console.log("success");
+						console.log(model);
+						CURRENT_DOMAIN_USER = model.toJSON();
+					}, 
+					error: function(model, response){
+					console.log("error");
+					}});
+	 		return;
+	});
+	/*click event for toggling the active class when clicked on the li items */
+	$(".appaside.dropdownnavbar ul li").on("click",function(e)
+	{
+		e.stopPropagation();
+		if(agile_is_mobile_browser())
+			{
+				$("#mobile-menu").trigger("click",function(e){
+				});
+			}
+		else
+			{
+				$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
+				$(this).addClass("agile-menuactive");
+				$(".active").removeClass("active");
+				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
+				$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+			}
+	});
 	// initializing need help popover for header page
    $(".need_help").popover({ 
    					placement : $(this).attr("data-placement"),
@@ -542,43 +608,39 @@ function initRolehandlers(){
  				 dashboardName = "dashboard";
 
  			// Update user with the current service
- 			var json = {};
- 			json.id = CURRENT_DOMAIN_USER.id;
- 			json.role = serviceName;
-
- 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
- 			new Role().save( json, 
- 						{success :function(model, response){
- 							console.log("success");
- 							console.log(model);
- 							CURRENT_DOMAIN_USER = model.toJSON();
- 							// Call dashboard route
-					 		Backbone.history.navigate("#navigate-dashboard", {
-					                trigger: true
-					            });
- 						}, 
- 						error: function(model, response){
-							console.log("error");
- 						}});
-
  			// Close popup
+ 			if(CURRENT_DOMAIN_USER.role != serviceName)
+ 				updateDashboardRole(serviceName);
+
  			// $("div.app-content-body div:first-child").click();
  			$(this).parents(".popover").popover('hide');
-
  			// Update dashboard name here
  			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
 
  			var due_tasks_count = $("#due_tasks_count").text();
  			due_tasks_count = due_tasks_count ? due_tasks_count : "";
-
+ 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive").removeClass("active");;
+ 			$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").addClass("agile-menuactive");
  			// Update UI
- 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+ 			//$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 
- 			
+ 			/*$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+*/
+ 			// Call dashboard route
+ 			Backbone.history.navigate("#navigate-dashboard/"+dashboardName, {
+                trigger: true
+            });
 	});
 }
-
-
+/*for naigating to the particular routes from the navbar */
+function navbarRoutes(id){
+	
+	if(id)
+	{
+		_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+	}
+		return ; 
+}
 //checks if there are any custom fields and if if present navigates to contact-add page otherwise opens person-modal
 function addContactBasedOnCustomfields(){
  	$.ajax({
@@ -650,6 +712,24 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 			return options_el += getTemplate("js-service-dashboards-options-newui");
 			break;
 	}	
+}
+function updateDashboardRole(prevrole)
+{
+	CURRENT_DOMAIN_USER.role = prevrole ;
+			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = prevrole;
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save(json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 							// Call dashboard route
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
 }
 
 

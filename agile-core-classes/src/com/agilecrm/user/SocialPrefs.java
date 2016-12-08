@@ -49,7 +49,7 @@ public class SocialPrefs
      */
     public enum Type
     {
-	LINKEDIN, TWITTER, FACEBOOK, GMAIL, DUMMY
+	LINKEDIN, TWITTER, FACEBOOK, GMAIL, GMAILSEND, DUMMY
     };
 
     /**

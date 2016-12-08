@@ -191,6 +191,12 @@ $(function()
     	e.preventDefault();
     	window.history.back();
     });
+
+	$('#opportunityUpdateModal, #newDealModal').off("click",".navigate-products");
+    $('#opportunityUpdateModal, #newDealModal').on("click",".navigate-products",function(e)
+	{
+				Backbone.history.navigate('products', { trigger : true });
+	});
 	
 });
 

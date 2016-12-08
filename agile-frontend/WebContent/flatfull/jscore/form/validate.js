@@ -42,8 +42,11 @@ function isValidForm(form) {
 			var month = $(element).siblings('select.exp_month')
 					.val(), year = value;
 
+			//current date
+			var current_date = new Date().getTime()
+
 			// date selected
-			var date = new Date().setFullYear(year, month - 1);
+			var selected_date = new Date().setFullYear(year, month - 1);
 
 			// Get number of milliseconds per day
 			var one_day = 1000 * 60 * 60 * 24;
@@ -52,8 +55,8 @@ function isValidForm(form) {
 			// if number of days are greater than 90 then returns
 			// true
 			return this.optional(element)
-					|| (((date - new Date().getTime()) / one_day) > 90);
-		}, "{{agile_lng_translate 'validation-msgs' 'card-3months-valid'}}");
+					|| (((selected_date - current_date) / one_day) >= 0);
+		}, "{{agile_lng_translate 'validation-msgs' 'card-expired'}}");
 	
 	// Validates multiple emails separated by comma entered in textbox
 	jQuery.validator.addMethod("multipleEmails", function(value, element) {
@@ -357,7 +360,7 @@ function isValidForm(form) {
 			if(value == "")
 				return true;
 			var substr = value.substring(0, 4);
-			if(substr == 'http' || substr == 'http' || value.substring(0, 3) == 'ftp')
+			if(substr.toLowerCase() == 'http' || substr.toLowerCase() == 'http' || value.substring(0, 3) == 'ftp')
 				return /^(?:(?:(?:https?|ftp?|):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);			
 			else
 				return /^(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(value);

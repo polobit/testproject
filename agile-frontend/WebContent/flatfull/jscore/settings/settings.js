@@ -93,7 +93,7 @@ function load_office365_widgets(limit) {
 	$('#prefs-tabs-content').find("#office-prefs").html(App_Settings.officeListView.el);
 }
 
-function load_smtp_widgets(limit) {
+function load_smtp_widgets() {
 	// Gets smtp prefs
 	smtpListView1 = new Settings_Collection_Events({
 		url : 'core/api/smtp/',
@@ -102,9 +102,8 @@ function load_smtp_widgets(limit) {
 		postRenderCallback : function(el) {
 			$("#loadingImgHolder").hide();
 			var smtp_count = smtpListView1.collection.length;
-			/*if ((smtp_count < limit && !HAS_EMAIL_ACCOUNT_LIMIT_REACHED) */
-			if ((smtp_count < SMTP_ACCOUNT_LIMIT) 
-					|| smtp_count === 0) {
+			
+			if ((smtp_count < SMTP_ACCOUNT_LIMIT) || smtp_count === 0) {
 				var data1 = {};
 
 				getTemplate("settings-smtp-access-model", data1, undefined, function(template_ui){
@@ -120,6 +119,35 @@ function load_smtp_widgets(limit) {
 	App_Settings.smtpListView = smtpListView1;
 	$('#prefs-tabs-content').find("#smtp-prefs").html(App_Settings.smtpListView.el);
 }
+
+function load_gmail_send_widgets() {
+	// Gets GmailSend Prefs 
+	gmailSendListView1 = new Settings_Collection_Events({
+		url : 'core/api/email-send',
+		templateKey : "settings-gmail-send",
+		individual_tag_name : 'div',
+		postRenderCallback : function(el) {
+			var gmail_count = gmailSendListView1.collection.length;
+			if ((gmail_count < OAUTH_GMAIL_SEND_LIMIT) || gmail_count === 0) {
+				var data1 = {
+					"service" : "gmail_send",
+					"return_url" : encodeURIComponent(window.location.href)
+				};
+
+				getTemplate("settings-gmail-send-model", data1, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#prefs-tabs-content').find("#gmail-send").append($(template_ui));
+				}, null);
+			}
+			updateTimeOut();
+		}
+	});
+	gmailSendListView1.collection.fetch();
+	App_Settings.gmailSendListView = gmailSendListView1;
+	$('#prefs-tabs-content').find("#gmail-send").html(App_Settings.gmailSendListView.el);			
+}
+
 
 function updateTimeOut(widget_height) {
 	setTimeout(function() {
@@ -336,6 +364,7 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 	events: {
 		'click #gmail-prefs-delete': 'onGmailPrefsDelete',
 		'click #office-prefs-delete,#imap-prefs-delete': 'onImapOfficePrefsDelete',
+		'click #gmailsend-prefs-delete': 'onGmailSendPrefsDelete',
 		'click #smtp-prefs-delete': 'onSmtpPrefsDelete',
 	},
 
@@ -396,6 +425,33 @@ var Settings_Collection_Events = Base_Collection_View.extend({
 			});
 		});		
 
+	},
+
+	onGmailSendPrefsDelete : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+
+		var saveBtn = $(target_el);
+		var id = $(saveBtn).attr("oid");
+
+		// Returns, if the save button has disabled attribute
+		if ($(saveBtn).attr('disabled'))
+			return;
+
+		showAlertModal("delete", "confirm", function(){
+			// Disables save button to prevent multiple click event issues
+			disable_save_button($(saveBtn));
+
+			$.ajax({
+				url : '/core/api/email-send/delete' + "/" + id,
+				type : 'DELETE',
+				success : function() {
+					enable_save_button($(saveBtn));
+					App_Settings.email();
+					return;
+				}
+			});
+		});
 	},
 
 	onSmtpPrefsDelete : function(e){

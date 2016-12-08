@@ -132,7 +132,7 @@
     <retry-parameters>
     	<task-retry-limit>10</task-retry-limit>
   	</retry-parameters>
-  <target>agile-campaigns-logs</target>
+  <target>agile-normal-bulk</target>
   </queue>
    <queue>
     <name>email-attachment-queue</name>

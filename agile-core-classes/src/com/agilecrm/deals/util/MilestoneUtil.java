@@ -57,7 +57,7 @@ public class MilestoneUtil
 
 	    return milestones.get(0);
 	}
-
+	System.out.println("creating default milestone from getMilestones");
 	return getDefaultMilestones();
 
     }
@@ -69,6 +69,7 @@ public class MilestoneUtil
      */
     public static Milestone getDefaultMilestones()
     {
+    	System.out.println("creating default milestone");
 	Milestone milestone = new Milestone("New,Prospect,Proposal,Won,Lost");
 	milestone.name = "Default";
 	milestone.isDefault = true;
@@ -90,6 +91,7 @@ public class MilestoneUtil
 	if (milestone == null)
 	{
 	    milestone = new ArrayList<>();
+	    System.out.println("creating default milestone from getMilestonesList");
 	    milestone.add(getDefaultMilestones());
 	}
 	for(Milestone temp : milestone ){

@@ -406,6 +406,9 @@ var CompaniesRouter = Backbone.Router
 				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 
+				//mobile tabs
+			 $('.content-tabs', el).tabCollapse();
+
 			} });
 
 		var el = this.companyDetailView.render(true).el;

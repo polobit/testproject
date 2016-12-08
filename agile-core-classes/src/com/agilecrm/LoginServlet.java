@@ -62,6 +62,13 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		if(request.getParameter("resendotp")!=null){
+			UserInfo userInfo = (UserInfo) SessionManager.getFromRequest(request);
+			if(userInfo == null) {
+				response.sendRedirect("/login");
+				return;
+			}
+			
+			// Re send verification code from different service
 			resendVerficationCode(request);
 			return;
 		}

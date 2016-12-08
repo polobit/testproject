@@ -10,10 +10,6 @@
                 </h3>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-offset-2 col-sm-8 p-l  duplicate-category"></div>
-                </div>
-
                 <div>
                     <div class="form-group" style="margin-bottom:2px;">
                         <label for="emailTemplate-category-name" class="col-sm-2 control-label">
@@ -23,7 +19,9 @@
                             <input type="text" class="form-control" id="emailTemplate-category-name" name="emailTemplate-category-name" placeholder="Maximum 25 Characters" maxlength="25">
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-sm-offset-2 col-sm-8 p-l p-t-xs duplicate-category"></div>
+                    </div>
                     <div class="form-group" style="margin-bottom:2px;">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8 text-left">
@@ -33,7 +31,7 @@
 
                 </div>
             </div>
-            <div class="modal-footer">      
+            <div class="modal-footer bg-white">      
                 <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
                     {{agile_lng_translate 'other' 'cancel'}}
                 </button>   

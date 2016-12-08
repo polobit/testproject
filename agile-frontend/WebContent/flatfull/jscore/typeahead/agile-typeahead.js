@@ -90,6 +90,16 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								type_url = '&' + urlParams;
 								searchParams = urlParams ;
 							}
+							if ($.trim(query) == ''){
+								$(".dashboard-search-scroll-bar").hide();
+								return;
+							}
+							if(!isQueryTextSearchValid(query)){
+								var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+								that.render();
+								return false;
+							}
 
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
@@ -192,6 +202,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 * the data
 								 */
 								process(items_list);
+							})
+							.success(function() {})
+							.error(function(data) 
+							{	
+								var txt = '<b>Unable to Process the Query.Please try again.</b>' ;
+								if(data.responseText)
+									txt = data.responseText ;
+								$('.dashboard-search-scroll-bar').html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 							});
 						},
 						showLoading : function(self)
@@ -327,6 +345,18 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (!items)
 								{
+									var query = $("#searchText").val();
+									if ($.trim(query) == ''){
+										$(".dashboard-search-scroll-bar").hide();
+										return;
+									}
+									if(!isQueryTextSearchValid(query))
+									{
+										var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+										$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+										$(".dashboard-search-scroll-bar").show();
+										return;
+									}
 									showSearchResults(); // fails
 									// automatically for
 									// non main search
@@ -718,6 +748,10 @@ $("body").on("click", '#remove_tag', function(event)
 		$('#sendEmailInviteBlock').html('');
 	}
 });
+$('body').on('click','a.text-white',function()
+	{
+		$(this).blur();
+});
 
 /* Customization of Type-Ahead data */
 
@@ -976,4 +1010,50 @@ function get_tag_item_json(items, items_temp, type){
 
 	console.log(tag_item_json);
 	return tag_item_json;
+}
+function isQueryTextSearchValid(query){
+	query = query.trim();
+	if(query == '')
+		return false
+	if(query == 'OR' || query == 'AND' || query == '()')
+		return false
+	if(query.indexOf('<') >= 0 || query.indexOf('>') >= 0 || query.indexOf(',') >= 0 || query.indexOf(':') >= 0 || query.indexOf('=') >= 0 || query.indexOf('~') >= 0) 
+		return false
+
+	if(query.startsWith('++') || query.startsWith('--')  || query.startsWith(')') || query.endsWith('(') )
+	  	return false
+
+	if(query.startsWith('/\/') && !query.startsWith('/\\/'))
+		return false
+
+	if(query.endsWith('/\/') && !query.endsWith('/\\/'))
+		return false
+	if(query.indexOf('(') >= 0 && !query.startsWith('('))
+		return false
+	if(query.indexOf(')') >= 0 && !query.endsWith(')'))
+		return false	
+	if(query.startsWith('(') && !query.endsWith(')') )
+		return false
+	else if(!query.startsWith('(') && query.endsWith(')') )
+		return false
+	else if(query.startsWith('(') && query.endsWith(')'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		return isQueryTextSearchValid(b) 
+	}
+	if(query.startsWith('"') && !query.endsWith('"') )
+		return false
+
+	else if(!query.startsWith('"') && query.endsWith('"') )
+		return false
+
+	else if(query.startsWith('"') && query.endsWith('"'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		if(b.indexOf('"') >= 0)
+			return false 
+	}
+	return true 
 }

@@ -26,6 +26,7 @@ import com.agilecrm.user.util.AliasDomainUtil;
 //import com.agilecrm.user.util.AliasDomainUtil;
 
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.exceptions.AgileExceptionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -76,7 +77,7 @@ public class NamespaceFilter implements Filter
 	// If it is choose domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains("choose-domain"))
 	    return true;
-
+	
 	// If it is enter domain, just return
 	if (((HttpServletRequest) request).getRequestURI().contains("enter-domain"))
 	    return true;
@@ -128,6 +129,9 @@ public class NamespaceFilter implements Filter
 	// If request is from register and domain is "my", request is forwarded
 	// to register jsp without setting domain
 	if (((HttpServletRequest) request).getRequestURI().contains("/register") && "my".equals(subdomain))
+	    return true;
+	
+	if (((HttpServletRequest) request).getRequestURI().contains("/oauth") && "my".equals(subdomain))
 	    return true;
 
 	// If my or any special domain - support etc, choose subdomain
@@ -259,24 +263,23 @@ public class NamespaceFilter implements Filter
     {
 	System.out.println(request.getServerName());
 
-	
-	 /*DomainUser domainUser = new DomainUser(null, "govind@invox.com",
-	  "hungry", "password", true, true); try { domainUser.save(); } catch
-	  (Exception e) { // TODO Auto-generated catch block
-	  e.printStackTrace(); }*/
+	if(VersioningUtil.isDevelopmentEnv()){
+		/*DomainUser domainUser = new DomainUser(null, "san@invox.com",
+		  "hungry", "password", true, true); try { domainUser.save(); } catch
+		  (Exception e) { // TODO Auto-generated catch block
+		  e.printStackTrace(); }*/
 
-	/*
-	 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
-	 * try { aliasDomain.save(); } catch (Exception e) { // TODO
-	 * Auto-generated catch block e.printStackTrace(); }
-	 */
+		/*
+		 * AliasDomain aliasDomain = new AliasDomain("testDomain", "testAlias");
+		 * try { aliasDomain.save(); } catch (Exception e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 */
 
-	/* DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com", "hungry", "password", true, true); 
-	 try { domainUser.save(); } catch
-	  (Exception e) { // TODO Auto-generated catch block
-	  e.printStackTrace(); }*/
-	 
-
+		/* DomainUser domainUser = new DomainUser(null, "yaswanth@invox.com", "hungry", "password", true, true); 
+		 try { domainUser.save(); } catch
+		  (Exception e) { // TODO Auto-generated catch block
+		  e.printStackTrace(); }*/
+	}
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
@@ -344,7 +347,7 @@ public class NamespaceFilter implements Filter
 		}
 		catch(Exception e)
 		{
-			AgileExceptionUtil.handleException(e);
+			AgileExceptionUtil.handleException(e, request);
 			throw e;
 		}
     }

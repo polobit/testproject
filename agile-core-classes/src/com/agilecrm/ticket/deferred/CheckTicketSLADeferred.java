@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
@@ -51,7 +52,10 @@ public class CheckTicketSLADeferred implements DeferredTask
 
 			System.out.println("Namespace: " + namespace);
 			NamespaceManager.set(namespace);
-
+			
+			if(SubscriptionUtil.isSubscriptionDeleted())
+				return;
+			
 			Set<Key<Tickets>> keys = TicketsUtil.getOverdueTickets();
 
 			System.out.println("Ticket keys size: " + keys.size());

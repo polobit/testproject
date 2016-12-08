@@ -212,7 +212,8 @@
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
             <div class="font-thin text-md m-t-none m-b-none inline-block ticket-subject-md 
             {{#is_mobile}}ticket-subj-block{{/is_mobile}}">
-               <i class="m-r-xs fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>  
+                
+                {{{get_status_label_details status}}}
 
                 {{subject}}
 
@@ -229,7 +230,11 @@
 
             <div class="btn-group m-l-xs">
 
-              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'not-spam'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-spam'}}{{/if_equals}}"></button>
+              <button class="btn-default w-xxs btn btn-sm p-ver-2  btn btn-sm " style="padding-left: 15px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_favorite "true"}}{{agile_lng_translate 'tickets' 'not-favourate'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-favourate'}}{{/if_equals}}">
+              <i style="font-size: 14px;" class="m-r-xs fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>
+              </button>
+
+              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'unspam'}}{{else}}{{agile_lng_translate 'tickets' 'markspam'}}{{/if_equals}}"></button>
               
               <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'delete-ticket'}}">
               </button>
@@ -560,7 +565,6 @@
       {{else}}
       <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{getInitials requester_name}}">
       {{/if}}
-
     </div>
     <div style="max-width: 210px; margin:auto;">
     <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none"> <span class="">

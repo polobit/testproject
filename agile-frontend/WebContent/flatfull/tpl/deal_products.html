@@ -1,16 +1,15 @@
 <script id="deal-products-collection-template" type="text/html">
 
-<div class="table-responsive" style="max-width:540px;max-height:300px;">
-		<table id="" class="  table table-bordered1 no-sorting checkbox dealproducts_table  noDelete agile-table panel table-layout-mob-view" url="core/api/products" style="padding-top:0px;border-left:0px;border-right:0px;">  
+<div class="table-responsive products_deals" style="max-width:520px;max-height:300px;border:1px solid #ddd">
+		<table id="" class="table table-striped no-sorting checkbox dealproducts_table  noDelete agile-table panel table-layout-mob-view" url="core/api/products" style="padding-top:0px;border-right:0px;border-left:0;border-bottom:0;">  
             <thead>
                 <tr>
-					<th style="width:5%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;"><label class="i-checks i-checks-sm m-b-none "><input type="checkbox" class=" dealproducts_th_checkbox " value=""><i></i></label></th>	   
-                    <th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'report-add' 'name'}}</th>
-					<th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'other' 'description'}}</th>
-					<th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'products' 'product-qty'}}</th>
-                    <th  style="width:19%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header">{{agile_lng_translate 'products' 'product-price'}}</th>
+					<th style="width:5%;border-top: 1px solid #ddd;border-left: 1px solid #ddd;"><label class="i-checks i-checks-sm m-b-none "><input type="checkbox" class=" dealproducts_th_checkbox " name="productthcheck" value=""><i></i></label></th>	   
+                    <th  style="width:19%;border-top: 1px solid #ddd;">{{agile_lng_translate 'report-add' 'name'}}</th>
+					<th  style="width:19%;border-top: 1px solid #ddd;">{{agile_lng_translate 'products' 'product-qty-new'}}</th>
+                    <th  style="width:19%;border-top: 1px solid #ddd;">{{agile_lng_translate 'products' 'product-price-new'}}</th>
                     <th style="" class="header none"  style="display:none;">Image</th>
-					<th style="width:19%;border-right: 1px solid #ddd;border-top: 1px solid #ddd;border-left: 1px solid #ddd;" class="header" style="">{{agile_lng_translate 'products' 'product-total'}}</th>
+					<th style="width:19%;border-right: 1px solid #ddd;border-top: 1px solid #ddd;" style="">{{agile_lng_translate 'products' 'product-total'}}</th>
                 </tr>
             </thead>
 			<tbody id='deal-products-model-list' ></tbody>            
@@ -21,30 +20,30 @@
 
 <script id="deal-products-model-template" type="text/html">
 	<td class="v-middle checkbox dealproducts_td" style="cursor:default;border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;" data='{{id}}' >
-		<label class="i-checks i-checks-sm"><input data='{{id}}' type="checkbox" {{#if isChecked}}checked{{/if}} class="dealproducts_td_checkbox" value=""><i></i></label>
+		<label class="i-checks i-checks-sm"><input data='{{id}}' name="productcheck" type="checkbox" {{#if isChecked}}checked{{/if}} class="dealproducts_td_checkbox" value=""><i></i></label>
 	</td>
-	<td class='data' data='{{id}}'  style="border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
-		<div class="line-clamp" style="display:-moz-box;" title="{{name}}">	
+	<td class='data' data='{{id}}'  style="border-bottom: 1px solid #ddd;">
+		<div class="text-ellipsis" style="display:-moz-box;width:5em" title="{{name}}">	
     		{{name}}
     	</div>
 	</td>
-	<td class='data' style="border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
-		<div class="line-clamp line-clamp-3"  style="display:-moz-box;" title="{{description}}">	
-	    	{{description}}
-	   	</div>
-	</td>
-	<td class='data dealproducts_td_qty' style="border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
+	<td class='data dealproducts_td_qty' style="border-bottom: 1px solid #ddd;">
 	
-    	<span class="dealproducts_td_qty_span" style="cursor:pointer;">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" maxlength="4" style="width: 100%;margin: 0px;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;" placeholder="{{agile_lng_translate 'products' 'product-enter-qty'}}" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
+    	<span class="dealproducts_td_qty_span" style="cursor:pointer;">{{#if qty}}{{qty}}{{else}}1{{/if}}</span><input class="hide dealproducts_qty_input" style="width: 100%;margin: 0px;box-sizing: border-box;-moz-box-sizing: border-box;-webkit-box-sizing: border-box;" placeholder="{{agile_lng_translate 'products' 'product-enter-qty'}}" type="text"  value={{#if qty}}"{{qty}}"{{else}}1{{/if}} />
 	</td>
-	<td class='data' style="border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
-    	{{price}}
+	<td class='data' style="border-bottom: 1px solid #ddd;">
+	<div class="text-ellipsis" style="display:-moz-box;width:5em" title="{{price}}">	
+    	{{currencySymbol}}{{price}}
+    	</div>
 	</td>
 	<td class='data none' style="display:none;">
     	{{image}}
 	</td>
-	<td  class='data' style="border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;border-left: 1px solid #ddd;">
-		{{total}}
+	<td  class='data' style="border-right: 1px solid #ddd;border-bottom: 1px solid #ddd;">
+	<div class="text-ellipsis" style="display:-moz-box;width:5em" title="{{total}}">	
+    			{{currencySymbol}}{{total}}
+    	</div>
+
 	</td>
 	
 </script>

@@ -128,60 +128,53 @@
 		App_Ticket_Module.feedbackollection = new Base_Collection_View({
 			url : '/core/api/tickets/notes/feedback/?start_time=' + start_time + '&end_time=' 
 			+ end_time + '&feedback=' + feedback+ '&group=' + group + '&assignee=' + assignee,
-				templateKey : "ticket-feedback-log",
-				isNew : true,
+			templateKey : "ticket-feedback-log",
+			isNew : true,
 			individual_tag_name : 'tr',
 			sort_collection : true, 
-			sortKey : 'updated_time',
-			descending : true,
-			postRenderCallback:function(el,model){
+			sortKey : 'created_time',
+			descending: true,
+			postRenderCallback:function(el,model){		
+				includeTimeAgo(el);
+			
+				/*Ticket related click event to show the modal when requester or assignee replies*/
+				$(".ticket-feedback-notes").on('click', function(e) 
+				{
+					e.preventDefault();
+				   	var id = $(this).data("id");
+				    
+				    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
 
-				console.log(model);
-			var feedback_rating = model.feedback;
-			for(var i=1;i<=feedback_rating;i++){
-				var image = document.getElementById(i+"_Image")
-				if(image.src.includes("star-off.png") )
-					image.src="/flatfull/img/star-on.png";
-			}			
-		
-			/*Ticket related click event to show the modal when requester or assignee replies*/
-			$(".ticket-feedback-notes").on('click', function(e) 
-			{
-				e.preventDefault();
-			   	var id = $(this).data("id");
-			    
-			    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+					getTemplate("ticket-note-feedback-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
 
-				getTemplate("ticket-note-feedback-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
 
-					if(!template_ui)
-						  return;
+						var emailinfo = $(template_ui);
 
-					var emailinfo = $(template_ui);
+						emailinfo.modal('show');
+					}, null);
 
-					emailinfo.modal('show');
-				}, null);
+				});
+				$(".ticket-feedback-comment").on('click', function(e) 
+				{
+					
+					e.preventDefault();
+				   	var id = $(this).data("id");
+				    
+				    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
 
-			});
-			$(".ticket-feedback-comment").on('click', function(e) 
-			{
-				
-				e.preventDefault();
-			   	var id = $(this).data("id");
-			    
-			    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+					getTemplate("ticket-feedback-comment-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
 
-				getTemplate("ticket-feedback-comment-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
 
-					if(!template_ui)
-						  return;
+						var emailinfo = $(template_ui);
 
-					var emailinfo = $(template_ui);
+						emailinfo.modal('show');
+					}, null);	
 
-					emailinfo.modal('show');
-				}, null);	
-
-			});
+				});
 
 		// $(el)
 		// 	.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',
@@ -462,8 +455,14 @@
 		 				//Render template with contact details
 		 				if(Ticket_Utils.Current_Ticket_Contact &&
 		 					!$.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON())){
+
+		 					var json = Ticket_Utils.Current_Ticket_Contact.toJSON();
+
+		 					json.status = data.status;
+
 		 					$('#ticket-contact-details', el).html(
-		 						getTemplate('ticket-contact', Ticket_Utils.Current_Ticket_Contact.toJSON()));
+
+		 						getTemplate('ticket-contact', json));
 		 				}else{
 		 					
 		 					$('#ticket-contact-details', el).html(
@@ -1194,7 +1193,8 @@
 	},
 
 	categories: function(){
-				loadServiceLibrary(function(){
+		
+		loadServiceLibrary(function(){
 		 	//Rendering root template
 			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
 				//Initializing base collection with groups URL
@@ -1261,6 +1261,7 @@
 								
 				}
 			});	
+			
 			//Fetching groups collections
 			if(!App_Ticket_Module.categoriesCollection.collection.fetch())
 			setTimeout(function(){
@@ -1271,9 +1272,12 @@
 			//Rendering template
 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);
 
-		 	});
+		 	make_menu_item_active("ticketknowledgebasemenu");
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.helpdesk-tab').addClass('select');
+	
+	 	});
 		});
-		make_menu_item_active("ticketknowledgebasemenu");
 	},
 
 
@@ -1356,6 +1360,9 @@
 
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
     
     articles: function(name){
@@ -1440,6 +1447,10 @@
 
 		 	});
 		});
+	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addArticle : function(section_id){
@@ -1509,7 +1520,10 @@
 		 			callback();
 		 	});
 		});
-
+		
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	editArticle : function(section_id,name){
@@ -1554,6 +1568,9 @@
 		 			callback();
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 
 	},
 
@@ -1579,6 +1596,9 @@
 							
 			});	
 		});	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addSection : function(category_id){
@@ -1617,6 +1637,10 @@
 				$('#admin-prefs-tabs-content').html(addsectionView.render().el);			
 			});	
 		});	
+		
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1650,6 +1674,9 @@
 				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
 			});	
 		});	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	}, 
 
 	addLandingpage : function(){
@@ -1685,7 +1712,10 @@
 
 					$('#admin-prefs-tabs-content').html(addLandingpageView.render().el);			
 				});	
-			});	
+			});
+				make_menu_item_active("ticketknowledgebasemenu");
+				$('#content').find('#AdminPrefsTab .select').removeClass('select');
+				$('#content').find('.helpdesk-tab').addClass('select');	
 		}, 
 
 
@@ -1705,6 +1735,9 @@
 				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
 			});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1733,6 +1766,9 @@
 				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
 			});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	loadAdminsettingsHelpdeskTemplate: function(json, callback){

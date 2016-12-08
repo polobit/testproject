@@ -1709,8 +1709,11 @@ $(function()
 									el = el.concat(val + ", ");
 								});*/
 
-								if (properties[i].subtype)
+								if (properties[i].subtype){
+									if(properties[i].subtype=="office")
+										properties[i].subtype="work";
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
+								}
 								el = el.concat('</span>&nbsp;<span id="map_view_action"></span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
@@ -1937,7 +1940,7 @@ $(function()
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		
+		if(data)
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -1987,6 +1990,18 @@ $(function()
 			return url.split(exp)[0];
 
 		return " ";
+	});
+
+	Handlebars.registerHelper("getPushNotificationHost", function(options)
+	{
+
+		var url = window.location.host;
+
+		if(url.length>28)
+		{
+			url = ".." + url.substring(url.length - 28);
+		}
+		return url;
 	});
 
 	Handlebars.registerHelper("getBase64Domain", function()
@@ -5927,7 +5942,7 @@ $(function()
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "ref-url-stats";
+ 			portlet_name = "ref-url-name";
  		else if (p_name == 'Lost Deal Analysis')
 			portlet_name = "deals-lost-reason";
 		else if (p_name== 'Revenue Graph')
@@ -6719,7 +6734,7 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	else if (p_name == 'Campaign stats')
 		description = 'campaign-stats-desc'
 	else if (p_name == 'Campaign graph')
-		description = 'campaign-graph-desc'
+		description = 'campaign-graph-dshlet'
 	else if(p_name == 'Deal Goals')
 		description = 'deal-goals-desc'
 	else if(p_name == 'Incoming Deals')
@@ -6729,9 +6744,9 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	else if(p_name == 'Average Deviation')
 		description = 'average-deviation-desc'
 	else if (p_name== 'Webstat Visits')
-		description = 'webstat-visits-desc';
+		description = 'webstat-visits-dshlet';
 	else if(p_name == 'Referralurl stats')
-		description = 'top-ref-url-desc'
+		description = 'ref-url-dshlet'
 
 	return _agile_get_translated_val("portlets", description);
 });
@@ -8169,4 +8184,16 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 		return options.fn(this);
 	}
 	return options.inverse(this);
+});
+
+Handlebars.registerHelper('renderTemplate', function(key, data){
+	return getTemplate(key, data);
+});
+
+Handlebars.registerHelper('if_checked_autoProfile', function(value, target, options){
+	if(!value || value == target){
+		return options.fn(this);
+	}else{
+		return options.inverse(this);
+	}
 });

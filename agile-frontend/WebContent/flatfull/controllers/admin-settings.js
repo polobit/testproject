@@ -4,6 +4,7 @@
  * 
  */
 var view = {};
+var SHOW_SSO_FORM = false;
 var AdminSettingsRouter = Backbone.Router.extend({
 	routes : {
 	/* Admin-Settings */
@@ -70,7 +71,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"js-security" : "jsSecuritySettings",
 
 	/* SSO Login */
-	"sso-login" : "ssoLoginSettings"
+	"sso-login" : "ssoLoginSettings",
+
+	"api-analytics" : "apiAnalyticsCode","api-analytics/:id" : "apiAnalyticsCode",
 
 
 	},
@@ -285,21 +288,37 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				
 			$('#account-pref').html($(template_ui));
 			$('#account-pref').find('#admin-prefs-tabs-content').html(getTemplate("settings-account-tab"), {});
-			var view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
-			postRenderCallback : function()
+			//var show_sso_form = _agile_get_prefs("show-sso-form");
+
+			that.view = new Base_Model_View({ url : '/core/api/sso/jwt', template : "admin-settings-sso-login",
+			postRenderCallback : function(data)
 			{
+				var resp = that.view.model.toJSON();
+				showSSO();
+				if(resp.url != undefined && resp.url != null){
+					$(".showsso").removeClass("hide");
+					$(".sso-btn").addClass("hide");
 				
-			},saveCallback : function(){
+				}
+				else{
+					if(SHOW_SSO_FORM){
+						$(".showsso").removeClass("hide");
+						$(".sso-btn").addClass("hide");
+					}
+				}
+				
+			},saveCallback : function(data){
 				console.log("saveCallback");
 				App_Admin_Settings.ssoLoginSettings();
 				showNotyPopUp("information", _agile_get_translated_val('others', 'prefs-saved-success'), "top", 1000);
 			},
 			deleteCallback : function(){
 				console.log("deleteCallback");
+				SHOW_SSO_FORM = false;
 				App_Admin_Settings.ssoLoginSettings();
 			} });
 			
-			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(view.render().el);
+			$('#content').find('#admin-prefs-tabs-content').find('#settings-account-tab-content').html(that.view.render().el);
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
 			$('#content').find('.account-prefs-tab').addClass('select');
 			$(".active").removeClass("active");
@@ -697,6 +716,68 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 	},
 
+	apiAnalyticsCode : function(id)
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+
+			head.js(LIB_PATH + 'lib/prettify-min.js', function()
+			{
+				var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-analytics-model", postRenderCallback : function(el)
+				{
+
+					
+					$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
+					$('#content').find('#AdminPrefsTab .select').removeClass('select');
+					$('#content').find('.api-analytics-code-tab').addClass('select');
+					// prettyPrint();
+					if (id)
+					{
+						$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
+					}
+
+					// initZeroClipboard("api_track_webrules_code_icon",
+					// "api_track_webrules_code");
+					// initZeroClipboard("api_key_code_icon", "api_key_code");
+					// initZeroClipboard("api_track_code_icon", "api_track_code");
+
+					try
+					{
+						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
+							$("#tracking-webrules, .tracking-webrules-tab").hide();
+						else
+							$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+					}
+					catch (e)
+					{
+						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+					}
+
+					prettify_api_add_events();
+					// initializeRegenerateKeysListeners();
+
+				} });
+			});
+
+		}, "#content");
+
+		
+	},
+
 	/**
 	 * Shows API-KEY. Loads minified prettify.js to prettify the view
 	 */
@@ -727,7 +808,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				} });
 				$('#content').find('#admin-prefs-tabs-content').html(view.el);
 				$('#content').find('#AdminPrefsTab .select').removeClass('select');
-				$('#content').find('.analytics-code-tab').addClass('select');
+				$('#content').find('.api-analytics-code-tab').addClass('select');
 				$(".active").removeClass("active");
 			});
 		}, "#content");
@@ -815,7 +896,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			
 
 			App_Admin_Settings.productsGridView = new Base_Collection_View({ url : '/core/api/products', 
-			templateKey : "admin-settings-products", sortKey : 'created_time', descending : true ,
+			templateKey : "admin-settings-products", sort_collection:true,sortKey : 'name',
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				console.log("loaded products : ", el);
@@ -1831,3 +1912,11 @@ var AccountPrefs_Events_Model_View = Base_Model_View.extend({
 	},
 	
 });
+
+function showSSO(){
+	$(".enale-sso").on("click",function(){
+		$(".showsso").removeClass("hide");
+		$(".sso-btn").addClass("hide");
+		SHOW_SSO_FORM = true;
+	});
+}

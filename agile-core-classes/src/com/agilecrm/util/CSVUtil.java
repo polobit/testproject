@@ -127,9 +127,9 @@ public class CSVUtil
 	//if (!VersioningUtil.isLocalHost())
 	//{
 	    GcsFileOptions options = new GcsFileOptions.Builder().mimeType("text/csv").contentEncoding("UTF-8")
-	    		.acl("public-read").addUserMetadata("domain", NamespaceManager.get()).build();
+	    		.acl("public-read").addUserMetadata("domain", "local").build();
 
-	    service = new GCSServiceAgile(NamespaceManager.get() + "_failed_contacts_" + GoogleSQL.getFutureDate()
+	    service = new GCSServiceAgile("local" + "_failed_contacts_" + GoogleSQL.getFutureDate()
 		    + ".csv", "agile-exports", options);
 	//}
 
@@ -927,6 +927,22 @@ public class CSVUtil
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
+		else
+		{
+			 ++billingRestriction.contacts_count;
+
+			    if (limitCrossed)
+			    {
+				++limitExceeded;
+				failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Error! limit is exceeded"));
+				continue;
+			    }
+
+			    if (billingRestriction.contacts_count >= allowedContacts)
+			    {
+				limitCrossed = true;
+			    }
+		}
 		/*else if (!ContactUtil.isValidName(companyName)){
 			failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Invalid Company Name"));
 			invalidName = false;
@@ -952,20 +968,6 @@ public class CSVUtil
 	     * If it is new contacts billingRestriction count is increased and
 	     * checked with plan limits
 	     */
-
-	    ++billingRestriction.contacts_count;
-
-	    if (limitCrossed)
-	    {
-		++limitExceeded;
-		failedCompanies.add(new FailedContactBean(getDummyContact(properties, csvValues) , "Error! limit is exceeded"));
-		continue;
-	    }
-
-	    if (billingRestriction.contacts_count >= allowedContacts)
-	    {
-		limitCrossed = true;
-	    }
 
 	    try
 	    {

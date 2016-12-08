@@ -40,8 +40,12 @@ public class EmailLinksConversion
     public static String AGILE_EMAIL_PUSH = "1";
     public static String AGILE_EMAIL_PUSH_EMAIL_ONLY = "2";
     
-    private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.cc";
-    private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.cc";
+//    private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.cc";
+//    private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.cc";
+    
+    private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.me";
+    private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.me";
+    
     
     private static String trackingURL = LINK_TRACK_URL;
     
@@ -77,7 +81,8 @@ public class EmailLinksConversion
 	        && !str.toLowerCase().startsWith("http://unscr.be")
 	        && !str.toLowerCase().contains("http://ag-email.unscr.me")
 	        && !str.toLowerCase().contains("http://ag-beta.unscr.me")
-	        && !str.toLowerCase().contains("agle1.cc"))
+	        && !str.toLowerCase().contains("agle1.cc")
+	        && !str.toLowerCase().contains("agle1.me"))
 	    return true;
 
 	return false;

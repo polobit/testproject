@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout maven_version29-2
+git checkout oauth_gmail_ap10_333
 
-git pull origin maven_version29-2
+git pull origin oauth_gmail_ap10_333
 
 # Change queue acls in beta before deploy
 
@@ -40,3 +40,4 @@ sed -i 's/naresh@faxdesk.com/yaswanth@agilecrm.com/g' "$PROJECT_TARGET_LOCATION"
 
 #cd ../
 
+git checkout sandbox_pre_live_new

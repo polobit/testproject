@@ -2389,9 +2389,11 @@ public class OpportunityUtil
 	List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 	JSONObject sourcecount = new JSONObject();
 	sourcecount.put("0", type.equalsIgnoreCase("deals") ? 0 : 0.0);
+	if(sources != null){
 	for (Category source : sources)
 	{
 	    sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
+	}
 	}
 	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
@@ -2408,11 +2410,13 @@ public class OpportunityUtil
 		 * Date(opportunity.close_date * 1000));
 		 */
 		Long source_id = opportunity.getDeal_source_id();
-		List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-		for (Category source_temp : sources_id)
+		//List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+		if(sources != null){
+		for (Category source_temp : sources)
 		{
 		    if (source_temp.getId().toString().equals(source_id.toString()))
 			flag_reason = false;
+		}
 		}
 		if (flag_reason)
 		    source_id = 0L;
@@ -2470,7 +2474,7 @@ public class OpportunityUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("Exception :" + e);
+		System.out.println("Exception :" + e.getMessage());
 	    }
 	}
 	return newDealsObject;
@@ -2946,13 +2950,21 @@ public class OpportunityUtil
 	conditionsMap.put("won_date >= ", minTime);
 	conditionsMap.put("won_date <= ", maxTime);
 	conditionsMap.put("archived", false);
+	List<Milestone> milestoneList = new ArrayList<Milestone>();
 	try
 	{
-	    List<Milestone> milestoneList = MilestoneUtil.getMilestonesList();
+		if(pipelineId != null && pipelineId != 0){
+			Milestone milestone = MilestoneUtil.getMilestone(pipelineId);
+			milestoneList.add(milestone);
+		}
+		else{
+	    milestoneList = MilestoneUtil.getMilestonesList();
+		}
+	    
 	    for (Milestone milestone : milestoneList)
 	    {
-		if (milestone.won_milestone != null)
-		{
+		  if (milestone.won_milestone != null)
+		  {
 		    conditionsMap.put("milestone", milestone.won_milestone);
 		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
@@ -2960,9 +2972,9 @@ public class OpportunityUtil
 		    {
 			ownDealsList.addAll(list);
 		    }
-		}
-		else
-		{
+		 }
+		 else
+		 {
 		    conditionsMap.put("milestone", "Won");
 		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
 		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
@@ -2971,7 +2983,7 @@ public class OpportunityUtil
 			ownDealsList.addAll(list);
 		    }
 		}
-	    }
+	 }
 	    return ownDealsList;
 	}
 	catch (Exception e)
