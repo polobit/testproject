@@ -105,7 +105,7 @@ select.form-control{
   border: 0px;
   background-color: #f4f8f9;
 }
-.b-b {
+:not('.dropdown-menu') .b-b {
   border-bottom: none;
 }
 .wrapper-md {
@@ -130,9 +130,27 @@ select.form-control{
 .i-checks {
   padding-left: inherit;
 }
+
+label.i-checks {
+  margin: 5px 0px;
+}
+label.i-checks input{
+  margin-right: 8px;
+}
+
+#dashlet_heading .btn-group .btn.btn-sm {
+  height: inherit;
+    padding: 5px;
+    font-size: 16px;
+    line-height: 1.5!important;
+}
+
 .agile-new-theme div.cc-emails-st
 {
   border: 0px;
+} 
+.bg-white a, button.show-search-dropdown {
+  color: #11a0f8;
 }
 .agile-new-theme .btn-addon.btn-sm i
 {
@@ -157,4 +175,11 @@ select.form-control{
 }
 .agile-new-theme #automation-video , .agile-new-theme .help-video{
   line-height: 41px!important;
+}
+.bg-white a:hover {
+    color: #067dc6;
+}
+
+.dropdown-menu a[href="#user-prefs"] span {
+  display: block;
 }
