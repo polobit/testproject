@@ -409,3 +409,18 @@ table label.i-checks{
 ul.tags-management li.tag{
   line-height: inherit;
 }
+
+.hbox .col.b-r{
+  border-right: none;
+}
+.hbox .col.b-l{
+  border-left: none;
+}
+.contDetails .btn-default{
+    background-color: rgba(17, 160, 248, 0.1);
+    color: #11a0f8!important;
+}
+.contDetails .btn-default:hover{
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
+}
