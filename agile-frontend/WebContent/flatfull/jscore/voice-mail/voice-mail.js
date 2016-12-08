@@ -102,8 +102,10 @@ function saveVoiceMailFileURL(url, network, id)
 	var newUrl = url.substring(0, url.indexOf("?"));//removing query string
    	$('#' + form_id).find('#upload_url').val(newUrl);
    	$(".addFileLink").empty();
-   	if(extension != "")
+   	if(extension != ""){
+   		$(".addFileLink").css({"margin-top":"5px"});
    		$(".addFileLink").html(extension);
+   	}
 }
 
 function saveVoiceMail(form_id, modal_id, saveBtn, json)
@@ -137,10 +139,10 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 			var msgType = "success";
 			msg = "Voice mail has been saved succesfully";
 			showNotyPopUp(msgType , msg, "bottomRight");
-		/*App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
-		App_VoiceMailRouter.VoiceMailCollectionView.render(true);*/
 		enable_save_button($(saveBtn));
 		makeDraggableVoicemail();
+		App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
+		App_VoiceMailRouter.VoiceMailCollectionView.render(true);
 		if(form_id)
 		{
 			$('#' + form_id).find("#network_type").val("");
@@ -148,6 +150,7 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 			$('#' + form_id).find("#extension").val("");
 			$('#' + form_id).find(".addFileLink").empty();
 			$('#' + form_id).find('#error').empty();
+			$('#' + form_id).find(".addFileLink").css({"margin-top":"0px"});
 			$('#' + form_id).find(".addFileLink").html('<a href="#" id="S3"><i class="icon-plus-sign"></i> <span>{{agile_lng_translate "documents" "add-file"}}</span></a>');
 			$('#' + form_id).each(function() {
 				this.reset();

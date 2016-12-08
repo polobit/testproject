@@ -1,5 +1,7 @@
 package com.agilecrm.core.api.widgets;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -15,10 +17,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.core.api.calendar.CategoriesAPI;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.user.AgileUser;
@@ -47,7 +52,13 @@ import com.twilio.sdk.client.TwilioCapability.DomainException;
 @Path("/api/widgets/twilio")
 public class TwilioWidgetsAPI
 {
-
+	private CategoriesUtil categoriesUtil = null;
+	 /**
+     * Default constructor.
+     */
+    public TwilioWidgetsAPI(){
+    	categoriesUtil = new CategoriesUtil();
+    }
 	/**
 	 * Retrieves registered phone numbers from agent's Twilio account
 	 * 
@@ -703,6 +714,14 @@ public class TwilioWidgetsAPI
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public JSONObject transferCall(@FormParam("callSid") String callSid,@FormParam("direction") String direction,@FormParam("From") String from, @FormParam("To") String to){
 		try{
+			if (categoriesUtil.getCategoryByNameAndType("Transferred", "TELEPHONY_STATUS").size() > 0){
+				
+			}else{
+				List<Category> list = categoriesUtil.getCategoriesByType("TELEPHONY_STATUS");
+				int list_size = list.size()+1;
+				Category newCategory = new Category("Transferred",list_size,Category.EntityType.TELEPHONY_STATUS);
+				categoriesUtil.createCategory(newCategory);
+			}
 			JSONObject response = new JSONObject();
 			response.put("modifyStatus", "");
 			response.put("conferenceStatus", "");

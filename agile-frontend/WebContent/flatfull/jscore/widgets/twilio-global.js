@@ -56,7 +56,7 @@ $(function(){
 				var modifyStatus = data.modifyStatus;
 				if(modifyStatus == "in-progress"){
 					var msgType = "success";
-					var msg = "{{agile_lng_translate 'twill' 'success-start-transfer'}}";
+					var msg = "{{agile_lng_translate 'twill' 'success-start-transferred'}}";
 					showNotyPopUp(msgType , msg, "bottomRight");
 				}else{
 					$("#globalModal").html(getTemplate("callInfoModalAlert"));
@@ -1365,12 +1365,12 @@ Twilio.Device.disconnect(function(conn){
 								}*/
 							}
 						} else {
+							calltransfer = false;
 							if(CALL_CAMPAIGN.start){
 								CALL_CAMPAIGN.state = "DISCONNECTED";
 							}						
 
 						}
-						calltransfer = false;
 						if(!waitForNextDial){
 							//if the call campaign is started then we try to make a next call from campaign
 								if(CALL_CAMPAIGN.start)
@@ -1801,12 +1801,19 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 
 				 	// Adds contact name to tags ul as li element
 					if(callStatus == "completed") {
+						var status = "";
+						alert(calltransfer);
+						if(calltransfer){
+							status = "transferred"
+						}else{
+							status = "answered";
+						}
 						var data = {};
 						data.url = "/core/api/widgets/twilio/";
 						data.subject = noteSub;
 						data.number = phoneNumber;
 						data.callType = TWILIO_DIRECTION;
-						data.status = "answered";
+						data.status = status;
 						data.duration = callRespJson.duration;
 						data.contId = json.id;
 						data.contact_name = contact_name;
@@ -1823,7 +1830,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 									}
 								});	
 							}
-											
+						calltransfer = false;					
 					} else {
 						//add note automatically
 						$.post( "/core/api/widgets/twilio/autosavenote", {
@@ -1860,6 +1867,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 					};
 					TWILIO_CONTACT_ID = null;
 				});
+						calltransfer = false;
 						
 					}
 					
@@ -1867,7 +1875,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 		});
 			
 	} else {
-		
+		calltransfer = false;
 		resetCallLogVariables();
 		
 		if(callStatus == "completed") {
@@ -1902,6 +1910,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 		return showContactMergeOption(jsonObj);
 		//return showNewContactModal(phoneNumber);
 	}
+
 	
 }
 
