@@ -49,8 +49,12 @@ define([
     }
     else if(snippet.attributes.fields.name){
       var snippetType = snippet.attributes.fields.name.value;
-      snippetType = snippetType+"_"+$.now();
-      snippet.setField("name",snippetType);
+      var snippet_Index = snippetType.lastIndexOf("_");
+      var snippet_Substr = snippetType.substr(snippet_Index+1,snippet_Index.length);
+      if(isNaN(snippet_Substr)){
+        snippetType = snippetType+"_"+$.now();
+        snippet.setField("name",snippetType);
+      }
     }
   }
     , renderAll: function(){
