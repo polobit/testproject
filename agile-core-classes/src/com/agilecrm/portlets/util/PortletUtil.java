@@ -1648,9 +1648,12 @@ public class PortletUtil {
 			Contact contact=ContactUtil.searchContactByEmail(user.email);
 			if(contact!=null){
 				DomainUser owner=contact.getContactOwner();
-				json.put("Owner_name",owner.name);
-				json.put("Owner_pic",owner.getOwnerPic());
-				json.put("Owner_url", owner.getCalendarURL());
+				if(owner!=null)
+				{
+					json.put("Owner_name",owner.name);
+					json.put("Owner_pic",owner.getOwnerPic());
+					json.put("Owner_url", owner.getCalendarURL());
+				}
 			}
 			
 			
