@@ -416,11 +416,11 @@ ul.tags-management li.tag{
 .hbox .col.b-l{
   border-left: none;
 }
-.contDetails .btn-default{
+.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default{
     background-color: rgba(17, 160, 248, 0.1);
     color: #11a0f8!important;
 }
-.contDetails .btn-default:hover{
+.tabListCenter .btn-default:hover, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default{
     background-color: rgba(17, 160, 248, 0.2);
     color: #11a0f8!important;
 }
