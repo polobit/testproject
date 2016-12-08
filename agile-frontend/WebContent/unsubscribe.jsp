@@ -59,9 +59,16 @@
 			    out.println("Oops! something went wrong. Please try again later.");
 			    return;
 			}
+			
+			if(StringUtils.isNotEmpty(contactId)){
+				long contactIdTemp = WorkflowUtil.getValidId(contactId);
+				if(contactIdTemp != 0)
+					contactId = Long.toString(contactIdTemp);
+			}			
+			
+			long campId = WorkflowUtil.getValidId(campaignId);
 	
-			Workflow workflow = WorkflowUtil.getWorkflow(Long
-						.parseLong(campaignId));
+			Workflow workflow = WorkflowUtil.getWorkflow(campId);
 	
 			// If workflow is deleted
 			if (workflow == null) {

@@ -346,4 +346,30 @@ public class WorkflowUtil
 	    	}
 	    	return maxNodes;
 	}
+	
+	/**
+	 * parse ids into Long if exception occurs then it will delete extra character
+	 * 
+	 * @param id 
+	 * 
+	 * @return long
+	 */
+	public static long getValidId(String id){
+		long cId = 0l; 
+		try{
+			cId = Long.parseLong(id);
+		}catch(NumberFormatException nfe){
+			String arr[] = id.trim().split("[^(0-9)]+");
+			try{
+				cId = Long.parseLong(arr[0]);
+			}catch(NumberFormatException e){
+				String regex = "[0-9]+";
+				if(arr[0].matches(regex)){
+					String camp = arr[0].substring(0, arr[0].length()-4);
+					cId = Long.parseLong(camp);
+				}
+			}	
+		}		
+		return cId;
+	}
 }
