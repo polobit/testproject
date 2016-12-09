@@ -436,11 +436,11 @@ ul.tags-management li.tag{
 .hbox .col.b-l{
   border-left: none;
 }
-.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default{
+.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
     background-color: rgba(17, 160, 248, 0.1);
     color: #11a0f8!important;
 }
-.tabListCenter .btn-default:hover, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default{
+.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
     background-color: rgba(17, 160, 248, 0.2);
     color: #11a0f8!important;
 }
@@ -547,4 +547,22 @@ a i, a span{vertical-align: inherit;}
     background-color: #067dc6!important;
     text-decoration: none;
     outline: 0 !important;
+}
+
+.editicon{
+  border: inherit;
+}
+.editicon:hover{
+  border: inherit;
+  color: inherit;
+}
+.dropdown-menu{
+  font-size: 14px;
+}
+.dropdown-menu li a{
+  color: #263238;
+}
+.widget_header_name{
+  padding-top: 15px;
+
 }
