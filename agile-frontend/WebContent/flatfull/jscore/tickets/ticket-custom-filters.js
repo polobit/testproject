@@ -1,6 +1,8 @@
 //Ticket_Custom_Filters allows you to initialize events on LHS filters, cancel and save as options.
 var Ticket_Custom_Filters = {
 
+	is_date_selected : false,
+
 	customFilters: new Array(),
 	filters: [],
 	//template_ui: '',
@@ -63,8 +65,14 @@ var Ticket_Custom_Filters = {
 				{
 					var range = $('#created-date-input').val();
 
+					if(range)
+						this.is_date_selected = true;
+
 					if(!range){
-						Ticket_Custom_Filters.changeCreatedDate();
+						if(this.is_date_selected){
+							Ticket_Custom_Filters.changeCreatedDate();
+							this.is_date_selected = false;
+						}
 						return;
 					}	
 					
