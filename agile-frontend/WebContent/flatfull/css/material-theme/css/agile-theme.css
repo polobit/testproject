@@ -503,7 +503,6 @@ ul.tags-management li.tag{
 }
 .agile-new-theme .navbar-brand i {
     display: inline-block;
-    padding-right: 10px;
     color: #7460ee;
     font-size: 20px;
 }
@@ -513,7 +512,7 @@ ul.tags-management li.tag{
     vertical-align: middle;
     font-weight: 600;
     font-size: 15px;
-    margin-left: 0;
+    margin-left: 10px;
 }
 .agile-new-theme .navbar-brand{transition: inherit; -webkit-transition: inherit;}
 .agile-new-theme .free_plan_alert{top: 80px; width:440px; font-size: 12px; padding-top: 8px; padding-bottom: 8px;}
@@ -534,17 +533,21 @@ a i, a span{vertical-align: inherit;}
 }
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default
 {
-      color: #ffffff!important;
-    background-color: #067dc6;
-    text-decoration: none;
-    outline: 0 !important;
+  color: #ffffff!important;
+  background-color: #067dc6;
+  text-decoration: none;
+  outline: 0 !important;
 }
 .pull-left .btn , .sort-field-txt {
   color:#58666e;
 }
 .agile-new-theme .btn.bg-light{
-  color: #ffffff!important;
+    color: #ffffff!important;
     background-color: #067dc6!important;
     text-decoration: none;
     outline: 0 !important;
 }
+#automation-video{margin-right: 15px !important;}
+#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}
+#document-list thead tr th:first-child label.i-checks{margin: 0;}
+
