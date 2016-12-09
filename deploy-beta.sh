@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout oauth_gmail_ap10_333
+git checkout theme-1-0
 
-git pull origin oauth_gmail_ap10_333
+git pull origin theme-1-0
 
 # Change queue acls in beta before deploy
 
