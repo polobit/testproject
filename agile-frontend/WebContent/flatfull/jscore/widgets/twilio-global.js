@@ -1319,9 +1319,11 @@ Twilio.Device.disconnect(function(conn){
 					}
 				}catch(e){
 				}*/
-
-				if(calltransfer)
+				if(calltransfer && TWILIO_CALLTYPE != "Incoming"){
 					isParent = "false";
+				}else{
+					isParent = "true";
+				}
 
 				var ApiCallUrl = "/core/api/widgets/twilio/getlastcall/" + acc_sid + "/" + auth_token + "/" + conn.parameters.CallSid + "/" + isParent;
 				console.log(ApiCallUrl);
