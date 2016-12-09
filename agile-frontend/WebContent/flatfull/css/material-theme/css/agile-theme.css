@@ -568,5 +568,5 @@ a i, a span{vertical-align: inherit;}
 
 #automation-video{margin-right: 15px !important;}
 #document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}
-#document-list thead tr th:first-child label.i-checks{margin: 0;}
+#document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}
 
