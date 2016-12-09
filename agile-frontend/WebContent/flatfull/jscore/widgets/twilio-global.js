@@ -54,8 +54,6 @@ $(function(){
 			},function(data){
 				data  = JSON.parse(data);
 				transfer_number = trans_number;
-				alert(trans_number);
-				alert(transfer_number);
 				var modifyStatus = data.modifyStatus;
 				if(modifyStatus == "in-progress"){
 					var msgType = "success";
