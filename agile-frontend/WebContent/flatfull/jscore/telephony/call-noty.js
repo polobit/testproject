@@ -532,8 +532,8 @@ function makeDraggableVoicemail(widgetName){
 			$('#draggable_noty .noty_twilio_voice_mail').append($(getTemplate("twilioio-voicemail",resp)));
 			$("#draggable_noty #call-noty-l1").hide();
 		}else{
-			$("#draggable_noty #call-noty-l1").show();
-			$("#draggable_noty #call-noty-l1").html("<a href='#voice-mail-add' class='voice-mail-add btn btn-default btn-sm btn-addon' id='addEmailTemplate'>Add Voicemail</a>");
+			//$("#draggable_noty #call-noty-l1").show();
+			//$("#draggable_noty #call-noty-l1").html("<a href='#voice-mail-add' class='voice-mail-add btn btn-default btn-sm btn-addon' id='addEmailTemplate'>Add Voicemail</a>");
 		}
 
 	});
