@@ -921,7 +921,7 @@ label {
   font-size: 10px;
   font-weight: 700;
 }
-.btn:hover,
+:not(".tab-content").btn:hover,
 .btn:focus,
 .btn:active,
 .open .btn.dropdown-toggle {
