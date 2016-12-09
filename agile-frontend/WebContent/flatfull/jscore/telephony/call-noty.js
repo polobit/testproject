@@ -26,7 +26,7 @@ function showCallNotyPopup(state, type, message, duration)
 
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
 			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-			{
+			{				
 				if (state == "incoming") // confirm
 					incomingCallNoty(message, type);
 				else if (state == "connected") // success
@@ -243,11 +243,20 @@ if(message.state == "connected"){
 	
 	var btns = [];
 	if(widgetype !=  "skype"){
-		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","title":""});
-		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","title":""});
+		if(widgetype ==  "TwilioIO"){
+			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""});
+			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voice_mail","popover-date":"Voicemail","title":""});
+			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out ","popover-date":"Transfer call","title":""});
+		}
+		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","popover-date":"Mute","title":""});
+		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","popover-date":"Unmute","title":""});
 	}
-	btns.push({"id":"", "class":"btn btn-sm btn-default noty_"+widgetype+"_dialpad icon-th","title":""});
-	btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
+	btns.push({"id":"", "class":"btn btn-sm btn-default noty_"+widgetype+"_dialpad icon-th","popover-date":"Dialpad","title":""});
+	if(widgetype ==  "TwilioIO"){
+		btns.push({"id":"", "class":"btn btn-sm btn-danger fa fa-headphones cam-call-icon noty_twilio_hangup","popover-date":"Hangup","title":""});
+	}else{
+		btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
+	}
 	var json = {"callId": callId};
 	showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
 	
@@ -396,7 +405,11 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	$("#noty_text_msg").html(txt);
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
-			makeDraggableVoicemail();
+			//makeDraggableVoicemail();
+			makeDraggableTransfer();
+			if(TWILIO_DIRECTION != "inbound" &&  TWILIO_DIRECTION != "incoming"){
+				makeDraggableVoicemail();
+			}
 			makeDraggableDialpad("twilioio-dialpad",{},$('.noty_buttons'));
 		}else if(widgetName == "bria" || widgetName == "skype"){
 			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
@@ -410,7 +423,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		$("#draggable_noty .draggable_noty_notes").html("");
 		
 	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
-		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
+		//$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
 		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
 			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
 			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
@@ -436,12 +449,16 @@ function showDraggablePopup(param){
 		y = a[1]*1;
 	}
 	var popup = $(getTemplate("call-noty",param));
+	//$(".noty_twilio_voicemail").html("<img src='../widgets/voicemail.png' />");
 	$("#draggable_noty .draggable_noty_info").html(popup);
 	$("#draggable_noty").css({'left':x,'top': y});
+	$(".icon-call-out").css({'font-size':'12px'});
+	$(".cam-call-icon").css({'font-size':'12px'});
 	$("#draggable_noty").show();
 	$("#draggable_noty").draggableTouch();
-	
-
+	if(TWILIO_DIRECTION && TWILIO_DIRECTION != "inbound" &&  TWILIO_DIRECTION != "incoming"){
+		$(".noty_twilio_voice_mail").html("<img src='../widgets/voicemail.png' style='width: 15px;' />");
+	}
 	$("#draggable_noty").bind("dragstart", function(e, pos) {
 	 flag = true;
 		//you can do anything related to move
@@ -509,11 +526,31 @@ function makeDraggableDialpad(templateName, param, ele){
 }
 
 function makeDraggableVoicemail(widgetName){
-	
+
 	accessUrlUsingAjax("core/api/voicemails", function(resp){
+		if(resp.length > 0){
+			$('#draggable_noty .noty_twilio_voice_mail').append($(getTemplate("twilioio-voicemail",resp)));
+			$("#draggable_noty #call-noty-l1").hide();
+		}else{
+			$("#draggable_noty #call-noty-l1").show();
+			$("#draggable_noty #call-noty-l1").html("<a href='#voice-mail-add' class='voice-mail-add btn btn-default btn-sm btn-addon' id='addEmailTemplate'>Add Voicemail</a>");
+		}
 
-			$('#call-noty-l1').html($(getTemplate("twilioio-voicemail",resp)));
-
+	});
+	
+}
+function makeDraggableTransfer(widgetName){
+	accessUrlUsingAjax("/core/api/widgets/twilio/getTwilioUsers", function(resp){
+			//$('#call-noty-l1').html($(getTemplate("twilioio-users",resp)));
+			$('#draggable_noty .noty_twilio_phone').removeClass("icon-call-out");
+			$('#draggable_noty .noty_twilio_phone').html($(getTemplate("twilioio-users",resp)));
+			
+	});
+	
+}
+function makeDraggableConference(widgetName){
+	accessUrlUsingAjax("/core/api/widgets/twilio/getTwilioUsers", function(resp){
+			$('#call-noty-l1').html($(getTemplate("twilioio-users-conference",resp)));
 	});
 	
 }

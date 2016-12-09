@@ -721,7 +721,6 @@ function resetcallConferenceVariables(){
 }
 
 function showContactMergeOption(jsonObj){
-	
 	var phoneNumber = jsonObj.phoneNumber;
 	showModal($("#mergeContactModal"),"newContactAddPhone");
 	$("#call_newNumber_btn_continue", "#mergeContactModal").data("phoneNumber",phoneNumber);
