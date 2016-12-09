@@ -311,7 +311,7 @@ label.i-checks input{
 #contact-sorter .sort-field-txt{
   color: #263238 !important;
 }
-#contact-sorter .fa-sort-desc{
+#contact-sorter .fa-sort-desc, #deal-sorter .fa-sort-desc{
   position: relative  !important;
   color: #58666e!important;
   font-size: 13px !important;
@@ -326,7 +326,7 @@ label.i-checks input{
 #contact-sorter .btn.btn-sm{
   padding: 0px !important;
 }
-#contact-sorter .btn.btn-sm:nth-child(2){
+#contact-sorter .btn.btn-sm:nth-child(2), #deal-sorter .btn.btn-sm:nth-child(2){
   height: 35px !important;
   margin-left: 5px !important;
 } 
@@ -448,16 +448,16 @@ ul.tags-management li.tag{
   margin-right: 10px;
   font-size: 22px;
 }
-#documents_collection_container .panel-heading{
+#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
   display: none !important;
 }
-#documents_collection_container .panel{
+#documents_collection_container .panel, #deals-new-list-view .panel{
   border: none !important;
 }
 #documents_collection_container .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
 }
-#documents-top-view .wrapper-md{
+#documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
   padding-bottom: 0px !important;
 }
 #task-list-based-condition .panel-heading label:first-child{
