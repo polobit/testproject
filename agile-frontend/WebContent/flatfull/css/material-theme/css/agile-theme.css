@@ -444,10 +444,6 @@ ul.tags-management li.tag{
     background-color: rgba(17, 160, 248, 0.2);
     color: #11a0f8!important;
 }
-.agile-add-icon{
-  margin-right: 10px;
-  font-size: 22px;
-}
 #documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
   display: none !important;
 }
