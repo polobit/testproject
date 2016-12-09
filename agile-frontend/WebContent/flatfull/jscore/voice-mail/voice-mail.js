@@ -3,6 +3,7 @@ $(function(){
 	
 	$('body').on('click', '.voice-mail-add', function(e){
 		e.preventDefault();
+		$("#draggable_noty div:first-child").css({"z-index":"1000"});
 		$("#uploadVoiceMailModal").modal('show');
 	});
 	
@@ -140,9 +141,10 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 			msg = "Voice mail has been saved succesfully";
 			showNotyPopUp(msgType , msg, "bottomRight");
 		enable_save_button($(saveBtn));
-		makeDraggableVoicemail();
-		App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
-		App_VoiceMailRouter.VoiceMailCollectionView.render(true);
+		if(App_VoiceMailRouter.VoiceMailCollectionView){
+			App_VoiceMailRouter.VoiceMailCollectionView.collection.add(data);
+			App_VoiceMailRouter.VoiceMailCollectionView.render(true);
+		}
 		if(form_id)
 		{
 			$('#' + form_id).find("#network_type").val("");
@@ -158,7 +160,10 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 			
 			$('#' + modal_id).modal('hide');
 		}
-		
+		$("#draggable_noty div:first-child").css({"z-index":"10000"});
+		/*setTimeout(function(){
+			makeDraggableVoicemail();
+		}, 30000);*/
 	}
 	});
 	
