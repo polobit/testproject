@@ -448,6 +448,25 @@ ul.tags-management li.tag{
   margin-right: 10px;
   font-size: 22px;
 }
+#documents_collection_container .panel-heading{
+  display: none !important;
+}
+#documents_collection_container .panel{
+  border: none !important;
+}
+#documents_collection_container .panel-footer{
+  border-top: 10px solid #f4f8f9 !important;
+}
+#documents-top-view .wrapper-md{
+  padding-bottom: 0px !important;
+}
+#task-list-based-condition .panel-heading label:first-child{
+  padding-left: 0px !important;
+}
+#task-list-based-condition .panel, .panel-heading{
+  border: none !important;
+}
+
 /*header and navbar styles*/
 
 @media (min-width:768px){
