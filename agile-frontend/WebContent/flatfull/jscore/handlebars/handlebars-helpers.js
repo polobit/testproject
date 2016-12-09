@@ -1684,20 +1684,23 @@ $(function()
 									el = el
 											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
-								if(address.address !== undefined)
+								if(address.address && address.address.trim())
 									el = el.concat(address.address+", ");
 
-								if(address.city !== undefined)
+								if(address.city && address.city.trim())
 									el = el.concat(address.city+", ");
 
-								if(address.state !== undefined)
+								if(address.state && address.state.trim())
 									el = el.concat(address.state+", ");
 
-								if(address.zip !== undefined)
+								if(address.zip && address.zip.trim())
 									el = el.concat(address.zip+", ");
 
-								if(address.country !== undefined)
-									el = el.concat(address.country+".");
+								if(address.countryname && address.countryname.trim())
+									el = el.concat(address.countryname+".");
+
+								if(!address.countryname && address.country && address.country.trim())
+									el = el.concat(getCode(address.country)+".");
 
 								/*$.each(address, function(key, val)
 								{
