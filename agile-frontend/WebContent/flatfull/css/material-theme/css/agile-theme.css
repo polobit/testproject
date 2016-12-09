@@ -371,7 +371,7 @@ label.i-checks input{
 table label.i-checks{
   margin-left: 8px !important;
 }
-#chrome-extensions{
+#chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
 .tag{ 
