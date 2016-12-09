@@ -1343,9 +1343,11 @@ Twilio.Device.disconnect(function(conn){
 							var callRespJson = callDetailsJson;
 					
 						var waitForNextDial = false;
+						alert("alert1");
 						if(typeof callRespJson != "undefined") {
 							waitForNextDial = true;
 							if(typeof callRespJson.status != "undefined") {
+								alert("alert2");
 								if(callRespJson.status != "completed" && CALL_CAMPAIGN.start){
 									CALL_CAMPAIGN.state = "DISCONNECTED";
 									waitForNextDial = false;
@@ -1360,12 +1362,14 @@ Twilio.Device.disconnect(function(conn){
 										$("#agilecrm-container #call-noty-notes").val("Call Transferred to "+ transfer_number+". "+callnotes);
 									}
 								}
+								alert("alert3");
 								showNoteAfterCall(callRespJson,messageObj,showNoteParam);
 								/*if(calltransfer){
 									saveNoteAfterTransfer(callRespJson,messageObj,showNoteParam,contactid,transfer_number);
 								}*/
 							}
 						} else {
+							alert("alert4");
 							calltransfer = false;
 							if(CALL_CAMPAIGN.start){
 								CALL_CAMPAIGN.state = "DISCONNECTED";
