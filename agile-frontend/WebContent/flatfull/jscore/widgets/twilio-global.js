@@ -40,9 +40,10 @@ $(function(){
 		var callsid = globalconnection.parameters.CallSid;
 		var form = Verfied_Number;
 		var to = $(this).attr("data-src");
-		var trans_number = $(this).text();
+		var name = $(this).attr("data-name");
+		var trans_number = name+" ("+to+")";
 		$("#draggable_noty div:first-child").css({"z-index":"1000"});
-		showAlertModal(_agile_get_translated_val('widgets', 'twilo-call-transfer-confirmation')+" "+trans_number, "confirm", function(){
+		showAlertModal(_agile_get_translated_val('widgets', 'twilo-call-transfer-confirmation')+" "+trans_number+"?", "confirm", function(){
 			$("#draggable_noty div:first-child").css({"z-index":"10000"});
 			calltransfer = true;
 			$.post( "/core/api/widgets/twilio/transferCall", {
@@ -53,6 +54,8 @@ $(function(){
 			},function(data){
 				data  = JSON.parse(data);
 				transfer_number = trans_number;
+				alert(trans_number);
+				alert(transfer_number);
 				var modifyStatus = data.modifyStatus;
 				if(modifyStatus == "in-progress"){
 					var msgType = "success";
@@ -1803,6 +1806,7 @@ function showNoteAfterCall(callRespJson,messageObj,paramJson)
 					if(callStatus == "completed") {
 						var status = "";
 						if(calltransfer){
+							noteSub = TWILIO_CALLTYPE + " call - Transferred";
 							status = "transferred"
 						}else{
 							status = "answered";

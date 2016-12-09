@@ -1361,6 +1361,7 @@ public class TwilioUtil
 				object.put("username", domainUser.name);
 				object.put("domainUserId", domainUser.id);
 				object.put("twillioNumber", widgetPrefs.get("twilio_number"));	
+				object.put("pic", domainUser.pic);	
 				object.put("domainusernumber", domainUser.phone);	
 				result.put(object);
 			}
