@@ -790,17 +790,17 @@ function show_custom_fields_helper(custom_fields, properties){
 						+'_input_valid custom_field required form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+'" max_len="'+max_len+'"></input>'
+						+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "widjets" "enter-number"}}"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 							+field.field_label
-							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
+							+' <span class="field_req">*</span></label><div class="controls col-sm-9 '+div_col9_style+' custom-number-controls"><input type="number" class="'
 							+field.field_type.toLowerCase()
 							+'_input_valid  custom_field required form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+'" max_len="'+max_len+'"></input>'
+							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "widjets" "enter-number"}}"></input>'
 							+'</div></div>');
 				}
 			}else{
@@ -812,17 +812,17 @@ function show_custom_fields_helper(custom_fields, properties){
 						+'_input_valid  custom_field form-control field_length" id="'
 						+field.id+'" name="'
 						+field.field_label
-						+'"max_len="'+max_len+'"></input>'
+						+'"max_len="'+max_len+'" placeholder="{{agile_lng_translate "widjets" "enter-number"}}"></input>'
 						+'</div></div>');
 				}else{
 					el = el.concat('<div class="control-group form-group ">	<label class="control-label '+label_style+'">'
 							+field.field_label
-							+'</label><div class="controls col-sm-9 '+div_col3_style+' custom-number-controls"><input type="number" class="'
+							+'</label><div class="controls col-sm-9 '+div_col9_style+' custom-number-controls"><input type="number" class="'
 							+field.field_type.toLowerCase()
 							+'_input_valid  custom_field form-control field_length" id="'
 							+field.id+'" name="'
 							+field.field_label
-							+'" max_len="'+max_len+'"></input>'
+							+'" max_len="'+max_len+'" placeholder="{{agile_lng_translate "widjets" "enter-number"}}"></input>'
 							+'</div></div>');
 				}
 			}
