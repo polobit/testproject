@@ -67,7 +67,7 @@ var Ticket_Custom_Filters = {
 						Ticket_Custom_Filters.is_date_selected = true;
 
 					if(!range){						
-						if(this.is_date_selected){
+						if(Ticket_Custom_Filters.is_date_selected){
 							Ticket_Custom_Filters.changeCreatedDate();
 							Ticket_Custom_Filters.is_date_selected = false;
 						}
