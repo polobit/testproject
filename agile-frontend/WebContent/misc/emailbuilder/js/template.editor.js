@@ -172,7 +172,6 @@ function handleObjects() {
                         $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
                         //$("#select_alignment").show();
-                        $('#image-width-height').show();
 
                         break;
                     case 'video-record':
@@ -202,7 +201,6 @@ function handleObjects() {
                         hideAllSettings();
                         $('#imageproperties').show();
                         $('#video-record-btn-holder').show();
-                        $('#image-width-height').show();
                         $("#imageHeaderId").html("Video");
                         $('#videoThumbnail').show();
                         
@@ -652,7 +650,7 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#image-width-height', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
@@ -786,7 +784,12 @@ $(document).ready(function () {
         e.preventDefault();
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());
-         $('#'+id).attr('width', $('#image-w').val());
+
+         if(parseInt($('#'+id).css("max-width")) >= parseInt($('#image-w').val()))           
+            $('#'+id).attr('width', $('#image-w').val());
+         else
+            alert("Image width must be less than or equal to "+$('#'+id).css("max-width"));
+
          $('#'+id).attr('height', $('#image-h').val());
          $('#'+id).attr('alt', $('#image-alt-text').val());
          //for new text field is adding on the 
@@ -1347,7 +1350,6 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         var img = $(this);
         var imageid = $(this).attr('id');
         $('#imageid').val(imageid);
-        $(this).css('border', '1px dotted red');
         $(this).addClass('selected-item');
 
         $('#image-url').val($(this).attr('src'));
@@ -1356,6 +1358,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#image-w').val($(this).width());
         $('#image-h').val($(this).height());
         $('#image-alt-text').val($(this).attr('alt'));
+        $(this).css('border', '1px dotted red');
 
         $('#video-link').val("");
         $('#image-link').val("");
@@ -1863,3 +1866,16 @@ if(typeof escapeHtmlEntities == 'undefined') {
         8364 : 'euro'
     };
 }
+
+ function emailBuilderPreview () {
+        
+        $('div.row').removeClass('active');
+        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        showElements();
+
+        downloadLayoutSrc();
+        var templateContent = $("#templateHtmlContent").val();
+
+        return templateContent.replace("{body}",$('#download').val());
+        
+    }

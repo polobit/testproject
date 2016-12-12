@@ -310,7 +310,7 @@ var localeJSON = <%=localeJSON%>;
                             </div>
 
                             <div class="row">
-                                <div id="image-width-height" style="display:none">
+                                <div id="image-width-height" >
                                 <div class="col-xs-1">
                                     W:
                                 </div>
@@ -755,35 +755,28 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                     <form id="padding-setting" class="form-inline">
                         <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "padding") %></h4>
-                        <center>
-                            <table>
+                        <left>
+                            <table class="table-condensed">
                                 <tbody>
-                                    <tr>
+                                    <tr class="row">
                                         <td></td>
-                                        <td><input type="text" class="form-control"
+                                        <td>
+                                        Top: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" class="form-control"
                                             placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' value="15px" id="ptop" name="ptop"
-                                            style="width: 60px; margin-right: 5px"></td>
+                                            style="width: 90px; margin-right: 5px">px</td>
                                         <td></td>
                                     </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "left") %>' value="15px" id="pleft" name="mtop"
-                                            style="width: 60px; margin-right: 5px"></td>
+                                    <tr class="row">
                                         <td></td>
-                                        <td><input type="text" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "right") %>' value="15px" id="pright" name="mbottom"
-                                            style="width: 60px; margin-right: 5px"></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><input type="text" class="form-control"
+                                        <td>
+                                        Bottom: &nbsp;&nbsp;<input type="number" class="form-control"
                                             placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "bottom") %>' value="15px" id="pbottom" name="pbottom"
-                                            style="width: 60px; margin-right: 5px"></td>
+                                            style="width: 90px; margin-right: 5px">px</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </center>
+                        </left>
                     </form>
                 </div>
 
@@ -804,7 +797,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
     <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="min-width: 120px">
+            <div class="modal-content" style="min-width: 120px;">
                 <div class="modal-header hidden">
                     <input id="httphref" type="text" name="href" value="http://"
                         class="form-control" />
