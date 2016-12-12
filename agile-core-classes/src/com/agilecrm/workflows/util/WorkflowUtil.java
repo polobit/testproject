@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +20,7 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
@@ -348,28 +350,42 @@ public class WorkflowUtil
 	}
 	
 	/**
-	 * parse ids into Long if exception occurs then it will delete extra character
+	 * parse ids into Long if exception occurs then it will delete extra
+	 * characters and also some extra digit from last based on given number(lastDigits)
 	 * 
-	 * @param id 
+	 * @param id
 	 * 
-	 * @return long
+	 * @param lastDigits
+	 * 
+	 * @return Long
 	 */
-	public static long getValidId(String id){
-		long cId = 0l; 
-		try{
-			cId = Long.parseLong(id);
-		}catch(NumberFormatException nfe){
-			String arr[] = id.trim().split("[^(0-9)]+");
+	public static Long getValidId(String id, int lastDigits){
+		Long cId = 0l; 
+		if(StringUtils.isNotEmpty(id)){
 			try{
-				cId = Long.parseLong(arr[0]);
-			}catch(NumberFormatException e){
-				String regex = "[0-9]+";
-				if(arr[0].matches(regex)){
-					String camp = arr[0].substring(0, arr[0].length()-4);
-					cId = Long.parseLong(camp);
-				}
-			}	
-		}		
+				cId = Long.parseLong(id);
+			}catch(NumberFormatException nfe){
+				// if there are extra characters at last then it will give only
+				// numeric number from beginning  
+				String arr[] = id.trim().split("[^(0-9)]+");
+				try{
+					cId = Long.parseLong(arr[0]);
+				}catch(NumberFormatException nf){	
+					try{
+						// delete extra digit based on lastDigit, if value of lastDigit
+						// is 4 then it will delete last 4 digit  
+						String camp = arr[0].substring(0, arr[0].length()-lastDigits);
+						cId = Long.parseLong(camp);
+					}catch(Exception e){
+						return 0l;
+					}
+				}catch (ArrayIndexOutOfBoundsException aioobe) {
+					return 0l;
+				}	
+			}catch(Exception e){
+				return cId;
+			}
+		}
 		return cId;
 	}
 }

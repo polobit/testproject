@@ -61,12 +61,12 @@
 			}
 			
 			if(StringUtils.isNotEmpty(contactId)){
-				long contactIdTemp = WorkflowUtil.getValidId(contactId);
-				if(contactIdTemp != 0)
+				Long contactIdTemp = WorkflowUtil.getValidId(contactId, 4);
+				if(contactIdTemp != 0l)
 					contactId = Long.toString(contactIdTemp);
 			}			
 			
-			long campId = WorkflowUtil.getValidId(campaignId);
+			Long campId = WorkflowUtil.getValidId(campaignId,4);
 	
 			Workflow workflow = WorkflowUtil.getWorkflow(campId);
 	
