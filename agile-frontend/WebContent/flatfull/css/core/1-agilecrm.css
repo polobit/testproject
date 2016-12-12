@@ -5065,3 +5065,12 @@ border-top: 0px !important;
     margin-bottom: 8px;
     margin-top: -12px;   
 }
+.admin-message-info{
+    padding: 6px;
+    margin-bottom: 8px;
+    margin-left: 33%;
+    align: center;
+    width: 212px;
+    text-align: center;
+    margin-top: -14px;
+}
