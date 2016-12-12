@@ -7,6 +7,7 @@ var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 var callJar = {"running" : false};
+var notifications_sound = true;
 $(function()
 {
 //	initToPubNub();
@@ -625,7 +626,7 @@ function closeCallNoty(option){
 		  $("#direct-dialler-div").show();
 		  dialled.using = "default";
 	  }
-	notification_sound = true;
+	notifications_sound = true;
 }
 
 

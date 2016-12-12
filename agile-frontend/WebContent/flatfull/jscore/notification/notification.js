@@ -6,7 +6,6 @@
  * @module Notifications
  */
 var notification_prefs;
-var notification_sound = true;
 
 /**
  * Fetches notification preferences for current user
@@ -558,8 +557,16 @@ function showNoty(type, message, position, notification_type, onCloseCallback,ti
 				// Play sounds for only user notifications
 				if (n.options.type == 'information')
 				{
-					if (notification_prefs.notification_sound != 'no_sound' && notification_sound)
-						play_sound(notification_prefs.notification_sound);
+					if(notifications_sound == "undefined"){
+						notifications_sound = true;
+						if (notification_prefs.notification_sound != 'no_sound' && notifications_sound){
+							play_sound(notification_prefs.notification_sound);
+						}
+					}else{
+						if (notification_prefs.notification_sound != 'no_sound' && notifications_sound){
+							play_sound(notification_prefs.notification_sound);
+						}
+					}
 				}
 
 				// Set the handler for click

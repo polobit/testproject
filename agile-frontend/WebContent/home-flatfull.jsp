@@ -60,7 +60,7 @@ pageEncoding="UTF-8"%>
   if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
   {
 %>
-<%@ include file="file-hash.json"%>
+
 <%
   }
 %>
