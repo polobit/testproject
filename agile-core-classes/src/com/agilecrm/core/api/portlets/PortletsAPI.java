@@ -176,6 +176,7 @@ public class PortletsAPI {
 
 		// UI sends only ID and Position
 		for (Portlet portlet : portlets) {
+			System.out.println("Current Portlet"+portlet.name+portlet.id);
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
 			portlt.column_position = portlet.column_position;
 			portlt.row_position = portlet.row_position;
@@ -199,8 +200,7 @@ public class PortletsAPI {
 			return;
 
 		// UI sends only ID and Position
-		for (Portlet portlet : portlets) {
-			System.out.println("Current Portlet"+portlet.name+portlet.id);
+		for (Portlet portlet : portlets) {	
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
 			portlt.size_x = portlet.size_x;
 			portlt.size_y = portlet.size_y;
