@@ -111,10 +111,8 @@ function handleObjects() {
                 $('#path').val(id);
                 var t = self.data('type');
 
-                $('#ptop').val(self.find('td:first').css('padding-top'));
-                $('#pbottom').val(self.find('td:first').css('padding-bottom'));
-                $('#pleft').val(self.find('td:first').css('padding-left'));
-                $('#pright').val(self.find('td:first').css('padding-right'));
+                    $('#ptop').val(parseInt(self.find('td:first').css('padding-top')));
+                    $('#pbottom').val(parseInt(self.find('td:first').css('padding-bottom')));
 
                 $('#common-settings').show();
                 $('#padding-setting').show();
@@ -846,10 +844,8 @@ $(document).ready(function () {
     // paddings functions;
     $(document).on('change', '#ptop,#pbottom,#pleft,#pright', function (e) {
 
-        $('#' + $('#path').val()).find('td:first').css('padding-top', $('#ptop').val());
-        $('#' + $('#path').val()).find('td:first').css('padding-left', $('#pleft').val());
-        $('#' + $('#path').val()).find('td:first').css('padding-right', $('#pright').val());
-        $('#' + $('#path').val()).find('td:first').css('padding-bottom', $('#pbottom').val());
+        $('#' + $('#path').val()).find('td:first').css('padding-top', parseInt($('#ptop').val()));
+        $('#' + $('#path').val()).find('td:first').css('padding-bottom', parseInt($('#pbottom').val()));
 
     });
 
