@@ -400,6 +400,19 @@ public class WidgetUtil {
 		return userList;
 	}
 	
+	public static List<Widget> getActiveWidgetsByName(String name) {
+		try {
+			Objectify ofy = ObjectifyService.begin();
+
+			// Queries on widget name, with current AgileUser Key
+			return ofy.query(Widget.class).filter("name", name).filter("isActive",true).list();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static List<Widget> getWigetUserListByAdmin(String name, Long agileUserID) {
 		try {
 			Objectify ofy = ObjectifyService.begin();
