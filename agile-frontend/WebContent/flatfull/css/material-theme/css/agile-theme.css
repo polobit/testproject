@@ -415,14 +415,14 @@ table label.i-checks{
 .hbox .col.b-l{
   border-left: none;
 }
-.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
+/*.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
     background-color: rgba(17, 160, 248, 0.1);
     color: #11a0f8!important;
 }
 .tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
     background-color: rgba(17, 160, 248, 0.2);
     color: #11a0f8!important;
-}
+}*/
 #documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
   padding-bottom: 0px !important;
 }
