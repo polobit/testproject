@@ -382,6 +382,8 @@ public class SubscriptionUtil
     
     public static boolean isCostlyUser(){
     	Subscription subscription = getSubscription();
+    	if(Subscription.EmailPurchaseStatus.RELEASED.equals(subscription.getEmailpurchaseStatus()))
+    		return true;
     	if(subscription.plan != null && !PlanType.FREE.equals(subscription.plan.plan_type) && subscription.plan.getPlanInterval() != null && (subscription.plan.getPlanInterval().toLowerCase().equals("yearly") || subscription.plan.getPlanInterval().toLowerCase().equals("biennial")))
     		return true;
     	return false;
