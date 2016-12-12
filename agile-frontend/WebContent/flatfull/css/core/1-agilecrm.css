@@ -5056,3 +5056,12 @@ border-top: 0px !important;
 {
   top:-1px!important;
 }
+.support-plan-alert{
+    padding: 7px;
+    align: center;
+    width: 362px;
+    text-align: center;
+    margin:auto;
+    margin-bottom: 8px;
+    margin-top: -12px;   
+}
