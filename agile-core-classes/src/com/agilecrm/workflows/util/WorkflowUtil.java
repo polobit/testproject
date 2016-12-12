@@ -386,21 +386,48 @@ public class WorkflowUtil
 	    	map.put("access_level IN ", list);
 	    }
 	    List<WorkflowPartial> partialWorkflows =  partialDAO.listByProperty(map);
-	
-	    boolean idPresent = false;
-	    for(WorkflowPartial workflowPartial : partialWorkflows){
-		  if(workflowPartial.id.equals(allowCampaign))
-			  idPresent = true;
-	    }
-	    if(!idPresent)
+
+	    try
 	    {
-		Workflow workflow = WorkflowUtil.getWorkflow(allowCampaign);
-//		if(workflow!=null)
-//		{
-//		    WorkflowPartial wp = new WorkflowPartial(workflow.id,workflow.name);
-//		    partialWorkflows.add(wp);
-//		}
+		boolean idPresent = false;
+		for(WorkflowPartial workflowPartial : partialWorkflows){
+		    if(workflowPartial.id.equals(allowCampaign))
+			  idPresent = true;
+		}
+		if(!idPresent)
+		{
+		    WorkflowPartial workflowPartial = WorkflowUtil.getPartialWorkflow(allowCampaign);
+		    if(workflowPartial!=null)
+		    {
+			partialWorkflows.add(workflowPartial);
+		    }
+		}
+	    }
+	    catch(Exception e)
+	    {
+		System.err.println(e.getMessage());
 	    }
 	    return partialWorkflows;	    
+	}
+	
+	/**
+	 * Locates workflow based on id.
+	 * 
+	 * @param id
+	 *            Workflow id.
+	 * @return workflow object with that id if exists, otherwise null.
+	 */
+	public static WorkflowPartial getPartialWorkflow(Long id)
+	{
+	    try
+	    {
+		return partialDAO.get(id);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+		e.printStackTrace();
+		return null;
+	    }
 	}
 }

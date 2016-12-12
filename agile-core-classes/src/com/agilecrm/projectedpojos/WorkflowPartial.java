@@ -1,9 +1,5 @@
 package com.agilecrm.projectedpojos;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.appengine.api.datastore.Entity;
@@ -17,7 +13,7 @@ public class WorkflowPartial extends ProjectionEntityParse
 
     public String name;
     
-    public boolean is_disabled;
+    public Boolean is_disabled = false;
     
     public WorkflowPartial()
     {
@@ -35,7 +31,16 @@ public class WorkflowPartial extends ProjectionEntityParse
     {
 	id = entity.getKey().getId();
 	name = (String) getPropertyValue(entity, "name");
-	is_disabled = (boolean) getPropertyValue(entity, "is_disabled");
+	try
+	{
+	    Boolean value = (Boolean) getPropertyValue(entity, "is_disabled");
+	    if(value!=null)
+		is_disabled = value.booleanValue();
+	}
+	catch(Exception e)
+	{
+	    System.out.println(e.getMessage());
+	}
 	return this;
     }
 
