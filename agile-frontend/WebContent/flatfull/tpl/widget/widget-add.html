@@ -367,6 +367,18 @@
 
 <script id="widgets-add-new-collection-template" type="text/html">
 	<div class="tab-container m-b-none">
+							{{#isAdmin}}											
+								<div class="alert alert-info admin-message-info" id="" style="text-align: center ;min-height: 32px;max-height: 37px;">
+								   <spna> For more integrations,</span>
+  									<a  href="#integrations">
+  									<span style="color: #23b7e6;">
+  										click here.
+  									</span>
+  									</a>  									
+								</div>
+								{{/isAdmin}}
+	
+
        <ul class="nav nav-tabs">
        {{#is_mobile}}
 
