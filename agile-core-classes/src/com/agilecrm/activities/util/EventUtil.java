@@ -725,11 +725,11 @@ public class EventUtil
     }
 
     public static List<Contact> getEventsRelatedContacts(Long id){
-    	List<Contact> relatedContacts = new ArrayList<Contact>();
+    	//List<Contact> relatedContacts = new ArrayList<Contact>();
     	Event event= getEvent(id);
     	if(event!=null)
     	return event.relatedContacts();
-    	return relatedContacts;
+    	return null;
     }
     
     public static void sendEmailForEventContacts(List<String> contactIds, Event event){
