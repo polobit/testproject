@@ -20,7 +20,6 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.WorkflowBackup;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 /**
  * <code>WorkflowUtil</code> provides various static methods to convert contact
