@@ -226,8 +226,13 @@ function saveNode(e) {
         
         // Get Display name
         var displayName = $("#nodeui").find("[name=nodename]").val();
-                       
-        
+
+        // Node Level validation for some Nodes, if it will return true then all validation fine, if false then will not save the Node
+        var isValidNodeData = nodeLevelValidation();                    
+        if(isValidNodeData == false){        	   
+        	return;
+        }
+
         // Get the node id and update the old node id
 		var nodeId = $("#nodeui").data('nodeId');
 		// Check if node id is undefined or not 
@@ -505,5 +510,44 @@ function showNodeConnectPopup(nodeId){
 	{
 		window.parent.workflow_alerts("Message", "Title", "show-connect-node-popup-modal", null);
 	}
-
 }
+
+// Node Level validation, based on Nodename validation happens
+function nodeLevelValidation(){
+	var urlVisited = 'URL Visited?';
+	var nodeJSONDefinition = $("#nodeui").data('jsonDefinition');	
+	var nodeName = nodeJSONDefinition.name;
+
+	if(nodeName != undefined){
+		// Validation for URL Visited Node
+		if(nodeName == urlVisited){
+			return validateUrl();
+		}
+	}	
+}	
+//Validate the is there or not in website
+ function validateUrl()
+  {   
+  	var callbackData = false;
+     $.ajax({
+         url : 'core/api/web-stats/JSAPI-status',
+         type : 'GET',
+      //   dataType : 'json', 
+         async: false,
+         success : function(data){
+         	if(data == 0)
+         	{
+         		if(($('form').find('#errorsdiv1').length) == 0){ 
+         			// Display error message
+         			$("form").append("<div id='errorsdiv1' style='padding:2px 4px;' class = 'ui-state-highlight'><p><i class='fa fa-times icon-1x' style='color:red;'>Tracking Code is not added</i></p></div>");
+         		}         		
+         	}else{
+         		callbackData = true;
+         	}
+         },
+         error: function (data) {
+         console.log(data);
+       }
+     });
+     return callbackData;
+ }
