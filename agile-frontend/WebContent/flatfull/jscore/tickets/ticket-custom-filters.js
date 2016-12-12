@@ -1,6 +1,8 @@
 //Ticket_Custom_Filters allows you to initialize events on LHS filters, cancel and save as options.
 var Ticket_Custom_Filters = {
 
+	is_date_selected : false,
+
 	customFilters: new Array(),
 	filters: [],
 	//template_ui: '',
@@ -15,6 +17,7 @@ var Ticket_Custom_Filters = {
 
 		var $container = $('#custom-filters-container');
 
+		$(".created-date-input").off('click');
 		$(".created-date-input").on('click',function(){ 
 			$(".calendar.left").show();
 			$(".calendar.right").show();
@@ -60,8 +63,16 @@ var Ticket_Custom_Filters = {
 				{
 					var range = $('#created-date-input').val();
 
-					if(!range)
+					if(range)
+						Ticket_Custom_Filters.is_date_selected = true;
+
+					if(!range){						
+						if(Ticket_Custom_Filters.is_date_selected){
+							Ticket_Custom_Filters.changeCreatedDate();
+							Ticket_Custom_Filters.is_date_selected = false;
+						}
 						return;
+					}	
 					
 					var range_array = range.split('-');
 
@@ -90,10 +101,10 @@ var Ticket_Custom_Filters = {
 	  	$container.off('click','a#clear-created-date');
 	  	$container.on('click','a#clear-created-date', function(event){
 
-	  		$(this).hide();
-
-	  		$('input.created-date-input').val('');
+	  		Ticket_Custom_Filters.is_date_selected = false;
 	  		
+	  		$(this).hide();
+	  		$('input.created-date-input').val('');
 	  		//Re-render collection with updated filter conditions
 	  		Ticket_Custom_Filters.changeCreatedDate();
 	  	});

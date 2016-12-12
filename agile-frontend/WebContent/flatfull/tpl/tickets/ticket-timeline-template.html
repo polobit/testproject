@@ -74,7 +74,7 @@
 			          </div>
 			          
 			          <div class="panel-body">
-			          	<div class="word-break-full word-break-all">
+			          	<div class="word-break-full word-break-all" style="word-break:break-word;">
 			          		{{#if_equals activity_type 'TICKET_CREATED'}}
 			          		
 			          			{{#if custom2}}
@@ -203,7 +203,7 @@
 			          
 			          {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}
 			          <div class="panel-body">
-			          	<div class="word-break-full word-break-all">
+			          	<div class="word-break-full word-break-all" style="word-break:break-word;">
 			          		{{#if custom1}}
 				  				{{{replace_newline_with_ticket_br custom1}}}
 				  			{{else}}
