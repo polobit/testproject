@@ -1021,6 +1021,7 @@
         editIcon: function() {
 
             $('a#icon_Link').parent().show();
+            $('a#icon_Link').click();
 
             //get icon class name, starting with fa-
             var get = $.grep(this.activeElement.element.className.split(" "), function(v, i){
