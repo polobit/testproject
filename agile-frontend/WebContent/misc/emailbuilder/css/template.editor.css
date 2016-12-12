@@ -38,10 +38,10 @@ body {
 }
 
 .nav-tabs {
-    font-size: 12px;
-    padding:1px;
+    /*font-size: 12px;
+    padding:1px;*/
 }
-.edit .demo { margin-left:0px; margin-top:10px; padding:30px 15px 15px; border: 1px solid #DDDDDD; border-radius: 4px; position:relative; word-wrap: break-word;}
+.edit .demo { margin-left:0px; margin-top:10px; padding:0; border: 1px solid #DDDDDD; border-radius: 4px; position:relative; word-wrap: break-word;}
 .edit .demo:after {
 
     border: 1px solid #DDDDDD;
@@ -54,6 +54,7 @@ body {
     padding: 3px 7px;
     position: absolute;
     top: -1px;
+    display: none;
 }
  .configuration  {
     cursor: pointer;
@@ -64,8 +65,6 @@ body {
 
 .container { width:auto; margin:0 0px;}
 .sidebar-nav {
-    width:220px;
-    background-color: #FFFFFF;
     z-index:10;
 }
 .sidebar-nav .nav-header { cursor:pointer; font-size:14px;  text-shadow:0 1px 0 rgba(0, 0, 0, 0.3); text-transform:uppercase; font-weight:bold;}
@@ -74,7 +73,7 @@ body {
 .sidebar-nav .nav-header .popover {color:#999; text-shadow:none;}
 
 .nav > li > a {
-    padding:4px 8px;
+    /*padding:4px 8px;*/
 }
 
 .popover-info {position:relative;}
@@ -149,7 +148,7 @@ body {
 .demo .box:hover .remove { filter: alpha(opacity=100); opacity: 1; }
 
 .edit .demo .row:before {
-    border: 1px solid #DDDDDD;
+    border: 0px solid #DDDDDD;
     border-radius: 4px 0 4px 0;
     color: #9DA0A4;
     font-size: 12px;

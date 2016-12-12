@@ -74,10 +74,61 @@ var localeJSON = <%=localeJSON%>;
         <a class="hide" href="#save" id="save" ><i class="glyphicon glyphicon-floppy-disk"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "save") %></a>
         <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
 
-        <div class="row">
+        <div class="row" style="margin:0">
 
-            <div class="col-md-4 pull-right">
-                <div class="sidebar-nav" style="width:100%;margin-top:24px">
+            <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
+
+                <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
+                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
+                        <tr>
+                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
+                                <div class="column" style="min-height:150px;">
+
+                                    <div class="lyrow dragitem">
+                                        <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
+
+                                        <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
+                                        <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
+
+                                        <div class="preview">
+                                            <div class="icon text-block"></div>
+                                            <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></label>
+                                        </div>
+                                        <div class="view">
+                                            <div class="row clearfix">
+                                                <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
+                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-4" style="padding-top:15px">
+                <div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#add-content" aria-controls="add-content" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add Content</a></li>
+    <li role="presentation"><a href="#customize" aria-controls="customize" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-cog"></i> Customize</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="add-content">
+        <div class="sidebar-nav">
                     <div id="elements" style="position:relative;">
                         <ul class="nav nav-list accordion-group">
                             <li class="rows" id="estRows">
@@ -115,47 +166,13 @@ var localeJSON = <%=localeJSON%>;
                         </ul>
                     </div>
                 </div>
-            </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="customize">
+        <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></a>
+    </div>
+  </div>
 
-            <div class="col-md-8">
-
-                <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></a>
-                <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
-                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
-                        <tr>
-                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
-                                <div class="column" style="min-height:150px;">
-
-                                    <div class="lyrow dragitem">
-                                        <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
-
-                                        <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
-                                        <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
-
-                                        <div class="preview">
-                                            <div class="icon text-block"></div>
-                                            <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></label>
-                                        </div>
-                                        <div class="view">
-                                            <div class="row clearfix">
-                                                <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+</div>
             </div>
 
             <div class="col-md-3" style="width:370px;">
