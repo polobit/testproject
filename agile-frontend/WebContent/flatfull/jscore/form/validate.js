@@ -376,6 +376,15 @@ function isValidForm(form) {
 		
 		return /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value.trim());
 	}," Please enter a valid number.");
+
+	//Number validation with blank data
+	jQuery.validator.addMethod("number_input_valid", function(value, element){
+		
+		if(value=="")
+			return true;
+		
+		return /^[0-9\-]+$/.test(value);
+	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-valid-no'}}");
     
 	$(form).validate({
 		ignoreTitle: true,
