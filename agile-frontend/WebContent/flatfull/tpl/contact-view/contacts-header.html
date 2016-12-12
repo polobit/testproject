@@ -88,7 +88,7 @@
 								<div id="view-list" class="pull-left btn-group">
 									{{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
 										<div class="btn-group">
-											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><span class="agile-add-icon">+</span> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
+											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
         									<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 											<ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
 												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
@@ -99,7 +99,7 @@
 										</div>
     								{{else}}
 										<div class="btn-group">
-											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><span class="agile-add-icon">+</span> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
+											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
 											<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 											<ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
 												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}

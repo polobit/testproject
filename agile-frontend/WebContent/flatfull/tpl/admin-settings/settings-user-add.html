@@ -164,11 +164,11 @@
 {{else}}
 <input type="hidden" id="owner" name='is_account_owner' value=''/><i></i> 
 {{/is_domain_owner}}
-<div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
+<div class="col-sm-offset-3 col-md-9 p-l-xs tabs" id="admin-previlages">
+  <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
+        </label>
 {{#is_admin_domain}}
     <div class="tab-container m-b-none">
-        <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
-        </label>
             <div class="control-group form-group">
               <div class="controls" >
                 <div class="multiple-checkbox" name="adminPanelAccessScopes" style="margin-top: 10px;">
@@ -261,7 +261,6 @@
     </div>
 {{/is_admin_domain}}
 <div class="tab-container m-b-none {{#is_admin_domain}} hide {{/is_admin_domain}}">
-<label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}</label>
   <ul class="nav nav-tabs b-b-none">
 
         <li class="p-none active">

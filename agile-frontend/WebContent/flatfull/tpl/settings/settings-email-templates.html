@@ -1,6 +1,6 @@
 <script id="settings-email-templates-collection-template" type="text/html">
     <div class="col-md-9" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
-        <div class="hbox h-auto {{#is_mobile}} {{else}} m-b-lg {{/is_mobile}}">
+        <div class="hbox h-auto {{#is_mobile}} {{else}} m-b-lg {{/is_mobile}}" id="email-templates-list-view">
             <div class="panel panel-default">
                 <div class="panel-heading {{#is_mobile}} b-n {{/is_mobile}}">
                     <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates-list'}}</div>
@@ -131,7 +131,7 @@
     <div class="wrapper-md lter bg-light b-b">
         <div class="btn-toolbar m-l-none pos-rlt">
             <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
-                <div class="">
+                <div class="" id="email-templates-header">
                     <h4 class="inline-block m-n">
                     {{agile_lng_translate 'preferences' 'email-templates'}}
                     <div class="inline-block" id="filter-email-ctg-div" data-id="new">

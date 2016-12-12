@@ -940,7 +940,7 @@ label {
   background-color: rgba(17, 160, 248, 0.2);
   color: #11a0f8;
 }
-.btn.btn-small {
+.btn.btn-small , .panel-footer .btn.btn-sm{
   height: 30px;
   line-height: 30px;
   font-size: 12px;
@@ -1329,7 +1329,7 @@ input[type="checkbox"]:checked:after {
   color: #ffffff;
   background-color: #11a0f8;
   border-color: #11a0f8;
-  z-index: 3;
+  z-index: 1;
   cursor: pointer;
 }
 input[type="checkbox"]:checked + span {
@@ -4706,5 +4706,6 @@ table.table-separated-rows.narrow tbody tr:active td {
     font-size: 28px;
   }
 }
+
 
 /*#endregion */
