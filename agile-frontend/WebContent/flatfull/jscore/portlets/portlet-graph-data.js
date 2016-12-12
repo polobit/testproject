@@ -46,7 +46,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -83,7 +83,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -175,7 +175,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -304,7 +304,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -672,7 +672,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -774,7 +774,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -916,7 +916,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -999,7 +999,7 @@ var portlet_graph_data_utility = {
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		setupCharts(function()
 	    {
 	    	that.fetchPortletsGraphData(url, function(data)
@@ -1360,7 +1360,7 @@ var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this
 				.fetchPortletsGraphData(
 						url,
@@ -1445,7 +1445,7 @@ var sizey = parseInt($('#' + selector).parent().attr("data-sizey"));
 				.html(
 						"<div class='text-center v-middle opa-half' style='margin-top:"
 								+ topPos
-								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 		this.fetchPortletsGraphData(
 						url,
 						function(data) {

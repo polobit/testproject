@@ -8185,3 +8185,8 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 	}
 	return options.inverse(this);
 });
+
+Handlebars.registerHelper('permissiondeleted', function()
+{
+	return new Handlebars.SafeString(LOADING_HTML);
+});
