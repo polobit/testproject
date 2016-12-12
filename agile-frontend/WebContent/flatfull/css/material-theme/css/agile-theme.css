@@ -135,7 +135,7 @@ select.form-control{
   padding-left: inherit;
 }
 
-.tab-container {
+.tabs .tab-container{
   overflow: hidden;
   padding: 0 20px;
   width: 100%;
@@ -146,36 +146,36 @@ select.form-control{
   border-radius: 4px 4px 0 0;
 }
 
-.tab-container .nav-tabs {
+.tabs .tab-container .nav-tabs {
   white-space: nowrap;
   border: none;
 }
-.tab-container .nav-tabs li {
+.tabs .tab-container .nav-tabs li {
   display: inline-block;
   float: none;
   margin: 0 5px;
 }
-.tab-container .nav-tabs li:first-child {
+.tabs .tab-container .nav-tabs li:first-child {
   margin-left: 0;
 }
-.tab-container .nav-tabs li:last-child {
+.tabs .tab-container .nav-tabs li:last-child {
   margin-right: 0;
 }
-.tab-container .nav-tabs li a {
+.tabs .tab-container .nav-tabs li a {
   border: none;
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
   color: #78909c;
 }
-.tab-container .nav-tabs li:hover{
+.tabs .tab-container .nav-tabs li:hover{
   background-color: #e7eef0 !important;
 }
-.tab-container .nav-tabs li a:hover {
+.tabs .tab-container .nav-tabs li a:hover {
   color: #7460ee;
   border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
   background-color: #e7eef0 !important;
 }
-.tab-container .nav-tabs li.active a {
+.tabs .tab-container .nav-tabs li.active a {
   background-color: transparent !important;
   color: #7460ee;
   font-weight: bold;
@@ -261,10 +261,10 @@ label.i-checks input{
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
-#clear-lhs-contact-filters, #clear-lhs-company-filters{
+#clear-lhs-contact-filters, #clear-lhs-company-filters, #clear-lhs-segmentation-filters, #save-segment-filter{
   color: #11a0f8 !important;
 }
-#clear-lhs-contact-filters:hover, #clear-lhs-contact-filters:active, #clear-lhs-contact-filters:focus, #clear-lhs-company-filters:hover, #clear-lhs-company-filters:active, #clear-lhs-company-filters:focus{
+#clear-lhs-contact-filters:hover, #clear-lhs-contact-filters:active, #clear-lhs-contact-filters:focus, #clear-lhs-company-filters:hover, #clear-lhs-company-filters:active, #clear-lhs-company-filters:focus, #clear-lhs-segmentation-filters:hover, #clear-lhs-segmentation-filters:active, #clear-lhs-segmentation-filters:focus, #save-segment-filter:hover, #save-segment-filter:active, #save-segment-filter:focus{
   color: #067dc6 !important;
 }
 #lhs-contact-filter-form a#addBtn{
@@ -330,20 +330,20 @@ label.i-checks input{
   height: 35px !important;
   margin-left: 5px !important;
 } 
-#tagslist .panel{
+#tagslist .panel, #lhs_filters_segmentation .panel, .visitors-div .panel{
   border: none !important;
   box-shadow: none !important;
 }
-#tagslist .panel-body{
+#tagslist .panel-body, #lhs_filters_segmentation .panel-body{
   padding: 10px 15px !important;
 }
-#contacts-lhs-filters-toggle, #companies-lhs-filters-toggle{
+#contacts-lhs-filters-toggle, #companies-lhs-filters-toggle, #segmentation-lhs-filters-toggle{
   border-right: 0px !important;
 }
 .app-content-body{
   background-color: #f4f8f9 !important;
 }
-#right-pane>div{
+#right-pane div:first-child{
   border-bottom: none !important;
 }
 .contacts-div #bulk-action-btns{
@@ -355,18 +355,24 @@ label.i-checks input{
 .table-list-view-top-margin{
   margin-top: 20px !important;
 }
-table thead tr{
+.agile-new-theme table thead tr{
   background-color: #f4f8f9 !important;
 }
-table>tbody>tr>td{
+.agile-new-theme table>tbody>tr>td{
    border-top: none !important;
    padding: 10px !important;
 }
-table>tbody>tr{
+.agile-new-theme table>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
-table>thead>tr>th{
+.agile-new-theme #contacts-portlets.table>tbody>tr:first-child{
+  border-top: none !important;
+}
+table.fc-header>tbody>tr:first-child{
+  border-top: none !important;
+}
+.agile-new-theme table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
@@ -394,7 +400,6 @@ table label.i-checks{
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-
 #documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
   display: none !important;
 }
@@ -403,6 +408,20 @@ table label.i-checks{
 }
 #documents_collection_container .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
+}
+.hbox .col.b-r{
+  border-right: none;
+}
+.hbox .col.b-l{
+  border-left: none;
+}
+.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
+    background-color: rgba(17, 160, 248, 0.1);
+    color: #11a0f8!important;
+}
+.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
 }
 #documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
   padding-bottom: 0px !important;
@@ -509,7 +528,50 @@ a i, a span{vertical-align: inherit;}
 }
 .widget_header_name{
   padding-top: 15px;
-
+}
+#automation-video{
+  margin-right: 15px !important;
+}
+#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading{
+  display: none !important;
+}
+#documents_collection_container .panel, #deals-new-list-view .panel, #workflows-collection-container .panel, #campaign-triggers-list .panel, #email-templates-list-view .panel, #forms-list-view .panel, #forms-list-view .panel, #landing-pages-collection-container .panel, #webrules-list-view .panel, #push-notify-list-view .panel{
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer{
+  border-top: 10px solid #f4f8f9 !important;
+}
+#document-list thead tr th:first-child .i-checks input, #deal-list thead tr th:first-child .i-checks input, #workflows-collection-container thead tr th:first-child .i-checks input, #campaign-triggers-list thead tr th:first-child .i-checks input, #email-template-div-id thead tr th:first-child .i-checks input, #forms-list-view thead tr th:first-child .i-checks input, #landing-pages-collection-container thead tr th:first-child .i-checks input, #webrules-list-view thead tr th:first-child .i-checks input, #push-notify-list-view thead tr th:first-child .i-checks input{ 
+  margin-left: -15px;
+}
+#document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks{
+  margin: 0; 
+  margin-left: 0px !important
+}
+#today-heading, #yesterday-heading, #earlier-heading{
+  border :none !important;
+}
+#deals-new-list-view .wrapper-md{
+  padding-top: 0px;
+}
+#workflows-top-view h4, #email-templates-header h4{
+  color: #11a0f8 !important;
+  font-weight: 400 !important;
+  font-size: 24px !important;
+}
+#workflows-top-view h4 small, #email-templates-header span#email-ctg-type-label small{
+  font-size: 12px !important;
+}
+#workflows-top-view .wrapper{
+  border-bottom: 0px !important;
+}
+#workflows-top-view .wrapper, #Landingpages-top-view .wrapper-md{
+  padding-bottom: 0px !important;
+}
+#landing-pages-collection-container .panel, #campaign-triggers-list .panel, #forms-list-view .panel{
+  background-color: #f4f8f9 !important;
 }
 
 #automation-video{margin-right: 15px !important;}
@@ -614,30 +676,34 @@ a i, a span{vertical-align: inherit;}
   line-height: 30px;
   font-size: 12px;
 }
+.multiple-checkbox-adminprefs .panel{
+  border-top: inherit;
+  padding-top: inherit;
+}
 .tag{ 
   margin: 3px 2px !important;
   line-height: 1px;
   height: auto;
-  padding: 0px;
-  margin: 0px;
-  background-color: inherit;
   vertical-align: middle;
-  padding: 4px 6px;
+  padding: 4px 6px !important;
   background-color: #f4f8f9!important;
-  color: #78909c!important;
+  color: #11a0f8!important;
   border-radius: 3px;
 }
 .tag:hover{
-  color: #78909c!important;
+  color: #11a0f8!important;
   background-color: #f4f8f9!important;
 }
 .tag a{
-  color: #78909c!important;
+  color: #11a0f8!important;
   font-size: 12px;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.tag a:hover{
+  color: #11a0f8!important;
 }
 .tag a.close, .tag.btn-primary .close{
   vertical-align: middle;
@@ -648,19 +714,9 @@ a i, a span{vertical-align: inherit;}
 }
 ul.tags-management li.tag{
   line-height: inherit;
+  border: inherit;
 }
-
-.hbox .col.b-r{
-  border-right: none;
-}
-.hbox .col.b-l{
-  border-left: none;
-}
-.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
-    background-color: rgba(17, 160, 248, 0.1);
-    color: #11a0f8!important;
-}
-.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
-    background-color: rgba(17, 160, 248, 0.2);
-    color: #11a0f8!important;
+#admin-prefs-tabs-content .control-group{
+  padding-top: 10px;
+  background-color: #fff;
 }

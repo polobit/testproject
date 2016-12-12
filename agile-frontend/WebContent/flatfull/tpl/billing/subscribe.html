@@ -8,13 +8,15 @@
 </div>
 <div class="wrapper-md">
 <div class="row">
-	<div class="col-md-9">
-		<div class="tab-container m-b-none">
+	<div class="col-md-9 tabs">
 {{#check_plan "FREE"}}
-<div class="" style="font-size: 13px;position: relative;top: -10px;margin: 0 auto;z-index: 9;width: 202px;bottom: -8px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{agile_lng_translate 'plan-and-upgrade' 'you-are-currently-on-free-plan'}}</span></div>
-
-			<ul class="nav nav-tabs {{#if billingData}}{{else}}hide{{/if}}" id="subTab" style="margin-top: -18px;">
+      <div class="text-center m-b">
+        <span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{agile_lng_translate 'plan-and-upgrade' 'you-are-currently-on-free-plan'}}</span>
+      </div>
+      <div class="tab-container m-b-none {{#if billingData}}{{else}}hide{{/if}}">
+			<ul class="nav nav-tabs {{#if billingData}}{{else}}hide{{/if}}" id="subTab">
 {{else}}
+<div class="tab-container m-b-none">
 <ul class="nav nav-tabs {{#if billingData}}{{else}}hide{{/if}}" id="subTab">
 {{/check_plan}}
 										    <li role="presentation" id="usertab" class="active" data-tab="1">
