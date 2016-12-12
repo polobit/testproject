@@ -134,9 +134,15 @@ public class NotesAPI
 	}
 	note.save();
 	
-	List<Contact> relatedContactsOldList = oldNote.relatedContacts();
-	List<Contact> relatedContactsList = note.relatedContacts();
-	
+	List<Contact> relatedContactsOldList = null ;
+	List<Contact> relatedContactsList = null;
+	try {
+		relatedContactsOldList = oldNote.relatedContacts();
+		relatedContactsList = note.relatedContacts();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
 	if(relatedContactsOldList != null && relatedContactsOldList.size() > 0 && relatedContactsList != null)
 	{
 		relatedContactsList.addAll(relatedContactsOldList);
