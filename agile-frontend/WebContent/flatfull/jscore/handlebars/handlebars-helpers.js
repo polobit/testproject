@@ -1684,33 +1684,34 @@ $(function()
 									el = el
 											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
+								var addressValues = [];
+
 								if(address.address && address.address.trim())
-									el = el.concat(address.address.trim());
+									addressValues.push(address.address);
 
 								if(address.city && address.city.trim())
-									el = el.concat(", "+address.city.trim());
+									addressValues.push(address.city);
 
 								if(address.state && address.state.trim())
-									el = el.concat(", "+address.state.trim());
+									addressValues.push(address.state);
 
 								if(address.zip && address.zip.trim())
-									el = el.concat(", "+address.zip.trim());
+									addressValues.push(address.zip);
 
 								if(address.countryname && address.countryname.trim())
-									el = el.concat(", "+address.countryname.trim());
+									addressValues.push(address.countryname);
 
 								if(!address.countryname && address.country && address.country.trim())
-									el = el.concat(", "+getCode(address.country.trim()));
+									addressValues.push(getCode(address.country.trim()));
 
-								/*$.each(address, function(key, val)
-								{
-									if (--count == 0)
+								$.each(addressValues, function(index, addressField){
+									if(index == addressValues.length - 1)
 									{
-										el = el.concat(val + ".");
+										el = el.concat(addressField.trim());
 										return;
 									}
-									el = el.concat(val + ", ");
-								});*/
+									el = el.concat(addressField.trim() + ", ");
+								});
 
 								if (properties[i].subtype && properties[i].subtype != "SYSTEM")
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
