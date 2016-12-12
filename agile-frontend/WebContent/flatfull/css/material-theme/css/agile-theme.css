@@ -165,19 +165,19 @@ select.form-control{
   border: none;
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
-  color: #78909c;
+  color: #78909c !important;
 }
 .tabs .tab-container .nav-tabs li:hover{
   background-color: #e7eef0 !important;
 }
 .tabs .tab-container .nav-tabs li a:hover {
-  color: #7460ee;
+  color: #7460ee !important;
   border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
   background-color: #e7eef0 !important;
 }
 .tabs .tab-container .nav-tabs li.active a {
   background-color: transparent !important;
-  color: #7460ee;
+  color: #7460ee !important;
   font-weight: bold;
   border: none;
   border-bottom: 3px solid #7460ee !important;
@@ -850,4 +850,8 @@ z-index:1;
 {
       background-color: #11a0f8!important;
   color: #fff!important;
+}
+#contacts-inner-tabs .tab-container{
+  padding-left: 0px;
+  padding-right: 0px;
 }
