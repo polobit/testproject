@@ -119,14 +119,14 @@ public class SearchAPI
     		count = "10";
 
 	if (StringUtils.isEmpty(type)){
-		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+		List<Object> searchResult =  (List<Object>)new QueryDocument(new Document().index, null).simpleSearchWithoutDatastoreEntities(keyword, Integer.parseInt(count), cursor);
 		if(searchResult.size() == Integer.parseInt(count) ){
 				searchResult =  SearchUtil.searchForCompanyResult(searchResult);
 		}
 		return searchResult;
 	}
 
-	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
+	return new QueryDocument(new Document().index, null).simpleSearchWithTypeWithoutDatastoreEntities(keyword, Integer.parseInt(count),
 		cursor, type);
     }
 
