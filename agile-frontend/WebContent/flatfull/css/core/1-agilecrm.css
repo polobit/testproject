@@ -4935,6 +4935,7 @@ ul#recent-menu-model-list li:nth-child(even)
     color: green;
     margin-right: 5px;
 }
-.fc-header-center h2{
+
+#calendar_event .fc-header-center h2{
   text-transform: inherit!important;
 }
