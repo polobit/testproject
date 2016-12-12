@@ -858,7 +858,7 @@ function deserialize_contact(contact, template, callback)
 		{
 			$("#content [name='"+related_company_id+"']")
 					.html(
-							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+							'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + data + '"><span><a class="m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 			$("#content #contact_company").hide();
 			if(data){							
 				$.ajax({
@@ -906,7 +906,7 @@ function deserialize_contact(contact, template, callback)
 					$("#content #contact_company").hide();
 					$("#content [name='"+related_company_id+"']")
 							.html(
-									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+									'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 				}
 			}
 		}
@@ -1357,13 +1357,13 @@ function setReferenceContacts(name, ele, valJSON, referenceContactIds)
 					{
 						$("ul[name='"+name+"']", ele)
 						.append(
-								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#contact/' + value + '">' + contact_name + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + value + '"><a class="m-r-xs" href="#contact/' + value + '">' + contact_name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 					}
 					else
 					{
 						$("ul[name='"+name+"']", ele)
 						.append(
-								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + value + '"><a class="m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 					}
 					
 				});
