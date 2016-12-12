@@ -208,7 +208,7 @@ var contact_details_documentandtasks_actions = {
 
 				var contact_name = getContactName(json);
 
-				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 			 	// Adds contact name to tags ul as li element
 			 	$('#contactTypeAhead .tags',e).html(template({name : contact_name, id : json.id}));
