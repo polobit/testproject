@@ -21,9 +21,7 @@ var Ticket_Custom_Filters = {
 		$(".created-date-input").on('click',function(){ 
 			$(".calendar.left").show();
 			$(".calendar.right").show();
-
-		});
-
+		})
 
 		//Initializing date picker
 		Ticket_Utils.loadDateChartAndDatePicker(function()
@@ -66,20 +64,21 @@ var Ticket_Custom_Filters = {
 					var range = $('#created-date-input').val();
 
 					if(range)
-						this.is_date_selected = true;
+						Ticket_Custom_Filters.is_date_selected = true;
 
-					if(!range){
+					if(!range){						
 						if(this.is_date_selected){
 							Ticket_Custom_Filters.changeCreatedDate();
-							this.is_date_selected = false;
+							Ticket_Custom_Filters.is_date_selected = false;
 						}
 						return;
 					}	
 					
 					var range_array = range.split('-');
 
+					$('#clear-created-date').show();
+
 					Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
-				
 				});
 			});
 
@@ -96,6 +95,18 @@ var Ticket_Custom_Filters = {
 	  		
 	  		//Re-render collection with updated filter conditions
 	  		Ticket_Custom_Filters.changeDueDate();
+	  	});
+
+	  	//Initializing click event on clear create date button
+	  	$container.off('click','a#clear-created-date');
+	  	$container.on('click','a#clear-created-date', function(event){
+
+	  		Ticket_Custom_Filters.is_date_selected = false;
+	  		
+	  		$(this).hide();
+	  		$('input.created-date-input').val('');
+	  		//Re-render collection with updated filter conditions
+	  		Ticket_Custom_Filters.changeCreatedDate();
 	  	});
 
 
