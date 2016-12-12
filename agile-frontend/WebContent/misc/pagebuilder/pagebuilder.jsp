@@ -2351,11 +2351,12 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
     <!-- /.modal for next step instruction -->
     <div class="modal fade instructionModal" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width: 500px;">
             
             <div class="modal-content">
                 
                 <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
                     <h3 class="modal-title">
                         <label id="success-msg" style="margin:5px; color: green;">
                             <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 
@@ -2371,12 +2372,12 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <div class="control-group form-group">
                             <div class="col-xs-6 col-sm-7 text-center">
                                 <a  class="lp-view-link agile-link" target="_blank" style="color:#34495e;">
-                                    <i class="fa fa-eye fa-4x"></i><br> Preview
+                                    <i class="fui-window" style="font-size:25px;"></i><br> Preview
                                 </a>
                             </div>
                             <div class="col-xs-6 col-sm-2 text-center" style="margin-top:2px;">
                                 <a class="lp-publish-link agile-link" target="_blank" style="color:#34495e;">
-                                    <i class="fa fa-cloud-upload fa-4x" ></i><br>Publish
+                                    <i class="fui-upload" style="font-size:25px;" ></i><br>Publish
                                 </a>
                             </div>
                         </div>  
@@ -2384,11 +2385,11 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                                                     
                 </div><!-- /.modal-body -->
                                 
-                <div class="modal-footer">
+                <div class="modal-footer" style="padding:15px 22px;">
                     <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
                         <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false">Don't show me again</label>
                     </div>
-                    <a type="button" class="btn btn-default close-popup" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></a>
+                    <a class="close-popup agile-link" style="border-bottom:1px solid #16a085;" href= "<%=MAIN_URL%>#landing-pages">back to landingpage</a>
                 </div>
                 
             </div><!-- /.modal-content -->
