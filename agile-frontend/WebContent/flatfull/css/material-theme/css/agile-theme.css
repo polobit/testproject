@@ -255,9 +255,10 @@ label.i-checks input{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
-/*.pull-right .btn.dropdown-toggle span {
+.pull-right .btn.dropdown-toggle span {
   color: #fff !important;
-}*/
+  margin-left:-5px;
+}
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
@@ -606,25 +607,30 @@ a i, a span{vertical-align: inherit;}
 }
 .icon-plus-sign:before{
   content:"+";
+  margin-left:-2px;
 }
 .icon-plus-sign
 {
   font-size: :22px;
-  padding-right:10px;
   margin-top: -4px;
   padding-right: 0px;
 }
-.btn-default 
+.btn-default
 {
   background-color: rgba(17, 160, 248, 0.1);
   color: #11a0f8!important;
+}
+.wrapper-md .btn-default
+{
+   background-color: #11a0f8!important;
+  color: #ffffff!important;
 }
 .btn-primary
 {
   background-color: #11a0f8!important;
   color: #ffffff!important;
 }
-.btn.btn-default:hover, .btn.btn-default:focus, .btn.btn-default:active ,.open .dropdown-toggle.btn-default
+.btn.btn-default:hover,.btn.btn-default:focus,.btn.btn-default:active,.open .dropdown-toggle.btn-default
 {
     background-color: rgba(17, 160, 248, 0.2);
     color: #11a0f8!important;
@@ -650,6 +656,7 @@ a i, a span{vertical-align: inherit;}
 .editicon:hover
 {
  background-color: #666!important;
+ color:#fff!important;
 }
 .editicon span
 {
@@ -676,6 +683,12 @@ a i, a span{vertical-align: inherit;}
   line-height: 30px;
   font-size: 12px;
 }
+.wrapper-md .btn.btn-sm {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+}
+
 .multiple-checkbox-adminprefs .panel{
   border-top: inherit;
   padding-top: inherit;
@@ -775,4 +788,26 @@ ul.tags-management li.tag{
 }
 .agile-new-theme .tickets-toolbar .toggle-custom-filters{
   color: #263238 !important;
+}
+#contactCampaignForm .line
+{
+  margin:5px 0;
+}
+.milestone-column .panel-heading
+{
+  background-color: #f6f8f8!important;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 15px;
+
+}
+input[type="checkbox"]:checked:after {
+z-index:1;
+}
+#chrome-extensions{
+  width:42px;
+}
+.wrapper-md .btn.btn-default:hover,.wrapper-md .btn.btn-default:focus,.wrapper-md .btn.btn-default:active,.wrapper-md .open .dropdown-toggle.btn-default
+{
+      background-color: #11a0f8!important;
+  color: #fff!important;
 }

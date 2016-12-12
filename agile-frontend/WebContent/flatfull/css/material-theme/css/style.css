@@ -1329,7 +1329,7 @@ input[type="checkbox"]:checked:after {
   color: #ffffff;
   background-color: #11a0f8;
   border-color: #11a0f8;
-  z-index: 3;
+  z-index: 1;
   cursor: pointer;
 }
 input[type="checkbox"]:checked + span {
