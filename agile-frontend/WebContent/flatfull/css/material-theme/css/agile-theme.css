@@ -135,7 +135,7 @@ select.form-control{
   padding-left: inherit;
 }
 
-.tab-container {
+.tabs .tab-container{
   overflow: hidden;
   padding: 0 20px;
   width: 100%;
@@ -146,36 +146,36 @@ select.form-control{
   border-radius: 4px 4px 0 0;
 }
 
-.tab-container .nav-tabs {
+.tabs .tab-container .nav-tabs {
   white-space: nowrap;
   border: none;
 }
-.tab-container .nav-tabs li {
+.tabs .tab-container .nav-tabs li {
   display: inline-block;
   float: none;
   margin: 0 5px;
 }
-.tab-container .nav-tabs li:first-child {
+.tabs .tab-container .nav-tabs li:first-child {
   margin-left: 0;
 }
-.tab-container .nav-tabs li:last-child {
+.tabs .tab-container .nav-tabs li:last-child {
   margin-right: 0;
 }
-.tab-container .nav-tabs li a {
+.tabs .tab-container .nav-tabs li a {
   border: none;
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
   color: #78909c;
 }
-.tab-container .nav-tabs li:hover{
+.tabs .tab-container .nav-tabs li:hover{
   background-color: #e7eef0 !important;
 }
-.tab-container .nav-tabs li a:hover {
+.tabs .tab-container .nav-tabs li a:hover {
   color: #7460ee;
   border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
   background-color: #e7eef0 !important;
 }
-.tab-container .nav-tabs li.active a {
+.tabs .tab-container .nav-tabs li.active a {
   background-color: transparent !important;
   color: #7460ee;
   font-weight: bold;
@@ -394,42 +394,6 @@ table label.i-checks{
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-.tag{ 
-  margin: 3px 2px !important;
-  line-height: 1px;
-  height: auto;
-  padding: 0px;
-  margin: 0px;
-  background-color: inherit;
-  vertical-align: middle;
-  padding: 4px 6px;
-  background-color: #f4f8f9!important;
-  color: #78909c!important;
-  border-radius: 3px;
-}
-.tag:hover{
-  color: #78909c!important;
-  background-color: #f4f8f9!important;
-}
-.tag a{
-  color: #78909c!important;
-  font-size: 12px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.tag a.close, .tag.btn-primary .close{
-  vertical-align: middle;
-  color: #90a4ae !important;
-}
-.tag a.close:hover {
-  color: #000000!important;
-}
-ul.tags-management li.tag{
-  line-height: inherit;
-}
-
 .hbox .col.b-r{
   border-right: none;
 }
@@ -566,3 +530,47 @@ a i, a span{vertical-align: inherit;}
 #document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}
 #document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}
 
+.multiple-checkbox-adminprefs .panel{
+  border-top: inherit;
+  padding-top: inherit;
+}
+.tag{ 
+  margin: 3px 2px !important;
+  line-height: 1px;
+  height: auto;
+  vertical-align: middle;
+  padding: 4px 6px !important;
+  background-color: #f4f8f9!important;
+  color: #11a0f8!important;
+  border-radius: 3px;
+}
+.tag:hover{
+  color: #11a0f8!important;
+  background-color: #f4f8f9!important;
+}
+.tag a{
+  color: #11a0f8!important;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tag a:hover{
+  color: #11a0f8!important;
+}
+.tag a.close, .tag.btn-primary .close{
+  vertical-align: middle;
+  color: #90a4ae !important;
+}
+.tag a.close:hover {
+  color: #000000!important;
+}
+ul.tags-management li.tag{
+  line-height: inherit;
+  border: inherit;
+}
+#admin-prefs-tabs-content .control-group{
+  padding-top: 10px;
+  background-color: #fff;
+}
