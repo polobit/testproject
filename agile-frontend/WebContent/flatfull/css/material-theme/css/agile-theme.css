@@ -613,3 +613,59 @@ ul.tags-management li.tag{
   padding-top: 10px;
   background-color: #fff;
 }
+
+.modal-content .modal-header h3{
+  font-size: 16px !important;
+}
+.modal-content .modal-header h4{
+  font-size: 16px !important;
+}
+
+.agile-new-theme #theme-and-layout{
+    margin-bottom: 20px;
+    padding:20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+
+.agile-new-theme .panel-default{
+  border: none !important;
+}
+
+.agile-new-theme .panel-heading{
+    background-color: #e7eef0 !important;
+    border: none !important;
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+    font-size: 14px;
+    padding: 20px 5px 17px 20px !important;
+    white-space: nowrap;
+  }
+
+.agile-new-theme .agile-theme-image{
+  width:3em !important;
+}
+.agile-new-theme .agile-theme-image-size{
+  height: 42px !important;
+  width: 42px !important;
+}
+
+.agile-new-theme .agile-theme-company-image-size{
+  height: 35px !important;
+  width: 35px !important;
+}
+
+.agile-new-theme #admin-settings-users-model-list .agile-img{
+ width: 35px !important; 
+}
+
+.agile-new-theme .tickets-toolbar .filter-name-btn{
+ color: #11a0f8 !important;
+    font-weight: 400 !important;
+}
+.agile-new-theme .tickets-toolbar .toggle-custom-filters{
+  color: #263238 !important;
+}
