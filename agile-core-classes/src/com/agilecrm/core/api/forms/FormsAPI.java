@@ -52,7 +52,7 @@ public class FormsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void saveForm(@Context HttpServletResponse response, String formString) throws IOException
+    public Form saveForm(@Context HttpServletResponse response, String formString) throws IOException
     {
 	try
 	{
@@ -114,7 +114,7 @@ public class FormsAPI
 	    if (StringUtils.isBlank(name) || !Character.isLetter(name.charAt(0)))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		return;
+		return null;
 	    }
 
 	    Form savedForm = FormUtil.getFormByName(name);
@@ -152,19 +152,19 @@ public class FormsAPI
 		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.Forms, true);
 		
 		response.setStatus(HttpServletResponse.SC_OK);
-		return;
+		return form;
 	    }
 	    else
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		return;
+		return null;
 	    }
 	}
 	catch (JSONException e)
 	{
 	    System.out.println(e.getMessage());
 	    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-	    return;
+	    return null;
 	}
     }
 
