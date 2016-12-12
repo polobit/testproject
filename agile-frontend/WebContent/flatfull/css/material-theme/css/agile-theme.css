@@ -255,9 +255,9 @@ label.i-checks input{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
-.pull-right .btn.dropdown-toggle span {
+/*.pull-right .btn.dropdown-toggle span {
   color: #fff !important;
-}
+}*/
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
@@ -394,56 +394,7 @@ table label.i-checks{
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-.tag{ 
-  margin: 3px 2px !important;
-  line-height: 1px;
-  height: auto;
-  padding: 0px;
-  margin: 0px;
-  background-color: inherit;
-  vertical-align: middle;
-  padding: 4px 6px;
-  background-color: #f4f8f9!important;
-  color: #78909c!important;
-  border-radius: 3px;
-}
-.tag:hover{
-  color: #78909c!important;
-  background-color: #f4f8f9!important;
-}
-.tag a{
-  color: #78909c!important;
-  font-size: 12px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.tag a.close, .tag.btn-primary .close{
-  vertical-align: middle;
-  color: #90a4ae !important;
-}
-.tag a.close:hover {
-  color: #000000!important;
-}
-ul.tags-management li.tag{
-  line-height: inherit;
-}
 
-.hbox .col.b-r{
-  border-right: none;
-}
-.hbox .col.b-l{
-  border-left: none;
-}
-.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
-    background-color: rgba(17, 160, 248, 0.1);
-    color: #11a0f8!important;
-}
-.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
-    background-color: rgba(17, 160, 248, 0.2);
-    color: #11a0f8!important;
-}
 #documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
   display: none !important;
 }
@@ -543,7 +494,6 @@ a i, a span{vertical-align: inherit;}
     text-decoration: none;
     outline: 0 !important;
 }
-
 .editicon{
   border: inherit;
 }
@@ -566,3 +516,151 @@ a i, a span{vertical-align: inherit;}
 #document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}
 #document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}
 
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus
+{
+  color: #141719;
+  background-color: #e7f6ff!important;
+  background-image: none;
+  filter: none;
+}
+.panel-default .panel-heading
+{
+  background-color : #FFFFFF;
+}
+.wrapper-md
+{
+  padding-bottom:0px!important;
+  padding-top: 15px;
+}
+.route_Portlet
+{
+  padding-top:10px;
+}
+.contact-owner .btn-sm
+{
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+}
+.icon-plus-sign:before{
+  content:"+";
+}
+.icon-plus-sign
+{
+  font-size: :22px;
+  padding-right:10px;
+  margin-top: -4px;
+  padding-right: 0px;
+}
+.btn-default 
+{
+  background-color: rgba(17, 160, 248, 0.1);
+  color: #11a0f8!important;
+}
+.btn-primary
+{
+  background-color: #11a0f8!important;
+  color: #ffffff!important;
+}
+.btn.btn-default:hover, .btn.btn-default:focus, .btn.btn-default:active ,.open .dropdown-toggle.btn-default
+{
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
+}
+.save-tag input
+{
+  height: 34px!important; 
+}
+#contact-add-tags , #company-add-tags
+{
+  height: 34px; 
+  line-height: 34px;
+}
+.tagsinput .btn-primary
+{
+  background-color: #ffffff!important;
+  color:#11a0f8!important ;
+}
+.wrapper-md.white-theme-portlets
+{
+  padding-bottom:0px!important;
+}
+.editicon:hover
+{
+ background-color: #666!important;
+}
+.editicon span
+{
+  margin-top: -7px!important;
+}
+#widgets-model-list h4,#widgets-model-list .h4,#widgets-model-list h5,#widgets-model-list .h5,#widgets-model-list h6,#widgets-model-list .h6
+{
+
+}
+.contact-right-widgetsview i
+{
+  margin-right:0px;
+}
+.agile-new-theme .form-control.textarea
+{
+  height: 72px;
+}
+.multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
+{
+  margin-left:0px;
+}
+.btn.btn-sm {
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+}
+.tag{ 
+  margin: 3px 2px !important;
+  line-height: 1px;
+  height: auto;
+  padding: 0px;
+  margin: 0px;
+  background-color: inherit;
+  vertical-align: middle;
+  padding: 4px 6px;
+  background-color: #f4f8f9!important;
+  color: #78909c!important;
+  border-radius: 3px;
+}
+.tag:hover{
+  color: #78909c!important;
+  background-color: #f4f8f9!important;
+}
+.tag a{
+  color: #78909c!important;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tag a.close, .tag.btn-primary .close{
+  vertical-align: middle;
+  color: #90a4ae !important;
+}
+.tag a.close:hover {
+  color: #000000!important;
+}
+ul.tags-management li.tag{
+  line-height: inherit;
+}
+
+.hbox .col.b-r{
+  border-right: none;
+}
+.hbox .col.b-l{
+  border-left: none;
+}
+.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
+    background-color: rgba(17, 160, 248, 0.1);
+    color: #11a0f8!important;
+}
+.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
+}
