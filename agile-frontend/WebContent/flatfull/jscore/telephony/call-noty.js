@@ -228,6 +228,7 @@ function showMissedNotyPopUp(type, message,position,notyTimeout)
 
 
 function ShowWidgetCallNoty(message){
+	notification_sound = false;
 	var state = message.state;
 	var number = message.number;
 	var callId = message.callId;
@@ -383,6 +384,7 @@ function showCallNotyMessage(message,type,position,timeout){
 }
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
+	notification_sound = false;
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -432,6 +434,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	
 	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed"){
 		$("#draggable_noty").show().delay(5000).hide(1);
+		notification_sound = true;
 	}
 }
 

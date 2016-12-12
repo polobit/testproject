@@ -625,7 +625,7 @@ function closeCallNoty(option){
 		  $("#direct-dialler-div").show();
 		  dialled.using = "default";
 	  }
-	
+	notification_sound = true;
 }
 
 
