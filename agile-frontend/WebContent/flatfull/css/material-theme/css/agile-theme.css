@@ -776,3 +776,9 @@ ul.tags-management li.tag{
 .agile-new-theme .tickets-toolbar .toggle-custom-filters{
   color: #263238 !important;
 }
+
+.agile-new-theme .tooltip-inner p{color:#fff;}
+
+.agile-new-theme .tooltip{
+  font-family: "Maison Neue" !important;
+}
