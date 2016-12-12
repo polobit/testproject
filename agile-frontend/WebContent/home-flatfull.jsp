@@ -712,17 +712,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </li>
 
 
-     <%
-  if(domainUser.is_admin){
-  %>
+   
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
-  <%}%>
-     
+       
      <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>
