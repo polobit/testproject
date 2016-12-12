@@ -19,8 +19,12 @@
 							{{else}}
 								{{#if_equals sort_field "priority_code"}}
 									{{agile_lng_translate 'tasks' 'priority'}}
-								{{else}}
-									{{agile_lng_translate 'portlets' 'due-date'}}
+								{{else}}	
+									{{#if_equals sort_field "requester_name"}}
+										{{agile_lng_translate 'tickets' 'sort_Requester'}}
+									{{else}}
+										{{agile_lng_translate 'portlets' 'due-date'}}
+									{{/if_equals}}
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}
@@ -51,6 +55,18 @@
 				    		{{agile_lng_translate 'portlets' 'due-date'}} <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs {{#if_equals sort_field "due_date"}}{{else}}display-none{{/if_equals}} sort-field-check"></i> 
 				    	</a>
 			    	</li>
+		    		<li>
+			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key='assignee_name'>{{agile_lng_translate 'tickets' 'sort_assignee'}} 
+			    			<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs 
+			    				{{#if_equals sort_field 'assignee_name'}}{{else}}display-none{{/if_equals}} sort-field-check"></i>
+		    			</a>
+		    		</li>
+		    		<li>
+			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="requester_name">{{agile_lng_translate 'tickets' 'sort_Requester'}} 
+			    			<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs 
+			    				{{#if_equals sort_field "requester_name"}}{{else}}display-none{{/if_equals}} sort-field-check"></i>
+		    			</a>
+		    		</li>
 			    	<li class="divider"></li>
 			    	<li>
 			    		<a class="sort-by" data-sort-by="-" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'descending'}} 
