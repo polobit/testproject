@@ -15,6 +15,7 @@ TWILIO_DIRECTION = "";
 TWILIO_CALLED_NO = "";
 TWILIO_IS_VOICEMAIL = false;
 var TWILIO_CONTACT ;
+var SMS_From_Number=["sms"];
 
 function initializeTwilioGlobalListeners(){
 	
@@ -29,9 +30,32 @@ $(function(){
 		if (document.readyState === "complete" && CURRENT_DOMAIN_USER)
 		{
 			//globalTwilioIOSetup();
+			SMS_From_Number=getTwilioIncomingListForSms();
 		}
 	}, 10000); // 15 sec
-    
+
+    //send sms from contact dash let
+    $('body').off('click', '.SMS-Gateway_sms');
+	$('body').on('click', '.SMS-Gateway_sms', function(e)
+	{
+		
+		e.preventDefault();
+		e.stopPropagation();
+
+        var number = $(this).closest(".contact-make-call").attr("phone");
+		var contact  = agile_crm_get_contact();
+
+		number =getFormattedPhone(number, contact);
+		contact['phone'] = number;
+		showDraggablePopup(contact, "sms");
+
+       $.each(SMS_From_Number,function(index,num){ 		
+         var option = new Option(num,num);	
+ 		  $("#draggable_noty").find("select").append($(option));
+ 	    });
+
+	});
+  
     $('body').off('click', '.noty_twilio_mute');
 	$('body').on('click', '.noty_twilio_mute', function(e)
 			{

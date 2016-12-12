@@ -392,7 +392,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var msg = {};
 	msg['buttons'] = arr;
 	c.msg = msg;
-	showDraggablePopup(c);
+	showDraggablePopup(c, "call");
 	$("#noty_text_msg").html(txt);
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
@@ -423,7 +423,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 }
 
 
-function showDraggablePopup(param){
+function showDraggablePopup(param, sms){
 	
 	var position = _agile_get_prefs("dragableNotyPosition");
 	var flag = false;
@@ -435,7 +435,14 @@ function showDraggablePopup(param){
 		x = a[0]*1;
 		y = a[1]*1;
 	}
-	var popup = $(getTemplate("call-noty",param));
+
+	  if(sms == "sms"){
+        var popup = $(getTemplate("sms-noty",param));
+        $("#draggable_noty .draggable_noty_notes").html("");
+    }
+    else
+    	var popup = $(getTemplate("call-noty",param));
+
 	$("#draggable_noty .draggable_noty_info").html(popup);
 	$("#draggable_noty").css({'left':x,'top': y});
 	$("#draggable_noty").show();

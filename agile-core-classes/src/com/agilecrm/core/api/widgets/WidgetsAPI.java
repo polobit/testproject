@@ -364,6 +364,14 @@ public class WidgetsAPI {
 		// ArrayList<String> callOptionName = new ArrayList<>();
 
 		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
+	    
+		//Adding sms widgets if Plivo or twilio is there
+		Widget widget=SMSGatewayUtil.getSMSGatewayWidget();
+				if(widget !=null){
+					widget.display_name="SMS-Gateway";
+					widget.mini_logo_url = "/widgets/sms-small-logo.png";
+					widgets.add(widget);
+				}
 		/*
 		 * if(!widgets.isEmpty()){ for(Widget widget : widgets){
 		 * callOptionName.add(widget.name); }

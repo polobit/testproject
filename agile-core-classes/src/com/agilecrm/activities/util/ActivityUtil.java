@@ -2632,5 +2632,13 @@ public class ActivityUtil
 			activity.save();
 		}
 	}
+	public static void createTwilioSmsActivity(String serviceType,ActivityType activityType ,String toNumber,Integer fromNumber,String message){
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.SMS;
+		Contact contact;
+		activity.activity_type = activityType;
+		activity.custom1 = ActivityType.SMS_TO_NUMBER;
+		
+	}
 }
 

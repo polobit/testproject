@@ -1938,3 +1938,75 @@ function menuServicerole(dashboard){
 				break;
 		}
 }
+
+ // Send a prsonal sms  
+function sendPersonalSMS(el, phone){
+
+        var fromNumber = $("#from-number").val();
+        var message = $("#sms-noty-notes").val();
+        phone = $("#notyCallDetails").attr("number");
+
+		$('.sms-message').removeClass("hidden");
+	    $('.sms-message').html(getRandomLoadingImg());
+
+	    if(message == undefined || message=="")
+        {
+        	if ($('#sms-noty-notes').val() == '') {
+        	 $('#sms-noty-notes').css('border-color', '#a94442');
+        	$save_info = $('<div style="display:inline-block "><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
+						$('.sms-message').html($save_info);
+						$save_info.show();
+
+						setTimeout(function()
+						{
+							$('.sms-message').empty();
+						}, 2000);
+           return;
+        }
+}else {
+    $('#sms-noty-notes').css('border-color', '');
+}
+						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&from=" + encodeURIComponent(fromNumber) + "&message=" + encodeURIComponent(message);
+
+						if ($(el).attr("disabled"))
+							return;
+
+						$(el).attr("disabled", "disabled");
+						$.get(
+										url,
+										function(data)
+										{
+											console.log("sending sms...");
+											$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>SMS will sent shortly</i></p></small></div>');
+
+											$('.sms-message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.sms-message').empty();
+												$("#send-sms").removeAttr("disabled");
+												closeCallNoty(true);
+											}, 2000);
+
+										})
+								.fail(
+										function(response)
+										{
+											$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+											$('.sms-message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.sms-message').empty();
+												$("#send-sms").removeAttr("disabled");
+												closeCallNoty(true);
+											}, 2000);
+
+										});
+				///	});
+}

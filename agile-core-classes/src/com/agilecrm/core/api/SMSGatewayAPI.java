@@ -9,14 +9,18 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.widgets.Widget;
+import com.campaignio.tasklets.sms.SendMessage;
+import com.thirdparty.twilio.TwilioSMS;
 import com.thirdparty.twilio.TwilioSMSUtil;
 
 /**
@@ -148,4 +152,37 @@ public class SMSGatewayAPI
 	{
 		return SMSGatewayUtil.getTwilioSMSGatewayWidget();
 	}
+	/* Send SMS
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/send-sms")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void sendSMS(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("message") String message )
+	{
+		
+		System.out.println("smsssss "+from +" to "+ to + message);
+		//checking valid number
+		if(SendMessage.checkValidFromNumber(from) && SendMessage.checkValidToNumber(to)){
+		    Widget widget= SMSGatewayUtil.getSMSGatewayWidget();
+		    JSONObject json;
+		    try {
+			      json = new JSONObject(widget.prefs);
+			      
+			      String authToken = json.getString(TwilioSMS.TWILIO_AUTH_TOKEN);
+			      String sid = json.getString(TwilioSMS.TWILIO_ACCOUNT_SID);
+		          SMSGatewayUtil.sendSMS(json.getString("sms_api"), from, to, message, sid, authToken);
+		      } catch (JSONException e) {
+		    	  System.out.println("While Sending Error Occured ." +e.getMessage());
+			     e.printStackTrace();
+			     throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+							.entity("Messege not sent!!").build());
+		      }
+		   }
+		else{
+			 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+						.entity("Number is not valid").build());
+		}
+		}
 }
