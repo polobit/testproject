@@ -633,10 +633,10 @@ header .bg-white a, header button.show-search-dropdown {
   background-image: none;
   filter: none;
 }
-.panel-default .panel-heading
+/*.panel-default .panel-heading
 {
   background-color : #FFFFFF;
-}
+}*/
 .wrapper-md
 {
   padding-bottom:0px!important;
@@ -789,7 +789,7 @@ header .bg-white a, header button.show-search-dropdown {
 }
 
 .agile-new-theme .panel-default{
-  border: none !important;
+  /*border: none !important;*/
 }
 
 .agile-new-theme .admin-users .panel-heading,.agile-new-theme .upload-panel .panel-heading {
@@ -1079,3 +1079,4 @@ input.mini-time.ui-timepicker-input{
   margin: 0 0 10px !important;
   line-height: 1.42857143 !important;
 }
+.tab-content 
