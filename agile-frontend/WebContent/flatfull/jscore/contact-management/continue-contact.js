@@ -1019,7 +1019,7 @@ function fill_multi_options(field_element, element)
 			else
 				$(sub_field_element).val(json[name]);
 
-			if(name == 'country' && !$(sub_field_element).val())
+			if(name == 'country' && json[name] && $(sub_field_element).find("option[value='"+json[name]+"']").length == 0)
 			{
 				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>{{agile_lng_translate 'contacts-view' 'country'}} {{country}} {{agile_lng_translate 'country' 'not-found-error'}}</i></span>");
 				$(sub_field_element).after(warning_msg_tpl(json));
