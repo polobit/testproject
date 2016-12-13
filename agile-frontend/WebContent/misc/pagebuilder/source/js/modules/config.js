@@ -6,7 +6,8 @@
     module.exports.editableItems = {
         'div#agileform_div' : [],
         'span.fa': ['color', 'font-size'],
-        '.bg.bg1': ['background-color'],
+        '.bg.bg1,.item': ['background-color'],
+        'nav': ['background-color','color'],
         'nav a': ['color', 'font-weight', 'text-transform', 'dynamic-button'],
         'img': ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
         'hr.dashed': ['border-color', 'border-width'],

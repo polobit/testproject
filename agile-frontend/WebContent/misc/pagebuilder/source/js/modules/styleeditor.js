@@ -451,7 +451,9 @@
                         if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
                             $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
                     }
-
+                    if($(this).attr("name") === 'color' && styleeditor.activeElement.element.tagName ==='NAV'){
+                        $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
+                    }
                     var nameAttrOfEl = $(this).attr("name");
                     if( nameAttrOfEl === "dynamic-text" || nameAttrOfEl === "dynamic-button" || nameAttrOfEl === "dynamic-image") {
                         if($(this).val() === "yes") {
