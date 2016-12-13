@@ -285,7 +285,7 @@ label.i-checks input{
 #lhs-contact-filter-form i#removeBtn:hover, #lhs-contact-filter-form i#removeBtn:active, #lhs-contact-filter-form i#removeBtn:focus{
   opacity: 1 !important;
 }
-.agile-new-theme .wrapper-md h1, .h1, .agile-new-theme .wrapper-md h2, .h2, .agile-new-theme .wrapper-md h3, .h3, .agile-new-theme .wrapper-md h4, .h4, .agile-new-theme .wrapper-md h5, .h5, .agile-new-theme .wrapper-md h6, .h6{
+.agile-new-theme .wrapper-md h1, .h1, .agile-new-theme .wrapper-md h2, .h2, .agile-new-theme .wrapper-md h3, .h3{
   color: #11a0f8 !important;
   font-weight: 400 !important;
 }
@@ -1024,6 +1024,7 @@ ul.tags-management li.tag{
 #scheduleid .line.line-dashed.b-b.line-lg {
     border-bottom: 1px solid #dee5e7;
 }
+
 input.mini-time.ui-timepicker-input{
     border: 1px solid #d2d2d2;
 }
@@ -1059,3 +1060,22 @@ input.mini-time.ui-timepicker-input{
 /*.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr {
     line-height: 1.1;
 }*/
+.agile-new-theme .data-block h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1 !important;
+    margin-bottom: 10px !important;
+    color: inherit !important;
+}
+.agile-new-theme .data-block p{
+  margin-bottom: 10px !important;
+}
+.agile-new-theme .workflows-right-body h1, h2, h3, h4, h5, h6{
+  color: #58666e !important;
+}
+.agile-new-theme .triggers-right-body  h1, h2, h3, h4, h5, h6{
+  color: #58666e !important;
+}
+
+.agile-new-theme p{
+  margin: 0 0 10px !important;
+  line-height: 1.42857143 !important;
+}
