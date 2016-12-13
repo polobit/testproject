@@ -895,6 +895,7 @@ z-index:1;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .tag a:hover{
   color: #11a0f8!important;
 }
@@ -918,3 +919,10 @@ ul.tags-management li.tag{
   color: #11a0f8!important;
   background-color: #f4f8f9!important;
 }
+
+/*.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr {
+    line-height: 1.1;
+}*/
+
+
+
