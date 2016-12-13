@@ -779,7 +779,7 @@ header .bg-white a, header button.show-search-dropdown {
   border: none !important;
 }
 
-.agile-new-theme .panel-heading{
+.agile-new-theme .admin-users .panel-heading,.agile-new-theme .upload-panel .panel-heading {
     background-color: #e7eef0 !important;
     border: none !important;
     border-radius: 4px 4px 0 0;

@@ -210,7 +210,7 @@ var upload = window.opener._Agile_Resources_Json.upload_window['upload-img-error
 <br/>
 <div class="row">
 <div class="col-md-12 col-sm-12 col-xs-12">
-<div class="panel panel-default mobile-popup">
+<div class="panel panel-default mobile-popup upload-panel">
 <div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-your-image") %></div>
 <div class="panel-body">
 <p><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-image-format") %></i></p>
