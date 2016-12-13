@@ -854,3 +854,6 @@ z-index:1;
   padding-left: 0px;
   padding-right: 0px;
 }
+.portlet_body_calendar #calendar_container table td{
+  padding: 0px !important;
+}
