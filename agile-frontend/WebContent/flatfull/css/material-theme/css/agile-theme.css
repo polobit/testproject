@@ -1099,3 +1099,6 @@ input.mini-time.ui-timepicker-input{
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
+.portlet_body_calendar #calendar_container table td{
+  padding: 0px !important;
+}
