@@ -16,6 +16,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     console.log("constructNodeFromDefinition "+nodeId);
 	console.log(nodeJSONDefinition);
 
+	$("#nodeui").find("#errorsdiv").html("").removeClass('ui-state-highlight');
+
     // Remove old data
     $("#nodeui").removeData();
     $("#nodeui").empty();
@@ -537,10 +539,9 @@ function nodeLevelValidation(){
          success : function(data){
          	if(data == 0)
          	{
-         		if(($('form').find('#errorsdiv1').length) == 0){ 
          			// Display error message
-         			$("form").append("<div id='errorsdiv1' style='padding:2px 4px;' class = 'ui-state-highlight'><p><i class='fa fa-times icon-1x' style='color:red;'>Tracking Code is not added</i></p></div>");
-         		}         		
+         			$("#nodeui").find("#errorsdiv").html("<p><i class='fa fa-times icon-1x' style='color:red;'>Tracking Code is not added</i></p>").addClass('ui-state-highlight');
+         		        		
          	}else{
          		callbackData = true;
          	}
