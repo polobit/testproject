@@ -375,12 +375,12 @@ label.i-checks input{
   background-color: #fff !important;
 }
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr{
-  border-top: none !important;
+  border-top: inherit;
 }
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
 }
-.agile-new-theme #contacts-portlets.table>tbody>tr:first-child{
+.agile-new-theme #contacts-portlets.table>tbody>tr{
   border-top: none !important;
 }
 table.fc-header>tbody>tr:first-child{
@@ -701,11 +701,6 @@ header .bg-white a, header button.show-search-dropdown {
   height: 34px; 
   line-height: 34px;
 }
-.tagsinput .btn-primary
-{
-  background-color: #ffffff!important;
-  color:#11a0f8!important ;
-}
 .wrapper-md.white-theme-portlets
 {
   padding-bottom:0px!important;
@@ -892,51 +887,6 @@ z-index:1;
 #data-sync-type a
 {
   color:#fff!important;
-}
-.tag{ 
-  margin: 3px 2px !important;
-  line-height: 1px;
-  height: auto;
-  vertical-align: middle;
-  padding: 4px 6px !important;
-  background-color: #f4f8f9!important;
-  color: #11a0f8!important;
-  border-radius: 3px;
-}
-.tag:hover{
-  color: #11a0f8!important;
-  background-color: #f4f8f9!important;
-}
-.tag a{
-  color: #11a0f8!important;
-  font-size: 12px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.tag a:hover{
-  color: #11a0f8!important;
-}
-.tag a.close, .tag.btn-primary .close{
-  vertical-align: middle;
-  color: #90a4ae !important;
-}
-.tag a.close:hover {
-  color: #000000!important;
-}
-ul.tags-management li.tag{
-  line-height: inherit;
-  border: inherit;
-}
-.tag.btn.btn-primary
-{
-  background-color: #f4f8f9!important;
-  color: #11a0f8!important;
-}
-.tag.btn.btn-primary:hover{
-  color: #11a0f8!important;
-  background-color: #f4f8f9!important;
 }
 .btn-addon.btn-sm i
 {
@@ -1150,4 +1100,44 @@ a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-colo
   border: 0px !important;
   color: #555;
   background-color: #fff !important;
+}
+.tag, .tag.btn, .controls .tag.btn{ 
+  margin: 3px 2px !important;
+  line-height: 16px;
+  font-size: 12px!important;
+  height: auto;
+  vertical-align: middle;
+  padding: 2px 6px !important;
+  background-color: #f4f8f9!important;
+  color: #78909c!important;
+  border-radius: 3px;
+}
+.tag:hover, .tag.btn:hover, .controls .tag.btn:hover{
+  color: #78909c!important;
+  background-color: #f4f8f9!important;
+}
+.tag a{
+  color: #78909c!important;
+  font-size: 12px!important;
+  font-weight: 600 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tag a:hover{
+  color: #78909c!important;
+}
+.tag a.close, .tag.btn-primary .close{
+  vertical-align: middle;
+  color: #90a4ae !important;
+  padding-left: 2px;
+  font-size: 14px!important;
+  float: none !important;
+}
+.tag a.close:hover {
+  color: #000000!important;
+}
+ul.tags-management li.tag{
+  line-height: inherit;
+  border: inherit;
+  margin-top: 12px !important;
 }
