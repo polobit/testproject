@@ -828,6 +828,7 @@ ul.tags-management li.tag{
 .agile-new-theme .tooltip{
   font-family: "Maison Neue" !important;
 }
+
 #contactCampaignForm .line
 {
   margin:5px 0;
@@ -853,4 +854,16 @@ z-index:1;
 #contacts-inner-tabs .tab-container{
   padding-left: 0px;
   padding-right: 0px;
+}
+
+
+.agile-new-theme .event-modal{
+  width: 630px;
+}
+.agile-new-theme #event-time-1 ,.agile-new-theme #event-time-2{
+  width: 91px;
+}
+
+.agile-new-theme .form-control{
+    padding: 6px 20px !important;  
 }

@@ -1,6 +1,6 @@
 <!-- New (Activity) Modal views -->
 <script type="text/html" id="new-event-modal-template">
- <div class="modal-dialog">
+ <div class="modal-dialog event-modal">
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
@@ -105,8 +105,8 @@
                 <div class="control-group form-group">
                         <div class="checkbox col-sm-offset-3 col-sm-6">
                             <label class="i-checks i-checks-sm c-p">
-                                <input type="checkbox" name="allDay" id="allDay" /><i></i>  <div class="m-l-sm">{{agile_lng_translate 'tasks' 'all-day-event'}}
-                                </div>
+                                <input type="checkbox" name="allDay" id="allDay" /> <span>{{agile_lng_translate 'tasks' 'all-day-event'}}
+                                </span>
                             </label>
                         </div>
                     </div>
