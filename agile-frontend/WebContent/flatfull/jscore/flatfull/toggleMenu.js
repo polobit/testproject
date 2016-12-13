@@ -437,7 +437,13 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	    	$('body').unbind("click",clickOutsideSearchDropdownEventHandler);
 	}
 
+	$( '#advanced-search-fields-group a input' ).on( 'click', function( event ) {
+		event.preventDefault();
+	});
+
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
+	   event.preventDefault();
+	   event.stopImmediatePropagation();
 
    	   var $target = $( event.currentTarget ),
        $inp = $target.find( 'input' );

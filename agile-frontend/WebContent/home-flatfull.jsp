@@ -214,8 +214,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <%if(currentUserPrefs.theme.equals("15")){%>
 <link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
 <link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
-<link href="flatfull/css/material-theme/css/style.css" rel="stylesheet" />
-<link href="flatfull/css/material-theme/css/agile-theme.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/style.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/agile-theme.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
 <%}%>
 
 
