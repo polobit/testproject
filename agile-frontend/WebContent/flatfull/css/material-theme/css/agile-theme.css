@@ -1129,3 +1129,25 @@ a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-colo
       display: inline-block !important;
       margin-left: -20px !important;
 }
+#reports-tab-container {
+  background-color: #fff;
+}
+#reports-tab-container ul li a{
+  border: 0px;
+  color: #555;
+}
+#reports-tab-container .maintab a:hover{
+  border:0px;
+  color: #11a0f8;
+  background-color: #f5fbff !important;
+}
+#reports-tab-container .report-selected a{
+  color: #11a0f8;
+  background-color: #e7f6ff !important;
+  border-left: 3px solid rgb(17, 160, 248) !important;
+}
+#reports-tab-container .maintab ul li a{
+  border: 0px !important;
+  color: #555;
+  background-color: #fff !important;
+}
