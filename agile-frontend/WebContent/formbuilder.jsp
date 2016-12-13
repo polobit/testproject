@@ -42,21 +42,19 @@ String template = request.getParameter("template");
    </head>
    <body>
       <header id="header" class="navbar" role="menu">
-         <a id="agile-logo" class="navbar-brand navbar-color" href="#navbar-dashboard">
+         <!-- <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
            <i class="glyphicon glyphicon-cloud"></i> 
-         </a>
+         </a> -->
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;">           
-            <button id="form-save" class="btn btn-primary navbar-brand  navbar-color">
-               <span class="glyphicon glyphicon-ok"></span> 
-               <span>Save Form</span>
-            </button>
-            <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
-               <span class="glyphicon glyphicon-eye-open"></span>
+            <a id="form_back" title="Go back to Forms Page" class="btn btn-default navbar-brand">
+               <span>Back</span>
+            </a>
+            <a id="form_preview" class="btn btn-primary navbar-brand" title="View the currently saved Form" target="_blank" disabled>
                <span>Preview</span> 
             </a>
-            <a id="form_back" class="btn btn-default navbar-brand">
-               <span class="glyphicon glyphicon-chevron-left text-muted"></span><span class="text-muted">Back</span>
+            <a id="form-save" title="Click here for Form Save " class="btn btn-primary navbar-brand  navbar-color">
+               <span>Save</span>
             </a>
          </div>
       </header>
@@ -104,8 +102,8 @@ String template = request.getParameter("template");
          a.removeAttribute("disabled");
          a.href = window.location.origin+"/forms/"+formNumber;
       }
-         var a = document.getElementById('agile-logo');
-         a.href = window.location.origin;
+         /*var a = document.getElementById('agile-logo');
+         a.href = window.location.origin;*/
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
       </script>
