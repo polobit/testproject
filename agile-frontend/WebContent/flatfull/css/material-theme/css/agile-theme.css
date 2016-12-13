@@ -127,16 +127,19 @@ select.form-control{
 }
 
 .i-checks input {
+  opacity: 0;
+}
+.i-checks input[type="checkbox"] {
   opacity: inherit;
 }
 
 .i-checks-sm>i {
   display: none;
 }
-
+/*
 .i-checks {
   padding-left: inherit;
-}
+} */
 
 .tabs .tab-container{
   overflow: hidden;
@@ -197,12 +200,13 @@ select.form-control{
 #contacts-inner-tabs #next, #contacts-inner-tabs #prev {
       padding: 20px 15px;
 }
+/*
 label.i-checks {
   margin: 5px 0px;
 }
 label.i-checks input{
   margin-right: 8px;
-}
+}*/
 
 #dashlet_heading .btn-group .btn.btn-sm {
   height: inherit;
@@ -948,10 +952,10 @@ ul.tags-management li.tag{
 {
   padding-top:25px;
 }
-.js-prev-lge ,.js-prev-lge .checkedMultiCheckbox
+/*.js-prev-lge ,.js-prev-lge .checkedMultiCheckbox
 {
   margin-left:40px;
-}
+}*/
 .agile-new-theme .ticket-collection-container .v-middle.p-l-none:nth-child(4){
   width: 55px !important;
 }
@@ -1104,3 +1108,13 @@ input.mini-time.ui-timepicker-input{
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
+
+
+.i-checks input[disabled]:after, .i-checks input[disabled]:focus, .i-checks input[disabled]:hover{
+    background-color: #dee5e7;
+    border-color: #ececec;
+}
+
+.i-checks, .radio label, .checkbox label, .i-checks label{
+  padding-left: 23px;
+}
