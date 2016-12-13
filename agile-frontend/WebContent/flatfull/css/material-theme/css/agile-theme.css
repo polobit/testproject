@@ -242,6 +242,8 @@ label.i-checks input{
 }
 .agile-new-theme #automation-video , .agile-new-theme .help-video{
   line-height: 41px!important;
+  background-color: #fff!important;
+  color:#78909c !important
 }
 .bg-white a:hover {
     color: #067dc6;
@@ -255,7 +257,8 @@ label.i-checks input{
   color: #78909c !important;
 }
 
-#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active, #chrome-extensions:hover, #chrome-extensions:focus, #chrome-extensions:active{
+#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active, #chrome-extensions:hover, #chrome-extensions:focus, #chrome-extensions:active,#automation-video:hover,#automation-video:active,#automation-video:focus,.help-video:hover,.help-video:active,.help-video:focus
+{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
@@ -654,10 +657,11 @@ header .bg-white a, header button.show-search-dropdown {
 }
 .icon-plus-sign:before{
   content: "+";
-  margin-left: -2px;
+  margin-left: 1px;
   font-weight: 600;
   font-family: "icomoon"!important;
-  font-size: 24px
+  font-size: 24px;
+  margin-right: 7px;
 }
 .tab-content  .icon-plus-sign:before{
   font-weight:normal!important;
@@ -737,9 +741,9 @@ header .bg-white a, header button.show-search-dropdown {
   font-size: 14px;
 }
 .btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm{
-  height: 30px!important;
-  line-height: 30px!important;
-  font-size: 12px!important;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
 }
 
 .multiple-checkbox-adminprefs .panel{
@@ -847,6 +851,9 @@ z-index:1;
 }
 #chrome-extensions{
   width:42px;
+}
+#chrome-extensions i{
+  font-size: 16px
 }
 .wrapper-md .btn.btn-default:hover,.wrapper-md .btn.btn-default:focus,.wrapper-md .btn.btn-default:active,.wrapper-md .open .dropdown-toggle.btn-default
 {
@@ -1019,8 +1026,19 @@ ul.tags-management li.tag{
   width: 40px !important;
   height: 40px !important;
 }
-
-
+#dashboard-name
+{
+  margin-right:7px!important;
+}
+#dashlet_heading .btn-group .btn.btn-sm 
+{
+  color: #78909c !important; 
+  margin-top: 3px;
+}
+#dashlet_heading .caret
+{
+  color: #78909c !important;
+}
 #scheduleid .line.line-dashed.b-b.line-lg {
     border-bottom: 1px solid #dee5e7;
 }
@@ -1079,4 +1097,10 @@ input.mini-time.ui-timepicker-input{
   margin: 0 0 10px !important;
   line-height: 1.42857143 !important;
 }
-.tab-content 
+
+.list-group{background-color: #fff; margin-top: 15px;}
+.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
+.list-group.no-border .list-group-item{border-width: 0px;}
+.list-group-item{border-left: 3px solid transparent !important;}
+a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
+.list-group-item:hover.select{background-color: #e7f6ff !important;}
