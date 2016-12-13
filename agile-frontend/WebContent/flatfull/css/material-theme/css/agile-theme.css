@@ -1171,3 +1171,21 @@ label.i-checks input{
   color: #555;
   background-color: #fff !important;
 }
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
+
+.agile-new-theme #portlets-add-listener #marketing_dashlet .col-md-3{
+  display: table;
+}
+.agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(5){
+  clear: both;
+}
+.agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(4){
+  height: 100%;
+}
