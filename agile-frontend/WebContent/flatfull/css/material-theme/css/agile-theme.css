@@ -200,13 +200,6 @@ select.form-control{
 #contacts-inner-tabs #next, #contacts-inner-tabs #prev {
       padding: 20px 15px;
 }
-/*
-label.i-checks {
-  margin: 5px 0px;
-}
-label.i-checks input{
-  margin-right: 8px;
-}*/
 
 #dashlet_heading .btn-group .btn.btn-sm {
   height: inherit;
@@ -568,9 +561,10 @@ a i, a span{vertical-align: inherit;}
 #documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
 }
+/*
 #document-list thead tr th:first-child .i-checks input, #deal-list thead tr th:first-child .i-checks input, #workflows-collection-container thead tr th:first-child .i-checks input, #campaign-triggers-list thead tr th:first-child .i-checks input, #email-template-div-id thead tr th:first-child .i-checks input, #forms-list-view thead tr th:first-child .i-checks input, #landing-pages-collection-container thead tr th:first-child .i-checks input, #webrules-list-view thead tr th:first-child .i-checks input, #push-notify-list-view thead tr th:first-child .i-checks input, .ticket-settings thead tr th:first-child .i-checks input{ 
   margin-left: -15px;
-}
+}*/
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
   margin-left: 0px !important
@@ -600,7 +594,7 @@ a i, a span{vertical-align: inherit;}
 }
 
 #automation-video{margin-right: 15px !important;}
-#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}
+/*#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}*/
 #document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}
 .grid-icon-header:hover, .grid-icon-header:focus{background-color: inherit;}
 .nav.navbar-right li a:hover, .nav.navbar-right li a:focus {
@@ -1114,11 +1108,43 @@ a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-colo
   padding: 0px !important;
 }
 
+/** Checkbox/Radio CSS **/
+label.i-checks input{
+  margin-right: 7px;
+}
 .i-checks input[disabled]:after, .i-checks input[disabled]:focus, .i-checks input[disabled]:hover{
     background-color: #dee5e7;
     border-color: #ececec;
 }
-
-.i-checks, .radio label, .checkbox label, .i-checks label{
+.i-checks {
+  padding-left: 0;
+  padding-top: 7px;
+}
+.tickets-div .dropdown-menu .i-checks {
+  padding-top: 0px!important;
+}
+.tickets-div .dropdown-menu > li > a {
+  padding: 5px 20px !important;
+}
+.radio label, .checkbox label{
   padding-left: 23px;
 }
+.js-prev-lge .i-checks {
+  padding-left: 23px;
+}
+.i-checks i {
+  display: none!important;
+}
+#textModalForm label {
+  display: inline;
+}
+.search-filters li a {
+  z-index: 100000;
+}
+/** End of Checkbox/Radio CSS **/
+
+/** Activities **/
+.activity-date-filter {
+  padding: 5px;
+}
+/** End of Activities**/
