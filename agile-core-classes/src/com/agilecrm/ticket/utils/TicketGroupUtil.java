@@ -8,9 +8,11 @@ import com.agilecrm.Globals;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
+import com.agilecrm.services.ServiceLocator;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.service.DomainUserService;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.campaignio.urlshortener.util.Base62;
@@ -65,9 +67,9 @@ public class TicketGroupUtil
 	 * 
 	 * @return List of Ticket Groups
 	 */
-	public static List<TicketGroups> getAllGroups()
+	public static List<TicketGroups> getAllGroupsWithDomainUsers()
 	{
-		List<TicketGroups> ticketGroups = TicketGroups.ticketGroupsDao.fetchAll();
+		List<TicketGroups> ticketGroups = getAllGroups();
 
 		if (ticketGroups == null || ticketGroups.size() == 0)
 		{
@@ -78,6 +80,21 @@ public class TicketGroupUtil
 		}
 
 		return inclDomainUsers(ticketGroups);
+	}
+	
+	/**
+	 * Fetch all groups visible to the current user
+	 * 
+	 * @return
+	 */
+	public static List<TicketGroups> getAllGroups()
+	{
+		DomainUserService service = (DomainUserService) ServiceLocator.lookupService(DomainUserService.ServiceID);
+		DomainUser user = service.getCurrentDomainUser();
+		
+		Key<DomainUser> key = new Key<>(DomainUser.class, user.id);
+		
+		return TicketGroups.ticketGroupsDao.listByProperty("agents_key_list", key);
 	}
 
 	public TicketGroups createGroup(String groupName, List<Long> domainUserIDs) throws Exception

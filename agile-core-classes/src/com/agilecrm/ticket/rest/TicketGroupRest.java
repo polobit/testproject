@@ -51,9 +51,9 @@ public class TicketGroupRest
 		try
 		{
 			if (onlyGroups == null)
-				return TicketGroupUtil.getAllGroups();
+				return TicketGroupUtil.getAllGroupsWithDomainUsers();
 
-			return TicketGroups.ticketGroupsDao.fetchAll();
+			return TicketGroupUtil.getAllGroups();
 		}
 		catch (Exception e)
 		{

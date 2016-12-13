@@ -9,6 +9,7 @@ import java.util.Map;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.ticket.entitys.TicketFilters;
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.Tickets.Status;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -77,6 +78,15 @@ public class TicketFiltersUtil
 	{
 		StringBuffer query = new StringBuffer();
 
+		List<TicketGroups> groups = TicketGroupUtil.getAllGroups();
+		List<String> groupIdsList = new ArrayList<>();
+		boolean isGroupAdded = false;
+		
+		for( TicketGroups group : groups )
+		{
+			groupIdsList.add(group.id.toString());
+		}
+
 		// Mapping conditions to table field names
 		Map<String, String> fieldsMap = new HashMap<String, String>()
 		{
@@ -97,7 +107,7 @@ public class TicketFiltersUtil
 		for (Map.Entry<String, List<SearchRule>> entry : conditionsMap.entrySet())
 		{
 			List<SearchRule> groupedConditions = entry.getValue();
-
+			
 			query.append("(");
 			for (SearchRule condition : groupedConditions)
 			{
@@ -112,7 +122,6 @@ public class TicketFiltersUtil
 					case "source":
 					case "labels":
 					case "assignee_id":
-					case "group_id":
 					{
 						if (LHS.equalsIgnoreCase("assignee_id") && RHS.equalsIgnoreCase("0"))
 						{
@@ -121,11 +130,21 @@ public class TicketFiltersUtil
 
 							RHS = domainUserKey.getId() + "";
 						}
-
+						
 						if (operator != null && operator.contains("not"))
 							query.append("NOT " + LHS + "=" + RHS);
 						else
 							query.append(LHS + "=" + RHS);
+
+						break;
+					}
+					case "group_id":
+					{
+						if( LHS.equalsIgnoreCase("group_id") && groupIdsList.contains(RHS) )
+						{
+							query.append(LHS + "=" + RHS);
+							isGroupAdded = true;
+						}
 
 						break;
 					}
@@ -195,6 +214,19 @@ public class TicketFiltersUtil
 			}
 
 			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")).trim());
+			query.append(") AND ");
+		}
+		
+		if( !(isGroupAdded) )
+		{
+			query.append("(");
+			for( String groupId : groupIdsList )
+			{
+				query.append("group_id = " + groupId);
+				query.append(" OR ");
+			}
+			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")).trim());
+			
 			query.append(") AND ");
 		}
 
