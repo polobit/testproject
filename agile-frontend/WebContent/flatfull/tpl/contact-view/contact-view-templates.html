@@ -373,22 +373,22 @@
              <div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "name"}}">{{getSystemPropertyValue properties "name"}}
             </div>{{/if_contact_type}}
 				 <div class="pull-left" style="width:70%"><div id='star' class="contact-star"></div></div>
-        		<div style="height: 35px;">
-	   	  <div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
-							<div  class="text-lg score-view">
-							<i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
+        		<div style="height: 20px;">
+	   	  <div class="unselectable" id="score" unselectable="on" onselectstart="return false">
+							<div  class="score-view">
+							<i class="icon-trophy  m-l-md" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
 							{{#canEditContact owner.id}}
-								<div class="inline-block v-middle text-ellipsis text-center" style="width:3em;margin-right: -1px;">
-									{{#if lead_score}} <span title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
+								<div class="inline-block v-middle text-ellipsis text-left" style="width:3em;margin-right: -1px;">
+									{{#if lead_score}} <span class="" title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
 									{{else}} <span id="lead-score">0</span>&nbsp;
 									 {{/if}}
-                                 <span class style="float:left; margin-top:-22px; margin-left: 3px;margin-right: 3px;">
-									<input type="text" maxlength="10" autofocus="true" class="hide  form-control" id="contactscorebox" style="margin-top: -1px; margin-bottom:2px; margin-right:6px; margin-left:-2px;">
+                                 <span class style="float:left; margin-top:-18px; margin-left: 3px;margin-right: 3px;">
+									<input type="text" maxlength="10" autofocus="true" class="hide  form-control" id="contactscorebox" style="margin-top: -1px; margin-right:6px; margin-left:-2px;">
 									</span>
 
 								</div>
 							
-								<span class="contact-score-control m-l-sm">
+								<!--<span class="contact-score-control m-l-sm">
 									<ul class="inline-block list-none m-n p-n">
 										<li style="height: 9px"><i class="icon-sort-up c-p" id="add-score"
 											style="height: 10px;"></i></li>
@@ -402,7 +402,7 @@
                       {{/if_contact_type}}
 
 									</ul>
-								</span>
+								</span>-->
 							{{/canEditContact}}
 							</div>
 						</div>
@@ -439,7 +439,7 @@
        		{{#property_is_exists "company" properties}}
        		<div class="b-b b-light p-b-xs">
        		<div class="pull-left"><i class="icon icon-building text-sm v-middle"></i></div>
-       		<span class="text-cap m-l-sm" title="{{getSystemPropertyValue properties "title"}}">{{getSystemPropertyValue properties "title"}}</span> 
+       		<span class="text-cap m-l-sm" title="{{getSystemPropertyValue properties "title"}}">{{getSystemPropertyValue properties "title"}}</span>{{#property_is_exists "title" properties}},{{/property_is_exists}}
        		<span class="text-cap" href="#company/{{contact_company_id}}" title="{{getSystemPropertyValue properties "company"}}">{{getSystemPropertyValue properties "company"}}</span></div>
 
        		{{else}}
