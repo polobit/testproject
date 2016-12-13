@@ -5076,7 +5076,6 @@ border-top: 0px !important;
 #calendar_event .fc-header-center h2{
   text-transform: inherit!important;
 }
-
 .userVoice-text{
    text-align: right;
    margin-bottom: 7px;
@@ -5085,4 +5084,8 @@ border-top: 0px !important;
     margin: 0 auto;
     font-size:12px !important;
     margin-top:-10px;
+  }
+
+#task-calendar-based-condition .fc-header-center h2{
+  text-transform: inherit!important;
 }
