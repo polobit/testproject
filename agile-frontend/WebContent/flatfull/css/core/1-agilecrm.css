@@ -4939,3 +4939,6 @@ ul#recent-menu-model-list li:nth-child(even)
 #calendar_event .fc-header-center h2{
   text-transform: inherit!important;
 }
+#task-calendar-based-condition .fc-header-center h2{
+  text-transform: inherit!important;
+}
