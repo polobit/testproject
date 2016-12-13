@@ -770,12 +770,11 @@ ul.tags-management li.tag{
   background-color: #fff;
 }
 
-.modal-content .modal-header h3{
+.modal-content .modal-header h3,.modal-content .modal-header h4{
   font-size: 16px !important;
+  color: #78909c !important;
 }
-.modal-content .modal-header h4{
-  font-size: 16px !important;
-}
+
 
 .agile-new-theme #theme-and-layout{
     margin-bottom: 20px;
