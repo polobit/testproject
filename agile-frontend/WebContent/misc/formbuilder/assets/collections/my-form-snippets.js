@@ -47,6 +47,15 @@ define([
        snippet.setField("id", snippetType + "-" + this.counter[snippetType]);
       }
     }
+    else if(snippet.attributes.fields.name){
+      var snippetType = snippet.attributes.fields.name.value;
+      var snippet_Index = snippetType.lastIndexOf("_");
+      var snippet_Substr = snippetType.substr(snippet_Index+1,snippet_Index.length);
+      if(isNaN(snippet_Substr)){
+        snippetType = snippetType+"_"+$.now();
+        snippet.setField("name",snippetType);
+      }
+    }
   }
     , renderAll: function(){
       return this.map(function(snippet){
