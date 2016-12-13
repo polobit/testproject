@@ -438,6 +438,8 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	}
 
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
+	   // event.preventDefault();
+	   event.stopImmediatePropagation();
 
    	   var $target = $( event.currentTarget ),
        $inp = $target.find( 'input' );
