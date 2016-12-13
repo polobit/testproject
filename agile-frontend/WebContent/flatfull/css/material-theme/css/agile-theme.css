@@ -242,6 +242,8 @@ label.i-checks input{
 }
 .agile-new-theme #automation-video , .agile-new-theme .help-video{
   line-height: 41px!important;
+  background-color: #fff!important;
+  color:#78909c !important
 }
 .bg-white a:hover {
     color: #067dc6;
@@ -255,7 +257,8 @@ label.i-checks input{
   color: #78909c !important;
 }
 
-#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active, #chrome-extensions:hover, #chrome-extensions:focus, #chrome-extensions:active{
+#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active, #chrome-extensions:hover, #chrome-extensions:focus, #chrome-extensions:active,#automation-video:hover,#automation-video:active,#automation-video:focus,.help-video:hover,.help-video:active,.help-video:focus
+{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
@@ -654,10 +657,11 @@ header .bg-white a, header button.show-search-dropdown {
 }
 .icon-plus-sign:before{
   content: "+";
-  margin-left: -2px;
+  margin-left: 1px;
   font-weight: 600;
   font-family: "icomoon"!important;
-  font-size: 24px
+  font-size: 24px;
+  margin-right: 7px;
 }
 .tab-content  .icon-plus-sign:before{
   font-weight:normal!important;
@@ -737,9 +741,9 @@ header .bg-white a, header button.show-search-dropdown {
   font-size: 14px;
 }
 .btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm{
-  height: 30px!important;
-  line-height: 30px!important;
-  font-size: 12px!important;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
 }
 
 .multiple-checkbox-adminprefs .panel{
@@ -847,6 +851,9 @@ z-index:1;
 }
 #chrome-extensions{
   width:42px;
+}
+#chrome-extensions i{
+  font-size: 16px
 }
 .wrapper-md .btn.btn-default:hover,.wrapper-md .btn.btn-default:focus,.wrapper-md .btn.btn-default:active,.wrapper-md .open .dropdown-toggle.btn-default
 {
@@ -1016,4 +1023,17 @@ ul.tags-management li.tag{
 .agile-new-theme #ticket-feedback table>tbody>tr>td:first-child>div{
   width: 40px !important;
   height: 40px !important;
+}
+#dashboard-name
+{
+  margin-right:7px!important;
+}
+#dashlet_heading .btn-group .btn.btn-sm 
+{
+  color: #78909c !important; 
+  margin-top: 3px;
+}
+#dashlet_heading .caret
+{
+  color: #78909c !important;
 }
