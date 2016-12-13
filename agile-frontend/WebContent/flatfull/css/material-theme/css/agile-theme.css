@@ -411,9 +411,9 @@ table label.i-checks{
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
+/*#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
   display: none !important;
-}
+}*/
 #documents_collection_container .panel, #deals-new-list-view .panel{
   border: none !important;
 }
@@ -549,25 +549,75 @@ a i, a span{vertical-align: inherit;}
 #automation-video{
   margin-right: 15px !important;
 }
-#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading{
+#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading{
   display: none !important;
 }
-#documents_collection_container .panel, #deals-new-list-view .panel, #workflows-collection-container .panel, #campaign-triggers-list .panel, #email-templates-list-view .panel, #forms-list-view .panel, #forms-list-view .panel, #landing-pages-collection-container .panel, #webrules-list-view .panel, #push-notify-list-view .panel, .ticket-settings .panel{
+table.panel, .panel{
   border: none !important;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important;
+  -webkit-box-shadow: inherit !important;
+  box-shadow: inherit !important;
+  /*background-color: #f4f8f9 !important;*/
+}
+div#contact-reports-list-view{
+  box-shadow: inherit;
+  background-color: inherit;
+}
+.agile-new-theme #contact-reports-list-view .agile-table td{
+  vertical-align: middle !important;
+}
+.agile-new-theme table>tbody>tr>td>label.i-checks.i-checks-sm{
+  margin-bottom: 0px !important;
+}
+.agile-new-theme #admin-settings-users .panel-heading>div:first-child{
+  display: none;
+}
+.agile-new-theme #admin-settings-users .panel-heading{
   background-color: #f4f8f9 !important;
 }
-#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer{
+.agile-new-theme #custom-fields-accordion table>tbody>tr, #deal-tracks-accordion table>tbody>tr, table#lost-reasons-table>tbody>tr, table#deal-sources-table>tbody>tr, #task-category table>tbody>tr, #account-stats table>tbody>tr{
+  border-top: none !important;
+}
+.agile-new-theme #account-stats .table-bordered>thead>tr>th, #account-stats .table-bordered>tbody>tr>td{
+  border: none !important;
+}
+.agile-new-theme #account-stats table>thead>tr>th{
+  padding: 15px !important;
+}
+.agile-new-theme #deal-tracks-accordion table>tbody>tr>td{
+  padding: 5px !important;
+}
+.agile-new-theme #deal-tracks-accordion .panel-heading{
+  padding-left: 5px !important;
+}
+.agile-new-theme #deal-tracks-accordion .panel-title{
+  color: #11a0f8 !important;
+}
+.agile-new-theme #deal-tracks-accordion .panel-body{
+  border-top: none !important;
+}
+.agile-new-theme table tr:last-child{
+  border-bottom: none !important;
+}
+.agile-new-theme table#lost-reasons-table>tbody>tr>td, table.table-bordered, table#deal-sources-table.table-bordered>tbody>tr>td{
+  border: 0 !important;
+}
+.agile-new-theme table#deal-sources-table>tbody>tr>td div.agile-img.avatar{
+  width: 42px !important;
+  height: 42px !important;
+}
+.agile-new-theme table#deal-sources-table>tbody>tr>td:nth-child(2)>div{
+  padding-left: 15px !important;
+}
+#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
 }
-/*
-#document-list thead tr th:first-child .i-checks input, #deal-list thead tr th:first-child .i-checks input, #workflows-collection-container thead tr th:first-child .i-checks input, #campaign-triggers-list thead tr th:first-child .i-checks input, #email-template-div-id thead tr th:first-child .i-checks input, #forms-list-view thead tr th:first-child .i-checks input, #landing-pages-collection-container thead tr th:first-child .i-checks input, #webrules-list-view thead tr th:first-child .i-checks input, #push-notify-list-view thead tr th:first-child .i-checks input, .ticket-settings thead tr th:first-child .i-checks input{ 
-  margin-left: -15px;
-}*/
-#document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
+/*#document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
   margin-left: 0px !important
+}*/
+.agile-new-theme table>thead>tr>th>label.i-checks.i-checks-sm{
+  margin: 0px !important;
+  padding: 0px !important;
 }
 #today-heading, #yesterday-heading, #earlier-heading{
   border :none !important;
@@ -1188,4 +1238,10 @@ label.i-checks input{
 }
 .agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
+}
+.agile-new-theme #task-list-based-condition .task_bulk_action{
+  background-color: rgba(17, 160, 248, 0.1) !important;
+}
+.agile-new-theme #task-list-based-condition .table-responsive.table-list-view-top-margin{
+  float: left !important;
 }
