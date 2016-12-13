@@ -53,10 +53,10 @@ function loadMiscScripts() {
     		_agile_execute_web_rules();
     });
 
-    if(!agile_is_mobile_browser())
+    /*if(!agile_is_mobile_browser())
 		load_urls_on_ajax_stop('lib/user-voice.js', function(){
 			
-		});
+		});*/
 
 	// load_clickdesk_code();
 

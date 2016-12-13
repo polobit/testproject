@@ -79,6 +79,23 @@ $("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
 		CLICKDESK_LIVECHAT.show();
 });
 
+$("#prefsDropdownModal").on('click','#showUserVoice',function(e){
+		if(typeof UserVoice != undefined){
+			if(!agile_is_mobile_browser())
+				load_urls_on_ajax_stop('lib/user-voice.js', function(){
+				$(".uv-icon").addClass("hide");
+			
+			});
+		}
+		setTimeout(function(){
+		$("#prefsDropdownModal").modal("hide");
+		$(".uv-icon").addClass("hide");
+		$(".uservoice-window")[0].click();
+		$(".uv-popover-tail").addClass("hide");
+		},100);
+
+});
+
 $("#help-options").click(function(e){
 	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
 	agile_toggle_chat_option_on_status();
