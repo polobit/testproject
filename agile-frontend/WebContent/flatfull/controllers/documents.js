@@ -361,6 +361,16 @@ function renderDocumentsActivityView(id)
 		}, appendItemCallback : function(el)
 		{
 			includeTimeAgo(el);
+		},
+		postRenderCallback : function(el,collection){
+
+			if(!collection.length){
+
+				$("#historydocument").hide();
+				$("#documents_collection_container").removeClass("col-md-9 col-sm-9");
+				$("#documents_collection_container").addClass("col-md-12 col-sm-12");
+			}
+
 		}
 
 	});
