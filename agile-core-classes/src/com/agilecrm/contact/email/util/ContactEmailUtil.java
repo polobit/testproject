@@ -777,27 +777,6 @@ public class ContactEmailUtil
 				hasEmailAccountsConfigured = true;
 			}
 			
-			// Get SMTP prefs
-		    List<SMTPPrefs> smtpPrefsList = SMTPPrefsUtil.getSMTPPrefsList(agileUser);
-		    if (smtpPrefsList != null && smtpPrefsList.size() > 0)
-		    {
-				List<String> smtpUserNames = new ArrayList<String>();
-				for (SMTPPrefs smtpPrefs : smtpPrefsList)
-				    smtpUserNames.add(smtpPrefs.user_name);
-				emailPrefs.setSmtpUserNames(smtpUserNames);
-				hasEmailAccountsConfigured = true;
-		    }
-		    
-		    // Get GmailSend prefs
-		    List<GmailSendPrefs> gmailSendPrefsList = GmailSendPrefsUtil.getPrefsList(agileUser);
-		    if (gmailSendPrefsList != null && gmailSendPrefsList.size() > 0)
-		    {
-				List<String> userNames = new ArrayList<String>();
-				for (GmailSendPrefs prefs : gmailSendPrefsList)
-				    userNames.add(prefs.name);
-				emailPrefs.setGmailSendUserNames(userNames);
-				hasEmailAccountsConfigured = true;
-		    }
 		    
 			// Get Shared Gmail Prefs
 			List<SocialPrefs> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
@@ -998,21 +977,6 @@ public class ContactEmailUtil
 		return sharedOfficePrefs;
 	}
 	
-	/**
-	 * Gets list of Shared Office prefs with this current user
-	 * 
-	 * @param agileUserKey
-	 * @return
-	 */
-	private static List<SMTPPrefs> getSharedToSMTPPrefs(Key<AgileUser> agileUserKey)
-	{
-		Objectify ofy = ObjectifyService.begin();
-		List<SMTPPrefs> sharedOfficePrefs = ofy.query(SMTPPrefs.class)
-				.filter("sharedWithUsers", agileUserKey).list();
-		return sharedOfficePrefs;
-	}
-
-
 	/**
 	 * Returns emails opened by individual user in specific duration
 	 * 
