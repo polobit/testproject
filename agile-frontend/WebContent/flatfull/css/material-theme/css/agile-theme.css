@@ -1093,6 +1093,7 @@ input.mini-time.ui-timepicker-input{
   line-height: 1.42857143 !important;
 }
 
+
 .list-group{background-color: #fff; margin-top: 15px;}
 .list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
 .list-group.no-border .list-group-item{border-width: 0px;}
@@ -1101,4 +1102,30 @@ a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-colo
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
 .portlet_body_calendar #calendar_container table td{
   padding: 0px !important;
+}
+.agile-new-theme input[type="checkbox"] i{
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #263238;
+  height: 20px;
+  line-height: 20px;
+  display: inline-block;
+  vertical-align: top;
+  padding-left: 10px;
+  margin-left: -3px;
+  padding-right: 10px;
+  margin-right: 16px;
+}
+.agile-new-theme .i-checks>span{
+  margin-right: 16px !important;
+}
+
+.agile-new-theme .newtheme-restricedscopes{
+  margin-left: 26px;
+}
+
+.agile-new-theme .i-checks-sm>i{
+      display: inline-block !important;
+      margin-left: -20px !important;
 }
