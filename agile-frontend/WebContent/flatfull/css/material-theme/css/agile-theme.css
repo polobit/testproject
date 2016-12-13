@@ -1074,3 +1074,11 @@ input.mini-time.ui-timepicker-input{
   margin: 0 0 10px !important;
   line-height: 1.42857143 !important;
 }
+
+.list-group{background-color: #fff; margin-top: 15px;}
+.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
+.list-group.no-border .list-group-item{border-width: 0px;}
+.list-group-item{border-left: 3px solid transparent !important;}
+a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
+.list-group-item:hover.select{background-color: #e7f6ff !important;}
+
