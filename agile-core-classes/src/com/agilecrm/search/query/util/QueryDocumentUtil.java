@@ -1049,9 +1049,9 @@ public class QueryDocumentUtil {
 			
 			cal.add(Calendar.DATE, value);
 			
-			String partialDateQuery = lhsMonth + " = " + (cal.get(Calendar.MONTH) + 1);
+			String partialDateQuery = "(" + lhsMonth + " = " + (cal.get(Calendar.MONTH) + 1);
 			
-			partialDateQuery += " AND " +  lhsDate+ " = " + (cal.get(Calendar.DATE));
+			partialDateQuery += " AND " +  lhsDate+ " = " + (cal.get(Calendar.DATE)) + ")";
 			
 			query = buildNestedCondition(joinCondition, query, partialDateQuery);
 		}
