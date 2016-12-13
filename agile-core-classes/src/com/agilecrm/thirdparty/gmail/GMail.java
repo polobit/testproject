@@ -133,6 +133,7 @@ public class GMail {
     		if(gmailPrefs.expires_at == null || gmailPrefs.expires_at < System.currentTimeMillis()) {
 				gcredential.refreshToken();
 				gmailPrefs.refresh_token = gcredential.getRefreshToken();
+				gmailPrefs.token = gcredential.getAccessToken();
 				gmailPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
 				//prefsUpdated = true;
 				GmailSendPrefsUtil.save(gmailPrefs);
