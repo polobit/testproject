@@ -32,24 +32,24 @@ public class TicketReportsRest
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String getDailyReports(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
 			@QueryParam("frequency") String frequency, @QueryParam("status") String status,
-			@PathParam("type") String type)
+			@QueryParam("group") Long group,@QueryParam("assignee") Long assignee,@PathParam("type") String type)
 	{
 		try
 		{
 			switch (type)
 			{
 				case "daily":
-					return TicketReportsUtil.getDailyReports(startTime, endTime, frequency, status);
+					return TicketReportsUtil.getDailyReports(startTime, endTime, frequency, status, group, assignee);
 				case "priority":
-					return TicketReportsUtil.getPriorityReport(startTime, endTime);
+					return TicketReportsUtil.getPriorityReport(startTime, endTime, group, assignee);
 				case "status":
-					return TicketReportsUtil.getStatusReport(startTime, endTime);
+					return TicketReportsUtil.getStatusReport(startTime, endTime, group, assignee);
 				case "first-response-time":
-					return TicketReportsUtil.getFirstReponseReport(startTime, endTime);
+					return TicketReportsUtil.getFirstReponseReport(startTime, endTime, group, assignee);
 				case "sla":
-					return TicketReportsUtil.getSLAReport(startTime, endTime);
+					return TicketReportsUtil.getSLAReport(startTime, endTime,group, assignee);
 				case "feedback":
-					return TicketReportsUtil.getFeedbackReport(startTime, endTime);
+					return TicketReportsUtil.getFeedbackReport(startTime, endTime,group, assignee);
 				default:
 					return "";
 			}

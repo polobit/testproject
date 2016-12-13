@@ -111,12 +111,26 @@ public class TicketReportsUtil
 	 * 
 	 * @param startTime
 	 * @param endTime
+	 * @param group
+	 * @param assignee
 	 * @return
 	 */
-	public static Collection<ScoredDocument> getTicketsBetweenDates(Long startTime, Long endTime,
-			String... fieldsToReturn)
+	public static Collection<ScoredDocument> getTicketsBetweenDates(Long startTime, Long endTime,Long group, Long assignee,
+			String... fieldsToReturn )
 	{
 		String queryString = "created_time >=" + startTime + " AND " + " created_time <= " + endTime;
+		
+		if(assignee != 0){
+			
+			queryString = "created_time >=" + startTime + " AND " + " created_time <= " + endTime+ " AND " + " assignee_id = " + assignee+ " AND " + " group_id = " + group;
+			
+		}
+		
+		if(assignee == 0 && group != 0){
+			
+			queryString = "created_time >=" + startTime + " AND " + " created_time <= " + endTime+ " AND " + " group_id = " + group;
+			
+		}
 
 		System.out.println("Query: " + queryString);
 
@@ -129,11 +143,23 @@ public class TicketReportsUtil
 	 * @param endTime
 	 * @return
 	 */
-	public static Collection<ScoredDocument> getTicketSLABetweenDates(Long startTime, Long endTime,
+	public static Collection<ScoredDocument> getTicketSLABetweenDates(Long startTime, Long endTime, Long group , Long assignee,
 			String... fieldsToReturn)
 	{
 		String queryString = "created_time >=" + startTime + " AND " + " created_time <= " + endTime + " AND status="
 				+ Status.CLOSED;
+		
+		if(assignee != 0){
+			
+			queryString = "created_time >=" + startTime + " AND " + " created_time <= " + endTime + " AND " + " assignee_id = " + assignee+ " AND " + " group_id = " + group;
+			
+		}
+		
+		if(assignee == 0 && group != 0){
+			
+			queryString = "created_time >=" + startTime + " AND " + " created_time <= " + endTime+ " AND " + " group_id = " + group;
+			
+		}
 
 		System.out.println("Query: " + queryString);
 
@@ -146,9 +172,11 @@ public class TicketReportsUtil
 	 * @param endTime
 	 * @param frequency
 	 * @param status
+	 * @param group
+	 * @param assignee 
 	 * @return
 	 */
-	public static String getDailyReports(Long startTime, Long endTime, String frequency, String status)
+	public static String getDailyReports(Long startTime, Long endTime, String frequency, String status, Long group, Long assignee)
 	{
 		String timeZone = "UTC";
 
@@ -164,19 +192,40 @@ public class TicketReportsUtil
 				timeZone, ticketTypes);
 
 		Collection<ScoredDocument> documents = null;
-
+		
 		String fieldToReturn = Tickets.CREATE_TIME;
 
-		String queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ")";
+		String queryString;
+		
+		queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ")";
+		
+		if(assignee != 0){
+		
+			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ") AND (assignee_id = "+ assignee+")";
 
+		}
+		
+		if(assignee == 0 && group != 0){
+			
+			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ")";
+
+		}
 		if (Status.CLOSED.toString().equalsIgnoreCase(status))
 		{
 			fieldToReturn = Tickets.CLOSED_TIME;
 
 			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime
-					+ ") AND (status = CLOSED)";
+					+ ") AND (status = CLOSED)" ;
+			
+			if(assignee != 0)
+			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime
+					+ ") AND (status = CLOSED) AND (assignee_id ="+ assignee+")";
+			
+			if(assignee == 0 &&  group != 0)
+				queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime
+						+ ") AND (status = CLOSED) AND (group_id ="+group+")";
 		}
-
+		
 		System.out.println("Query: " + queryString);
 
 		documents = new TicketsDocument().executeQuery(queryString, fieldToReturn);
@@ -238,11 +287,13 @@ public class TicketReportsUtil
 	 * 
 	 * @param startTime
 	 * @param endTime
+	 * @param group
+	 * @param assignee
 	 * @return
 	 */
-	public static String getPriorityReport(Long startTime, Long endTime)
+	public static String getPriorityReport(Long startTime, Long endTime ,Long group,Long assignee)
 	{
-		Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime, "priority");
+		Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,group,assignee,"priority");
 
 		LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 		innerMap.put("count", 0);
@@ -252,7 +303,7 @@ public class TicketReportsUtil
 		map.put(Priority.LOW.toString(), new LinkedHashMap<String, Integer>(innerMap));
 		map.put(Priority.MEDIUM.toString(), new LinkedHashMap<String, Integer>(innerMap));
 		map.put(Priority.HIGH.toString(), new LinkedHashMap<String, Integer>(innerMap));
-
+		
 		for (ScoredDocument document : documents)
 		{
 			Integer count = map.get(document.getOnlyField("priority").getText()).get("count");
@@ -267,9 +318,11 @@ public class TicketReportsUtil
 	 * 
 	 * @param startTime
 	 * @param endTime
+	 * @param group
+	 * @param assignee
 	 * @return
 	 */
-	public static String getFeedbackReport(Long startTime, Long endTime)
+	public static String getFeedbackReport(Long startTime, Long endTime,Long group,Long assignee)
 	{	
 		System.out.println("in feedback:  "+startTime);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -309,11 +362,13 @@ public class TicketReportsUtil
 	 * 
 	 * @param startTime
 	 * @param endTime
+	 * @param group
+	 * @param assignee
 	 * @return
 	 */
-	public static String getStatusReport(Long startTime, Long endTime)
+	public static String getStatusReport(Long startTime, Long endTime,Long group,Long assignee)
 	{
-		Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime, "status");
+		Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,group,assignee,"status");
 
 		LinkedHashMap<String, Integer> innerMap = new LinkedHashMap<String, Integer>();
 		innerMap.put("count", 0);
@@ -338,11 +393,13 @@ public class TicketReportsUtil
 	 * 
 	 * @param startTime
 	 * @param endTime
+	 * @param group
+	 * @param assignee
 	 * @return
 	 */
-	public static String getFirstReponseReport(Long startTime, Long endTime)
+	public static String getFirstReponseReport(Long startTime, Long endTime,Long group,Long assignee)
 	{
-		Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,
+		Collection<ScoredDocument> documents = TicketReportsUtil.getTicketsBetweenDates(startTime, endTime,group,assignee,
 				"created_time", "first_replied_time");
 
 		LinkedHashMap<String, Long> innerMap = new LinkedHashMap<String, Long>();
@@ -406,13 +463,15 @@ public class TicketReportsUtil
 	 * 
 	 * @param startTime
 	 * @param endTime
+	 * @param group
+	 * @param assignee
 	 * @return
 	 */
-	public static String getSLAReport(Long startTime, Long endTime)
+	public static String getSLAReport(Long startTime, Long endTime,Long group,Long assignee)
 	{
 		try
 		{
-			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketSLABetweenDates(startTime, endTime,
+			Collection<ScoredDocument> documents = TicketReportsUtil.getTicketSLABetweenDates(startTime, endTime,group,assignee,
 					"created_time", "closed_time");
 
 			String[] timeDurationToCloseTicket = { "<2 hour", "2-6 hours", "6-12 hours", "12-24 hours", "1-2 days",
@@ -431,11 +490,19 @@ public class TicketReportsUtil
 
 			for (ScoredDocument document : documents)
 			{
-				Long createdTime = Math.round(document.getOnlyField("created_time").getNumber()), closedTime = Math
-						.round(document.getOnlyField("closed_time").getNumber());
-
-				if (closedTime == null || closedTime == 0)
-					continue;
+				Long createdTime = Math.round(document.getOnlyField("created_time").getNumber()); 
+				
+				Long closedTime = (long) 0;
+				
+				try{	
+					
+						closedTime = Math.round(document.getOnlyField("closed_time").getNumber());
+				
+				}
+				catch(Exception e){
+				
+						continue;
+				}	
 
 				total++;
 
