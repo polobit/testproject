@@ -218,7 +218,8 @@ label.i-checks input{
 .agile-new-theme .btn-addon.btn-sm i
 {
       margin: 0px;
-      vertical-align: baseline; 
+      vertical-align: middle; 
+      display:inline;
 }
 .agile-new-theme .btn-addon i{
  float: none;
@@ -606,9 +607,11 @@ a i, a span{vertical-align: inherit;}
   font-size: 12px;
 }
 .icon-plus-sign:before{
-  content:"+";
-  margin-left:-2px;
-  font-weight:800;
+  content: "+";
+  margin-left: -2px;
+  font-weight: 600;
+  font-family: "icomoon"!important;
+  font-size: 24px
 }
 .tab-content  .icon-plus-sign:before{
   font-weight:normal!important;
@@ -688,9 +691,9 @@ a i, a span{vertical-align: inherit;}
   font-size: 14px;
 }
 .btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm{
-  height: 30px;
-  line-height: 30px;
-  font-size: 12px;
+  height: 30px!important;
+  line-height: 30px!important;
+  font-size: 12px!important;
 }
 
 .multiple-checkbox-adminprefs .panel{
@@ -699,7 +702,7 @@ a i, a span{vertical-align: inherit;}
 }
 .controls .btn-default
 {
-  background-color: rgba(17, 160, 248, 0.1);
+  background-color: rgba(17, 160, 248, 0.1)!important;
   color: #11a0f8!important;
 }
 .controls .btn-primary
@@ -862,4 +865,16 @@ ul.tags-management li.tag{
 .tag.btn.btn-primary:hover{
   color: #11a0f8!important;
   background-color: #f4f8f9!important;
+}
+.btn-addon.btn-sm i
+{
+  width: 20px;
+}
+.wrapper-md.bg-light.b-b
+{
+  padding-top:25px;
+}
+.js-prev-lge ,.js-prev-lge .checkedMultiCheckbox
+{
+  margin-left:40px;
 }
