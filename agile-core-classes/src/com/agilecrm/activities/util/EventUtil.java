@@ -742,10 +742,15 @@ public class EventUtil
     	DomainUser eventOwner = DomainUserUtil.getDomainUser(domainUserID);
     	String eventOwnerEmail = eventOwner.email;
     	net.fortuna.ical4j.model.Calendar agileUseiCal = IcalendarUtil.getICalFromEvent(event, eventOwner, eventOwnerEmail, eventOwner.name);
-    	String[] attachments = { "text/calendar", "mycalendar.ics", agileUseiCal.toString() };
+    	String temp = null;
+    	if(agileUseiCal != null){
+    	   temp = agileUseiCal.toString();
+    	}
+    	String[] attachments = { "text/calendar", "mycalendar.ics", temp };
     	
     	String domain_url = VersioningUtil.getHostURLByApp(eventOwner.domain);
     	String cancel_link = domain_url + "appointment/cancel/" + event.id;
+    		
     	String link = "https://www.agilecrm.com/?utm_source=powered-by&medium=email&utm_campaign=" + eventOwner.domain;
     	Long startTime = event.start;
 		Long endTime = event.end;
