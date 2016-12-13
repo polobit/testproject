@@ -608,7 +608,11 @@ a i, a span{vertical-align: inherit;}
 .icon-plus-sign:before{
   content:"+";
   margin-left:-2px;
+  font-weight:800;
 }
+.tab-content  .icon-plus-sign:before{
+  font-weight:normal!important;
+  }
 .icon-plus-sign
 {
   font-size: :22px;
@@ -678,57 +682,42 @@ a i, a span{vertical-align: inherit;}
 {
   margin-left:0px;
 }
-.btn.btn-sm {
-  height: 30px;
-  line-height: 30px;
-  font-size: 12px;
-}
 .wrapper-md .btn.btn-sm {
   height: 40px;
   line-height: 40px;
   font-size: 14px;
+}
+.btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm{
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
 }
 
 .multiple-checkbox-adminprefs .panel{
   border-top: inherit;
   padding-top: inherit;
 }
-.tag{ 
-  margin: 3px 2px !important;
-  line-height: 1px;
-  height: auto;
-  vertical-align: middle;
-  padding: 4px 6px !important;
-  background-color: #f4f8f9!important;
-  color: #11a0f8!important;
-  border-radius: 3px;
-}
-.tag:hover{
-  color: #11a0f8!important;
-  background-color: #f4f8f9!important;
-}
-.tag a{
-  color: #11a0f8!important;
-  font-size: 12px;
-  font-weight: 600;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.tag a:hover{
+.controls .btn-default
+{
+  background-color: rgba(17, 160, 248, 0.1);
   color: #11a0f8!important;
 }
-.tag a.close, .tag.btn-primary .close{
-  vertical-align: middle;
-  color: #90a4ae !important;
+.controls .btn-primary
+{
+  background-color: #11a0f8!important;
+  color: #ffffff!important;
 }
-.tag a.close:hover {
-  color: #000000!important;
+.controls .btn.btn-default:hover,.controls .btn.btn-default:focus,.controls .btn.btn-default:active,.controls .open .dropdown-toggle.btn-default
+{
+  background-color: rgba(17, 160, 248, 0.2)!important;
+    color: #11a0f8!important;
 }
-ul.tags-management li.tag{
-  line-height: inherit;
-  border: inherit;
+.controls .btn.btn-primary:hover,.controls .btn.btn-primary:focus,.controls .btn.btn-primary:active,.controls .open .dropdown-toggle.btn-primary
+{
+ background-color: #067dc6!important;
+  color: #ffffff;
 }
+
 #admin-prefs-tabs-content .control-group{
   padding-top: 10px;
   background-color: #fff;
@@ -808,6 +797,69 @@ z-index:1;
 }
 .wrapper-md .btn.btn-default:hover,.wrapper-md .btn.btn-default:focus,.wrapper-md .btn.btn-default:active,.wrapper-md .open .dropdown-toggle.btn-default
 {
-      background-color: #11a0f8!important;
+  background-color: #067dc6!important;
   color: #fff!important;
+}
+.modal-footer .btn{
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+}
+.btn.btn-blue:hover,
+.btn.btn-primary:hover,
+.btn.btn-blue:focus,
+.btn.btn-primary:focus,
+.btn.btn-blue:active,
+.btn.btn-primary:active {
+  background-color: #067dc6!important;
+  color: #ffffff;
+}
+#data-sync-type a
+{
+  color:#fff!important;
+}
+.tag{ 
+  margin: 3px 2px !important;
+  line-height: 1px;
+  height: auto;
+  vertical-align: middle;
+  padding: 4px 6px !important;
+  background-color: #f4f8f9!important;
+  color: #11a0f8!important;
+  border-radius: 3px;
+}
+.tag:hover{
+  color: #11a0f8!important;
+  background-color: #f4f8f9!important;
+}
+.tag a{
+  color: #11a0f8!important;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tag a:hover{
+  color: #11a0f8!important;
+}
+.tag a.close, .tag.btn-primary .close{
+  vertical-align: middle;
+  color: #90a4ae !important;
+}
+.tag a.close:hover {
+  color: #000000!important;
+}
+ul.tags-management li.tag{
+  line-height: inherit;
+  border: inherit;
+}
+.tag.btn.btn-primary
+{
+  background-color: #f4f8f9!important;
+  color: #11a0f8!important;
+}
+.tag.btn.btn-primary:hover{
+  color: #11a0f8!important;
+  background-color: #f4f8f9!important;
 }
