@@ -288,7 +288,7 @@ label.i-checks input{
 #lhs-contact-filter-form i#removeBtn:hover, #lhs-contact-filter-form i#removeBtn:active, #lhs-contact-filter-form i#removeBtn:focus{
   opacity: 1 !important;
 }
-.agile-new-theme .wrapper-md h1, .h1, .agile-new-theme .wrapper-md h2, .h2, .agile-new-theme .wrapper-md h3, .h3, .agile-new-theme .wrapper-md h4, .h4, .agile-new-theme .wrapper-md h5, .h5, .agile-new-theme .wrapper-md h6, .h6{
+.agile-new-theme .wrapper-md h1, .h1, .agile-new-theme .wrapper-md h2, .h2, .agile-new-theme .wrapper-md h3, .h3{
   color: #11a0f8 !important;
   font-weight: 400 !important;
 }
@@ -1037,3 +1037,65 @@ ul.tags-management li.tag{
 {
   color: #78909c !important;
 }
+#scheduleid .line.line-dashed.b-b.line-lg {
+    border-bottom: 1px solid #dee5e7;
+}
+
+input.mini-time.ui-timepicker-input{
+    border: 1px solid #d2d2d2;
+}
+
+#schedule-preferences .line.line-lg.b-b{
+  border-bottom: 1px solid #dee5e7;
+}
+
+#businesshours-tab fieldset div:first-child.form-group {
+    margin-left: -110px !important;
+}
+
+#advanced-tab .note-editor .btn .btn-default{
+    height: 30px;
+    font-size: 12px;
+}
+#advanced-tab .note-editor .btn{
+    height: 30px;
+    font-size: 12px;
+    background-color: rgba(17, 160, 248, 0.1) !important;
+    color: #11a0f8!important;
+    -webkit-box-shadow: 0 1px 1px rgba(90,90,90,0.1);
+    box-shadow: 0 1px 1px rgba(90,90,90,0.1);
+    border-radius: 0px;
+}
+#advanced-tab .note-editor .btn:hover{
+    background-color: rgba(17, 160, 248, 0.2) !important;
+}
+#advanced-tab .note-editor .btn i {
+    font-size: 12px;
+}
+
+.agile-new-theme .data-block h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1 !important;
+    margin-bottom: 10px !important;
+    color: inherit !important;
+}
+.agile-new-theme .data-block p{
+  margin-bottom: 10px !important;
+}
+.agile-new-theme .workflows-right-body h1, h2, h3, h4, h5, h6{
+  color: #58666e !important;
+}
+.agile-new-theme .triggers-right-body  h1, h2, h3, h4, h5, h6{
+  color: #58666e !important;
+}
+
+.agile-new-theme p{
+  margin: 0 0 10px !important;
+  line-height: 1.42857143 !important;
+}
+
+.list-group{background-color: #fff; margin-top: 15px;}
+.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
+.list-group.no-border .list-group-item{border-width: 0px;}
+.list-group-item{border-left: 3px solid transparent !important;}
+a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
+.list-group-item:hover.select{background-color: #e7f6ff !important;}
