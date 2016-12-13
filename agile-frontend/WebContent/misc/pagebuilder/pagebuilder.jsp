@@ -331,6 +331,10 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     </p>
                     
                     <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a>
+
+                    <label>Alerternate Text:</label>
+                    
+                    <input type="text" class="form-control" id="alttxt" placeholder="Enter alternate Text" value=""> 
                     
                 </div><!-- /.tab-pane -->
 
