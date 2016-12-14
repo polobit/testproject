@@ -1351,3 +1351,15 @@ ul.tags-management li.tag{
 .agile-new-theme #contact-reports-list-view table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
   padding-left: 8px !important;
 }
+
+/** Bussiness Hours **/
+.operationTime .mini-time {
+  padding: 3px !important;
+}
+/** End of Bussiness Hours **/
+
+/** Panels **/
+.agile-new-theme .no-panel-border .panel, .agile-new-theme .table-responsive .panel{
+    border: none !important;
+}
+/** End of panel CSS **/
