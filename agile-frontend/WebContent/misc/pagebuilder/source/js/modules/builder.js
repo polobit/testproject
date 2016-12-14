@@ -1950,9 +1950,9 @@
 
                     appUI.agilePageId = res.id;
 
-                   /* if(reqMethod === "POST"){
-                        window.location.href  = window.location.origin+"/#landing-pages";
-                    }*/
+                   if(reqMethod === "POST"){
+                        window.history.replaceState("","",appUI.siteUrl+"pagebuilder/"+appUI.agilePageId);
+                    }
         
                     if( showConfirmModal ) {
 
