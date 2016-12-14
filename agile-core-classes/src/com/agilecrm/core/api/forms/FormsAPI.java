@@ -157,7 +157,7 @@ public class FormsAPI
 	    else
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		return form;
+		return null;
 	    }
 	}
 	catch (JSONException e)
