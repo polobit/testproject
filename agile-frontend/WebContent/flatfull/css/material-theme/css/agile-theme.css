@@ -942,7 +942,7 @@ z-index:1;
 }
 
 .agile-new-theme form .form-control{
-    padding: 6px 20px !important;  
+    padding: 6px 20px;  
 }
 .modal-footer .btn{
   height: 30px;
@@ -1147,7 +1147,7 @@ label.i-checks input{
 }
 .i-checks {
   padding-left: 0;
-  padding-top: 7px;
+  padding-bottom: 7px;
 }
 .tickets-div .dropdown-menu .i-checks {
   padding-top: 0px!important;
@@ -1163,6 +1163,12 @@ label.i-checks input{
 }
 .i-checks i {
   display: none!important;
+}
+.i-checks>span {
+    margin-left: auto;
+}
+.i-checks i.glyphicon {
+    display: inline-block!important
 }
 #textModalForm label {
   display: inline;
@@ -1384,10 +1390,10 @@ ul.tags-management li.tag{
 {
   margin-right:10px!important;
 }
-
-.agile-new-theme .input-group-addon{
+/*
+.agile-new-theme form .input-group-addon{
   padding: 12px 25px !important;
-}
+}*/
 
 #advanced-search-fields-group {
   padding-bottom: 5px;
