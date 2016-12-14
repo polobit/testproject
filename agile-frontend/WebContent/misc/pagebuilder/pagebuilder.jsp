@@ -2293,7 +2293,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 
     </div><!-- /.modal -->
     
-    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         
         <div class="modal-dialog">
             
