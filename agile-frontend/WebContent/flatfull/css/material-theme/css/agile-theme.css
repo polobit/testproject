@@ -380,6 +380,9 @@ select.form-control{
 .agile-new-theme #contacts-portlets.table>tbody>tr{
   border-top: none !important;
 }
+.agile-new-theme .portlet_body .table>tbody>tr{
+  border-top: none !important;
+}
 table.fc-header>tbody>tr:first-child{
   border-top: none !important;
 }
