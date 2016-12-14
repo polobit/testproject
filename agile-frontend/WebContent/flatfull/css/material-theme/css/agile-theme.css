@@ -564,7 +564,7 @@ table.panel, table .panel{
   box-shadow: inherit !important;
   /*background-color: #f4f8f9 !important;*/
 }
-div#contact-reports-list-view{
+div#contact-reports-list-view, #task-list-based-condition .panel{
   box-shadow: inherit;
   background-color: inherit;
 }
@@ -1414,8 +1414,10 @@ ul.tags-management li.tag{
 /** End of Bussiness Hours **/
 
 /** Panels **/
-.agile-new-theme .no-panel-border .panel, .agile-new-theme .table-responsive .panel{
-    border: none !important;
+.agile-new-theme .no-panel-border .panel, .agile-new-theme .table-responsive .panel, .agile-new-theme .no-panel-border.panel{
+  border: none !important;
+  -webkit-box-shadow: inherit !important;
+  box-shadow: inherit !important;
 }
 /** End of panel CSS **/
 

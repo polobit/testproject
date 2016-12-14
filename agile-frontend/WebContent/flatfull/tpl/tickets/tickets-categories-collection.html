@@ -1,6 +1,6 @@
 <script id="ticket-helpcenter-categories-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col panel wrapper">
+    <div class="col panel wrapper no-panel-border">
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
             <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-dont-have-any-categories'}}</h4>
@@ -47,7 +47,7 @@
 
     {{else}}
 
-    <div class="col panel wrapper p-b-xs">
+    <div class="col panel wrapper p-b-xs no-panel-border">
         <div class="hbox h-auto">
             <div class="pull-right" style="margin-left:10px">
                 <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">

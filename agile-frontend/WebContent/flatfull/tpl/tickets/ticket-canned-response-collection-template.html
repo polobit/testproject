@@ -1,6 +1,6 @@
 <script id="ticket-canned-response-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col panel wrapper">
+    <div class="col panel wrapper no-panel-border">
         <div class="hbox h-auto m-b-sm">
             <div class="text-center padder-v">
                 <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-canned-responses'}}</h4>
@@ -38,7 +38,7 @@
 
     {{else}}
 
-    <div class="col panel wrapper p-b-xs">
+    <div class="col panel wrapper p-b-xs no-panel-border">
         <div class="hbox h-auto">
             <div class="pull-right">
                 <a href="#add-canned-response" class="btn btn-sm btn-default btn-default-imp btn-addon">
