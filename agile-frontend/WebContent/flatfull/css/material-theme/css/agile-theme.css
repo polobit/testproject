@@ -870,9 +870,6 @@ z-index:1;
   width: 91px;
 }
 
-.agile-new-theme .form-control{
-    padding: 6px 20px !important;  
-}
 .modal-footer .btn{
   height: 30px;
   line-height: 30px;
@@ -1050,7 +1047,8 @@ input.mini-time.ui-timepicker-input{
 }
 
 #businesshours-tab fieldset div:first-child.form-group {
-    margin-left: -110px !important;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
 }
 
 #advanced-tab .note-editor .btn .btn-default{
@@ -1188,4 +1186,45 @@ label.i-checks input{
 }
 .agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
+}
+ul.leader-board-view li div table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+ul.leader-board-view li div table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
+.agile-new-theme .dayContainer {
+    float: left;
+    line-height: 20px;
+    margin-right: 9px;
+    width: 65px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.agile-new-theme #schedule-preferences .operationTime .mini-time {
+    width: 41px !important;
+    padding: 3px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.agile-new-theme #schedule-preferences label.control-label.col-sm-3
+{
+    top: 5px !important;
+}
+.agile-new-theme #online-calendar-content {
+    margin: 0px !important;
+}
+.agile-new-theme #schedule-preferences .m-t-xs
+{
+   left: 0px !important;
+}
+
+.agile-new-theme .panel-default .panel-heading {
+    background-color: #e7eef0 !important;
+}
+.agile-new-theme .panel-default .portlet_header.panel-heading {
+ background-color: #FFFFFF !important;
 }
