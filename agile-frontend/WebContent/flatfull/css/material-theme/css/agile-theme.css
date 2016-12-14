@@ -1027,8 +1027,12 @@ z-index:1;
 .agile-new-theme .fa-filter, .icon-filter{
   font-size: 14px !important;
 }
+.no-label-content{
+  background-color: white !important;
+}
 .agile-new-theme .ticket-settings .col.panel.wrapper{
-  background-color: #f4f8f9 !important;
+ /* background-color: #f4f8f9 !important;*/
+ background-color: inherit; 
 }
 @media (min-width: 768px){
 .agile-new-theme .table thead tr th {
@@ -1101,7 +1105,7 @@ input.mini-time.ui-timepicker-input{
 /*.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr {
     line-height: 1.1;
 }*/
-.agile-new-theme .data-block h1, h2, h3, h4, h5, h6 {
+.agile-new-theme .data-block h1,.agile-new-theme .data-block h2,.agile-new-theme .data-block h3,.agile-new-theme .data-block h4,.agile-new-theme .data-block h5,.agile-new-theme .data-block h6 {
     line-height: 1.1 !important;
     margin-bottom: 10px !important;
     color: inherit !important;
@@ -1538,4 +1542,19 @@ table#contacts-table, table#companies {
 }
 
 
+.agile-new-theme #task-list-based-condition .slate-content h3{
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
+  color: rgb(88, 102, 110) !important;
 
+}
+.reports-Container .slate-content h4 {
+  font-size: 18px !important;
+}
+
+#email-reports h4{
+  font-size: 18px !important;
+}
+.tickets-div h4{
+  font-size: 18px !important;
+}
