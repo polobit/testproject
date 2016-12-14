@@ -540,7 +540,7 @@ function nodeLevelValidation(){
          	if(data == 0)
          	{
          			// Display error message
-         			$("#nodeui").find("#errorsdiv").html("<p><i class='fa fa-times icon-1x' style='color:red;'>Tracking Code is not added</i></p>").addClass('ui-state-highlight');
+         			$("#nodeui").find("#errorsdiv").html("<p><i class='fa fa-times icon-1x' style='color:red;'>It seems tracking code is not setup. Please check how to <a href='http://"+window.location.host+"/#api-analytics' target = '_parent'>setup</a></i></p>").addClass('ui-state-highlight');
          		        		
          	}else{
          		callbackData = true;
