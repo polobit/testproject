@@ -371,7 +371,7 @@ select.form-control{
   background-color: #fff !important;
 }
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr{
-  border-top: inherit;
+  border-top: inherit !important;
 }
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
@@ -1314,10 +1314,10 @@ ul.tags-management li.tag{
   color: #11a0f8!important;
   margin-left:5px;
 }
-#task-list-based-condition #bulk-action-btns .btn.btn-default
+/*#task-list-based-condition #bulk-action-btns .btn.btn-default
 {
   color: #ffffff!important;
-}
+}*/
 .fa-plus-circle:before
 {
   content: "+";
@@ -1335,4 +1335,10 @@ ul.tags-management li.tag{
 #lp-video-tutorial,#webrule-video-tutorial
 {
   margin-right:10px!important;
+}
+.agile-new-theme table>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+  padding-top: 3px !important;
+}
+.agile-new-theme #contact-reports-list-view table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
+  padding-left: 8px !important;
 }
