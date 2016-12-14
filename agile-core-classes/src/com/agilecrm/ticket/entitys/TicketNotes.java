@@ -17,11 +17,13 @@ import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.ticket.utils.TicketNotesUtil;
+import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.HTMLUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 
@@ -293,7 +295,16 @@ public class TicketNotes
 		    
 		  //removing the text between script
 		    String htmlText = HTMLUtil.removeScriptFromHtmltext(html_text);
-			
+		    
+		    String nameSpace = NamespaceManager.get();
+		    
+		    if("our".equalsIgnoreCase(nameSpace)){
+		    	TicketStatsUtil.updateEntity(TicketStats.OUR_Notes_Count);
+		    }
+		    
+		    else{	
+		    	TicketStatsUtil.updateEntity(TicketStats.Notes_Count);
+		    }
 		    // Logging notes activity
 			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, htmlText,
 					"html_text", false);
