@@ -17,9 +17,9 @@ function saveCallNoteOzonetel(message){
 	}else if(message.state == "failed"){
 		callStatus = "Failed";
 	}else if(message.state == "busy"){
-		callStatus = "Contact busy";
+		callStatus = "Busy";
 	}else if(message.state == "noanswer" || message.state == "not_answered"){
-		callStatus = "Not Answered";
+		callStatus = "Busy";
 	}else if(message.state == "answered"){
 		callStatus = "Answered";
 	}else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
