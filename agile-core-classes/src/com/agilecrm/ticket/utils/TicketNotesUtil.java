@@ -268,8 +268,7 @@ public class TicketNotesUtil
 		
 		if( ticket != null )
 		{
-			String[] group_email = group.group_email.split("@");
-			if( group_email.length == 2 )	replyTo = group_email[0] + "-" + ticket.id + "@" + group_email[1];
+			replyTo = TicketsUtil.getTicketReplyToEmailAddress(group.group_email, ticket.id.toString());
 		}
 
 		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails, html, replyTo);
