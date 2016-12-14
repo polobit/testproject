@@ -496,7 +496,6 @@
                         styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
                 }  
                 else styleeditor.activeElement.element.innerText = document.getElementById('linkText').value;
-
                 /* SANDBOX */
 
                 if( styleeditor.activeElement.sandbox ) {
@@ -899,18 +898,7 @@
             var theHref;
 
             $('a#link_Link').parent().show();
-            $("#tab1").removeClass("active");
-            $("a#default-tab1").parent().removeClass("active");
-
-            if($(el).prop('tagName') === 'IMG'){
-                $("#image_Tab").addClass("active");
-                $("a#img_Link").parent().addClass("active");
-
-            }else {
-                //link tab should active                
-                $("#link_Tab").addClass("active");
-                $("a#link_Link").parent().addClass("active");
-            }
+            $('a#link_Link').click();
 
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
@@ -922,7 +910,6 @@
                 theHref = $(el).parent().attr('href');
 
             }
-
             styleeditor.buildPagesDropdown(theHref);
             styleeditor.buildBlocksDropdown(theHref);
             styleeditor.inputCustomLink.value = theHref;
@@ -947,19 +934,15 @@
 
             $('a#img_Link').parent().show();
 
-            if($(el).prop('tagName')=== "IMG" && $(el).parent().prop('tagName') !== 'A' && $(el).attr('data-type') !== 'video'){
-                $("#tab1").removeClass("active");
-                $("a#default-tab1").parent().removeClass("active");
-                $("#image_Tab").addClass("active");
-                $("a#img_Link").parent().addClass("active");
-            }      
-
-           
+            if($(el).prop('tagName')=== "IMG"  && $(el).attr('data-type') !== 'video')
+                $("a#img_Link").click(); 
+    
             if($("#error-img-msg").css("display")!=="none"){
                 $('input#imageURL').css("margin-bottom","");
                 $("#error-img-msg").next().css("margin-top","");
                 $("#error-img-msg").hide();
             }
+
             //set the current SRC 
             if($(el).siblings("IMG").length!==0){
                 $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));
