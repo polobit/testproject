@@ -1950,7 +1950,7 @@
 
                     appUI.agilePageId = res.id;
 
-                   if(reqMethod === "POST"){
+                   if(reqMethod === "POST" && typeof(window.history.replaceState) === 'function'){
                         window.history.replaceState("","",appUI.siteUrl+"pagebuilder/"+appUI.agilePageId);
                     }
         
