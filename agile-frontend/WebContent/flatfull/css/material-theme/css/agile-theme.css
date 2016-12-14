@@ -350,17 +350,17 @@ select.form-control{
 .table-list-view-top-margin{
   margin-top: 20px !important;
 }
-.agile-new-theme table thead tr{
+#content .agile-new-theme table thead tr{
   background-color: #f4f8f9 !important;
 }
-.agile-new-theme table>tbody>tr>td{
+#content .agile-new-theme table>tbody>tr>td{
    border-top: none !important;
    padding: 10px 15px !important;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
 }
-.agile-new-theme table>tbody>tr{
+#content .agile-new-theme table>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
@@ -377,10 +377,10 @@ select.form-control{
 .agile-new-theme .portlet_body .table>tbody>tr{
   border-top: none !important;
 }
-table.fc-header>tbody>tr:first-child{
+#content table.fc-header>tbody>tr:first-child{
   border-top: none !important;
 }
-.agile-new-theme table>thead>tr>th{
+#content .agile-new-theme table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
@@ -396,7 +396,7 @@ table.fc-header>tbody>tr:first-child{
 .table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
 }
-.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+#content.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
   background-color: #e7f6ff !important;
 }
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
