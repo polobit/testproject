@@ -1398,3 +1398,8 @@ ul.tags-management li.tag{
       margin-top: 5px;
 }
 
+.agile-new-theme table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: 3px !important;
+}

@@ -291,7 +291,7 @@
 			<div class="table-responsive">
 			<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'companies-view' 'companies-list'}}</div>
-			<table id="companies" class="table table-striped showCheckboxes panel"
+			<table id="companies" class="table table-striped showCheckboxes panel {{getCompactTableView 'companies'}}"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
 					
@@ -365,7 +365,7 @@
 			<div class="data-container"></div>
 			<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'companies-view' 'companies-list'}}</div>
-			<table id="companies" class="table table-striped showCheckboxes"
+			<table id="companies" class="table table-striped showCheckboxes {{getCompactTableView 'companies'}}"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
 					
