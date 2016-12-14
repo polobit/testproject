@@ -833,7 +833,7 @@ header .bg-white a, header button.show-search-dropdown {
 
 .modal-content .modal-header h3,.modal-content .modal-header h4{
   font-size: 16px !important;
-  color: #78909c !important;
+  /*color: #78909c !important;*/
 }
 
 
@@ -1157,6 +1157,10 @@ label.i-checks input{
 .search-filters li a {
   z-index: 100000;
 }
+.getting-started-body label.i-checks input{
+  vertical-align: middle;
+  margin-right: 10px;
+}
 /** End of Checkbox/Radio CSS **/
 
 /** Activities **/
@@ -1190,6 +1194,7 @@ label.i-checks input{
   color: #555;
   background-color: #fff !important;
 }
+
 .agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
   border-top: 0px !important; 
   background-color: transparent !important;
@@ -1353,4 +1358,16 @@ ul.tags-management li.tag{
 }
 .agile-new-theme #contact-reports-list-view table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
   padding-left: 8px !important;
+}
+
+.agile-new-theme .input-group-addon{
+  padding: 12px 25px !important;
+}
+
+#advanced-search-fields-group {
+  padding-bottom: 5px;
+}
+
+#admin-previlages .m-l-md{
+  margin-left: 40px !important;
 }
