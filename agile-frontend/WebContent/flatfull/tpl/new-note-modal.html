@@ -50,7 +50,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-sm btn-primary pull-right" id="{{#if id}}note_update{{else}}note_validate{{/if}}">{{agile_lng_translate 'report-add' 'save'}}
+        <a href="#" class="btn btn-sm btn-primary pull-right" id="{{#if id}}note_update{{else}}note_validate{{/if}}">{{#if id}}{{agile_lng_translate 'contact-edit' 'update'}}{{else}}{{agile_lng_translate 'report-add' 'save'}}{{/if}}
         </a>
         <span class="save-status"></span>
     </div>
