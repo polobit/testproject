@@ -619,3 +619,14 @@ border-bottom-right-radius: 0px;
 ul li>a[href="#bsourcecodeb"] {
     display: none;
 }
+.container{
+  display:none;
+}
+#loader{
+    max-width: 1000px;
+    margin: auto;
+    left: -3%;
+    right: -71%;
+    top: 27%;
+    position: fixed;
+}

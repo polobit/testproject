@@ -15,25 +15,32 @@ define([
 		if(formNumber){
 			form.id = formNumber;
 		}
+		$("#form-save").text("Saving...");
 		$.ajax({
 			type : 'POST',
 			url : url,
 			async : true,
 			contentType : 'application/json',
 			data : JSON.stringify(form),
-			success: function(){
-				if(formNumber){
-					alert("Form saved successfuly.Click on Preview option to view the updated form.");
+			success: function(data){
+				if(data!=null){					
+					$("#form-save").text("Save");
 					$("#form-save").removeAttr("disabled");
-				}
-				else{
-					var url = window.location.origin + "/#forms";
-					window.location.replace(url);	
+					$("#form_preview").removeAttr("disabled");
+					if(!formNumber){
+						formNumber=data.id;
+						if(window.history)
+							window.history.replaceState(null,null,window.location.origin+"/formbuilder?form="+formNumber);
+					}
+					$("#form_preview").attr("href",window.location.origin+"/forms/"+formNumber);
+					
 				}
 			},
 			error: function(){
 				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
 				target.removeAttr("disabled");
+				$("#form-save").text("Save");
+					
 			}});
 	}}
 });

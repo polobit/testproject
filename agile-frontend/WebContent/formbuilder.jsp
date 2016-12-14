@@ -13,6 +13,7 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/builder-themes.css?v=3" rel="stylesheet">
       <link href="misc/formbuilder/custom.css?v=3-3" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css" rel="stylesheet">
+      <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
 
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -58,6 +59,10 @@ String template = request.getParameter("template");
             </a>
          </div>
       </header>
+      <div id="loader">
+         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>
+         <span>Loading...</span>
+      </div>
       <div class="container">
          <div class="row">
             <!-- Building Form. -->
@@ -102,8 +107,6 @@ String template = request.getParameter("template");
          a.removeAttribute("disabled");
          a.href = window.location.origin+"/forms/"+formNumber;
       }
-         /*var a = document.getElementById('agile-logo');
-         a.href = window.location.origin;*/
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
       </script>

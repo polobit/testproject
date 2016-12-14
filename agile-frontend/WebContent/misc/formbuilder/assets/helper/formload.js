@@ -136,8 +136,10 @@ define([
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
 		}
 				}
-				
+				$("#loader").fadeOut('fast');
+				$(".container").css("display","block");
 			}
 		});
+
 	}}
 });

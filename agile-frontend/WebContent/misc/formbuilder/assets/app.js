@@ -54,6 +54,8 @@ define(
 								} else {
 									saveform = json;
 									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });
+									$("#loader").fadeOut('fast');
+									$(".container").css("display","block");
 								}	
 							}
 						});
