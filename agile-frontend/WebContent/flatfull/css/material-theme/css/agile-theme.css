@@ -366,7 +366,7 @@ form select.form-control{
      border-top: none !important; 
      padding: 0px !important; 
 } 
-#content .agile-new-theme table thead tr{
+.agile-new-theme #content table thead tr{
   background-color: #f4f8f9 !important;
 }
 .agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
@@ -403,7 +403,7 @@ form select.form-control{
 #content table.fc-header>tbody>tr:first-child{
   border-top: none !important;
 }
-#content .agile-new-theme table>thead>tr>th{
+.agile-new-theme #content table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
@@ -1027,8 +1027,12 @@ z-index:1;
 .agile-new-theme .fa-filter, .icon-filter{
   font-size: 14px !important;
 }
+.no-label-content{
+  background-color: white !important;
+}
 .agile-new-theme .ticket-settings .col.panel.wrapper{
-  background-color: #f4f8f9 !important;
+ /* background-color: #f4f8f9 !important;*/
+ background-color: inherit; 
 }
 @media (min-width: 768px){
 .agile-new-theme .table thead tr th {
@@ -1101,7 +1105,7 @@ input.mini-time.ui-timepicker-input{
 /*.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr {
     line-height: 1.1;
 }*/
-.agile-new-theme .data-block h1, h2, h3, h4, h5, h6 {
+.agile-new-theme .data-block h1,.agile-new-theme .data-block h2,.agile-new-theme .data-block h3,.agile-new-theme .data-block h4,.agile-new-theme .data-block h5,.agile-new-theme .data-block h6 {
     line-height: 1.1 !important;
     margin-bottom: 10px !important;
     color: inherit !important;
@@ -1129,7 +1133,7 @@ input.mini-time.ui-timepicker-input{
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
 
-.portlet_body_calendar #calendar_container table td{
+#content .portlet_body_calendar #calendar_container table td, #content .portlet_body_calendar #calendar_container table th {
   padding: 0px !important;
 }
 
@@ -1535,4 +1539,33 @@ table#contacts-table, table#companies {
 
 #browseBtn{
   margin-top:0px !important;
+}
+
+
+.agile-new-theme #task-list-based-condition .slate-content h3{
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
+  color: rgb(88, 102, 110) !important;
+
+}
+.reports-Container .slate-content h4 {
+  font-size: 18px !important;
+}
+
+#email-reports h4{
+  font-size: 18px !important;
+}
+.tickets-div h4{
+  font-size: 18px !important;
+}
+#calendar-listers #calendar_event table .fc-header-center span h2{
+  color: #fff !important;
+  margin-bottom: 0px !important;
+}
+#calendar-listers #user_calendars #google_cal_link span, #calendar-listers #user_calendars #office_cal_link span{
+  font-size: 11px !important;
+}
+#calendar-listers #refrecal{
+  color: #a7a7a7 !important;
+  line-height: 29px;
 }
