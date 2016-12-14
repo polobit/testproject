@@ -1368,7 +1368,7 @@ public class TwilioUtil
 				for (Widget widget : widgetList) {
 					try{
 						JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
-						System.out.println(widget.getUserID());
+						System.out.println("Agile User Id"+widget.getUserID());
 						AgileUser agileUser = AgileUser.getCurrentAgileUser(widget.getUserID());
 						DomainUser domainUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);			
 						JSONObject object = new JSONObject();
@@ -1379,6 +1379,7 @@ public class TwilioUtil
 						object.put("domainusernumber", domainUser.phone);	
 						result.put(object);
 					}catch(Exception e){
+						System.out.println("widget id"+widget.id);
 						e.printStackTrace();
 					}
 				}
