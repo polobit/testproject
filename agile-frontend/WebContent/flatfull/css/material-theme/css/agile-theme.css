@@ -366,7 +366,7 @@ form select.form-control{
      border-top: none !important; 
      padding: 0px !important; 
 } 
-#content .agile-new-theme table thead tr{
+.agile-new-theme #content table thead tr{
   background-color: #f4f8f9 !important;
 }
 .agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
@@ -1179,6 +1179,7 @@ label.i-checks input{
 #reports-tab-container ul li a{
   border: 0px;
   color: #555;
+  margin-right: 0px;
 }
 #reports-tab-container .maintab a:hover{
   border:0px;
@@ -1494,4 +1495,7 @@ table#contacts-table, table#companies {
   margin-top:0px !important;
 }
 
+#reports-tab-container .nav-tabs {
+  border-bottom: 0px;
+}
 
