@@ -1754,7 +1754,7 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </script>
 <script id="activity-list-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b ">
+<div class="wrapper-md lter bg-light b-b agile-page-header ">
 <div class="row">
     <div class="col-md-12" id="activity_header">
 
@@ -1764,15 +1764,15 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 		<div class="btn-group pull-left" role="group">
 		{{#is_admin_domain}}
                 {{else}}
-                <a href="#activities" class="btn btn-default btn-default-imp-white btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
+                <a href="#activities" class="btn btn-default btn-default-imp-white btn-lg-imp btn-sm bg-light">{{agile_lng_translate 'report-view' 'user-activities'}}</a> 
                 
 
-                <a href="#contact-activities" class="btn btn-default btn-default-imp-white btn-sm" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
+                <a href="#contact-activities" class="btn btn-default btn-default-imp-white btn-lg-imp btn-sm" onclick="$(this).prev().removeClass('bg-light')">{{agile_lng_translate 'report-view' 'contact-activities'}}</a>
                 {{/is_admin_domain}}
             </div>
             <div class="pull-left" style=" margin-bottom:0px !important;">
             <div id="activities_date_range" style="line-height:20px;" 
-            class="btn-group pull-right activity-date-filter btn btn-default btn-default-imp-white c-p m-t-none">
+            class="btn-group pull-right activity-date-filter btn btn-default btn-default-imp-white  c-p m-t-none">
             <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
                 <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
@@ -1783,15 +1783,15 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
             </div>
             </div>
             <div class="btn-group pull-left activity-log-button c-p m-r-sm">
-                <div class="btn btn-default btn-default-imp btn-sm selected_name" id="selectedusername">{{agile_lng_translate 'report-view' 'all-users'}}</div>
-                <button class="btn btn-default btn-sm dropdown-toggle btn-default-imp" data-toggle="dropdown" href="#">
+                <div class="btn btn-default btn-default-imp btn-lg-imp btn-sm selected_name" id="selectedusername">{{agile_lng_translate 'report-view' 'all-users'}}</div>
+                <button class="btn btn-default btn-sm btn-lg-imp dropdown-toggle btn-default-imp" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu  pull-right" id="user-select" role="menu"></ul>
             </div>
 		<div class="btn-group pull-left type-task-button c-p">
-                <div class="btn btn-default btn-sm selected_name" id="selectedentity_type">{{agile_lng_translate 'report-view' 'all-activities'}}</div>
-                <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" href="#">
+                <div class="btn btn-default btn-primary-imp btn-sm btn-lg-imp selected_name" id="selectedentity_type">{{agile_lng_translate 'report-view' 'all-activities'}}</div>
+                <button class="btn btn-default dropdown-toggle btn-primary-imp btn-lg-imp btn-sm" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </button>
 
