@@ -1599,3 +1599,12 @@ table#contacts-table, table#companies {
   font-size: 16px !important;
   color: #263238 !important;
 }
+#dialPad.panel-default .panel-heading{
+  background-color: #fff !important;
+}
+#close-dialler>span{
+  color: #b7b7b7;
+}
+#dialler-page .panel.panel-default{
+  border: 1px solid #fafafa !important;
+}
