@@ -64,8 +64,8 @@ public class SendGridUtil
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
 	
      // 
-     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "unknown device"};
-     private static final String[] blockedSubjectStringList = new String[] {"unknown device"};
+     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "unknown device","unknown source","appleid.billing-update.net"};
+     private static final String[] blockedSubjectStringList = new String[] {"unknown device","unknown source"};
 
     /**
      * Substitution tags
