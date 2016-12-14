@@ -171,7 +171,7 @@ select.form-control{
   border: none;
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
-  color: #78909c !important;
+  color: #78909c;
 }
 .tabs .tab-container .nav-tabs>li:hover>a, .tabs .tab-container .nav-tabs>li:focus>a, .tabs .tab-container .nav-tabs>li.active>a{
   background-color: inherit;
@@ -359,7 +359,10 @@ select.form-control{
 }
 .agile-new-theme table>tbody>tr>td{
    border-top: none !important;
-   padding: 10px !important;
+   padding: 10px 15px !important;
+}
+.table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
+    padding: 10px 15px !important;
 }
 .agile-new-theme table>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
@@ -367,6 +370,7 @@ select.form-control{
 }
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr{
   border-top: inherit !important;
+  background: inherit !important;
 }
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
@@ -397,7 +401,7 @@ table.fc-header>tbody>tr:first-child{
   background-color: #fff !important;
 }
 .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
-  background-color: rgba(17, 160, 248, 0.1) !important;
+  background-color: #e7f6ff !important;
 }
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
@@ -961,11 +965,11 @@ z-index:1;
   margin-left:40px;
 }*/
 .agile-new-theme .ticket-collection-container .v-middle.p-l-none:nth-child(4){
-  width: 55px !important;
+  width: 60px !important;
 }
-.agile-new-theme .ticket-collection-container .v-middle.p-l-none:nth-child(5){
+/*.agile-new-theme .ticket-collection-container .v-middle.p-l-none:nth-child(5){
   padding: 0px 0px 0px 10px !important;
-}
+}*/
 .agile-new-theme #right-pane .tickets-toolbar, #tickets-container div.col.bg-white{
   background-color: #f4f8f9 !important;
 }
@@ -1414,3 +1418,8 @@ ul.tags-management li.tag{
     border: none !important;
 }
 /** End of panel CSS **/
+
+#ticket-model-list div.show-caret:hover, #ticket-model-list div.show-caret:hover>a[aria-expanded="true"]{background-color: #fff;}
+
+#ticket-model-list .ticket-data .show-caret .btn{height:auto; line-height: normal; transition: inherit; -webkit-transition: inherit; background-color: inherit; color: #78909c !important;}
+
