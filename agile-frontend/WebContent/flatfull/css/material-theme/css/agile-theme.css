@@ -1403,3 +1403,14 @@ ul.tags-management li.tag{
   height: 20px !important;
   margin-top: 3px !important;
 }
+/** Bussiness Hours **/
+.operationTime .mini-time {
+  padding: 3px !important;
+}
+/** End of Bussiness Hours **/
+
+/** Panels **/
+.agile-new-theme .no-panel-border .panel, .agile-new-theme .table-responsive .panel{
+    border: none !important;
+}
+/** End of panel CSS **/
