@@ -350,8 +350,24 @@ form select.form-control{
 .table-list-view-top-margin{
   margin-top: 20px !important;
 }
+
+/** Table CSS **/
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
 #content .agile-new-theme table thead tr{
   background-color: #f4f8f9 !important;
+}
+.agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+  padding-top: 3px !important;
+}
+.agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
+  padding-left: 8px !important;
 }
 .agile-new-theme #content table:not(.no-new-theme-updates)>tbody>tr>td{
    border-top: none !important;
@@ -364,6 +380,7 @@ form select.form-control{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
+
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr{
   border-top: inherit !important;
   background: inherit !important;
@@ -388,6 +405,8 @@ form select.form-control{
   color: #78909c !important;
   font-size: 12px !important;
 }
+/** End of table CSS **/
+
 .img-inital{
   border-radius: 50% !important;
   height: 42px!important;
@@ -396,14 +415,14 @@ form select.form-control{
 .table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
 }
-#content.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
   background-color: #e7f6ff !important;
 }
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
 }
 table label.i-checks{
-  margin-left: 8px !important;
+  /*margin-left: 8px !important;*/
 }
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
@@ -1195,15 +1214,6 @@ label.i-checks input{
   background-color: #fff !important;
 }
 
-.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
-  border-top: 0px !important; 
-  background-color: transparent !important;
-}
-.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
-     border-top: none !important; 
-     padding: 0px !important; 
-} 
-
 .agile-new-theme #portlets-add-listener #marketing_dashlet .col-md-3{
   display: table;
 }
@@ -1353,12 +1363,6 @@ ul.tags-management li.tag{
 #lp-video-tutorial,#webrule-video-tutorial
 {
   margin-right:10px!important;
-}
-.agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
-  padding-top: 3px !important;
-}
-.agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
-  padding-left: 8px !important;
 }
 
 .agile-new-theme .input-group-addon{
