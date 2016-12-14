@@ -350,17 +350,17 @@ select.form-control{
 .table-list-view-top-margin{
   margin-top: 20px !important;
 }
-#content .agile-new-theme table thead tr{
+.agile-new-theme #content table thead tr{
   background-color: #f4f8f9 !important;
 }
-#content .agile-new-theme table>tbody>tr>td{
+.agile-new-theme #content table>tbody>tr>td{
    border-top: none !important;
    padding: 10px 15px !important;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
 }
-#content .agile-new-theme table>tbody>tr{
+.agile-new-theme #content  table>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
@@ -380,7 +380,7 @@ select.form-control{
 #content table.fc-header>tbody>tr:first-child{
   border-top: none !important;
 }
-#content .agile-new-theme table>thead>tr>th{
+.agile-new-theme #content table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
@@ -597,7 +597,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 .agile-new-theme #deal-tracks-accordion .panel-body{
   border-top: none !important;
 }
-.agile-new-theme table tr:last-child{
+.agile-new-theme #content table tr:last-child{
   border-bottom: none !important;
 }
 .agile-new-theme table#lost-reasons-table>tbody>tr>td, table.table-bordered, table#deal-sources-table.table-bordered>tbody>tr>td{
@@ -1114,7 +1114,7 @@ input.mini-time.ui-timepicker-input{
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
 
-.portlet_body_calendar #calendar_container table td{
+#content .portlet_body_calendar #calendar_container table td, #content .portlet_body_calendar #calendar_container table th {
   padding: 0px !important;
 }
 
@@ -1443,4 +1443,15 @@ ul.tags-management li.tag{
 }
 .goals_portlet_body .portlet-panel.bg-light{
   background-color: #dde6e9 !important;
+}
+#calendar-listers #calendar_event table .fc-header-center span h2{
+  color: #fff !important;
+  margin-bottom: 0px !important;
+}
+#calendar-listers #user_calendars #google_cal_link span, #calendar-listers #user_calendars #office_cal_link span{
+  font-size: 11px !important;
+}
+#calendar-listers #refrecal{
+  color: #a7a7a7 !important;
+  line-height: 29px;
 }
