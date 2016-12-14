@@ -223,11 +223,11 @@ $(function()
 			agile_type_ahead("call_related_to", $("#phoneLogForm", '#logCallModal'), contacts_typeahead);
 			/*var contact_html="";
 			$.each(contacts,function(index,contact){
-				contact_html=contact_html.concat('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
+				contact_html=contact_html.concat('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
 	
 			});
 			$('#phoneLogForm #logPhone_relatedto_tag').html(contact_html);*/
-			//$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
+			//$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+getContactName(contact)+'</li>');
 		}catch(e){
 			$('#logCallModal').modal('hide');
 			console.log ("an error has occured")
@@ -264,7 +264,7 @@ $(function()
 		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
 		
 		
-		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
+		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
 		
 		$('#phoneLogForm #saveActivity').val("true");
 		$("#logCallModal").modal('show');
@@ -573,7 +573,7 @@ function showDynamicCallLogs(data)
 		$('#phoneLogForm #hour').val(time.pop());
 		$('#phoneLogForm #callWidgetName').val(data.widget);
 		$('#phoneLogForm #saveActivity').val("true");
-		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
+		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ data.contId +'">'+data.contact_name+'</li>');
 		CallLogVariables.description = $("#agilecrm-container #call-noty-notes").val();
 		if(CallLogVariables.description){
 			$("#phoneLogForm #description").val(CallLogVariables.description.trim());
