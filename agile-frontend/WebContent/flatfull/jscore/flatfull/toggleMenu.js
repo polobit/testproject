@@ -82,17 +82,13 @@ $("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
 $("#prefsDropdownModal").on('click','#showUserVoice',function(e){
 		if(typeof UserVoice != undefined){
 			if(!agile_is_mobile_browser())
-				load_urls_on_ajax_stop('lib/user-voice.js', function(){
-				$(".uv-icon").addClass("hide");
-			
+				load_user_voice('lib/user-voice.js', function(){
+				$(".uservoice-window")[0].click();
 			});
-		}
-		setTimeout(function(){
-		$("#prefsDropdownModal").modal("hide");
-		$(".uv-icon").addClass("hide");
+		}		
+		/*setTimeout(function(){
 		$(".uservoice-window")[0].click();
-		$(".uv-popover-tail").addClass("hide");
-		},100);
+		},100);*/
 
 });
 

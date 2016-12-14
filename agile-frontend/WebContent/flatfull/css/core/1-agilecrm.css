@@ -5088,4 +5088,8 @@ border-top: 0px !important;
 
 #task-calendar-based-condition .fc-header-center h2{
   text-transform: inherit!important;
+
+}
+.uv-icon,.uv-popover-tail{
+  display: none !important;
 }

@@ -21,6 +21,14 @@ function load_urls_on_ajax_stop(url, callback) {
 
 }
 
+function load_user_voice(url,callback){
+	
+	head.js(url, function() {
+		if (callback && typeof callback == "function")
+			callback();
+	});
+}
+
 function loadMiscScriptsWithTimeOut() {
 	if (loadMiscScripts) {
 		// Load User voice then
