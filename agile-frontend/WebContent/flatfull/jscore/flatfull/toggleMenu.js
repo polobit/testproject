@@ -437,19 +437,19 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	    	$('body').unbind("click",clickOutsideSearchDropdownEventHandler);
 	}
 
-	$( '#advanced-search-fields-group a input' ).on( 'click', function( event ) {
-		event.preventDefault();
-	});
-
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
-	   event.preventDefault();
+		if(!isTargetAnInputField(event)){
+	   		event.preventDefault();
+	   	}
+
 	   event.stopImmediatePropagation();
 
    	   var $target = $( event.currentTarget ),
        $inp = $target.find( 'input' );
-       if(!$inp.closest("li").hasClass("disabled"))
+       if(!$inp.closest("li").hasClass("disabled") && !isTargetAnInputField(event)){
        		$inp.prop( 'checked', !$inp.is(":checked") );
-
+       }
+       	
        var $allitems = $("#advanced-search-fields-group a input"),
        $inputs = $allitems.not($inp),
        $items = $inputs.closest("li");
@@ -467,7 +467,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
 	   // console.log(list);
 	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
-	   return false;
+	   // return false;
 	});
 
 	var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id),
@@ -738,6 +738,11 @@ function updateDashboardRole(prevrole)
  						}});
 }
 
+
+function isTargetAnInputField(e) {
+	return ($(e.target).prop("tagName").toLowerCase() == "input");
+}
+    	 
 
 
 

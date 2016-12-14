@@ -77,8 +77,8 @@
         {{else}}
       <div>
         <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
-          <div class="btn btn-sm btn-default">{{agile_lng_translate 'deal-view' 'bulk-actions'}}</div>
-          <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
+          <div class="btn btn-sm btn-default btn-default-imp">{{agile_lng_translate 'deal-view' 'bulk-actions'}}</div>
+          <a class="btn btn-sm dropdown-toggle btn-default-imp btn-default" data-toggle="dropdown" href="#">
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" id="view-actions" role="menu">
@@ -107,7 +107,7 @@
       <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
       {{#is_mobile}} {{else}} <div class="panel-heading"> {{agile_lng_translate 'deal-view' 'deals'}}
       </div>{{/is_mobile}}
-      <div class="table-responsive">
+      <div class="table-responsive no-panel-border">
 
                 <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
 

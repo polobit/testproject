@@ -41,7 +41,7 @@
 									{{#if is_new}}
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 										<div class="right m-r-sm">
-						                    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
+						                    <label class="btn btn-default btn-sm m-l-xs btn-default-imp btn-lg-imp" id="campaign_access_level"> 
 						                    		<span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
 						                    </label>
 										</div>
@@ -116,7 +116,7 @@
 									<a data-toggle="modal" id="workflow-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">{{agile_lng_translate 'campaigns' 'need-help-watch-our-tutorial'}}</a>
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}
-										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
+										<button class="btn btn-primary btn-sm btn-primary-imp btn-lg-imp right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 									 <!--
 										{{#is_mobile}}
 
@@ -128,8 +128,8 @@
 										-->
 									{{else}}
 										<div class="btn-group right m-r-xs m-r-n-sm">									
-											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+											<button class="btn btn-primary btn-sm btn-lg-imp btn-primary-imp btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
+                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle  btn-lg-imp btn-primary-imp m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
             									<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu">
@@ -313,17 +313,17 @@
 
                     {{#if is_new}}
                    	<div>
-						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
+						<button class="btn btn-sm btn-primary btn-primary-imp btn-lg-imp" id="save-workflow-bottom">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 						<div class="left m-r-sm">
-						    <label class="btn btn-default btn-sm " id="campaign_access_level"> 
+						    <label class="btn btn-default btn-sm btn-default-imp btn-lg-imp" id="campaign_access_level"> 
 						        <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
 						    </label>
 						</div>
 					</div>
 					{{else}}
 						<div class="btn-group left m-r-xs">
-							<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
+							<button class="btn btn-primary btn-sm btn-lg-imp btn-primary-imp btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
+            				<button type="button" class="btn btn-primary btn-sm btn-lg-imp btn-primary-imp dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
 								<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu">
