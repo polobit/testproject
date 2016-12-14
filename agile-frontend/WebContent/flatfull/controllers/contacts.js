@@ -1366,7 +1366,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					{
 						$("#content [name='contact_company_id']")
 								.html(
-										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+										'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 						$("#content #contact_company").hide();
 						if(data){							
 							$.ajax({
@@ -1712,7 +1712,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+													'<li class="tag  btn btn-xs btn-default m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');									
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
@@ -1754,7 +1754,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 							.closest("div.controls")
 							.find(".tags")
 							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+									'<li class="tag  btn btn-xs btn-default m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 				}
 				else  if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);
