@@ -10,7 +10,7 @@
         'nav': ['background-color','color'],
         '.pricing2 > .top' : ['background-color'],
         'header.wrapper' : ['background-color'],
-        '.divider' : ['background-color'],
+        '.dividerel' : ['background-color'],
         'nav a': ['color', 'font-weight', 'text-transform', 'dynamic-button'],
         'img': ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
         'hr.dashed': ['border-color', 'border-width'],
