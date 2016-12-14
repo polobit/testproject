@@ -303,6 +303,12 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
    background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
    background-position: 98% 0px;
 }
+.uservoice-icon{
+  position: fixed;
+  bottom: 10px;
+  right: 12px;
+  visibility:hidden;
+  }
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>
@@ -345,6 +351,10 @@ function isIE() {
 <div id="contacts_limit_alert_info" class="contacts_plan_alert hide" style="position: relative;width:340px;"> 
 </div>
 </div>
+<div class="pos-abs "><a href="javascript:void(0)" class="uservoice-window uservoice-icon" data-uv-trigger="smartvote">voice</a></div>
+  
+  
+
 <%if(!MobileUADetector.isiPhone(userAgent)) {%>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
@@ -702,17 +712,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </li>
 
 
-     <%
-  if(domainUser.is_admin){
-  %>
+   
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
-  <%}%>
-     
+       
      <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>

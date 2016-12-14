@@ -305,7 +305,7 @@ function fill_relation_deal_task(el)
 	var json = App_Deal_Details.dealDetailView.model.toJSON();
 	var deal_name = json.name;
 
-	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-primary" data="{{id}}">{{name}}</li>');
+	var template = Handlebars.compile('<li class="tag inline-block v-middle m-r-xs btn btn-xs btn-default" data="{{id}}">{{name}}</li>');
 
 	var relatedContactsJOSN = json.contacts;
 	$.each(relatedContactsJOSN, function(index, relContact){

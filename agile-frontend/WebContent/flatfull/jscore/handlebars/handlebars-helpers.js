@@ -1684,32 +1684,36 @@ $(function()
 									el = el
 											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
-								if(address.address !== undefined)
-									el = el.concat(address.address+", ");
+								var addressValues = [];
 
-								if(address.city !== undefined)
-									el = el.concat(address.city+", ");
+								if(address.address && address.address.trim())
+									addressValues.push(address.address);
 
-								if(address.state !== undefined)
-									el = el.concat(address.state+", ");
+								if(address.city && address.city.trim())
+									addressValues.push(address.city);
 
-								if(address.zip !== undefined)
-									el = el.concat(address.zip+", ");
+								if(address.state && address.state.trim())
+									addressValues.push(address.state);
 
-								if(address.country !== undefined)
-									el = el.concat(address.country+".");
+								if(address.zip && address.zip.trim())
+									addressValues.push(address.zip);
 
-								/*$.each(address, function(key, val)
-								{
-									if (--count == 0)
+								if(address.countryname && address.countryname.trim())
+									addressValues.push(address.countryname);
+
+								if(!address.countryname && address.country && address.country.trim())
+									addressValues.push(getCode(address.country.trim()));
+
+								$.each(addressValues, function(index, addressField){
+									if(index == addressValues.length - 1)
 									{
-										el = el.concat(val + ".");
+										el = el.concat(addressField.trim());
 										return;
 									}
-									el = el.concat(val + ", ");
-								});*/
+									el = el.concat(addressField.trim() + ", ");
+								});
 
-								if (properties[i].subtype){
+								if (properties[i].subtype && properties[i].subtype != "SYSTEM"){
 									if(properties[i].subtype=="office")
 										properties[i].subtype="work";
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
@@ -1723,49 +1727,6 @@ $(function()
 							}
 						}
 					});
-
-	Handlebars.registerHelper('address_Template', function(properties)
-	{
-
-		for (var i = 0, l = properties.length; i < l; i++)
-		{
-
-			if (properties[i].name == "address")
-			{
-				var el = '';
-
-				var address = {};
-				try
-				{
-					address = JSON.parse(properties[i].value);
-				}
-				catch (err)
-				{
-					address['address'] = properties[i].value;
-				}
-
-				// Gets properties (keys) count of given json
-				// object
-				var count = countJsonProperties(address);
-
-				$.each(address, function(key, val)
-				{
-					if (--count == 0)
-					{
-						el = el.concat(val + ".");
-						return;
-					}
-					el = el.concat(val + ", ");
-				});
-				/*
-				 * if (properties[i].subtype) el = el.concat(" <span
-				 * class='label'>" + properties[i].subtype + "</span>");
-				 */
-
-				return new Handlebars.SafeString(el);
-			}
-		}
-	});
 	
 	/**
 	 * To represent a number with commas in deals
@@ -3536,23 +3497,41 @@ $(function()
 					address['address'] = properties[i].value;
 				}
 
-				// Gets properties (keys) count of given json
-				// object
-				var count = countJsonProperties(address);
+				var addressValues = [];
 
-				$.each(address, function(key, val)
+				if(address['address'] && address['address'].trim())
 				{
-					if (--count == 0)
+					addressValues.push(address['address']);
+				}
+				if(address['city'] && address['city'].trim())
+				{
+					addressValues.push(address['city']);
+				}
+				if(address['state'] && address['state'].trim())
+				{
+					addressValues.push(address['state']);
+				}
+				if(address['zip'] && address['zip'].trim())
+				{
+					addressValues.push(address['zip']);
+				}
+				if(address['countryname'] && address['countryname'].trim())
+				{
+					addressValues.push(address['countryname']);
+				}
+				if(!address['countryname'] && address['country'] && address['country'].trim())
+				{
+					addressValues.push(getCode(address['country']));
+				}
+
+				$.each(addressValues, function(index, addressField){
+					if(index == addressValues.length - 1)
 					{
-						el = el.concat(val + ".");
+						el = el.concat(addressField.trim());
 						return;
 					}
-					el = el.concat(val + ", ");
+					el = el.concat(addressField.trim() + ", ");
 				});
-				/*
-				 * if (properties[i].subtype) el = el.concat(" <span
-				 * class='label'>" + properties[i].subtype + "</span>");
-				 */
 
 				return new Handlebars.SafeString(el);
 			}

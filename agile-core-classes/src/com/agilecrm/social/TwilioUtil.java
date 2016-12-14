@@ -1338,7 +1338,8 @@ public class TwilioUtil
 			//Map<String, String> params = new HashMap<String, String>();
 				params.put("From",from);
 				params.put("To", to);
-				params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				//params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+childCallSid, "POST", params);
 				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 				JSONObject callResponse = responseTextJson.getJSONObject("Call");
@@ -1359,23 +1360,32 @@ public class TwilioUtil
 	}
 	
 	public static JSONArray getTwillioUsersAndNumbers() throws JSONException{
-		JSONArray result = null;
+		JSONArray result = new JSONArray();
 		List<Widget> widgetList =  WidgetUtil.getActiveWidgetsByName("TwilioIO");
-		if(widgetList != null){
-			result = new JSONArray();
-			for (Widget widget : widgetList) {
-				JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
-				
-				AgileUser agileUser = AgileUser.getCurrentAgileUser(widget.getUserID());
-				DomainUser domainUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);			
-				JSONObject object = new JSONObject();
-				object.put("username", domainUser.name);
-				object.put("domainUserId", domainUser.id);
-				object.put("twillioNumber", widgetPrefs.get("twilio_number"));	
-				object.put("pic", domainUser.pic);	
-				object.put("domainusernumber", domainUser.phone);	
-				result.put(object);
+		try{
+			if(widgetList != null){
+				result = new JSONArray();
+				for (Widget widget : widgetList) {
+					try{
+						JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
+						System.out.println("Agile User Id"+widget.getUserID());
+						AgileUser agileUser = AgileUser.getCurrentAgileUser(widget.getUserID());
+						DomainUser domainUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);			
+						JSONObject object = new JSONObject();
+						object.put("username", domainUser.name);
+						object.put("domainUserId", domainUser.id);
+						object.put("twillioNumber", widgetPrefs.get("twilio_number"));	
+						object.put("pic", domainUser.pic);	
+						object.put("domainusernumber", domainUser.phone);	
+						result.put(object);
+					}catch(Exception e){
+						System.out.println("widget id"+widget.id);
+						e.printStackTrace();
+					}
+				}
 			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return result;
 		

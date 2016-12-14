@@ -161,9 +161,9 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 			$('#' + modal_id).modal('hide');
 		}
 		$("#draggable_noty div:first-child").css({"z-index":"10000"});
-		/*setTimeout(function(){
+		setTimeout(function(){
 			makeDraggableVoicemail();
-		}, 30000);*/
+		}, 100);
 	}
 	});
 	

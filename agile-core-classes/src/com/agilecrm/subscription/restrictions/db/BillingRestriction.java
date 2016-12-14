@@ -631,6 +631,9 @@ public class BillingRestriction implements Serializable
     public void decrementEmailCreditsCount(int count){
     	this.email_credits_count -= count;
     	if(isAutoRenewalEnabled && email_credits_count <= autoRenewalPoint){
+    		Subscription subscription = SubscriptionUtil.getSubscription();
+    		if(Subscription.EmailPurchaseStatus.BLOCKED.equals(subscription.getEmailpurchaseStatus()))
+    			return;
     		String namespace = NamespaceManager.get();
     		String syncKey = namespace + "_auto_renewal_lock";
     		boolean lockAcquired = false;

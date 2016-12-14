@@ -133,6 +133,7 @@ public class GMail {
     		if(gmailPrefs.expires_at == null || gmailPrefs.expires_at < System.currentTimeMillis()) {
 				gcredential.refreshToken();
 				gmailPrefs.refresh_token = gcredential.getRefreshToken();
+				gmailPrefs.token = gcredential.getAccessToken();
 				gmailPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
 				//prefsUpdated = true;
 				GmailSendPrefsUtil.save(gmailPrefs);
@@ -383,7 +384,7 @@ public class GMail {
 			url.append("&bcc=" + ((bcc != null) ? URLEncoder.encode(bcc, "UTF-8"):null));
 			url.append("&from_name=" + ((fromName != null) ? URLEncoder.encode(fromName, "UTF-8"):null));
 			
-			url.append("&subject=" + ((subject != null) ? URLEncoder.encode(subject, "UTF-8"):null));
+			url.append("&subject=" + ((subject != null) ? URLEncoder.encode(escapeJava(subject), "UTF-8"):null));
 			url.append("&html=" + ((html != null) ? URLEncoder.encode(escapeJava(html), "UTF-8"):null));
 			url.append("&text=" + ((text != null) ? URLEncoder.encode(text, "UTF-8"):null));
 			

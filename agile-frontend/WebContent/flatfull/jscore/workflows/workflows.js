@@ -665,7 +665,7 @@ function populate_workflows_list(id, el, callback)
         callback = 'no-callback';
 
      var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-     fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
+     fillSelect(id, '/core/api/workflows/partial', 'workflow', callback , optionsTemplate, undefined, el);
 }
 
 function shareCampaign()
