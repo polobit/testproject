@@ -554,7 +554,7 @@ a i, a span{vertical-align: inherit;}
 #documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading{
   display: none !important;
 }
-table.panel, .panel{
+table.panel, table .panel{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;
