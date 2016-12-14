@@ -1125,7 +1125,10 @@ label.i-checks input{
 }
 .i-checks {
   padding-left: 0;
-  padding-top: 7px;
+  padding-bottom: 7px;
+}
+.i-checks>span {
+  margin-left: auto;
 }
 .tickets-div .dropdown-menu .i-checks {
   padding-top: 0px!important;
@@ -1141,6 +1144,9 @@ label.i-checks input{
 }
 .i-checks i {
   display: none!important;
+}
+.i-checks i.glyphicon {
+  display: inline-block!important;
 }
 #textModalForm label {
   display: inline;
