@@ -268,10 +268,13 @@ function changeCallNotyBasedOnStatus(event){
 		var agentNumber = event.agent_number;		
 		var knowlarityNumber = event.knowlarity_number;
 		var customerNumber = event.caller;
-		//"customer_number": "+919052500344",
+		
+		console.log("*************");
 		console.log("Event type : "+eventType);
 		console.log("Type : "+type);
 		console.log("callDirection : "+callDirection);
+		console.log(event);
+		console.log("_____________");
 
 		if(callDirection){
 			if(callDirection == "Outbound"){
@@ -423,8 +426,6 @@ function startKnowlarityWidget(contact_id){
 
 	KNOWLARITY_Plugin_Id = knowlarity_widget.id;	
 	Email = agile_crm_get_contact_property('email');
-
-	//loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
 
 	$('#Knowlarity').html('<div class="wrapper-sm">No Logs</div>');
 	
