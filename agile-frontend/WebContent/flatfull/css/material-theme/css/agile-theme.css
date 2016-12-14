@@ -75,7 +75,7 @@ table td a {
    border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
   }
-select.form-control{
+form select.form-control{
   height:40px;
   color: #263238;
   background-color: #f4f8f9; 
@@ -84,7 +84,7 @@ select.form-control{
   border-radius: 4px;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==');
 }
-.agile-new-theme .form-control.input-group-addon
+.agile-new-theme form .form-control.input-group-addon
 {
   height:40px;
   color: #263238;
@@ -95,10 +95,10 @@ select.form-control{
   background-image: none;
   border: 0px;
 }
-.agile-new-theme .form-control.input-group-addon span{
+.agile-new-theme form .form-control.input-group-addon span{
       margin-left: -15px!important;
 }
-.agile-new-theme .form-control
+.agile-new-theme form .form-control
 {
   height:40px;
   border: 0px;
@@ -353,14 +353,14 @@ select.form-control{
 #content .agile-new-theme table thead tr{
   background-color: #f4f8f9 !important;
 }
-#content .agile-new-theme table>tbody>tr>td{
+.agile-new-theme #content table:not(.no-new-theme-updates)>tbody>tr>td{
    border-top: none !important;
    padding: 10px 15px !important;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
 }
-#content .agile-new-theme table>tbody>tr{
+.agile-new-theme #content table:not(.no-new-theme-updates)>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
@@ -782,7 +782,7 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
-.agile-new-theme .form-control.textarea
+.agile-new-theme form .form-control.textarea
 {
   height: 72px;
 }
@@ -927,7 +927,7 @@ z-index:1;
   width: 91px;
 }
 
-.agile-new-theme .form-control{
+.agile-new-theme form .form-control{
     padding: 6px 20px !important;  
 }
 .modal-footer .btn{
@@ -1354,10 +1354,10 @@ ul.tags-management li.tag{
 {
   margin-right:10px!important;
 }
-.agile-new-theme table>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+.agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
   padding-top: 3px !important;
 }
-.agile-new-theme #contact-reports-list-view table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
+.agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
   padding-left: 8px !important;
 }
 

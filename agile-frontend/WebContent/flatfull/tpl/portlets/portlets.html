@@ -437,7 +437,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg calls_popover"  data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						<div class="text-xlg calls_popover"  data-container="body" data-toggle="tooltip" title='<div><table class="no-new-theme-updates" style="background-color:transparent!important">
 							
 							{{#each eachCallStatus}} 
 									<tr><td style="color:{{selectJsonValue ../colors @key}}">{{convertToi18ForCall @key}}:&nbsp</td><td>{{this}}</td></tr>
@@ -459,7 +459,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg calls_popover" data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						<div class="text-xlg calls_popover" data-container="body" data-toggle="tooltip" title='<div><table class="no-new-theme-updates" style="background-color:transparent!important">
 							
 							{{#each eachCallStatus}} 
 									<tr><td style="color:{{selectJsonValue ../colors @key}}">{{convertToi18ForCall @key}}:&nbsp</td><td>{{this}}</td></tr>
