@@ -402,9 +402,9 @@ form select.form-control{
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
 }
-table label.i-checks{
+/*table label.i-checks{
   margin-left: 8px !important;
-}
+}*/
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
@@ -434,9 +434,9 @@ table label.i-checks{
 #documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
   padding-bottom: 0px !important;
 }
-#task-list-based-condition .panel-heading label:first-child{
+/*#task-list-based-condition .panel-heading label:first-child{
   padding-left: 0px !important;
-}
+}*/
 #task-list-based-condition .panel, .panel-heading{
   border: none !important;
 }
@@ -618,7 +618,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   margin-left: 0px !important
 }*/
 .agile-new-theme table>thead>tr>th>label.i-checks.i-checks-sm{
-  margin: 0px !important;
+  /*margin: 0px !important;*/
   padding: 0px !important;
 }
 #today-heading, #yesterday-heading, #earlier-heading{
@@ -647,7 +647,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 
 #automation-video{margin-right: 15px !important;}
 /*#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}*/
-#document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}
+/*#document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}*/
 .grid-icon-header:hover, .grid-icon-header:focus{background-color: inherit;}
 .nav.navbar-right li a:hover, .nav.navbar-right li a:focus {
     background: inherit;
@@ -1443,4 +1443,22 @@ ul.tags-management li.tag{
 }
 .goals_portlet_body .portlet-panel.bg-light{
   background-color: #dde6e9 !important;
+}
+/*.agile-new-theme #bulk-action-btns .i-checks{
+  padding-left: 9px !important;
+}*/
+table#contacts-table, table#companies {
+  -webkit-box-shadow: none !important; 
+  box-shadow: none !important; 
+}
+.agile-new-theme .no-panel-border .panel-footer{
+  background-color: #f4f8f9;
+}
+#dialler-phone-number-form #dail_phone_number{
+  background-color: inherit;
+  border-radius: 0;
+  border-bottom: 1px solid #fafafa !important;
+}
+#dialPad .panel-body{
+  height: 324px !important;
 }
