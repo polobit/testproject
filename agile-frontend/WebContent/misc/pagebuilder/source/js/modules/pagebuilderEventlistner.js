@@ -80,6 +80,13 @@
         $("#error-img-msg").next().css("margin-top","");
         $("#error-img-msg").hide();
     });
+    $("#lp-instruct-popup").click(function(){
+
+        if($("#lp-instruct-popup").prop("checked"))            
+            localStorage.setItem("lp-instruct-popup",true);
+        else
+            localStorage.removeItem("lp-instruct-popup",false);
+    });
      exports.customAgileEvents = customAgileEvents;
 
 }());

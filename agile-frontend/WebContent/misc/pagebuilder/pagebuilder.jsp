@@ -191,7 +191,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <li><a href="#" id="saveTemplate" data-toggle="modal" data-siteid="6"><span class="fui-arrow-right"></span> Save page template</a></li>
                     </ul> -->
                 </div>
-                
+                <div class="col-md-4" id="lp-save-msg" style="color: white; text-align: left; float: right; margin-top: 7px; display:none; color: #24bfa0;">Landing page saved.</div>
                 <ul class="nav nav-pills nav-inverse pull-left responsiveToggle" id="responsiveToggle">
                     <li>
                         <a href="" data-responsive="mobile">
@@ -2323,7 +2323,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 
     </div><!-- /.modal -->
     
-    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         
         <div class="modal-dialog">
             
@@ -2371,6 +2371,55 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
+                </div>
+                
+            </div><!-- /.modal-content -->
+            
+        </div><!-- /.modal-dialog -->
+                
+    </div><!-- /.modal -->
+       <!-- /.modal for next step instruction -->
+    <div class="modal fade instructionModal" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" style="width:500px;">
+            
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" style="font-size: 20px;">&times;</button>
+                    <h3 class="modal-title">
+                        <label id="success-msg" style="margin:-5px -1px; color: green;">
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 
+                        </label>
+                    </h3>
+                    <i class="fa fa-arrow-right"></i> 
+                    <strong> Next Action </strong> 
+                     Publish the Landing Page
+                    
+                </div>      
+                <div class="modal-body" style="text-align: center;">
+                    <fieldset> 
+                        <div class="control-group form-group">
+                            <div class="col-xs-6 col-sm-7 text-center">
+                                <a  class="lp-view-link agile-link" target="_blank" style="color:#34495e;">
+                                    <i class="fui-window" style="font-size:30px;"></i><br> Preview
+                                </a>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 text-center" style="margin-top:2px;">
+                                <a class="lp-publish-link agile-link" target="_blank" style="color:#34495e;">
+                                    <i class="fui-upload" style="font-size:30px;" ></i><br>Publish
+                                </a>
+                            </div>
+                        </div>  
+                    </fieldset>             
+                                                                    
+                </div><!-- /.modal-body -->
+                                
+                <div class="modal-footer" style="padding:15px 22px;">
+                    <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
+                        <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false">Don't show me again</label>
+                    </div>
+                    <a class="close-popup agile-link" href= "<%=MAIN_URL%>#landing-pages">Back to Landing Pages</a>
                 </div>
                 
             </div><!-- /.modal-content -->
