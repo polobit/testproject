@@ -487,7 +487,12 @@
                 
                 //does the link contain an image?
                 if( styleeditor.linkImage ) styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
-                else if ( styleeditor.linkIcon ) styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
+                else if ( styleeditor.linkIcon ) {
+                    if($(styleeditor.activeElement.element.childNodes[length-1]).hasClass('fa'))
+                        styleeditor.activeElement.element.childNodes[0].nodeValue = document.getElementById('linkText').value;
+                    else
+                        styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
+                }  
                 else styleeditor.activeElement.element.innerText = document.getElementById('linkText').value;
 
                 /* SANDBOX */
@@ -1021,6 +1026,7 @@
         editIcon: function() {
 
             $('a#icon_Link').parent().show();
+            $('a#icon_Link').click();
 
             //get icon class name, starting with fa-
             var get = $.grep(this.activeElement.element.className.split(" "), function(v, i){
