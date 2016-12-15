@@ -1764,5 +1764,15 @@ color:#0d1114 !important;
 .agile-new-theme #content .portlet_body .agile-table>tbody>tr{
   border-top: none !important;
 }
+/*.tabs .tab-container{
+  margin-bottom: 0px !important;
+}
+.tabs .tab-content{
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    border-top-width: 0;
+    border-radius: 0 0 2px 2px;
+}*/
 
 /***** END TABLES ********/
