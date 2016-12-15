@@ -111,9 +111,9 @@ form select.form-control{
   border-bottom: 1px solid #dee5e7;
 }
 
-.wrapper-md {
+/*.wrapper-md {
   padding-bottom: 15px
-}
+}*/
 .app:before {
   background: #f4f8f9;
 }
@@ -698,11 +698,11 @@ header .bg-white a, header button.show-search-dropdown {
 {
   background-color : #FFFFFF;
 }*/
-.wrapper-md
+/*.wrapper-md
 {
   padding-bottom:0px!important;
   padding-top: 15px;
-}
+}*/
 .route_Portlet
 {
   padding-top:10px;
@@ -949,10 +949,10 @@ z-index:1;
 {
   width: 20px;
 }
-.wrapper-md.bg-light.b-b
+/*.wrapper-md.bg-light.b-b
 {
   padding-top:25px;
-}
+}*/
 /*.js-prev-lge ,.js-prev-lge .checkedMultiCheckbox
 {
   margin-left:40px;
@@ -1469,5 +1469,5 @@ ul.tags-management li.tag{
 #browseBtn{
   margin-top:0px !important;
 }
-
+.agile-new-theme .agile-page-header{padding: 20px 20px 10px !important;}
 
