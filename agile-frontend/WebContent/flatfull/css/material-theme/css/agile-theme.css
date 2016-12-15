@@ -309,7 +309,7 @@ form select.form-control{
   font-size: 13px;
 }
 .agile-new-theme h6, .h6{
-  font-size: 125px;
+  font-size: 12px;
 } 
 #contact-sorter .sort-field-txt{
   color: #263238 !important;
@@ -1996,4 +1996,7 @@ ul#recent-menu-model-list li:nth-child(even){
 }
 #basic-addon1{
   border: 0px;
+}
+#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item{
+  border: none !important;
 }
