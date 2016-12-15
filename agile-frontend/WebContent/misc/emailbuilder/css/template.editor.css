@@ -428,3 +428,61 @@ div.view {
     background-color: #ffffff;
     z-index: 1000;
 }
+
+.dropdown{
+    float: right;
+    margin-right: 25px;
+}
+
+.widget-label{
+    width: 40% !important;
+}
+
+.mr-right{
+    margin-right: 0px !important;
+}
+
+
+.wrapper-color-selector{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 135px !important;
+    font-size: 13px; 
+}
+
+.color-style{
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.color-preview{
+    height: 26px;
+    width: 26px;
+    cursor: pointer;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin-left: 3px;
+}
+
+.hex-color{
+    width: 90px;
+    padding: 0 5px 0 23px;
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.hex-col-val{
+    color: #000000;
+    max-width: 100%;
+    border: 0;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 31px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+}

@@ -1388,6 +1388,44 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
     });
 
+    $('#custome-val').on('click', function(){
+        
+        //font styles of template
+        $('#customize').find('.font-family-picker').val($('#tosave').find('table:first').css('font-family'));
+        $('#customize').find('.font-size-picker').val($('#tosave').find('table:first').css('font-size'));
+        $('#customize').find('.line-height-picker').val($('#tosave').find('table:first').css('line-height'));
+
+        //template background color
+        $('#customize').find('#background-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
+        $('#customize').find('#background-color .hex-col-val').text(rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
+
+        //template content area background color
+        $('#customize').find('#content-bg-color .color-preview').css('background-color', rgb2hex($('#tosave').find('.main:first').css('background-color').replace("#","")));
+        $('#customize').find('#content-bg-color .hex-col-val').text(rgb2hex($('#tosave').find('.main:first').css('background-color').replace("#","")));
+
+        //template font color
+        $('#customize').find('#font-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('color').replace("#","")));
+        $('#customize').find('#font-color .hex-col-val').text(rgb2hex($('#tosave').find('table:first').css('color').replace("#","")));
+
+    });
+
+    $('.font-family-picker').on('change', function(){
+        console.log($(this));
+        $('#tosave').find('table:first').css('font-family', $(this).find('option:selected').css('font-family'));
+    });
+
+    $('.font-size-picker').on('change', function(){
+        console.log($(this));
+        $('#tosave').find('table:first').css('font-size', $(this).find('option:selected').text());
+    });
+
+    $('.line-height-picker').on('change', function(){
+        console.log($(this));
+        $('#tosave').find('table:first').css('line-height', $(this).find('option:selected').text());
+    });
+
+
+
 
     $('#user-poll').on('change', 'input[name="poll_url"]',function (){
 
@@ -1863,15 +1901,3 @@ if(typeof escapeHtmlEntities == 'undefined') {
     };
 }
 
- function emailBuilderPreview () {
-        
-        $('div.row').removeClass('active');
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
-        showElements();
-
-        downloadLayoutSrc();
-        var templateContent = $("#templateHtmlContent").val();
-
-        return templateContent.replace("{body}",$('#download').val());
-        
-    }

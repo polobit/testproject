@@ -79,9 +79,9 @@ var localeJSON = <%=localeJSON%>;
             <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
 
                 <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
-                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
+                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee; font-family: Arial;font-size: 12px;line-height: 21px;color: #000000;" >
                         <tr>
-                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
+                            <td width="100%" id="primary" class="demo" align="center" valign="top" >
                                 <div class="column" style="min-height:150px;">
 
                                     <div class="lyrow dragitem">
@@ -99,7 +99,7 @@ var localeJSON = <%=localeJSON%>;
                                                 <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
+                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;">
                                                                 <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
                                                             </td>
                                                         </tr>
@@ -122,7 +122,9 @@ var localeJSON = <%=localeJSON%>;
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#add-content" aria-controls="add-content" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add Content</a></li>
-    <li role="presentation"><a href="#customize" aria-controls="customize" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-cog"></i> Customize</a></li>
+    <li role="presentation">
+    <a href="#customize" aria-controls="customize" role="tab" data-toggle="tab" id="custome-val"><i class="glyphicon glyphicon-cog"></i> Customize</a>
+    </li>
   </ul>
 
   <!-- Tab panes -->
@@ -167,13 +169,202 @@ var localeJSON = <%=localeJSON%>;
                     </div>
                 </div>
     </div>
-    <div role="tabpanel" class="tab-pane" id="customize">
-        <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></a>
-    </div>
+    <div role="tabpanel" class="form-horizontal tab-pane" id="customize">
+
+
+ <div class="form-group mr-right">
+                    <div class="col-sm-2 control-label widget-label">Default Font</div>
+    <div class="col-sm-4 dropdown" >
+<select style="min-width: 135px;text-align: right;" class="form-control font-family-picker inline-block">
+
+        <option style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
+        <option style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
+        <option style="font-family: Georgia, Times, 'Times New Roman', serif">Georgia</option>
+        <option style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica</option>
+        <option style="font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Geneva, Verdana, sans-serif">Lucida Sans</option>
+        <option style="font-family: Tahoma, Verdana, Segoe, sans-serif">Tahoma</option>
+        <option style="font-family: TimesNewRoman, 'Times New Roman', Times, Beskerville, Georgia, serif">Times New Roman</option>
+        <option style="font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Trebuchet MS</option>
+        <option style="font-family: Verdana, Geneva, sans-serif">Verdana</option>
+        <option style="font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif">Bitter</option>
+        <option style="font-family: 'Droid Serif', Georgia, Times, 'Times New Roman', serif">Droid Serif</option>
+        <option style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif">Lato</option>
+        <option style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Open Sans</option>
+        <option style="font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif">Roboto</option>
+        <option style="font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif"> Source Sans Pro</option>
+        <option style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Montserrat</option>
+        <option style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
+
+    </select>
+  </div>
+  </div>
+
+
+
+<div class="form-group mr-right">
+                    <div class="col-sm-2 control-label widget-label">Font Size</div>
+    <div class="col-sm-4 dropdown" >
+    <select style="min-width: 135px;text-align: right;" class="form-control font-size-picker inline-block">
+        <option>8px</option>
+        <option>9px</option>
+        <option>10px</option>
+        <option>11px</option>
+        <option>12px</option>
+        <option>14px</option>
+        <option>16px</option>
+        <option>18px</option>
+        <option>20px</option>
+        <option>22px</option>
+        <option>24px</option>
+        <option>26px</option>
+        <option>28px</option>
+        <option>36px</option>
+        <option>48px</option>
+        <option>72px</option>
+    </select>
+  </div>
+  </div>
+
+
+<div class="form-group mr-right">
+                    <div class="col-sm-2 control-label widget-label">Line Height</div>
+    <div class="col-sm-4 dropdown" >
+<select style="min-width: 135px;text-align: right;" class="form-control line-height-picker inline-block">
+        <option>16px</option>
+        <option>21px</option>
+        <option>25px</option>
+        <option>28px</option>
+    </select>
+  </div>
+  </div>
+
+
+
+<div class="form-group mr-right">
+                    <div class="col-sm-2 control-label widget-label">Font Color</div>
+    <div class="col-sm-4 dropdown" >
+    <div class="wrapper-color-selector" id="font-color">
+        <div class="color-style">
+            <div class="color-preview" style="background-color:#000000;"></div>
+        </div>
+        <div class="hex-color" >
+            <div class="hex-col-val">#000000</div>
+        </div>
+
+    </div>    
+  </div>
+  <script type="text/javascript">
+                $('#font-color').colpick({
+                layout: 'hex',
+                // colorScheme: 'dark',
+                onBeforeShow: function () {
+                $(this).colpickSetColor(rgb2hex($('#background-color').val().replace("#","")));
+                },
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        if (!bySetColor){
+                            $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                            $(el).parent().find(".hex-col-val").text('#' + hex);
+                            $('#tosave').find('table:first').css('color', '#'+ hex);
+                        }
+                },
+                onSubmit: function (hsb, hex, rgb, el) {
+                    $('#tosave').find('table:first').css('color', '#'+ hex);
+                    $(el).colpickHide();
+                }
+                }).keyup(function () {
+                $(this).colpickSetColor(this.value);
+                });
+    </script>
+</div>
+
+
+
+<div class="form-group mr-right">
+                    <div class="col-sm-2 control-label widget-label">Content Area </div>
+    <div class="col-sm-4 dropdown" >
+    <div class="wrapper-color-selector" id="content-bg-color">
+        <div class="color-style">
+            <div class="color-preview" style="background-color:#ffffff;"></div>
+        </div>
+        <div class="hex-color" >
+            <div class="hex-col-val">#ffffff</div>
+        </div>
+
+    </div>    
+  </div>
+  <script type="text/javascript">
+                $('#content-bg-color').colpick({
+                layout: 'hex',
+                // colorScheme: 'dark',
+                onBeforeShow: function () {
+                $(this).colpickSetColor(rgb2hex($('#background-color').val().replace("#","")));
+                },
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        if (!bySetColor){
+                            $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                            $(el).parent().find(".hex-col-val").text('#' + hex);
+                            $('#tosave').find('.main').css('background-color', '#' + hex);
+                        }
+                },
+                onSubmit: function (hsb, hex, rgb, el) {
+                    $('#tosave').find('.main').css('background-color', '#' + hex);
+                    $(el).colpickHide();
+                }
+                }).keyup(function () {
+                $(this).colpickSetColor(this.value);
+                });
+    </script>
+</div>
+
+
+
+<div class="form-group mr-right">
+                    <div class="col-sm-2 control-label widget-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></div>
+    <div class="col-sm-4 dropdown" >
+    <div class="wrapper-color-selector" id="background-color">
+        <div class="color-style">
+            <div class="color-preview" style="background-color:#eeeeee;"></div>
+        </div>
+        <div class="hex-color" >
+            <div class="hex-col-val">#eeeeee</div>
+        </div>
+
+    </div>    
+  </div>
+  <script type="text/javascript">
+                $('#background-color').colpick({
+                layout: 'hex',
+                // colorScheme: 'dark',
+                onBeforeShow: function () {
+                $(this).colpickSetColor(rgb2hex($('#background-color').val().replace("#","")));
+                },
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        if (!bySetColor){
+                            $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                            $(el).parent().find(".hex-col-val").text('#' + hex);
+                            $('#path').val('tosave table:first');
+                            $('#' + $('#path').val()).css('background-color', '#' + hex);
+                        }
+                },
+                onSubmit: function (hsb, hex, rgb, el) {
+                    $('#path').val('tosave table:first');
+                    $('#' + $('#path').val()).css('background-color', '#' + hex);
+                    $(el).colpickHide();
+                }
+                }).keyup(function () {
+                $(this).colpickSetColor(this.value);
+                });
+    </script>
+</div>
+
+
+
+ </div>
   </div>
 
 </div>
-            </div>
+    </div>
+
 
             <div class="col-md-3" style="width:370px;">
                 <!-- START ELEMENT -->
