@@ -1784,6 +1784,16 @@ color:#0d1114 !important;
 .agile-new-theme #content .portlet_body .agile-table>tbody>tr{
   border-top: none !important;
 }
+/*.tabs .tab-container{
+  margin-bottom: 0px !important;
+}
+.tabs .tab-content{
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    border-top-width: 0;
+    border-radius: 0 0 2px 2px;
+}*/
 
 /***** END TABLES ********/
 
@@ -1796,4 +1806,13 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 .contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
   margin-left: 0px;
+}
+ 
+#activity_model .list-group {
+     background-color: transparent;
+     margin-top: 0px;  
+}
+#activity_model .scroll div[id*="heading"] {
+     border-bottom: 1px solid #f4f8f9; 
+     border-top: 1px solid #f4f8f9; 
 }
