@@ -1600,7 +1600,7 @@ table#contacts-table, table#companies {
   color: #263238 !important;
 }
 
-.panel-heading h4, .h4,.panel-heading,.panel-heading h3, .h3{
+.panel-heading h4, .h4,.panel-heading{
   font-size: 16px !important;
   color: #263238 !important;
 }
