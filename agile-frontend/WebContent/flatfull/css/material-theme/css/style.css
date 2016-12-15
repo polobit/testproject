@@ -1372,7 +1372,7 @@ input[type="checkbox"].red-color:checked:after {
   background-color: #f33155;
   border-color: #f33155;
 }
-:not('#themeform') input[type="radio"] {
+input[type="radio"] {
   position: relative;
   display: inline-block;
   vertical-align: top;
@@ -1387,7 +1387,7 @@ input[type="checkbox"].red-color:checked:after {
   -webkit-transition-delay: 0;
   transition-delay: 0;
 }
-:not('#themeform') input[type="radio"] + span {
+input[type="radio"] + span:first-child {
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -1400,7 +1400,7 @@ input[type="checkbox"].red-color:checked:after {
   margin-left: -3px;
   margin-right: 10px;
 }
-:not('#themeform') input[type="radio"]:after {
+input[type="radio"]:after {
   display: block;
   content: "";
   height: 20px;
@@ -1417,35 +1417,35 @@ input[type="checkbox"].red-color:checked:after {
   z-index: 2;
   cursor: pointer;
 }
-:not('#themeform') input[type="radio"]:checked {
+input[type="radio"]:checked {
   color: #11a0f8;
 }
-:not('#themeform') input[type="radio"]:checked:after {
+input[type="radio"]:checked:after {
   content: "";
   border: 6px solid #11a0f8 !important;
   z-index: 3;
   cursor: pointer;
 }
-:not('#themeform') input[type="radio"]:checked + span {
+input[type="radio"]:checked + span {
   color: #11a0f8;
 }
-:not('#themeform') input[type="radio"]:hover:after,
-:not('#themeform') input[type="radio"]:active:after,
-:not('#themeform') input[type="radio"]:focus:after {
+input[type="radio"]:hover:after,
+input[type="radio"]:active:after,
+input[type="radio"]:focus:after {
   border-color: #11a0f8;
 }
-:not('#themeform') input[type="radio"]:hover + span,
-:not('#themeform') input[type="radio"]:active + span,
-:not('#themeform') input[type="radio"]:focus + span {
+input[type="radio"]:hover + span,
+input[type="radio"]:active + span,
+input[type="radio"]:focus + span {
   color: #263238;
 }
-:not('#themeform') input[type="radio"].error:after {
+input[type="radio"].error:after {
   border-color: #f33155;
 }
-:not('#themeform') input[type="radio"].red-color:after {
+input[type="radio"].red-color:after {
   border: 2px solid #f33155;
 }
-:not('#themeform') input[type="radio"].red-color:checked:after {
+input[type="radio"].red-color:checked:after {
   border-color: #f33155 !important;
 }
 .dashboard-select {
