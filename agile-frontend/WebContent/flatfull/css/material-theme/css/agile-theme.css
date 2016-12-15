@@ -1582,6 +1582,7 @@ table#contacts-table, table#companies {
 #calendar-listers #calendar_event table .fc-header-center span h2{
   color: #fff !important;
   margin-bottom: 0px !important;
+  font-size: 18px;
 }
 #calendar-listers #user_calendars #google_cal_link span, #calendar-listers #user_calendars #office_cal_link span{
   font-size: 11px !important;
@@ -1756,7 +1757,7 @@ color:#0d1114 !important;
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel{
+#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel, #import-tabs-content .tab-content.panel{
   box-shadow :0px 0px 0px 0px !important;
 }
 
@@ -1967,4 +1968,7 @@ font-size: 24px !important;
 }
 #dashboardAddForm #description{
   height: auto !important;
+}
+#basic-addon1{
+  border: 0px;
 }
