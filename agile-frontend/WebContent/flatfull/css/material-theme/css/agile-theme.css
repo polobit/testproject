@@ -1153,6 +1153,7 @@ label.i-checks input{
 }
 .radio label, .checkbox label{
   padding-left: 23px;
+  vertical-align: middle;
 }
 .js-prev-lge .i-checks {
   padding-left: 23px;
