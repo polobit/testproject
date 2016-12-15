@@ -1766,3 +1766,11 @@ color:#0d1114 !important;
 }
 
 /***** END TABLES ********/
+
+#tinyMCEhtml_email .form-control
+{
+  height: auto !important;
+}
+textarea#tinyMCEhtml_email {
+    height: auto !important;
+}
