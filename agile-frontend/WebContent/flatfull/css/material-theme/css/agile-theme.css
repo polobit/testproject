@@ -1869,4 +1869,12 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 {
   border:0px solid #fff!important;
 }
-
+#emailBuilderTopOptionsHolder .emailbuilder-copy
+{
+  top:inherit!important;
+}
+.btn-default-imp.active
+{
+    background-color: rgba(17, 160, 248, 0.2)!important;
+    color: #11a0f8!important;
+}
