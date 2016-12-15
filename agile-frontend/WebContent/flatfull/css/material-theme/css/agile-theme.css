@@ -871,7 +871,7 @@ header .bg-white a, header button.show-search-dropdown {
   /*border: none !important;*/
 }
 
-.agile-new-theme .admin-users .panel-heading,.agile-new-theme .upload-panel .panel-heading {
+.agile-new-theme .admin-users .panel-heading, .upload-panel .panel-heading {
     background-color: #e7eef0 !important;
     border: none !important;
     border-radius: 4px 4px 0 0;
@@ -1699,11 +1699,11 @@ table#contacts-table, table#companies {
 }
 
 /***** END TABLES ********/
-#activity_model .list-group {
+#activity_model .list-group , #contact_activity_model .list-group {
      background-color: transparent;
      margin-top: 0px;  
 }
-#activity_model .scroll div[id*="heading"] {
+#activity_model .scroll div[id*="heading"] ,#contact_activity_model .scroll div[id*="heading"] {
      border-bottom: 1px solid #f4f8f9; 
      border-top: 1px solid #f4f8f9; 
 }
