@@ -1753,7 +1753,7 @@ color:#0d1114 !important;
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel{
+#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel{
   box-shadow :0px 0px 0px 0px !important;
 }
 
