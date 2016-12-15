@@ -58,9 +58,9 @@ body, * {
 .agile-new-theme .tickets-div .panel-heading:first-child{
   padding: 10px 15px !important;
 }
-table td a {
+/*table td a {
   color: #263238;; 
-}
+}*/
 .bg-light {
   background-color: inherit!important;
 }
@@ -214,7 +214,7 @@ form select.form-control{
 .agile-new-theme .btn-addon.btn-sm i
 {
       margin: 0px;
-      vertical-align: middle; 
+      vertical-align: baseline; 
       display:inline;
       background-color: rgba(0,0,0,0.0);;
 }
@@ -234,11 +234,7 @@ form select.form-control{
   text-decoration: none;
   outline: 0 !important;
 }
-.agile-new-theme #automation-video {
-  line-height: 41px!important;
-  background-color: #fff!important;
-  color:#78909c !important
-}
+
 .bg-white a:hover {
     color: #067dc6;
 }
@@ -317,12 +313,12 @@ form select.form-control{
   color: #58666e!important;
   font-size: 13px !important;
 }
-#filter-list .btn.btn-sm{
+/*#filter-list .btn.btn-sm{
   padding: 0px !important;
-}
-#filter-list .btn.btn-sm span{
+}*/
+/*#filter-list .btn.btn-sm span{
   color: #58666e!important;
-}
+}*/
 
 #contact-sorter .btn.btn-sm{
   padding: 0px !important;
@@ -358,7 +354,7 @@ form select.form-control{
 }
 
 /** Table CSS **/
-.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+/*.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
   border-top: 0px !important; 
   background-color: transparent !important;
 }
@@ -369,7 +365,7 @@ form select.form-control{
 .agile-new-theme #content table thead tr{
   background-color: #f4f8f9 !important;
 }
-.agile-new-theme table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
   padding-top: 3px !important;
 }
 .agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
@@ -385,7 +381,7 @@ form select.form-control{
 .agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
-}
+}*/
 
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr{
   border-top: inherit !important;
@@ -400,17 +396,17 @@ form select.form-control{
 .agile-new-theme .portlet_body .table>tbody>tr{
   border-top: none !important;
 }
-#content table.fc-header>tbody>tr:first-child{
+/*#content table.fc-header>tbody>tr:first-child{
   border-top: none !important;
-}
-.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header) thead tr th{
+}*/
+/*.agile-new-theme #content table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
   text-transform: uppercase !important;
   color: #78909c !important;
   font-size: 12px !important;
-}
+}*/
 /** End of table CSS **/
 
 .img-inital{
@@ -418,12 +414,12 @@ form select.form-control{
   height: 42px!important;
   width: 42px!important;
 }
-.table-striped>tbody>tr:nth-child(odd)>td{
+/*.table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
-}
-#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+}*/
+/*#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
   background-color: #e7f6ff !important;
-}
+}*/
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
 }
@@ -579,12 +575,12 @@ a i, a span{vertical-align: inherit;}
 #documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading{
   display: none !important;
 }
-table.panel, .panel{
+/*table.panel, .panel{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;
-  /*background-color: #f4f8f9 !important;*/
-}
+   
+} */
 div#contact-reports-list-view, #task-list-based-condition .panel{
   box-shadow: inherit;
   background-color: inherit;
@@ -638,13 +634,14 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 #documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
 }
-/*#document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
+#document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
   margin-left: 0px !important
-}*/
+} 
 .agile-new-theme table>thead>tr>th>label.i-checks.i-checks-sm{
   /*margin: 0px !important;*/
-  padding: 0px !important;
+  padding-bottom: 0px !important;
+  vertical-align: middle;
 }
 #today-heading, #yesterday-heading, #earlier-heading{
   border :none !important;
@@ -749,7 +746,7 @@ header .bg-white a, header button.show-search-dropdown {
 {
   font-size: 14px;
   padding-right:0px;
-  margin-top:0px;
+  /*margin-top:0px;*/
 }     
 .icon-plus-sign
 {
@@ -815,7 +812,7 @@ header .bg-white a, header button.show-search-dropdown {
   line-height: 40px;
   font-size: 14px;
 }
-.btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm , #bulk-actions .btn-sm{
+.btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm , #bulk-actions .btn-sm ,.btn-sm-imp{
   height: 30px;
   line-height: 30px;
   font-size: 12px;
@@ -942,7 +939,7 @@ z-index:1;
 }
 
 .agile-new-theme form .form-control{
-    padding: 6px 20px !important;  
+    padding: 6px 20px;  
 }
 .modal-footer .btn{
   height: 30px;
@@ -958,10 +955,10 @@ z-index:1;
   background-color: #067dc6!important;
   color: #ffffff;
 }
-#data-sync-type a
+/*#data-sync-type a
 {
   color:#fff!important;
-}
+}*/
 .btn-addon.btn-sm i
 {
   width: 20px;
@@ -1039,7 +1036,7 @@ z-index:1;
     vertical-align: middle !important; 
   }
 }
-.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container table>tbody>tr>td, #campaign-triggers-list table>tbody>tr>td, #email-template-div-id table>tbody>tr>td, #forms-list-view table>tbody>tr>td, #landing-pages-collection-container table>tbody>tr>td, #webrules-list-view table>tbody>tr>td, #push-notify-list-view table>tbody>tr>td, .ticket-settings table>tbody>tr>td{
+/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container table>tbody>tr>td, #campaign-triggers-list table>tbody>tr>td, #email-template-div-id table>tbody>tr>td, #forms-list-view table>tbody>tr>td, #landing-pages-collection-container table>tbody>tr>td, #webrules-list-view table>tbody>tr>td, #push-notify-list-view table>tbody>tr>td, .ticket-settings table>tbody>tr>td{
   vertical-align: middle !important;
 }
 .agile-new-theme #deals-new-list-view table>thead>tr>th, #documents_collection_container table>thead>tr>th, #workflows-collection-container table>thead>tr>th, #campaign-triggers-list table>thead>tr>th, #email-templates-list-view table>thead>tr>th, #forms-list-view table>thead>tr>th, #landing-pages-collection-container table>thead>tr>th, #webrules-list-view table>thead>tr>th, #push-notify-list-view table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings table>thead>tr>th{
@@ -1051,7 +1048,7 @@ z-index:1;
 .agile-new-theme #ticket-feedback table>tbody>tr>td:first-child>div{
   width: 40px !important;
   height: 40px !important;
-}
+}*/
 #dashboard-name
 {
   margin-right:7px!important;
@@ -1133,6 +1130,9 @@ input.mini-time.ui-timepicker-input{
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
 
+/*#content .portlet_body_calendar #calendar_container table td, #content .portlet_body_calendar #calendar_container table th {
+  padding: 0px !important;
+}*/
 
 /** Checkbox/Radio CSS **/
 label.i-checks input{
@@ -1144,7 +1144,7 @@ label.i-checks input{
 }
 .i-checks {
   padding-left: 0;
-  padding-top: 7px;
+  padding-bottom: 7px;
 }
 .tickets-div .dropdown-menu .i-checks {
   padding-top: 0px!important;
@@ -1160,6 +1160,12 @@ label.i-checks input{
 }
 .i-checks i {
   display: none!important;
+}
+.i-checks>span {
+    margin-left: auto;
+}
+.i-checks i.glyphicon {
+    display: inline-block!important
 }
 #textModalForm label {
   display: inline;
@@ -1181,6 +1187,7 @@ label.i-checks input{
 #reports-tab-container ul li a{
   border: 0px;
   color: #555;
+  margin-right: 0px;
 }
 #reports-tab-container .maintab a:hover{
   border:0px;
@@ -1215,6 +1222,7 @@ ul.leader-board-view li div table tr td{
      border-top: none !important; 
      padding: 0px !important; 
 } 
+ 
 .agile-new-theme .dayContainer {
     float: left;
     line-height: 20px;
@@ -1328,12 +1336,12 @@ ul.tags-management li.tag{
 {
   color:#11a0f8!important;
 }
-.btn.btn-default.btn-default-imp,.btn.btn-default.btn-default-imp.dropdown-toggle span
+.btn.btn-default-imp,.btn.btn-default.btn-default-imp.dropdown-toggle span
 {
   background-color: rgba(17, 160, 248, 0.1)!important;
   color: #11a0f8!important;
 }
-.btn.btn-default.btn-default-imp:hover,.btn.btn-default.btn-default-imp:focus,.btn.btn-default.btn-default-imp:active,.open .dropdown-toggle.btn-default.btn-default-imp
+.btn.btn-default-imp:hover,.btn.btn-default-imp:focus,.btn.btn-default-imp:active,.open .dropdown-toggle.btn-default.btn-default-imp
 {
     background-color: rgba(17, 160, 248, 0.2)!important;
     color: #11a0f8!important;
@@ -1380,10 +1388,10 @@ ul.tags-management li.tag{
 {
   margin-right:10px!important;
 }
-
-.agile-new-theme .input-group-addon{
+/*
+.agile-new-theme form .input-group-addon{
   padding: 12px 25px !important;
-}
+}*/
 
 #advanced-search-fields-group {
   padding-bottom: 5px;
@@ -1406,12 +1414,12 @@ ul.tags-management li.tag{
 {
   margin-right:15px;
 }
-#activity-log-header-div #activities_date_range.activity-date-filter
+#activity-log-header-div #activities_date_range.activity-date-filter ,  #activities_date_range
 {
   margin-right:15px;
   line-height:27px!important;
 }
-#activity-log-header-div #activities_date_range.activity-date-filter  .caret
+#activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
 {
       margin-left: 7px;
       margin-right: 7px;
@@ -1447,11 +1455,11 @@ ul.tags-management li.tag{
    background-color: #11a0f8!important;
   color: #ffffff!important;
 }
-.agile-new-theme .btn-addon.btn-sm i:active,.agile-new-theme .btn-addon.btn-sm i:hover,.agile-new-theme .btn-addon.btn-sm i:focus
+/*.agile-new-theme .btn-addon.btn-sm i:active,.agile-new-theme .btn-addon.btn-sm i:hover,.agile-new-theme .btn-addon.btn-sm i:focus
 {
     background-color: #067dc6!important;
     color: #ffffff;
-}
+}*/
 .btn.dropdown-toggle.btn-primary-imp .caret
 {
   color: #ffffff !important;
@@ -1523,7 +1531,6 @@ table#contacts-table, table#companies {
 #browseBtn{
   margin-top:0px !important;
 }
-
 .agile-new-theme #phoneLogForm .input-group .form-control{
     padding: 6px 12px !important;   
     color: #78909c; 
@@ -1538,6 +1545,9 @@ table#contacts-table, table#companies {
   margin-top:0px !important;
 }
 
+#reports-tab-container .nav-tabs {
+  border-bottom: 0px;
+}
 
 .agile-new-theme #task-list-based-condition .slate-content h3{
   margin-top: 20px !important;
@@ -1586,3 +1596,172 @@ table#contacts-table, table#companies {
   font-size: 16px !important;
   color: #263238 !important;
 }
+#dialPad.panel-default .panel-heading{
+  background-color: #fff !important;
+}
+#close-dialler>span{
+  color: #b7b7b7;
+}
+#dialler-page .panel.panel-default{
+  border: 1px solid #fafafa !important;
+}
+#contact-sorter
+{
+  margin-top:-5px;
+}
+#refrecal
+{
+  color: #11a0f8 !important;
+}
+#milestone-view-track .icon-road 
+{
+  font-size:15px;
+}
+#activities_date_range .icon-calendar 
+{
+  font-size:13px;
+  margin-top:5px;
+}
+#contact-sorter .fa-sort-desc
+{
+  margin-top:-8px;
+}
+#contact-sorter .sort-field-txt
+{
+ color:#263238 !important;
+}
+#contact-sorter .sort-field-txt:hover
+{
+color:#0d1114 !important;
+}
+#whitelabel-domain
+{
+  height:40px;
+}
+.btn-gray:hover, .btn-gray:focus, .btn-gray:active, .btn-gray.active, .open .dropdown-toggle.btn-gray
+{
+  background-color: #067dc6!important;
+  color: #fff!important;
+}
+
+/*Contact Single Row Image Fix Start*/
+.agile-new-theme table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: 3px !important;
+}
+/*Contact Single Row Image Fix End*/
+
+
+#company-contacts-list-view .contacts-inner-div{
+  border-top: 15px solid #f4f8f9;
+}
+
+.new-deal-input{
+  width: 87% !important;
+}
+/*start of call campaign*/
+#callnoty-container .new-theme-btn{
+      border-radius: 2px !important;
+    outline: 0!important;
+    height: 18px !important;
+    line-height: 14px !important;
+    font-size: 9px !important;
+    margin: 0px !important;
+    padding: 1px 5px !important;
+} 
+.call-campaign-running .app-content-full {
+    top: 122px !important;
+}
+/*end of call campaign*/
+
+
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
+
+/***** Start TABLES ********/
+
+#content .portlet_body_calendar #calendar_container .agile-table td, #content .portlet_body_calendar #calendar_container .agile-table th {
+  padding: 0px !important;
+}
+.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container .agile-table>tbody>tr>td, #campaign-triggers-list .agile-table>tbody>tr>td, #email-template-div-id .agile-table>tbody>tr>td, #forms-list-view .agile-table>tbody>tr>td, #landing-pages-collection-container .agile-table>tbody>tr>td, #webrules-list-view .agile-table>tbody>tr>td, #push-notify-list-view .agile-table>tbody>tr>td, .ticket-settings .agile-table>tbody>tr>td{
+  vertical-align: middle !important;
+}
+.agile-new-theme #deals-new-list-view .agile-table>thead>tr>th, #documents_collection_container .agile-table>thead>tr>th, #workflows-collection-container .agile-table>thead>tr>th, #campaign-triggers-list .agile-table>thead>tr>th, #email-templates-list-view .agile-table>thead>tr>th, #forms-list-view .agile-table>thead>tr>th, #landing-pages-collection-container .agile-table>thead>tr>th, #webrules-list-view .agile-table>thead>tr>th, #push-notify-list-view .agile-table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings .agile-table>thead>tr>th{
+  vertical-align: bottom !important;
+}
+.agile-new-theme .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
+  padding-left: 15px !important;
+}
+.agile-new-theme #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+  width: 40px !important;
+  height: 40px !important;
+}
+#document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
+  margin: 0; 
+  margin-left: 0px !important
+}
+.agile-table.panel, .panel{
+  border: none !important;
+  -webkit-box-shadow: inherit !important;
+  box-shadow: inherit !important;
+   
+}
+#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+  background-color: #e7f6ff !important;
+}
+.table-striped>tbody>tr:nth-child(odd)>td{
+  background-color: #fff !important;
+}
+.agile-new-theme #content .agile-table>thead>tr>th{
+  padding: 10px 15px 15px 15px !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  text-transform: uppercase !important;
+  color: #78909c !important;
+  font-size: 12px !important;
+}#content .agile-table.fc-header>tbody>tr:first-child{
+  border-top: none !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span .agile-table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span .agile-table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
+.agile-new-theme #content .agile-table thead tr{
+  background-color: #f4f8f9 !important;
+}
+.agile-new-theme .agile-table>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+  padding-top: 3px !important;
+}
+.agile-new-theme #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>a{
+  padding-left: 8px !important;
+}
+.agile-new-theme #content .agile-table>tbody>tr>td{
+   border-top: none !important;
+   padding: 10px 15px !important;
+}
+.table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
+    padding: 10px 15px !important;
+}
+.agile-new-theme #content .agile-table>tbody>tr{
+  border-top: 10px solid #f4f8f9 !important;
+  background-color: #fff !important;
+}
+.agile-table td a {
+  color: #263238;
+}
+#content  .agile-table .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+  background-color: #e7f6ff !important;
+}
+
+/***** END TABLES ********/
