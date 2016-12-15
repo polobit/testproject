@@ -1908,7 +1908,7 @@ tbody#ticket-single-row-model-list tr td{
 }
 table.agile-table>tbody>tr>td{
   vertical-align: middle !important;
-
+}
 /*start of deals*/
 #opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li{
   border-bottom:  none !important;
@@ -1948,4 +1948,13 @@ font-size: 24px !important;
 }
 .slate-content h4{
   font-size: 18px !important;
+}
+#emailBuilderTopOptionsHolder .emailbuilder-copy
+{
+  top:inherit!important;
+}
+.btn-default-imp.active
+{
+    background-color: rgba(17, 160, 248, 0.2)!important;
+    color: #11a0f8!important;
 }
