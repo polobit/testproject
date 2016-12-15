@@ -390,12 +390,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-new-theme .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
 }
-.agile-new-theme #contacts-portlets.table>tbody>tr{
-  border-top: none !important;
-}
-.agile-new-theme .portlet_body .table>tbody>tr{
-  border-top: none !important;
-}
+
 /*#content table.fc-header>tbody>tr:first-child{
   border-top: none !important;
 }*/
@@ -1762,6 +1757,12 @@ color:#0d1114 !important;
 }
 #content  .agile-table .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
   background-color: #e7f6ff !important;
+}
+/*.agile-new-theme #content #contacts-portlets .agile-table>tbody>tr{
+  border-top: none !important;
+}*/
+.agile-new-theme #content .portlet_body .agile-table>tbody>tr{
+  border-top: none !important;
 }
 
 /***** END TABLES ********/
