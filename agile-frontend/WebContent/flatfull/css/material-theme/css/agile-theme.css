@@ -291,7 +291,7 @@ form select.form-control{
   font-weight: 400;
 }
 .agile-new-theme h1, .h1{
-  font-size: 28px;
+  font-size: 24px;
 }
 .agile-new-theme h2, .h2{
   font-size: 28px;
@@ -470,7 +470,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
 .agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px; overflow: inherit;}
 .agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 70px; }
+.app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 55px; }
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -1752,7 +1752,7 @@ color:#0d1114 !important;
   box-shadow: inherit !important;   
   
 }
-.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default{
+.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default{
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
@@ -1935,7 +1935,36 @@ table.agile-table>tbody>tr>td{
 .setting-add-tag{
   padding: 6px 12px !important;
 }
+
 .btn-group>.btn:last-child:not(:first-child){
   border-top-left-radius : 4px;
   border-bottom-left-radius : 4px;
+}
+/* star of filters*/
+#contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
+    padding-right: 5px !important; 
+    padding-bottom: 5px !important; 
+}
+
+.filter-contacts-multiple-remove,.filter-opportunities-multiple-remove{
+  margin-top:10px;
+}
+/* end of filters*/
+#affiliate-container h1,#affiliate-container .h3{
+font-size: 24px !important;
+}
+.slate-content h4{
+  font-size: 18px !important;
+}
+#emailBuilderTopOptionsHolder .emailbuilder-copy
+{
+  top:inherit!important;
+}
+.btn-default-imp.active
+{
+    background-color: rgba(17, 160, 248, 0.2)!important;
+    color: #11a0f8!important;
+}
+#dashboardAddForm #description{
+  height: auto !important;
 }
