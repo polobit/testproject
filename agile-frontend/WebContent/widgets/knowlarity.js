@@ -280,25 +280,25 @@ function changeCallNotyBasedOnStatus(event){
 			if(callDirection == "Outbound"){
 				if(eventType){				
 					if(eventType == "AGENT_CALL"){
-						KNOWLARITY_PREVIOUS_EVENT = "AGENT_CALL";									
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];						
+						KNOWLARITY_PREVIOUS_EVENT = "AGENT_CALL";						
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
 					}else if(eventType == "CUSTOMER_CALL"){
 						KNOWLARITY_PREVIOUS_EVENT = "CUSTOMER_CALL";
 						var json = {"callId": agentNumber};				
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];							
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];											
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "ringing", globalCall.callNumber, btns, json, callDirection);					
 					}else if(eventType == "BRIDGE"){
 						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];	
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);					
 					}else if(KNOWLARITY_PREVIOUS_EVENT && KNOWLARITY_PREVIOUS_EVENT == "BRIDGE" && eventType == "HANGUP"){
 						KNOWLARITY_PREVIOUS_EVENT = "HANGUP";
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];	
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "answered", globalCall.callNumber, btns);					
 					}else if(KNOWLARITY_PREVIOUS_EVENT && KNOWLARITY_PREVIOUS_EVENT == "AGENT_CALL" && eventType == "HANGUP"){
 						KNOWLARITY_PREVIOUS_EVENT = "HANGUP";
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];	
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "failed", globalCall.callNumber, btns);					
 					}
 				}
@@ -317,17 +317,17 @@ function changeCallNotyBasedOnStatus(event){
 							
 							globalCall.callNumber = customerNumber;
 
-							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel","title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];	
+							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];		
 							var json = {"callId": customerNumber};
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 						});									
 					}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
 						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel","title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];	
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];		
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
 					}else if(KNOWLARITY_PREVIOUS_EVENT && KNOWLARITY_PREVIOUS_EVENT == "BRIDGE" && eventType == "HANGUP"){
 						KNOWLARITY_PREVIOUS_EVENT = "HANGUP";
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel","title":"{{agile_lng_translate 'widgets' 'Knowlarity-cancel'}}"}];	
+						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];		
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "answered", globalCall.callNumber, btns);						
 					}
 				}	
