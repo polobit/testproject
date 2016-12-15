@@ -113,4 +113,5 @@
     "back-landingpage" : "{{agile_lng_translate 'landingpage-builder' 'back-landingpage'}}",
     "next-action" : "{{agile_lng_translate 'landingpages' 'next-action'}}",
     "publish-the-landing-page" : "{{agile_lng_translate 'landingpages' 'publish-the-landing-page'}}",
+
 }

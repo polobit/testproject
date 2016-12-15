@@ -507,6 +507,12 @@
 
                 }
 
+                //check for open in new tab
+                if($('#newtab-option').prop("checked"))            
+                    $(styleeditor.activeElement.element).attr('target','_blank');
+                else
+                    $(styleeditor.activeElement.element).removeAttr('target');       
+
                 /* END SANDBOX */
 
             }
@@ -751,7 +757,7 @@
             styleeditor.selectLinksInernal.innerHTML = '';
 
             newOption = document.createElement('OPTION');
-            newOption.innerText = _AGILE_LOCALE_JSON['choose-a-block'];
+            newOption.innerText = _AGILE_LOCALE_JSON['select-on-page-link'];
             newOption.setAttribute('value', '#');
             styleeditor.selectLinksInernal.appendChild(newOption);
 
@@ -898,18 +904,22 @@
             var theHref;
 
             $('a#link_Link').parent().show();
+            $('#linkText').parent().show();
+            //check target attribute
+            if($(el).attr('target')==="_blank")
+                $("#newtab-option").prop("checked", "checked");
+            else
+                $("#newtab-option").prop("checked", "");
             $('a#link_Link').click();
 
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
-
                 theHref = $(el).attr('href');
-
             } else if( $(el).parent().prop('tagName') === 'A' ) {
-
                 theHref = $(el).parent().attr('href');
-
             }
+            
+            $('#linkText').focus();
             styleeditor.buildPagesDropdown(theHref);
             styleeditor.buildBlocksDropdown(theHref);
             styleeditor.inputCustomLink.value = theHref;
@@ -933,6 +943,7 @@
         editImage: function(el) {
 
             $('a#img_Link').parent().show();
+            $('#linkText').parent().hide();
 
             if($(el).prop('tagName')=== "IMG"  && $(el).attr('data-type') !== 'video')
                 $("a#img_Link").click(); 
@@ -1022,6 +1033,8 @@
 
             $('a#icon_Link').parent().show();
             $('a#icon_Link').click();
+            $('#linkText').parent().hide();
+
 
             //get icon class name, starting with fa-
             var get = $.grep(this.activeElement.element.className.split(" "), function(v, i){
@@ -1393,7 +1406,7 @@
                 $(event.currentTarget).prev().find('input').val("none");
             });
             return icon;
-        }
+        }       
 
     };
 

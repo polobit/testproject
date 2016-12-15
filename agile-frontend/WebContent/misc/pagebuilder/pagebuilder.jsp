@@ -288,6 +288,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <div class="tab-pane link_Tab" id="link_Tab">
                     
                     <div class="form-group fullWidth">
+                        <label>Text to display: </label>
                         <input type="text" class="form-control" id="linkText" name="linkText" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-text")%>' value="">
                     </div>
                     
@@ -299,20 +300,26 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <p class="text-center or hidden">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or")%></span>
+                    </p>                  
+                   
+                    <div class="form-group fullWidth">
+                        <label>URL: </label>
+                        <input type="text" class="form-control" id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
+                    </div>
+                    <p class="text-center or">
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
-                    
+
                     <div class="form-group">
                         <!--<select id="pageLinksDropdown" class="form-control select select-primary btn-block mbl">-->
                         <select id="internalLinksDropdown" class="form-control select select-primary btn-block mbl">
-                            <option value="#"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-a-block")%></option>
+                            <option value="#"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-on-page-link")%></option>
+
                         </select>
                     </div>
-                    
-                    <p class="text-center or">
-                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or")%></span>
-                    </p>
-                    
-                    <input type="text" class="form-control" id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
+                    <div class="checkbox form-group " style="margin-top:4px; margin-bottom:4px;">
+                        <label class="pull-left"  style="padding-left: 0px; margin-top: -16px;"><input type="checkbox" id="newtab-option" value="false">Open in new tab</label>
+                    </div>
                     
                 </div>
             
