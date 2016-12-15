@@ -724,7 +724,7 @@ header .bg-white a, header button.show-search-dropdown {
 {
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 :not(.notaddon-imp).icon-plus-sign:before{
   content: "+";
@@ -814,7 +814,7 @@ header .bg-white a, header button.show-search-dropdown {
 .btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm , #bulk-actions .btn-sm ,.btn-sm-imp{
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 
 .multiple-checkbox-adminprefs .panel{
@@ -943,7 +943,7 @@ z-index:1;
 .modal-footer .btn{
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 .btn.btn-blue:hover,
 .btn.btn-primary:hover,
@@ -1410,7 +1410,7 @@ ul.tags-management li.tag{
 {
    height: 40px!important;
   line-height: 40px!important;
-  font-size: 14px;
+  font-size: 14px!important;
 }
 #deals-view
 {
@@ -1990,3 +1990,37 @@ ul#recent-menu-model-list li:nth-child(even){
 .agile-new-theme .agile-menu-parent-item {
     font-size: 16px;
 }
+#widget-settings-tab-pane .btn-primary ,#widget-settings-tab-pane .btn-default ,#settings-widgets-tab-content .btn-danger{
+    margin-left: 10px;
+}
+#setting-email-prefs-tab-content .btn-danger 
+{
+    margin-right: 10px;
+}
+#prefs-tabs-content .btn-primary
+{
+  margin-left:10px;
+}
+/*
+#online-calendar-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#notificationsForm .btn-primary , #theme-and-layout .btn-primary , #settings-user-prefs-tab-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#admin-prefs-tabs-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+    font-size: 14px; 
+    margin-left:10px;
+}*/
+/*.save{
+ 
+      background-color: #11a0f8!important;
+      color: #ffffff!important;
+}*/
