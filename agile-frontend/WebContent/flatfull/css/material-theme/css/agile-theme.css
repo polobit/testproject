@@ -1774,3 +1774,6 @@ color:#0d1114 !important;
 textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
     height: auto !important;
 }
+.contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
+  margin-left: 0px;
+}
