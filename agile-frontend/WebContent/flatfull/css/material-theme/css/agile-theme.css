@@ -100,9 +100,12 @@ form select.form-control{
 }
 .agile-new-theme form .form-control
 {
-  height:40px;
   border: 0px;
   background-color: #f4f8f9;
+}
+.agile-new-theme form .form-control:not(textarea)
+{
+  height:40px;
 }
 .b-b {
   border-bottom: none;
