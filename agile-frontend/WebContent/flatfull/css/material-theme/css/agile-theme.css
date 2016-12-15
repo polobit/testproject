@@ -465,8 +465,9 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
 .agile-new-theme .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
 .agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
-.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px;}
+.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px; overflow: inherit;}
 .agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
+.app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 70px; }
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -677,21 +678,20 @@ header .bg-white a, header button.show-search-dropdown {
 
 .app-aside-dock .app-aside .navi>ul>li>a{border-top: 3px solid transparent;}
 
-.agile-new-theme .nav-sub{
+/*.agile-new-theme .nav-sub{
     overflow-y: auto !important;
-    /*-webkit-overflow-scrolling: touch;*/
     max-height: 470px;
-}
-.agile-new-theme .nav-sub::-webkit-scrollbar {
+}*/
+.agile-new-theme .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar {
     width:5px;
 }
  
-.agile-new-theme .nav-sub::-webkit-scrollbar-track {
+.agile-new-theme .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar-track {
     /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
     background-color: #fff;
 }
  
-.agile-new-theme .nav-sub::-webkit-scrollbar-thumb {
+.agile-new-theme .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar-thumb {
   background-color: #e7eef0;
   border-radius: 14px; 
   -webkit-border-radius: 14px;
@@ -1119,7 +1119,6 @@ input.mini-time.ui-timepicker-input{
 }
 
 
-.list-group{background-color: #fff; margin-top: 15px;}
 .list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
@@ -1548,7 +1547,7 @@ table#contacts-table, table#companies {
 #browseBtn{
   margin-top:0px !important;
 }
-.agile-new-theme .agile-page-header{padding: 20px 20px 10px !important;}
+.agile-new-theme .agile-page-header{padding: 15px 20px 10px !important;}
 
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus{background-color: inherit;}
 .agile-new-theme .app-aside-dock.app-aside-fixed .app-header .navbar-header{border-right: 0px;}
@@ -1682,9 +1681,33 @@ color:#0d1114 !important;
     margin: 0px !important;
     padding: 1px 5px !important;
 } 
+
+#call-campaign-content .btn{
+  border-radius: 2px !important;
+    outline: 0!important;
+    height: 18px !important;
+    line-height: 14px !important;
+    font-size: 9px !important;
+    margin: 0px !important;
+    padding: 1px 5px !important;
+}
+
+#call-campaign-content .new-theme-pausecall-btn,#call-campaign-content .new-theme-headphone,#call-campaign-content .cam-dialpad-icon,#call-campaign-content .new-theme-microphone-btn{
+  height: 16px !important;
+}
+#call-campaign-content .cam-call-icon{
+  top :-3px !important;
+}
+#call-campaign-content #hangup{
+  height: 17px;
+  width: 18px;
+}
+
+
 .call-campaign-running .app-content-full {
     top: 122px !important;
 }
+
 /*end of call campaign*/
 
 
@@ -1696,6 +1719,7 @@ color:#0d1114 !important;
      border-top: none !important; 
      padding: 0px !important; 
 } 
+
 
 /***** Start TABLES ********/
 
@@ -1756,9 +1780,9 @@ color:#0d1114 !important;
 .agile-new-theme #content .agile-table thead tr{
   background-color: #f4f8f9 !important;
 }
-.agile-new-theme .agile-table>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+/*.agile-new-theme .agile-table>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
   padding-top: 3px !important;
-}
+}*/
 .agile-new-theme #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>a{
   padding-left: 8px !important;
 }
@@ -1809,6 +1833,10 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 .contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
   margin-left: 0px;
 }
+
+.tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
+.agile-new-theme .reports-tabs-left-panel{height: 100vh;}
+
 #activity_model .list-group , #contact_activity_model .list-group {
  
      background-color: transparent;
@@ -1857,6 +1885,20 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 {
   margin-left:10px!important;
 }
+.btn-danger
+{
+    background-color: rgba(243, 49, 85, 0.1)!important;
+    color: #f33155 !important;
+}
+.btn-danger:hover,.btn-danger:active,.btn-danger:hover,.btn-danger:focus
+{
+    background-color: rgba(243, 49, 85, 0.2)!important;
+    color: #f33155!important;
+}
+.dropdown-menu
+{
+  border:0px solid #fff!important;
+}
 tbody#ticket-single-row-model-list tr td{
   vertical-align: initial;
 }
@@ -1866,3 +1908,24 @@ tbody#ticket-single-row-model-list tr td{
 table.agile-table>tbody>tr>td{
   vertical-align: middle !important;
 }
+
+/*start of deals*/
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li{
+  border-bottom:  none !important;
+  margin: 0px 5px 10px 0px;
+}
+#deals-new-milestone-view .panel{
+  background-color: #f4f8f9 !important;
+} 
+.milestone-column>ul, .milestone-column>div.milestones{
+  height: calc(100vh - 190px) !important; 
+}
+.milestone-column>div.milestones ul.milestones{
+  min-height: calc(100vh - 190px) !important; 
+}
+/*End of deals*/
+
+.setting-add-tag{
+  padding: 6px 12px !important;
+}
+
