@@ -111,9 +111,9 @@ form select.form-control{
   border-bottom: 1px solid #dee5e7;
 }
 
-.wrapper-md {
+/*.wrapper-md {
   padding-bottom: 15px
-}
+}*/
 .app:before {
   background: #f4f8f9;
 }
@@ -169,20 +169,20 @@ form select.form-control{
   padding: 20px 5px 17px 5px !important;
   color: #78909c;
 }
-.tabs .tab-container .nav-tabs li:hover{
-  background-color: #e7eef0 !important;
+.tabs .tab-container .nav-tabs>li:hover>a, .tabs .tab-container .nav-tabs>li:focus>a, .tabs .tab-container .nav-tabs>li.active>a{
+  background-color: inherit;
 }
 .tabs .tab-container .nav-tabs li a:hover {
-  color: #7460ee !important;
+  color: #11a0f8;
   border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
   background-color: #e7eef0 !important;
 }
 .tabs .tab-container .nav-tabs li.active a {
   background-color: transparent !important;
-  color: #7460ee !important;
+  color: #11a0f8 ;
   font-weight: bold;
   border: none;
-  border-bottom: 3px solid #7460ee !important;
+  border-bottom: 3px solid #11a0f8 !important;
 }
 .nav-tabs-scroll.nav-tabs-scroll-style1 .nav-tabs-scroll-controls {
   background-color: #e7eef0;
@@ -480,7 +480,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-new-theme .app-aside-dock.app-aside-fixed .app-aside {
    top: 70px;
 }
-.app-aside-dock.app-aside-fixed.app-header-fixed{padding-top: 138px;}
+.app-aside-dock.app-aside-fixed.app-header-fixed{padding-top: 70px;}
 /*.app-aside-dock .app-aside{background-color: #f6f8f8;}*/
 }/*medis 992 end*/
 
@@ -514,10 +514,10 @@ a i, a span{vertical-align: inherit;}
 .agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{width: auto;}
 .agile-new-theme .agile-menu-dropdown-aside{padding-top: 0px !important}
 .agile-new-theme .navi ul.nav li a{padding-top:12px; padding-bottom: 12px; color:#78909c;}
-.agile-new-theme .nav>li>a:hover, .agile-new-theme .nav>li>a:focus{color: #11a0f8 !important; background-color: #f5fbff;}
+.agile-new-theme .nav>li>a:hover, .agile-new-theme .nav>li>a:focus{color: #11a0f8 !important; background-color:inherit;}
 .agile-new-theme .navi ul.nav li a{border-left: 3px solid transparent;}
-/*.agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}*/
-.agile-new-theme .bg-white .agile-menuactive>a.agile-menu-parent-item{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
+.agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
+.agile-new-theme .bg-white .agile-menuactive>a.agile-menu-parent-item{color: #11a0f8; background-color: inherit; /*border-left: 3px solid rgb(17, 160, 248);*/}
 .agile-new-theme .bg-white .agile-menuactive>a{color: #11a0f8 !important;}
 .agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{padding:0px !important;}
 .app-aside-dock .app-aside .agile-menuactive>a.agile-menu-parent-item{border-left:0px; color: #11a0f8; background-color: #e7f6ff; border-top: 3px solid rgb(17, 160, 248);}
@@ -570,6 +570,7 @@ a i, a span{vertical-align: inherit;}
 #documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading{
   display: none !important;
 }
+
 /*table.panel, .panel{
   border: none !important;
   -webkit-box-shadow: inherit !important;
@@ -707,11 +708,11 @@ header .bg-white a, header button.show-search-dropdown {
 {
   background-color : #FFFFFF;
 }*/
-.wrapper-md
+/*.wrapper-md
 {
   padding-bottom:0px!important;
   padding-top: 15px;
-}
+}*/
 .route_Portlet
 {
   padding-top:10px;
@@ -958,10 +959,10 @@ z-index:1;
 {
   width: 20px;
 }
-.wrapper-md.bg-light.b-b
+/*.wrapper-md.bg-light.b-b
 {
   padding-top:25px;
-}
+}*/
 /*.js-prev-lge ,.js-prev-lge .checkedMultiCheckbox
 {
   margin-left:40px;
@@ -1141,6 +1142,9 @@ label.i-checks input{
   padding-left: 0;
   padding-bottom: 7px;
 }
+.i-checks i.glyphicon {
+  display: inline-block!important;
+ }
 .tickets-div .dropdown-menu .i-checks {
   padding-top: 0px!important;
 }
@@ -1153,6 +1157,10 @@ label.i-checks input{
 .js-prev-lge .i-checks {
   padding-left: 23px;
 }
+.getting-started-body label.i-checks input{
+  vertical-align: middle;
+  margin-right: 10px;
+ }
 .i-checks i {
   display: none!important;
 }
@@ -1539,7 +1547,15 @@ table#contacts-table, table#companies {
 #browseBtn{
   margin-top:0px !important;
 }
+.agile-new-theme .agile-page-header{padding: 20px 20px 10px !important;}
 
+.nav .open>a, .nav .open>a:hover, .nav .open>a:focus{background-color: inherit;}
+.agile-new-theme .app-aside-dock.app-aside-fixed .app-header .navbar-header{border-right: 0px;}
+.agile-new-theme table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
+    width: 20px !important;
+    height: 20px !important;
+    margin-top: 3px !important;
+ }
 #reports-tab-container .nav-tabs {
   border-bottom: 0px;
 }
@@ -1702,13 +1718,13 @@ color:#0d1114 !important;
   margin: 0; 
   margin-left: 0px !important
 }
-.agile-table.panel, .panel{
+.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default {
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;   
   
 }
-.tabs .panel {
+.tab-content .panel, #admin-prefs-tabs-content.tabs .tab-pane:not(.no-box-shadow) .panel {
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
@@ -1777,4 +1793,7 @@ color:#0d1114 !important;
 }
 textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
     height: auto !important;
+}
+.contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
+  margin-left: 0px;
 }
