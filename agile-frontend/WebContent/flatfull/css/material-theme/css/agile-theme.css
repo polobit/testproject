@@ -1749,7 +1749,7 @@ color:#0d1114 !important;
   box-shadow: inherit !important;   
   
 }
-.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default{
+.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default{
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
@@ -1957,4 +1957,7 @@ font-size: 24px !important;
 {
     background-color: rgba(17, 160, 248, 0.2)!important;
     color: #11a0f8!important;
+}
+#dashboardAddForm #description{
+  height: auto !important;
 }
