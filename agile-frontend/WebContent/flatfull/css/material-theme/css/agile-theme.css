@@ -568,7 +568,7 @@ a i, a span{vertical-align: inherit;}
 #automation-video{
   margin-right: 15px !important;
 }
-#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading{
+#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading, #reports-show-results .panel-heading, #workflow-subscribers-list .panel-heading{
   display: none !important;
 }
 
@@ -609,9 +609,9 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 .agile-new-theme #deal-tracks-accordion .panel-heading{
   padding-left: 5px !important;
 }
-.agile-new-theme #deal-tracks-accordion .panel-title{
+/*.agile-new-theme #deal-tracks-accordion .panel-title{
   color: #11a0f8 !important;
-}
+}*/
 .agile-new-theme #deal-tracks-accordion .panel-body{
   border-top: none !important;
 }
@@ -628,7 +628,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 .agile-new-theme table#deal-sources-table>tbody>tr>td:nth-child(2)>div{
   padding-left: 15px !important;
 }
-#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer{
+#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer, #user-dashboard-list .panel-footer, #voicemail-list .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
 }
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
@@ -723,7 +723,7 @@ header .bg-white a, header button.show-search-dropdown {
   line-height: 30px;
   font-size: 12px;
 }
-.icon-plus-sign:before{
+:not(.notaddon-imp).icon-plus-sign:before{
   content: "+";
   margin-left: 1px;
   font-weight: 600;
@@ -840,7 +840,7 @@ header .bg-white a, header button.show-search-dropdown {
 }
 
 #admin-prefs-tabs-content .control-group{
-  padding-top: 10px;
+  padding-top: 0px;
   background-color: #fff;
 }
 
@@ -864,7 +864,7 @@ header .bg-white a, header button.show-search-dropdown {
   /*border: none !important;*/
 }
 
-.agile-new-theme .admin-users .panel-heading,.agile-new-theme .upload-panel .panel-heading {
+.agile-new-theme .admin-users .panel-heading, .upload-panel .panel-heading {
     background-color: #e7eef0 !important;
     border: none !important;
     border-radius: 4px 4px 0 0;
@@ -1152,6 +1152,7 @@ label.i-checks input{
 }
 .radio label, .checkbox label{
   padding-left: 23px;
+  vertical-align: middle;
 }
 .js-prev-lge .i-checks {
   padding-left: 23px;
@@ -1467,7 +1468,7 @@ ul.tags-management li.tag{
   color: #ffffff !important;
 }
 /*css for the caret icon in the campaigns page */
-#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial
+#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial, #document_validate ,#document_update_validate
 {
   border-radius: 4px;
 }
@@ -1632,9 +1633,9 @@ table#contacts-table, table#companies {
   font-size:13px;
   margin-top:5px;
 }
-#contact-sorter .fa-sort-desc
+#contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
-  margin-top:-8px;
+  margin-top:-11px;
 }
 #contact-sorter .sort-field-txt
 {
@@ -1680,9 +1681,33 @@ color:#0d1114 !important;
     margin: 0px !important;
     padding: 1px 5px !important;
 } 
+
+#call-campaign-content .btn{
+  border-radius: 2px !important;
+    outline: 0!important;
+    height: 18px !important;
+    line-height: 14px !important;
+    font-size: 9px !important;
+    margin: 0px !important;
+    padding: 1px 5px !important;
+}
+
+#call-campaign-content .new-theme-pausecall-btn,#call-campaign-content .new-theme-headphone,#call-campaign-content .cam-dialpad-icon,#call-campaign-content .new-theme-microphone-btn{
+  height: 16px !important;
+}
+#call-campaign-content .cam-call-icon{
+  top :-3px !important;
+}
+#call-campaign-content #hangup{
+  height: 17px;
+  width: 18px;
+}
+
+
 .call-campaign-running .app-content-full {
     top: 122px !important;
 }
+
 /*end of call campaign*/
 
 
@@ -1695,17 +1720,18 @@ color:#0d1114 !important;
      padding: 0px !important; 
 } 
 
+
 /***** Start TABLES ********/
 
 #content .portlet_body_calendar #calendar_container .agile-table td, #content .portlet_body_calendar #calendar_container .agile-table th {
   padding: 0px !important;
 }
-.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container .agile-table>tbody>tr>td, #campaign-triggers-list .agile-table>tbody>tr>td, #email-template-div-id .agile-table>tbody>tr>td, #forms-list-view .agile-table>tbody>tr>td, #landing-pages-collection-container .agile-table>tbody>tr>td, #webrules-list-view .agile-table>tbody>tr>td, #push-notify-list-view .agile-table>tbody>tr>td, .ticket-settings .agile-table>tbody>tr>td{
+/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container .agile-table>tbody>tr>td, #campaign-triggers-list .agile-table>tbody>tr>td, #email-template-div-id .agile-table>tbody>tr>td, #forms-list-view .agile-table>tbody>tr>td, #landing-pages-collection-container .agile-table>tbody>tr>td, #webrules-list-view .agile-table>tbody>tr>td, #push-notify-list-view .agile-table>tbody>tr>td, .ticket-settings .agile-table>tbody>tr>td{
   vertical-align: middle !important;
-}
-.agile-new-theme #deals-new-list-view .agile-table>thead>tr>th, #documents_collection_container .agile-table>thead>tr>th, #workflows-collection-container .agile-table>thead>tr>th, #campaign-triggers-list .agile-table>thead>tr>th, #email-templates-list-view .agile-table>thead>tr>th, #forms-list-view .agile-table>thead>tr>th, #landing-pages-collection-container .agile-table>thead>tr>th, #webrules-list-view .agile-table>thead>tr>th, #push-notify-list-view .agile-table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings .agile-table>thead>tr>th{
+}*/
+/*.agile-new-theme #deals-new-list-view .agile-table>thead>tr>th, #documents_collection_container .agile-table>thead>tr>th, #workflows-collection-container .agile-table>thead>tr>th, #campaign-triggers-list .agile-table>thead>tr>th, #email-templates-list-view .agile-table>thead>tr>th, #forms-list-view .agile-table>thead>tr>th, #landing-pages-collection-container .agile-table>thead>tr>th, #webrules-list-view .agile-table>thead>tr>th, #push-notify-list-view .agile-table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings .agile-table>thead>tr>th{
   vertical-align: bottom !important;
-}
+}*/
 .agile-new-theme .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
@@ -1717,12 +1743,16 @@ color:#0d1114 !important;
   margin: 0; 
   margin-left: 0px !important
 }
-.agile-table.panel, .panel{
+.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default {
   border: none !important;
   -webkit-box-shadow: inherit !important;
-  box-shadow: inherit !important;
-   
+  box-shadow: inherit !important;   
+  
 }
+.tab-content .panel, #admin-prefs-tabs-content.tabs .tab-pane:not(.no-box-shadow) .panel {
+   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+
 #content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
   background-color: #e7f6ff !important;
 }
@@ -1791,16 +1821,107 @@ color:#0d1114 !important;
 }*/
 
 /***** END TABLES ********/
+ 
 
 #tinyMCEhtml_email .form-control
 {
   height: auto !important;
 }
-textarea#tinyMCEhtml_email {
+textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
     height: auto !important;
 }
 .contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
   margin-left: 0px;
 }
+
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
 .agile-new-theme .reports-tabs-left-panel{height: 100vh;}
+
+#activity_model .list-group , #contact_activity_model .list-group {
+ 
+     background-color: transparent;
+     margin-top: 0px;  
+}
+#activity_model .scroll div[id*="heading"] ,#contact_activity_model .scroll div[id*="heading"] {
+     border-bottom: 1px solid #f4f8f9; 
+     border-top: 1px solid #f4f8f9; 
+}
+.task-add-deal
+{
+      left: 45%!important;
+}
+#verification_anaytical_code
+{
+  height:40px!important;
+}
+#whitelabel-domain
+{
+  height: 40px!important;
+}
+.add_to_all
+{
+  line-height:1.42857143 !important;
+}
+.m-l-n-xs-imp
+{
+  margin-left:-5px!important;
+}
+.m-l-xs-imp
+{
+  margin-left:5px !important;
+}
+.form-actions .btn-primary-imp
+{
+  margin-left:10px!important;
+}
+.deal-restore-detail-view
+{
+  left:-15px!important;
+}
+#bringYourCodeBtn
+{
+  margin-left:10px!important;
+}
+.btn-danger
+{
+    background-color: rgba(243, 49, 85, 0.1)!important;
+    color: #f33155 !important;
+}
+.btn-danger:hover,.btn-danger:active,.btn-danger:hover,.btn-danger:focus
+{
+    background-color: rgba(243, 49, 85, 0.2)!important;
+    color: #f33155!important;
+}
+.dropdown-menu
+{
+  border:0px solid #fff!important;
+}
+tbody#ticket-single-row-model-list tr td{
+  vertical-align: initial;
+}
+.tickets-div .panel-default .panel-heading{
+  background-color: #fff !important;
+}
+table.agile-table>tbody>tr>td{
+  vertical-align: middle !important;
+
+/*start of deals*/
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li{
+  border-bottom:  none !important;
+  margin: 0px 5px 10px 0px;
+}
+#deals-new-milestone-view .panel{
+  background-color: #f4f8f9 !important;
+} 
+.milestone-column>ul, .milestone-column>div.milestones{
+  height: calc(100vh - 190px) !important; 
+}
+.milestone-column>div.milestones ul.milestones{
+  min-height: calc(100vh - 190px) !important; 
+}
+/*End of deals*/
+
+.setting-add-tag{
+  padding: 6px 12px !important;
+}
+
