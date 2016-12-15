@@ -1,10 +1,15 @@
 package com.agilecrm.social;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.Date;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
@@ -14,6 +19,20 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.jboss.resteasy.spi.UnhandledException;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+
+import java.io.StringReader;    
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathFactory;    
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.agilecrm.user.util.DomainUserUtil;
 
@@ -64,7 +83,7 @@ public class OzonetelUtil {
 	        //uribuilder.addParameter("url", "http://ozonetelin.appspot.com/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId);
 	        //uribuilder.addParameter("callback_url","http://ozonetelin.appspot.com/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId);
 	        URI uri = uribuilder.build();
-	        ozonetelGetRequest(uri.toString());
+	        String resstatus = ozonetelGetRequest(uri.toString());
 	        /*HttpClient client = HttpClientBuilder.create().build();
 	        URI uri = uribuilder.build();
 	        HttpGet request = new HttpGet(uri);
@@ -78,7 +97,11 @@ public class OzonetelUtil {
 	            e.printStackTrace();
 
 	        }*/
-	        status="success";
+	        if(StringUtils.equals(resstatus, "error")){
+	        	status="failed";
+	        }else{
+	        	status="success";
+	        }
 		}catch(Exception e){
 			System.out.println("Exception form OzonetelUtil connectToNumber method");
 			e.printStackTrace();
@@ -106,6 +129,15 @@ public class OzonetelUtil {
 		   response.append(inputLine);
 		  }
 		  in.close();
+		  
+		  org.jdom.input.SAXBuilder saxBuilder = new SAXBuilder();
+		  try {
+		      org.jdom.Document doc = saxBuilder.build(new StringReader(response.toString()));
+		      String message = doc.getRootElement().getChildText("status");
+		      result = message;
+		  } catch (JDOMException e) {
+		  } catch (IOException e) {
+		  }
 		  System.out.println(response.toString());
 		  return result;
 	}

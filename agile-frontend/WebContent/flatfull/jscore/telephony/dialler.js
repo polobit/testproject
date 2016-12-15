@@ -448,12 +448,13 @@ function dialFromOzonetel(to,from,contact){
 			type : 'GET', 
 			success : function(data){
 				if(data == "success"){
-					//var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
-					var btns= [];
+					var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 					showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
 					globalCall.callStatus = "Oncall";
 				}else{
-					alert("Failed to connect with kookoo server");
+					showAlertModal(_agile_get_translated_val('widgets', 'ozonetel-make-call'), undefined, function(){
+
+					},undefined, "Ozonetel");
 				}
 			}, error : function(response){
 				console.log(response);
