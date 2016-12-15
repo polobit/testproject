@@ -1817,3 +1817,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
      border-bottom: 1px solid #f4f8f9; 
      border-top: 1px solid #f4f8f9; 
 }
+.task-add-deal
+{
+      left: 45%!important;
+}
