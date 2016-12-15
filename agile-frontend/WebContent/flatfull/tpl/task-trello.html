@@ -1,24 +1,24 @@
 <script id="new-tasks-list-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-  <div class="wrapper-md lter bg-light b-b">
+  <div class="wrapper-md lter bg-light b-b agile-page-header">
     <div class="row">  
        <div class="col-md-12">   
          <h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
           <div class="pull-right">
             <div class="inline-block m-r hide" id="calendarTasksButtons">
-                <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}
+                <button type="button" class="btn btn-sm btn-default btn-default-imp-white btn-lg-imp" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}
                 </button>
                 <div class="btn-group m-l-xs">
-                  <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}
+                  <button id="agendaDay" class="btn btn-sm btn-default btn-default-imp btn-lg-imp taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}
                   </button>
-                  <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}
+                  <button id="month" class="btn btn-sm btn-default btn-default-imp btn-lg-imp taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}
                   </button>
                 </div>
             </div>
             <div class="btn-group owner-task-button m-r">
-              <button class="btn btn-default btn-sm fnew-task-subject btn-default-imp-white selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
+              <button class="btn btn-default btn-sm fnew-task-subject btn-default-imp-white  btn-lg-imp selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
               </button>
-              <a class="btn btn-default btn-sm btn-default-imp-white dropdown-toggle" data-toggle="dropdown" href="#">
+              <a class="btn btn-default btn-sm btn-default-imp-white btn-lg-imp dropdown-toggle" data-toggle="dropdown" href="#">
                  <span class="caret">
                  </span>
               </a>
@@ -28,9 +28,9 @@
             {{#is_mobile}}
             {{else}}
              <div class="btn-group type-task-button c-p m-r">
-                <button class="btn btn-default btn-default-imp btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
+                <button class="btn btn-default btn-default-imp btn-lg-imp btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
                 </button>
-                <button class="btn btn-default btn-default-imp btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                <button class="btn btn-default btn-default-imp btn-lg-imp btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
                   <span class="caret">
                   </span>
                 </button>
@@ -76,7 +76,7 @@
                 </ul>
             </div>
             <div class="btn-group type-task-button c-p pull-right">
-                <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+                <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-primary-imp btn-lg-imp btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
                  <i class="icon icon-plus-sign">
                  </i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 

@@ -811,7 +811,7 @@ a i.right {
 }
 a i,
 a span {
-  display: inline-block;
+  /*display: inline-block;*/
   vertical-align: middle;
 }
 a:hover,

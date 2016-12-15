@@ -289,7 +289,7 @@
 {{/if_equals}}
 
 <div class=" text-muted deal-track text-xs">
-{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
+{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn-sm-imp btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
 {{#getTracksCount}}<span>{{#if pipeline.name}}{{pipeline.name}} , {{/if}}</span>{{/getTracksCount}}         
             
@@ -670,8 +670,8 @@
 	</div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 <!-- End of Restore confirmation-->
