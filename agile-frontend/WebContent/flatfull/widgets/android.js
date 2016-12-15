@@ -26,9 +26,9 @@ function saveCallNoteAndroid(message){
 	console.log("callDirection : in Android "+callDirection);
 
 	if(state){
-		if(state == "answered"){
+		if(state == "ANSWERED"){
 			state = "answered";
-		}else if(state == "agent_missed"){
+		}else if(state == "AGENT_MISSED" || state == "FAILED"){
 			state = "failed";
 		}
 	}
@@ -130,7 +130,7 @@ function androidCallNoty(message){
 		if(callDirection){
 			if(callDirection == "Outgoing"){
 				if(state){	
-					if(state == "iniated"){
+					if(state == "INITIATED"){
 						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
 						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
 					}else if(state == "CDR"){
