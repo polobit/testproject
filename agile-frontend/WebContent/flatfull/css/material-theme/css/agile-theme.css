@@ -1682,9 +1682,33 @@ color:#0d1114 !important;
     margin: 0px !important;
     padding: 1px 5px !important;
 } 
+
+#call-campaign-content .btn{
+  border-radius: 2px !important;
+    outline: 0!important;
+    height: 18px !important;
+    line-height: 14px !important;
+    font-size: 9px !important;
+    margin: 0px !important;
+    padding: 1px 5px !important;
+}
+
+#call-campaign-content .new-theme-pausecall-btn,#call-campaign-content .new-theme-headphone,#call-campaign-content .cam-dialpad-icon,#call-campaign-content .new-theme-microphone-btn{
+  height: 16px !important;
+}
+#call-campaign-content .cam-call-icon{
+  top :-3px !important;
+}
+#call-campaign-content #hangup{
+  height: 17px;
+  width: 18px;
+}
+
+
 .call-campaign-running .app-content-full {
     top: 122px !important;
 }
+
 /*end of call campaign*/
 
 
@@ -1696,6 +1720,7 @@ color:#0d1114 !important;
      border-top: none !important; 
      padding: 0px !important; 
 } 
+
 
 /***** Start TABLES ********/
 
@@ -1809,6 +1834,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 .contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
   margin-left: 0px;
 }
+
 #activity_model .list-group , #contact_activity_model .list-group {
  
      background-color: transparent;
@@ -1862,4 +1888,23 @@ tbody#ticket-single-row-model-list tr td{
 }
 table.agile-table>tbody>tr>td{
   vertical-align: middle !important;
+
+/*start of deals*/
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list>li, #deals-by-paging-relax-model-list>li{
+  border-bottom:  none !important;
+  margin: 0px 5px 10px 0px;
+}
+#deals-new-milestone-view .panel{
+  background-color: #f4f8f9 !important;
+} 
+.milestone-column>ul, .milestone-column>div.milestones{
+  height: calc(100vh - 190px) !important; 
+}
+.milestone-column>div.milestones ul.milestones{
+  min-height: calc(100vh - 190px) !important; 
+}
+/*End of deals*/
+
+.setting-add-tag{
+  padding: 6px 12px !important;
 }
