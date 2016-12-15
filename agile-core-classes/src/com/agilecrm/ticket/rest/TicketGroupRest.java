@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailTemplates;
+import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.ticket.utils.TicketGroupUtil;
@@ -84,7 +85,19 @@ public class TicketGroupRest
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 		}
 	}
-	
+
+	/**
+	 * Fetch all users who have common groups with currently logged in user
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/current-user/common-assignees")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<DomainUserPartial> getCommonAssigneesForCurrentUser()
+	{
+		return TicketGroupUtil.getCommonAssigneesForCurrentUser();
+	}
 	
 	/**
 	 * @return List of Domain Users

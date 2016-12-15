@@ -2,7 +2,9 @@ package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.agilecrm.Globals;
 import com.agilecrm.projectedpojos.DomainUserPartial;
@@ -116,7 +118,27 @@ public class TicketGroupUtil
 		
 		Key<DomainUser> key = new Key<>(DomainUser.class, user.id);
 		
+		if( user.is_admin )	return TicketGroups.ticketGroupsDao.fetchAll();
+		
 		return TicketGroups.ticketGroupsDao.listByProperty("agents_key_list", key);
+	}
+	
+	/**
+	 * Fetch common assignees for current user
+	 * 
+	 * @return
+	 */
+	public static List<DomainUserPartial> getCommonAssigneesForCurrentUser()
+	{
+		List<TicketGroups> groups = getAllGroupsForCurrentUser();
+		Set<Long> commonAgentIds = new HashSet<>();
+		
+		for( TicketGroups group : groups )
+		{
+			commonAgentIds.addAll(group.agents_keys);
+		}
+		
+		return DomainUserUtil.getPartialDomainUsersByIdList(new ArrayList<Long>(commonAgentIds));
 	}
 
 	public TicketGroups createGroup(String groupName, List<Long> domainUserIDs) throws Exception
