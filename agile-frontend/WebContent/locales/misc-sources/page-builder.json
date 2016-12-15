@@ -107,4 +107,6 @@
     "enter-image-url" : "{{agile_lng_translate 'landingpage-builder' 'enter-image-url'}}",
     "error-image-url" : "{{agile_lng_translate 'landingpage-builder' 'error-image-url'}}",
     "icons" : "{{agile_lng_translate 'landingpage-builder' 'icons'}}",
+    "alt-text" : "{{agile_lng_translate 'landingpage-builder' 'alt-text'}}",
+    "alt-txt-placeholder" : "{{agile_lng_translate 'landingpage-builder' 'alt-txt-placeholder'}}",
 }
