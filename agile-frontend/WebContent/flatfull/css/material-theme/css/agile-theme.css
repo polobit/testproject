@@ -1987,3 +1987,6 @@ ul.dashboard-search-scroll-bar li:hover, ul.dashboard-search-scroll-bar li:activ
 ul#recent-menu-model-list li:nth-child(even){
   background-color: inherit;
 }
+.agile-new-theme .agile-menu-parent-item {
+    font-size: 16px;
+}
