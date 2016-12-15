@@ -374,7 +374,7 @@ function callToNumber(to,from,widgetName,contact,dialler){
 			dialFromSip(to,from,contact)
 		}else if(widgetName == "Skype"){
 			dialFromSkype(to,from,contact)
-		}else if(widgetName == "android"){
+		}else if(widgetName == "Android"){
 			dialFromMobileAPP(to, from, contact);
 		}		
 	}catch(e){
