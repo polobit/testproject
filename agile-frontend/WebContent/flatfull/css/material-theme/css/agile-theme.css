@@ -1961,6 +1961,7 @@ font-size: 24px !important;
 .slate-content h4{
   font-size: 18px !important;
 }
+
 #emailBuilderTopOptionsHolder .emailbuilder-copy
 {
   top:inherit!important;
@@ -2034,3 +2035,10 @@ ul#recent-menu-model-list li:nth-child(even){
       background-color: #11a0f8!important;
       color: #ffffff!important;
 }*/
+
+#widgets h4 {
+  font-size: 18px !important;
+}
+#widgets .text-base{
+  font-size: 14px !important;
+}
