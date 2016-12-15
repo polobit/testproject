@@ -55,6 +55,7 @@ define(
 									saveform = json;
 									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });
 									$("#loader").fadeOut('fast');
+									$("#header").css("display","block");
 									$(".container").css("display","block");
 								}	
 							}

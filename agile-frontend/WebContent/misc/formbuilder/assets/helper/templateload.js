@@ -87,6 +87,7 @@ define([
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
 					$("#loader").fadeOut('fast');
+					$("#header").css("display","block");
 					$(".container").css("display","block");
 				});
 				}

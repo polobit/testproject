@@ -137,6 +137,7 @@ define([
 		}
 				}
 				$("#loader").fadeOut('fast');
+				$("#header").css("display","block");
 				$(".container").css("display","block");
 			}
 		});
