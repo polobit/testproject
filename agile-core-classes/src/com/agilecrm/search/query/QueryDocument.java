@@ -123,12 +123,15 @@ public class QueryDocument<T> implements QueryInterface
 		Collection<T> entities =  null ;
 		try
 		{
-			entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);		
+			Long time = System.currentTimeMillis();
+			entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+			System.out.println("Time to process query and get entities -------- "+(System.currentTimeMillis() - time)+" milli seconds");
 		}
 		catch(Exception e){
 			throw new SearchQueryException("Search input is not supported. Please try again.");
 		}
-		try{			
+		try{
+			Long time = System.currentTimeMillis();
 			if(typeField != null && entities != null){
 				String localKeyword = keyword.toLowerCase();			
 				
@@ -201,7 +204,9 @@ public class QueryDocument<T> implements QueryInterface
 			    }
 			    
 			    mainList.addAll(secondarList);			   
-			    entities = (Collection<T>) mainList;			    
+			    entities = (Collection<T>) mainList;
+			    
+			    System.out.println("Time to manipulate search results -------- "+(System.currentTimeMillis() - time)+" milli seconds");
 			}
 		}catch (Exception e){
 			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
@@ -716,7 +721,9 @@ public class QueryDocument<T> implements QueryInterface
 
 	System.out.println("query string : " + query_string);
 	// Fetches documents based on query options
+	Long time = System.currentTimeMillis();
 	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
+	System.out.println("Query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
 
 	// Results fetched and total number of available contacts are set in map
 	Map<String, Object> documents = new HashMap<String, Object>();
@@ -727,14 +734,15 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    // If search results size is less than limit set, the returned doc
 	    // ids are considered as total local available documents.
-	    if (options.getLimit() > searchResults.size())
+	    if (options.getLimit() >= searchResults.size())
 		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
 	    else
 		documents.put("availableDocuments", index.search(query_string).getNumberFound());
 	}
 
 	documents.put("fetchedDocuments", searchResults);
-
+	
+	System.out.println("Returning docs after query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
 	// Gets sorted documents
 	return documents;
     }
@@ -795,6 +803,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     public Collection getDatastoreEntities(Map<String, Object> results, Integer page, String cursor)
     {
+    Long time = System.currentTimeMillis();
 	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results.get("fetchedDocuments");
 
 	Long availableResults = (Long) results.get("availableDocuments");
@@ -819,6 +828,7 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
+	System.out.println("Time to get only datastore entities ---------- "+(System.currentTimeMillis() - time)+" milli seconds");
 	return entities;
     }
 
