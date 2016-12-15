@@ -31,8 +31,7 @@ function startOzonetelWidget(contact_id){
 		}
 	});
 	$('body').off('click', '.noty_ozonetel_cancel');
-	$('body').on('click', '.noty_ozonetel_cancel', function(e){
+	$('body').on('click', '.noty_ozonetel_cancel', function(e){		
 		closeCallNoty(true);
 	});
-
 }
