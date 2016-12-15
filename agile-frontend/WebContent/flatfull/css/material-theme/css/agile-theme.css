@@ -1651,6 +1651,24 @@ color:#0d1114 !important;
 }
 /*Contact Single Row Image Fix End*/
 
+
 #company-contacts-list-view .contacts-inner-div{
   border-top: 15px solid #f4f8f9;
+
+.new-deal-input{
+  width: 87% !important;
 }
+/*start of call campaign*/
+#callnoty-container .new-theme-btn{
+      border-radius: 2px !important;
+    outline: 0!important;
+    height: 18px !important;
+    line-height: 14px !important;
+    font-size: 9px !important;
+    margin: 0px !important;
+    padding: 1px 5px !important;
+} 
+.call-campaign-running .app-content-full {
+    top: 122px !important;
+}
+/*end of call campaign*/
