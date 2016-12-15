@@ -1705,7 +1705,7 @@ color:#0d1114 !important;
 .agile-table.panel, .panel{
   border: none !important;
   -webkit-box-shadow: inherit !important;
-  box-shadow: inherit !important;
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
    
 }
 #content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
@@ -1771,6 +1771,6 @@ color:#0d1114 !important;
 {
   height: auto !important;
 }
-textarea#tinyMCEhtml_email {
+textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
     height: auto !important;
 }
