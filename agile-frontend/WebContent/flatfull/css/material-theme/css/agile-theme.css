@@ -723,7 +723,7 @@ header .bg-white a, header button.show-search-dropdown {
   line-height: 30px;
   font-size: 12px;
 }
-.icon-plus-sign:before{
+:not(.notaddon-imp).icon-plus-sign:before{
   content: "+";
   margin-left: 1px;
   font-weight: 600;
@@ -1469,7 +1469,7 @@ ul.tags-management li.tag{
   color: #ffffff !important;
 }
 /*css for the caret icon in the campaigns page */
-#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial
+#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial, #document_validate ,#document_update_validate
 {
   border-radius: 4px;
 }
@@ -1634,9 +1634,9 @@ table#contacts-table, table#companies {
   font-size:13px;
   margin-top:5px;
 }
-#contact-sorter .fa-sort-desc
+#contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
-  margin-top:-8px;
+  margin-top:-11px;
 }
 #contact-sorter .sort-field-txt
 {
@@ -1820,4 +1820,32 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 .task-add-deal
 {
       left: 45%!important;
+}
+#verification_anaytical_code
+{
+  height:40px!important;
+}
+#whitelabel-domain
+{
+  height: 40px!important;
+}
+.add_to_all
+{
+  line-height:1.42857143 !important;
+}
+.m-l-n-xs-imp
+{
+  margin-left:-5px!important;
+}
+.m-l-xs-imp
+{
+  margin-left:5px !important;
+}
+.form-actions .btn-primary-imp
+{
+  margin-left:10px!important;
+}
+.deal-restore-detail-view
+{
+  left:-15px!important;
 }
