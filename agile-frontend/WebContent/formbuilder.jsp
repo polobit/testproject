@@ -14,7 +14,7 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/custom.css?v=3-3" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css" rel="stylesheet">
       <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
-
+     
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -44,7 +44,7 @@ String template = request.getParameter("template");
    <body>
       <header id="header" class="navbar" role="menu">
          <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
-           <i class="glyphicon glyphicon-cloud"></i> 
+           <i class="fa fa-cloud"></i> 
          </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;">           
@@ -108,7 +108,7 @@ String template = request.getParameter("template");
          a.href = window.location.origin+"/forms/"+formNumber;
       }  
          var a = document.getElementById('agile-logo');
-         a.href = window.location.origin;*
+         a.href = window.location.origin;
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
       </script>

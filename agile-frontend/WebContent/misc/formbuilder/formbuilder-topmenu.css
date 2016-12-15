@@ -85,6 +85,7 @@ border-radius: 0px;font-size: 15px;
     border-top-color: #eee!important;
     border-bottom-color: #eee!important;
 }
-#form-save:hover {
-    background-color: #6254b2;
+#form-save:hover,#form-save:focus,#form-save:active {
+    background-color: #6254b2!important;
+    border-color: #6254b2!important;
 }

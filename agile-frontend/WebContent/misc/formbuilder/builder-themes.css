@@ -8,7 +8,7 @@ border-top-left-radius: 20px!important;
 border-bottom-left-radius: 20px!important;
 height: 43px;
 }
-.theme1 .agile-field input[type=text],.theme1 .agile-field input[type=email],.theme1 .agile-field input[type=password],.theme1 .agile-field input[type=url],.theme1 .agile-group select:not([multiple]),.theme1 textarea {
+.theme1 .agile-field>input[type=text],.theme1 .agile-field>input[type=email],.theme1 .agile-field>input[type=password],.theme1 .agile-group select:not([multiple]),.theme1 textarea{
 border: 1px solid #cfdadd;
 -webkit-border-radius: 50px;
 -moz-border-radius: 50px;
@@ -23,6 +23,9 @@ padding: 10px 20px !important;
 display: block;
 font-family:sans-serif;
 box-sizing: border-box;
+}
+.theme1 .agile-input-group input{
+  padding: 10px 20px !important;
 }
 .theme1 .agile-field{
 width:100%;
