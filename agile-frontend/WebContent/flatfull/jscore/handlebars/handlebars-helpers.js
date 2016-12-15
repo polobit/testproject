@@ -21,6 +21,29 @@ $(function()
 		return getSystemPropertyValue(items, name);
 	});
 
+	Handlebars.registerHelper('fillSelectOptionWithNumbers', function(start, end)
+	{
+		var optionsHtml = "";
+		for(var i = start; i <= end; i++){
+			optionsHtml = optionsHtml+"<option value="+i+">"+i+"</option>";
+		}
+		return optionsHtml;
+	});
+
+	Handlebars.registerHelper('checkPlan', function(plan, options)
+	{
+		if(!plan)
+			return options.inverse(this);
+		var plan_name = USER_BILLING_PREFS.plan.plan_type;
+		var plan_fragments = plan_name.split("_");
+		var db_plan_name = plan_fragments[0].toLowerCase();
+		if(db_plan_name == "pro")
+			db_plan_name = "enterprise";
+		if(db_plan_name == plan.toLowerCase())
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
 	Handlebars.registerHelper('stripeCreditConvertion', function(amount)
 	{
 		if(amount == 0){
@@ -189,6 +212,19 @@ $(function()
 		});
 
 		return options.fn(exclusive_fields)
+
+	});
+
+	/**
+	 * 
+	 */
+	Handlebars.registerHelper('getCompanyCustomProperties', function(items, options)
+	{
+		var fields = getCompanyCustomProperties(items);
+		if (fields.length == 0)
+			return options.inverse(fields);
+
+		return options.fn(fields);
 
 	});
 	
@@ -500,7 +536,7 @@ $(function()
 	 */
 	Handlebars.registerHelper('contactShortName', function()
 	{
-		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany())
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && !company_util.isCompany() && Current_Route.indexOf("lead") != 0)
 		{
 
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
@@ -531,7 +567,7 @@ $(function()
 				}
 				return "{{agile_lng_translate 'menu' 'company'}}";
 			}
-		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model)
+		} else if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("lead") != 0)
 		{
 			var contact_properties = App_Companies.companyDetailView.model.get('properties');
 
@@ -541,6 +577,37 @@ $(function()
 					return contact_properties[i].value;
 			}
 			return "{{agile_lng_translate 'menu' 'company'}}";
+		} 
+		else if (App_Leads.leadDetailView && App_Leads.leadDetailView.model && !company_util.isCompany() && Current_Route.indexOf("lead") == 0)
+		{
+			var lead_properties = App_Leads.leadDetailView.model.get('properties');
+
+			if (App_Leads.leadDetailView.model.get('type') == 'LEAD')
+			{
+				var last_name;
+				for (var i = 0; i < lead_properties.length; i++)
+				{
+
+					if (lead_properties[i].name == "last_name")
+						last_name = lead_properties[i].value;
+					else if (lead_properties[i].name == "first_name")
+						return lead_properties[i].value;
+				}
+				if (last_name && last_name != null)
+				{
+					return last_name;
+				}
+				return "{{agile_lng_translate 'menu' 'lead'}}";
+			}
+			else
+			{
+				for (var i = 0; i < lead_properties.length; i++)
+				{
+					if (lead_properties[i].name == "name")
+						return lead_properties[i].value;
+				}
+				return "{{agile_lng_translate 'menu' 'company'}}";
+			}
 		}
 	});
 	
@@ -769,15 +836,15 @@ $(function()
 							{
 								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
 								if(milestones[i] == data.won_milestone){
-									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none text-right' style='width:25%'><div class='m-b-n-xs'>";
 									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
 									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else if(milestones[i] == data.lost_milestone){
-									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none text-right' style='width:25%'><div class='m-b-n-xs'>";
 									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
 									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else{
-									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += milestones[i] + "</div></td><td class='b-r-none text-right' style='width:25%'><div class='m-b-n-xs'>";
 									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
 									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								}
@@ -1115,7 +1182,7 @@ $(function()
 			window.location.hash.split("#")[1] == "company/" + App_Companies.companyDetailView.model.get('id'))
  		setCompactView=_agile_get_prefs("contactCompanyTabelView");
  		else
-		 setCompactView=(type != "PERSON") ? _agile_get_prefs("companyTabelView") : _agile_get_prefs("contactTabelView");
+		 setCompactView = (type == "COMPANY") ? _agile_get_prefs("companyTabelView") : (type == "LEAD") ? _agile_get_prefs("leadTabelView") : _agile_get_prefs("contactTabelView");
 
 		if(setCompactView)
 				return options.fn(this);
@@ -1145,12 +1212,10 @@ $(function()
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
   		{
   			if (element == "basic_info" || element == "image")
-  			{
-					
+  			{	
 					if(_agile_get_prefs("contactTabelView"))
 					{
 						// if the compact view is present the remove th basic info heading and add the empty heading for the image
-
 						if(element == "basic_info")
 							return ;
 	
@@ -1158,8 +1223,7 @@ $(function()
 						{
 							element = "";
 							cls = "";
-						}
-							  
+						}			  
 					}
 					else
 					{
@@ -1170,16 +1234,22 @@ $(function()
 						}
 						if(element == "basic_info")
 							element = "Basic Info";
+						
 					}
 			}
-
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
+
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
@@ -1205,7 +1275,8 @@ $(function()
 			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 			element = element.replace("_", " ")
-
+			if(element=='last campaign_emaild')
+				element = element.replace("_", " ")
 			el = el.concat('<th>' + ucfirst(element) + '</th>');
 
 		});
@@ -1346,48 +1417,51 @@ $(function()
 		}
 
 		// Replaces '_' with ' '
-		var str = this.notification.replace(/_/, ' ');
+		if(this.notification){
 
-		switch (str) {
-		case "IS BROWSING":
-			return str.toLowerCase() + " " + this.custom_value;
+			var str = this.notification.replace(/_/, ' ');
 
-		case "CLICKED LINK":
-			var customJSON = JSON.parse(this.custom_value);
+			switch (str) {
+			case "IS BROWSING":
+				return str.toLowerCase() + " " + this.custom_value;
 
-			if (customJSON["workflow_name"] == undefined)
-				return str.toLowerCase() + " " + customJSON.url_clicked;
+			case "CLICKED LINK":
+				var customJSON = JSON.parse(this.custom_value);
 
-			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
+				if (customJSON["workflow_name"] == undefined)
+					return str.toLowerCase() + " " + customJSON.url_clicked;
 
-		case "OPENED EMAIL":
-			var customJSON = JSON.parse(this.custom_value);
+				return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
 
-			if (customJSON.hasOwnProperty("workflow_name"))
-				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
+			case "OPENED EMAIL":
+				var customJSON = JSON.parse(this.custom_value);
 
-			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
+				if (customJSON.hasOwnProperty("workflow_name"))
+					return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
 
-		case "CONTACT ADDED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+				return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
 
-		case "CONTACT DELETED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			case "CONTACT ADDED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "DEAL CREATED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			case "CONTACT DELETED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "DEAL CLOSED":
-			return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
+			case "DEAL CREATED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "TAG ADDED":
-			return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+			case "DEAL CLOSED":
+				return " - " + ucfirst(str.split(' ')[0]) + " " + ucfirst(str.split(' ')[1]);
 
-		case "TAG DELETED":
-			return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+			case "TAG ADDED":
+				return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
 
-		default:
-			return str.toLowerCase();
+			case "TAG DELETED":
+				return " - " + "\"" + this.custom_value + "\" " + str.toLowerCase().split(' ')[0] + " has been " + str.toLowerCase().split(' ')[1];
+
+			default:
+				return str.toLowerCase();
+			}
 		}
 	});
 
@@ -1643,8 +1717,11 @@ $(function()
 									el = el.concat(val + ", ");
 								});*/
 
-								if (properties[i].subtype)
+								if (properties[i].subtype){
+									if(properties[i].subtype=="office")
+										properties[i].subtype="work";
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
+								}
 								el = el.concat('</span>&nbsp;<span id="map_view_action"></span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
@@ -1871,7 +1948,7 @@ $(function()
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		
+		if(data)
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -1921,6 +1998,18 @@ $(function()
 			return url.split(exp)[0];
 
 		return " ";
+	});
+
+	Handlebars.registerHelper("getPushNotificationHost", function(options)
+	{
+
+		var url = window.location.host;
+
+		if(url.length>28)
+		{
+			url = ".." + url.substring(url.length - 28);
+		}
+		return url;
 	});
 
 	Handlebars.registerHelper("getBase64Domain", function()
@@ -2272,6 +2361,10 @@ $(function()
 		else if (type == "deals")
 		{
 			template = $(getTemplate('csv_deals_options', context));
+		}
+		else if (type == "leads")
+		{
+			template = $(getTemplate('leads_csv_upload_options', context));
 		}
 
 		// Replaces _ with spaces
@@ -3143,6 +3236,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -3186,6 +3285,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			 if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -3978,6 +4083,14 @@ $(function()
 
 	Handlebars.registerHelper('getCurrentContactProperty', function(value)
 	{
+		if(App_Leads.leadDetailView && App_Leads.leadDetailView.model 
+			&& Current_Route && Current_Route.indexOf("lead/") == 0)
+		{
+			var lead_properties = App_Leads.leadDetailView.model.get('properties')
+			console.log(App_Leads.leadDetailView.model.toJSON());
+			return getPropertyValue(lead_properties, value);
+		}
+		
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
 			var contact_properties = App_Contacts.contactDetailView.model.get('properties')
@@ -4304,107 +4417,6 @@ $(function()
 			element = element.concat('<li style="display: inline;"><img src="'+updateImageS3Path("img/star-value-off.png")+'" alt="' + i + '"></li>');
 		}
 		return new Handlebars.SafeString(element);
-	});
-
-	/**
-	 * Builds options to be shown in the table heading of CSV import. Also tries
-	 * to match headings in select field
-	 */
-	Handlebars.registerHelper('setupCSVUploadOptions', function(type, key, context)
-	{
-		// console.log(context.toJSON());
-		var template;
-		if (type == "contacts")
-		{
-			getTemplate('csv_upload_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-
-		}
-		else if (type == "company")
-		{
-			getTemplate('csv_companies_upload_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-		}
-		else if (type == "deals")
-		{
-			getTemplate('csv_deals_options', context, undefined, function(template_ui){
-		 		if(!template_ui)
-		    		return;
-		    	template = $(template_ui);
-				
-			}, null);
-		}
-
-		// Replaces _ with spaces
-		key = key.replace("_", " ");
-
-		var isFound = false;
-
-		var match_weight = 0;
-
-		var key_length = key.length;
-		var key = key.toLowerCase();
-		var matched_value;
-
-		var selected_element;
-		template.find('option').each(function(index, element)
-		{
-			if ($(element).text().toLowerCase().indexOf(key) != -1)
-			{
-
-				var current_match_weight = key_length / $(element).text().length;
-				if (match_weight >= current_match_weight)
-					return;
-
-				selected_element = $(element);
-				matched_value = $(element).text();
-				match_weight = current_match_weight;
-			}
-		})
-
-		console.log(matched_value + ", " + key + " : " + match_weight);
-
-		for (var i = 0; i < key.length - 3; i++)
-		{
-			template.find('option').each(function(index, element)
-			{
-				if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
-				{
-					console.log(key.substr(0, key.length - i) + " , " + $(element).text());
-					var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
-					console.log(current_match_weight);
-					if (match_weight >= current_match_weight)
-						return;
-					selected_element = $(element);
-					matched_value = $(element).text();
-					match_weight = current_match_weight;
-				}
-			})
-		}
-
-		$(selected_element).attr("selected", true);
-
-		/*
-		 * // Iterates to create various combinations and check with the header
-		 * for ( var i = 0; i < key.length - 3; i++) {
-		 * template.find('option').each(function(index, element) { if
-		 * ($(element).val().toLowerCase().indexOf(key) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; } else if
-		 * ($(element).val().toLowerCase().indexOf(key.substr(0, key.length -
-		 * i).toLowerCase()) != -1) { isFound = true;
-		 * $(element).attr("selected", true); return false; }
-		 * 
-		 * }); if (isFound) break; }
-		 */
-		return new Handlebars.SafeString($('<div>').html(template).html());
 	});
 
 	/**
@@ -5155,6 +5167,12 @@ $(function()
 				if (prefs.sms_api == value)
 					return options.fn(target[i]);
 			}
+
+		    if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
+					return options.fn(target[i]);
+			}
 		}
 		return options.inverse(this);
 	});
@@ -5198,6 +5216,12 @@ $(function()
 			if (target[i].name == "SMS-Gateway")
 			{
 				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+
+			if (target[i].name == "RecaptchaGateway")
+			{
+				if (prefs.recaptcha_api == value)
 					return options.fn(target[i]);
 			}
 		}
@@ -5926,7 +5950,7 @@ $(function()
 		else if(p_name == 'Webstat Visits')
 			portlet_name = "visits";
 		else if(p_name=='Referralurl stats')
- 			portlet_name = "ref-url-stats";
+ 			portlet_name = "ref-url-name";
  		else if (p_name == 'Lost Deal Analysis')
 			portlet_name = "deals-lost-reason";
 		else if (p_name== 'Revenue Graph')
@@ -6531,7 +6555,7 @@ $(function()
 		$.each(App_Companies.companyViewModel[item], function(index, element)
   		{
 
-  			if (element == "basic_info" || element == "image")
+  			if (element == "basic_info" || element == "image" || element == "url" || element == "name")
   			{
 					
 					if(_agile_get_prefs("companyTabelView"))
@@ -6557,6 +6581,8 @@ $(function()
 						}
 						if(element == "basic_info")
 							element = "Basic Info";
+						if(element == "url" || element == "name")
+							return;
 					}
 			}
 		else if(element == "url")
@@ -6566,7 +6592,7 @@ $(function()
 		}
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
@@ -6574,7 +6600,6 @@ $(function()
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
-
 	 	element = getTableLanguageConvertHeader(element);
 	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
 	  
@@ -6717,7 +6742,7 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	else if (p_name == 'Campaign stats')
 		description = 'campaign-stats-desc'
 	else if (p_name == 'Campaign graph')
-		description = 'campaign-graph-desc'
+		description = 'campaign-graph-dshlet'
 	else if(p_name == 'Deal Goals')
 		description = 'deal-goals-desc'
 	else if(p_name == 'Incoming Deals')
@@ -6727,9 +6752,9 @@ Handlebars.registerHelper('get_portlet_description', function(p_name)
 	else if(p_name == 'Average Deviation')
 		description = 'average-deviation-desc'
 	else if (p_name== 'Webstat Visits')
-		description = 'webstat-visits-desc';
+		description = 'webstat-visits-dshlet';
 	else if(p_name == 'Referralurl stats')
-		description = 'top-ref-url-desc'
+		description = 'ref-url-dshlet'
 
 	return _agile_get_translated_val("portlets", description);
 });
@@ -7207,6 +7232,10 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 			CURRENT_USER_DASHBOARDS.sort(function(a,b){return a.name.trim() < b.name.trim() ? -1 : a.name.trim() > b.name.trim() ? 1 : 0;});
 			var is_active_added = false;
 			var selected_li_id = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+			
+			// If there is no selected dashboard in cookie, get type from Role
+			if(!selected_li_id)
+				selected_li_id = menuServiceDashboard(CURRENT_DOMAIN_USER.role);
 
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
 				if(selected_li_id == this.id)
@@ -7244,14 +7273,17 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					{
 						trim_name = trim_name.substring(0, 30)+"...";
 					}
-					if(index == 0 && (!selected_li_id || !is_active_added))
-					{
+					if(!selected_li_id){
 						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
 					}
-					else if(index == 0)
+					/*if(index == 0 && (!selected_li_id || !is_active_added))
+					{
+						options_el += "<li class='active'><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
+					}*/
+					/*else if(index == 0)
 					{
 						options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
-					}
+					}*/
 
 					if(selected_li_id == this.id)
 					{
@@ -7263,7 +7295,19 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 					}
 					if(index == CURRENT_USER_DASHBOARDS.length-1)
 					{
-						options_el += getTemplate("js-dashboards-options-newui");
+
+						switch(CURRENT_DOMAIN_USER.role){
+							case 'SALES':
+							    return options_el += getTemplate("js-sales-dashboards-options-newui");
+							    break;
+							case 'MARKETING':
+								return options_el += getTemplate("js-marketing-dashboards-options-newui");
+								break;
+							case 'SERVICE' :
+								return options_el += getTemplate("js-service-dashboards-options-newui");
+								break;
+						}	
+						
 					}
 					
 				}
@@ -7272,8 +7316,19 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 
 			if(CURRENT_USER_DASHBOARDS.length == 0 && type == 'dashboard')
 			{
-				options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";
-				options_el += getTemplate("js-dashboards-options-newui");
+				
+				//options_el += "<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>";		
+				switch(CURRENT_DOMAIN_USER.role){
+					case 'SALES':
+					    return options_el += getTemplate("js-sales-dashboards-options-newui");
+					    break;
+					case 'MARKETING':
+						return options_el += getTemplate("js-marketing-dashboards-options-newui");
+						break;
+					case 'SERVICE' :
+						return options_el += getTemplate("js-service-dashboards-options-newui");
+						break;
+				}	
 			}			
 		}
 
@@ -7289,9 +7344,9 @@ Handlebars.registerHelper('convert_toISOString', function(dateInepoch, options) 
 		return dashboard_name;
 	});
 
-	Handlebars.registerHelper('is_acl_allowed', function(options)
+	Handlebars.registerHelper('is_acl_allowed', function(id, options)
 	{
-		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers())
+		if(_plan_restrictions.is_ACL_allowed[0]() || checkForACLExceptionalUsers(id))
 			return options.inverse(this);
 		else
 			return options.fn(this);
@@ -7595,11 +7650,16 @@ Handlebars.registerHelper('is_enterprise_plan', function(name, plan, options)
 
 		else if (element.indexOf("CUSTOM_") == 0) 
 		{
-  			element = element.split("_")[1];
+  			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
   		}
   		else 
   		{
+  			if(!_agile_get_prefs("contactCompanyTabelView"))
+  			{
+  				if(element == "first_name" || element =="last_name" || element == "email")
+							return ; 
+  			}
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
@@ -7634,6 +7694,56 @@ Handlebars.registerHelper('affiliateCommission', function(amount, commission)
 	if(!amount || !commission)
 		return 0;
 	return (((amount/100)*commission)/100).toFixed(2);
+});
+
+/**
+ * Returns table headings for custom contacts list view
+ */
+Handlebars.registerHelper('leadTableHeadings', function(item)
+{
+	var el = "", cls = ""; 
+	$.each(App_Leads.leadViewModel[item], function(index, element)
+	{
+		if (element == "basic_info" || element == "image")
+		{
+			
+			if(_agile_get_prefs("leadTabelView"))
+			{
+				// if the compact view is present the remove th basic info heading and add the empty heading for the image
+
+				if(element == "basic_info")
+					return ;
+
+				if(element == "image")
+				{
+					element = "";
+					cls = "";
+				}
+					  
+			}
+			else
+			{
+				if(element == "image")
+				{
+					return;
+				}
+				if(element == "basic_info")
+					element = "Basic Info";
+			}
+		}
+		else if (element.indexOf("CUSTOM_") == 0) 
+		{
+				element = element.split("_")[1];
+				cls = "text-muted";
+			}
+			else 
+			{
+			element = element.replace("_", " ");
+			cls = "";
+	 	}
+ 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+ 	});
+	return new Handlebars.SafeString(el);
 });
 Handlebars.registerHelper('get_default_label', function(label, module_name, options)
 {
@@ -7714,10 +7824,14 @@ Handlebars.registerHelper('can_api_js_serve_from_cloud', function(options)
 	else
 		return options.inverse(this);
 });
-
 Handlebars.registerHelper('agile_lng_translate', function(key, value, options)
 {
 	console.log("Not found " + key + " : " + value);
+});
+
+Handlebars.registerHelper('getContactNameProperty', function(contact, prop_key)
+{ 
+	return getContactName(contact, prop_key);
 });
 
 //returning 0sec in case of no time
@@ -7782,3 +7896,332 @@ Handlebars.registerHelper('if_anyone_equals', function(value, target, options)
 		return options.inverse(this);
 	
 });
+
+/**
+ * 
+ */
+Handlebars.registerHelper('selectJsonValue', function(json, key)
+{
+	var jsonObject = json;
+	if(jsonObject[key]){
+		return jsonObject[key];
+	}
+	return "";
+});
+
+/**
+ * 
+ */
+Handlebars.registerHelper("convertToi18ForCall",function(value)
+{
+	var constantJson = {"answered":"{{agile_lng_translate 'campaigns' 'answered'}}",
+						"busy":"{{agile_lng_translate 'campaigns' 'busy'}}",
+						"failed" : "{{agile_lng_translate 'call_activity' 'fail'}}",
+						"voicemail" : "{{agile_lng_translate 'campaigns' 'voicemail'}}",
+						"missed":"{{agile_lng_translate 'campaigns' 'missed'}}",
+						"others" : "{{agile_lng_translate 'admin-settings-tasks' 'Other'}}"					
+						};
+	if(constantJson[value]){
+		return constantJson[value];
+	}
+	
+	if (value.length > 12) {
+		value = value
+				.slice(0,
+						12)
+				+ '...';
+	} 
+	return value;
+	
+});
+
+Handlebars.registerHelper('isExtensionInstalled', function(options)
+{
+	if (document.getElementById('agilecrm_extension')) 
+		return options.fn(this);
+
+	return options.inverse(this);
+ 		 
+});
+
+Handlebars.registerHelper('if_won_milestone', function(id,milestone,options)
+{
+	var track ; 
+	if(id)
+		track = trackListView.collection.get(id);
+	if(milestone && track && track.get('won_milestone') && milestone == track.get('won_milestone'))
+		return options.fn(this);
+	else
+		return options.inverse(this); 
+
+});
+
+Handlebars.registerHelper('isEmailCreditsExists', function(options)
+{
+	var credits = _billing_restriction.email_credits_count;
+	if (credits != undefined && credits > 0)
+		return options.fn(this);
+	return options.inverse(this);
+});
+Handlebars.registerHelper('brandedemailstatus', function(options)
+{
+	var count = getPendingEmails();
+	if(count == 0)
+		return options.inverse(this);
+	return options.fn(this);
+
+});
+
+Handlebars.registerHelper('calc_Products_Total', function(products)
+{
+	var iSubTotal=0
+	for (var i = 0; i < products.length; i++)
+	{
+		iSubTotal+=products[i].total
+	}
+	return iSubTotal;
+});
+Handlebars.registerHelper('retrevie_Deal_Value', function(element)
+{
+	var iDealAmt=element.currency_conversion_value;
+	if(!$.isNumeric(iDealAmt))
+		iDealAmt=element.expected_value;
+	return iDealAmt;
+});
+Handlebars.registerHelper('contactlimitcount', function()
+{
+	return USER_BILLING_PREFS.planLimits.contactLimit;
+
+});
+
+Handlebars.registerHelper('contactsnamestatus', function(options)
+	{
+
+		return (_agile_get_custom_contact_display_type() == "FTL") ?  options.fn(this) : options.inverse(this);
+	});
+
+Handlebars.registerHelper('is_admin_domain', function(options)
+{
+	if(CURRENT_DOMAIN_USER.domain == "admin")
+		return options.fn(this);
+	return options.inverse(this);
+
+});
+
+Handlebars.registerHelper('adminpanel_restrictions', function(restriction,options)
+{
+	if(CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf(restriction) != -1)
+		return options.fn(this);
+	return options.inverse(this);
+
+});
+
+Handlebars.registerHelper('permissionshanged', function(value)
+{
+	var added  = value.split(",");
+});
+Handlebars.registerHelper('permissionChanged', function(value)
+{
+	var changes = value.replace("[","").replace("]","").replace("_"," ");
+	var el = "<span> ";
+	var elements = changes.split(",");
+	$.each(elements, function(index)
+	{
+			el = el.concat(elements[index] + " &nbsp;");
+	});
+		return new Handlebars.SafeString(el);
+});
+
+Handlebars.registerHelper('PermissionsExist', function(value,options)
+{
+	var changes = value.replace("[","").replace("]","");
+	if(changes.length == 0)
+		return options.fn(this);
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('permissiondeleted', function(value)
+{
+	var changes = value.replace("[","").replace("]","").replace("_"," ");
+	var el = "<span> ";
+	var elements = changes.split(",");
+	$.each(elements, function(index)
+	{
+			el = el.concat(elements[index] + "&nbsp;");
+	});
+		return new Handlebars.SafeString(el);
+});
+
+/*
+ * Helper to get lead status name based on id
+ */
+Handlebars.registerHelper('getLeadStatus', function(leadStatusId, options)
+{
+	if(App_Leads.leadStatusesListView && App_Leads.leadStatusesListView.collection)
+	{
+		var leadStatusModel = App_Leads.leadStatusesListView.collection.get(leadStatusId);
+
+		if(leadStatusModel)
+		{
+			return leadStatusModel.get("label");
+		}
+	}
+	return "";
+});
+
+/**
+ * Displays multiple times occurred properties of a lead in its detail
+ * view in single entity
+ */
+Handlebars.registerHelper('multiple_Lead_Property_Element', function(name, properties, options)
+{
+	// Reads current contact model form the contactDetailView
+	var lead_model = App_Leads.leadDetailView.model;
+
+	// Gets properties list field from contact
+	var properties = lead_model.get('properties');
+	var property_list = [];
+
+	/*
+	 * Iterates through each property in contact properties and checks for the
+	 * match in it for the given property name and retrieves value of the
+	 * property if it matches
+	 */
+	$.each(properties, function(index, property)
+	{
+		if (property.name == name)
+		{
+			property_list.push(property);
+		}
+	});
+	if (property_list.length > 0)
+		return options.fn(property_list);
+});
+
+/**
+ * Returns custom fields without few fields like LINKEDIN or TWITTER or
+ * title fields
+ */
+Handlebars.registerHelper('getLeadCustomPropertiesExclusively', function(items, options)
+{
+
+	var exclude_by_subtype = [
+			"LINKEDIN", "TWITTER"
+	];
+	var exclude_by_name = [
+		"title"
+	];
+
+	var fields = getLeadCustomProperties(items);
+
+	var exclusive_fields = [];
+	for (var i = 0; i < fields.length; i++)
+	{
+		if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+		{
+			continue;
+		}
+
+		exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+	}
+	if (exclusive_fields.length == 0)
+		return options.inverse(exclusive_fields);
+
+	$.getJSON("core/api/custom-fields/type/DATE", function(data)
+	{
+
+		if (data.length == 0)
+			return;
+
+		for (var j = 0; j < data.length; j++)
+		{
+			for (var i = 0; i < exclusive_fields.length; i++)
+			{
+				if (exclusive_fields[i].name == data[j].field_label)
+					try
+					{
+						var value = exclusive_fields[i].value;
+
+						if (!isNaN(value))
+						{
+							exclusive_fields[i].value = value;
+							exclusive_fields[i]["subtype"] = data[j].field_type;
+						}
+
+					}
+					catch (err)
+					{
+						exclusive_fields[i].value = exclusive_fields[i].value;
+					}
+			}
+		}
+		updateLeadCustomData(options.fn(exclusive_fields));
+	});
+
+	return options.fn(exclusive_fields)
+
+});
+
+Handlebars.registerHelper('getLeadCustomProperties', function(items, options)
+{
+	var fields = getLeadCustomProperties(items);
+	if (fields.length == 0)
+		return options.inverse(fields);
+
+	return options.fn(fields);
+
+});
+
+/*
+ * Helper to get lead source name based on id
+ */
+Handlebars.registerHelper('getLeadSource', function(leadSourceId, options)
+{
+	if(App_Leads.leadSourcesListView && App_Leads.leadSourcesListView.collection)
+	{
+		var leadSourceModel = App_Leads.leadSourcesListView.collection.get(leadSourceId);
+
+		if(leadSourceModel)
+		{
+			return leadSourceModel.get("label");
+		}
+	}
+	return "";
+});
+
+/*
+ * Helper to enable leads for some domains
+ */
+Handlebars.registerHelper('isAccessToLeads', function(options)
+{
+	if(isAccessToLeads())
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('renderTemplate', function(key, data){
+	return getTemplate(key, data);
+});
+
+Handlebars.registerHelper('if_checked_autoProfile', function(value, target, options){
+	if(!value || value == target){
+		return options.fn(this);
+	}else{
+		return options.inverse(this);
+	}
+});
+
+/*
+* Helper to identify the user is in Iphone
+*/
+Handlebars.registerHelper('isUserNotInIphone', function(options)
+{
+	if(!IS_IPHONE_APP)
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+

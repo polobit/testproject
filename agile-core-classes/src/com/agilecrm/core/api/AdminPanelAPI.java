@@ -21,6 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.affiliate.AffiliateDetails;
 import com.agilecrm.affiliate.util.AffiliateDetailsUtil;
 import com.agilecrm.contact.util.ContactUtil;
@@ -66,6 +69,7 @@ public class AdminPanelAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<DomainUser> getDomainUserDetails(@QueryParam("d") String domainname)
     {
+    	 DomainUser domainuser = DomainUserUtil.getCurrentDomainUser();
 	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -93,6 +97,7 @@ public class AdminPanelAPI
 	        users = DomainUserUtil.getUsers(actualDomain);
 	    	
 	    }
+	    ActivityUtil.createAdminPanelActivity( domainuser , Activity.ActivityType.ADMIN_PANEL_SEARCHED_DOMAIN , domainname);
 	    return users;
 	}
 	catch (Exception e)
@@ -115,7 +120,7 @@ public class AdminPanelAPI
     {
 
      try{
-
+    	
 	    String domain = NamespaceManager.get();
 
 		if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
@@ -148,8 +153,8 @@ public class AdminPanelAPI
     public void deleteDomainUser(@PathParam("namespace") String namespace)
     {
 	System.out.println("delete request for deletion of account from admin panel " + namespace);
+	DomainUser domainuser = DomainUserUtil.getCurrentDomainUser();
 	String domain = NamespaceManager.get();
-
 	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -159,6 +164,7 @@ public class AdminPanelAPI
 	try
 	{
 	    AccountDeleteUtil.deleteNamespace(namespace);
+	    ActivityUtil.createAdminPanelActivity( domainuser , Activity.ActivityType.ADMIN_PANEL_DELETE_ACCOUNT , namespace);
 	}
 	catch (Exception e)
 	{
@@ -203,6 +209,7 @@ public class AdminPanelAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
+	ActivityUtil.createAdminPanelActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_DELETED_USER ,domainUser.name );
 
 	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
 
@@ -307,11 +314,11 @@ public class AdminPanelAPI
     public Subscription getsubscriptionOfDomain(@QueryParam("d") String domainname) throws StripeException
     {
     	
-//	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
-//	{
-//	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-//		    .entity("Sorry you don't have privileges to access this page.").build());
-//	}
+	if (StringUtils.isEmpty(NamespaceManager.get()) || (!NamespaceManager.get().equals("admin") && !NamespaceManager.get().equals("our")))
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry you don't have privileges to access this page.").build());
+	}
 
 	// System.out.println(sc.billing_data_json_string.toString());
 	return Subscription.getSubscriptionOfParticularDomain(domainname);
@@ -396,7 +403,7 @@ public class AdminPanelAPI
     {
 	try
 	{
-	    // Return updated subscription object
+			    // Return updated subscription object
 	    return Subscription.updatePlan(plan);
 	}
 	catch (PlanRestrictedException e)
@@ -410,6 +417,8 @@ public class AdminPanelAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
+	
+	
 
     }
 
@@ -492,7 +501,7 @@ public class AdminPanelAPI
     public Charge applyRefund(@QueryParam("chargeid") String chargeid)
     {
 	String domain = NamespaceManager.get();
-
+	
 	if (StringUtils.isEmpty(chargeid) || !domain.equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -503,6 +512,7 @@ public class AdminPanelAPI
 	{
 
 	    Charge chrge = StripeUtil.createRefund(chargeid);
+	    
 	    return chrge;
 	}
 	catch (Exception e)
@@ -512,6 +522,8 @@ public class AdminPanelAPI
 		    .build());
 
 	}
+	
+	
 
     }
 
@@ -519,9 +531,11 @@ public class AdminPanelAPI
     @Path("/applypartialrefund")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount)
+    public Refund applyPartialRefund(@QueryParam("chargeid") String chargeId, @QueryParam("amount") Integer amount ,@QueryParam("domain") String cust_domain  )
 	    throws StripeException
     {
+    	
+    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	String domain = NamespaceManager.get();
 	System.out.println(chargeId);
 	System.out.println(amount);
@@ -535,6 +549,7 @@ public class AdminPanelAPI
 	{
 
 	    Refund refund = StripeUtil.createPartialRefund(chargeId, amount);
+	    ActivityUtil.adminPanelREfundActivity(domainUser , Activity.ActivityType.ADMIN_PANEL_REFUND_AMOUNT ,cust_domain,amount/100 );
 	    return refund;
 
 	}
@@ -551,15 +566,26 @@ public class AdminPanelAPI
     // delete Subscription
     @Path("/deletesubscription")
     @DELETE
-    public void deleteSubscription(@QueryParam("subscription_id") String sub_id, @QueryParam("cus_id") String cus_id)
+    public void deleteSubscription(@QueryParam("subscription_id") String sub_id, @QueryParam("cus_id") String cus_id , @QueryParam("e") String email)
     {
+    	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	if (StringUtils.isEmpty(NamespaceManager.get()) || !NamespaceManager.get().equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Sorry you don't have privileges to access this page.").build());
 	}
-	StripeUtil.deleteSubscription(sub_id, cus_id);
 
+	String oldNameSpace = NamespaceManager.get();
+	NamespaceManager.set(email);
+	try
+	{
+		StripeUtil.deleteSubscription(sub_id, cus_id);
+	}
+	finally
+	{
+		NamespaceManager.set(oldNameSpace);
+	}
+	ActivityUtil.createAdminPanelActivity(domainUser, Activity.ActivityType.ADMIN_PANEL_SUBSCRIPTION_CANCEL, email);
     }
    
     @Path("/resumeMandrill")
@@ -657,6 +683,7 @@ public class AdminPanelAPI
     	Subscription subscription = SubscriptionUtil.getSubscription();
     	subscription.status = BillingStatus.BILLING_SUCCESS;
     	subscription.save();
+    	ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_RELEASE_DOMAIN  , domainname);
     	}catch(Exception e){
     		throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
@@ -688,11 +715,24 @@ public class AdminPanelAPI
     
     @Path("affiliate/addAmount")
     @POST
-	public void addAffiliateAmountAmount(@QueryParam("id") Long userId, @QueryParam("amount") int amount){
+	public void addAffiliateAmountAmount(@QueryParam("d") String userdomain,@QueryParam("id") Long userId, @QueryParam("amount") int amount){
     	try {
     		AffiliateDetails details = AffiliateDetailsUtil.getAffiliateDetailsbyUserId(userId);
     		details.setAmount(details.getAmount() + amount * 100);
-    		details.save();
+    		AffiliateDetailsUtil.save(details);
+    		ActivityUtil.adminPanelAddAffliateAmount( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_ADDED_AFFILIATE_AMOUNT,userdomain,amount);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+    @Path("/logintodomain")
+    @POST
+	public void createAdminloginActivity(@QueryParam("d") String userdomain){
+    	try {
+    		ActivityUtil.createAdminPanelActivity( DomainUserUtil.getCurrentDomainUser() , Activity.ActivityType.ADMIN_PANEL_LOGIN_INTO_DOMAIN,userdomain);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WebApplicationException(Response
@@ -701,4 +741,19 @@ public class AdminPanelAPI
 		}
 	}
     
+    @Path("/release_email_account")
+    @POST
+    public void releaseEmailAcount(@QueryParam("d") String domainname){
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    	NamespaceManager.set(domainname);
+    	SubscriptionUtil.releaseEmailPurchasing();
+    	}catch(Exception e){
+    		throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
 }

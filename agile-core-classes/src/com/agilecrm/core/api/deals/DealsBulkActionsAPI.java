@@ -100,8 +100,10 @@ public class DealsBulkActionsAPI
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    List<Long> dealIds = new ArrayList();
 	    for (Opportunity deal : deals)
 	    {
+	    dealIds.add(deal.id);	
 		deal.archived = true;
 		subList.add(deal);
 		if (subList.size() >= 100)
@@ -119,7 +121,7 @@ public class DealsBulkActionsAPI
 		OpportunityUtil.updateSearchDoc(subList);
 		System.out.println("total sublist -----" + subList.size());
 	    }
-	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_ARCHIVE", "", "deals", "");
+	    ActivitySave.createDealBulkActionActivity(dealIds, deals.size(), "BULK_DEAL_ARCHIVE", "", "deals", "");
 
 	    BulkActionNotifications.publishNotification(deals.size() + " Deals are archived.");
 
@@ -161,8 +163,11 @@ public class DealsBulkActionsAPI
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    List<Long> dealIds = new ArrayList<Long>();
 	    for (Opportunity deal : deals)
 	    {
+	    	
+	    dealIds.add(deal.id);	
 		deal.archived = false;
 		subList.add(deal);
 		if (subList.size() >= 100)
@@ -181,7 +186,7 @@ public class DealsBulkActionsAPI
 		OpportunityUtil.updateSearchDoc(subList);
 		System.out.println("total sublist -----" + subList.size());
 	    }
-	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_RESTORE", "", "deals", "");
+	    ActivitySave.createDealBulkActionActivity(dealIds, deals.size(), "BULK_DEAL_RESTORE", "", "deals", "");
 
 	    BulkActionNotifications.publishNotification(deals.size() + " Deals are restored.");
 
@@ -224,14 +229,18 @@ public class DealsBulkActionsAPI
 	    System.out.println("total deals -----" + deals.size());
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    List<Long> dealIds = new ArrayList<Long>();
+
 	    String oldOwner=null;
 	    String newOwner=null;
 	    for (Opportunity deal : deals)
 	    {
 	    try{
+	    	
 		   newOwner = DomainUserUtil.getDomainUser(ownerId).name;
 		  // oldOwner = DomainUserUtil.getDomainUser(Long.parseLong(deal.owner_id)).name;
 		   oldOwner = deal.getOwner().name;
+		   dealIds.add(deal.id);
 	
 	    }
 	    catch(Exception e){
@@ -261,7 +270,7 @@ public class DealsBulkActionsAPI
 	    }
 
 	    String owner_name = DomainUserUtil.getDomainUser(ownerId).name;
-	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_OWNER_CHANGE", owner_name, "deals",
+	    ActivitySave.createDealBulkActionActivity(dealIds,deals.size(), "BULK_DEAL_OWNER_CHANGE", owner_name, "deals",
 		    "");
 	    BulkActionNotifications.publishNotification("Owner changed for " + deals.size() + " Deals.");
 
@@ -310,11 +319,13 @@ public class DealsBulkActionsAPI
 
 	    // Get Deal Milestone change triggers
 	    List<Trigger> triggers = TriggerUtil.getTriggersByCondition(Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
+	    List<Long> dealIds = new ArrayList<Long>();
 
 	    List<Opportunity> subList = new ArrayList<Opportunity>();
 	    for (Opportunity deal : deals)
 	    {
-
+         
+	    	dealIds.add(deal.id);
 		// For triggers
 		Long oldPipelineId = deal.getPipeline_id();
 		String oldMilestone = deal.milestone;
@@ -361,7 +372,7 @@ public class DealsBulkActionsAPI
 		System.out.println("total sublist -----" + subList.size());
 	    }
 
-	    ActivitySave.createBulkActionActivityForDeals(deals.size(), "BULK_DEAL_MILESTONE_CHANGE", milestone_name,
+	    ActivitySave.createDealBulkActionActivity(dealIds, deals.size(), "BULK_DEAL_MILESTONE_CHANGE", milestone_name,
 		    "deals", pipeline_name);
 	    BulkActionNotifications.publishNotification("Track/Milestone changed for " + deals.size() + " Deals.");
 	}
@@ -369,7 +380,7 @@ public class DealsBulkActionsAPI
 	{
 	    je.printStackTrace();
 	}
-    }
+  }
 
     /**
      * Call backends to delete deals in bulk.
@@ -420,7 +431,7 @@ public class DealsBulkActionsAPI
 		    OpportunityUtil.deleteSearchDoc(subList);
 		    subList.clear();
 		    ActivitySave.createLogForBulkDeletes(EntityType.DEAL, dealIdsArray,
-			    String.valueOf(dealIdsArray.length()), "");
+			String.valueOf(dealIdsArray.length()), "");
 		    dealIdsArray = new JSONArray();
 		}
 	    }
@@ -652,6 +663,60 @@ public class DealsBulkActionsAPI
 	    BulkActionNotifications.publishNotification(message);
 
 	    ActivitySave.createBulkActionActivity(contacts.size(), "ASIGN_WORKFLOW", workflow.name, "contacts", "");
+
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+    }
+    
+    /**
+     * Call backends to update deals with updated time in bulk.
+     */
+    @Path("/update/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void updateDeals(@FormParam("ids") String deal_ids, @PathParam("current_user") Long current_user)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(current_user);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(current_user);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
+
+	try
+	{
+		OpportunityUtil opportunityUtil = new OpportunityUtil();
+	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(deal_ids, null, 100);
+	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, current_user);
+	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
+	    
+	    List<Opportunity> subList = new ArrayList<Opportunity>();
+	    for (Opportunity deal : deals)
+	    {
+	    deal.updated_time = System.currentTimeMillis() / 1000;
+		subList.add(deal);
+		if (subList.size() >= 100)
+		{
+		    Opportunity.dao.putAll(subList);
+		    OpportunityUtil.updateSearchDoc(subList);
+		    subList.clear();
+		}
+	    }
+
+	    if (!subList.isEmpty())
+	    {
+		Opportunity.dao.putAll(subList);
+		OpportunityUtil.updateSearchDoc(subList);
+	    }
 
 	}
 	catch (Exception je)

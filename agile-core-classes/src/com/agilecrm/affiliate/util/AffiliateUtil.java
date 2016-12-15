@@ -60,11 +60,11 @@ public class AffiliateUtil {
 			query.addFilter("createdTime", FilterOperator.LESS_THAN_OR_EQUAL, endTime);
 		}
 		List<Entity> list = dataStore.prepare(query).asList(FetchOptions.Builder.withDefaults());
-		long totalCommissionAmount = 0;
+		float totalCommissionAmount = 0;
 		for(Entity entity : list){
 			Long amount = (Long)entity.getProperty("amount");
 			Long commission = (Long)entity.getProperty("commission");
-			totalCommissionAmount = totalCommissionAmount + ((amount / 100) * commission);
+			totalCommissionAmount = totalCommissionAmount + ((amount / 100f) * commission);
 		}
 		JSONObject json = new JSONObject();
 		json.put("count", list.size());
@@ -103,7 +103,8 @@ public class AffiliateUtil {
 				affiliate.setRelatedUserId(accPrefs.affiliatedBy);
 				affiliate.setAmount(amount);
 				affiliate.setCommission(Globals.AFFILIATE_COMMISION);
-				affiliate.save();
+				save(affiliate);
+				AffiliateDetailsUtil.setLastAffiliateAddedTime(accPrefs.affiliatedBy);
 				return affiliate;
 			}
 		}finally{
@@ -111,4 +112,14 @@ public class AffiliateUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * save affiliate
+	 * @param affiliatte
+	 */
+	public static void save(Affiliate affiliatte){
+		affiliatte.setCreatedTime(System.currentTimeMillis()/1000);
+		dao.put(affiliatte);
+	}
+	
 }

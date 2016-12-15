@@ -216,7 +216,8 @@ var Base_Model_View = Backbone.View
 				 */
 				var $el = $(this.el);
 				var formId = $(this.el).find('form').attr('id');
-				
+				if(!formId)
+					return;
 				var saveCallback = this.options.saveCallback;
 				
 				var errorCallback = this.options.errorCallback;
@@ -451,10 +452,10 @@ var Base_Model_View = Backbone.View
 										//$save_info.hide();
 
 										// Show cause of error in saving
-										$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+										$save_info = $('<div id="base-model-error-container" style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
 												+ response.responseText
 												+ '</i></p></small></div>');
-
+										$(targetEle).closest(".form-actions", this.el).find("#base-model-error-container").remove();
 										// Appends error info to form actions
 										// block.
 										$(targetEle).closest(".form-actions", this.el).append($save_info);
@@ -509,7 +510,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					$(this.el).html(getRandomLoadingImg());
+					$(this.el).html(getRandomLoadingImg(this.options.noLoading));
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -530,7 +531,8 @@ var Base_Model_View = Backbone.View
 					}
 					else
 					{
-						$(this.el).html(getRandomLoadingImg());
+						if(typeof(showLoading) != undefined)
+						$(this.el).html(getRandomLoadingImg(this.options.noLoading));
 					}
 				}
 
@@ -618,7 +620,7 @@ function disable_save_button(elem)
 
 	var loadingText = elem.attr("data-loading-text");
 	if(!loadingText)
-	   loadingText = _agile_get_translated_val("others", "saving");
+	   loadingText = "{{agile_lng_translate 'others' 'saving'}}";
 	
 	elem.css('min-width',elem.width()+'px')
 		.attr('disabled', 'disabled')

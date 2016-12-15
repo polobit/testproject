@@ -191,12 +191,47 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			var categories = [];
 			var tempcategories = [];
 			var colors=[];
+			var colorForStatus = {};
 
 			if(selector!='calls-chart')
 				colors=['#23b7e5','#27c24c','#7266ba','#fad733'];
 			else
-				colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];
-			
+				{
+					colorForStatus = {"failed" : "#f05050", "busy" :"#23b7e5" , "voicemail" : "#7266ba", "answered" : "#27c24c", "missed" : "#fad733", "others": "#ff8080"}
+				};
+
+				var addedColor = {};  // this is temp variable to check whether the color is alread added or not
+					var jsn = data[Object.keys(data)[0]];
+					var lc = 0;
+					if(jsn){
+						$.each(jsn, function(key, value){
+							if(colorForStatus[key]){
+								colors.push(colorForStatus[key]);
+								addedColor[colorForStatus[key]] = colorForStatus[key];
+							}else{
+								var colorCode;
+								var loop = 0;
+								while(true){
+									if(lc >= lightColors.length-1 || loop > 1){
+									colorCode = '#'+Math.floor(Math.random()*16777215 + Math.random()*7777).toString(16);
+									}else{
+										loop = loop + 1;
+										colorCode = lightColors[lc];
+									}
+									
+									if(!addedColor[colorCode]){
+										loop = 0;
+										lc = lc+1;
+										break;
+									}
+								}
+								addedColor[colorCode] = colorCode;
+								colors.push(colorCode);
+							}
+						});
+					}else{
+						colors=['#27c24c','#23b7e5','#f05050','#7266ba','#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF','#B72030'];	
+					}
 			colors = selected_colors || colors;
 			
 			var dataLength = 0;
@@ -300,6 +335,16 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 			        backgroundColor: (Highcharts.theme&&Highcharts.theme.legendBackgroundColorSolid)||'white',
 			        borderColor: '#CCC',
 			        borderWidth: 1,
+			        labelFormatter : function() {
+						if (this.name.length > 20) {
+							return this.name
+									.slice(0,
+											20)
+									+ '...';
+						} else {
+							return this.name;
+						}
+					},
 			        shadow: false
 			    },
 			    tooltip: {
@@ -444,6 +489,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 						series[index++] = series_data;
 					});
 				}
+            
 
 				// Fill Data Values with series data
 				$.each(v, function(k1, v1)
@@ -468,6 +514,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 					min_tick_interval = 4;
 				}
 			}
+			
 			$.each(sortedData, function(k, v)
 			{
 				 var dt = new Date(k * 1000);
@@ -616,11 +663,14 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 			    },
 			    //Sets the series of data to be shown in the graph,shows total 
 			    //and pipeline
+			    
 			    series: series,
 			});
+			
 		});
 	});
 }
+
 
 /**
  * Function to show funnel bsed on the data
@@ -1571,26 +1621,55 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
                     min_tick_interval = 4;
                 }
             }
-            if(series==undefined)
+          if(series==undefined)
+            	if(selector == "won-deals-chart")
+            		chartRenderforWonDeals(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
+             else
             	 chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
-            else
-            {
-            $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
-            success: function(data){
-                $.each(data,function(index,deals){
-                    for(var i=0;i<series.length;i++){
-                        if(series[i].name=="0")
-                                series[i].name="Unknown";
-                        else if(deals.id==series[i].name){
-                            series[i].name=deals.label;
+          else{
+            
+            if(selector == "won-deals-chart"){
+            	   var won_total= {};
+            	  $.each(series,function(index,user){
+            	  	var sum=0;
+            	  	$.each(user.data,function(i,value){
+            	  		sum+=value;
+            	  	});
+            	  	won_total[index]=sum;
+            	  });
+            	$.ajax({ type : 'GET', url : '/core/api/users', dataType : 'json',
+                success: function(data){
+                   $.each(data,function(index,user){
+                     for(var i=0;i<series.length;i++){  
+                        if(user.id==series[i].name){
+                            series[i].name=user.name;
                         }
                             
                     }
-                });
-                chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
+                  });
+                chartRenderforWonDeals(selector,categories,name,yaxis_name,min_tick_interval,type,series,won_total);
+
+                }
+               });
+            }
+            else{
+                     $.ajax({ type : 'GET', url : '/core/api/categories?entity_type=DEAL_SOURCE', dataType : 'json',
+                     success: function(data){
+                        $.each(data,function(index,deals){
+                            for(var i=0;i<series.length;i++){
+                               if(series[i].name=="0")
+                                series[i].name="Unknown";
+                                else if(deals.id==series[i].name){
+                                     series[i].name=deals.label;
+                                }
+                            
+                            }
+                       });
+                  chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData);
                 } 
             });
-        	}
+            }
+       }
 
 
             // After loading and processing all data, highcharts are initialized
@@ -1599,6 +1678,88 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
         });
     });
 }
+
+function chartRenderforWonDeals(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData){
+chart = new Highcharts.Chart({
+			    chart: {
+			        renderTo: selector,
+			        type: 'line',
+			        marginRight: 130,
+			        marginBottom: 50
+			    },
+			    title: {
+			        text: name,
+			        x: -20//center
+			    },
+			    xAxis: {
+			        /*type: 'datetime',
+			        dateTimeLabelFormats: {
+			            //don't display the dummy year  month: '%e.%b',
+			            year: '%b',
+			            month: '%e.%b \'%y',
+			        },
+			        minTickInterval: min_interval,
+			        startOfWeek: startOfWeek*/
+			        categories: categories,
+			        tickmarkPlacement: 'on',
+			        minTickInterval: min_tick_interval,
+			        tickWidth: 1
+			    },
+			    yAxis: {
+			        title: {
+			            text: yaxis_name
+			        },
+			        plotLines: [
+			            {
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }
+			        ],
+			        min: 0
+			    },
+			    //Tooltip to show details,
+			    /*ongraphtooltip: {
+			        formatter: function(){
+			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
+			            this.x)+': '+this.y.toFixed(2);
+			        }
+			    },*/
+			    legend: {
+			        layout: 'vertical',
+			        align: 'right',
+			        verticalAlign: 'top',
+			        x: -10,
+			        y: 100,
+			        borderWidth: 0
+			    },
+			    //Sets the series of data to be shown in the graph,shows total 
+			    //and pipeline
+			    tooltip: {
+                    formatter: function(){
+                        if(type=="deals")
+                                {
+                        return '<div>' + 
+                                '<div class="p-ntext-cap"><font color='+this.series.color+'>'+this.series.name+'</font></div>' + 
+                                '<div class="p-n text-cap">'+this.x+' : '+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '</div>'+
+                                '<div class="p-n">Total : '+getNumberWithCommasForCharts(AllData[this.series._i])+'</div>';
+                            }
+                             else
+                        {
+                        return '<div>' + 
+                                '<div class="p-ntext-cap"><font color='+this.series.color+'>'+this.series.name+'</font></div>' + 
+                                 '<div class="p-n text-cap">'+this.x+' : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(this.y)+'</div>' +
+                                '</div>'+
+                                 '<div class="p-n">Total : '+getCurrencySymbolForCharts()+''+getNumberWithCommasForCharts(AllData[this.series._i])+'</div>';;
+                            }
+                        },
+                        useHTML: true
+                },
+			    series: series,
+			});
+}
+
 
 function chartRenderforIncoming(selector,categories,name,yaxis_name,min_tick_interval,type,series,AllData,x_pos,y_pos,base_model){
 	if(x_pos == undefined)

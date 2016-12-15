@@ -49,7 +49,10 @@ public class EcommerceWebhook extends HttpServlet
 	    	ecommUtil.syncAsTags = request.getParameter("syncAsTags");
 
 	    String json = request.getParameter("payLoad");
-
+	    // Get the email from payload
+	    ecommUtil.getEmailFromPayload(json, ecommUtil);
+	    System.out.println("email= "+ecommUtil.email);
+	    
 	    JSONObject jsonObj = null;
 	    try
 	    {

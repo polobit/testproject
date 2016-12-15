@@ -161,7 +161,7 @@ public class AppengineMail
      * @param template
      * @param object
      */
-    public static void sendMail(String to, String subject, String template, Object object)
+    public static void sendMail(String to, String subject, String template, Object object, String language)
     {
 
 	System.out.println(template + SendMail.TEMPLATE_HTML_EXT);
@@ -199,10 +199,10 @@ public class AppengineMail
 	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
 
 	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, mergedJSON, language);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = MustacheUtil.templatize(template + SendMail.TEMPLATE_BODY_EXT, mergedJSON, language);
 
 	    if (StringUtils.isEmpty(emailBody))
 		emailBody = " ";

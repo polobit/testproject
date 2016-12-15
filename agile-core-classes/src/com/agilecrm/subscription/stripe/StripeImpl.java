@@ -11,6 +11,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOn;
+import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.AgileBilling;
@@ -21,6 +23,7 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
@@ -62,7 +65,7 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
 public class StripeImpl implements AgileBilling {
 
 	static {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = StripeUtil.getStripeApiKey();
 		Stripe.apiVersion = "2012-09-24";
 	}
 
@@ -184,16 +187,10 @@ public class StripeImpl implements AgileBilling {
 				.getData();
 
 		// Fetches all subscriptions and check if there is an account plan
-		Iterator<com.stripe.model.Subscription> iterator = subscriptionList
-				.iterator();
 		com.stripe.model.Subscription oldSubscription = null;
-		boolean is_EmailSubs = false;
-		while (iterator.hasNext()) {
-			com.stripe.model.Subscription s = iterator.next();
-			com.stripe.model.Plan p = s.getPlan();
-			if (!StringUtils.containsIgnoreCase(p.getId(), "email")) {
-				oldSubscription = s;
-				is_EmailSubs = true;
+		for(com.stripe.model.Subscription subscription : subscriptionList){
+			if(!StringUtils.containsIgnoreCase(subscription.getPlan().getId(), "email") && !StringUtils.containsIgnoreCase(subscription.getPlan().getId(), "addon")){
+				oldSubscription = subscription;
 				break;
 			}
 		}
@@ -253,6 +250,19 @@ public class StripeImpl implements AgileBilling {
 		//
 		// }
 
+		//If plan is Enterprise remove all addon subscriptions
+		if(StringUtils.containsIgnoreCase(plan.plan_type.toString().toLowerCase(), "enterprise")){
+			AddOn addon = AddOnUtil.getAddOn();
+			if(addon.id != null){
+				for(com.stripe.model.Subscription subscription : subscriptionList){
+					if(subscription.getPlan().getId().toLowerCase().contains("addon")){
+						subscription.cancel(null);
+						AddOnUtil.deleteAddOn();
+					}
+				}
+			}
+		}
+				
 		// Updates customer with changed plan
 		if (oldSubscription != null) {
 			oldSubscription.update(updateParams);
@@ -315,7 +325,7 @@ public class StripeImpl implements AgileBilling {
 			} catch (Exception e) {
 			}
 		}
-
+		
 		// Returns Customer object as JSONObject
 		return StripeUtil.getJSONFromCustomer(customer);
 	}
@@ -466,6 +476,7 @@ public class StripeImpl implements AgileBilling {
 
 		SubscriptionUtil.deleteEmailSubscription();
 		SubscriptionUtil.deleteUserSubscription();
+		AddOnUtil.deleteAddOn();
 
 		// Fetches all subscriptions and cancels from stripe
 		for (com.stripe.model.Subscription s : subscriptions.getData()) {
@@ -645,7 +656,7 @@ public class StripeImpl implements AgileBilling {
 		System.out.println("cust id:: "+customer.getId());
 		List<com.stripe.model.Subscription> subs = customer.getSubscriptions().getData();
 		for(com.stripe.model.Subscription sub : subs){
-			if(!sub.getPlan().getId().contains("email")){
+			if(!StringUtils.containsIgnoreCase(sub.getPlan().getId(), "email") && !StringUtils.containsIgnoreCase(sub.getPlan().getId(), "addon")){
 				invoiceParams.put("subscription", sub.getId());
 				System.out.println("sub id:: "+sub.getId());
 			}
@@ -655,7 +666,7 @@ public class StripeImpl implements AgileBilling {
 		invoiceParams.put("subscription_prorate", true);
 		invoiceParams.put("subscription_plan", plan.plan_id);
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
-		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setApiKey(StripeUtil.getStripeApiKey());
 		builder.setStripeVersion("2015-10-16");
 		RequestOptions options = builder.build();
 		Invoice invoice = Invoice.upcoming(invoiceParams, options);
@@ -664,7 +675,7 @@ public class StripeImpl implements AgileBilling {
 	}
 	
 	// Create InvoiceIterm and pay to purchase life time emails
-	public void purchaseEmailCredits(JSONObject customerJSON, Integer quantity) throws Exception {
+	public boolean purchaseEmailCredits(JSONObject customerJSON, int quantity) throws Exception {
 		Customer customer = StripeUtil.getCustomerFromJson(customerJSON);
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("customer", customer.getId());
@@ -675,18 +686,21 @@ public class StripeImpl implements AgileBilling {
 		System.out.println("invoiceItem for email credits "+invoiceItem);
 		params.remove("amount");
 		params.remove("currency");
-		try{
-			Invoice invoice = Invoice.create(params).pay();
+		Invoice invoice = Invoice.create(params).pay();
+		if(invoice.getPaid()){
+			CacheUtil.deleteCache(NamespaceManager.get()+"_auto_renewal_billing_failed");
 			System.out.println("invoice for email credits "+invoice);
-		}catch(Exception e){
-			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			return true;
+		}else{
 			params.remove("description");
 			params.put("limit", 1);
-			List<InvoiceItem> invoiceItems = InvoiceItem.all(params).getData();
-			invoiceItems.get(0).delete();
-			throw new Exception(e.getMessage());
+			List<Invoice> invoiceList = Invoice.all(params).getData();
+			Map<String, Object> updateParams = new HashMap<String, Object>();
+			updateParams.put("closed", "true");
+			invoiceList.get(0).update(updateParams);
+			CacheUtil.setCache(NamespaceManager.get()+"_auto_renewal_billing_failed", "BILLING_FAILED", 5 * 60 * 1000);
+			return false;
 		}
-		
 		
 	}
 	

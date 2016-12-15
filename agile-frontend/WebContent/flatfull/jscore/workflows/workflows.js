@@ -20,6 +20,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         'change #disable-workflow':'saveCampaignClick',
         'change .emailSelect,click .emailSelect' : 'fillDetails',
         'click #campaign_access_level': 'accessLevelChange',
+        'click #campaign-restore-alert': 'showRestoreAlert'
     },
 
     fillDetails : function(e)
@@ -143,7 +144,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
          */      
         if(!is_start_active(designerJSON)){
             var $save_info = '<span style="color: red;">{{agile_lng_translate "campaigns" "connect-start-node"}}</span>';
-            $("#workflow-msg").html($save_info).show().fadeOut(3000);
+            $("#workflow-msg").html($save_info).show().fadeOut(8000);
             return false;
         }
 
@@ -343,6 +344,40 @@ var Workflow_Model_Events = Base_Model_View.extend({
         // Change ui text
         change_access_level(level, this.el);
 
+    },
+
+    showRestoreAlert: function(e){
+        e.preventDefault();
+
+        showAlertModal("Are you sure you want to restore the campaign to earlier version?", "confirm",
+         function confirm(modal)
+         {
+
+            $.ajax({
+                url: 'core/api/workflows/restore?workflow_id=' + App_Workflows.workflow_model.get("id"),
+                method: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(workflow_model_json)
+                {
+                    App_Workflows.workflow_model.set("rules", workflow_model_json.rules);
+                   
+                    App_Workflows.workflow_json = App_Workflows.workflow_model.get("rules");
+                    App_Workflows.is_disabled = App_Workflows.workflow_model.get("is_disabled");
+
+                   // Reload iframe
+                   var iframe = document.getElementById("designer");
+                   iframe.src = iframe.src;
+
+                   show_campaign_save(e, "Restored workflow successfully.");
+                }, 
+                error: function() {
+                   show_campaign_save(e, "Backup of earlier version is not available.", "red");
+                 }
+             })
+         }, function decline(modal){
+
+         }, "Restore Workflow");  
     }
 
 });
@@ -598,7 +633,7 @@ function show_campaign_save(e,message,color)
     if(color)
         save_info = $(save_info).css("color", color);
 
-    $("#workflow-msg").html(save_info).show().fadeOut(3000);
+    $("#workflow-msg").html(save_info).show().fadeOut(5000);
 }
 
 function is_start_active(designerJSON){
@@ -803,4 +838,274 @@ function showHide_UnsubscribeEmail_Status(alertMsg){
         $("#unsubscribe-email_status-msg").html(msg).show();  
     }
     
+}
+
+/**
+* Returns campaign modify changes. Please refer workflow rules json accordingly
+*
+* @param updated_workflow_json - updated workflow rules json
+* @param old_workflow_json - old workflow rules json
+**/
+function get_campaign_changes(updated_workflow_json, old_workflow_json, callback)
+{
+    // If any workflow is undefined
+    if(!updated_workflow_json || !old_workflow_json)
+        return;
+
+    var update_nodes = JSON.parse(updated_workflow_json).nodes;
+    var old_nodes = JSON.parse(old_workflow_json).nodes;
+
+    var map = {"ADDED":[], "MODIFIED":[], "DELETED": []};
+
+    // var modified_table = {NodeName, Action, FieldName, Previous Value, New Value};
+
+    head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
+        
+        for(var i=0; i < update_nodes.length; i++){ // nodes iterator
+        
+            var update_node = update_nodes[i];
+
+            // If Start node
+            if(update_node.id == "PBXNODE1")
+                continue;
+
+            // Finding in Old workflow json
+            var old_node = _.findWhere(old_nodes, {id: update_node.id});
+            
+            if(old_node)
+            {
+                // Check both nodes are same or not?
+                var is_equal = _.isEqual(old_node.JsonValues, update_node.JsonValues);
+
+                if(is_equal)
+                {
+                    // Do Nothing
+                }
+                else
+                {
+                    console.log("Node Modified...");
+                    
+                    // Modified Field Values
+                    var modified_field_values = [];
+                    for(var j=0; j< update_node.JsonValues.length; j++) // Fields Iterator
+                    {
+
+                        var updated_node_field = update_node.JsonValues[j];
+                        var search_obj = search_for_old_field(updated_node_field, old_node.JsonValues);
+                        var old_node_field = search_obj["field"];
+                        var key_identity = search_obj["key_identity"];
+                       
+                        // If any of the fields is undefined
+                        if(!updated_node_field || !old_node_field)
+                            continue;
+
+                        // Compare update field and old field
+                        var field_equal = _.isEqual(updated_node_field, old_node_field);
+
+                        console.log(field_equal);
+                        console.log("Node.................." +  updated_node_field.name);
+
+                        if(!field_equal)
+                        {
+                            try
+                            {        
+                                var modified_data = {};
+                                modified_data.node_name = update_node.displayname;
+
+                                // If Node name is changed, it doesn't comes under ui
+                                if(updated_node_field.name == "nodename" && key_identity == "nodename")
+                                {
+                                    modified_data.name = "Node Name";
+                                    modified_data.old_value = old_node_field.value;
+                                    modified_data.new_value = updated_node_field.value;
+                                }
+                                else
+                                {
+                                    var modified_field_ui_obj = search_ui_obj(old_node.NodeDefinition.ui, key_identity);
+
+                                    modified_data.name = get_modified_name(modified_field_ui_obj);
+                                    modified_data.old_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
+                                                                , old_node_field.value);
+                                    modified_data.new_value = get_modified_value(modified_field_ui_obj, updated_node_field.name
+                                                                , updated_node_field.value);
+                                }
+
+
+                                modified_field_values.push(modified_data);
+                            }
+                            catch(err)
+                            {
+                                console.debug("Error occured while pushing modified fields..." + err);
+                            }
+
+                        }
+
+                    }
+
+                    if(modified_field_values && modified_field_values.length > 0)
+                    map["MODIFIED"].push(modified_field_values);
+                }
+
+                // Remove existing node from old_nodes
+                old_nodes = _.without(old_nodes, old_node);
+
+            }
+            else
+            {
+                console.log("Newly Added....");
+                map["ADDED"].push(update_node.displayname);
+            }
+        }
+
+         // If still nodes exists, those are deleted nodes in updated workflow
+        for(var i=0; i< old_nodes.length; i++){
+
+            if(old_nodes[i].id == "PBXNODE1")
+                continue;
+
+            console.log("Node deleted..." + old_nodes[i].displayname);
+
+            map["DELETED"].push(old_nodes[i].displayname);
+        }
+
+
+        if(callback && typeof callback == "function"){
+            callback(map);
+        }
+
+    });
+}
+
+function search_for_old_field(updated_node_field, old_node_json_values)
+{
+    var search_obj = {};
+    var old_field;
+
+    // Search in Old JSONValues and pick that JSONValue
+    if(updated_node_field.hasOwnProperty("name"))
+    {
+        old_field  = _.findWhere(old_node_json_values, 
+                                    {name: updated_node_field.name});
+        key_identity = updated_node_field.name;
+    }
+    else
+    {
+        for(var key in updated_node_field)
+        {
+            old_field = _.find(old_node_json_values, function(obj){
+                if(obj.hasOwnProperty(key)){
+                 key_identity = key;
+                 return obj;
+             }
+            });
+        }
+    }
+
+    search_obj["field"] = old_field;
+    search_obj["key_identity"] = key_identity;
+
+    return search_obj;
+}
+
+function search_ui_obj(node_ui, key_identity)
+{
+     var ui_obj = _.find(node_ui, function(obj)
+        {
+            if(obj.name == key_identity)
+            {
+                return obj; 
+            }
+        });
+
+     return ui_obj;
+}
+
+function get_modified_name(modified_field_ui_obj)
+{
+    var name = "";
+
+    if(modified_field_ui_obj)
+        name = modified_field_ui_obj.label;
+
+    // If Modified field undefined
+    if(!name)                            
+        name = modified_field_ui_obj.name;
+
+    name = name.replace(/:+$/, "");
+
+    return name;
+}
+
+function get_modified_value(modified_field_ui_obj, field_name, field_value)
+{
+    var value = "-";
+    var restricted_fields = ["text_email", "html_email", "unsubscribe", "description", "campaign_id", "milestone"];
+    var allow_select_values = ["from_email"];
+
+    if(restricted_fields.indexOf(field_name) != -1)
+        return "-";
+
+    if(modified_field_ui_obj.options) // For select fields having options, return key's text
+    {
+
+       if(allow_select_values.indexOf(field_name) != -1)
+       {
+            // Removed * if occurs in first character
+            if(field_value.charAt(0) === '*')
+            {
+                field_value = field_value.substr(1);
+            }
+
+            return field_value;
+       }
+
+       value = _.findKey(modified_field_ui_obj.options, function(value)
+        {
+            if(value == field_value)
+            {
+                // Removed * if occurs in first character
+                if(value.charAt(0) === '*')
+                {
+                    value = value.substr(1);
+                }
+
+                return value;
+            }
+
+        });
+    }
+    else
+    {
+       value = field_value;
+    }
+    
+    if(!value)
+        value = "-";
+
+    // Removed * if occurs in first character
+    if(value.charAt(0) === '*')
+        value = value.substr(1);
+
+    return value;
+}
+function workflowVideoPopup(){
+    var data={};
+    data.title="Workflows Tutorial";
+    data.videourl="//www.youtube.com/embed/fPFS3w0GSyw?enablejsapi=10&amp;autoplay=1";
+    showHelpVideoModal(data);
+}
+
+function showHelpVideoModal(data){
+    getTemplate('help_video_tutorial_modal', data, undefined, function(template_ui){
+                if(!template_ui)
+                      return;           
+
+                $("#help_video_tutorial_modal").html($(template_ui)).modal('show');
+
+                // Stops video on modal hide
+                $("#help_video_tutorial_modal").on("hide.bs.modal", function(){
+                    $(this).html("");
+                });
+
+    }, null);
 }

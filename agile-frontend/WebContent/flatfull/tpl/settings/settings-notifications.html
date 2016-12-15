@@ -20,8 +20,8 @@
                         </div>                                           
                     {{#if control_notifications}}
                     </div>
-                    <div class="pull-right">
-                    <span id="desktop-notification-content" class="right text-base"></span>
+                    <div class="{{#is_mobile}} pull-left {{else}} pull-right {{/is_mobile}}">
+                    <span id="desktop-notification-content" class="right {{#is_mobile}} text-sm {{else}} text-base {{/is_mobile}}"></span>
                     {{#is_mobile}}
 
                     {{else}}
@@ -75,23 +75,39 @@
                         </div>
                         
                     </div>
+                   
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'deal'}}</label>
                         <div class="controls col-sm-8">
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                            <input type="checkbox" id="deal_created" name="deal_created" value="true" /><i></i> 
+                            <input type="checkbox" id="deal_created" name="deal_created" value="true" 
+                            {{#hasMenuScope "DEALS"}}   
+
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
+                            
                             {{agile_lng_translate 'prefs-notifications' 'deal-is-created'}}
                             </label>
-</div>
+                            </div>
+                         
                             <div class="checkbox">
 <label class="i-checks i-checks-sm">
-                            <input type="checkbox" id="deal_closed" name="deal_closed" value="true" /><i></i> 
+                            <input type="checkbox" id="deal_closed" name="deal_closed"  
+                            {{#hasMenuScope "DEALS"}}        
+                            {{else}}
+                                    disabled="disabled"
+                            {{/hasMenuScope}}/><i></i> 
                            {{agile_lng_translate 'prefs-notifications' 'deal-is-closed'}}
                             </label>
-</div>
+                            </div>
+
+                                            
                         </div>
                     </div>
+
+
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'contact-edit' 'tag'}}</label>
                         <div class="controls col-sm-8">
@@ -128,7 +144,8 @@
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="call" name="call" value="true"/><i></i> 
-                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}}
+                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}} 
+                            ({{agile_lng_translate 'prefs-notifications' 'for-ringcentral-only'}})
                             </label>
 </div>
                         </div>
@@ -170,8 +187,7 @@
                             </select>
 <p class="help-block m-b-none">{{agile_lng_translate 'prefs-notifications' 'get-notified-when-a-contact-clicks-link-in-email'}}</p>
                         </div>
-                        
-                    </div>
+                   
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'campaigns' 'deal'}}
                         </label>
@@ -224,12 +240,28 @@
                         <div class="controls col-sm-8">
                             <div class="checkbox"><label class="i-checks i-checks-sm">
                             <input type="checkbox" id="call" name="call" value="true" disabled="disabled"/><i></i> 
-                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}}
-                            </label>
+                            {{agile_lng_translate 'prefs-notifications' 'incoming-call'}} 
+                            ({{agile_lng_translate 'prefs-notifications' 'for-ringcentral-only'}})</label>
 </div>
                         </div>
                     </div>
                     {{/if}}
+
+                    <!-- Mobile Notifications -->
+                    <div class="control-group form-group">
+                        <label class="control-label col-sm-3">{{agile_lng_translate 'contact-edit' 'mobile'}}
+                        </label>
+                        <div class="controls col-sm-8">
+                            <div class="checkbox">
+                                <label class="i-checks i-checks-sm">
+                                <input type="checkbox" id="push_mobile_notification" name="push_mobile_notification" value="true" {{#if control_notifications}} {{else}}disabled="disabled"{{/if}} /><i></i> 
+                                {{agile_lng_translate 'notications' 'enable-notifications'}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Mobile Notifications -->
+
                     <div class="control-group form-group">
                         <label class="control-label col-sm-3">{{agile_lng_translate 'prefs-notifications' 'sound'}}</label>
                         <div class="controls col-sm-8" >
@@ -241,12 +273,13 @@
                                         <option value="alert_5">{{agile_lng_translate 'prefs-notifications' 'chime'}}</option>
                                         <option value="no_sound">{{agile_lng_translate 'prefs-notifications' 'silent'}}</option>
                                     </select>
-                        <button class="btn btn-default  m-l-sm inline-block" id="notification-sound-play"><i class="icon-play"></i></button>
+                        <button class="btn btn-default  m-l-sm inline-block" id="notification-sound-play" {{#is_mobile}} style="margin-bottom: 3px" {{/is_mobile}}><i class="icon-play"></i></button>
                         </div>
                     </div>
+
 <div class="line line-lg b-b"></div>
                   <div class="row">
-                    <div class="col-sm-offset-3 col-sm-8">                      
+                    <div class="col-sm-offset-3 col-sm-8 {{#is_mobile}} text-center {{/is_mobile}}">                      
                         <button type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                         <!--<a href="#settings" class="btn btn-sm btn-default">Cancel</a>-->
                     </div>

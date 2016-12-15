@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -133,7 +135,7 @@ public class ActivityReportsUtil
 	     */
 
 	    // Format for dates in the report.
-	    String format = "EEE, MMM d, yyyy HH:mm z";
+	    String format = "EEE, MMM d, yyyy";
 
 	    // Fill the map object with the required data.
 	    activityReports.put("start_time", MustacheUtil.convertDate(format, timeBounds.get("startTime")));
@@ -145,7 +147,7 @@ public class ActivityReportsUtil
 	    // For every user selected in the activity report.
 	    for (DomainUser user : users)
 	    {
-		Map<String, Object> activityReport = new HashMap<String, Object>();
+		Map<String, Object> activityReport = new LinkedHashMap<String, Object>();
 		activityReport.put("user_id", user.id);
 		activityReport.put("user_name", user.name);
 		activityReports.put("domain", user.domain);
@@ -159,54 +161,72 @@ public class ActivityReportsUtil
 		    System.out.println("User not logged in upto now.");
 		}
 		int count = 0;
+		String lastEntry = null;
 		// Check for the entities/activities selected by the user for
 		// activity report.
 		if (activities.contains(ActivityReports.ActivityType.DEAL)
 			&& user.menu_scopes.contains(NavbarConstants.DEALS))
 		{
-		    activityReport.put("deals",
-			    getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> dealsMap = getDealActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("deals" ,dealsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("deals"), "deals_total");
+		    if(dealsMap.size() > 0)
+		    	lastEntry = "deals";
 		}
 		if (activities.contains(ActivityReports.ActivityType.EVENT))
 		{
-		    activityReport.put("events",
-			    getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> eventsMap = getEventActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("events" ,eventsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("events"), "events_total");
+		    if(eventsMap.size() > 0)
+		    	lastEntry = "events";
 		}
 		if (activities.contains(ActivityReports.ActivityType.TASK))
 		{
-		    activityReport.put("tasks",
-			    getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> tasksMap = getTaskActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("tasks" ,tasksMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("tasks"), "tasks_total");
+		    if(tasksMap.size() > 0)
+		    	lastEntry = "tasks";
 		}
 		if (activities.contains(ActivityReports.ActivityType.EMAIL))
 		{
-		    activityReport.put("emails",
-			    getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> emailsMap = getEmailActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+			activityReport.put("emails" ,emailsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("emails"), "emails_count");
+		    if(emailsMap.size() > 0)
+		    	lastEntry = "emails";
 		}
 		if (activities.contains(ActivityReports.ActivityType.NOTES))
 		{
-		    activityReport.put("notes",
-			    getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> notesMap = getNotesActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+		    activityReport.put("notes" ,notesMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("notes"), "notes_contacts_count");
+		    if(notesMap.size() > 0)
+		    	lastEntry = "notes";
 		}
 		if (activities.contains(ActivityReports.ActivityType.DOCUMENTS))
 		{
-		    activityReport.put("docs",
-			    getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> docsMap = getDocumentsActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+		    activityReport.put("docs" ,docsMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("docs"), "doc_count");
+		    if(docsMap.size() > 0)
+		    	lastEntry = "docs";
 		}
 
 		if (activities.contains(ActivityReports.ActivityType.CALL))
 		{
-		    activityReport.put("calls",
-			    getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime")));
+			Map<String, Object> callMap = getCallActivityReport(user, timeBounds.get("startTime"), timeBounds.get("endTime"));
+		    activityReport.put("calls" ,callMap);
 		    count += getTotalCount((Map<String, Object>) activityReport.get("calls"), "total_calls");
+		    if(callMap.size() > 0)
+		    	lastEntry = "calls";
 		}
-		if (count > 0)
+		if (count > 0){
 		    activityReport.put("total", count);
+		    Map<String, Object> subMap = (Map<String, Object>)activityReport.get(lastEntry);
+		    subMap.put("isLast", true);
+		}
 		else
 		    activityReport.put("message", "No activity form " + user.name);
 		allUserCount += count;
@@ -683,7 +703,7 @@ public class ActivityReportsUtil
 		// Prepare the summary to show in the email, as it is not
 		// possible to format in the template.
 		activity.label = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
-			+ "\">" + activity.label + "</a>";
+			+ "\" style=\"text-decoration:none\">" + activity.label + "</a>";
 		emailActivity.add(activity);
 	    }
 	    else if (activity.activity_type == Activity.ActivityType.BULK_ACTION
@@ -754,7 +774,7 @@ public class ActivityReportsUtil
 
 	    if (!StringUtils.isEmpty(name))
 		result = "to <a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + contact.id
-			+ "\" target=\"_blank\">" + name + "</a>";
+			+ "\" target=\"_blank\" style=\"text-decoration:none\">" + name + "</a>";
 
 	    activity.custom4 = result;
 	    noteActivities.add(activity);
@@ -854,7 +874,7 @@ public class ActivityReportsUtil
 
 	    if (activity.entity_id != null)
 		link = "<a href=\"https://" + user.domain + ".agilecrm.com/#contact/" + activity.entity_id
-			+ "\" target=\"_blank\">" + activity.label + "</a>";
+			+ "\" target=\"_blank\" style=\"text-decoration:none\">" + activity.label + "</a>";
 	    else
 		link = activity.label;
 
@@ -1054,7 +1074,7 @@ public class ActivityReportsUtil
 	if (recordsCount != null && recordsCount > 0)
 	{
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, "activity_reports",
-		    reports);
+		    reports, LanguageUtil.getUserLanguageFromSession());
 	    return;
 	}
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
@@ -1078,13 +1098,13 @@ public class ActivityReportsUtil
 	{
 	    if (activity.related_contact_ids != null && activity.related_contact_ids.length() != 0)
 	    {
-		String result = prefix;
+		String result = "";
 
 		JSONArray contacts = new JSONArray(activity.related_contact_ids);
 		for (int i = 0; i < contacts.length(); i++)
 		{
 		    result += "<a href=\"https://" + domain + ".agilecrm.com/#contact/"
-			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\">"
+			    + contacts.getJSONObject(i).getString("contactid") + "\" target=\"_blank\" style=\"text-decoration:none\">"
 			    + contacts.getJSONObject(i).getString("contactname") + "</a>";
 		    if (i + 1 != contacts.length())
 			result += ", ";

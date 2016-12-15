@@ -16,10 +16,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
@@ -93,7 +95,7 @@ public class Contact extends Cursor
      */
     public static enum Type
     {
-	PERSON, COMPANY
+	PERSON, COMPANY, LEAD
     };
 
     /**
@@ -319,7 +321,106 @@ public class Contact extends Cursor
     @Indexed
     public String guid = null;
 
+    /* 
+     *  To check Owner updated or not 
+     */
+    @JsonIgnore
+    @NotSaved
+    private boolean owner_updated = false;
+    
     /**
+     * To check with old Contact. Transient because to avoid this object to be serialized
+     */
+    @JsonIgnore
+    @NotSaved
+    private transient ContactSavePreprocessor preProcessor = null;
+    
+    /**
+     * Lost source Id of the Lead.
+     */
+    @NotSaved
+    private Long lead_source_id = 0L;
+
+    /**
+     * Key object of Lead source
+     */
+    private Key<Category> leadSource = null;
+
+    /**
+     * Lead status Id
+     */
+    @NotSaved
+    private Long lead_status_id = 0L;
+
+    /**
+     * Key object of Lead status
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Category> leadStatus = null;
+    
+    /**
+     * boolean value to know lead is converted or not
+     */
+    @NotSaved
+    private boolean is_lead_converted = false;
+    
+    /**
+     * Converted time of a lead into contact
+     */
+    @NotSaved(IfDefault.class)
+    private Long lead_converted_time = 0L;
+    
+    
+
+    public Long getLead_source_id() {
+    	if(leadSource != null)
+    	{
+    		lead_source_id = leadSource.getId();
+    	}
+		return lead_source_id;
+	}
+
+	public void setLead_source_id(Long lead_source_id) {
+		this.lead_source_id = lead_source_id;
+	}
+
+	public Long getLead_status_id() {
+		if(leadStatus != null)
+    	{
+			lead_status_id = leadStatus.getId();
+    	}
+		return lead_status_id;
+	}
+
+	public void setLead_status_id(Long lead_status_id) {
+		this.lead_status_id = lead_status_id;
+	}
+
+	public boolean isIs_lead_converted() {
+		return is_lead_converted;
+	}
+
+	public void setIs_lead_converted(boolean is_lead_converted) {
+		this.is_lead_converted = is_lead_converted;
+	}
+
+	public Long getLead_converted_time() {
+		return lead_converted_time;
+	}
+
+	public void setLead_converted_time(Long lead_converted_time) {
+		this.lead_converted_time = lead_converted_time;
+	}
+
+	public void setLeadSource(Key<Category> leadSource) {
+		this.leadSource = leadSource;
+	}
+
+	public void setLeadStatus(Key<Category> leadStatus) {
+		this.leadStatus = leadStatus;
+	}
+
+	/**
      * Default constructor
      */
     public Contact()
@@ -490,23 +591,39 @@ public class Contact extends Cursor
      */
     public void save(boolean... args)
     {
+    	
+    	/*if (this.type == Type.COMPANY)
+    	{
+    		if (this.properties.size() > 0)
+    		{
+    			ContactField nameField = this.getContactFieldByName(Contact.NAME);
+    			if(!ContactUtil.isValidName(nameField.value)){
+    				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+    					    .entity(nameField.value+"::Invalid Company Name, contains special characters.").build());
+    			}
+    		}
+    	}*/
+
 	// Stores current contact id in to a temporary variable, to check
 	// whether contact is newly created or being edited.
 
-	ContactSavePreprocessor preProcessor = new ContactSavePreprocessor(this);
+    preProcessor = new ContactSavePreprocessor(this);
 	preProcessor.preProcess(args);
 
 	Contact oldContact = preProcessor.getOldContact();
+	String sSource=this.source;
+	if(("importing").equals(this.source))
+		this.source="import";
 	dao.put(this);
 
-	postSave(oldContact, args);
+	postSave(oldContact,sSource,args);
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
 	addToSearch();
     }
 
-    public void postSave(Contact oldContact, boolean... args)
+    public void postSave(Contact oldContact,String sSource, boolean... args)
     {
 
 	Long time = System.currentTimeMillis();
@@ -515,25 +632,34 @@ public class Contact extends Cursor
 	{
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
-
-	// Execute trigger for contacts
-	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
-
-	// Update Email Bounce status
-	EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
-
-	// Boolean value to check whether to avoid notification on each contact.
-	boolean notification_condition = true;
-
-	// Reads arguments from method. If it is not null and then reading first
-	// parameter will judge whether to send notification or not
-	if (args != null && (args.length > 0))
-	    notification_condition = args[0];
-
-	if (notification_condition)
-	    // Execute notification for contacts
-	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
-
+	
+	if(!(("importing").equals(sSource)))
+	{
+		// Execute trigger for contacts
+		ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+	
+		// Update Email Bounce status
+		EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
+	
+		// Boolean value to check whether to avoid notification on each contact.
+		boolean notification_condition = true;
+	
+		// Reads arguments from method. If it is not null and then reading first
+		// parameter will judge whether to send notification or not
+		if (args != null && (args.length > 0))
+		    notification_condition = args[0];
+	
+		if (notification_condition)
+		    // Execute notification for contacts
+		    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
+		System.out.println("trigger ran for non import source" );
+	}
+	else
+	{
+		System.out.println("trigger didnot run for import" );
+		this.source = "import" ;
+	}	
+	
 	System.out.println("Time taken to process post save on contact : " + this.id + " time is : "
 		+ (System.currentTimeMillis() - time));
     }
@@ -543,6 +669,9 @@ public class Contact extends Cursor
 	if (this.id == null || this.id == 0l)
 	    return;
 
+	// Checks Owner change
+	checkOwnerChange();
+			
 	dao.put(this);
 
 	System.out.println("Before add to text search "+NamespaceManager.get());
@@ -1029,6 +1158,9 @@ public class Contact extends Cursor
     public void setContactOwner(Key<DomainUser> owner_key)
     {
 	this.owner_key = owner_key;
+	
+	if(this.type == Contact.Type.PERSON)
+		this.owner_updated = true;
     }
 
     @JsonIgnore
@@ -1245,9 +1377,28 @@ public class Contact extends Cursor
 	    // Set lead owner(current domain user)
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
-
-	if (this.type == Type.PERSON)
+	
+	if(this.type == Type.LEAD || (this.lead_converted_time != null && this.lead_converted_time > 0))
 	{
+		if(this.lead_source_id != null && this.lead_source_id > 0)
+		{
+			this.leadSource = new Key<Category>(Category.class, this.lead_source_id);
+		}
+		
+		if(this.lead_status_id != null && this.lead_status_id > 0)
+		{
+			this.leadStatus = new Key<Category>(Category.class, this.lead_status_id);
+		}
+	}
+	
+	if(this.is_lead_converted && (this.lead_converted_time == null || (this.lead_converted_time != null && this.lead_converted_time == 0)))
+	{
+		this.lead_converted_time = System.currentTimeMillis() / 1000;
+	}
+
+	if (this.type == Type.PERSON || this.type == Type.LEAD)
+	{
+
 	    System.out.println("type of contact is person");
 	    if (this.properties.size() > 0)
 	    {
@@ -1336,6 +1487,43 @@ public class Contact extends Cursor
 	
     }
 
+	public void checkOwnerChange()
+	{
+		try
+		{
+			System.out.println("Checking Owner Change id :"+ id +"  Owner_Key : " + owner_key + "  owner_updated : " + owner_updated);
+			// Set old owner only if owner_updated is false
+			if(id == null || owner_key == null || owner_updated)
+				return;
+				
+			Contact oldContact = null;
+			
+			if(preProcessor != null)
+			    oldContact = preProcessor.getOldContact();
+			else
+				oldContact = ContactUtil.getContact(id);
+			
+			System.out.println("OldContact " + oldContact);
+			
+			if(oldContact == null || oldContact.getContactOwnerKey() == null){
+				System.out.println("Old Contact Owner Key is null");
+				return;
+			}
+			
+			System.out.println("OldContact " + oldContact);
+			// If updated owner key doesn't match with old owner key
+			if(!oldContact.getContactOwnerKey().equals(owner_key))
+			{
+				System.out.println("Setting owner back to old...");
+				setContactOwner(oldContact.getContactOwnerKey());
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
+
     /**
      * A person must have contact_company_key, if not all company info is
      * removed from properties <br/>
@@ -1421,6 +1609,10 @@ public class Contact extends Cursor
 	if (this.type == Contact.Type.COMPANY)
 	{
 		this.entity_type = "company_entity";
+	}
+	else if (this.type == Contact.Type.LEAD)
+	{
+		this.entity_type = "lead_entity";
 	}
     }
 

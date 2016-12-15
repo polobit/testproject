@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.util.TimeZoneUtil"%>
 {
     "name": "Send Email",
     "thumbnail": "json/nodes/images/email/sendemail.png",
@@ -261,23 +262,7 @@
             "name": "time_zone",
             "title": "Select the time zone for your email delivery.",
             "options": {
-                 <%@page import="java.util.Arrays"%>
-                        <%@page import="java.util.TimeZone"%>
-                        <%
-						String[] allTimeZones = TimeZone.getAvailableIDs();    
-						Arrays.sort(allTimeZones);  
-						
-					    for (int i = 0; i < allTimeZones.length; i++)
-					    {  
-							String option = allTimeZones[i];
-							
-							if(i == allTimeZones.length -1 )
-							out.println("\"" + option +  "\":\"" + option + "\"");
-							else
-							out.println("\"" + option +  "\":\"" + option + "\",");
-								
-						}  
-						%>
+                 <%= TimeZoneUtil.getJavaTimeZones(null, null, false) %>
             },
             "fieldType": "select",
             "type": "select"

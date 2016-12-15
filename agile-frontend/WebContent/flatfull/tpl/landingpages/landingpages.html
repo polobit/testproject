@@ -5,7 +5,26 @@
 <div class="wrapper-md">
 <div class="row">
 <div class="col-md-9" id="landing-pages-collection-container"></div>
-<div class="col-md-3" id="learn-workflows">
+{{#is_mobile}}
+    <div class="col-md-3" id="learn-workflows">
+        <h4 class="m-t-none m-b-sm">
+            {{agile_lng_translate 'landing-pages' 'how-to-use-landing-pages'}}
+        </h4>
+        <p>
+        {{agile_lng_translate 'landing-pages' 'landing-pages-desc-1'}}
+        </p>
+        <br>
+        {{#if this.length}}
+            <p>
+                <a href="https://www.youtube.com/watch?v=WwXsiCHZ52Y" target="_blank">
+                    <img src="{{getS3ImagePath '../../img/landingpage-info-1.png'}}" class="img-responsive w-full">
+                </a>
+            </p>
+            <br>
+        {{/if}}
+    </div>
+{{else}}
+    <div class="col-md-3">
         
             <h4 class="m-t-none h4 m-b-sm">
                 {{agile_lng_translate 'landing-pages' 'how-to-use-landing-pages'}}
@@ -26,6 +45,7 @@
         {{/if}}
         
     </div>
+{{/is_mobile}}
 </div>
 </div>
 {{else}}
@@ -48,13 +68,12 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                  <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
-                                    <div class="">
-                                        <h4 class="inline-block m-n">
-                                {{agile_lng_translate 'landing-pages' 'landing-pages'}} <small>
-                                <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span>
-                                </small></h4>
+                                    <div>
+                                        <h3 class="font-thin h3 pull-left {{#is_mobile}} landing-pages-title {{else}} inline-block m-n {{/is_mobile}}">
+                                            {{agile_lng_translate 'landing-pages' 'landing-pages'}} 
+                                        </h3>
                                     </div>
-                                    <div class="btn-group m-r-xs p-t-n-sm workflow-sortby">
+                                    <div class="btn-group m-r-xs m-b-xs p-t-n-sm workflow-sortby">
                                         <div class="btn-group dropdown">
                                                      <button class="btn btn-sm no-shadow p-n b-n bg-transparent text-base" style="font-size: 11px;" data-toggle="dropdown" id="contact-sort">
                                                             <span class="text-muted">{{agile_lng_translate 'contacts-view' 'sort-by'}} </span>
@@ -100,15 +119,27 @@
                                          </div>
                                     </div>
                                 </div>
-                                    <div class="pull-right">
+                                {{#is_mobile}} 
+                                    <div class="pull-right add-landing-pages-btn">
                                         <div class="btn-group right pos-rlt pull-right">
-                                       <a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                            <a href="pagebuilder" class="btn btn-default btn-addon pull-right btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                            <a id="lp-video-tutorial" onclick="lpVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
+                                                <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+                                            </a>
                                         </div>  
                                      </div> 
-                                     <div class="m-r-sm pull-right">
-                                        <a href="#forms" class="btn btn-default btn-sm btn-addon"><i class="icon-cog"></i>{{agile_lng_translate 'landingpages' 'manage-forms'}}</a>
-                                    </div>
-                                     <div class="clearfix"></div>       
+                                    <div class="clearfix"></div>
+                                {{else}}
+                                    <div class="pull-right">
+                                        <div class="btn-group right pos-rlt pull-right">
+                                            <a id="lp-video-tutorial" onclick="lpVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
+                                                <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
+                                            </a>
+                                            <a href="pagebuilder" class="btn btn-default btn-addon  btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                        </div>  
+                                     </div> 
+                                    <div class="clearfix"></div>
+                                {{/is_mobile}}
                             </div>
                         </div>
                     </div>
@@ -143,6 +174,17 @@
                             </div>
                 {{/unless}}
                 {{#if this.length}}
+                {{#is_mobile}}
+                <div class="panel panel-default">
+                    <div class="panel-heading b-n">{{agile_lng_translate 'landing-pages' 'landing-pages-list'}}</div>
+                    <div>                
+                        <table class="table m-b-none agile-table panel no-sorting" url="core/api/landingpages/bulk" id="landingpages-list">
+                            <tbody id="landingpages-model-list" route="landing-page/">
+                            </tbody>
+                        </table>                
+                    </div>
+                </div>
+                {{else}}
                 <div class="panel panel-default">
                 <div class="panel-heading">{{agile_lng_translate 'landing-pages' 'landing-pages-list'}}</div>
                  <div class="table-responsive">                
@@ -160,10 +202,36 @@
                                 </table>                
                             </div>
                      </div>
-                     {{/if}}
+                {{/is_mobile}}
+                {{/if}}
                 </script>
-        <script id="landingpages-model-template" type="text/html">
-            <td data="{{id}}" class="data">
+<script id="landingpages-model-template" type="text/html">
+{{#is_mobile}}
+    <td class="hide"></td>
+    <td data="{{id}}" class="data">
+        <div class="text-base table-resp text-ellipsis">{{name}}</div>
+        <div class="text-muted text-xs table-resp text-ellipsis">
+            <i class="fa fa-clock-o"></i>
+            {{#if updated_time}}
+                <span><em> {{agile_lng_translate 'campaigns' 'modified'}}</em>
+                </span>
+                <time class="document-created-time" value="{{updated_time}}" datetime="{{epochToHumanDate "" updated_time}}" style="margin-left: 2px">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" updated_time}}</time>
+            {{else}}
+                <span><em> {{agile_lng_translate 'campaigns' 'created'}}</em></span>
+                <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="margin-left: 2px">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+            {{/if}} 
+        </div>
+        <div class="table-resp">
+            <span class="label bg-light m-r-xs l-h-sm">
+                <a href="/landing/{{id}}" class="stop-propagation" target="_blank">{{agile_lng_translate 'landing-pages' 'view'}}</a>
+            </span>
+            <span class="label bg-light l-h-sm">
+                <a href="#landing-page-settings/{{id}}" class="stop-propagation">{{agile_lng_translate 'landing-pages' 'publish'}}</a>
+            </span>
+        </div>
+    </td>
+{{else}}
+    <td data="{{id}}" class="data">
             <div>{{name}}</div>
             </td>
             <td>
@@ -183,8 +251,9 @@
             &nbsp;<span><em>{{agile_lng_translate 'campaigns' 'created'}}</em>&nbsp;</span>
             <time class="document-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
             {{/if}}
-            </td>
-            </script>
+            </td>     
+{{/is_mobile}}
+</script>
 
 
 <script id="landingpages-save-popup-modal-template" type="text/html">
@@ -192,7 +261,7 @@
         <div class="modal-dialog" style="width:350px;">
         <div class="modal-content">
                 <div class="modal-header">
-                 <button class="close" data-dismiss="modal">x</button>
+                 <button class="close" data-dismiss="modal">&times;</button>
                     <h3 class="modal-title">
                         <h6 id="popup-msg" style="margin:5px"><span style="color: green;">{{agile_lng_translate 'landingpages' 'page-saved-sucessfully'}}</span></h6>
                         <i class="glyphicon glyphicon-arrow-right"></i> <strong>{{agile_lng_translate 'landingpages' 'next-action'}} {{title}} </strong> {{agile_lng_translate 'landingpages' 'publish-the-landing-page'}} </h3>

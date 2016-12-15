@@ -18,40 +18,40 @@
             </tr>
             <tr>
 				<td style="line-height: 20px; font-size: 14px; font-family: sans-serif;padding: 20px 25px 25px 25px">			
-					<div style="font-weight:bold;padding-bottom:10px">Total {{HashMap.type}} in CSV file: {{HashMap.TOTAL}} </div> 
-					<div style="font-weight:bold;padding-bottom:10px">Successfully Saved: {{HashMap.SAVED_CONTACTS}}</div>
+					<div style="font-weight:bold;padding-bottom:10px">{{agile_lng_translate 'contacts-view' 'total'}} {{HashMap.type}} {{agile_lng_translate 'reports-email' 'in-csv-file'}}: {{HashMap.TOTAL}} </div> 
+					<div style="font-weight:bold;padding-bottom:10px">{{agile_lng_translate 'import-email' 'successfully-saved'}}: {{HashMap.SAVED_CONTACTS}}</div>
 					{{#HashMap.NEW_CONTACTS}}
-						<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- New {{HashMap.type}}: {{HashMap.NEW_CONTACTS}}</div>
+						<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'menu' 'new'}} {{HashMap.type}}: {{HashMap.NEW_CONTACTS}}</div>
 						{{/HashMap.NEW_CONTACTS}}
 						
 						{{#HashMap.MERGED_CONTACTS}}
-						<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Merged {{HashMap.type}}: {{HashMap.MERGED_CONTACTS}}</div>
+						<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'contacts-view' 'merged'}} {{HashMap.type}}: {{HashMap.MERGED_CONTACTS}}</div>
 						{{/HashMap.MERGED_CONTACTS}}
 						
 					{{#HashMap.TOTAL_FAILED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Failed {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}*</div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'campaigns' 'failed'}} {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}*</div>
 					{{/HashMap.TOTAL_FAILED}}
 					 
 					{{#HashMap.NAME_MANDATORY}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Name missing : {{HashMap.NAME_MANDATORY}}</div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'reports-email' 'name-missing'}} : {{HashMap.NAME_MANDATORY}}</div>
 					{{/HashMap.NAME_MANDATORY}}
 					
 					{{#HashMap.EMAIL_REQUIRED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} </div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'reports-email' 'email-missing'}} : {{HashMap.EMAIL_REQUIRED}} </div>
 					{{/HashMap.EMAIL_REQUIRED}}
 					
 					{{#HashMap.LIMIT_REACHED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Limit exceeded : {{HashMap.LIMIT_REACHED}} </div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'import-email' 'limit-exceeded'}} : {{HashMap.LIMIT_REACHED}} </div>
 					{{/HashMap.LIMIT_REACHED}}
 					
 					{{#HashMap.ACCESS_DENIED}} 
-					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- Access denied to update : {{HashMap.ACCESS_DENIED}} </div>
+					<div style="padding-bottom:10px;padding-left:15px;font-size:14px; font-family: sans-serif">- {{agile_lng_translate 'reports-email' 'access-denied-to-update'}} : {{HashMap.ACCESS_DENIED}} </div>
 					{{/HashMap.ACCESS_DENIED}}
 					{{#HashMap.FAILEDCSV}}
 					{{#HashMap.TOTAL_FAILED}}
 				
 				<div style="line-height:20px;font-size:14px;font-family:sans-serif;padding-bottom:10px">
-					<b>*</b> Attached CSV file contains the failed contacts along with the reason for failure. You may correct the data and upload the file again
+					<b>*</b> {{agile_lng_translate 'reports-email' 'failed-contacts-csv-info'}}
 				</div>
 				{{/HashMap.TOTAL_FAILED}}
 				{{/HashMap.FAILEDCSV}}
@@ -64,10 +64,10 @@
 
 				
 				<div style="font-family:sans-serif;font-size:14px;padding-bottom:12px">
-					Should you have any questions or need assistance, don't hesitate to get in touch with us at any time by sending an email to <font color="blue"><a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
+					{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue"><a href="mailto:care@agilecrm.com" target="_blank">care@agilecrm.com</a></font>
 				</div>
 				<div style="font-weight: bold; font-size: 12px;">
-						The Crew at Agile CRM  <br />
+						{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
 					  </div>
 					  <div><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
 				</td>

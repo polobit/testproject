@@ -6,12 +6,14 @@ import com.agilecrm.reports.deferred.SendContactReportDeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TransientFailureException;
 
 public class ContactReportDeferredTaskCreation
 {
 	public static void createContactDeferredTask(String domain, Long reportid, Long time, String timezone)
 	    throws IOException
     {
+	
 	System.out.println("Time in create createDeferredTask ============ " + time);
 	System.out.println("domain in create createContactDeferredTask ============ " + domain);
 	System.out.println("reportid in create createContactDeferredTask ============ " + reportid);
@@ -26,6 +28,12 @@ public class ContactReportDeferredTaskCreation
 	{
 		options.etaMillis(time * 1000);
 	}
+	try{
 	queue.add(options);
+	}
+	catch(TransientFailureException e)
+	{
+		queue.add(options);
+	}
     }
 }

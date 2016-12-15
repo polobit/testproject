@@ -5,6 +5,7 @@ import java.util.List;
 import com.agilecrm.activities.Event;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.DocumentNote;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
@@ -48,6 +49,28 @@ public class DocumentUtil
 	}
     }
 
+    public static void deleteDocumentNotes(String document_id) throws Exception
+    {
+    	
+    	try
+    	{
+    		List<DocumentNote> documentnotes= dao.ofy().query(DocumentNote.class).filter("document_id =", document_id).order("-document_id").list();
+    		if(documentnotes!=null)
+    		{
+    			 for (int i = 0; i < documentnotes.size(); i++)
+    			 {
+    				 documentnotes.get(i).delete();
+    			 }	
+    		}
+
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	}
+    	    	
+    	
+    }
     /**
      * Fetches all the Documents with out any filtering
      * 

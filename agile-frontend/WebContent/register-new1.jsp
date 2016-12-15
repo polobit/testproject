@@ -19,14 +19,20 @@ pageEncoding="UTF-8"%>
 		return;
 	}
 
- if(RegisterUtil.isWrongURL(request))
+ 	if(RegisterUtil.isWrongURL(request))
 	{
 	    RegisterUtil.redirectToRegistrationpage(request, response);
 	    return;
-	} 
+	}
 
   String _source = request.getParameter("_source");
   String registered_email = request.getParameter("email");
+  
+  String shopifyUserEmail = request.getParameter("merchant_email");
+  String shopifyUserName = request.getParameter("merchant_name");
+  if(StringUtils.isBlank(shopifyUserName))
+	  shopifyUserName = "";
+  
 
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
@@ -44,7 +50,12 @@ String S3_STATIC_IMAGE_PATH = CLOUDFRONT_STATIC_FILES_PATH.replace("flatfull/", 
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
 // Error Message
+/*String errorMessage = request.getParameter("error");
+if(StringUtils.isBlank(errorMessage))
+		errorMessage = "";*/
+
 String errorMessage = "";
+
 if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
 {
 	  CLOUDFRONT_STATIC_FILES_PATH = FLAT_FULL_PATH;
@@ -73,6 +84,8 @@ if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Develo
 	  }
 	
   }
+  if(StringUtils.isNotBlank(shopifyUserEmail))
+	  registered_email = shopifyUserEmail; 
   
 //Get the language and save as cookie
 String _LANGUAGE = request.getParameter("lang");
@@ -129,6 +142,36 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "regi
 #myFrame {
 	display: none;
 }
+.text-info-color{
+    color: #23b7e5
+}
+.text-alignment{
+	text-align: center;
+	padding-top: 5px;
+}
+.font-11{
+	font-size: 11px;
+}
+.font-18{
+	font-size: 18px;
+}
+.login-position-fixed{
+position: fixed !important;width: 100% !important;top: 0px !important;
+z-index: 3;
+}
+.error {
+	color: white !important;
+	background-color: #c74949 !important;
+  border-color: #c74949 !important;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.text-top{
+	margin-top: 3px;
+}
+
 </STYLE>
 
 <script type="text/javascript">
@@ -169,11 +212,26 @@ if(isSafari && isWin)
 </head>
 <body class="overlay">
 
-  <div id="error-area" class="error-top-view">
-    <%if(StringUtils.isNotEmpty(errorMessage)){
-        out.println(errorMessage);
-    }%>
-  </div>
+	<!-- <%if(StringUtils.isNotEmpty(errorMessage)){
+		if(StringUtils.equalsIgnoreCase("Sorry, we could not recognized the email ID registered with any of the Google App.",errorMessage)){
+		%>
+		<div  class="alert error login-position-fixed text-center m-b-none">
+    			<a class="close" data-dismiss="alert" href="#" style="position:relative;top:-2px;">&times</a><%=errorMessage%> 
+    		</div>
+    	<%}else{%>
+    	<div id="error-area" class="error-top-view">
+             <%=errorMessage%>
+          </div>
+    	<%}}%> -->
+
+    	 <div id="error-area" class="error-top-view">
+		    <%if(StringUtils.isNotEmpty(errorMessage)){
+		        out.println(errorMessage);
+		    }%>
+		 </div>
+	
+    
+ 
 <div class="app app-header-fixed app-aside-fixed transparant">
 	<!-- Language -->
 	<div class="lang-identifier">
@@ -200,6 +258,8 @@ if(isSafari && isWin)
       				<strong><%=LanguageUtil.getLocaleJSONValue(localeJSON, "register-with-free")%></strong>
    				</div>
 
+
+
 <form name='agile' id="agile" method='post'
 					onsubmit="return isValid(this);">
 
@@ -221,7 +281,7 @@ if(isSafari && isWin)
 
 <div class="list-group list-group-sm" style="margin-bottom:4px;">
 <div class="list-group-item">
-<input class="input-xlarge field required form-control no-border" name='name'
+<input class="input-xlarge field required form-control no-border" name='name' value="<%=shopifyUserName%>"
 											type="text" required maxlength="50" minlength="3" title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "name-validation")%>' 
                       pattern="[a-zA-Z0-9\s]+"
 											oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "full-name")%>' autocapitalize="off" autofocus>
@@ -253,11 +313,29 @@ if(isSafari && isWin)
 									</div> 		
 
 <input type='submit' id="register_account" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%>' class='btn btn-lg btn-primary btn-block'>
-<div class="text-center text-white m-t m-b">
-	<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> 
-	<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
-</div>
+
 </form>
+
+
+<form id='oauth' name='oauth' method='post' class="text-alignment m-t" action="/register">
+			<div id="openid_btns" class="login-social-btns">
+					<input type='hidden' name='type' value='oauth'></input>
+					<input type='hidden' name='server' id='oauth-name' value=''></input>
+					<small class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signup-Using")%> <small>
+					<a title="Sign up using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white"><i class="fa fa-google"></i><small>Google Apps</small></a>
+					
+			</div>
+</form>
+<div class="text-center text-white m-b">
+	<div class="text-top">
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
+		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-In")%></a></small>
+	</div>
+	<div class="text-top">
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%>
+		<a href="/forgot-domain?lang=<%=_LANGUAGE%>" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a></small> 
+	</div>
+</div>
 					
 </div>
 <div class="container hide">
@@ -324,6 +402,17 @@ $(document).ready(function() {
     if($("#error-area").text().trim())
     	$("#error-area").slideDown("slow");
 //preload_login_pages();
+$('.openid_large_btn').click(function(e)
+			{
+				
+				// Gets Data Google/Yahoo and submits to LoginServlet
+				var data = $(this).attr('data');
+				$('#oauth-name').val(data);
+				$('#oauth').submit();
+
+				e.preventDefault();
+			});
+
 });
 /*
  function preload_login_pages()

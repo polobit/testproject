@@ -91,7 +91,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 	{
 		var ele = $(saveBtn).closest('form').find('.single-error').first();
 		var container = $form;
-		$('body').scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
+		if(ele.offset() && container.offset())
+			$('body').scrollTop(ele.offset().top - container.offset().top + container.scrollTop());
 		return;
 	}
 	// Disables save button to prevent multiple click event issues
@@ -177,7 +178,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			{
 				if ($(this).parent().find("ul").find("li").length == 0)
 				{
-					$(this).parent().append('<span for="fname" generated="true" class="help-inline">'+_agile_get_translated_val('validation-msgs','required')+'</span>');
+					$(this).parent().append('<span for="fname" generated="true" class="help-inline">{{agile_lng_translate "validation-msgs" "required"}}</span>');
 					var that = this;
 					setTimeout(function(){
 						$(that).parent().find('span').remove();
@@ -227,7 +228,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         // checking the condition for the when tweeterId is saving into the
 		// datastore
         if(isValidField(form_id +' #handle'))
-        	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
+        	properties.push({ "name" : "website", "value" :$('#handle').val().toLowerCase(), "subtype" : "TWITTER" })
 
       
 		// /give preference to autofilled company, ignore any text in textfield
@@ -245,7 +246,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 		{
 			if ($form.find('#contact_company').prop('value').length > 100)
 			{
-				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
+				show_error(modal_id, form_id, 'duplicate-email', "{{agile_lng_translate 'companies' 'name-length-error'}}");
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
 			}
@@ -367,7 +368,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 			if (companyName.length > 100)
 			{
 				// Company name too long, show error and return;
-				show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-length-error'));
+				show_error(modal_id, form_id, 'duplicate-email', "{{agile_lng_translate 'companies' 'name-length-error'}}");
 
 				enable_save_button($(saveBtn));// Remove loading image
 				return;
@@ -378,7 +379,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 
 					if (status)
 					{
-						show_error(modal_id, form_id, 'duplicate-email', _agile_get_translated_val('companies','name-exists'));
+						show_error(modal_id, form_id, 'duplicate-email', "{{agile_lng_translate 'companies' 'name-exists'}}");
 
 						enable_save_button($(saveBtn));// Remove loading image
 						return;
@@ -540,6 +541,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 				.each(obj.properties,
 						function(contact_property_index, contact_property)
 						{
+							if(contact_property.name=='Google_Sync_Type' ||
+								contact_property.name=='quickbookSyncId' || contact_property.name=='shopifySyncId')
+								properties.push(contact_property);
 							$
 									.each(properties_temp,
 											function(new_property_index, new_property)
@@ -789,9 +793,9 @@ function serialize_contact_properties_and_save(e, form_id, obj, properties, moda
 		else if (response.status == 403)
 		{
 			if(form_id == 'companyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-add'));
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "{{agile_lng_translate 'companies' 'no-perm-to-add'}}");
 			else if(form_id == 'continueCompanyForm')
-				show_error_in_formactions(modal_id, form_id, 'form-action-error', _agile_get_translated_val('companies','no-perm-to-update'));
+				show_error_in_formactions(modal_id, form_id, 'form-action-error', "{{agile_lng_translate 'companies' 'no-perm-to-update'}}");
 			else
 				show_error_in_formactions(modal_id, form_id, 'form-action-error', response.responseText);
 		}
@@ -822,7 +826,7 @@ function deserialize_contact(contact, template, callback)
 			
 		var form = $('#content').html($(template_ui));	
 		// Add placeholder and date picker to date custom fields
-		$('.date_input').attr("placeholder", _agile_get_translated_val("contacts", "select-date"));
+		$('.date_input').attr("placeholder", "{{agile_lng_translate 'contacts-view' 'select-date'}}");
 
 		$('.date_input').datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
@@ -843,9 +847,16 @@ function deserialize_contact(contact, template, callback)
 			fill_multi_options(field_element, element);
 		});
 
+		var related_company_id = "contact_company_id";
+
+		if(contact.type == "LEAD")
+		{
+			related_company_id = "lead_company_id";
+		}
+
 		var fxn_display_company = function(data, item)
 		{
-			$("#content [name='contact_company_id']")
+			$("#content [name='"+related_company_id+"']")
 					.html(
 							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 			$("#content #contact_company").hide();
@@ -884,7 +895,7 @@ function deserialize_contact(contact, template, callback)
 				});
 			}
 		}
-		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>'+_agile_get_translated_val("others","no-results")+'</b> <br/> ' + _agile_get_translated_val("others","add-new-one"));
+		agile_type_ahead("contact_company", $('#content'), contacts_typeahead, fxn_display_company, 'type=COMPANY', '<b>{{agile_lng_translate "others" "no-results"}}</b> <br/> {{agile_lng_translate "others" "add-new-one"}}');
 
 		if (contact.contact_company_id && contact.contact_company_id.length > 0)
 		{
@@ -893,7 +904,7 @@ function deserialize_contact(contact, template, callback)
 				if (contact.properties[i].name == 'company')
 				{
 					$("#content #contact_company").hide();
-					$("#content [name='contact_company_id']")
+					$("#content [name='"+related_company_id+"']")
 							.html(
 									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
 				}
@@ -950,6 +961,13 @@ function deserialize_contact(contact, template, callback)
 				}
 			}
 		});
+
+		if(contact.type == "LEAD")
+		{
+			leadsViewLoader = new LeadsViewLoader();
+			leadsViewLoader.setupSources($("#content"), contact);
+			leadsViewLoader.setupStatuses($("#content"), contact);
+		}
 
 		initializeEditContactListeners($('form', $('#content')).attr("id"));
 		
@@ -1362,5 +1380,22 @@ function initializeEditContactListeners(ele_id)
 		e.preventDefault();
 
 		$('.country-mismatch-error').hide();
+	});
+
+	$("#"+ele_id).off('click', '#lead-update');
+	$("#"+ele_id).on('click', '#lead-update', function(e)
+	{
+		serialize_and_save_continue_lead(e, 'updateLeadForm', 'new-lead-modal', false, e.currentTarget, 'tags_source_continue_lead');
+	});
+
+	$("#"+ele_id).off('click', '#lead-close');
+	$("#"+ele_id).on('click', '#lead-close', function(e)
+	{
+		e.preventDefault();
+		var id = $('#updateLeadForm input[name=id]').val();
+		if (id)
+		{
+			Backbone.history.navigate("lead/" + id, { trigger : true });
+		}
 	});
 }

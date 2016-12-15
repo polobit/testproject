@@ -7,13 +7,26 @@ public class EmailPrefs
     private String agileUserName;
 
     private boolean hasEmailAccountsConfigured;
+	private boolean hasSharedEmailAccounts;
 
-    private boolean hasSharedEmailAccounts;
+	private int emailAccountsLimit;
+	private boolean emailAccountsLimitReached;
+	private int emailAccountsCount;
 
-    private boolean emailAccountsLimitReached;
-    
-    private int emailAccountsCount;
-    
+	private List<String> imapUserNames;
+	private List<String> exchangeUserNames;
+	private List<String> gmailUserNames;
+	private List<String> smtpUserNames;
+	private List<String> gmailSendUserNames;
+	
+	private List<String> sharedImapUserNames;
+	private List<String> sharedGmailUserNames;
+	private List<String> sharedExchangeUserNames;
+	private List<String> fetchUrls;
+
+	    
+	public EmailPrefs() { }
+
     public int getEmailAccountsLimit()
     {
         return emailAccountsLimit;
@@ -23,8 +36,6 @@ public class EmailPrefs
     {
         this.emailAccountsLimit = emailAccountsLimit;
     }
-
-    private int emailAccountsLimit;
 
     public int getEmailAccountsCount()
     {
@@ -106,14 +117,6 @@ public class EmailPrefs
 	this.agileUserName = agileUserName;
     }
 
-    private List<String> imapUserNames;
-    private List<String> exchangeUserNames;
-    private List<String> gmailUserNames;
-    private List<String> sharedImapUserNames;
-    private List<String> sharedGmailUserNames;
-    private List<String> sharedExchangeUserNames;
-    private List<String> fetchUrls;
-
     public List<String> getFetchUrls()
     {
         return fetchUrls;
@@ -122,11 +125,6 @@ public class EmailPrefs
     public void setFetchUrls(List<String> fetchUrls)
     {
         this.fetchUrls = fetchUrls;
-    }
-
-    public EmailPrefs()
-    {
-
     }
 
     public List<String> getSharedImapUserNames()
@@ -158,5 +156,21 @@ public class EmailPrefs
     {
 	this.sharedExchangeUserNames = sharedExchangeUserNames;
     }
+
+	public List<String> getSmtpUserNames() {
+		return smtpUserNames;
+	}
+
+	public void setSmtpUserNames(List<String> smtpUserNames) {
+		this.smtpUserNames = smtpUserNames;
+	}
+
+	public List<String> getGmailSendUserNames() {
+		return gmailSendUserNames;
+	}
+
+	public void setGmailSendUserNames(List<String> gmailSendUserNames) {
+		this.gmailSendUserNames = gmailSendUserNames;
+	}
 
 }

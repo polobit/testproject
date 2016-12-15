@@ -6,11 +6,12 @@
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
 <div class="col-md-12">
-{{#if id}}
+
+				{{#if id}}
 				<h3 class="formheading h3 font-thin">{{agile_lng_translate 'web-rules' 'edit-web-rule'}}</h3>
 				{{else}}
 				<h3 class="formheading h3 font-thin">
-					<i class="fa fa-plus-circle"></i> {{agile_lng_translate 'web-rules' 'add-web-rule'}}
+				{{agile_lng_translate 'web-rules' 'add-web-rule'}}
 				</h3>
 				{{/if}}
 
@@ -32,9 +33,9 @@
 						</div>
 					</div>
 					{{#if id}}<input type="hidden" name="position" class="required" />{{/if}}
-					<div class="control-group form-group" id="report-settings">
+					<div class="control-group form-group m-b-xs" id="report-settings">
 						<label class="control-label col-sm-2">{{agile_lng_translate 'report-add' 'condition'}}</label>
-						<div class="controls col-sm-9  table-responsive" >
+						<div class="controls col-sm-9 b-n m-none" >
 							<table
 								class="bg-transparent web-rule-contact-condition-table chained-table">
 								<tbody>
@@ -82,7 +83,7 @@
 											<div id="condition" name="CONDITION" class="m-r-xs">
 												<select name="temp" class="form-control">
 													<option value="MATCHES" class="page referrer" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'contains'}}</option>
-													<option value="NOT_CONTAINS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'does-not-contain'}}</option>
+													<option value="NOT_CONTAINS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'web-rules' 'does-not-contain'}}</option>
 													<option value="EQUALS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option value="NOTEQUALS" class="referrer page" placeholder="{{agile_lng_translate 'web-rules' 'enter-url'}}">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
 													
@@ -128,7 +129,7 @@
 													<option class="user_agent" value="UA_IS">{{agile_lng_translate 'contacts-view' 'is'}}</option>
 													<option class="user_agent" value="UA_IS_NOT">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
 													<option class="user_agent" value="UA_CONTAINS">{{agile_lng_translate 'contacts-view' 'contains'}}</option>
-													<option class="user_agent" value="UA_NOT_CONTAINS">{{agile_lng_translate 'contacts-view' 'does-not-contain'}}</option>
+													<option class="user_agent" value="UA_NOT_CONTAINS">{{agile_lng_translate 'web-rules' 'does-not-contain'}}</option>
 									
 													<!-- shopify cart -->
 													<option value="IS_EMPTY" class="cart">{{agile_lng_translate 'web-rules' 'cart-is-empty'}}</option>
@@ -447,19 +448,19 @@
 											</div>
 										</td>
 
-										<td class="v-top">
+										<td class="v-top" style="display:flex;">
 											<i
-											class="filter-contacts-web-rule-multiple-remove filter-contacts-multiple-remove icon-remove-circle c-p text-md"
+											class="filter-contacts-web-rule-multiple-remove filter-contacts-multiple-remove icon-close c-p m-t-sm m-l-xs"
 											style="display: none;"></i>
 											<i
-											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-l-xs c-p"></i></td>
+											class="filter-contacts-web-rule-multiple-add icon-plus inline-block m-r-sm m-t-sm m-l-xs c-p"></i></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
 			</div>
-			<div class="control-group form-group p-t-md">
+			<div class="control-group form-group">
 						<label class="control-label col-sm-2">{{agile_lng_translate 'web-rules' 'action'}}</label>
 						<div class="controls col-sm-10">
 								<div class="webrule-actions chained-table"> 
@@ -497,6 +498,11 @@
 													related="WEB_RULE_RHS">{{agile_lng_translate 'web-rules' 'add-score'}}</option>
 												<option value="SUBTRACT_SCORE" class="campaign" 
 													related="WEB_RULE_RHS">{{agile_lng_translate 'web-rules' 'substract-score'}}</option>
+											</optgroup>
+											<optgroup label="Dynamic Content">
+												<option value="DYNAMIC_TEXT" related="WEB_RULE_RHS">Text</option>
+												<option value="DYNAMIC_BUTTON" related="WEB_RULE_RHS">Button</option>
+												<option value="DYNAMIC_IMAGE" related="WEB_RULE_RHS">Image</option>
 											</optgroup>
 											<optgroup label="{{agile_lng_translate 'web-rules' 'execute-code'}}">
 												<option value="JAVA_SCRIPT">{{agile_lng_translate 'web-rules' 'java-script'}}</option>
@@ -553,9 +559,23 @@
 
 }()</textarea>
 
+<textarea class="DYNAMIC_TEXT form-control w-full required" rows="10" placeholder="Enter text"></textarea>
+
+<input type="text" name="dynamic-button-link" class="DYNAMIC_BUTTON form-control required url" placeholder="Enter link">
+
+<div class="form-group">
+<div class="col-xs-10" name="popup_text">
+<input type="text" name="dynamic-image-source-url" id="dynamic-image-source-url" class="DYNAMIC_IMAGE form-control required url" placeholder="Enter source URL">
+</div>
+<div class="col-xs-2 dynamic-image-browse" style="display:none;">
+<a class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+<input type="file" id="uploadImageToS3Btn" class="hidden DYNAMIC_IMAGE">
+</div>
+</div>
+
 <textarea  cols="" name="webrule-custom-html" id="agile-bar-code"  class="custom_html required SITE_BAR w-full form-control" rows="10" placeholder="Paste HTML context"></textarea>
 
-									<input type="text" name="temp-title class="FORM input form-control required w-xs" placeholder="{{agile_lng_translate 'web-rules' 'form-id'}}">
+									<input type="text" name="temp-title" class="FORM input form-control required w-xs" placeholder="{{agile_lng_translate 'web-rules' 'form-id'}}">
 													<div style="float:right;display:none" class="web-rule-preview"><a href="#" class="text-info">{{agile_lng_translate 'web-rules' 'preview'}}</a></div> 
 												</div>
 
@@ -607,6 +627,13 @@
 											<div name="timer" id="timer" style="margin-top:3px;">
 												<input type="number" class="AFTER_SECS form-control" placeholder="{{agile_lng_translate 'web-rules' 'enter-seconds'}}"></input>
 											</div>
+										</td>
+									</tr>
+
+									<tr>
+										<td class="controls v-top">
+											<div name="title" id="dynamic-button-title">
+												<input type="text" name="dynamic-button-title" class="DYNAMIC_BUTTON form-control" placeholder="Enter label"></input>
 											</div>
 										</td>
 									</tr>
@@ -629,7 +656,7 @@
 <hr>
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
-			<div class="form-actions">
+			<div class="form-actions web-rules-actions">
 				<a href="#web-rules" class="btn btn-sm btn-default">{{agile_lng_translate 'report-add' 'close'}}</a>
 				<a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a> 
 				<small id="twilio_call_setup">Please enable your Twilio integration <a href="#integrations" class="text-info">here.</a></small>

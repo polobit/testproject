@@ -24,6 +24,10 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 	
 	var templateKey = 'contacts-list-view-model';
 	var gridViewEl = _agile_get_prefs("agile_contact_view");
+	if(base_model.get("type") == "LEAD")
+	{
+		gridViewEl = _agile_get_prefs("agile_lead_view");
+	}
 	if (gridViewEl) {
 		templateKey = 'contacts-grid';
 	}
@@ -62,7 +66,8 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 						$(el).append($(template_ui));
 					}, null);
 
-		}else {
+		}
+		else {
 				// Clears the template, because all the fields are appended, has to be reset
 				// for each contact
 				// $('#contacts-custom-view-model-template').empty();
@@ -72,6 +77,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 				if(isFromRender!=true)
 					$(el).html($(el).find('td').first());
 				$.each(fields, function(index, field_name) {
+
 					if(field_name.indexOf("CUSTOM_") != -1)
 					{
 						field_name = field_name.split("CUSTOM_")[1]; 			
@@ -198,12 +204,24 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 						}
 						return;
 					}
-					
+					if(!_agile_get_prefs("contactTabelView") && (window.location.hash=="#contacts"))
+					{
+						if(field_name == "first_name" || field_name == "last_name" || field_name == "email")
+							return ;
+					}
+					if( (window.location.hash=="#companies") && (_agile_get_prefs("companyTabelView")== null))
+					{
+						if(field_name == "name" || field_name == "url")
+							return ;
+					}
+					if(!_agile_get_prefs("contactCompanyTabelView") && (window.location.hash.indexOf("#company/") != -1))
+					{
+						if(field_name == "first_name" || field_name == "last_name" || field_name == "email")
+							return ;
+					}
 					getTemplate('contacts-custom-view-' + field_name, contact, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
-
-						
 						$(el).append($(template_ui));
 					}, null);
 				});
@@ -213,7 +231,12 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 		
 
 	} else  {
-		getTemplate('contacts-grid-view-model', contact, undefined, function(template_ui){
+		var tplName = "contacts-grid-view-model";
+		if(base_model.get("type") == "LEAD")
+		{
+			tplName = "leads-grid-view-model";
+		}
+		getTemplate(tplName, contact, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
 				$(el).append($(template_ui));
@@ -751,6 +774,15 @@ function isCompanyTypeCustomField(customCompanyfields,property){
 	var count = 0;
 	$.each(customCompanyfields,function(index,field){
 		if(field.field_label==property.name && field.field_type == "COMPANY")
+			count++;
+	});
+	return count>0;
+}
+// Check whether the given fields list has the property name.
+function isReportDateCustomField(customDatefields,property){
+	var count = 0;
+	$.each(customDatefields,function(index,field){
+		if(field.field_label==property.name  && field.field_type == "DATE")
 			count++;
 	});
 	return count>0;

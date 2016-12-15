@@ -218,17 +218,32 @@ function initializeTasksListeners(){
 	$('#tasks-list-template').on('click', '.is-task-complete', function(event)
 	{
 		event.preventDefault();
-		if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
+		var that=$(this);
+		/*if(!confirm(_agile_get_translated_val('tasks','confirm-delete')))
 		{
 			$(this).closest(".task-content-view").find(".taskComplete").attr("checked", false);
 				return;
-		}
+		}*/
+		if(!getTaskListId(that)  && $(that).parent().attr('data')){
+					completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
+				}
+				else
+					completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
 		
-		if(!getTaskListId(this)  && $(this).parent().attr('data')){
-			completeTask(getTaskId(this), $(this).parent().attr('data'), parseInt(getTaskListOwnerId(this)));
-		}
-		else
-			completeTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
+
+		/*showAlertModal("complete_task", "confirm", 
+			function() {
+				if(!getTaskListId(that)  && $(that).parent().attr('data')){
+					completeTask(getTaskId(that), $(that).parent().attr('data'), parseInt(getTaskListOwnerId(that)));
+				}
+				else
+					completeTask(getTaskId(that), getTaskListId(that), parseInt(getTaskListOwnerId(that)));
+			},
+			function() {
+				$(that).closest(".task-content-view").find(".taskComplete").attr("checked", false);
+					
+			});
+*/
 	});
 
 	// Task Action: Open Task Edit Modal and display details in it.
@@ -633,7 +648,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							if (isUpdate)
 								App_Calendar.allTasksListView.collection.remove(json);
 
-							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == _agile_get_translated_val('tasks', 'All Tasks') || json.owner_id == CURRENT_DOMAIN_USER.id))
+							if ((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "{{agile_lng_translate 'tasks' 'All Tasks'}}" || json.owner_id == CURRENT_DOMAIN_USER.id))
 								App_Calendar.allTasksListView.collection.add(data);
 
 							App_Calendar.allTasksListView.render(true);
@@ -680,16 +695,25 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 							updateTask(isUpdate, data, json);
 						}
 						// Updates data to temeline
-						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+						else if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+							(App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id')))
 						{
-
+							var contactId;
+							if(App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+							{
+								contactId = App_Contacts.contactDetailView.model.get('id');
+							}
+							else
+							{
+								contactId = App_Leads.leadDetailView.model.get('id');
+							}
 							/*
 							 * Verifies whether the added task is related to the
 							 * contact in contact detail view or not
 							 */
 							$.each(task.contacts, function(index, contact)
 							{
-								if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+								if (contact.id == contactId)
 								{
 
 									// Add model to collection. Disabled sort
@@ -1243,7 +1267,7 @@ function saveBulkTaskProperties(task_ids,priorityJson,form_id){
 						count = count - t ;
 						$('#tasks-list-template').find('.tasks-count').removeAttr('data');
 						$('#tasks-list-template').find('.tasks-count').attr('data' , count);
-						$('#tasks-list-template').find('.tasks-count').text('('+count+' ' +_agile_get_translated_val('other','total')+ ')');
+						$('#tasks-list-template').find('.tasks-count').text('('+count+' {{agile_lng_translate "other" "total"}})');
 					}
 					App_Calendar.allTasksListView.render(true);
 				}

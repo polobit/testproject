@@ -14,17 +14,17 @@
                     <input type="hidden"  name="current_div" id="current_div"/>
                     <input type="hidden"  name="type" id="type" value="{{type}}"/>
                      <input type="hidden"  name="meeting_type" id="meeting_type"/>
-                    <div id="addEvent" class="control-group form-group" style="margin-bottom:0px;">
+                    <div id="addEvent" class="control-group form-group">
                             <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'event-name'}}<span class="field_req">*</span></label>
                             <div class="controls col-sm-7">
                                 <input id="title" placeholder="{{agile_lng_translate 'tasks' 'name-of-event'}}" type="text" name="title" class="required form-control" />
                             </div>
                     </div>
-                    <div class="text-muted">
+                   <!--  <div class="text-muted">
                             <div class="col-sm-offset-3 col-sm-7" {{#is_mobile}} style="padding-left: 0px !important;font-size: 11px;" {{else}} style="font-size:12px;margin-bottom:10px;padding-left: 9px"{{/is_mobile}}>
                                  {{agile_lng_translate 'tasks' 'events-description'}}
                             </div>
-                    </div>
+                    </div> -->
 
                     <div class="control-group form-group">
                             <label for="priority_type" class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'priority'}}</label>
@@ -112,12 +112,13 @@
 
                     <div class="control-group form-group">
                         <!-- <label class="control-label"><a href="#" id="new-event-related-contacts-label"><i class="icon-plus"></i> Add Contacts</a></label> -->
-                        <label class="control-label update-event-related-contacts-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}</label>
+                        <label class="control-label update-event-related-contacts-label col-sm-3">{{agile_lng_translate 'deal-view' 'related-to'}}</label>
                         <div class="controls update-event-related-contacts-input col-sm-7">
                             <div>
-                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" placeholder="{{agile_lng_translate 'documents' 'related-contacts'}}" data-provide="typeahead" data-mode="multiple" size="40" />
+                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts form-control" placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" data-provide="typeahead" data-mode="multiple" size="40" />
+                                <span class="contact-add-error"></span>
                                 <div style="padding-top:1px;">
-                                    <ul name="contacts" class="contacts tags tagsinput p-n m-n"></ul>
+                                    <ul name="contacts" class="newtypeaheadcontact contacts tags tagsinput p-n m-n"></ul>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -153,6 +154,7 @@
                     
 
                 </fieldset>
+                <input type="hidden" id="form-opened-time" value="" />
             </form>
         </div>
     </div>

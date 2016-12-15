@@ -1,8 +1,14 @@
 package com.agilecrm.bulkaction.deferred;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -49,12 +55,18 @@ public class ContactExportPullTask implements DeferredTask
 	System.out.println(contact_ids + " " + dynamicFilter + " " + filter + " " + currentUserId + " " + namespace);
 
 	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+	HashMap<String, String> stats = new HashMap<String, String>();
 
 	if (user == null)
 	    return;
 
 	try{
+		Long time = System.currentTimeMillis();
+    	stats.put("start_time", dateTimeFormat.format(time));
 	writeContacts();
+	time = System.currentTimeMillis();
+	stats.put("end_time", dateTimeFormat.format(time));
 	}
 	catch(Exception e)
 	{
@@ -64,7 +76,10 @@ public class ContactExportPullTask implements DeferredTask
 	getExporter().finalize();
 
 	getExporter().sendEmail(user.email);
-
+	getExporter().sendEmail("nidhi@agilecrm.com",stats,user.domain);
+	
+	getExporter().addToActivity(ActivityType.CONTACT_EXPORT,EntityType.CONTACT);
+	//ActivityUtil.createLogForExport(ActivityType.CONTACT_EXPORT, EntityType.CONTACT, 0,null);
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
 
 	NamespaceManager.set(null);

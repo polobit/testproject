@@ -1,13 +1,13 @@
  <script id="settings-email-template-add-template" type="text/html">
-<div class="panel panel-default">
-	<div class="panel-heading">
+<div class="panel wrapper col-md-9" >
+	<!--<div class="panel-heading">
 	{{#if id}}
       {{agile_lng_translate 'prefs-email-templates' 'edit-email-template'}}
     {{else}}
        {{agile_lng_translate 'prefs-email-templates' 'new-email-template'}}
    	{{/if}}
 	
-	</div>
+	</div>-->
 	<div class="panel-body">
 
 
@@ -47,7 +47,7 @@
 	    </div>
 	    <div class="control-group form-group">
 	    <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-email-templates' 'text'}} <span class="field_req">*</span></label>
-	        <div class="controls col-sm-9">
+	        <div class="controls col-sm-9" style="width: 73%;">
 			<div id="loading-editor"></div>
 	        <textarea class="col-md-6 required" style="width: 75%; height: 300px; display: none;" name="text" id="email-template-html" placeholder="{{agile_lng_translate 'settings' 'email-template-html'}}"></textarea>
 	        </div>
@@ -59,9 +59,17 @@
 	        	<span class="attachment-document-select" style="display:none;">
 	        		<select id="attachment-select" style="margin-bottom: -1px;" name="document_id" class="form-control inline-block w overflow-auto">
 	        		</select>
-	        		<a href="#" class="btn btn-default btn-sm add-tpl-attachment-cancel">{{agile_lng_translate 'other' 'cancel'}}</a>
-	        		<a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm">{{agile_lng_translate 'other' 'add'}}</a>
-	        		<span id="attachment-select-required" for="attachment-select" generated="true" class="help-inline" style="display:none;">{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}</span>
+	        		{{#is_mobile}}
+	        			<span id="attachment-select-required" for="attachment-select" generated="true" class="help-inline" style="display:none;">{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}</span>
+	        			<div class="text-center m-t">
+		        			<a href="#" class="btn btn-default btn-sm m-r-sm add-tpl-attachment-cancel">{{agile_lng_translate 'other' 'cancel'}}</a>
+			        		<a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm">{{agile_lng_translate 'other' 'add'}}</a>
+		        		</div>
+	        		{{else}}
+		        		<a href="#" class="btn btn-default btn-sm add-tpl-attachment-cancel">{{agile_lng_translate 'other' 'cancel'}}</a>
+		        		<a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm">{{agile_lng_translate 'other' 'add'}}</a>
+		        		<span id="attachment-select-required" for="attachment-select" generated="true" class="help-inline" style="display:none;">{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}</span>
+	        		{{/is_mobile}}
 	        	</span>
 	        </div>
 	        <div class="controls col-sm-9 col-sm-offset-2" id="tpl-attachment-name" style="display:none">
@@ -77,18 +85,34 @@
 			</div>
 	    </div>
 <hr>
-<div class="row p-b-md">
+<div class="row p-b-md" id="email-editor-btns">
 	    
 <div class="col-sm-offset-2 col-sm-9">
-			<a href="#email-templates" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+			<a href="#email-templates" class="btn btn-default btn-sm" id="cancel-btn">{{agile_lng_translate 'other' 'cancel'}}</a>
             <a href="#" type="submit" class="save btn btn-sm btn-primary">{{#if id}}{{agile_lng_translate 'prefs-settings' 'save-changes'}} {{else}}{{agile_lng_translate 'modals' 'save'}} {{/if}}</a> 
 		</div>
 
          </fieldset>
 		</form>
-    
-
 
 </div>
 </div>
+
+<div class="col-md-3 {{#is_mobile}} w-full {{/is_mobile}}" style="position: relative; right: -16px;">
+        <div class="panel wrapper data-block">
+            <div class="p-l p-r">
+                <h4 class="m-t-none">
+                    {{agile_lng_translate 'preferences' 'email-templates'}}
+                </h4>
+                
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-1'}}
+                </p>
+                <p>
+                    {{agile_lng_translate 'prefs-email-templates' 'email-templates-desc-2'}}
+                </p>
+           </div>
+        </div>
+</div>
+
 </script>

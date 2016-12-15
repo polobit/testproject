@@ -418,6 +418,10 @@ function deserializeChainedSelect(form, el, el_self)
 			{
 				chainDealFilters(rule_element);
 			}
+			else if($(form).hasClass("lead"))
+			{
+				chainLeadFilters(rule_element);
+			}
 			else
 			{
 				chainFilters(rule_element);

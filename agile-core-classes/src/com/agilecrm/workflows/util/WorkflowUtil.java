@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -14,6 +16,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.googlecode.objectify.Key;
 
@@ -301,5 +304,46 @@ public class WorkflowUtil
 	public static int get_enable_campaign_count()
 	{
 		return Workflow.dao.getCountByProperty("is_disabled", false);
+	}
+	
+	/**
+	 * Restores workflow with available backup
+	 * 
+	 * @param workflowId - Workflow id
+	 * @param backup  - backup workflow object
+	 * 
+	 * @return Restored workflow
+	 */
+	public static Workflow restoreWorkflow(Long workflowId, WorkflowBackup backup) {
+		Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+		workflow.rules = backup.getRules();
+		workflow.setSkip_verify(true);
+		workflow.setBackupExists(false);
+		workflow.save();
+		
+		return workflow;
+	}
+	
+	/**
+	 * Fetch all workflows and check the max number of nodes among them.
+	 * @return int
+	 */
+	public static int getMaxWorkflowNodes(){
+			int maxNodes = 0;
+	    	List<Workflow> workflows = getAllWorkflows();
+	    	for(Workflow workflow : workflows){
+	    		if(workflow.rules != null){
+	    			try{
+	    			JSONObject json = new JSONObject(workflow.rules);
+	    			JSONArray nodes = json.getJSONArray("nodes");
+	    			if(nodes.length() > maxNodes)
+	    				maxNodes = nodes.length();
+	    			}catch(JSONException e){
+	    				e.printStackTrace();
+	    			}
+	    			
+	    		}
+	    	}
+	    	return maxNodes;
 	}
 }

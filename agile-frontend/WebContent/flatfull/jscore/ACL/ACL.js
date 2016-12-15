@@ -11,7 +11,7 @@ function hasScope(scope)
 
 function showContactsImportAccessDeniedMessage(el)
 {
-   $(el).html("<h4>" +_agile_get_translated_val('acls','access-denied')+ "</h4>");	
+   $(el).html("<h4>{{agile_lng_translate 'acls' 'access-denied'}}</h4>");	
 }
 
 function hasScope(scope_constant)

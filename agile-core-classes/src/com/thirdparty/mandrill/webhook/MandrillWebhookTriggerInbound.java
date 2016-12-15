@@ -355,26 +355,55 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 				String mailHtmlContent = emailMessage.get("html").toString();
 				String applicationId = SystemProperty.applicationId.get();
 				Pattern pattern = null;
+				/**
+				 * If open tracking is new then in query params domain name is in first place.
+				 * So while fetching campaign name and domain name add one.
+				**/
+				
+				int newOpenLink = 0;
+				
 				if (StringUtils.equals(applicationId, "agilecrmbeta"))
 				{
-					agileDomain = agileDomain + "-dot-sandbox-dot-" + applicationId + "\\.appspot\\.com";
-					pattern = Pattern.compile("src=[\"']https:\\/\\/" + agileDomain + "[^\"']*");
+					if(mailHtmlContent.contains("http://open-beta.agle.me"))
+					{
+						pattern = Pattern.compile("src=[\"']http:\\/\\/open-beta\\.agle\\.me[^\"']*");
+						newOpenLink = 1;
+					}
+					else
+					{
+						agileDomain = agileDomain + "-dot-sandbox-dot-" + applicationId + "\\.appspot\\.com";
+						pattern = Pattern.compile("src=[\"']https:\\/\\/" + agileDomain + "[^\"']*");
+					}
+					
+				}
+				else if(mailHtmlContent.contains("http://open.agle.me"))
+				{
+					pattern = Pattern.compile("src=[\"']http:\\/\\/open\\.agle\\.me+[^\"']*");
+					newOpenLink = 1;
 				}
 				else
 					pattern = Pattern.compile("src=[\"']https:\\/\\/" + agileDomain + "\\.agilecrm\\.com+[^\"']*");
+				
+				
 				Matcher matcher = pattern.matcher(mailHtmlContent);
+				System.out.println("Reply node pattern matcher: "+matcher.toString());
+				
 				if (matcher.find())
 				{
 					String src = matcher.group(0);
+					
 					if (StringUtils.isNotEmpty(src))
 					{
 						src = StringEscapeUtils.unescapeHtml(src);
 						String[] srcSplits = src.split("\\?");
 						String params = srcSplits[1];
-						String campaignId = params.split("&")[0].split("=")[1];
-						String subscriberId = params.split("&")[1].split("=")[1];
-						System.out.println("Campaign Id " + campaignId);
-						System.out.println("SubscriberId " + subscriberId);
+						
+						String campaignId = params.split("&")[0 + newOpenLink].split("=")[1];
+						System.out.println("Reply node Campaign Id " + campaignId);
+						
+						String subscriberId = params.split("&")[1 + newOpenLink].split("=")[1];
+						System.out.println("Reply node SubscriberId " + subscriberId);
+						
 						interruptCronTasksOfReplied(campaignId, subscriberId);
 					}
 				}
@@ -387,6 +416,7 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 		}
 	}
 
+	
 	/**
 	 * Interrupts email replied in Cron
 	 * 
@@ -410,4 +440,5 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
 }

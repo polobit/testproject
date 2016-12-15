@@ -48,6 +48,9 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+				if(tight_acl.isRestrictedScope('CAMPAIGN'))
+					return;
+				
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
 
@@ -71,6 +74,7 @@ var WorkflowsRouter = Backbone.Router
 							// Add collection view
 							console.log("Load collection");
 							App_Workflows.loadworkflows($("#content"));
+							el.find('[data-toggle="tooltip"]').tooltip();
 						}
 					});
 
@@ -97,7 +101,7 @@ var WorkflowsRouter = Backbone.Router
 					customLoader : true,
 					customLoaderTemplate : 'agile-app-collection-loader',
 					cursor : true, 
-					page_size : 20, 
+					page_size : getMaximumPageSize(), 
 					global_sort_key : sortKey, 
 					postRenderCallback : function(col_el)
 					{
@@ -125,6 +129,7 @@ var WorkflowsRouter = Backbone.Router
 						}
 						else
 						{
+							window.location.href  = window.location.origin+"/#workflow-templates";
 							el.find('#campaign_logs').attr('href','#workflows');
 							return;
 						}
@@ -409,7 +414,7 @@ var WorkflowsRouter = Backbone.Router
 								log_type = '?log-type=' + log_type;
 
 							var logsListView = new Workflow_Reports_Events({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
-								cursor : true,page_size :20, individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
+								cursor : true,page_size :getMaximumPageSize(), individual_tag_name : 'tr', sort_collection :false, postRenderCallback : function(el)
 								{
 									initializeTriggersListeners();
 									agileTimeAgoWithLngConversion($("time.log-created-time", el));
@@ -637,7 +642,7 @@ var WorkflowsRouter = Backbone.Router
 									RHS = $("#RHS", el);
 
 									CALL = $('#CALL', el);
-
+									SMS= $('#SMS', el);
 									// Chaining dependencies of input
 									// fields
 									// with jquery.chained.js
@@ -645,6 +650,7 @@ var WorkflowsRouter = Backbone.Router
 
 									// Chain Call trigger options
 									CALL.chained(LHS);
+									SMS.chained(LHS);
 
 								});
 
@@ -735,6 +741,7 @@ var WorkflowsRouter = Backbone.Router
 							RHS = $("#RHS", el);
 
 							CALL = $('#CALL', el);
+							SMS=$('#SMS', el);
 
 							// Chaining dependencies of input
 							// fields
@@ -743,6 +750,7 @@ var WorkflowsRouter = Backbone.Router
 
 							// Chain Call Trigger options
 							CALL.chained(LHS);
+							SMS.chained(LHS);
 
 						});
 
@@ -899,7 +907,14 @@ var WorkflowsRouter = Backbone.Router
 							populate_call_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
 						}
 
-						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ("+_agile_get_translated_val('campaigns','disabled')+"){{else}}>{{name}}{{/if}}</option>";
+						if (type == 'REPLY_SMS' )
+						{
+							populate_sms_trigger_options($('form#addTriggerForm', el), currentTrigger.toJSON());
+							$('#trigger-custom-keyword', el).closest('div.control-group').css('display', '');
+							$('#keyword-tooltip', el).css('display', '');
+						}
+
+						var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} (Disabled){{else}}>{{name}}{{/if}}</option>";
 
 						/**
 						 * Fills campaign select drop down with existing
@@ -1416,7 +1431,7 @@ var WorkflowsRouter = Backbone.Router
 			shareWorkflow : function(sender_cid, sender_domain, workflow){
 				
                 this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection : false,
-					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
+					templateKey : "workflows", individual_tag_name : 'tr', cursor : true, page_size : getMaximumPageSize(), postRenderCallback : function(el)
 					{	
 					}});
 

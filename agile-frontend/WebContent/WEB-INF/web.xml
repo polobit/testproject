@@ -30,6 +30,16 @@
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
 	
+	
+	<servlet>
+		<servlet-name>Inviteusers</servlet-name>
+		<jsp-file>/invited-users-mails.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Inviteusers</servlet-name>
+		<url-pattern>/invite-users</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>PaypalScribe</servlet-name>
 		<servlet-class>com.agilecrm.scribe.PaypalScribeServlet</servlet-class>
@@ -159,6 +169,15 @@
 		<servlet-name>register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>inviteuser</servlet-name>
+		<servlet-class>com.agilecrm.InviteUserServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>inviteuser</servlet-name>
+		<url-pattern>/inviteuser</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>registration checker</servlet-name>
@@ -243,6 +262,20 @@
 	<servlet-mapping>
 		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
 		<url-pattern>/helpcenterapi/*</url-pattern>
+	</servlet-mapping>
+
+<servlet>
+		<servlet-name>Jersey Feedback REST Service</servlet-name>
+		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+		<init-param>
+			<param-name>resteasy.servlet.mapping.prefix</param-name>
+			<param-value>/feedbackapi</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Jersey Feedback REST Service</servlet-name>
+		<url-pattern>/feedbackapi/*</url-pattern>
 	</servlet-mapping>
 
 
@@ -505,6 +538,16 @@
     <servlet-mapping>
         <servlet-name>AffiliateReportServlet</servlet-name>
         <url-pattern>/backend/cron/affiliateReport</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
+        <servlet-class>com.agilecrm.affiliate.AffiliateDetailsEditServlet</servlet-class>
+    </servlet>   
+ 
+    <servlet-mapping>
+        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
+        <url-pattern>/editAffiliateDetails</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -1406,6 +1449,15 @@
 	</servlet-mapping>
 	<!-- End of HelpCenter -->
 	<servlet>
+		<servlet-name>FeedBack</servlet-name>
+		<jsp-file>/feedback.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FeedBack</servlet-name>
+		<url-pattern>/feedback</url-pattern>
+	</servlet-mapping>
+	<servlet>
         <servlet-name>VoiceCallTwilioServlet</servlet-name>
         <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
     </servlet>  
@@ -1492,9 +1544,64 @@
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<servlet-class>com.agilecrm.forms.FormSubmitServlet</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<url-pattern>/formtrigger</url-pattern>
+	</servlet-mapping>
+	<!-- message url for sendmessage node-->
+       <servlet>
+         <servlet-name>ReplySMSTwilioServlet</servlet-name>
+         <servlet-class>com.thirdparty.twilio.ReplySMSTwilioServlet</servlet-class>
+      </servlet>
+     
+      <servlet-mapping>
+         <servlet-name>ReplySMSTwilioServlet</servlet-name>
+         <url-pattern>/msgReplyActionUrl</url-pattern>
+      </servlet-mapping> 
+      
+    <servlet>
+		<servlet-name>SaveWebruleData</servlet-name>
+		<servlet-class>com.analytics.servlets.WebruleReportsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SaveWebruleData</servlet-name>
+		<url-pattern>/savedata</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>VideoServingServlet</servlet-name>
+		<servlet-class>com.agilecrm.videorecords.VideoRecordServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VideoServingServlet</servlet-name>
+		<url-pattern>/video/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SaveFormData</servlet-name>
+		<servlet-class>com.analytics.servlets.FormReportsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SaveFormData</servlet-name>
+		<url-pattern>/addformstats</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>OpenDocumentViewer</servlet-name>
+        <jsp-file>/open-documentviewer.jsp</jsp-file>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>OpenDocumentViewer</servlet-name>
+        <url-pattern>/sendemail/*</url-pattern>
+ </servlet-mapping>
+ <servlet>
+        <servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<servlet-class>com.agilecrm.DeleteDuplicateMilestoneServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<url-pattern>/backend/cron/delete-duplicate-servlet</url-pattern>
 	</servlet-mapping>
 </web-app>

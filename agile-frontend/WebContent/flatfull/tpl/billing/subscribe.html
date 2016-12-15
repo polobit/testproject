@@ -23,6 +23,16 @@
 											<li role="presentation" id="emailtab" data-tab="2">
 												<a href="#email-content" name="email-content" aria-control="email-content" role="tab" data-toggle="tab" id="emails">{{agile_lng_translate 'other' 'email'}}</a>
 											</li>
+											{{#if billingData}}
+  											{{#checkPlan 'enterprise'}}
+                        {{else}}
+                          {{#isAdmin}}
+    											<li id="addontab" data-tab="3">
+    												<a href="#addon-content" name="addon-content" aria-control="addon-content" role="tab" data-toggle="tab">Add-ons</a>
+    											</li>
+                          {{/isAdmin}}
+  											{{/checkPlan}}
+											{{/if}}
 </ul>
             <div class="tab-content" style=" display: block;">
             	<div class="tab-pane active" role="tab-panel" id="users-content">
@@ -180,106 +190,7 @@
                <div class="controls col-sm-3">
 
 			<select name="quantity" id="user_quantity" class="form-control">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-						<option value="6">6</option>
-						<option value="7">7</option>
-						<option value="8">8</option>
-						<option value="9">9</option>
-						<option value="10">10</option>
-						<option value="11">11</option>
-						<option value="12">12</option>
-						<option value="13">13</option>
-						<option value="14">14</option>
-						<option value="15">15</option>
-						<option value="16">16</option>
-						<option value="17">17</option>
-						<option value="18">18</option>
-						<option value="19">19</option>
-						<option value="20">20</option>
-						<option value="21">21</option>
-						<option value="22">22</option>
-						<option value="23">23</option>
-						<option value="24">24</option>
-						<option value="25">25</option>
-						<option value="26">26</option>
-						<option value="27">27</option>
-						<option value="28">28</option>
-						<option value="29">29</option>
-						<option value="30">30</option>
-						<option value="31">31</option>
-						<option value="32">32</option>
-						<option value="33">33</option>
-						<option value="34">34</option>
-						<option value="35">35</option>
-						<option value="36">36</option>
-						<option value="37">37</option>
-						<option value="38">38</option>
-						<option value="39">39</option>
-						<option value="40">40</option>
-						<option value="41">41</option>
-						<option value="42">42</option>
-						<option value="43">43</option>
-						<option value="44">44</option>
-						<option value="45">45</option>
-						<option value="46">46</option>
-						<option value="47">47</option>
-						<option value="48">48</option>
-						<option value="49">49</option>
-						<option value="50">50</option>
-						<option value="51">51</option>
-						<option value="52">52</option>
-						<option value="53">53</option>
-						<option value="54">54</option>
-						<option value="55">55</option>
-						<option value="56">56</option>
-						<option value="57">57</option>
-						<option value="58">58</option>
-						<option value="59">59</option>
-						<option value="60">60</option>
-						<option value="61">61</option>
-						<option value="62">62</option>
-						<option value="63">63</option>
-						<option value="64">64</option>
-						<option value="65">65</option>
-						<option value="66">66</option>
-						<option value="67">67</option>
-						<option value="68">68</option>
-						<option value="69">69</option>
-						<option value="70">70</option>
-						<option value="71">71</option>
-						<option value="72">72</option>
-						<option value="73">73</option>
-						<option value="74">74</option>
-						<option value="75">75</option>
-						<option value="76">76</option>
-						<option value="77">77</option>
-						<option value="78">78</option>
-						<option value="79">79</option>
-						<option value="80">80</option>
-						<option value="81">81</option>
-						<option value="82">82</option>
-						<option value="83">83</option>
-						<option value="84">84</option>
-						<option value="85">85</option>
-						<option value="86">86</option>
-						<option value="87">87</option>
-						<option value="88">88</option>
-						<option value="89">89</option>
-						<option value="90">90</option>
-						<option value="91">91</option>
-						<option value="92">92</option>
-						<option value="93">93</option>
-						<option value="94">94</option>
-						<option value="95">95</option>
-						<option value="96">96</option>
-						<option value="97">97</option>
-						<option value="98">98</option>
-						<option value="99">99</option>
-						<option value="100">100</option>
+						{{#fillSelectOptionWithNumbers "1" "100"}}{{/fillSelectOptionWithNumbers}}
 
 						<option disabled="disabled">{{agile_lng_translate 'plan-and-upgrade' 'contact-us-if-you-need-more-users'}}</option>
 				</select>
@@ -382,116 +293,152 @@ Proceed to Trial
 </div> <!-- End of form-horizontal -->
 </div>  <!-- End of tab-pane -->
 <div class="tab-pane" role="tab-panel" id="email-content" onclick="document.getElementById('email-quantity').focus();">
-<div class="row" style="
-">
+<div class="row" style="display: flex;align-items:stretch;flex-flow:row wrap;">
 <!-- start of purchase email -->
-<div class="col-md-4 col-sm-6 col-xs-12  p-r-none" id="purchase-email">
+<div class="col-md-6 col-sm-6 col-xs-12 {{#is_mobile}} p-r {{else}} p-r-none {{/is_mobile}}" id="purchase-email" {{#is_mobile}} {{else}}style="flex: 1 0;height: auto;"{{/is_mobile}}>
  
 </div>
 <!-- end of purchase email -->
- <!-- Detailed Info div start -->
-<div class="col-md-8 col-sm-6 col-xs-12">
-<div class="panel panel-default m-t-sm">
-        <div class="panel-heading ">{{agile_lng_translate 'plan-and-upgrade' 'detailed-information'}}</div>
-        <div class="panel-body">
-        <form class="bs-example form-horizontal p-b-lg">
-{{#getSubscriptionBasedOnPlan billingData emailPlan}} 
-         
-            <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}</label>
-              <div class="col-sm-6">
-                -
-              </div>
-            </div>
-			
+<div {{#is_mobile}} {{else}}style="flex: 1 0;position: relative;"{{/is_mobile}}>
+{{#getSubscriptionBasedOnPlan billingData emailPlan}}
 
-			<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}</label>
-              <div class="col-sm-6">
-                {{getRemaininaEmails}}
-              </div>
-            </div>
-			
-			<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-emails'}}</label>
-              <div class="col-sm-6">
-                {{numeric_operation ../emailPlan.quantity 1000 "*"}}
-                
-              </div>
-            </div>
-			<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-date'}}</label>
-              <div class="col-sm-6">
-               {{epochToHumanDate "mmm dd, yyyy" currentPeriodStart}}
-                
-              </div>
-            </div>
-			<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-amount'}}</label>
-              <div class="col-sm-6">
-                ${{total}}
-                
-              </div>
-            </div>
-    
+<!-- Detailedinfo second dashlet -->
+			<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} pos-t-0 ">
+				<div class="panel panel-default m-t-sm">
+					<div class="panel-heading ">
+						{{agile_lng_translate "portlets" "branded-emails-details"}}
+					</div>
+					<div class="panel-body p-md subscriptionDetail">
+        				<form class="bs-example form-horizontal ">
+	        				<div class="form-group m-b-sm">
+				              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
+				              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
+				              		</label>
+				              		<div class="col-sm-6 col-xs-6">
+				               		{{getRemaininaEmails}} 
+				               	
+				              		</div>
+				           		 </div>
+								<div class="form-group m-b-sm">
+				              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
+				              		{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-emails'}}
+				              		</label>
+				              		<div class="col-sm-6 col-xs-6">
+				                	{{numeric_operation ../emailPlan.quantity 1000 "*"}}
+				              		</div>
+				            	</div>
+				            	<div class="form-group m-b-sm">
+					             	<label class="col-sm-6 col-xs-6 control-label p-t-none "  {{#is_mobile}}{{else}}style="white-space: nowrap;"{{/is_mobile}}>
+					             	 {{agile_lng_translate 'plan-and-upgrade' 'last-purchased-amount'}}
+					             	</label>
+					              	<div class="col-sm-6 col-xs-6 ">
+					                ${{total}}
+					              	</div>
+				            	</div>
+								<div class="form-group m-b-sm">
+				              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
+				              		{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-date'}}
+				              		</label>
+				              		<div class="col-sm-6 col-xs-6">
+				               		{{epochToHumanDate "mmm dd, yyyy" currentPeriodStart}}
+				              		</div>
+				            	</div>
+						</form>
+					</div>
+				</div>
+				</div>
+<!--end of second onfo dashlet -->
 {{else}}
-          
-            <div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none">{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}</label>
-              <div class="col-sm-6">
-                {{getFreeEmailsCount}} 
-              </div>
-            </div>
-
-<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}</label>
-              <div class="col-sm-6">
-               {{getRemaininaEmails}} {{#is_paid_emails}}{{else}}<span class="text-muted text-xs m-l-sm">({{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}} <span id="next_emails_renewal">{{emails_next_renewal_time}}</span>)</span> {{/is_paid_emails}}
-              </div>
-            </div>
-
-<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-emails'}}</label>
-              <div class="col-sm-6">
-                -
-                
-              </div>
-            </div>
-<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-date'}}</label>
-              <div class="col-sm-6">
-                -
-                
-              </div>
-            </div>
-<div class="form-group m-b-sm">
-              <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'last-purchased-amount'}}</label>
-              <div class="col-sm-6">
-                -
-                
-              </div>
-            </div>  
-          
-{{/getSubscriptionBasedOnPlan}} 
-
-	<div class="form-group m-b-sm">
-      <label class="col-sm-6 control-label p-t-none ">{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}<i class="icon-question p-l-xs c-p" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'plan-and-upgrade' 'email-credits-tooltip'}}"></i></label>
-      <div class="col-sm-6">
-        {{getEmailCreditsCount}}
-        {{#if billingData}}
-        <span class="m-l-xs">
-        	<a href="#" id="purchase_credits" class="text-info text-xs">{{agile_lng_translate 'other' 'add'}}</a>
-        </span>
-        {{/if}}
-      </div>
-    </div>
-
-</form>
-<div class="line line-dashed b-b line-lg"></div>
-
+<!-- Detailedinfo first dashlet -->
+		<div class="col-md-12 col-sm-12 col-xs-12 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} pos-t-0 ">
+			<div class="panel panel-default m-t-sm">
+				<div class="panel-heading ">
+				Free Emails
+				</div>
+				<div class="panel-body p-md freePlanDetails">
+			    	<form class="bs-example form-horizontal">
+		           		<div class="form-group m-b-sm">
+		              		<label class="col-sm-6 col-xs-6 control-label p-t-none">
+		              		{{agile_lng_translate 'plan-and-upgrade' 'free-emails'}}
+		              		</label>
+		              		<div class="col-sm-6 col-xs-6">
+		                	{{getFreeEmailsCount}} 
+		              		</div>
+		            	</div>
+		            	<div class="form-group m-b-sm">
+			              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
+			              		{{agile_lng_translate 'plan-and-upgrade' 'emails-remaining'}}
+			              		</label>
+			              		<div class="col-sm-6 col-xs-6">
+			               		{{getRemaininaEmails}}{{#brandedemailstatus}} {{#is_paid_emails}}
+                           (Unbranded) {{else}}(Branded){{/is_paid_emails}} {{else}}
+                            {{/brandedemailstatus}}
+			              		</div>
+			           	</div>
+			           	<div class="form-group m-b-sm">
+				              		<label class="col-sm-6 col-xs-6 control-label p-t-none ">
+				              		{{#is_paid_emails}}
+				               			{{else}}
+				               			{{agile_lng_translate 'plan-and-upgrade' 'next-renewal'}}
+				               			{{/is_paid_emails}}
+				              		</label>
+				              		<div class="col-sm-6 col-xs-6" id="next_emails_renewal">
+				               		{{#is_paid_emails}}
+				               			{{else}}
+				               			{{emails_next_renewal_time}}
+				               			{{/is_paid_emails}}
+				              		</div>
+				            	</div>
+			           	<p class="text-xs p-t-sm">
+			           	Please note that once you have purchased the email subscription, all the branded emails will be removed from your account.
+			           	</p>
+					</form>
+			    </div>
+			</div>
+		</div>
+<!-- End of detailed Info first dashlet-->
+{{/getSubscriptionBasedOnPlan}}
+<!-- start of email credits dashlet -->
+<div class="col-md-12 col-sm-12 col-xs-12 pos-b-0 {{#is_mobile}} pos-rlt {{else}} pos-abs {{/is_mobile}} emailCreditsDetails" >
+<div class="panel panel-default m-t-sm m-b-sm">
+		<div class="panel-heading ">
+		{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}
+		</div>
+		<div class="panel-body p-t-md">
+        	<form class="bs-example form-horizontal p-b-md">
+				<div class="form-group m-b-sm">
+      				<label class="col-sm-4 col-xs-6 control-label p-t-none ">
+      					{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}
+      				</label>
+      				<div class="col-sm-8 col-xs-6">
+        				{{getEmailCreditsCount}}
+        				{{#if billingData}}
+        				<span class="m-l-xs">
+	        				<a href="#" id="purchase_credits" class="text-info text-xs">
+	        				{{agile_lng_translate 'other' 'add'}}
+	        				</a>
+                  {{#isEmailCreditsExists}}
+                  <a href="#" class="text-info text-xs p-l" id="manage_auto_recharge">Auto Recharge</a>
+                  {{/isEmailCreditsExists}}
+        				</span>
+        				{{/if}}
+     				 </div>
+    			</div>
+    			
+    			</form>
+    			<p class="text-xs "> {{agile_lng_translate 'plan-and-upgrade' 'email-credits-tooltip-msg'}}</p>
+		</div>
+		</div>
+		</div>
+<!-- End of email credits dashlet -->
+</div>
+<!-- End of detailed Info second dashlet-->
+<div class="col-md-12 col-sm-12 col-xs-12">
+	<div class="panel panel-default m-t-sm">
+        <div class="panel-body">        
 <!-- Start of Testimonials -->
 
-<div class="agile-testimonial  p-t-none b-n m-t-lg" style="box-shadow: none; min-height:145px; border: 0;">
+<div class="agile-testimonial  p-t-none b-n " style="box-shadow: none; min-height:100px; border: 0;">
    <div id="myCarousel" class="carousel slide" style="width: 80%;margin: 0 auto;">
       <ol class="carousel-indicators">
          <li data-target="#myCarousel" data-slide-to="0" class=""></li>
@@ -499,75 +446,95 @@ Proceed to Trial
          <li data-target="#myCarousel" data-slide-to="2" class="active"></li>
       </ol>
       <div class="carousel-inner">
-         <div class="item">
-            <div class="pull-left tweet-img-pricing">
-               <img title="Nicolas Woirhaye" src="{{getS3ImagePath '../../img/testimonial-nicolas.png'}}">
-            </div>
+      <div class="item active">
+            <div class="pull-left tweet-img-pricing"><img title="{{agile_lng_translate 'plan-and-upgrade' 'joão-camacho'}}" src="{{getS3ImagePath '../../img/camacho.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
-                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'nicolas-woirhaye'}}</span>
-                  <span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'co-founder-iko-system'}}</span>
+                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'joão-camacho'}}
+                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'joão-camacho-coordenador'}}</span>
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info">
-               {{agile_lng_translate 'plan-and-upgrade' 'nicolas-woirhaye-desc'}} 
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
+               {{agile_lng_translate 'plan-and-upgrade' 'joão-camacho-coordenador-desc'}}  
             </div>
          </div>
          <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Ron Kaplan" src="{{getS3ImagePath '../../img/testimonial-ron.png'}}"></div>
+            <div class="pull-left tweet-img-pricing"><img title="{{agile_lng_translate 'plan-and-upgrade' 'jeri-murphy'}}" src="{{getS3ImagePath '../../img/jmurphy.png'}}"></div>
             <div class="pull-left tweet-txt">
                <span class="tweet-arrow"></span>
                <div class="tweet-head">
-                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'ron-kaplan'}}</span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'ron-kaplan-desc'}}</span>
-               </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="tweet-info">
-               {{agile_lng_translate 'plan-and-upgrade' 'ron-kaplan-desc-1'}}  
-            </div>
-         </div>
-         <div class="item active">
-            <div class="pull-left tweet-img-pricing"><img title="Gary Tramer" src="{{getS3ImagePath '../../img/testimonial-gary.png'}}"></div>
-            <div class="pull-left tweet-txt">
-               <span class="tweet-arrow"></span>
-               <div class="tweet-head">
-                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'gary-tramer'}}</span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'gary-tramer-desc'}}</span>
-               </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="tweet-info">
-               {{agile_lng_translate 'Plan-and-upgrade' 'gary-tramer-desc4'}}   
-            </div>
-         </div>
-         <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Mark Valles" src="{{getS3ImagePath '../../img/testimonial-mark.png'}}"></div>
-            <div class="pull-left tweet-txt">
-               <span class="tweet-arrow"></span>
-               <div class="tweet-head">
-                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'mark-valles'}}
-                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'mark-valles-desc'}}</span>
-               </div>
-            </div>
-            <div class="clearfix"></div>
-            <div class="tweet-info">
-               {{agile_lng_translate 'plan-and-upgrade' 'mark-valles-desc-1'}}  
-            </div>
-         </div>
-         <div class="item">
-            <div class="pull-left tweet-img-pricing"><img title="Paul Singh" src="{{getS3ImagePath '../../img/testimonial-paulsingh.png'}}"></div>
-            <div class="pull-left tweet-txt">
-               <span class="tweet-arrow"></span>
-               <div class="tweet-head">
-                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'paul-singh'}}
-                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'paul-singh-desc'}}
+                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'jeri-murphy'}}
+                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'jeri-murphy-co-founder'}}
                   </span>
                </div>
             </div>
             <div class="clearfix"></div>
-            <div class="tweet-info">
-               {{agile_lng_translate 'plan-and-upgrade' 'paul-singh-desc-1'}} 
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
+               {{agile_lng_translate 'plan-and-upgrade' 'jeri-murphy-desc'}} 
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing">
+            <img title="{{agile_lng_translate 'plan-and-upgrade' 'brenton-brien'}}" src="{{getS3ImagePath '../../img/brentonobrien.png'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">
+                  {{agile_lng_translate 'plan-and-upgrade' 'brenton-brien'}}</span><span class="tweet-authdesc">
+                  {{agile_lng_translate 'plan-and-upgrade' 'managing-director-microbric'}}
+                  </span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
+               {{agile_lng_translate 'plan-and-upgrade' 'brenton-brien-desc'}}  
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing"><img title="{{agile_lng_translate 'plan-and-upgrade' 'sebastian'}}" style="border-radius:50%" src="{{getS3ImagePath '../../img/sebastian.png'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'sebastian'}}
+                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'sebastian-madrid'}}
+                  </span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
+               {{agile_lng_translate 'plan-and-upgrade' 'sebastian-desc'}} 
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing"><img title="{{agile_lng_translate 'plan-and-upgrade' 'unplug'}}" src="{{getS3ImagePath '../../img/unplug.jpg'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'unplug'}}
+                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'unplug-auth'}}
+                  </span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
+               {{agile_lng_translate 'plan-and-upgrade' 'unplug-desc'}} 
+            </div>
+         </div>
+         <div class="item">
+            <div class="pull-left tweet-img-pricing"><img title="{{agile_lng_translate 'plan-and-upgrade' 'deean-harper'}}" style="border-radius:50%" src="{{getS3ImagePath '../../img/deanharper.jpg'}}"></div>
+            <div class="pull-left tweet-txt">
+               <span class="tweet-arrow"></span>
+               <div class="tweet-head">
+                  <span class="tweet-authname">{{agile_lng_translate 'plan-and-upgrade' 'deean-harper'}}
+                  </span><span class="tweet-authdesc">{{agile_lng_translate 'plan-and-upgrade' 'deean-harper-auth'}}
+                  </span>
+               </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="tweet-info {{#is_mobile}} m-l-none {{else}} m-l-63 {{/is_mobile}}">
+               {{agile_lng_translate 'plan-and-upgrade' 'deean-harper-desc'}} 
             </div>
          </div>
       </div>
@@ -575,113 +542,82 @@ Proceed to Trial
       <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
    </div>
 </div>
-
 <!-- End of Testimonials -->
-
  </div>
 </div>
 </div>
 <!-- Detailed Info div end -->
 {{#getSubscriptionBasedOnPlan billingData emailPlan}}
-	<a href="#" class="text-info text-xs pull-right p-r" id="cancel_email_plan">{{agile_lng_translate 'portlets' 'cancel-email-subscriptiion'}} </a> 
+	<a href="#" {{#is_mobile}} style="margin-left:50%;" {{else}} style="margin-left:80%;" {{/is_mobile}} class="text-info text-xs pull-right p-r" id="cancel_email_plan">{{agile_lng_translate 'portlets' 'cancel-email-subscriptiion'}} </a> 
 {{/getSubscriptionBasedOnPlan}}
 </div>
 
 </div> 
 <!-- End of email pane -->
-            </div>  <!-- End of tab-content -->
+
+<!-- Addon tab content -->
+	
+	<div class="tab-pane" role="tab-panel" id="addon-content">
+	    <div id="acl-addon-content"></div>
+		<div id="campaign-addon-content"></div>
+		<div id="trigger-addon-content"></div>
+	</div>
+
+<!-- End of Addon tab content -->
+
+	        </div>  <!-- End of tab-content -->
 
         </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
-
-{{#if billingData}}
-{{else}}
-<div class="col-md-3" id="email">
-	
-		<div class="panel panel-default wrapper-md m-b-none m-t">
-		<p class="b-b b-light p-b-xs">{{agile_lng_translate 'portlets' 'emails'}}<a onclick='emailClickEvent()' style="font-size: 12px;" class="text-info pull-right">{{agile_lng_translate 'plan-and-upgrade' 'purchase'}}</a></p>
-		<div>
-{{agile_lng_translate 'plan-and-upgrade' 'current-plan-description'}} 
-</div>
+<div class="col-md-3">
+	{{#if billingData}}
+	{{else}}
+		<div id="email" class="panel panel-default wrapper-md">
+			<p class="b-b b-light p-b-xs">{{agile_lng_translate 'portlets' 'emails'}}<a onclick='emailClickEvent()' style="font-size: 12px;" class="text-info pull-right">{{agile_lng_translate 'plan-and-upgrade' 'purchase'}}</a></p>
+			<div>
+				{{agile_lng_translate 'plan-and-upgrade' 'current-plan-description'}} 
+			</div>
 		</div>
-	
-	</div>
 	{{/if}}
-        
-     
-  <div class="col-md-3">
-{{#getSubscriptionBasedOnPlan billingData plan}}
-   <div class="panel panel-default wrapper-md m-t-xl">
-      <p class="b-b b-light p-b-xs">
-         {{agile_lng_translate 'plan-and-upgrade' 'current-plan'}}
-      </p>
-
- {{agile_lng_translate 'plan-and-upgrade' 'you-are-currently-on'}} {{proToEnterprise ../plan.plan_type}} {{agile_lng_translate 'plan-and-upgrade' 'plan-with'}} {{quantity}}  {{#if_equals quantity 1}}
-  {{agile_lng_translate 'plan-and-upgrade' 'user'}}.
-{{else}}
-{{agile_lng_translate 'plan-and-upgrade' 'users'}}.
-{{/if_equals}} 
-
-
-   </div> <!-- End of panel wrapper-md -->
-  
-{{/getSubscriptionBasedOnPlan}}
-{{#if billingData}}
-<div class="row">
-	<div class="col-md-12">
-	{{#ifCond billingData.accountBalance "lessthan" "0"}}
-		<div class="panel panel-default wrapper-md">
-			<p class="b-b b-light p-b-xs">{{agile_lng_translate 'plan-and-upgrade' 'credit'}}<i class="icon-question p-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'plan-and-upgrade' 'credit-balance-desc'}}"></i>
-
-			</p>
-		<div>{{agile_lng_translate 'plan-and-upgrade' 'credit-balance'}}: $<span id="credit_amount">{{getCredit billingData.accountBalance}}</span></div>
-		<div class="clearfix"></div>
-
-		</div>
-	{{/ifCond}}
-{{#isAdmin}}
-{{#check_plan "FREE"}}
-        <div class="panel panel-default wrapper-md m-t-xl">
-{{else}}
-		<div class="panel panel-default wrapper-md">
-{{/check_plan}}
-			<p class="b-b b-light p-b-xs">{{agile_lng_translate 'plan-and-upgrade' 'credit-card'}}
-<a href="#updateCreditCard" class="text-info pull-right" style="
-    font-size: 12px;">{{agile_lng_translate 'portlets' 'change'}}</a>
-			</p>
-
-		<div>
-		
-			<div id="customer-details-holder"></div>
-		</div>
-		
-		<div class="clearfix"></div>
-
-		</div>
-{{/isAdmin}}	
-</div>
- 
-</div>
-{{/if}}
-</div> <!-- End of col-md-3 -->
-
-{{#if billingData}}
+	{{#getSubscriptionBasedOnPlan billingData plan}}
+   		<div class="panel panel-default wrapper-md">
+	    	<p class="b-b b-light p-b-xs">{{agile_lng_translate 'plan-and-upgrade' 'current-plan'}}</p>
+ 			{{agile_lng_translate 'plan-and-upgrade' 'you-are-currently-on'}} {{proToEnterprise ../plan.plan_type}} {{agile_lng_translate 'plan-and-upgrade' 'plan-with'}} {{quantity}}  
+ 			{{#if_equals quantity 1}}
+  				{{agile_lng_translate 'plan-and-upgrade' 'user'}}.
+			{{else}}
+				{{agile_lng_translate 'plan-and-upgrade' 'users'}}.
+			{{/if_equals}} 
+   		</div> 
+   		<!-- End of panel wrapper-md -->
+	{{/getSubscriptionBasedOnPlan}}
+	{{#if billingData}}
+		{{#ifCond billingData.accountBalance "lessthan" "0"}}
+			<div class="panel panel-default wrapper-md">
+				<p class="b-b b-light p-b-xs">{{agile_lng_translate 'plan-and-upgrade' 'credit'}}<i class="icon-question p-l-xs" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'plan-and-upgrade' 'credit-balance-desc'}}"></i>
 	
-		<div class="col-md-3">
-	
-		<div class="panel panel-default wrapper-md m-b-none">
+				</p>
+				<div>{{agile_lng_translate 'plan-and-upgrade' 'credit-balance'}}: $<span id="credit_amount">{{getCredit billingData.accountBalance}}</span></div>
+				<div class="clearfix"></div>
+			</div>
+		{{/ifCond}}
+		{{#isAdmin}}
+			<div class="panel panel-default wrapper-md">
+				<p class="b-b b-light p-b-xs">{{agile_lng_translate 'plan-and-upgrade' 'credit-card'}}
+					<a href="#updateCreditCard" class="text-info pull-right" style="font-size: 12px;">{{agile_lng_translate 'portlets' 'change'}}</a>
+				</p>
+				<div id="customer-details-holder"></div>		
+				<div class="clearfix"></div>
+			</div>
+		{{/isAdmin}}
+	<div class="panel panel-default wrapper-md">
 		<p class="b-b b-light p-b-xs">{{agile_lng_translate 'plan-and-upgrade' 'invoices'}} <a href="#invoice-details" style="font-size: 12px;" class="text-info pull-right">{{agile_lng_translate 'plan-and-upgrade' 'more'}}</a></p>
-		<div id="recent_invoice">
-		</div>
-		</div>
-	
-	</div>  <!-- End of col-md-3 -->
-{{/if}}
-		
-		<div class="clearfix"></div>
-
-		</div>
+		<div id="recent_invoice"></div>
+	</div>	
+	{{/if}}
+</div>
+<!-- End of col-md-3 -->
 </div>
 	
 </div> <!-- End of row -->
@@ -699,7 +635,7 @@ Proceed to Trial
    <img src="{{getS3ImagePath '/flatfull/img/mail.png'}}" style="width: 132px;">
 </div>
 <div  class="price-panel wrapper text-center b-b b-light m-t bg-white">
-  <h4 class="m-b-none">{{agile_lng_translate 'portlets' 'emails'}}</h4>
+  <h4 class="m-b-none">{{agile_lng_translate 'portlets' 'email-subscription'}}</h4>
   <div class="p-t-xs p-b-xs">
 <div class="text-20"  style="color:#2b866e">
 <span>$<span id="emails_total_cost">0</span></span><span>/{{agile_lng_translate 'calendar' 'month'}}</span>
@@ -739,7 +675,7 @@ Proceed to Trial
 </script>
 
 <script id="latest-invoice-template" type="text/html">
- {{agile_lng_translate 'Plan-and-upgrade' 'thank-for-paying'}} ${{numeric_operation this.total 100 "/"}} on {{epochToHumanDate "mmm dd, yyyy" date}}.
+ {{agile_lng_translate 'Plan-and-upgrade' 'your-invoice-of'}} ${{numeric_operation this.total 100 "/"}} {{agile_lng_translate 'Plan-and-upgrade' 'has-been-generated-on'}} {{epochToHumanDate "mmm dd, yyyy" date}}.
 </script>
 
 <script id="subscribe-error-modal-template" type="text/html">
@@ -747,33 +683,117 @@ Proceed to Trial
 <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-header">
-            <button class="close" data-dismiss="modal">x</button>
+            <button class="close" data-dismiss="modal">&times;</button>
 			<h3 class="modal-title">{{agile_lng_translate 'Plan-and-upgrade' 'plan-restrictions'}}</h3>
 		</div>
 		<div class="modal-body help-text">
 			<strong>{{agile_lng_translate 'Plan-and-upgrade' 'sorry-we-are-unable-to-sucscribe'}} {{plan}} {{agile_lng_translate 'Plan-and-upgrade' 'failure-reason'}}{{#if_greater errorsCount 2}}s{{/if_greater}}:</strong><br/><br/>
 			
 			{{#if is_more_users}}
-				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{../count}}  {{agile_lng_translate 'Plan-and-upgrade' 'users-with-your-current-plan-and-are-trying-to-subscribe'}}{{../newCount}} user{{#if_greater ../newCount 1}}s{{/if_greater}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
+				<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{../count}}  {{agile_lng_translate 'Plan-and-upgrade' 'users-limit-msg'}} {{../newCount}} User{{#if_greater ../newCount 1}}s{{/if_greater}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
 			{{else}}
-				{{#if_greater users.count users.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{users.count}} {{agile_lng_translate 'Plan-and-upgrade' 'users-with-your-current-plan-and-are-trying-to-subscribe'}} {{users.limit}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater contacts.count contacts.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'campaigns-with-your-current-plan-and-are-trying-to-subscribe'}}{{agile_lng_translate 'portlets' 'contacts'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater workflows.count workflows.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{workflows.count}}{{agile_lng_translate 'Plan-and-upgrade' 'campaigns-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{workflows.count}} {{agile_lng_translate 'portlets' 'campaigns'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater webrules.count webrules.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{webrules.count}} {{agile_lng_translate 'Plan-and-upgrade' 'webrules-with-your-current-plan-and-are-trying-to-subscribe'}} ({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{webrules.count}} {{agile_lng_translate 'portlets' 'webrules'}}</div></div>
-				{{/if_greater}}
-				{{#if_greater triggers.count triggers.limit}}
-					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{triggers.count}} {{agile_lng_translate 'Plan-and-upgrade' 'triggers-with-your-current-plan-and-are-trying-to-subscribe'}}({{../plan}}) {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{triggers.count}} {{agile_lng_translate 'portlets' 'triggers'}}</div></div>
-				{{/if_greater}}
+				{{#if users}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{users.count}} {{agile_lng_translate 'Plan-and-upgrade' 'users-limit-msg'}} {{users.limit}} {{agile_lng_translate 'Plan-and-upgrade' 'for-the-new-plan'}}</div></div>
+				{{/if}}
+				{{#if contacts}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'contacts-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{contacts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Contacts'}}</div></div>
+				{{/if}}
+				{{#if workflows}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{workflows.count}} {{agile_lng_translate 'Plan-and-upgrade' 'campaigns-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{workflows.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Campaigns'}}</div></div>
+				{{/if}}
+				{{#if webrules}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{webrules.count}} {{agile_lng_translate 'Plan-and-upgrade' 'webrules-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{webrules.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Webrules'}}</div></div>
+				{{/if}}
+				{{#if triggers}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{triggers.count}} {{agile_lng_translate 'Plan-and-upgrade' 'triggers-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{triggers.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Triggers'}}</div></div>
+				{{/if}}
+				{{#if widgets}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{widgets.count}} {{agile_lng_translate 'Plan-and-upgrade' 'widgets-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{widgets.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Widgets'}}</div></div>
+				{{/if}}
+				{{#if nodes}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{nodes.count}} {{agile_lng_translate 'Plan-and-upgrade' 'nodes-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{nodes.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Nodes'}}</div></div>
+				{{/if}}
+				{{#if emailAccounts}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{emailAccounts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'emailAccounts-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{emailAccounts.count}} {{agile_lng_translate 'Plan-and-upgrade' 'EmailAccounts'}}</div></div>
+				{{/if}}
+				{{#if reports}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{reports.count}} {{agile_lng_translate 'Plan-and-upgrade' 'reports-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{reports.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Reports'}}</div></div>
+				{{/if}}
+				{{#if tracks}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'we-see-that-you-have'}} {{tracks.count}} {{agile_lng_translate 'Plan-and-upgrade' 'tracks-limit-msg'}} {{../plan}}{{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{tracks.count}} {{agile_lng_translate 'Plan-and-upgrade' 'Tracks'}}</div></div>
+				{{/if}}
+				{{#if smsGateway}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'smsGateway-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{agile_lng_translate 'Plan-and-upgrade' 'SmsGateway'}}</div></div>
+				{{/if}}
+				{{#if ecommerceSync}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'ecommerceSync-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{agile_lng_translate 'Plan-and-upgrade' 'EcommerceSync'}}</div></div>
+				{{/if}}
+				{{#if accountingSync}}
+					<div class="p-t-xs"><i class="fa fa-angle-double-right pull-left" style="margin-top:3px;"></i><div class="p-l">{{agile_lng_translate 'Plan-and-upgrade' 'accountingSync-limit-msg'}} {{../plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}, {{agile_lng_translate 'Plan-and-upgrade' 'which-does-not-support'}} {{agile_lng_translate 'Plan-and-upgrade' 'AccountingSync'}}</div></div>
+				{{/if}}
 			{{/if}}
 			<br/>
 			<div class="text-danger">{{agile_lng_translate 'portlets' 'please-adjust-your-current-plan-accordingly-and-proceed'}}</div>
+			
+		</div>
+		<div class="modal-footer">
+			<a href="#" data-dismiss="modal" class="btn btn-sm btn-danger">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+		</div>
+	</div>
+</div>
+</div>
+</script>
+
+<script id="subscribe-error-more-modal-template" type="text/html">
+	<div class="modal" data-backdrop="static">
+<div class="modal-dialog">
+    <div class="modal-content">
+		<div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>
+			<h3 class="modal-title">{{agile_lng_translate 'Plan-and-upgrade' 'plan-restrictions'}}</h3>
+		</div>
+		<div class="modal-body help-text">
+			<strong>{{agile_lng_translate 'Plan-and-upgrade' 'below-features-in-plan'}} {{plan}} {{agile_lng_translate 'Plan-and-upgrade' 'plan'}}:</strong><br/><br/>
+				{{#if users}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Users'}} - {{users.count}}; 
+				{{/if}}
+				{{#if contacts}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Contacts'}} - {{contacts.count}}; 
+				{{/if}}
+				{{#if workflows}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Campaigns'}} - {{workflows.count}}; 
+				{{/if}}
+				{{#if webrules}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Webrules'}} - {{webrules.count}}; 
+				{{/if}}
+				{{#if triggers}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Triggers'}} - {{triggers.count}}; 
+				{{/if}}
+				{{#if widgets}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Widgets'}} - {{widgets.count}}; 
+				{{/if}}
+				{{#if nodes}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Nodes'}} - {{nodes.count}}; 
+				{{/if}}
+				{{#if emailAccounts}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'EmailAccounts'}} - {{emailAccounts.count}}; 
+				{{/if}}
+				{{#if reports}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Reports'}} - {{reports.count}}; 
+				{{/if}}
+				{{#if tracks}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'Tracks'}} - {{tracks.count}}; 
+				{{/if}}
+				{{#if smsGateway}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'SmsGateway'}}; 
+				{{/if}}
+				{{#if ecommerceSync}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'EcommerceSync'}}; 
+				{{/if}}
+				{{#if accountingSync}}
+					{{agile_lng_translate 'Plan-and-upgrade' 'AccountingSync'}}; 
+				{{/if}}
+			<div class="text-danger p-t">{{agile_lng_translate 'portlets' 'please-adjust-your-current-plan-accordingly-and-proceed'}}</div>
 			
 		</div>
 		<div class="modal-footer">
@@ -850,7 +870,7 @@ Proceed to Trial
 	<div class="modal-dialog">
 	    <div class="modal-content">
 			<div class="modal-header">
-	            <button class="close" data-dismiss="modal">x</button>
+	            <button class="close" data-dismiss="modal">&times;</button>
 				<h3 class="modal-title">{{agile_lng_translate 'plan-and-upgrade' 'email-credits'}}</h3>
 			</div>
 			<div class="modal-body help-text">
@@ -859,25 +879,23 @@ Proceed to Trial
 			      <div class="control-group form-group m-b-none"> 
 			       <label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'emails'}}<span class="field_req">*</span></label> 
 			       <div class="controls col-sm-9"> 
-					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" style="width:25%;">
+					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" {{#is_mobile}} style="width:75%;" {{else}} style="width:25%;" {{/is_mobile}}>
 			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>
 			        
 			       </div>
 			       <div class="col-sm-offset-3 p-l help-block m-b-none"> 
 				     {{agile_lng_translate 'billing' 'email-credits-tooltip'}} @ $4/1000 {{agile_lng_translate 'portlets' 'emails'}}.
 				   </div>
-			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l"></span> 
+			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l {{#is_mobile}} inline-block p-t {{else}} block {{/is_mobile}}"></span> 
 			      </div>
 			      <div class="control-group form-group m-b-xs"> 
-			       <label class="control-label col-sm-3">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}}</label> 
-			       <div class="controls col-sm-6" style="padding-top:7px;">
+			       <label class="control-label {{#is_mobile}} col-xs-4 {{else}} col-sm-3 {{/is_mobile}}">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}}</label> 
+			       <div class="controls {{#is_mobile}} col-xs-6 {{else}} col-sm-6 {{/is_mobile}}" {{#is_mobile}} style="padding-top: 0px !important" {{else}} style="padding-top: 7px !important" {{/is_mobile}}>
 			       	 $<span id="total_credits_cost">0</span>
 			       </div>
 			       </div>
 			     </fieldset> 
 			    </form>
-			    
-
 			</div>
 			<div class="modal-footer">
 				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel'}}</a>
@@ -885,4 +903,51 @@ Proceed to Trial
 			</div>
 		</div>
 	</div>
+</script>
+<script id="auto-recharge-template" type="text/html">
+	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+	            <button class="close" data-dismiss="modal">x</button>
+				<h3 class="modal-title">Manage Auto Recharge<span class="label bg-light dk text-tiny auto_recharge_status m-l-xs">{{#if isAutoRenewalEnabled}}ON{{else}}OFF{{/if}}</span></h3>
+			</div>
+			<div class="modal-body help-text">
+				<form id="auto-recharge-form" class="form-horizontal">
+				 <div class="form-group">
+			      <label class="col-sm-5 control-label">Recharge Emails With<span class="field_req">*</span></label>
+			      <div class="col-sm-6">
+			        <input type="text" name="nextRechargeCount" value="{{nextRechargeCount}}" style="width:38%;" class="form-control required digits inline-block pull-left" min="1">
+			        <span class="input-group-addon form-control pull-left" style="width:25%;">*1000</span>
+			        <span class="clearfix"></span>
+			        <span id="nextRechargeCountError" style="font-size: 11px;" for="nextRechargeCount" generated="true" class="help-inline p-t-xs"></span>
+			     </div>
+			    </div>
+
+				<div class="form-group m-b-sm">
+			      <label class="col-sm-5 control-label">When Emails Falls To<span class="field_req">*</span></label>
+			      <div class="col-sm-4">
+			        <input type="text" name="autoRenewalPoint" value="{{autoRenewalPoint}}" class="form-control required digits" min="0">
+			        <span id="autoRechargeLimitError" style="font-size: 11px;" for="autoRenewalPoint" generated="true" class="help-inline p-t-xs"></span>
+			      </div>
+			    </div>
+			    <div class="row">
+				    <div class="col-sm-offset-5 col-sm-5">
+				    	<a href="#" class="text-info text-xs" style="{{#if isAutoRenewalEnabled}}{{else}}display:none;{{/if}}" id="disable_auto_recharge">Disable Auto Recharge</a>
+				    </div>
+			    </div>
+				</form>
+
+		</div>
+			<div class="modal-footer">
+				<a href="#" data-dismiss="modal" class="btn btn-sm btn-default">Cancel</a>
+				<a href="#" id="save_auto_recharge" loadingText = "Saving..." class="btn btn-sm btn-primary">Save</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="emails-limit-crossed-message-template" type="text/html">
+  <p>{{agile_lng_translate "plan" "thanks-for-payment"}}</p>
+  <p>{{agile_lng_translate "plan" "emails-request-processing"}}</p>
+  <p>{{agile_lng_translate "plan" "please-contact-our-support"}}</p>
 </script>

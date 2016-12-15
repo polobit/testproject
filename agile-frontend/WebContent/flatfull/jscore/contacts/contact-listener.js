@@ -49,7 +49,7 @@ var timer = undefined;
 		 	});
 		}
 		 	
-		 }, 1000);
+		 }, 1500);
 });
 
 
@@ -514,10 +514,34 @@ $('.popover').on('click', '.contact-owner-list-popover', function(e){
 				 	Contact_collection.set(model.toJSON());
 				 	else
 				 	{
-				Contact_collection.set(model.toJSON(),{silent:true});
-      				 Contact_collection.trigger('popoverChange');
+						Contact_collection.set(model.toJSON(),{silent:true});
+      				 	Contact_collection.trigger('popoverChange');
       				}
-				
+
+      			if(Current_Route == "contacts"){
+      				CONTACTS_HARD_RELOAD = true;
+      				contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
+	            }
+
+                if(Current_Route == "companies"){
+                	COMPANIES_HARD_RELOAD = true;
+                	companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
+                }
+
+	            if(!hasScope("VIEW_CONTACTS")){
+	              var storageItems = JSON.parse(localStorage.recentItems);
+	              var arr = [];
+	              localStorage.removeItem("recentItems");
+	              for(var i=0;i<storageItems.length;i++){
+	                if(storageItems[i].id != Contact_collection.get('id')){
+	                  arr.push(storageItems[i]);
+	                }else{
+	                  recent_view.collection.remove(storageItems[i].id);
+	                }
+	              }
+	              localStorage.setItem("recentItems", JSON.stringify(arr));
+	              recent_view_update_required = true;
+	            }
 		    }});
 });
 
@@ -680,14 +704,7 @@ click: function(score, evt)
 
 function popoverEnter(that,left,top,listView,campaigns_view)
 {
-
-
- 
-     
-
-			timer=setTimeout(function() {
-						 	
-						  	
+		timer=setTimeout(function() {	  	
 				if (!insidePopover)	{
 		
 					 $('.popover').remove();	
@@ -728,7 +745,7 @@ function popoverEnter(that,left,top,listView,campaigns_view)
 		 		return false;
 		 	}
 		 	}
-		 }, 1000);
+		 }, 1500);
 }
 
 function popout(that)

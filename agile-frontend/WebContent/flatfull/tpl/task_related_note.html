@@ -10,7 +10,7 @@
                     <div class="text">
                         {{agile_lng_translate 'task' 'you-can-save-specific-information'}}
                     </div>
-                    <a href="#new-task-modal" data-toggle="modal" class="m-r-none btn btn-default btn-sm blue btn-slate-action task-add-note m-t-xs m-t-none"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'deal-view' 'add-note' }}</a>
+                    <a href="#new-task-modal" data-toggle="modal" class="m-r-none btn btn-default btn-sm blue btn-slate-action task-add-note m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'deal-view' 'add-note' }}</a>
                 </div>
 				<div class="clearfix">
 				</div>
@@ -59,7 +59,7 @@
 				{{#isDuplicateContactProperty properties "email"}}
 					{{else}}	
 						{{#if_contact_type "PERSON"}}
-						<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+						<a class="text-info popover_contact" href="#contact/{{id}}" data="{{id}}">{{contact_name_necessary this}}</a>,
 					{{/if_contact_type}}
 					{{#if_contact_type "COMPANY"}}
         				<a class="text-info" href="#company/{{id}}">{{getPropertyValue properties "name"}}</a>,

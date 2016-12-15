@@ -7,17 +7,22 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.knowledgebase.entity.Article;
 import com.agilecrm.ticket.entitys.TicketDocuments;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
@@ -51,6 +56,28 @@ public class TicketNotesRest
 				throw new Exception("Ticket ID is missing.");
 
 			return TicketNotesUtil.getTicketNotes(ticketID, "-created_time");
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	
+	@GET
+	@Path("/feedback")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getFeedbackdata(@QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime,
+			@QueryParam("feedback") String feedback, @QueryParam("group") Long group, @QueryParam("assignee") Long assignee)
+	{
+		try
+		{
+			if (startTime == null || endTime == null )
+				throw new Exception("Strat and end times is missing.");
+
+			return TicketNotesUtil.getJsonFeedback(startTime,endTime,feedback,group,assignee).toString();
 		}
 		catch (Exception e)
 		{
@@ -146,6 +173,7 @@ public class TicketNotesRest
 								: false, notes.close_ticket, false);
 
 				// Creating new Notes in TicketNotes table
+
 				ticketNotes = new TicketNotes(ticket.id, ticket.groupID, ticket.assigneeID, CREATED_BY.AGENT,
 						ticket.requester_name, ticket.requester_email, plain_text, html_text, notes.note_type,
 						new ArrayList<TicketDocuments>(), "", false);
@@ -167,4 +195,48 @@ public class TicketNotesRest
 					.build());
 		}
 	}
+	/**
+	 * 
+	 * @param comment,noteid
+	 * @throws WebApplicationException
+	 */
+	@POST
+	@Path("/feedback-comment/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void addFeedbackComment(@PathParam("id") Long id ,String comment) throws WebApplicationException
+	{
+		try
+		{
+			System.out.println(comment);
+			String[] fbarray = comment.split("\\&", -1);
+			System.out.println(fbarray);
+		    String feed_back = (fbarray[1].split("\\=",-1)[1]);
+		    String feedback_comment = (fbarray[2].split("\\=",-1)[1]);
+		    
+		    Long feedback_time = Long.parseLong((fbarray[3].split("\\=",-1)[1]));
+		    
+		    String result = java.net.URLDecoder.decode(feedback_comment, "UTF-8");
+		    
+			if (id == null)
+				throw new Exception("Required params missing.");
+			
+			TicketNotes dbNotes = TicketNotes.ticketNotesDao.get(id);
+			dbNotes.feedback_flag = true;
+			dbNotes.feed_back = feed_back;
+			dbNotes.feedback_comment = result;
+			dbNotes.feedback_time = feedback_time;
+
+					TicketNotes.ticketNotesDao.put(dbNotes);
+					}
+		catch (Exception e)
+		{
+			System.out.println("exception occured while saving feedback comment");
+
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
+	
 }

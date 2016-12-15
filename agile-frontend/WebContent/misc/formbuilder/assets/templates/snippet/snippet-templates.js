@@ -18,8 +18,9 @@ define(function(require) {
   , selectbasic              = require('text!templates/snippet/selectbasic.html')
   , selectmultiple           = require('text!templates/snippet/selectmultiple.html')
   , textarea                 = require('text!templates/snippet/textarea.html')
-  , textinput                = require('text!templates/snippet/textinput.html');
-
+  , textinput                = require('text!templates/snippet/textinput.html')
+  , styledbutton             = require('text!templates/snippet/styledbutton.html')
+  , hiddeninput              = require('text!templates/snippet/hiddeninput.html');
   return {
     formname                   : formname
     , prependedtext            : prependedtext
@@ -41,5 +42,7 @@ define(function(require) {
     , selectmultiple           : selectmultiple
     , textarea                 : textarea
     , textinput                : textinput
+    , styledbutton             : styledbutton
+    , hiddeninput              : hiddeninput
   }
 });

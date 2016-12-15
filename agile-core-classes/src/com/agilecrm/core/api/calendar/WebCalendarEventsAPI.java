@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.calendar;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,6 +21,8 @@ import com.agilecrm.activities.WebCalendarEvent;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.contact.Contact;
+import com.google.gdata.data.contacts.ContactFeed;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>WebCalendarEventsAPI</code> includes REST calls to interact with
@@ -119,14 +122,30 @@ public class WebCalendarEventsAPI
 	@Path("/deletewebevent")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public void deleteWebEvent(@QueryParam("event_id") Long eventid, @QueryParam("cancel_reason") String cancel_reason)
+	public void deleteWebEvent(@QueryParam("event_id") Long eventid, @QueryParam("cancel_reason") String cancel_reason, @QueryParam("contact_id") Long contactID)
 	{
 		System.out.println(eventid + " ---------------" + cancel_reason);
 		Event event = EventUtil.getEvent(eventid);
-		if (event != null)
-		{
-			EventUtil.deleteWebEventFromClinetEnd(event, cancel_reason);
+		if (event != null){
+			List<Contact> eventContacts = event.relatedContacts();	
+			List<String> newContactsList = new ArrayList<String>();
+			if(contactID != null && contactID > 0 && eventContacts.size() > 1){
+				Contact selectedContact = null;
+				for (Contact contact : eventContacts) {
+					if(!contact.id.equals(contactID)){						
+						newContactsList.add(contact.id.toString());
+					}else{
+						selectedContact = contact;
+					}
+				}
+				event.contacts = newContactsList;
+				event.update();				
+				if(selectedContact != null){
+					EventUtil.sendEventCancelMail(event, selectedContact, cancel_reason);
+				}
+			}else{
+				EventUtil.deleteWebEventFromClinetEnd(event, cancel_reason);
+			}
 		}
-
 	}
 }

@@ -35,6 +35,20 @@ define([
           };
         });
       }
+
+      //Popover and arrow postion changing
+
+      var popoverTop =  parseInt($(".popover").css("top"));
+      var arrowTop = parseInt($(".arrow").css("top"));
+      if(popoverTop < 15) {
+        $(".popover").css("top",15);
+        $(".arrow").css("top",arrowTop + (popoverTop-15));
+      }
+    
+      $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+      });
+
     }
 
     , preventPropagation: function(e) {

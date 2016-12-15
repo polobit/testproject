@@ -44,8 +44,10 @@ var PAYMENT_FAILED_REASON = ["BILLING_FAILED_0", "BILLING_FAILED_1"];
  * 
  * @returns
  */
-function getRandomLoadingImg()
+function getRandomLoadingImg(noLoading)
 {
+	if(noLoading)
+		return "";
 	var length = LOADING_HTML_IMAGES.length;
 	return LOADING_HTML_IMAGES[Math.round(Math.random() * (LOADING_HTML_IMAGES.length - 1))]
 }
@@ -443,8 +445,9 @@ function text_gravatar_initials(items, char_count)
 
 	if (first_name && last_name)
 	{
-		name = first_name.substr(0, 1);
-		name += last_name.substr(0, 1);
+		/*name = first_name.substr(0, 1);
+		name += last_name.substr(0, 1);*/
+		name = (_agile_get_custom_contact_display_type() == "FTL")  ? first_name.substr(0, 1)+last_name.substr(0, 1)  : last_name.substr(0, 1)+first_name.substr(0, 1);
 	}
 	else
 	{
@@ -735,6 +738,13 @@ function showPageBlockModal() {
 			$("body").append(template_ui);
 			$("#user-blocked-modal").modal('show');
 		}, null);
+	}else if(hasAddonDues()){
+		getTemplate("addon-blocked-modal", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$("body").append(template_ui);
+			$("#user-blocked-modal").modal('show');
+		}, null);
 	}
 }
 
@@ -863,4 +873,73 @@ function agileTimeAgoWithLngConversion(el, callback){
         if(callback)
         	 callback();
     });
+}
+function getMaximumPageSize(){
+	return CURRENT_USER_PREFS.page_size;
+}
+
+function isDevelomentMode(){
+	var url = window.location.href;
+	if(!url)
+		return true;
+
+	if(url.indexOf("localhost:88") > -1 || url.indexOf("agilecrmbeta") > -1)
+		return true;
+	
+	return false;
+}
+
+function serializeForms(el){
+	var isValid, json;
+	// Initialize variable json as a map
+	json = {};
+	if ($(el).find('form').length > 1) {
+		$.each($(el).find('form'),	function(index, formelement) {			
+			/*
+			 * If any form in multiple forms are not valid
+			 * then returns, setting a flag form data is
+			 * invalid
+			 */
+			if (!isValidForm($(formelement))) {
+				isValid = false;
+				return;
+			}
+
+			/*
+			 * Form id and Mame of the form is read,
+			 * required to serialize and set in JSON
+			 */
+			var form_id = $(formelement).attr('id');
+			var name = $(formelement).attr('name');
+
+			/*
+			 * If name of the form is defined, set the
+			 * serialized data in to JSON object with form
+			 * name as key
+			 */
+			if (name) {
+				json[name] = serializeForm(form_id);
+			}
+			/*
+			 * If form name is not defined the set the
+			 * serialized values to json, with filed names
+			 * as key for the value
+			 */
+			else {
+				$.each(serializeForm(form_id), function(
+						key, value) {
+					json[key] = value;
+				});
+			}
+		});
+	}else{
+		json = serializeForm($("form", el).attr("id"));
+	}
+	return json;
+}
+
+function isSubscriptionStatusDeleted(){
+	if(USER_BILLING_PREFS.status && (USER_BILLING_PREFS.status == "SUBSCRIPTION_DELETED" || USER_BILLING_PREFS.status == "SUB&#x73;criptION_DELETED"))
+		return true;
+	return false;
 }

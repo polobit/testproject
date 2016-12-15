@@ -1,4 +1,4 @@
-<!-- Edit (Deal) Modal views -->
+<!-- 
 <div class="modal  fade opportunity-modal" id="opportunityUpdateModal">
 <div class="modal-dialog">
     <div class="modal-content" style="border-radius:0px;">
@@ -164,6 +164,208 @@
             </div>
           </div>
         </div>
+      </fieldset>
+    </form>
+    </div>
+    <div class="modal-footer" id="deals-add-footer">
+    <span class="error-status" style="color:red;"></span>
+    <a href="#" class="btn btn-sm btn-default" id="opportunity_archive" title="{{agile_lng_translate 'deal-view' 'archive'}}">{{agile_lng_translate 'deal-view' 'archive-deal'}}</a>
+    <a href="#" class="btn btn-sm btn-default" id="opportunity_unarchive" title="{{agile_lng_translate 'deal-view' 'move-deal-from-archive-to-active-state'}}">{{agile_lng_translate 'deal-view' 'restore'}}</a>
+    <a href="#" class="btn btn-primary" id="opportunity_validate">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a> <span class="save-status"></span>
+  </div>
+  </div>
+</div>
+</div>
+-->
+<!-- Edit (Deal) Modal views -->
+<div class="modal  fade opportunity-modal" id="opportunityUpdateModal">
+<div class="modal-dialog">
+    <div class="modal-content" style="border-radius:0px;">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">&times;</button>
+    <h3 class="modal-title" style="font-size:18px;">&nbsp;{{agile_lng_translate 'modals' 'edit-deal'}}
+    </h3>
+  </div>
+  <div class="modal-body">
+    <form id="opportunityUpdateForm" name="opportunityUpdateForm" method="post" class="form-horizontal">
+      <fieldset>
+      <input name="id" type="hidden"/>
+        <input name="created_time" type="hidden"/>
+        <input name="won_date" type="hidden"/>
+        <input name="discount_amt" type="hidden" class="form-control discountvalue" id="discount_amt">
+        <div class="control-group form-group">
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'name'}}<span
+              class="field_req">*</span></label>
+            <div class="controls col-sm-7">
+              <span><input id="name" name="name" type="text"
+                class=" required form-control" placeholder="{{agile_lng_translate 'documents' 'deal-name'}}" /></span>
+            </div>
+        </div>
+        <div class="control-group form-group">
+            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'owner'}}
+            <span class="field_req">*</span></label>
+            <div class="controls col-sm-7" id="owners">
+              <select id="owners-list" class="required form-control" name="owner_id"></select>
+
+              <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
+
+            </div>
+        </div>
+        <div class="control-group form-group" style="margin-bottom:0px;"> 
+           <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'value'}}<span class="field_req">*</span></label> 
+           <div class="controls col-sm-5 value_box"> 
+            <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="p-n"> 
+              <input type="text" name="expected_value" class="required  number_with_trim form-control" min="0" max="2147483647"
+                placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"   style="font-size:13px"/> 
+             </div> 
+            </div> 
+           </div> 
+           <div class="toggleHead col-sm-2 text-left" id="showtoggle_show" style="display:none;margin-top: 5px;"><i class="icon-plus-sign control-label " style="cursor:pointer;color: #23b7e5;"> <span style="cursor:pointer;"> {{agile_lng_translate 'documents' 'deal-products'}}</span></i></div>
+        <div class="advances hide  p-r p-l" id="showproducts">
+           <div class="row">
+              <div class="col-md-10" style="margin-left:50px;">
+                 <div class="" id="deal_products_div">
+                 </div>
+              </div>
+           </div>
+           <div class="">
+              <div class="form-group">
+               <div class="control-group  m-t-md" style="margin-bottom:0px;margin-top:15px;">
+              <label class="control-label  col-sm-3">{{agile_lng_translate 'documents' 'deal-discount'}}</label>
+              <div class="controls col-sm-7 input-group" style="padding-right:15px;padding-left:15px;">
+                <div class="input-group">
+                      <div class="discounttype-input-group-btn input-group-btn dropdown" dropdown="" style="">
+                        <button type="button" name="discount_type_btn" id="discount_type_btn" class="btn btn-default discounttype-select disabled" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="m-r-xs">Percent</span><span class="caret"></span></button>
+                        <ul class="dropdown-menu"></ul>
+                      </div><!-- /btn-group -->
+                      <input name="discount_value" type="text" placeholder="Enter Percent" class="form-control  discountvalue" id="discount_value" disabled="disabled">
+                      <input type="text" class="hide" name="discount_type" id="discount_type" value="Percent">
+                    </div>
+                  </div>
+              </div>  
+               <span class="calculation-error-status pull-right col-sm-10" style="color:#d9534f;padding-left:66px;"></span>
+            </div>
+          </div>
+        </div>
+          </div>    
+             <div class="text-muted no-products" style="display:none;">
+                            <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;
+                            margin-top:-15px;padding-left: 9px"> {{agile_lng_translate 'documents' 'no-products'}} 
+                              <a href="#" data-dismiss="modal" class="navigate-products text-info">{{agile_lng_translate 'contact-details' 'here'}}</a>
+                            </div>
+               </div> 
+              <div class="control-group form-group" style="margin-bottom:0px;"> 
+           <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
+           <div class="controls col-sm-7"> 
+            <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="col-xs-10 col-md-10 p-n probability-form"> 
+              <input type="text" value="20" class="form-control digits deal-pro required positive_number" id="probability" name="probability" placeholder="{{agile_lng_translate 'deal-view' 'probability'}} " max="100" style="border-radius:2px 0px 0px 2px;"> 
+             </div> 
+             <span class="col-md-1 form-control input-group-addon" style="border-left:none;border-radius:0px 2px 2px 0px;padding-top:9px;"><span style="margin-left:-4px;">%</span></span> 
+            </div> 
+           </div> 
+          </div>
+
+          <div class="control-group form-group">
+            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'milestone'}}
+            <span class="field_req">*</span></label>
+            <div class="controls col-sm-7">
+              <span><select id="pipeline_milestone" name="pipeline_milestone"
+                class="required form-control">
+                  <option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+              </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
+            </div>
+        </div>
+        <div>
+            <div class="control-group form-group">
+                <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'close-date'}}
+                </label>
+                <div class="controls col-sm-7">
+                  <span><input id="close_date" placeholder="{{agile_lng_translate 'contacts-view' 'select-date'}}" type="text" name="close_date"
+                    class="input date form-control" /></span>
+                </div>
+            </div>
+          <input id="pipeline" name="pipeline_id" type="hidden"/>
+          <input id="milestone" name="milestone" type="hidden"/>
+        </div>
+
+        <div class="control-group form-group hidden" id="deal_deal_source">
+            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'deal-source'}}
+            </label>
+            <div class="controls col-sm-7">
+              <span><select id="deal_source" name="deal_source_id"
+                class="form-control">
+                  <option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+              </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
+            </div>
+        </div>
+        <div class="control-group form-group  hidden" id="deal_lost_reason">
+            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'loss-reason'}}
+            </label>
+            <div class="controls col-sm-7">
+              <span><select id="lost_reason" name="lost_reason_id"
+                class="form-control">
+                  <option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
+              </select></span><img class="loading-img" src="//doxhze3l6s7v9.cloudfront.net/app/static/img/21-0.gif" style="display:none;"></img>
+            </div>
+        </div>
+        <div class="control-group form-group" style="margin-bottom:3px;">
+          <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'related-to'}}</label>
+          <div class="controls col-sm-7" id="contactTypeAhead">
+            <div>
+              <input type="text" id="relates_to" name="relates_to"
+                placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" class="typeahead typeahead_contacts form-control"
+                data-provide="typeahead" data-mode="multiple" />
+                <span class="contact-add-error"></span>
+                <div style="padding-top:1px;">
+                  <ul name="contact_ids" class="newtypeaheadcontact contacts tagsinput tags p-n"></ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+         <div class="control-group form-group" id='tags_source_deal_modal'>
+                      <label class="control-label col-sm-3">{{agile_lng_translate 'report-add' 'tags'}}</label>
+     
+                      <div class="controls col-sm-7">
+                          <input name="tags" type="text" id="tags-new-person" class="tags-typeahead form-control" maxlength="500" placeholder="{{agile_lng_translate 'other' 'separate-tags-with-commas'}}"/>
+                          <div class="pull-left" style="margin-top: 1px;">
+                            <ul name="tags" class="tagsinput tags p-n" style="margin-bottom: 1px;">
+                            </ul>
+                      </div>
+              </div>
+         </div>
+         <div class="row invalid-tags-person" style="display:none;">
+                    <div class="col-sm-offset-3 col-sm-7">
+                        <div style="color:red;" class="text-sm">{{agile_lng_translate 'tags' 'invalid-tag'}}</div>
+                    </div>
+                </div>
+        <div class="control-group hidden">  
+          <label class="i-checks i-checks-sm control-label">
+          <input type="checkbox" id="archived" class="input" name="archived" style="margin: 0px 5px;"><i></i> {{agile_lng_translate 'deal-view' 'archive'}} </label>
+        </div>
+        
+        <div id="custom-field-deals"></div>
+
+        <div class="control-group form-group" style="margin-bottom: 0px;">
+            <label class="control-label col-sm-3">{{agile_lng_translate 'tasks' 'add-description'}}
+            </label>
+            <div class="controls col-sm-7 agiletxexander">
+              <textarea id="description" name="description" rows="3"
+                class="input h-auto col-md-8 form-control textarea" data-agileexpand="true"  placeholder="{{agile_lng_translate 'tasks' 'add-comment'}}"></textarea>
+
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="control-group form-group">
+              <div id="forNoteForm" class="controls"></div>
+              <ul style="display:none;" id="notes" name="notes" class="notes"></ul>
+            </div>
+          </div>
+        </div>
+        
       </fieldset>
     </form>
     </div>

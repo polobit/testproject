@@ -8,7 +8,72 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Settings */
-	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit", "webrules-templates" : "webrules_display", "webrules-add/*path" : "webrules_template_load", "webrules-custom" : "load_empty_editor"},
+	"web-rules" : "webrules", "webrules-add" : "web_reports_add","webrule-report/:id":"WebruleReports", "webrule-edit/:id" : "web_reports_edit", "webrules-templates" : "webrules_display", "webrules-add/*path" : "webrules_template_load", "webrules-custom" : "load_empty_editor"},
+
+	WebruleReports : function(id)
+			{
+				showTransitionBar();
+
+
+				render_email_reports_select_ui(id, function(){
+
+					getTemplate("webrule-analysis-tabs", { "id" : id }, undefined, function(template_ui)
+					{
+						if (!template_ui)
+							return;
+
+						// Render tabs with id
+						$('#webrule-analysis-tabs').html($(template_ui));
+						
+
+						initReportLibs(function()
+						{
+							// Load Reports Template
+							getTemplate('webrule-reports', {}, undefined, function(template_ui1)
+							{
+								if (!template_ui1)
+									return;
+								
+								$('#webrule-analysis-tabs-content').html($(template_ui1));
+
+								if(id == "all")
+								 {
+									var webRuleId = $("#webrule-reports-select option")[1].value;
+									$("#webrule-reports-select").val(webRuleId);
+									id = webRuleId;
+
+								 }
+								
+								   // Set the name
+								   // $('#reports-webrule-name').text(workflowName);
+								 initWebruleChartsUI(function()
+								{
+									// Updates table data
+									get_webrule_table_reports(id);
+
+									// shows graphs by default week date range.
+									showWebruleGraphs(id);
+								});
+
+							}, "#webrule-analysis-tabs-content");
+
+						});
+
+						$(".active").removeClass("active");
+						$("#web-rules-menu").addClass("active");
+
+						$('#webrule-tabs .select').removeClass('select');
+						$('.webrule-stats-tab').addClass('select');
+
+						hideTransitionBar();
+
+					}, "#webrule-analysis-tabs");
+				
+				});
+
+			},
+			
+
 	webrules : function()
 	{
 		var that = this;
@@ -17,7 +82,8 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				if (that.webrules.collection && that.webrules.collection.length == 0)
 				{
-					head.js(LIB_PATH + 'lib/prettify-min.js', function()
+					window.location.href  = window.location.origin+"/#webrules-templates";
+					/*head.js(LIB_PATH + 'lib/prettify-min.js', function()
 					{
 						$.ajax({ url : 'core/api/api-key', type : 'GET', dataType : 'json', success : function(data)
 						{
@@ -37,12 +103,13 @@ var WebreportsRouter = Backbone.Router.extend({
 							
 						} });
 
-					});
+					});*/
 				}
 				else
 				{
 					enableWebrulesSorting(el);
 				}
+				el.find('[data-toggle="tooltip"]').tooltip();
 			} });
 
 		this.webrules.collection.fetch();
@@ -68,6 +135,8 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
+						if($('#LHS select').val()=="page")
+							$('#RHS input').val("http");
 					}, true);
 
 				})
@@ -131,6 +200,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		web_reports_add.render();
 	},
 
+
 	webrules_display : function(){
 
 			$('.fancybox-overlay').hide();
@@ -181,6 +251,8 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
+						if($('#LHS select').val()=="page")
+							$('#RHS input').val("http");
 						loadSavedTemplate(path, function(data) {
 							$("#tiny_mce_webrules_link").trigger('click');
 						});
@@ -223,6 +295,8 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
+						if($('#LHS select').val()=="page")
+							$('#RHS input').val("http");
 						$("#tinyMCEhtml_email").text(" ");
 						$("#tiny_mce_webrules_link").trigger('click');
 					}, true);

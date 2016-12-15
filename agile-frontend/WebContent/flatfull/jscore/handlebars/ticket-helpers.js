@@ -26,6 +26,15 @@ Handlebars.registerHelper('get_ticket_id', function(action_type, options) {
 	return Tickets.get_next_prev_ticket_id(action_type);
 });
 
+Handlebars.registerHelper('get_feedback', function(feedback_rating,value,options) {
+			
+			parseInt(feedback_rating);
+			if(feedback_rating >= value )
+				return "/img/star-on.png";		
+			return "/img/star-off.png";	
+	
+});
+
 Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	var currentEpoch = new Date().getTime();
 
@@ -355,6 +364,40 @@ Handlebars.registerHelper('is_single_row_view', function(options) {
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('get_feedback_status', function(status, options) {
+
+	switch(status[0]){
+		case '3':
+			return "<div class='feedback_label_width color_ok cus-pad'></span>";
+			break;
+		case '1':
+			return "<div   class='feedback_label_width color_awful cus-pad'></div>";
+			break;	
+		case '2':
+			return "<div   class='color_bad cus-pad feedback_label_width'></div>";
+			break;
+		case '4':
+			return "<div  class='feedback_label_width color_good cus-pad'></div>";
+			break;
+		case '5':
+			return "<div  class='feedback_label_width color_awesome cus-pad'></div>";
+			break;
+	}
+});
+
+Handlebars.registerHelper('timeago_feedback', function(time, options) {
+	
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{	
+			if(time){
+				time[0] = new Date(time[0]);
+				var timeago = $.timeago(time[0]);
+				return timeago; 
+			}
+		});
+
+});				
+
 Handlebars.registerHelper('get_status_label', function(status, options) {
 
 	switch(status){
@@ -438,6 +481,10 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 	if(!str)
 		return "";
 
+	str = str.replace(/<script.*?>.*?<\/script>/igm, '');
+	str = str.replace(/ action="[^"]*"/igm, '');
+	str = str.replace(/value="[^"]*"/igm, '');
+	str = str.replace(/ on\w+="[^"]*"/igm, '');
 	str = str.trim();
 
 	//str = str.replace(/(?:\r\n)/g, '<br/>');
@@ -453,8 +500,24 @@ Handlebars.registerHelper('convert_to_html', function(str, options) {
 
 	return str;
 });
-Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
+Handlebars.registerHelper('replace_newline_with_ticket_br', function(str, options) {
 
+	if(!str)
+		return "";
+
+	str = str.trim();
+	
+	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+	str = str.replace(/ on\w+="[^"]*"/igm, '');
+	str = str.replace(/action="[^"]*"/igm, '');
+	str = str.replace(/value="[^"]*"/igm, '');
+    str = str.replace(/<script.*?>.*?<\/script>/igm, '')
+    return str;
+});
+
+Handlebars.registerHelper('replace_newline_with_br_feedback', function(object, options) {
+
+	var str = object.toString();
 	if(!str)
 		return "";
 
@@ -462,6 +525,17 @@ Handlebars.registerHelper('replace_newline_with_br', function(str, options) {
 
 	str = str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return str;
+});
+Handlebars.registerHelper('replace_br_with_space_feedback', function(object, options)
+{
+	var text = object.toString();
+
+	if(!text)
+		return;
+	
+	var regex = /<br\s*[\/]?>/gi;
+
+	return text.replace(regex, " ");
 });
 
 Handlebars.registerHelper('get_ticket_uri', function(str, options) {
@@ -615,6 +689,49 @@ Handlebars.registerHelper('get_ticket_translated_text', function(module, key, op
 {
 	return get_ticket_translated_text(module, key);
 	
+});
+
+Handlebars.registerHelper('return_feedback_title', function(feedback,options) {
+
+	var feedback_title= ""
+	
+	switch (feedback[0]) {
+	    case "1":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'unacceptable'}}";
+	        break;
+	    case "2":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'can_improve'}}";
+	        break;
+	    case "3":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'acceptable'}}";
+	        break;
+	    case "4":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'meets_expectations'}}";
+	        break;
+	    case "5":
+	        feedback_title = "{{agile_lng_translate 'tickets' 'exceptional'}}";
+	}
+
+	return feedback_title;        
+	
+});
+
+Handlebars.registerHelper('get_status_label_details', function(status, options) {
+
+	switch(status){
+		case 'NEW':
+			return '<span class="label status_label label-warning cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "new_status"}}</span>';
+			break;
+		case 'OPEN':
+			return '<span class="label status_label label-danger cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "open_status"}}</span>';
+			break;
+		case 'PENDING':
+			return '<span class="label status_label label-info cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "pending_status"}}</span>';
+			break;
+		case 'CLOSED':
+			return '<span class="label status_label label-success cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em!important;">{{agile_lng_translate "tickets" "closed_status"}}</span>';
+			break;
+	}
 });
 /** End of ticketing handlebars* */
 

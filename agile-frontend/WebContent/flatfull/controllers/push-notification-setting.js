@@ -8,13 +8,13 @@ var PushNotificationRouter = Backbone.Router.extend({
 
 	pushNotificationSettings : function()
 	{
-		console.log("forms collection template");
-		
+		showTransitionBar();		
 		this.pushNotificationView = new Base_Collection_View({ url : '/core/api/push/notifications', restKey : "pushNotification", templateKey : "push-notification",
 			individual_tag_name : 'tr', postRenderCallback : function(el){
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(el)
 						{
 							$("time.form-modified-time", el).timeago();
+							hideTransitionBar();
 						});
 			} })
 		this.pushNotificationView.collection.fetch();
@@ -25,6 +25,7 @@ var PushNotificationRouter = Backbone.Router.extend({
 
 	pushNotificationAdd : function()
 	{
+		showTransitionBar();
 		var push_notification_add = new Push_Notification_Event_View({ url : '/core/api/push/notifications', template : "push-notification-add", window : "push-notification", isNew : true,
 			
 			postRenderCallback : function(el)
@@ -34,6 +35,7 @@ var PushNotificationRouter = Backbone.Router.extend({
 						{
 							if(notify.permissionLevel() != notify.PERMISSION_DENIED)
                     		 $('#push-notification-content').hide();
+                    	 hideTransitionBar();
                    });
 				
 			} 
@@ -48,7 +50,7 @@ var PushNotificationRouter = Backbone.Router.extend({
 
 	pushNotificationEdit : function(id)
 	{
-
+		showTransitionBar();
 		if(this.pushNotificationView == undefined){
           	this.navigate("push-notification", { trigger : true });
           	return;
@@ -65,6 +67,8 @@ var PushNotificationRouter = Backbone.Router.extend({
 						{
 							if(notify.permissionLevel() != notify.PERMISSION_DENIED)
                     		 $('#push-notification-content').hide();
+
+                    		hideTransitionBar();
                    });
 
 			} });

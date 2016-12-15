@@ -224,6 +224,26 @@ var CONTENT_JSON = {
 		"route" : "#webrules-add",
 		"image" : updateImageS3Path("/img/clipboard.png")
 	}*/
+	"leads" : {
+		"title" : "{{agile_lng_translate 'leads' 'no-leads-pad-content'}}",
+		"description" : "{{agile_lng_translate 'leads' 'no-leads-pad-content-title'}}",
+		"button_text" : "{{agile_lng_translate 'leads' 'leads-btn-text'}}",
+		"route" : "#",
+		"id" : "add-lead",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
+	"filter_results_leads" : {
+		"title" : "{{agile_lng_translate 'leads' 'leads-filter-results-title'}}",
+		"route" : "#",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
+	"lead-filters" : {
+		"title" : "{{agile_lng_translate 'portlets' 'deal-filters-pad-content-title'}}",
+		"description" : "{{agile_lng_translate 'leads' 'lead-filters-pad-content-desc'}}",
+		"button_text" : "{{agile_lng_translate 'portlets' 'deal-filters-btn-text'}}",
+		"route" : "#lead-filter-add",
+		"image" : updateImageS3Path("/img/clipboard.png")
+	},
 	
 };
 
@@ -262,7 +282,12 @@ function fill_slate(id, el, key) {
 		getTemplate(template_name, json, undefined, function(template_ui){
 			if(!template_ui)
 				  return;
-			$("#" + id, el).html($(template_ui));	
+			$("#" + id, el).html($(template_ui));
+			
+			if(json && json.id)
+			{
+				$("#" + id, el).find("a").attr("id", json.id);
+			}	
 		}, $("#" + id, el));
 		
 	}
@@ -324,3 +349,18 @@ $(function() {
 			$("#" + id).modal('show');
 	});
 });
+
+function getLeadPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	if(url.indexOf('tag') > 0)
+		return "tag_results";
+	
+	if(url.indexOf('filter') > 0)
+		return "filter_results_leads";
+	
+	return "leads";
+		
+}

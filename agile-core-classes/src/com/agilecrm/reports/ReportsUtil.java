@@ -27,12 +27,15 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.util.GoogleSQLUtil;
 import com.agilecrm.deals.Opportunity;
@@ -52,10 +55,12 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -141,7 +146,7 @@ public class ReportsUtil {
 	    System.out.println("Before sendMail in sendReportsToUsers of ReportsUtil"); 
 	    // Send reports email
 	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
-		    new Object[] { results, fieldsList });
+		    new Object[] { results, fieldsList }, LanguageUtil.getUserLanguageFromSession());
 		}
 	}
 
@@ -172,7 +177,7 @@ public class ReportsUtil {
 					results.put("duration",	WordUtils.capitalizeFully((report.duration.toString())));
 	
 					// Send reports email
-					SendMail.sendMail(report.sendTo, report.name + " - "+ SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,new Object[] { results, results});
+					SendMail.sendMail(report.sendTo, report.name + " - "+ SendMail.REPORTS_SUBJECT, SendMail.CAMPAIGN_REPORTS,new Object[] { results, results}, LanguageUtil.getUserLanguageFromSession());
 			} 
 			catch (Exception e) 
 			{
@@ -364,7 +369,7 @@ public class ReportsUtil {
 				statsJSON.put("campaign_name", "<b style=\"color: #58666e\">Campaign Name : </b>"
 						+ WorkflowUtil.getCampaignName(report.campaignId));
 			statsJSON.put("report_name", report.name);
-			statsJSON.put("domain", NamespaceManager.get());
+			statsJSON.put("domain", AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get()));
 			statsJSON.put("email_status", getTotalEmailCredit());
 
 			return statsJSON;
@@ -432,7 +437,7 @@ public class ReportsUtil {
 	public static Collection customizeContactParameters(Collection contactList,
 			LinkedHashSet<String> fields_set,String timezone) {
 
-		List<CustomFieldDef> fields = CustomFieldDefUtil
+		/*List<CustomFieldDef> fields = CustomFieldDefUtil
 				.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
 						com.agilecrm.contact.CustomFieldDef.Type.DATE
 								.toString());
@@ -440,7 +445,7 @@ public class ReportsUtil {
 		// Store date fields for easy verification. It is used to convert epoch
 		// times into date values
 		List<String> dateFields = new ArrayList<String>();
-
+		
 		for (CustomFieldDef def : fields) {
 			for (String field : fields_set) {
 				if (!field.contains("custom"))
@@ -450,13 +455,35 @@ public class ReportsUtil {
 				if (def.field_label.equals(field_name))
 					dateFields.add(field_name);
 			}
-		}
+		}*/
+		 List<CustomFieldDef> customTypeFields = CustomFieldDefUtil.getAllCustomFields(SCOPE.CONTACT);
+		 List<String> typeSpecificFields = new ArrayList<String>();
+		 List<String> dateFields = new ArrayList<String>();
+		 for (CustomFieldDef customField : customTypeFields)
+		    {
+			 for (String field : fields_set) {
+				 if (!field.contains("custom"))
+						continue;
+				 String field_name = field.split("custom_")[1];
+				 if (customField.field_label.equals(field_name)){
+					 if(customField.field_type.equals(CustomFieldDef.Type.CONTACT) || customField.field_type.equals(CustomFieldDef.Type.COMPANY))
+					 {
+						 typeSpecificFields.add(field_name);
+					 }
+					 if(customField.field_type.equals(CustomFieldDef.Type.DATE))
+					 {
+						 dateFields.add(field_name);
+					 }
+				 }
+				 }
+			 }	
 
 		List<Map<String, List<Map<String, Object>>>> newProperties = new ArrayList<Map<String, List<Map<String, Object>>>>();
-
+		int index = 0;
 		for (Object contactObject : contactList) {
 			List<Map<String, Object>> customProperties = new ArrayList<Map<String, Object>>();
 			List<Map<String, Object>> contactProperties = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> contactTagNames = new ArrayList<Map<String, Object>>();
 			Contact contact = (Contact) contactObject;
 
 			Map<String, List<Map<String, Object>>> details = new HashMap<String, List<Map<String, Object>>>();
@@ -498,7 +525,29 @@ public class ReportsUtil {
 								e.printStackTrace();
 							}
 						}
-
+						if(typeSpecificFields.contains(field_name))
+						{
+							try{
+							List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(contactField.value)) ;
+							if (contacts.size() > 0) {
+			    			 StringBuilder contactName = new StringBuilder("[");
+				    		for(Contact cont : contacts){
+				    			if(cont.type.equals(Contact.Type.PERSON)){
+				    				contactName.append(cont.first_name);
+					    			contactName.append(cont.last_name);
+				    			}else{
+				    				contactName.append(cont.name);
+				    			}
+				    			
+				    			contactName.append(",");
+				    		}
+				    		contactName.replace(contactName.length()-1, contactName.length(),"");
+				    		contactName.append("]");
+				    		contactField.value=contactName.toString();
+			    		}
+							}
+							catch(Exception e){}
+						}
 						customFieldJSON = new ObjectMapper()
 								.writeValueAsString(contactField);
 
@@ -517,11 +566,29 @@ public class ReportsUtil {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				} else {
+				} else if (field.contains("tags")) {
+					// Map for tags
+					Map<String, Object> tagsMap = new HashMap<String, Object>();
+					
+					LinkedHashSet<String> tags = contact.getContactTags();
+					if(tags != null){
+						Iterator<String> itr = tags.iterator();
+						while (itr.hasNext()) {
+							Map<String, Object> tagMap = new HashMap<String, Object>();
+							tagMap.put("tag", itr.next());
+							
+							contactTagNames.add(tagMap);
+						}
+						
+						tagsMap.put("tags", contactTagNames);
+						contactProperties.add(tagsMap);
+					}
+				}
+				else {
 
 					ObjectMapper mapper = new ObjectMapper();
 					JSONObject contactJSON = new JSONObject();
-					String fieldValue = null;
+					String fieldValue = "";
 
 					try {
 						contactJSON = new JSONObject(
@@ -539,13 +606,15 @@ public class ReportsUtil {
 											.equalsIgnoreCase("last_contacted")
 											|| field.equalsIgnoreCase("last_emailed") || field
 												.equalsIgnoreCase("last_called") || field
-												.equalsIgnoreCase("updated_time")))
+												.equalsIgnoreCase("updated_time") || field
+												.equalsIgnoreCase("last_campaign_emaild")))
 								fieldValue = " ";
 							System.out.println("Field value Before:"+fieldValue);
 							if ((field.contains("time")
 									|| field.equalsIgnoreCase("last_contacted")
 									|| field.equalsIgnoreCase("last_emailed") || field
-										.equalsIgnoreCase("last_called"))
+										.equalsIgnoreCase("last_called") || field
+										.equalsIgnoreCase("last_campaign_emaild"))
 									&& !fieldValue.equals(" "))
 								fieldValue = SearchUtil
 										.getDateWithoutTimeComponent(Long
@@ -565,6 +634,8 @@ public class ReportsUtil {
 
 					if (fieldValue == null)
 						fieldsMap.put(field, new ContactField());
+					else if(fieldValue.trim().length() == 0)
+						fieldsMap.put(field, "-");
 					else
 						fieldsMap.put(field, fieldValue);
 
@@ -576,7 +647,11 @@ public class ReportsUtil {
 
 			details.put("details", contactProperties);
 			details.put("custom_fields", customProperties);
-
+			
+			if(++index == contactList.size())
+			    details.put("last", contactProperties);
+			
+			System.out.println("Details :"+details);
 			newProperties.add(details);
 		}
 
@@ -936,19 +1011,14 @@ public class ReportsUtil {
 			e.printStackTrace();
 		}
 			String type="";
-				callsObject.put("answered", 0);
-				callsObject.put("busy",0);
-				callsObject.put("failed",0);
-				callsObject.put("voicemail",0);
-				callsObject.put("missed",0);
-				callsObject.put("inquiry",0);
-				callsObject.put("interest",0);
-				callsObject.put("no interest",0);
-				callsObject.put("incorrect referral",0);
-				callsObject.put("meeting scheduled",0);
-				callsObject.put("new opportunity",0);
-				callsObject.put("other",0);
-
+			CategoriesUtil categoriesUtil = new CategoriesUtil();
+			List<Category> categories = categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
+			for(Category category : categories){
+				callsObject.put(category.getLabel().toLowerCase(), 0);
+			}
+			callsObject.put("others",0);
+			
+			
 				callsPerPersonJSON=initializeFrequencyForReports(minTime,maxTime,frequency,timeZone,callsObject);
 			        try{
 				for(Activity activity : activitieslist){
@@ -971,13 +1041,11 @@ public class ReportsUtil {
 			    			     }
 			    			    break;
 			    			}
-			    			
 			    			}
 			            calendar.set(Calendar.HOUR_OF_DAY, 0);
 			            calendar.set(Calendar.MINUTE, 0);
 			            calendar.set(Calendar.SECOND, 0);
 			            calendar.set(Calendar.MILLISECOND, 0);
-			            
 			            String createdTime ;
 			            if(StringUtils.equalsIgnoreCase(frequency,"weekly"))
 			            	createdTime=last;
@@ -995,47 +1063,14 @@ public class ReportsUtil {
 								type=Call.BUSY;
 	                    		
 	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.FAILED))
+							else if(activity.custom3!=null)
 							{
-		                    	type=Call.FAILED;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.VOICEMAIL))
-							{
-		                    	type=Call.VOICEMAIL;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Missed))
-							{
-		                    	type=Call.Missed;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NewOpportunity))
-							{
-		                    	type=Call.NewOpportunity;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.MeetingScheduled))
-							{
-		                    	type=Call.MeetingScheduled;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Inquiry))
-							{
-		                    	type=Call.Inquiry;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.IncorrectReferral))
-							{
-		                    	type=Call.IncorrectReferral;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.Interest))
-							{
-		                    	type=Call.Interest;
-	                    	}
-							else if(activity.custom3!=null && activity.custom3.equalsIgnoreCase(Call.NoInterest))
-							{
-		                    	type=Call.NoInterest;
-	                    	}
-							else /*if(activity.custom3!=null && activity.custom3.equalsIgnoreCase("queued"))*/
-							{
-		                    	type="other";
-	                    	}
-		                   
+								if(callsObject.containsKey(activity.custom3.toLowerCase())){
+									type=activity.custom3.toLowerCase();
+								}else{
+			                    	type="others";
+								}
+							}
 		                    int count1=count.getInt(type);
                     		count1++;
                     		count.put(type,count1);
@@ -1046,7 +1081,6 @@ public class ReportsUtil {
 			e.printStackTrace();
 		}
 		return callsPerPersonJSON;
-
 	}
 
 	/*

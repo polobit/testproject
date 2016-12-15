@@ -14,7 +14,7 @@
 						</div>
 						<div class="pull-left text-ellipsis" style="width: calc(100% - 45px);line-height: 18px;color:#7C7C7C;">
 							<a href="#contact/{{id}}" style="width: calc(100% - 30px);" class="text-cap agile-contact-grid-view text-ellipsis block">
-								{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}
+								{{contact_name_necessary this}}
 							</a>
 							<div style="color:#7C7C7C; display:{{checkPropertyValueExistance properties "company" "title"}}">
 								<span class="text-cap grid-view-elipsis" style="vertical-align: bottom;" title="{{getPropertyValue properties "company"}}">

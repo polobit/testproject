@@ -8,7 +8,7 @@
     </div>
 	<div class="modal-body">
         <div id="contacts-export-csv-detail">
-            <p>{{agile_lng_translate 'contacts-view' 'csv-file-desc'}}</p>
+            <p>{{agile_lng_translate 'contacts-view' 'csv-file-desc-with-activity'}}</p>
         </div>
     </div>
     <div class="modal-footer">
@@ -63,6 +63,30 @@
     <span class="deals-export-csv-message m-r-xs"></span>
 	<a  href="#" class="btn btn-sm btn-danger" data-dismiss="modal" >{{agile_lng_translate 'portlets' 'no'}}</a>
     <a href="#" id="deals-export-csv-confirm" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+    </div>
+</div>
+</div>
+</div>
+</script>
+
+<script id = "leads-export-csv-modal-template" type="text/html">
+<div class="modal fade in" id="leads-export-csv-modal">
+ <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3 class="modal-title"><i class="icon-file-text"></i> {{agile_lng_translate 'leads-view' 'export-leads-in-CSV'}}</h3>
+    </div>
+    <div class="modal-body">
+        <div id="leads-export-csv-detail">
+            <p>{{agile_lng_translate 'contacts-view' 'csv-file-desc'}}</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+    <span class="leads-export-csv-message m-r-xs"></span>
+    <a  href="#" class="btn btn-sm  btn-danger" data-dismiss="modal" >{{agile_lng_translate 'portlets' 'no'}}
+    </a>
+    <a href="#" id="leads-export-csv-confirm" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
     </div>
 </div>
 </div>

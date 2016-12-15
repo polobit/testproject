@@ -75,9 +75,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 		console.log(domainname);
 		$.ajax({ url : 'core/api/admin_panel/get_subscription?d=' + domainname, type : 'GET', success : function(data)
 		{
-			if(data && data.status && $.inArray(data.status, PAGEBLOCK_REASON) != -1 && data.plan && data.plan.plan_type && data.plan.plan_type.toUpperCase().indexOf("BIENNIAL")){
+			if(data && data.status && $.inArray(data.status, PAGEBLOCK_REASON) != -1 && data.plan && data.plan.plan_type && data.plan.plan_type.toUpperCase().indexOf("BIENNIAL") != -1){
 				$(el).find(".unblock_user").closest("div").show();
 				$(el).find(".unblock_user").attr("domain", domainname);
+			}
+			if(data && data.emailpurchaseStatus && data.emailpurchaseStatus == "BLOCKED"){
+				$(el).find(".unblock_email_purchasing").closest("div").show();
+				$(el).find(".unblock_email_purchasing").attr("domain", domainname);
 			}
 
 
@@ -111,7 +115,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				}
 
 				else
-					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
+					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id, domainname);
 
 			}, $(el).find('#planinfo'));
 
@@ -134,10 +138,12 @@ var AdminPanelRouter = Backbone.Router.extend({
 	},
 
 	// gets collection of charges of aa paricular customer based on
-	get_collection_of_charges_for_customer_from_adminpanel : function(el, customerid)
+	get_collection_of_charges_for_customer_from_adminpanel : function(el, customerid, domainname)
 	{
-		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",
-
+		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",postRenderCallback : function(el)
+		{
+			$("tabel",el).attr("domain",domainname);
+		},
 		individual_tag_name : 'tr', sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
 
@@ -257,7 +263,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	allDomainUsers : function()
 	{
 		allDomainUsersCollectionView = new Base_Collection_View({ url : 'core/api/admin_panel/getAllDomainUsers', templateKey : "all-domain-users",
-			individual_tag_name : 'tr', cursor : true, page_size : 25, postRenderCallback : function(el)
+			individual_tag_name : 'tr', cursor : true, page_size : getMaximumPageSize(), postRenderCallback : function(el)
 			{
 				initializeAdminpanelListner(el);
 

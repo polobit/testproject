@@ -70,7 +70,46 @@
     <target depends="clean, build" name="create-target">
         <!--Copy static content to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war">
-            <fileset dir="WebContent" />
+            <fileset dir="WebContent">
+                <exclude name="misc/**/*"/>
+            </fileset>
+        </copy>
+        <!-- Copy locales folder -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/locales">
+              <fileset dir="../agile-frontend/WebContent/locales" />
+        </copy>
+
+        <!-- Copy misc folder -->
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/campaign-templates">
+              <fileset dir="../agile-frontend/WebContent/misc/campaign-templates" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/email">
+              <fileset dir="../agile-frontend/WebContent/misc/email" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/campaign-templates">
+              <fileset dir="../agile-frontend/WebContent/misc/campaign-templates" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/email-templates">
+              <fileset dir="../agile-frontend/WebContent/misc/email-templates" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/formbuilder">
+              <fileset dir="../agile-frontend/WebContent/misc/formbuilder" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/gmail">
+              <fileset dir="../agile-frontend/WebContent/misc/gmail" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/gmap">
+              <fileset dir="../agile-frontend/WebContent/misc/gmap" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/modal-templates">
+              <fileset dir="../agile-frontend/WebContent/misc/modal-templates" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/site">
+              <fileset dir="../agile-frontend/WebContent/misc/site" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/zendesk-widget">
+              <fileset dir="../agile-frontend/WebContent/misc/zendesk-widget" />
+        </copy>="../agile-frontend/WebContent/misc/zendesk-widget" />
         </copy>
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">

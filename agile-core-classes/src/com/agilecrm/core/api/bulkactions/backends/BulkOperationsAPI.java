@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,14 +29,18 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.BulkActionLog;
+import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.bulkaction.deferred.CampaignStatusUpdateDeferredTask;
 import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkDeleteDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagAddDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsBulkTagRemoveDeferredTask;
 import com.agilecrm.bulkaction.deferred.ContactsOwnerChangeDeferredTask;
+import com.agilecrm.bulkaction.deferred.UpdateRelatedContactsDeferredTask;
+import com.agilecrm.bulkaction.deferred.LeadsStatusChangeDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
@@ -81,7 +86,6 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.RetryOptions;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
-import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -144,6 +148,11 @@ public class BulkOperationsAPI
 	{
 	    message = idsFetcher.getCompanyCount() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "DELETE", "", "companies", "");
+	}
+	else if (idsFetcher.getLeadCount() > 0)
+	{
+	    message = idsFetcher.getCompanyCount() + " Leads deleted";
+	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "DELETE", "", "leads", "");
 	}
 	else
 	{
@@ -213,6 +222,13 @@ public class BulkOperationsAPI
 	    ActivitySave.createBulkActionActivity(idsFetcher.getCompanyCount(), "CHANGE_OWNER", user.name, "companies",
 		    "");
 	}
+	else if (idsFetcher.getLeadCount() > 0)
+	{
+	    message = message + idsFetcher.getLeadCount() + " Leads";
+	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
+	    ActivitySave.createBulkActionActivity(idsFetcher.getLeadCount(), "CHANGE_OWNER", user.name, "leads",
+		    "");
+	}
 	else
 	{
 	    message = message + idsFetcher.getTotalCount() + " Companies/Contacts";
@@ -241,137 +257,152 @@ public class BulkOperationsAPI
 	    @FormParam("tracker") String tracker, @PathParam("current_user_id") Long current_user_id,
 	    @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
-	System.out.println(contact_ids + " model ids " + filter + " filter " + workflowId + " workflow id");
-
-	try
-	{
-	    // To avoid running same bulk action twice
-	    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
-		{
-	    	System.err.println("Avoiding running same campaign twice..." + tracker);
-	    	return;
-		}
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	DomainUser user = DomainUserUtil.getDomainUser(current_user_id);
-	if (user == null)
-	    return;
-
-	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
-		contact_ids, null, 200, current_user_id);
-
-	idsFetcher.setLimits();
-
-	int count = 0;
-	UserInfo info = new UserInfo(user);
-	while (idsFetcher.hasNext())
-	{
-
-	    try
-	    {
-		Set<Key<Contact>> contactSet = idsFetcher.next();
-		count += contactSet.size();
-		CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
-			NamespaceManager.get(), contactSet, info);
-
-		// Add to queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
+    
+    	try
+    	{
+		    System.out.println("Form Params: ");
+		    System.out.println("Filter: " + filter + " Tracker " + tracker + " Dynamic filter " + dynamicFilter);
+		    System.out.println("Contact ids " + contact_ids);
+		//	System.out.println(contact_ids + " model ids " + filter + " filter " + workflowId + " workflow id");
 		
-		// Added Retries 5 with 120 secs interval gap for next retry
-		queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
-
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-
-	System.out.println("completed assigning" + NamespaceManager.get() + ", " + workflowId + ", " + filter + ", "
-		+ dynamicFilter + ", " + current_user_id + ", " + contact_ids);
-
-	try
-	{
-	    // Notifies that campaigns initiated in Production
-		if(VersioningUtil.isProductionAPP())
-	    	SendGrid.sendMail("campaigns@agilecrm.com",
-			    "Campaign Observer",
-			    "naresh@agilecrm.com",
-			    "prashannjeet@agilecrm.com, rahul@agilecrm.com",
-			    null,
-			    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
-			    null,
-			    "Hi,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-				    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
-				    + "<br><br>Dynamic Filter: " + dynamicFilter
-				    + "<br><br>User email: " + user.email
-				    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
-			    null);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
-	}
-
-	/*
-	 * ContactFilterResultFetcher fetcher = new
-	 * ContactFilterResultFetcher(id, dynamicFilter, 200, contact_ids,
-	 * current_user_id);
-	 * 
-	 * // Sets limit on free user fetcher.setLimits();
-	 * 
-	 * // while (fetcher.hasNextSet()) // { //
-	 * ContactUtil.deleteContactsbyListSupressNotification
-	 * (fetcher.nextSet()); //
-	 * WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), //
-	 * workflowId);
-	 * 
-	 * // }
-	 * 
-	 * int count = fetcher.getTotalFetchedCount(); count = (count == 0) ?
-	 * fetcher.getAvailableContacts() : count;
-	 * 
-	 * System.out.println("contacts : " + fetcher.getAvailableContacts());
-	 * System.out.println("companies : " + fetcher.getAvailableCompanies());
-	 * 
-	 * System.out.println("Total contacts subscribed to campaign " +
-	 * workflowId + " is " + String.valueOf(count));
-	 * 
-	 * BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.
-	 * ENROLL_CAMPAIGN, String.valueOf(count));
-	 * 
-	 * try { Mailgun.sendMail( "campaigns@agile.com", "Campaign Observer",
-	 * "naresh@agilecrm.com", null, null, "Campaign Initiated in " +
-	 * NamespaceManager.get(), null,
-	 * "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " +
-	 * current_user_id + "<br><br>Campaign-id: " + workflowId +
-	 * "<br><br>Filter-id: " + filter + "<br><br>Fetched Count: " + count +
-	 * "<br><br>Filter count: " + fetcher.getAvailableContacts(), null); }
-	 * catch (Exception e) { e.printStackTrace(); System.err.println(
-	 * "Exception occured while sending campaign initiated mail " +
-	 * e.getMessage()); }
-	 */
-
-	Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
-	String workflowname = workflow.name;
-
-	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ASIGN_WORKFLOW", workflowname, "contacts",
-		"");
-
-	try
-	{
-	    BulkActionLog.delete(tracker);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+			try
+			{
+			    // To avoid running same bulk action twice
+			    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
+				{
+			    	System.err.println("Avoiding running same campaign twice..." + tracker);
+			    	return;
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception occured while checking tracker " + e.getMessage());
+			    System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		
+			DomainUser user = DomainUserUtil.getDomainUser(current_user_id);
+			
+			if (user == null)
+			{
+				System.out.println("User is null");
+				return;
+			}
+		
+			System.out.println("Getting contacts based on filter...");
+			
+			ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+				contact_ids, null, 200, current_user_id);
+		
+			idsFetcher.setLimits();
+		
+			int count = 0;
+			UserInfo info = new UserInfo(user);
+			while (idsFetcher.hasNext())
+			{
+		
+			    try
+			    {
+				Set<Key<Contact>> contactSet = idsFetcher.next();
+				count += contactSet.size();
+				CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
+					NamespaceManager.get(), contactSet, info);
+		
+				// Add to queue
+				Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
+				
+				// Added Retries 5 with 120 secs interval gap for next retry
+				queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
+		
+			    }
+			    catch (Exception e)
+			    {
+			    	System.out.println("Exception occured while adding to queue " + e.getMessage());
+			    	System.out.println(ExceptionUtils.getFullStackTrace(e));
+			    }
+		
+			}
+	
+		System.out.println("completed assigning" + NamespaceManager.get() + ", " + workflowId + ", " + filter + ", "
+			+ dynamicFilter + ", " + current_user_id + ", " + contact_ids);
+	
+		try
+		{
+		    // Notifies that campaigns initiated in Production
+			if(VersioningUtil.isProductionAPP())
+		    	SendGrid.sendMail("campaigns@agilecrm.com",
+				    "Campaign Observer",
+				    "naresh@agilecrm.com",
+				    "prashannjeet@agilecrm.com, rahul@agilecrm.com",
+				    null,
+				    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
+				    null,
+				    "Hi,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
+					    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
+					    + "<br><br>Dynamic Filter: " + dynamicFilter
+					    + "<br><br>User email: " + user.email
+					    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
+				    null);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
+		}
+	
+		/*
+		 * ContactFilterResultFetcher fetcher = new
+		 * ContactFilterResultFetcher(id, dynamicFilter, 200, contact_ids,
+		 * current_user_id);
+		 * 
+		 * // Sets limit on free user fetcher.setLimits();
+		 * 
+		 * // while (fetcher.hasNextSet()) // { //
+		 * ContactUtil.deleteContactsbyListSupressNotification
+		 * (fetcher.nextSet()); //
+		 * WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), //
+		 * workflowId);
+		 * 
+		 * // }
+		 * 
+		 * int count = fetcher.getTotalFetchedCount(); count = (count == 0) ?
+		 * fetcher.getAvailableContacts() : count;
+		 * 
+		 * System.out.println("contacts : " + fetcher.getAvailableContacts());
+		 * System.out.println("companies : " + fetcher.getAvailableCompanies());
+		 * 
+		 * System.out.println("Total contacts subscribed to campaign " +
+		 * workflowId + " is " + String.valueOf(count));
+		 * 
+		 * BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.
+		 * ENROLL_CAMPAIGN, String.valueOf(count));
+		 * 
+		 * try { Mailgun.sendMail( "campaigns@agile.com", "Campaign Observer",
+		 * "naresh@agilecrm.com", null, null, "Campaign Initiated in " +
+		 * NamespaceManager.get(), null,
+		 * "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " +
+		 * current_user_id + "<br><br>Campaign-id: " + workflowId +
+		 * "<br><br>Filter-id: " + filter + "<br><br>Fetched Count: " + count +
+		 * "<br><br>Filter count: " + fetcher.getAvailableContacts(), null); }
+		 * catch (Exception e) { e.printStackTrace(); System.err.println(
+		 * "Exception occured while sending campaign initiated mail " +
+		 * e.getMessage()); }
+		 */
+	
+		
+			Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+			String workflowname = workflow.name;
+		
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ASIGN_WORKFLOW", workflowname, "contacts",
+				"");
+	
+		
+		    BulkActionLog.delete(tracker);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured " + e.getMessage());
+		    System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
 
     }
 
@@ -461,6 +492,13 @@ public class BulkOperationsAPI
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "contacts", "");
 	}
+	
+	if(idsFetcher.getLeadCount() > 0){
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.LEAD_ADD_TAGS, Arrays.asList(tagsArray)
+			.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+		ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ADD_TAG", tagsString, "leads", "");
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -541,6 +579,13 @@ public class BulkOperationsAPI
 		.toString(), String.valueOf(idsFetcher.getTotalCount()));
 
 	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "contacts", "");
+	}
+	
+	if(idsFetcher.getLeadCount() > 0){
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.LEAD_REMOVE_TAGS, Arrays.asList(tagsArray)
+			.toString(), String.valueOf(idsFetcher.getTotalCount()));
+
+		ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "REMOVE_TAG", tagsString, "leads", "");
 	}
 
     }
@@ -637,6 +682,12 @@ public class BulkOperationsAPI
 		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.COMPANIES);
 		new CSVUtil(restrictions, accessControl, dao)
 			.createCompaniesFromCSV(blobStream, contact, ownerId, type);
+	    }
+	    else if (type.equalsIgnoreCase("leads"))
+	    {
+		ImportStatusDAO dao = new ImportStatusDAO(NamespaceManager.get(), ImportType.LEADS);
+		new CSVUtil(restrictions, accessControl, dao)
+			.createLeadsFromCSV(blobStream, contact, ownerId);
 	    }
 
 	    ContactUtil.eraseContactsCountCache();
@@ -790,7 +841,9 @@ public class BulkOperationsAPI
 	    @FormParam("data") String data) throws JSONException
     {
 
-	int count = 0;
+	int contactsCount = 0;
+	int companiesCount = 0;
+	int leadsCount = 0;
 
 	try
 	{
@@ -830,32 +883,46 @@ public class BulkOperationsAPI
 	    }
 	}
 
-	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
-	count = count - noEmailsCount;
+	/*count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies() > 0 ? fetcher.getAvailableCompanies() : fetcher.getAvailableLeads();
+	count = count - noEmailsCount;*/
 
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
-
+	
+	contactsCount = fetcher.getAvailableContacts();
+	companiesCount = fetcher.getAvailableCompanies();
+	leadsCount = fetcher.getAvailableLeads();
 	// String message = "";
-	if (fetcher.getAvailableContacts() > 0)
+	if (contactsCount > 0)
 	{
+		contactsCount = contactsCount - noEmailsCount;
 	    // message = fetcher.getAvailableContacts() + " Contacts deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "SEND_EMAIL",
 		    ActivitySave.html2text(emailData.getString("message")), "contacts",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
-	else if (fetcher.getAvailableCompanies() > 0)
+	else if (companiesCount > 0)
 	{
+		companiesCount = companiesCount - noEmailsCount;
 	    // message = fetcher.getAvailableCompanies() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "SEND_EMAIL",
 		    ActivitySave.html2text(emailData.getString("message")), "companies",
 		    ActivitySave.html2text(emailData.getString("subject")));
 	}
+	else if (fetcher.getAvailableLeads() > 0)
+	{
+		leadsCount = leadsCount - noEmailsCount;
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableLeads(), "SEND_EMAIL",
+		    ActivitySave.html2text(emailData.getString("message")), "leads",
+		    ActivitySave.html2text(emailData.getString("subject")));
+	}
 
-	if (count > 0)
-	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
-	else if (count > 0)
-	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " companies");
+	if (contactsCount > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + contactsCount + " Contacts");
+	else if (companiesCount > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + companiesCount + " companies");
+	else if (leadsCount > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + leadsCount + " leads");
 	else
 	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");
 
@@ -1115,7 +1182,8 @@ public class BulkOperationsAPI
 	}
 	companyExporter.finalize();
 	companyExporter.sendEmail(user.email);
-	ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
+	companyExporter.addToActivity(ActivityType.COMPANY_EXPORT, EntityType.CONTACT);
+	//ActivityUtil.createLogForImport(ActivityType.COMPANY_EXPORT, EntityType.CONTACT, count, 0);
 
 	// creates a log for company export
 
@@ -1230,6 +1298,228 @@ public class BulkOperationsAPI
 	    e.printStackTrace();
 	    System.err.println("Exception occured while deleting workflow related entities" + e.getMessage());
 	}
+    }
+    
+    /**
+     * Change the updated time of selected contacts
+     * 
+     * @param contact_ids
+     *            array of contact ids as String
+     * @param current_user
+     *            id of domain user (DomainUser id)
+     * 
+     * @throws JSONException
+     */
+    @Path("/update/{current_user}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    public void updateContacts(@FormParam("ids") String contact_ids, 
+    		@PathParam("current_user") Long current_user)throws JSONException
+    {
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(null, null,
+		contact_ids, null, 200, current_user);
+
+	while (idsFetcher.hasNext())
+	{
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		UpdateRelatedContactsDeferredTask task = new UpdateRelatedContactsDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, null);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+    }
+    
+    /**
+     * Sends email with leads csv as an attachment
+     * 
+     * @param currentUserId
+     *            - Current user id.
+     * @param contact_ids
+     *            - list of Contact ids.
+     * @param filter
+     *            - filter id
+     * @param data
+     *            - data request parameter
+     * @throws JSONException
+     */
+    @Path("/contacts/export-leads-csv/{current_user_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void exportLeadsCSV(@PathParam("current_user_id") Long currentUserId,
+	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
+	    @FormParam("dynamic_filter") String dynamicFilter, @FormParam("data") String data) throws JSONException
+    {
+	int count = 0;
+
+	if (StringUtils.isBlank(data))
+	{
+	    System.out.println("Not proceeding further as data is null.");
+	    return;
+	}
+
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	String[] header = ContactExportCSVUtil.getCSVHeadersForLead();
+
+	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+
+	if (user == null)
+	    return;
+
+	Exporter<Contact> leadExporter = ExportBuilder.buildLeadExporter();
+
+	// If filter is not empty, 500 contacts are fetched on every
+	// iteration
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contacts_list = BulkActionUtil.getFilterLeads(filter, null, currentUserId);
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    int firstTime = 0;
+
+	    do
+	    {
+		count += contacts_list.size();
+
+		leadExporter.writeEntitesToCSV(contacts_list);
+
+		System.out.println("Leads Export completed so far: " + count);
+
+		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts_list = BulkActionUtil.getFilterLeads(filter, previousCursor, currentUserId);
+
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
+		    continue;
+		}
+
+		break;
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+
+	    // Close channel after contacts completed
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	{
+	    BulkActionUtil.setSessionManager(currentUserId);
+	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+	    count += contacts_list.size();
+
+	    leadExporter.writeEntitesToCSV(contacts_list);
+	}
+	else if (!StringUtils.isEmpty(dynamicFilter))
+	{
+	    BulkActionUtil.setSessionManager(currentUserId);
+	    ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(dynamicFilter);
+	    contacts_list = new ArrayList<Contact>(contact_filter.queryContacts(BulkActionUtil.ENTITIES_FETCH_LIMIT,
+		    null, null));
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    int firstTime = 0;
+
+	    do
+	    {
+		count += contacts_list.size();
+
+		// Create new file for first time, then append content to the
+		// existing file.
+		leadExporter.writeEntitesToCSV(contacts_list);
+
+		System.out.println("Leads Export completed so far: " + count);
+
+		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts_list = new ArrayList<Contact>(contact_filter.queryContacts(
+			    BulkActionUtil.ENTITIES_FETCH_LIMIT, previousCursor, null));
+
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
+		    continue;
+		}
+
+		break;
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	}
+	leadExporter.finalize();
+	leadExporter.sendEmail(user.email);
+	ActivityUtil.createLogForImport(ActivityType.LEAD_EXPORT, EntityType.CONTACT, count, 0);
+
+	// creates a log for company export
+
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_LEADS_CSV);
+    }
+    
+    /**
+     * Change the status of selected leads
+     * 
+     * @param contact_ids
+     *            array of lead ids as String
+     * @param new_status
+     *            id of new status (Category id)
+     * 
+     * @throws JSONException
+     */
+    @Path("/change-status/{new_status}/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void changeStatusToLeads(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("new_status") String new_status, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user, @FormParam("dynamic_filter") String dynamicFilter)
+	    throws JSONException
+    {
+	System.out.println(contact_ids + " model ids " + filter + " filter " + new_status + " new_owner");
+
+	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+		contact_ids, null, 200, current_user);
+
+	while (idsFetcher.hasNext())
+	{
+
+	    try
+	    {
+		Set<Key<Contact>> contactSet = idsFetcher.next();
+		LeadsStatusChangeDeferredTask task = new LeadsStatusChangeDeferredTask(current_user,
+			NamespaceManager.get(), contactSet, null, new_status);
+
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.BULK_ACTION_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+
+	String message = "Status changed for " + idsFetcher.getLeadCount() + " Leads";
+	if (idsFetcher.getLeadCount() > 0)
+	{
+		CategoriesUtil categoriesUtil = new CategoriesUtil();
+		Category leadStatus = categoriesUtil.getCategory(Long.valueOf(new_status));
+		ActivitySave.createBulkActionActivity(idsFetcher.getLeadCount(), String.valueOf(ActivityType.CHANGE_LEAD_STATUS), leadStatus.getLabel(), "contacts", "");
+	}
+	BulkActionNotifications.publishNotification(message);
+
+	// BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+	// String.valueOf(0));
     }
 
 }

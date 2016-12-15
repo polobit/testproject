@@ -14,7 +14,8 @@ var TYPEHEAD_TYPE = {};
 
 // Saves map of key: name and value: related contacts of a deal
 var TYPEHEAD_DEAL_RELATED_CONTACTS = {};
-
+//query and url params for validation
+var searchUrl ; var searchParams ;
 /**
  * This script file defines simple search keywords entered in input fields are
  * sent to back end as query through bootstrap typeahead. Methods render,
@@ -79,14 +80,26 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
 							// Get data on query
 
-							var type_url = "";
+							var type_url = "";searchUrl = url ;
 
 							if(urlParamsCallback){
 								urlParams = urlParamsCallback();
 							}
 
-							if (urlParams && urlParams.length)
+							if (urlParams && urlParams.length){
 								type_url = '&' + urlParams;
+								searchParams = urlParams ;
+							}
+							if ($.trim(query) == ''){
+								$(".dashboard-search-scroll-bar").hide();
+								return;
+							}
+							if(!isQueryTextSearchValid(query)){
+								var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+								that.$menu.html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+								that.render();
+								return false;
+							}
 
 							// Sends search request and holds request object,
 							// which can be reference to cancel request if there
@@ -124,7 +137,12 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (data.length == 0)
 								{
-									var txt = '<b>{{agile_lng_translate "others" "no-reults-found"}}</b>';
+									var txt ;
+									if(!searchParams && searchUrl != "core/api/search/deals")
+										txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="contact">{{agile_lng_translate "typeahead" "add-as-new-contact"}}</a></p><p class="text-center"><a onclick="createtypeheadcontact($(this));" type="company">{{agile_lng_translate "typeahead" "add-as-new-company"}}</a></p>';
+									else
+										txt = '<b>{{agile_lng_translate "others" "no-results-found"}}</b>' ; 
+									searchParams = "";searchUrl = "";
 
 									if (noResultText && noResultText.length)
 										txt = noResultText;
@@ -174,6 +192,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										TYPEHEAD_TYPE[tag_name] = '#contact/';
 									else if(item.type == 'COMPANY')
 										TYPEHEAD_TYPE[tag_name] = '#company/';
+									else if(item.type == 'LEAD')
+										TYPEHEAD_TYPE[tag_name] = '#lead/';
 										
 								});
 
@@ -182,6 +202,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 * the data
 								 */
 								process(items_list);
+							})
+							.success(function() {})
+							.error(function(data) 
+							{	
+								var txt = '<b>Unable to Process the Query.Please try again.</b>' ;
+								if(data.responseText)
+									txt = data.responseText ;
+								$('.dashboard-search-scroll-bar').html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
 							});
 						},
 						showLoading : function(self)
@@ -317,6 +345,18 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 								 */
 								if (!items)
 								{
+									var query = $("#searchText").val();
+									if ($.trim(query) == ''){
+										$(".dashboard-search-scroll-bar").hide();
+										return;
+									}
+									if(!isQueryTextSearchValid(query))
+									{
+										var txt = '{{agile_lng_translate "specialchar-typeahead" "error-input"}}' ;
+										$(".dashboard-search-scroll-bar").html('<div class="m-t-sm"><p align="center"   class="custom-color">' + txt + '<p></div>');
+										$(".dashboard-search-scroll-bar").show();
+										return;
+									}
 									showSearchResults(); // fails
 									// automatically for
 									// non main search
@@ -365,19 +405,24 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										// Don't append email
 										if (name.trim() != data.trim())
 											data = name.trim() + ' <' + data.trim() + '>';
-									}
+									}									
 
 									$('#' + id, el)
 											.closest("div.controls")
 											.find(".tags")
 											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp, "email")));
-
+									//for send mail validation
+									if($("#" + id, el).siblings("span")!=null){
+										var attr=$("#" + id, el).siblings("span").attr("for");
+										if(attr==="to" || attr==="email_cc" || attr==="email_bcc")
+											$("#" + id, el).siblings("span").css("display","none");
+									}
 
 								}
 
 							}
 							else if (isDealSearch)
-							{
+							{								
 								// If tag already exists returns
 								$.each($('.deal_tags', el).children('li'), function(index, tag)
 								{
@@ -417,11 +462,21 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 											else if(relContact.type == 'COMPANY'){
 												tplJSON.type_item = '#company/';
 											}
+											else if(relContact.type == 'LEAD'){
+												tplJSON.type_item = '#lead/';
+											}
 											tplJSON.tag_item = relContact.id;
 											tplJSON.item = getContactName(relContact);
 											$('ul.tags', el).append(getTemplate("tag-item-li", tplJSON));
 										}
 									});
+
+									if(relatedContactsJOSN.length > 0){
+										var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+	                     				sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+										$('#sendEmailInviteBlock').html(sendInviteHtml);
+									}
+
 									dealJSON.related_contact_ids = related_contact_ids;
 									$('.deal_tags', el)
 											.append(getTemplate("tag-deal-item-li", dealJSON));
@@ -445,13 +500,20 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 										tag_not_exist = false;
 										return;
 									}
-								});
+								});						
 
 								// add tag
 								if (tag_not_exist)
 									targetContainer
 											.append(getTemplate("tag-item-li", get_tag_item_json(items, items_temp)));
 
+								console.log("Agile type head contact html ***** ");								
+
+								if(targetContainer && targetContainer.size() == 1){																		
+                    				var sendInviteHtml = '<div class="control-group"><div class="checkbox col-sm-offset-3 col-sm-6"><label class="i-checks i-checks-sm c-p">';
+                     				sendInviteHtml += '<input type="checkbox" name="sendInvite" id="sendInviteEmail" checked/><i></i> Send Email Invitation </label></div></div>';
+									$('#sendEmailInviteBlock').html(sendInviteHtml);									
+								}
 											
 							}
 							//Sets modal backdrop height to modal dialog height after select the tag
@@ -644,6 +706,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 // Removes tags ("Related to" field contacts)
 $("body").on("click", '#remove_tag', function(event)
 {
+	console.log("contact removed from agile type head ****** ");		
+	
 	event.preventDefault();var company_name ;var prop = null;var flag = false;
 	if($(this).parent().attr("data-deal-related-contacts"))
 	{
@@ -653,6 +717,7 @@ $("body").on("click", '#remove_tag', function(event)
 			$("li[data="+contact_id+"]", el).remove();
 		});
 	}
+
 	if($(this).hasClass("companyAddress") && contact_company){
 		$.each(contact_company.properties , function(){
 			if(this.name == "address" && this.subtype == "office")
@@ -673,8 +738,19 @@ $("body").on("click", '#remove_tag', function(event)
 				$("#content .address-type,#address,#city,#state,#zip,#country").val('');
 			}
         }
-    }
-	$(this).parent().remove();
+    }	
+
+    $(this).parent().remove();
+
+    var size = $('.newtypeaheadcontact').children().length;	    	
+
+	if(size == 0){					
+		$('#sendEmailInviteBlock').html('');
+	}
+});
+$('body').on('click','a.text-white',function()
+	{
+		$(this).blur();
 });
 
 /* Customization of Type-Ahead data */
@@ -777,16 +853,18 @@ function checkEmailValidation(value)
 	return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 }
 
-function getContactName(contact)
+function getContactName(contact, prop_key)
 {
 	var name = "";
-	if (!contact.type || contact.type == 'PERSON')
+	if (!contact.type || contact.type == 'PERSON' || contact.type == 'LEAD')
 	{
 		var first_name = getPropertyValue(contact.properties, "first_name");
 		var last_name = getPropertyValue(contact.properties, "last_name");
 		last_name = last_name != undefined ? last_name.trim() : "";
 		first_name = first_name != undefined ? first_name.trim() : "";
+
 		name = (first_name + " " + last_name).trim();
+		name = _agile_get_contact_display_name(first_name, last_name, prop_key);
 	}
 	else if (contact.type == "COMPANY")
 	{
@@ -794,7 +872,10 @@ function getContactName(contact)
 		company_name = company_name != undefined ? company_name.trim() : "";
 		name = company_name.trim();
 	}
-
+	if(prop_key)
+	{
+		return name;
+	}
 	if (name.length)
 		return name;
 
@@ -811,7 +892,11 @@ function getContactName(contact)
 
 function buildcategorizedResultDropdown(items, options)
 {
-	var contact_custom_view = new Base_Collection_View({ data : items, templateKey : "typeahead-contacts", individual_tag_name : 'li',
+	var contact_custom_view = new Base_Collection_View({ 
+		data : items, 
+		templateKey : "typeahead-contacts", 
+		individual_tag_name : 'li',
+		sort_collection: false,
 		typeahead_options : options });
 
 	contact_custom_view.appendItem = appendItemInResult;
@@ -874,6 +959,12 @@ function appendItemInResult(item)
 			$("#company-typeahead-heading", this.el).show();
 			$("#company-results", this.el).append(i);
 		}
+		if (type == "lead_entity")
+		{
+
+			$("#lead-typeahead-heading", this.el).show();
+			$("#lead-results", this.el).append(i);
+		}
 		if (type == "deal")
 		{
 			$("#deal-typeahead-heading", this.el).show();
@@ -919,4 +1010,50 @@ function get_tag_item_json(items, items_temp, type){
 
 	console.log(tag_item_json);
 	return tag_item_json;
+}
+function isQueryTextSearchValid(query){
+	query = query.trim();
+	if(query == '')
+		return false
+	if(query == 'OR' || query == 'AND' || query == '()')
+		return false
+	if(query.indexOf('<') >= 0 || query.indexOf('>') >= 0 || query.indexOf(',') >= 0 || query.indexOf(':') >= 0 || query.indexOf('=') >= 0 || query.indexOf('~') >= 0) 
+		return false
+
+	if(query.startsWith('++') || query.startsWith('--')  || query.startsWith(')') || query.endsWith('(') )
+	  	return false
+
+	if(query.startsWith('/\/') && !query.startsWith('/\\/'))
+		return false
+
+	if(query.endsWith('/\/') && !query.endsWith('/\\/'))
+		return false
+	if(query.indexOf('(') >= 0 && !query.startsWith('('))
+		return false
+	if(query.indexOf(')') >= 0 && !query.endsWith(')'))
+		return false	
+	if(query.startsWith('(') && !query.endsWith(')') )
+		return false
+	else if(!query.startsWith('(') && query.endsWith(')') )
+		return false
+	else if(query.startsWith('(') && query.endsWith(')'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		return isQueryTextSearchValid(b) 
+	}
+	if(query.startsWith('"') && !query.endsWith('"') )
+		return false
+
+	else if(!query.startsWith('"') && query.endsWith('"') )
+		return false
+
+	else if(query.startsWith('"') && query.endsWith('"'))
+	{
+		var a = query.slice(1);
+		var b = a.slice(0,-1);
+		if(b.indexOf('"') >= 0)
+			return false 
+	}
+	return true 
 }

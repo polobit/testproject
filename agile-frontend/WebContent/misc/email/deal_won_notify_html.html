@@ -8,7 +8,7 @@
 					<tbody>
 						<tr>
 							<td valign="middle" height="32px"
-								style="padding: 0; color: white"> Deal Won Alert </td>
+								style="padding: 0; color: white"> {{agile_lng_translate 'deals-email' 'won-deal-alert'}} </td>
 							
 						</tr>
 					</tbody>
@@ -16,17 +16,17 @@
 			</div>
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
-			 <p>********This is an automated email. Please do not reply********</p>
+			 <p>********{{agile_lng_translate 'reports-email' 'automated-email-dont-reply'}}********</p>
 
 				<br>
-				<p>Dear {{user.name}} </p>
+				<p>{{agile_lng_translate 'welcome-email' 'dear'}} {{user.name}} </p>
 				
 
-				<p>Hurray. {{deal.owner.name}} has won deal '{{deal.name}}' worth {{deal.expected_value}}. </p>
+				<p>{{agile_lng_translate 'deals-email' 'hurray'}}. {{deal.owner.name}} {{agile_lng_translate 'deals-email' 'has-won-deal'}} '{{deal.name}}' {{agile_lng_translate 'deals-email' 'worth'}} {{deal.expected_value}}. </p>
 				
 				<br>
-				<p>Thanks for being a valued customer.</p>
-				<br /> Best Wishes, <br /> AgileCRM <br />
+				<p>{{agile_lng_translate 'verify-email' 'thx-for-being-a-valued-customer'}}</p>
+				<br /> {{agile_lng_translate 'import-email' 'best-wishes'}}, <br /> AgileCRM <br />
 				http://www.agilecrm.com
 				<div style="text-align: right">
 					<a href="{{HashMap.domain}}.agilecrm.com" target="_blank"> <img

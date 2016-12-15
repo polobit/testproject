@@ -10,11 +10,10 @@ $(function()
       $(this).find('.highcharts-button').hide();
   });
   $('body').on('click','.maintab',function(e){
-     /*var c = $(this).find(".sub-nav-tab").children()[0];
-     var d = c.children;
-     var route = $(d).attr("href").split("#")[1];
-     Backbone.history.navigate(route, true)*/
-     $(this).find(".sub-nav-tab>li:first").trigger('click')
+
+     //if($(this).hasClass("reportsliElement"))
+     	//return ; 
+     //$(this).find(".sub-nav-tab>li:first").trigger('click')
   });
 });
 /**
@@ -244,7 +243,12 @@ function initializeReportsListeners(){
 						var upgrade_id=$('._upgrade','#'+tab_id).attr('id');
 						var upgrade_span=$('.'+upgrade_id,'#'+tab_id);
 						if(upgrade_span.length!=0)
-						{$('#reportsUpgradeModal').html(getTemplate('upgradeModal'));
+						{
+							// Dont show upgrade modal to iphone users
+							if(_agile_is_user_from_iphone())
+								return;
+
+							$('#reportsUpgradeModal').html(getTemplate('upgradeModal'));
 					var cloned_upgrade=upgrade_span.clone();
 							$('.modal-body','#reportsUpgradeModal').html(cloned_upgrade);
 							$(cloned_upgrade,'.modal-body').show();
@@ -315,8 +319,104 @@ function reportsContactTableView(base_model, customDatefields, view)
 					if (!property)
 						property = {};
 
-					if (isDateCustomField(customDatefields, property))
+					if (isReportDateCustomField(customDatefields, property))
 						final_html_content += getTemplate('contacts-custom-view-custom-date', property);
+					else if (isCompanyTypeCustomField(customDatefields, property))
+						{
+							var contactIdsJSON =  [];
+							try{ 
+								contactIdsJSON = JSON.parse(property.value);
+							}catch(err){
+								console.log("no contact ids found");
+								console.log(err.message);
+							}
+							var referenceContactIds = "";
+							$.each(contactIdsJSON, function(index, val){
+								referenceContactIds += val+",";
+							});
+							App_Reports.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+							getTemplate('contacts-custom-view-custom-company', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								final_html_content+= ($(template_ui).attr("company_id", contact.id)).prop('outerHTML');
+							}, null);
+							App_Reports.referenceContactsCollection.collection.fetch({
+								success : function(data){
+									if (data && data.length > 0)
+									{
+										getTemplate('contacts-custom-view-custom-company', data.toJSON(),
+										 undefined, function(template_ui){
+											if(!template_ui)
+												  return;
+											$("td[company_id="+contact.id+"]").html($(template_ui));
+										});
+											/*var ellipsis_required = false;
+											$(el).find("td[contact_id="+contact.id+"]").find(".contact-type-image").each(function(index, val){
+												if(index > 3)
+												{
+													ellipsis_required = true;
+													$(this).remove();
+												}
+											});
+											if(ellipsis_required)
+											{
+												$(el).find("td[contact_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+											}
+										}, null);*/
+									}
+									hideTransitionBar();
+								}
+							});
+							
+						}
+						else if (isContactTypeCustomField(customDatefields, property))
+						{
+							var contactIdsJSON =  [];
+							try{ 
+								contactIdsJSON = JSON.parse(property.value);
+							}catch(err){
+								console.log("no contact ids found");
+								console.log(err.message);
+							}
+							var referenceContactIds = "";
+							$.each(contactIdsJSON, function(index, val){
+								referenceContactIds += val+",";
+							});
+							App_Reports.referenceContactsCollection = new Base_Collection_View({ url : '/core/api/contacts/references?references='+referenceContactIds, sort_collection : false });
+							getTemplate('contacts-custom-view-custom-contact', {}, undefined, function(template_ui){
+								if(!template_ui)
+									  return;
+								final_html_content+= ($(template_ui).attr("contact_id", contact.id)).prop('outerHTML');
+							}, null);
+							App_Reports.referenceContactsCollection.collection.fetch({
+								success : function(data){
+									if (data && data.length > 0)
+									{
+										getTemplate('contacts-custom-view-custom-contact', data.toJSON(),
+										 undefined, function(template_ui){
+											if(!template_ui)
+												  return;
+											$("td[contact_id="+contact.id+"]").html($(template_ui));
+										});
+											/*var ellipsis_required = false;
+											$(el).find("td[contact_id="+contact.id+"]").find(".contact-type-image").each(function(index, val){
+												if(index > 3)
+												{
+													ellipsis_required = true;
+													$(this).remove();
+												}
+											});
+											if(ellipsis_required)
+											{
+												$(el).find("td[contact_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
+											}
+										}, null);*/
+									}
+									hideTransitionBar();
+								}
+							});
+							
+						}
 					else
 						final_html_content += getTemplate('contacts-custom-view-custom', property);
 
@@ -325,7 +425,9 @@ function reportsContactTableView(base_model, customDatefields, view)
 
 				if (field_name.indexOf("properties_") != -1)
 					field_name = field_name.split("properties_")[1];
-
+				if(field_name=='image')
+					final_html_content += getTemplate('contacts-custom-view-reports-' + field_name, contact);
+				else
 				final_html_content += getTemplate('contacts-custom-view-' + field_name, contact);
 			});
 

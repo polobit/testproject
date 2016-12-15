@@ -10,10 +10,6 @@ body #builder > .container {
 	padding: 60px 0px 0px 0px;
 }
 
-body .modal-dialog {
-	margin: 120px auto 30px;
-}
-
 .toggle:hover, .toggle:focus {
 	color: #fff;
 }
@@ -73,23 +69,14 @@ body .drop-hover {
 	z-index: 10000;
 }
 
-#loader span {
-  	color: #ecf0f1;
-  	font-family: Consolas, Menlo, Monaco, monospace;
-  	font-weight: bold;
-  	font-size: 30vh;
-  	opacity: 0.8;
+#loader i, #canvasOverlay .loader i{
+	animation: fa-spin 1.5s infinite steps(8);
+    color: white;
 }
-
-#loader span {
-  	display: inline-block;
-    -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
-          animation: pulse 0.4s alternate infinite ease-in-out;
-}
-
-#loader span:nth-child(odd) {
-     -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
+#loader span, #canvasOverlay .loader span {
+    color: #ecf0f1;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-size: 1em;
 }
 @-webkit-keyframes pulse {
   to {
@@ -332,6 +319,7 @@ header .slick:hover .slide {
 	height: 35px;
 	background: #fff;
 	padding: 6px;
+	margin-top:5px;
 }
 
 .styleEditor .form-group .sp-preview {
@@ -408,7 +396,7 @@ body .sp-input {
 
 .styleEditor .sideButtons > * {
 	float: left;
-	width: 33.33%;
+	width: 49.97%;
 }
 
 .styleEditor p.or {
@@ -969,27 +957,9 @@ li.element {
   -webkit-box-align: center;
   -webkit-align-items: center;
       -ms-flex-align: center;
-          align-items: center;
+          align-items: baseline;
 }
 
-#canvasOverlay .loader {
-	color: #fff;
-  	font-family: Consolas, Menlo, Monaco, monospace;
-  	font-weight: bold;
-  	font-size: 20vh;
-  	opacity: 0.8;
-}
-
-#canvasOverlay .loader span {
-  display: inline-block;
-  -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
-          animation: pulse 0.4s alternate infinite ease-in-out;
-}
-
-#canvasOverlay .loader span:nth-child(odd) {
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
-}
 @-webkit-keyframes pulse {
   to {
     -webkit-transform: scale(0.8);
@@ -1058,6 +1028,34 @@ li.element {
 
 .tab-pane#uploadTab button.upload {
 	margin-bottom: 15px;
+
+
 }
 
 /* end image upload tab */
+.modal-backdrop{
+	position: absolute;
+}
+
+.tooltip {z-index: 2001;}
+
+.agile-tooltip +  .tooltip > .tooltip-inner {
+   color: white;
+   background-color: #34495e;
+   white-space:nowrap;
+   max-width:none;
+}
+
+.agile-tooltip:hover{
+	cursor:pointer;
+}
+
+.agile-tooltip +  .tooltip > .tooltip-inner {
+    color: white;
+    background-color: #34495e;
+    white-space:nowrap;
+    max-width:none;
+      
+}
+.left{float:left;}
+.right{float:right;}

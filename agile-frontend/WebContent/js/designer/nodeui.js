@@ -52,9 +52,16 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     
     // Deserialize form values. 2nd condition is needed to avoid deserialize 
     // for Send Email node in addons.
-    if(jsonData != undefined && jsonData != "/json/nodes/email/send_email.jsp")
+    //Select defult emty in merged field select box
+    if(jsonData != undefined && jsonData != "/json/nodes/email/send_email.jsp"){
 	    $("#nodeui").deserialize(jsonData);
+    }
     
+    //Select default empty in selecte merged filed
+     if(jsonData != undefined && nodeJSONDefinition.name == "Send Email"){
+	      $("#nodeui").find("[name=merge_fields]").val("");
+    }
+
     // Set node name field
     if( nodeId == undefined || nodeId == null ) {    
   		$("#nodeui").find("[name=nodename]").val(nodeJSONDefinition.name);
@@ -79,7 +86,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         $("#nodeui").find("[name=from_name]").val(current_user["from_name"]);
         $("#nodeui").find("[name=from_email]").val(current_user["from_email"]);
     }
-    
+
     // Init validator
     initValidator($("#nodeui"), saveNode);
     

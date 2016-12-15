@@ -5,26 +5,26 @@
   <div class="modal-content"> 
 
 	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3><i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'voice-mail' 'add-voicemail'}}</h3>
+		<button class="close" data-dismiss="modal">&times;</button>
+		<h3 class="modal-title">&nbsp;{{agile_lng_translate 'voice-mail' 'add-voicemail'}}</h3>
 	</div>
 	<div class="modal-body">
-		<form id="uploadVoiceMaiForm" name="uploadVoiceMaiForm" method="post">
+		<form id="uploadVoiceMaiForm" name="uploadVoiceMaiForm" method="post" class="form-horizontal">
 			<fieldset>				
-				<div class="control-group">
-					<label class="control-label"><b>{{agile_lng_translate 'report-add' 'title'}} </b><span
+				<div class="control-group form-group">
+					<label class="control-label col-sm-3">{{agile_lng_translate 'report-add' 'title'}} <span
 						class="field_req">*</span></label>
-					<div class="controls">
+					<div class="controls col-sm-7">
 						<span><input id="name" name="name" type="text"
 							class="required form-control" placeholder="{{agile_lng_translate 'opportunity' 'name-of-voice-mail'}}" required/></span>
 					</div>
 				</div>				
 				<div class="m-t-xs">
 					<input name="extension" id="extension" type="hidden"/>
-					<div class="control-group">
-						<label class="control-label"><b>{{agile_lng_translate 'opportunity' 'voice-file'}}</b><span
+					<div class="control-group form-group">
+						<label class="control-label col-sm-3">{{agile_lng_translate 'opportunity' 'voice-file'}}<span
 							class="field_req">*</span></label>
-						<div class="controls">
+						<div class="controls col-sm-7">
 						    <input type="hidden" name="url" id="upload_url" class="required"/>
 						    <input type="hidden" name="network_type" id="network_type" class="required"/>
 							<div class="span3" style="margin-left:0px!important;">							

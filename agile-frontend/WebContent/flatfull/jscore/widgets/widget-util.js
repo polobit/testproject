@@ -159,6 +159,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				callback(data);
 			}
 
+			Backbone.history.navigate('add-widget', { trigger : true });
+			
 		}, error : function(data){
 			console.log(data);
 

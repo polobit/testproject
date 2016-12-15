@@ -19,8 +19,11 @@ import com.agilecrm.ssologin.SingleSignOnUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.push.AgileUserPushNotificationId;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.NamespaceUtil;
@@ -28,6 +31,7 @@ import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.AppengineMail;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -58,6 +62,13 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		if(request.getParameter("resendotp")!=null){
+			UserInfo userInfo = (UserInfo) SessionManager.getFromRequest(request);
+			if(userInfo == null) {
+				response.sendRedirect("/login");
+				return;
+			}
+			
+			// Re send verification code from different service
 			resendVerficationCode(request);
 			return;
 		}
@@ -213,6 +224,9 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 
 		String timezone = request.getParameter("account_timezone");
+		
+		// Agile push notification Registration Id
+		String registrationId = request.getParameter("registrationId");
 
 		// Hash to redirect after login
 		String hash = request.getParameter("location_hash");
@@ -246,12 +260,17 @@ public class LoginServlet extends HttpServlet {
 					"Looks like you have registered using Google or Yahoo account. Please use the same to login. ");
 
 		// Check if Encrypted passwords are same
-		if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password),
-				domainUser.getHashedString())
-				&& !StringUtils.equals(password,
+		if(!StringUtils.equals(MD5Util.getMD5HashedPassword(password),
+				domainUser.getHashedString())) {
+			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production){
+				if("admin".equalsIgnoreCase(NamespaceManager.get()) && !StringUtils.equals(password,
+						LoginUtil.ADMIN_DOMAIN_MASTER_PWD))
+					throw new Exception("Incorrect password. Please try again.");
+				else if(!"admin".equalsIgnoreCase(NamespaceManager.get()) && !StringUtils.equals(password,
 						Globals.MASTER_CODE_INTO_SYSTEM))
-			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-				throw new Exception("Incorrect password. Please try again.");
+					throw new Exception("Incorrect password. Please try again.");
+			}
+		}
 
 		// Read Subdomain
 		String subdomain = NamespaceUtil.getNamespaceFromURL(request
@@ -287,7 +306,7 @@ public class LoginServlet extends HttpServlet {
 		
 		UserFingerPrintInfo browser_auth = null;
 		
-		if(!Globals.MASTER_CODE_INTO_SYSTEM .equals(password))
+		if(!Globals.MASTER_CODE_INTO_SYSTEM.equals(password))
 		{
 			// Validate User finger print
 			browser_auth = new UserFingerPrintInfo();
@@ -296,15 +315,11 @@ public class LoginServlet extends HttpServlet {
 			// Send email with code
 			if(!browser_auth.valid_finger_print || !browser_auth.valid_ip ){
 				
-				// Generate one finger print
-				browser_auth.generateOAuthToken(request);
-
-				// Set info in session for future usage 
-				browser_auth.addUserBrowserInfo(request, domainUser);
+				// Generate token
+				browser_auth.generateOTP(request, domainUser);
 				
 				// Send Sendgrid Email
-				sendOTPEmail(request, domainUser.email, false);
-				
+				sendOTPEmail(request, domainUser, false);
 			}
 		}
 		
@@ -324,8 +339,14 @@ public class LoginServlet extends HttpServlet {
 		// If not, set these values after verification. Check HomeServlet.doPost() method.
 		if( browser_auth != null && browser_auth.valid_finger_print && browser_auth.valid_ip )
 		{
-			LoginUtil.setMiscValuesAtLogin(request, domainUser);
+			new LoginUtil().setMiscValuesAtLogin(request, domainUser);
 		}
+		
+		// Add User Push Notification Registration Id
+ 		if(StringUtils.isNotBlank(registrationId)){
+ 			new AgileUserPushNotificationId(domainUser.id, registrationId, NamespaceManager.get()).save();
+ 		}
+ 		
 		
 		hash = (String) request.getSession().getAttribute(
 				RETURN_PATH_SESSION_HASH);
@@ -359,7 +380,8 @@ public class LoginServlet extends HttpServlet {
 		String email = ((UserInfo)request.getSession().getAttribute(
 				SessionManager.AUTH_SESSION_COOKIE_NAME)).getEmail();
 		
-		sendOTPEmail(request, email, true);
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+		sendOTPEmail(request, domainUser, true);
 		
 	}
 	
@@ -370,12 +392,18 @@ public class LoginServlet extends HttpServlet {
 
 	}
 
-	private void sendOTPEmail(HttpServletRequest request, String email, boolean resend) {
+	private void sendOTPEmail(HttpServletRequest request, DomainUser domainUser, boolean resend) {
 
 		try {
 			UserFingerPrintInfo info = UserFingerPrintInfo.getUserAuthCodeInfo(request);
 			Map data = info.info;
-			 
+			
+			// For some reason it goes wrong with empty data. Better check and regenerate otp
+			if(StringUtils.isBlank(info.verification_code)){
+				info.generateOTP(request, domainUser);
+				data = info.info;
+			}
+						
 			// Simulate template
 			String template = SendMail.ALLOW_IP_ACCESS;
 			String subject = SendMail.ALLOW_IP_ACCESS_SUBJECT;
@@ -384,10 +412,13 @@ public class LoginServlet extends HttpServlet {
 				subject =  "New sign-in from " + data.get("browser_name") + " on " + data.get("browser_os"); 
 			}
 			
+			String email = domainUser.email;
+			String language = LanguageUtil.getUserLanguageFromEmail(email);
+			
 			if(resend)
-				SendMail.sendMail(email, subject, template, data);
+				SendMail.sendMail(email, subject, template, data, language);
 			else 
-				AppengineMail.sendMail(email, subject, template, data);
+				AppengineMail.sendMail(email, subject, template, data, language);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

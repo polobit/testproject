@@ -20,7 +20,9 @@ $(function(){
 		var data_array = [];
 		var checked = false;
 		var table = $('body').find('.showCheckboxes');
-
+		App_Companies.Company_detail_route="";
+			 if (company_util.isCompanyContact())
+				App_Companies.Company_detail_route = Current_Route;
 		$(table).find('tr .tbody_check').each(function(index, element){
 			
 			// If element is checked store it's id in an array. !$(element).attr('disabled') included by Sasi to avoid disabled checkboxes
@@ -37,11 +39,11 @@ $(function(){
 			}
 		});
 		if(checked){
-			
+
 			if(!hasScope('DELETE_CONTACT'))
 			{
-				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
-						_agile_get_translated_val("contacts", "no-permission-to-delete"), 
+				showModalConfirmation("{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}", 
+						"{{agile_lng_translate 'contacts' 'no-permission-to-delete'}}", 
 						function (){
 							return;
 						}, 
@@ -51,7 +53,7 @@ $(function(){
 						function() {
 							
 						},
-						_agile_get_translated_val("contact-details", "cancel"), "");
+						"{{agile_lng_translate 'contact-details' 'cancel'}}", "");
 			}
 			else
 			{
@@ -73,7 +75,7 @@ $(function(){
 								console.log("tickets clicked");
 								
 								$('#ticketsModal').modal('hide');
-								$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+								//$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
 								bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
 							});
 						});				
@@ -89,7 +91,7 @@ $(function(){
 				}
 				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 				{
-					showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
+					showModalConfirmation("{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}", 
 						related_contacts_update_acl_error, 
 						function (){
 							bulk_delete_operation($(table).attr('url'), id_array, index_array, table, undefined, data_array);
@@ -110,16 +112,31 @@ $(function(){
 
 				if(($(table).attr("id") == "document-list" || $(table).attr("id") == "task-list") && !hasScope("EDIT_CONTACT"))
 					return;
-
+				var canProceed = true;
+				if($(table).attr("id") == "users-list-table"){
+					if(ADDON_INFO && ADDON_INFO.id && ADDON_INFO.aclUsers.length > 0){
+						$.each( id_array, function( index, value ){
+						   if($.inArray(value, ADDON_INFO.aclUsers) != -1){
+						   		var msg = "Sorry, you cannot delete the selected user. Cancel Permissions Add-on and try again.";
+						   		if(id_array.length > 1)
+						   			msg = "Sorry, you cannot delete the selected users. Cancel Permissions Add-on and try again.";
+							   	showNotyPopUp('warning', msg, "top", 10000);
+							   	canProceed = false;
+						   }
+						});
+					}
+				}
+				if(!canProceed)
+					return;
 				// Default message for all tables
-				var confirm_msg = _agile_get_translated_val("others", "delete-warn");
+				var confirm_msg = "{{agile_lng_translate 'others' 'delete-warn'}}";
 				var $that = $(this);
 				// Shows confirm alert, if Cancel clicked, return false
  				showAlertModal(confirm_msg, "confirm", function(){
 				// Appends campaign-name for active subscribers
 				if($(table).attr('id') === "active-campaign")
-					confirm_msg = _agile_get_translated_val("contacts", "delete-contacts-from") + " " +$('#subscribers-campaign-name').text()+" " +_agile_get_translated_val("contact-details", "campaign")+ "?";
-					$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
+					confirm_msg = "{{agile_lng_translate 'contacts' 'delete-contacts-from'}} " +$('#subscribers-campaign-name').text()+" {{agile_lng_translate 'contact-details' 'campaign'}}?";
+					//$that.append('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "'+updateImageS3Path("img/21-0.gif")+'"></img>');
 				
 					var url = $(table).attr('url');
 					if(SELECT_ALL && SELECT_ALL == true)
@@ -137,9 +154,9 @@ $(function(){
 						if($(table).attr('id') == "active-campaign")
 							url = url + "&filter=all-active-subscribers";
 					}
-					
+
 					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
-				}, undefined, _agile_get_translated_val("bulk-delete", "bulk-delete"));
+				}, undefined, "{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}");
 			}
 						
 		}	
@@ -149,7 +166,7 @@ $(function(){
 			if($(this).attr('disabled') === "disabled")
 				return;
 			
-			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("others", "bulk-delete-no-select") + '</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a> {{agile_lng_translate "others" "bulk-delete-no-select"}}</div>').show().delay(3000).hide(1);
 		}
 			
 	});
@@ -192,8 +209,8 @@ $(function(){
 				
 				if(!canRunBulkOperations())
 				{
-					showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
-							_agile_get_translated_val("contacts", "no-previlige-to-delete") + "<br/><br/> " + _agile_get_translated_val("deal-view",  "do-you-want-to-proceed"),
+					showModalConfirmation("{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}", 
+							"{{agile_lng_translate 'contacts' 'no-previlige-to-delete'}}" + "<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}",
 							function (){
 								// Customize the bulk delete operations
 								if(!customize_bulk_delete(id_array, data_array))
@@ -224,7 +241,7 @@ $(function(){
 				
 			}	
 			else
-	            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("others", "bulk-delete-no-select") + '</div>').show().delay(3000).hide(1);
+	            $('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a> {{agile_lng_translate "others" "bulk-delete-no-select"}}</div>').show().delay(3000).hide(1);
 				
 		});
 
@@ -256,8 +273,8 @@ $(function(){
 			
 			if(!hasScope("DELETE_DEALS"))
 			{
-				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
-						_agile_get_translated_val("deal-view", "persmission-to-delete-deals"), 
+				showModalConfirmation("{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}", 
+						"{{agile_lng_translate 'deal-view' 'persmission-to-delete-deals'}}",
 						function (){
 							return;
 						}, 
@@ -273,7 +290,7 @@ $(function(){
 
 			if(!hasScope("EDIT_CONTACT"))
 			{
-				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
+				showModalConfirmation("{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}", 
 						DEALS_CONTACTS_BULK_DELETE_ERROR, 
 						function (){
 					
@@ -313,8 +330,8 @@ $(function(){
 			}
 			else
 			{
-				showModalConfirmation(_agile_get_translated_val("bulk-delete", "bulk-delete"), 
-						_agile_get_translated_val("contact-details", "delete") + " " + dealsCount + " " + _agile_get_translated_val("deal-view", "Deals?"), 
+				showModalConfirmation("{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}", 
+						 "{{agile_lng_translate 'contact-details' 'delete'}} " + dealsCount + " {{agile_lng_translate 'deal-view' 'Deals?'}}", 
 						function (){
 							// Customize the bulk delete operations
 							if(!customize_bulk_delete(id_array, data_array))
@@ -345,7 +362,7 @@ $(function(){
 			if($(this).attr('disabled') === "disabled")
 				return;
 			
-			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("others", "bulk-delete-no-select") + '</div>').show().delay(3000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger m-t-sm"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "others" "bulk-delete-no-select"}}</div>').show().delay(3000).hide(1);
 		}
 			
 	});
@@ -370,7 +387,7 @@ function customize_bulk_delete(id_array, data_array){
 			}	
 		});
 		if(id_array.length == 0){
-			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>' + _agile_get_translated_val("users", "delete-user-error") + '</div>').show().delay(5000).hide(1);
+			$('body').find(".select-none").html('<div class="alert alert-danger"><a class="close" data-dismiss="alert" href="#">&times;</a>{{agile_lng_translate "users" "delete-user-error"}}</div>').show().delay(5000).hide(1);
 			return false;
 		}
 	}
@@ -404,7 +421,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		data: json,
 		contentType : "application/x-www-form-urlencoded",
 		success: function() {
-			
+
 			if(url=='core/api/tasks/bulk'){
 				getDueTasksCount(function(count){
 					var due_task_count= count;
@@ -449,37 +466,124 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			{
 				var message;
 				if(count > 1)
-				 message = _agile_get_translated_val("users", "deleted-users");
+				 message = "{{agile_lng_translate 'users' 'deleted-users'}}";
 			    else
-			     message = _agile_get_translated_val("users", "deleted-user");
+			     message = "{{agile_lng_translate 'users' 'deleted-user'}}";
 				showNotyPopUp('information', message, "top", 10000);
 			}
 			if(count >= 100 || count == 0)
 			{
 				if($(table).attr('id') == "contacts-table")
 				{
-					showNotyPopUp('information', _agile_get_translated_val("contacts", "delete-process-info"), "top", 5000);
+					showNotyPopUp('information', "{{agile_lng_translate 'contacts' 'delete-process-info'}}", "top", 5000);
 					CONTACTS_HARD_RELOAD = true;
 				}
 				if($(table).attr('id') == "companies"){
-					showNotyPopUp('information', _agile_get_translated_val("companies", "delete-process-info"), "top", 5000);
+					showNotyPopUp('information', "{{agile_lng_translate 'companies' 'delete-process-info'}}", "top", 5000);
 					COMPANIES_HARD_RELOAD = true;
 				}
 			}
 			
 			if(!is_grid_view)
 			{
+				
 				var tbody = $(table).find('tbody');
 				
 				// To remove table rows on delete 
-				for(var i = 0; i < index_array.length; i++) 
+				for(var i = 0; i < index_array.length; i++) {
 					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });				
+				}
+				if($("#contacts-count").is(":visible")){
+					if(SELECT_ALL && SELECT_ALL == true){
+						var type ="";
+						var countURL = "";
+						if($(table).attr('id') == "contacts-table"){
+							type = "contacts";
+							countURL = App_Contacts.contactsListView.options.url + "/count";
+						}
+						if($(table).attr('id') == "companies"){
+							type = "companies";
+							countURL = App_Companies.companiesListView.options.url + "/count";
+						}
+						var is_curr_route = Current_Route;
+						var count_one = null;
+						var count_two= 0;
+						i = 0;
+						var time = 2500;
+						var isfirst_time = false;
+						var couninterval = setInterval(function() {
+							if(Current_Route == is_curr_route){
+								if(isfirst_time)
+									time = 5000;
+
+								if(count_one != count_two){
+									$.ajax({
+									 	url:countURL,
+									 	method:"GET",
+									 	success:function(data){
+									 		if(i == 0){
+									 			count_one = data;
+									 			i = 1;
+									 		}else{
+									 			count_two = data;
+									 			i = 0;
+									 		}
+									 		var count_message = "<small> (" + data + " {{agile_lng_translate 'other' 'total'}}) </small>";
+											$('#contacts-count').html(count_message);
+											isfirst_time = true;
+											if(data == 0)
+									 			clearInterval(couninterval);
+									 	}
+									 });
+								}else{
+									if(is_curr_route == "contacts"){
+										CONTACTS_HARD_RELOAD = true;
+									}else{
+										COMPANIES_HARD_RELOAD = true;
+									}
+									clearInterval(couninterval);
+								}
+							}else{
+								if(is_curr_route == "contacts"){
+									CONTACTS_HARD_RELOAD = true;
+								}else{
+									COMPANIES_HARD_RELOAD = true;
+								}
+								clearInterval(couninterval);
+							}
+						}, time);
+					}else{
+						var time = "";
+						if(count < 100){
+							time = 1000;
+						}else{
+							time = 5000;
+						}
+						
+						var con_count = $('#contacts-count').text();
+						if(con_count){
+							var res_count = con_count.split("(")[1].split(" ")[0];
+							res_count = parseInt(res_count.trim())-count;
+							setTimeout(function() {
+								var count_message = "<small> (" + res_count + " {{agile_lng_translate 'other' 'total'}}) </small>";
+								$('#contacts-count').html(count_message);
+								if($(table).attr('id') == "contacts-table"){
+									CONTACTS_HARD_RELOAD = true;
+									contacts_view_loader.getContacts(App_Contacts.contactViewModel, $("#contacts-listener-container"));
+								}else{
+									COMPANIES_HARD_RELOAD = true;
+									companies_view_loader.getCompanies(App_Companies.companyViewModel, $('#companies-listener-container'));
+								}
+							},time);
+						}
+					}
+				}
 			}
 			else
 			{
 				// To remove table rows on delete 
 				for(var i = 0; i < id_array.length; i++) 
-					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
+					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });		
 			}
 			
 			try{
@@ -510,6 +614,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				}
 				case 'core/api/tickets/filters/bulk':{
 
+					if(App_Ticket_Module.ticketFiltersList && App_Ticket_Module.ticketFiltersList.collection){
 					  if(id_array.length == App_Ticket_Module.ticketFiltersList.collection.length)
 						App_Ticket_Module.ticketFilters();
 
@@ -521,7 +626,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 	                      var filterJSON = App_Ticket_Module.ticketFiltersList.collection.at(0).toJSON();
 			 			  Ticket_Filter_ID = filterJSON.id;
 			 		  }
-
+			 		}
 					break;
 				}
 
@@ -584,11 +689,11 @@ function customize_delete_message(table)
 	}
 	
 	// Default message for all tables
-	var confirm_msg = _agile_get_translated_val("others", "delete-warn");
+	var confirm_msg = "{{agile_lng_translate 'others' 'delete-warn'}}";
 	
 	// Appends campaign-name for active subscribers
 	if($(table).attr('id') === "active-campaign")
-		confirm_msg = _agile_get_translated_val("contacts", "delete-contacts-from") +$('#subscribers-campaign-name').text()+" " + _agile_get_translated_val("contact-details", "campaign") + "?";
+		confirm_msg = "{{agile_lng_translate 'contacts' 'delete-contacts-from'}}" + $('#subscribers-campaign-name').text()+" {{agile_lng_translate 'contact-details' 'campaign'}}?";
 
 	// Shows confirm alert, if Cancel clicked, return false
 	//if(!confirm(confirm_msg))   //changed 21/6 adi

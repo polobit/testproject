@@ -39,9 +39,11 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.ReferUtil;
 import com.agilecrm.util.CookieUtil;
+import com.agilecrm.util.MobileUADetector;
 import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Key;
@@ -103,6 +105,9 @@ public class RegisterServlet extends HttpServlet
 		
 	    if (type != null)
 	    {
+	    // Validates Oauth Request
+	    validateOauthRequest(request);
+	    
 		if (type.equalsIgnoreCase("oauth"))
 		{
 		    registerOAuth(request, response);
@@ -117,8 +122,15 @@ public class RegisterServlet extends HttpServlet
 	}
 	catch (Exception e)
 	{
+		String mssg = "";
+		try {
+			mssg = e.getMessage();
+			mssg = URLEncoder.encode(mssg);
+		} catch (Exception e2) {
+		}
+		
 	    // Send to Login Page
-	    request.getRequestDispatcher("register-new1.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(
+	    request.getRequestDispatcher("register-new1.jsp?error=" + mssg).forward(
 		    request, response);
 	    return;
 	}
@@ -136,7 +148,7 @@ public class RegisterServlet extends HttpServlet
 	}
 	request.getRequestDispatcher("register-new1.jsp").forward(request, response);
     }
-
+    
     /**
      * If the user is registering using Oauth, it first checks if user
      * information already exists. Domain user is created and it is redirected
@@ -162,6 +174,8 @@ public class RegisterServlet extends HttpServlet
 	    if (DomainUserUtil.count() == 0)
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
+		if(domainUser == null)
+			return;
 
 		response.sendRedirect(VersioningUtil.getLoginUrl(domainUser.domain, request));
 		return;
@@ -253,6 +267,8 @@ public class RegisterServlet extends HttpServlet
 
 	email = email.toLowerCase();
 
+	
+
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
 
@@ -295,14 +311,8 @@ public class RegisterServlet extends HttpServlet
 	// New user param to save defaults
 	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
 	
-	// New user param to save defaults
-	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
-	
-	// New user param to save defaults
-	request.getSession().setAttribute(IS_NEWLY_REGISTERED_USER_ATTR, new Boolean(true));
-	
 	// Set misc values at Register before sending user to home page.
-	LoginUtil.setMiscValuesAtLogin(request, domainUser);
+	new LoginUtil().setMiscValuesAtLogin(request, domainUser);
 	
 	// If request from plugins forward the request to jsp to call plugin callback
 	if(StringUtils.isNotBlank(originName))
@@ -312,9 +322,18 @@ public class RegisterServlet extends HttpServlet
 		request.getRequestDispatcher("register_success_callback.jsp").forward(request, response);
 		return;
 	}
+	request.getSession().setAttribute("Email", email);
 	
-	// Redirect to home page
-	response.sendRedirect(redirectionURL);
+	request.getSession().setAttribute("RedirectionHomeURL", redirectionURL);
+	request.setAttribute("redirectionurl", redirectionURL);
+	
+	// Hide invite users from mobile
+	if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
+		response.sendRedirect(redirectionURL);
+	}
+	else{
+		response.sendRedirect("/invite-users?redirectionurl="+redirectionURL);
+	}
 	
     }
 
@@ -570,9 +589,15 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Domain
 	String domain = NamespaceManager.get();
-	if (StringUtils.isEmpty(domain))
+	String type = request.getParameter("type");
+	if (StringUtils.isEmpty(domain) && StringUtils.isNotBlank(type) && type.equalsIgnoreCase("oauth")) {
+		request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
+		return null;
+	}
+	
+	/*if (StringUtils.isEmpty(domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-		throw new Exception("Invalid Domain. Please go to choose domain.");
+		throw new Exception("Invalid Domain. Please go to choose domain.");*/
 
 	// Get Domain User with this name, password - we do not check for domain
 	// for validity as it is verified in AuthFilter
@@ -612,10 +637,17 @@ public class RegisterServlet extends HttpServlet
 	domainUser.setInfo(DomainUser.COUNTRY, request.getHeader("X-AppEngine-Country"));
 	domainUser.setInfo(DomainUser.CITY, request.getHeader("X-AppEngine-City"));
 	domainUser.setInfo(DomainUser.LAT_LONG, request.getHeader("X-AppEngine-CityLatLong"));
-	
+	domainUser.pic = "https://d1gwclp1pmzk26.cloudfront.net/img/gravatar/48.png";
 	
 	// Set Role
 	domainUser.role = DomainUserUtil.getDomainUserRole(((String) request.getParameter(RegistrationGlobals.USER_ROLE)));
+	
+	// Add user selected language from register page dropdown
+	String language = request.getParameter("user_lang");
+	if(StringUtils.isBlank(language))
+		language = UserPrefs.DEFAULT_LANGUAGE;
+	domainUser.language_on_register = language;
+	
 	domainUser.save();
 
 	if (domainUser != null && reference_domain != null)
@@ -726,9 +758,26 @@ public class RegisterServlet extends HttpServlet
 	}
     }
     
+    private void validateOauthRequest(HttpServletRequest request) throws Exception{
+    	String oauthError = request.getParameter("oauth_error");
+    	if(StringUtils.isBlank(oauthError))
+    		return;
+    	
+    	// Delete session from request
+    	deleteSessionFromRequestScope(request);
+    	
+    	throw new Exception(oauthError);
+    }
+    
+    public static void deleteSessionFromRequestScope(HttpServletRequest request){
+    	try {
+    		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+		} catch (Exception e) {
+		}
+    }
+    
     public static void main(String[] args) {
-    	String email = "info@mpagenciadigital.com.br";
-    	String emailType = (email.split("@")[1]).split("\\.")[0];
-    	System.out.println(emailType);
+		String password = null;
+		System.out.println(StringUtils.isEmpty(password));
 	}
 }

@@ -68,6 +68,7 @@ public class NotificationsAPI
 	    notifications.link_clicked = notify.link_clicked;
 	    notifications.deal_created = notify.deal_created;
 	    notifications.deal_closed = notify.deal_closed;
+	    notifications.deal_closed_email=notify.deal_closed_email;				//ad
 	    notifications.contact_added = notify.contact_added;
 	    notifications.contact_deleted = notify.contact_deleted;
 	    notifications.tag_added = notify.tag_added;
@@ -75,6 +76,7 @@ public class NotificationsAPI
 	    notifications.call = notify.call;
 
 	    notifications.notification_sound = notify.notification_sound;
+	    notifications.push_mobile_notification = notify.push_mobile_notification;
 
 	    notifications.save();
 	    return notifications;

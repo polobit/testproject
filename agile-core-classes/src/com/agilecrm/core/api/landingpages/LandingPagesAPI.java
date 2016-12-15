@@ -263,6 +263,9 @@ public class LandingPagesAPI
 		JSONArray landingPageIds = new JSONArray(model_ids);
 		LandingPage.dao.deleteBulkByIds(landingPageIds);
 		LandingPageUtil.deleteLandingPageCNames(landingPageIds);
+		
+		// Inform to CMS plugins
+		CMSPlugin.updateToCmsPlugins(CMSPlugin.EventName.LandingPages, false);
 	}
 
 }

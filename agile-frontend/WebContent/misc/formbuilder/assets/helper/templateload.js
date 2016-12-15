@@ -1,7 +1,7 @@
 define([
 		'jquery', 'underscore', 'backbone', 'helper/pubsub', 'collections/my-form-snippets', 'views/my-form'], function($, _, Backbone, PubSub, MyFormSnippetsCollection, MyFormView)
 {
-	return { agile_template_load : function(api)
+	return { agile_template_load : function(api,fields)
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'misc/formbuilder/templates/' +formTemplate + '/index.json';
 		console.log(url);
@@ -14,6 +14,19 @@ define([
 				
 				saveform = JSON.parse(data.formJson);
 				console.log(saveform);
+				var agilethemeObj=saveform[0].fields.agiletheme;
+				var themeClassName="";
+				if(agilethemeObj!=undefined || agilethemeObj!=null){
+					var agilethemeObjValArr=agilethemeObj.value;
+					for(i=0;i<agilethemeObjValArr.length;i++){
+						if(agilethemeObjValArr[i].selected){
+						     themeClassName=agilethemeObjValArr[i].value;
+						     $("#target").addClass(themeClassName);
+						     break;
+						}
+					}
+			    }
+				
 				saveform[0].fields.agiledomain.value = window.location.hostname.split('.')[0];
 				saveform[0].fields.agileapi.value = api.js_api_key;
 				console.log(saveform);
@@ -33,7 +46,7 @@ define([
 			    		  }
 			    	  }
 				} else {
-					$.getJSON( "/core/api/custom-fields", function(fields) {
+				if(fields) {
 					
 					var count = 0;
 					if(fields.length != 0)
@@ -73,7 +86,7 @@ define([
 				}
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
-				});
+		}
 				}
 				
 			}

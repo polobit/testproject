@@ -4,20 +4,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.RegistrationGlobals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.subscription.Subscription.BillingStatus;
+import com.agilecrm.subscription.Subscription.BlockedEmailType;
+import com.agilecrm.subscription.Subscription.EmailPurchaseStatus;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import com.thirdparty.sendgrid.SendGrid;
 
 public class SubscriptionUtil
 {
@@ -29,16 +39,32 @@ public class SubscriptionUtil
      * */
     public static Subscription getSubscription()
     {
-	Objectify ofy = ObjectifyService.begin();
-	Subscription subscription = ofy.query(Subscription.class).get();
-	if (subscription == null)
-	{
-	    subscription = new Subscription();
-
-	    subscription.fillDefaultPlans();
-	}
-
-	return subscription;
+    	Subscription subscription = null;
+    	// Check if subscription is present in Cache.
+    	// If yes, serve it from cache.
+    	// If not, fetch from datastore, set in cache and return it.
+    	try {
+    		subscription = (Subscription) CacheUtil.getCache(Subscription.fetchCacheKey());
+    		if( subscription != null )	
+        		return subscription; 
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+    	
+		Objectify ofy = ObjectifyService.begin();
+		subscription = ofy.query(Subscription.class).get();
+		if (subscription == null)
+		{
+		    subscription = new Subscription();
+		    subscription.fillDefaultPlans();
+		}
+		try {
+			CacheUtil.setCache(Subscription.fetchCacheKey(), subscription);
+		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return subscription;
     }
 
     public static boolean isFreePlan()
@@ -95,9 +121,11 @@ public class SubscriptionUtil
 	Subscription subscription = Subscription.getSubscriptionOfParticularDomain(namespace);
 	if (subscription != null)
 	{
-	    JSONObject billing = subscription.billing_data;
-	    System.out.println(billing + " in subscription.java");
-	    return getCustomer(billing);
+	    JSONObject billing = subscription.fetchBillingDataJSONObject();
+	    if(billing != null){
+		    System.out.println(billing + " in subscription.java");
+		    return getCustomer(billing);
+	    }
 	}
 	return null;
 
@@ -121,14 +149,19 @@ public class SubscriptionUtil
     public static Subscription createEmailSubscription(Plan plan) throws Exception
     {
 	Subscription subscription = getSubscription();
+	if(isEmailsPurchaseStatusBlocked(subscription))
+		throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKED);
 	// Creates customer and adds subscription
-	subscription.billing_data = subscription.getAgileBilling().addSubscriptionAddon(plan);
+	subscription.setBillingData(subscription.getAgileBilling().addSubscriptionAddon(plan));
 	subscription.emailPlan = plan;
 
 	// Saves new subscription information
-	if (subscription.billing_data != null)
+	if (subscription.fetchBillingDataJSONObject() != null)
 	    subscription.save();
-
+	if(plan.quantity > 10 && !isCostlyUser()){
+		blockEmailPurchasing(BlockedEmailType.SUBSCRIPTION, plan.quantity * 1000);
+		throw new EmailPurchaseLimitCrossedException(ExceptionUtil.EMAILS_PURCHASE_BLOCKING);
+	}
 	return subscription;
     }
 
@@ -226,6 +259,8 @@ public class SubscriptionUtil
 
     public static void deleteUserSubscription()
     {
+    if(StringUtils.equalsIgnoreCase("admin", NamespaceManager.get()))
+    	return;
 	Subscription subscription = getSubscription();
 	if (subscription.isFreePlan())
 	    return;
@@ -283,5 +318,72 @@ public class SubscriptionUtil
 	    plan = new Plan("FREE", 2);
 
 	return plan;
+    }
+    
+    public static boolean isSubscriptionDeleted(){
+    	Subscription subscription = getSubscription();
+    	System.out.println("subscription:::"+subscription);
+    	if(subscription.status != null && subscription.status.equals(BillingStatus.SUBSCRIPTION_DELETED)){
+    		System.out.println("subscriptionstatus is SUBSCRIPTION_DELETED");
+			return true;
+    	}
+    	return false;
+    }
+    
+    public static boolean isSubscriptionDeleted(String namespace){
+    	if(namespace == null)
+    		return true;
+    	String oldNamespace = NamespaceManager.get();
+    	try{
+    		NamespaceManager.set(namespace);
+    		return isSubscriptionDeleted();
+    	}finally{
+    		NamespaceManager.set(oldNamespace);
+    	}
+    }
+    
+    public static boolean isEmailsPurchaseStatusBlocked(){
+    	Subscription subscription = getSubscription();
+    	return isEmailsPurchaseStatusBlocked(subscription);
+    }
+    
+    public static boolean isEmailsPurchaseStatusBlocked(Subscription subscription){
+    	EmailPurchaseStatus status = subscription.getEmailpurchaseStatus();
+    	if(status != null && status.equals(EmailPurchaseStatus.BLOCKED))
+    		return true;
+    	return false;
+    }
+    
+    public static Subscription blockEmailPurchasing(BlockedEmailType type, int pendingEmailsCount){
+    	Subscription subscription = getSubscription();
+    	subscription.setEmailpurchaseStatus(EmailPurchaseStatus.BLOCKED);
+    	subscription.setBlockedEmailtype(type);
+    	subscription.setPendingEmailsCount(pendingEmailsCount);
+    	subscription.save();
+    	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+    	String html = "Below are the details who subscribed or purchased emails:<br><br>Domain: "+user.domain+"<br>Username: "+user.email+"<br>Emails type: EMAIL "+type.toString();
+    	SendGrid.sendMail(user.email, user.domain, "care@agilecrm.com,mogulla@agilecrm.com,venkat@agilecrm.com", null, null, "Email Subscription - Spam Checking", null, html, null);
+    	return subscription;
+    }
+    
+    public static void releaseEmailPurchasing(){
+    	Subscription subscription = getSubscription();
+    	if(subscription.getEmailpurchaseStatus() == null || !subscription.getEmailpurchaseStatus().equals(EmailPurchaseStatus.BLOCKED))
+    		return;
+    	if(BlockedEmailType.SUBSCRIPTION.equals(subscription.getBlockedEmailtype()))
+    		BillingRestrictionUtil.setPaidEmailsCount(subscription.getPendingEmailsCount());
+    	else if(BlockedEmailType.CREDIT.equals(subscription.getBlockedEmailtype()))
+    		BillingRestrictionUtil.addEmailCredits(subscription.getPendingEmailsCount());
+    	subscription.setPendingEmailsCount(0);
+    	subscription.setEmailpurchaseStatus(EmailPurchaseStatus.RELEASED);
+    	subscription.setBlockedEmailtype(null);
+    	subscription.save();
+    }
+    
+    public static boolean isCostlyUser(){
+    	Subscription subscription = getSubscription();
+    	if(subscription.plan != null && !PlanType.FREE.equals(subscription.plan.plan_type) && subscription.plan.getPlanInterval() != null && (subscription.plan.getPlanInterval().toLowerCase().equals("yearly") || subscription.plan.getPlanInterval().toLowerCase().equals("biennial")))
+    		return true;
+    	return false;
     }
 }

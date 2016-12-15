@@ -20,6 +20,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.HTMLUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -59,9 +60,23 @@ public class TicketNotes
 	@NotSaved
 	public Long group_id = null;
 
+	
+	public Long feedback_time = 0L;
+	
+	
+	public String feedback_comment = "";
 	/**
 	 * Stores user ID to whom ticket is assigned
 	 */
+	
+	/**
+	 * Stores feed back for a note
+	 */
+	public String feed_back;
+	
+	
+	
+	
 	private Key<DomainUser> assignee_key = null;
 
 	/**
@@ -74,12 +89,15 @@ public class TicketNotes
 	{
 		AGENT, REQUESTER
 	};
-
+	
+	public boolean feedback_flag = false;
+	
 	/**
 	 * Stores last updated by text either agent or customer
 	 */
 	public CREATED_BY created_by = CREATED_BY.REQUESTER;
 
+	
 	/**
 	 * Stores name of customer who created ticket
 	 */
@@ -272,9 +290,12 @@ public class TicketNotes
 					// Execute note created by agent trigger
 					TicketTriggerUtil.executeTriggerForNewNoteAddedByCustomer(ticket);
 			}
-
-			// Logging notes activity
-			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, html_text,
+		    
+		  //removing the text between script
+		    String htmlText = HTMLUtil.removeScriptFromHtmltext(html_text);
+			
+		    // Logging notes activity
+			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, htmlText,
 					"html_text", false);
 		}
 		catch (Exception e)
@@ -306,6 +327,11 @@ public class TicketNotes
 
 		if (assignee_key != null)
 			assignee_id = assignee_key.getId();
+		
+		if(feedback_time == 0 || feedback_time == null)
+		   feedback_time = created_time;
+		
+		html_text =HTMLUtil.removeScriptFromHtmltext(html_text); 	    
 	}
 
 	/**

@@ -50,7 +50,7 @@ var task_details_tab = {
 								var taskJSON = taskDetailView.toJSON();
 								var domainUserId = taskJSON.domain
 								taskActivitiesView = new Base_Collection_View({ url : '/core/api/activitylog/getActivityByEntityId?entity_id='+taskJSON.id+'', templateKey : "task-related-activity",
-												individual_tag_name : 'li',sortKey : "time", descending : true,cursor : true, page_size : 25, postRenderCallback : function(el)
+												individual_tag_name : 'li',sortKey : "time", descending : true,cursor : true, page_size : getMaximumPageSize(), postRenderCallback : function(el)
 												{
 													agileTimeAgoWithLngConversion($(".event-created-time", el));
 																

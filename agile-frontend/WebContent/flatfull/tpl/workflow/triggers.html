@@ -1,5 +1,46 @@
 <script id="triggers-model-template" type="text/html">		
-	<td class="data" data="{{id}}">
+	{{#is_mobile}}
+    <td class="hide"></td>
+     <td class="data" data="{{id}}">
+        <div class="table-resp">
+            <a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a>
+        </div>
+        <div class="table-resp text-sm text-muted l-h-xs">
+        {{triggerType type}}
+        <span class="table-resp">
+            {{#if custom_score}}({{custom_score}}) {{/if}} 
+            {{#if custom_tags}}({{custom_tags}}){{/if}} 
+            {{#if trigger_deal_milestone}}
+                ({{trigger_milestone trigger_deal_milestone}})
+            {{/if}} 
+            {{#if trigger_stripe_event}}
+                ({{trigger_stripe_event}})
+            {{/if}}
+            {{#if trigger_shopify_event}}({{trigger_shopify_event}}){{/if}}
+            {{#if contactFilter}}
+                {{#if_equals_lowerCase contactFilter ""}} {{else}}
+                    ({{contactFilter}})
+                {{/if_equals_lowerCase}}
+            {{/if}}
+            {{#if trigger_form_event}}
+                ({{getFormNameFromId trigger_form_event}})
+            {{/if}}
+        </span>
+        </div>
+
+        <div class="table-resp text-xs text-muted l-h-xs">
+        <div class="text-ellipsis">{{campaign}}</div>
+        </div>
+
+        {{#if is_disabled}}
+        <div><label class="label label-danger m-b-none">{{agile_lng_translate 'campaigns' 'disabled'}}</label></div>
+        {{/if}}
+
+    </td>        
+
+    {{else}}
+
+    <td class="data" data="{{id}}">
 		<div class="table-resp">
 			<a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a>
 		</div>
@@ -8,22 +49,22 @@
 	<td><div class="table-resp">{{#if custom_score}}{{custom_score}} {{/if}} {{#if custom_tags}}{{custom_tags}}{{/if}} {{#if trigger_deal_milestone}}{{trigger_milestone trigger_deal_milestone}}{{/if}} {{#if trigger_stripe_event}}{{trigger_stripe_event}}{{/if}}{{#if trigger_shopify_event}}{{trigger_shopify_event}}{{/if}} {{#if contactFilter}}{{contactFilter}}{{/if}}{{#if trigger_form_event}}{{getFormNameFromId trigger_form_event}}{{/if}}</div></td>
 	<td><div class="table-resp"><div class="pull-left text-ellipsis" style="width: 70%;">{{campaign}}</div>{{#if is_disabled}}<div class="pull-right"><label class="label label-danger m-b-none">{{agile_lng_translate 'campaigns' 'disabled'}}</label></div>{{/if}}</div></td>
 	<br />
+    {{/is_mobile}}
 </script>
 <script id="triggers-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-sm-12 col-md-12">
-        
 			
-            	<h3 class="pull-left font-thin h3">{{agile_lng_translate 'campaigns' 'list-of-triggers'}}</h3>
-			
-			<div class="pull-right">
-            	<a href="#trigger-add" class="btn right btn-default btn-sm btn-addon" id="addTrigger">
-					<i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}
-				</a>
-			</div>
-           <div class="clearfix"></div>
-       
+                    <h3 class="pull-left font-thin h3">{{agile_lng_translate 'campaigns' 'triggers-title'}}</h3>
+
+                    <div class="pull-right add-campaign-btn">
+                    <a href="#trigger-add" class="btn right btn-default btn-sm btn-addon" id="addTrigger">
+                    <i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}
+                    </a>
+                    </div>
+                    <div class="clearfix"></div>
+
     </div>
 </div>
 </div>
@@ -53,6 +94,21 @@
 		</div>
         {{/unless}}
         {{#if this.length}}
+
+        {{#is_mobile}}
+
+        <div class="col-md-9 col-sm-9">
+                <div class="panel panel-default">
+                <div class="panel-heading">{{agile_lng_translate 'campaigns' 'triggers-list'}}</div>
+                <table class="table m-b-none agile-table panel" url="core/api/triggers/bulk">
+                
+                    <tbody id="triggers-model-list" route="trigger/"> </tbody>
+                </table>
+                </div>
+            </div>
+
+            {{else}}
+
             <div class="col-md-9 col-sm-9 table-responsive">
 				<div class="panel panel-default">
 			    <div class="panel-heading">{{agile_lng_translate 'campaigns' 'triggers-list'}}</div>
@@ -69,9 +125,10 @@
                 </table>
 				</div>
             </div>
+            {{/is_mobile}}
         {{/if}}
-    <div class="col-sm-3 col-md-3 p-none">
-        <div class="wrapper-sm">
+    <div class="col-sm-3 col-md-3">
+        <div class="triggers-right-body">
             <h4 class="m-t-none h4 m-b-sm">
                 {{agile_lng_translate 'campaigns' 'what-are-triggers'}}
             </h4>

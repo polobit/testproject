@@ -1,10 +1,26 @@
 
 <!DOCTYPE html>
 
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="java.util.Date"%>
 <%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<%
+//User Language 
+String _LANGUAGE = "en";
+try{
+  _LANGUAGE = UserPrefsUtil.getCurrentUserPrefsFromRequest(request).language;
+}catch(Exception e){}
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload-csv");
+
+%>
 
 <html>
 
@@ -13,7 +29,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Upload CSV</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-csv") %></title>
 <%-- <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
@@ -30,7 +46,13 @@
 jQuery.validator.setDefaults({
   debug: true,
   success: "valid"
-});;
+});
+
+var localeJSON = <%=localeJSON%>;
+jQuery.extend(jQuery.validator.messages, {
+      required: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "required") %>'
+  });
+
 </script>
 <script type="text/javascript">
 
@@ -75,7 +97,7 @@ $(function()
   //$('.error', $("#form")).remove();
   if(fail && !key)
     { 
-      $("#form").append('<label class="error">Max limit 10,000 contacts.</label>'); 
+      $("#form").append('<label class="error"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "max-limit-10000") %>.</label>'); 
       return;
     }
   if(key != undefined)
@@ -103,7 +125,7 @@ function isValid(){
                },
           messages: {
               file: {
-                accept: "Please upload a CSV file",
+                accept: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "pl-upload-a-csv") %>',
               },
                },
              submitHandler:function(form)
@@ -150,14 +172,14 @@ function isValid(){
 <div class="row">
 <div class="col-md-12 col-sm-12 col-xs-12">
 <div class="panel panel-default mobile-popup">
-<div class="panel-heading">Upload CSV file</div>
+<div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-csv-file") %></div>
 <div class="panel-body">
 <br/>
  <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
   
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<input name="upload" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary' type="submit" /> 
 <%String filetype = request.getParameter("type"); 
 if(!filetype.equalsIgnoreCase("undefind")){
     %>

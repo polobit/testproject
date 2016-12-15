@@ -3,7 +3,7 @@
         {
             "category": "General",
             "description": "Category description here",
-            "list": [
+            "newsletters_list": [
                 {
                     "id": "layout1",
                     "displayname": "sample layout 1",
@@ -28,8 +28,30 @@
                     "id": "layout5",
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
+                }
+                
+            ],
+         "celebrations_list" :[
+
+                {
+                    "id":"layout8",
+                    "displayname":"sample layout2",
+                    "description":"this is sample text"
                 },
                 {
+                    "id":"layout9",
+                    "displayname":"sample layout2",
+                    "description":"this is sample text"
+                },
+                {
+                    "id":"layout10",
+                    "displayname":"sample layout2",
+                    "description":"this  is sample text"
+                }
+            ],
+            "notifications_list" :[
+
+                 {
                     "id": "layout4",
                     "displayname": "sample layout 2",
                     "description": "this is sample text"

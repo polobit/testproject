@@ -43,9 +43,11 @@ $(function(){
 		save_event('updateActivityForm', 'updateActivityModal', true, this,currentDiv, function(data)
 		{
 			console.log(data);
-			var eventModel = eventCollectionView.collection.get(eventId);
-			eventModel.set(data.toJSON(), { merge : true });
-			eventCollectionView.render(true);
+			if(eventCollectionView && eventCollectionView.collection){
+				var eventModel = eventCollectionView.collection.get(eventId);
+				eventModel.set(data.toJSON(), { merge : true });
+				eventCollectionView.render(true);
+			}
 		});
 
 	});
@@ -56,17 +58,17 @@ $("#updateActivityModal").on('click', '#delete_web_event', function(e)
 	{
 		e.preventDefault();
 
-		if(hasScope("MANAGE_CALENDAR") || (CURRENT_DOMAIN_USER.id == App_Calendar.current_event.owner.id))
+		if(hasScope("DELETE_CALENDAR"))
 		{
 			var event_id = $('#updateActivityForm input[name=id]').val();
 			$("#updateActivityModal").modal('hide');
 			$("#webEventCancelModel").modal('show');
-			$("#cancel_event_title").html(_agile_get_translated_val('events','delete-event') + " &#39" + web_event_title + "&#39?");
+			$("#cancel_event_title").html("{{agile_lng_translate 'events' 'delete-event'}} &#39" + web_event_title + "&#39?");
 			$("#event_id_hidden").html("<input type='hidden' name='event_id' id='event_id' value='" + event_id + "'/>");
 		}
 		else
 		{
-			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>'+_agile_get_translated_val('tasks','you-do-not-have-permission-to-delete-this-event')+'</i></p></div>');
+			$("#updateActivityModal").find('span.error-status').html('<div class="inline-block"><p class="text-base" style="color:#B94A48;"><i>{{agile_lng_translate "tasks" "you-do-not-have-permission-to-delete-this-event"}}</i></p></div>');
 			setTimeout(function()
 			{
 				$("#updateActivityModal").find('span.error-status').html('');
@@ -144,7 +146,8 @@ $("#updateActivityModal").on(
 													}
 												}
 											}
-											else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+											else if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+												App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id'))
 											{
 												if (eventsView && eventsView.collection)
 												{
@@ -480,75 +483,7 @@ $(function()
 	 		highlight_event();
 	  		
 	  });
-	  $("body").on('click','#chrome-extension',function(e){
-		
-		$("#chrome-extension-modal").html(getTemplate("chrome-modal"));
-		$("#chrome-extension-modal").modal('show');
-	});
-
-	  $("body").on("click" , ".betaAccess", function(e){
-	  	//$(".BetaAccessForm").removeClass('hide');
-	  	$(".model-etensions").addClass("hide");
-	  		console.log("inside the sending request for the betarequest");
 	 
-	  	var json = {};
-		json.from=CURRENT_DOMAIN_USER.email;
-		json.to = "kiran@agilecrm.com";
-		json.cc = "narmada@invox.com" ;
-		json.subject = "Request for getting the Beta Access";	
-		json.body = "Name: " +CURRENT_DOMAIN_USER.name+"<br>"+"Useremail: "+CURRENT_DOMAIN_USER.email+"<br>Domain: "+CURRENT_DOMAIN_USER.domain;
-		sendEmail(json);
-		$("#betasuccess").removeClass("hide");
-	  });
-
-	  $("body").on('click','#betarequest',function(e){
-
-
-	 //form for validationand sending the email and the domani name for the user
-	/*  	
-	  if(! validateEmail($("#betaAccessForm").find("#email").val()))
-	  	return;
-	  		
-	  		unindexed_array = $("#betaAccessForm").serializeArray();
-			var indexed_array = {};
-
-			$.map(unindexed_array, function(n, i) {
-				indexed_array[n['name']] = n['value'];
-			});
-			return indexed_array;	*/
-	  });
-	    
-	    $('body').on('click',".AndroidExtension",function(e){
-	    	$(this).parents(".popover").popover('hide');
-	    });
-
-	  $('body').on('click',".chromeExtension",function(e){
-	  	if (document.getElementById('extension-is-installed')) {
-		  document.getElementById('chrome-extension').addClass("disabled");
-		  alert("Already installed");
-		}
-	  	// e.stopImmediatePropagation();
-	  	$(this).parents(".popover").popover('hide');
-	  	e.stopPropagation();
-	  	$("#chrome-extension-modal").addClass("hide")
-	  	console.log("before the chrome installation");
-	  	try{
-	  		chrome.webstore.install("https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib", 
-		        function(d){
-		          console.log("installed");
-		          var isInstalledNode = document.createElement('div');
-				  isInstalledNode.id = 'extension-is-installed';
-				  document.body.appendChild(isInstalledNode);
-		        },function(e){
-		          console.log("not installed: "+ e)
-		        });
-	  	}catch(e){
-	  		console.log(e);
-	  	}
-      	
-      	console.log("after the chrome installation")
-	  });
-
 
 	 function loadModalsDateandTimepickers(el){
 	 	agile_type_ahead("event_related_to", el, contacts_typeahead);
@@ -587,8 +522,7 @@ $(function()
 	 * start time, when they have no values by the time the modal is shown.
 	 */
 	$('#activityModal, #activityTaskModal').on('shown.bs.modal', function()
-	{
-		console.log("prem **** ");
+	{		
 		// Show related to contacts list
 		var el = $("#activityForm");
 		loadModalsDateandTimepickers(el);
@@ -977,7 +911,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>'+_agile_get_translated_val('events','start-date-error')+'</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-date-error"}}</div>');
 
 		return false;
 	}
@@ -986,7 +920,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>'+_agile_get_translated_val('events','start-time-error')+'</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-time-error"}}</div>');
 
 		return false;
 	}
@@ -995,7 +929,7 @@ function is_valid_range(startDate, endDate, startTime, endTime, modalName)
 		$('#' + modalName)
 				.find(".invalid-range")
 				.html(
-						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>'+_agile_get_translated_val('events','start-time-equals-error')+'</div>');
+						'<div class="alert alert-danger m-t-sm" style="margin-bottom:5px;"><a class="close" data-dismiss="alert" href="#">&times</a>{{agile_lng_translate "events" "start-time-equals-error"}}</div>');
 
 		return false;
 	}
@@ -1144,16 +1078,25 @@ function save_event(formId, modalName, isUpdate, saveBtn, el,callback)
 							renderAddedEventToFullCalenarBasedOnCookie(event);
 						}
 						// Updates data to temeline
-						else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+						else if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+							(App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id')))
 						{
-
+							var contactId;
+							if(App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+							{
+								contactId = App_Contacts.contactDetailView.model.get('id');
+							}
+							else
+							{
+								contactId = App_Leads.leadDetailView.model.get('id');
+							}
 							/*
 							 * Verifies whether the added task is related to the
 							 * contact in contact detail view or not
 							 */
 							$.each(event.contacts, function(index, contact)
 							{
-								if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+								if (contact.id == contactId)
 								{
 
 									// Add model to collection. Disabled sort

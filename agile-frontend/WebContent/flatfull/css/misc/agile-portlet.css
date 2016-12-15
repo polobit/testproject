@@ -905,7 +905,6 @@ border-radius: 2px;
 	font-size:16px;
 	line-height : 15px;
 	padding-right:	5px;
-	 text-transform: lowercase; 
 	 color:#58666e
 }
 
@@ -970,7 +969,8 @@ border-radius: 2px;
  background:#eee;
 }
 .events_show{
-	overflow-y:auto
+	overflow-y:auto;
+	overflow-x:hidden;
 }
 
 
@@ -1031,12 +1031,11 @@ text-transform: uppercase;
  }
  .portlet-calendar-error-message
 {
-	padding: 20px 10px;
-	font-size: 14px;
+	padding: 20px 5px;
+	font-size: 13px;
 	font-style: italic;
 	text-align: center;
 	color: #98a6ad;
-	word-wrap: break-word;
 }
 
 .text-count{

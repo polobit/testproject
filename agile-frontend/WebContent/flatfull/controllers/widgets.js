@@ -127,7 +127,6 @@ var WidgetsRouter = Backbone.Router
 
                     // Shows available widgets in the content
                     $('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
-
                 });
 
             },
@@ -255,10 +254,15 @@ var WidgetsRouter = Backbone.Router
              */
             Xero : function(id) {
                 if (!id) {
+                    // For live use.
+                    var URL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins";
+                    // For local use.
+                    //var URL = "http://localhost:8585/clickdesk-plugins";
+
                     addOAuthWidget(
                             "Xero",
                             "xero-login",
-                            ("http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol
+                            (URL + "/agile-xero-oauth?callbackUrl=" + encodeURIComponent(window.location.protocol
                                     + "//"
                                     + window.location.host
                                     + "/XeroServlet?isForAll="
@@ -423,7 +427,6 @@ function getAgileConfiguredWidgetCollection(callback) {
 }
 
 function renderWidgetView(templateName, url, model, renderEle){
-
     var widgetModel = new Widget_Model_Events({
         template : templateName,
         url : url,
@@ -439,8 +442,69 @@ function renderWidgetView(templateName, url, model, renderEle){
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
+            /*$( "#twilioio_login_form .question-tag" ).hover(function() {
+                setTimeout(function(){ 
+                    $(".popover").addClass("col-md-12"); //.css({"top":"0px"});
+                }, 10);
+            });*/
+            $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
         }
     });
     var output = widgetModel.render().el;
     $(renderEle).html(output);
+    /*$( "#twilioio_login_form .question-tag" ).hover(function() {
+        setTimeout(function(){ 
+            $(".popover").addClass("col-md-12"); //.css({"top":"0px"});
+        }, 10);
+    });*/
+    $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
+}
+function closesupportnoty(){
+    $("#support_plan_alert_info").hide();
+}
+function gotoService(e,service,dashboard){
+    e.preventDefault();
+    // Remove blink icon from menu group icon
+    $(".grid_icon_center a.grid-icon-header").removeClass("agile-feature-item-blink");
+    // Reset active state from DomainUser.role
+    $(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").addClass("active");
+
+    var serviceName = service;
+    if(!serviceName)
+          return;
+
+    var dashboardName = dashboard;
+    if(!dashboardName)
+         dashboardName = "dashboard";
+
+    // Update user with the current service
+    var json = {};
+    json.id = CURRENT_DOMAIN_USER.id;
+    json.role = serviceName;
+
+    var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+    new Role().save( json, 
+    {success :function(model, response){
+        console.log("success");
+        console.log(model);
+        CURRENT_DOMAIN_USER = model.toJSON();
+        // Call dashboard route
+        Backbone.history.navigate("#", {
+                trigger: true
+            });
+    }, 
+    error: function(model, response){
+        console.log("error");
+    }});
+
+    //$(this).parents(".popover").popover('hide');
+
+    // Update dashboard name here
+    _agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
+
+    var due_tasks_count = $("#due_tasks_count").text();
+    due_tasks_count = due_tasks_count ? due_tasks_count : "";
+
+    // Update UI
+    $("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 }

@@ -1,6 +1,7 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,10 +25,12 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
+import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -281,6 +284,8 @@ public class ActivityUtil
 					activity.related_contact_ids = arr.toString();
 				}
 			}
+			
+			addRelatedDealsToActivity(activity, task.getDeal_ids());
 		}
 		catch (JSONException e)
 		{
@@ -345,6 +350,8 @@ public class ActivityUtil
 				}
 
 			}
+			
+			addRelatedDealsToActivity(activity, event.getDeal_ids());
 		}
 		catch (JSONException e)
 		{
@@ -482,6 +489,8 @@ public class ActivityUtil
 					activity.related_contact_ids = arr.toString();
 				}
 			}
+			
+			addRelatedDealsToActivity(activity, document.getDeal_ids());
 		}
 		catch (JSONException e)
 		{
@@ -806,6 +815,29 @@ public class ActivityUtil
 				mapvalue[2] = "expected_value";
 				dealmap.put("expected_value", mapvalue);
 			}
+			
+			Long oldID = oldobj.getPipeline_id();
+    		Long newID = obj.pipeline_id;
+    		
+    		if(!oldID.equals(newID)){
+    			Object[] mapvalue = new Object[3];
+    			String oldTrackName = MilestoneUtil.getMilestone(oldID).name;
+	    		String newTrackName = MilestoneUtil.getMilestone(newID).name;
+	    		if(!oldTrackName.equals(newTrackName)){
+					mapvalue[0] = newTrackName;
+					mapvalue[1] = oldTrackName;
+					mapvalue[2] = "track_names";
+					dealmap.put("track_names", mapvalue);
+					
+					if(oldobj.milestone.equalsIgnoreCase(obj.milestone)){
+						Object[] mileStoneMapValue = new Object[5];
+						mileStoneMapValue[0] = obj.milestone;
+						mileStoneMapValue[1] = oldobj.milestone;
+						mileStoneMapValue[2] = "milestone";
+						dealmap.put("milestone", mileStoneMapValue);
+					}
+	    		}
+    		}
 
 			if (compareDoubleValues(oldobj.probability, obj.probability) != 0)
 			{
@@ -1587,10 +1619,16 @@ public class ActivityUtil
 					if (f.name.equals(contact.FIRST_NAME))
 					{
 						calledToName += f.value;
+						continue;
 					}
 					if (f.name.equals(contact.LAST_NAME))
 					{
 						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
 					}
 				}
 
@@ -1894,9 +1932,19 @@ public class ActivityUtil
 	 * @return
 	 */
 	public static List<Activity> getActivititesBasedOnSelectedConditon(String entitytype, Long userid, int max,
-			String cursor, Long starttime, Long endtime, Long entityId)
+			String cursor, Long starttime, Long endtime, Long entityId,String activityTypeArray)
 	{
+		List<String> items = new ArrayList<String>();
+		
+		if(StringUtils.isNotEmpty(activityTypeArray)){
+			 items = Arrays.asList(activityTypeArray.split("\\s*,\\s*"));
+		}
+		
 		Map<String, Object> searchMap = new HashMap<String, Object>();
+		if(entitytype.equalsIgnoreCase("ALL") && items != null && items.size() != 0){
+			searchMap.put("entity_type in",items);
+		}
+
 		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT"))
 			searchMap.put("entity_type", entitytype);
 		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
@@ -1945,6 +1993,41 @@ public class ActivityUtil
 			return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
 		return dao.listByPropertyAndOrder(searchMap, "-time");
+	}
+
+	/**
+	 * 
+	 * @param activity_type
+	 *            CONTACTS_IMPORT,CONTACT_EXPORT,COMPANY_IMPORT,COMPANY_EXPORT,
+	 *            DEALS_IMPORT
+	 * @param data
+	 *            saved contacts,merged ,failed status
+	 * @param entity_type
+	 *            CONTACTS,COMAPANY,DEAL
+	 * 
+	 * @param label
+	 *            contacts,company,deal etc.
+	 */
+	public static void createLogForExport(ActivityType activity_type, EntityType entityType, int exported_contacts,
+			String url)
+	{
+
+		try
+		{
+
+			Activity activity = new Activity();
+			activity.activity_type = activity_type;
+			activity.entity_type = entityType;
+
+			activity.custom1 = String.valueOf(exported_contacts);
+			if (url != null)
+				activity.custom2 = url;
+			activity.save();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured in  import log " + e.getMessage());
+		}
 	}
 
 	/**
@@ -2210,10 +2293,16 @@ public class ActivityUtil
 							if (f.name.equals(contact.FIRST_NAME))
 							{
 								calledToName += f.value;
+								continue;
 							}
 							if (f.name.equals(contact.LAST_NAME))
 							{
 								calledToName += " " + f.value;
+								continue;
+							}
+							if(f.name.equals(contact.NAME)){
+								calledToName = f.value;
+								continue;
 							}
 						}
 
@@ -2292,11 +2381,17 @@ public class ActivityUtil
 					System.out.println("\t" + f.name + " - " + f.value);
 					if (f.name.equals(contact.FIRST_NAME))
 					{
-						calledToName += f.value;
+						calledToName = f.value;
+						continue;
 					}
 					if (f.name.equals(contact.LAST_NAME))
 					{
 						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
 					}
 				}
 
@@ -2354,4 +2449,188 @@ public class ActivityUtil
 
 		return dao.listByProperty(searchMap);
 	}
+	
+	private static void addRelatedDealsToActivity(Activity activity, List<String> relatedDealIdsList) 
+	{
+		try 
+		{
+			if(relatedDealIdsList != null && relatedDealIdsList.size() > 0)
+			{
+				List<Key<Opportunity>> dealKeys = new ArrayList<Key<Opportunity>>();
+				for(String str : relatedDealIdsList)
+				{
+					dealKeys.add(new Key<Opportunity>(Opportunity.class, Long.valueOf(str)));
+				}
+				
+				List<OpportunityPartial> relatedDealsList =  OpportunityUtil.getPartialOpportunities(dealKeys);
+				
+				if(relatedDealsList != null && relatedDealsList.size() > 0)
+				{
+					JSONObject obj = new JSONObject();
+					JSONArray arr = new JSONArray();
+					List<Long> dealIdsList = new ArrayList<Long>();
+					
+					for(OpportunityPartial opp : relatedDealsList)
+					{
+						if(!dealIdsList.contains(String.valueOf(opp.id)))
+						{
+							dealIdsList.add(opp.id);
+							
+							obj.put("dealid", opp.id);
+							obj.put("dealname", opp.name);
+
+							arr.put(obj);
+
+							obj = new JSONObject();
+						}
+					}
+					activity.related_deals = arr.toString();
+					
+					activity.related_deal_ids = dealIdsList;
+				}
+			}
+		} 
+		catch (JSONException e) 
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * gets list of deal related activities based on deal id
+	 * 
+	 * @param entity_id
+	 * @param max
+	 * @param cursor
+	 * @return
+	 */
+	public static List<Activity> getDealRelatedActivities(Long entity_id, Integer max, String cursor)
+	{
+		try
+		{
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			searchMap.put("related_deal_ids", entity_id);
+
+			if (max != 0)
+				return dao.fetchAll(max, cursor, searchMap, true, false);
+
+			return dao.listByProperty(searchMap);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured while fetching deal related activities");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Activity createDealBulkActionActivity(List<Long> dealIds, String new_data, String old_data, String changed_field,
+			String label, String bulk_email_subject, EntityType entityType)
+	{
+		Activity activity = new Activity();
+		activity.label = label;
+		activity.activity_type = ActivityType.BULK_ACTION;
+		activity.entity_type = entityType;
+
+		if (StringUtils.isNotEmpty(new_data))
+			activity.custom1 = new_data;
+		if (StringUtils.isNotEmpty(old_data))
+			activity.custom2 = old_data;
+		if (StringUtils.isNotEmpty(changed_field))
+			activity.custom3 = changed_field;
+		if (StringUtils.isNotEmpty(changed_field))
+			activity.custom4 = bulk_email_subject;
+		if(dealIds != null && dealIds.size()>0)
+			activity.bulk_deal_ids = dealIds;
+
+		activity.save();
+		return activity;
+	}
+
+	
+	/**
+	 * gets list of activities based on entity id
+	 * 
+	 * @param entity_id
+	 * @param max
+	 * @param cursor
+	 * @return list of activities
+	 */
+	
+	
+	public static List<Activity> getDealBulkActionActivitiesByEntityId(Long entity_id, Integer max, String cursor)
+	{
+		try
+		{
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			List<Activity> dealList = null;
+			
+			searchMap.put("bulk_deal_ids", entity_id);
+
+			if (max != 0){
+				dealList = dao.fetchAll(max, cursor, searchMap, true, false);
+				return dealList;
+			}
+
+			return dao.listByProperty(searchMap);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+			
+		}
+	}
+
+	/*create admin panel activities*/
+	
+	public static void createAdminPanelActivity(DomainUser domainuser , ActivityType activityType , String CustName)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.name;
+			activity.custom2 = CustName ;
+			activity.custom3 = domainuser.email ; 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address"); 
+			activity.save();
+		}
+	}
+	
+	public static void adminPanelREfundActivity(DomainUser domainuser , ActivityType activityType , String CustName,Integer amount)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.name;
+			activity.custom2 = CustName ;
+			activity.custom3 = amount.toString(); 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
+			activity.save();
+		}
+	}
+	public static void adminPanelAddAffliateAmount(DomainUser domainuser , ActivityType activityType , String CustName,Integer amount)
+	{
+		Activity activity = new Activity();
+		activity.entity_type = EntityType.ADMINPANEL;
+		if(domainuser.id != null)
+		{
+			activity.activity_type = activityType;
+			activity.custom1 = domainuser.email;
+			activity.custom2 = CustName ;
+			activity.custom3 = amount.toString(); 
+			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
+			activity.save();
+		}
+	}
 }
+

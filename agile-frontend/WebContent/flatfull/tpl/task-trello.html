@@ -99,7 +99,7 @@
         </div>
        </div>
   </div>
-  <div class="wrapper-md p-b-none p-t-none" style="position:relative;">
+  <div class="wrapper-md p-b-none" style="position:relative;">
      <div id="new-task-list-based-condition"> 
         <img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}">
         </img>
@@ -223,9 +223,18 @@
  <label class="icon icon-check m-r-xs" data-toggle="tooltip" style="float:left;font-size:15px;color:green;margin-top:3px;" data-placement="top" data-container="body" title="Completed"></label>
  {{/if_equals}}  
       {{#if is_complete}}
-         {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject word-break white-space-normal  w-full   activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject word-break-all white-space-normal w-full  " style="opacity:0.75;top:0px;text-transform: capitalize;">{{/is_link}}
-         {{safe_string subject}}
-         </span></a>
+        {{#if_equals priority_type "HIGH"}}
+          <span style="display:inline-block;color:red;font-size:15px;">!</span>
+        {{/if_equals}}
+        {{#is_link subject}}
+          <a href="#task/{{id}}">
+            <span class="new-task-subject word-break white-space-normal  w-full   activate-link" style="opacity:0.75;text-transform: capitalize;">
+        {{else}}
+            <a href="#task/{{id}}" style="">
+              <span class="new-task-subject word-break-all white-space-normal w-full  " style="opacity:0.75;top:0px;text-transform: capitalize;">
+        {{/is_link}}
+        {{safe_string subject}}
+        </span></a>
       {{else}}
          {{#if_equals status "COMPLETED"}}
            {{#if_equals priority_type "HIGH"}} <span style="display:inline-block;color:red;font-size:15px;">!</span>{{/if_equals}}{{#is_link subject}}<a href="#task/{{id}}"><span class="new-task-subject  w-full word-break white-space-normal  activate-link" style="opacity:0.75;text-transform: capitalize;">{{else}}<a href="#task/{{id}}" style=""><span class="new-task-subject  word-break-all white-space-normal w-full " style="opacity:0.75;top: 0px;text-transform: capitalize;">{{/is_link}}{{safe_string subject}} </span></a>
@@ -253,7 +262,7 @@
          <div class="task-related-to task-related-contacts" title="Related To">
           {{#each contacts}}
             {{#if_contact_type "PERSON"}}
-              <a href="#contact/{{id}}" class="activate-link text-xs text-muted popover_contact text-cap" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+              <a href="#contact/{{id}}" class="activate-link text-xs text-muted popover_contact text-cap" data="{{id}}">{{contact_name_necessary this}}</a>
             {{/if_contact_type}}
         {{#if_contact_type "COMPANY"}}
               <a href="#company/{{id}}" class="activate-link text-xs text-muted text-cap popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>

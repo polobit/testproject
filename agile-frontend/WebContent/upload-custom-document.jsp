@@ -1,12 +1,40 @@
 
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
+
+<%
+//User Language 
+String _LANGUAGE = "en";
+try{
+  _LANGUAGE = UserPrefsUtil.getCurrentUserPrefsFromRequest(request).language;
+}catch(Exception e){}
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload-custom-document");
+
+%>
+
 <!DOCTYPE html>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="java.util.Date"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.jsoup.Jsoup"%>
+<%@page import="org.codehaus.jackson.map.ObjectMapper"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="org.json.JSONArray"%>
+<%@page import="java.util.Arrays"%>
+<%@page import= "com.agilecrm.session.SessionCache"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
+<%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Upload New Custom Document</title>
+<title><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-new-doc") %></title>
 
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
@@ -20,8 +48,15 @@ jQuery.validator.setDefaults({
 	debug: true,
 	success: "valid"
 });;
+
+var localeJSON = <%=localeJSON%>;
+jQuery.extend(jQuery.validator.messages, {
+      required: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "required") %>'
+  });
+
 </script>
 <script type="text/javascript">
+var LOCALES_JSON = <%=localeJSON%>;
 //Get URL
 var url = "https://s3.amazonaws.com/agilecrm/" + unescape(getUrlVars()["key"]) + "?id=" + unescape(getUrlVars()["id"]);
 
@@ -68,7 +103,7 @@ $(function()
 	    	
 	    	$("#fileextension").replaceWith($("#fileextension").clone(true));
 	    	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-												+ 'Document size exceeds the 10MB limit.'
+												+ '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "doc-size-limit-exceeded") %>.'
 												+ '</i></p></small></div>');
 	    	$("#upl_doc").after($save_info);
 	    	$save_info.show().delay(4000).hide(1);
@@ -125,7 +160,7 @@ function isValid(){
 <div class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
 <div class="panel panel-default" style="height:215px;">
-<div class="panel-heading">Upload Document</div>
+<div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-doc") %></div>
 <div class="panel-body">
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
 <input type="hidden" id="key" name="key" value="panel/uploaded-logo/<%=request.getParameter("d")%>" /> 
@@ -137,7 +172,7 @@ function isValid(){
 <input type="hidden" name="signature" value="lJaO/ZQyMANyulpZrP/FcxVLz5M=" />
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" id="upl_doc" value="Upload" class='submit btn btn-primary m-r-xs' type="submit"/> 
+<input name="upload" id="upl_doc" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary m-r-xs' type="submit"/> 
 </form> 
 </div>
 </div>

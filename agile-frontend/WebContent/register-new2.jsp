@@ -5,16 +5,18 @@
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page contentType="text/html; charset=UTF-8" %>
 <%@page import="com.agilecrm.ipaccess.IpAccessUtil"%>
+<%@page import="com.agilecrm.session.SessionManager"%>
+<%@page import="com.agilecrm.session.UserInfo"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
 <%
 
 
-if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
     return;
-}
+}*/
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String CSS_PATH = "/";
@@ -38,6 +40,16 @@ if(StringUtils.isBlank(_LANGUAGE) || !LanguageUtil.isSupportedlanguageFromKey(_L
 }
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "register");
+String password = request.getParameter("password");
+String email = request.getParameter("email");
+String name = request.getParameter("name");
+UserInfo userInfo = (UserInfo) request.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+if(userInfo != null){
+		name = userInfo.getName();
+		email = userInfo.getEmail();
+		request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+}
+
 
 %>
 <!DOCTYPE html>
@@ -181,6 +193,22 @@ position:fixed!important;
     position: absolute;
 
 }
+
+#domain-validation-icon{
+	position: absolute;
+    font-size: 19px;
+    top: 6px;
+    right: -30px;
+}
+.icon-check{
+	color: green;
+}
+.icon-close{
+	color: red;
+}
+#subdomain-div{
+	position: relative;
+}
 /*Ending of the animation*/
 
 
@@ -193,7 +221,8 @@ position:fixed!important;
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH %>css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
-<link type="text/css" rel="stylesheet" href="/css/phonenumber-lib/intlTelInput.css" />
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.4/css/intlTelInput.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
 
 <script type="text/javascript">
 var localeJSON = <%=localeJSON%>;
@@ -236,21 +265,21 @@ if(isSafari && isWin)
 		<div class="col-lg-6 col-lg-offset-3 col-sm-offset-1 col-sm-10 col-xs-12">
 	<form class="form-horizontal" method="post" onsubmit="return isValid(this);">
 <div class="panel panel-default">
-<div class="panel-heading text-center"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "time-to-configure")%> </div>
+<div class="panel-heading text-center text-lg" style="opacity:0.67"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "time-to-configure")%> </div>
 <div class="panel-body">
 <div class="form-group m-t m-b-none">
 <label class="col-sm-3 control-label">&nbsp;</label>
 <div class="col-sm-6">
-	<div class="input-prepend input-append input-group">
+	<div class="input-prepend input-append input-group subdomain-div">
 	<input id='subdomain' type="text" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>' name="subdomain"  class="required  domainLength commonDomain domainCharacters domain_input_field form-control" autocapitalize="off" minlength="4" maxlength="20" pattern="^[a-zA-Z][a-zA-Z0-9-_]{3,20}$"> <span class="add-on field_domain_add_on input-group-addon regpage-domain" 
 	id="app_address">.agilecrm.com</span>
+	<i id="domain-validation-icon" class="icon"></i>
 	</div>
-	
 </div>
 </div>
 <div class="form-group" style="margin-bottom:25px;">
 <div class="col-sm-offset-3 col-sm-8 m-t-xs">	
-<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain-name-helptext")%>
+<%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain-name-helpmsg")%>
 	</div>
 </div>
 <div class="line line-dashed b-b line-lg"></div>
@@ -258,7 +287,7 @@ if(isSafari && isWin)
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></label>
 <div class="col-sm-6">
 	<select class="form-control required" required  name="plan_type" data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
-											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-plan")%></option>
+											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-plan")%></option>
 											<option value="Free">Free</option>
 											<option value="Starter">Starter</option>
 											<option value="Regular">Regular</option>
@@ -270,17 +299,15 @@ if(isSafari && isWin)
 <div class="form-group">
 <label class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%></label>
 <div class="col-sm-6">
-<input class="field required form-control number" name="users_count" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" type="number" pattern="\d*" min="1" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%>' autocapitalize="off">
+<input class="field required form-control number" name="users_count" value="10" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);" type="number" pattern="\d*" min="1" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "users")%>' autocapitalize="off">
 
 </div>
 </div>
 
-<div class="form-group m-b-xs" style="margin-top: 18px;">
-<div class="col-sm-offset-3 col-sm-9 text-base"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-helptext")%> </div>
-</div>
+
 <div class="form-group m-b-none">
 <label class="col-sm-3 control-label"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-and-company")%></label>
-<div class="col-sm-3 m-b">
+<div class="col-sm-3 m-b-xs">
 <select class="form-control required" required  name="role" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "role")%></option>
 											<option value="CEO"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "ceo")%></option>
@@ -297,7 +324,7 @@ if(isSafari && isWin)
 											<option value="Other"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "other")%></option>
 								  </select>
 </div>
-<div class="col-sm-3 m-b">
+<div class="col-sm-3 m-b-xs">
 	<select class="form-control required"  name="company_type" required  data-width="100%" oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
 											<option value="" selected disabled><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-type")%></option>
 											<option value="B2B"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "b2b")%></option>
@@ -311,7 +338,9 @@ if(isSafari && isWin)
 											<option value="Other"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "other")%></option>
 								  </select>
 </div>
-
+<div class="form-group m-b">
+<div class="col-sm-offset-3 col-sm-9 text-base" style="padding-left:24px;"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "role-helptext")%> </div>
+</div>
 </div>
 
 <div class="form-group">
@@ -321,14 +350,15 @@ if(isSafari && isWin)
 											class="field form-control required tel-number"
 											id="login_phone_number" name='phone' required type="password"
 											placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "phone-number")%>' autocapitalize="off" autocomplete="tel">
+											<input type="text" name="phone_duplicate" class="hide">
 											<div class='custom-error'><%=LanguageUtil.getLocaleJSONValue(localeJSON, "pnone-num-validation")%></div>
 </div>
 </div>
 
-<input type='hidden' id="login_email" name='email' value="<%=request.getParameter("email")%>"></input>
-<input type='hidden' id="user_name" name='name' value="<%=request.getParameter("name")%>"></input>
+<input type='hidden' id="login_email" name='email' value="<%=email%>"></input>
+<input type='hidden' id="user_name" name='name' value="<%=name%>"></input>
 <input type='hidden' name='account_timezone' id='account_timezone' value=''></input>
-<input type="password" class="hide" name='password' id="password" value="<%=request.getParameter("password")%>"></input>
+<input type="password" class="hide" name='password' id="password" value="<%=password%>"></input>
 
 <!-- Origin Name -->
 <%
@@ -367,7 +397,7 @@ if(isSafari && isWin)
 
 <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
 <script src="/flatfull/lib/bootstrap.v3.min.js"></script>
-<script type="text/javascript" src="/lib/phonenumber-lib/intlTelInput.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.4/js/intlTelInput.min.js"></script>
 <script src="/flatfull/registration/register.js?_v=<%=_AGILE_VERSION%>"   type="text/javascript"></script>
 <!--[if lt IE 10]>
 <script src="flatfull/lib/ie/placeholders.jquery.min.js"></script>
@@ -387,9 +417,9 @@ $(document).ready(function(){
 
 	// Set domain name error title
 	$("#subdomain").attr("data-title", localeJSON["domain-name-validation"]);
-
 	// Set selected plan name
-	if(selected_plan_type){
+	 if(selected_plan_type && selected_plan_type !== "null" && selected_plan_type !== "undefined")
+	 {
         $("select[name='plan_type']").val(selected_plan_type);
 	}
 
@@ -411,9 +441,36 @@ $(document).ready(function(){
 }	});
 
 	$("#login_phone_number").intlTelInput({
-				utilsScript: "lib/phonenumber-lib/utils.js",
-				responsiveDropdown : true
-			});
+	  initialCountry: "auto",
+	  autoHideDialCode:false,
+	  nationalMode:false,
+	  geoIpLookup: function(callback) {
+	    $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+	      var countryCode = (resp && resp.country) ? resp.country : "";
+	      callback(countryCode);
+	    });
+	  },
+	  utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/9.2.4/js/utils.js" // just for formatting/placeholders etc
+	});
+
+	$("#subdomain").on("blur",function(e){
+		if(agile_is_mobile_browser())
+			return;
+		if (!this.checkValidity()) {
+			$("#domain-validation-icon", form).removeClass("icon-check").addClass("icon-close");
+            return;
+        }
+        var form = $(this).closest("form");
+   		var email = $("#login_email", form).val();
+   		var domain = $(this).val();
+   		if(!email)
+   			return;
+   		isDuplicateAccount("/backend/register-check?email="+email+"&domain="+domain, form, function(data){
+   			$("#domain-validation-icon", form).removeClass("icon-close").addClass("icon-check");
+   		},function(data){
+   			$("#domain-validation-icon", form).removeClass("icon-check").addClass("icon-close");
+   		})
+	});
 	
 });
 

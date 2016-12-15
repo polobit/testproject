@@ -27,7 +27,9 @@ cat flatfull/tpl/segmentation/*.html > tpl/min/flatfull/segmentation.js
 cat flatfull/tpl/referals/*.html > tpl/min/flatfull/referals.js
 cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
+cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 
+cat flatfull/tpl/voice-mail/*.html > tpl/min/flatfull/voice-mail.js
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
 cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
 cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js
@@ -54,6 +56,10 @@ cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
+cat flatfull/tpl/leads-filters/*.html  > tpl/min/flatfull/leads-filters.js
+cat flatfull/tpl/leads-view/*.html  > tpl/min/flatfull/leads-view.js
+cat flatfull/tpl/leads-form/*.html  > tpl/min/flatfull/leads-form.js
+cat flatfull/tpl/leads-detail/*.html  > tpl/min/flatfull/leads-detail.js
 
 ## Widgets
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
@@ -79,6 +85,8 @@ cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
 cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
 cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
+cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
+cat flatfull/tpl/emailbuilder/*.html > tpl/min/flatfull/emailbuilder.js
 ## End of widgets
 
 cd ../util

@@ -41,7 +41,7 @@ function getTimeFromDatePicker(){
 }
 
 function showCommission(userId, time, el){
-	getCommission(CURRENT_DOMAIN_USER.id, time, function(data){
+	getCommission(userId, time, function(data){
 		$("#aff-count", el).html(data.count);
 		$("#aff-commission", el).html((data.commission/100).toFixed(2));
 	});
@@ -49,6 +49,9 @@ function showCommission(userId, time, el){
 
 function getCommission(userId, time, callback){
 	var url = 'core/api/affiliate/total?startTime='+time.start+'&endTime='+time.end;
+	if(CURRENT_DOMAIN_USER.domain == "admin"){
+		url = url + '&domain='+admin_affiliate_domain;
+	}
 	if(userId)
 		url = url + '&userId='+userId;
 	$.ajax({ url : url, type : 'GET', success : function(data)
@@ -57,3 +60,111 @@ function getCommission(userId, time, callback){
 				callback(data);
 		}});
 }
+
+$(document).ready(function(){
+	$("#register_deal_modal").on("click","#deal_register_validate", function(e){
+		e.preventDefault();
+		var modal_id = $(this).closest('.modal').attr("id");
+		var form_id = $(this).closest('.modal').find('form').attr("id");
+		var json = serializeForm(form_id);
+		registerDeal(form_id, modal_id, $(this), json);
+	});
+});
+
+function registerDeal(formId, modalId, saveBtn, json)
+{
+	// Returns, if the save button has disabled attribute
+	if ($(saveBtn).attr('disabled'))
+		return;
+
+	// Disables save button to prevent multiple click event issues
+	disable_save_button($(saveBtn));
+
+	if (!isValidForm('#' + formId))
+	{
+		enable_save_button($(saveBtn));
+		// Removes disabled attribute of save
+		// button
+		return false;
+	}
+
+	var newEntry = false; // test if this model is new, true => new model
+	if (json.id === undefined)
+		newEntry = true;
+
+	var newRegisterDeal = new Backbone.Model();
+	newRegisterDeal.url = 'core/api/affiliate/deals';
+	newRegisterDeal.save(json, { success : function(data)
+	{
+		// Removes disabled attribute of save button
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+
+		// $('#' + modalId).find('span.save-status img').remove();
+		$('#' + modalId).modal('hide');
+
+		var registeredDeal = data.toJSON();
+
+		add_recent_view(new BaseModel(registeredDeal));
+
+			// On cases page.. adjust current model
+			if (newEntry == true)
+				App_Affiliate.registeredDealsCollectionView.collection.add(data);
+			else
+			{
+				App_Affiliate.registeredDealsCollectionView.collection.remove(json);
+				App_Affiliate.registeredDealsCollectionView.collection.add(data);
+			}
+			App_Affiliate.registeredDealsCollectionView.render(true);
+	}, error : function(data, response)
+	{
+		enable_save_button($(saveBtn));
+	} });
+}
+
+function loadAdminAffiliateDetailListeners(){
+	$("#admin-affiliate-detail-container").on("click", "ul#affiliate_filter_list li a", function(e)
+	{
+		e.preventDefault();
+		var name = $(this).html();
+		var filter_key = $(this).attr("data");
+		_agile_set_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter", filter_key);
+		$(this).closest(".btn-group").find("#affiliate_filter_btn").text(name);
+		$(this).closest(".btn-group").find("#affiliate_filter_btn").attr("data", filter_key);
+		var data = getAdminAffiliateFilterParameters();
+		App_Affiliate.showAffiliateDetailCollection(data);
+	});
+}
+
+function getAdminAffiliateFilterParameters(){
+	var time = getTimeFromDatePicker();
+	var filter_by = $("#affiliate_filter_btn").attr("data");
+	var data={"startTime":time.start,"endTime":time.end,"filter_by":filter_by};
+	return data;
+}
+
+var admin_affiliate_id;
+var admin_affiliate_domain;
+var Admin_Affiliate_Detail_Collection_View = Base_Collection_View.extend({
+    events: {
+    	'click #admin-affiliate-detail-model-list > tr' : 'listAffiliatesInAdminPanel'
+    },
+    
+    listAffiliatesInAdminPanel : function(e){
+		var targetEle= $(e.currentTarget);
+		admin_affiliate_id = $(targetEle).find("td:first").attr("data");
+		admin_affiliate_domain = $(targetEle).find("td:first").attr("domain");
+		window.location.href='#admin-affiliate-referrals';
+    }
+});
+
+function setAffiliateDetailsFilter(){
+	var filterJson = {"createdTime":"Created Time","lastAffiliateAddedTime":"Last Affiliate Added Time"};
+	var filter_key = _agile_get_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter");
+	if(filter_key == null || filter_key == undefined){
+		filter_key = "createdTime";
+		_agile_set_prefs(CURRENT_DOMAIN_USER.domain+"affiliate_details_filter", filter_key);
+	}
+	$("#affiliate_filter_btn").attr("data",filter_key).html(filterJson[filter_key]);
+}
+
+

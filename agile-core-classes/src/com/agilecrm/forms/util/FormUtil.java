@@ -12,6 +12,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Query;
 import com.thirdparty.sendgrid.SendGrid;
@@ -53,15 +54,18 @@ public class FormUtil
      */
     public static void sendMailToContactOwner(Contact contact, String formName){
     	String ownerEmailId=contact.getOwner().email;
+    	// Get user prefs language
+	    String language = LanguageUtil.getUserLanguageFromEmail(ownerEmailId);
+	    
     		try {
-  
+    		
 			Map<String, String> map = new HashMap<String, String>();
 			//map.put("contactName", contact.first_name);
 			map.put("contactEmail", contact.getContactFieldValue(contact.EMAIL));
 			map.put("formName", formName);
 			SendMail.sendMail(ownerEmailId, SendMail.CONTACT_FORM_SUBMITTED_SUBJECT+formName,
 					SendMail.CONTACT_FORM_SUBMITTED, map,
-					"noreply@agilecrm.com", "AgileCRM");
+					"noreply@agilecrm.com", "Agile CRM", language);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,5 +73,17 @@ public class FormUtil
 					+ e.getMessage());
 		}
  }
-   
+   /**
+    * @method for the  replace the
+    * @param string
+    * @param from
+    * @param to
+    * @return
+    */
+    public static String replaceLast(String stringText, String findText, String replaceText) {
+	     int lastIndex = stringText.lastIndexOf(findText);
+	     if (lastIndex < 0) return stringText;
+	     String tail = stringText.substring(lastIndex).replaceFirst(findText, replaceText);
+	     return stringText.substring(0, lastIndex) + tail;
+	}
 }

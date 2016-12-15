@@ -7,6 +7,7 @@
 	<div class="pull-left thumb-small m-t-xs">
 		{{#if_equals created_by 'REQUESTER'}}
 			{{#ticket_contact_exists}}
+
 		 		<img src="{{get_contact_image 24}}" class="r-5x" alt="..." 
 		 			onerror="image_error(this);" _data-name="{{getInitials requester_name}}">
 		 	{{else}}
@@ -54,7 +55,6 @@
 	  <div class="inline-block w-full word-break-all {{#if plain_text}}plain-text-comment{{/if}}">
 
 	  {{#if plain_text}}
-
 	  	{{{convert_to_html plain_text}}}
 
 	  	{{else}}
@@ -71,7 +71,7 @@
 	  			<h5>{{agile_lng_translate 'tickets' 'attachments'}}</h5>
 	  			 <ul class="inline v-top m-b-sm p-n attachments-list">
 	  			 	{{#each attachments_list}}
-		  				<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
+		  				<li class="ccemail tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" file-name="{{name}}" url="{{url}}" size="{{size}}">
 						    <span>
 						      <i class="fa fa-paperclip"></i> 
 						      <a class="anchor m-r-xs" href="{{url}}" target="_blank">{{name}}</a>

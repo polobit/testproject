@@ -39,7 +39,7 @@ $(function()
 		// This method is called when the add-note modal is closed .....
 		//This will check if the if the activities is saved or not
 			$('#logCallModal').on('shown.bs.modal', function (e) {
-				$("#phoneLogForm #status-wait").html('<img class="loading-img" src="../../img/21-0.gif" style="width: 40px;margin-left: 40px;"></img>');
+				$("#phoneLogForm #status-wait").html('<img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif"></img>');
 				getTelephonyStatus(function(status){
 					var statusHtml="";
 					$.each(status,function(index,stats){
@@ -315,6 +315,16 @@ $(function()
 					$("#phoneLogForm #logPhone_number_error").show().delay(5000).hide(1);
 					return;
 				}
+				if(phone){
+					var regE1 = new RegExp("^(.*[;]+.*)$");
+					var regE2 = new RegExp("^(.+[\;][0-9\*\#]+)$");
+					if(regE1.test(value)){
+						if(!regE2.test(value)){
+							$("#phoneLogForm #logPhone_number_ext_error").show().delay(5000).hide(1);
+							return;
+						}
+					}
+				}
 				var prop = property_JSON('phone', 'phoneLogForm #contact_phone');
 				prop['subtype'] = "";
 			if(company_util.isCompany()){
@@ -393,7 +403,11 @@ try{
 	if(CallLogVariables.id){
 		contactDetailsObjId = CallLogVariables.id;
 	}else{
-		contactDetailsObjId = agile_crm_get_contact().id;	
+		if(company_util.isCompany()){
+			contactDetailsObjId = App_Companies.companyDetailView.model.toJSON().id;
+		} else {
+			contactDetailsObjId = agile_crm_get_contact().id;
+		}
 	}
 	
 	if($("#saveActivity",form).val() == "true"){
@@ -452,8 +466,14 @@ try{
 			}
 			else
 			{
+			if(window.location.hash.split("/")[1]){  
+			   if(window.location.hash.split("/")[1] == contactDetailsObjId){
 				notesView.collection.add(new BaseModel(logPhone), { sort : false });
 				notesView.collection.sort();
+
+			  }
+
+		    }
 			}
 		}
 		
@@ -491,9 +511,13 @@ try{
 }
 
 function toTitleCase(str) {
+	try{
     return str.replace(/(?:^|\s)\w/g, function(match) {
         return match.toUpperCase();
     });
+	}catch(e){
+		return str;
+	}
 }
 
 function saveLogPhoneActivity(data){

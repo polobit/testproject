@@ -1,3 +1,5 @@
+/*global  _AGILE_LOCALE_JSON*/
+/*global  _LANGUAGE*/
 (function () {
     "use strict";
 
@@ -34,11 +36,13 @@
         tempFrame: {},
 
         currentResponsiveMode: {},
+
+        siteUrl: appUI.siteUrl,
                 
         init: function(){
                                                 
             //load blocks
-            $.getJSON(appUI.baseUrl+'elements.json?v=12345678', function(data){ builderUI.allBlocks = data; builderUI.implementBlocks(); });
+            $.getJSON(appUI.siteUrl+'locales/locales/'+_LANGUAGE+'/elements.json?v=12345678', function(data){ builderUI.allBlocks = data; builderUI.implementBlocks(); });
             
             //sitebar hover animation action
             $(this.menuWrapper).on('mouseenter', function(){
@@ -86,7 +90,7 @@
             
             for( var key in this.allBlocks.elements ) {
                 
-                var niceKey = key.toLowerCase().replace(" ", "_");
+                var niceKey = key.toLowerCase().replace(/\s/g, '_');
                 
                 $('<li><a href="" id="'+niceKey+'">'+key+'</a></li>').appendTo('#menu #main ul#elementCats');
                 
@@ -263,7 +267,7 @@
                 $(overlay).hide();
                 overlay.id = 'canvasOverlay';
 
-                overlay.innerHTML = '<div class="loader"><span>{</span><span>}</span></div>';
+                overlay.innerHTML = '<div class="loader" style="margin-top:25%;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><br/><span>Loading...</span></div>';
 
                 document.getElementById('frameWrapper').appendChild(overlay);
 
@@ -301,7 +305,8 @@
             meta_description: page.meta_description || '',
             meta_keywords: page.meta_keywords || '',
             header_includes: page.header_includes || '',
-            page_css: page.page_css || ''
+            page_css: page.page_css || '',
+            page_js: page.page_js || ''
         };
                 
         this.pageMenuTemplate = '<a href="" class="menuItemLink">page</a><span class="pageButtons"><a href="" class="fileEdit fui-new"></a><a href="" class="fileDel fui-cross"><a class="btn btn-xs btn-primary btn-embossed fileSave fui-check" href="#"></a></span></a></span>';
@@ -336,6 +341,7 @@
             site.inputPageSettingsMetaKeywords.value = this.pageSettings.meta_keywords;
             site.inputPageSettingsIncludes.value = this.pageSettings.header_includes;
             site.inputPageSettingsPageCss.value = this.pageSettings.page_css;
+            site.inputPageSettingsPageJs.value = this.pageSettings.page_js;
                           
             //trigger custom event
             // $('body').trigger('changePage');
@@ -758,7 +764,14 @@
                 var newBlock = new Block();
             
                 page.blocks[x].frames_original_url = page.blocks[x].originalUrl;
-                page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.agilePageId+"/"+page.blocks[x].frames_id;
+
+                if (appUI.agilePageId !== 0) {
+                    page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.agilePageId+"/"+page.blocks[x].frames_id;
+                }else if(appUI.copyPagebuilderId !== 0){
+                    page.blocks[x].src = appUI.siteUrl+"core/api/landingpages/getframe/"+appUI.copyPagebuilderId+"/"+page.blocks[x].frames_id;
+                }else{
+                   page.blocks[x].src = page.blocks[x].originalUrl;
+                }
                 
                 //sandboxed block?
                 if( page.blocks[x].frames_sandbox === '1') {
@@ -1065,25 +1078,25 @@
             var delButton = document.createElement('BUTTON');
             delButton.setAttribute('class', 'btn btn-inverse btn-sm deleteBlock');
             delButton.setAttribute('type', 'button');
-            delButton.innerHTML = '<i class="fui-trash"></i> <span>remove</span>';
+            delButton.innerHTML = '<i class="fui-trash"></i> <span>' + _AGILE_LOCALE_JSON['remove'] + '</span>';
             delButton.addEventListener('click', this, false);
                     
             var resetButton = document.createElement('BUTTON');
             resetButton.setAttribute('class', 'btn btn-inverse btn-sm resetBlock');
             resetButton.setAttribute('type', 'button');
-            resetButton.innerHTML = '<i class="fa fa-refresh"></i> <span>reset</span>';
+            resetButton.innerHTML = '<i class="fa fa-refresh"></i> <span>'+ _AGILE_LOCALE_JSON['reset'] + '</span>';
             resetButton.addEventListener('click', this, false);
                     
             var htmlButton = document.createElement('BUTTON');
             htmlButton.setAttribute('class', 'btn btn-inverse btn-sm htmlBlock');
             htmlButton.setAttribute('type', 'button');
-            htmlButton.innerHTML = '<i class="fa fa-code"></i> <span>source</span>';
+            htmlButton.innerHTML = '<i class="fa fa-code"></i> <span>' + _AGILE_LOCALE_JSON['source'] + '</span>';
             htmlButton.addEventListener('click', this, false);
 
             var dragButton = document.createElement('BUTTON');
             dragButton.setAttribute('class', 'btn btn-inverse btn-sm dragBlock');
             dragButton.setAttribute('type', 'button');
-            dragButton.innerHTML = '<i class="fa fa-arrows"></i> <span>Move</span>';
+            dragButton.innerHTML = '<i class="fa fa-arrows"></i> <span>' + _AGILE_LOCALE_JSON['Move']+ '</span>';
             dragButton.addEventListener('click', this, false);
 
             var globalLabel = document.createElement('LABEL');
@@ -1643,6 +1656,7 @@
         inputPageSettingsMetaKeywords: document.getElementById('pageData_metaKeywords'),
         inputPageSettingsIncludes: document.getElementById('pageData_headerIncludes'),
         inputPageSettingsPageCss: document.getElementById('pageData_headerCss'),
+        inputPageSettingsPageJs: document.getElementById('pageData_headerJs'),
         
         buttonSubmitPageSettings: document.getElementById('pageSettingsSubmittButton'),
         
@@ -1670,7 +1684,8 @@
                                 "meta_description": respData.description,
                                 "meta_keywords": respData.tags,
                                 "header_includes": respData.header_includes,
-                                "page_css": respData.css
+                                "page_css": respData.css,
+                                "page_js": respData.js
                             }
                         },
                         "is_admin": 1
@@ -1692,19 +1707,79 @@
                     $('body').trigger('siteDataLoaded');
                 
                 });
-            } else {
+            } else if (appUI.selectedTemplateId !== null && appUI.selectedTemplateId === "copy" && appUI.copyPagebuilderId !== 0){
+            
+                $.getJSON(appUI.siteUrl+"core/api/landingpages/"+appUI.copyPagebuilderId, function(respDataCopy){
+                    var data = {
+                        "pages": {
+                            "index": {
+                                "blocks": JSON.parse(respDataCopy.blocks),
+                                "page_id": 0,
+                                "pages_title": '',
+                                "meta_description": respDataCopy.description,
+                                "meta_keywords": respDataCopy.tags,
+                                "header_includes": respDataCopy.header_includes,
+                                "page_css": respDataCopy.css,
+                                "page_js": respDataCopy.js
+                            }
+                        },
+                        "is_admin": 0
+                    };
+
+                    
+                    if( data.site !== undefined ) {
+                        site.data = data.site;
+                    }
+                    if( data.pages !== undefined ) {
+                        site.pages = data.pages;
+                    }
+                    
+                    site.is_admin = data.is_admin;
+
+                    
+                    if( $('#pageList').size() > 0 ) {
+                        builderUI.populateCanvas();
+                    }
+
+                    //fire custom event
+                    $('body').trigger('siteDataLoaded');
+
+
+                    // treated as pending changes
+                    site.setPendingChanges(true);
+                    $("#publishPage").addClass("disabled");
+                    $("#buttonPreview").addClass("disabled");
+                    $("#pagebuilderCopyBtn").addClass("disabled");
+                    
+                });
+
+            }else {
                 site.newPage();
 
                 site.setPendingChanges(false);
 
                 $("#publishPage").addClass("disabled");
                 $("#buttonPreview").addClass("disabled");
+                $("#pagebuilderCopyBtn").addClass("disabled");
             }
 
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){
                
                for(var i=0;i<respData.length;i++){
                  $('#agileform_id').append("<option value= "+ window.CURRENT_AGILE_DOMAIN +"_"+respData[i].id +">"+respData[i].formName+"</option>");
+               }    
+                
+            }).fail(function(jqXHR) {
+                //login required
+                if (jqXHR.status === 401) {
+                    window.location = appUI.siteUrl + "login#landing-pages";
+                }
+            });
+
+            $.getJSON(appUI.siteUrl+"core/api/video-record", function(respVideoData){
+               
+               for(var i=0;i<respVideoData.length;i++){
+                 $('#videoRecordId').append("<option value= "+respVideoData[i].id +">"+respVideoData[i].name+"</option>");
                }    
                 
             }).fail(function(jqXHR) {
@@ -1777,7 +1852,7 @@
                 window.clearInterval(this.autoSaveTimer);
                 this.autoSaveTimer = setTimeout(site.autoSave, bConfig.autoSaveTimeout);
                 
-                $('#savePage .bLabel').text("Save now (!)");
+                $('#savePage .bLabel').text(_AGILE_LOCALE_JSON['save-now'] + " (!)");
                 
                 if( site.activePage.status !== 'new' ) {
                 
@@ -1787,7 +1862,7 @@
             
             } else {
     
-                $('#savePage .bLabel').text("Nothing to save");
+                $('#savePage .bLabel').text(_AGILE_LOCALE_JSON['nothing-to-save']);
                 
                 site.updatePageStatus('');
 
@@ -1854,7 +1929,7 @@
                 "tags": serverData.pages["index"]["pageSettings"]["meta_keywords"],
                 "description": serverData.pages["index"]["pageSettings"]["meta_description"],
                 "header_includes": serverData.pages["index"]["pageSettings"]["header_includes"],
-                "js": "",
+                "js":serverData.pages["index"]["pageSettings"]["page_js"],
                 "elements_css": "",
                 "version": 2.0
             };
@@ -1879,18 +1954,25 @@
                 if(res.id) {
 
                     appUI.agilePageId = res.id;
+
+                    if(reqMethod === "POST"){
+                        window.location.href  = window.location.origin+"/#landing-pages";
+                    }
         
                     if( showConfirmModal ) {
 
                         var publishPageBtn = $("#publishPage");
                         var buttonPreviewBtn = $("#buttonPreview");
+                        var pagebuilderCopyBtn = $("#pagebuilderCopyBtn");
                         publishPageBtn.removeClass("disabled");
                         buttonPreviewBtn.removeClass("disabled");
+                        pagebuilderCopyBtn.removeClass("disabled");
 
                         $("#markupPreviewForm").attr("action", window.location.origin+"/landing/"+appUI.agilePageId);
                         publishPageBtn.attr("href", window.location.origin+"/#landing-page-settings/"+appUI.agilePageId);
+                        pagebuilderCopyBtn.attr("href", window.location.origin+"/pagebuilder/copy-"+appUI.agilePageId);
         
-                        $('#successModal .modal-body').html("Landing page have been saved successfully!");
+                        $('#successModal .modal-body').html(_AGILE_LOCALE_JSON['saved-successfully'] + "!");
                         $('#successModal').modal('show');
                 
                     }
@@ -2049,6 +2131,8 @@
             site.activePage.pageSettings.meta_keywords = site.inputPageSettingsMetaKeywords.value;
             site.activePage.pageSettings.header_includes = site.inputPageSettingsIncludes.value;
             site.activePage.pageSettings.page_css = site.inputPageSettingsPageCss.value;
+            site.activePage.pageSettings.page_js = site.inputPageSettingsPageJs.value;
+
                         
             site.setPendingChanges(true);
             

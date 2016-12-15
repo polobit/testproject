@@ -104,7 +104,7 @@ function initTaskListCollection()
 {
 	// Define main collection
 	TASKS_LIST_COLLECTION = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
-		className : "list-area-wrapper", sort_collection : false, postRenderCallback : function(el)
+		className : "list-area-wrapper m-t-n-md", sort_collection : false, postRenderCallback : function(el)
 		{
 			// Remove loding imgs
 			$('.loading-img', el).remove();
@@ -163,7 +163,7 @@ function taskFetch(base_model)
 		individual_tag_name : 'div',
 		sort_collection : false,
 		cursor : true,
-		page_size : 20,
+		page_size : getMaximumPageSize(),
 		postRenderCallback : function(el)
 		{
 			// Add tooltip info

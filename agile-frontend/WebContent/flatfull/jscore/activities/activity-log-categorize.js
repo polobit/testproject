@@ -85,6 +85,65 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 
 });
 
+	$("#activities-listners").on('click', '#campaign-modify-history', function(e) 
+	{
+		e.preventDefault();
+
+		$(this).find("i").toggleClass('icon-plus').toggleClass('fa fa-minus-circle');
+
+		var $campaign_history_details = $(this).siblings('div.campaign-history-details');
+		
+		// If already exists, just show
+		if($campaign_history_details.html())
+		{
+			$campaign_history_details.slideToggle("slow");
+			return;
+		}
+
+		var updated_workflow = $(this).data('entity');
+		var updated_workflow_rules = updated_workflow.rules;
+
+		$.ajax({
+			url: 'core/api/workflows/backups/get/' + updated_workflow.id,
+			dataType: 'json',
+			method: 'GET',
+			contentType: 'application/json',
+			success: function(workflow_backup){
+
+				var workflow_backup_rules = workflow_backup.rules;
+
+				head.js(LIB_PATH + 'lib/underscore-min.1.8.3.js', function(){
+
+				 	var is_equal = _.isEqual(updated_workflow_rules, workflow_backup_rules);
+
+					if(is_equal)
+					{
+						$campaign_history_details.html("<p class='m-b-none text-muted text-sm l-h-xs'>No modifications made to this campaign nodes.</p>");
+						$campaign_history_details.slideToggle("slow");
+						return;
+					}
+
+					get_campaign_changes(updated_workflow_rules, workflow_backup_rules, function(changes_map){
+
+							var details = "";
+
+							details = getTemplate('activity-campaign-history-modify', changes_map);
+							
+							$campaign_history_details.html(details);
+							$campaign_history_details.slideToggle("slow");
+					});
+				});
+			},
+
+			error: function(){
+
+				$campaign_history_details.html("<p>Modified details will be available on next save.</p>");
+				$campaign_history_details.slideToggle("slow");
+			}
+
+		});	
+	});
+
 }
 
 function getEventObject(id, callback)
@@ -142,13 +201,13 @@ function update_event_activity(ele)
 	}
 	if (value.description)
 	{
-		var description = '<label class="control-label"><b>' + _agile_get_translated_val("misc-keys", "description") + ' </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea></div>'
+		var description = '<label class="control-label"><b>{{agile_lng_translate "misc-keys" "description"}} </b></label><div class="controls"><textarea id="description" name="description" rows="3" class="input form-control" placeholder="{{agile_lng_translate "misc-keys" "add-description"}}"></textarea></div>'
 		$("#event_desc").html(description);
 		$("textarea#description").val(value.description);
 	}
 	else
 	{
-		var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> ' + _agile_get_translated_val("misc-keys", "add-description") + ' </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="' + _agile_get_translated_val("misc-keys", "add-description") + '"></textarea>' + '</div></div></div>'
+		var desc = '<div class="row-fluid">' + '<div class="control-group form-group m-b-none">' + '<a href="#" id="add_event_desctiption"><i class="icon-plus"></i> {{agile_lng_translate "misc-keys" "add-description"}} </a>' + '<div class="controls event_discription hide">' + '<textarea id="description" name="description" rows="3" class="input form-control w-full col-md-8" placeholder="{{agile_lng_translate "misc-keys" "add-description"}}"></textarea>' + '</div></div></div>'
 		$("#event_desc").html(desc);
 	}
 	// Fills owner select element

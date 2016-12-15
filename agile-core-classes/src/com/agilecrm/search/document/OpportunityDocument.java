@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,7 +52,9 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 
     public Builder buildOpportunityDoc(Opportunity opportunity)
     {
-    	Document.Builder doc = Document.newBuilder();    	
+    	
+    	Document.Builder doc = Document.newBuilder();  
+    	try{
 		Set<String> fields = new HashSet<String>();
 
 		fields.add(opportunity.name);
@@ -265,12 +268,18 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		
 		addTagFields(opportunity.getTagsList(), doc);
 		
-		if(opportunity.tags != null)
+		if(opportunity.getTagsList() != null)
 		{
-			String tags = SearchUtil.normalizeTagsSet(opportunity.tags);
+			LinkedHashSet<String> deals_tag = new LinkedHashSet<String>();
+
+			for (Tag tag : opportunity.getTagsList())
+			{
+				deals_tag.add(tag.tag);
+			}
+			String tags = SearchUtil.normalizeTagsSet(deals_tag);
 			if(tags != null)
 			{
-				doc.addField(Field.newBuilder().setName("tags").setText(SearchUtil.normalizeTagsSet(opportunity.tags)));
+				doc.addField(Field.newBuilder().setName("tags").setText(SearchUtil.normalizeTagsSet(deals_tag)));
 				fieldLabelsSet.add("tags");
 			}
 		}
@@ -293,7 +302,12 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 			System.out.println("exception in currency conversion"+e.getMessage());
 		}
 		
-		return doc;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println("Text search failed:"+e.getMessage());
+    	}
+    	return doc;
     }
 
     @Override
@@ -544,6 +558,6 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	}
 	public void bulkDelete(String... id)
     {
-		// TODO Auto-generated method stub
+		index.delete(id);
     }
 }

@@ -1,3 +1,4 @@
+/*global  _AGILE_LOCALE_JSON*/
 (function (){
     "use strict";
 
@@ -5,6 +6,7 @@
     var bConfig = require('./config.js');
     var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
+    var customAgileEvents = require('./pagebuilderEventlistner.js').customAgileEvents;
     
     var styleeditor = {
 
@@ -33,6 +35,7 @@
         ulPageList: document.getElementById('pageList'),
         responsiveToggle: document.getElementById('responsiveToggle'),
         theScreen: document.getElementById('screen'),
+        prevFocus:null,
 
         init: function() {
 
@@ -41,6 +44,11 @@
             });
 
             publisher.subscribe('onBlockLoaded', function (block) {
+                //hide lhs popup when click on ESC
+                $(block.frameDocument).keyup(function(e) {
+                    if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
+                        $("#styleEditor").css("left","-300px");           
+                });
                 styleeditor.setupCanvasElements(block);
             });
 
@@ -170,8 +178,23 @@
                          
             //Element object extention
             canvasElement.prototype.clickHandler = function(el) {
-                if(el.style.cursor === "pointer")                   
+               if(el.dataset.selector==='.bg.bg1, .bg.bg2, .header10, .header11, .search-box1' && el.getElementsByClassName("editContent").length!==0){
+                    $.each(el.getElementsByClassName("editContent"),function( i ){
+                        if(el.getElementsByClassName("editContent")[i].style.cursor==="pointer"){
+                           el.style.cursor="" ;
+                           el.style.outline="";
+                        }
+                        else {
+                           el.style.cursor="pointer" ;
+                           el.style.outline="rgba(233, 94, 94, 0.498039) solid 2px";
+                        }
+                    });
+                }
+                if(el.style.cursor === "pointer") {                  
                    styleeditor.styleClick(this);
+                    if($(el).attr('data-selector').indexOf(".editContent")!==-1)
+                        styleeditor.prevFocus = el;
+                }
             };
 
             var newElement = new canvasElement(element);
@@ -278,6 +301,20 @@
             //open side panel
             this.toggleSidePanel('open');
 
+            var $currentClickedEl = $(this.activeElement.element);
+            if($currentClickedEl.hasClass("agile-dynamic-text")){
+                $('[name="dynamic-text"]').val("yes");
+                $('[name="dynamic-text"]').trigger("change");
+            }
+            if($currentClickedEl.hasClass("agile-dynamic-button")){
+                $('[name="dynamic-button"]').val("yes");
+                $('[name="dynamic-button"]').trigger("change");
+            }
+            if($currentClickedEl.hasClass("agile-dynamic-image")){
+                $('[name="dynamic-image"]').val("yes");
+                $('[name="dynamic-image"]').trigger("change");
+            }
+
             return false;
 
         },
@@ -301,7 +338,6 @@
                 var newStyleEl = $('#styleElTemplate').clone();
                 newStyleEl.attr('id', '');
                 newStyleEl.find('.control-label').text( bConfig.editableItems[theSelector][x]+":" );
-
                 if( theSelector + " : " + bConfig.editableItems[theSelector][x] in bConfig.editableItemOptions) {//we've got a dropdown instead of open text input
 
                     newStyleEl.find('input').remove();
@@ -340,10 +376,14 @@
                             $('#imageModal').modal('show');
                             $('#imageModal .image button.useImage').unbind('click');
                         
-                            console.log("hi");
-                        });
+                            //console.log("hi");
+                        });                                             
+
 
                     } else if( bConfig.editableItems[theSelector][x].indexOf("color") > -1 ) {
+
+                        if( bConfig.editableItems[theSelector][x] === 'background-color' )
+                            $(newStyleEl).css('margin-top','15px');
 
                         if( $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== 'transparent' && $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== 'none' && $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== '' ) {
 
@@ -378,7 +418,14 @@
                     newStyleEl.css('display', 'block'); 
 
                 $('#styleElements').append( newStyleEl );
-
+                if(bConfig.editableItems[theSelector][x] === 'background-image'){
+                    //add remove icon in background image
+                    var removeIcon=styleeditor.addRemoveIcon(newStyleEl);
+                    $('#styleElements').append(removeIcon);
+                    $('.remove-icon').tooltip({
+                        container: 'body'
+                    });
+                }
                 $('#styleEditor form#stylingForm').height('auto');
 
             }
@@ -403,7 +450,17 @@
                         var nodeName=styleeditor.activeElement.element.nodeName;
                         if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
                             $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
-                    }                     
+                    }
+
+                    var nameAttrOfEl = $(this).attr("name");
+                    if( nameAttrOfEl === "dynamic-text" || nameAttrOfEl === "dynamic-button" || nameAttrOfEl === "dynamic-image") {
+                        if($(this).val() === "yes") {
+                            $(styleeditor.activeElement.element).addClass("agile-" + nameAttrOfEl);
+                        } else {
+                            $(styleeditor.activeElement.element).removeClass("agile-" + nameAttrOfEl);
+                        }
+                    }
+
                 }
 
                 /* SANDBOX */
@@ -509,15 +566,60 @@
             //video URL
             if( $(styleeditor.activeElement.element).attr('data-type') === 'video' ) {
 
-                if( $('input#youtubeID').val() !== '' ) {
-
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+$('#video_Tab input#youtubeID').val());
-
-                } else if( $('input#vimeoID').val() !== '' ) {
-
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
-
+                var videoRecord_Id = $('select[id=videoRecordId]').val();
+                 //image under video section
+                if($(styleeditor.activeElement.element).siblings("IMG")!==0 && $('.imageFileTab').hasClass('active')){
+                    var url=$('.imageFileTab').find('input#imageURL').val();
+                    if(url.match("^(http|https)://")===null|| url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
+                        $('input#imageURL').css("margin-bottom","0px");
+                        $("#error-img-msg").next().css("margin-top","6px");
+                        $("#error-img-msg").show();
+                        return;
+                    }
+                    else 
+                       $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
                 }
+                if(!$('.imageFileTab').hasClass('active')){
+                    if( $('input#youtubeID').val() !== '' ) {
+
+                        var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                        var ytMatch = $('input#youtubeID').val().match(ytRegExp);
+                        if (ytMatch && ytMatch[1].length === 11) {
+                            var youtubeId = ytMatch[1];
+                            $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
+                            customAgileEvents.createYoutubeThumbnail(youtubeId,$(styleeditor.activeElement.element));
+                                
+                        
+                        }
+                        else{
+                            $('input#youtubeID').removeClass("margin-bottom-20");
+                            $("#err-youtube-msg").next().css("margin-top","6px");
+                            $("#err-youtube-msg").show();
+                            return;
+                        }
+                        
+                    } else if( $('input#vimeoID').val() !== '' ) {
+                        var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
+                        var vimMatch = $('input#vimeoID').val().match(vimRegExp);
+                        if (vimMatch && vimMatch[3].length){
+                            var vimeoId = vimMatch[3];
+                            $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
+                            customAgileEvents.createVimeoThumbnail(vimeoId,$(styleeditor.activeElement.element));
+                        }
+                        else{
+                            $('input#vimeoID').removeClass("margin-bottom-20");
+                            $("#err-vimeo-msg").next().css("margin-top","6px");
+                            $("#err-vimeo-msg").show();
+                            return;
+                        }
+                    } else if ( videoRecord_Id !== '' ) {
+
+                        $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
+                    }
+                    else
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "");
+                }
+
 
                 /* SANDBOX */
 
@@ -533,7 +635,7 @@
 
                         $('#'+styleeditor.activeElement.sandbox).contents().find('#'+elementID).prev().attr('src', "//player.vimeo.com/video/"+$('#video_Tab input#vimeoID').val()+"?title=0&amp;byline=0&amp;portrait=0");
 
-                    }
+                    }                  
 
                 }
 
@@ -558,6 +660,21 @@
 
                 styleeditor._oldForm[window.current_agileform]=current_element;                
                 styleeditor.loadAgileCRMFormInLandingPage(form_id);
+            }
+
+            //direct url pass for image
+            if($(styleeditor.activeElement.element).prop('tagName')==="IMG"){
+
+                    var image_url=$('.imageFileTab').find('input#imageURL').val();
+                   
+                    if( image_url.match("^(http|https)://")===null|| image_url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
+                        $('input#imageURL').css("margin-bottom","0px");
+                        $("#error-img-msg").next().css("margin-top","6px");
+                        $("#error-img-msg").show();
+                        return;
+                    }
+                    $(styleeditor.activeElement.element).attr('src',decodeURIComponent(image_url));
+            
             }
 
             $('#detailsAppliedMessage').fadeIn(600, function(){
@@ -623,7 +740,7 @@
             styleeditor.selectLinksInernal.innerHTML = '';
 
             newOption = document.createElement('OPTION');
-            newOption.innerText = "Choose a block";
+            newOption.innerText = _AGILE_LOCALE_JSON['choose-a-block'];
             newOption.setAttribute('value', '#');
             styleeditor.selectLinksInernal.appendChild(newOption);
 
@@ -714,7 +831,7 @@
             styleeditor.selectLinksPages.innerHTML = '';
 
             newOption = document.createElement('OPTION');
-            newOption.innerText = "Choose a page";
+            newOption.innerText = _AGILE_LOCALE_JSON['choose-a-page'];
             newOption.setAttribute('value', '#');
             styleeditor.selectLinksPages.appendChild(newOption);
 
@@ -770,6 +887,18 @@
             var theHref;
 
             $('a#link_Link').parent().show();
+            $("#tab1").removeClass("active");
+            $("a#default-tab1").parent().removeClass("active");
+
+            if($(el).prop('tagName') === 'IMG'){
+                $("#image_Tab").addClass("active");
+                $("a#img_Link").parent().addClass("active");
+
+            }else {
+                //link tab should active                
+                $("#link_Tab").addClass("active");
+                $("a#link_Link").parent().addClass("active");
+            }
 
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
@@ -806,8 +935,24 @@
 
             $('a#img_Link').parent().show();
 
-            //set the current SRC
-            $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
+            if($(el).prop('tagName')=== "IMG" && $(el).parent().prop('tagName') !== 'A' && $(el).attr('data-type') !== 'video'){
+                $("#tab1").removeClass("active");
+                $("a#default-tab1").parent().removeClass("active");
+                $("#image_Tab").addClass("active");
+                $("a#img_Link").parent().addClass("active");
+            }      
+
+           
+            if($("#error-img-msg").css("display")!=="none"){
+                $('input#imageURL').css("margin-bottom","");
+                $("#error-img-msg").next().css("margin-top","");
+                $("#error-img-msg").hide();
+            }
+            //set the current SRC 
+            if($(el).siblings("IMG").length!==0)
+                $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));            
+            else 
+                $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
 
             //reset the file upload
             $('.imageFileTab').find('a.fileinput-exists').click();
@@ -826,24 +971,45 @@
             $('a#video_Link').click();
             $('a#default-tab1').css("display","none");
 
-            //inject current video ID,check if we're dealing with Youtube or Vimeo
+            if($("#err-youtube-msg").css("display")!=="none"){
+                $('input#youtubeID').addClass("margin-bottom-20");
+                $("#err-youtube-msg").next().css("margin-top","");
+                $("#err-youtube-msg").hide();
+            }
+            if($("#err-vimeo-msg").css("display")!=="none"){
+                $('input#vimeoID').addClass("margin-bottom-20");
+                $("#err-vimeo-msg").next().css("margin-top","");
+                $("#err-vimeo-msg").hide();
+            }
+            //inject current video ID,check if we're dealing with Youtube or Vimeo or Recorded video
 
             if( $(el).prev().attr('data-video').indexOf("vimeo.com") > -1 ) {//vimeo
 
-                matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
+                //matchResults = $(el).prev().attr('data-video').match(/player\.vimeo\.com\/video\/([0-9]*)/);
 
-                $('#video_Tab input#vimeoID').val( matchResults[matchResults.length-1] );
+                $('#video_Tab input#vimeoID').val("https:"+ $(el).prev().attr('data-video'));
                 $('#video_Tab input#youtubeID').val('');
+                $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
-            } else {//youtube
+            } else if( $(el).prev().attr('data-video').indexOf("youtube.com") > -1 ) {//youtube
 
                 //temp = $(el).prev().attr('src').split('/');
-                var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-                matchResults = $(el).prev().attr('data-video').match(regExp);
+               // var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+               // matchResults = $(el).prev().attr('data-video').match(regExp);
 
-                $('#video_Tab input#youtubeID').val( matchResults[1] );
+                $('#video_Tab input#youtubeID').val("https:"+$(el).prev().attr('data-video'));
                 $('#video_Tab input#vimeoID').val('');
+                $('#video_Tab select[id=videoRecordId]').val('').attr('selected','selected');
 
+            } else { //Recorded video
+
+                matchResults = $(el).prev().attr('data-video').match(/video\/([0-9]*)/);
+                if(matchResults)
+                    $('#video_Tab select[id=videoRecordId]').val( matchResults[1] ).attr('selected','selected');
+                else
+                    $("#video_Tab select[id=videoRecordId]").val("");
+                $('#video_Tab input#youtubeID').val('');
+                $('#video_Tab input#vimeoID').val('');
             }
 
         },
@@ -902,7 +1068,7 @@
 
             } else if( $(styleeditor.activeElement.element).prop('tagName') === 'IMG' ) {//image
 
-                if( $(styleeditor.activeElement.element).parent().prop('tagName') === 'A' ) {//clone the A
+                if( $(styleeditor.activeElement.element).parent().prop('tagName') === 'A' && $.trim($(styleeditor.activeElement.element).parent().text())==="") {//delete only image if link text is empty
 
                     toDel = $(styleeditor.activeElement.element).parent();
 
@@ -912,6 +1078,8 @@
 
                 }
 
+            } else if( $(styleeditor.activeElement.element).hasClass("frameCover") ) { // To delete video block correctly
+                toDel = $(styleeditor.activeElement.element).parent(".videoWrapper");
             } else {//everything else
 
                 toDel = $(styleeditor.activeElement.element);
@@ -955,6 +1123,11 @@
         cloneElement: function() {
 
             publisher.publish('onBeforeClone');
+
+            // To clone video block correctly
+            if( $(styleeditor.activeElement.element).hasClass("frameCover") ) {
+                $(styleeditor.activeElement.element).parent(".videoWrapper").addClass("propClone");
+            }
 
             var theClone, theClone2, theOne, cloned, cloneParent, elementID;
 
@@ -1165,6 +1338,8 @@
                 styleeditor.toggleSidePanel('close');
 
             }
+            if(styleeditor.prevFocus)
+                $(styleeditor.prevFocus).focus();
 
         },
 
@@ -1186,10 +1361,16 @@
             $('a#agileform_link').parent().show();
             $('a#agileform_link').click();
             $('a#default-tab1').css('display','none');
-            if($(this.activeElement.element).find('.agile_crm_form_embed').size()!==0)
+            if($(this.activeElement.element).find('.agile_crm_form_embed').size()!==0){
                 $('#agileform_id').val($(this.activeElement.element).find('.agile_crm_form_embed').attr('id')).attr('selected','selected');
-            else
+                var form_id=$(this.activeElement.element).find(".agile_crm_form_embed").attr("id").split(window.CURRENT_AGILE_DOMAIN+"_")[1];
+                $('#refresh-formlist .edit-form').attr("href",window.siteUrl+"formbuilder?form="+form_id);
+                $('#refresh-formlist .edit-form').show();
+            }else{
+
                 $('#agileform_id').val('default').attr('selected','selected');
+                $('#refresh-formlist .edit-form').hide();
+            }
 
         },
 
@@ -1201,6 +1382,16 @@
              var script = document.createElement('script');
             script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
             document.body.appendChild(script);  
+        },
+        addRemoveIcon: function(el){
+            $(el).css('margin-bottom','0px');
+            var icon=$('<a class="right agile-tooltip remove-icon" data-placement="right" data-original-title="Click to remove background image"></a>');
+            icon.append('<i class="fa fa-trash right" style="color: #bdc3c7;"></i>');
+            $(icon).off('click');
+            $(icon).on('click', function(event){
+                $(event.currentTarget).prev().find('input').val("none");
+            });
+            return icon;
         }
 
     };

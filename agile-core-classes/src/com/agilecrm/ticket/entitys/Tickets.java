@@ -32,6 +32,7 @@ import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.HTMLUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;

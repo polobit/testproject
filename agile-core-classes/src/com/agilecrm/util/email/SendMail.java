@@ -82,6 +82,9 @@ public class SendMail
     
     public static final String INVOICE_CREATED = "subscription/payments/invoice_created";
     public static final String INVOICE_CREATED_SUBJECT = "Your Agile CRM Invoice";
+    
+    public static final String ADDON_PAYMENT_FAILED = "subscription/payments/failed/our_addon_payment_failed";
+    public static final String ADDON_PAYMENT_FAILED_SUBJECT = "Addon payment failed";
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
@@ -124,7 +127,7 @@ public class SendMail
     public static final String CSV_IMPORT_DELAY_NOTIFICATION = "csv_delay_notifier";
     public static final String CSV_IMPORT_DELAY_NOTIFICATION_SUBJECT = "CSV Import Delay";
 
-    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
+    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";	
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
     public static final String EXPORT_DEALS_CSV = "export_csv";
     public static final String EXPORT_DEALS_CSV_SUBJECT = "Agile CRM Deals CSV";
@@ -164,6 +167,10 @@ public class SendMail
    	public static final String HELPCENTER_VERIFICATION = "helpcenter_verification_email";
    	public static final String HELPCENTER_VERIFICATION_SUBJECT = "Verify your Helpcenter Account";
    	
+   	//For invited user form email
+  	public static final String INVITED_USER = "inviteduser_authentication";
+  	public static final String INVITED_USER_SUBJECT = "Welcome to Agile CRM";
+   	
     /**
      * From Name of email.
      */
@@ -177,7 +184,7 @@ public class SendMail
     /**
      * Templates path where template files exist.
      */
-    public static final String TEMPLATES_PATH ="misc/email/";
+    public static final String TEMPLATES_PATH = "misc/email/";
 
     /**
      * Html body template extension.
@@ -190,6 +197,8 @@ public class SendMail
     public static final String TEMPLATE_BODY_EXT = "_body.html";
     
     public static final String CONTACT_UPDATE_STATUS = "Domainuser_updates";
+    
+    public static final String CSV_IMPORT_STATS_NOTIFICATION="Csv_import_stats";
 
     @SuppressWarnings("unused")
     private static Object String;
@@ -215,7 +224,7 @@ public class SendMail
      */
     @SuppressWarnings("unused")
     public static void sendMail(String to, String subject, String template, Object object, String from,
-	    String fromName, String... args)
+	    String fromName, String language, String... args)
     {
 	try
 	{
@@ -267,33 +276,14 @@ public class SendMail
 	    // Merge JSONObjects as a single JSONObject in order to get all
 	    // values in a single object
 	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
-	   // System.out.println("ekkkkkkk"+mergedJSON.getString("unsubscribe_body"));
-	    String emailHTML1 = "";
-	    String emailBody1 = "";
-	    
-	    if(mergedJSON.has("unsubscribe_subject")&& mergedJSON.has("unsubscribe_body")){
-	        emailHTML1 = mergedJSON.getString("unsubscribe_body");
-		    emailBody1 = mergedJSON.getString("unsubscribe_body");
-	    
+
+	    System.out.println("mergedJson in sendemail" + mergedJSON);
 
 	    // Read template - HTML
-	    if(!(StringUtils.isBlank(emailHTML1) && StringUtils.isBlank(mergedJSON.getString("unsubcribe_subject"))))
-	    {
-	    	        String oldNamespace = NamespaceManager.get();
-	 	            NamespaceManager.set("");
-	    	SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML1, emailBody1, null, args);
-	    	        NamespaceManager.set(oldNamespace);
-	    	     
-	    	   return;
-
-	  
-	    }
-	  }  
-	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON);
+	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON, language);
 
 	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON);
+	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON, language);
 
 	    // If both are null, nothing to be sent
 	    if (emailHTML == null && emailBody == null)
@@ -337,8 +327,8 @@ public class SendMail
      * @param args
      *            - Variable args to send email attachment.
      */
-    public static void sendMail(String to, String subject, String template, Object object)
+    public static void sendMail(String to, String subject, String template, Object object, String language)
     {
-	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME);
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME, language);
     }
 }

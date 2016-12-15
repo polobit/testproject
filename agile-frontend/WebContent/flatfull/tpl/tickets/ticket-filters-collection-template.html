@@ -16,25 +16,50 @@
             </div>
         </div>
     </div>
+    <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
+     </div>
 {{/unless}}
 {{#if this.length}}
-    <div class="panel-defaut panel">
-        <div class="pull-right">
-            <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon" style="margin-top:20px;margin-right:20px;">
+    {{#is_mobile}}
+
+    <div class="panel-defaut panel wrapper p-b-xs">
+    <div class="text-center text-md m-b-xs">{{agile_lng_translate 'contacts-view' 'views'}}</div>
+        <div class="pull-right add-btn-mobile">
+            <a href="#add-ticket-view" class="btn btn-xs m-b btn-default btn-addon">
                 <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-view'}}
             </a>
         </div>
+        <table class="table service-table-mobile no-shadow m-b-none agile-table panel" url="core/api/tickets/filters/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
+            
+            <tbody id="ticket-filters-model-list" class="ticket-label-border" route="ticket-view/" class="c-p"></tbody>
+        </table>
+        </div>
+
+    {{else}}
+
+    <div class="col panel wrapper">
+        <div class="pull-right">
+            <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon">
+                <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-view'}}
+            </a>
+        </div>
+        <div class="table-responsive inline-block">
         <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/tickets/filters/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}" data-bulk-delete-msg="{{agile_lng_translate 'others' 'delete-warn'}}">
             <thead>
                 <tr>
                     <th class="hide">{{agile_lng_translate 'tickets' 'id'}}</th>
-                    <th style="width: 35%">{{agile_lng_translate 'tickets' 'view-name'}}</th>
+                    <th style="width: 35%">{{agile_lng_translate 'documents' 'name'}}</th>
                     <th style="width: 40%">&nbsp;</th>
                 </tr>
             </thead>
             <tbody id="ticket-filters-model-list" route="ticket-view/" class="c-p"></tbody>
         </table>
+        </div>
 
     </div>
+     <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none">
+     </div>
+    {{/is_mobile}}
+
 {{/if}}
 </script>

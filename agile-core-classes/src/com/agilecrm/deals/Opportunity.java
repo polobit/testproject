@@ -99,6 +99,18 @@ public class Opportunity extends Cursor implements Serializable
     @Id
     public Long id;
 
+	public static enum DiscountType {
+		Value, Percent
+	};
+	
+	public boolean apply_discount = false;
+	
+	public float discount_value = 0;
+	public float discount_amt = 0;
+	
+	@NotSaved(IfDefault.class)
+	public DiscountType discount_type = DiscountType.Value;
+	
     /**
      * Name of a Deal.
      */
@@ -120,6 +132,11 @@ public class Opportunity extends Cursor implements Serializable
     @Embedded
     public List<CustomFieldData> custom_data = new ArrayList<CustomFieldData>();
 
+    
+    @XmlElement(name = "products")
+ 	@Embedded
+ 	public List<DealProducts> products = new ArrayList<DealProducts>();
+    
     /**
      * Description of a deal.
      */
@@ -469,6 +486,8 @@ public class Opportunity extends Cursor implements Serializable
     {
 	if (pipeline != null)
 	    return pipeline.getId();
+	if(pipeline_id!=null)
+		return pipeline_id;
 	return 0L;
     }
 
@@ -608,7 +627,7 @@ public class Opportunity extends Cursor implements Serializable
 	    if (this.milestone_changed_time == 0 && oldOpportunity.milestone_changed_time > 0)
 		this.milestone_changed_time = oldOpportunity.milestone_changed_time;
 
-	    if (!this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+	    if (!this.getPipeline_id().equals(oldOpportunity.getPipeline_id())
 		    || !this.milestone.equals(oldOpportunity.milestone))
 		this.milestone_changed_time = System.currentTimeMillis() / 1000;
 
@@ -628,7 +647,7 @@ public class Opportunity extends Cursor implements Serializable
 	    System.out.println("New Opportunity-----" + this);
 	    // If old deal, new deal are same and lost reason is there,
 	    // can update milestone changed time with old milestone changed time
-	    if (this.pipeline_id.equals(oldOpportunity.getPipeline_id())
+	    if (this.getPipeline_id().equals(oldOpportunity.getPipeline_id())
 		    && this.milestone.equals(oldOpportunity.milestone)
 		    && this.lost_reason_id != null
 		    && ((oldOpportunity.lost_reason_id != null && oldOpportunity.lost_reason_id == 0L) || oldOpportunity.lost_reason_id == null))
@@ -859,7 +878,7 @@ public class Opportunity extends Cursor implements Serializable
 	{
 		List <Tag> oldtags = new ArrayList<Tag>(oldDeal.tagsWithTime);
 		List <Tag> newtags = new ArrayList<Tag>(updatedDeal.tagsWithTime);
-		if(oldtags != null && newtags != null){
+		if(oldtags != null && oldtags.size()>0 && newtags != null && newtags.size()>0){
 			for(Tag newTag : newtags){
 				for(Tag oldTag: oldtags){
 					if(newTag.equals(oldTag))
@@ -869,7 +888,7 @@ public class Opportunity extends Cursor implements Serializable
 				}
 			}
 		}
-		else if(oldtags == null && newtags != null){
+		else if(oldtags.size()==0 && newtags != null && newtags.size()>0){
 			for (Tag newtag : newtags){
 				newtag.createdTime = System.currentTimeMillis();
 			}
@@ -1115,11 +1134,16 @@ public class Opportunity extends Cursor implements Serializable
 	if (this.notes != null)
 	{
 	    // Create list of Note keys
+		
 	    for (String note_id : this.notes)
 	    {
-		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    	try{
+		       this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    	}catch(Exception e){
+	    		System.out.println("Exception in id conversion: "+e.getMessage());
+	    	}
 	    }
-
+	
 	    this.notes = null;
 	}
 
@@ -1279,6 +1303,24 @@ public class Opportunity extends Cursor implements Serializable
 	save();
 
     }
+    
+    public void removeContactIdsToDealWithoutSaving(List<String> contact_idsList)
+    {
+	removeRelatedContactForEditContact();
+	for (String contact_id : contact_idsList)
+	{
+	    contact_ids.remove(contact_id);
+	}
+    }
+	
+    @JsonIgnore
+    public void removeRelatedContactForEditContact()
+    {
+    	for(String eachContactID : contact_ids){
+    		this.related_contacts.remove(new Key<>(Contact.class,Long.parseLong(eachContactID)));
+    	}
+    
+    }
 
     /*
      * (non-Javadoc)
@@ -1291,7 +1333,9 @@ public class Opportunity extends Cursor implements Serializable
 
 	StringBuilder builder = new StringBuilder();
 	builder.append("Opportunity [id=").append(id).append(", name=").append(name).append(", contact_ids=")
-		.append(contact_ids).append(", related_contacts=").append(related_contacts).append(", custom_data=")
+		.append(contact_ids).append(", related_contacts=").append(related_contacts)
+		.append(", related_products=").append(products)
+		.append(", custom_data=")
 		.append(custom_data).append(", description=").append(description).append(", expected_value=")
 		.append(expected_value).append(", milestone=").append(milestone).append(", probability=")
 		.append(probability).append(", close_date=").append(close_date).append(", owner_id=").append(owner_id)
@@ -1301,7 +1345,12 @@ public class Opportunity extends Cursor implements Serializable
 		.append(", related_notes=").append(related_notes).append(", note_description=")
 		.append(note_description).append(", pipeline=").append(pipeline).append(", pipeline_id=")
 		.append(pipeline_id).append(", archived=").append(archived).append(", lost_reason_id=")
-		.append(lost_reason_id).append(", deal_source_id=").append(deal_source_id).append("]");
+		.append(lost_reason_id)
+		.append(", discount_type=").append(discount_type)
+		.append(", apply_discount=").append(apply_discount)
+		.append(",discount_value=").append(discount_value)
+		.append(",discount_amt=").append(discount_amt)
+		.append(", deal_source_id=").append(deal_source_id).append("]");
 	;
 	return builder.toString();
     }

@@ -46,11 +46,11 @@ define(
 						addAgileApi(formJSON, api, function(json)
 						{
 							if(formNumber){
-								formLoad.agile_form_load();
+								formLoad.agile_form_load(fields);
 							}
 							else{
 								if(typeof formTemplate != "undefined") {
-									templateLoad.agile_template_load(api);
+									templateLoad.agile_template_load(api,fields);
 								} else {
 									saveform = json;
 									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });

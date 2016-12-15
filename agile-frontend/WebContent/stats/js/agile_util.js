@@ -169,7 +169,7 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 			var params = "contactid=" + contact_id + "&formname=" + encodeURIComponent(form_name) + "&formdata=" + encodeURIComponent(JSON
                     .stringify(form_data)) + "&new=" + new_contact+"&checkId="+id_check;
 			var trigger_url="https://"+ agile_id.getNamespace()+".agilecrm.com/formtrigger";
-			sendRequest(trigger_url,"",params);
+			sendRequest(trigger_url,"",params);				
 		}
 	}
 	else if (error[1])
@@ -183,10 +183,53 @@ function agile_formCallback(error, button, url, agile_form, contact_id, form_dat
 		if (button)
 			button.removeAttribute("disabled");
 
-		if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
+		/*if (!agile_form.getAttribute("action") || agile_form.getAttribute("action") == "#" || agile_form.getAttribute("action").indexOf("/formsubmit") != -1)
 			agile_form.setAttribute("action", url);
 		agile_form.setAttribute("method","POST");
-		agile_form.submit();
+		agile_form.submit();*/
+		
+		var emailVal = agile_guid.get_email();
+		if(typeof emailVal != "undefined") {
+			if(url && url != "#"){
+				var emailParam = encodeURIComponent("{\"email\":\""+emailVal+"\"}");	
+				var index = url.indexOf("?");
+				if(index!=-1)
+					window.location = url+"&"+"fwd=cd&data="+emailParam;	
+				else
+					window.location = url+"?"+"fwd=cd&data="+emailParam;
+			}	
+			else if(url && url == "#"){
+				//condition for the checking custom templates
+				var confirmationMsgEl = document.getElementById("_agile_confirmation_msg");
+				var confirmationMsg = "Great! Thanks for filling out the form.";
+				if(confirmationMsgEl) {
+					confirmationMsg = confirmationMsgEl.value;
+				}
+				document.getElementById("agile-error-msg").innerHTML = '<br><span style="color:green; font-size: 13px;">' + confirmationMsg + '</span>';
+				var agile_form = document.forms["agile-form"];
+				if(typeof grecaptcha != "undefined") grecaptcha.reset();
+				agile_form.reset();
+			
+			}
+		
+		} else {
+			if(url && url != "#")
+				window.location = url;
+			else if(url && url == "#"){
+				document.getElementById("agile-error-msg").innerHTML = '<span style="color:green">Form submitted successfully</span>';
+				var agile_form = document.forms["agile-form"];
+				if(typeof grecaptcha != "undefined") grecaptcha.reset();
+				agile_form.reset();
+				
+			}
+		}	
+
+		agile_track_form_action({
+			"id" : form_data._agile_form_id || null,
+			"name" : form_name,
+			"email" : emailVal
+		});
+
 	}, 1500);
 }
 
@@ -203,16 +246,59 @@ function _agile_load_form_fields()
 			var rj = {};
 			var cp = data.properties;
 			for ( var r = 0; r < cp.length; r++)
-			{
-				rj[cp[r].name] = cp[r].value;
+			{  
+				if(cp[r].name == "address")
+				{
+					
+                   var addrObj = JSON.parse(cp[r].value);
+                   var addrKeys = Object.keys(addrObj);
+                   for(var i=0;i<addrKeys.length;i++){
+                   		rj[addrKeys[i]] = addrObj[addrKeys[i]];
+                   }
+                }
+				else
+				{
+					rj[cp[r].name] = cp[r].value;
+
+				}
 			}
 			var form = document.getElementById("agile-form");
 			for ( var s = 0; s < form.length; s++)
 			{
-				if (rj[form[s].name])
-				{
-					form[s].value = rj[form[s].name];
-				}
+				if(rj[form[s].name] && form[s].type != "checkbox" && form[s].type != "radio"){
+					if (form[s].name != "country")
+					{
+						form[s].value = rj[form[s].name];
+					}//if close
+					else if(form[s].name == "country"){
+						if(rj["countryname"]){
+							form[s].value = rj["countryname"];		
+						}
+						else{
+							form[s].value = rj[form[s].name];
+						}
+					}//else if close
+				}//outer if
+				else if(rj[form[s].name] && (form[s].type == "checkbox" || form[s].type == "radio")){
+					if (form[s].name != "country")
+					{
+						if(form[s].value == rj[form[s].name])
+							form[s].checked = true;
+					}//if close
+					else if(form[s].name == "country"){
+						if(rj["countryname"]){
+							if(form[s].value == rj["countryname"]){
+								form[s].checked = true;
+							}
+						}
+						else{
+							if(form[s].value == rj[form[s].name]){
+
+								form[s].checked = true;
+							}
+						}
+					}//else if close
+				}//outer else close
 			}
 		}
 	}, error : function(data)
@@ -395,4 +481,10 @@ function createXMLHTTPObject() {
         break;
     }
     return xmlhttp;
+}
+
+function agile_find_closest_element(el, condCallback) {
+    return el && (
+        condCallback(el) ? el : agile_find_closest_element(el.parentNode, condCallback)
+    );
 }

@@ -1,16 +1,19 @@
 package com.agilecrm.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.mail.internet.InternetAddress;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,11 +23,14 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.amazonaws.services.simpleemail.model.Message;
+import com.agilecrm.user.EmailPrefs;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.sendgrid.SendGrid;
 
 public class EmailUtil
@@ -33,6 +39,16 @@ public class EmailUtil
     // Agile emails - to avoid count when emails are sent to Agile support
     public static String[] agileEmails = { "care@agilecrm.com", "sales@agilecrm.com" };
     public static List<String> agileEmailsList = Arrays.asList(agileEmails);
+    
+    /**
+     * Beta open email track url
+     */
+    public static final String BETA_OPEN_TRACKING_URL = "http://open-beta.agle.me";
+    
+    /**
+     * Live open email track url
+     */
+    public static final String LIVE_OPEN_TRACKING_URL = "http://open.agle.me";
 
     /**
      * Parses html body of an email using jsoup.
@@ -161,25 +177,34 @@ public class EmailUtil
      **/
     public static String appendTrackingImage(String html, String campaignId, String trackerId)
     {
-	String queryParams = "";
-
+      // Adding domain name in query param
+	String queryParams ="";
+	
+	String domain =  NamespaceManager.get() ;
+	
+	//domain name
+	if(!StringUtils.isEmpty(domain))
+	    queryParams = "ns=" + domain + "&";
+	
 	// Campaign-id
 	if (!StringUtils.isEmpty(campaignId))
-	    queryParams = "c=" + campaignId;
-
-	// If not emtpy add '&'
-	if (!StringUtils.isEmpty(queryParams))
-	    queryParams += "&";
+	    queryParams += "c=" + campaignId + "&";
 
 	// Contact id (for campaigns) or Tracker Id (for personal emails)
 	if (!StringUtils.isEmpty(trackerId))
 	    queryParams += "s=" + trackerId;
-
+	
+	String trackURL = LIVE_OPEN_TRACKING_URL;
+	
+	//If environment is beta then use beta url
+	if(SystemProperty.applicationId.get().equals("agilecrmbeta"))
+		trackURL = BETA_OPEN_TRACKING_URL;
+	
 	String trackingImage = "<div class=\"ag-img\"><img src="
-	        + VersioningUtil.getHostURLByApp(NamespaceManager.get()) + "open?" + queryParams
-	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
+	        + trackURL + "?" + queryParams
+	        + " nosend=\"1\" alt='' style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
 
-	return html + trackingImage;
+	return replaceLastOccurence(html, "</body>", trackingImage);
     }
 
     /**
@@ -191,7 +216,7 @@ public class EmailUtil
      */
     public static String getPoweredByAgileURL(String medium)
     {
-	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
+	return "http://www.crm.io?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
 	        + NamespaceManager.get();
     }
 
@@ -219,15 +244,15 @@ public class EmailUtil
     {
 
 	// Returns only html if Agile label exits
-	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
-	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
+	if (isWhiteLableEnabled || StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by") || StringUtils.contains(html, "http://www.crm.io?utm_source=powered-by")
+	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com"))
 	    return html;
 
 	// For Campaign HTML emails, Powered by should be right aligned
 	if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-	    html = html + "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+	    html = replaceLastOccurence(html, "</body>", "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>");
 	else
-	    html = html + "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+	    html = replaceLastOccurence(html, "</body>", "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>");
 
 	return html;
     }
@@ -475,7 +500,7 @@ public class EmailUtil
 		content.append("<tr> <td style='color:#1E90FF; font-weight:bold;font-size:16px; text-align:center;'> _title </td> </tr> ");
 		content.append("<tr> <td style='font-weight:bold;font-size:12px; text-align:center;'> _date</td> </tr> </tbody> </table> ");
 		content.append("<table cellspacing=\"0\" cellpadding=\"0\"> <tbody> <tr> ");
-		content.append("<td style=\"padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:arial,sans-serif;color:#4B4848\"> ");
+		content.append("<td style=\"padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:arial,sans-serif;color:#4B4848\"> <p>");
 
 		String header = StringUtils.replaceOnce(content.toString(), "_title", title);
 		return StringUtils.replaceOnce(header, "_date", DateUtil.getCalendarString(System.currentTimeMillis(), DateUtil.EMAIL_TEMPLATE_DATE_FORMAT, "GMT"));
@@ -489,7 +514,7 @@ public class EmailUtil
      */
     public static String templateFooter() {
     	StringBuilder content = new StringBuilder();
-    	content.append("<br> <br> <br> The Crew at AgileCRM<br> <a target=\"_blank\" href=\"https://www.agilecrm.com\">https://www.agilecrm.com</a><br> ");
+    	content.append("<br> <br> <br> The Crew at AgileCRM<br> <a target=\"_blank\" href=\"http://www.crm.io\">https://www.agilecrm.com</a><br> ");
 		content.append("<br> <br> </td> </tr> </tbody> </table> </td> </tr> </tbody> </table> </td> </tr> <tr> <td> ");
 		content.append("<table cellspacing=\"0\" cellpadding=\"0\" align=\"center\" class=\"container\"> <tbody> <tr> <td align=\"center\"> ");
 		content.append("<img width=\"600\" height=\"15\" src=\"http://venkat2desk.site90.net/images/border-shadow.png\" alt=\"\" class=\"img-shadow\"> </td> </tr> ");
@@ -503,4 +528,117 @@ public class EmailUtil
 		return content.toString();
     }
     
-}
+    /**
+     * Common email template.
+     * 
+     * @param mail_content
+     * @return
+     */
+    public static String emailTemplate(String mail_content) {
+    	
+    	String template = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">	" +
+    	            "<html>\n" +
+    	            "  <head>\n" +
+    	            "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n" +
+    	            "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n" +
+    	            "    <title>AgileCRM</title>\n" +
+    	            "    \n" +
+    	            "  </head>\n" +
+    	            "  <body>\n" +
+    	            "    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"background-color:#edf1f2;padding:6% 10%\">\n" +
+    	            "      <tr>\n" +
+    	            "        <td align=\"center\">\n" +
+    	            "          <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" bgcolor=\"#FFFFFF\" style=\"border:1px solid #ccc;border-radius:2px\">\n" +
+    	            "            <tr>\n" +
+    	            "              <td style=\"font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc\" height=\"70\" align=\"center\" class=\"responsive-image\">\n" +
+    	            "                <img width=\"150\" alt=\"AgileCRM\" src=\"https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png\">\n" +
+    	            "              </td>\n" +
+    	            "            </tr>\n" +
+    	            "            <tr>\n" +
+    	            "              <td style=\"padding: 15px 25px 5px\">\n" +
+    	            "                <div style=\"font-size:14px;font-family:sans-serif;\">\n" +
+    	            "\t\t\t" + mail_content + "\n" +
+    	            "                </div>\n" +
+    	            "              </td>\n" +
+    	            "            </tr>\n" +
+    	            "\t\t\t\n" +
+    	            "\t\t\t<tr>\n" +
+    	            "              <td style=\"padding: 10px 25px 25px\">\n" +
+    	            "                \t\t<div style=\"font-weight: bold; font-size: 12px;\">\n" +
+    	            "\t\t\t\t\t\tThe Crew at Agile CRM  <br />\n" +
+    	            "\t\t\t\t\t  </div>\n" +
+    	            "\t\t\t\t\t  <div><a target=\"_blank\" href=\"http://www.crm.io\" style=\"color:blue\">https://www.agilecrm.com</a></div>\n" +
+    	            "              </td>\n" +
+    	            "            </tr>\n" +
+    	            "          </table>\n" +
+    	            "        </td>\n" +
+    	            "      </tr>\n" +
+    	            "    </table>\n" +
+    	            "  </body>\n" +
+    	            "</html>";
+    	
+    	return template;
+    }
+    
+	/**
+     * It gives mails data as String based on mails passing
+     * 
+     * @param contactEmails
+     *            - JSONArray contains mails
+     * 
+     * @return String
+     */
+    public static String getEmails(JSONArray contactEmails) throws JSONException
+    {
+    	JSONObject res = new JSONObject();
+		
+		EmailPrefs emailPrefs = null;
+		List<String> mailUrls = new ArrayList<>();
+		
+		try
+		{
+		    emailPrefs = ContactEmailUtil.getEmailPrefs();
+		    mailUrls = emailPrefs.getFetchUrls();
+		    String agileEmailsUrl = "core/api/emails/agile-emails?count=20";
+		    for(int i=0; i< mailUrls.size();i++){
+		    	if(mailUrls.get(i).equals(agileEmailsUrl)){
+		    		mailUrls.remove(i);
+		    	}
+		    }
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+		res.put("emails", contactEmails);
+		res.put("emailPrefs", mailUrls);
+		return res.toString();
+    }
+    
+    /**
+     * Replaces last occurence in a String
+     * 
+     * @param text
+     * @param searchString
+     * @param replacement
+     * @return
+     */
+    public static String replaceLastOccurence(String text, String searchString, String replacement)
+	{
+    	try
+		{
+			if(StringUtils.isBlank(text) || StringUtils.isBlank(searchString) || StringUtils.isBlank(replacement))
+				return text;
+			
+			int index = text.lastIndexOf(searchString);
+			
+			return text.substring(0, index) + replacement + text.substring(index);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			return text;
+		}
+	}
+    
+   }

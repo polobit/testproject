@@ -42,6 +42,7 @@ function initializeThemeSettingsListeners(){
 	$(".theme-save-status").css("display","inline");
 	if($(this).val() == 'top')
 	{
+		$(".app").removeClass("app-aside-folded");
 		$(".app").addClass("app-aside-dock");
 		$(".fixedicons#planView,.fixedicons#helpView").removeClass('fixedicons').addClass('dockedicons');
 		
@@ -89,6 +90,10 @@ $('#theme-and-layout').on('change', '#animations', function(e){
 		$("body").addClass("disable-anim");
 
 	}
+});
+
+$('#theme-and-layout').on('change', '#page_size', function(e){
+	CURRENT_USER_PREFS.page_size = $(this).val();
 });
 
 //retrieve the current radio button value	

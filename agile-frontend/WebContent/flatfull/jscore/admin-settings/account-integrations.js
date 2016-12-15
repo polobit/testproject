@@ -98,8 +98,8 @@ $('#email-stats-listners a[href="#sync-stats-new"]').on('click', function(e) {
 }
 function syncAppData(){
 	 showModalConfirmation(
-		_agile_get_translated_val('datasync','update-data'),
-		_agile_get_translated_val('datasync','update-data-confirm'),
+		"{{agile_lng_translate 'datasync' 'update-data'}}",
+		"{{agile_lng_translate 'datasync' 'update-data-confirm'}}",
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
@@ -110,11 +110,11 @@ function syncAppData(){
 			success : function(data) {
 				console.log(data);
 				var yes = "";
-				var no = _agile_get_translated_val('reputation','Ok');
+				var no = "{{agile_lng_translate 'reputation' 'Ok'}}";
 				if(data == "success"){
 					showModalConfirmation(
-						_agile_get_translated_val('datasync','update-data'),
-						_agile_get_translated_val('datasync','update-request-scheduled'),
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled'}}",
 						function()
 						{
 							// No callback
@@ -126,8 +126,8 @@ function syncAppData(){
                   }
                   else if (data == "limitReached"){
                   	showModalConfirmation(
-						_agile_get_translated_val('datasync','update-data'),
-						_agile_get_translated_val('datasync','update-request-scheduled-error'),
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled-error'}}",
 						function()
 						{
 							// No callback
@@ -139,8 +139,8 @@ function syncAppData(){
                   }
                   else{
                   	showModalConfirmation(
-						_agile_get_translated_val('datasync','update-data'),
-						_agile_get_translated_val('datasync','sync-error'),
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'sync-error'}}",
 						function()
 						{
 							// No callback
@@ -163,12 +163,12 @@ function syncAppData(){
 			}, function()
 			{
 				return;
-			}, _agile_get_translated_val('reputation','Ok'), _agile_get_translated_val('contact-details','cancel'));
+			}, "{{agile_lng_translate 'reputation' 'Ok'}}", "{{agile_lng_translate 'contact-details' 'cancel'}}");
 }
 function syncAppDatatoDeals(){
 	 showModalConfirmation(
-		"Update Data",
-		"This will update your data. Do you want to continue?",
+		"{{agile_lng_translate 'datasync' 'update-data'}}",
+		"{{agile_lng_translate 'datasync' 'update-data-confirm'}}",
 		function()
 		{		
 	 	var domain = CURRENT_DOMAIN_USER.domain ; 
@@ -176,7 +176,7 @@ function syncAppDatatoDeals(){
 
 	 	$.ajax({
 
-			url : 'core/api/custom-fields/syncappdata?domain='+domain +'&domainusermail='+domain_user_mail,
+			url : 'core/api/custom-fields/syncappdataforDeals?domain='+domain,
 
 			type : 'GET',
 			success : function(data) {
@@ -185,8 +185,8 @@ function syncAppDatatoDeals(){
 				var no = "Ok"
 				if(data == "success"){
 					showModalConfirmation(
-						"Update Data",
-						"Update request is successfully scheduled. Status will be notified by email.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled'}}",
 						function()
 						{
 							// No callback
@@ -198,8 +198,8 @@ function syncAppDatatoDeals(){
                   }
                   else if (data == "limitReached"){
                   	showModalConfirmation(
-						"Update Data",
-						"Update is allowed only once a month. Please try later.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'update-request-scheduled-error'}}",
 						function()
 						{
 							// No callback
@@ -211,8 +211,8 @@ function syncAppDatatoDeals(){
                   }
                   else{
                   	showModalConfirmation(
-						"Update Data",
-						"There seems to be an issue. Please try again later.",
+						"{{agile_lng_translate 'datasync' 'update-data'}}",
+						"{{agile_lng_translate 'datasync' 'sync-error'}}",
 						function()
 						{
 							// No callback
@@ -235,5 +235,5 @@ function syncAppDatatoDeals(){
 			}, function()
 			{
 				return;
-			}, _agile_get_translated_val('reputation','Ok'), _agile_get_translated_val('contact-details','cancel'));
+			}, "{{agile_lng_translate 'reputation' 'Ok'}}", "{{agile_lng_translate 'contact-details' 'cancel'}}");
 }

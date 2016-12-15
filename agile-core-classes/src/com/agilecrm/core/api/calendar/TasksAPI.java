@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.simple.JSONObject;
 
+import com.agilecrm.UpdateRelatedEntitiesUtil;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
@@ -219,18 +220,14 @@ public class TasksAPI
 		ActivitySave.createTaskDeleteActivity(task);
 		if (!task.getNotes(id).isEmpty())
 		    NoteUtil.deleteBulkNotes(task.getNotes(id));
-		try {
-			if(!(task.relatedDeals()).isEmpty())
-			{
-				for(Opportunity oppr : task.relatedDeals())
-				{
-					oppr.save();
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		List<Contact> relatedContactsList = task.relatedContacts();
+		List<Opportunity> relatedDealsList = task.relatedDeals();
+		
+		UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+		
+		UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
+		
 		task.delete();
 	}
 	catch (Exception e)
@@ -275,31 +272,13 @@ public class TasksAPI
 	{
 	    e.printStackTrace();
 	}
-	try {
-		if(!(task.relatedDeals()).isEmpty())
-		{
-			for(Opportunity oppr : task.relatedDeals())
-			{
-				oppr.save();
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	try {
-		if(!(task.relatedContacts()).isEmpty() && task.relatedContacts().size() > 0)
-		{
-			for(Contact c : task.relatedContacts())
-			{
-				c.forceSearch = true;
-				c.save();
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	
+	List<Contact> relatedContactsList = task.relatedContacts();
+	List<Opportunity> relatedDealsList = task.relatedDeals();
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+	
+	UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
 	
 	return TaskUtil.getTask(task.id);
     }
@@ -317,6 +296,8 @@ public class TasksAPI
     public Task updateTask(Task task)
     {
     	Task oldTask = TaskUtil.getTask(task.id);
+    	List<String> oldConIds = new ArrayList<String>();
+    	List<String> oldDealIds = new ArrayList<String>();
         if(oldTask != null)
         {
         	List<ContactPartial> contList = oldTask.getContacts();
@@ -337,6 +318,8 @@ public class TasksAPI
         	{
         		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated deal(s).");
         	}
+        	oldConIds.addAll(conIds);
+        	oldDealIds.addAll(dealIds);
         }
     	List<String> conIds = task.contacts;
     	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
@@ -352,24 +335,6 @@ public class TasksAPI
     		throw new AccessDeniedException("Task cannot be updated because you do not have permission to update associated deal(s).");
     	}
     	
-    	  try {
-			if(oldTask != null && !(oldTask.relatedDeals()).isEmpty())
-				{
-					for(Opportunity oppr : oldTask.relatedDeals())
-					{
-						oppr.save();
-					}
-				}
-			if(oldTask != null && oldTask.relatedContacts() != null && oldTask.relatedContacts().size() > 0){
-				for(Contact c : oldTask.relatedContacts()){
-					c.forceSearch = true ;
-					c.save();
-				}
-			}
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	  try
 		{
 		    ActivitySave.createTaskEditActivity(task);
@@ -380,24 +345,28 @@ public class TasksAPI
 		    e.printStackTrace();
 		}
     task.save();
-    try {
-		if(!(task.relatedDeals()).isEmpty())
-		{
-			for(Opportunity oppr : task.relatedDeals())
-			{
-				oppr.save();
-			}
-		}
-		if(task.relatedContacts() != null && task.relatedContacts().size() > 0){
-			for(Contact c : task.relatedContacts()){
-				c.forceSearch  = true;
-				c.save();
-			}
-		}
-	} catch (Exception e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+    
+    List<Contact> relatedContactsList = oldTask.relatedContacts();
+	List<Opportunity> relatedDealsList = oldTask.relatedDeals();
+    
+    List<Contact> relatedConList = task.relatedContacts();
+	List<Opportunity> relatedDeList = task.relatedDeals();
+	
+	if(relatedConList != null && relatedConList.size() > 0)
+	{
+		relatedContactsList.addAll(relatedConList);
 	}
+	if(relatedDeList != null && relatedDeList.size() > 0)
+	{
+		relatedDealsList.addAll(relatedDeList);
+	}
+	
+	conIds.addAll(oldConIds);
+	dealIds.addAll(oldDealIds);
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+	
+	UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
     
 	return TaskUtil.getTask(task.id);
     }
@@ -436,18 +405,15 @@ public class TasksAPI
 		    		 tasksArray.put(tasksJSONArray.getString(i));
 		    		 contactIdsList.addAll(modifiedConIds);
 		    	 }
-				 
-				 if(!task.relatedDeals().isEmpty()){
-					 for(Opportunity oppr : task.relatedDeals()){
-						 oppr.save();
-					 }
-				 }
-				 if(task.relatedContacts() != null && task.relatedContacts().size() > 0){
-					 for(Contact c : task.relatedContacts()){
-						 c.forceSearch = true ;
-						 c.save();
-					 }
-				 }
+				
+		    	List<String> dealIds = task.getDeal_ids();
+		    	
+		    	List<Contact> relatedContactsList = task.relatedContacts();
+	    		List<Opportunity> relatedDealsList = task.relatedDeals();
+	    		
+	    		UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+	    		
+	    		UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -809,6 +775,25 @@ public class TasksAPI
 
 	    if (key.equals("progress"))
 		task.progress = obj.getInt(key);
+	    
+	    if (key.equals("status")){
+		try {
+		    task.status = Task.Status.valueOf(obj.getString("status"));
+		} catch (Exception e) {
+		    System.out.println("Status type not found");
+		}
+	    }
+	    
+	    if (key.equals("priority_type")){
+		try {
+		    task.priority_type = Task.PriorityType.valueOf(obj.getString("priority_type"));
+		} catch (Exception e) {
+		    System.out.println("PriorityType type not found");
+		}
+	    }
+	    
+	    if (key.equals("is_complete"))
+		task.is_complete = obj.getBoolean(key);
 
 	    if (key.equals("contacts"))
 	    {
@@ -907,18 +892,14 @@ public class TasksAPI
 			ActivitySave.createTaskDeleteActivity(task);
 			if (!task.getNotes(id).isEmpty())
 			    NoteUtil.deleteBulkNotes(task.getNotes(id));
-			try {
-				if(!(task.relatedDeals()).isEmpty())
-				{
-					for(Opportunity oppr : task.relatedDeals())
-					{
-						oppr.save();
-					}
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
+			List<Contact> relatedContactsList = task.relatedContacts();
+			List<Opportunity> relatedDealsList = task.relatedDeals();
+			
+			UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIds);
+			
+			UpdateRelatedEntitiesUtil.updateRelatedDeals(relatedDealsList, dealIds);
+			
 			task.delete();
 		}
 		catch (Exception e)

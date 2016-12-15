@@ -74,7 +74,7 @@ public class SingleSignOnServlet extends HttpServlet {
 
 			// Set Account Timezone, User Timezone, Browser Fingerprint
 			// and OnlineCalendarPrefs
-			LoginUtil.setMiscValuesAtLogin(request, duser);
+			new LoginUtil().setMiscValuesAtLogin(request, duser);
 			response.sendRedirect("/");
 
 		} catch (Exception e) {

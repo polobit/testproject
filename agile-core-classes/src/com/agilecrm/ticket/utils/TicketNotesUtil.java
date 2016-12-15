@@ -11,7 +11,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.jboss.resteasy.util.Encode;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +25,9 @@ import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.subscription.Subscription;
@@ -36,12 +40,14 @@ import com.agilecrm.ticket.entitys.TicketNotes.CREATED_BY;
 import com.agilecrm.ticket.entitys.TicketNotes.NOTE_TYPE;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.agilecrm.util.email.SendMail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.campaignio.urlshortener.util.Base62;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -61,7 +67,15 @@ public class TicketNotesUtil
 	 */
 	public static TicketNotes getTicketNotesByID(Long notesID) throws EntityNotFoundException
 	{
-		return TicketNotes.ticketNotesDao.get(notesID);
+		try{
+			
+			return TicketNotes.ticketNotesDao.get(notesID);
+		}
+		
+		catch(Exception e){
+			
+			return null;
+		}
 	}
 
 	/**
@@ -72,7 +86,7 @@ public class TicketNotesUtil
 	 * @throws EntityNotFoundException
 	 */
 	public static TicketNotesPartial getTicketNotesPartialByID(Long notesID) throws EntityNotFoundException
-	{
+	{			
 		return TicketNotes.partialDAO.get(notesID);
 	}
 
@@ -92,6 +106,7 @@ public class TicketNotesUtil
 		// Formatting plain text content
 		for (TicketNotes note : notes)
 		{
+			
 			// note.plain_text = StringEscapeUtils.escapeHtml(note.plain_text);
 			note.plain_text = TicketNotesUtil.convertNewLinesToBreakTags(note.plain_text);
 		}
@@ -99,6 +114,20 @@ public class TicketNotesUtil
 		// return inclDomainUsers(notes);
 		return notes;
 	}
+	/**
+	 * 
+	 * @param noteID,feedback
+	 * @return
+	 * @throws EntityNotFoundException 
+	 */
+	public static void savefeedback(Long noteId,String feedback) throws EntityNotFoundException
+	{
+		TicketNotes dbnote = TicketNotes.ticketNotesDao.get(noteId);
+		 
+		dbnote.feed_back = feedback;
+		TicketNotes.ticketNotesDao.put(dbnote);
+		
+ 	}
 
 	// /**
 	// *
@@ -168,6 +197,7 @@ public class TicketNotesUtil
 			throw new Exception("No group found with id " + group.id + " or group has been deleted.");
 		}
 
+		Boolean groupFeedback = group.feedback_flag;
 		String groupName = group.group_name;
 		String agentName = DomainUserUtil.getDomainUser(ticket.assigneeID).name;
 
@@ -179,6 +209,7 @@ public class TicketNotesUtil
 		json.put("agent_name", agentName);
 		json.put("tracking_img", appendTrackingImage(ticket.id, notesList.get(0).id));
 
+		json.put("feedback_flag",groupFeedback);
 		String companyName = AccountPrefsUtil.getAccountPrefs().company_name;
 
 		if (companyName != null)
@@ -202,7 +233,7 @@ public class TicketNotesUtil
 		 		
 		 		System.out.println(email_pan);		
 		 	
-
+	    int count =0; 		
 		JSONArray notesArray = new JSONArray();
 
 		// Add all notes
@@ -211,10 +242,11 @@ public class TicketNotesUtil
 			if (notes.note_type == NOTE_TYPE.PRIVATE)
 				continue;
 
-			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, contact);
+			JSONObject eachNoteJSON = getFormattedEmailNoteJSON(notes, contact,count );
 
 			if (eachNoteJSON != null)
 				notesArray.put(eachNoteJSON);
+				count++;
 		}
 
 		json.put("note_json_array", notesArray);
@@ -246,12 +278,12 @@ public class TicketNotesUtil
 		{
 			// No template is chosen so returning default template html content
 			if (group.template_id == null)
-				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON);
+				return MustacheUtil.templatize(SendMail.TICKET_REPLY + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE);
 
 			dataJSON.put("ticket_comments",
-					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_COMMENTS + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 			dataJSON.put("ticket_footer",
-					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON));
+					MustacheUtil.templatize(SendMail.TICKET_FOOTER + SendMail.TEMPLATE_HTML_EXT, dataJSON, UserPrefs.DEFAULT_LANGUAGE));
 
 			EmailTemplates emailTemplates = EmailTemplatesUtil.getEmailTemplate(group.template_id);
 
@@ -319,18 +351,147 @@ public class TicketNotesUtil
 		}
 	}
 
+	
+	public static JSONArray getJsonFeedback(Long startTime, Long endTime, String feedback, Long group, Long assignee) throws Exception{
+		
+		JSONArray json = new JSONArray();
+		
+		Map<String, Object> map =  new HashMap<String, Object>(); 
+		
+		map.put("created_by", CREATED_BY.AGENT);
+		map.put("feedback_time >", startTime);
+		map.put("feedback_time <", endTime);
+		map.put("feedback_flag", true);
+		
+		if(StringUtils.isNotEmpty(feedback))
+			map.put("feed_back",feedback);	
+		
+		List<TicketNotes> ticketnotes = TicketNotes.ticketNotesDao.listByProperty(map);
+		
+		Map<String, Object> map2 =  new HashMap<String, Object>(); 
+		
+		map2.put("created_by", CREATED_BY.AGENT);
+		map2.put("created_time >", startTime);
+		map2.put("created_time <", endTime);
+		map2.put("feedback_flag", true);
+
+		if(StringUtils.isNotEmpty(feedback))
+			map2.put("feed_back",feedback);
+		
+		List<TicketNotes> ticketnotes2 = TicketNotes.ticketNotesDao.listByProperty(map2);
+		
+		ticketnotes.addAll(ticketnotes2);
+		
+		Set<TicketNotes> hs = new HashSet<>();
+		
+		hs.addAll(ticketnotes);
+		ticketnotes.clear();
+		ticketnotes.addAll(hs);
+		
+		for(TicketNotes tn: ticketnotes ){
+				
+				if(group != 0){
+					if(tn.group_id.longValue()!=group)
+						continue;
+				}		
+				if(assignee != 0){
+					if(tn.assignee_id.longValue()!=assignee)
+						continue;
+				}		
+				
+				
+				JSONObject jsonobject = new JSONObject();
+				jsonobject.append("note", tn.html_text);
+				jsonobject.append("feedback_comment", tn.feedback_comment);
+				jsonobject.append("feedback", tn.feed_back);
+				jsonobject.append("created_time", tn.feedback_time);
+				jsonobject.append("note_created_time", tn.created_time);
+		
+				Long ticketfeedback_id = tn.ticket_id;		
+				
+				Tickets ticket = Tickets.ticketsDao.get(ticketfeedback_id);
+				
+				jsonobject.append("ticket_subject", ticket.subject);
+				jsonobject.append("contact_id", ticket.contactID);
+												
+				String assignee_name;
+		
+				
+				try{
+						Long assigneeid = (tn.assignee_id);
+						  
+						String agentName = DomainUserUtil.getDomainUser((assigneeid)).name;
+						
+						assignee_name = agentName;
+				}
+
+				catch(Exception e){
+					
+					assignee_name = "";
+				}
+					
+				jsonobject.append("assignee_name",assignee_name );
+				
+				Contact contact = ContactUtil.getContact(ticket.contactID);
+				
+				String imageURL = null; 
+				
+				if(contact != null){
+					
+					jsonobject.append("first_name",contact.first_name );
+					jsonobject.append("last_name",contact.last_name );
+				
+				
+					imageURL = contact.getContactFieldValue(Contact.IMAGE);
+				
+				}
+				
+				if (imageURL == null)			
+					imageURL = Globals.GRAVATAR_SECURE_DEFAULT_IMAGE_URL;
+
+				jsonobject.append("img_url", imageURL);
+
+				jsonobject.append("ticket_id",tn.ticket_id);
+				jsonobject.append("id",tn.id);
+				
+				json.put(jsonobject);
+			}
+			
+			System.out.println(json);
+		return json;
+	}
 	/**
 	 * 
 	 * @param notes
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes, Contact contact) throws Exception
+	public static JSONObject getFormattedEmailNoteJSON(TicketNotes notes, Contact contact , int count) throws Exception
 	{
 		Map<Long, DomainUser> domainUsersMap = new HashMap<Long, DomainUser>();
 
+		String oldNamespace = NamespaceManager.get();
+		
 		JSONObject json = new JSONObject();
 
+		
+
+		
+		if(count == 0){
+			
+		//creating encoded urls for feedback
+		for(int i=1;i<=5;i++ ){
+			
+			String url= Base62.fromDecimalToOtherBase(62, i)+"-"+Base62.fromDecimalToOtherBase(62, notes.id)+"-"+Base62.fromDecimalToOtherBase(62, contact.id);
+	
+			json.put("url"+i, url);
+		}
+		
+		json.put("count", true);
+		json.put("namespace", oldNamespace);
+		json.put("note_id", notes.id);
+		json.put("contactid", contact.id);
+		}
 		json.put("created_time", DateUtil.getCalendarString(notes.created_time, "MMM d, h:mm a (z)", ""));
 
 		json.put("plain_text", notes.plain_text);

@@ -2,55 +2,56 @@
 <div class="custom-animated custom-fadeInUp">
 	{{#is_mobile}}
 	{{else}}
-	<div class="wrapper-md lter bg-light b-b" id="opportunities-header">
-		<div class="row">
-	    	<div class="col-md-12">
-	    		<h3 class="pull-left font-thin h3" id="opp-header">{{agile_lng_translate 'contact-details' 'deals'}} <small>{{agile_lng_translate 'deal-view' 'opportunities'}}</small>
+	<div class="wrapper-md bg-light b-b p-b-sm" id="opportunities-header">
+    	<div class="btn-toolbar m-l-none pos-rlt">
+			<div class="filters-drp-down btn-group dropdown m-l-none">
+	    		<h3 class="inline-block m-n font-thin" id="opp-header">{{agile_lng_translate 'contact-details' 'deals'}}
+					<div id="deal-list-filters" class="inline-block"></div>
 					<div id="milestone-set-msg" class="alert alert-warning p-sm" role="alert" style="margin-left:100px;display:none;">
 	  					{{agile_lng_translate 'opportunities' 'intro'}}<a href="#milestones" style="font-style:italic;text-decoration: initial;color: #337ab7;">{{agile_lng_translate 'deal-view' 'deal-settings'}}</a> {{agile_lng_translate 'deal-view' 'page'}}
 					</div>
 				</h3>
-				<div class="pull-right">
-					<div class="btn-group pull-left m-r-xs" id="deal-sorter"></div>
-	            	<div class="btn-group inline-block m-l-xs" id="deals-tracks"></div>
-					<div id="deal-list-filters" class="btn-group inline-block m-l-xs"></div>
-					<div class="btn-group inline-block m-l-xs" id="deals-view">
-						<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
-						<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
-							<span class="caret deals-view-caret"></span>
-						</a>
-						<ul class="dropdown-menu pull-right" role="menu">
-							<li><a href="#deal-rc-0" class="deals-list-view">{{agile_lng_translate 'tasks' 'list-view'}}</a></li>
-							<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">{{agile_lng_translate 'deal-view' 'milestone-view'}}</a>
-								<ul class="dropdown-menu" style="min-width:130px" role="menu">
-									<li><a href="#deal-rc-1" id="deal-milestone-regular">{{agile_lng_translate 'deal-view' 'relaxed'}}</a></li>
-									<li><a href="#deal-rc-2" id="deal-milestone-compact">{{agile_lng_translate 'deal-view' 'compact'}}</a></li>
-									<li><a href="#deal-rc-3" id="deal-milestone-fit">{{agile_lng_translate 'deal-view' 'fit'}}</a></li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-					<div class="btn-group inline-block m-l-xs" id="deals-action">
-						<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')">
-							<i class="icon-plus-sign" /> {{agile_lng_translate 'contact-details' 'add-deal'}}
-						</a>
-						<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu pull-right" role="menu">
-							{{#hasScope "CREATE_DEALS"}}
-								<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
-							{{/hasScope}}
-							{{#hasScope "UPDATE_DEALS"}}
-								<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">{{agile_lng_translate 'deal-view' 'export'}}</a></li>
-							{{/hasScope}}
-							<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
-						</ul>
-					</div>
+			</div>
+			<div class="pull-right">
+            	<div class="btn-group inline-block m-l-xs" id="deals-tracks"></div>
+				<!-- <div id="deal-list-filters" class="btn-group inline-block m-l-xs"></div> -->
+				<div class="btn-group inline-block m-l-xs" id="deals-view">
+					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
+					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret deals-view-caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right" role="menu">
+						<li><a href="#deal-rc-0" class="deals-list-view">{{agile_lng_translate 'tasks' 'list-view'}}</a></li>
+						<li class="dropdown-submenu do-onclick-nothing"><a href="#deal-rc-1" data-toggle="dropdown" class="deals-pipelined-view">{{agile_lng_translate 'deal-view' 'milestone-view'}}</a>
+							<ul class="dropdown-menu" style="min-width:130px" role="menu">
+								<li><a href="#deal-rc-1" id="deal-milestone-regular">{{agile_lng_translate 'deal-view' 'relaxed'}}</a></li>
+								<li><a href="#deal-rc-2" id="deal-milestone-compact">{{agile_lng_translate 'deal-view' 'compact'}}</a></li>
+								<li><a href="#deal-rc-3" id="deal-milestone-fit">{{agile_lng_translate 'deal-view' 'fit'}}</a></li>
+							</ul>
+						</li>
+					</ul>
 				</div>
-	        	<div class="clearfix"></div>
-	    	</div>
-		</div>
+				<div class="btn-group inline-block m-l-xs" id="deals-action">
+					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')">
+						<i class="icon-plus-sign" /> {{agile_lng_translate 'contact-details' 'add-deal'}}
+					</a>
+					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu pull-right" role="menu">
+						{{#hasScope "CREATE_DEALS"}}
+							<li><a href="#import-deals" onclick="Agile_GA_Event_Tracker.track_event('Deals Import from CSV')">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
+						{{/hasScope}}
+						{{#hasScope "UPDATE_DEALS"}}
+							<li><a href="#" class="deals-export-csv" onclick="Agile_GA_Event_Tracker.track_event('Deals Export as CSV')">{{agile_lng_translate 'deal-view' 'export'}}</a></li>
+						{{/hasScope}}
+						<li><a href="#add-dashlet" onclick="Agile_GA_Event_Tracker.track_event('Deals Add Dashlet')">{{agile_lng_translate 'portlets' 'add-dashlet'}}</a></li>
+					</ul>
+				</div>
+			</div>
+        	<div class="clearfix"></div>
+        </div>
+    	<div class="btn-group m-r-xs m-t-n-md" id="deal-sorter"></div>
 	</div>
 	{{/is_mobile}}
 	<div class="route_Portlet b-b" style="display:none">

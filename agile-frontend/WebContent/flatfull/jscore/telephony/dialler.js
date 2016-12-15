@@ -91,32 +91,47 @@ $(function()
 				}else{
 					$(".panel-heading","#dialler-page").css("height",0);
 				}
-						
+				
+				var isDragging = false;
+				$("#dail_phone_number")
+				.mousedown(function() {
+					$( "#dail_phone_number" ).unbind('blur');
+					isDragging = true;
+				})
+				.mousemove(function() {
+					if(isDragging){
+						$( "#dail_phone_number" ).blur(); 
+					}else{
+						$( "#dail_phone_number" ).unbind('blur');
+					}
+				})
+				.mouseup(function() {
+					$( "#dail_phone_number" ).unbind('blur');
+					isDragging = false;
+				});
 				// start- dialler configuring		
-						dialled.using = "default";
-						
-						$("#direct-dialler-div").draggableTouch();
-						
-						$("#direct-dialler-div").bind("dragstart", function(e, pos) {
-							 flag = true;
-								//you can do anything related to move
-						    }).bind("dragend", function(e, pos) {
-						    	if(flag){
-						    		flag = false;
-						  		//  var maxWidth = ($(window).width())-190;
-						  		  var maxHeight = $(window).height()-100;
-						  		  var popup_position_top = $(this).css('top').split("px")[0];
-						  		 // var popup_position_left = $(this).css('left').split("px")[0];
-						  				var y = $(window).height()-200;
-						  				var x = 200;
-						  			  if( popup_position_top > maxHeight){
-						  				$("#direct-dialler-div").animate({ top: y, left:x }, 500);
-						  			  }
-						    	}
-						    });
-							
-						
-					}, "#direct-dialler-div");
+				dialled.using = "default";
+
+				$("#direct-dialler-div").draggableTouch();
+				
+				$("#direct-dialler-div").bind("dragstart", function(e, pos) {
+					 flag = true;
+						//you can do anything related to move
+				    }).bind("dragend", function(e, pos) {
+				    	if(flag){
+				    		flag = false;
+				  		//  var maxWidth = ($(window).width())-190;
+				  		  var maxHeight = $(window).height()-100;
+				  		  var popup_position_top = $(this).css('top').split("px")[0];
+				  		 // var popup_position_left = $(this).css('left').split("px")[0];
+				  				var y = $(window).height()-200;
+				  				var x = 200;
+				  			  if( popup_position_top > maxHeight){
+				  				$("#direct-dialler-div").animate({ top: y, left:x }, 500);
+				  			  }
+				    	}
+				    });
+				}, "#direct-dialler-div");
 			});
 	
 	$('#agilecrm-container #direct-dialler-div').on('click', '#clear-dialler', function(e)
@@ -210,7 +225,7 @@ $(function()
 					return;
 				}
 			  		
-			  accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+to, function(responseJson){
+			  accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+encodeURIComponent(to), function(responseJson){
 				  callToNumber(to,from,widgetName,responseJson,"dialler");
 			  });
 			});
@@ -417,7 +432,9 @@ function dialFromBria(to,from,contact){
 	
 	var action ={};
   	action['command'] = "startCall";
-  	action['number'] = to;
+  	var callNumber = to;
+  	generateNumberAndExtension(callNumber, action);
+  	//action['number'] = to;
   	action['callId'] = "";
 	
 	try{
@@ -449,7 +466,9 @@ function dialFromSkype(to,from,contact){
 	
 	var action ={};
   	action['command'] = "startCall";
-  	action['number'] = to;
+  	var callNumber = to;
+  	generateNumberAndExtension(callNumber, action);
+  	//action['number'] = to;
   	action['callId'] = "";
   	
 	try{

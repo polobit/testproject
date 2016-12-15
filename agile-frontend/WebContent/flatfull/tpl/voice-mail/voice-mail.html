@@ -1,8 +1,8 @@
 <script id="voice-mail-collection-template" type="text/html">
 <div class="col">
-    <div class="hbox h-auto m-b-lg">
+    <div class="hbox h-auto {{#is_mobile}} m-b-none {{else}} m-b-lg{{/is_mobile}}">
 	  <div class="panel panel-default">
-		<div class="panel-heading">
+		<div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">
             <div class="pull-left m-t-xs">{{agile_lng_translate 'voice-mail' 'voicemail-list'}}</div>
 			<div class="pull-right">
             	<a href="#voice-mail-add" class="voice-mail-add btn btn-default btn-sm btn-addon" id="addEmailTemplate">
@@ -31,21 +31,30 @@
 		{{/unless}}
         {{#if this.length}}
         <div class="data-block">
-            <div class="data-container">				
+            {{#is_mobile}}
+            <div class="data-container">                
+                <table class="table table-striped m-b-none agile-table panel" url="core/api/voicemails/bulk" id="voicemail-list">
+                    <tbody id="voice-mail-model-list" style="cursor:pointer;">
+                    </tbody>
+                </table>                
+            </div>
+            {{else}}
+            <div class="data-container">                
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/voicemails/bulk" id="voicemail-list">
-				 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
+                 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
                     <thead>
                         <tr>
                             <th>{{agile_lng_translate 'voice-mail' 'title'}}</th>
                             <th>{{agile_lng_translate 'voice-mail' 'file-name'}}</th>
                             <th>{{agile_lng_translate 'voice-mail' 'uploaded'}}</th>
-							<th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="voice-mail-model-list" style="cursor:pointer;">
                     </tbody>
-                </table>				
+                </table>                
             </div>
+            {{/is_mobile}}
         </div>
         {{/if}}
 		</div>
@@ -54,7 +63,7 @@
 </div>
 <div class="col w-md">
 	<div class="data-block">
-        <div class="p-l p-r">
+        <div class="p-l p-r" id="learn-voicemail">
             <h4 class="m-t-none">{{agile_lng_translate 'voice-mail' 'how-to-use-voicemails'}}</h4>
 			<p>{{agile_lng_translate 'voice-mail' 'voicemail-desc-1'}}</p>
 		</div>
@@ -63,14 +72,30 @@
 </script>
 
 <script id="voice-mail-model-template" type="text/html">
-<td data="{{id}}" class="data">
-<div>{{name}}</div>
-</td>
-<td>{{extension}}</td>
-<td class="text-muted"><div style="width:10em;"><i class="fa fa-clock-o m-r-xs"></i><time class="document-created-time" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time></div></td>
-<td><div class="tdVoiceMailOver" style="display:none;"><span class="audioPlay">&nbsp;&nbsp;
-<i class="icon-play"></i>
-<audio><source src="{{url}}" type="audio/wav"></audio>
-</span></div></td>
-
+{{#is_mobile}}
+    <td data="{{id}}" class="data hide"></td>
+    <td>
+        <div class="table-resp text-base">{{name}}</div>
+        <div>
+            <span class="text-sm">{{extension}}</span>
+            <span class="tdVoiceMailOver audioPlay pull-right">
+                <i class="icon-play"></i>
+                <audio><source src="{{url}}" type="audio/wav"></audio>
+            </span>
+        </div>
+        <div class="text-muted text-xs">
+            <i class="fa fa-clock-o"></i> <time class="document-created-time" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+        </div>
+    </td>
+{{else}}
+    <td data="{{id}}" class="data">
+    <div class="table-resp">{{name}}</div>
+    </td>
+    <td><div class="table-resp">{{extension}}</div></td>
+    <td class="text-muted"><div style="width:10em;"><i class="fa fa-clock-o m-r-xs"></i><time class="document-created-time" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time></div></td>
+    <td><div class="tdVoiceMailOver" style="display:none;"><span class="audioPlay">&nbsp;&nbsp;
+    <i class="icon-play"></i>
+    <audio><source src="{{url}}" type="audio/wav"></audio>
+    </span></div></td>
+{{/is_mobile}}
 </script>

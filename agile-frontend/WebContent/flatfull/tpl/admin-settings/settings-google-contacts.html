@@ -147,7 +147,7 @@
 	<div class="controls">
        <div class="checkbox">
 <label class="i-checks i-checks-sm">
-          <input  type="checkbox" name="my_contacts" value="true" checked="checked"><i></i>
+          <input  type="checkbox" name="my_contacts" class="my_contacts_set" value="true" checked="checked"><i></i>
             {{agile_lng_translate 'prefs-data-sync' 'only-sync-agile-contacts-owned-by-me'}}
         </label> 
 </div>      
@@ -164,6 +164,8 @@
 	{{/if}}
         </fieldset>
     </form>
+    <span style="font-size: 12px;position: relative;top: 5px;">*</span>
+		<span style="font-size: 10px;position: relative;top: 5px;">{{agile_lng_translate 'sync' 'google-note'}}</span>
     </div>
 </div>
 </div>
@@ -426,7 +428,7 @@
 							<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 						{{/check_plan}}
 							<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
-							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}</option>
 						</select>
 					</div>
 		   		</div>
@@ -544,7 +546,7 @@
 							<option value="DAILY">{{agile_lng_translate 'report-add' 'daily'}}</option>
 						{{/check_plan}}
 							<option value="WEEKLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
-							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'weekly'}}</option>
+							<option value="MONTHLY">{{agile_lng_translate 'report-add' 'monthly'}}</option>
 						</select>
 					</div>
 		   		</div>

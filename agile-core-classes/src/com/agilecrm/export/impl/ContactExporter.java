@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.activities.Category;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
@@ -37,7 +38,7 @@ public class ContactExporter extends AbstractCSVExporter<Contact>
     protected String[] convertEntityToCSVRow(Contact contact, Map<String, Integer> indexMap, int headerLength)
     {
 	// TODO Auto-generated method stub
-	String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headerLength);
+	String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headerLength, null, null);
 	List<Note> notes;
 	try
 	{
@@ -56,4 +57,31 @@ public class ContactExporter extends AbstractCSVExporter<Contact>
 
 	return str;
     }
+
+	@Override
+	protected String[] convertEntityToCSVRow(Contact contact, Map<String, Integer> indexMap, int headerLength, 
+			Map<Long, String> source_map, Map<Long, String> status_map) 
+	{
+		String str[] = ContactCSVExport.insertContactProperties(contact, indexMap, headerLength, source_map, status_map);
+		List<Note> notes;
+		try
+		{
+		    Long start = System.currentTimeMillis();
+		    notes = NoteUtil.getNotes(contact.id);
+		    System.out.println("Notes Fetch Time :" + (System.currentTimeMillis() - start) + " , Notes fetched : "
+			    + notes.size());
+
+		    return ContactExportCSVUtil.addNotes(str, notes);
+		}
+		catch (Exception e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+
+		return str;
+	    
+	}
+    
+    
 }

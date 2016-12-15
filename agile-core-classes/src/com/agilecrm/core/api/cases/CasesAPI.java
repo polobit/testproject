@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.cases;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -17,12 +18,10 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.activities.Task;
-import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.UpdateRelatedEntitiesUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -100,12 +99,7 @@ public class CasesAPI
     {
 	newCase.save();
 	try {
-		if(newCase.relatedContacts() != null && newCase.relatedContacts().size() > 0){
-			for(Contact con : newCase.relatedContacts()){
-				con.forceSearch = true;
-				con.save();
-			}
-		}
+		UpdateRelatedEntitiesUtil.updateRelatedContacts(newCase.relatedContacts(), newCase.related_contacts_id);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -126,29 +120,29 @@ public class CasesAPI
     public Case updateCase(Case newCase)
     {
 	Case oldCase = CaseUtil.getCase(newCase.id);
-	try {
-		if(oldCase.relatedContacts() != null && oldCase.relatedContacts().size() > 0){
-			for(Contact con : oldCase.relatedContacts()){
-				con.forceSearch = true ;
-				con.save();
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
 	newCase.save();
-	try {
-		if(newCase.relatedContacts() != null && newCase.relatedContacts().size() > 0){
-			for(Contact con : newCase.relatedContacts()){
-				con.forceSearch = true ;
-				con.save();
-			}
-		}
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	List<Contact> relatedContactsOldList = oldCase.relatedContacts();
+	List<Contact> relatedContactsList = newCase.relatedContacts();
+	
+	List<String> oldConIds = oldCase.related_contacts_id;
+	List<String> conIds = newCase.related_contacts_id;
+	
+	if(relatedContactsOldList != null && relatedContactsOldList.size() > 0 && relatedContactsList != null)
+	{
+		relatedContactsList.addAll(relatedContactsOldList);
 	}
+	List<String> conIdList = new ArrayList<String>();
+	if(oldConIds != null && oldConIds.size() > 0)
+	{
+		conIdList.addAll(oldConIds);
+	}
+	if(conIds != null && conIds.size() > 0)
+	{
+		conIdList.addAll(conIds);
+	}
+	
+	UpdateRelatedEntitiesUtil.updateRelatedContacts(relatedContactsList, conIdList);
+	
 	return newCase;
     }
 
@@ -164,12 +158,7 @@ public class CasesAPI
     {
     Case c = CaseUtil.getCase(id);
     try {
-		if(c.relatedContacts() != null && c.relatedContacts().size() > 0){
-			for(Contact con : c.relatedContacts()){
-				con.forceSearch = true ;
-				con.save();
-			}
-		}
+		UpdateRelatedEntitiesUtil.updateRelatedContacts(c.relatedContacts(), c.related_contacts_id);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -194,12 +183,7 @@ public class CasesAPI
 			for (int i = 0; i < caseJSONArray.length(); i++) {
 				 String caseId = caseJSONArray.getString(i);
 				 Case c = CaseUtil.getCase(Long.parseLong(caseId));
-				 if(c != null && c.relatedContacts() != null && c.relatedContacts().size() > 0){
-					 for(Contact con : c.relatedContacts()){
-						 con.forceSearch = true;
-						 con.save();
-					 }
-				 }
+				 UpdateRelatedEntitiesUtil.updateRelatedContacts(c.relatedContacts(), c.related_contacts_id);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

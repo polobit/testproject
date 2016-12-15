@@ -3,10 +3,12 @@ var Portlets_View, gridster;
 /** If CURRENT_AGILE_USER is not set, set it from user.domain **/
 $(function()
 {
-	$.getJSON('/core/api/users/current-agile-user', function(user)
-	{
-		CURRENT_AGILE_USER = user;
-	});
+	if(CURRENT_DOMAIN_USER){
+		$.getJSON('/core/api/users/current-agile-user', function(user)
+		{
+			CURRENT_AGILE_USER = user;
+		});
+	}
 });
 
 /**
@@ -44,7 +46,7 @@ function loadPortlets(route,el){
 	
 	// This flag is used to ensure portlet script are loaded only once in
 	// postrender. It is set to false after portlet setup is initialized
-	Portlets_View = new Base_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
+	Portlets_View = new Portlets_Collection_View({ url : '/core/api/portlets?route='+route, sortKey : "row_position",sort_collection : false, restKey : "portlet", templateKey : "portlets", individual_tag_name : 'div',
 		postRenderCallback : function(portlets_el){
 			if(route!='DashBoard' && Portlets_View.collection.length!=0 && !$('.route_Portlet').is(':visible') && isNaN(route))
 			{
@@ -67,12 +69,14 @@ function loadPortlets(route,el){
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
 					model.set({'isForAll' : false});
 					//set_p_portlets(model,portlets_el);
-					portlet_utility.getOuterViewOfPortlet(model,portlets_el, function() {
-							portlet_utility.getInnerViewOfPortlet(model, portlets_el);
+					portlet_utility.getOuterViewOfPortlet(model,portlets_el, Portlets_View.model_list_element_fragment,function() {
+							portlet_utility.getInnerViewOfPortlet(model, portlets_el,Portlets_View.model_list_element_fragment);
 						});
 					//set_up_portlets(el,$('#portlets > div'));
-					
+					$('.gridster > div:visible', this.el).append(Portlets_View.model_list_element_fragment);
 					portlet_utility.addWidgetToGridster(model);
+					//var that=$(Portlets_View.model_list_element_fragment.querySelector('[id="'+model.get("id")+'"]')).parent();
+					
 					var that=$('#'+model.id).parent();
 					if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
 					{
@@ -84,6 +88,7 @@ function loadPortlets(route,el){
 					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
 			
 				});
+				
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 					
@@ -101,11 +106,14 @@ function loadPortlets(route,el){
 						model.set({ 'column_position' : obj.column_position}, { silent : true });
 						model.set({ 'row_position' : obj.row_position  }, { silent : true });
 						model.set({'isForAll' : false});
-						portlet_utility.getOuterViewOfPortlet(model,portlets_el, function() {
-								portlet_utility.getInnerViewOfPortlet(model, portlets_el);
+						portlet_utility.getOuterViewOfPortlet(model,portlets_el, Portlets_View.model_list_element_fragment,function() {
+								portlet_utility.getInnerViewOfPortlet(model, portlets_el,Portlets_View.model_list_element_fragment);
 							});
+
 						portlet_utility.addWidgetToGridster(model);
-						var that=$('#'+model.id).parent();
+						var that=$(Portlets_View.model_list_element_fragment.querySelector('[id="'+model.get("id")+'"]')).parent();
+					
+						//var that=$('#'+model.id).parent();
 						if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
 						{
 							model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
@@ -116,6 +124,7 @@ function loadPortlets(route,el){
 						models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
 			
 					});
+				$('.gridster > div:visible', this.el).append(Portlets_View.model_list_element_fragment);
 					$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 						contentType : "application/json; charset=utf-8", dataType : 'json' });
 					
@@ -135,11 +144,13 @@ function loadPortlets(route,el){
 				model.set({ 'column_position' : obj.column_position}, { silent : true });
 					model.set({ 'row_position' : obj.row_position  }, { silent : true });
 					model.set({'isForAll' : false});
-					set_p_portlets(model);
+					set_p_portlets(model,Portlets_View.model_list_element_fragment);
+
 					//set_up_portlets(el,$('#portlets > div'));
 					
 					portlet_utility.addWidgetToGridster(model);
-					var that=$('#'+model.id).parent();
+					var that=$(Portlets_View.model_list_element_fragment.querySelector('[id="'+model.get("id")+'"]')).parent();
+					//var that=$('#'+model.id).parent();
 					if(!(that.attr('data-col')==model.get('column_position')) || !(that.attr('data-row')==model.get('row_position')))
 					{
 						model.set({ 'column_position' : parseInt(that.attr("data-col")) }, { silent : true });
@@ -150,6 +161,7 @@ function loadPortlets(route,el){
 					models.push({ id : model.get("id"), column_position : obj.column_position, row_position : obj.row_position,isForAll : false });
 			
 				});
+				$('.gridster > div:visible', this.el).append(Portlets_View.model_list_element_fragment);
 				$.ajax({ type : 'POST', url : '/core/api/portlets/positions', data : JSON.stringify(models),
 					contentType : "application/json; charset=utf-8", dataType : 'json' });
 				}
@@ -188,9 +200,8 @@ function loadPortlets(route,el){
 			contactListener();
 
 		} });
-
-	this.Portlets_View.appendItem = set_p_portlets;
-
+	
+	//this.Portlets_View.appendItem = set_p_portlets;
 	//  Fetch portlets from collection and set_up_portlets (load their scripts)
 	Portlets_View.collection.fetch();
 

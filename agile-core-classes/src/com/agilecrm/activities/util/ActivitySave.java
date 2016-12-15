@@ -1,7 +1,9 @@
 package com.agilecrm.activities.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,15 +24,19 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.AdminPanelAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.amazonaws.services.route53domains.model.ContactType;
 import com.google.gson.Gson;
-
+import com.agilecrm.contact.DocumentNote;
 /**
  * <code>ActivitySave</code> class is interacts with ActivityUtil to create activities.
  * ActivitySave interacts all other classes to create log for action performed
@@ -54,8 +60,15 @@ public class ActivitySave
 	    jsn = ActivityUtil.getContactIdsJson(contacts);
 	}
 
-	String owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
-
+	String owner_name = "" ; 
+	try {
+		if(opportunity.owner_id != null)
+			owner_name = DomainUserUtil.getDomainUser(Long.parseLong(opportunity.owner_id)).name;
+		else if(opportunity.getOwner().name != null)
+			owner_name = opportunity.getOwner().name ;
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
 	ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, opportunity, owner_name,
 	        opportunity.expected_value.toString(), String.valueOf(opportunity.probability), jsn);
 	if(opportunity.tagsWithTime.size() >0){
@@ -93,16 +106,17 @@ public class ActivitySave
 	System.out.println(deals.size());
 	System.out.println("in deals api");
 	Object close_date[] = deals.get("close_date");
-	Object name[] = deals.get("name");
+	Object name[] = deals.get("name");	
 	Object ownername[] = deals.get("owner_name");
 	Object expectedvalue[] = deals.get("expected_value");
 	Object probablity[] = deals.get("probability");
 	Object milestone[] = deals.get("milestone");
 	Object description[] = deals.get("description");
 	Object tags[] = deals.get("tags");
+	Object trackNames[] = deals.get("track_names");
 	JSONObject js = new JSONObject(new Gson().toJson(opportunity));
 	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
-
+	
 	if (deals.size() > 0)
 	{
 	    if (ownername != null)
@@ -112,16 +126,30 @@ public class ActivitySave
 
 	    }
 	    if (milestone != null)
-	    {
-		if (milestone[0].toString().equalsIgnoreCase("Won"))
-		    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, milestone[0].toString(),
-			    milestone[1].toString(), milestone[2].toString(), jsn);
-		else if (milestone[0].toString().equalsIgnoreCase("Lost"))
-		    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, milestone[0].toString(),
-			    milestone[1].toString(), milestone[2].toString(), jsn);
-		else
-		    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
-			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString(), jsn);
+	    {	    	
+	    	
+	    	String fromMileStone = milestone[1].toString();
+	    	String toMileStone = milestone[0].toString();	    		    		    
+	    	if(trackNames != null){
+	    		fromMileStone += " ("+ trackNames[1] +")";
+    			toMileStone += " ("+ trackNames[0] +")";	 
+	    	}else{	    		
+	    		String trackName = MilestoneUtil.getMilestone(opportunity.pipeline_id).name;
+	    		if(trackName != null){
+	    			fromMileStone += " ("+ trackName +")";
+    				toMileStone += " ("+ trackName +")";
+	    		}
+	    	}
+	    	
+			if (milestone[0].toString().equalsIgnoreCase("Won"))
+			    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, toMileStone,
+			    		fromMileStone, milestone[2].toString(), jsn);
+			else if (milestone[0].toString().equalsIgnoreCase("Lost"))
+			    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, toMileStone,
+			    		fromMileStone, milestone[2].toString(), jsn);
+			else
+			    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
+			    		toMileStone, fromMileStone, milestone[2].toString(), jsn);
 	    }
 
 	    if (name != null || expectedvalue != null || probablity != null || close_date != null || description != null)
@@ -131,7 +159,7 @@ public class ActivitySave
 		ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, opportunity, changed_data.get(1).toString(),
 		        changed_data.get(0).toString(), changed_data.get(2).toString(), jsn);
 	    }
-	    if(tags.length > 0){
+	    if(tags != null && tags.length > 0){
 	    	if(tags[0] != null && tags[1] != null)
 	    		ActivityUtil.createDealActivity(ActivityType.DEAL_TAG_CHANGE, opportunity, tags[0].toString(), tags[1].toString(), tags[2].toString(), jsn);
 	    	else if(tags[0] == null && tags[1] != null)
@@ -545,6 +573,31 @@ public class ActivitySave
 
     }
 
+    
+    public static void createDocumentNoteAddActivity(DocumentNote note) throws JSONException
+    {
+
+	JSONObject js = new JSONObject(new Gson().toJson(note));
+	System.out.println(js);
+
+	JSONArray jsn = getExistingContactsJsonArray(js.getJSONArray("contact_ids"));
+	
+	String custom4 = "";
+	if (jsn != null && jsn.length() > 0)
+	{
+
+	    for (int i = 0; i <= jsn.length() - 1; i++)
+	    {
+
+			Contact contact = ContactUtil.getContact(jsn.getLong(i));
+				ActivityUtil.createContactActivity(ActivityType.NOTE_ADD, contact, note.subject, note.description,
+				        note.id.toString());
+	    }
+
+	}
+
+    }
+
     /**
      * create TAG_ADD activity
      * 
@@ -560,6 +613,9 @@ public class ActivitySave
 
 	if (contact.type.toString().equalsIgnoreCase("COMPANY"))
 	    ActivityUtil.createContactActivity(ActivityType.COMPANY_CREATE, contact, owner_name, "", "Company Created");
+	
+	if (contact.type.toString().equalsIgnoreCase("LEAD"))
+	    ActivityUtil.createContactActivity(ActivityType.LEAD_CREATE, contact, owner_name, "", "Lead Created");
 	JSONObject js = new JSONObject(new Gson().toJson(contact));
 	JSONArray jsn = js.getJSONArray("tagsWithTime");
 	ArrayList<String> tag = new ArrayList<String>();
@@ -625,11 +681,18 @@ public class ActivitySave
 
 	    if (_tags_difference != null && _tags_difference.length() > 0)
 	    {
+	    ActivityType addTagActiivtyType = ActivityType.TAG_ADD;
+	    ActivityType removeTagActiivtyType = ActivityType.TAG_REMOVE;
+	    if(contact != null && contact.type == Contact.Type.LEAD)
+	    {
+	    	addTagActiivtyType = ActivityType.LEAD_TAG_ADD;
+	    	removeTagActiivtyType = ActivityType.LEAD_TAG_REMOVE;
+	    }
 		if (old_tags.size() < jsn.length())
-		    ActivityUtil.createContactActivity(ActivityType.TAG_ADD, contact, _tags_difference.toString(), "",
+		    ActivityUtil.createContactActivity(addTagActiivtyType, contact, _tags_difference.toString(), "",
 			    "tag Added");
 		if (old_tags.size() > jsn.length())
-		    ActivityUtil.createContactActivity(ActivityType.TAG_REMOVE, contact, _tags_difference.toString(),
+		    ActivityUtil.createContactActivity(removeTagActiivtyType, contact, _tags_difference.toString(),
 			    "", "tag Removed");
 	    }
 	}
@@ -744,6 +807,15 @@ public class ActivitySave
 	        bulk_email_subject, EntityType.DEAL);
 
     }
+    
+    public static void createDealBulkActionActivity(List<Long> dealIds, int dealidscount, String actiontype, String data, String label,
+    	    String bulk_email_subject) throws JSONException
+        {
+
+    	ActivityUtil.createDealBulkActionActivity(dealIds, actiontype, data, String.valueOf(dealidscount), label,
+    	        bulk_email_subject, EntityType.DEAL);
+
+        }
 
     /**
      * common method to get the changed fields when updating deal,task,event
@@ -1186,7 +1258,14 @@ public class ActivitySave
     public static void  createUserEditActivity(DomainUser domainuser)
     {
     	Activity activity = new Activity();
-    	activity.entity_type = EntityType.USER;
+    	if("admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
+		{
+    		activity.entity_type = EntityType.ADMINPANEL;
+		}
+    	else
+    	{
+    		activity.entity_type = EntityType.USER;
+    	}
     	activity.entity_id = domainuser.id;
     	if(domainuser.id != null)
 		{
@@ -1224,10 +1303,43 @@ public class ActivitySave
 				 activity.custom3 = activity.custom3 = (String) domainuser.getInfo("Ip_Address");
 				 activity.save();
 			 }
-	
-    	}
-		
-   
+			 activity.custom1 = (DomainUserUtil.getCurrentDomainUser().domain); 
+			 if("admin".equals(DomainUserUtil.getCurrentDomainUser().domain))
+			 {	
+				Set <AdminPanelAccessScopes> ScopesAdded = new HashSet<AdminPanelAccessScopes>();
+			 	Set <AdminPanelAccessScopes> ScopesDeleted = new HashSet<AdminPanelAccessScopes>();
+				List<AdminPanelAccessScopes> Scopes = new ArrayList<AdminPanelAccessScopes>(Arrays.asList(AdminPanelAccessScopes.values()));
+				Set <AdminPanelAccessScopes> Scopeslist = new HashSet<AdminPanelAccessScopes>(Scopes);
+				 for(AdminPanelAccessScopes access :Scopeslist )
+			 	 {
+			 		 if(domainuser.adminPanelAccessScopes.contains(access))
+			 		 {
+			 			 if(old_user.adminPanelAccessScopes.contains(access))
+			 			 {
+			 				 continue;
+			 			 }
+			 			 	ScopesAdded.add(access);
+			 		 }
+			 		 else if(old_user.adminPanelAccessScopes.contains(access))
+			 		 {
+			 			if(domainuser.adminPanelAccessScopes.contains(access))
+			 			{
+			 				continue;
+			 			}
+			 			ScopesDeleted.add(access);
+			 			}
+			 	 }
+				 activity.activity_type = activity.activity_type.ADMIN_PANEL_PERMISSIONS_CHANGED;
+			 	 activity.custom1 = DomainUserUtil.getCurrentDomainUser().email;
+				 activity.custom4 = domainuser.name;
+				 activity.custom3 = ScopesAdded.toString();
+				 activity.custom2 = ScopesDeleted.toString();
+				 if(ScopesAdded.isEmpty() && ScopesDeleted.isEmpty())
+					 return ;
+				 activity.save();
+			 }
+		}
+ 
 }
     
     public static void  createNewUserActivity(DomainUser domainuser)

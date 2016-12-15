@@ -200,7 +200,7 @@ var CompaniesRouter = Backbone.Router
 		this.companiesListView = new Contacts_Events_Collection_View({ 
 			url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
 			templateKey : template_key, individual_tag_name : 'tr', slateKey : slateKey, 
-			cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, 
+			cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : getMaximumPageSize(), 
 			sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
@@ -406,10 +406,17 @@ var CompaniesRouter = Backbone.Router
 				// fill_owners(eidl, contact.toJSON());
 				// loadWidgets(el, contact.toJSON());
 
+				//mobile tabs
+			 $('.content-tabs', el).tabCollapse();
+
 			} });
 
 		var el = this.companyDetailView.render(true).el;
-		$('#content').html(el);
+		if(!this.companyDetailView.model.get('owner') || CURRENT_DOMAIN_USER.id == this.companyDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
+			$('#content').html(el);
+		}else{
+			$("#content").html("<div class='well'> <div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8'> " +_agile_get_translated_val('companies', 'invalid-viewer')+ "</h4><div class='text'style='opacity:0.6'>" +_agile_get_translated_val('companies','enable-permission')+ "</div></div></div></div>");
+		}
 	//	fill_company_related_contacts(id, 'company-contacts');
 		// company_detail_tab.initEvents();
 		checkCompanyUpdated();
@@ -540,7 +547,7 @@ var CompaniesRouter = Backbone.Router
 			templateKey : template_key, 
 			individual_tag_name : 'tr', 
 			cursor : true,
-			page_size : 25, 
+			page_size : getMaximumPageSize(), 
 			sort_collection : collection_is_reverse, 
 			slateKey : null, 
 			postRenderCallback : function(el){

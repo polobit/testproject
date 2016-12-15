@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -14,11 +15,15 @@ import org.codehaus.jettison.json.JSONObject;
 import org.json.JSONException;
 
 import com.agilecrm.Globals;
+import com.agilecrm.addon.AddOnInfo;
+import com.agilecrm.addon.AddOnUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
@@ -55,8 +60,33 @@ import com.stripe.net.RequestOptions.RequestOptionsBuilder;
  */
 public class StripeUtil {
 	static {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		Stripe.apiVersion = "2012-09-24";
+	}
+	
+	public static String getStripeApiKey(){
+		if(isDevelopmentEnv())
+			return Globals.STRIPE_TEST_API_KEY;
+		return Globals.STRIPE_LIVE_API_KEY;
+	}
+	private static boolean isDevelopmentEnv(){
+		if(VersioningUtil.isDevelopmentEnv() || VersioningUtil.getApplicationAPPId().equals("agilecrmbeta")){
+			return true;
+		}
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		try{
+			String versionNumber = CacheUtil.getCache("stripe_test_key").toString();
+			if(versionNumber != null && versionNumber.equals(VersioningUtil.getVersion()))
+				return true;
+			return false;
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getStackTrace(e));
+			e.printStackTrace();
+			return false;
+		}finally{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
 
 	/**
@@ -152,7 +182,7 @@ public class StripeUtil {
 	 */
 	public static Customer getCustomerFromJson(JSONObject customerJSON)
 			throws StripeException {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		// Converts Customer JSON to customer object
 		Customer customer = new Gson().fromJson(customerJSON.toString(),
 				Customer.class);
@@ -160,7 +190,7 @@ public class StripeUtil {
 		if (customer != null && !customer.getLivemode()) {
 			RequestOptionsBuilder builder = new RequestOptionsBuilder()
 					.setApiKey(Globals.STRIPE_TEST_API_KEY);
-			// builder.setApiKey(Globals.STRIPE_API_KEY);
+			// builder.setApiKey(getStripeApiKey());
 			// builder.setStripeVersion("2014-12-08");
 			RequestOptions options = builder.build();
 
@@ -211,7 +241,7 @@ public class StripeUtil {
 	public static List<Charge> getCharges(String customerid, Integer limit)
 			throws StripeException {
 
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
 
@@ -233,7 +263,7 @@ public class StripeUtil {
 	// based on charge id, that charge will be refunded
 	public static Charge createRefund(String chargeid) throws StripeException {
 
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 
 		Charge ch = Charge.retrieve(chargeid);
 
@@ -244,7 +274,7 @@ public class StripeUtil {
 	public static Refund createPartialRefund(String chargeId, Integer amount)
 			throws StripeException {
 		RequestOptionsBuilder builder = new RequestOptionsBuilder();
-		builder.setApiKey(Globals.STRIPE_API_KEY);
+		builder.setApiKey(getStripeApiKey());
 		builder.setStripeVersion("2014-12-08");
 		RequestOptions options = builder.build();
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -316,7 +346,7 @@ public class StripeUtil {
 	}
 
 	public static void deleteSubscription(String sub_id, String cus_id) {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		Customer cu;
 
 		try {
@@ -324,8 +354,14 @@ public class StripeUtil {
 
 			com.stripe.model.Subscription subscription = cu.getSubscriptions().retrieve(sub_id);
 			subscription.cancel(null);
-			if(subscription.getPlan().getId().contains("email"))
+			String planId = subscription.getPlan().getId();
+			if(StringUtils.containsIgnoreCase(planId, "email"))
 				SubscriptionUtil.deleteEmailSubscription();
+			else if(StringUtils.containsIgnoreCase(planId, "addon")){
+				
+			}else{
+				SubscriptionUtil.deleteUserSubscription();
+			}
 			System.out.println("subscription successfully deleted");
 		} catch (AuthenticationException e) {
 			// TODO Auto-generated catch block
@@ -347,10 +383,10 @@ public class StripeUtil {
 	}
 
 	public static Invoice getInvoice(String invoice_id) {
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+		Stripe.apiKey = getStripeApiKey();
 		try {
 			RequestOptionsBuilder builder = new RequestOptionsBuilder();
-			builder.setApiKey(Globals.STRIPE_API_KEY);
+			builder.setApiKey(getStripeApiKey());
 			builder.setStripeVersion("2014-12-08");
 			RequestOptions options = builder.build();
 
@@ -365,5 +401,164 @@ public class StripeUtil {
 		}
 		return null;
 	}
+	
+	public static void closeInvoice(String id) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException{
+		Invoice invoice = Invoice.retrieve(id);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("closed", true);
+		invoice.update(params);
+	}
+	
+	public static void addTrial(String cust_id, String sub_id, Long trialEnd) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException{
+		Customer customer = Customer.retrieve(cust_id);
+		List<com.stripe.model.Subscription> subscriptions = customer.getSubscriptions().getData();
+		if(subscriptions.size() > 0){
+			for(com.stripe.model.Subscription subscription : subscriptions){
+				if(subscription.getId().equals(sub_id)){
+					Map<String, Object> params = new HashMap<String, Object>();
+					params.put("trial_end", trialEnd);
+					subscription.update(params);
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * Creates any addOn subscription in stripe
+	 * @param planId
+	 * @param quantity
+	 * @return
+	 * @throws Exception
+	 */
+	public static com.stripe.model.Subscription createAddOnSubscription(String planId, int quantity) throws Exception{
+		if(planId == null || quantity == 0)
+			throw new Exception("Please provide valid details");
+		Customer cust = getStripeCustomer();
+		if(cust == null)
+			throw new Exception("Please upgrade your plan to do this action");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("plan", planId);
+		params.put("prorate", true);
+		params.put("quantity", quantity);
+		System.out.println("Creating new subscription with plan:"+planId+" quantity:"+quantity);
+		com.stripe.model.Subscription subscription = cust.createSubscription(params);
+		System.out.println("Subscription created");
+		return subscription;
+	}
+	
+	/**
+	 * updates any addOn subscription in stripe
+	 * if subscription is not available with provided planId creates new subscription
+	 * @param planId
+	 * @param quantity
+	 * @return
+	 * @throws Exception
+	 */
+	public static com.stripe.model.Subscription updateAddOnSubscription(String planId, int quantity, String subscriptionId, boolean proration) throws Exception{
+		if(planId == null || quantity == 0)
+			throw new Exception("Please provide valid details");
+		Customer cust = getStripeCustomer();
+		if(cust == null)
+			throw new Exception("Please upgrade your plan to do this action");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("plan", planId);
+		params.put("prorate", proration);
+		params.put("quantity", quantity);
+		com.stripe.model.Subscription subscription = null;;
+		if(subscriptionId != null)
+			subscription= getStripeSubscriptionById(subscriptionId);
+		if(subscription == null){
+			System.out.println("creating subscription with plan:"+planId+" quantity:"+quantity);
+			subscription = cust.createSubscription(params);
+		}else{
+			System.out.println("updating subscription with plan:"+planId+" quantity:"+quantity);
+			System.out.println("Old plandetails::: plan:"+subscription.getId()+" quantity:"+quantity);
+			subscription = subscription.update(params);
+			System.out.println("Subscription updated");
+		}
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		invoiceParams.put("customer", cust.getId());
+		invoiceParams.put("subscription", subscription.getId());
 
+		// Creates invoice for plan upgrade and charges customer
+		// immediately
+		Invoice invoice = null;
+		try{
+			invoice = Invoice.create(invoiceParams);
+		}catch(Exception e){
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		if (invoice != null && invoice.getSubscription().equals(subscription.getId()) && !invoice.getPaid())
+			invoice.pay();
+		return subscription;
+		
+	}
+	
+	/**
+	 * Gives stripe customer object
+	 * @return
+	 * @throws Exception
+	 */
+	public static Customer getStripeCustomer() throws Exception{
+		Subscription agileSub = SubscriptionUtil.getSubscription();
+		if(agileSub.billing_data_json_string == null)
+			return null;
+		return getCustomerFromJson(agileSub.fetchBillingDataJSONObject());
+	}
+	
+	
+	/**
+	 * Gives the subscription from stripe by plan id
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public static com.stripe.model.Subscription getStripeSubscriptionById(String id) throws Exception{
+		if(id == null || StringUtils.isEmpty(id))
+			return null;
+		Customer cust = getStripeCustomer();
+		List<com.stripe.model.Subscription> subscriptions = cust.getSubscriptions().getData();
+		com.stripe.model.Subscription subscription = null;
+		for(com.stripe.model.Subscription sub : subscriptions){
+			if(sub.getId().equals(id)){
+				subscription = sub;
+				break;
+			}
+		}
+		return subscription;
+	}
+	
+	/**
+	 * Cancel AddOn subscriptions
+	 * @param subscriptionId
+	 * @throws Exception 
+	 */
+	public static void cancelAddOnSubscription(String subscriptionId) throws Exception{
+		Customer cust = getStripeCustomer();
+		System.out.println("Deleting subscription::"+subscriptionId);
+		cust.getSubscriptions().retrieve(subscriptionId).cancel(null);
+		System.out.println("Subscription Deleted");
+	}
+	
+	public static Invoice getupcomingInvoice(AddOnInfo addonInfo, AddOnInfo dbAddonInfo) throws Exception{
+		Customer customer = getStripeCustomer();
+		Map<String, Object> invoiceParams = new HashMap<String, Object>();
+		invoiceParams.put("subscription", dbAddonInfo.subscriptionId);
+		invoiceParams.put("customer", customer.getId());
+		invoiceParams.put("subscription_quantity", addonInfo.quantity);
+		boolean proration = false;
+		if(addonInfo.quantity > dbAddonInfo.quantity)
+			proration = true;
+		invoiceParams.put("subscription_prorate", proration);
+		invoiceParams.put("subscription_plan", dbAddonInfo.planId);
+		RequestOptionsBuilder builder = new RequestOptionsBuilder();
+		builder.setApiKey(StripeUtil.getStripeApiKey());
+		builder.setStripeVersion("2015-10-16");
+		RequestOptions options = builder.build();
+		Invoice invoice = Invoice.upcoming(invoiceParams, options);
+		System.out.println("Invoice===  "+invoice);
+		return invoice;
+	}
+	
 }

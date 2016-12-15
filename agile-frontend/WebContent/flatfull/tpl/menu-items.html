@@ -144,34 +144,15 @@
     </li>
    {{/isRestrictedMenuScope}}
 
-   {{#isRestrictedMenuScope "WEBRULE"}} {{else}}
-    <li id="web-rules-menu">
-      <a  href="#web-rules">
-        <i class="icon icon-globe"></i>
-        <span>{{agile_lng_translate 'menu' 'menu-web-rules'}}</span>
-      </a>
-    </li>
-   {{/isRestrictedMenuScope}}
+	<li id="email-templates-menu">
+    <a href="#email-templates">
+      <i class="icon-envelope-letter"></i>
+      <span>{{agile_lng_translate 'preferences' 'email-templates'}}</span>
+    </a>
+  </li>
 
-   {{#isRestrictedMenuScope "VISITORS"}} {{else}}
-    <li id="segmentationmenu">
-      <a  href="#visitors">
-         <i class="icon-eye"></i>
-        <span>Visitors</span>  
-      </a>
-    </li>
-   {{/isRestrictedMenuScope}}
 
-   {{#isRestrictedMenuScope "LANDINGPAGES"}} {{else}}
-    <li id="landing-pages-menu">
-      <a href="#landing-pages">
-          <i class="fa fa-file-code-o"></i>
-          <span>Landing Pages</span>
-      </a>
-    </li>
-   {{/isRestrictedMenuScope}}
-   
-  {{#isAdmin}}
+{{#isAdmin}}
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
@@ -180,18 +161,21 @@
   </li>
   {{/isAdmin}}
 
-  <li id="email-templates-menu">
-    <a href="#email-templates">
-      <i class="icon-envelope-letter"></i>
-      <span>{{agile_lng_translate 'preferences' 'email-templates'}}</span>
-    </a>
-  </li>
   
-  {{#isRestrictedMenuScope "SOCIAL"}} {{else}}
-    <li id="socialsuitemenu">
-      <a  href="#social">
-        <i class="icon-bubbles"></i>
-        <span>{{agile_lng_translate 'menu' 'menu-social'}}</span>
+  {{#isRestrictedMenuScope "LANDINGPAGES"}} {{else}}
+    <li id="landing-pages-menu">
+      <a href="#landing-pages">
+          <i class="fa fa-file-code-o"></i>
+          <span>Landing Pages</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+  {{#isRestrictedMenuScope "WEBRULE"}} {{else}}
+    <li id="web-rules-menu">
+      <a  href="#web-rules">
+        <i class="icon icon-globe"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-web-rules'}}</span>
       </a>
     </li>
    {{/isRestrictedMenuScope}}
@@ -203,7 +187,25 @@
     </a>
   </li>
 
-  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
+  {{#isRestrictedMenuScope "SOCIAL"}} {{else}}
+    <li id="socialsuitemenu">
+      <a  href="#social">
+        <i class="icon-bubbles"></i>
+        <span>{{agile_lng_translate 'menu' 'menu-social'}}</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+	{{#isRestrictedMenuScope "VISITORS"}} {{else}}
+    <li id="segmentationmenu">
+      <a  href="#visitors">
+         <i class="icon-eye"></i>
+        <span>Visitors</span>  
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+   {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
@@ -306,6 +308,16 @@
   </li>
   {{/isRestrictedMenuScope}}
   {{/isAdmin}}
+
+  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
+    <li id="feedbackactivitiesmenu">
+      <a  href="#ticket-feedback">
+        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+        <span>Feedback</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
 
    {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">

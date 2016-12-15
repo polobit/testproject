@@ -138,7 +138,8 @@ String logo_url = accountPrefs.logo;
 // Bg Image
 int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 
-
+// Mobile push
+String registrationId = request.getParameter("registrationId");
 %>
 <!DOCTYPE html>
 
@@ -151,6 +152,7 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<meta name="robots" content="noindex, nofollow">
 
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=flatfull_path%>/css/app.css" />
@@ -162,7 +164,8 @@ int randomBGImageInteger = MathUtil.randomWithInRange(1, 9);
 body {
 	
 	<% 
-	if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
+	String userAgent = request.getHeader("user-agent");
+	if(MobileUADetector.isMobile(userAgent)) {%>
 
 		background-color: #f0f3f4;
 	
@@ -248,7 +251,9 @@ var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);
 if(isIE || isIENew)
  window.location = '/error/not-supported.jsp';
 */
-
+var S3_STATIC_IMAGE_PATH = undefined;
+var _billing_restriction = undefined;
+var CURRENT_DOMAIN_USER = undefined;
 var isSafari = (Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0);
 var isWin = (window.navigator.userAgent.indexOf("Windows") != -1);
 if(isSafari && isWin) 
@@ -377,6 +382,10 @@ if(isSafari && isWin)
 						<input class="hide" id="browser_Name" name="browser_Name"></input>
 						<input class="hide" id="browser_version" name="browser_version"></input>
 						<input class="hide" id="browser_os" name="browser_os"></input>
+						<%if(StringUtils.isNotBlank(registrationId)) {%>
+						 <input class="hide" id="registrationId" name="registrationId" value="<%=registrationId%>"></input>
+						<%} %>
+
 						</div>
 							<label class="checkbox" style="display:none;">
 							    <input type="checkbox" checked="checked" name="signin">Keep me signed in 
@@ -394,13 +403,15 @@ if(isSafari && isWin)
   			if(MobileUADetector.isMobile(request.getHeader("user-agent"))) {%>
 		id="mobile"
 	<% }else {  %> <%}%> >
-	<div class="text-center tags-color text-white m-t m-b" >
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with")%></small> 
-		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google</a>&nbsp|&nbsp
-		<a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "login-with-yahoo")%>' data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a><br/>	
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>?</small> <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-up")%></a><br/>
-		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
+	<%if(!MobileUADetector.isiPhone(userAgent)) {%>
+		<div class="text-center tags-color text-white m-t m-b" >
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using")%></small> 
+		<small><a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using-google")%>' data='google' href='#' class="openid_large_btn google tags-color text-white">Google Apps</a></small>&nbsp|&nbsp
+		<small><a title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "signin-using-yahoo")%>' data='yahoo' href="#" class="openid_large_btn yahoo tags-color text-white">Yahoo</a></small><br/>	
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-have-account")%>? <a href="/register" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signUp")%></a></small><br/>
+		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%> <a href="/forgot-password" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "password")%>? </a><a href="/forgot-domain" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a></small>
 		</div>
+	<%} %>
 	</div>
 		
 		</form>
@@ -418,6 +429,9 @@ if(isSafari && isWin)
 	
                   
 		<script type="text/javascript">
+		    // Save mobile device GCM Id
+		    var registrationId = '<%=registrationId%>';
+
 			// localStorage setup
 			var _agile_storage = {
 				key : "_agile_user_fingerprint",
@@ -473,6 +487,10 @@ if(isSafari && isWin)
 			});
 
 			var localeJSON = <%=localeJSON%>;
+
+			// Save mobile device Id to localstorage
+			if(registrationId)
+				 _agile_storage.set(registrationId, "_agile_GCM_Id");
 			
 		</script>
 		

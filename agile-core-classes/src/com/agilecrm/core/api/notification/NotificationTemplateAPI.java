@@ -20,6 +20,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.AllDomainStats;
+import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.notification.NotificationTemplate;
 import com.agilecrm.webrules.WebrulePushPopup;
 import com.google.appengine.api.NamespaceManager;
@@ -74,6 +76,10 @@ public class NotificationTemplateAPI
 			WebrulePushPopup.CreateWebrule(NamespaceManager.get());
     	}
 		
+		//Increase count of push_notification template for AllDomainstats report in database
+		AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.NOTIFICATION_TEMPLATE_COUNT);
+		
+		
 		notificationTemplate.save();
 	   return notificationTemplate;
     }
@@ -91,6 +97,7 @@ public class NotificationTemplateAPI
 		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			    .entity("Sorry, Notification Template with the same name already exist.").build());
 		}
+		notificationTemplate.updated_time = System.currentTimeMillis() / 1000;
 		NotificationTemplate.dao.put(notificationTemplate);	   
 	   return notificationTemplate;
 	

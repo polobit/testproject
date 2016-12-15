@@ -5,7 +5,7 @@ $(function()
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#opportunityModal, #opportunityUpdateModal').on('show.bs.modal', function()
+	$('#opportunityModal, #opportunityUpdateModal, #newDealModal').on('show.bs.modal', function()
 	{
 
 		// Removes alert message of error related date and time.
@@ -15,9 +15,8 @@ $(function()
 		$('#' + this.id).find('.error').removeClass('error');
 	});
 
-	$('#opportunityModal, #opportunityUpdateModal').on("shown.bs.modal", function()
+	$('#opportunityModal, #opportunityUpdateModal, #newDealModal').on("shown.bs.modal", function()
 	{
-
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder",_agile_get_translated_val("contacts", "select-date"));
     
@@ -32,7 +31,7 @@ $(function()
 	 * "Hide" event of note modal to remove contacts appended to related to
 	 * field and validation errors
 	 */
-	$('#opportunityModal').on('hidden.bs.modal', function()
+	$('#opportunityModal, #newDealModal').on('hidden.bs.modal', function()
 	{
 
 		// Removes appended contacts from related-to field
@@ -72,6 +71,17 @@ $(function()
 		// Hide the Note label.
 		$("#deal-note-label").hide();
 
+	});
+
+	/**
+	 * Hide lost reasons popup, if deal moves to lost milestone from other track, 
+	 * hide the tracks list and show milestone view
+	 */
+	$('#dealLostReasonModal').on('hidden.bs.modal', function()
+	{
+		$("#new-track-list-paging").hide();
+		$("#new-opportunity-list-paging").show();
+		$("#opportunities-header", $("#opportunity-listners")).show();
 	});
 
 	
@@ -214,6 +224,12 @@ $(function()
 											// Shows deals chart
 											dealsLineChart();
 											update_deal_collection(model.toJSON(), id, milestone, milestone);
+											var modelsLength = dealPipelineModel[0].get('dealCollection').models.length ;
+                                            if(modelsLength ==10 && modelsLength <= deal_count)
+                                            {
+                                                dealPipelineModel[0]['isUpdateCollection'] = true ;
+                                                dealsFetch(dealPipelineModel[0]);
+                                            }
 
 										},error : function(model, err)
 										{
@@ -450,7 +466,7 @@ function updateDeal(ele, editFromMilestoneView)
 				var data =value.tagsWithTime[i].tag ; 
 				$('#tags_source_deal_modal', dealForm)
 				.find(".tags")
-				.append('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag">&times</a></li>');
+				.append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag" style="color: #363f44">&times</a></li>');
 			} 
 	}
 	
@@ -495,7 +511,7 @@ function updateDeal(ele, editFromMilestoneView)
 	// Fills the pipelines list in the select menu.
 	populateTrackMilestones(dealForm, undefined, value, function(pipelinesList)
 	{
-
+		populateLostReasons(dealForm, value);
 	});
 
 	// Enable the datepicker
@@ -514,6 +530,8 @@ function updateDeal(ele, editFromMilestoneView)
 		]);
 		// if(!value["custom_data"]) value["custom_data"] = [];
 		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
+		$('.date_input',dealForm).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
+
 
 		$('.contact_input', dealForm).each(function(){
 			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), dealForm), contacts_typeahead, undefined, 'type=PERSON');
@@ -563,10 +581,31 @@ function updateDeal(ele, editFromMilestoneView)
 			}
 		});
 
-	}, "DEAL")
+	}, "DEAL");
 
-	populateLostReasons(dealForm, value);
-
+	$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0 || value.products.length>0){
+			$("#opportunityUpdateForm").find("#showtoggle_show").show();
+			$("#opportunityUpdateForm").find("#showproducts").show();
+			$("#opportunityUpdateForm").find('.no-products').hide();
+			$("#opportunityUpdateForm").find('.value_box').removeClass('col-sm-7').addClass('col-sm-5');
+			//$("#showtoggle_show").show();
+			//$("#showproducts").show();
+			populate_deal_products(dealForm,value,"#opportunityUpdateForm");
+			$('#discount_type_btn',dealForm).addClass('disabled');
+			$('#discount_value',dealForm).attr('disabled','disabled');
+						
+		}else{
+			$("#opportunityUpdateForm").find("#showtoggle_show").hide();
+			$("#opportunityUpdateForm").find("#showproducts").hide();
+			$("#opportunityUpdateForm").find('.no-products').show();
+			$("#opportunityUpdateForm").find('.value_box').removeClass('col-sm-5').addClass('col-sm-7');
+			//$("#showtoggle_show").hide();
+			//$("#showproducts").hide();
+		}
+	});
 	populateDealSources(dealForm, value);
 	// setup tags for the search 
 	setup_tags_typeahead();
@@ -578,23 +617,21 @@ function updateDeal(ele, editFromMilestoneView)
  */
 function show_deal()
 {
-   $( "#opportunityForm" )[ 0 ].reset();
-   
-   var el = $("#opportunityForm");
-
-    if($('#color1', el).is(':hidden')){
-
-    $('.colorPicker-picker', el).remove();
-
-    $('#color1', el).colorPicker();
-	} 
-    // Disable color input field
+	$("#newDealModal").html(getTemplate("new-deal-model")).modal('show');
+	var e = $("#opportunityForm",$("#newDealModal"));							
+	if($('#color1', e).is(':hidden'))
+	{
+		$('.colorPicker-picker', e).remove();
+		$('#color1', e).colorPicker();
+	}
+	
+	// Disable color input field
     $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
 
 
-    $("#opportunityModal").modal('show');
+    //$("#opportunityModal").modal('show');
 
-    $("#opportunityModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+  //  $("#opportunityModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
 
 	add_custom_fields_to_form({}, function(data)
 	{
@@ -602,19 +639,21 @@ function show_deal()
 			"modal"
 		]);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+		$('.date_input',$("#opportunityModal")).datepicker({ format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true});
 
-		$('.contact_input', el).each(function(){
-			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=PERSON');
+
+		$('.contact_input', e).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_contact_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=PERSON');
 		});
 
-		$('.company_input', el).each(function(){
-			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), el), contacts_typeahead, undefined, 'type=COMPANY');
+		$('.company_input', e).each(function(){
+			agile_type_ahead($(this).attr("id"), $('#custom_company_'+$(this).attr("id"), e), contacts_typeahead, undefined, 'type=COMPANY');
 		});
 
 	}, "DEAL");
 
 	// Fills owner select element
-	populateUsers("owners-list", el, undefined, undefined, function(data)
+	populateUsers("owners-list", e, undefined, undefined, function(data)
 	{
 
 		$("#opportunityForm").find("#owners-list").html(data);
@@ -622,10 +661,25 @@ function show_deal()
 		$("#owners-list", $("#opportunityForm")).closest('div').find('.loading-img').hide();
 	});
 	// Contacts type-ahead
-	agile_type_ahead("relates_to", el, contacts_typeahead);
+	agile_type_ahead("relates_to", e, contacts_typeahead);
 
+	$.ajax({
+	  url: "/core/api/products",
+	}).done(function(data) {
+		if(data.length > 0){
+			$("#showtoggle_show",e).show();
+			$("#showproducts",e).show();
+			populate_deal_products(e, undefined,"#opportunityForm");
+		}else{
+			$("#showtoggle_show",e).hide();
+			$("#showproducts",e).hide();
+			$('.no-products',e).show();
+			$('.value_box',e).removeClass('col-sm-5').addClass('col-sm-7');
+		}
+	});
+	
 	// Fills the pipelines list in select box.
-	populateTrackMilestones(el, undefined, undefined, function(pipelinesList)
+	populateTrackMilestones(e, undefined, undefined, function(pipelinesList)
 	{
 		console.log(pipelinesList);
 		$.each(pipelinesList, function(index, pipe)
@@ -636,22 +690,22 @@ function show_deal()
 				if (pipe.milestones.length > 0)
 				{
 					val += pipe.milestones.split(',')[0];
-					$('#pipeline_milestone', el).val(val);
-					$('#pipeline', el).val(pipe.id);
-					$('#milestone', el).val(pipe.milestones.split(',')[0]);
+					$('#pipeline_milestone', e).val(val);
+					$('#pipeline', e).val(pipe.id);
+					$('#milestone', e).val(pipe.milestones.split(',')[0]);
 				}
 
 			}
 		});
 	});
 
-	populateLostReasons(el, undefined);
+	populateLostReasons(e, undefined);
 
-	populateDealSources(el, undefined);
+	populateDealSources(e, undefined);
 
 	// Enable the datepicker
-	$('#close_date', el).datepicker("remove");
-	$('#close_date', el).datepicker({
+	$('#close_date', e).datepicker("remove");
+	$('#close_date', e).datepicker({
 		format : CURRENT_USER_PREFS.dateFormat, weekStart : CALENDAR_WEEK_START_DAY, autoclose: true
 	});
 }
@@ -707,6 +761,11 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
 		return false;
 	}
+	if(!ValidateDealDiscountAmt('#' + formId))
+	{
+		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
+		return false;
+	}	
 
 	// Shows loading symbol until model get saved
 	// $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
@@ -722,6 +781,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 
 		// $('#' + modalId).find('span.save-status img').remove();
 		$('#' + modalId).modal('hide');
+		$("#newDealModal").modal('hide');
 
 		$('#' + formId).each(function()
 		{
@@ -736,9 +796,18 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		add_recent_view(new BaseModel(deal));
 
 		// Updates data to timeline
-		if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+		if ((App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id')) || 
+			(App_Leads.leadDetailView && Current_Route == "lead/" + App_Leads.leadDetailView.model.get('id')))
 		{
-
+			var contactId;
+			if(App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
+			{
+				contactId = App_Contacts.contactDetailView.model.get('id');
+			}
+			else
+			{
+				contactId = App_Leads.leadDetailView.model.get('id');
+			}
 			// Add model to collection. Disabled sort while adding and called
 			// sort explicitly, as sort is not working when it is called by add
 			// function
@@ -750,7 +819,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 			$.each(deal.contacts, function(index, contact)
 			{
 
-				if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+				if (contact.id == contactId)
 				{
 
 					if (dealsView && dealsView.collection)
@@ -800,6 +869,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 				&& Current_Route == "company/"
 					+ App_Companies.companyDetailView.model.get('id')){
 			company_util.updateDealsList(deal,true, isUpdate);
+			add_entity_to_timeline(data);
 		}
 		// When deal is added or updated from Deals route
 		else if (Current_Route == 'deals')
@@ -1168,8 +1238,10 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate)
 		}
 		else
 		{
-			App_Deal_Details.dealDetailView.model = data;
-			App_Deal_Details.dealDetailView.render(true)
+			if(App_Deal_Details.dealDetailView){
+				App_Deal_Details.dealDetailView.model = data;
+				App_Deal_Details.dealDetailView.render(true)
+			}
 			Backbone.history.navigate("deal/" + data.toJSON().id, { trigger : true });
 			/*
 			 * App_Deals.navigate("deals", { trigger : true });

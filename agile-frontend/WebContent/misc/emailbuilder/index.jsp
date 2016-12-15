@@ -1,11 +1,18 @@
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String templateId = request.getParameter("tmpid");
 String action = request.getParameter("action");
+
+//Locales JSON
+String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "email-builder");
+
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%=_LANGUAGE%>">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +39,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 <% if(templateId != null) { %>
     AGILE_EB_OPTIONS['templateId'] = '<%=templateId%>';
 <% } %>
+var localeJSON = <%=localeJSON%>;
 </script>
 
         <!--[if lt IE 9]>
@@ -43,7 +51,8 @@ AGILE_EB_OPTIONS['templateId'] = "";
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        <!--<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
+        <script src="/js/designer/tinymce/tinymce.min.js"></script>
         <script type="text/javascript" src="js/colpick.js"></script>
         <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
 
@@ -54,12 +63,15 @@ AGILE_EB_OPTIONS['templateId'] = "";
 .main {
     width: 638px !important;
 }
+.edit .demo:after {
+    content: '<%=LanguageUtil.getLocaleJSONValue(localeJSON, "body") %>'!important;
+}
 </style>
     </head>
     <body class="edit" style="overflow: hidden;" onload="parent.onEmailBuilderLoad()" id="builderFullBodyHolder">
 
-        <a class="hide" href="#save" id="sourcepreview">Preview</a>
-        <a class="hide" href="#save" id="save" ><i class="glyphicon glyphicon-floppy-disk"></i> Save</a>
+        <a class="hide" href="#save" id="sourcepreview"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview") %></a>
+        <a class="hide" href="#save" id="save" ><i class="glyphicon glyphicon-floppy-disk"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "save") %></a>
         <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
 
         <div class="row">
@@ -78,6 +90,9 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <%@ include file="blocks/text.html" %>
                                 <!-- image -->
                                 <%@ include file="blocks/image.html" %>
+
+                                <%@ include file="blocks/video-record.html" %>
+                                
                                 <!-- button -->
                                 <%@ include file="blocks/button.html" %>
                                 <!--Image + Text -->
@@ -104,7 +119,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
             <div class="col-md-7" style="width:800px;">
 
-                <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;">Edit background</a>
+                <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></a>
                 <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
                     <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
                         <tr>
@@ -119,7 +134,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                                         <div class="preview">
                                             <div class="icon text-block"></div>
-                                            <label>Text</label>
+                                            <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></label>
                                         </div>
                                         <div class="view">
                                             <div class="row clearfix">
@@ -127,7 +142,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                                     <tbody>
                                                         <tr>
                                                             <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix">This is a Text Block! Click on this text to edit it. You can add content easily by dragging content blocks from the right sidebar. Drag this and other blocks around to re-order them.</div>
+                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -148,10 +163,10 @@ AGILE_EB_OPTIONS['templateId'] = "";
                 <div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
 
                     <form id="editor" style="margin-top:5px">
-                        <h4 class="text text-info">Text</h4>
+                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></h4>
                         <div class="form-inline" id="font-settings" style="margin-top:5px">
                             <div class="form-group">
-                                <label for="fontstyle">Font style</label>
+                                <label for="fontstyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-style") %></label>
                                 <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
 
                             </div>
@@ -160,7 +175,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     <div class="hide" id='font-style'>
                         <div id="mainfontproperties" >
                             <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;">Color</span>
+                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "color") %></span>
                                 <input type="text" class="form-control picker" id="colortext" >
                                 <span class="input-group-addon"></span>
                                 <script type="text/javascript">
@@ -184,11 +199,11 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 </script>
                             </div>
                             <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;">Font</span>
+                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font") %></span>
                                 <input type="text" class="form-control " id="fonttext" readonly>
                             </div>
                             <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;">Size</span>
+                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "size") %></span>
                                 <input type="text" class="form-control " id="sizetext" style="width: 100px">
                                 &nbsp;
                                 <a class="btn btn-default plus" href="#">+</a>
@@ -197,7 +212,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                             <hr/>
                             <div class="text text-right">
-                                <a class="btn btn-info" id="confirm-font-properties">OK</a>
+                                <a class="btn btn-primary" id="confirm-font-properties"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
                             </div>
                         </div>
 
@@ -222,15 +237,53 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </form>
 
                     <div id="imageproperties" style="margin-top:5px">
-                        <h4 class="text text-info">Image</h4>
+                        <h4 class="text text-info" id="imageHeaderId"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image") %></h4>
+
+                        <div class="form-group" id="video-record-btn-holder" style="display:none;">
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <h5><span>Record a video</span><h5>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button type="button" class="btn btn-default" id="videoRecordBtnNew" style="width:73px;">
+                                        <span class="fa fa-video-camera"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-2 text-right">
+                                    <span>(OR)</span>
+                                </div>
+                            </div>
+                            <br/>
+
+                            <div class="row">
+                                <div class="col-xs-8">
+                                    <input type="text" id="video-link" class="form-control" placeholder="Link to Video URL" aria-describedby="basic-addon11" data-id="none">
+                                </div>
+                                
+                                <div class="col-xs-4">
+                                    <button type="button" class="btn btn-default" id="videoRecordBtn">
+                                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select") %></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
                         <div class="form-group">
 
+                            <div class="row" id="videoThumbnail" style="display:none;">
+                                <label for="video-record-Thumbnail" class="col-xs-8 control-label">Thumbnail</label>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-8">
                                     <input type="text" id="image-url" class="form-control" data-id="none"/>
                                 </div>
                                 <div class="col-xs-4">
-                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "browse") %></a>
                                     <input type="file" id="uploadImageToS3Btn" class="hidden">
                                 </div>
                             </div>
@@ -239,31 +292,21 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
                         <div class="form-group">
                             
-                            <div class="row">
+                            <div class="row" id="image-link-holder">
                                 <div class="col-xs-11">
                                     <div class="input-group">
                                         <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-                                        <input type="text" id="image-link" class="form-control" placeholder="Link to Web Address(URL)" aria-describedby="basic-addon11" data-id="none">
+                                        <input type="text" id="image-link" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-to-web-link") %>' aria-describedby="basic-addon11" data-id="none">
                                     </div>
                                     <br>
                                 </div>
                             </div>
-
+                            
                             <div class="row">
                                 <div class="col-xs-11">
-                                    <input type="text" id="image-alt-text" class="form-control" placeholder="Alternate Text" data-id="none">
+                                    <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
                                     <br>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-11" id="image-alt-text">
-                               <!--  <select id="select_alignment" class="form-control">
-                                          <option value="Center">Center</option>
-                                          <option value="Right">Right</option>
-                                           <option value="Left">Left</option>
-                                </select> -->
-                          <br>
-                          </div>
                             </div>
 
                             <div class="row">
@@ -285,7 +328,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 </div>
                                 <div class="col-xs-4" style="float: right">
 
-                                    <a class="btn btn-warning" href="#" id="change-image"><i class="fa fa-edit"></i>&nbsp;Apply</a>
+                                    <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
                                 </div>
 
                             </div>
@@ -293,7 +336,7 @@ AGILE_EB_OPTIONS['templateId'] = "";
                     </div>
 
                     <div id="social-links">
-                        <h4 class="text text-info">Social</h4>
+                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "social") %></h4>
                         <ul class="list-group" id="social-list">
                             <li>
                                 <div class="input-group">
@@ -365,12 +408,12 @@ AGILE_EB_OPTIONS['templateId'] = "";
 
 
                     <div id="buttons" style="max-width: 400px">
-                        <h4 class="text text-info">Buttons</h4>
+                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "buttons") %></h4>
                         <div class="form-group">
                             <select class="form-control">
-                                <option value="center">Align buttons to Center</option>
-                                <option value="left">Align buttons to Left</option>
-                                <option value="right">Align buttons to Right</option>
+                                <option value="center"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-center") %></option>
+                                <option value="left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-left") %></option>
+                                <option value="right"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-right") %></option>
                             </select>
                         </div>
                         <ul id="buttonslist" class="list-group">
@@ -379,14 +422,14 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                 <span class="pull-right trashbutton"><i class="fa fa-trash"></i></span>
 
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter Button Title" name="btn_title"/>
+                                    <input type="text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-title") %>' name="btn_title"/>
                                 </div>
                                 <div class="input-group">
                                     <span class="input-group-addon" id="basic-addon1"><i class="fa fa-paperclip"></i></span>
-                                    <input type="text" class="form-control"  placeholder="Add link to button" aria-describedby="basic-addon1" name="btn_link"/>
+                                    <input type="text" class="form-control"  placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-link-to-btn") %>' aria-describedby="basic-addon1" name="btn_link"/>
                                 </div>
                                 <div class="input-group" style="margin-top:10px">
-                                    <label for="buttonStyle">Button Style</label>
+                                    <label for="buttonStyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
                                     <div   class="color-circle buttonStyle" data-original-title="" title="">
                                         <i class="fa fa-font"></i>
                                     </div>
@@ -402,24 +445,22 @@ AGILE_EB_OPTIONS['templateId'] = "";
                                             <input type="text" class="form-control text-center"  placeholder="Button Size"  name="ButtonSize"/>
                                             <span class="input-group-addon button"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
                                         </div>-->
-                                    <label> Font Size</label>
+                                    <label> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-size") %></label>
                                     <div class="input-group " style="margin-bottom: 5px">
 
                                         <span class="input-group-addon font"><i
                                             class="fa fa-plus" style="cursor: pointer;"></i></span> <input
                                             type="text" class="form-control text-center"
-                                            placeholder="Font Size" name="FontSize" /> <span
+                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-size") %>' name="FontSize" /> <span
                                             class="input-group-addon font"><i class="fa fa-minus"
                                             style="cursor: pointer;"></i></span>
                                     </div>
                                     <div class="input-group background" style="margin-bottom: 5px">
-                                        <span class="input-group-addon " style="width: 50px;">Background
-                                            Color</span> <span class="input-group-addon picker" data-color="bg"></span>
+                                        <span class="input-group-addon " style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "bg-color") %></span> <span class="input-group-addon picker" data-color="bg"></span>
                                     </div>
 
                                     <div class="input-group fontcolor" style="margin-bottom: 5px">
-                                        <span class="input-group-addon" style="width: 50px;">Font
-                                            Color</span> <span class="input-group-addon picker"
+                                        <span class="input-group-addon" style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-color") %></span> <span class="input-group-addon picker"
                                             data-color="font"></span>
                                         <script type="text/javascript">
                                                 $('.picker').colpick({
@@ -473,7 +514,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                                     </div>
                                     <div class="text text-right">
-                                        <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
+                                        <a href="#" class="btn btn-xs btn-default confirm"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
                                     </div>
                                 </div>
                                 <div class="fontselector" class="hide" style="min-width: 200px">
@@ -521,14 +562,13 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                     <hr />
                     <div class="form-group">
-                        <a class="btn btn-default form-control" href="#" id="add-button">Add
-                            one more button</a>
+                        <a class="btn btn-default form-control" href="#" id="add-button"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-one-more-btn") %></a>
                     </div>
 
                 </div>
 
                 <div id="buttonstxt" style="max-width: 400px">
-                    <h4 class="text text-info">Buttons</h4>
+                    <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "buttons") %></h4>
                     <ul id="buttonstxtlist" class="list-group">
                         <li class="hide"
                             style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px">
@@ -537,16 +577,16 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                             <div class="form-group">
                                 <input type="text" class="form-control"
-                                    placeholder="Enter Button Title" name="btn_title" />
+                                    placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-title") %>' name="btn_title" />
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon" id="basic-addon1"><i
                                     class="fa fa-paperclip"></i></span> <input type="text"
-                                    class="form-control" placeholder="Add link to button"
+                                    class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-link-to-btn") %>'
                                     aria-describedby="basic-addon1" name="btn_link" />
                             </div>
                             <div class="input-group" style="margin-top: 10px">
-                                <label for="buttonStyleTxt">Button Style</label>
+                                <label for="buttonStyleTxt"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
                                 <div class="color-circle buttonStyleTxt" data-original-title=""
                                     title="">
                                     <i class="fa fa-font"></i>
@@ -563,25 +603,23 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                                             <input type="text" class="form-control text-center"  placeholder="Button Size"  name="ButtonSize"/>
                                             <span class="input-group-addon button"  ><i class="fa fa-minus" style="  cursor : pointer;"></i></span>
                                         </div>-->
-                                    <label> Font Size</label>
+                                    <label> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-size") %></label>
                                     <div class="input-group " style="margin-bottom: 5px">
 
                                         <span class="input-group-addon font"><i
                                             class="fa fa-plus" style="cursor: pointer;"></i></span> <input
                                             type="text" class="form-control text-center"
-                                            placeholder="Font Size" name="FontSize" /> <span
+                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-size") %>' name="FontSize" /> <span
                                             class="input-group-addon font"><i class="fa fa-minus"
                                             style="cursor: pointer;"></i></span>
                                     </div>
                                     <div class="input-group background" style="margin-bottom: 5px">
-                                        <span class="input-group-addon " style="width: 50px;">Background
-                                            Color</span> <span class="input-group-addon pickerTxt"
+                                        <span class="input-group-addon " style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "bg-color") %></span> <span class="input-group-addon pickerTxt"
                                             data-color="bg"></span>
                                     </div>
 
                                     <div class="input-group fontcolor" style="margin-bottom: 5px">
-                                        <span class="input-group-addon" style="width: 50px;">Font
-                                            Color</span> <span class="input-group-addon pickerTxt"
+                                        <span class="input-group-addon" style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "bg-color") %></span> <span class="input-group-addon pickerTxt"
                                             data-color="font"></span>
 
                                         <script type="text/javascript">
@@ -636,7 +674,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                                     </div>
                                     <div class="text text-right">
-                                        <a href="#" class="btn btn-xs btn-default confirm">Ok</a>
+                                        <a href="#" class="btn btn-xs btn-default confirm"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
                                     </div>
                                 </div>
                                 <div class="fontselector" class="hide" style="min-width: 200px">
@@ -686,10 +724,10 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                 <div id="common-settings">
 
-                    <h4 class="text text-info">Style</h4>
+                    <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "style") %></h4>
                     <form id="background" class="form-inline">
                         <div class="form-group">
-                            <label for="bgcolor">Background</label>
+                            <label for="bgcolor"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "background") %></label>
                             <div class="color-circle" id="bgcolor"></div>
                             <script type="text/javascript">
                                     $('#bgcolor').colpick({
@@ -716,30 +754,30 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                     </form>
 
                     <form id="padding-setting" class="form-inline">
-                        <h4 class="text text-info">Padding</h4>
+                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "padding") %></h4>
                         <center>
                             <table>
                                 <tbody>
                                     <tr>
                                         <td></td>
                                         <td><input type="text" class="form-control"
-                                            placeholder="top" value="15px" id="ptop" name="ptop"
+                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' value="15px" id="ptop" name="ptop"
                                             style="width: 60px; margin-right: 5px"></td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td><input type="text" class="form-control"
-                                            placeholder="left" value="15px" id="pleft" name="mtop"
+                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "left") %>' value="15px" id="pleft" name="mtop"
                                             style="width: 60px; margin-right: 5px"></td>
                                         <td></td>
                                         <td><input type="text" class="form-control"
-                                            placeholder="right" value="15px" id="pright" name="mbottom"
+                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "right") %>' value="15px" id="pright" name="mbottom"
                                             style="width: 60px; margin-right: 5px"></td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td><input type="text" class="form-control"
-                                            placeholder="bottom" value="15px" id="pbottom" name="pbottom"
+                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "bottom") %>' value="15px" id="pbottom" name="pbottom"
                                             style="width: 60px; margin-right: 5px"></td>
                                         <td></td>
                                     </tr>
@@ -750,7 +788,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                 </div>
 
                 <div class="text text-right" style="margin-top: 5px">
-                    <a href="#" id="saveElement" class="btn btn-info">done</a>
+                    <a href="#" id="saveElement" class="btn btn-primary"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "done") %></a>
                 </div>
             </div>
             <!-- END SETTINGS -->
@@ -774,9 +812,9 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                 <div class="modal-body" align="center">
                     <div class="btn-group  previewActions">
                         <a class="btn btn-default btn-sm active" href="#"
-                            data-val="iphone">smartphone</a> <a
-                            class="btn btn-default btn-sm " href="#" data-val="smalltablet">tablet</a>
-                        <a class="btn btn-default btn-sm " href="#" data-val="ipad">ipad</a>
+                            data-val="iphone"><i class="fa fa-mobile fa-2x"></i></a> <a
+                            class="btn btn-default btn-sm " href="#" data-val="smalltablet"><i class="fa fa-tablet fa-2x" aria-hidden="true"></i></a>
+                        <a class="btn btn-default btn-sm " href="#" data-val="ipad"><i class="fa fa-desktop  fa-2x" aria-hidden="true"></i></a>
                     </div>
                     <button type="button" class="close" data-dismiss="modal"
                         aria-label="Close">
@@ -786,7 +824,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                 </div>
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" data-dismiss="modal"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE") %></button>
                 </div>
             </div>
         </div>

@@ -33,19 +33,24 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.WorkflowBackup;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
+import com.agilecrm.workflows.util.WorkflowBackupUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
  * <code>WorkflowsAPI</code> includes REST calls to interact with
@@ -166,6 +171,9 @@ public class WorkflowsAPI {
 			
 			//Increase count of Campaign for AllDomainstats report in database
 			AllDomainStatsUtil.updateAllDomainStats(AllDomainStats.CAMPAIGN_COUNT);
+			//Increase count of top ten nodes count template for AllDomainstats report in database
+			
+			//AllDomainStatsUtil.updateWorkflowNodecount(AllDomainStatsUtil.getNodeCountFromWorkflow(workflow.rules));
 			
 		} catch (Exception e) {
 			System.out
@@ -561,7 +569,7 @@ public class WorkflowsAPI {
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("verification_link",
-					VersioningUtil.getHostURLByApp(NamespaceManager.get()));
+					VersioningUtil.getHostURLByApp(AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get())));
 
 			DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 			map.put("campaignId", workflow_id);
@@ -569,11 +577,13 @@ public class WorkflowsAPI {
 			map.put("type", "Workflow");
 			map.put("senderName", domainUser.name);
 			map.put("senderId", domainUser.id.toString());
-			map.put("senderDomain", domainUser.domain);
-
+			map.put("senderDomain", AliasDomainUtil.getCachedAliasDomainName(domainUser.domain));
+			
+			//Get user prefs language
+			String language = LanguageUtil.getUserLanguageFromEmail(recEmail);
 			SendMail.sendMail(recEmail, SendMail.SHARE_CAMPAIGN_SUBJECT,
 					SendMail.SHARE_CAMPAIGN_CONFIRMATION, map,
-					domainUser.email, domainUser.name);
+					domainUser.email, domainUser.name, language);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -601,4 +611,44 @@ public class WorkflowsAPI {
 					.build());
 		}
 	}
+	
+	@Path("/restore")
+	@POST
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Workflow restoreWorkflow(@QueryParam("workflow_id") Long workflowId) throws EntityNotFoundException
+	{
+		WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
+		
+		if(backup == null)
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
+		
+		// Deleting workflow backup after restore
+		backup.delete();
+		
+		Workflow workflow = WorkflowUtil.restoreWorkflow(workflowId, backup);
+		
+		try 
+		{
+			ActivityUtil.createCampaignActivity(ActivityType.CAMPAIGN_RESTORE, workflow, null);
+		}
+		catch (Exception e){
+			System.out.println("Exception occured while creating workflow restore activity" + e.getMessage());
+		}
+		
+		return workflow;
+	}
+
+	 @Path("/backups/get/{id}")
+     @GET
+     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+     public WorkflowBackup getWorkflowBackup(@PathParam("id") Long workflowId) throws EntityNotFoundException
+     {
+         WorkflowBackup backup =  WorkflowBackupUtil.getWorkflowBackup(workflowId);
+         
+         if(backup == null)
+                 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
+         
+         return backup;
+     }
+
 }

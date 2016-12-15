@@ -75,7 +75,7 @@
 
             var $uploadImageButton = $('button#uploadImageButton');
             var uploadImageButtonHtml = $uploadImageButton.html();
-            $uploadImageButton.html(uploadImageButtonHtml + " ...");
+            $uploadImageButton.html(uploadImageButtonHtml + "ing ...");
             
             var fileInput = document.getElementById('imageFile');
             var file = fileInput.files[0];

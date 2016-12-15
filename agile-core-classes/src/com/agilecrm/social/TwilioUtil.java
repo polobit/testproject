@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
@@ -15,11 +16,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
+import com.campaignio.tasklets.sms.SendMessage;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestException;
@@ -708,8 +715,8 @@ public class TwilioUtil
 	public static String createAppSidTwilioIO(String accountSID, String authToken, String numberSid, String record,
 			String twimletUrl) throws Exception
 	{
-		// Get current logged in agile user
-		Long agileUserID = AgileUser.getCurrentAgileUser().id;
+	    	    	
+	    	Long agileUserID = AgileUser.getCurrentAgileUser().id;
 		// Encode twimlet url
 		String twimletUrlToSend = URLEncoder.encode(twimletUrl, "UTF-8");
 		// Get Twilio client configured with account SID and authToken
@@ -727,9 +734,18 @@ public class TwilioUtil
 		 */
 
 		// For Main
-		params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
-				+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
-
+		
+		// dut to domain issue we are hard coding the domain to our which will work for all the domain....
+		// this changed is being done in one more file name named voicecallutil.java
+		//--params.put("VoiceUrl", "https://" + NamespaceManager.get() + ".agilecrm.com/twilioiovoice?record=" + record
+		//--		+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		
+			
+		
+		params.put("VoiceUrl", "https://our.agilecrm.com/twilioiovoice?record=" + record
+						+ "&agileuserid=" + agileUserID + "&twimleturl=" + twimletUrlToSend);
+		
+		
 		// For Beta
 		/*
 		 * params.put("VoiceUrl", "https://" + NamespaceManager.get() +
@@ -738,10 +754,14 @@ public class TwilioUtil
 		 * twimletUrlToSend);
 		 */
 
+		
+		//  params.put("VoiceUrl", "https://our-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?record=" +
+		//  record + "&agileuserid=" + agileUserID+ "&twimleturl=" +twimletUrlToSend);
+		 
+		
 		// For Version
 		
-		/*  params.put("VoiceUrl", "https://" + NamespaceManager.get() +
-		  "-dot-29-0-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
+		/*  params.put("VoiceUrl", "https://our-dot-33-3-dot-agile-crm-cloud.appspot.com/twilioiovoice?record=" +
 		  record + "&agileuserid=" + agileUserID + "&twimleturl=" +
 		  twimletUrlToSend);*/
 		 
@@ -956,7 +976,7 @@ public class TwilioUtil
 			return logs;
 		}
 	}
-	
+
 	/**
 	 * join client to conference call.
 	 * 
@@ -1048,6 +1068,8 @@ public class TwilioUtil
 			}
 			
 				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+			//params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+			
 				params.put("Method", "POST");
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/" +childCallSid, "POST", params);
 				System.out.println("respomse for modify call is -" + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
@@ -1170,4 +1192,192 @@ public class TwilioUtil
 		return number;
 	}
 	
+	public static String createSMSAppSidTwilioIO(String accountSID, String authToken, String numberSid) throws Exception
+	{
+            	
+        	// Get Twilio client configured with account SID and authToken
+        	TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
+        
+        	// parameters required to create application
+        	Map<String, String> params = new HashMap<String, String>();
+        	params.put("FriendlyName", "Agile CRM Twilio SMS");        
+        	params.put("SmsUrl", "https://"+  NamespaceManager.get()  +".agilecrm.com/msgReplyActionUrl");     
+        	params.put("SmsMethod", "POST");
+        
+        	// Make a POST request to create application
+        	TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
+        			+ "/Applications.json", "POST", params);
+        
+        	/*
+        	 * If error occurs, throw exception based on its status else return
+        	 * application SID
+        	 */
+        	if (response.isError()){
+        		throwProperException(response);
+        	}
+        
+        	String appSid = new JSONObject(response.getResponseText()).getString("sid");
+        
+        	/* ****** Add application to twilio number ***** */
+        	if (!numberSid.equalsIgnoreCase("None"))
+        	{
+        		// parameters required to create application
+        		params = new HashMap<String, String>();
+        		params.put("SmsApplicationSid", appSid);        
+        		// Make a POST request to add application to twilio number
+        		// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
+        		response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
+        				+ numberSid, "POST", params);
+        		if (response.isError()){
+        			throwProperException(response);
+        		}
+        	}
+        	return appSid;
+	}
+	
+	//checking smsapppsid and from number present in integration or not 
+	public static void checkSidAndFromNumber(Widget twilioObj,String num)
+	{
+ 	    try{
+ 		JSONObject jsonObj=new JSONObject(twilioObj.prefs);
+             	if(!jsonObj.has("replynumber") && !jsonObj.has("smsappSid"))              		
+              		setSmsSidAndFromNUmber(twilioObj,num);
+             	else if(jsonObj.get("replynumber")!=null || !jsonObj.get("replynumber").toString().isEmpty()){
+             	    if(!num.equalsIgnoreCase(jsonObj.get("replynumber").toString()))
+             		setSmsSidAndFromNUmber(twilioObj,num);
+             	}    	    	
+             	    
+ 	    }
+ 	   catch (Exception e)
+ 	    {
+ 		e.printStackTrace();
+ 		System.out.println(ExceptionUtils.getFullStackTrace(e));
+ 		
+ 	    }
+	}
+	//set smsappsid and from number if not present
+ 	public  static void setSmsSidAndFromNUmber(Widget twilioObj,String num)
+	{
+ 	  try
+ 	    {
+         	    String numberSid=null;
+              	    String applicationSid=null;   
+              	    String accId = TwilioUtil.getAccountSID(twilioObj);
+              	    String authToken= TwilioUtil.getAuthToken(twilioObj);
+              	    JSONObject jsonObj=new JSONObject(twilioObj.prefs);
+         	    TwilioRestClient client = new TwilioRestClient(accId, authToken, null);
+         	    TwilioRestResponse response = client.request(
+        				"/" + TwilioUtil.APIVERSION + "/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers.xml?PhoneNumber="+URLEncoder.encode(num, "UTF-8"), "GET",
+        				null);	
+         	    JSONObject result = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse").getJSONObject("IncomingPhoneNumbers"); 
+         	    numberSid=result.getJSONObject("IncomingPhoneNumber").get("Sid").toString();             		
+        	   
+         	    applicationSid= TwilioUtil.createSMSAppSidTwilioIO(accId, authToken,numberSid);
+         	    jsonObj.put("smsappSid", applicationSid);
+         	    jsonObj.put("replynumber", num);
+         	    twilioObj.prefs=jsonObj.toString();
+         	    ObjectifyGenericDao<Widget> dao = new ObjectifyGenericDao<Widget>(Widget.class);
+         	    dao.put(twilioObj);
+ 	    }
+ 	  catch (Exception e)
+ 	    {
+ 		e.printStackTrace();
+ 		System.out.println(ExceptionUtils.getFullStackTrace(e));
+ 		
+ 	    }
+	}    
+ 	
+ 	
+ 	/**
+	 * Call Transfer
+	 * 
+	 * @author Rajesh
+	 * @created 23-Nov-2016
+	 * 
+	 */
+ 	
+	public static String transferCall(Widget widget, String from, String to, String callSid, String direction)
+			throws JSONException, Exception
+	{
+		String status = "400";
+		try
+		{
+			System.out.println("In transfer call method");
+			String account_sid = widget.getProperty("twilio_acc_sid");
+			String auth_token = widget.getProperty("twilio_auth_token");
+			
+			TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+			String record = widget.getProperty("twilio_record");
+			
+			Map<String, String> params = new HashMap<String, String>();
+			String childCallSid = "";
+
+			// we only need the to number to forward so we find the call sid which have to number
+			if(direction.equalsIgnoreCase("Outgoing")){
+				params.put("ParentCallSid", callSid);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json",
+						"GET", params);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				JSONArray calls = responseTextJson.getJSONArray("calls");
+				JSONObject call = (JSONObject) calls.get(0);
+				childCallSid = call.getString("sid");
+				System.out.println("child call sid is " +  childCallSid);
+			}else{
+				childCallSid = callSid;
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
+						+ callSid + ".json", "GET", null);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				childCallSid = responseTextJson.getString("parent_call_sid");
+			}
+			
+			
+			//Map<String, String> params = new HashMap<String, String>();
+				params.put("From",from);
+				params.put("To", to);
+				params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+childCallSid, "POST", params);
+				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
+				JSONObject callResponse = responseTextJson.getJSONObject("Call");
+				if(callResponse == null){
+					callResponse = responseTextJson.getJSONObject("RestException");
+				}
+				if(callResponse != null){
+					status = callResponse.getString("Status");
+				}
+				System.out.println("status for adding in conference is " + status);
+				return status;
+		}
+		catch (Exception e)
+		{
+			System.out.println( "Error occured in adding call to conference" + e.getMessage());
+		}
+		return status;
+	}
+	
+	public static JSONArray getTwillioUsersAndNumbers() throws JSONException{
+		JSONArray result = null;
+		List<Widget> widgetList =  WidgetUtil.getActiveWidgetsByName("TwilioIO");
+		if(widgetList != null){
+			result = new JSONArray();
+			for (Widget widget : widgetList) {
+				JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
+				
+				AgileUser agileUser = AgileUser.getCurrentAgileUser(widget.getUserID());
+				DomainUser domainUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);			
+				JSONObject object = new JSONObject();
+				object.put("username", domainUser.name);
+				object.put("domainUserId", domainUser.id);
+				object.put("twillioNumber", widgetPrefs.get("twilio_number"));	
+				object.put("pic", domainUser.pic);	
+				object.put("domainusernumber", domainUser.phone);	
+				result.put(object);
+			}
+		}
+		return result;
+		
+	}
 }

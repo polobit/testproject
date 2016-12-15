@@ -18,9 +18,16 @@ var ContactSearchRouter = Backbone.Router.extend({
 	{
 		try{query = query.trim();}catch(e){}
 
-		if ( $.trim(query) == '' )
-    			return;
-    		
+		if ($.trim(query) == ''){
+			$(".dashboard-search-scroll-bar").hide();
+			return;
+		}
+    	if(!isQueryTextSearchValid(query)){    		
+			var txt = '<div id="search-results-container"><div class="wrapper-md lter bg-light b-b"><div class="row"><div class="col-md-12"><div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3 pull-left">{{agile_lng_translate "specialchar-typeahead" "error-input"}}</div><div class="pull-right"><div class="btn-group" id="view-list"></div><div class="btn-group right" id="filter-list"></div></div><div class="clearfix"></div></div></div></div></div>' ;
+			$("#content").html(txt);
+			return false;
+		}
+
     	$('.searchicon-dropdown').removeClass('open');
 		
 		 $("#searchForm").find(".dashboard-search-scroll-bar").css({"display":"none"});
@@ -70,11 +77,66 @@ var ContactSearchRouter = Backbone.Router.extend({
 									$("#search-query-heading", el).html('{{agile_lng_translate "contact-details" "no-matches-found-for"}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
 								else
 									$("#search-query-heading", el).html('{{agile_lng_translate "contact-details" "search-results-for"}} "' + query + '" {{agile_lng_translate "contacts-view" "in"}} <span style="font-weight:600;">' + module_name);
+
+								agileTimeAgoWithLngConversion($("time", el));
+							},
+							appendItemCallback: function(el) 
+							{
+                            	agileTimeAgoWithLngConversion($("time", el));
+                        	},
+							infini_scroll_cbk : function(ele)
+							{
+								//This will update the table sorting functionality with added new rows
+								$("table", ele).trigger("update");
+
+								$("table > thead > tr > th", ele).each(function(){
+									//If any table header contians "headerSortDown" or "headerSortUp", 
+									//sort is performed on that header
+									if($(this).hasClass("headerSortDown") || $(this).hasClass("headerSortUp"))
+									{
+										//Trigger table header click action twice to set the correct sort order
+										//and don't use dbclick to perform this
+										$(this).trigger("click");
+										$(this).trigger("click");
+									}
+								});
 							} });
 						
 							// If in case results in different page is clicked before
 							// typeahead fetch results, then results are fetched here
-							searchResultsView.collection.fetch();
+							searchResultsView.collection.fetch({
+								success : function (){},
+								error : function(data)
+								{
+									hideTransitionBar();
+									if(data.url && data.url.endsWith('person'))
+									{
+										$('#search-results-container').find('#search_content_person').html(getTemplate("search-collection" , {}));
+										$("#search_content_person").find('#search-query-heading').html('Search input is not supported in <b>Contacts </b>');
+									}
+									else if(data.url && data.url.endsWith('company'))
+									{
+										$('#search-results-container').find('#search_content_company').html(getTemplate("search-collection" , {}));
+										$("#search_content_company").find('#search-query-heading').html('Search input is not supported in <b>Companies </b>');
+									}
+									else if(data.url && data.url.endsWith('document'))
+									{
+										$('#search-results-container').find('#search_content_document').html(getTemplate("search-collection" , {}));
+										$("#search_content_document").find('#search-query-heading').html('Search input is not supported in <b>Documents </b>');
+									}
+									else if(data.url && data.url.endsWith('opportunity'))
+									{
+										$('#search-results-container').find('#search_content_opportunity').html(getTemplate("search-collection" , {}));
+										$("#search_content_opportunity").find('#search-query-heading').html('Search input is not supported in <b>Deals </b>');
+									}
+									else if(data.url && data.url.endsWith('tickets'))
+									{
+										$('#search-results-container').find('#search_content_tickets').html(getTemplate("search-collection" , {}));
+										$("#search_content_tickets").find('#search-query-heading').html('Search input is not supported in <b>Tickets </b>');
+									}					
+
+								}
+							});
 						    $('#search-results-container').find('#search_content_'+search_list_filters[i]).html(searchResultsView.render().el);
 
 		 }
@@ -106,6 +168,8 @@ var ContactSearchRouter = Backbone.Router.extend({
 			return "documents-search";
 		else if(module_name == "tickets")
 			return "tickets-search";
+		else if(module_name == "lead")
+			return "lead-search";
 	},
 	getModuleName : function(url){
 		if(url.indexOf("type=person") != -1){
@@ -122,6 +186,9 @@ var ContactSearchRouter = Backbone.Router.extend({
 		}
 		else if(url.indexOf("type=tickets") != -1){
 			return "{{agile_lng_translate 'report-view' 'tickets'}}";
+		}
+		else if(url.indexOf("type=lead") != -1){
+			return "{{agile_lng_translate 'menu' 'leads'}}";
 		}
 	},
 });

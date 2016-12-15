@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <queue-entries>
   <queue>
+    <name>mobile-notification-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+  </queue>
+  
+  <queue>
+    <name>app-error-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>40</max-concurrent-requests>
+  </queue>
+  
+  <queue>
     <name>campaign-queue</name>
     <rate>10/s</rate>
     <bucket-size>10</bucket-size>
@@ -22,9 +36,19 @@
   </queue>
   <queue>
     <name>bulk-campaign-queue</name>
-    <rate>10/s</rate>
-    <bucket-size>50</bucket-size>
-    <max-concurrent-requests>50</max-concurrent-requests>
+    <rate>100/s</rate>
+    <bucket-size>100</bucket-size>
+    <!-- <max-concurrent-requests>100</max-concurrent-requests> -->
+    <retry-parameters>
+    <task-retry-limit>0</task-retry-limit>
+  </retry-parameters>
+  <target>agile-campaigns-bulk</target>
+  </queue>
+  <queue>
+    <name>bulk-campaign-queue-1</name>
+    <rate>100/s</rate>
+    <bucket-size>100</bucket-size>
+    <!-- <max-concurrent-requests>100</max-concurrent-requests> -->
     <retry-parameters>
     <task-retry-limit>0</task-retry-limit>
   </retry-parameters>
@@ -32,9 +56,9 @@
   </queue>
   <queue>
     <name>normal-campaign-queue</name>
-    <rate>10/s</rate>
-    <bucket-size>10</bucket-size>
-    <max-concurrent-requests>40</max-concurrent-requests>
+    <rate>100/s</rate>
+    <bucket-size>100</bucket-size>
+    <!--<max-concurrent-requests>100</max-concurrent-requests>-->
     <retry-parameters>
     <task-retry-limit>0</task-retry-limit>
   </retry-parameters>
@@ -92,11 +116,22 @@
   </queue>
   <queue>
     <name>periodic-triggers-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>5</max-concurrent-requests>
+    <rate>20/s</rate>
+    <bucket-size>40</bucket-size>
+    <max-concurrent-requests>10</max-concurrent-requests>
     <retry-parameters>
-    <task-retry-limit>1</task-retry-limit>
+    <task-retry-limit>5</task-retry-limit>
   </retry-parameters>
+  <target>agile-normal-bulk</target>
+  </queue>
+  <queue>
+    <name>periodic-triggers-cron-queue</name>
+    <rate>2/s</rate>
+    <bucket-size>5</bucket-size>
+    <max-concurrent-requests>1</max-concurrent-requests>
+    <retry-parameters>
+    	<task-retry-limit>10</task-retry-limit>
+  	</retry-parameters>
   <target>agile-normal-bulk</target>
   </queue>
    <queue>
@@ -118,8 +153,8 @@
   </queue>
     <queue>
     <name>contact-sync-queue</name>
-    <rate>2/s</rate>
-    <max-concurrent-requests>10</max-concurrent-requests>
+    <rate>80/s</rate>
+    <bucket-size>100</bucket-size>
     <retry-parameters>
     <task-retry-limit>1</task-retry-limit>
   </retry-parameters>
@@ -369,6 +404,16 @@
     <task-retry-limit>2</task-retry-limit>
   </retry-parameters>
   </queue>
+  
+  <queue>
+    <name>credits-auto-renewal-queue</name>
+    <rate>10/s</rate>
+    <bucket-size>10</bucket-size>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+    <task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
 
   <queue>
     <name>company-update-queue</name>
@@ -392,6 +437,16 @@
       <max-backoff-seconds>300</max-backoff-seconds>
     </retry-parameters>
     <target>agile-slow-tasks-handler</target>
+  </queue>
+  
+  <queue>
+    <name>cron-pull-task-queue</name>
+    <rate>50/s</rate>
+    <bucket-size>50</bucket-size>
+    <max-concurrent-requests>50</max-concurrent-requests>
+    <retry-parameters>
+    	<task-retry-limit>1</task-retry-limit>
+  	</retry-parameters>
   </queue>
   
   <!-- pull queues -->
@@ -428,6 +483,14 @@
   
   <queue>
   <name>bulk-campaign-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+      <task-retry-limit>2</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+   <queue>
+  <name>bulk-campaign-pull-queue-1</name>
   <mode>pull</mode>
   <retry-parameters>
       <task-retry-limit>2</task-retry-limit>

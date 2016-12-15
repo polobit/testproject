@@ -12,6 +12,7 @@ $(function()
 	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
 	{
 	  	e.preventDefault();
+	  	e.stopPropagation();
 		if(checkForActiveCall()){
 			$('#briaInfoModal').html(getTemplate("briaCallStatusModal"));
 			$('#briaInfoModal').modal('show');
@@ -19,7 +20,9 @@ $(function()
 		}
 		var action ={};
 	  	action['command'] = "startCall";
-	  	action['number'] = $(this).closest(".contact-make-call").attr("phone");
+	  	var callNumber = $(this).closest(".contact-make-call").attr("phone");
+	  	generateNumberAndExtension(callNumber, action);
+	  	//action['number'] = $(this).closest(".contact-make-call").attr("phone");
 	  	action['callId'] = "";
 
 	  	
@@ -43,9 +46,12 @@ $(function()
 	$('body').on('click', '.Skype_call', function(e)
 			{
 			  	e.preventDefault();
+			  	e.stopPropagation();
 				var action ={};
 			  	action['command'] = "startCall";
-			  	action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
+			  	var callNumber = $(this).closest(".contact-make-call-div").children().first().attr("phone");
+			  	generateNumberAndExtension(callNumber, action);
+			  	//action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
 			  	action['callId'] = "";
 			  	
 				if(checkForActiveCall()){
@@ -108,6 +114,7 @@ $(function()
 			e.preventDefault();
 			var json = {"command" : "ignoreCall"};
 		  	var action = makeCallAction(json);
+		  	//globalCall.callStatus = "Missed";
 		  	sendActionToClient(action);
 		  	globalCallForActivity.answeredByTab = true;
 		  	play_sound("dtmf");
@@ -140,7 +147,7 @@ $(function()
 		
 		e.preventDefault();
 		if(globalCall.lastSent){
-			if(globalCall.lastSent == "endCall"){
+			if(globalCall.lastSent == "cancelCall"){
 				console.log("duplicate command recived endCall");
 				closeCallNoty(true);
 				return;
@@ -318,6 +325,11 @@ function sendActionToClient(action){
 	var number = action.number;
 	var callid = action.callId;
 	var client = globalCall.calledFrom;
+	var extension = "";
+	
+	if(action['extension']){
+		extension = action['extension'];
+	}
 	
 	if(command == "startCall"){
 		var btns = [];
@@ -363,7 +375,22 @@ function sendActionToClient(action){
 			return;
 		}
 	};
-	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+"?";
+	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+";extension="+extension+"?";
 }
 
 
+function generateNumberAndExtension(number, json){
+	var num = "";
+	var ext = "";
+	
+	if(number && number.indexOf(";") != -1){
+		ext = number.split(";")[1];
+		num = number.split(";")[0];
+	}else{
+		num = number;
+	}
+
+	json['number'] = num;
+	json['extension'] = ext;
+	return;
+}

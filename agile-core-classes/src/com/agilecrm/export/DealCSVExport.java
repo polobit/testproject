@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.CategoriesUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Milestone;
@@ -21,7 +23,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * <code>DealCSVExport</code> handles building CSV file for obtained Deals.
@@ -48,6 +49,10 @@ public class DealCSVExport
     public static final String CREATED_DATE = "Created Date";
     public static final String WON_DATE = "Won Date";
     public static final String ID = "Deal ID";
+    public static final String TAGS = "Tags";				
+    public static final String TAGS_TIME_EPOCH = "Tags Time Epoch";	
+    public static final String TAGS_TIME = "Tags Time";	
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
     private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -118,23 +123,51 @@ public class DealCSVExport
 			if(index){
 				// this is either contact or company type
 				//fetch the conntact r company
-			List<Contact> customContacts = ContactUtil.getContactsBulk(new JSONArray(field.value));
-			if(customContacts.size() > 0){
-				StringBuffer nameString = new StringBuffer("[");
-				for(Contact cont : customContacts){
-					if(cont.type.equals(Contact.Type.PERSON)){
-						nameString.append(cont.first_name);
-						nameString.append(cont.last_name);
-						
-					}else{
-						nameString.append(cont.name);
-					}
-					nameString.append(",");
+				JSONArray customFieldsArray = null;
+	    		try {
+	    			JSONParser parser = new JSONParser();
+	    			customFieldsArray = (JSONArray)parser.parse(field.value);
+				} catch (Exception e) {
+					System.out.println("Exception occured while converting contact and company type custom fields JSON string to array");
+					e.printStackTrace();
 				}
-				nameString.replace(nameString.length()-1, nameString.length(), "");
-				nameString.append("]");
-				str[indexMap.get(field.name+" Name")] = nameString.toString();
-			}
+				List<Contact> customContacts = null;//ContactUtil.getContactsBulk(new JSONArray(field.value));
+				if(customFieldsArray != null && customFieldsArray.size() > 0)
+				{
+					customContacts = ContactUtil.getContactsBulk(new org.json.JSONArray(customFieldsArray.toJSONString()));
+				}
+				if(customContacts != null && customContacts.size() > 0){
+					StringBuffer nameString = new StringBuffer("[");
+					for(Contact cont : customContacts){
+						List<ContactField> prop = cont.properties ;
+						if(cont.type.equals(Contact.Type.PERSON)){
+							String fname = null ; String lname = null; 
+		    				for(int k=0;k<prop.size();k++){
+		    					if(prop.get(k).name.equals("first_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+		    						fname = prop.get(k).value ;
+		    					else if(prop.get(k).name.equals("last_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+		    						lname = prop.get(k).value ;
+		    				}
+		    				nameString.append(fname);
+		    				if(lname != null)
+		    					nameString.append(" "+lname);
+							
+						}else{	
+							String name = null;
+							for(int k=0;k<prop.size();k++){
+		    					if(prop.get(k).name.equals("name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM)){
+		    						name = prop.get(k).value ;
+		    						break;
+		    					}
+		    				}
+		    				nameString.append(name);
+						}
+						nameString.append(",");
+					}
+					nameString.replace(nameString.length()-1, nameString.length(), "");
+					nameString.append("]");
+					str[indexMap.get(field.name+" Name")] = nameString.toString();
+				}
 			}
 		}catch(Exception e){
 		}
@@ -177,6 +210,12 @@ public class DealCSVExport
 		d.setTime(deal.won_date * 1000);
 		str[indexMap.get(WON_DATE)] = date.format(d);
 	    }
+	    
+	    String[] tagWithTimes = getDealTagsWithTimes(deal);
+	    
+		str[indexMap.get(TAGS)] = tagWithTimes[0];
+	    str[indexMap.get(TAGS_TIME)] = tagWithTimes[2];
+	    str[indexMap.get(TAGS_TIME_EPOCH)] = tagWithTimes[1];
 
 	}
 	catch (ParseException e)
@@ -211,5 +250,27 @@ public class DealCSVExport
 	}
 
 	return "";
+    }
+    public static String[] getDealTagsWithTimes(Opportunity deal){
+    	String tags = "";
+    	String tagTimes = "";
+    	String tagTimesNew = "";
+
+    	for (Tag tag : deal.tagsWithTime)
+    	{
+    	    tags += tag.tag + ",";
+    	    if(tag.createdTime!=0)
+    	    {
+    	    	tagTimes += tag.createdTime;
+    	    	Date date = new Date();
+        		date.setTime(tag.createdTime);	
+        	    tagTimesNew += dateTimeFormat.format(date);
+    	    }
+    	    tagTimes +=",";
+    	    tagTimesNew += ",";
+    	}
+
+    	// Return array having tags and tagTimes without trailing commas
+    	return new String[] { StringUtils.chop(tags), StringUtils.chop(tagTimes), StringUtils.chop(tagTimesNew)};
     }
 }

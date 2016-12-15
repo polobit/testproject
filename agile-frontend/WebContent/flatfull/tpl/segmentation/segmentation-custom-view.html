@@ -3,11 +3,36 @@
 {{#hasMenuScope 'VISITORS'}}
 {{#is_mobile}}
 <!-- Newly Added -->
+
+<!--  start visitorFilters Tab section -->
+<div class="content-tabs-show m-none visitor-filters-tab" id="visitorFilters" role="tablist" aria-multiselectable="true">
+     <div class="panel panel-default m-b-sm bg-transparent">
+       <div class="panel-heading" role="tab" id="headingOne">
+         <h4 class="panel-title">
+           <a role="button" data-toggle="collapse" data-parent="#visitorFilters" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"  class="collapsed" style="padding-left:17px;">
+             Filters
+           </a>
+         </h4>
+       </div>
+       <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+         <div class="panel-body">
+               <div class="" id="segmentation-lhs-filters-toggle" >
+               <div class="data-block">
+               <div id="lhs_filters_segmentation">
+               </div>
+               </div>
+         </div>
+       </div>
+     </div>  
+</div>
+
+<!--  end visitorFilters Tab section -->
+
 <div class="hbox hbox-auto-xs hbox-auto-sm">
 <div class="">
    <div id="right-pane">
       <div class="visitors-div">
-         <div class="dta-contatiner table-responsive m-r-sm b-n">
+         <div class="dta-contatiner table-responsive b-n">
             <div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
                {{#unless this.length}}
                <div class="m-l-sm" id="slate">
@@ -57,7 +82,7 @@
             <div id="activities_date_range" class="btn-group pull-right activity-date-filter c-p m-r m-t-none">
                <span class="inline-block" style="padding: 3px 10px;">
                <i class="icon-calendar icon-large m-r-xs"></i>
-               <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-6"}}</span>
+               <span id="range" class="text-xs" style="vertical-align: text-top;">{{date-range "today" "-1"}}</span>
                </span>
                <span class="inline-block" style="padding: 4px 6px;border-left: 1px solid #eee;">
                <span class="caret  inline-block p-t-xs"></span>
@@ -144,20 +169,47 @@
 
 
 <script id="segmentation-custom-view-model-template" type="text/html"> 
+{{#is_mobile}}
+
 <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
-<td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
-<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:20em;" {{/is_mobile}}>
-<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+<td class="data icon-append-mobile p-r-none" data="{{id}}" style="padding:10px 15px !important;" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<div class="table-resp" style="width:calc(100vw - 45px);">
+<div class="agile-img m-r-sm thumb-small" style="margin-right:10px">
    {{#if id}}
-   <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+   <img class="img-inital r r-2x"  title="{{contact_name_necessary this}} " data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
    {{else}}
-   <img src="{{defaultGravatarurl 36}}"/>
+   <img class="r r-2x" src="{{defaultGravatarurl 36}}"/>
    {{/if}}
 </div>
-<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 50px); margin-top:-5px;">
 {{#if id}}
 <a class="text-cap custom-link">{{getPropertyValue properties "first_name"}}
 {{getPropertyValue properties "last_name"}} </a>
+<div><small class="text-muted  block text-ellipsis l-h-xs">{{getPropertyValue properties "email"}}</small></div>
+{{else}}
+<span class="text-cap custom-link">{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}} </span>
+<div><small class="text-muted  block text-ellipsis l-h-xs">{{getPropertyValue properties "email"}}</small></div>
+{{/if}}
+</div>  
+</div>
+</td>
+
+
+{{else}}
+
+<td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
+<td class="data icon-append-mobile" data="{{id}}" style="{{#if id}}{{else}} cursor:default;{{/if}}">
+<div class="table-resp" style="width:20em;">
+<div class="agile-img m-r-sm thumb-sm" style="margin-right:10px">
+   {{#if id}}
+   <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+   {{else}}
+   <img class="r r-2x" src="{{defaultGravatarurl 36}}"/>
+   {{/if}}
+</div>
+<div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
+{{#if id}}
+<a class="text-cap custom-link">{{contact_name_necessary this}}</a>
 <div><small class="text-muted  block text-ellipsis">{{getPropertyValue properties "email"}}</small></div>
 {{else}}
 <span class="text-cap custom-link">{{agile_lng_translate 'contact-details' 'someone-visited-your-website'}} </span>
@@ -190,6 +242,8 @@
    </ul>
    {{/if}}
 </td>
+
+{{/is_mobile}}
   
 </script>
 
@@ -200,7 +254,7 @@
 <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:20em;" {{/is_mobile}}>
 <div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
    {{#if id}}
-   <img class="img-inital r r-2x"  title="{{getPropertyValue properties 'first_name'}} {{getPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+   <img class="img-inital r r-2x"  title="{{contact_name_necessary this}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
    {{else}}
    <img src="{{defaultGravatarurl 36}}"/>
    {{/if}}

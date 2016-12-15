@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.json.JSONException;
 
 import net.sf.json.JSONObject;
 
@@ -33,6 +35,8 @@ import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDefe
 import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException;
+import com.agilecrm.subscription.restrictions.exception.EmailPurchaseLimitCrossedException.Type;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.StripeUtil;
@@ -43,6 +47,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -154,6 +159,16 @@ public class SubscriptionApi {
 			queue.add(TaskOptions.Builder.withPayload(task));
 
 			return subscribe;
+		}catch (EmailPurchaseLimitCrossedException e){
+			org.json.JSONObject json = new org.json.JSONObject();
+			try {
+				json.put("type", Type.BULK_EMAIL_PURCHASE_EXCEPTION);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(json.toString())
+					.build());
 		} catch (PlanRestrictedException e) {
 			throw e;
 		} catch (WebApplicationException e) {
@@ -221,31 +236,20 @@ public class SubscriptionApi {
 	 * @param plan
 	 *            {@link Plan}
 	 * @return
+	 * @throws Exception 
 	 */
 	@Path("/change-email-plan")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Subscription addEmailPlan(Plan plan) {
-		try {
-			DomainUser user = DomainUserUtil.getCurrentDomainUser();
-			if (!user.is_admin)
-			{
-				throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
-			}
-			// Return updated subscription object
-			return SubscriptionUtil.createEmailSubscription(plan);
-		} catch (PlanRestrictedException e) {
-			System.out.println("excpetion plan exception");
-			throw e;
-		} catch (WebApplicationException e) {
-			throw e;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
+	public Subscription addEmailPlan(Plan plan) throws Exception{
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		if (!user.is_admin)
+		{
+			throw new Exception("Sorry. Only users with admin privileges can change the plan. Please contact your administrator for further assistance.");
 		}
+		// Return updated subscription object
+		return SubscriptionUtil.createEmailSubscription(plan);
 
 	}
 
@@ -380,6 +384,7 @@ public class SubscriptionApi {
 		try {
 			SubscriptionUtil.getSubscription().cancelSubscription();
 		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -471,7 +476,7 @@ public class SubscriptionApi {
 				}
 			}else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)) {
 				System.out.println("plan upgrade not possible");
-				Map<String, Map<String, Integer>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
+				Map<String, Map<String, Object>> restrictions = BillingRestrictionUtil.getInstanceTemporary(plan).getRestrictions();
 				restrictionsJSONString = new Gson().toJson(restrictions);
 			}
 			Invoice invoice = subscription.getUpcomingInvoice(plan);
@@ -483,6 +488,7 @@ public class SubscriptionApi {
 			String invoiceJSONString = new Gson().toJson(invoice);
 			return invoiceJSONString;
 		} catch (Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			throw new WebApplicationException(Response
 					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -521,9 +527,36 @@ public class SubscriptionApi {
 	{
 		Subscription subscription = SubscriptionUtil.getSubscription();
 		try {
+			if(SubscriptionUtil.isEmailsPurchaseStatusBlocked(subscription))
+				throw new Exception(ExceptionUtil.EMAILS_PURCHASE_BLOCKED);
 			subscription.purchaseEmailCredits(quantity);
+		}catch (EmailPurchaseLimitCrossedException e){
+			org.json.JSONObject json = new org.json.JSONObject();
+			try {
+				json.put("type", Type.BULK_EMAIL_PURCHASE_EXCEPTION);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(json.toString())
+					.build());
+		} catch (Exception e) {
+			throw new WebApplicationException(Response
+					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
+	// Auto Renewal Credits 
+	@Path("/auto_recharge")
+	@POST
+	public void autoRecharge(@FormParam("isAutoRenewalEnabled") Boolean isAutoRenewalEnabled, @FormParam("nextRechargeCount") Integer nextRechargeCount, @FormParam("autoRenewalPoint") Integer autoRenewalPoint)
+	{
+		try {
 			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
-			restriction.incrementEmailCreditsCount(quantity*1000);
+			restriction.isAutoRenewalEnabled = isAutoRenewalEnabled;
+			restriction.nextRechargeCount = nextRechargeCount;
+			restriction.autoRenewalPoint = autoRenewalPoint;
 			restriction.save();
 		} catch (Exception e) {
 			throw new WebApplicationException(Response

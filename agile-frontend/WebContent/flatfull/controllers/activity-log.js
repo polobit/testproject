@@ -8,15 +8,23 @@ var ActivitylogRouter = Backbone.Router.extend({
     routes: {
         /* Shows page */
         "activities": "activities",
+        "navbar-activities/:id" : "navbarActivities",
         "contact-activities": "contactActivities",
         "contact-activities/:type": "contactActivities",
         "activities/campaign/:id" : "activities"
     },
-
+    navbarActivities :function(e)
+    {
+        navbarRoutes(e)
+        Backbone.history.navigate("activities", {
+            trigger: true
+        });
+    },
     activities: function(id) {
         if (!tight_acl.checkPermission('ACTIVITY'))
             return;
-
+        if(CURRENT_DOMAIN_USER.domain == "admin" && CURRENT_DOMAIN_USER.adminPanelAccessScopes.indexOf("VIEW_LOGS") == -1)
+            return  showNotyPopUp("information", 'You donot have the Privileges to Access this page ', "top", 6000);
         head.js(LIB_PATH + 'lib/date-charts-en.js', LIB_PATH + 'lib/date-range-picker.js' + '?_=' + _agile_get_file_hash('date-range-picker.js'), function() {
 
             $('#content').html("<div id='activities-listners'>&nbsp;</div>");
@@ -30,6 +38,43 @@ var ActivitylogRouter = Backbone.Router.extend({
                     DEAL_TRACKS_COUNT = count;
 
                     $('#activities-listners').html($(template_ui));
+
+                    var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+                    $(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
+                    $("."+dashboard_name+"-activitiesnavbar").addClass("agile-menuactive")
+                    var activities_list;
+                    if(!dashboard_name){
+                        var role = CURRENT_DOMAIN_USER.role;
+                        switch(role){
+                            case "SALES" :
+                                dashboard_name = "SalesDashboard";
+                                break;
+                            case "MARKETING" :
+                                dashboard_name = "MarketingDashboard";
+                                break;
+                            case "SERVICE" :
+                                dashboard_name = "dashboard";
+                                break;
+                        }
+                        
+                    }
+                    switch(dashboard_name){
+                         case "SalesDashboard" :
+                             activities_list = "sales-activity-list-header"
+                             break;
+                         case "MarketingDashboard" :
+                             activities_list = "marketing-activity-list-header"
+                             break;
+                         case "dashboard" :
+                             activities_list = "service-activity-list-header"
+                             break;
+                     }
+                     getTemplate(activities_list, {}, undefined, function(template) {
+ 
+                         if (!template)
+                             return;
+                         $(".dashboard-activities").append(template);
+                     });
 
                     initActivitiesDateRange();
 
@@ -50,14 +95,24 @@ var ActivitylogRouter = Backbone.Router.extend({
 
                     var activityFilters = JSON.parse(_agile_get_prefs(ACTIVITY_FILTER));
 
+                    var entityId;
+                    var entitytype_dashboard;
+                    if(activityFilters){
+                        if(activityFilters[dashboard_name] != undefined){
+                                entityId = activityFilters[dashboard_name].entityId;
+                                entitytype_dashboard = activityFilters[dashboard_name].entity;
+                                console.log("saddfasda");
+                        }
+                    }
+
                     var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
                     // fill workflows
                     fillSelect('user-select', 'core/api/users', 'domainuser', function fillActivities() {
                         $('#activities-listners').find("#user-select").append("<li><a href=''>" + _agile_get_translated_val('report-view', 'all-users') + "</a></li>");
-                        if (activityFilters && (activityFilters.user || activityFilters.entity)) {
+                        if (activityFilters &&  (activityFilters.user || entitytype_dashboard)) {
                             $('ul#user-select li a').closest("ul").data("selected_item", activityFilters.userId);
-                            $('ul#entity_type li a').closest("ul").data("selected_item", activityFilters.entityId);
+                            $('ul#entity_type li a').closest("ul").data("selected_item", entityId);
                             $('#selectedusername').html(activityFilters.user);
 
                                     //Campaing History
@@ -67,8 +122,8 @@ var ActivitylogRouter = Backbone.Router.extend({
                                    activityFilters.entity = _agile_get_translated_val("menu", "menu-campaigns");
                             }
                             
-                                $('#selectedentity_type').html(activityFilters.entity);
-                                $('.activity-sub-heading').html(activityFilters.entity);
+                                $('#selectedentity_type').html(entitytype_dashboard);
+                                $('.activity-sub-heading').html(entitytype_dashboard);
 
                         }
 
@@ -84,7 +139,7 @@ var ActivitylogRouter = Backbone.Router.extend({
             }, "#activities-listners");
 
             $(".active").removeClass("active");
-            $("#activitiesmenu").addClass("active");
+            
         })
     },
     contactActivities: function(id) { // begin contact activities

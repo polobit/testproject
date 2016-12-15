@@ -87,12 +87,12 @@
                   </div>
                   <div class="col-md-12  ticket-email b-a p-xs p-b-none r text-xs">
                     <div class="v-top">
-                      <ul class="cc-emails m-n p-n" name="cc_emails">
+                      <ul class="cc-emails m-n p-n ccemailul" name="cc_emails">
                           {{#each cc_emails}}
-                            <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{this}}" >
-                              <span class="farword_remove_email">
-                                <a class="m-r-xs" href="javascript:void(0);" >{{this}}</a>
-                                <a class="close farword_remove_email remove-ticket-cc-emails text-lg">&times</a>
+                            <li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block ccemail" data="{{this}}" >
+                              <span >
+                                <a class="m-r-xs" href="javascript:void(0);" style="vertical-align:middle;" >{{this}}</a>
+                                <a class="close  remove-ticket-cc-emails text-lg" style="float:none;vertical-align:middle;line-height:2px;">&times</a>
                               </span>
                             </li>
                           {{/each}}
@@ -212,7 +212,8 @@
           <div class="wrapper bg-light p-t-sm p-b-sm pos-rlt b-b">
             <div class="font-thin text-md m-t-none m-b-none inline-block ticket-subject-md 
             {{#is_mobile}}ticket-subj-block{{/is_mobile}}">
-               <i class="m-r-xs fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>  
+                
+                {{{get_status_label_details status}}}
 
                 {{subject}}
 
@@ -229,7 +230,11 @@
 
             <div class="btn-group m-l-xs">
 
-              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'not-spam'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-spam'}}{{/if_equals}}"></button>
+              <button class="btn-default w-xxs btn btn-sm p-ver-2  btn btn-sm " style="padding-left: 15px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_favorite "true"}}{{agile_lng_translate 'tickets' 'not-favourate'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-favourate'}}{{/if_equals}}">
+              <i style="font-size: 14px;" class="m-r-xs fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>
+              </button>
+
+              <button class="fa fa-ban btn btn-sm p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'unspam'}}{{else}}{{agile_lng_translate 'tickets' 'markspam'}}{{/if_equals}}"></button>
               
               <button class="fa fa-trash-o btn btn-sm p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'delete-ticket'}}">
               </button>
@@ -335,9 +340,9 @@
 
         <div class="btn-group dropdown m-l-xs pull-right">
           <a class="link-color text-sm"  id="macro_list" data-toggle="dropdown" aria-expanded="false">{{agile_lng_translate 'tickets' 'canned-responses'}} <span class="caret"></span></a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" style="width:300px;">
             {{#each canned_responses}}
-            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}>{{title}}</a></li>
+            <li class="text-cap" id="ticket_canned_response" rel="{{id}}"><a href="javascript:void(0);" id={{id}}><span class="text-flow-ellipsis word-break-all line-clamp-2" style="width: 160px;float: left;">{{title}}</span> <div class="text-muted" style="width:90px;text-overflow: ellipsis;overflow: hidden;float: right;white-space: nowrap">{{#if owner_name}}({{owner_name}}){{/if}}</div> <div style="clear:both;"></div></a></li>
             {{/each}}
           </ul>
         </div>
@@ -356,7 +361,7 @@
                       </ul> 
                     {{/if_equals}}
 
-                     <textarea id="reply_textarea" name="html_text" class="{{#is_mobile}}reply-textarea-h{{/is_mobile}} form-control required 
+                     <textarea  id="reply_textarea" name="html_text" class="{{#is_mobile}}reply-textarea-h{{/is_mobile}} form-control required 
                      {{#if_equals reply_type "forward"}}forward{{/if_equals}} 
                      {{#if_equals reply_type "reply"}}reply{{/if_equals}} 
                      {{#if_equals reply_type "comment"}} bg-lightyellow comment{{/if_equals}}
@@ -503,7 +508,7 @@
           </div>
           <div class="col-md-12 last-notes-drp-dwn p-b-sm">  
             <div id="recent-reply-notes" class="recent-reply-notes">
-              {{{first_notes_text}}}
+              {{first_notes_text}}
             </div>
           </div>
           {{#if_equals status 'NEW'}}
@@ -523,7 +528,7 @@
               </span>
             </div>
             <div id="recent-reply-notes" class="col-md-12 p-t-xs recent-reply-notes">
-              {{{last_reply_text}}}  
+              {{last_reply_text}}  
             </div>
           {{/if_equals}}
         </div>
@@ -560,12 +565,11 @@
       {{else}}
       <img src="{{getGravatarFromEmail requester_email 24}}"  class="r-5x" onerror="image_error(this);" _data-name="{{getInitials requester_name}}">
       {{/if}}
-
     </div>
     <div style="max-width: 210px; margin:auto;">
     <div class="text-md m-t-sm m-b-xxs overflow-elipsis m-b-none"> <span class="">
-        {{getPropertyValue properties "first_name"}}
-        {{getPropertyValue properties "last_name"}} 
+        {{contact_name_necessary this}}
+        
       </span>
     </div>
     <div class="overflow-elipsis m-b-none">
@@ -585,7 +589,7 @@
       {{#if tags}}
         <div>
           {{#each tags}}
-          <span class="label bg-light dk text-tiny first-letter-cap inline-block m-r-xxs">
+          <span class="label bg-light dk text-tiny first-letter-cap inline-block m-r-xxs ccemail">
             {{this}}
           </span>
           {{/each}}

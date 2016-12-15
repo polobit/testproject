@@ -11,6 +11,7 @@ var Tickets_Notes = {
 			  highlight : function(element, errorClass) {
 			   $(element).closest('div').addClass('has-error');
 			  },
+
 			 unhighlight : function(element, errorClass) {
 			   $(element).closest('div').removeClass('has-error');
 			  },
@@ -20,6 +21,7 @@ var Tickets_Notes = {
 		});
 
 		if(!$("#send-reply").valid()){
+
 
 			if($(e.target).hasClass('forward'))
 				this.forwardTicket(json, $save_btn, false);
@@ -211,8 +213,19 @@ var Tickets_Notes = {
 		Ticket_Utils.loadTextExpander(function()
 		{	
 			try{
+				
 				$('textarea#reply_textarea', $container).TextAreaExpander({'padding' : '8px 8px 1px 8px' });
 				$('textarea#reply_textarea', $container).css({'height':'60px'});
+
+				if(!$('textarea#reply_textarea', $container).hasClass('textareaclass')){
+		 	
+		 			$('textarea#reply_textarea', $container).on('focus',function(){
+
+ 					$('textarea#reply_textarea', $container).addClass('textareaclass');
+ 			}); 
+ 		}
+
+			
 			}catch(e){}
 		});
 
@@ -299,6 +312,7 @@ var Tickets_Notes = {
 			Ticket_Utils.loadInsertCursor(function()
 			{	
 				$container.find("#reply_textarea").insertAtCaret(message);
+			
 			});
 		})
 	},

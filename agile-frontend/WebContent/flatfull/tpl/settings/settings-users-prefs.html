@@ -1050,7 +1050,7 @@
                 </div>
             </div>
 <div class="control-group form-group hidden">
-                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminder'}}</label>
+                <label class="control-label col-sm-2">{{agile_lng_translate 'prefs-settings' 'event-reminders'}}</label>
                 <div class="controls col-sm-9">
                     <div class="checkbox">
 <label class="i-checks i-checks-sm">
@@ -1079,7 +1079,7 @@
 <div class="row">
 <div class="col-md-12">
 <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-9">
+            <div class="col-sm-offset-2 col-sm-9" id="save_changes_btn">
                 <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                 <!--<a href="#settings" class="btn btn-default btn-sm ">Cancel</a>-->
             </div>
@@ -1098,7 +1098,7 @@
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
-		<h3 class="modal-title">Avatars</h3>
+		<h3 class="modal-title">{{agile_lng_translate 'upload-image' 'avatars'}}</h3>
 	</div>
 	<div class="modal-body choose-avatars">
 		<table>
@@ -1120,10 +1120,12 @@
 	                         	<img class="preview-avatar  m-b-none thumb-avatar-wrapper" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{/if}}{{/getCurrentUserPrefs}}" />
                           	</a>  
                           	<div class="m-l-xs inline-block pull-left">
+                          	{{#is_mobile}} {{else}}
                           	<div>
                                   <input class="upload_prefs_s3 submit btn btn-sm  btn-primary m-t-xs" type="submit" id="user_prefs_image" value="{{agile_lng_translate 'others' 'upload'}}"/>
                                   <p class="help-block text-sm text-muted">{{agile_lng_translate 'settings' 'recomended-image-size'}}: 50px*50px.</p>
                                   </div>
+                             {{/is_mobile}}
                      </div>
                      <div class="clearfix"></div>
                          </div>

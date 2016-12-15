@@ -1,3 +1,4 @@
+<%@page import="com.agilecrm.user.util.AliasDomainUtil"%>
 <%@page import="com.agilecrm.util.CookieUtil"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
@@ -38,10 +39,11 @@ if (!StringUtils.isEmpty(password)) {
 	domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 
 	domainUser.password = EncryptDecryptUtil.decrypt(password);
-
+	String domain = domainUser.domain;
+	domainUser.domain = AliasDomainUtil.getCachedAliasDomainName(domainUser.domain);
 	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-			SendMail.FORGOT_PASSWORD, domainUser);
-	
+			SendMail.FORGOT_PASSWORD, domainUser, LanguageUtil.getUserLanguageFromDomainUser(domainUser));
+	domainUser.domain = domain;
 	success = LanguageUtil.getLocaleJSONValue(localeJSON, "we-sent-email");
 }
 else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
@@ -72,6 +74,7 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
 
 //Static images s3 path
 String S3_STATIC_IMAGE_PATH = VersioningUtil.getStaticFilesBaseURL().replace("flatfull/", "");
+String userAgent = request.getHeader("user-agent");
 %>
 <!DOCTYPE html>
 <html lang="<%=_LANGUAGE %>">
@@ -265,7 +268,7 @@ jQuery.validator.setDefaults({
 					  <input type='submit' value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "submit")%>' class='btn btn-lg btn-primary btn-block forgot_password_btn'>
 					  <div class="text-center m-t">
 					  	<%
-				    if (domainUser != null) {
+				    if (domainUser != null && !MobileUADetector.isiPhone(userAgent)) {
 				%>
 				<a href="#" id="resend-password" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "resend-password")%></a><br>
 				<%
@@ -293,10 +296,12 @@ jQuery.validator.setDefaults({
 
 			</form>
 			
+			<%if(!MobileUADetector.isiPhone(userAgent)) {%>
 			<div class="text-center text-white m-t m-b">
 	                 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?</small> <a href="/login" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "login")%></a><br/>
 	                 <small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%></small> <a href="/forgot-domain" class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "domain")%>?</a>
                </div>
+             <%} %>
              </div>
              </div>  
 		</div>

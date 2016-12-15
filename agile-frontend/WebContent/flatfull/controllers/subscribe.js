@@ -199,7 +199,12 @@ var SubscribeRouter = Backbone.Router
 
 				}, errorCallback : function(data)
 				{
-					showNotyPopUp("warning", data.responseText, "top");
+					if(data.responseJSON && data.responseJSON.type && data.responseJSON.type == "BULK_EMAIL_PURCHASE_EXCEPTION"){
+						showAlertModal("Thank you for Payment.</p><p>We are processing your request. Emails purchased will be credited to your account with in 24 Hours.</p><p>Please contact our customer support for any queries.", "alert", undefined, undefined, "Email Subscription");
+						window.location.href="#subscribe"
+					}
+					else	
+						showNotyPopUp("warning", data.responseText, "top");
 				}
 				/*
 				 * prePersist : function(el) { console.log(el); }
@@ -219,6 +224,10 @@ var SubscribeRouter = Backbone.Router
 			 */
 			subscribe : function(id, plan)
 			{
+				if(IS_IPHONE_APP){
+					// alert("No route with the name.");
+					return;
+				}
 
 				IS_HAVING_MANDRILL = false;
 				if(window.location.href.split("#")[1] == "subscribe")
@@ -648,8 +657,9 @@ var SubscribeRouter = Backbone.Router
 							.append(getTemplate("js-recent-invoice"));
 					return;
 				}
+				var pageSize = getMaximumPageSize();
 
-				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=20", templateKey : "invoice",
+				this.invoice = new Base_Collection_View({ url : "core/api/subscription/invoices" + "?page_size=pageSize", templateKey : "invoice",
 					window : 'subscribe', individual_tag_name : 'tr', sortKey : 'date', descending : true });
 
 				// Fetches the invoice payments
@@ -687,6 +697,92 @@ var SubscribeRouter = Backbone.Router
 				else{
 					that.subscribe();
 				}
+			},
+
+			aclAddon : function(){
+				var acl_addon_model_view = new ACL_Addon_Events_Model_View({
+					url:"core/api/addon/acl",
+					template:"acl-addon-model",
+					postRenderCallback: function(el){
+						var addOn = acl_addon_model_view.model.toJSON();
+						var quantity = addOn.aclUsers.length;
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
+							updatePriceAndQuantity(quantity, el);
+					}, noLoading : true,
+					saveCallback : function(data){
+						ADDON_INFO = data;
+						showNotyPopUp("information", "You have successfully updated your Add-on subscription.", "top");
+					}, errorCallback : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+					},saveAuth : function(el){
+						var btn = $(".save", el);
+						disable_save_button(btn);
+						addonPaymentPreprocess(el, "core/api/addon/aclRestriction");
+					}
+				});
+				$("#acl-addon-content").html(acl_addon_model_view.render().el);
+			},
+			campaignAddon : function(){
+				var campaign_addon_model_view = new Campaign_Addon_Events_Model_View({
+					url:"core/api/addon/campaign",
+					template:"campaign-addon-model",
+					postRenderCallback: function(el){
+						var addOn = campaign_addon_model_view.model.toJSON();
+						var quantity = addOn.campaignInfo.quantity;
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
+							updatePriceAndQuantity(quantity, el);
+					}, noLoading : true,
+					saveCallback : function(data){
+						ADDON_INFO = data;
+						showNotyPopUp("information", "You have successfully updated your Add-on subscription.", "top");
+					}, errorCallback : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+					},saveAuth : function(el){
+						var btn = $(".save", el);
+						disable_save_button(btn);
+						if(ADDON_INFO && ADDON_INFO.campaignInfo && ADDON_INFO.campaignInfo.quantity && ADDON_INFO.campaignInfo.quantity == $('.campaign_quantity:first', el).val()){
+							showAlertModal("change_campaigns_addon");
+							enable_save_button(btn);
+							return;
+						}
+						addonPaymentPreprocess(el, "core/api/addon/campaignRestriction");
+					}
+				});
+				$("#campaign-addon-content").html(campaign_addon_model_view.render().el);
+			},
+			triggerAddon : function(){
+				var trigger_addon_model_view = new Trigger_Addon_Events_Model_View({
+					url:"core/api/addon/trigger",
+					template:"trigger-addon-model",
+					postRenderCallback: function(el){
+						var addOn = trigger_addon_model_view.model.toJSON();
+						var quantity = addOn.triggerInfo.quantity;
+						if(quantity == 0)
+							$(".save", el).attr("disabled", "disabled");
+						else
+							updatePriceAndQuantity(quantity, el);
+					}, noLoading : true,
+					saveCallback : function(data){
+						ADDON_INFO = data;
+						showNotyPopUp("information", "You have successfully updated your Add-on subscription.", "top");
+					}, errorCallback : function(data){
+						showNotyPopUp("warning", data.responseText, "top");
+					},saveAuth : function(el){
+						var btn = $(".save", el);
+						disable_save_button(btn);
+						if(ADDON_INFO && ADDON_INFO.triggerInfo && ADDON_INFO.triggerInfo.quantity && ADDON_INFO.triggerInfo.quantity == $('.trigger_quantity:first', el).val()){
+							showAlertModal("change_triggers_addon");
+							enable_save_button(btn);
+							return;
+						}
+						addonPaymentPreprocess(el, "core/api/addon/triggerRestriction");
+					}
+				});
+				$("#trigger-addon-content").html(trigger_addon_model_view.render().el);
 			}
 
 		});
@@ -732,6 +828,8 @@ function getMaxEmailsLimit()
 }
 function canSendEmails(emails_to_send)
 {
+	if(_billing_restriction.isAutoRenewalEnabled)
+		return true;
 	var pending = getPendingEmails() + getEmailCreditsCount();
 	if (pending >= emails_to_send)
 		return true;
@@ -802,3 +900,5 @@ function getEmailCreditsCount()
 
 	return count;
 }
+
+

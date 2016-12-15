@@ -629,22 +629,23 @@ function getNextContactsId(callback)
 
 	var param = {};
 	var method = "";
+	var pageSize = getMaximumPageSize();
 	// If there is a filter saved in cookie then show filter results
 	if(_agile_get_prefs('dynamic_contact_filter')){
 		
 		url = 'core/api/filters/filter/dynamic-filter';
 		param['filterJson'] = _agile_get_prefs('dynamic_contact_filter');
 		param['cursor'] = CALL_CAMPAIGN.cursor;
-		param['page_size'] = 25;
+		param['page_size'] = getMaximumPageSize();
 		param['global_sort_key'] = sortKey;
 		method = "POST";
 	}else if(_agile_get_prefs('contact_filter')){
 		param = {};
-		url = 'core/api/filters/query/' + _agile_get_prefs('contact_filter') + '?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+		url = 'core/api/filters/query/' + _agile_get_prefs('contact_filter') + '?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=pageSize&global_sort_key=' + sortKey;
 		method = "GET";
 	}else{
 		param = {};
-		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=25&global_sort_key=' + sortKey;
+		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size='+pageSize+'&global_sort_key=' + sortKey;
 		method = "GET";
 	}
 

@@ -6,10 +6,10 @@ var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "S
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
-
+var callJar = {"running" : false};
 $(function()
 {
-	initToPubNub();
+//	initToPubNub();
 	globalCallWidgetSet();
 });
 
@@ -91,6 +91,12 @@ function globalCallWidgetSet()
 									window.location.href="tel://"+phone;
 								});
 							}
+						}else{
+							$("body").on("click", ".contact-make-call", function(e){
+								e.preventDefault();
+								var phone = $(this).attr("phone");
+								window.location.href="tel://"+phone;
+							});
 						}
 						if (call_widget.length == 0)
 						{
@@ -331,28 +337,7 @@ function sendTestCommand()
 						sendTestCommand();
 						return;
 					}
-					
-					var image = new Image();
-
-					var domain = CURRENT_DOMAIN_USER['domain'];
-					var id = CURRENT_DOMAIN_USER['id'];
-
-					var command = "testConnection";
-					var number = "";
-					var callid = "";
-
-					image.onload = function(png)
-					{
-						console.log("test sucess");
-						window.focus();
-					};
-					image.onerror = function(png)
-					{
-						showCallNotyMessage("Executable file is not running");
-					};
-					image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
-
-					
+					sendTestCommandToClient();
 				}, 5000);
 		
 	
@@ -494,8 +479,14 @@ function handleCallRequest(message)
 				closeCallNoty(true);
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
+				return;
 			}
+			var message ={};
+			message["data"] = "";
+			handleLogsForBria(message);		
 			
+			
+			showCallNotyMessage("Bria is not running");
 			return;
 		}
 		showBriaCallNoty(message);
@@ -570,8 +561,12 @@ function handleCallRequest(message)
 				showCallNotyMessage("Skype is not running");
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
+				return;
 			}
-			
+			var message ={};
+			message["data"] = "";
+			handleLogsForSkype(message);
+			showCallNotyMessage("Skype is not running");
 			return;
 		}
 		showSkypeCallNoty(message);
@@ -681,7 +676,7 @@ function getPhoneWithSkypeInArray(items)
  * This method updates two fields of contact object - lastcalled and last contacted
  * This method retrieves the current contact object and make the json call to server to save json time in server.
  */
-function twilioIOSaveContactedTime(contactId)
+function twilioIOSaveContactedTime(contactId, callback)
 {
 	console.log ('in IOSaveContactedTime');
 	var id;
@@ -696,9 +691,17 @@ function twilioIOSaveContactedTime(contactId)
 				console.log('processed In twilioIOSaveContactedTime');
 				console.log('Results : ' + result);
 				console.log('result = ' + result);
+				if(callback && typeof callback === "function")
+				{
+					callback();
+				}
 			}).error(function(data)
 			{
 				console.log('Error - Results :' + data);
+				if(callback && typeof callback === "function")
+				{
+					callback();
+				}
 			});
 }
 
@@ -718,7 +721,6 @@ function resetcallConferenceVariables(){
 }
 
 function showContactMergeOption(jsonObj){
-	
 	var phoneNumber = jsonObj.phoneNumber;
 	showModal($("#mergeContactModal"),"newContactAddPhone");
 	$("#call_newNumber_btn_continue", "#mergeContactModal").data("phoneNumber",phoneNumber);
@@ -794,4 +796,38 @@ function showEditContactPage(contact, callback){
 				else
 					deserialize_contact(contact, 'continue-contact', callback);
 			}, contact.type);
+}
+
+
+function sendTestCommandToClient(callback){
+	var image = new Image();
+
+	var domain = CURRENT_DOMAIN_USER['domain'];
+	var id = CURRENT_DOMAIN_USER['id'];
+
+	var command = "testConnection";
+	var number = "";
+	var callid = "";
+
+	image.onload = function(png)
+	{
+		callJar.running = true;
+		console.log("test sucess");
+		window.focus();
+		if (callback && typeof (callback) === "function")
+			callback();	
+		
+	};
+	image.onerror = function(png)
+	{
+		callJar.running = false;
+		if (callback && typeof (callback) === "function"){
+			callback();
+		}else{
+			showCallNotyMessage("Executable file is not running");
+		}
+	};
+	image.src = "http://localhost:33333/" + new Date().getTime() + "?command=" + command + ";number=" + number + ";callid=" + callid + ";domain=" + domain + ";userid=" + id + ";type=test?";
+
+
 }

@@ -60,7 +60,7 @@ var DealsRouter = Backbone.Router.extend({
 				setupDealFilters();
 				setUpDealSortFilters($('#opportunity-listners'));
 				initializeDealListners();
-				loadPortlets('Deals');
+				loadPortlets('Deals',$('.route_Portlet',$('#opportunity-listners')));
 				contactListener();
 
 			}, "#opportunity-listners");
@@ -80,7 +80,7 @@ var DealsRouter = Backbone.Router.extend({
 
 					setUpDealSortFilters($('#opportunity-listners'));
 					
-					loadPortlets('Deals');
+					loadPortlets('Deals',$('.route_Portlet',$('#opportunity-listners')));
 				});
 				fetchDealsList(data);
 			});

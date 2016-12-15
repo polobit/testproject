@@ -6,13 +6,19 @@ var Document_Collection_Events = Base_Collection_View.extend({
 	events: {
 		
 		'click #documents-model-list > tr > td:not(":first-child")': 'onDocumentListSelect',
-		'click .documents-add': 'onAddDocument',	
+		'click .document-url': 'onDocumentSelect',		
 	},
+	onDocumentSelect : function(e){
+			var source = e.target || e.srcElement;
+						var id =$(source).attr("data");
+						Backbone.history.navigate('documents/' + id, { trigger : true });
+	},
+
 	 /** 
      * Document list view edit
      */
 	onDocumentListSelect : function(e){
-		if(e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
+		if(e.target.parentElement.attributes.length > 0 && e.target.parentElement.attributes[0] && e.target.parentElement.attributes[0].name!="href" && e.target.parentElement.attributes[1].name!="href"){
      		e.preventDefault();
 
      	 	updateDocument($(e.currentTarget).closest('tr').data());
@@ -39,7 +45,7 @@ var Document_Collection_Events = Base_Collection_View.extend({
 var Document_Model_Events = Base_Model_View.extend({
  			events: {
  						'click #sort_menu > li': 'documentsSort',
- 						'click .documents-add': 'onAddDocument',		
+ 						//'click .documents-add': 'onAddDocument',		
 					},
 			documentsSort : function(e)
 				{
@@ -95,16 +101,15 @@ $(function(){
 		$(this).closest('form').find('#error').html("");
 		var form_id = $(this).closest('form').attr("id");
 		var id = $(this).find("a").attr("id");
-		
-		if(id && id == "GOOGLE")
-			var newwindow = window.open("upload-google-document.jsp?id="+ form_id, 'name','height=510,width=800');
-		else if(id && id == "S3")
-			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
-		
-		if (window.focus)
-		{
-			newwindow.focus();
+		var pageSettings = "height=310,width=500";
+		var pageURL = "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain;
+
+		if(id && id == "GOOGLE"){
+			pageURL = "upload-google-document.jsp?id="+ form_id;
+			pageSettings = "height=510,width=800";
 		}
+		agileOpenWindowAndFocus(pageURL, 'name', pageSettings);
+
 		return false;
 	});
 	
@@ -143,7 +148,7 @@ function updateDocument(ele) {
 	
 	add_recent_view(new BaseModel(value));
 
-	var uploadModal = $('#uploadDocumentUpdateModal');
+	var uploadModal = $('#uploadDocumentUpdateModalForm');
 	uploadModal.html(getTemplate("upload-document-update-modal", {}));
 	uploadModal.modal('show');
 	
@@ -223,16 +228,42 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			
 			return false;
 		}
-		
-		var url = $('#' + form_id).find('#upload_url').val();
-		if(url == "")
-		{
-			$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
-			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-			$('#' + form_id).find('#error').html('<div class="alert alert-danger col-sm-offset-3 col-sm-7">{{agile_lng_translate "documents" "not-attached"}}</div>');
-			enable_save_button($(saveBtn));
-			return;
+		if(json.doc_type!="SENDDOC")
+		{	
+			var url = $('#' + form_id).find('#upload_url').val();
+			if(url == "")
+			{
+				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
+				$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
+				$('#' + form_id).find('#error').html('<div class="alert alert-danger col-sm-offset-3 col-sm-7">{{agile_lng_translate "documents" "not-attached"}}</div>');
+				enable_save_button($(saveBtn));
+				return;
+			}
 		}
+		else
+		{
+			if($('#' + form_id).find('.contacts').children().length==0)
+			{
+
+				$(".contacts_relatedto_error",'#uploadDocumentForm,#uploadDocumentUpdateForm').show().delay(5000).hide(1);
+				enable_save_button($(saveBtn));
+				return;
+			}
+			var model_json=$("#documents-listener-container").data("contact_model_json")
+			var emailid="";
+			if(model_json)
+			{				
+				emailid= getPropertyValue(model_json.properties, "email")	
+			}
+			if(!emailid || emailid=="")
+			{
+				$(".contacts_noemail_error",'#uploadDocumentForm,#uploadDocumentUpdateForm').show().delay(5000).hide(1);
+				enable_save_button($(saveBtn));
+				return;
+				
+			}
+
+		}	
 	}
 	
 	var newDocument = new Backbone.Model();
@@ -242,11 +273,21 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 			// reset document size 
 			CUSTOM_DOCUMENT_SIZE = 0;
 
+			
+			var document = data.toJSON();
+			if(document.doc_type=="SENDDOC")
+			{
+				$(".email-send-doc",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");				
+				$(".email-send-doc-group",'#uploadDocumentForm,#uploadDocumentUpdateForm').removeClass("hide");				
+			}
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
-			
+			var id=$('#' + form_id).find("#id")
+			$(id).attr("name","id");
+			$(id).val(data.toJSON().id);
+
 			// While attaching document is from existing documenst list, no need of form verification.
-			if(form_id)
+			/*if(form_id)
 			{
 				$('#' + form_id).find("#network_type").val("");
 				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
@@ -257,20 +298,83 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				$('#' + form_id).each(function() {
 					this.reset();
 				});
-			}
+			}*/
 			
 			//$('#' + modalId).find('span.save-status img').remove();
-			if(form_id)
-				$('#' + modal_id).modal('hide');
+			//if(form_id)
+			//	$('#' + modal_id).modal('hide');
 			
-			var document = data.toJSON();
+			
 			add_recent_view(new BaseModel(document));
 			
-			// Updates data to timeline
-			if (App_Contacts.contactDetailView
-					&& Current_Route == "contact/"
-							+ App_Contacts.contactDetailView.model.get('id')) {
-
+			var contactcompanydealtype=$("#documents-listener-container").attr("contactcompanydealtype")
+			if(contactcompanydealtype=="email-template")
+			{
+				var sRoute=window.location.hash.split("#")[1];
+				var sRedirectRoute="email-templates"
+				if(sRoute!="")
+				{
+					try{
+					var arrRoutes=sRoute.split("/")
+					sRedirectRoute=arrRoutes.splice(2).join("/")
+					}catch(e){}	
+				}
+				Backbone.history.navigate(sRedirectRoute,{trigger: true});  
+				return;
+			}
+			
+			if (App_Contacts.contactDetailView)
+			{
+					if(Current_Route.indexOf( "contact")>-1)	
+					{
+						$.each(document.contacts, function(index, contact) 
+						{
+							
+							if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+							{
+								if (documentsView && documentsView.collection)
+								{
+									if(documentsView.collection.get(document.id))
+									{
+										documentsView.collection.get(document.id).set(new BaseModel(document));
+									}
+									else
+									{
+										documentsView.collection.add(new BaseModel(document), { sort : false });
+										documentsView.collection.sort();
+									}
+								}
+								
+									// Activates "Timeline" tab and its tab content in
+									// contact detail view
+									// activate_timeline_tab();
+									//add_entity_to_timeline(data);
+									/*
+									 * If timeline is not defined yet, initiates with the
+									 * data else inserts
+									 */
+									return false;
+							}
+						});	
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}
+						
+						return;	
+					}
+					else if( Current_Route.indexOf( App_Contacts.contactDetailView.model.get('id'))>-1)
+					{
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="contact/" + App_Contacts.contactDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });
+						}
+						
+						return;
+					}		
+					
 				// Add model to collection. Disabled sort while adding and called
 				// sort explicitly, as sort is not working when it is called by add
 				// function
@@ -280,99 +384,141 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json, contact_id)
 				 * Verifies whether the added document is related to the contact in
 				 * contact detail view or not
 				 */
-				$.each(document.contacts, function(index, contact) {
 					
-					if (contact.id == App_Contacts.contactDetailView.model.get('id'))
+			
+			} 
+			
+			if (App_Companies.companyDetailView)
+			{
+					if(Current_Route.indexOf( "company")>-1)	
 					{
-						if (documentsView && documentsView.collection)
+						$.each(document.contacts, function(index, company) 
 						{
-							if(documentsView.collection.get(document.id))
+							
+							if (company.id == App_Companies.companyDetailView.model.get('id'))
 							{
-								documentsView.collection.get(document.id).set(new BaseModel(document));
+								if (documentsView && documentsView.collection)
+								{
+									if(documentsView.collection.get(document.id))
+									{
+										documentsView.collection.get(document.id).set(new BaseModel(document));
+									}
+									else
+									{
+										documentsView.collection.add(new BaseModel(document), { sort : false });
+										documentsView.collection.sort();
+									}
+								}
+								
+									// Activates "Timeline" tab and its tab content in
+									// contact detail view
+									// activate_timeline_tab();
+									//add_entity_to_timeline(data);
+									/*
+									 * If timeline is not defined yet, initiates with the
+									 * data else inserts
+									 */
+									return false;
 							}
-							else
-							{
-								documentsView.collection.add(new BaseModel(document), { sort : false });
-								documentsView.collection.sort();
-							}
+						});	
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}	
+						
+						return;	
+					}
+					else if( Current_Route.indexOf( App_Companies.companyDetailView.model.get('id'))>-1)
+					{
+						//if(company_util)
+						//	company_util.updateDocumentsList(document,true);
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="company/" + App_Companies.companyDetailView.model.get('id');
+							Backbone.history.navigate(sURL, { trigger : true });	
 						}
 						
-							// Activates "Timeline" tab and its tab content in
-							// contact detail view
-							// activate_timeline_tab();
-							//add_entity_to_timeline(data);
-							/*
-							 * If timeline is not defined yet, initiates with the
-							 * data else inserts
-							 */
-							return false;
-					}
-				});
-			} else if (company_util.isCompany()){
-				company_util.updateDocumentsList(document,true);
-			}
-			else if (Current_Route == 'documents') {
-				if (isUpdate)
-					App_Documents.DocumentCollectionView.collection.remove(json);
-
-				App_Documents.DocumentCollectionView.collection.add(data);
-
-				App_Documents.DocumentCollectionView.render(true);
-
-			}
-			else if (App_Deal_Details.dealDetailView
-					&& Current_Route == "deal/"
-						+ App_Deal_Details.dealDetailView.model.id) {
-
-			// Add model to collection. Disabled sort while adding and called
-			// sort explicitly, as sort is not working when it is called by add
-			// function
-			
-			
-			/*
-			 * Verifies whether the added document is related to the deal in
-			 * deal detail view or not
-			 */
-			$.each(document.deals, function(index, deal) {
-				
-				if (deal.id == App_Deal_Details.dealDetailView.model.id)
-				{
-					if (dealDocsView && dealDocsView.collection)
-					{
-						if(dealDocsView.collection.get(document.id))
-						{
-							dealDocsView.collection.get(document.id).set(new BaseModel(document));
-						}
-						else
-						{
-							dealDocsView.collection.add(new BaseModel(document), { sort : false });
-							dealDocsView.collection.sort();
-						}
-					}
+						return;
+					}				
 					
-						// Activates "Timeline" tab and its tab content in
-						// contact detail view
-						// activate_timeline_tab();
-						//add_entity_to_timeline(data);
-						/*
-						 * If timeline is not defined yet, initiates with the
-						 * data else inserts
-						 */
-						return false;
+				
+			}
+			if (App_Deal_Details.dealDetailView)
+			{
+					if(Current_Route.indexOf( "deal" + "/" +App_Deal_Details.dealDetailView.model.id)>-1)	
+					{
+
+						$.each(document.deals, function(index, deal) 
+						{
+							
+							if (deal.id == App_Deal_Details.dealDetailView.model.get('id'))
+							{
+								if (dealDocsView && dealDocsView.collection)
+								{
+									if(dealDocsView.collection.get(document.id))
+									{
+										dealDocsView.collection.get(document.id).set(new BaseModel(document));
+									}
+									else
+									{
+										dealDocsView.collection.add(new BaseModel(document), { sort : false });
+										dealDocsView.collection.sort();
+									}
+								}
+								return false;			
+							}
+						});
+						
+						if(document.doc_type!="SENDDOC")
+						{
+							var sURL="deal/" + App_Deal_Details.dealDetailView.model.id ;
+							Backbone.history.navigate(sURL, { trigger : true });	
+						}
+						return;			
+						
+					}
+							
+				
+			}
+			
+			if (Current_Route.indexOf("documents") == 0) 
+			{
+
+				if(App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+				{
+					if (isUpdate)
+						App_Documents.DocumentCollectionView.collection.remove(json);
+
+					App_Documents.DocumentCollectionView.collection.add(data);
+					App_Documents.DocumentCollectionView.render(true);
 				}
-			});
-		}
-		else if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0 || Current_Route.indexOf("emailbuilder") == 0) {
-			$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
-			$('.add-tpl-attachment-confirm').trigger("click");
-			App_Settings.navigate(Current_Route, {
-					trigger : true
-				});
-		}
-			else {
-				App_Documents.navigate("documents", {
-					trigger : true
-				});
+				
+				if(document.doc_type!="SENDDOC")
+				{
+					App_Documents.navigate("documents", {trigger : true});
+				}
+					
+				return;	
+
+			}
+			if (Current_Route == "email-template-add" || Current_Route.indexOf("email-template") == 0) 
+			{
+				$('#tpl-attachment-select').find('select').find('option:last').after("<option value="+document.id+" selected='selected'>"+document.name+"</option>");
+				$('.add-tpl-attachment-confirm').trigger("click");
+				if(document.doc_type!="SENDDOC")
+				{
+					App_Settings.navigate(Current_Route, {trigger : true});	
+				}
+				
+			}
+			else 
+			{
+				if(document.doc_type!="SENDDOC")
+				{
+					App_Documents.navigate("documents", {trigger : true});		
+				}
+				
 			}
 		},
 		error : function(model, response)
@@ -432,7 +578,7 @@ function documentsCollection(sortField)
 			sort_collection : false ,
 			templateKey : "documents",
 			cursor : true,
-			page_size : 20,
+			page_size : getMaximumPageSize(),
 			individual_tag_name : 'tr',
 			order_by : sortField,
 			postRenderCallback : function(el)

@@ -2,25 +2,31 @@
 	<td class="hide"></td>
 	<td class="data  icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}}>
     	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
-    	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
+    	<div class="agile-img m-r-sm {{#is_mobile}} thumb-sm {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
+        		<img class="img-inital r r-2x"  title="{{contact_name_necessary this}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
         		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
-        		<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+        		<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}"
+        		{{#is_mobile}}  style="height:35px !important; width:35px !important;" 
+        		{{/is_mobile}} {{getCompanyImage "40" "display:inline;"}}/>
         	{{/if_contact_type}}
     	</div>
-  		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
+  		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-3px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
-        		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
-        		{{getSystemPropertyValue properties "last_name"}} </a>
+        		<a class="text-cap custom-link">{{contact_name_necessary this}}
+        		</a>
         		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
         		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
+        		<div><small style="text-transform:lowercase" class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
@@ -56,6 +62,10 @@
     	<div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:15em;" {{/is_mobile}}>
     	<div class="agile-img m-r-sm {{#is_mobile}} thumb {{else}} thumb-sm {{/is_mobile}}" style="margin-right:10px">
         	{{#if_contact_type "PERSON"}}
+        		<img class="img-inital r r-2x"  title="{{contact_name_necessary this}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+        	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
         		<img class="img-inital r r-2x"  title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
         	{{/if_contact_type}}
         
@@ -67,6 +77,12 @@
     	</div>
   		<div class="agile-thumb agile-thumb-view" {{#is_mobile}} style="width:calc(100% - 60px); margin-top:-5px;" {{else}} style="width:calc(100% - 60px);" {{/is_mobile}}>
         	{{#if_contact_type "PERSON"}}
+        		<a class="text-cap custom-link">{{contact_name_necessary this}}
+        		</a>
+        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
+        	{{/if_contact_type}}
+
+        	{{#if_contact_type "LEAD"}}
         		<a class="text-cap custom-link">{{getSystemPropertyValue properties "first_name"}}
         		{{getSystemPropertyValue properties "last_name"}} </a>
         		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "email"}}</small></div>
@@ -74,7 +90,7 @@
         
 			{{#if_contact_type "COMPANY"}}
         		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
+        		<div><small style="text-transform:lowercase" class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
@@ -113,6 +129,14 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-status-template" type="text/html">
+	<td class="data" data="{{id}}">
+    	<div class="text-ellipsis "style="width:12em;">
+    		<span class="label m-r-xs bg-light dk">{{getLeadStatus lead_status_id}}</span>
+    	</div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-phone-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:12em;" >
@@ -132,7 +156,7 @@
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:12em;" >
-    		<a class="text-cap">{{getSystemPropertyValue properties "website"}}</a>
+    		<a style="text-transform:lowercase">{{getSystemPropertyValue properties "website"}}</a>
         </div>
 	</td>
 </script>
@@ -165,7 +189,7 @@
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div class="text-ellipsis" style="width:12em;" >
+    <div class="text-ellipsis" style="width:8em;" >
 		<a class="text-cap">{{epochToHumanDateInFormat  created_time}}</a>
     </div>
 	</td>
@@ -192,7 +216,7 @@
 <script id = "contacts-custom-view-url-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:12em;" >
-		<a href="{{getSystemPropertyValue properties 'url'}}" class="text-cap">{{getSystemPropertyValue properties "url"}}</a>
+		<a style="text-transform:lowercase" href="{{getSystemPropertyValue properties 'url'}}" >{{getSystemPropertyValue properties "url"}}</a>
     </div>
 	</td>
 </script>
@@ -215,7 +239,7 @@
 
 <script id = "contacts-custom-view-star_value-template" type="text/html">
 	<td class='data' data='{{id}}'>
-		 <ul class="m-n p-n list-none "  style="width:12em;" >
+		 <ul class="m-n p-n list-none "  style="width:8em;" >
 			{{setupRating star_value}}
 		</ul>
 	</td>
@@ -223,7 +247,7 @@
 
 <script id = "contacts-custom-view-lead_score-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div  style="width:12em;" >
+       <div  style="width:6em;" >
 		  {{lead_score}}
        </div>
 	</td>
@@ -266,7 +290,7 @@
 		<div class="table-resp "  style="width:12em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
-					<img class="img-inital r-2x" title="{{getSystemPropertyValue properties 'first_name'}} {{getSystemPropertyValue properties 'last_name'}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
+					<img class="img-inital r-2x" title="{{contact_name_necessary this}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
 				</div>
    			{{/each}}
    		</div>
@@ -332,12 +356,19 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-last_campaign_emaild-template" type="text/html">
+	<td class='data' data='{{id}}'>
+       <div class="text-ellipsis " style="width:12em;">
+	   	  <span>{{epochToHumanDateInFormat last_campaign_emaild}}</span>
+       </div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-popover-template" type="text/html">
        <div class="data panel-default" data={{id}} style="width:260px">
 	   
        <div class="text-cap panel-heading text-ellipsis">
-         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "first_name"}} {{getSystemPropertyValue properties "last_name"}}">{{getSystemPropertyValue properties "first_name"}}
-        		{{getSystemPropertyValue properties "last_name"}}</div>{{/if_contact_type}}
+         {{#if_contact_type "PERSON"}}<div class="text-ellipsis inline-block" style="width:80%" title="{{contact_name_necessary this}}">{{contact_name_necessary this }}</div>{{/if_contact_type}}
              {{#if_contact_type "COMPANY"}}
              <div class="text-ellipsis inline-block" style="width:80%" title="{{getSystemPropertyValue properties "name"}}">{{getSystemPropertyValue properties "name"}}
             </div>{{/if_contact_type}}
@@ -347,7 +378,7 @@
 							<div  class="text-lg score-view">
 							<i class="icon-trophy" style="height: 6px; vertical-align: middle;font-size:14px;"></i>
 							{{#canEditContact owner.id}}
-								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em;margin-left: 2px;margin-right: -1px;">
+								<div class="inline-block v-middle text-ellipsis text-center" style="width:2em;margin-left:2px;margin-right: -1px;">
 									{{#if lead_score}} <span title="{{lead_score}}" id="lead-score">{{lead_score}}</span>&nbsp;
 									{{else}} <span id="lead-score">0</span>&nbsp;
 									 {{/if}}
@@ -427,7 +458,7 @@
           <div class="b-b b-light p-b-xs">
           <div class="pull-left"><i class="fa fa-globe text-sm v-middle"></i></div>
           <div class="text-ellipsis">
-          <a class="m-l-sm" title="{{getSystemPropertyValue properties "url"}}" href="{{getSystemPropertyValue properties "url"}}" target="_blank">{{getSystemPropertyValue properties "url"}}</a> 
+          <a class="m-l-sm" style="text-transform:lowercase" title="{{getSystemPropertyValue properties "url"}}" href="{{getSystemPropertyValue properties "url"}}" target="_blank">{{getSystemPropertyValue properties "url"}}</a> 
           </div>
          </div>
           
@@ -690,3 +721,14 @@
  {{/each}}
 </script>
 
+<script id = "contacts-custom-view-reports-image-template" type="text/html">
+
+	<td class="data taxt-center p-b-none" data="{{id}}" >
+	<div class="overflow-hidden thumb-sm " style="width:2em;" >
+	{{#if_equals type "COMPANY"}}
+	<img class="img-inital r r-2x pull-left" style="width:20px!important;height:20px!important;"{{getCompanyImage "40"}}/></img>
+	{{else}}
+  				<img class="img-inital overflow-hidden thumb-sm r r-2x " style= "height:20px;width:20px;" 
+            data-name="{{dataNameAvatar properties 40 1}}" src="{{gravatarurl properties 40 1}}" />
+        {{/if_equals}}    
+</script>

@@ -1,9 +1,13 @@
 <script type="text/html" id="js-upgrade-link-template">
+	{{#isUserNotInIphone}}
 	{{agile_lng_translate 'contact-details' 'please'}} <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">{{agile_lng_translate 'menu' 'upgrade'}}</a> {{agile_lng_translate 'billing' 'your-email-subscription'}}
+	{{/isUserNotInIphone}}
 </script>
 
 <script type="text/html" id="js-email-error-mssg-template">
+	{{#isUserNotInIphone}}
 	<div>{{agile_lng_translate 'billing' 'continue-send-emails'}}, {{agile_lng_translate 'contact-details' 'please'}}<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> {{agile_lng_translate 'plan-and-upgrade' 'purchase'}}</a>  {{agile_lng_translate 'plan-and-upgrade' 'more'}}.</div>
+	{{/isUserNotInIphone}}
 </script>
 
 <script type="text/html" id="js-referal-program-template">
@@ -80,7 +84,7 @@
 		<td>
 			<div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>{{new_milestone}}</div>
 		</td>
-		<td class='b-r-none'>
+		<td class="b-r-none text-right" style="width:25%">
 			<div class='m-b-n-xs'>
 				<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i>
 				</a>
@@ -105,6 +109,21 @@
 
 <script type="text/html" id="js-deleting-tags-template">
 	{{agile_lng_translate 'tags' 'deleting'}} {{tag}}.  {{agile_lng_translate 'tags' 'delete-info'}}
+</script>
+<script type="text/html" id="js-sales-dashboards-options-newui-template">
+	<li><a id='SalesDashboard' title='{{agile_lng_translate "dashboards" "sales-dashboard"}}' class='user-defined-dashboard' href='#'>{{agile_lng_translate 'menu' 'sales'}} </a></li>
+	<li class='divider'></li>
+	<li><a id='dashboards' href='#dashboards'>{{agile_lng_translate 'portlets' 'manage-dashboards'}}</a></li>
+</script>
+<script type="text/html" id="js-marketing-dashboards-options-newui-template">
+	<li><a id='MarketingDashboard' title='{{agile_lng_translate "dashboards" "marketing-dashboard"}}' class='user-defined-dashboard' href='#'>{{agile_lng_translate 'dashboards' 'marketing'}}</a></li>
+	<li class='divider'></li>
+	<li><a id='dashboards' href='#dashboards'>{{agile_lng_translate 'portlets' 'manage-dashboards'}}</a></li>
+</script>
+<script type="text/html" id="js-service-dashboards-options-newui-template">
+	<li><a id='Dashboard' class='user-defined-dashboard predefined-dashboard' href='#'>{{agile_lng_translate 'portlets' 'dashboard'}}</a></li>
+	<li class='divider'></li>
+	<li><a id='dashboards' href='#dashboards'>{{agile_lng_translate 'portlets' 'manage-dashboards'}}</a></li>
 </script>
 
 

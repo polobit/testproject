@@ -18,8 +18,13 @@ var ContactsRouter = Backbone.Router.extend({
 		"" : "dashboard", 
 		
 		"dashboard" : "dashboard",
-
-		"navigate-dashboard" : "navigateDashboard", 
+		
+		"navigate-dashboard" : "navigateDashboard",
+		
+		"navigate-dashboard/:id" : "navigateDashboard", 
+		
+		//clicking on the dashboard icon
+		"navbar-dashboard" : "homeDashboard",
 		
 		// "dashboard-test": "dashboard",
 
@@ -47,6 +52,9 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"send-email" : "sendEmail",
 		
+		"send-email/documents/:id" : "sendDocumentEmail",
+		"send-email/documents/:id/send" : "sendDocumentEmail",
+
 		"send-email/:id" : "sendEmail",
 
 		"send-emails/:id" : "sendEmailCustom",
@@ -83,9 +91,29 @@ var ContactsRouter = Backbone.Router.extend({
 	salesforceImport : function(){
          App_Datasync.salesforce();
 	},
-
-	navigateDashboard : function(){
+	homeDashboard : function(){
+		var newRole = $(".appaside.agile-menuactive").attr("data-service-name");
+		
+		if(CURRENT_DOMAIN_USER.role != newRole )
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, menuServiceDashboard(newRole));
+			updateDashboardRole(newRole);
+		}
+		Backbone.history.navigate("#", {
+            trigger: true
+        });
+	},
+	navigateDashboard : function(id){
 		// Call dashboard route
+		if(id)
+		{
+			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
+			var prevrole = menuServicerole(id);
+			if(CURRENT_DOMAIN_USER.role != prevrole)
+			{
+				updateDashboardRole(prevrole);
+			}
+		}
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -102,8 +130,20 @@ var ContactsRouter = Backbone.Router.extend({
             });
             return;
 		}
-
+		var role = CURRENT_DOMAIN_USER.role;
+		//var dashboard_name = menuServiceDashboard(role);
+		
 		var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		if(isNaN(dashboard_name)){
+			dashboard_name = menuServiceDashboard(role);	
+		}
+		else{
+				dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
+		}
+
+		
+
+
 		if(!dashboard_name){
 			var selected_id = _agile_get_prefs("selected_dashboard_"+CURRENT_DOMAIN_USER.id);
 			if(selected_id == "Dashboard")
@@ -120,7 +160,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-
+		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		$(".nav.nav-sub li").removeClass("active");
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -155,7 +197,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 				var el = $(template_ui);
 				$("#content").html(el);
-
+				if(dashboard_name=="MarketingDashboard")
+					$('#automation-video').show();
+				
 				$('[data-toggle="tooltip"]').tooltip();
 				if ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1&&navigator.userAgent.toLowerCase().indexOf('opr/') == -1) && !document.getElementById('agilecrm_extension'))
 				{
@@ -169,9 +213,9 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		$("#home_dashboard").addClass("active");
-
-	},
+		//$("#home_dashboard").addClass("active");
+		
+		},
 	
 	/**
 	 * Fetches all the contacts (persons) and shows as list, if tag_id
@@ -348,7 +392,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * infiniScroll
 		 */
 		this.contactsListView = new  Contacts_Events_Collection_View({ url : url,custom_scrollable_element:custom_scrollable_element, sort_collection : false, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
+			cursor : true, page_size : getMaximumPageSize(), global_sort_key : sort_key, slateKey : slateKey, request_method : 'POST', post_data: {filterJson: postData}, postRenderCallback : function(el, collection)
 			{		  
 		
 			$("#contacts-view-options").css( 'pointer-events', 'auto' );
@@ -462,7 +506,7 @@ var ContactsRouter = Backbone.Router.extend({
 		 * infiniScroll
 		 */
 		this.duplicateContactsListView = new Contacts_Events_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
-			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
+			page_size : getMaximumPageSize(), sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
 			{
 				// this.duplicateContactsListView.collection.forEach(function(model,
 				// index) {
@@ -561,6 +605,9 @@ var ContactsRouter = Backbone.Router.extend({
 		//Removed previous contact timeline nodes from the queue, if existed
 		if(timeline_collection_view && timeline_collection_view.queue)
 		{
+			if($("#timeline").is(":visible")){
+				$("#timeline").empty();
+			}
 			timeline_collection_view.queue.pop();
 		}
 		
@@ -638,12 +685,19 @@ var ContactsRouter = Backbone.Router.extend({
 		if(this.contactsListView && this.contactsListView.collection)
 			contact_collection = this.contactsListView.collection;
 
-		add_recent_view(contact);
+		
 
 		// If contact is of type company , go to company details page
 		if (contact.get('type') == 'COMPANY')
 		{			
 			Backbone.history.navigate( "company/"+id, { trigger : true });
+			return;
+		}
+
+		// If contact is of type lead , go to lead details page
+		if (contact.get('type') == 'LEAD')
+		{			
+			Backbone.history.navigate( "lead/"+id, { trigger : true });
 			return;
 		}
 
@@ -725,8 +779,13 @@ var ContactsRouter = Backbone.Router.extend({
 
 		var el = this.contactDetailView.render(true).el;
 		$(el).find('.content-tabs').tabCollapse(); 
-
-		$('#content').html(el);
+		
+		if(!this.contactDetailView.model.get('owner') || CURRENT_DOMAIN_USER.id == this.contactDetailView.model.get('owner').id || hasScope("VIEW_CONTACTS")){
+			$('#content').html(el);
+			add_recent_view(contact);
+		}else{
+			$("#content").html ("<div class='well'><div class='alert bg-white text-center'><div class='slate-content p-md text'><h4 style='opacity:0.8;margin-bottom:5px!important;'> "+_agile_get_translated_val('contacts','invalid-viewer')+"</h4><div class='text'style='opacity:0.6;'>"+_agile_get_translated_val('companies','enable-permission')+"</div></div></div></div>");
+		}
 	/*	if($(".toggle-contact-image .contact-delete-option").length == 0) {
 			$(".toggle-contact-image .contact-edit-option").css("margin-left","10px");
 			}*/
@@ -891,6 +950,9 @@ var ContactsRouter = Backbone.Router.extend({
 			template : "import-contacts",
 			postRenderCallback: function(el)
 			{
+				var leadsViewLoader = new LeadsViewLoader();
+				leadsViewLoader.setupImportView(el);
+				
 				initializeImportEvents("import-contacts-event-listener");
 
 				if(import_tab_Id) {
@@ -905,6 +967,7 @@ var ContactsRouter = Backbone.Router.extend({
 		});
 
 		$('#content').html(App_Contacts.importContacts.render().el);
+
 		
 /*
 $('#content').html('<div id="import-contacts-event-listener"></div>');
@@ -947,13 +1010,25 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		
 	},
 
+	sendDocumentEmail:function(id) 
+	{
+		//this.sendEmail(id,null,null,null,null,null,"documents");
+		var that=this;
+		sendMail(id,null,null,null,null,that,null,"documents");
+
+			var options = {};
+		options[_agile_get_translated_val('others','add-new')] = "verify_email";
+		
+		confirmandVerifyEmail()
+	},
+
 	/**
 	 * Shows a send email form with some prefilled values (email - from,
 	 * to and templates etc..). To prefill the fields the function
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id, subject, body, cc, bcc, force_reload)
+	sendEmail : function(id, subject, body, cc, bcc, force_reload,id_type)
 	{
 
 		// Check old hash and call same function
@@ -965,9 +1040,10 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
              
              // Gets the domain name from the contacts of the custom fields.
                var currentContactJson = App_Contacts.contactDetailView.model.toJSON();
+               var email;
                if(contactId == currentContactJson.id){
 					var properties = currentContactJson.properties;
-					var email;
+					
 					$.each(properties,function(id, obj){
 						if(obj.name == "email"){
 							email = obj.value;
@@ -975,41 +1051,25 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 						}
 					});
 			   }
+
+			   if(App_Companies.companyDetailView){
+			      var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			      var tempId = id;
+			      id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+			        if(id && id == compEmailTemp){
+				        email = tempId;
+			        }
+		        }
               
-              this.sendEmail(email, subject, body, cc, bcc, true);
+              this.sendEmail(email, subject, body, cc, bcc, true,id_type);
               return;
 		}
 		var that=this;
 		sendMail(id,subject,body,cc,bcc,that);
 
-		var options = {};
-		options[_agile_get_translated_val('others','add-new')] = "verify_email";
 		
-		fetchAndFillSelect(
-			'core/api/account-prefs/verified-emails/all',
-			"email",
-			"email",
-			undefined,
-			options,
-			$('#from_email'),
-			"prepend",
-			function($select, data) {
-				
-				if($select.find('option').size()===1){
-					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
-					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
-				}
-				else {
-					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
-					if(typeof(ownerEmail) !== "undefined")
-						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
-					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select one Email -</option>");
-						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
-					}
-				}
-				rearrange_from_email_options($select, data);
-			});
+		confirmandVerifyEmail()
+	
 	},
 
 	sendEmailCustom : function(id, subject, body, cc, bcc,custom_view)
@@ -1017,6 +1077,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		var that=this.contact_popover;
 		insidePopover=false;
 		sendMail(id,subject,body,cc,bcc,that,true);
+		confirmandVerifyEmail();
 	
 	},
 	
@@ -1158,7 +1219,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 		}	
 		that = this ;
 		this.contact_custom_view = new Contacts_Events_Collection_View({ url : url, restKey : "contact", modelData : view_data, global_sort_key : sort_key,
-			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : 25, sort_collection : false,
+			templateKey : template_key,custom_scrollable_element:custom_scrollable_element, individual_tag_name : individual_tag_name, slateKey : slateKey, cursor : true, request_method : 'POST', post_data: {'filterJson': postData}, page_size : getMaximumPageSize(), sort_collection : false,
 			postRenderCallback : function(el, collection)
 			{
 				
@@ -1421,13 +1482,13 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 			_agile_delete_prefs('dynamic_contact_filter');
 		}
 
-		if(_agile_get_prefs("contacts_tag") != tag_id)
+		if(tag_id && _agile_get_prefs("contacts_tag") != tag_id)
 		{
 			CONTACTS_HARD_RELOAD = true;
 			_agile_set_prefs("contacts_tag", tag_id);
 		}
 		$('#content').html('<div id="contacts-listener-container"></div>');
-		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,
+		var contactsHeader = new Contacts_And_Companies_Events_View({ data : {}, template : "contacts-header", isNew : true,page_size:3,
 			postRenderCallback : function(el)
 			{
 				contacts_view_loader.buildContactsView(el, tag_id);
@@ -1463,6 +1524,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 
     	else if(type == "workflows")
     		countURL = countFetchURL + "/count";
+    	else if(type == "leads")
+    		countURL = App_Leads.leadsListView.options.url + "/count";
      	else
     		countURL = App_Companies.companiesListView.options.url + "/count";
 
@@ -1474,13 +1537,17 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
     	abortCountQueryCall();
 
     	Count_XHR_Call = $.get(countURL, {}, function(data){
+    			if(type == "contacts")
     		        data = parseInt(data);
-    		        
-                    count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
+    		        count_message = "<small> (" + data + " "+_agile_get_translated_val('other','total')+") </small>";
 					$('#contacts-count').html(count_message);
 
 					if(type == "workflows")
 						  $("span.badge.bg-primary", el).html(data);
+					else if(type == "leads")
+					{
+						$('#leads-count').html(count_message);
+					}
 
 					// Reset collection
 					if(type == "contacts-company")
@@ -1490,6 +1557,8 @@ function getAndUpdateCollectionCount(type, el, countFetchURL){
 					else if(type == "workflows"){
 						if(App_Workflows.active_subscribers_collection && App_Workflows.active_subscribers_collection.collection && App_Workflows.active_subscribers_collection.collection.length > 0)
 							App_Workflows.active_subscribers_collection.collection.models[0].set("count", data, {silent: true});
+					}else if(type == "leads" && App_Leads.leadsListView && App_Leads.leadsListView.collection && App_Leads.leadsListView.collection.length > 0){
+						App_Leads.leadsListView.collection.models[0].set("count", data, {silent: true});
 					} else{
 						App_Companies.companiesListView.collection.models[0].set("count", data, {silent: true});
 					}
@@ -1505,7 +1574,7 @@ function abortCountQueryCall(){
 	}catch(e){}
 }
 
-function sendMail(id,subject,body,cc,bcc,that,custom_view)
+function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 {
 	var model = {};
 		
@@ -1518,7 +1587,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			var no = _agile_get_translated_val("reputation", "Ok");
 			var upgrade_link =  _agile_get_translated_val('contact-details','please') + ' <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('portlets','upgrade')+' </a> ' + _agile_get_translated_val('billing','your-email-subscription');
 			var emialErrormsg = '<div class="m-t-xs">'+_agile_get_translated_val('billing','continue-send-emails')+', ' +_agile_get_translated_val('contact-details','please')+ '<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('plan-and-upgrade','purchase')+' </a>'+_agile_get_translated_val('plan-and-upgrade','more')+'.</div>';
-			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + emialErrormsg;
+			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + (_agile_is_user_from_iphone() ? "" : emialErrormsg);
 			
 			showModalConfirmation(title, 
 					message, 
@@ -1539,6 +1608,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 			model=that.toJSON();
 		}
 		else{
+
+		var documentId=null;
 		// Takes back to contacts if contacts detail view is not defined
 		if (that.contactDetailView && !that.contactDetailView.model.get(id))
 		{
@@ -1548,16 +1619,51 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 		
 		if(App_Companies.companyDetailView){
 			var compEmailTemp = getPropertyValue(App_Companies.companyDetailView.model.toJSON().properties,'email');
+			id=id.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
 			if(id && id == compEmailTemp){
 				model = App_Companies.companyDetailView.model.toJSON();
 			}
 		}
+		if(id_type=="documents" )
+		{
+			if(App_Documents.DocumentCollectionView && App_Documents.DocumentCollectionView.collection)
+			{
+				$.each(App_Documents.DocumentCollectionView.collection.models, function(index, document_model)
+				{
+					if(id && document_model.id==id	)
+					{
+						model=document_model.toJSON();	
+						return false;
+					}	
+				});
+			}
+			if (documentsView && documentsView.collection)
+			{
+				if(documentsView.collection.get(id))
+				{
+					model=documentsView.collection.get(id).toJSON();
+				}
+				
+			}
+			if(dealDocsView && dealDocsView.collection)
+			{
+				if(dealDocsView.collection.get(id))
+				{
+					model=dealDocsView.collection.get(id).toJSON();
+				}
+			}
+		}	
+
+		if(Current_Route && App_Leads.leadDetailView && Current_Route == "lead/"+App_Leads.leadDetailView.model.get("id"))
+		{
+			model = App_Leads.leadDetailView.model.toJSON();
+		}
 	}
 	
-		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
+//		var el = $("#content").html('<div id="send-email-listener-container"></div>').find('#send-email-listener-container').html(getTemplate("send-email", model));
 		
 		// Call setupTypeAhead to get contacts
-		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
+//		agile_type_ahead("to", el, contacts_typeahead, null, null, "email-search", null, true, null, true);
 
 
 		$("#content").html('<div id="send-email-listener-container"></div>');
@@ -1583,17 +1689,78 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 				// For Reply all, id may contains multiple emails. If contains multiple, skip
 				if (model && id.indexOf(',') == -1)
 				{
-					if (model.type == "PERSON")
+					if(id_type=="documents" && model.id!=null)
 					{
+						
+						$('#emailForm').find('.add-attachment-select').addClass('hide');
+						$('#emailForm').find('#eattachment').css('display','block');
+						$('#emailForm').find('#attachment_id').css("display",'block');
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").removeClass("text-ellipsis")
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").attr("href","#documents/" + model.id)
+						$('#emailForm').find('#attachment_id').find("#attachment_fname").css( 'cursor', 'pointer' );
+				    	$('#emailForm').find('#attachment_id').find("#attachment_fname").html('<div title=' + model.name + ' class="line-clamp activity-tag" style="display:inline;">' + model.name +'</div>');
+				    	$('#emailForm').find(".attachment-document-select").css('display','none');
+				    	$('#emailForm').find('#eattachment_key').attr('name',"edoc_key");
+				    	$('#emailForm').find('#eattachment_key').attr('value',model.id);
+				    	$("#emailForm").find("#agile_attachment_name").attr("value", model.name);
+				    	$("#emailForm").find(".add-attachment-cancel").addClass("hide");
+				    	$("#emailForm").find(".attach-file").addClass("hide");
+				    	$("#emailForm").find(".fa-paperclip").removeClass("fa-paperclip").addClass("fa-file-text-o");
+				    	$("#emailForm").find("#attachment-select").append('<option selected=\'yes\' value='+ model.id +'>' + model.name+ '</option>');
+				    	var first_name ="",last_name="";
+				    	if(model.contacts && model.contacts.length>0)
+				    	{
 
-						var first_name = getPropertyValue(model.properties, "first_name");
-						var last_name = getPropertyValue(model.properties, "last_name");
+				    		var url = '/core/api/contacts/'+ model.contacts[0].id;
+							$.ajax({
+								url : url,
+								type: 'GET',
+								dataType: 'json',
+								success: function(data){
+									model_json=data;
+									var email=getPropertyValue(model_json.properties, "email");
+									var first_name = getPropertyValue(model_json.properties, "first_name");
+									if(model_json.type=="COMPANY")
+									{
+										first_name = getPropertyValue(model_json.properties, "name");
+									}
+									var last_name = getPropertyValue(model_json.properties, "last_name");
+									var name="";
+									if (first_name || last_name)
+									{
+										name = first_name ? first_name : "";
+										name = (name + " " + (last_name ? last_name : "")).trim();
+									}
+									// If already appended with name, skip
+									if(email && email.indexOf('<') == -1 && email.indexOf('>') == -1)
+										email = name + ' <' + email.trim() + '>';
 
+									$('#to', el)
+											.closest("div.controls")
+											.find(".tags")
+											.append(
+													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a class="text-white " href="#contact/' + model_json.id + '">' + name + '</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>');									
+												}
+							});
+					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
+					    	$("#contact_type","#emailForm").val(model.contacts[0].type);
+					    	$("#doc_type","#emailForm").val(model.doc_type);
+					    	/*
+			               	first_name = getPropertyValue(model.contacts[0].properties, "first_name");
+							last_name = getPropertyValue(model.contacts[0].properties, "last_name");
+							id=getPropertyValue(model.contacts[0].properties, "email");*/
+						}
 						if (first_name || last_name)
 						{
 							name = first_name ? first_name : "";
 							name = (name + " " + (last_name ? last_name : "")).trim();
 						}
+						
+					}
+					else if (model.type == "PERSON")
+					{
+
+						name  = getContactName(model);
 					}
 					else
 					{
@@ -1607,16 +1774,16 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view)
 					var data = id;
 
 					// If already appended with name, skip
-					if(id.indexOf('<') == -1 && id.indexOf('>') == -1)
+					if(id && id.indexOf('<') == -1 && id.indexOf('>') == -1)
 						data = name + ' <' + id.trim() + '>';
 
 					$('#to', el)
 							.closest("div.controls")
 							.find(".tags")
 							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a class="text-white" href="#contact/' + model.id + '">' + name + '</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>');
 				}
-				else
+				else  if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);
 			}
 			else
@@ -1695,7 +1862,7 @@ function addTypeCustomData(contactId, el){
 							descending : true,
 							templateKey : "contact-type-custom-fields",
 							cursor : true,
-							page_size : 20,
+							page_size : getMaximumPageSize(),
 							postRenderCallback : function(el){
 								
 							}
@@ -1710,4 +1877,64 @@ function addTypeCustomData(contactId, el){
 	});
 	$('#contacts-type-custom-fields' , el).html(customFieldsView.render().el);
 	
+}
+
+function confirmandVerifyEmail()
+{
+	var options = {};
+	options["{{agile_lng_translate 'verification' 'add-new'}}"] = "verify_email";
+
+	fetchAndFillSelect(
+			'core/api/account-prefs/verified-emails/all',
+			"email",
+			"email",
+			undefined,
+			options,
+			$('#from_email'),
+			"prepend",
+			function($select, data) {
+				
+				if($select.find('option').size()===1){
+					$select.find("option:first").before("<option value='NOEMAIL'>- No Verified Email -</option>");
+					$select.find('option[value ="NOEMAIL"]').attr("selected", "selected");
+				}
+				else {
+					var ownerEmail = $select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').val();
+					if(typeof(ownerEmail) !== "undefined")
+						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
+					else{
+						$select.find("option:first").before("<option value='SELECTEMAIL'>Select Email</option>");
+						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
+					}
+				}
+				rearrange_from_email_options($select, data);
+			});
+
+}
+
+function menuServiceDashboard(role){
+		switch(role){
+			case 'SALES':
+			    return "SalesDashboard"
+			    break;
+			case 'MARKETING':
+				return "MarketingDashboard";
+				break;
+			case 'SERVICE' :
+				return "Dashboard";
+				break;
+		}
+}
+function menuServicerole(dashboard){
+		switch(dashboard){
+			case 'SalesDashboard':
+			    return "SALES"
+			    break;
+			case 'MarketingDashboard':
+				return "MARKETING";
+				break;
+			case 'Dashboard' :
+				return "SERVICE";
+				break;
+		}
 }

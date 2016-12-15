@@ -2215,6 +2215,147 @@ public class OpportunityUtil
 
 	return dao.listByProperty(conditionsMap);
     }
+    
+    /**
+     * 
+     * Gets JSONObject of won deals by user. These are used for graph building.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return JsonObject .
+     */
+    public static JSONObject getWonDealsByUser(Long ownerId, Long pipelineId, Long sourceId, Long minTime, Long maxTime, String frequency,
+    	    String type)
+        {
+    	JSONObject newDealsObject = new JSONObject();
+
+    	String timeZone = "UTC";
+    	List<Opportunity> opportunitiesList;
+    	UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+    	if (userPrefs != null && userPrefs.timezone != null)
+    	{
+    	    timeZone = userPrefs.timezone;
+    	}
+    	if ((ownerId != null && ownerId != 0) || (pipelineId != null && pipelineId != 0) || (sourceId != null && sourceId != 0)){
+    	    opportunitiesList = getWonDealsListBasedOnSelectedCondition(minTime, maxTime,ownerId,pipelineId,sourceId);
+    	    System.out.println("calling getWonDealList based on selected condition");
+    	}
+    	else{
+    	opportunitiesList = getWonDealsList(minTime,maxTime);
+    	System.out.println("calling getwonDealList without condtion");
+    	}
+    	
+    	if(opportunitiesList != null)
+    	   System.out.println("total deals found is : "+opportunitiesList.size());
+
+    	List<DomainUser> domainUsers= new ArrayList<DomainUser>();
+		DomainUser dUser = DomainUserUtil.getCurrentDomainUser();
+
+    	if(ownerId != null && ownerId != 0){
+    	   if (DomainUserUtil.getDomainUser(ownerId) != null)
+    	        domainUsers.add(DomainUserUtil.getDomainUser(ownerId));
+    	}
+    	else{
+    		if (dUser != null){
+    		    domainUsers = DomainUserUtil.getUsers(dUser.domain);
+    	    }
+    	} 	
+    	JSONObject usersCount = new JSONObject();
+    	//usersCount.put("0", type.equalsIgnoreCase("deals") ? 0 : 0.0);
+    	for (DomainUser user : domainUsers)
+    	{
+    	    usersCount.put(user.id.toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
+    	}
+    	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, usersCount);
+
+    	System.out.println("Total opportunitite....." + opportunitiesList.size());
+    	if(opportunitiesList != null){
+    	for (Opportunity opportunity : opportunitiesList)
+    	{
+    	    String last = "";
+    	    boolean flag_reason = true;
+    	    try
+    	    {
+    		/*
+    		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+    		 * //Get mm/yy String mmYY = formatter.format(new
+    		 * Date(opportunity.close_date * 1000));
+    		 */
+    	    Long user_id = opportunity.getOwner().id;
+    	    List<DomainUser> allUsers = DomainUserUtil.getUsers(dUser.domain);
+    	    for(DomainUser user_temp : allUsers){
+    	    	if(user_temp.id.toString().equals(user_id.toString())){
+        			flag_reason = false;
+    	    	}
+    	    }
+    	   
+    		if (flag_reason)
+    		    user_id = 0L;
+    		System.out.println("user" + user_id);
+    		Double revenue = opportunity.expected_value;
+    		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+    		calendar.setTimeInMillis(opportunity.won_date * 1000);
+
+    		if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+    		    calendar.set(Calendar.DAY_OF_MONTH, 1);
+    		if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+    		{
+
+    		    Iterator iter = newDealsObject.keys();
+    		    while (iter.hasNext())
+    		    {
+    			String key = (String) iter.next();
+    			if ((calendar.getTimeInMillis() / 1000 + "").compareToIgnoreCase(key.toString()) > -1)
+    			{
+    			    last = key;
+    			    continue;
+    			}
+    			break;
+    		    }
+
+    		}
+    		calendar.set(Calendar.HOUR_OF_DAY, 0);
+    		calendar.set(Calendar.MINUTE, 0);
+    		calendar.set(Calendar.SECOND, 0);
+    		calendar.set(Calendar.MILLISECOND, 0);
+
+    		String createdtime;
+    		if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+    		    createdtime = last;
+    		else
+    		    createdtime = (calendar.getTimeInMillis() / 1000) + "";
+    		double count = 0;
+
+    		// Read from previous object if present
+    		if (newDealsObject.containsKey(createdtime))
+    		{
+    		    JSONObject sourcecount1 = newDealsObject.getJSONObject(createdtime);
+    		    count = sourcecount1.getInt(user_id.toString());
+    		    if (type.equalsIgnoreCase("deals"))
+    			count++;
+    		    else
+                {
+                     if(revenue!=null)
+    			count = count + revenue;
+            }
+    		    sourcecount1.put(user_id, count);
+    		    newDealsObject.put(createdtime, sourcecount1);
+    		}
+    	    }
+    	    catch (Exception e)
+    	    {
+    		System.out.println("Exception :" + e);
+    	    }
+    	}
+    	}
+        System.out.println("total deals returnig is :"+newDealsObject.size());
+
+    	return newDealsObject;
+    	
+
+        }
 
     /**
      * 
@@ -2227,7 +2368,7 @@ public class OpportunityUtil
      *            - Given time greater than closed date.
      * @return JsonObject .
      */
-    public static JSONObject getIncomingDealsList(Long ownerId, Long minTime, Long maxTime, String frequency,
+	public static JSONObject getIncomingDealsList(Long ownerId, Long minTime, Long maxTime, String frequency,
 	    String type)
     {
 	JSONObject newDealsObject = new JSONObject();
@@ -2248,9 +2389,11 @@ public class OpportunityUtil
 	List<Category> sources = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
 	JSONObject sourcecount = new JSONObject();
 	sourcecount.put("0", type.equalsIgnoreCase("deals") ? 0 : 0.0);
+	if(sources != null){
 	for (Category source : sources)
 	{
 	    sourcecount.put(source.getId().toString(), type.equalsIgnoreCase("deals") ? 0 : 0.0);
+	}
 	}
 	newDealsObject = ReportsUtil.initializeFrequencyForReports(minTime, maxTime, frequency, timeZone, sourcecount);
 
@@ -2267,11 +2410,13 @@ public class OpportunityUtil
 		 * Date(opportunity.close_date * 1000));
 		 */
 		Long source_id = opportunity.getDeal_source_id();
-		List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
-		for (Category source_temp : sources_id)
+		//List<Category> sources_id = categoriesUtil.getCategoriesByType("DEAL_SOURCE");
+		if(sources != null){
+		for (Category source_temp : sources)
 		{
 		    if (source_temp.getId().toString().equals(source_id.toString()))
 			flag_reason = false;
+		}
 		}
 		if (flag_reason)
 		    source_id = 0L;
@@ -2329,7 +2474,7 @@ public class OpportunityUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("Exception :" + e);
+		System.out.println("Exception :" + e.getMessage());
 	    }
 	}
 	return newDealsObject;
@@ -2782,7 +2927,71 @@ public class OpportunityUtil
 	}
 	return dealswoncount;
     }
-
+    
+    /**
+     * Returns list of deals based on ownerId or won-date or all at once
+     * 
+     * 
+     * @param ownerId
+     *            - Owner Id
+     * @return List
+     */
+    public static List<Opportunity> getWonDealsListBasedOnSelectedCondition(long minTime, long maxTime, Long ownerId, Long pipelineId, Long sourceId)
+    {
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+	List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
+	if (ownerId != null && ownerId != 0)
+	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	if(pipelineId != null && pipelineId != 0)
+	    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+    if(sourceId != null && sourceId != 0)
+    	conditionsMap.put("dealSource", new Key<Category>(Category.class, sourceId));
+  		
+	conditionsMap.put("won_date >= ", minTime);
+	conditionsMap.put("won_date <= ", maxTime);
+	conditionsMap.put("archived", false);
+	List<Milestone> milestoneList = new ArrayList<Milestone>();
+	try
+	{
+		if(pipelineId != null && pipelineId != 0){
+			Milestone milestone = MilestoneUtil.getMilestone(pipelineId);
+			milestoneList.add(milestone);
+		}
+		else{
+	    milestoneList = MilestoneUtil.getMilestonesList();
+		}
+	    
+	    for (Milestone milestone : milestoneList)
+	    {
+		  if (milestone.won_milestone != null)
+		  {
+		    conditionsMap.put("milestone", milestone.won_milestone);
+		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
+		    if (list != null)
+		    {
+			ownDealsList.addAll(list);
+		    }
+		 }
+		 else
+		 {
+		    conditionsMap.put("milestone", "Won");
+		    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, milestone.id));
+		    List<Opportunity> list = dao.listByPropertyAndOrder(conditionsMap, "won_date");
+		    if (list != null)
+		    {
+			ownDealsList.addAll(list);
+		    }
+		}
+	 }
+	    return ownDealsList;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+ }
     /**
      * Returns list of deals based on ownerId or won-date or all at once
      * 
@@ -2795,8 +3004,8 @@ public class OpportunityUtil
     {
 	Map<String, Object> conditionsMap = new HashMap<String, Object>();
 	List<Opportunity> ownDealsList = new ArrayList<Opportunity>();
-	if (ownerId != null)
-	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+	if (ownerId != null && ownerId != 0)
+    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));	
 	conditionsMap.put("won_date >= ", minTime);
 	conditionsMap.put("won_date <= ", maxTime);
 	conditionsMap.put("archived", false);

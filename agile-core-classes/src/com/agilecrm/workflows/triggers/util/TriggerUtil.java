@@ -1,5 +1,6 @@
 package com.agilecrm.workflows.triggers.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.social.TwilioUtil;
+import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -236,5 +240,20 @@ public class TriggerUtil
 		conditionsMap.put("type", condition);
 
 		return dao.getCountByProperty(conditionsMap);
+	}
+	//set sms appsid 
+	public static void setSmsAppSidForSmsTrigger(Trigger trigger)
+	{
+	    Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+	    if (widget == null)
+		return ;
+
+	    String SMS_API = SMSGatewayUtil.getSMSType(widget);
+
+	    if (SMS_API.equals("TWILIO"))
+	    {
+        	TwilioUtil.checkSidAndFromNumber(widget,trigger.sms_reply);
+	    }
+		
 	}
 }

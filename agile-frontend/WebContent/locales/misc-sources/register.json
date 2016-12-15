@@ -4,6 +4,8 @@
  	"register-with-free": "{{agile_lng_translate 'register' 'register-with-free'}}",
  	
  	"sign-up": "{{agile_lng_translate 'login' 'sign-up'}}",
+ 	"sign-in": "{{agile_lng_translate 'login' 'sign-in'}}",
+ 	"already-have-account": "{{agile_lng_translate 'forgot-password' 'already-have-account'}}",
  	
  	"full-name": "{{agile_lng_translate 'register' 'full-name'}}",
  	"email-address": "{{agile_lng_translate 'register' 'email-address'}}",
@@ -17,11 +19,12 @@
  	"domain-name-validation": "{{agile_lng_translate 'register' 'domain-name-validation'}}",
  	"domain-name-helptext": "{{agile_lng_translate 'register' 'domain-name-helptext'}}",
  	"choose-plan": "{{agile_lng_translate 'register' 'choose-plan'}}",
+ 	"select-plan":"{{agile_lng_translate 'register' 'select-plan'}}",
  	"users": "{{agile_lng_translate 'admin-settings' 'users'}}",
  	"role-helptext": "{{agile_lng_translate 'register' 'role-helptext'}}",
  	"role-and-company": "{{agile_lng_translate 'register' 'role-and-company'}}",
  	"ceo": "{{agile_lng_translate 'register' 'ceo'}}",
- 	
+ 	"domain-name-helpmsg" : "{{agile_lng_translate 'register' 'domain-name-helpmsg'}}",
  	"vp": "{{agile_lng_translate 'register' 'vp'}}",
  	"vp-sales": "{{agile_lng_translate 'register' 'vp-sales'}}",
  	"vp-marketing": "{{agile_lng_translate 'register' 'vp-marketing'}}",
@@ -46,6 +49,8 @@
  	"phone-number": "{{agile_lng_translate 'widgets' 'phone-number'}}",
  	"pnone-num-validation": "{{agile_lng_translate 'register' 'pnone-num-validation'}}",
  	"get-started": "{{agile_lng_translate 'web-rules' 'get-started'}}",
+ 	"sign-In": "{{agile_lng_translate 'login' 'sign-In'}}",
+ 	"signup-Using": "{{agile_lng_translate 'register' 'signup-Using'}}",
 
  	// Custom validations
  	"invalid-select-one": "{{agile_lng_translate 'html5Validations' 'invalid-select-one'}}",

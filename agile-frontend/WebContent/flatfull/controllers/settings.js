@@ -1,11 +1,13 @@
 /**
  * Creates backbone router to access preferences of the user (email templates,
- * email (gmail/IMAP), notifications and etc..).
+ * email (gmail/IMAP and SMTP), notifications and etc..).
  */
 
 var HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
 var EMAIL_PREFS_WIDGET_SIZE = 0;
+var SMTP_ACCOUNT_LIMIT = 1;
+var OAUTH_GMAIL_SEND_LIMIT = 1;
 
 var SettingsRouter = Backbone.Router
 		.extend({
@@ -41,9 +43,22 @@ var SettingsRouter = Backbone.Router
 			/* Gmail share preferences */
 			"gmail/:id" : "gmailShare",
 
+
+			/* smtp add prefs */
+			"smtp" : "smtpAdd",
+
+			/* smtp edit prefs */
+			"smtp/:id" : "smtpEdit",
+
+			/* Gmail send preferences */
+			"gmail-send" : "gmailSendPrefs",
+
+
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
 			"email-template/:id" : "emailTemplateEdit",
+
+			"document-templates" : "documentTemplates", "document-template-add" : "documentTemplateAdd", "document-template/:id" : "documentTemplateEdit",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
@@ -58,7 +73,10 @@ var SettingsRouter = Backbone.Router
 			"contact-us" : "contactUsEmail",
 
 			/* Theme & Layout page */
-			"themeandlayout" : "themeandlayout" },
+			"themeandlayout" : "themeandlayout" ,
+
+			/*"help-options" : "helpOptions"*/
+		},
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -273,10 +291,25 @@ var SettingsRouter = Backbone.Router
 							that.imapListView = {};
 							that.officeListView = {};
 							that.gmailListView = {};
+							
+							that.gmailSendListView = {};
+							that.smtpListView = {};
 
 							$('#PrefsTab .select').removeClass('select');
 							$('.email-tab').addClass('select');
 							$(".active").removeClass("active");
+
+							var emailPrefsTab = _agile_get_prefs("emailprefs_tab");
+			                if(!emailPrefsTab || emailPrefsTab == null) {
+			                    _agile_set_prefs('emailprefs_tab', "imap-tab");
+			                    emailPrefsTab = "imap-tab";
+			                }
+			                $('#prefs-tabs-content a[href="#'+emailPrefsTab+'"]').tab('show');
+			                $("#prefs-tabs-content .tab-container ul li").off("click");
+			                $("#prefs-tabs-content").on("click",".tab-container ul li",function(){
+								var temp = $(this).find("a").attr("href").split("#");
+			                	_agile_set_prefs('emailprefs_tab', temp[1]);
+			                });
 
 					}, "#prefs-tabs-content");
 
@@ -288,12 +321,15 @@ var SettingsRouter = Backbone.Router
 						else
 							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
+						
 						var limit = data.emailAccountsLimit;
 
 						load_gmail_widgets(limit);
 						load_imap_widgets(limit);
 						load_office365_widgets(limit);
 
+						load_smtp_widgets();
+						load_gmail_send_widgets();
 					});
 
 				}, "#content");
@@ -442,6 +478,106 @@ var SettingsRouter = Backbone.Router
 				}, "#content");
 			},
 
+
+			/**
+			 * smtp Add settings
+			 */
+			smtpAdd : function()
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					// Gets smtp Prefs
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/smtp', template : "settings-smtp-prefs", isNew : true, change : false,
+						postRenderCallback : function(el)
+						{
+							itemView3.model.set("password", "");
+						}, saveCallback : function()
+						{
+							// $("#smtp-prefs-form").find("#smtp-password").val("");
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+					// Appends smtp
+					$('#prefs-tabs-content').html(itemView3.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+					$("#server_host").trigger('change');
+
+				}, "#content");
+			},
+
+			/**
+			 * smtp Update settings
+			 */
+			smtpEdit : function(id)
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					if (App_Settings.smtpListView === undefined)
+					{
+						App_Settings.navigate("email", { trigger : true });
+						return;
+					}
+
+					var smtp_model = App_Settings.smtpListView.collection.get(id);
+
+					// Gets smtp Prefs
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/smtp/', model : smtp_model, template : "settings-smtp-prefs",
+						postRenderCallback : function(el)
+						{
+							itemView3.model.set("password", "");
+							$("#server_host").val(smtp_model.server_url);
+
+							if(el.find("div [id = server_host]").val() == "smtp.live.com" 
+									|| el.find("div [id = server_host]").val() == "smtp.office365.com"){
+								el.find("div [id = useSSLCheckboxHolder]").hide();
+							} else {
+								el.find("div [id = useSSLCheckboxHolder]").show();
+							}
+
+						}, saveCallback : function()
+						{
+							// $("#smtp-prefs-form").find("#smtp-password").val("");
+							App_Settings.navigate("email", { trigger : true });
+							return;
+						} });
+
+					// Appends smtp
+					$('#prefs-tabs-content').html(itemView3.render().el);
+					$('#PrefsTab .active').removeClass('select');
+					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
+			},
+
+			gmailSendPrefs : function()
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+
+					var data = { "service" : "gmail_send" };
+					var itemView = new Settings_Modal_Events({ url : '/core/api/email-send', template : "settings-gmail-send", data : data, postRenderCallback : function(el){
+					} });
+
+					$('#prefs-tabs-content').html(itemView.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.social-prefs-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
+			},
+
+
 			/**
 			 * Gmail sharing settings
 			 */
@@ -481,24 +617,221 @@ var SettingsRouter = Backbone.Router
 			/**
 			 * Shows list of email templates, with an option to add new template
 			 */
-			emailTemplates : function()
-			{
+			emailTemplates : function(selectedEmailTempCtg, no_load)
+			{	
+
 				var that = this;
-				getTemplate('settings', {}, undefined, function(template_ui){
+				
+				getTemplate('settings-email-templates-top-header', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
-					$('#content').html($(template_ui));	
-					that.emailTemplatesListView = new Base_Collection_View({ url : '/core/api/email/templates', restKey : "emailTemplates",
-					templateKey : "settings-email-templates", individual_tag_name : 'tr', postRenderCallback : function(el)
-					{
-						agileTimeAgoWithLngConversion($(".created_time", el));
-					} });
+
+					if(!no_load)
+					{	
+						$('#content').html($(template_ui));
+						var el = $("#content");
+						
+						if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
+
+							$(el).find("div#filter-email-ctg-div").removeAttr("data-id");
+							var ctNm = "{{agile_lng_translate 'portlets' 'all'}}";
+							var size = Object.keys(Email_Template_Category).length;
+							$("#email_ctg_ui_menu").empty();
+
+							var html = '<li><span style="padding: 5px 15px;display: block;">';
+								html +=	'{{agile_lng_translate "admin-settings-tasks" "categories"}}';
+								html +=	'</span></li>';
+								html += '<li class="divider" id="sort-divider"></li>';
+
+								html +=	'<li>';
+								html +=	'<a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="">';
+								html +=	'{{agile_lng_translate "portlets" "all"}}';
+								if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category == ""){
+									html +=	'<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check">';
+									$("#email-ctg-type-label").empty().append("<small>"+ctNm+"</small>");
+								}else{
+									html +=	'<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check display-none">';
+								}
+								
+								html += '</i>';
+								html +=	'</a>';
+								html +=	'</li>';
+
+							$("#email_ctg_ui_menu").append(html);
+
+							for(var i=0;i<size;i++){
+				            	var ctgId = Email_Template_Category[i].id;
+							    var ctgName = Email_Template_Category[i].name;
+
+							    var html =	'<li>';
+			    					html +=	'<a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="'+ctgId+'">';
+			    					html +=	ctgName;
+
+			    					if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category == ctgId){
+					            		html +=	'<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check">';
+					            		$("#email-ctg-type-label").empty().append("<small>"+ctgName+"</small>");
+					            	}else{
+					            		html +=	'<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check display-none">';
+					            	}
+
+			    					html += '</i>';
+			    					html +=	'</a>';
+			    					html +=	'</li>';
+			    				$("#email_ctg_ui_menu").append(html);
+							}
+
+							$('div#filter-email-ctg-div ul li a').on('click',  function(e){
+								e.preventDefault();
+								$.each($(this).parent().parent().find("li a i"), function(index, elt){
+									if(!($(this).hasClass("display-none"))){
+										$(this).addClass("display-none");
+									}
+								});
+								var selectedCtg = $(this).attr("data");
+								var ctNm = "{{agile_lng_translate 'portlets' 'all'}}";
+								Selected_Email_Template_Category = selectedCtg;
+								if(selectedCtg != ""){
+									var htm = $(this).html();
+									var ltInd = htm.indexOf('<i class');
+									ctNm = htm.substring(0,ltInd)
+								}
+								$(this).find("i[class^=fa]").removeClass("display-none")
+								$("#email-ctg-type-label").empty().append("<small>"+ctNm+"</small>");
+								that.emailTemplates(selectedCtg, true);
+							});
+
+						}else{
+
+							el.on('click', '#filter-email-ctg-div', function(event){
+								event.preventDefault();
+								var isCtg = $(this).attr("data-id");
+								if(isCtg != undefined && isCtg == "new"){
+
+									$(this).removeAttr("data-id");
+									$("#email-ctg-type-label").empty();
+
+									$.getJSON("core/api/emailTemplate-category", function(data){
+
+										Email_Template_Category = {};
+		       							$("#email_ctg_ui_menu").empty();
+		       							var html = '<li><span style="padding: 5px 15px;display: block;">';
+		                					html +=	'{{agile_lng_translate "admin-settings-tasks" "categories"}}';
+		                					html +=	'</span></li>';
+		                					html += '<li class="divider" id="sort-divider"></li>';
+
+		                					html +=	'<li>';
+		                					html +=	'<a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="">';
+		                					html +=	'{{agile_lng_translate "portlets" "all"}}';
+		                					html +=	'<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check display-none">';
+		                					html += '</i>';
+		                					html +=	'</a>';
+		                					html +=	'</li>';
+
+										$("#email_ctg_ui_menu").append(html);
+
+										for(var i=0;i<data.length;i++){
+							                var ctgId = data[i].id;
+							                var ctgName = data[i].name;
+
+							               	var html =	'<li>';
+		                    					html +=	'<a class="sort-link sort-field pos-rlt text-ellipsis" style="width:185px;" href="javascript:void(0);" data="'+ctgId+'">';
+		                    					html +=	ctgName;
+		                    					html +=	'<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs sort-field-check display-none">';
+		                    					html += '</i>';
+		                    					html +=	'</a>';
+		                    					html +=	'</li>';
+		                    				$("#email_ctg_ui_menu").append(html);
+							                
+							                var tempObj = {};
+							                tempObj["id"] = ctgId;
+							                tempObj["name"] = ctgName;
+
+							                Email_Template_Category[i] = tempObj;  
+										}
+
+										$('div#filter-email-ctg-div ul li a').on('click',  function(e){
+											e.preventDefault();
+											$.each($(this).parent().parent().find("li a i"), function(index, elt){
+												if(!($(this).hasClass("display-none"))){
+													$(this).addClass("display-none");
+												}
+											});
+											var selectedCtg = $(this).attr("data");
+											var ctNm = "{{agile_lng_translate 'portlets' 'all'}}";
+											Selected_Email_Template_Category = selectedCtg;
+											if(selectedCtg != ""){
+												var htm = $(this).html();
+												var ltInd = htm.indexOf('<i class');
+												ctNm = htm.substring(0,ltInd)
+											}
+											$(this).find("i[class^=fa]").removeClass("display-none")
+											$("#email-ctg-type-label").empty().append("<small>"+ctNm+"</small>");
+											that.emailTemplates(selectedCtg, true);
+										});
+
+									});
+								}
+
+							});
+						}
+
+					}	
+		
+					var currUrl = "/core/api/email/templates";
+					if(selectedEmailTempCtg && selectedEmailTempCtg != ""){
+						currUrl = "/core/api/email/templates?category_id="+selectedEmailTempCtg;
+					}else if(typeof Email_Template_Category != "undefined" && Email_Template_Category){
+						if(typeof Selected_Email_Template_Category != "undefined" && Selected_Email_Template_Category != ""){
+							currUrl = "/core/api/email/templates?category_id="+Selected_Email_Template_Category;
+						}
+					}
+
+					if (that.emailTemplatesListView && that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length > 0)
+	                {
+	                	if(typeof Email_Template_Category == "undefined" && typeof Refresh_Email_Template == "undefined"){
+                			$("#content").find("#prefs-tabs-content").html(that.emailTemplatesListView.render(true).el);
+                    		return;
+	                		
+	                	}else if(!no_load && typeof Email_Template_Category != "undefined"){
+	                		if(typeof Refresh_Email_Template == "undefined"){
+	                			$("#content").find("#prefs-tabs-content").html(that.emailTemplatesListView.render(true).el);
+	                    		return;
+	                		}
+	                	}
+	                }
+
+					that.emailTemplatesListView = new Base_Collection_View({ 
+						url : currUrl, 
+						restKey : "emailTemplates",
+						templateKey : 'settings-email-templates', 
+						individual_tag_name : 'tr',
+						cursor : true, 
+						page_size : getMaximumPageSize(),
+						postRenderCallback : function(el)
+						{
+							if (that.emailTemplatesListView.collection && that.emailTemplatesListView.collection.length == 0){
+								if(typeof Email_Template_Category == "undefined" ||
+										(typeof Email_Template_Category != "undefined" && typeof Selected_Email_Template_Category != "undefined" 
+											&& Selected_Email_Template_Category == "")){
+
+									window.location.href  = window.location.origin+"/#emailbuilder-templates";
+								}
+							}
+
+							agileTimeAgoWithLngConversion($("time.campaign-created-time", el));
+							make_menu_item_active("email-templates-menu");
+							Refresh_Email_Template = undefined;
+						},
+						appendItemCallback : function(el)
+			            {
+				               $("time.campaign-created-time", el).timeago();
+
+			             }
+
+					});
 
 					that.emailTemplatesListView.collection.fetch();
 					$('#prefs-tabs-content').html(that.emailTemplatesListView.el);
-					$('#PrefsTab .select').removeClass('select');
-					$('.email-templates-tab').addClass('select');
-					make_menu_item_active("email-templates-menu");
 
 				}, "#content");
 
@@ -515,9 +848,19 @@ var SettingsRouter = Backbone.Router
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));
+					$("#content").find(".col").hide();
+					$("#content").find(".prefs-title").html("Add Email Template");
+
+					Old_Editor_Count = 0;
+
 					var view = new Email_Template_Events({ url : '/core/api/email/templates', isNew : true, template : "settings-email-template-add",
 					window : 'email-templates', postRenderCallback : function()
 					{
+						Old_Editor_Count ++;
+						if(Old_Editor_Count > 1){
+							Refresh_Email_Template = true;
+            				Selected_Email_Template_Category = "";
+						}
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
@@ -542,6 +885,7 @@ var SettingsRouter = Backbone.Router
 					$('#PrefsTab .select').removeClass('select');
 					$('.email-templates-tab').addClass('select');
 					$(".active").removeClass("active");
+					make_menu_item_active("email-templates-menu");
 
 				}, "#content");
 			},
@@ -559,7 +903,9 @@ var SettingsRouter = Backbone.Router
 				getTemplate('settings', {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
-					$('#content').html($(template_ui));	
+					$('#content').html($(template_ui));
+					$("#content").find(".col").hide();
+					$("#content").find(".prefs-title").html("Edit Email Template");	
 
 					// Navigates to list of email templates, if it is not defined
 					if (!that.emailTemplatesListView || that.emailTemplatesListView.collection.length == 0)
@@ -596,6 +942,7 @@ var SettingsRouter = Backbone.Router
 					$('#PrefsTab .select').removeClass('select');
 					$('.email-templates-tab').addClass('select');
 					$(".active").removeClass("active");
+					make_menu_item_active("email-templates-menu");
 
 				}, "#content");
 				if ($('#attachment_id').val())
@@ -613,6 +960,165 @@ var SettingsRouter = Backbone.Router
 						$('#tpl-attachment-name').show();
 					}, optionsTemplate, false, el);
 				}
+			},
+
+			documentTemplates : function()
+			{
+				
+
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', 
+					templateKey : "settings-document-templates",
+					individual_tag_name : 'tr', postRenderCallback : function(el)
+					{
+						console.log("loaded document template : ", el);
+								head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+								{
+									
+									$(".created_time", el).timeago();
+								});
+						
+					} });
+					that.documentTemplatesListView.collection.fetch();
+
+					$('#content').find('#prefs-tabs-content').html(that.documentTemplatesListView.render().el);
+					$('#content').find('#PrefsTab .active').removeClass('select');
+					$('#content').find('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+			},
+
+			/**
+			 * Loads a form to add new document-template. Sets HTMLEditor for the
+			 * form. Navigates to list of document templates on save success.
+			 */
+			documentTemplateAdd : function()
+			{
+
+				var that = this;
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', isNew : true, template : "settings-document-template-add",change:false,
+					saveAuth:function (el)
+					{
+						trigger_tinymce_save('document-template-html')
+						var sVal1=$("#document-template-html").val()
+						if(sVal1.length<=61)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return false;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						if($("#id","#userForm").length==0){
+							$("#userForm").append('<input id="id" name="id" type="hidden" value="' + data.id + '" />')	
+						}
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', '');
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
+
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+			},
+
+			/**
+			 * Updates existing document-template. On updation navigates the page
+			 * to document-templates list
+			 * 
+			 * @param id
+			 *            DocumentTemplate Id
+			 */
+			documentTemplateEdit : function(id)
+			{
+
+				if (!this.documentTemplatesListView || this.documentTemplatesListView.collection.length == 0)
+				{
+					this.navigate("document-templates", { trigger : true });
+					return;
+				}
+				var that = this;
+				that.currentTemplate = that.documentTemplatesListView.collection.get(id);
+				getTemplate("settings", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));	
+
+					that.view = new Base_Model_View({url : '/core/api/document/templates', model : that.currentTemplate, template : "settings-document-template-add",reload : false,change:false,
+					saveAuth:function (el)
+					{
+						
+						var plain_content = '';
+
+						try{
+							plain_content = $(tinyMCE.activeEditor.getBody()).text();
+						}
+						catch(err){}
+
+						if(plain_content.trim().length==0)
+						{
+							$(".doc-template-error-status","#userForm").html("This field is required.")
+							return true;
+						}	
+						else
+							$(".doc-template-error-status","#userForm").html("");
+					},
+					saveCallback:function(data){
+						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+					},
+					postRenderCallback : function(el)
+					{
+								// set up TinyMCE Editor
+								setupTinyMCEEditor('textarea#document-template-html', false, undefined, function()
+								{
+									// Reset tinymce
+									set_tinymce_content('document-template-html', that.currentTemplate.toJSON().text);
+
+									// Register focus
+									register_focus_on_tinymce('document-template-html');
+									//$("#document-template-html_ifr").height("90vh");
+								});
+
+								$('.save-doc-template').on('click', function(e) {
+									e.preventDefault();
+									
+								
+								});
+						
+					} });
+					$('#prefs-tabs-content').html(that.view.render().el);
+
+					$('#PrefsTab .active').removeClass('select');
+					$('.document-templates-tab').addClass('select');
+					
+				}, "#content");
+
+				
 			},
 
 			/**
@@ -819,6 +1325,11 @@ var SettingsRouter = Backbone.Router
 
 			themeandlayout : function()
 			{
+				getTemplate("settings", {}, undefined, function(template_ui){
+										if(!template_ui)
+											  return;
+										$('#content').html($(template_ui));
+									});
 				// $("#content").html(getTemplate("theme-layout-form"), {});
 				showTransitionBar();
 				$
@@ -828,19 +1339,23 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
-									$('#content').html($(template_ui));	
+									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
+									$("#page_size").val(CURRENT_USER_PREFS.page_size);
 									$("#layout").val(CURRENT_USER_PREFS.layout);
 									if (CURRENT_USER_PREFS.animations == true)
 										$("#animations").attr('checked', true);
 									$('.magicMenu  input:radio[name="theme"]').filter('[value=' + CURRENT_USER_PREFS.theme + ']').attr('checked', true);
-									if (data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
+									if (data.page_size != CURRENT_USER_PREFS.page_size || data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 										$(".theme-save-status").css("display", "inline");
 									hideTransitionBar();
+									$('#PrefsTab .select').removeClass('select');
+									$('.theme-and-layout').addClass('select');
 
 								}, "#content");
 
@@ -903,15 +1418,29 @@ var SettingsRouter = Backbone.Router
 			userPrefsAdvanced : function(data)
 			{
 				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
+
 					postRenderCallback : function(el, data){
+						$('[data-toggle="tooltip"]',el).tooltip();
 					},saveCallback : function(response){
 						console.log(response);
 						// Save language cookie
 						createCookie("user_lang", response.language, 360);
+
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
-			}
+			},
+			/*helpOptions : function(){
+				var that =this;
+				getTemplate("prefs-dropdown-options", {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+					loadLiveChat();
+					hideTransitionBar();
+				},"#content");
+			
+			}*/
 
 		});
 
@@ -924,3 +1453,11 @@ function getCurrentDomain(options){
 	}
 	return " ";
 }
+
+/*function loadLiveChat(){
+	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
+		e.preventDefault();
+		$(this).closest(".dropdown").removeClass("open");
+		CLICKDESK_LIVECHAT.show();
+	});
+}*/

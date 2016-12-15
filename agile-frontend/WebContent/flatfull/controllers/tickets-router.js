@@ -39,6 +39,7 @@
 		/*Ticket reports*/
 		"ticket-reports" : "ticketReports",
 		"ticket-report/:report_type" : "ticketReport",
+		"ticket-feedback":"ticketFeedback",
 	     
          /*Help center Routes*/
 		"knowledgebase" : "categories",
@@ -68,6 +69,207 @@
 		});
 		make_menu_item_active("tickets");
 	},
+
+	ticketFeedback: function(){
+		
+		initReportLibs(function(){
+
+			loadServiceLibrary(function(){
+			
+
+				if(!$('#ticket-feedback').length){	
+									
+					getTemplate("ticket-feedback-header", {}, undefined, function(template_ui){
+			 		
+			 		if(!template_ui)
+			 			return;
+			 		
+			 		var el = $('#content').html($(template_ui));
+			 		
+			 		$("#feedback").off();
+					$("#feedback").on('change',function(){
+						App_Ticket_Module.renderfeedbackmodel(el);
+					});
+
+					$("#group_names").off();
+					$("#group_names").on('change',function(){
+						App_Ticket_Module.renderfeedbackmodel(el);
+					});
+			 		//initializing date range picket
+					initDateRange(App_Ticket_Module.renderfeedbackmodel);
+						
+			fillSelect('group_names', '/core/api/tickets/groups', '', function(collection){
+			 	 			getTemplate("ticket-feedback-group", collection.toJSON(), undefined, function(template_ui){						
+
+								if(!template_ui)
+									return;
+
+				                $('#group_names', el).html($(template_ui));
+				       
+				  
+									
+								
+			               	} );		
+					
+					},'', true);
+
+						App_Ticket_Module.renderfeedbackmodel(el);
+			 		});
+						
+				}				
+			});		
+		});
+	make_menu_item_active("feedbackactivitiesmenu");
+	},	 	
+
+	renderfeedbacktemplate :function(start_time,end_time,feedback,group,assignee){
+		
+		//Rendering root template	
+		App_Ticket_Module.feedbackollection = new Base_Collection_View({
+			url : '/core/api/tickets/notes/feedback/?start_time=' + start_time + '&end_time=' 
+			+ end_time + '&feedback=' + feedback+ '&group=' + group + '&assignee=' + assignee,
+			templateKey : "ticket-feedback-log",
+			isNew : true,
+			individual_tag_name : 'tr',
+			sort_collection : true, 
+			sortKey : 'created_time',
+			descending: true,
+			postRenderCallback:function(el,model){		
+				includeTimeAgo(el);
+			
+				/*Ticket related click event to show the modal when requester or assignee replies*/
+				$(".ticket-feedback-notes").on('click', function(e) 
+				{
+					e.preventDefault();
+				   	var id = $(this).data("id");
+				    
+				    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+
+					getTemplate("ticket-note-feedback-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+
+						if(!template_ui)
+							  return;
+
+						var emailinfo = $(template_ui);
+
+						emailinfo.modal('show');
+					}, null);
+
+				});
+				$(".ticket-feedback-comment").on('click', function(e) 
+				{
+					
+					e.preventDefault();
+				   	var id = $(this).data("id");
+				    
+				    var activity_ticket_feedback_notes = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();;
+
+					getTemplate("ticket-feedback-comment-modal", activity_ticket_feedback_notes, undefined, function(template_ui){
+
+						if(!template_ui)
+							  return;
+
+						var emailinfo = $(template_ui);
+
+						emailinfo.modal('show');
+					}, null);	
+
+				});
+
+		// $(el)
+		// 	.on('mouseover mouseout', 'tbody#ticket-feedback-log-model-list> tr>td#ticket_note',
+		// 		function(event) {
+
+		// 			clearTimeout(popoverFunction);
+					
+					    
+		// 			if (event.type == 'mouseover'){
+
+		// 				var $that = $(this);
+						
+		// 				popoverFunction = setTimeout(function(){
+
+		// 					var id = $that.data("id");
+		// 					var ticketJSON = App_Ticket_Module.feedbackollection.collection.get(id).toJSON();
+
+		// 					getTemplate("ticket-feedback-popup", ticketJSON, undefined, function(template_ui){
+
+                               
+                               
+  //                           	  if(!template_ui)
+		// 					  		return;
+
+		// 						$('body').append($(template_ui));
+								
+								         
+		// 						if(Current_Ticket_ID || Current_Route.indexOf('ticket') == -1)
+		// 							return;
+
+		// 						//Get closest div with row class to set left alignment. Table row left doesn't work as table have scrolling.
+		// 						var $closest_div = $that.closest('div.row');
+		// 						var top = 0, left = $closest_div.offset().left + 500 + 'px';
+
+		// 						if (window.innerHeight - ($that.offset().top - $(window).scrollTop()) >= 250)
+		// 							top = $that.offset().top + 35 + 'px';
+		// 						else
+		// 							top = $that.offset().top - $('#ticket-feedback-comment').height() + 'px';
+                                
+  //                               Ticket_Utils.loadTimeAgoPlugin(function(){
+		// 			        	     var x = $("time","#ticket-feedback-comment").timeago();
+		// 			        	 });
+								 
+                                
+		// 						$('#ticket-feedback-comment').css('top', top).css('left', left).css('display', 'block');
+		// 					});
+		// 				},600);
+						
+		// 			}else{
+		// 				$('div.ticket-feedback-comment').remove();
+		// 			}
+
+			//});	
+
+			}
+
+
+	
+		});
+		App_Ticket_Module.feedbackollection.collection.fetch();
+
+		$('#ticket-feedback').html(App_Ticket_Module.feedbackollection.render().el);	
+	},
+
+	renderfeedbackmodel: function(el){
+		
+		var range = $('#range',el).html().split("-");
+		var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
+	    var d = new Date();
+	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
+	    var end_value = $.trim(range[1]);
+	    // To make end value as end time of day
+	    if (end_value)
+	        end_value = end_value + " 23:59:59";
+
+	    var group = 0;
+	    var assignee = 0;
+	    	if($('#group_names').find('option:selected').val()){
+	    		group = $('#group_names').find('option:selected').val();
+	    	}
+
+	    	if($('#group_names').find('option:selected').data('assignee-id')){
+	    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+
+	    	}
+	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
+
+	    end_time += (((23*60*60)+(59*60)+59)*1000);
+	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
+		var feedback =null;
+	    feedback = $('#feedback').find('option:selected').val();
+		
+		App_Ticket_Module.renderfeedbacktemplate(start_time,end_time,feedback,group,assignee);
+	},
+
 
 	/**
 	 * Shows new ticket form
@@ -253,16 +455,23 @@
 		 				//Render template with contact details
 		 				if(Ticket_Utils.Current_Ticket_Contact &&
 		 					!$.isEmptyObject(Ticket_Utils.Current_Ticket_Contact.toJSON())){
+
+		 					var json = Ticket_Utils.Current_Ticket_Contact.toJSON();
+
+		 					json.status = data.status;
+
 		 					$('#ticket-contact-details', el).html(
-		 						getTemplate('ticket-contact', Ticket_Utils.Current_Ticket_Contact.toJSON()));
+
+		 						getTemplate('ticket-contact', json));
 		 				}else{
 		 					
 		 					$('#ticket-contact-details', el).html(
 		 						getTemplate('ticket-contact-fallback', data));
-		 				
 		 				}
-		 				loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
+		 				Tickets.ticketsloadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON());
+		 				//loadWidgets(el, Ticket_Utils.Current_Ticket_Contact.toJSON(), "widgets");
 		 			});
+
 
 		 			// Append reply container
 		 			Tickets_Notes.repltBtn("reply", el);
@@ -273,9 +482,7 @@
 					//Showing ticket labels as selected labels
 					Ticket_Labels.showSelectedLabels(data.labels, $(el), true);
 
-					//Load RHS side bar widgets
-					Tickets.ticketsloadWidgets(App_Ticket_Module.ticketView.el);
-
+					
 					//Initializing Assignee dropdown with groups and assignees
 					Tickets.fillAssigneeAndGroup(el);
 
@@ -843,6 +1050,10 @@
 						template = 'ticket-avg-first-resp-time';
 						callback = Ticket_Reports.avgFirstRespTime;
 						break;
+					case 'feedback':
+						template = 'ticket-feedback-report';
+						callback = Ticket_Reports.feedbackReports;
+						break;
 				}
 
 				//Renders the required template based on report type
@@ -881,7 +1092,11 @@
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
-	 			agileTimeAgoWithLngConversion($("time", el));
+
+	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", el).timeago();
+				});
 
 	 			if(callback)
 	 				callback();
@@ -907,8 +1122,12 @@
 	 		descending:true,
 	 		individual_tag_name : 'div',
 	 		postRenderCallback : function(el) {
-	 			agileTimeAgoWithLngConversion($("time", el));
-	 			
+
+	 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$("time", el).timeago();
+				});
+
 				if(callback)
 	 				callback();
 	 		}
@@ -974,7 +1193,8 @@
 	},
 
 	categories: function(){
-				loadServiceLibrary(function(){
+		
+		loadServiceLibrary(function(){
 		 	//Rendering root template
 			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
 				//Initializing base collection with groups URL
@@ -1041,6 +1261,7 @@
 								
 				}
 			});	
+			
 			//Fetching groups collections
 			if(!App_Ticket_Module.categoriesCollection.collection.fetch())
 			setTimeout(function(){
@@ -1051,9 +1272,12 @@
 			//Rendering template
 			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);
 
-		 	});
+		 	make_menu_item_active("ticketknowledgebasemenu");
+			$('#content').find('#AdminPrefsTab .select').removeClass('select');
+			$('#content').find('.helpdesk-tab').addClass('select');
+	
+	 	});
 		});
-		make_menu_item_active("ticketknowledgebasemenu");
 	},
 
 
@@ -1136,6 +1360,9 @@
 
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
     
     articles: function(name){
@@ -1220,6 +1447,10 @@
 
 		 	});
 		});
+	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addArticle : function(section_id){
@@ -1289,7 +1520,10 @@
 		 			callback();
 		 	});
 		});
-
+		
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	editArticle : function(section_id,name){
@@ -1334,6 +1568,9 @@
 		 			callback();
 		 	});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 
 	},
 
@@ -1359,6 +1596,9 @@
 							
 			});	
 		});	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addSection : function(category_id){
@@ -1397,6 +1637,10 @@
 				$('#admin-prefs-tabs-content').html(addsectionView.render().el);			
 			});	
 		});	
+		
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1430,6 +1674,9 @@
 				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
 			});	
 		});	
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	}, 
 
 	addLandingpage : function(){
@@ -1449,21 +1696,26 @@
 					        var kb_id = json.id;
 					        var optionTemplate = "<option value='{{id}}'>{{name}}</option>";
 								
-
-								fillSelect('template_id', '/core/api/landingpages?page_size=20', '', 
+					        	var pageSize = getMaximumPageSize();
+								fillSelect('template_id', '/core/api/landingpages?page_size='+pageSize, '', 
 								function(){
-									$("#template_id",el).append('<option value=1>{{agile_lng_translate "report-chart-forms" "default"}}</option>');
+									$("#template_id",el).append('<option value=1>Default</option>');
 									$('#template_id option[value=""]',el).attr("value",0);
 									$('#template_id option[value="'+kblpid+'"]',el).attr("selected",true);
-								}, optionTemplate, false, el,"{{agile_lng_translate 'landingpages' 'basic'}}");
-								
+																							
+								}, optionTemplate, false, el,"Basic");
+										
+							
 		 				}
 					   
 				    });
 
 					$('#admin-prefs-tabs-content').html(addLandingpageView.render().el);			
 				});	
-			});	
+			});
+				make_menu_item_active("ticketknowledgebasemenu");
+				$('#content').find('#AdminPrefsTab .select').removeClass('select');
+				$('#content').find('.helpdesk-tab').addClass('select');	
 		}, 
 
 
@@ -1483,6 +1735,9 @@
 				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
 			});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1511,6 +1766,9 @@
 				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
 			});
 		});
+		make_menu_item_active("ticketknowledgebasemenu");
+		$('#content').find('#AdminPrefsTab .select').removeClass('select');
+		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	loadAdminsettingsHelpdeskTemplate: function(json, callback){

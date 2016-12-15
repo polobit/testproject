@@ -1,5 +1,43 @@
-    <script id="deal-search-model-template" type="text/html">
-    <td></td>
+<script id="deal-search-model-template" type="text/html">
+{{#is_mobile}}
+    <td class="hide"></td>
+    <td class="data" data="{{id}}" style="padding-bottom:12px;">
+        <div class="text-ellipsis deals-name"> 
+            <a class="text-cap">{{name}}</a>
+        </div>
+        <div class="text-ellipsis deals-name" style="font-size:13px; margin-top:-2px;">
+            {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+            <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
+        </div>
+        <!-- <div class="text-ellipsis">
+            {{milestone}} ({{probability}}%) 
+        </div> -->
+        <div class="text-ellipsis">
+            {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}
+        </div>
+    </td>
+    <td style="vertical-align:middle">
+        <div class="text-md text-muted contact-list-mobile text-right block">
+            <i class="fa fa-angle-right"></i>
+        </div>
+    </td>
+    <!-- <td><div class="text-ellipsis" style="width:10em">
+        {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+        </div>
+    </td> -->
+    <!-- <td>
+        <div class="text-ellipsis">
+            {{milestone}} ({{probability}}%) 
+        </div>
+    </td> -->
+    <!-- <td><div class="text-ellipsis">
+
+        {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}
+
+    </div>
+    </td> -->
+{{else}}
+<td></td>
     <td class="data" data="{{id}}">
     <div class="table-resp">
         <div class="agile-thumb agile-thumb-view" style="width:calc(100% - 60px);">
@@ -8,7 +46,7 @@
        </div>
     </td>
    
-    <td><div class="text-ellipsis" style="width:10em">
+    <td value="{{#if expected_value}}{{expected_value}}{{else}}0{{/if}}"><div class="text-ellipsis" style="width:10em">
         {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
         </div>
     </td>
@@ -19,18 +57,38 @@
     </td>
     <td><div class="text-ellipsis">
 
-        {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}
+        {{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+        {{else}}
+            <time class="deal-close-time" value="" datetime=""></time>
+        {{/if}}
 
     </div>
     </td>
+{{/is_mobile}}
 </script>
 <script id="deal-search-collection-template" type="text/html">
+{{#is_mobile}}
+    <div class="wrapper-md lter bg-light b-b">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3 pull-left">Search results for 
+                    <span style="font-weight:bold;">"{{query}}"</span>
+                </div>
+                    <!-- <div class="pull-right">
+                    <div class="btn-group" id="view-list">
+                    </div>
+                    <div class="btn-group right" id="filter-list">
+                    </div>
+                    </div> -->
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{{else}}
 <div class="wrapper-md lter bg-light b-b">
 <div class="row">
     <div class="col-md-12">
-       
-           
-            <div id="search-query-heading" style="font-size:19px;"class="m-n font-thin h3 pull-left">Search results for 
+         <div id="search-query-heading" style="font-size:19px;" class="m-n font-thin h3 pull-left">Search results for 
             <span style="font-weight:600;">"{{query}}"</span>
             </div>
             <div class="pull-right">
@@ -43,6 +101,7 @@
     </div>
 </div>
 </div>
+{{/is_mobile}}
 <div class="row">
     <div class="col-md-12">
         {{#if this.length}}
@@ -62,6 +121,24 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
+                {{#is_mobile}}
+                    <div>
+                        <table id="deal-list" class="table table-striped  panel agile-table onlySorting table-layout-mob-view m-b-none" url="core/api/opportunity/bulk" style="table-layout:auto;">
+                            <!-- <thead>
+                                <tr>
+                                    <th style="width:2%;"></th>
+                                    <th style="width:25%;">{{agile_lng_translate 'deal-view' 'opportunity'}}</th>
+                                    <th style="width:25%;">{{agile_lng_translate 'contacts-view' 'value'}}</th>
+                                    <th style="width:30%;">{{agile_lng_translate 'admin-settings-tasks' 'Milestone'}}</th>
+                                    <th style="width:25%;">{{agile_lng_translate 'deal-view' 'close-date'}}</th>
+
+                                </tr>
+                            </thead> -->
+                            <tbody id="deal-search-model-list" class="model-list-cursor" route="deals/">
+                            </tbody>
+                        </table>
+                    </div>
+                {{else}}
                 <div class="table-responsive">
                 <table id="deal-list" class="table table-striped  panel agile-table onlySorting table-layout-mob-view m-b-none" url="core/api/opportunity/bulk" style="table-layout:auto;">
                     <thead>
@@ -79,6 +156,7 @@
                     </tbody>
                 </table>
                 </div>
+                {{/is_mobile}}
             </div>
         </div>
 

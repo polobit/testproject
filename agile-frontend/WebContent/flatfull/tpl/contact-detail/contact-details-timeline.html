@@ -31,7 +31,15 @@
 
         {{#if_entity "contact_entity"}}
             <div class="timestamp">{{created_time}}</div>
-            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> {{agile_lng_translate 'campaigns' 'created'}}</div></div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> {{agile_lng_translate 'campaigns' 'created'}}{{#if source}}{{#if_equals source 'manual'}}{{else}} ({{source}}){{/if_equals}}{{/if}}</div></div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
+            <div class="body" style="padding:5px">
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+            </div>
+        {{/if_entity}}
+        {{#if_entity "company_entity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks text-muted"></i></a></span> {{agile_lng_translate 'campaigns' 'created'}}{{#if source}}{{#if_equals source 'manual'}}{{else}} ({{source}}){{/if_equals}}{{/if}}</div></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body" style="padding:5px">
                 <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
@@ -255,7 +263,7 @@
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
-                <span class="text-xs"><pre class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">{{description}}</pre></span>
+                <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">{{description}}</div></span>
             </div>
         {{/if_entity}}
 
@@ -281,8 +289,23 @@
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'created'}}
+                    {{#if source}}{{#if_equals source 'manual'}}{{else}} ({{source}}){{/if_equals}}{{/if}}
 				</div>
 			</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
+            <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
+            <!-- <div class="body" style="padding:5px">
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+            </div> -->
+        {{/if_entity}}
+        {{#if_entity "company_entity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div></div> -->
+            <div class="text-md text-cap pull-left">    
+                <div class="contact-job-title text-base custom-color">
+                    <i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'created'}}
+                {{#if source}}{{#if_equals source 'manual'}}{{else}} ({{source}}){{/if_equals}}{{/if}}</div>
+            </div>
             <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
             <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
             <!-- <div class="body" style="padding:5px">
@@ -377,7 +400,7 @@
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="text-xs " >{{user.name}}</div>
-                <div class="text-xs " >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+                <div class="text-xs " >{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{/if}}</div>
             </div>
          {{/if_equals}}
         {{#if_equals "outgoing" custom2}}
@@ -414,7 +437,7 @@
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="text-xs">{{user.name}}</div>
-                <div class="text-xs">{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToFriendlyTime custom4}}{{/if}}</div>
+                <div class="text-xs">{{callActivityFriendlyStatus custom3 custom2}}{{#if custom4}}{{secondsToCallActivitiesTime custom4}}{{/if}}</div>
             </div>	
         {{/if_equals}}
         {{/if_equals}}
@@ -437,15 +460,15 @@
 
       {{#if_entity "event"}}
 			
-            <div class="timestamp">{{start}}</div>
+            <div class="timestamp">{{end}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-folder-close"></i></a></span> Event Added</div></div> -->
 			<div class="text-md text-cap pull-left">	
 				<div class="contact-job-title text-base custom-color">
 					<i class="icon icon-calendar text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'event-completed'}}
 				</div>
 			</div>
-            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" start}}</div><div class="clearfix"></div>
-            <div class="date">{{epochToTaskDate start}}</div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" end}}</div><div class="clearfix"></div>
+            <div class="date">{{epochToTaskDate end}}</div>
             <div class="body">
                 <div class="text-xs ">{{title}}</div>
                 <div class="text-xs ">{{agile_lng_translate 'contact-details' 'started-at'}} {{epochToHumanDate "h:MM TT" start}} on {{epochToHumanDate "ddd mmm dd yyyy" start}}</div>
@@ -485,7 +508,7 @@
                 <div class="text-xs text-ellipsis" style="margin-top:-8px">{{agile_lng_translate 'contact-details' 'campaign'}} - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'emailbuilder' 'subject'}} {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                    <div class="text-xs text-ellipsis">{{#if_email_sent this "log_type"}} {{agile_lng_translate 'emailbuilder' 'subject'}} {{{Subject}}} {{else}} {{{message}}} {{/if_email_sent}}
                         <div class="right" data="{{#if_email_sent this "log_type"}} {{agile_lng_translate 'emailbuilder' 'subject'}} {{Subject}} {{else}} {{message}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="glyphicon glyphicon-plus-sign"></i></a></div>
                     </div>   
             {{/if}}        
@@ -640,6 +663,21 @@
                  <div class="text-xs ">{{subject}}</div>
                 <div class="text-xs ">{{{convert_to_html plain_text}}}</div>
             </div>
+        {{/if_entity}}
+
+        {{#if_entity "lead_entity"}}
+            <div class="timestamp">{{created_time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Created</div></div> -->
+            <div class="text-md text-cap pull-left">    
+                <div class="contact-job-title text-base custom-color">
+                    <i class="icon-tasks text-muted p-r-xs"></i>{{agile_lng_translate 'contact-details' 'created'}}
+                </div>
+            </div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" created_time}}</div><div class="clearfix"></div>
+            <div class="date" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}">{{epochToTaskDate created_time}}</div>
+            <!-- <div class="body" style="padding:5px">
+                <div class="text-base ">{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" created_time}}</div>
+            </div> -->
         {{/if_entity}}
 	<!-- <a href="#" class="open-close"></a> -->
   </div>

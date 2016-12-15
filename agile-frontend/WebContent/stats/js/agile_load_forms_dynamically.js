@@ -1,14 +1,20 @@
 function loadAgileCRMForm(id){
-	id = id.split("_");
-	var agileDomain = id[0];
-	var formId = id[id.length-1];
+	var idArr = id.split("_");
+	var formId = idArr.pop();
+	var agileDomain = idArr.join("_");
 	var script = document.createElement('script');
     script.src = window.location.protocol+'//'+agileDomain+'.agilecrm.com/core/api/forms/form/js/'+formId;
+    // script.src = "http://localhost:8888/core/api/forms/form/js/"+formId;
+    // script.src = "https://"+agileDomain+"-dot-sandbox-dot-agilecrmbeta.appspot.com/core/api/forms/form/js/"+formId;
     document.body.appendChild(script);      
 }
 
 function showAgileCRMForm(formJson,formHolderId) {   
 	document.getElementById(formHolderId).innerHTML = formJson.formHtml;
+
+    var gCaptchaSrc = document.getElementById("gRecaptchaSrc");
+    if(gCaptchaSrc) document.getElementById(formHolderId).removeChild(gCaptchaSrc);
+
 	var onloadScript = document.getElementById(formHolderId).getElementsByTagName("script");
     onloadScript = onloadScript[0].innerHTML;
 	var script = document.createElement('script');
@@ -27,6 +33,19 @@ function showAgileCRMForm(formJson,formHolderId) {
         }
     }
 
+   /*loading the captcha js file dynamically*/
+    var formJsonObj = JSON.parse(formJson.formJson);
+    if(typeof formJsonObj[0].fields.agileformcaptcha !== "undefined") {
+        for (var key in formJsonObj[0].fields.agileformcaptcha["value"]) { 
+            if(formJsonObj[0].fields.agileformcaptcha["value"][key]["selected"]) {
+                if(formJsonObj[0].fields.agileformcaptcha["value"][key]["value"]=="true") {
+                    var gCaptcha = document.createElement("script");
+                    gCaptcha.src = "https://www.google.com/recaptcha/api.js";
+                    document.body.appendChild(gCaptcha);
+                }
+            }
+        }
+    }  
 }
 
 window.addEventListener('load', function() { 

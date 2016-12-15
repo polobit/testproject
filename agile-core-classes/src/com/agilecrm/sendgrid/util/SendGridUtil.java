@@ -18,11 +18,13 @@ import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.lib.SendGridException;
@@ -60,6 +62,10 @@ public class SendGridUtil
 	public static final String SENDGRID_SUBDOMAIN = "subdomain";
 	public static final String SENDGRID_USERNAME = "username";
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
+	
+     // 
+     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "unknown device"};
+     private static final String[] blockedSubjectStringList = new String[] {"unknown device"};
 
     /**
      * Substitution tags
@@ -85,6 +91,12 @@ public class SendGridUtil
 	try
 	{
 	    MailDeferredTask firstSendGridDefferedTask = tasks.get(0);
+	    
+	    String htmlContent = firstSendGridDefferedTask.html;
+	    String subject = firstSendGridDefferedTask.subject;
+	    
+	    if(isBlockListedEmail(htmlContent, subject))
+		return;
 	    
 	    // SendGrid Credentials based on domain and gateway
 	    JSONObject credentials = getSendGridCredentials(firstSendGridDefferedTask.domain, emailSender.emailGateway);
@@ -554,6 +566,8 @@ public class SendGridUtil
 public static String getSendgridWhiteLabelDomain(String emailDomain, String username, String password, String domain)
 {
 	String response = null, queryString="?domain="+emailDomain, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+	
+	queryString += "&username="+SendGridSubUser.getAgileSubUserName(domain);
 	try
 	 {
 	   response = HTTPUtil.accessURLUsingAuthentication(url+queryString, username, password,"GET", null, false, "application/json", "application/json");
@@ -629,14 +643,174 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		return response;
 	
 }
+
 	
 	public static void main(String asd[]){
-		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
 		
-		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
-		lt.add(mt);
 		
-		sendSendGridMails(lt, null);
+		System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
-    
+	
+	/**
+	 * Checks whether email content/subject having block listed words.
+	 * because of these words we are having spam problems.
+	 * @param htmlContent
+	 * @param subject
+	 * @return
+	 */
+	private static boolean isBlockListedEmail(String htmlContent,String subject)
+	{
+	    boolean result = false;
+	    if(StringUtils.isBlank(htmlContent) || StringUtils.isBlank(subject))
+		return result;
+	    try
+	    {
+		//checking has email content having block listed words
+		for(int i=0;i<blockedBodyStringList.length;i++)
+		{
+		    if(StringUtils.containsIgnoreCase(htmlContent,blockedBodyStringList[i]))
+		    {
+			result = true;
+			return result;
+		    }
+		}
+		//checking has email subject having block listed words
+		for(int j=0;j<blockedSubjectStringList.length;j++)
+		{
+		    if(StringUtils.containsIgnoreCase(subject,blockedBodyStringList[j]))
+		    {
+			result = true;
+			return result;
+		    }
+		}
+	    }
+	    catch(Exception e)
+	    {
+		System.err.println(e.getMessage());
+	    }
+	    finally
+	    {
+		result = false;
+	    }
+	    return result;
+	}
+	
+	private static String getAllWhiteLabelDomains(String username, String password){
+		String response = null, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+		
+		try
+		{
+		   response = HTTPUtil.accessURLUsingAuthentication(url, username, password,"GET", null, false, "application/json", "application/json");
+		   
+		   System.out.println("response " + response);
+		} 
+		catch (Exception e)
+		{						
+			System.out.println("Error occured while getting sendgrid whitelabel "+e.getMessage());
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return response;
+	}
+	
+	public static String getAllWhiteLabelDomains(EmailGateway emailGateway)
+	{
+		String username = Globals.SENDGRID_API_USER_NAME, password = Globals.SENDGRID_API_KEY;
+		
+		if(emailGateway != null)
+		{
+			username = emailGateway.api_user;
+			password = emailGateway.api_key;
+		}
+		else // if Gateway is null
+		{
+			String domain = NamespaceManager.get();
+			
+			if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+				domain = "our";
+			
+			if(StringUtils.isNotBlank(domain))
+			{
+				username = SendGridSubUser.getAgileSubUserName(domain);
+				password = SendGridSubUser.getAgileSubUserPwd(domain);
+			}
+		}
+		
+		return getAllWhiteLabelDomains(username, password);
+	}
+	
+	public static boolean isDomainWhiteLabelled(EmailGateway emailGateway)
+	{
+		if(emailGateway != null)
+			return true;
+		
+		String domain = NamespaceManager.get();
+		
+		if(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+		{
+			domain = "our";
+		}
+		
+		final String KEY = "__"+ domain+"_" + "sendgrid" + "_" + "whitelabel" + "__";
+		
+		Boolean isWhiteLabelled = (Boolean) CacheUtil.getCache(KEY);
+		
+		System.out.println("Value from cache is " + isWhiteLabelled);
+		
+		if(isWhiteLabelled != null && isWhiteLabelled)
+		{
+			System.out.println("Returning from Cache " + isWhiteLabelled);
+			return isWhiteLabelled;
+		}
+		
+		String response = getAllWhiteLabelDomains(null);
+		
+		try
+		{
+			JSONArray array = new JSONArray(response);
+			
+			// if length is zero
+			if(array.length() == 0)
+				return false;
+			
+			System.out.println("Whitelabel Response is " + array);
+			for(int i=0; i< array.length(); i++)
+			{
+				JSONObject json = array.getJSONObject(i);
+				
+				System.out.println("JSON is " + json);
+				
+				// If valid is true then add in cache
+				if(json.has("valid") && json.getBoolean("valid"))
+				{
+					isWhiteLabelled = json.getBoolean("valid");
+					break;
+				}
+			}
+			
+			// Set in cache
+			if(isWhiteLabelled != null && isWhiteLabelled)
+				CacheUtil.setCache(KEY, isWhiteLabelled);
+			
+			return isWhiteLabelled;
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception occured while getting DKIM settings " + ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
 }

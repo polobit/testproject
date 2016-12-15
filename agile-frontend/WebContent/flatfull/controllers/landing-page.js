@@ -6,8 +6,14 @@ var LandingPageRouter = Backbone.Router.extend({
 	"landing-page-add/:id" : "loadSelectedTemplate",
 	"landing-page/:id" : "loadSavedLandingPage",
     "landing-page-settings/:id" : "pageSettings",
-    "landing-page-copy/:id" : "copySelectedLandingPage"
+    "landing-page-copy/:id" : "copySelectedLandingPage",
+    "pagebuilder" : "pageBuilderRedirect",
 	},
+    pageBuilderRedirect : function(){
+       var loc = window.location.href.replace("#", "");
+       window.location = loc;
+       return;
+    },
 
 	getListOfLandingPages : function()
     {
@@ -32,6 +38,7 @@ var LandingPageRouter = Backbone.Router.extend({
                             // Add collection view
                             console.log("Load collection");
                             App_LandingPageRouter.loadLandingPagesCollection($("#content"));
+                            el.find('[data-toggle="tooltip"]').tooltip();
                         }
                     });
 
@@ -52,7 +59,7 @@ var LandingPageRouter = Backbone.Router.extend({
             sort_collection : false,
             templateKey : "landingpages",
             cursor : true,
-            page_size : 20,  
+            page_size : getMaximumPageSize(),  
             individual_tag_name : 'tr',
             customLoaderTemplate : 'agile-app-collection-loader',
             customLoader : true,
@@ -233,5 +240,4 @@ var LandingPageRouter = Backbone.Router.extend({
     $("#landing-pages-menu").addClass("active");
         hideTransitionBar();
     }
-	
 });

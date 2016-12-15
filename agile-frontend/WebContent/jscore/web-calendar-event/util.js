@@ -4,7 +4,7 @@ function change_availability_date(selected_date)
 
 	var date = new Date(selected_date);
 
-	$('.availability').html(LOCALES_JSON['on-availability'] + " " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html(LOCALES_JSON['on-availability'] + " " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 }
 
 // Get slot details time n description
@@ -194,7 +194,7 @@ function displayNoSlotsMsg()
 
 	var date = new Date(selecteddate);
 
-	$('.availability').html(LOCALES_JSON['no-valid-slot'] + " " + date.getDayName() + ", " + date.getMonthName() + " " + date.getDate());
+	$('.availability').html(LOCALES_JSON['no-valid-slot'] + " " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 
 	// Add msg
 	// $('.checkbox-main-grid').append('<label for="no-slots"
@@ -343,13 +343,17 @@ function save_web_event(formId, confirmBtn)
 
 	if (web_calendar_event["selectedSlotsString"].length == 0)
 	{
-		alert("Please select appointment time.");
+		alert("Please select appointment time.");		
 		return false;
 	}
+
 	$('#confirm').attr('disabled', 'disabled');
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
+
+	$(confirmBtn).val('Please wait');
+	$(confirmBtn.form).find('input, textarea, button, select').attr('disabled','disabled');
 
 	// Send request to save slot, if new then contact, event
 	$
@@ -368,26 +372,24 @@ function save_web_event(formId, confirmBtn)
 					var start = convertToHumanDateUsingMoment("", d.start);
 						$('#mainwrap').addClass("appointment-wrap");
 						var appointment_success_img1 = "/img/appointment_confirmation.png";
-						var temp = '<div style="margin: 26px;font-size:15px;">'
+						var temp = '<div class="appointment-body">'
 
-						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><img style="margin-right: 8px;margin-top: -4px;" src=' + appointment_success_img1 + '><b>' +LOCALES_JSON['appointment-scheduled']+ '</b></h3>' + '<p >'+LOCALES_JSON['your-appointment']+' (' + appointmenttype + ') '+LOCALES_JSON['you-scheduled']+' <b>' + User_Name + '</b> '+LOCALES_JSON['for']+' ' + web_calendar_event.slot_time + ' '+LOCALES_JSON['mins-on']+' ' + start + '. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">'+LOCALES_JSON['scheduled-another-appointment']+'</a>' + '</div>' + '</div>' + '</div>' + '</div>' + '<div align="right" style="position: absolute;right: 280px;bottom: -80px;">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>' + '</div>'
-
+						+ '<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><img style="margin-right: 8px;margin-top: -4px;" src=' + appointment_success_img1 + '><b>' +LOCALES_JSON['appointment-scheduled']+ '</b></h3>' + '<p >'+LOCALES_JSON['your-appointment']+' (' + appointmenttype + ') '+LOCALES_JSON['you-scheduled']+' <b>' + User_Name + '</b> '+LOCALES_JSON['for']+' ' + web_calendar_event.slot_time + ' '+LOCALES_JSON['mins-on']+' ' + start + '. </div>' + '<div class="row">' + '<div class="col-md-12">' + '<div class="row">' + '<div class="col-md-12">' + '<div class="left">' + '<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">'+LOCALES_JSON['scheduled-another-appointment']+'</a>' + '</div>' + '</div>' + '</div>' + '</div>';
+						var powered_by_img = '<div class="text-center">' + '<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px;">Powered by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign=' + domainname + '" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 2px 5px 5px 5px;height: auto;width: 135px;"></a>' + '</div>'
 						resetAll();
 
-						$(".container").html(temp);
+						$(".container").html(temp).after(powered_by_img);
 				},
 				error : function(res){
 					console.log(res);
+					$(confirmBtn).val('Confirm');
+					$(confirmBtn.form).find('input, textarea, button, select').removeAttr('disabled');
 					
-					if(res.responseText == "slot booked")
-					{
+					if(res.responseText == "slot booked"){
 						alert(LOCALES_JSON['solt-book-error']);
 						get_slots(selecteddate, Selected_Time);
-						$('#confirm').attr('disabled', false);
-					}
-
-					else
-					{
+						$('#confirm').attr('disabled', false);											
+					}else{
 						alert(LOCALES_JSON['slot-exists'] + "Error: " + res.statusText);
 						resetAll();
 						location.reload(true);

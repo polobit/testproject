@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -84,6 +85,11 @@ public class ContactCSVExport
     public static final String CREATED_TIME = "Created Date";
     private static final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private static final DateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    
+    //specific to leads
+    public static final String LEAD_SOURCE = "Lead Source";
+    public static final String LEAD_STATUS = "Lead Status";
+    
     /**
      * Inserts contact properties into CSV w.r.t header name.
      * 
@@ -95,7 +101,7 @@ public class ContactCSVExport
      *            - CSV headers to build array with headers array length.
      * @return String[]
      */
-    public static String[] insertContactProperties(Contact contact, Map<String, Integer> indexMap, int headersLength)
+    public static String[] insertContactProperties(Contact contact, Map<String, Integer> indexMap, int headersLength, Map<Long, String> source_map, Map<Long, String> status_map)
     {
 	// Initialize new array to insert as new row.
 	String str[] = new String[headersLength];
@@ -258,15 +264,43 @@ public class ContactCSVExport
 		    	try{
 			    	Integer index = indexMap.get(field.name + " Name");
 			    	if(index != null){  // if the dynamic index is present then it denotes that the custom filed is contact or company type
-			    		List<Contact> contacts = ContactUtil.getContactsBulk(new JSONArray(field.value)) ;
-			    		if (contacts.size() > 0) {
+			    		JSONArray customFieldsArray = null;
+			    		try {
+			    			JSONParser parser = new JSONParser();
+			    			customFieldsArray = (JSONArray)parser.parse(field.value);
+						} catch (Exception e) {
+							System.out.println("Exception occured while converting contact and company type custom fields JSON string to array");
+							e.printStackTrace();
+						}
+			    		List<Contact> contacts = null;
+			    		if(customFieldsArray != null && customFieldsArray.size() > 0)
+			    		{
+			    			contacts = ContactUtil.getContactsBulk(new org.json.JSONArray(customFieldsArray.toJSONString())) ;
+			    		}
+			    		if (contacts != null && contacts.size() > 0) {
 			    			StringBuilder contactName = new StringBuilder("[");
 				    		for(Contact cont : contacts){
+				    			List<ContactField> prop = cont.properties ;
 				    			if(cont.type.equals(Contact.Type.PERSON)){
-				    				contactName.append(cont.first_name);
-					    			contactName.append(cont.last_name);
+				    				String fname = null ; String lname = null; 
+				    				for(int k=0;k<prop.size();k++){
+				    					if(prop.get(k).name.equals("first_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+				    						fname = prop.get(k).value ;
+				    					else if(prop.get(k).name.equals("last_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+				    						lname = prop.get(k).value ;
+				    				}
+				    				contactName.append(fname);
+				    				if(lname != null)
+				    					contactName.append(" "+lname);
 				    			}else{
-				    				contactName.append(cont.name);
+				    				String name = null;
+				    				for(int k=0;k<prop.size();k++){
+				    					if(prop.get(k).name.equals("name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM)){
+				    						name = prop.get(k).value ;
+				    						break;
+				    					}
+				    				}
+				    				contactName.append(name);
 				    			}
 				    			
 				    			contactName.append(",");
@@ -302,6 +336,28 @@ public class ContactCSVExport
 	setFieldAtIndex(CREATED_TIME, dateFormat.format(date), str, indexMap);
 	// adding date in MM/dd/yyyy format done
 	
+	if(contact != null && contact.type == Contact.Type.LEAD && source_map != null)
+	{
+		String source_name = null;
+		Long source_id = contact.getLead_source_id();
+		if(source_id != null)
+		{
+			source_name = source_map.get(source_id);
+		}
+		setFieldAtIndex(LEAD_SOURCE, source_name, str, indexMap);
+	}
+	
+	if(contact != null && contact.type == Contact.Type.LEAD && status_map != null)
+	{
+		String status_name = null;
+		Long status_id = contact.getLead_status_id();
+		if(status_id != null)
+		{
+			status_name = status_map.get(status_id);
+		}
+		setFieldAtIndex(LEAD_STATUS, status_name, str, indexMap);
+	}
+	
 	return str;
     }
 
@@ -320,12 +376,16 @@ public class ContactCSVExport
 
 	for (Tag tag : contact.tagsWithTime)
 	{
-	    tags += tag.tag + ",";
-	    tagTimes += tag.createdTime + ",";
-	    
-	    Date date = new Date();
-		date.setTime(tag.createdTime);	
-	    tagTimesNew += dateTimeFormat.format(date) + ",";
+		 tags += tag.tag + ",";
+ 	    if(tag.createdTime!=0)
+ 	    {
+ 	    	tagTimes += tag.createdTime;
+ 	    	Date date = new Date();
+     		date.setTime(tag.createdTime);	
+     	    tagTimesNew += dateTimeFormat.format(date);
+ 	    }
+ 	    tagTimes +=",";
+ 	    tagTimesNew += ",";
 	}
 
 	// Return array having tags and tagTimes without trailing commas

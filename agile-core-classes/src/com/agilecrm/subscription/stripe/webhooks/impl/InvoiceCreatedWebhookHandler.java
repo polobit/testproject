@@ -2,9 +2,11 @@ package com.agilecrm.subscription.stripe.webhooks.impl;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,7 +15,9 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.email.SendMail;
+import com.agilecrm.util.language.LanguageUtil;
 import com.google.gson.Gson;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
@@ -31,25 +35,58 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	 */
     	System.out.println("InvoiceCreatedWebhookHandler");
     	AccountPrefs prefs = getAccountPrefs();
-	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED) && prefs != null && prefs.sendInvoiceBeforeCharge && getEvent().getRequest() == null)
+	if (eventType.equals(StripeWebhookServlet.STRIPE_INVOICE_CREATED))
 	{
 		System.out.println("InvoiceCreatedWebhookHandler success");
-
-	    // Get domain owner
-	    DomainUser user = getUser();
-
-	    System.out.println(user);
-	    // Checks whether owner of the domain is not null, if not null
-	    // send invoice created mail to the domain user
-	    if (user == null)
-		return;
-
-	    System.out.println("********** Sending mail ***********");
-	    System.out.println(user.email);
-	    SendMail.sendMail("mogulla@invox.com", SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED, getMailDetails());
-	    sendMail1(SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED);
+		//check if invoice created automatically by stripe (if request == null)
+		if(getEvent().getRequest() == null){
+			//if biennial plan set trial for one year if first year completed
+			try{
+				JSONObject invoiceJSON = eventJSON.getJSONObject("data").getJSONObject("object");
+				JSONObject data = invoiceJSON.getJSONObject("lines").getJSONArray("data").getJSONObject(0);
+				JSONObject plan = data.getJSONObject("plan");
+				//Check for biennial plan
+				if(plan.getString("name").toLowerCase().contains("biennial") && checkTrialEligibility(invoiceJSON.getLong("period_start"), invoiceJSON.getLong("period_end"))){
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeInMillis(invoiceJSON.getLong("period_start") * 1000);
+					cal.add(Calendar.YEAR, 2);
+					StripeUtil.addTrial(invoiceJSON.getString("customer"), data.getString("id"), (cal.getTime().getTime())/1000);
+					StripeUtil.closeInvoice(invoiceJSON.getString("id"));
+					System.out.println("Added trial for biennial customer and invoice closed "+invoiceJSON.getString("id"));
+				}
+				
+				if(prefs != null && prefs.sendInvoiceBeforeCharge){
+				    // Get domain owner
+				    DomainUser user = getUser();
+			
+				    System.out.println(user);
+				    // Checks whether owner of the domain is not null, if not null
+				    // send invoice created mail to the domain user
+				    if (user == null)
+					return;
+			
+				    System.out.println("********** Sending mail ***********");
+				    System.out.println(user.email);
+				    // Get user prefs language
+				    String language = LanguageUtil.getUserLanguageFromDomainUser(user);
+				    
+				    SendMail.sendMail("mogulla@invox.com", SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED, getMailDetails(), language);
+				    sendMail1(SendMail.INVOICE_CREATED_SUBJECT, SendMail.INVOICE_CREATED);
+				}
+			}catch(Exception e){
+				System.out.println(ExceptionUtils.getMessage(e));
+				e.printStackTrace();
+			}
+		}
 	}
 
+    }
+    
+    public boolean checkTrialEligibility(Long start, Long end){
+    	//check if difference between 2 dates are more than 11 months and less than 13 months
+    	if(end - start < 33696000 && end - start > 28512000)
+    		return true;
+    	return false;  	
     }
 
     @Override
@@ -137,7 +174,7 @@ public class InvoiceCreatedWebhookHandler extends StripeWebhookHandler
 	if(prefs != null && !prefs.company_name.toLowerCase().equals("my company"))
 		details.put("company", prefs.company_name);
 	details.put("user_name", user.name);
-	details.put("domain", getDomain());
+	details.put("domain", AliasDomainUtil.getCachedAliasDomainName(getDomain()));
 	details.put("email", user.email);
 	Card card = StripeUtil.getDefaultCard(customer);
 	details.put("last4", card.getLast4());

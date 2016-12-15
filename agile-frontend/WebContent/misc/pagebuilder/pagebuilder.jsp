@@ -1,44 +1,65 @@
+<%@page import="com.agilecrm.util.language.LanguageUtil"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.util.VersioningUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
 <%
 String AGILE_VERSION = SystemProperty.applicationVersion.get();
 
-//local,beta,live
-String ENVIRONMENT = "live";
 String MAIN_URL = "http://localhost:8888/";
+if(!VersioningUtil.isDevelopmentEnv())
+    MAIN_URL = VersioningUtil.getURL(NamespaceManager.get(), request);
 
-if(ENVIRONMENT == "live")
-  MAIN_URL = "https://"+NamespaceManager.get()+".agilecrm.com/";
-else if(ENVIRONMENT == "beta")
-  MAIN_URL = "https://"+NamespaceManager.get()+"-dot-sandbox-dot-agilecrmbeta.appspot.com/";
-
-String PAGE_BUILDER_URL = MAIN_URL + "misc/pagebuilder/";
-String BUILD_PATH = PAGE_BUILDER_URL + "source/build/";
 String S3_BASE_URL = "https://s3.amazonaws.com/agilecrm/pagebuilder/";
 String S3_STATIC_FILES_URL = S3_BASE_URL + "static/";
-
-if(ENVIRONMENT == "live" || ENVIRONMENT == "beta")
-  BUILD_PATH = S3_BASE_URL + ENVIRONMENT + "/build/";
-
+String PAGE_BUILDER_URL = MAIN_URL + "misc/pagebuilder/";
+String BUILD_PATH = PAGE_BUILDER_URL + "source/build/";
 
 String idPath = request.getPathInfo();
 String pageId = "0";
+String SELECTED_TEMPLATE = null;
+String copyPageId = "0";
 if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
-  pageId = idPath.substring(1);
+    if(idPath.indexOf("copy") != -1){
+        String[] pathArr = idPath.split("-");
+        SELECTED_TEMPLATE = pathArr[0].substring(1);
+        copyPageId = pathArr[1];
+    }else{
+        pageId = idPath.substring(1);
+    }
+
 } else {
-  pageId = "0";
+    pageId = "0";
 }
+
+//User Language 
+String _LANGUAGE = "en";
+
+try{
+  UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefsFromRequest(request);
+ _LANGUAGE = userPrefs.language;
+}catch(Exception e){
+	e.printStackTrace();
+}
+
+//Locales JSON
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page-builder");
+
 
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Agile CRM | Page Builder</title>
+  <title>Agile CRM | <%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-page-title")%></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-  <link href="<%=BUILD_PATH%>css/main.min.css" rel="stylesheet">    
-  <link href="<%=BUILD_PATH%>css/builder.min.css" rel="stylesheet">      
+  <link href="<%=BUILD_PATH%>css/main.min.css?v=<%=AGILE_VERSION%>" rel="stylesheet">    
+  <link href="<%=BUILD_PATH%>css/builder.min.css?v=<%=AGILE_VERSION%>" rel="stylesheet">      
   <!-- <link rel="shortcut icon" href="<%=S3_STATIC_FILES_URL%>images/favicon.png"> -->
   
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
@@ -54,6 +75,12 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
     var s3BaseUrl = '<%=S3_STATIC_FILES_URL%>';
     var CURRENT_AGILE_DOMAIN = '<%=NamespaceManager.get()%>';
     var current_agileform;
+    var selectedTemplateId = '<%=SELECTED_TEMPLATE%>';
+    var copyPagebuilderId = <%=copyPageId%>;
+ 	// Locale JSON
+    var _AGILE_LOCALE_JSON = <%=localeJSON%>;
+    var localeJSON = <%=localeJSON%>;
+    var _LANGUAGE = '<%=_LANGUAGE%>';
     </script>
 </head>
 <body class="builderUI">
@@ -64,10 +91,10 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
       
             <div class="main" id="main">
                                         
-                <h3><span class="fui-list"></span> Blocks</h3>
+                <h3><span class="fui-list"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "blocks")%></h3>
                 
                 <ul id="elementCats">
-                    <li><a href="#" id="all">All Blocks</a></li>
+                    <li><a href="#" id="all"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "all-blocks")%></a></li>
                 </ul>
                 
                 <a class="toggle" href="#"><img src="<%=S3_STATIC_FILES_URL%>images/logo.svg"></a>
@@ -89,7 +116,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 </ul>
         
                 <div class="sideButtons clearfix" style="display: none;">
-                    <a href="#" class="btn btn-primary btn-sm btn-embossed" id="addPage"><span class="fui-plus"></span> Add Page</a>
+                    <a href="#" class="btn btn-primary btn-sm btn-embossed" id="addPage"><span class="fui-plus"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-page")%></a>
                 </div>
         
             </div><!-- /.main -->
@@ -113,14 +140,14 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                         <i class="fui-gear"></i>
                     </button>
                     <button class="btn btn-inverse">
-                        <a href="<%=MAIN_URL%>#landing-pages" id="backButton" style="color: #fff"><i class="fui-arrow-left"></i> Back</a>
+                        <a href="<%=MAIN_URL%>#landing-pages" id="backButton" style="color: #fff"><i class="fui-arrow-left"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "back")%></a>
                     </button>
                     <span class="dropdown-arrow dropdown-arrow-inverse"></span>
                     <ul class="dropdown-menu dropdown-menu-inverse dropdown-menu-right">
                         <li>
                             <a href="#pageSettingsModal" id="pageSettingsButton" data-toggle="modal" data-siteid="6">
                                 <span class="fui-arrow-right"></span> 
-                                Page Settings                            </a>
+                                <%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-settings")%>                            </a>
                         </li>
                         <!-- <li class="divider"></li>
                         
@@ -134,22 +161,27 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     </ul>
                 </div>
                 
-                <a href="<%=MAIN_URL%>#landing-page-settings/<%=pageId%>" id="publishPage" target="_blank" class="btn btn-inverse pull-right actionButtons slick" data-toggle="tooltip" data-placement="bottom" title="You can publish your page with a custom domain." style="display: none">
+                <a href="<%=MAIN_URL%>#landing-page-settings/<%=pageId%>" id="publishPage" target="_blank" class="btn btn-inverse pull-right actionButtons slick" data-toggle="tooltip" data-placement="bottom" title='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "publish-title")%>' style="display: none">
                     <i class="fui-upload"></i> 
-                    <span class="slide">Publish</span>
+                    <span class="slide"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "publish")%></span>
                     <i class="fui-alert text-danger" >
                     </i>
                 </a>
                 
                 <a href="#previewModal" data-toggle="modal" class="btn btn-inverse btn-embossed pull-right slick" style="display: none" id="buttonPreview">
                     <i class="fui-window"></i> 
-                    <span class="slide">Preview</span>
+                    <span class="slide"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview")%></span>
+                </a>
+
+                <a href="<%=MAIN_URL%>pagebuilder/copy-<%=pageId%>" class="btn btn-inverse btn-embossed pull-right slick" id="pagebuilderCopyBtn">
+                    <i class="fui-windows"></i> 
+                    <span class="slide"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "create-copy")%></span>
                 </a>
                 
                                 <div class="btn-group" style="float: right;">           
                     <button class="btn btn-primary" id="savePage">
                         <span class="fui-check"></span> 
-                        <span class="bLabel">Nothing to save</span>
+                        <span class="bLabel"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "nothing-to-save")%></span>
                     </button>
                     <!-- <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
@@ -202,7 +234,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                         
                     </div>
                     <div class="start" id="start" style="display:none">
-                        <span>Build your page by dragging blocks onto the canvas</span>
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "drag-info")%></span>
                     </div>
                 </div>
             
@@ -212,22 +244,25 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
         
         <div id="styleEditor" class="styleEditor">
         
-            <a href="#" class="close"><span class="fui-cross-circle"></span></a>
+            <a title=" Press Esc to close" href="#" class="close"><span class="fui-cross-circle"></span></a>
             
-            <h3><span class="fui-new"></span> Detail Editor</h3>
+            <h3><span class="fui-new"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "detail-editor")%></h3>
             
             <ul class="breadcrumb">
-                <li>editing:</li>
+                <li><%=LanguageUtil.getLocaleJSONValue(localeJSON, "editing")%>:</li>
                 <li class="active" id="editingElement">p</li>
             </ul>
             
             <ul class="nav nav-tabs" id="detailTabs">
-                <li class="active"><a href="#tab1" id="default-tab1"><span class="fui-new"></span> Style</a></li>
-                <li style="display: none;"><a href="#link_Tab" id="link_Link"><span class="fui-clip"></span> Link</a></li>
-                <li style="display: none;"><a href="#image_Tab" id="img_Link"><span class="fui-image"></span> Image</a></li>
-                <li style="display: none;"><a href="#icon_Tab" id="icon_Link"><span class="fa fa-flag"></span> Icons</a></li>
-                <li style="display: none;"><a href="#video_Tab" id="video_Link"><span class="fa fa-youtube-play"></span> Video</a></li>
-                <li style="display: none;"><a href="#agileform_Tab" id="agileform_link">Agile Form</a></li>
+                <li class="active"><a href="#tab1" id="default-tab1"><span class="fui-new"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "style")%></a></li>
+                <li style="display: none;"><a href="#link_Tab" id="link_Link"><span class="fui-clip"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "link")%></a></li>
+                <li style="display: none;"><a href="#image_Tab" id="img_Link"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "Image")%></a></li>
+                <li style="display: none;"><a href="#icon_Tab" id="icon_Link"><span class="fa fa-flag"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "icons")%></a></li>
+                <li style="display: none;"><a href="#video_Tab" id="video_Link"><span class="fa fa-youtube-play"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "video")%></a></li>
+                <li style="display: none;">
+                    <a href="#agileform_Tab" id="agileform_link" class="agile-tooltip" data-placement="right" data-original-title=" <%=LanguageUtil.getLocaleJSONValue(localeJSON, "form-tooltip")%>" ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-form")%>
+                <sup style="font-size: 9px;color: #337ab7;">?</sup></a>
+                </li>
             </ul><!-- /tabs -->
             
             <div class="tab-content">
@@ -253,28 +288,28 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 <div class="tab-pane link_Tab" id="link_Tab">
                     
                     <div class="form-group fullWidth">
-                        <input type="text" class="form-control" id="linkText" name="linkText" placeholder="Link text" value="">
+                        <input type="text" class="form-control" id="linkText" name="linkText" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-text")%>' value="">
                     </div>
                     
                     <div class="form-group hidden">
                         <select id="pageLinksDropdown" class="form-control select select-primary btn-block mbl">
-                            <option value="#">Choose a page</option>                            
+                            <option value="#"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-a-page")%></option>                            
                         </select>
                     </div>
                     
                     <p class="text-center or hidden">
-                        <span>or</span>
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or")%></span>
                     </p>
                     
                     <div class="form-group">
                         <!--<select id="pageLinksDropdown" class="form-control select select-primary btn-block mbl">-->
                         <select id="internalLinksDropdown" class="form-control select select-primary btn-block mbl">
-                            <option value="#">Choose a block</option>
+                            <option value="#"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-a-block")%></option>
                         </select>
                     </div>
                     
                     <p class="text-center or">
-                        <span>or</span>
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or")%></span>
                     </p>
                     
                     <input type="text" class="form-control" id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
@@ -284,28 +319,41 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 <!-- /tabs -->
                 <div class="tab-pane imageFileTab" id="image_Tab">
                     
-                    <!--<label>Enter image path:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
-                    <input type="text" class="form-control" id="imageURL" placeholder="Enter an image URL" value="">
-                    
+                    <input type="text" class="form-control" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
+                    <span id="error-img-msg" style="font-size: 12px;color:#f05050; display:none;">
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "error-image-url")%>
+                    </span>
+                                 
                     <p class="text-center or">
-                        <span>OR</span>
-                    </p>-->
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
                     
-                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> Open image library</a>
+                    <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a>
                     
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
-                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
-                        <option value="default">Select form</option>
-                    </select>            
+                    <select id="agileform_id" name="agileformlist" class="btn btn-default btn-embossed btn-block ">
+                        <option value="default"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-form")%></option>
+                    </select> 
+                      <div  class="margin-bottom-20" id="refresh-formlist"  style="padding: 3px 0px 5px;" >
+                        <a class="right agile-tooltip refresh-formlist"  data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "refresh-form-tooltip")%>">
+                        <i class="fa fa-refresh" aria-hidden="true" style="color: #bdc3c7;"></i></a>
+                        <a class="agile-tooltip edit-form right"  target="_new" style="margin-right: 5px; display:none;" data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-form-tooltip")%>" >
+                        <i class="fa fa-edit" style="color: #bdc3c7;"></i></a>
+                    </div>
+		           <p class="text-center or">
+                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
+                    <a target="_new"    href="<%=MAIN_URL%>#form-builder-templates" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20" id="addnew-formlink"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-form")%></a>
                 </div> 
                 
                 <!-- /tabs -->
                 <div class="tab-pane iconTab" id="icon_Tab">
                 
-                    <label>Choose an icon below: </label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-a-icon")%>: </label>
                     
                     <select id="icons" data-placeholder="" class>
                         <option value="fa-adjust">&#xf042; adjust</option>
@@ -1927,17 +1975,30 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 <!-- /tabs -->
                 <div class="tab-pane videoTab" id="video_Tab">
                     
-                    <label>Youtube Video ID:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="Enter a Youtube video ID" value="">
-                    
+                    <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-url")%>" value="">
+                    <span id="err-youtube-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
-                        <span>OR</span>
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
                     
-                    <label>Vimeo Video ID:</label>
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-url")%>:</label>
                     
-                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="Enter a Vimeo video ID" value="">
+                    <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-url")%>" value="">
+                     <span id="err-vimeo-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
+                    <p class="text-center or">
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
+                    </p>
+
+                    <label class="agile-tooltip" data-placement="right" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "recorded-video-tooltip")%>">
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "recorded-video")%>:
+                     <sup style="font-size: 9px;color: #337ab7;">?</sup>
+                    </label>
+                    
+                    <select id="videoRecordId" name="videoRecordlist" class="btn btn-default btn-embossed btn-block margin-bottom-20">
+                        <option value="">Select Video</option>
+                    </select>
                     
                 </div><!-- /.tab-pane -->
             
@@ -1945,16 +2006,16 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             
             <div class="alert alert-success" style="display: none;" id="detailsAppliedMessage">
                 <button class="close fui-cross" type="button" id="detailsAppliedMessageHide"></button>
-                The changes were applied successfully!            </div>
+                <%=LanguageUtil.getLocaleJSONValue(localeJSON, "changes-applied")%>            </div>
                                 
             <div class="margin-bottom-5">
-                <button type="button" class="btn btn-primary btn-embossed btn-sm btn-block" id="saveStyling"><span class="fui-check-inverted"></span> Apply changes</button>
+                <button type="button" class="btn btn-primary btn-embossed btn-sm btn-block" id="saveStyling"><span class="fui-check-inverted"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "changes-apply")%></button>
             </div>
                         
             <div class="sideButtons clearfix">
-                <button type="button" class="btn btn-inverse btn-embossed btn-xs" id="cloneElementButton"><span class="fui-windows"></span> Clone</button>
-                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton"><i class="fa fa-refresh"></i> Reset</button>
-                <button type="button" class="btn btn-danger btn-embossed btn-xs" data-target="#deleteElement" data-toggle="modal" id="removeElementButton"><span class="fui-cross-inverted"></span> Remove</button>
+                <button type="button" class="btn btn-inverse btn-embossed btn-xs" id="cloneElementButton"><span class="fui-windows"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "clone")%></button>
+                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton" style="display:none;"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
+                <button type="button" class="btn btn-danger btn-embossed btn-xs" data-target="#deleteElement" data-toggle="modal" id="removeElementButton"><span class="fui-cross-inverted"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "remove")%></button>
             </div>
                                                     
         </div><!-- /.styleEditor -->
@@ -1970,14 +2031,14 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> Image Library</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></span></button>
+                        <h4 class="modal-title" id="myModalLabel"><span class="fui-upload"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></h4>
                     </div>
                     <div class="modal-body">
                                             
                         <div class="loader" style="display: none;">
                             <img src="<%=S3_STATIC_FILES_URL%>images/loading.gif" alt="Loading...">
-                            Uploading image...                        </div>
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "uploading-img")%>...                        </div>
                                             
                         <div class="modal-alerts">
                             
@@ -1987,7 +2048,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                             
                             <ul class="nav nav-tabs nav-append-content">
                                 <!-- <li><a href="#myImagesTab">My Images</a></li> -->
-                                <li id="uploadTabLI" class="active"><a href="#uploadTab">Upload Image</a></li>
+                                <li id="uploadTabLI" class="active"><a href="#uploadTab"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview")%></a></li>
                                 <!-- <li><a href="#adminImagesTab">Other Images</a></li> -->                            </ul> <!-- /tabs -->
                             
                             <div class="tab-content">
@@ -1998,7 +2059,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                                         <!-- Alert Info -->
                                         <div class="alert alert-info">
                                             <button type="button" class="close fui-cross" data-dismiss="alert"></button>
-                                            You currently have no images uploaded. To upload images, please use the upload panel on your left.                                        </div>
+                                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img-info")%>                                        </div>
                                         
                                                                                                 
                                 </div><!-- /.tab-pane -->
@@ -2009,21 +2070,21 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                                     
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>
-                                            <div>
+                                             <button type="button" class="btn btn-primary btn-embossed btn-wide upload  fileinput-exists" id="uploadImageButton"><span class="fui-upload"></span> 
+                                                <%=LanguageUtil.getLocaleJSONValue(localeJSON, 
+                                                "upload")%></button>
+                                            <div style="float:right;">
                                                 <span class="btn btn-primary btn-embossed btn-file">
-                                                    <span class="fileinput-new"><span class="fui-image"></span>&nbsp;&nbsp;Select Image</span>
-                                                    <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;Change</span>
+                                                    <span class="fileinput-new"><span class="fui-image"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-img")%></span>
+                                                    <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "change")%></span>
                                                     <input type="file" name="imageFile" id="imageFile">
                                                 </span>
-                                                <a href="#" class="btn btn-primary btn-embossed fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>&nbsp;&nbsp;Remove</a>
                                             </div>
                                         </div>
                                     
                                     </form>
                                     
-                                    <hr>
-                                    
-                                    <button type="button" class="btn btn-primary btn-embossed btn-wide upload btn-block disabled" id="uploadImageButton"><span class="fui-upload"></span> Upload Image</button>
+                                   
                                 
                                 </div><!-- /.tab-pane -->
                             
@@ -2057,7 +2118,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                                                 
                     </div><!-- /.modal-body -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Cancel & Close</button>
+                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -2072,11 +2133,11 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 <div class="modal-content">
                     <div class="modal-body">
                     
-                        Are you sure you want to delete this block?                        
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "delete-block-confirm")%>                        
                     </div><!-- /.modal-body -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Cancel & Close</button>
-                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="deleteBlockConfirm">Delete</button>
+                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="deleteBlockConfirm"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "delete")%></button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -2091,14 +2152,14 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     <div class="modal-body">
                     
                         <p>
-                            Are you sure you want to reset this block?                        </p>
+                           <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset-block-confirm")%>                       </p>
                         <p>
-                            All changes made to the content will be destroyed.                        </p>
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "all-changed-destroyed")%>                        </p>
                         
                     </div><!-- /.modal-body -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Cancel & Close</button>
-                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="resetBlockConfirm">Reset Block</button>
+                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="resetBlockConfirm"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset-block")%></button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -2112,12 +2173,12 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     <div class="modal-body">
                     
                         <p>
-                            Are you sure you want to delete this entire page?                        </p>
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "delete-page-confirm")%>                        </p>
                         
                     </div><!-- /.modal-body -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="deletePageCancel">Cancel & Close</button>
-                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="deletePageConfirm">Delete Page</button>
+                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="deletePageCancel"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="deletePageConfirm"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "delete-page")%></button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -2131,12 +2192,12 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     <div class="modal-body">
                     
                         <p>
-                            Are you sure you want to delete this element? Once deleted, it can not be restored.                        </p>
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "delete-element-info")%>                        </p>
                         
                     </div><!-- /.modal-body -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="deletePageCancel">Cancel & Close</button>
-                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="deleteElementConfirm">Delete Block</button>
+                        <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal" id="deletePageCancel"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                        <button type="button" type="button" class="btn btn-primary btn-embossed" id="deleteElementConfirm"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "delete-block")%></button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -2144,7 +2205,11 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
         </div><!-- /.modal -->
         
         <div id="loader">
-            <span>{</span><span>}</span>
+            <div>
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <br/>
+                <span>Loading...</span>
+            </div>
         </div>
     
     </div>
@@ -2159,15 +2224,15 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             <div class="modal-content">
             
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> Page Settings <span class="hidden text-primary pName">index.html</span></h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="fui-gear"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-settings")%> <span class="hidden text-primary pName">index.html</span></h4>
                 </div>
                 
                 <div class="modal-body">
                 
                     <div class="loader" style="display: none;">
                         <img src="<%=S3_STATIC_FILES_URL%>images/loading.gif" alt="Loading...">
-                        Saving page settings...                    </div>
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saving-page-changes")%>...                    </div>
                     
                     <div class="modal-alerts"></div>
                 
@@ -2180,37 +2245,44 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
   <div class="optionPane">
             
     <div class="form-group">
-      <label for="name" class="col-sm-3 control-label">Page Title:</label>
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-title")%>:</label>
       <div class="col-sm-9">
-        <input type="text" class="form-control" id="pageData_title" name="pageData_title" placeholder="Page title" value="">
+        <input type="text" class="form-control" id="pageData_title" name="pageData_title" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-title-sm")%>' value="">
       </div>
     </div>
     
     <div class="form-group">
-      <label for="name" class="col-sm-3 control-label">Page Meta Description:</label>
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-meta-desc")%>:</label>
       <div class="col-sm-9">
-        <textarea class="form-control" id="pageData_metaDescription" name="pageData_metaDescription" placeholder="Page meta description"></textarea>
+        <textarea class="form-control" id="pageData_metaDescription" name="pageData_metaDescription" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-meta-desc-sm")%>'></textarea>
       </div>
     </div>
     
     <div class="form-group">
-      <label for="name" class="col-sm-3 control-label">Page Meta Keywords:</label>
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-meta-keywords")%>:</label>
       <div class="col-sm-9">
-        <textarea class="form-control" id="pageData_metaKeywords" name="pageData_metaKeywords" placeholder="Page meta keywords"></textarea>
+        <textarea class="form-control" id="pageData_metaKeywords" name="pageData_metaKeywords" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-meta-keywords-sm")%>'></textarea>
       </div>
     </div>
     
     <div class="form-group">
-      <label for="name" class="col-sm-3 control-label">Header Includes:</label>
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header")%>:</label>
       <div class="col-sm-9">
-        <textarea class="form-control" id="pageData_headerIncludes" name="pageData_headerIncludes" rows="7" placeholder="Additional code you'd like to include in the <head> section"></textarea>
+        <textarea class="form-control" id="pageData_headerIncludes" name="pageData_headerIncludes" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-header-inf")%>' <head> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "head-section")%>></textarea>
       </div>
     </div>
     
     <div class="form-group">
-      <label for="name" class="col-sm-3 control-label">Page CSS:</label>
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css")%>:</label>
       <div class="col-sm-9">
-        <textarea class="form-control" id="pageData_headerCss" name="pageData_headerCss" rows="7" placeholder="CSS applied specifically to this page"></textarea>
+        <textarea class="form-control" id="pageData_headerCss" name="pageData_headerCss" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-css-applied")%>'></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-js")%>:</label>
+      <div class="col-sm-9">
+        <textarea class="form-control" id="pageData_headerJs" name="pageData_headerJs" rows="7" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-script-applied")%>'></textarea>
       </div>
     </div>
     
@@ -2220,8 +2292,8 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 </div><!-- /.modal-body -->
                                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> Cancel & Close</button>
-                    <button type="button" class="btn btn-primary btn-embossed" id="pageSettingsSubmittButton"><span class="fui-check"></span> Save Settings</button>
+                    <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                    <button type="button" class="btn btn-primary btn-embossed" id="pageSettingsSubmittButton"><span class="fui-check"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "save-settings")%></button>
                 </div>
                 
             </div><!-- /.modal-content -->
@@ -2242,7 +2314,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 </div><!-- /.modal-body -->
                                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
                 </div>
                 
             </div><!-- /.modal-content -->
@@ -2264,9 +2336,9 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                   <div class="" style="padding: 30px 20px;">
                             
                     <div class="form-group">
-                      <label for="name" class="col-sm-3 control-label">Page Title:</label>
+                      <label for="name" class="col-sm-3 control-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-title")%>:</label>
                       <div class="col-sm-9">
-                        <input type="text" class="form-control" id="lppagename" name="lppagename" placeholder="Enter a name to the page" value="" required>
+                        <input type="text" class="form-control" id="lppagename" name="lppagename" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "page-name")%>' value="" required oninvalid="_agile_set_custom_validate(this);" oninput="_agile_reset_custom_validate(this);">
                       </div>
                     </div>
                     
@@ -2275,7 +2347,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 </div><!-- /.modal-body -->
                                 
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary btn-embossed" id="lpPageNameSaveButton"><span class="fui-check"></span> Save</button>
+                    <button type="submit" class="btn btn-primary btn-embossed" id="lpPageNameSaveButton"><span class="fui-check"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "save")%></button>
                 </div>
 
             </form>
@@ -2298,7 +2370,7 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                 </div><!-- /.modal-body -->
                                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
                 </div>
                 
             </div><!-- /.modal-content -->
@@ -2314,20 +2386,20 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             <div class="modal-content">
                 
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"> Are you sure?</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></span></button>
+                    <h4 class="modal-title" id="myModalLabel"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "are-you-sure")%>?</h4>
                 </div>
                         
                 <div class="modal-body">
                                 
                     <p>
-                        You've got pending changes, if you leave this page your changes will be lost. Are you sure?                    </p>
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "back-modal-info")%>                    </p>
                                     
                 </div><!-- /.modal-body -->
                                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-inverse" data-dismiss="modal"><span class="fui-cross"></span> Stay on this page!</button>
-                    <a href="<%=MAIN_URL%>#landing-pages" class="btn btn-primary btn-embossed" id="leavePageButton"><span class="fui-check"></span> Leave the page</a>
+                    <button type="button" class="btn btn-inverse" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "stay-on-the-page")%></button>
+                    <a href="<%=MAIN_URL%>#landing-pages" class="btn btn-primary btn-embossed" id="leavePageButton"><span class="fui-check"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "leave-the-page")%></a>
                 </div>
                 
             </div><!-- /.modal-content -->
@@ -2347,8 +2419,8 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
                     
                 </div><!-- /.modal-body -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal">Cancel & Close</button>
-                    <button type="button" type="button" class="btn btn-primary btn-embossed" id="updateContentInFrameSubmit">Update Content</button>
+                    <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                    <button type="button" type="button" class="btn btn-primary btn-embossed" id="updateContentInFrameSubmit"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "update-content")%></button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -2367,20 +2439,20 @@ if(idPath != null && !StringUtils.isEmpty(idPath) && !idPath.equals("/")) {
             <div class="modal-content">
                 
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span class="fui-window"></span> Site Preview</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="fui-window"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "site-preview")%></h4>
                 </div>
                 
                 <div class="modal-body">
                 
                     <p>
-                        Please note that the preview will always show your latest saved version; changes which haven't been saved yet will not be visible in the preview.                    </p>
+                        <%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview-saved-info")%>                    </p>
                     
                 </div><!-- /.modal-body -->
                 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> Cancel & Close</button>
-                    <button type="submit" class="btn btn-primary btn-embossed"><span class="fui-export"></span> Preview Changes</button>
+                    <button type="button" class="btn btn-default btn-embossed" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "cancel-and-close")%></button>
+                    <button type="submit" class="btn btn-primary btn-embossed"><span class="fui-export"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview-changes")%></button>
                 </div>
                 
             </div><!-- /.modal-content -->
@@ -2406,13 +2478,14 @@ function showAgileCRMForm(formJson,formHolderId) {
                 var iframe_id=iframe.getAttribute("id");
                 var replace_form_class=$('#'+iframe_id).contents().find('.agile_crm_form_embed');
                 try{
-                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0)){
+                if($('#'+iframe_id).contents().find('#agileform').size()!==0 || (check_agileform.includes("header10") && $('#'+iframe_id).contents().find('#agileform_div')!==0  && replace_form_class.length===0)){
                     if(window.current_agileform!=null){
                         $('#'+iframe_id).contents().find('#agileform_div').empty();
                         var div = $("<div class='agile_crm_form_embed' id='"+window.CURRENT_AGILE_DOMAIN+"_"+formJson.id+"' ></div>");
-                        div.html(formJson.formHtml); 
+                         div.html(formJson.formHtml); 
                         $('#'+iframe_id).contents().find('#agileform_div').append(div);
-                    }            
+                        //$('#'+iframe_id).contents().find('#agileform_div').innerHTML=div;
+                        }            
                     return;
                 } 
                 else {            
@@ -2424,13 +2497,19 @@ function showAgileCRMForm(formJson,formHolderId) {
                         replace_form_class.html(formJson.formHtml);
                     }                    
                     return;
-                } 
+                }         
                 }catch(err){}   
             }
          }
     });
 }
 </script>
-    <script src="<%=BUILD_PATH%>js/builder.min.js" charset="utf-8"></script>
+    <script src="<%=BUILD_PATH%>js/builder.min.js?v=<%=AGILE_VERSION%>" charset="utf-8"></script>
+    <script src="/locales/html5/localize.js?v=<%=AGILE_VERSION%>" charset="utf-8"></script>
+<script>
+function _agile_get_locale_val(key){
+    return _AGILE_LOCALE_JSON[key];
+}
+</script>
   </body>
 </html>

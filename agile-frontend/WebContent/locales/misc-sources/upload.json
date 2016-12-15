@@ -1,0 +1,10 @@
+{ 
+    "upload-image" : "{{agile_lng_translate 'upload-image' 'upload-image'}}",
+    "upload-valid-image" : "{{agile_lng_translate 'upload-image' 'upload-valid-image'}}", 
+    "required" : "{{agile_lng_translate 'validation-msgs' 'required'}}",
+    "upload-your-image" : "{{agile_lng_translate 'upload-image' 'upload-your-image'}}",
+    "upload-image-format" : "{{agile_lng_translate 'upload-image' 'upload-image-format'}}",
+    "cropped-image" : "{{agile_lng_translate 'upload-image' 'cropped-image'}}",
+    "upload" : "{{agile_lng_translate 'others' 'upload'}}",
+    "uploading" : "{{agile_lng_translate 'upload-image' 'uploading'}}",
+}

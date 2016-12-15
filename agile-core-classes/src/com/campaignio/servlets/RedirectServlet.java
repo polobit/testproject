@@ -67,6 +67,7 @@ public class RedirectServlet extends HttpServlet
 	String push = req.getParameter("p");
 	String personalEmailTrackerId = req.getParameter("t");
 	String pushNotificationLinked = req.getParameter("n");
+	String namespace = req.getParameter("ns"); // for new click tracking urls
 	
 	//Get client IP address
 	String clientIPAddress=AnalyticsServlet.getClientIP(req);
@@ -80,7 +81,13 @@ public class RedirectServlet extends HttpServlet
 
 	// When requested from shorten url, get domain from URLShortener
 	if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
-	    domain = URLShortenerUtil.getDomainFromShortURL(url);
+	{
+		// Get namespace from request parameter
+		if(StringUtils.isNotBlank(namespace))
+			domain = namespace;
+		else
+			domain = URLShortenerUtil.getDomainFromShortURL(url);
+	}
 	else
 	    domain = NamespaceUtil.getNamespaceFromURL(host);
 
@@ -88,6 +95,7 @@ public class RedirectServlet extends HttpServlet
 	// using contactspot URLs
 	if (StringUtils.isBlank(domain))
 	    return;
+	
     //IP Filter status for email clicked and open
 	IPFilterStatus=AnalyticsServlet.isBlockedIp(clientIPAddress,domain);
 	
@@ -102,22 +110,22 @@ public class RedirectServlet extends HttpServlet
 		NamespaceManager.set(domain);
 
 	    // When requested from shorten url, get values from URLShortener
-	    if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
+	    if (StringUtils.isBlank(namespace) && StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
 	    {
-		// Get URLShortener object based on key i.e., URLShortener id
-		urlShortener = URLShortenerUtil.getURLShortener(url);
-
-		if (urlShortener == null)
-		{
-		    resp.getWriter().println("Invalid URL");
-		    return;
-		}
-
-		subscriberId = urlShortener.subscriber_id;
-		campaignId = urlShortener.campaign_id;
-		originalURL = urlShortener.long_url;
-		trackerId = urlShortener.tracker_id;
-		push = urlShortener.getPushParameter();
+			// Get URLShortener object based on key i.e., URLShortener id
+			urlShortener = URLShortenerUtil.getURLShortener(url);
+	
+			if (urlShortener == null)
+			{
+			    resp.getWriter().println("Invalid URL");
+			    return;
+			}
+	
+			subscriberId = urlShortener.subscriber_id;
+			campaignId = urlShortener.campaign_id;
+			originalURL = urlShortener.long_url;
+			trackerId = urlShortener.tracker_id;
+			push = urlShortener.getPushParameter();
 	    }
 
 	    // Remove spaces, \n and \r
@@ -181,6 +189,9 @@ public class RedirectServlet extends HttpServlet
 	    // For personal emails campaign-id is blank  and checked ip address is blocked or not for mail notification
 	    if (StringUtils.isBlank(campaignId) && contact != null && IPFilterStatus == false)
 	    {
+	    	// In URLShortener we get from tracker Id
+	    	if(StringUtils.isBlank(personalEmailTrackerId))
+	    		personalEmailTrackerId = trackerId;
 	    	
 	    	// Save link clicked time
 	    	if(StringUtils.isNotBlank(personalEmailTrackerId))
@@ -225,6 +236,7 @@ public class RedirectServlet extends HttpServlet
 					// Interrupt cron tasks of clicked.
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.SMS);
 					
+				    return;
 		    	}
 		    	
 		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.TWEET))
@@ -234,24 +246,33 @@ public class RedirectServlet extends HttpServlet
 			    	
 					// Interrupt cron tasks of clicked.
 				    TrackClickUtil.interruptCronTasksOfClicked(trackerId, campaignId, subscriberId, ShortenURLType.TWEET);
+				    
+				    return;
 					
 		    	}
-		    	
-		    	// Show notification
-				TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
-				
-				return;
+
+		    	// For Emails
+		    	if(urlShortener.getURLShortenerType().equals(ShortenURLType.EMAIL))
+		    	{
+		    		TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    		
+		    		// Show notification
+					TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
+		    	}
 		    	
 		    }
-		    
-		    //If linked click is push notification then add push  notification linked log
-		    if(pushNotificationLinked !=null)
+		    else if(pushNotificationLinked != null)
+		    {
+		    	//If linked click is push notification then add push  notification linked log
 		    	TrackClickUtil.addPushNtificationClickedLog(campaignId, subscriberId, originalURL, workflow.name);
+		    	
+		    	return;
+		    }
 		    else
 		    {
 		    	TrackClickUtil.addEmailClickedLog(campaignId, subscriberId, originalURL, workflow.name);
 	
-			// Show notification
+				// Show notification
 		    	TrackClickUtil.showEmailClickedNotification(contact, workflow.name, originalURL);
 		    }
 	    }

@@ -102,7 +102,8 @@ public class SendGridSubUser extends SendGridLib
 	
 	public String associateAgileWhiteLabel(SubUser subUser) throws Exception
 	{
-		String DEFAULT_WHITELABEL_ID = "455116";
+		//String DEFAULT_WHITELABEL_ID = "455116";//email.agilecrm.com
+		String DEFAULT_WHITELABEL_ID = "933254";//mailagile-server.net
 		String url = "https://api.sendgrid.com/v3/whitelabel/domains/"+DEFAULT_WHITELABEL_ID+"/subuser";
 		
 		
@@ -171,7 +172,7 @@ public class SendGridSubUser extends SendGridLib
 		public SubUser()
 		{
 			this.ips = new ArrayList<String>();
-			ips.add("167.89.30.183");
+			ips.add("167.89.30.173");
 		}
 		
 		public String getName()

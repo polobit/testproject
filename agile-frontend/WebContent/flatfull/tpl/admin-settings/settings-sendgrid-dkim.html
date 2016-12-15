@@ -74,17 +74,14 @@
 </div>
 </script>
 
-<script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">
-{{#if plan}}
- <div class="m-xs " style="text-align:center;font-size: 13px; margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">upgrade</a> {{agile_lng_translate 'other' 'plan-to-use-this-feature'}} </span>
- </div>
- {{else}}
-    {{#if emailGateway}}
-     <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> 
-     {{agile_lng_translate 'other' 'you-are-using-your-own-email-gateway'}} </span>
-     </div>
-     {{else}}
-     undefined
-    {{/if}}
- {{/if}}
-</script>
+<script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">    
+   
+  {{#if emailGateway}}    
+    <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;">
+      <span style="padding: 3px 10px 3px 10px;" class="alert alert-info">    
+   {{agile_lng_translate 'other' 'you-are-using-your-own-email-gateway'}} </span>   
+   </div>   
+ {{else}}   
+     undefined    
+   {{/if}}     
+ </script> 
