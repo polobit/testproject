@@ -467,7 +467,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
 .agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px; overflow: inherit;}
 .agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 70px; }
+.app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 55px; }
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
