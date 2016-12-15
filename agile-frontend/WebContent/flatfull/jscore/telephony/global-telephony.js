@@ -12,6 +12,7 @@ $(function()
 {
 //	initToPubNub();
 	globalCallWidgetSet();
+	
 });
 
 function getContactImage(number, type, callback)
