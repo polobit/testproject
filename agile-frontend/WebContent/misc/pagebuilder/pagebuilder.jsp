@@ -2385,7 +2385,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
        <!-- /.modal for next step instruction -->
     <div class="modal fade instructionModal" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-        <div class="modal-dialog" style="width:500px;">
+        <div class="modal-dialog" style="max-width: 500px;">
             
             <div class="modal-content">
                 
