@@ -1803,4 +1803,14 @@ textarea#tinyMCEhtml_email {
 .contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
   margin-left: 0px;
 }
+ 
+/***** END TABLES ********/
+#activity_model .list-group {
+     background-color: transparent;
+     margin-top: 0px;  
+}
+#activity_model .scroll div[id*="heading"] {
+     border-bottom: 1px solid #f4f8f9; 
+     border-top: 1px solid #f4f8f9; 
+}
 
