@@ -457,6 +457,10 @@
 </small></div>
 {{/if_equals}}
 
+<!-- adding the template for the sms activity-->
+
+
+
 
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'reassigned-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}
@@ -1302,6 +1306,13 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 </small>
 {{/if_equals}}
 {{/if}}
+{{/if_equals}}
+
+{{#if_equals "SMS_SENT" activity_type}}
+To {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >SMS Sent</a>{{else}}'gatewayName'{{/if}} <br/>
+<small class="activities_second_line m-t-none text-sm"> 
+<i class="icon-envelope-alt"></i>{{#unless this.entityObject}}FROM: {{/unless}} Message - <a href="" class="email-details" data="{{id}}">smsStatus</a> 
+</small>
 {{/if_equals}}
 
 {{#if_equals "CHANGE_LEAD_STATUS" custom1}}

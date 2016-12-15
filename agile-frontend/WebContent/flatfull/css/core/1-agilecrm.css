@@ -5056,3 +5056,6 @@ border-top: 0px !important;
 {
   top:-1px!important;
 }
+.sms-draggable-noty:hover .move-icon{
+ display:block!important;
+ }

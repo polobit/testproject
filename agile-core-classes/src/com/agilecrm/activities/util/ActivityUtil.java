@@ -2632,13 +2632,63 @@ public class ActivityUtil
 			activity.save();
 		}
 	}
-	public static void createTwilioSmsActivity(String serviceType,ActivityType activityType ,String toNumber,Integer fromNumber,String message){
-		Activity activity = new Activity();
-		activity.entity_type = EntityType.SMS;
-		Contact contact;
-		activity.activity_type = activityType;
-		activity.custom1 = ActivityType.SMS_TO_NUMBER;
-		
+	
+public static void createLogForSMS(String toNumber, String fromNumber, String message, String smsStatus, String gatewayName, String contactId)
+	{
+
+		// Search contact
+		if (toNumber != null)
+		{
+			Contact contact;
+			try
+			{
+				contact = QueryDocumentUtil.getContactsByPhoneNumber(toNumber);
+			}
+			catch (Exception e)
+			{
+				contact = ContactUtil.searchContactByPhoneNumber(toNumber);
+			}
+			if(contact == null)
+				contact = ContactUtil.getContact(Long.parseLong(contactId));
+			
+			System.out.println("SMS Log contact: " + contact);
+			if (contact != null)
+			{
+				String smsToName = "";
+				List<ContactField> properties = contact.properties;
+				for (ContactField f : properties)
+				{
+					System.out.println("\t" + f.name + " - " + f.value);
+					if (f.name.equals(contact.FIRST_NAME))
+					{
+						smsToName += f.value;
+						continue;
+					}
+					if (f.name.equals(contact.LAST_NAME))
+					{
+						smsToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						smsToName = f.value;
+						continue;
+					}
+				}
+
+				Activity activity = new Activity();
+				activity.activity_type = ActivityType.SMS_SENT;
+				activity.custom1 = toNumber;
+				activity.custom2 = message;
+				activity.custom3 = smsStatus;
+				activity.custom4 = fromNumber;
+				activity.label = gatewayName;
+				activity.entity_type = EntityType.CONTACT;
+				activity.entity_id = contact.id;
+				activity.save();
+			}
+		}
+
 	}
 }
+
 

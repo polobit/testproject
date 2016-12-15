@@ -44,7 +44,8 @@ import com.agilecrm.contact.DocumentNote;
 public class ActivitySave
 {
 
-    /**
+    private static final String String = null;
+	/**
      * method used to create DEAL_ADD activity
      * 
      * @param opportunity
@@ -1419,4 +1420,19 @@ public class ActivitySave
     	        bulk_action_subject, EntityType.TASK);
 
         }
+    /*public static void createLogForSMS(String toNumber, String fromNumber, String message, String smsStatus, String gatewayName){
+    	//creating the activity class object
+    	Activity activity= new Activity();
+    	activity.activity_type = ActivityType.SMS_SENT;
+    	activity.custom1 = toNumber;
+		activity.custom2 = message;
+		activity.custom3 = smsStatus;
+		activity.custom4 = gatewayName;
+		activity.label = fromNumber;
+    	//activity.custom4 = "SMS send via Twilio";
+    	//activity.save();
+    	//Activity.createTwilioSMSActivity(toNumber,fromNumber,message,smsStatus,gatewayName);	
+    	
+    }*/
+  
 }

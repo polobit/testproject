@@ -267,6 +267,7 @@
             </div>
         {{/if_entity}}
 
+
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</div></div> -->
@@ -366,6 +367,20 @@
         {{/if_entity}}
 
          {{#if_entity "CONTACT"}}
+            {{#if_equals "SMS_SENT" activity_type}}
+            <div class="timestamp">{{time}}</div>
+            <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-list-alt"></i></a></span> Message Sent</div></div> -->
+            <div class="text-md text-cap pull-left">    
+                <div class="contact-job-title text-base custom-color">
+                    <i class="icon-list-alt text-muted p-r-xs"></i>{{custom3}}
+                </div>
+            </div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body">
+                <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">{{custom2}}</div></span>
+            </div>
+        {{/if_equals}}
 			{{#if_equals "CALL" activity_type}}
             {{#if_equals "incoming" custom2}}
          <div class="timestamp">{{time}}</div>

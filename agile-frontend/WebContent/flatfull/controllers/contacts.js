@@ -1940,7 +1940,7 @@ function menuServicerole(dashboard){
 }
 
  // Send a prsonal sms  
-function sendPersonalSMS(el, phone){
+function sendPersonalSMS(el, id){
 
         var fromNumber = $("#from-number").val();
         var message = $("#sms-noty-notes").val();
@@ -1952,7 +1952,7 @@ function sendPersonalSMS(el, phone){
 	    if(message == undefined || message=="")
         {
         	if ($('#sms-noty-notes').val() == '') {
-        	 $('#sms-noty-notes').css('border-color', '#a94442');
+        	 $('#sms-noty-notes').css('border-color', 'red');
         	$save_info = $('<div style="display:inline-block "><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
 						$('.sms-message').html($save_info);
 						$save_info.show();
@@ -1966,8 +1966,7 @@ function sendPersonalSMS(el, phone){
 }else {
     $('#sms-noty-notes').css('border-color', '');
 }
-						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&from=" + encodeURIComponent(fromNumber) + "&message=" + encodeURIComponent(message);
-
+						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&from=" + encodeURIComponent(fromNumber) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
 						if ($(el).attr("disabled"))
 							return;
 
@@ -1990,8 +1989,8 @@ function sendPersonalSMS(el, phone){
 												closeCallNoty(true);
 											}, 2000);
 
-										})
-								.fail(
+										})		
+						         .fail(
 										function(response)
 										{
 											$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
