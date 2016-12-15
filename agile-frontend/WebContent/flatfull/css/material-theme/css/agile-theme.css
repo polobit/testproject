@@ -1855,3 +1855,18 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 {
   margin-left:10px!important;
 }
+.btn-danger
+{
+    background-color: rgba(243, 49, 85, 0.1)!important;
+    color: #f33155 !important;
+}
+.btn-danger:hover,.btn-danger:active,.btn-danger:hover,.btn-danger:focus
+{
+    background-color: rgba(243, 49, 85, 0.2)!important;
+    color: #f33155!important;
+}
+.dropdown-menu
+{
+  border:0px solid #fff!important;
+}
+
