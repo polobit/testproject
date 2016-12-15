@@ -699,7 +699,7 @@ header .bg-white a, header button.show-search-dropdown {
   line-height: 30px;
   font-size: 12px;
 }
-.icon-plus-sign:before{
+:not(.notaddon-imp).icon-plus-sign:before{
   content: "+";
   margin-left: 1px;
   font-weight: 600;
@@ -1425,11 +1425,11 @@ color:#0d1114 !important;
 }
 #verification_anaytical_code
 {
-  height:40px;
+  height:40px!important;
 }
 #whitelabel-domain
 {
-  height: 40px
+  height: 40px!important;
 }
 .add_to_all
 {
@@ -1446,4 +1446,8 @@ color:#0d1114 !important;
 .form-actions .btn-primary-imp
 {
   margin-left:10px!important;
+}
+.deal-restore-detail-view
+{
+  left:-15px!important;
 }
