@@ -1378,7 +1378,7 @@ ul.tags-management li.tag{
   color: #ffffff !important;
 }
 /*css for the caret icon in the campaigns page */
-#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial
+#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial, #document_validate ,#document_update_validate
 {
   border-radius: 4px;
 }
@@ -1402,9 +1402,9 @@ ul.tags-management li.tag{
   font-size:13px;
   margin-top:5px;
 }
-#contact-sorter .fa-sort-desc
+#contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
-  margin-top:-8px;
+  margin-top:-11px;
 }
 #contact-sorter .sort-field-txt
 {
@@ -1422,4 +1422,28 @@ color:#0d1114 !important;
 {
   background-color: #067dc6!important;
   color: #fff!important;
+}
+#verification_anaytical_code
+{
+  height:40px;
+}
+#whitelabel-domain
+{
+  height: 40px
+}
+.add_to_all
+{
+  line-height:1.42857143 !important;
+}
+.m-l-n-xs-imp
+{
+  margin-left:-5px!important;
+}
+.m-l-xs-imp
+{
+  margin-left:5px !important;
+}
+.form-actions .btn-primary-imp
+{
+  margin-left:10px!important;
 }
