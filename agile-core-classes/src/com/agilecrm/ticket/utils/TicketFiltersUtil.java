@@ -78,7 +78,7 @@ public class TicketFiltersUtil
 	{
 		StringBuffer query = new StringBuffer();
 
-		List<TicketGroups> groups = TicketGroupUtil.getAllGroups();
+		List<TicketGroups> groups = TicketGroupUtil.getAllGroupsForCurrentUser();
 		List<String> groupIdsList = new ArrayList<>();
 		boolean isGroupAdded = false;
 		

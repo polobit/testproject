@@ -51,9 +51,9 @@ public class TicketGroupRest
 		try
 		{
 			if (onlyGroups == null)
-				return TicketGroupUtil.getAllGroupsWithDomainUsers();
+				return TicketGroupUtil.getAllGroups();
 
-			return TicketGroupUtil.getAllGroups();
+			return TicketGroups.ticketGroupsDao.fetchAll();
 		}
 		catch (Exception e)
 		{
@@ -63,6 +63,29 @@ public class TicketGroupRest
 		}
 	}
 
+	/**
+	 * Fetch all groups visible to the current user
+	 * 
+	 * @param onlyGroups
+	 * @return
+	 */
+	@GET
+	@Path("/current-user")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<TicketGroups> getGroupsForCurrentUser(@QueryParam("only_groups") Boolean onlyGroups)
+	{
+		try {
+			if( onlyGroups == null )
+				return TicketGroupUtil.getAllGroupsForCurrentUserIncludingDomainUsers();
+			
+			return TicketGroupUtil.getAllGroupsForCurrentUser();
+		} catch(Exception e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+		}
+	}
+	
+	
 	/**
 	 * @return List of Domain Users
 	 */

@@ -67,9 +67,31 @@ public class TicketGroupUtil
 	 * 
 	 * @return List of Ticket Groups
 	 */
-	public static List<TicketGroups> getAllGroupsWithDomainUsers()
+	public static List<TicketGroups> getAllGroups()
 	{
-		List<TicketGroups> ticketGroups = getAllGroups();
+		List<TicketGroups> ticketGroups = TicketGroups.ticketGroupsDao.fetchAll();
+
+		if (ticketGroups == null || ticketGroups.size() == 0)
+		{
+			TicketGroups supportGroup = createDefaultGroup();
+
+			ticketGroups = new ArrayList<TicketGroups>();
+			ticketGroups.add(supportGroup);
+		}
+
+		return inclDomainUsers(ticketGroups);
+	}
+
+	/**
+	 * GetAllGroups method fetches all Ticket Groups from specified namespace.
+	 * If user have no groups then default group will be created and it will be
+	 * returned.
+	 * 
+	 * @return List of Ticket Groups
+	 */
+	public static List<TicketGroups> getAllGroupsForCurrentUserIncludingDomainUsers()
+	{
+		List<TicketGroups> ticketGroups = getAllGroupsForCurrentUser();
 
 		if (ticketGroups == null || ticketGroups.size() == 0)
 		{
@@ -87,7 +109,7 @@ public class TicketGroupUtil
 	 * 
 	 * @return
 	 */
-	public static List<TicketGroups> getAllGroups()
+	public static List<TicketGroups> getAllGroupsForCurrentUser()
 	{
 		DomainUserService service = (DomainUserService) ServiceLocator.lookupService(DomainUserService.ServiceID);
 		DomainUser user = service.getCurrentDomainUser();

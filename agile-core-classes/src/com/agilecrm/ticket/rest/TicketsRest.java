@@ -256,7 +256,7 @@ public class TicketsRest
 	{
 		try
 		{
-			List<TicketGroups> groups = TicketGroupUtil.getAllGroups();
+			List<TicketGroups> groups = TicketGroupUtil.getAllGroupsForCurrentUserIncludingDomainUsers();
 
 			List<DomainUserPartial> domainUsers = DomainUserUtil.getPartialDomainUsers(NamespaceManager.get());
 
