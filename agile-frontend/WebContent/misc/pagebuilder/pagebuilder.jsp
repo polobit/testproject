@@ -2397,8 +2397,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         </label>
                     </h3>
                     <i class="fa fa-arrow-right"></i> 
-                    <strong> Next Action </strong> 
-                     Publish the Landing Page
+                    <strong> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "next-action")%> </strong> 
+                     <%=LanguageUtil.getLocaleJSONValue(localeJSON, "publish-the-landing-page")%>
                     
                 </div>      
                 <div class="modal-body" style="text-align: center;">
@@ -2406,12 +2406,12 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <div class="control-group form-group">
                             <div class="col-xs-6 col-sm-7 text-center">
                                 <a  class="lp-view-link agile-link" target="_blank" style="color:#34495e;">
-                                    <i class="fui-window" style="font-size:30px;"></i><br> Preview
+                                    <i class="fui-window" style="font-size:30px;"></i><br> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview")%>
                                 </a>
                             </div>
                             <div class="col-xs-6 col-sm-2 text-center" style="margin-top:2px;">
                                 <a class="lp-publish-link agile-link" target="_blank" style="color:#34495e;">
-                                    <i class="fui-upload" style="font-size:30px;" ></i><br>Publish
+                                    <i class="fui-upload" style="font-size:30px;" ></i><br><%=LanguageUtil.getLocaleJSONValue(localeJSON, "publish")%>
                                 </a>
                             </div>
                         </div>  
@@ -2421,9 +2421,9 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                 
                 <div class="modal-footer" style="padding:15px 22px;">
                     <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
-                        <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false">Don't show me again</label>
+                        <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-show-me-again")%></label>
                     </div>
-                    <a class="close-popup agile-link" href= "<%=MAIN_URL%>#landing-pages">Back to Landing Pages</a>
+                    <a class="close-popup agile-link" href= "<%=MAIN_URL%>#landing-pages"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "back-landingpage")%></a>
                 </div>
                 
             </div><!-- /.modal-content -->
