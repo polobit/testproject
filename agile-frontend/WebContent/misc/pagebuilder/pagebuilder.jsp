@@ -2423,7 +2423,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
                         <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-show-me-again")%></label>
                     </div>
-                    <a class="close-popup agile-link" href= "<%=MAIN_URL%>#landing-pages"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "back-landingpage")%></a>
+                    <a class="close-popup agile-link" style="display: inline-block;margin-top: 3px;" href= "<%=MAIN_URL%>#landing-pages"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "back-landingpage")%></a>
                 </div>
                 
             </div><!-- /.modal-content -->
