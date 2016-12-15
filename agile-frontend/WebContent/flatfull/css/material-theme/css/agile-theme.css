@@ -567,7 +567,7 @@ a i, a span{vertical-align: inherit;}
 #automation-video{
   margin-right: 15px !important;
 }
-#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading{
+#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading, #workflows-collection-container .panel-heading, #campaign-triggers-list .panel-heading, #email-templates-list-view .panel-heading, #forms-list-view .panel-heading, #landing-pages-collection-container .panel-heading, #webrules-list-view .panel-heading, #push-notify-list-view .panel-heading, #contact-reports-list-view .panel-heading, #reports-show-results .panel-heading, #workflow-subscribers-list .panel-heading{
   display: none !important;
 }
 
@@ -608,9 +608,9 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 .agile-new-theme #deal-tracks-accordion .panel-heading{
   padding-left: 5px !important;
 }
-.agile-new-theme #deal-tracks-accordion .panel-title{
+/*.agile-new-theme #deal-tracks-accordion .panel-title{
   color: #11a0f8 !important;
-}
+}*/
 .agile-new-theme #deal-tracks-accordion .panel-body{
   border-top: none !important;
 }
@@ -627,7 +627,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 .agile-new-theme table#deal-sources-table>tbody>tr>td:nth-child(2)>div{
   padding-left: 15px !important;
 }
-#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer{
+#documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer, #user-dashboard-list .panel-footer, #voicemail-list .panel-footer{
   border-top: 10px solid #f4f8f9 !important;
 }
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
@@ -840,7 +840,7 @@ header .bg-white a, header button.show-search-dropdown {
 }
 
 #admin-prefs-tabs-content .control-group{
-  padding-top: 10px;
+  padding-top: 0px;
   background-color: #fff;
 }
 
@@ -1702,12 +1702,12 @@ color:#0d1114 !important;
 #content .portlet_body_calendar #calendar_container .agile-table td, #content .portlet_body_calendar #calendar_container .agile-table th {
   padding: 0px !important;
 }
-.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container .agile-table>tbody>tr>td, #campaign-triggers-list .agile-table>tbody>tr>td, #email-template-div-id .agile-table>tbody>tr>td, #forms-list-view .agile-table>tbody>tr>td, #landing-pages-collection-container .agile-table>tbody>tr>td, #webrules-list-view .agile-table>tbody>tr>td, #push-notify-list-view .agile-table>tbody>tr>td, .ticket-settings .agile-table>tbody>tr>td{
+/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container .agile-table>tbody>tr>td, #campaign-triggers-list .agile-table>tbody>tr>td, #email-template-div-id .agile-table>tbody>tr>td, #forms-list-view .agile-table>tbody>tr>td, #landing-pages-collection-container .agile-table>tbody>tr>td, #webrules-list-view .agile-table>tbody>tr>td, #push-notify-list-view .agile-table>tbody>tr>td, .ticket-settings .agile-table>tbody>tr>td{
   vertical-align: middle !important;
-}
-.agile-new-theme #deals-new-list-view .agile-table>thead>tr>th, #documents_collection_container .agile-table>thead>tr>th, #workflows-collection-container .agile-table>thead>tr>th, #campaign-triggers-list .agile-table>thead>tr>th, #email-templates-list-view .agile-table>thead>tr>th, #forms-list-view .agile-table>thead>tr>th, #landing-pages-collection-container .agile-table>thead>tr>th, #webrules-list-view .agile-table>thead>tr>th, #push-notify-list-view .agile-table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings .agile-table>thead>tr>th{
+}*/
+/*.agile-new-theme #deals-new-list-view .agile-table>thead>tr>th, #documents_collection_container .agile-table>thead>tr>th, #workflows-collection-container .agile-table>thead>tr>th, #campaign-triggers-list .agile-table>thead>tr>th, #email-templates-list-view .agile-table>thead>tr>th, #forms-list-view .agile-table>thead>tr>th, #landing-pages-collection-container .agile-table>thead>tr>th, #webrules-list-view .agile-table>thead>tr>th, #push-notify-list-view .agile-table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings .agile-table>thead>tr>th{
   vertical-align: bottom !important;
-}
+}*/
 .agile-new-theme .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
@@ -1809,7 +1809,6 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 .contacts-div #bulk-action-btns span#contacts-grid-view-checkbox:nth-child(2){
   margin-left: 0px;
 }
- 
 #activity_model .list-group , #contact_activity_model .list-group {
  
      background-color: transparent;
@@ -1854,4 +1853,13 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 #bringYourCodeBtn
 {
   margin-left:10px!important;
+}
+tbody#ticket-single-row-model-list tr td{
+  vertical-align: initial;
+}
+.tickets-div .panel-default .panel-heading{
+  background-color: #fff !important;
+}
+table.agile-table>tbody>tr>td{
+  vertical-align: middle !important;
 }
