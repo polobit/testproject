@@ -202,7 +202,7 @@ public class EmailUtil
 	
 	String trackingImage = "<div class=\"ag-img\"><img src="
 	        + trackURL + "?" + queryParams
-	        + " nosend=\"1\" alt='' style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
+	        + " nosend=\"1\" alt=\"\" style=\"display:block;width:1px!important;min-width:1px!important;max-width:1px!important;height:1px!important;border:0;overflow:hidden;\" border=\"0\" width=\"1\" height=\"1\"></img></div>";
 
 	return replaceLastOccurence(html, "</body>", trackingImage);
     }
