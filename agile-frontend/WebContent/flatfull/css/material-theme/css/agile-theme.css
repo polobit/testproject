@@ -640,7 +640,8 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }*/
 .agile-new-theme table>thead>tr>th>label.i-checks.i-checks-sm{
   /*margin: 0px !important;*/
-  padding: 0px !important;
+  padding-bottom: 0px !important;
+  vertical-align: middle;
 }
 #today-heading, #yesterday-heading, #earlier-heading{
   border :none !important;
