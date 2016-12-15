@@ -135,6 +135,9 @@ form select.form-control{
 .i-checks-sm>i {
   display: none;
 }
+.r-switch input[type="checkbox"] {
+  position: absolute;
+}
 /*
 .i-checks {
   padding-left: inherit;
