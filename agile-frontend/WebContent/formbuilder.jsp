@@ -43,9 +43,9 @@ String template = request.getParameter("template");
    </head>
    <body>
       <header id="header" class="navbar" role="menu">
-         <!-- <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
+         <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
            <i class="glyphicon glyphicon-cloud"></i> 
-         </a> -->
+         </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;">           
             <a id="form_back" title="Go back to Forms Page" class="btn btn-default navbar-brand">
@@ -106,7 +106,9 @@ String template = request.getParameter("template");
          var a = document.getElementById('form_preview');
          a.removeAttribute("disabled");
          a.href = window.location.origin+"/forms/"+formNumber;
-      }
+      }  
+         var a = document.getElementById('agile-logo');
+         a.href = window.location.origin;*
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
       </script>
