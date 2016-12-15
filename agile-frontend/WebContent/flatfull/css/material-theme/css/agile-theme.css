@@ -1640,5 +1640,16 @@ color:#0d1114 !important;
 {
   background-color: #067dc6!important;
   color: #fff!important;
+}
 
+/*Contact Single Row Image Fix Start*/
+.agile-new-theme table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: 3px !important;
+}
+/*Contact Single Row Image Fix End*/
+
+#company-contacts-list-view .contacts-inner-div{
+  border-top: 15px solid #f4f8f9;
 }
