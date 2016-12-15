@@ -126,17 +126,20 @@ function androidCallNoty(message){
 		var callDirection = message.direction;
 		var state = message.state;
 		var customerNumber = message.contact_number;
+		var eventType = message.event_type;
 
 		if(callDirection){
 			if(callDirection == "Outgoing"){
-				if(state){	
-					if(state == "INITIATED"){
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
-					}else if(state == "CDR"){
-						closeCallNoty(true);	
-						saveCallNoteAndroid(message);
+				if(eventType == "CALL"){
+					if(state){
+						if(state == "INITIATED"){
+							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
+						}
 					}
+				}else if(eventType == "CDR"){		
+					closeCallNoty(true);	
+					saveCallNoteAndroid(message);			
 				}
 			}
 		}
