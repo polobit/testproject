@@ -239,7 +239,8 @@ public class GMail {
 			Session session = Session.getDefaultInstance(props, null);
 			
 			MimeMessage message = new MimeMessage(session);
-			message.addFrom(parse(escapeJava(name) + " <" + from + ">"));
+			message.setFrom(new InternetAddress(from));
+			//message.addFrom(parse(escapeJava(name) + " <" + from + ">"));
 			message.addRecipients(TO, parse(escapeJava(to), false));
             message.addRecipients(CC, parse(escapeJava(cc), false));
             message.addRecipients(BCC, parse(escapeJava(bcc), false));
