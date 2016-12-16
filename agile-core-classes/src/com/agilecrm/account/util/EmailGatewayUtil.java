@@ -564,10 +564,10 @@ public class EmailGatewayUtil
      * @param tasks
      *            - tasks leased from pull queue
      */
-    public static void sendMails(List<TaskHandle> tasks)
+    public static void sendMails(List<TaskHandle> tasks, String queueName)
     {
     	
-	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), queueName);
     }
 
     public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
@@ -649,7 +649,7 @@ public class EmailGatewayUtil
 	}
     }
 
-    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks)
+    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks, String queueName)
     {
 
 	MailDeferredTask mailDeferredTask = tasks.get(0);
@@ -665,6 +665,8 @@ public class EmailGatewayUtil
 	    NamespaceManager.set(domain);
 
 	    EmailSender emailSender = EmailSender.getEmailSender();
+	    emailSender.setQueueName(queueName);
+	    
 	    EmailGateway emailGateway = emailSender.emailGateway;
 
 	    if (emailSender.canSend())
