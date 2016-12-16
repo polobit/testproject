@@ -2107,3 +2107,7 @@ ul#recent-menu-model-list li:nth-child(even){
     transform: scale(1);
 
 }
+#pipeline-delete-modal .btn-default-imp
+{
+  opacity:0.8!important;
+}
