@@ -138,6 +138,8 @@ function saveCallNoteKnolarity(event){
 	data.contact_name = "";
 	data.widget = "Knowlarity";
 
+	console.log(callType +" : "+ state);
+
 	if(callType == "Incoming"){		
 
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(responseJson){
@@ -148,8 +150,8 @@ function saveCallNoteKnolarity(event){
 	    		
 	    		if(state == "answered") {
 	    			data.status = "answered";
-	    			CallLogVariables.dynamicData = data;
-	    		}
+	    			CallLogVariables.dynamicData = ;
+	    		}data
 
     			CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = "Knowlarity";
@@ -166,7 +168,7 @@ function saveCallNoteKnolarity(event){
 
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
-	    	if(message.state == "answered"){				
+	    	if(state == "answered"){				
 				data.status = "answered";		
 				data.contId = contact.id;
 				data.contact_name = contact_name;
@@ -334,6 +336,7 @@ function changeCallNotyBasedOnStatus(event){
 			}else if(callType == "Incoming"){
 				KNOWLARITY_PREVIOUS_EVENT = undefined;
 				closeCallNoty(true);
+				saveCallNoteKnolarity(event);
 			}
 		}
 	}	
