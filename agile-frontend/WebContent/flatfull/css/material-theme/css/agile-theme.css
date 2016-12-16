@@ -1064,7 +1064,7 @@ z-index:1;
 {
   color: #78909c !important;
 }
-#scheduleid .line.line-dashed.b-b.line-lg {
+#scheduleid .line.line-dashed.b-b.line-lg ,#subscribe_plan_change .line.line-dashed.b-b.line-lg{
     border-bottom: 1px solid #dee5e7;
 }
 
@@ -1963,6 +1963,7 @@ font-size: 24px !important;
 .slate-content h4{
   font-size: 18px !important;
 }
+
 #emailBuilderTopOptionsHolder .emailbuilder-copy
 {
   top:inherit!important;
@@ -1996,6 +1997,7 @@ ul#recent-menu-model-list li:nth-child(even){
 .agile-new-theme .agile-menu-parent-item {
     font-size: 16px;
 }
+
 #basic-addon1{
   border: 0px;
 }
@@ -2064,4 +2066,44 @@ ul#recent-menu-model-list li:nth-child(even){
   border-bottom-left-radius : 4px !important;
   border-top-right-radius : 4px !important;
   border-bottom-right-radius : 4px !important;
+}
+#widgets h4 {
+  font-size: 18px !important;
+}
+#widgets .text-base{
+  font-size: 14px !important;
+}
+
+.select-new-theme.form-control,.select-new-theme.form-control{
+    color: #263238;
+    background-color: #f4f8f9;
+    background-image: inherit;
+    border: inherit;
+    border-radius: 4px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
+  }
+  .email_plan_minimum,.email_credits_count{
+    border: 1px solid #ccc !important;
+    background-color: #fff !important;
+  }
+  #aclInfo .b-b,#campaignInfo .b-b,#triggerInfo .b-b{
+    border-bottom: 1px solid #dee5e7;
+  }
+  .freePlanDetails,.subscriptionDetail{
+    font-size: 13px !important;
+  }
+  .emailCreditsDetails .panel-body{
+    font-size: 12px !important;
+  }
+  .new-them-upgrade p{
+    color: #263238; 
+  }
+  .plan-collection-in.selected-plan {
+    border: 1px solid #5fa2dd !important;
+    box-shadow: 0 0 5px #8bc0e0 !important;
+    opacity: 1;
+    margin: 0;
+    padding-bottom: 20px;
+    transform: scale(1);
+
 }
