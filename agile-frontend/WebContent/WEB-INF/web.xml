@@ -1596,4 +1596,12 @@
 		<servlet-name>DeleteDuplicateMilestone</servlet-name>
 		<url-pattern>/backend/cron/delete-duplicate-servlet</url-pattern>
 	</servlet-mapping>
+<servlet>
+	<servlet-name>TwilioIOTransferTwiml</servlet-name>
+	<servlet-class>com.thirdparty.twilio.TwilioIOTransferTwiml</servlet-class>
+</servlet>  
+<servlet-mapping>
+	<servlet-name>TwilioIOTransferTwiml</servlet-name>
+	<url-pattern>/transfercall</url-pattern>
+</servlet-mapping>
 </web-app>
