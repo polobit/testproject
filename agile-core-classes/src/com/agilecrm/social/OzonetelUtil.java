@@ -76,7 +76,8 @@ public class OzonetelUtil {
 	        String trackId = "" + d.getTime();
 	        URIBuilder uribuilder = new URIBuilder(url);
 	        uribuilder.addParameter("api_key", api_key);
-	        uribuilder.addParameter("phone_no", agent_no);
+	        uribuilder.addParameter("phone_no", agent_no.substring(agent_no.length() - 10));
+	        System.out.println(agent_no.substring(agent_no.length() - 10));
 	        uribuilder.addParameter("caller_id", caller_id);
 	        uribuilder.addParameter("url", domainUrl+"/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId+"&domain_user="+domain_user);
 	        uribuilder.addParameter("callback_url",domainUrl+"/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId+"&domain_user="+domain_user);

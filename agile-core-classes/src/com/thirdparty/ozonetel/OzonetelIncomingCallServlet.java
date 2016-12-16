@@ -77,7 +77,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
             if ((null != kookoo_event)&& kookoo_event.equalsIgnoreCase("newcall")) {
             	
                 Dial dialnumber = new Dial(); //kookoo dial tag class
-                dialnumber.setNumber(agent_no);
+                dialnumber.setNumber(agent_no.substring(agent_no.length() - 10));
                 r.addDial(dialnumber);
                 
                 contact_number = request.getParameter("cid");

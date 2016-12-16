@@ -34,7 +34,7 @@ function saveCallNoteOzonetel(message){
 	if(message.direction == "Incoming"){
 		var number = message.number;
 
-	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
+	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number.substr(number.length - 10), function(responseJson){
 	    	if(!responseJson){
 	    		
 	    		resetCallLogVariables();
