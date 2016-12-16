@@ -144,14 +144,13 @@ function saveCallNoteKnolarity(event){
 
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(responseJson){
 	    	if(!responseJson){
-	    		alert("not json");
-
+	    		    	
 	    		resetCallLogVariables();
 	    		
 	    		if(state == "answered") {
 	    			data.status = "answered";
-	    			CallLogVariables.dynamicData = ;
-	    		}data
+	    			CallLogVariables.dynamicData = data;
+	    		}
 
     			CallLogVariables.subject = noteSub;
 	    		CallLogVariables.callWidget = "Knowlarity";
