@@ -133,7 +133,7 @@ form select.form-control{
 }
 
 .i-checks-sm>i {
-  display: none;
+  /*display: none;*/
 }
 .r-switch input[type="checkbox"] {
   position: absolute;
@@ -1167,7 +1167,7 @@ label.i-checks input{
   vertical-align: middle;
   margin-right: 10px;
  }
-.i-checks i {
+table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   display: none!important;
 }
 .i-checks>span {
@@ -1181,6 +1181,9 @@ label.i-checks input{
 }
 .search-filters li a {
   z-index: 100000;
+}
+.i-checks-sm>i {
+  margin-left: -20px;
 }
 /** End of Checkbox/Radio CSS **/
 
