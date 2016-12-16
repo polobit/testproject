@@ -801,10 +801,10 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
-.agile-new-theme form .form-control.textarea
+/*.agile-new-theme form .form-control.textarea
 {
   height: 72px;
-}
+}*/
 .multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
 {
   margin-left:0px;
@@ -2118,6 +2118,7 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
+<<<<<<< HEAD
 .agile-new-theme #settings-milestones-tab-content #lost-reasons-table > tbody>tr{
       border-top: 1px solid #eaeff0 !important;
 }
@@ -2137,4 +2138,41 @@ ul#recent-menu-model-list li:nth-child(even){
 }
 .agile-new-theme #service-previlages div {
     margin-top: 0px !important;
+=======
+#settings-widgets-tab-content .btn-default , #settings-widgets-tab-content .btn-danger ,  #settings-widgets-tab-content .btn-primary, #widget-settings-tab-pane .btn-primary , #widget-settings-tab-pane .btn-default,#widget-settings-tab-pane .btn-danger
+{
+    height: 30px!important;
+    line-height: 30px!important;
+    font-size: 12px!important;
+    margin: 4px!important;
+    padding: 0 1em!important;
+}
+#settings-data-sync-tab-content .btn-default ,#settings-data-sync-tab-content .btn-primary ,#settings-data-sync-tab-content .btn-danger  ,#data-sync-settings-tab-content .btn-default ,#data-sync-settings-tab-content .btn-primary , #data-sync-settings-tab-content .btn-danger 
+{
+    height: 30px!important;
+    line-height: 30px!important;
+    font-size: 12px!important;
+    margin: 4px!important;
+    padding: 0 1em!important;
+}
+#import-tabs-content .btn-default
+{
+    height: 30px!important;
+    line-height: 30px!important;
+    font-size: 12px!important;
+    margin: 0px!important;
+    padding: 0 1em!important;
+}
+#portlets-add-listener .btn-default ,#workflows-listener-container .tab-content .btn.btn-default ,#triggers-tab-container .btn.btn-default ,.dash_tabview .tab-content  .btn-default
+{
+    height: 30px!important;
+    line-height: 30px!important;
+    font-size: 12px!important;
+    margin: 4px!important;
+    padding: 0 1em!important;
+}
+.agile-select-tag
+{
+  height:100px!important;
+>>>>>>> d3ebaf1fd8cb0eaa734f0efb0fd73b1fbc224c57
 }
