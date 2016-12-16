@@ -451,9 +451,9 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
     background-color: rgba(17, 160, 248, 0.2);
     color: #11a0f8!important;
 }*/
-#documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
+/*#documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
   padding-bottom: 0px !important;
-}
+}*/
 /*#task-list-based-condition .panel-heading label:first-child{
   padding-left: 0px !important;
 }*/
@@ -1560,7 +1560,18 @@ table#contacts-table, table#companies {
 #browseBtn{
   margin-top:0px !important;
 }
-.agile-new-theme .agile-page-header{padding: 15px 20px 10px !important;}
+.agile-new-theme .agile-page-header{padding: 20px 20px 10px !important;}
+.agile-new-theme .agile-p-t-none{padding-top: 0px !important;}
+.agile-new-theme .agile-p-t-xs{padding-top: 5px !important;}
+.agile-new-theme .agile-p-t-sm{padding-top: 10px !important;}
+.agile-new-theme .agile-p-t{padding-top: 15px !important;}
+
+.agile-new-theme .agile-pos-t-none{top: 0px;}
+.agile-new-theme .agile-pos-t-xs{top: 5px;}
+.agile-new-theme .agile-pos-t-sm{top: 10px;}
+.agile-new-theme .agile-pos-t{top: 15px;}
+
+#tasks-list-template .list-area-wrapper.m-t-n-md{margin-top: 0px;}
 
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus{background-color: inherit;}
 .agile-new-theme .app-aside-dock.app-aside-fixed .app-header .navbar-header{border-right: 0px;}
@@ -2176,7 +2187,6 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   height:100px!important;
 }
-
 
 /*Table Sort Caret Start*/
 
