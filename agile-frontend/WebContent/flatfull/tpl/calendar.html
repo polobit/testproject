@@ -1,13 +1,13 @@
 <script id="calendar-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-	<div class="wrapper-md lter bg-light b-b agile-page-header">
+	<div class="wrapper-md lter bg-light b-b calender-header agile-page-header">
 		<div class="row">
 			<div class="col-md-12">
-				<h3 class="pull-left font-thin h3">{{agile_lng_translate 'portlets' 'calendar'}} <small></small></h3>
+				<h3 class="pull-left font-thin h3" style="margin-bottom: 0px !important;">{{agile_lng_translate 'portlets' 'calendar'}} <small></small></h3>
 				<a id="refrecal" class="text-md btn m-l-none bg-transparent refresh-tickets no-shadow p-t-xs p-l-xs" onclick="refreshcal()">
 					<i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" data-original-title="{{agile_lng_translate 'campaigns' 'refresh'}}" style="vertical-align: text-top;"></i>
 				</a>     	
-				<div class="pull-right">
+				<div class="pull-right" style="margin-bottom: 0px !important;">
 					<!-- <div id="event-list-filters" class="btn-group inline-block m-r">
 					<img class="loading_img p-r-xs thumb-xs"  src= "{{getS3ImagePath 'img/21-0.gif'}}"></img>
 					</div> -->
@@ -60,12 +60,11 @@
 				<div class="bg-transparent">
 					<div class="data-block todo-block">
 						<div class="data-container">
-							<div id="calendar-filters"></div><br/><br/><br/><br/>
+							<div id="calendar-filters"></div>
 							<div id="ical_appointment_links">
-								<a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time" style="margin-right:3px;"></i> {{agile_lng_translate 'calendar' 'online-scheduling'}}</a>
+								<a  href="#scheduler-prefs"  id="show-schedule-url1"><i class="icon-time"></i> {{agile_lng_translate 'calendar' 'online-scheduling'}}</a>
 								<br />
-								<br />
-								<a  href="#icalModal" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar" style="margin-right:4px;"></i>{{agile_lng_translate 'calendar' 'subscribe-to-ical'}}</a>
+								<a  href="#icalModal" class="m-t-sm m-b-sm inline-block" data-toggle="modal" id="subscribe-ical"><i class="icon-calendar"></i> {{agile_lng_translate 'calendar' 'subscribe-to-ical'}}</a>
 							</div>
 						</div>
 					</div>
@@ -206,7 +205,7 @@
         <i class="fa fa-plus-square"></i> {{agile_lng_translate 'calendar' 'add-office-365-calendar'}}</a>
         </span>           
               </div>
-</div><br/>
+</div>
 <div id="user_cal_sub">
 {{#if this.length}}
 <label><h4 class="m-b-n-sm">{{agile_lng_translate 'calendar' 'team'}}</label></h4><br/>
@@ -216,7 +215,7 @@
                 <input type="checkbox" data="{{this.domain_user_id}}" class="calendar_user_check" value="{{this.id}}">
                 <i></i>    {{this.name}}             
               </label><br/>{{/each}}
-</div><br/>
+</div>
 <div id="list_event_time" class='m-b-md hide'>
 <label class="control-label">{{agile_lng_translate 'calendar' 'showing'}} 
 					</label>

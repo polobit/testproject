@@ -23,10 +23,12 @@
 				<div class="panel text-center text-md m-b-none bg-light">
 					<div class="panel-body">
 						
-						{{agile_lng_translate 'main' 'your-subscription-has-canceled-and-your-account-has-blocked'}} 
+					{{agile_lng_translate 'main' 'your-subscription-has-canceled-and-your-account-has-blocked'}}
+					{{#isUserNotInIphone}}
 					<div class="p-t"><a class="btn btn-success btn-lg" href="#subscribe">
 					{{agile_lng_translate 'main' 'uppgrade-subscription'}}</a></div><span class="text-info text-xs"><a href="/login">{{agile_lng_translate 'main' 'log-out'}}</a></span> 
 					</div>
+					{{/isUserNotInIphone}}
 				</div>
 			</div>
 		</div>
@@ -61,7 +63,9 @@
 
 <script id="free-user-alert-template" type="text/html">
 	<div class="user-alert center-div">
+	{{#isUserNotInIphone}}
  <div class="free-user-alert-message"> <a class="text-info" href="#subscribe" onclick="Agile_GA_Event_Tracker.track_event('Upgrade from Nav Bar Message')">{{agile_lng_translate 'main' 'upgrade-now'}}</a></div> 
+ 	{{/isUserNotInIphone}}
   </div>
 </div>
 </script>

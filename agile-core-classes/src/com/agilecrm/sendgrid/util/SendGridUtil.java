@@ -64,8 +64,9 @@ public class SendGridUtil
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
 	
      // 
-     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "paypal", "unknown device"};
-     private static final String[] blockedSubjectStringList = new String[] {"unknown device"};
+     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "unknown device","unknown source","appleid.billing-update.net"
+    	 ,"https://appleid.apple.com/ca","Apple ID"};
+     private static final String[] blockedSubjectStringList = new String[] {"unknown device","unknown source","https://appleid.apple.com/ca","Apple ID"};
 
     /**
      * Substitution tags
@@ -566,6 +567,8 @@ public class SendGridUtil
 public static String getSendgridWhiteLabelDomain(String emailDomain, String username, String password, String domain)
 {
 	String response = null, queryString="?domain="+emailDomain, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+	
+	queryString += "&username="+SendGridSubUser.getAgileSubUserName(domain);
 	try
 	 {
 	   response = HTTPUtil.accessURLUsingAuthentication(url+queryString, username, password,"GET", null, false, "application/json", "application/json");
@@ -644,15 +647,9 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 
 	
 	public static void main(String asd[]){
-//		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
-//		
-//		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
-//		lt.add(mt);
-//		
-//		sendSendGridMails(lt, null);
 		
 		
-		getAllWhiteLabelDomains(null);
+		System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
 	
 	/**

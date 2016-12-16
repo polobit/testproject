@@ -229,7 +229,7 @@ public class EmailSender
 
 	// If plan exceeded, throw exception
 	throw new Exception(
-	        "Your email quota has expired. Please <a href=\"#subscribe\">upgrade</a> your email subscription.");
+	        "Your email quota has expired. <span class=\"hideInIphone\">Please <a href=\"#subscribe\">upgrade</a> your email subscription.</span>");
 
     }
 

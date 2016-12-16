@@ -458,7 +458,7 @@ function show_email_tracking_campaigns()
 	 * @param optionsTemplate-
 	 *            to fill options with workflows
 	 */
-	fillSelect('email-tracking-campaign-id', '/core/api/workflows', 'workflow', function()
+	fillSelect('email-tracking-campaign-id', '/core/api/workflows/partial', 'workflow', function()
 			{
 				
 				$('#email-tracking-campaign-id option:first').after('<option value="0">{{agile_lng_translate "subscriber_type" "all"}}</option>');

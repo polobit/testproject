@@ -44,7 +44,7 @@
 
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
-											{{agile_lng_translate 'company-details' 'add-opportunity'}}</a></li>
+											{{agile_lng_translate 'deal-view' 'add-deals'}}</a></li>
 									{{/hasMenuScope}}
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
@@ -59,15 +59,13 @@
 					
 							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="padding-right:20px; text-transform: capitalize;">
 
-								<div id="company-Input" style="height:30px;"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
-								<div class="text-ellipsis"id="company-name-text" style="height:28px;">{{getPropertyValue properties "name"}}</div></div>
+								<div id="company-Input" style="display:table; margin:0px auto;"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
+								<div class="text-ellipsis" id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
+
 								<div class="clearfix"></div>
-								{{#if_propertyName "url"}}</br>
+								{{#if_propertyName "url"}}
 
-								
-
-
-									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
+									<a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{toLowerCase value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a>
 								{{/if_propertyName}}
 								
 								<div class=" text-center m-b-xs text-muted  text-ellipsis" style="font-size:13px;">
@@ -209,7 +207,7 @@
 								{{#each tagsWithTime}}
 										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
-								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
+								class="close remove-company-tags" tag="{{this.tag}}" style="top: -1px">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
@@ -441,7 +439,7 @@
         <div class="panel-body">
 				<div class="text-center pos-rlt">
 							<form id="contact-container">
-								<a href="#" class="tooltip_info" data-placement="top"
+								<!--/*<a href="#" class="tooltip_info" data-placement="top"
 									data-toggle="tooltip"
 									title="<i class='icon-edit icon-white icon'></i> {{agile_lng_translate 'contact-details' 'change-picture'}}"
 									style='text-decoration: none;'> 
@@ -449,7 +447,19 @@
 								<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:46px" type="submit"
 
 									{{getCompanyImage "80" "display:inline;"}} /> 
-								</a> <input type="hidden" id="upload_url" name="gravatarurl">
+								</a>*/ -->
+								<a href="#" class="tooltip_info" style='text-decoration: none; margin-right: 25px'>
+										<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:46px" type="submit"
+										{{getCompanyImage "80" "display:inline;"}} /></a>
+										<div style="width: 32px; top: 30px; left: 58px; position:absolute;font-size: 11px;" class="toggle-contact-image">
+											<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
+											</div>
+											{{#property_is_exists "image" properties}}
+											|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
+											</div>{{/property_is_exists}}
+											</div>
+
+								<input type="hidden" id="upload_url" name="gravatarurl">
 								<a style="display: none;" class="save_img submit" type="submit">{{agile_lng_translate 'portlets' 'save'}}</a>
 							</form>
 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:13px;">
@@ -471,7 +481,7 @@
 
 									{{#hasMenuScope 'DEALS'}}
 									<li><a href='#' class="contact-add-deal"><i class="icon-money" style="margin-right:2px"></i>
-											{{agile_lng_translate 'company-details' 'add-opportunity'}}</a></li>
+											{{agile_lng_translate 'deal-view' 'add-deals'}}</a></li>
 									{{/hasMenuScope}}
 									<li class='divider'></li>
 									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email">
@@ -495,11 +505,13 @@
 							<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis" style="text-transform: capitalize;">
 
 								<div id="company-Input"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
-								<div class="text-ellipsis p-l-md p-r-md"id="company-name-text">{{getPropertyValue properties "name"}}</div></div>
+
+								<div class="text-ellipsis" id="company-name-text" style="padding-right: 22px">{{getPropertyValue properties "name"}}</div></div>
+
 								<div class="clearfix"></div>
 								{{#if_propertyName "url"}}
 
-									<div><a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{getHyperlinkFromURL value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a></div>
+									<div><a class="text-base" href="{{getHyperlinkFromURL value}}" title="{{toLowerCase value}}" target="_blank"><i class="fa fa-globe"></i> <!-- {{value}} --></a></div>
 
 								{{/if_propertyName}}
 								
@@ -632,7 +644,7 @@
 								{{#each tagsWithTime}}
 										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
-								class="close remove-company-tags" tag="{{this.tag}}">&times</a></span></li> 
+								class="close remove-company-tags" tag="{{this.tag}}" style="top: -1px">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tagsWithTime}}
@@ -845,11 +857,11 @@
 {{/is_mobile}}
 <!-- end desktop view -->
 
-		<div class="col  bg-white companytabListCenter">
+		<div class="col bg-white companytabListCenter bg-none-xs">
 <div class="vbox" style="display:block">
 <div class="row-row tabs" style="display:block">
 	<div class="tab-container">
-			<ul class="nav nav-tabs  bg-light" id="contactDetailsTab">
+			<ul class="nav nav-tabs  bg-light content-tabs" id="contactDetailsTab">
 			<li class=""><a data-toggle="tab" role="tab" href="#company-timeline" onclick="setTimeout(function(){$(window).resize()}, 1000)">{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
 				<li class="active"><a data-toggle="tab" href="#company-contacts">{{agile_lng_translate 'contact-details' 'Contacts'}}</a></li>
 				<li class=""><a data-toggle="tab" href="#company-deals">{{agile_lng_translate 'contact-details' 'deals'}}</a></li>
@@ -956,6 +968,11 @@
 			<span><i class="icon-plus-sign"></i></span>{{agile_lng_translate 'contact-details' 'add-contact'}}
 		</a>
 	</div>
+
+{{#is_mobile}}
+
+{{else}}
+
 <div id="bulk-action-btns" class="panel-heading no-shadow p-r-none b-r m-r-sm" style="border-bottom: 0;background-color: rgba(246,248,248,1);position:relative;">
 				      	<span id="contacts-list-view-checkbox">
 								<label class="i-checks i-checks-sm">
@@ -963,8 +980,8 @@
 				                	<i></i>                
 				          		</label>
 							</span>
-				      	
-					    <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+				      		<div class="inline-block bulk-action-wrapper">
+					   		 <button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
 						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
 						    {{#hasMenuScope 'CAMPAIGN'}}
 						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
@@ -978,7 +995,7 @@
 						    {{else}}
 						    	<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							{{/hasRestrictedMenuScope}}
-
+							</div>
 					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
 							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactCompanyTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
@@ -1000,6 +1017,7 @@
 
 				    </div>
 </div>
+{{/is_mobile}}
 
 					<div id="company-contacts-list-view"></div>
 	 </div>

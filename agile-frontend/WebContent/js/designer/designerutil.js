@@ -166,7 +166,7 @@ function getCampaignList(type) {
 
 	var workflows = $.ajax({
 		type : "GET",
-		url : '/core/api/workflows',
+		url : '/core/api/workflows/partial',
 		async : false,
 		dataType : 'json'
 	}).responseText;
@@ -628,7 +628,6 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 	    	selectoption= "<select '"+ getStyleAttribute(uiFieldDefinition.style) +"' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' +  id='" + uiFieldDefinition.id + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
 	    else
 	    	selectoption= "<select style='position:relative;float:right;cursor:pointer;width: 152px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
-
 
 	$.each(options, function(name, option_value) {
 		if (typeof (option_value) == 'object') {

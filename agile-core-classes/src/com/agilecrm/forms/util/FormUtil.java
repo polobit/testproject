@@ -65,7 +65,7 @@ public class FormUtil
 			map.put("formName", formName);
 			SendMail.sendMail(ownerEmailId, SendMail.CONTACT_FORM_SUBMITTED_SUBJECT+formName,
 					SendMail.CONTACT_FORM_SUBMITTED, map,
-					"noreply@agilecrm.com", "AgileCRM", language);
+					"noreply@agilecrm.com", "Agile CRM", language);
 
 		} catch (Exception e) {
 			e.printStackTrace();

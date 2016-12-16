@@ -1,7 +1,7 @@
 <script id="workflows-model-template" type="text/html">
     {{#is_mobile}}
     <td class="hide data" data="{{id}}">{{id}}</td>
-    <td>
+    <td class="v-middle">
     <div class="table-resp"><a class="text-cap">{{name}}</a></div>
 
     <div class="table-resp">
@@ -55,9 +55,9 @@
     {{else}}
 
     <td class="hide data" data="{{id}}">{{id}}</td>
-    <td><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
+    <td class="v-middle"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
 
-    <td class="workflow-triggers" workflow-id={{id}}>
+    <td class="workflow-triggers v-middle" workflow-id={{id}}>
         <div class="table-resp">
             <a href="#trigger-add/{{id}}" class="stop-propagation">
                 <i class="icon-plus text-xs" style="margin-right:3px"></i>{{agile_lng_translate 'other' 'add'}}
@@ -65,7 +65,7 @@
         </div>  
     </td>
 
-    <td> 
+    <td class="v-middle"> 
         {{#if updated_time}}
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
@@ -84,14 +84,14 @@
         </div>
         {{/if}}
     </td> 
-    <td>
+    <td class="v-middle">
     <div>
     {{#if is_disabled}}
             <div><label class="label label-danger m-b-none">{{agile_lng_translate 'campaigns' 'disabled'}}</label></div>
             {{/if}}
      </div>
     </td>
-    <td>
+    <td class="v-middle">
         <div class="table-resp hide" id="camp_reports">
             <div class="pull-left text-ellipsis">
                 <a href="#email-reports/{{id}}" class="stop-propagation"><i class="icon icon-bar-chart"></i></a>
@@ -99,7 +99,7 @@
         </div> 
     </td>
 
-    <td>   
+    <td class="v-middle">   
 
     <div class="table-resp hide" id="camp_history">
         <div class="pull-left">

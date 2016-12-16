@@ -26,7 +26,7 @@
         
 			{{#if_contact_type "COMPANY"}}
         		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
+        		<div><small style="text-transform:lowercase" class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
@@ -90,7 +90,7 @@
         
 			{{#if_contact_type "COMPANY"}}
         		<a class="text-cap">{{getSystemPropertyValue properties "name"}}</a>
-        		<div><small class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
+        		<div><small style="text-transform:lowercase" class="text-muted  block text-ellipsis">{{getSystemPropertyValue properties "url"}}</small></div>
         	{{/if_contact_type}}
         	{{#is_mobile}}
         	 <div>
@@ -156,7 +156,7 @@
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div class="text-ellipsis" style="width:12em;" >
-    		<a class="text-cap">{{getSystemPropertyValue properties "website"}}</a>
+    		<a style="text-transform:lowercase">{{getSystemPropertyValue properties "website"}}</a>
         </div>
 	</td>
 </script>
@@ -216,7 +216,7 @@
 <script id = "contacts-custom-view-url-template" type="text/html">
 	<td class='data' data='{{id}}'>
     <div class="text-ellipsis" style="width:12em;" >
-		<a href="{{getSystemPropertyValue properties 'url'}}" class="text-cap">{{getSystemPropertyValue properties "url"}}</a>
+		<a style="text-transform:lowercase" href="{{getSystemPropertyValue properties 'url'}}" >{{getSystemPropertyValue properties "url"}}</a>
     </div>
 	</td>
 </script>
@@ -458,7 +458,7 @@
           <div class="b-b b-light p-b-xs">
           <div class="pull-left"><i class="fa fa-globe text-sm v-middle"></i></div>
           <div class="text-ellipsis">
-          <a class="m-l-sm" title="{{getSystemPropertyValue properties "url"}}" href="{{getSystemPropertyValue properties "url"}}" target="_blank">{{getSystemPropertyValue properties "url"}}</a> 
+          <a class="m-l-sm" style="text-transform:lowercase" title="{{getSystemPropertyValue properties "url"}}" href="{{getSystemPropertyValue properties "url"}}" target="_blank">{{getSystemPropertyValue properties "url"}}</a> 
           </div>
          </div>
           

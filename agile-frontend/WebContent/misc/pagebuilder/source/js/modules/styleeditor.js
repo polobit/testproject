@@ -6,6 +6,7 @@
     var bConfig = require('./config.js');
     var siteBuilder = require('./builder.js');
     var publisher = require('../vendor/publisher');
+    var customAgileEvents = require('./pagebuilderEventlistner.js').customAgileEvents;
     
     var styleeditor = {
 
@@ -337,7 +338,6 @@
                 var newStyleEl = $('#styleElTemplate').clone();
                 newStyleEl.attr('id', '');
                 newStyleEl.find('.control-label').text( bConfig.editableItems[theSelector][x]+":" );
-
                 if( theSelector + " : " + bConfig.editableItems[theSelector][x] in bConfig.editableItemOptions) {//we've got a dropdown instead of open text input
 
                     newStyleEl.find('input').remove();
@@ -376,10 +376,14 @@
                             $('#imageModal').modal('show');
                             $('#imageModal .image button.useImage').unbind('click');
                         
-                            console.log("hi");
-                        });
+                            //console.log("hi");
+                        });                                             
+
 
                     } else if( bConfig.editableItems[theSelector][x].indexOf("color") > -1 ) {
+
+                        if( bConfig.editableItems[theSelector][x] === 'background-color' )
+                            $(newStyleEl).css('margin-top','15px');
 
                         if( $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== 'transparent' && $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== 'none' && $(styleeditor.activeElement.element).css( bConfig.editableItems[theSelector][x] ) !== '' ) {
 
@@ -414,7 +418,14 @@
                     newStyleEl.css('display', 'block'); 
 
                 $('#styleElements').append( newStyleEl );
-
+                if(bConfig.editableItems[theSelector][x] === 'background-image'){
+                    //add remove icon in background image
+                    var removeIcon=styleeditor.addRemoveIcon(newStyleEl);
+                    $('#styleElements').append(removeIcon);
+                    $('.remove-icon').tooltip({
+                        container: 'body'
+                    });
+                }
                 $('#styleEditor form#stylingForm').height('auto');
 
             }
@@ -476,7 +487,12 @@
                 
                 //does the link contain an image?
                 if( styleeditor.linkImage ) styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
-                else if ( styleeditor.linkIcon ) styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
+                else if ( styleeditor.linkIcon ) {
+                    if($(styleeditor.activeElement.element.childNodes[length-1]).hasClass('fa'))
+                        styleeditor.activeElement.element.childNodes[0].nodeValue = document.getElementById('linkText').value;
+                    else
+                        styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
+                }  
                 else styleeditor.activeElement.element.innerText = document.getElementById('linkText').value;
 
                 /* SANDBOX */
@@ -556,48 +572,60 @@
             if( $(styleeditor.activeElement.element).attr('data-type') === 'video' ) {
 
                 var videoRecord_Id = $('select[id=videoRecordId]').val();
-
-                if( $('input#youtubeID').val() !== '' ) {
-
-                    var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-                    var ytMatch = $('input#youtubeID').val().match(ytRegExp);
-                    if (ytMatch && ytMatch[1].length === 11) {
-                        var youtubeId = ytMatch[1];
-                        $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
-                    }
-                    else{
-                        $('input#youtubeID').removeClass("margin-bottom-20");
-                        $("#err-youtube-msg").next().css("margin-top","6px");
-                        $("#err-youtube-msg").show();
-                        return;
-                    }
-                    
-                } else if( $('input#vimeoID').val() !== '' ) {
-                    var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
-                    var vimMatch = $('input#vimeoID').val().match(vimRegExp);
-                    if (vimMatch && vimMatch[3].length){
-                        var vimeoId = vimMatch[3];
-                        $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
-                    }
-                    else{
-                        $('input#vimeoID').removeClass("margin-bottom-20");
-                        $("#err-vimeo-msg").next().css("margin-top","6px");
-                        $("#err-vimeo-msg").show();
-                        return;
-                    }
-                } else if ( videoRecord_Id !== '' ) {
-
-                    $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
-                }
-                else
-                    $(styleeditor.activeElement.element).prev().attr('data-video', "");
-
                  //image under video section
-                    if($(styleeditor.activeElement.element).siblings("IMG")!==0){
-                        var url=$('.imageFileTab').find('input#imageURL').val();
-                        $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
+                if($(styleeditor.activeElement.element).siblings("IMG")!==0 && $('.imageFileTab').hasClass('active')){
+                    var url=$('.imageFileTab').find('input#imageURL').val();
+                    if(url.match("^(http|https)://")===null|| url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
+                        $('input#imageURL').css("margin-bottom","0px");
+                        $("#error-img-msg").next().css("margin-top","6px");
+                        $("#error-img-msg").show();
+                        return;
                     }
-               
+                    else 
+                       $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
+                    // alternate text for image
+                    $(styleeditor.activeElement.element).siblings("IMG").attr('alt',$('.imageFileTab').find('input#alttxt').val());
+                }
+                if(!$('.imageFileTab').hasClass('active')){
+                    if( $('input#youtubeID').val() !== '' ) {
+
+                        var ytRegExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+                        var ytMatch = $('input#youtubeID').val().match(ytRegExp);
+                        if (ytMatch && ytMatch[1].length === 11) {
+                            var youtubeId = ytMatch[1];
+                            $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
+                            customAgileEvents.createYoutubeThumbnail(youtubeId,$(styleeditor.activeElement.element));
+                                
+                        
+                        }
+                        else{
+                            $('input#youtubeID').removeClass("margin-bottom-20");
+                            $("#err-youtube-msg").next().css("margin-top","6px");
+                            $("#err-youtube-msg").show();
+                            return;
+                        }
+                        
+                    } else if( $('input#vimeoID').val() !== '' ) {
+                        var vimRegExp = /\/\/(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/;
+                        var vimMatch = $('input#vimeoID').val().match(vimRegExp);
+                        if (vimMatch && vimMatch[3].length){
+                            var vimeoId = vimMatch[3];
+                            $(styleeditor.activeElement.element).prev().attr('data-video', "//player.vimeo.com/video/"+vimeoId+"?title=0&amp;byline=0&amp;portrait=0");
+                            customAgileEvents.createVimeoThumbnail(vimeoId,$(styleeditor.activeElement.element));
+                        }
+                        else{
+                            $('input#vimeoID').removeClass("margin-bottom-20");
+                            $("#err-vimeo-msg").next().css("margin-top","6px");
+                            $("#err-vimeo-msg").show();
+                            return;
+                        }
+                    } else if ( videoRecord_Id !== '' ) {
+
+                        $(styleeditor.activeElement.element).prev().attr('data-video', siteBuilder.builderUI.siteUrl+"video/"+videoRecord_Id+"?embed=true");
+                    }
+                    else
+                        $(styleeditor.activeElement.element).prev().attr('data-video', "");
+                }
 
 
                 /* SANDBOX */
@@ -653,7 +681,10 @@
                         return;
                     }
                     $(styleeditor.activeElement.element).attr('src',decodeURIComponent(image_url));
-            
+
+                    //apply alternate text for image
+                    $(styleeditor.activeElement.element).attr('alt',$('.imageFileTab').find('input#alttxt').val());
+                
             }
 
             $('#detailsAppliedMessage').fadeIn(600, function(){
@@ -928,11 +959,16 @@
                 $("#error-img-msg").hide();
             }
             //set the current SRC 
-            if($(el).siblings("IMG").length!==0)
-                $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));            
-            else 
+            if($(el).siblings("IMG").length!==0){
+                $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));
+                //set if alternate text for image is exist
+                $('.imageFileTab').find('input#alttxt').val($(el).siblings("IMG").attr("alt"));
+            }            
+            else{ 
+                $('.imageFileTab').find('input#alttxt').val($(el).attr("alt"));
                 $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
-
+            }
+            
             //reset the file upload
             $('.imageFileTab').find('a.fileinput-exists').click();
 
@@ -1000,6 +1036,7 @@
         editIcon: function() {
 
             $('a#icon_Link').parent().show();
+            $('a#icon_Link').click();
 
             //get icon class name, starting with fa-
             var get = $.grep(this.activeElement.element.className.split(" "), function(v, i){
@@ -1057,6 +1094,8 @@
 
                 }
 
+            } else if( $(styleeditor.activeElement.element).hasClass("frameCover") ) { // To delete video block correctly
+                toDel = $(styleeditor.activeElement.element).parent(".videoWrapper");
             } else {//everything else
 
                 toDel = $(styleeditor.activeElement.element);
@@ -1100,6 +1139,11 @@
         cloneElement: function() {
 
             publisher.publish('onBeforeClone');
+
+            // To clone video block correctly
+            if( $(styleeditor.activeElement.element).hasClass("frameCover") ) {
+                $(styleeditor.activeElement.element).parent(".videoWrapper").addClass("propClone");
+            }
 
             var theClone, theClone2, theOne, cloned, cloneParent, elementID;
 
@@ -1354,6 +1398,16 @@
              var script = document.createElement('script');
             script.src = window.siteUrl+'core/api/forms/form/js/'+formId;
             document.body.appendChild(script);  
+        },
+        addRemoveIcon: function(el){
+            $(el).css('margin-bottom','0px');
+            var icon=$('<a class="right agile-tooltip remove-icon" data-placement="right" data-original-title="Click to remove background image"></a>');
+            icon.append('<i class="fa fa-trash right" style="color: #bdc3c7;"></i>');
+            $(icon).off('click');
+            $(icon).on('click', function(event){
+                $(event.currentTarget).prev().find('input').val("none");
+            });
+            return icon;
         }
 
     };

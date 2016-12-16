@@ -3060,7 +3060,7 @@ width : 150px;
   padding-bottom:9px;
 }
 
-#portlets-add-listener .wrapper-md div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(3)
 {
   height: 243px;
 }
@@ -4948,7 +4948,6 @@ ul#recent-menu-model-list li:nth-child(even)
     color: green;
     margin-right: 5px;
 }
-<<<<<<< HEAD
 
 .form-margin
 {
@@ -5056,20 +5055,42 @@ border-top: 0px !important;
 {
   top:-1px!important;
 }
-.dealValuehelptext{
-  margin-top: -7px !important;
+.support-plan-alert{
+    padding: 7px;
+    align: center;
+    width: 362px;
+    text-align: center;
+    margin:auto;
+    margin-bottom: 8px;
+    margin-top: -12px;   
 }
-.input-percentage{
-  margin-left:-4px;
-  font-weight: bold;
-  color: #90a4ae;
+.admin-message-info{
+    padding: 6px;
+    margin-bottom: 8px;
+    margin-left: 33%;
+    align: center;
+    width: 212px;
+    text-align: center;
+    margin-top: -14px;
 }
-.tabs .tab-container{
-  margin-bottom: 0px !important;
+#calendar_event .fc-header-center h2{
+  text-transform: inherit!important;
 }
-.tabs .tab-content{
-    padding: 15px;
-    background-color: #fff;
-    border-top-width: 0;
-    border-radius: 0 0 2px 2px;
+.userVoice-text{
+   text-align: right;
+   margin-bottom: 7px;
+    display: table;
+    width: 87%;
+    margin: 0 auto;
+    font-size:12px !important;
+    margin-top:-10px;
+  }
+
+#task-calendar-based-condition .fc-header-center h2{
+  text-transform: inherit!important;
+
 }
+.uv-icon,.uv-popover-tail{
+  display: none !important;
+}
+

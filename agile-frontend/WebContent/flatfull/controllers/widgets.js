@@ -127,7 +127,6 @@ var WidgetsRouter = Backbone.Router
 
                     // Shows available widgets in the content
                     $('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
-
                 });
 
             },
@@ -428,7 +427,6 @@ function getAgileConfiguredWidgetCollection(callback) {
 }
 
 function renderWidgetView(templateName, url, model, renderEle){
-
     var widgetModel = new Widget_Model_Events({
         template : templateName,
         url : url,
@@ -444,10 +442,18 @@ function renderWidgetView(templateName, url, model, renderEle){
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
             initializeTabListeners("widget_tab", "add-widget");
+            $("#twilioio_login_form .question-tag" ).popover({
+              template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+            });
+            $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
         }
     });
     var output = widgetModel.render().el;
     $(renderEle).html(output);
+    $("#twilioio_login_form .question-tag" ).popover({
+      template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+    });
+    $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
 }
 function closesupportnoty(){
     $("#support_plan_alert_info").hide();

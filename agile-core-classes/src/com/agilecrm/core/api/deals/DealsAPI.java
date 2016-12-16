@@ -434,22 +434,26 @@ public class DealsAPI
 	    throws com.google.appengine.labs.repackaged.org.json.JSONException, JSONException, Exception
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
+        if (opportunity != null)
+	{
+	
 	List<String> conIds = opportunity.getContact_ids();
 	List<String> modifiedConIds = UserAccessControlUtil.checkUpdateAndmodifyRelatedContacts(conIds);
+	JSONArray oppJSONArray = new JSONArray().put(opportunity.id);
 	if(conIds != null && modifiedConIds != null && conIds.size() != modifiedConIds.size())
 	{
 		throw new AccessDeniedException("Deal cannot be deleted because you do not have permission to update associated contact.");
 	}
 	UserAccessControlUtil.check(Opportunity.class.getSimpleName(), opportunity, CRUDOperation.DELETE, true);
-	if (opportunity != null)
-	{
 		UpdateRelatedEntitiesUtil.updateRelatedContacts(opportunity.relatedContacts(), conIds);
 		
 	    ActivitySave.createDealDeleteActivity(opportunity);
 	    if (!opportunity.getNotes().isEmpty())
-		NoteUtil.deleteBulkNotes(opportunity.getNotes());
+	    	NoteUtil.deleteBulkNotes(opportunity.getNotes());
+	    
+	    DealTriggerUtil.executeTriggerForDeleteDeal(oppJSONArray);
 	    // Send Notification
-	    DealNotificationPrefsUtil.executeNotificationForDeleteDeal(new JSONArray().put(opportunity.id));
+	    DealNotificationPrefsUtil.executeNotificationForDeleteDeal(oppJSONArray);
 	    opportunity.delete();
 	}
     }
@@ -806,7 +810,12 @@ public class DealsAPI
     public List<Contact> getRelatedContacts(@PathParam("deal-id") Long id)
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
-	return opportunity.relatedContacts();
+	if (opportunity!=null)
+	{
+	 return opportunity.relatedContacts();
+	}
+	else
+	    return null;
     }
 
     /**

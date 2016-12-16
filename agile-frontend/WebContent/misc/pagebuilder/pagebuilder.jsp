@@ -191,7 +191,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         <li><a href="#" id="saveTemplate" data-toggle="modal" data-siteid="6"><span class="fui-arrow-right"></span> Save page template</a></li>
                     </ul> -->
                 </div>
-                
+                <div class="col-md-4" id="lp-save-msg" style="color: white; text-align: left; float: right; margin-top: 7px; display:none; color: #24bfa0;">Landing page saved.</div>
                 <ul class="nav nav-pills nav-inverse pull-left responsiveToggle" id="responsiveToggle">
                     <li>
                         <a href="" data-responsive="mobile">
@@ -244,7 +244,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         
         <div id="styleEditor" class="styleEditor">
         
-            <a href="#" class="close"><span class="fui-cross-circle"></span></a>
+            <a title=" Press Esc to close" href="#" class="close"><span class="fui-cross-circle"></span></a>
             
             <h3><span class="fui-new"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "detail-editor")%></h3>
             
@@ -331,6 +331,10 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     </p>
                     
                     <a href="#imageModal" data-toggle="modal" type="button" class="btn btn-default btn-embossed btn-block margin-bottom-20"><span class="fui-image"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-img")%></a>
+
+                    <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-text")%></label>
+                    
+                    <input type="text" class="form-control" id="alttxt" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-txt-placeholder")%>" value=""> 
                     
                 </div><!-- /.tab-pane -->
 
@@ -2014,7 +2018,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                         
             <div class="sideButtons clearfix">
                 <button type="button" class="btn btn-inverse btn-embossed btn-xs" id="cloneElementButton"><span class="fui-windows"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "clone")%></button>
-                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
+                <button type="button" class="btn btn-warning btn-embossed btn-xs" id="resetStyleButton" style="display:none;"><i class="fa fa-refresh"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "reset")%></button>
                 <button type="button" class="btn btn-danger btn-embossed btn-xs" data-target="#deleteElement" data-toggle="modal" id="removeElementButton"><span class="fui-cross-inverted"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "remove")%></button>
             </div>
                                                     
@@ -2205,7 +2209,11 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
         </div><!-- /.modal -->
         
         <div id="loader">
-            <span>{</span><span>}</span>
+            <div>
+                <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                <br/>
+                <span>Loading...</span>
+            </div>
         </div>
     
     </div>
@@ -2319,7 +2327,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 
     </div><!-- /.modal -->
     
-    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade landingPageNameModal" id="landingPageNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         
         <div class="modal-dialog">
             
@@ -2367,6 +2375,55 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fui-cross"></span> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "CLOSE")%></button>
+                </div>
+                
+            </div><!-- /.modal-content -->
+            
+        </div><!-- /.modal-dialog -->
+                
+    </div><!-- /.modal -->
+       <!-- /.modal for next step instruction -->
+    <div class="modal fade instructionModal" id="instructionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" style="max-width: 500px;">
+            
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" style="font-size: 20px;">&times;</button>
+                    <h3 class="modal-title">
+                        <label id="success-msg" style="margin:-5px -1px; color: green;">
+                            <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 
+                        </label>
+                    </h3>
+                    <i class="fa fa-arrow-right"></i> 
+                    <strong> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "next-action")%> </strong> 
+                     <%=LanguageUtil.getLocaleJSONValue(localeJSON, "publish-the-landing-page")%>
+                    
+                </div>      
+                <div class="modal-body" style="text-align: center;">
+                    <fieldset> 
+                        <div class="control-group form-group">
+                            <div class="col-xs-6 col-sm-7 text-center">
+                                <a  class="lp-view-link agile-link" target="_blank" style="color:#34495e;">
+                                    <i class="fui-window" style="font-size:30px;"></i><br> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "preview")%>
+                                </a>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 text-center" style="margin-top:2px;">
+                                <a class="lp-publish-link agile-link" target="_blank" style="color:#34495e;">
+                                    <i class="fui-upload" style="font-size:30px;" ></i><br><%=LanguageUtil.getLocaleJSONValue(localeJSON, "publish")%>
+                                </a>
+                            </div>
+                        </div>  
+                    </fieldset>             
+                                                                    
+                </div><!-- /.modal-body -->
+                                
+                <div class="modal-footer" style="padding:15px 22px;">
+                    <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;">
+                        <label class="pull-left"  style="padding-left: 0px; margin-top: -6px;"><input type="checkbox" id="lp-instruct-popup" value="false"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "dont-show-me-again")%></label>
+                    </div>
+                    <a class="close-popup agile-link" style="display: inline-block;margin-top: 3px;" href= "<%=MAIN_URL%>#landing-pages"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "back-landingpage")%></a>
                 </div>
                 
             </div><!-- /.modal-content -->
