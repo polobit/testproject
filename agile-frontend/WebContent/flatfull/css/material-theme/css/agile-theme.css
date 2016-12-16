@@ -801,10 +801,10 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
-.agile-new-theme form .form-control.textarea
+/*.agile-new-theme form .form-control.textarea
 {
   height: 72px;
-}
+}*/
 .multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
 {
   margin-left:0px;
@@ -2193,6 +2193,7 @@ ul#recent-menu-model-list li:nth-child(even){
     margin: 4px!important;
     padding: 0 1em!important;
 }
+
 #active-campaign a{
   margin-top: 0px !important;
 }
@@ -2201,4 +2202,9 @@ ul#recent-menu-model-list li:nth-child(even){
 }
 #unsubscribe-campaigns-list p{
   margin-top:  7px !important;
+}
+
+.agile-select-tag
+{
+  height:100px!important;
 }
