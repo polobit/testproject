@@ -1773,11 +1773,11 @@ color:#0d1114 !important;
   box-shadow: inherit !important;   
   
 }
-.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default{
+.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default, .prefs-option-col .panel.panel-default{
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel, #import-tabs-content .tab-content.panel{
+#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel, #import-tabs-content .tab-content.panel, #reports-show-results.panel.panel-default{
   box-shadow :0px 0px 0px 0px !important;
 }
 
@@ -2053,6 +2053,7 @@ ul#recent-menu-model-list li:nth-child(even){
       background-color: #11a0f8!important;
       color: #ffffff!important;
 }*/
+
 #contact-tab-content #send-new-email .icon-envelope
 {
   top:-1px;
@@ -2217,7 +2218,7 @@ ul#recent-menu-model-list li:nth-child(even){
   margin-top: 0px !important;
 }
 #active-campaign .remove-active-campaign{
-  top:-1px important;
+  top:-1px !important;
 }
 #unsubscribe-campaigns-list p{
   margin-top:  7px !important;
@@ -2227,3 +2228,35 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   height:100px!important;
 }
+
+
+/*Table Sort Caret Start*/
+
+table .headerSortUp::after, table .headerSortDown::after{
+  content: "";
+  margin-top: 5px;
+  border-width: 0 4px 4px;
+  border-style: solid;
+  border-color: black transparent;
+  visibility: hidden;
+  position: relative;
+  top: -10px;
+  left: 10px;
+}
+
+/*Table Sort Caret End*/
+
+/*Plan & Upgrade Border Start*/
+
+#planform .line.line-dashed, #users-content .line.line-dashed{
+  border-bottom: 1px dashed #dee5e7 !important;
+}
+#users-content .line.ling-lg.b-b{
+ border-bottom: 1px solid #dee5e7 !important; 
+}
+
+/*Plan & Upgrade Border End*/
+#import-border{
+  border-bottom: none !important;
+}
+
