@@ -563,7 +563,7 @@ public class WidgetsAPI {
 //			String prefs = widget.prefs;
 //			KnowlarityUtil knowlarity = new KnowlarityUtil(prefs);
 //			result = knowlarity.checkAgentIsValid();
-		//  knowlarity.checkAgentIsValid();
+//		  knowlarity.checkAgentIsValid();
 //		}
 		return result;
 	}
