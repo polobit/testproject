@@ -560,4 +560,10 @@ margin-left: 35px;
 /*form theme4 css end*/
 
 .form-view .agile-hiddenEle-group{display: none;}
+.theme1 select:not([multiple]),.theme2 select:not([multiple]),.theme3 select:not([multiple]),.theme4 select:not([multiple]){
+  -webkit-appearance:none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(" http://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
+}
 

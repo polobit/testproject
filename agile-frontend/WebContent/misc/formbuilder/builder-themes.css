@@ -619,3 +619,9 @@ border-bottom-right-radius: 0px;
 ul li>a[href="#bsourcecodeb"] {
     display: none;
 }
+.theme1 .agile-group  select:not([multiple]), .theme2 .agile-group select:not([multiple]), .theme3 .agile-group select:not([multiple]), .theme4 .agile-group select:not([multiple]){
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(" http://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
+}
