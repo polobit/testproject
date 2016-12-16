@@ -2042,7 +2042,9 @@ $(function()
 
 			if (!currentContactEntity || !contactEntity)
 			{
-				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " ";
+				if(getPropertyValue(contact_properties, "last_name"))
+					currentContactEntity=currentContactEntity+getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
 			}
 			
@@ -2052,7 +2054,7 @@ $(function()
 				contactEntity = getPropertyValue(properties, "name");
 			}
 
-			if (currentContactEntity == contactEntity)
+			if (currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
 				return options.fn(this);
 
 			return options.inverse(this)
@@ -8210,3 +8212,27 @@ Handlebars.registerHelper('isUserNotInIphone', function(options)
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
+{
+	var html='';
+	for(var i=0;i<contacts.length;i++)
+	{
+		if(contacts[i].id)
+		{
+			if(!isDuplicateContactProperty(contacts[i].properties,"email"))
+			{
+				if(contacts[i].type=='PERSON')
+				{
+					html=html+' <a href="#contact/'+contacts[i].id+'" style="color: #4d759e;" data="'+contacts[i].id+'" class="popover_contact text-capitalize">'+ getContactName(contacts[i])+'</a>,';
+				}
+				if(contacts[i].type=='COMPANY')
+				{
+   					html=html+' <a href="#company/'+contacts[i].id+'"style="color: #4d759e;" data="'+contacts[i].id+'" class="text-capitalize popover_contact">'+getPropertyValue(contacts[i].properties, 'name')+'</a>,';
+				}
+			}
+		}
+	}
+	if(html.endsWith(','))
+		html=html.substring(0, html.length - 1)
+	return html;
+});
