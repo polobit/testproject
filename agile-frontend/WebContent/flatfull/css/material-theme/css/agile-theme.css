@@ -40,9 +40,9 @@ body, * {
 #bulk-action-btns .btn {
   background-color: rgba(17, 160, 248, 0.1);
   color: #11a0f8!important;
-  height: 30px;
-  line-height: 30px;
-  font-size: 12px;
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 12px !important;
 }
 
 #bulk-action-btns .btn:hover, #bulk-action-btns .btn:focus, #bulk-action-btns .btn:active {
