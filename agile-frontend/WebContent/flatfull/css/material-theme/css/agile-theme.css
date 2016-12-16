@@ -592,7 +592,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   vertical-align: middle !important;
 }
 .agile-new-theme table>tbody>tr>td>label.i-checks.i-checks-sm{
-  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
 }
 .agile-new-theme #admin-settings-users .panel-heading>div:first-child{
   display: none;
