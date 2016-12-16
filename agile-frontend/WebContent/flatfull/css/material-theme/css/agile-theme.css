@@ -2260,4 +2260,8 @@ table .headerSortUp::after, table .headerSortDown::after{
 #import-border{
   border-bottom: none !important;
 }
-
+#integrations-label
+{
+  margin-top:10px;
+  margin-bottom:10px;
+}
