@@ -53,7 +53,7 @@
 								{{agile_lng_translate 'leads-view' 'import-upto-10000-leads-from-a-CSV-file'}}
 							</div>
 							<input type="hidden" id="type" value="leads" class="form-control">
-        					<fieldset>
+        					<fieldset class="btn-group">
 							{{#canSyncContacts}}
 	           					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
 	           					<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
@@ -82,7 +82,7 @@
 									{{agile_lng_translate 'contacts-view' 'import-upto-10,000-contacts-from-a-CSV-file'}}
 								</div>
 								<input type="hidden" id="type" value="contacts" class="form-control">
-	        					<fieldset>
+	        					<fieldset class="btn-group">
 								{{#canSyncContacts}}
 				{{#if ../type}}
 						<span class="btn btn-sm btn-default inline-block" disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
@@ -123,7 +123,7 @@
 								{{agile_lng_translate 'contacts-view' 'import-upto-10,000-companies-from-a-CSV-file'}}
 							</div>
 							<input type="hidden" id="type" value="company" class="form-control">
-        					<fieldset>
+        					<fieldset class="btn-group">
 							{{#canSyncContacts}}
            					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
            					<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>

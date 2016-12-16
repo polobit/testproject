@@ -1427,7 +1427,9 @@ ul.tags-management li.tag{
 {
   margin-right:15px;
   line-height:27px!important;
+  border-radius:4px;
 }
+
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
 {
       margin-left: 7px;
@@ -1474,7 +1476,7 @@ ul.tags-management li.tag{
   color: #ffffff !important;
 }
 /*css for the caret icon in the campaigns page */
-#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial, #document_validate ,#document_update_validate
+#campaign-video-tutorial , #lp-video-tutorial , #addLandingPage , #document_validate ,#document_update_validate
 {
   border-radius: 4px;
 }
@@ -1874,7 +1876,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 .add_to_all
 {
-  line-height:1.42857143 !important;
+  line-height:1.1857143 !important;
 }
 .m-l-n-xs-imp
 {
@@ -1890,7 +1892,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 .deal-restore-detail-view
 {
-  left:-15px!important;
+  left:-30px!important;
 }
 #bringYourCodeBtn
 {
@@ -1940,10 +1942,10 @@ table.agile-table>tbody>tr>td{
   padding: 6px 12px !important;
 }
 
-.btn-group>.btn:last-child:not(:first-child){
+/*.btn-group>.btn:last-child:not(:first-child){
   border-top-left-radius : 4px;
   border-bottom-left-radius : 4px;
-}
+}*/
 
 /* star of filters*/
 #contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
@@ -2034,3 +2036,32 @@ ul#recent-menu-model-list li:nth-child(even){
       background-color: #11a0f8!important;
       color: #ffffff!important;
 }*/
+#contact-tab-content #send-new-email .icon-envelope
+{
+  top:-1px;
+}
+.m-l-sm-imp{
+  margin-left:10px;
+}
+#addWorkflow , .btn-group-imp>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle)
+
+{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.btn-group-imp>.dropdown-toggle:not(:first-child)
+{
+  border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.border-imp a
+{
+  border-top-left-radius : 4px !important;
+  border-bottom-left-radius : 4px !important;
+  border-top-right-radius : 4px !important;
+  border-bottom-right-radius : 4px !important;
+}
