@@ -2124,3 +2124,17 @@ ul#recent-menu-model-list li:nth-child(even){
 .agile-new-theme #settings-milestones-tab-content #deal-sources-table > tbody>tr{
    border-top: 1px solid #eaeff0 !important;
 }
+.agile-new-theme #marketing-previlages div>div>div {
+    padding-top: 10px !important;
+}
+
+.agile-new-theme #service-previlages div>div>div {
+    padding-top: 10px !important;
+}
+
+.agile-new-theme #marketing-previlages div {
+    margin-top: 0px !important;
+}
+.agile-new-theme #service-previlages div {
+    margin-top: 0px !important;
+}
