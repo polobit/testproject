@@ -2231,6 +2231,7 @@ ul#recent-menu-model-list li:nth-child(even){
 }
 
 
+
 /*Table Sort Caret Start*/
 
 table .headerSortUp::after, table .headerSortDown::after{
@@ -2261,3 +2262,18 @@ table .headerSortUp::after, table .headerSortDown::after{
   border-bottom: none !important;
 }
 
+/*deals*/
+#opportunities-header .tag{
+  background-color: #eee !important;
+}
+
+/*contacts tabs*/
+#notes-model-list .contact-title-dynamic a,#contact-tasks-model-list .task-subject a,#contact-tasks-model-list .task-subject,#deal-tasks-model-list .task-subject,#deal-tasks-model-list .task-subject a,
+#deal-notes-model-list .contact-title-dynamic a{
+  color: #363f44 !important;
+}
+.company-details-mobile-view #contact-owner{
+  color: #363f44 !important;
+}
+
+/*end of contact tabs*/
