@@ -819,7 +819,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
 </li>
   
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
-  <!-- Service menu -->   
+  <!-- Service menu -->
+  <%
+    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK) || !domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE)){
+  %>   
    <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.SERVICE){ %> agile-menuactive <% } %>" id="agile-service-menu-navigation-container" data-service-name='SERVICE' data-dashboard='dashboard'>
       <a class="auto">      
         <span class="pull-right text-muted">
@@ -829,34 +832,19 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <i class="icon-support icon"></i>
         <span class="font-bold">Service</span>
       </a>
-      <ul class="nav nav-sub dk" style="display:block;" > 
-  
-  <li id="home_dashboard" class="Dashboard-home">
-    <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/Dashboard" >
-      <i class="icon icon-home"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
-    </a>
-  </li>
-<%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
-  %>      
-  <li id="contactsmenu">
-    <a class="agile-menu-dropdown-aside" href="#contacts">
-      <i class="icon icon-user"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
-    </a>
-  </li>
+      <ul class="nav nav-sub dk" style="display:block;"> 
   <%
-      }
+    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>
-
-  
   <li id="tickets">
     <a class="agile-menu-dropdown-aside" href="#tickets">
       <i class="icon icon-ticket"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
+  <%
+  }
+  %>
 
   <li id="tasksmenu" class="hide">
     <a class="agile-menu-dropdown-aside" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
@@ -868,6 +856,32 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
 
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE)){
+    %>
+    <li id="ticketknowledgebasemenu">
+    <a  class="agile-menu-dropdown-aside" href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
+    </a>
+  </li>
+    <%
+      }
+    %>
+
+    <%
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.FEEDBACK) && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK) ){
+    %>
+    <li id="feedbackactivitiesmenu">
+    <a class="agile-menu-dropdown-aside" href="#ticket-feedback">
+      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <span>Feedback</span>
+    </a>
+  </li>
+    <%
+      }
+    %> 
+  
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>          
@@ -895,31 +909,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
-  <li id="ticketknowledgebasemenu">
-    <a  class="agile-menu-dropdown-aside" href="#knowledgebase">
-      <i class="fa fa-search"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
-    </a>
-  </li>
    <%
       }
-  %>
+  %>  
 
   <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
-    %>
-    <li id="feedbackactivitiesmenu">
-    <a class="agile-menu-dropdown-aside" href="#ticket-feedback">
-      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-      <span>Feedback</span>
-    </a>
-  </li>
-    <%
-          }
-    %>  
-
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY) && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
     %>
     <li id="activitiesmenu" class="dashboard-activitiesnavbar">
     <a class="agile-menu-dropdown-aside" href="#navbar-activities/dashboard">
@@ -931,7 +926,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
           }
     %>
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT) && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
     %>
   <li id="reportsmenu" class="dashboard-reportsnavbar">
     <a class="agile-menu-dropdown-aside" href="#navbar-reports/dashboard">
@@ -948,7 +943,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- End of Service menu -->
  
              </ul>
-           </li>
+ </li>
+ <%
+  }
+ %>
   </ul>
 
 

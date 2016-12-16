@@ -716,6 +716,17 @@ Handlebars.registerHelper('return_feedback_title', function(feedback,options) {
 	
 });
 
+Handlebars.registerHelper('isHelpdeskenabled', function(options) {
+	
+	if(CURRENT_DOMAIN_USER.restricted_menu_scopes.indexOf('HELPDESK') == -1 ){
+
+		return options.fn(this);
+		
+	}	
+		return options.inverse(this);
+
+});
+
 Handlebars.registerHelper('get_status_label_details', function(status, options) {
 
 	switch(status){
