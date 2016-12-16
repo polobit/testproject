@@ -38,9 +38,9 @@ function loadKnowlarityLogs(responceObject, to, contact){
 
 	$.ajax({
 		headers : {
-				"Accept-Language" : "en_US",
-				"Authorization" : authCode,
-				"x-api-key" : appCode
+			"Accept-Language" : "en_US",
+			"Authorization" : authCode,
+			"x-api-key" : appCode
 		},
 		url : requestURL,
 		type : "GET",		
@@ -331,11 +331,10 @@ function changeCallNotyBasedOnStatus(event){
 				KNOWLARITY_PREVIOUS_EVENT = undefined;
 				closeCallNoty(true);	
 				saveCallNoteKnolarity(event);						
+			}else if(callType == "Incoming"){
+				KNOWLARITY_PREVIOUS_EVENT = undefined;
+				closeCallNoty(true);
 			}
-			// else if(callType == "Incoming"){
-			// 	KNOWLARITY_PREVIOUS_EVENT = undefined;
-			// 	closeCallNoty(true);
-			// }
 		}
 	}	
 }

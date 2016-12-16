@@ -331,11 +331,10 @@ function changeCallNotyBasedOnStatus(event){
 				KNOWLARITY_PREVIOUS_EVENT = undefined;
 				closeCallNoty(true);	
 				saveCallNoteKnolarity(event);						
+			}else if(callType == "Incoming"){
+				KNOWLARITY_PREVIOUS_EVENT = undefined;
+				closeCallNoty(true);
 			}
-			// else if(callType == "Incoming"){
-			// 	KNOWLARITY_PREVIOUS_EVENT = undefined;
-			// 	closeCallNoty(true);
-			// }
 		}
 	}	
 }
