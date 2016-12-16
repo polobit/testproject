@@ -2181,6 +2181,7 @@ ul#recent-menu-model-list li:nth-child(even){
 }
 .agile-new-theme #service-previlages div {
     margin-top: 0px !important;
+}
 #settings-widgets-tab-content .btn-default , #settings-widgets-tab-content .btn-danger ,  #settings-widgets-tab-content .btn-primary, #widget-settings-tab-pane .btn-primary , #widget-settings-tab-pane .btn-default,#widget-settings-tab-pane .btn-danger
 {
     height: 30px!important;
