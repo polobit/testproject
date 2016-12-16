@@ -1317,10 +1317,13 @@ ul.tags-management li.tag{
 }
 #filter-list #filters-tour-step .caret
 {
-    margin-left: 3px;
-    margin-right: 2px;
+    /*margin-left: 3px;
+    margin-right: 2px;*/
+    margin-left: -6px;
+    margin-right: -1px;
     color:#78909c !important;
 }
+
 #contacts-view-options .contacts-view i
 {
   font-size:16px;
@@ -1628,9 +1631,15 @@ table#contacts-table, table#companies {
 #dialler-page .panel.panel-default{
   border: 1px solid #fafafa !important;
 }
-#contact-sorter
+#contact-sorter,.workflow-sortby,.tickets-toolbar .new-theme-sort
 {
-  margin-top:-5px;
+  margin-top:-7px;
+}
+.tickets-toolbar .new-theme-sort{
+  margin-top: -7px !important;
+}
+#deal-sorter{
+  margin-top: -22px !important;
 }
 #refrecal
 {
@@ -2085,6 +2094,16 @@ ul#recent-menu-model-list li:nth-child(even){
     border-radius: 4px;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
+.select-new-theme-nopanel.form-control{
+    color: #263238;
+    background-color: #fff;
+    background-image: inherit;
+    border: inherit;
+    border-radius: 4px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
+  }
+
+
   .email_plan_minimum,.email_credits_count{
     border: 1px solid #ccc !important;
     background-color: #fff !important;
@@ -2110,6 +2129,7 @@ ul#recent-menu-model-list li:nth-child(even){
     transform: scale(1);
 
 }
+
 #pipeline-delete-modal .btn-default-imp
 {
   opacity:0.8!important;
@@ -2149,4 +2169,13 @@ ul#recent-menu-model-list li:nth-child(even){
     font-size: 12px!important;
     margin: 4px!important;
     padding: 0 1em!important;
+}
+#active-campaign a{
+  margin-top: 0px !important;
+}
+#active-campaign .remove-active-campaign{
+  top:-1px important;
+}
+#unsubscribe-campaigns-list p{
+  margin-top:  7px !important;
 }
