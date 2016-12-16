@@ -24,7 +24,9 @@ cat ../WebContent/flatfull/css/core/*.css > ../WebContent/flatfull/css/min/core-
 cat ../WebContent/flatfull/css/core/*.css > ../WebContent/flatfull/css/min/core-all-new.css 
 cat ../WebContent/flatfull/css/misc/*.css > ../WebContent/flatfull/css/min/misc-all.css
 cat ../WebContent/flatfull/css/misc/*.css > ../WebContent/flatfull/css/min/misc-all-new.css
-
+lessc ../WebContent/flatfull/css/material-theme/css/style.less ../WebContent/flatfull/css/material-theme/css/style.css -x -w
+lessc ../WebContent/flatfull/css/material-theme/css/agile-theme.less ../WebContent/flatfull/css/material-theme/css/agile-theme.css -x -w
+lessc ../WebContent/flatfull/css/material-theme/css/dynamic-colors.less ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css -x -w
 ## Combil all CSS for fast load
 cat ../WebContent/flatfull/css/min/lib-all-new.css ../WebContent/flatfull/css/min/core-all-new.css ../WebContent/flatfull/css/min/misc-all-new.css > ../WebContent/flatfull/css/min/css-all-min.css
 

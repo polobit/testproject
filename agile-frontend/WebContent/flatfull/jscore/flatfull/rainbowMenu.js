@@ -102,6 +102,10 @@ $('#theme-and-layout').on('change', '#page_size', function(e){
 
 //retrieve the current radio button value	
 $('#theme-and-layout').on('change', '.magicMenu input:radio', function(e){
+		if($(this).val() == 15)
+			$("html").addClass("theme-15");
+		else
+			$("html").removeClass("theme-15");
 		CURRENT_USER_PREFS.theme = $(this).val();
 		$(".theme-save-status").css("display","inline");
 		var asideClassName = $(this).attr("target-aside-class");

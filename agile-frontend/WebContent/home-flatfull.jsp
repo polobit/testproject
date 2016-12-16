@@ -46,7 +46,7 @@ pageEncoding="UTF-8"%>
 
 
 
-<html>
+<html class="theme-15 agile-service-theme">
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
@@ -211,12 +211,11 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
-<%if(currentUserPrefs.theme.equals("15")){%>
 <link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
 <link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
 <link href="flatfull/css/material-theme/css/style.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
 <link href="flatfull/css/material-theme/css/agile-theme.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
-<%}%>
+<link href="flatfull/css/material-theme/css/dynamic-colors.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
 
 
 <style>
