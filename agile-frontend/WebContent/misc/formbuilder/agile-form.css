@@ -560,7 +560,7 @@ margin-left: 35px;
 /*form theme4 css end*/
 
 .form-view .agile-hiddenEle-group{display: none;}
-.theme1 select:not([multiple]),.theme2 select:not([multiple]),.theme3 select:not([multiple]),.theme4 select:not([multiple]){
+.form-view select:not([multiple]){
   -webkit-appearance:none;
   -moz-appearance: none;
   appearance: none;
