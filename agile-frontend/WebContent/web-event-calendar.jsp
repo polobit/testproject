@@ -236,6 +236,9 @@ if(scheduleid.contains(",")){
 <%}else{ %>
 <html>
 <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <% 
 if (scheduleid != null && multiple_users){  %>
 <title><%=_page_title%> - <%=scheduleid %></title>
@@ -351,8 +354,10 @@ if (scheduleid != null && multiple_users){  %>
 					style="display: table;display:none">
 					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:4px;margin-top:2px;font-weight:normal;">
-						<span class="pull-left"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-date-time")%></span>
-						<span class="timezone ">											<span id="base_timezone"class="font-normal"></span>
+
+						<span class="pull-left datetimezone"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select-date-time")%></span>
+						<span class="timezone ">											
+							<span id="base_timezone"class="font-normal"></span>
 								<select name="user_timezone" class="form-control hidden m-b-none m-t-n-sm" style="font-weight:normal;height:32px;" id="user_timezone">
                                 	<optgroup label="US/Canada">
 										<option value="US/Arizona">US/Arizona</option>

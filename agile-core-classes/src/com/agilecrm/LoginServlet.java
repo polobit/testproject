@@ -194,7 +194,7 @@ public class LoginServlet extends HttpServlet {
 		// Forward to OpenID Authenticaiton which will set the cookie and then
 		// forward it to /
 		if (server.equals("google"))
-			response.sendRedirect("/oauth?hd=" + server+"&loginoauth=true");
+			response.sendRedirect("/oauth?hd=" + server);
 		else
 			response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
 		return;

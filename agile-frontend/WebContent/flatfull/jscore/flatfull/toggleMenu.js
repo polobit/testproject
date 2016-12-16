@@ -79,6 +79,19 @@ $("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
 		CLICKDESK_LIVECHAT.show();
 });
 
+$("#prefsDropdownModal").on('click','#showUserVoice',function(e){
+		if(typeof UserVoice != undefined){
+			if(!agile_is_mobile_browser())
+				load_user_voice('lib/user-voice.js', function(){
+				$(".uservoice-window")[0].click();
+			});
+		}		
+		/*setTimeout(function(){
+		$(".uservoice-window")[0].click();
+		},100);*/
+
+});
+
 $("#help-options").click(function(e){
 	$("#prefsDropdownModal").html(getTemplate('prefs-dropdown-options', {})).modal('show');
 	agile_toggle_chat_option_on_status();

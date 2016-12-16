@@ -396,11 +396,16 @@ var Leads_Header_Events_View = Base_Model_View.extend({
                     title = _agile_get_translated_val('campaigns', 'emails-limit');
                     yes = "";
                     no = _agile_get_translated_val('reputation','Ok');
-                    message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div> " + emialErrormsg;
+                    message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div> " + (_agile_is_user_from_iphone() ? "" : emialErrormsg);
                 }
-                else
-                    message = _agile_get_translated_val('billing','remaining-email') + " " + pendingEmails + " "+_agile_get_translated_val('billing','have-only')+" " + upgrade_link + _agile_get_translated_val('billing','not-send-email') + " <br/><br/>" + _agile_get_translated_val('deal-view','do-you-want-to-proceed');
-
+                else{
+                    message = _agile_get_translated_val('billing','remaining-email') + " " + pendingEmails + " "+_agile_get_translated_val('billing','have-only')+" " 
+                    if(!_agile_is_user_from_iphone())
+                        message += upgrade_link + _agile_get_translated_val('billing','not-send-email'); 
+                    
+                    message +=  " <br/><br/>" + _agile_get_translated_val('deal-view','do-you-want-to-proceed');
+                }
+                    
                 showModalConfirmation(title, message, App_Leads.leadsBulkActions.showBulkEmailForm, function(element)
                 {
 

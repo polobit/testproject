@@ -73,3 +73,15 @@
 </div>
 </div>
 </script>
+
+<script id="admin-setting-sendgrid-whitelabel-permission-template" type="text/html">    
+   
+  {{#if emailGateway}}    
+    <div class="m-xs " style="text-align:center;font-size: 13px;margin-top: 15px;">
+      <span style="padding: 3px 10px 3px 10px;" class="alert alert-info">    
+   {{agile_lng_translate 'other' 'you-are-using-your-own-email-gateway'}} </span>   
+   </div>   
+ {{else}}   
+     undefined    
+   {{/if}}     
+ </script> 

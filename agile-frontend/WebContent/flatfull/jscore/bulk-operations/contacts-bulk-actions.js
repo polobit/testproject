@@ -148,7 +148,7 @@ var contacts_bulk_actions = {
 					}, function()
 					{
 						return;
-					},  "{{agile_lng_translate 'portlets' 'upgrade'}}", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+					},  _agile_get_Upgrade_text(), "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 		}
 		if (!canSendEmails(count))
 		{
@@ -165,7 +165,7 @@ var contacts_bulk_actions = {
 				title = "{{agile_lng_translate 'bulk-actions' 'email-low-limit'}}";
 				yes = "";
 				no = "{{agile_lng_translate 'reputation' 'Ok'}}";
-				message = "{{agile_lng_translate 'bulk-actions' 'emails-limit-reached'}} " + upgrade_link;
+				message = "{{agile_lng_translate 'bulk-actions' 'emails-limit-reached'}} " + (_agile_is_user_from_iphone() ? "" : upgrade_link);
 			}
 			else
 				message = "{{agile_lng_translate 'billing' 'have-only'}} " + pendingEmails + " {{agile_lng_translate 'bulk-actions' 'emails-left-quota'}}. " + upgrade_link + " {{agile_lng_translate 'bulk-actions' 'wanna-continue'}}<br/><br/>{{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}";
@@ -231,7 +231,7 @@ var contacts_bulk_actions = {
 									}, function()
 									{
 										return;
-									},  "{{agile_lng_translate 'portlets' 'upgrade'}}", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+									},  _agile_get_Upgrade_text(), "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 						}
 						else
 						{
@@ -278,7 +278,7 @@ var contacts_bulk_actions = {
 								}, function()
 								{
 									return;
-								}, "{{agile_lng_translate 'portlets' 'upgrade'}}", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+								}, _agile_get_Upgrade_text(), "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
 					}
 					else
 					{
@@ -358,11 +358,17 @@ var contacts_bulk_actions = {
 									title = "{{agile_lng_translate 'campaigns' 'emails-limit'}}";
 									yes = "";
 									no = "{{agile_lng_translate 'reputation' 'Ok'}}";
-									message = "<div>{{agile_lng_translate 'billing' 'email-quota-exceed'}}</div> " + emialErrormsg;
+									message = "<div>{{agile_lng_translate 'billing' 'email-quota-exceed'}}</div> " + (_agile_is_user_from_iphone() ? "" : emialErrormsg);
 								}
 								else
-									message = "{{agile_lng_translate 'billing' 'remaining-email'}} " + pendingEmails + " {{agile_lng_translate 'billing' 'have-only'}} " + upgrade_link + "{{agile_lng_translate 'billing' 'not-send-email'}} <br/><br/>{{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}";
+								{
+									message = "{{agile_lng_translate 'billing' 'remaining-email'}} " + pendingEmails + " {{agile_lng_translate 'billing' 'have-only'}} ";
+									if(!_agile_is_user_from_iphone())
+									 	message +=  upgrade_link + "{{agile_lng_translate 'billing' 'not-send-email'}} ";
 
+									 message +=  "<br/><br/>{{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}";
+								}
+									
 								showModalConfirmation(title, message, show_bulk_email_form, function(element)
 								{
 

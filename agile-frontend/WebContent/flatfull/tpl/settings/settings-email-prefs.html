@@ -27,8 +27,8 @@
 			<div class="tab-pane" id="imap-tab">
 				<div class="row">
 					<div id="social-prefs"></div>
-					<div id="office-prefs"></div>
 					<div id="imap-prefs"></div>
+					<div id="office-prefs"></div>
 				</div>
 			</div>
 
@@ -76,7 +76,7 @@
 			<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>
+			    <div class="p-xs hideInIphone" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>
 				{{/if_non_pro_plan}}
 				<!--<a class="btn btn-sm btn-default m-t-sm" disabled="disabled">Enable</a>-->
 				
@@ -100,7 +100,7 @@
 	<div class="panel panel-default" style="min-height:257px; height:auto !important;">
 	<div class="panel-heading">
 		<center>
-			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/icons/office356-calendar-logo.png"/>
+			<img class="m-b-none thumb-transparent img-responsive thumb-xl" style="height:47px;" src="/img/icons/office365_new.png"/>
 		</center>
 		</div>
 		<div class="panel-body">
@@ -124,7 +124,7 @@
 				<div>
 			    {{#has_email_account_limit_reached}}
 			    {{#if_non_pro_plan}}
-				<div class="p-xs" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>				
+			    <div class="p-xs hideInIphone" style="border: 1px solid #E2E29C;background-color: #F7F7D0;"> {{agile_lng_translate 'portlets' 'please'}} <strong><a class="text-info" href="#subscribe">{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}</div>
 				{{/if_non_pro_plan}}
 				<!--<a class="btn m-t-sm btn-sm btn-default" disabled="disabled">Enable</a>-->
 				{{else}}
