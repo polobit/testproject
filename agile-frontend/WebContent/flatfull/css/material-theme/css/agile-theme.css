@@ -2115,3 +2115,9 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
+.agile-new-theme #settings-milestones-tab-content #lost-reasons-table > tbody>tr{
+      border-top: 1px solid #eaeff0 !important;
+}
+.agile-new-theme #settings-milestones-tab-content #deal-sources-table > tbody>tr{
+   border-top: 1px solid #eaeff0 !important;
+}
