@@ -16,7 +16,7 @@
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 			<div style="padding:0px 4px 10px" class="pull-right">
-				<select class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-175 {{/is_mobile}}" name="group-by" id="typeCall">
+				<select class="required form-control select-new-theme-nopanel {{#is_mobile}} {{else}} text-ellipsis w-175 {{/is_mobile}}" name="group-by" id="typeCall">
 					<option value="number-of-calls" selected="selected">{{agile_lng_translate 'report-add' 'total-calls'}}</option>
 						<option value="call-duration">{{agile_lng_translate 'report-add' 'total-call-duration'}}</option>
                          <option value="average-calls" style="display:none;">{{agile_lng_translate 'report-add' 'average-call-duration'}}</option>
@@ -100,7 +100,7 @@
               </div>
 
 			<div class="pull-right" style="padding:0px 4px 10px 2px">
-				<select name="frequency" id="frequency" class="required form-control" style="width:105px">
+				<select name="frequency" id="frequency" class="required form-control select-new-theme-nopanel" style="width:105px">
 					<option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
 					<option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}</option>
                     <option value="monthly">{{agile_lng_translate 'report-add' 'monthly'}}</option>
