@@ -456,12 +456,6 @@
 <i class="icon-pencil"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}} {{/unless}}<span title="{{custom1}}">{{add_dots_end custom1}}</span> {{#if custom2}}- <span title="{{custom2}}">{{add_dots_end custom2}}{{/if}}
 </small></div>
 {{/if_equals}}
-
-<!-- adding the template for the sms activity-->
-
-
-
-
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'reassigned-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}
 <div class="activities_second_line m-t-none"><small>
@@ -1309,9 +1303,10 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 {{/if_equals}}
 
 {{#if_equals "SMS_SENT" activity_type}}
-To {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >SMS Sent</a>{{else}}'gatewayName'{{/if}} <br/>
+ToNumber:{{#if this.entityObject}}
+    <a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{custom1}}</a>{{else}}'{{label}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm"> 
-<i class="icon-envelope-alt"></i>{{#unless this.entityObject}}FROM: {{/unless}} Message - <a href="" class="email-details" data="{{id}}">smsStatus</a> 
+<i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} SMS Subject - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
 </small>
 {{/if_equals}}
 

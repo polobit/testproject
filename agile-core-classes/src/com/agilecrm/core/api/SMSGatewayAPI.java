@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.widgets.Widget;
 import com.campaignio.tasklets.sms.SendMessage;
 import com.thirdparty.twilio.TwilioSMS;
@@ -33,6 +34,14 @@ import com.thirdparty.twilio.TwilioSMSUtil;
 @Path("/api/sms-gateway")
 public class SMSGatewayAPI
 {
+	
+	
+	/**creating an variable for the sent sms*/
+	public static final String  SMS_SENT = "Sms Sent";
+	
+	public static final String SMS_SENDING_FAILED = "SMS Sending failed";
+	
+	public static final String NUMBER_NOT_VALID = "Number is not invalid";
 	/**
 	 * Returns current SMSGateway Widget
 	 * 
@@ -156,22 +165,50 @@ public class SMSGatewayAPI
 	}
 	/**
 	 * @author Priyanka
-	 *  Send SMS
-	 * 
-	 * @return
-	 */
+	 * @param from number
+	 * @param to number
+	 * @param message
+	 * @param contactId 
+	 * @return 
+	 * @throws JSONException 
+	 * */
 	@GET
 	@Path("/send-sms")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void  sendSMS(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("message") String message, @QueryParam("contactId") String contactId)
+	public void  sendSMS(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("message") String message, @QueryParam("contactId") String contactId) throws JSONException
 	{
-		//calling the  sendtwilioSms method here
-		 try {
-			SMSGatewayUtil.sendTwilioSms(from, to, message, contactId);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Exception occured while :"+e.getMessage());
-			e.printStackTrace();
-		}
-	}
-  }
+			System.out.println("smsssss "+from +" to "+ to + message);
+					//checking valid number
+
+		      if(SendMessage.checkValidFromNumber(from) && SendMessage.checkValidToNumber(to)){
+					    Widget widget= SMSGatewayUtil.getSMSGatewayWidget();
+					    JSONObject json;
+					    json = new JSONObject(widget.prefs);
+					    try {
+						      //json = new JSONObject(widget.prefs);
+						      
+						      String authToken = json.getString(TwilioSMS.TWILIO_AUTH_TOKEN);
+						      String sid = json.getString(TwilioSMS.TWILIO_ACCOUNT_SID);
+						      
+					          SMSGatewayUtil.sendSMS(json.getString("sms_api"), from, to, message, sid, authToken);
+
+					          ActivityUtil.createLogForSMS(to, from, message, SMS_SENT, json.getString("sms_api"), contactId);
+					          
+					      } catch (JSONException e) {
+					    	  System.out.println("While Sending Error Occured ." +e.getMessage());
+					    	  ActivityUtil.createLogForSMS(to, from, message, SMS_SENDING_FAILED, json.getString("sms_api"), contactId);
+
+						     throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+										.entity("Messege not sent!!").build());
+						     
+					      }
+					   }
+					else{
+						//ActivityUtil.createLogForSMS(to, from, message, NUMBER_NOT_VALID, json.getString("sms_api"), contactId);
+
+						 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+									.entity("Number is not valid").build());
+					}
+					
+			}
+}
