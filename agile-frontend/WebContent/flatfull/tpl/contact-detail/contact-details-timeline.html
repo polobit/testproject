@@ -382,9 +382,14 @@
             <div class="body">
             <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">From Number : {{custom4}}</div></span>
             <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">To Number : {{custom1}}</div></span>
-           
+               {{#if_equals "Sms Sent" custom3}}
                 <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">SMS Subject : {{custom2}}</div></span>
-            </div>
+                {{else}}
+                {{#if_equals "SMS Sending failed" custom3}}
+                <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;">SMS Sending failed due to : Phone Number Invalid</div></span>
+                {{/if_equals}}
+              {{/if_equals}}
+              </div>
             {{/if}}
         {{/if_equals}}
 			{{#if_equals "CALL" activity_type}}

@@ -1953,7 +1953,7 @@ function sendPersonalSMS(el, id){
         {
         	if ($('#sms-noty-notes').val() == '') {
         	 $('#sms-noty-notes').css('border-color', 'red');
-        	$save_info = $('<div style="display:inline-block "><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
+        	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
 						$('.sms-message').html($save_info);
 						$save_info.show();
 
@@ -1976,7 +1976,7 @@ function sendPersonalSMS(el, id){
 										function(data)
 										{
 											console.log("sending sms...");
-											$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>SMS will sent shortly</i></p></small></div>');
+											$save_info = $('<div style="display:inline-block;margin-left:-13px;"><small><p class="text-success"><i>SMS will be sent shortly</i></p></small></div>');
 
 											$('.sms-message').html($save_info);
 
@@ -1993,7 +1993,7 @@ function sendPersonalSMS(el, id){
 						         .fail(
 										function(response)
 										{
-											$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+											$save_info = $('<div style="display:inline-block; margin-left:-13px;"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
 
 											$('.sms-message').html($save_info);
 

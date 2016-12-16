@@ -41,7 +41,7 @@ public class SMSGatewayAPI
 	
 	public static final String SMS_SENDING_FAILED = "SMS Sending failed";
 	
-	public static final String NUMBER_NOT_VALID = "Number is not invalid";
+	public static final String NUMBER_NOT_VALID = "SMS Sending failed";
 	/**
 	 * Returns current SMSGateway Widget
 	 * 
@@ -204,7 +204,9 @@ public class SMSGatewayAPI
 					      }
 					   }
 					else{
-						//ActivityUtil.createLogForSMS(to, from, message, NUMBER_NOT_VALID, json.getString("sms_api"), contactId);
+						//JSONObject json = new JSONObject(widget.prefs);
+						//ActivityUtil.createLogForSMS(to, from, message, NUMBER_NOT_VALID,, contactId);
+						ActivityUtil.createLogForSMS(to, from, message, NUMBER_NOT_VALID, SMSGatewayUtil.getTwilioSMSGatewayWidget(), contactId);
 
 						 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 									.entity("Number is not valid").build());
