@@ -130,6 +130,12 @@ public class TicketGroupUtil
 	 */
 	public static List<DomainUserPartial> getCommonAssigneesForCurrentUser()
 	{
+		List<DomainUserPartial> list = DomainUserUtil.getPartialDomainUsers(NamespaceManager.get());
+		DomainUserService service = (DomainUserService) ServiceLocator.lookupService(DomainUserService.ServiceID);
+		DomainUser user = service.getCurrentDomainUser();
+		
+		if( user.is_admin )	return list;
+
 		List<TicketGroups> groups = getAllGroupsForCurrentUser();
 		Set<Long> commonAgentIds = new HashSet<>();
 		
@@ -138,7 +144,14 @@ public class TicketGroupUtil
 			commonAgentIds.addAll(group.agents_keys);
 		}
 		
-		return DomainUserUtil.getPartialDomainUsersByIdList(new ArrayList<Long>(commonAgentIds));
+		// Going in reverse order makes remove work more efficiently
+		for( int index = list.size() - 1; index >= 0; index--  )
+		{
+			DomainUserPartial puser = list.get(index);
+			if( !(commonAgentIds.contains(puser.id)) )	list.remove(index);
+		}
+		
+		return list;
 	}
 
 	public TicketGroups createGroup(String groupName, List<Long> domainUserIDs) throws Exception
