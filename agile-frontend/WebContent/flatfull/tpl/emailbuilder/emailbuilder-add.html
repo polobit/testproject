@@ -129,7 +129,7 @@
         <br>
         <a href="#email-templates" class="btn btn-default btn-lg-imp btn-default-imp btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
     </div>
-    <div class="form-group right {{#if_equals action "edit"}} m-r-n-sm {{/if_equals}}">
+    <div class="form-group btn-group-imp right {{#if_equals action "edit"}} m-r-n-sm {{/if_equals}}">
         <br>
         {{#if_equals action "edit"}}
         <button class="btn btn-primary btn-primary-imp btn-lg-imp btn-sm btn-addon saveEmailBuilderButton" style="
@@ -199,8 +199,8 @@
                 <a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm attachmentAddBtn">{{agile_lng_translate 'other' 'add'}}</a>
             </div>
         {{else}}
-            <a href="#" class="btn btn-default btn-sm attachmentCancelBtn">{{agile_lng_translate 'other' 'cancel'}}</a>
-            <a href="#" class="btn btn-sm btn-primary add-tpl-attachment-confirm attachmentAddBtn">{{agile_lng_translate 'other' 'add'}}</a>
+            <a href="#" class="btn btn-default btn-sm btn-lg-imp m-r-sm-imp attachmentCancelBtn">{{agile_lng_translate 'other' 'cancel'}}</a>
+            <a href="#" class="btn btn-sm btn-primary  btn-lg-imp add-tpl-attachment-confirm attachmentAddBtn">{{agile_lng_translate 'other' 'add'}}</a>
             <span id="attachmentSelectBoxRequired" for="attachmentSelectBox" generated="true" class="help-inline" style="display:none;">{{agile_lng_translate 'validation-msgs' 'this-field-is-required'}}</span>
         {{/is_mobile}}
     </span>

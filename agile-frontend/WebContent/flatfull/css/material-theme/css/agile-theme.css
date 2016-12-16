@@ -309,7 +309,7 @@ form select.form-control{
   font-size: 13px;
 }
 .agile-new-theme h6, .h6{
-  font-size: 125px;
+  font-size: 12px;
 } 
 #contact-sorter .sort-field-txt{
   color: #263238 !important;
@@ -727,7 +727,7 @@ header .bg-white a, header button.show-search-dropdown {
 {
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 :not(.notaddon-imp).icon-plus-sign:before{
   content: "+";
@@ -817,7 +817,7 @@ header .bg-white a, header button.show-search-dropdown {
 .btn.btn-sm,.controls .btn.btn-sm ,.form-actions .btn.btn-sm , #bulk-actions .btn-sm ,.btn-sm-imp{
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 
 .multiple-checkbox-adminprefs .panel{
@@ -946,7 +946,7 @@ z-index:1;
 .modal-footer .btn{
   height: 30px;
   line-height: 30px;
-  font-size: 12px;
+  /*font-size: 12px;*/
 }
 .btn.btn-blue:hover,
 .btn.btn-primary:hover,
@@ -1064,7 +1064,7 @@ z-index:1;
 {
   color: #78909c !important;
 }
-#scheduleid .line.line-dashed.b-b.line-lg {
+#scheduleid .line.line-dashed.b-b.line-lg ,#subscribe_plan_change .line.line-dashed.b-b.line-lg{
     border-bottom: 1px solid #dee5e7;
 }
 
@@ -1416,7 +1416,7 @@ ul.tags-management li.tag{
 {
    height: 40px!important;
   line-height: 40px!important;
-  font-size: 14px;
+  font-size: 14px!important;
 }
 #deals-view
 {
@@ -1430,7 +1430,9 @@ ul.tags-management li.tag{
 {
   margin-right:15px;
   line-height:27px!important;
+  border-radius:4px;
 }
+
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
 {
       margin-left: 7px;
@@ -1477,7 +1479,7 @@ ul.tags-management li.tag{
   color: #ffffff !important;
 }
 /*css for the caret icon in the campaigns page */
-#campaign-video-tutorial , #addWorkflow , #lp-video-tutorial , #addLandingPage ,#webrule-video-tutorial, #document_validate ,#document_update_validate
+#campaign-video-tutorial , #lp-video-tutorial , #addLandingPage , #document_validate ,#document_update_validate
 {
   border-radius: 4px;
 }
@@ -1588,6 +1590,7 @@ table#contacts-table, table#companies {
 #calendar-listers #calendar_event table .fc-header-center span h2{
   color: #fff !important;
   margin-bottom: 0px !important;
+  font-size: 18px;
 }
 #calendar-listers #user_calendars #google_cal_link span, #calendar-listers #user_calendars #office_cal_link span{
   font-size: 11px !important;
@@ -1762,7 +1765,7 @@ color:#0d1114 !important;
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel{
+#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel, #import-tabs-content .tab-content.panel{
   box-shadow :0px 0px 0px 0px !important;
 }
 
@@ -1876,7 +1879,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 .add_to_all
 {
-  line-height:1.42857143 !important;
+  line-height:1.1857143 !important;
 }
 .m-l-n-xs-imp
 {
@@ -1892,7 +1895,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 .deal-restore-detail-view
 {
-  left:-15px!important;
+  left:-30px!important;
 }
 #bringYourCodeBtn
 {
@@ -1942,10 +1945,10 @@ table.agile-table>tbody>tr>td{
   padding: 6px 12px !important;
 }
 
-.btn-group>.btn:last-child:not(:first-child){
+/*.btn-group>.btn:last-child:not(:first-child){
   border-top-left-radius : 4px;
   border-bottom-left-radius : 4px;
-}
+}*/
 
 /* star of filters*/
 #contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
@@ -1963,6 +1966,7 @@ font-size: 24px !important;
 .slate-content h4{
   font-size: 18px !important;
 }
+
 #emailBuilderTopOptionsHolder .emailbuilder-copy
 {
   top:inherit!important;
@@ -1995,4 +1999,122 @@ ul#recent-menu-model-list li:nth-child(even){
 }
 .agile-new-theme .agile-menu-parent-item {
     font-size: 16px;
+}
+
+#basic-addon1{
+  border: 0px;
+}
+#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item{
+  border: none !important;
+}
+#widget-settings-tab-pane .btn-primary ,#widget-settings-tab-pane .btn-default ,#settings-widgets-tab-content .btn-danger{
+    margin-left: 10px;
+}
+#setting-email-prefs-tab-content .btn-danger 
+{
+    margin-right: 10px;
+}
+#prefs-tabs-content .btn-primary
+{
+  margin-left:10px;
+}
+/*
+#online-calendar-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#notificationsForm .btn-primary , #theme-and-layout .btn-primary , #settings-user-prefs-tab-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#admin-prefs-tabs-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+    font-size: 14px; 
+    margin-left:10px;
+}*/
+/*.save{
+ 
+      background-color: #11a0f8!important;
+      color: #ffffff!important;
+}*/
+#contact-tab-content #send-new-email .icon-envelope
+{
+  top:-1px;
+}
+.m-l-sm-imp{
+  margin-left:10px;
+}
+#addWorkflow , .btn-group-imp>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle)
+
+{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.btn-group-imp>.dropdown-toggle:not(:first-child)
+{
+  border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.border-imp a
+{
+  border-top-left-radius : 4px !important;
+  border-bottom-left-radius : 4px !important;
+  border-top-right-radius : 4px !important;
+  border-bottom-right-radius : 4px !important;
+}
+#widgets h4 {
+  font-size: 18px !important;
+}
+#widgets .text-base{
+  font-size: 14px !important;
+}
+
+.select-new-theme.form-control,.select-new-theme.form-control{
+    color: #263238;
+    background-color: #f4f8f9;
+    background-image: inherit;
+    border: inherit;
+    border-radius: 4px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
+  }
+  .email_plan_minimum,.email_credits_count{
+    border: 1px solid #ccc !important;
+    background-color: #fff !important;
+  }
+  #aclInfo .b-b,#campaignInfo .b-b,#triggerInfo .b-b{
+    border-bottom: 1px solid #dee5e7;
+  }
+  .freePlanDetails,.subscriptionDetail{
+    font-size: 13px !important;
+  }
+  .emailCreditsDetails .panel-body{
+    font-size: 12px !important;
+  }
+  .new-them-upgrade p{
+    color: #263238; 
+  }
+  .plan-collection-in.selected-plan {
+    border: 1px solid #5fa2dd !important;
+    box-shadow: 0 0 5px #8bc0e0 !important;
+    opacity: 1;
+    margin: 0;
+    padding-bottom: 20px;
+    transform: scale(1);
+
+}
+#pipeline-delete-modal .btn-default-imp
+{
+  opacity:0.8!important;
+}
+#admin-prefs-tabs-content .btn-primary
+{
+  margin-left:10px;
 }
