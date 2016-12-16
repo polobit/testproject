@@ -801,10 +801,10 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
-.agile-new-theme form .form-control.textarea
+/*.agile-new-theme form .form-control.textarea
 {
   height: 72px;
-}
+}*/
 .multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
 {
   margin-left:0px;
@@ -2149,4 +2149,8 @@ ul#recent-menu-model-list li:nth-child(even){
     font-size: 12px!important;
     margin: 4px!important;
     padding: 0 1em!important;
+}
+.agile-select-tag
+{
+  height:100px!important;
 }
