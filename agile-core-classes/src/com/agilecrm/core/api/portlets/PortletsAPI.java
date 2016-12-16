@@ -178,10 +178,13 @@ public class PortletsAPI {
 		for (Portlet portlet : portlets) {
 			System.out.println("Current Portlet"+portlet.name+portlet.id);
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
-			portlt.column_position = portlet.column_position;
-			portlt.row_position = portlet.row_position;
-			portlt.isForAll = portlet.isForAll;
-			portlt.save();
+			if(portlt!=null)
+			{
+				portlt.column_position = portlet.column_position;
+				portlt.row_position = portlet.row_position;
+				portlt.isForAll = portlet.isForAll;
+				portlt.save();
+			}
 		}
 	}
 
