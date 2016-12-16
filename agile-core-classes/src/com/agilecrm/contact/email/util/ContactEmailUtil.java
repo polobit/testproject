@@ -29,6 +29,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.email.wrappers.EmailWrapper;
+import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -240,7 +241,7 @@ public class ContactEmailUtil
 		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
-		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
+		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, MandrillUtil.getText(body, null), documentIds, blobKeys);
 		System.out.println("After send email");
 				
 		// it is for calculating total contact emails
