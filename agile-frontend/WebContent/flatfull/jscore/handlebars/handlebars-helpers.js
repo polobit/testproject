@@ -1687,19 +1687,19 @@ $(function()
 								var addressValues = [];
 
 								if(address.address && address.address.trim())
-									addressValues.push(address.address);
+									addressValues.push(address.address.trim());
 
 								if(address.city && address.city.trim())
-									addressValues.push(address.city);
+									addressValues.push(address.city.trim());
 
 								if(address.state && address.state.trim())
-									addressValues.push(address.state);
+									addressValues.push(address.state.trim());
 
-								if(address.zip && address.zip.trim())
+								if(address.zip)
 									addressValues.push(address.zip);
 
 								if(address.countryname && address.countryname.trim())
-									addressValues.push(address.countryname);
+									addressValues.push(address.countryname.trim());
 
 								if(!address.countryname && address.country && address.country.trim())
 									addressValues.push(getCode(address.country.trim()));
@@ -1707,10 +1707,10 @@ $(function()
 								$.each(addressValues, function(index, addressField){
 									if(index == addressValues.length - 1)
 									{
-										el = el.concat(addressField.trim());
+										el = el.concat(addressField);
 										return;
 									}
-									el = el.concat(addressField.trim() + ", ");
+									el = el.concat(addressField + ", ");
 								});
 
 								if (properties[i].subtype && properties[i].subtype != "SYSTEM"){
@@ -3501,36 +3501,36 @@ $(function()
 
 				if(address['address'] && address['address'].trim())
 				{
-					addressValues.push(address['address']);
+					addressValues.push(address['address'].trim());
 				}
 				if(address['city'] && address['city'].trim())
 				{
-					addressValues.push(address['city']);
+					addressValues.push(address['city'].trim());
 				}
 				if(address['state'] && address['state'].trim())
 				{
-					addressValues.push(address['state']);
+					addressValues.push(address['state'].trim());
 				}
-				if(address['zip'] && address['zip'].trim())
+				if(address['zip'])
 				{
 					addressValues.push(address['zip']);
 				}
 				if(address['countryname'] && address['countryname'].trim())
 				{
-					addressValues.push(address['countryname']);
+					addressValues.push(address['countryname'].trim());
 				}
 				if(!address['countryname'] && address['country'] && address['country'].trim())
 				{
-					addressValues.push(getCode(address['country']));
+					addressValues.push(getCode(address['country'].trim()));
 				}
 
 				$.each(addressValues, function(index, addressField){
 					if(index == addressValues.length - 1)
 					{
-						el = el.concat(addressField.trim());
+						el = el.concat(addressField);
 						return;
 					}
-					el = el.concat(addressField.trim() + ", ");
+					el = el.concat(addressField + ", ");
 				});
 
 				return new Handlebars.SafeString(el);
