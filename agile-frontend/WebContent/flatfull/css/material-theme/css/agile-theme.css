@@ -2111,3 +2111,7 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   opacity:0.8!important;
 }
+#admin-prefs-tabs-content .btn-primary
+{
+  margin-left:10px;
+}
