@@ -24,20 +24,20 @@ cat ../WebContent/flatfull/css/core/*.css > ../WebContent/flatfull/css/min/core-
 cat ../WebContent/flatfull/css/core/*.css > ../WebContent/flatfull/css/min/core-all-new.css 
 cat ../WebContent/flatfull/css/misc/*.css > ../WebContent/flatfull/css/min/misc-all.css
 cat ../WebContent/flatfull/css/misc/*.css > ../WebContent/flatfull/css/min/misc-all-new.css
-lessc ../WebContent/flatfull/css/material-theme/css/style.less ../WebContent/flatfull/css/material-theme/css/style.css -x -w
-lessc ../WebContent/flatfull/css/material-theme/css/agile-theme.less ../WebContent/flatfull/css/material-theme/css/agile-theme.css -x -w
-lessc ../WebContent/flatfull/css/material-theme/css/dynamic-colors.less ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css -x -w
+lessc ../WebContent/flatfull/css/material-theme/css/style.less ../WebContent/flatfull/css/material-theme/css/style.css
+lessc ../WebContent/flatfull/css/material-theme/css/agile-theme.less ../WebContent/flatfull/css/material-theme/css/agile-theme.css
+lessc ../WebContent/flatfull/css/material-theme/css/dynamic-colors.less ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css
 ## Combil all CSS for fast load
 cat ../WebContent/flatfull/css/min/lib-all-new.css ../WebContent/flatfull/css/min/core-all-new.css ../WebContent/flatfull/css/min/misc-all-new.css > ../WebContent/flatfull/css/min/css-all-min.css
 
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/lib-all.css --type css -o  ../WebContent/flatfull/css/min/lib-all.css --charset utf-8
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/lib-all-new.css --type css -o  ../WebContent/flatfull/css/min/lib-all-new.css --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/lib-all.css --type css -o  ../WebContent/flatfull/css/min/lib-all.css --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/lib-all-new.css --type css -o  ../WebContent/flatfull/css/min/lib-all-new.css --charset utf-8
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/core-all.css  --type css -o  ../WebContent/flatfull/css/min/core-all.css  --charset utf-8
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/core-all-new.css  --type css -o  ../WebContent/flatfull/css/min/core-all-new.css  --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/core-all.css  --type css -o  ../WebContent/flatfull/css/min/core-all.css  --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/core-all-new.css  --type css -o  ../WebContent/flatfull/css/min/core-all-new.css  --charset utf-8
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/misc-all.css --type css -o  ../WebContent/flatfull/css/min/misc-all.css  --charset utf-8
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/misc-all-new.css --type css -o  ../WebContent/flatfull/css/min/misc-all-new.css  --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/misc-all.css --type css -o  ../WebContent/flatfull/css/min/misc-all.css  --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/misc-all-new.css --type css -o  ../WebContent/flatfull/css/min/misc-all-new.css  --charset utf-8
 
-java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/css-all-min.css --type css -o  ../WebContent/flatfull/css/min/css-all-min.css  --charset utf-8
+#java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/css-all-min.css --type css -o  ../WebContent/flatfull/css/min/css-all-min.css  --charset utf-8
