@@ -189,14 +189,13 @@
   p{margin:0 0 10px !important;line-height:1.42857143 !important}
   .list-group.no-border .list-group-item{border-width:0}
   .list-group-item{border-left:3px solid transparent !important}
-  label.i-checks input{margin-right:7px}
+  label.i-checks input{margin-right:7px!important;}
   .i-checks{padding-left:0;padding-bottom:7px}
   .i-checks i.glyphicon{display:inline-block !important}
   .tickets-div .dropdown-menu .i-checks{padding-top:0 !important}
   .tickets-div .dropdown-menu>li>a{padding:5px 20px !important}
   .radio label,.checkbox label{padding-left:23px;vertical-align:middle}
-  .radio label.i-checks,.checkbox label.i-checks{padding-left:0;}
-  /*.js-prev-lge .i-checks{padding-left:23px}*/
+  .radio label.i-checks,.checkbox label.i-checks{padding-left:23px;}
   .getting-started-body label.i-checks input{vertical-align:middle;margin-right:10px}
   table.agile-table .i-checks i,#bulk-action-btns .i-checks i{display:none !important}
   .i-checks>span{margin-left:auto}
@@ -377,6 +376,12 @@
   #integrations-label{margin-top:10px;margin-bottom:10px}
   @media (min-width: 768px){.app-aside-folded .navbar-collapse, .app-aside-folded .app-content, .app-aside-folded .app-footer {margin-left: 60px;}}
   .i-checks input[type="radio"]+i {display: none;}
-  table.agile-table label.i-checks {padding-left:0px !important; padding-bottom: 0px;}
+  table.agile-table label.i-checks {padding-left:0px !important;}
+  table.agile-table thead tr th label.i-checks {margin-left:0px !important;}
+  table.agile-table label.i-checks input {margin-left: 0px; margin-right: 0px!important;}
   .ticket-bulk-actions label.i-checks{padding-bottom:0px;}
+  .radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {margin-left:-22px;}
+  #bulk-action-btns {padding-left: 10px;}
+  #bulk-action-btns .i-checks {padding-bottom: 0px;}
+  .js-prev-lge .i-checks{padding-left:23px}
 }
