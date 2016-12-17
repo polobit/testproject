@@ -555,15 +555,15 @@ public class SubscriptionApi {
 	{
 		try {
 			BillingRestriction restriction = BillingRestrictionUtil.getBillingRestrictionFromDB();
-			restriction.isAutoRenewalEnabled = isAutoRenewalEnabled;
-			restriction.nextRechargeCount = nextRechargeCount;
-			restriction.autoRenewalPoint = autoRenewalPoint;
 			if(!restriction.isAutoRenewalEnabled){
 				Subscription subscription = SubscriptionUtil.getSubscription();
 				if(subscription.getEmailpurchaseStatus() == null){
 					SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.AUTO_RECHARGE, 0);
 				}
 			}
+			restriction.isAutoRenewalEnabled = isAutoRenewalEnabled;
+			restriction.nextRechargeCount = nextRechargeCount;
+			restriction.autoRenewalPoint = autoRenewalPoint;
 			restriction.save();
 		} catch (Exception e) {
 			throw new WebApplicationException(Response

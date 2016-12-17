@@ -901,7 +901,7 @@ $(function(){
 			$that.closest(".modal").modal("hide");
 			var msg = "Auto recharge has been enabled successfully.";
 			if(!_billing_restriction.isAutoRenewalEnabled && !USER_BILLING_PREFS.emailpurchaseStatus)
-				msg = "Request processed. We wil enable auto recharge soon";
+				msg = "Thank you for setting up Auto recharge. We are processing your request. It will be activated within in 24 Hours.";
 			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
 			_billing_restriction.nextRechargeCount = json.nextRechargeCount;
 			_billing_restriction.autoRenewalPoint = json.autoRenewalPoint;
