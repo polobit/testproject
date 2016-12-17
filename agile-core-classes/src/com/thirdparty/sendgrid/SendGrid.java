@@ -275,6 +275,9 @@ public class SendGrid
 			subjectJSON.put(SENDGRID_API_PARAM_SUBJECT,subject );
 			SMTPJSON.put(SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
 			
+			if(StringUtils.equalsIgnoreCase(apiUser, Globals.SENDGRID_API_USER_NAME))
+				SMTPJSON.put(SendGridUtil.IP_POOL, SendGridUtil.getIPPool(null, null, 0));
+			
 			queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPJSON.toString(), "UTF-8");
 		 } 
     	catch (JSONException e) {
