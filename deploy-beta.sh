@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout theme-1-0
+git checkout theme-1-1
 
-git pull origin theme-1-0
+git pull origin theme-1-1
 
 # Change queue acls in beta before deploy
 
