@@ -569,6 +569,11 @@ public class EmailGatewayUtil
     	
 	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), queueName);
     }
+    
+    public static void sendMails(List<TaskHandle> tasks)
+    {
+    	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), null);
+    }
 
     public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
     {
