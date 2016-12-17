@@ -1167,7 +1167,7 @@ label.i-checks input{
   vertical-align: middle;
   margin-right: 10px;
  }
-table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
+table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-checks i, #bulk-action-btns .i-checks i {
   display: none!important;
 }
 .i-checks>span {
@@ -2221,4 +2221,14 @@ table .headerSortUp::after, table .headerSortDown::after{
 {
   margin-top:10px;
   margin-bottom:10px;
+}
+
+.agile-new-theme .mce-btn .mce-txt {
+  line-height: normal;
+}
+.user-add-m-sm {
+  margin-left: 6px!important;
+}
+#textModalForm .i-checks-sm>i {
+  display: none;
 }
