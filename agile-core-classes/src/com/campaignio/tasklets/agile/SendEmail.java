@@ -654,10 +654,10 @@ public class SendEmail extends TaskletAdapter
 	if(data.has(Cron.CRON_TYPE))
 	{
 		// If true
-		isTimeOut = data.getBoolean(Cron.CRON_TYPE);
+		String cronType = data.getString(Cron.CRON_TYPE);
 		
-		if(isTimeOut == null)
-			isTimeOut = false;
+		if(cronType != null && cronType.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
+			isTimeOut = true;
 	}
 	
 	// Send Message
