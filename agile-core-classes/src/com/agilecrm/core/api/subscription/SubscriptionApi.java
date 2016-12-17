@@ -30,6 +30,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.Subscription.BillingStatus;
+import com.agilecrm.subscription.Subscription.BlockedEmailType;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.limits.plan.FreePlanLimits;
@@ -557,6 +558,12 @@ public class SubscriptionApi {
 			restriction.isAutoRenewalEnabled = isAutoRenewalEnabled;
 			restriction.nextRechargeCount = nextRechargeCount;
 			restriction.autoRenewalPoint = autoRenewalPoint;
+			if(!restriction.isAutoRenewalEnabled){
+				Subscription subscription = SubscriptionUtil.getSubscription();
+				if(subscription.getEmailpurchaseStatus() == null){
+					SubscriptionUtil.blockEmailPurchasing(BlockedEmailType.AUTO_RECHARGE, 0);
+				}
+			}
 			restriction.save();
 		} catch (Exception e) {
 			throw new WebApplicationException(Response
