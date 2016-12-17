@@ -216,6 +216,12 @@ public class SendEmail extends TaskletAdapter
      */
     public static String EMAIL_OPEN = "email_open";
     public static String EMAIL_CLICK = "email_click";
+    
+    /**
+     * Time out true and time out false
+     */
+    public static boolean TIME_OUT_FALSE = false;
+    public static boolean TIME_OUT_TRUE = true;
 
     /*
      * Unsubscribe Links public static String UNSUBSCRIBE_LINK =
@@ -382,7 +388,7 @@ public class SendEmail extends TaskletAdapter
 	if (on.equalsIgnoreCase(ON_ANY_DAY) && at.equalsIgnoreCase(AT_ANY_TIME))
 	{
 	    // Send Email and Execute next task
-	    sendEmail(campaignJSON, subscriberJSON, data, nodeJSON);
+	    sendEmail(campaignJSON, subscriberJSON, data, nodeJSON, TIME_OUT_FALSE);
 	    return;
 	}
 
@@ -469,7 +475,7 @@ public class SendEmail extends TaskletAdapter
     {
 	// TimeOut - Cron Job Wakes it up
 	System.out.println("Wake up from wait. Executing next one.");
-	sendEmail(campaignJSON, subscriberJSON, data, nodeJSON);
+	sendEmail(campaignJSON, subscriberJSON, data, nodeJSON, TIME_OUT_TRUE);
     }
 
     /**
@@ -578,9 +584,10 @@ public class SendEmail extends TaskletAdapter
      *            Data within the workflow
      * @param nodeJSON
      *            Current Node data
+     * @param timeOut 
      * @throws Exception
      */
-    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, boolean isTimeOut)
 	    throws Exception
     {
 	// Add Unsubscription Link
@@ -650,14 +657,14 @@ public class SendEmail extends TaskletAdapter
 	    // Send HTML Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
-		    campaignId);
+		    campaignId, isTimeOut);
 	}
 	else
 	{
 	    // Send Text Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, null, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
-		    campaignId);
+		    campaignId, isTimeOut);
 	}
 
 	// Creates log for sending email
@@ -715,9 +722,10 @@ public class SendEmail extends TaskletAdapter
      *            - HTML body
      * @param text
      *            - text body
+     * @param timeOut 
      */
     private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
+	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId, boolean isTimeOut)
     {
 	String domain = NamespaceManager.get();
 
@@ -736,9 +744,14 @@ public class SendEmail extends TaskletAdapter
   	}else{
 	
 	// Send Email using email gateway
-	EmailGatewayUtil.sendBulkEmail(
-			Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
-	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+	   String queueName = AgileQueues.NORMAL_EMAIL_PULL_QUEUE;
+	   
+	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()))
+		   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
+	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut)
+		   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;
+	  		
+		EmailGatewayUtil.sendBulkEmail(queueName, domain, fromEmail, fromName, to, cc, bcc, subject,
 	        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
   	}
 	}catch(Exception e){
