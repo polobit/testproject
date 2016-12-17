@@ -195,9 +195,10 @@
   .tickets-div .dropdown-menu .i-checks{padding-top:0 !important}
   .tickets-div .dropdown-menu>li>a{padding:5px 20px !important}
   .radio label,.checkbox label{padding-left:23px;vertical-align:middle}
-  .js-prev-lge .i-checks{padding-left:23px}
+  .radio label.i-checks,.checkbox label.i-checks{padding-left:0;}
+  /*.js-prev-lge .i-checks{padding-left:23px}*/
   .getting-started-body label.i-checks input{vertical-align:middle;margin-right:10px}
-  table.agile-table thead tr th .i-checks i,#bulk-action-btns .i-checks i{display:none !important}
+  table.agile-table .i-checks i,#bulk-action-btns .i-checks i{display:none !important}
   .i-checks>span{margin-left:auto}
   .i-checks i.glyphicon{display:inline-block !important}
   #textModalForm label{display:inline}
@@ -375,4 +376,6 @@
   #import-border{border-bottom:none !important}
   #integrations-label{margin-top:10px;margin-bottom:10px}
   @media (min-width: 768px){.app-aside-folded .navbar-collapse, .app-aside-folded .app-content, .app-aside-folded .app-footer {margin-left: 60px;}}
+  .i-checks input[type="radio"]+i {display: none;}
+  table.agile-table label.i-checks {padding-left:0px !important; padding-bottom: 0px;}
 }
