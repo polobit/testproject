@@ -745,7 +745,7 @@ function show_bulk_owner_change_page()
 		                                       function()
 		                                      {
 		                                      		  enable_save_button(saveButton);
-		                                              Backbone.history.navigate("analytics-code", { trigger : true });
+		                                              Backbone.history.navigate("api-analytics", { trigger : true });
 
 		                                      },  function()
 		                                      {
