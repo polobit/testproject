@@ -666,6 +666,7 @@ public class EmailGatewayUtil
 
 	    EmailSender emailSender = EmailSender.getEmailSender();
 	    emailSender.setQueueName(queueName);
+	    emailSender.setEmailsToSend(tasks.size());
 	    
 	    EmailGateway emailGateway = emailSender.emailGateway;
 

@@ -301,7 +301,7 @@ public class SendGridUtil
 	
 	// If default gateway add pool
 	if(emailSender.emailGateway == null)
-		SMTPJSON.put(IP_POOL, getIPPool(deferredtask.domain, emailSender.getQueueName()));
+		SMTPJSON.put(IP_POOL, getIPPool(deferredtask.domain, emailSender.getQueueName(), emailSender.getEmailsToSend()));
 	
 	return SMTPJSON;
     }
@@ -360,7 +360,7 @@ public class SendGridUtil
 			SMTPJSON.put(FILTERS, getFilterJSON());
 			
 			if(emailSender.emailGateway == null)
-				SMTPJSON.put(IP_POOL, getIPPool(sendGridDeferred.domain, emailSender.getQueueName()));
+				SMTPJSON.put(IP_POOL, getIPPool(sendGridDeferred.domain, emailSender.getQueueName(), emailSender.getEmailsToSend()));
 			
 			SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
 	    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
@@ -379,8 +379,12 @@ public class SendGridUtil
     	
     }
 
-	public static SendGridIpPools getIPPool(String domain, String queueName)
+	public static SendGridIpPools getIPPool(String domain, String queueName, int emailsCount)
 	{
+		
+		final int MAX_LIMIT = 15;
+		
+		// For our domain and empty namespace
 		if(StringUtils.equalsIgnoreCase(domain, "our") ||
 				StringUtils.isEmpty(domain))
 			return AgileGlobalProperties.SendGridIpPools.INTERNAL;
@@ -388,6 +392,9 @@ public class SendGridUtil
 		if(StringUtils.equalsIgnoreCase(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE))
 			return AgileGlobalProperties.SendGridIpPools.BULK;
 		
+		if(StringUtils.equals(queueName, AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE) && emailsCount > MAX_LIMIT)
+			return AgileGlobalProperties.SendGridIpPools.BULK;
+			
 		return AgileGlobalProperties.SendGridIpPools.TRANSACTIONAL;
 	}
 

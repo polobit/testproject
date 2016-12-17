@@ -400,7 +400,7 @@ public class SendGrid
     		// Added IP pools
     		if(StringUtils.isEmpty(SMTPHeaderJSON))
     		{
-    			SMTPHeaderJSON = new JSONObject().put(SendGridUtil.IP_POOL, SendGridUtil.getIPPool(domain, null)).toString();
+    			SMTPHeaderJSON = new JSONObject().put(SendGridUtil.IP_POOL, SendGridUtil.getIPPool(domain, null, 0)).toString();
     		}
     	}
     	

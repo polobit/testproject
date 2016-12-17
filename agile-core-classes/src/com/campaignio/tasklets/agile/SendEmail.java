@@ -24,6 +24,7 @@ import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
+import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -388,7 +389,7 @@ public class SendEmail extends TaskletAdapter
 	if (on.equalsIgnoreCase(ON_ANY_DAY) && at.equalsIgnoreCase(AT_ANY_TIME))
 	{
 	    // Send Email and Execute next task
-	    sendEmail(campaignJSON, subscriberJSON, data, nodeJSON, TIME_OUT_FALSE);
+	    sendEmail(campaignJSON, subscriberJSON, data, nodeJSON);
 	    return;
 	}
 
@@ -475,7 +476,7 @@ public class SendEmail extends TaskletAdapter
     {
 	// TimeOut - Cron Job Wakes it up
 	System.out.println("Wake up from wait. Executing next one.");
-	sendEmail(campaignJSON, subscriberJSON, data, nodeJSON, TIME_OUT_TRUE);
+	sendEmail(campaignJSON, subscriberJSON, data, nodeJSON);
     }
 
     /**
@@ -587,7 +588,7 @@ public class SendEmail extends TaskletAdapter
      * @param timeOut 
      * @throws Exception
      */
-    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, boolean isTimeOut)
+    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
 	    throws Exception
     {
 	// Add Unsubscription Link
@@ -646,6 +647,18 @@ public class SendEmail extends TaskletAdapter
 
 	// Appends name in format e.g., Naresh <naresh@agilecrm.com>
 	to = EmailUtil.appendNameToEmail(to, subscriberJSON);
+	
+	Boolean isTimeOut = false;
+	
+	// Checks whether current node came after scheduled
+	if(data.has(Cron.CRON_TYPE))
+	{
+		// If true
+		isTimeOut = data.getBoolean(Cron.CRON_TYPE);
+		
+		if(isTimeOut == null)
+			isTimeOut = false;
+	}
 	
 	// Send Message
 	if (html != null && html.length() > 10)
@@ -725,7 +738,7 @@ public class SendEmail extends TaskletAdapter
      * @param timeOut 
      */
     private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId, boolean isTimeOut)
+	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId, Boolean isTimeOut)
     {
 	String domain = NamespaceManager.get();
 
@@ -748,7 +761,7 @@ public class SendEmail extends TaskletAdapter
 	   
 	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()))
 		   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
-	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut)
+	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut != null && isTimeOut)
 		   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;
 	  		
 		EmailGatewayUtil.sendBulkEmail(queueName, domain, fromEmail, fromName, to, cc, bcc, subject,

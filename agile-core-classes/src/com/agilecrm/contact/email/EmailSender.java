@@ -38,8 +38,9 @@ public class EmailSender
     boolean isWhiteLabled = false;
     
     private String queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE; 
+    private int emailsToSend = 0;
     		
-    private EmailSender()
+	private EmailSender()
     {
     }
 
@@ -267,6 +268,14 @@ public class EmailSender
 
 	public void setQueueName(String queueName) {
 		this.queueName = queueName;
+	}
+	
+	public int getEmailsToSend() {
+		return emailsToSend;
+	}
+
+	public void setEmailsToSend(int emailsToSend) {
+		this.emailsToSend = emailsToSend;
 	}
 
 }
