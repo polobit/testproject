@@ -592,7 +592,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   vertical-align: middle !important;
 }
 .agile-new-theme table>tbody>tr>td>label.i-checks.i-checks-sm{
-  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
 }
 .agile-new-theme #admin-settings-users .panel-heading>div:first-child{
   display: none;
@@ -2017,7 +2017,7 @@ ul#recent-menu-model-list li:nth-child(even){
 #basic-addon1{
   border: 0px;
 }
-#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item{
+#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item, #today-activity .list-group-item, #tomorrow-activity .list-group-item, #next-week-activity .list-group-item{
   border: none !important;
 }
 #widget-settings-tab-pane .btn-primary ,#widget-settings-tab-pane .btn-default ,#settings-widgets-tab-content .btn-danger{
