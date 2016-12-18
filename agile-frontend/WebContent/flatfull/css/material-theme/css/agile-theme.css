@@ -2078,7 +2078,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-color: #fff;
     background-image: inherit;
     border-radius: 4px;
-    /*border: inherit;*/
+    border: inherit;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
    #owner,#source,#track{
@@ -2086,6 +2086,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-color: #fff;
     background-image: inherit;
     border-radius: 4px;
+    border: inherit;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
   #campaign-reports-select .select-new-theme-nopanel{
@@ -2278,4 +2279,8 @@ table .headerSortUp::after, table .headerSortDown::after{
 .agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
 #sync-app-data p{
   padding: 10px 15px;
+}
+
+.import-panel-heading .data-block h4,.dash_tabview  .data-block h4{
+  color: #263238 !important;
 }
