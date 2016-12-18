@@ -2087,4 +2087,5 @@ table .headerSortUp::after, table .headerSortDown::after{
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
-
+.agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
+/*table.agile-table tr td.checkbox {position: inherit;}*/
