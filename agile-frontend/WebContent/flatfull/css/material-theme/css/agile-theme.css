@@ -1414,6 +1414,13 @@ ul.tags-management li.tag{
   border-radius:4px;
   vertical-align: text-top;
 }
+#reportrange
+{
+  margin-right:15px;
+  line-height:24px!important;
+  border-radius:4px;
+  vertical-align: middle;
+}
 
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
 {
@@ -1633,7 +1640,13 @@ table#contacts-table, table#companies {
 {
   font-size:15px;
 }
-#activities_date_range .icon-calendar ,#reportrange .icon-calendar
+#activities_date_range .icon-calendar
+{
+  font-size:13px!important;
+  margin-top:5px!important;
+  vertical-align: text-bottom;
+}
+#reportrange .icon-calendar
 {
   font-size:13px!important;
   margin-top:5px!important;
@@ -2293,3 +2306,6 @@ table .headerSortUp::after, table .headerSortDown::after{
   color: #263238 !important;
 }
 .agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+.activities-dropdown{vertical-align:text-bottom!important;}
+.datedropdown{margin-top:5px!important;}
+
