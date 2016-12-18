@@ -1,5 +1,5 @@
 body, .h1, .h2, .h3, .h4, .h5,.h6  {
-  font-family: "Maison Neue", sans-serif !important;
+  font-family: "Maison Neue" !important;
 }
 body {
   font-size: 13px;
@@ -58,7 +58,9 @@ body, * {
 .agile-theme-15 .tickets-div .panel-heading:first-child{
   padding: 10px 15px !important;
 }
-
+/*table td a {
+  color: #263238;; 
+}*/
 .bg-light {
   background-color: inherit!important;
 }
@@ -113,6 +115,9 @@ form select.form-control{
   border-bottom: 1px solid #dee5e7;
 }
 
+/*.wrapper-md {
+  padding-bottom: 15px
+}*/
 .app:before {
   background: #f4f8f9;
 }
@@ -128,9 +133,16 @@ form select.form-control{
   opacity: inherit;
 }
 
+.i-checks-sm>i {
+  /*display: none;*/
+}
 .r-switch input[type="checkbox"] {
   position: absolute;
 }
+/*
+.i-checks {
+  padding-left: inherit;
+} */
 
 .tabs .tab-container{
   overflow: hidden;
@@ -248,7 +260,9 @@ form select.form-control{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
-
+/*.pull-right .btn.dropdown-toggle span {
+  color: #fff !important;
+}*/
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
@@ -307,6 +321,12 @@ form select.form-control{
   color: #58666e!important;
   font-size: 13px !important;
 }
+/*#filter-list .btn.btn-sm{
+  padding: 0px !important;
+}*/
+/*#filter-list .btn.btn-sm span{
+  color: #58666e!important;
+}*/
 
 #contact-sorter .btn.btn-sm{
   padding: 0px !important;
@@ -342,6 +362,34 @@ form select.form-control{
 }
 
 /** Table CSS **/
+/*.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
+.agile-new-theme #content table thead tr{
+  background-color: #f4f8f9 !important;
+}
+agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+  padding-top: 3px !important;
+}
+.agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
+  padding-left: 8px !important;
+}
+.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td{
+   border-top: none !important;
+   padding: 10px 15px !important;
+}
+.table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
+    padding: 10px 15px !important;
+}
+.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr{
+  border-top: 10px solid #f4f8f9 !important;
+  background-color: #fff !important;
+}*/
 
 .agile-theme-15 .tickets-div table.ticket-data>tbody>tr{
   border-top: inherit !important;
@@ -350,6 +398,18 @@ form select.form-control{
 .agile-theme-15 .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
 }
+
+/*#content table.fc-header>tbody>tr:first-child{
+  border-top: none !important;
+}*/
+/*.agile-new-theme #content table>thead>tr>th{
+  padding: 10px 15px 15px 15px !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  text-transform: uppercase !important;
+  color: #78909c !important;
+  font-size: 12px !important;
+}*/
 /** End of table CSS **/
 
 .img-inital{
@@ -357,7 +417,12 @@ form select.form-control{
   height: 42px!important;
   width: 42px!important;
 }
-
+/*.table-striped>tbody>tr:nth-child(odd)>td{
+  background-color: #fff !important;
+}*/
+/*#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+  background-color: #e7f6ff !important;
+}*/
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
 }
@@ -365,16 +430,35 @@ form select.form-control{
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-
+/*#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
+  display: none !important;
+}*/
 #documents_collection_container .panel, #deals-new-list-view .panel{
   border: none !important;
 }
+/*#documents_collection_container .panel-footer{
+  border-top: 10px solid #f4f8f9 !important;
+}*/
 .hbox .col.b-r{
   border-right: none;
 }
 .hbox .col.b-l{
   border-left: none;
 }
+/*.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
+    background-color: rgba(17, 160, 248, 0.1);
+    color: #11a0f8!important;
+}
+.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
+}*/
+/*#documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
+  padding-bottom: 0px !important;
+}*/
+/*#task-list-based-condition .panel-heading label:first-child{
+  padding-left: 0px !important;
+}*/
 #task-list-based-condition .panel, .panel-heading{
   border: none !important;
 }
@@ -496,6 +580,12 @@ a i, a span{vertical-align: inherit;}
   display: none !important;
 }
 
+/*table.panel, .panel{
+  border: none !important;
+  -webkit-box-shadow: inherit !important;
+  box-shadow: inherit !important;
+   
+} */
 div#contact-reports-list-view, #task-list-based-condition .panel{
   box-shadow: inherit;
   background-color: inherit;
@@ -505,7 +595,6 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
-  padding-bottom: 0px !important;
 }
 .agile-theme-15 #admin-settings-users .panel-heading>div:first-child{
   display: none;
@@ -578,6 +667,8 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 
 #automation-video{margin-right: 15px !important;}
+/*#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}*/
+/*#document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}*/
 .grid-icon-header:hover, .grid-icon-header:focus{background-color: inherit;}
 .nav.navbar-right li a:hover, .nav.navbar-right li a:focus {
     background: inherit;
@@ -610,6 +701,15 @@ header .bg-white a, header button.show-search-dropdown {
   background-image: none;
   filter: none;
 }
+/*.panel-default .panel-heading
+{
+  background-color : #FFFFFF;
+}*/
+/*.wrapper-md
+{
+  padding-bottom:0px!important;
+  padding-top: 15px;
+}*/
 .route_Portlet
 {
   padding-top:10px;
@@ -692,6 +792,10 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
+/*.agile-new-theme form .form-control.textarea
+{
+  height: 72px;
+}*/
 .multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
 {
   margin-left:0px;
@@ -840,6 +944,10 @@ z-index:1;
   background-color: #067dc6!important;
   color: #ffffff;
 }
+/*#data-sync-type a
+{
+  color:#fff!important;
+}*/
 .btn-addon.btn-sm i
 {
   width: 20px;
@@ -908,7 +1016,19 @@ z-index:1;
     vertical-align: middle !important; 
   }
 }
-
+/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container table>tbody>tr>td, #campaign-triggers-list table>tbody>tr>td, #email-template-div-id table>tbody>tr>td, #forms-list-view table>tbody>tr>td, #landing-pages-collection-container table>tbody>tr>td, #webrules-list-view table>tbody>tr>td, #push-notify-list-view table>tbody>tr>td, .ticket-settings table>tbody>tr>td{
+  vertical-align: middle !important;
+}
+.agile-new-theme #deals-new-list-view table>thead>tr>th, #documents_collection_container table>thead>tr>th, #workflows-collection-container table>thead>tr>th, #campaign-triggers-list table>thead>tr>th, #email-templates-list-view table>thead>tr>th, #forms-list-view table>thead>tr>th, #landing-pages-collection-container table>thead>tr>th, #webrules-list-view table>thead>tr>th, #push-notify-list-view table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings table>thead>tr>th{
+  vertical-align: bottom !important;
+}
+.agile-new-theme .ticket-settings table>tbody>tr>td:nth-child(3){
+  padding-left: 15px !important;
+}
+.agile-new-theme #ticket-feedback table>tbody>tr>td:first-child>div{
+  width: 40px !important;
+  height: 40px !important;
+}*/
 #dashboard-name
 {
   margin-right:7px!important;
@@ -979,11 +1099,16 @@ input.mini-time.ui-timepicker-input{
   line-height: 1.42857143 !important;
 }
 
+
 .list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
+
+/*#content .portlet_body_calendar #calendar_container table td, #content .portlet_body_calendar #calendar_container table th {
+  padding: 0px !important;
+}*/
 
 /** Checkbox/Radio CSS **/
 label.i-checks input{
@@ -1017,7 +1142,7 @@ label.i-checks input{
   vertical-align: middle;
   margin-right: 10px;
  }
-table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-checks i, #bulk-action-btns .i-checks i {
+table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   display: none!important;
 }
 .i-checks>span {
@@ -1252,6 +1377,10 @@ ul.tags-management li.tag{
 {
   margin-right:10px!important;
 }
+/*
+.agile-new-theme form .input-group-addon{
+  padding: 12px 25px !important;
+}*/
 
 #advanced-search-fields-group {
   padding-bottom: 5px;
@@ -1317,6 +1446,11 @@ ul.tags-management li.tag{
    background-color: #11a0f8!important;
   color: #ffffff!important;
 }
+/*.agile-new-theme .btn-addon.btn-sm i:active,.agile-new-theme .btn-addon.btn-sm i:hover,.agile-new-theme .btn-addon.btn-sm i:focus
+{
+    background-color: #067dc6!important;
+    color: #ffffff;
+}*/
 .btn.dropdown-toggle.btn-primary-imp .caret
 {
   color: #ffffff !important;
@@ -1347,6 +1481,10 @@ ul.tags-management li.tag{
 #portlets-tasks-model-list tr td:first-child{
   width: 40px !important;
 }
+/*.scroll div[id*="heading"], .scroll>div>div{
+  border-top: none !important;
+  border-bottom: none !important;
+}*/
 .portlet_header h4 span{
   color: #263238 !important;
   font-weight: 400 !important;
@@ -1363,7 +1501,9 @@ ul.tags-management li.tag{
 .goals_portlet_body .portlet-panel.bg-light{
   background-color: #dde6e9 !important;
 }
-
+/*.agile-new-theme #bulk-action-btns .i-checks{
+  padding-left: 9px !important;
+}*/
 table#contacts-table, table#companies {
   -webkit-box-shadow: none !important; 
   box-shadow: none !important; 
@@ -1661,6 +1801,16 @@ color:#0d1114 !important;
 .agile-theme-15 #content .portlet_body .agile-table>tbody>tr{
   border-top: none !important;
 }
+/*.tabs .tab-container{
+  margin-bottom: 0px !important;
+}
+.tabs .tab-content{
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    border-top-width: 0;
+    border-radius: 0 0 2px 2px;
+}*/
 
 /***** END TABLES ********/
  
@@ -1771,6 +1921,11 @@ table.agile-table>tbody>tr>td{
   padding: 6px 12px !important;
 }
 
+/*.btn-group>.btn:last-child:not(:first-child){
+  border-top-left-radius : 4px;
+  border-bottom-left-radius : 4px;
+}*/
+
 /* star of filters*/
 #contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
     padding-right: 5px !important; 
@@ -1825,7 +1980,7 @@ ul#recent-menu-model-list li:nth-child(even){
 #basic-addon1{
   border: 0px;
 }
-#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item, #today-activity .list-group-item, #tomorrow-activity .list-group-item, #next-week-activity .list-group-item{
+#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item{
   border: none !important;
 }
 #widget-settings-tab-pane .btn-primary ,#widget-settings-tab-pane .btn-default ,#settings-widgets-tab-content .btn-danger{
@@ -1839,6 +1994,29 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
+/*
+#online-calendar-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#notificationsForm .btn-primary , #theme-and-layout .btn-primary , #settings-user-prefs-tab-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#admin-prefs-tabs-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+    font-size: 14px; 
+    margin-left:10px;
+}*/
+/*.save{
+ 
+      background-color: #11a0f8!important;
+      color: #ffffff!important;
+}*/
 #contact-tab-content #send-new-email .icon-envelope
 {
   top:-1px;
@@ -2080,6 +2258,16 @@ table .headerSortUp::after, table .headerSortDown::after{
 .m-t-sm-imp{margin-top:10px}
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
 #TrackingTab.nav li.active a{background-color: rgba(17,160,248,0.2);color: #11a0f8 !important;}
+#goal_duration{
+  position: relative;
+}
+#goal_duration i{
+  position: absolute;
+  top: 6px;
+}
+.price_per_month h4{
+  font-size: 16px;
+}
 #setting-email-prefs-tab-content .btn-default,#setting-email-prefs-tab-content .btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
@@ -2088,4 +2276,6 @@ table .headerSortUp::after, table .headerSortDown::after{
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
-/*table.agile-table tr td.checkbox {position: inherit;}*/
+#sync-app-data p{
+  padding: 10px 15px;
+}
