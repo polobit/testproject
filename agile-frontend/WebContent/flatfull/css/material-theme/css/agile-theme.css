@@ -1197,11 +1197,13 @@ table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
 .agile-theme-15 #portlets-add-listener #marketing_dashlet .col-md-3{
   display: table;
 }
+
 .agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(5){
   clear: inherit;
 }
 .agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
+  clear: both;
 }
 ul.leader-board-view li div table tr{
   border-top: 0px !important; 
