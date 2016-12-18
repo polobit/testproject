@@ -471,11 +471,11 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 }
 .agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0;}
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
-.agile-theme-15 .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
-.agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
-.agile-theme-15 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
-.agile-theme-15 .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 9999 !important;}
+.agile-new-theme .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
+.agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
+.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
+.agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
+.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 1035 !important;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -2272,10 +2272,6 @@ table .headerSortUp::after, table .headerSortDown::after{
   font-size: 16px;
 }
 #setting-email-prefs-tab-content .btn-default,#setting-email-prefs-tab-content .btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
-<<<<<<< HEAD
-=======
-
->>>>>>> 840b4493632b8bf6cde8d2a554821026cf0df81a
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
@@ -2290,3 +2286,5 @@ table .headerSortUp::after, table .headerSortDown::after{
 .import-panel-heading .data-block h4,.dash_tabview  .data-block h4{
   color: #263238 !important;
 }
+.agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+
