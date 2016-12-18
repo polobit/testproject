@@ -290,7 +290,7 @@
 <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
 {{/if}}
 <div class=" text-muted deal-track text-xs">
-{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
+{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn-sm-imp btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
 {{#getTracksCount}}<span>{{#if pipeline.name}}{{pipeline.name}} , {{/if}}</span>{{/getTracksCount}}         
             
@@ -591,7 +591,7 @@
 <div class="col  dealsTabListCenter bg-white">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">			
-<div id="deal-details">
+<div id="deal-details" class="tabs">
 	<div class="tab-container">
            <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
              <li><a href="#dealactivities" data-toggle="tab" >{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
@@ -646,8 +646,8 @@
   </div>
   <div class="modal-footer">
   <span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 </div>
@@ -671,8 +671,8 @@
 	</div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 <!-- End of Restore confirmation-->

@@ -8165,6 +8165,23 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 	return options.inverse(this);
 });
 
+Handlebars.registerHelper('permissiondeleted', function()
+{
+	return new Handlebars.SafeString(LOADING_HTML);
+});
+
+Handlebars.registerHelper('getCompactTableView', function(type)
+{
+	if(type == "contacts"){
+		if(_agile_get_prefs("contactTabelView"))
+			 return "table-compact";
+	}
+	else if(type == "companies"){
+		if(_agile_get_prefs("companyTabelView"))
+			 return "table-compact";	
+	}
+});
+
 Handlebars.registerHelper('renderTemplate', function(key, data){
 	return getTemplate(key, data);
 });
@@ -8188,4 +8205,3 @@ Handlebars.registerHelper('isUserNotInIphone', function(options)
 	}
 	return options.inverse(this);
 });
-

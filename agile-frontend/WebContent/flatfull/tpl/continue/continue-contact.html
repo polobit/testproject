@@ -1,5 +1,5 @@
 <script id="continue-contact-template" type="text/html">
-<div class="bg-light lter b-b wrapper-md">
+<div class="bg-light lter b-b wrapper-md agile-page-header">
 	<h3 class="h3 font-thin m-n">{{#if id}}{{agile_lng_translate 'modals' 'continue-editing'}}{{else}}&nbsp;{{agile_lng_translate 'prefs-settings' 'new-contact'}}{{/if}}
 	</h3>
 </div>
@@ -528,11 +528,11 @@
                 <div class="row">
 	            <div class="controls col-sm-9 pull-right">
                     {{#if id}}
-    					<a href="#home" class="btn btn-sm btn-default m-r-xs" id="close">{{agile_lng_translate 'contact-details' 'close'}}</a>
-                        <a href="#" type="submit" class="save btn btn-sm btn-primary" id="update">{{agile_lng_translate 'contact-edit' 'update'}}</a>
+    					<a href="#home" class="btn btn-sm btn-default m-r-xs btn-default-imp m-r-sm-imp  btn-lg-imp" id="close">{{agile_lng_translate 'contact-details' 'close'}}</a>
+                        <a href="#" type="submit" class="save btn btn-sm btn-primary btn-lg-imp btn-primary-imp" id="update">{{agile_lng_translate 'contact-edit' 'update'}}</a>
                     {{else}}
-                        <a href="#contacts" class="btn btn-sm btn-default m-r-xs">{{agile_lng_translate 'contact-details' 'close'}}</a>
-                        <a href="#" class="save btn btn-sm btn-primary" id="update">{{agile_lng_translate 'modals' 'save'}} </a>
+                        <a href="#contacts" class="btn btn-sm btn-default m-r-xs btn-default-imp m-r-sm-imp btn-lg-imp">{{agile_lng_translate 'contact-details' 'close'}}</a>
+                        <a href="#" class="save btn btn-sm btn-primary btn-lg-imp btn-primary-imp" id="update">{{agile_lng_translate 'modals' 'save'}} </a>
                     {{/if}}
 					<span class="form-action-error"></span>
                     <span class="save-status"></span>

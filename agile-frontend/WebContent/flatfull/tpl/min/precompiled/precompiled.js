@@ -1,1 +1,0 @@
-!function(){Handlebars.template,Handlebars.templates=Handlebars.templates||{}}();

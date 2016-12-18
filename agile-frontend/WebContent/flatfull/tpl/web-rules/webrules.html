@@ -1,16 +1,16 @@
 <script id="webrule-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md bg-light lter b-b">
+<div class="wrapper-md bg-light lter b-b agile-page-header">
 <div class="row">
     <div class="col-sm-12 col-md-12">
     
             <h3 class="pull-left font-thin h3">{{agile_lng_translate 'web-rules' 'web-rules'}}</h3>
 
-            <div class="pull-right btn-group">
-            <a id="webrule-video-tutorial" onclick="webruleVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;" >
+            <div class="pull-right btn-group border-imp">
+            <a id="webrule-video-tutorial" onclick="webruleVideoPopup();" class="help-video btn-default-imp-white btn-lg-imp btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;" >
                  <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
             </a>
-            <a href="#webrules-templates" class="btn btn-sm btn-default btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a>
+            <a href="#webrules-templates" class="btn btn-sm btn-default btn-primary-imp btn-lg-imp btn-addon "><span><i class="fa fa-plus-circle"></i></span>  {{agile_lng_translate 'web-rules' 'add-web-rule'}}</a>
             </div>
 			<div class="clearfix"></div>
 
@@ -18,7 +18,7 @@
 </div>
 </div>
 
-<div class="wrapper-md">
+<div class="wrapper-md no-panel-border agile-p-t-sm" id="webrules-list-view">
 <div class="row">
     <div class="col-md-9">
         {{#if this.length}}

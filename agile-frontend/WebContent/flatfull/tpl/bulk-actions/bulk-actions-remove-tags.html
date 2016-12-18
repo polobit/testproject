@@ -1,10 +1,13 @@
 <script id="bulk-actions-tags-remove-template" type="text/html">
 <div class="row">
 <div class="col-md-8">
-    <div class="well">
+    <div class="tab-content wrapper-md">
+    <div class="panel panel-default">
+    <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'remove-tags-from-selected-contacts'}}</div>
+    <div class="panel-body">
         <form id="tagsRemoveBulkForm" class="form-horizontal">
             <fieldset>
-                <legend>{{agile_lng_translate 'contacts-view' 'remove-tags-from-selected-contacts'}}</legend>
+              <!--   <legend>{{agile_lng_translate 'contacts-view' 'remove-tags-from-selected-contacts'}}</legend> -->
                 <div class="control-group form-group">         
                     <label class="control-label col-sm-2">{{agile_lng_translate 'contacts-view' 'enter-tags'}} 
                     <span class="field_req">*</span></label>
@@ -24,14 +27,16 @@
                      {{#if company_route}}   
                     <a href="#{{company_route}}" class="btn btn-default btn-sm">{{agile_lng_translate 'report-add' 'close'}}</a> 
             {{else}}
-					<a href="#contacts" class="btn btn-sm btn-danger">{{agile_lng_translate 'report-add' 'close'}}</a>
+					<a href="#contacts" class="btn btn-sm btn-danger btn-default-imp btn-lg-imp ">{{agile_lng_translate 'report-add' 'close'}}</a>
                     {{/if}}
-                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
+                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary btn-primary-imp btn-lg-imp">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>
             </fieldset>
         </form>
+    </div>
+    </div>
     </div>
 </div>
 </div>
@@ -40,11 +45,14 @@
 <script id="bulk-actions-companies-tags-remove-template" type="text/html">
 <div class="row">
 <div class="col-md-8">
-    <div class="well">
+    <div class="tab-content wrapper-md">
+    <div class="panel panel-default">
+    <div class="panel-heading">{{agile_lng_translate 'companies-view' 'remove-tags-from-selected-companies'}}</div>
+    <div class="panel-body">
         <form id="tagsRemoveBulkForm" class="form-horizontal">
             <fieldset>
-                <legend>{{agile_lng_translate 'companies-view' 'remove-tags-from-selected-companies'}}
-                </legend>
+                <!-- <legend>{{agile_lng_translate 'companies-view' 'remove-tags-from-selected-companies'}}
+                </legend> -->
                 <div class="control-group form-group">         
                     <label class="control-label col-sm-2">{{agile_lng_translate 'contacts-view' 'enter-tags'}} <span class="field_req">*</span></label>
                     <div class="controls col-sm-10">
@@ -60,13 +68,15 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-                    <a href="#companies" class="btn btn-sm btn-danger">{{agile_lng_translate 'report-add' 'close'}}</a>
-                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
+                    <a href="#companies" class="btn btn-sm btn-danger btn-default-imp btn-lg-imp ">{{agile_lng_translate 'report-add' 'close'}}</a>
+                    <a href="#" type="submit" id="removeTagsToContactsBulk" class="btn btn-sm btn-primary btn-primary-imp btn-lg-imp">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
                     <span class="save-status"></span>
                 </div>
 </div>
             </fieldset>
         </form>
+        </div>
+        </div>
     </div>
 </div>
 </div>
@@ -75,10 +85,13 @@
 <script id="bulk-actions-leads-tags-remove-template" type="text/html">
 <div class="row">
     <div class="col-md-8">
-        <div class="well">
+    <div class="tab-content wrapper-md">
+    <div class="panel panel-default">
+     <div class="panel-heading">{{agile_lng_translate 'leads-view' 'remove-tags-from-selected-leads'}}</div>
+        <div class="panel-body">
             <form id="tagsRemoveBulkForm" class="form-horizontal">
                 <fieldset>
-                    <legend>{{agile_lng_translate 'leads-view' 'remove-tags-from-selected-leads'}}</legend>
+                   <!--  <legend>{{agile_lng_translate 'leads-view' 'remove-tags-from-selected-leads'}}</legend> -->
                     <div class="control-group form-group">         
                         <label class="control-label col-sm-2">{{agile_lng_translate 'contacts-view' 'enter-tags'}}
                             <span class="field_req">*</span>
@@ -96,14 +109,16 @@
                     <div class="row">
                         <div class="col-sm-offset-2 col-sm-10">
                             <div class="form-actions">          
-                                <a href="#leads" class="btn btn-sm btn-danger">{{agile_lng_translate 'report-add' 'close'}}</a>
-                                <a href="#" type="submit" id="removeTagsToLeadsBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
+                                <a href="#leads" class="btn btn-sm btn-danger btn-default-imp ">{{agile_lng_translate 'report-add' 'close'}}</a>
+                                <a href="#" type="submit" id="removeTagsToLeadsBulk" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'contacts-view' 'remove'}}</a> 
                                 <span class="save-status"></span>
                             </div>
                         </div>
                     </div>
                 </fieldset>
             </form>
+            </div>
+            </div>
         </div>
     </div>
 </div>

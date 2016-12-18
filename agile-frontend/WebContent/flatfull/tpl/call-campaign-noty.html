@@ -13,7 +13,7 @@
 				
 					{{#if autodial}}
 						<div class="pos-rlt tooltip_info pull-left m-r-xs" style="top:-2px;" data-placement="top" title="{{agile_lng_translate 'noty' 'skip-and-call-next-contact'}}"> 
-						<span class="noty_twilio_skip c-p font-weight-600"><i class="fa fa-step-forward btn btn-default btn-xs"></i></span>
+						<span class="noty_twilio_skip c-p font-weight-600"><i class="fa fa-step-forward new-theme-btn btn btn-default btn-xs"></i></span>
 						</div>
 					{{else}}
 							{{#if_equals total_count "1"}}		
@@ -24,12 +24,12 @@
    							{{else}} 
 								{{#if_equals "0" current_count}}
 									<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="{{agile_lng_translate 'note' 'previous'}}">
-										<i class="fa fa-step-backward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+										<i class="fa fa-step-backward btn btn-default btn-xs disabled cam-small-btn new-theme-btn"  style="vertical-align:text-top;"></i>
 									</span>
                     			{{else}}
 								<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="{{agile_lng_translate 'note' 'previous'}}">
 									<a class="noty_twilio_previous c-p" href="#" >
-										<i class="fa fa-step-backward btn btn-default btn-xs cam-small-btn"  style="vertical-align:text-top;"></i>
+										<i class="fa fa-step-backward btn btn-default btn-xs new-theme-btn cam-small-btn"  style="vertical-align:text-top;"></i>
 									</a>
 								</span>
                     			{{/if_equals}}
@@ -37,17 +37,17 @@
 
    							{{#if_equals total_count "1"}}
 								<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="{{agile_lng_translate 'other' 'next'}}">
-									<i class="fa fa-step-forward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+									<i class="fa fa-step-forward new-theme-btn btn btn-default btn-xs disabled cam-small-btn new-theme-btn"  style="vertical-align:text-top;"></i>
 								</span>
    							{{else}} 
 								{{#if_equals total_count temp_count}}        
 									<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="{{agile_lng_translate 'other' 'next'}}">
-										<i class="fa fa-step-forward btn btn-default btn-xs disabled cam-small-btn"  style="vertical-align:text-top;"></i>
+										<i class="fa fa-step-forward new-theme-btn btn btn-default btn-xs disabled cam-small-btn new-theme-btn"  style="vertical-align:text-top;"></i>
 									</span>
     	        				{{else}} 
 									<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="{{agile_lng_translate 'other' 'next'}}">
 										<a class="noty_twilio_next c-p" href="#" >
-											<i class="fa fa-step-forward btn btn-default btn-xs cam-small-btn"  style="vertical-align:text-top;"></i>
+											<i class="fa fa-step-forward new-theme-btn btn btn-default btn-xs cam-small-btn new-theme-btn"  style="vertical-align:text-top;"></i>
 										</a>
 									</span>
             					{{/if_equals}}
@@ -57,7 +57,7 @@
  
 				<span class="m-t-xs text-xs font-thin text-info tooltip_info pos-rlt" style="top:-3px;" title="{{agile_lng_translate 'note' 'exit-froom-the-campaign-and-will-be-redirected-to-contacts'}}">
 						<a id="stop" href="#" >
-							<i class="fa fa-power-off btn btn-default btn-xs cam-small-btn" style="vertical-align:text-top;"></i>
+							<i class="fa fa-power-off btn btn-default btn-xs new-theme-btn cam-small-btn" style="vertical-align:text-top;"></i>
 						</a>
 				</span>	
   				<div class="text-muted block font-normal text-xs"> 
@@ -65,8 +65,8 @@
 						{{#getIndexIncrementByOne current_count}}{{/getIndexIncrementByOne}} of {{total_count}} <span id="totalTime" class="text-muted" style="color:#424242;" data-toggle="tooltip" data-placement="top" title="{{agile_lng_translate 'campaigns' 'call-campaign-duriation'}}">({{totalTimeFormat total_time}})</span>
 					</div>		
 					<div id="pauseCallDiv" class="c-p pos-rlt pull-left m-l-xs" style="display:none;top: -2px;"  data-toggle="tooltip" data-placement="top" title="{{agile_lng_translate 'campaigns' 'pause-current-call'}}">
-						<span id="campaign_pauseCall"><i class='fa fa-pause btn btn-default btn-xs cam-small-btn'></i></span>
-						<span id="campaign_resumeCall" style="display:none;"><i class='fa fa-play btn btn-default btn-xs cam-small-btn'></i></span>
+						<span id="campaign_pauseCall"><i class='fa fa-pause btn btn-default btn-xs new-theme-pausecall-btn cam-small-btn'></i></span>
+						<span id="campaign_resumeCall" style="display:none;"><i class='fa fa-play btn btn-default btn-xs cam-small-btn new-theme-btn'></i></span>
 					</div>
 				</div>
 		   </div>
@@ -131,12 +131,12 @@
 						{{#if_equals call_status "CONNECTED"}}	
 							<span id="pauseDiv" class="pos-rlt tooltip_info" style="top:-2px;" data-placement="top" title="{{agile_lng_translate 'campaign' 'mute-you-current-call'}}">
 							<a id="pause" href="#" class="c-p" data-call_state='pause' >	
-								<span><i class="fa fa-microphone text-sm v-middle btn btn-default btn-xs  w-h-22"></i></span>
+								<span><i class="fa fa-microphone new-theme-microphone-btn text-sm v-middle btn btn-default btn-xs  w-h-22"></i></span>
 							</a>
 							</span>
 							<span id="resumeDiv" class="pos-rlt tooltip_info" style="display:none;top:-2px;" data-placement="top" title="{{agile_lng_translate 'campaign' 'unmute-you-current-call'}}">
 							<a id="resume" href="#" class="c-p" data-call_state='resume'>	
-								<i class="fa fa-microphone-slash text-sm v-middle btn btn-default btn-xs  w-h-22"></i>
+								<i class="fa fa-microphone-slash new-theme-microphone-btn text-sm v-middle btn btn-default btn-xs  w-h-22"></i>
 							</a>
 							</span>
 						{{/if_equals}}
@@ -145,7 +145,7 @@
 
 					{{#if_equals call_status "CONNECTED"}}						
 						<div id="hangup" class="pull-left c-p w-h-20 text-center v-middle p-t-4 text-white  text-11 m-t-n-xxs m-r-xs" style="background:rgb(240, 120, 120);" data-toggle="tooltip" data-placement="top" title="Hangup">
-							<i class="fa fa-headphones cam-call-icon"></i>
+							<i class="fa fa-headphones new-theme-headphone cam-call-icon"></i>
 						</div>
 							<div class="campaign_voicemail_buttons  pull-left pos-rlt m-r-xs" style="top:-2px;"  data-toggle="tooltip" data-placement="top" title="
 							{{agile_lng_translate 'campaigns' 'voicemail'}}"></div>
