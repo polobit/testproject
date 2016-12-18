@@ -2,7 +2,7 @@ body, .h1, .h2, .h3, .h4, .h5,.h6  {
   font-family: "Maison Neue", sans-serif !important;
 }
 body {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.42857143;
   color: #78909c;
   background-color: #f4f8f9;
@@ -82,6 +82,7 @@ form select.form-control{
   border-radius: 4px;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==');
 }
+.form-control{font-size: 13px;}
 .agile-new-theme form .form-control.input-group-addon
 {
   height:40px;
@@ -162,6 +163,7 @@ form select.form-control{
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
   color: #78909c;
+  font-size: 14px;
 }
 .tabs .tab-container .nav-tabs>li:hover>a, .tabs .tab-container .nav-tabs>li:focus>a, .tabs .tab-container .nav-tabs>li.active>a{
   background-color: inherit;
@@ -383,13 +385,13 @@ form select.form-control{
 .navbar-collapse, .app-content, .app-footer {
     margin-left: 239px;
 }
-.agile-new-theme .app-aside-fixed .app-header .navbar-header{height: 70px; line-height: 70px; border-right: 1px solid #e7eef0;}
+.agile-new-theme .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0;}
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
 .agile-new-theme .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
 .agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
-.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px; overflow: inherit;}
+.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
 .agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 55px; }
+.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 9999 !important;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -409,7 +411,7 @@ form select.form-control{
 
 .agile-new-theme #navbar{box-shadow: inherit; height: 70px !important;}
 .agile-new-theme .app-header-fixed{padding-top: 70px;}
-.agile-new-theme .navbar-brand{line-height: 70px;}
+.agile-new-theme .navbar-brand{line-height: 50px;}
 .agile-new-theme #app-aside-folded{top: 18px !important}
 .agile-new-theme .navbar-searchicon{padding: 25px 15px;}
 .agile-new-theme .grid-icon-header {
@@ -436,7 +438,7 @@ a i, a span{vertical-align: inherit;}
 
 .agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{width: auto;}
 .agile-new-theme .agile-menu-dropdown-aside{padding-top: 0px !important}
-.agile-new-theme .navi ul.nav li a{padding-top:12px; padding-bottom: 12px; color:#78909c;}
+.agile-new-theme .navi ul.nav li a{padding-top:9px; padding-bottom: 9px; color:#78909c;}
 .agile-new-theme .nav>li>a:hover, .agile-new-theme .nav>li>a:focus{color: #11a0f8 !important; background-color:inherit;}
 .agile-new-theme .navi ul.nav li a{border-left: 3px solid transparent;}
 .agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
@@ -570,9 +572,6 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 #workflows-top-view .wrapper{
   border-bottom: 0px !important;
-}
-#workflows-top-view .wrapper, #Landingpages-top-view .wrapper-md{
-  padding-bottom: 0px !important;
 }
 #landing-pages-collection-container .panel, #campaign-triggers-list .panel, #forms-list-view .panel{
   background-color: #f4f8f9 !important;
@@ -1820,7 +1819,7 @@ ul#recent-menu-model-list li:nth-child(even){
   background-color: inherit;
 }
 .agile-new-theme .agile-menu-parent-item {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 #basic-addon1{
@@ -2085,3 +2084,7 @@ table .headerSortUp::after, table .headerSortDown::after{
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
+.import-panel-heading .panel-heading{display: none;}
+.import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
+.agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+
