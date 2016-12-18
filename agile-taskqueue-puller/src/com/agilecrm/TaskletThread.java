@@ -68,7 +68,7 @@ public class TaskletThread implements Work
 
 	    if (tasks.size() > 0 && isMailTask(tasks.get(0)))
 	    {
-		EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+	    	EmailGatewayUtil.sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), queueName);
 	    }
 	    else
 	    {
