@@ -1,5 +1,5 @@
 body, .h1, .h2, .h3, .h4, .h5,.h6  {
-  font-family: "Maison Neue" !important;
+  font-family: "Maison Neue", sans-serif !important;
 }
 body {
   font-size: 14px;
@@ -55,12 +55,10 @@ body, * {
 #bulk-action-btns, .tickets-div .panel-heading:first-child{
   background-color: #fff!important;
 }
-.agile-new-theme .tickets-div .panel-heading:first-child{
+.agile-theme-15 .tickets-div .panel-heading:first-child{
   padding: 10px 15px !important;
 }
-/*table td a {
-  color: #263238;; 
-}*/
+
 .bg-light {
   background-color: inherit!important;
 }
@@ -84,7 +82,7 @@ form select.form-control{
   border-radius: 4px;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==');
 }
-.agile-new-theme form .form-control.input-group-addon
+.agile-theme-15 form .form-control.input-group-addon
 {
   height:40px;
   color: #263238;
@@ -95,15 +93,15 @@ form select.form-control{
   background-image: none;
   border: 0px;
 }
-.agile-new-theme form .form-control.input-group-addon span{
+.agile-theme-15 form .form-control.input-group-addon span{
       margin-left: -15px!important;
 }
-.agile-new-theme form .form-control
+.agile-theme-15 form .form-control
 {
   border: 0px;
   background-color: #f4f8f9;
 }
-.agile-new-theme form .form-control:not(textarea)
+.agile-theme-15 form .form-control:not(textarea)
 {
   height:40px;
 }
@@ -114,9 +112,6 @@ form select.form-control{
   border-bottom: 1px solid #dee5e7;
 }
 
-/*.wrapper-md {
-  padding-bottom: 15px
-}*/
 .app:before {
   background: #f4f8f9;
 }
@@ -132,16 +127,9 @@ form select.form-control{
   opacity: inherit;
 }
 
-.i-checks-sm>i {
-  /*display: none;*/
-}
 .r-switch input[type="checkbox"] {
   position: absolute;
 }
-/*
-.i-checks {
-  padding-left: inherit;
-} */
 
 .tabs .tab-container{
   overflow: hidden;
@@ -210,25 +198,25 @@ form select.form-control{
     line-height: 1.5!important;
 }
 
-.agile-new-theme div.cc-emails-st
+.agile-theme-15 div.cc-emails-st
 {
   border: 0px;
 } 
 .bg-white a, button.show-search-dropdown {
   color: #11a0f8;
 }
-.agile-new-theme .btn-addon.btn-sm i
+.agile-theme-15 .btn-addon.btn-sm i
 {
       margin: 0px;
       vertical-align: baseline; 
       display:inline;
       background-color: rgba(0,0,0,0.0);;
 }
-.agile-new-theme .btn-addon i{
+.agile-theme-15 .btn-addon i{
  float: none;
  border-right:0px;
 }
-:not("#bulk-action-btns") .agile-new-theme .btn.dropdown-toggle span
+:not("#bulk-action-btns") .agile-theme-15 .btn.dropdown-toggle span
 {
  color: #fff!important;
 }
@@ -258,9 +246,7 @@ form select.form-control{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
-/*.pull-right .btn.dropdown-toggle span {
-  color: #fff !important;
-}*/
+
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
@@ -283,32 +269,32 @@ form select.form-control{
 #lhs-contact-filter-form i#removeBtn:hover, #lhs-contact-filter-form i#removeBtn:active, #lhs-contact-filter-form i#removeBtn:focus{
   opacity: 1 !important;
 }
-.agile-new-theme .wrapper-md h1, .h1, .agile-new-theme .wrapper-md h2, .h2, .agile-new-theme .wrapper-md h3, .h3{
+.agile-theme-15 .wrapper-md h1, .h1, .agile-theme-15 .wrapper-md h2, .h2, .agile-theme-15 .wrapper-md h3, .h3{
   color: #11a0f8 !important;
   font-weight: 400 !important;
 }
-.agile-new-theme h1, .h1, .agile-new-theme h2, .h2, .agile-new-theme h3, .h3, .agile-new-theme h4, .h4, .agile-new-theme h5, .h5, .agile-new-theme h6, .h6{
+.agile-theme-15 h1, .h1, .agile-theme-15 h2, .h2, .agile-theme-15 h3, .h3, .agile-theme-15 h4, .h4, .agile-theme-15 h5, .h5, .agile-theme-15 h6, .h6{
   color: #263238;
 }
-.agile-new-theme h1, .h1, .agile-new-theme h2, .h2, .agile-new-theme h3, .h3,{
+.agile-theme-15 h1, .h1, .agile-theme-15 h2, .h2, .agile-theme-15 h3, .h3,{
   font-weight: 400;
 }
-.agile-new-theme h1, .h1{
+.agile-theme-15 h1, .h1{
   font-size: 24px;
 }
-.agile-new-theme h2, .h2{
+.agile-theme-15 h2, .h2{
   font-size: 28px;
 }
-.agile-new-theme h3, .h3{
+.agile-theme-15 h3, .h3{
   font-size: 24px;
 }
-.agile-new-theme h4, .h4{
+.agile-theme-15 h4, .h4{
   font-size: 14px;
 }
-.agile-new-theme h5, .h5{
+.agile-theme-15 h5, .h5{
   font-size: 13px;
 }
-.agile-new-theme h6, .h6{
+.agile-theme-15 h6, .h6{
   font-size: 12px;
 } 
 #contact-sorter .sort-field-txt{
@@ -319,12 +305,6 @@ form select.form-control{
   color: #58666e!important;
   font-size: 13px !important;
 }
-/*#filter-list .btn.btn-sm{
-  padding: 0px !important;
-}*/
-/*#filter-list .btn.btn-sm span{
-  color: #58666e!important;
-}*/
 
 #contact-sorter .btn.btn-sm{
   padding: 0px !important;
@@ -360,54 +340,14 @@ form select.form-control{
 }
 
 /** Table CSS **/
-/*.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
-  border-top: 0px !important; 
-  background-color: transparent !important;
-}
-.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
-     border-top: none !important; 
-     padding: 0px !important; 
-} 
-.agile-new-theme #content table thead tr{
-  background-color: #f4f8f9 !important;
-}
-agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
-  padding-top: 3px !important;
-}
-.agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
-  padding-left: 8px !important;
-}
-.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td{
-   border-top: none !important;
-   padding: 10px 15px !important;
-}
-.table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
-    padding: 10px 15px !important;
-}
-.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr{
-  border-top: 10px solid #f4f8f9 !important;
-  background-color: #fff !important;
-}*/
 
-.agile-new-theme .tickets-div table.ticket-data>tbody>tr{
+.agile-theme-15 .tickets-div table.ticket-data>tbody>tr{
   border-top: inherit !important;
   background: inherit !important;
 }
-.agile-new-theme .tickets-div table.ticket-data>tbody>tr>td{
+.agile-theme-15 .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
 }
-
-/*#content table.fc-header>tbody>tr:first-child{
-  border-top: none !important;
-}*/
-/*.agile-new-theme #content table>thead>tr>th{
-  padding: 10px 15px 15px 15px !important;
-  border-top: none !important;
-  border-bottom: none !important;
-  text-transform: uppercase !important;
-  color: #78909c !important;
-  font-size: 12px !important;
-}*/
 /** End of table CSS **/
 
 .img-inital{
@@ -415,12 +355,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
   height: 42px!important;
   width: 42px!important;
 }
-/*.table-striped>tbody>tr:nth-child(odd)>td{
-  background-color: #fff !important;
-}*/
-/*#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
-  background-color: #e7f6ff !important;
-}*/
+
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
 }
@@ -428,35 +363,16 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-/*#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
-  display: none !important;
-}*/
+
 #documents_collection_container .panel, #deals-new-list-view .panel{
   border: none !important;
 }
-/*#documents_collection_container .panel-footer{
-  border-top: 10px solid #f4f8f9 !important;
-}*/
 .hbox .col.b-r{
   border-right: none;
 }
 .hbox .col.b-l{
   border-left: none;
 }
-/*.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
-    background-color: rgba(17, 160, 248, 0.1);
-    color: #11a0f8!important;
-}
-.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
-    background-color: rgba(17, 160, 248, 0.2);
-    color: #11a0f8!important;
-}*/
-/*#documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
-  padding-bottom: 0px !important;
-}*/
-/*#task-list-based-condition .panel-heading label:first-child{
-  padding-left: 0px !important;
-}*/
 #task-list-based-condition .panel, .panel-heading{
   border: none !important;
 }
@@ -467,46 +383,46 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .navbar-collapse, .app-content, .app-footer {
     margin-left: 239px;
 }
-.agile-new-theme .app-aside-fixed .app-header .navbar-header{height: 70px; line-height: 70px; border-right: 1px solid #e7eef0;}
+.agile-theme-15 .app-aside-fixed .app-header .navbar-header{height: 70px; line-height: 70px; border-right: 1px solid #e7eef0;}
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
-.agile-new-theme .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
-.agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
-.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px; overflow: inherit;}
-.agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
+.agile-theme-15 .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
+.agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
+.agile-theme-15 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 70px; overflow: inherit;}
+.agile-theme-15 .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
 .app-aside-fixed:not(.app-aside-dock) aside{overflow-y:auto; padding-bottom: 55px; }
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
-.agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi ul li .sales-nav:hover span{
+.agile-theme-15 .app-aside-folded:not(.app-aside-dock) .navi ul li .sales-nav:hover span{
   padding-top:25% !important; 
 }
 
 }/*medis 768 end*/
 
 @media (min-width: 992px){
-.agile-new-theme .app-aside-dock.app-aside-fixed .app-aside {
+.agile-theme-15 .app-aside-dock.app-aside-fixed .app-aside {
    top: 70px;
 }
 .app-aside-dock.app-aside-fixed.app-header-fixed{padding-top: 70px;}
 /*.app-aside-dock .app-aside{background-color: #f6f8f8;}*/
 }/*medis 992 end*/
 
-.agile-new-theme #navbar{box-shadow: inherit; height: 70px !important;}
-.agile-new-theme .app-header-fixed{padding-top: 70px;}
-.agile-new-theme .navbar-brand{line-height: 70px;}
-.agile-new-theme #app-aside-folded{top: 18px !important}
-.agile-new-theme .navbar-searchicon{padding: 25px 15px;}
-.agile-new-theme .grid-icon-header {
+.agile-theme-15 #navbar{box-shadow: inherit; height: 70px !important;}
+.agile-theme-15 .app-header-fixed{padding-top: 70px;}
+.agile-theme-15 .navbar-brand{line-height: 70px;}
+.agile-theme-15 #app-aside-folded{top: 18px !important}
+.agile-theme-15 .navbar-searchicon{padding: 25px 15px;}
+.agile-theme-15 .grid-icon-header {
     color: #11a0f8!important;
     padding-bottom: 25px;
     padding-top: 25px;
 }
-.agile-new-theme .navbar-brand i {
+.agile-theme-15 .navbar-brand i {
     display: inline-block;
     color: #7460ee;
     font-size: 20px;
 }
-.agile-new-theme .navbar-brand span{
+.agile-theme-15 .navbar-brand span{
     display: inline-block;
     color: #263238;
     vertical-align: middle;
@@ -514,26 +430,26 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
     font-size: 15px;
     margin-left: 10px;
 }
-.agile-new-theme .navbar-brand{transition: inherit; -webkit-transition: inherit;}
-.agile-new-theme .free_plan_alert{top: 80px; width:440px; font-size: 12px; padding-top: 8px; padding-bottom: 8px;}
+.agile-theme-15 .navbar-brand{transition: inherit; -webkit-transition: inherit;}
+.agile-theme-15 .free_plan_alert{top: 80px; width:440px; font-size: 12px; padding-top: 8px; padding-bottom: 8px;}
 a i, a span{vertical-align: inherit;}
 
-.agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{width: auto;}
-.agile-new-theme .agile-menu-dropdown-aside{padding-top: 0px !important}
-.agile-new-theme .navi ul.nav li a{padding-top:12px; padding-bottom: 12px; color:#78909c;}
-.agile-new-theme .nav>li>a:hover, .agile-new-theme .nav>li>a:focus{color: #11a0f8 !important; background-color:inherit;}
-.agile-new-theme .navi ul.nav li a{border-left: 3px solid transparent;}
-.agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
-.agile-new-theme .bg-white .agile-menuactive>a.agile-menu-parent-item{color: #11a0f8; background-color: inherit; /*border-left: 3px solid rgb(17, 160, 248);*/}
-.agile-new-theme .bg-white .agile-menuactive>a{color: #11a0f8 !important;}
-.agile-new-theme .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{padding:0px !important;}
+.agile-theme-15 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{width: auto;}
+.agile-theme-15 .agile-menu-dropdown-aside{padding-top: 0px !important}
+.agile-theme-15 .navi ul.nav li a{padding-top:12px; padding-bottom: 12px; color:#78909c;}
+.agile-theme-15 .nav>li>a:hover, .agile-theme-15 .nav>li>a:focus{color: #11a0f8 !important; background-color:inherit;}
+.agile-theme-15 .navi ul.nav li a{border-left: 3px solid transparent;}
+.agile-theme-15 .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
+.agile-theme-15 .bg-white .agile-menuactive>a.agile-menu-parent-item{color: #11a0f8; background-color: inherit; /*border-left: 3px solid rgb(17, 160, 248);*/}
+.agile-theme-15 .bg-white .agile-menuactive>a{color: #11a0f8 !important;}
+.agile-theme-15 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{padding:0px !important;}
 .app-aside-dock .app-aside .agile-menuactive>a.agile-menu-parent-item{border-left:0px; color: #11a0f8; background-color: #e7f6ff; border-top: 3px solid rgb(17, 160, 248);}
-.agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li a:hover{background-color: #f5fbff;}
+.agile-theme-15 .navi ul.nav li.agile-menuactive ul.nav-sub li a:hover{background-color: #f5fbff;}
 .app-aside-dock aside#aside{display: none;}
-.agile-new-theme .app-aside-folded .bg-white .agile-menuactive>a.agile-menu-parent-item{
+.agile-theme-15 .app-aside-folded .bg-white .agile-menuactive>a.agile-menu-parent-item{
   color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);
 }
-.agile-new-theme .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a:hover{background-color: #e7f6ff;}
+.agile-theme-15 .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a:hover{background-color: #e7f6ff;}
 
 /*header and navbar styles end*/
 .app-content-full{
@@ -549,7 +465,7 @@ a i, a span{vertical-align: inherit;}
 .pull-left .btn , .sort-field-txt {
   color:#58666e;
 }
-.agile-new-theme .btn.bg-light{
+.agile-theme-15 .btn.bg-light{
     color: #ffffff!important;
     background-color: #067dc6!important;
     text-decoration: none;
@@ -578,60 +494,51 @@ a i, a span{vertical-align: inherit;}
   display: none !important;
 }
 
-/*table.panel, .panel{
-  border: none !important;
-  -webkit-box-shadow: inherit !important;
-  box-shadow: inherit !important;
-   
-} */
 div#contact-reports-list-view, #task-list-based-condition .panel{
   box-shadow: inherit;
   background-color: inherit;
 }
-.agile-new-theme #contact-reports-list-view .agile-table td{
+.agile-theme-15 #contact-reports-list-view .agile-table td{
   vertical-align: middle !important;
 }
-.agile-new-theme table>tbody>tr>td>label.i-checks.i-checks-sm{
+.agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
 }
-.agile-new-theme #admin-settings-users .panel-heading>div:first-child{
+.agile-theme-15 #admin-settings-users .panel-heading>div:first-child{
   display: none;
 }
-.agile-new-theme #admin-settings-users .panel-heading{
+.agile-theme-15 #admin-settings-users .panel-heading{
   background-color: #f4f8f9 !important;
 }
-.agile-new-theme #custom-fields-accordion table>tbody>tr, #deal-tracks-accordion table>tbody>tr, table#lost-reasons-table>tbody>tr, table#deal-sources-table>tbody>tr, #task-category table>tbody>tr, #account-stats table>tbody>tr{
+.agile-theme-15 #custom-fields-accordion table>tbody>tr, #deal-tracks-accordion table>tbody>tr, table#lost-reasons-table>tbody>tr, table#deal-sources-table>tbody>tr, #task-category table>tbody>tr, #account-stats table>tbody>tr{
   border-top: none !important;
 }
-.agile-new-theme #account-stats .table-bordered>thead>tr>th, #account-stats .table-bordered>tbody>tr>td{
+.agile-theme-15 #account-stats .table-bordered>thead>tr>th, #account-stats .table-bordered>tbody>tr>td{
   border: none !important;
 }
-.agile-new-theme #account-stats table>thead>tr>th{
+.agile-theme-15 #account-stats table>thead>tr>th{
   padding: 15px !important;
 }
-.agile-new-theme #deal-tracks-accordion table>tbody>tr>td{
+.agile-theme-15 #deal-tracks-accordion table>tbody>tr>td{
   padding: 5px !important;
 }
-.agile-new-theme #deal-tracks-accordion .panel-heading{
+.agile-theme-15 #deal-tracks-accordion .panel-heading{
   padding-left: 5px !important;
 }
-/*.agile-new-theme #deal-tracks-accordion .panel-title{
-  color: #11a0f8 !important;
-}*/
-.agile-new-theme #deal-tracks-accordion .panel-body{
+.agile-theme-15 #deal-tracks-accordion .panel-body{
   border-top: none !important;
 }
-.agile-new-theme table tr:last-child{
+.agile-theme-15 table tr:last-child{
   border-bottom: none !important;
 }
-.agile-new-theme table#lost-reasons-table>tbody>tr>td, table.table-bordered, table#deal-sources-table.table-bordered>tbody>tr>td{
+.agile-theme-15 table#lost-reasons-table>tbody>tr>td, table.table-bordered, table#deal-sources-table.table-bordered>tbody>tr>td{
   border: 0 !important;
 }
-.agile-new-theme table#deal-sources-table>tbody>tr>td div.agile-img.avatar{
+.agile-theme-15 table#deal-sources-table>tbody>tr>td div.agile-img.avatar{
   width: 42px !important;
   height: 42px !important;
 }
-.agile-new-theme table#deal-sources-table>tbody>tr>td:nth-child(2)>div{
+.agile-theme-15 table#deal-sources-table>tbody>tr>td:nth-child(2)>div{
   padding-left: 15px !important;
 }
 #documents_collection_container .panel-footer, #workflows-collection-container .panel-footer, #campaign-triggers-list .panel-footer, #email-templates-list-view .panel-footer, #forms-list-view .panel-footer, #landing-pages-collection-container .panel-footer, #webrules-list-view .panel-footer, #push-notify-list-view .panel-footer, .ticket-settings .panel-footer, #contact-reports-list-view .panel-footer, #admin-settings-users .panel-footer, #user-dashboard-list .panel-footer, #voicemail-list .panel-footer{
@@ -641,7 +548,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   margin: 0; 
   margin-left: 0px !important
 } 
-.agile-new-theme table>thead>tr>th>label.i-checks.i-checks-sm{
+.agile-theme-15 table>thead>tr>th>label.i-checks.i-checks-sm{
   /*margin: 0px !important;*/
   padding-bottom: 0px !important;
   vertical-align: middle;
@@ -671,8 +578,6 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 
 #automation-video{margin-right: 15px !important;}
-/*#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}*/
-/*#document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}*/
 .grid-icon-header:hover, .grid-icon-header:focus{background-color: inherit;}
 .nav.navbar-right li a:hover, .nav.navbar-right li a:focus {
     background: inherit;
@@ -684,20 +589,15 @@ header .bg-white a, header button.show-search-dropdown {
 
 .app-aside-dock .app-aside .navi>ul>li>a{border-top: 3px solid transparent;}
 
-/*.agile-new-theme .nav-sub{
-    overflow-y: auto !important;
-    max-height: 470px;
-}*/
-.agile-new-theme .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar {
+.agile-theme-15 .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar {
     width:5px;
 }
  
-.agile-new-theme .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar-track {
-    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+.agile-theme-15 .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar-track {
     background-color: #fff;
 }
  
-.agile-new-theme .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar-thumb {
+.agile-theme-15 .app-aside-fixed:not(.app-aside-dock) aside::-webkit-scrollbar-thumb {
   background-color: #e7eef0;
   border-radius: 14px; 
   -webkit-border-radius: 14px;
@@ -710,15 +610,6 @@ header .bg-white a, header button.show-search-dropdown {
   background-image: none;
   filter: none;
 }
-/*.panel-default .panel-heading
-{
-  background-color : #FFFFFF;
-}*/
-/*.wrapper-md
-{
-  padding-bottom:0px!important;
-  padding-top: 15px;
-}*/
 .route_Portlet
 {
   padding-top:10px;
@@ -801,10 +692,6 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
-/*.agile-new-theme form .form-control.textarea
-{
-  height: 72px;
-}*/
 .multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
 {
   margin-left:0px;
@@ -856,7 +743,7 @@ header .bg-white a, header button.show-search-dropdown {
 }
 
 
-.agile-new-theme #theme-and-layout{
+.agile-theme-15 #theme-and-layout{
     margin-bottom: 20px;
     padding:20px;
     background-color: #fff;
@@ -866,11 +753,7 @@ header .bg-white a, header button.show-search-dropdown {
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
 }
 
-.agile-new-theme .panel-default{
-  /*border: none !important;*/
-}
-
-.agile-new-theme .admin-users .panel-heading, .upload-panel .panel-heading {
+.agile-theme-15 .admin-users .panel-heading, .upload-panel .panel-heading {
     background-color: #e7eef0 !important;
     border: none !important;
     border-radius: 4px 4px 0 0;
@@ -880,32 +763,32 @@ header .bg-white a, header button.show-search-dropdown {
     white-space: nowrap;
   }
 
-.agile-new-theme .agile-theme-image{
+.agile-theme-15 .agile-theme-image{
   width:3em !important;
 }
-.agile-new-theme .agile-theme-image-size{
+.agile-theme-15 .agile-theme-image-size{
   height: 42px !important;
   width: 42px !important;
 }
 
-.agile-new-theme .agile-theme-company-image-size{
+.agile-theme-15 .agile-theme-company-image-size{
   height: 35px !important;
   width: 35px !important;
 }
 
-.agile-new-theme #admin-settings-users-model-list .agile-img{
+.agile-theme-15 #admin-settings-users-model-list .agile-img{
  width: 35px !important; 
 }
 
-.agile-new-theme .tickets-toolbar .filter-name-btn{
+.agile-theme-15 .tickets-toolbar .filter-name-btn{
  color: #11a0f8 !important;
     font-weight: 400 !important;
 }
-.agile-new-theme .tickets-toolbar .toggle-custom-filters{
+.agile-theme-15 .tickets-toolbar .toggle-custom-filters{
   color: #263238 !important;
 }
-.agile-new-theme .tooltip-inner p{color:#fff;}
-.agile-new-theme .tooltip{
+.agile-theme-15 .tooltip-inner p{color:#fff;}
+.agile-theme-15 .tooltip{
   font-family: "Maison Neue" !important;
 }
 
@@ -933,14 +816,14 @@ z-index:1;
   padding-left: 0px;
   padding-right: 0px;
 }
-.agile-new-theme .event-modal{
+.agile-theme-15 .event-modal{
   width: 630px;
 }
-.agile-new-theme #event-time-1 ,.agile-new-theme #event-time-2{
+.agile-theme-15 #event-time-1 ,.agile-theme-15 #event-time-2{
   width: 91px;
 }
 
-.agile-new-theme form .form-control{
+.agile-theme-15 form .form-control{
     padding: 6px 20px;  
 }
 .modal-footer .btn{
@@ -957,100 +840,75 @@ z-index:1;
   background-color: #067dc6!important;
   color: #ffffff;
 }
-/*#data-sync-type a
-{
-  color:#fff!important;
-}*/
 .btn-addon.btn-sm i
 {
   width: 20px;
 }
-/*.wrapper-md.bg-light.b-b
-{
-  padding-top:25px;
-}*/
-/*.js-prev-lge ,.js-prev-lge .checkedMultiCheckbox
-{
-  margin-left:40px;
-}*/
-.agile-new-theme .ticket-collection-container .v-middle.p-l-none:nth-child(4){
+
+.agile-theme-15 .ticket-collection-container .v-middle.p-l-none:nth-child(4){
   width: 60px !important;
 }
-/*.agile-new-theme .ticket-collection-container .v-middle.p-l-none:nth-child(5){
-  padding: 0px 0px 0px 10px !important;
-}*/
-.agile-new-theme #right-pane .tickets-toolbar, #tickets-container div.col.bg-white{
+
+.agile-theme-15 #right-pane .tickets-toolbar, #tickets-container div.col.bg-white{
   background-color: #f4f8f9 !important;
 }
-.agile-new-theme .ticket-collection-container .i-checks.i-checks-sm{
+.agile-theme-15 .ticket-collection-container .i-checks.i-checks-sm{
   margin-top: 0px !important;
 }
-.agile-new-theme .ticket-collection-container table label.i-checks{
+.agile-theme-15 .ticket-collection-container table label.i-checks{
   margin-left: 0px !important;
 }
-.agile-new-theme .tickets-div .panel-heading label.i-checks{
+.agile-theme-15 .tickets-div .panel-heading label.i-checks{
   padding-left: 5px !important;
   vertical-align: middle !important;
 }
-.agile-new-theme .tickets-div .panel-heading .btn.btn-default{
+.agile-theme-15 .tickets-div .panel-heading .btn.btn-default{
   background-color: rgba(17, 160, 248, 0.1) !important;
 }
-.agile-new-theme #tickets-bulk-select div:first-child, .agile-new-theme .ticket-collection-container .table{
+.agile-theme-15 #tickets-bulk-select div:first-child, .agile-theme-15 .ticket-collection-container .table{
   border-top: 5px solid #f4f8f9 !important;
 }
-.agile-new-theme .ticket-showing-no a i{
+.agile-theme-15 .ticket-showing-no a i{
   color: #a7a7a7 !important;
 }
-.agile-new-theme .tickets-div .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
+.agile-theme-15 .tickets-div .btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle){
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
-.agile-new-theme .ticket-collection-container, .tickets-div div.text-center.padder-v.b-t{
+.agile-theme-15 .ticket-collection-container, .tickets-div div.text-center.padder-v.b-t{
   border-top: 10px solid #f4f8f9 !important;
 }
-.agile-new-theme tbody.ticket-single-row-model-list label.i-checks{
+.agile-theme-15 tbody.ticket-single-row-model-list label.i-checks{
   padding-left: 0px !important;
 }
-.agile-new-theme .tickets-div .panel-heading label.i-checks:first-child{
+.agile-theme-15 .tickets-div .panel-heading label.i-checks:first-child{
   padding-left: 0px !important;
   margin-top: 0px !important;
 }
-.agile-new-theme .tickets-div .ticket-collection-row{
+.agile-theme-15 .tickets-div .ticket-collection-row{
   min-height: 0px !important;
 }
-.agile-new-theme .ticket-head-filters .filter-name-btn{
+.agile-theme-15 .ticket-head-filters .filter-name-btn{
   color: #11a0f8 !important;
   font-weight: 400 !important;
   font-size: 22px !important;
 }
-.agile-new-theme .fa-filter, .icon-filter{
+.agile-theme-15 .fa-filter, .icon-filter{
   font-size: 14px !important;
 }
 .no-label-content{
   background-color: white !important;
 }
-.agile-new-theme .ticket-settings .col.panel.wrapper{
+.agile-theme-15 .ticket-settings .col.panel.wrapper{
  /* background-color: #f4f8f9 !important;*/
  background-color: inherit; 
 }
 @media (min-width: 768px){
-.agile-new-theme .table thead tr th {
+.agile-theme-15 .table thead tr th {
     vertical-align: middle !important; 
   }
 }
-/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container table>tbody>tr>td, #campaign-triggers-list table>tbody>tr>td, #email-template-div-id table>tbody>tr>td, #forms-list-view table>tbody>tr>td, #landing-pages-collection-container table>tbody>tr>td, #webrules-list-view table>tbody>tr>td, #push-notify-list-view table>tbody>tr>td, .ticket-settings table>tbody>tr>td{
-  vertical-align: middle !important;
-}
-.agile-new-theme #deals-new-list-view table>thead>tr>th, #documents_collection_container table>thead>tr>th, #workflows-collection-container table>thead>tr>th, #campaign-triggers-list table>thead>tr>th, #email-templates-list-view table>thead>tr>th, #forms-list-view table>thead>tr>th, #landing-pages-collection-container table>thead>tr>th, #webrules-list-view table>thead>tr>th, #push-notify-list-view table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings table>thead>tr>th{
-  vertical-align: bottom !important;
-}
-.agile-new-theme .ticket-settings table>tbody>tr>td:nth-child(3){
-  padding-left: 15px !important;
-}
-.agile-new-theme #ticket-feedback table>tbody>tr>td:first-child>div{
-  width: 40px !important;
-  height: 40px !important;
-}*/
+
 #dashboard-name
 {
   margin-right:7px!important;
@@ -1101,39 +959,31 @@ input.mini-time.ui-timepicker-input{
     font-size: 12px;
 }
 
-/*.portlet_body_calendar>#calendar_container>.fc-content>.fc-view>.fc-border-separate>tbody>tr {
-    line-height: 1.1;
-}*/
-.agile-new-theme .data-block h1,.agile-new-theme .data-block h2,.agile-new-theme .data-block h3,.agile-new-theme .data-block h4,.agile-new-theme .data-block h5,.agile-new-theme .data-block h6 {
+.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,.agile-theme-15 .data-block h4,.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
     line-height: 1.1 !important;
     margin-bottom: 10px !important;
     color: inherit !important;
 }
-.agile-new-theme .data-block p{
+.agile-theme-15 .data-block p{
   margin-bottom: 10px !important;
 }
-.agile-new-theme .workflows-right-body h1, h2, h3, h4, h5, h6{
+.agile-theme-15 .workflows-right-body h1, h2, h3, h4, h5, h6{
   color: #58666e !important;
 }
-.agile-new-theme .triggers-right-body  h1, h2, h3, h4, h5, h6{
+.agile-theme-15 .triggers-right-body  h1, h2, h3, h4, h5, h6{
   color: #58666e !important;
 }
 
-.agile-new-theme p{
+.agile-theme-15 p{
   margin: 0 0 10px !important;
   line-height: 1.42857143 !important;
 }
-
 
 .list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
-
-/*#content .portlet_body_calendar #calendar_container table td, #content .portlet_body_calendar #calendar_container table th {
-  padding: 0px !important;
-}*/
 
 /** Checkbox/Radio CSS **/
 label.i-checks input{
@@ -1219,13 +1069,13 @@ table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-chec
   background-color: #fff !important;
 }
 
-.agile-new-theme #portlets-add-listener #marketing_dashlet .col-md-3{
+.agile-theme-15 #portlets-add-listener #marketing_dashlet .col-md-3{
   display: table;
 }
-.agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(5){
+.agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(5){
   clear: both;
 }
-.agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(4){
+.agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
 }
 ul.leader-board-view li div table tr{
@@ -1237,7 +1087,7 @@ ul.leader-board-view li div table tr td{
      padding: 0px !important; 
 } 
  
-.agile-new-theme .dayContainer {
+.agile-theme-15 .dayContainer {
     float: left;
     line-height: 20px;
     margin-right: 9px;
@@ -1246,35 +1096,35 @@ ul.leader-board-view li div table tr td{
     font-weight: bold;
     margin-top: 5px;
 }
-.agile-new-theme #schedule-preferences .operationTime .mini-time {
+.agile-theme-15 #schedule-preferences .operationTime .mini-time {
     width: 41px !important;
     padding: 3px;
     font-size: 12px;
     font-weight: normal;
 }
-.agile-new-theme #schedule-preferences label.control-label.col-sm-3
+.agile-theme-15 #schedule-preferences label.control-label.col-sm-3
 {
     top: 5px !important;
 }
-.agile-new-theme #online-calendar-content {
+.agile-theme-15 #online-calendar-content {
     margin: 0px !important;
 }
-.agile-new-theme #schedule-preferences .m-t-xs
+.agile-theme-15 #schedule-preferences .m-t-xs
 {
    left: 0px !important;
 }
 
-.agile-new-theme .panel-default .panel-heading {
+.agile-theme-15 .panel-default .panel-heading {
     background-color: #e7eef0 !important;
 }
-.agile-new-theme .panel-default .portlet_header.panel-heading {
+.agile-theme-15 .panel-default .portlet_header.panel-heading {
  background-color: #FFFFFF !important;
 }
 
-.agile-new-theme #task-list-based-condition .task_bulk_action{
+.agile-theme-15 #task-list-based-condition .task_bulk_action{
   background-color: rgba(17, 160, 248, 0.1) !important;
 }
-.agile-new-theme #task-list-based-condition .table-responsive.table-list-view-top-margin{
+.agile-theme-15 #task-list-based-condition .table-responsive.table-list-view-top-margin{
   float: left !important;
 }
 .tag, .tag.btn, .controls .tag.btn{ 
@@ -1402,10 +1252,6 @@ ul.tags-management li.tag{
 {
   margin-right:10px!important;
 }
-/*
-.agile-new-theme form .input-group-addon{
-  padding: 12px 25px !important;
-}*/
 
 #advanced-search-fields-group {
   padding-bottom: 5px;
@@ -1471,11 +1317,6 @@ ul.tags-management li.tag{
    background-color: #11a0f8!important;
   color: #ffffff!important;
 }
-/*.agile-new-theme .btn-addon.btn-sm i:active,.agile-new-theme .btn-addon.btn-sm i:hover,.agile-new-theme .btn-addon.btn-sm i:focus
-{
-    background-color: #067dc6!important;
-    color: #ffffff;
-}*/
 .btn.dropdown-toggle.btn-primary-imp .caret
 {
   color: #ffffff !important;
@@ -1492,7 +1333,7 @@ ul.tags-management li.tag{
 /** End of Bussiness Hours **/
 
 /** Panels **/
-.agile-new-theme .no-panel-border .panel, .agile-new-theme .table-responsive .panel, .agile-new-theme .no-panel-border.panel{
+.agile-theme-15 .no-panel-border .panel, .agile-theme-15 .table-responsive .panel, .agile-theme-15 .no-panel-border.panel{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;
@@ -1506,10 +1347,6 @@ ul.tags-management li.tag{
 #portlets-tasks-model-list tr td:first-child{
   width: 40px !important;
 }
-/*.scroll div[id*="heading"], .scroll>div>div{
-  border-top: none !important;
-  border-bottom: none !important;
-}*/
 .portlet_header h4 span{
   color: #263238 !important;
   font-weight: 400 !important;
@@ -1526,14 +1363,12 @@ ul.tags-management li.tag{
 .goals_portlet_body .portlet-panel.bg-light{
   background-color: #dde6e9 !important;
 }
-/*.agile-new-theme #bulk-action-btns .i-checks{
-  padding-left: 9px !important;
-}*/
+
 table#contacts-table, table#companies {
   -webkit-box-shadow: none !important; 
   box-shadow: none !important; 
 }
-.agile-new-theme .no-panel-border .panel-footer{
+.agile-theme-15 .no-panel-border .panel-footer{
   background-color: #f4f8f9;
 }
 #dialler-phone-number-form #dail_phone_number{
@@ -1547,11 +1382,11 @@ table#contacts-table, table#companies {
 #browseBtn{
   margin-top:0px !important;
 }
-.agile-new-theme #phoneLogForm .input-group .form-control{
+.agile-theme-15 #phoneLogForm .input-group .form-control{
     padding: 6px 12px !important;   
     color: #78909c; 
 }
-.agile-new-theme #phoneLogForm .input-group .input-group-btn .btn{
+.agile-theme-15 #phoneLogForm .input-group .input-group-btn .btn{
     color:#78909c !important;  
 }
 #contact-add-phone-span .contact_phone_add{margin-left: 7px !important; line-height: 40px; height: 40px !important;}
@@ -1560,22 +1395,22 @@ table#contacts-table, table#companies {
 #browseBtn{
   margin-top:0px !important;
 }
-.agile-new-theme .agile-page-header{padding: 20px 20px 10px !important;}
-.agile-new-theme .agile-p-t-none{padding-top: 0px !important;}
-.agile-new-theme .agile-p-t-xs{padding-top: 5px !important;}
-.agile-new-theme .agile-p-t-sm{padding-top: 10px !important;}
-.agile-new-theme .agile-p-t{padding-top: 15px !important;}
+.agile-theme-15 .agile-page-header{padding: 20px 20px 10px !important;}
+.agile-theme-15 .agile-p-t-none{padding-top: 0px !important;}
+.agile-theme-15 .agile-p-t-xs{padding-top: 5px !important;}
+.agile-theme-15 .agile-p-t-sm{padding-top: 10px !important;}
+.agile-theme-15 .agile-p-t{padding-top: 15px !important;}
 
-.agile-new-theme .agile-pos-t-none{top: 0px;}
-.agile-new-theme .agile-pos-t-xs{top: 5px;}
-.agile-new-theme .agile-pos-t-sm{top: 10px;}
-.agile-new-theme .agile-pos-t{top: 15px;}
+.agile-theme-15 .agile-pos-t-none{top: 0px;}
+.agile-theme-15 .agile-pos-t-xs{top: 5px;}
+.agile-theme-15 .agile-pos-t-sm{top: 10px;}
+.agile-theme-15 .agile-pos-t{top: 15px;}
 
 #tasks-list-template .list-area-wrapper.m-t-n-md{margin-top: 0px;}
 
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus{background-color: inherit;}
-.agile-new-theme .app-aside-dock.app-aside-fixed .app-header .navbar-header{border-right: 0px;}
-.agile-new-theme table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
+.agile-theme-15 .app-aside-dock.app-aside-fixed .app-header .navbar-header{border-right: 0px;}
+.agile-theme-15 table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
     width: 20px !important;
     height: 20px !important;
     margin-top: 3px !important;
@@ -1584,7 +1419,7 @@ table#contacts-table, table#companies {
   border-bottom: 0px;
 }
 
-.agile-new-theme #task-list-based-condition .slate-content h3{
+.agile-theme-15 #task-list-based-condition .slate-content h3{
   margin-top: 20px !important;
   margin-bottom: 10px !important;
   color: rgb(88, 102, 110) !important;
@@ -1681,7 +1516,7 @@ color:#0d1114 !important;
 }
 
 /*Contact Single Row Image Fix Start*/
-.agile-new-theme table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
+.agile-theme-15 table.table-compact>tbody>tr>td .agile-theme-image-size, table.table-compact>tbody>tr>td .agile-theme-company-image-size{
   width: 20px !important;
   height: 20px !important;
   margin-top: 3px !important;
@@ -1736,11 +1571,11 @@ color:#0d1114 !important;
 /*end of call campaign*/
 
 
-.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+.agile-theme-15 .portlet_body .highcharts-tooltip>span table tr{
   border-top: 0px !important; 
   background-color: transparent !important;
 }
-.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
+.agile-theme-15 .portlet_body .highcharts-tooltip>span table tr td{
      border-top: none !important; 
      padding: 0px !important; 
 } 
@@ -1751,16 +1586,10 @@ color:#0d1114 !important;
 #content .portlet_body_calendar #calendar_container .agile-table td, #content .portlet_body_calendar #calendar_container .agile-table th {
   padding: 0px !important;
 }
-/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container .agile-table>tbody>tr>td, #campaign-triggers-list .agile-table>tbody>tr>td, #email-template-div-id .agile-table>tbody>tr>td, #forms-list-view .agile-table>tbody>tr>td, #landing-pages-collection-container .agile-table>tbody>tr>td, #webrules-list-view .agile-table>tbody>tr>td, #push-notify-list-view .agile-table>tbody>tr>td, .ticket-settings .agile-table>tbody>tr>td{
-  vertical-align: middle !important;
-}*/
-/*.agile-new-theme #deals-new-list-view .agile-table>thead>tr>th, #documents_collection_container .agile-table>thead>tr>th, #workflows-collection-container .agile-table>thead>tr>th, #campaign-triggers-list .agile-table>thead>tr>th, #email-templates-list-view .agile-table>thead>tr>th, #forms-list-view .agile-table>thead>tr>th, #landing-pages-collection-container .agile-table>thead>tr>th, #webrules-list-view .agile-table>thead>tr>th, #push-notify-list-view .agile-table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings .agile-table>thead>tr>th{
-  vertical-align: bottom !important;
-}*/
-.agile-new-theme .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
+.agile-theme-15 .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
-.agile-new-theme #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
   width: 40px !important;
   height: 40px !important;
 }
@@ -1788,7 +1617,7 @@ color:#0d1114 !important;
 .table-striped>tbody>tr:nth-child(odd)>td{
   background-color: #fff !important;
 }
-.agile-new-theme #content .agile-table>thead>tr>th{
+.agile-theme-15 #content .agile-table>thead>tr>th{
   padding: 10px 15px 15px 15px !important;
   border-top: none !important;
   border-bottom: none !important;
@@ -1798,31 +1627,28 @@ color:#0d1114 !important;
 }#content .agile-table.fc-header>tbody>tr:first-child{
   border-top: none !important;
 }
-.agile-new-theme .portlet_body .highcharts-tooltip>span .agile-table tr{
+.agile-theme-15 .portlet_body .highcharts-tooltip>span .agile-table tr{
   border-top: 0px !important; 
   background-color: transparent !important;
 }
-.agile-new-theme .portlet_body .highcharts-tooltip>span .agile-table tr td{
+.agile-theme-15 .portlet_body .highcharts-tooltip>span .agile-table tr td{
      border-top: none !important; 
      padding: 0px !important; 
 } 
-.agile-new-theme #content .agile-table thead tr{
+.agile-theme-15 #content .agile-table thead tr{
   background-color: #f4f8f9 !important;
 }
-/*.agile-new-theme .agile-table>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
-  padding-top: 3px !important;
-}*/
-.agile-new-theme #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>a{
+.agile-theme-15 #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view .agile-table>tbody>tr>td:nth-child(2)>a{
   padding-left: 8px !important;
 }
-.agile-new-theme #content .agile-table>tbody>tr>td{
+.agile-theme-15 #content .agile-table>tbody>tr>td{
    border-top: none !important;
    padding: 10px 15px !important;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
 }
-.agile-new-theme #content .agile-table>tbody>tr{
+.agile-theme-15 #content .agile-table>tbody>tr{
   border-top: 10px solid #f4f8f9 !important;
   background-color: #fff !important;
 }
@@ -1832,22 +1658,9 @@ color:#0d1114 !important;
 #content  .agile-table .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
   background-color: #e7f6ff !important;
 }
-/*.agile-new-theme #content #contacts-portlets .agile-table>tbody>tr{
-  border-top: none !important;
-}*/
-.agile-new-theme #content .portlet_body .agile-table>tbody>tr{
+.agile-theme-15 #content .portlet_body .agile-table>tbody>tr{
   border-top: none !important;
 }
-/*.tabs .tab-container{
-  margin-bottom: 0px !important;
-}
-.tabs .tab-content{
-    padding: 15px;
-    background-color: #fff;
-    border: 1px solid #dee5e7;
-    border-top-width: 0;
-    border-radius: 0 0 2px 2px;
-}*/
 
 /***** END TABLES ********/
  
@@ -1864,7 +1677,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
-.agile-new-theme .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
  
@@ -1958,11 +1771,6 @@ table.agile-table>tbody>tr>td{
   padding: 6px 12px !important;
 }
 
-/*.btn-group>.btn:last-child:not(:first-child){
-  border-top-left-radius : 4px;
-  border-bottom-left-radius : 4px;
-}*/
-
 /* star of filters*/
 #contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
     padding-right: 5px !important; 
@@ -2010,7 +1818,7 @@ ul.dashboard-search-scroll-bar li:hover, ul.dashboard-search-scroll-bar li:activ
 ul#recent-menu-model-list li:nth-child(even){
   background-color: inherit;
 }
-.agile-new-theme .agile-menu-parent-item {
+.agile-theme-15 .agile-menu-parent-item {
     font-size: 16px;
 }
 
@@ -2031,29 +1839,6 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
-/*
-#online-calendar-content .btn-primary
-{
-    background-color: rgba(17, 160, 248, 0.1)!important;
-    color: #11a0f8!important;
-}
-#notificationsForm .btn-primary , #theme-and-layout .btn-primary , #settings-user-prefs-tab-content .btn-primary
-{
-    background-color: rgba(17, 160, 248, 0.1)!important;
-    color: #11a0f8!important;
-}
-#admin-prefs-tabs-content .btn-primary
-{
-    background-color: rgba(17, 160, 248, 0.1)!important;
-    color: #11a0f8!important;
-    font-size: 14px; 
-    margin-left:10px;
-}*/
-/*.save{
- 
-      background-color: #11a0f8!important;
-      color: #ffffff!important;
-}*/
 #contact-tab-content #send-new-email .icon-envelope
 {
   top:-1px;
@@ -2131,24 +1916,24 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
-.agile-new-theme #settings-milestones-tab-content #lost-reasons-table > tbody>tr{
+.agile-theme-15 #settings-milestones-tab-content #lost-reasons-table > tbody>tr{
       border-top: 1px solid #eaeff0 !important;
 }
-.agile-new-theme #settings-milestones-tab-content #deal-sources-table > tbody>tr{
+.agile-theme-15 #settings-milestones-tab-content #deal-sources-table > tbody>tr{
    border-top: 1px solid #eaeff0 !important;
 }
-.agile-new-theme #marketing-previlages div>div>div {
+.agile-theme-15 #marketing-previlages div>div>div {
     padding-top: 10px !important;
 }
 
-.agile-new-theme #service-previlages div>div>div {
+.agile-theme-15 #service-previlages div>div>div {
     padding-top: 10px !important;
 }
 
-.agile-new-theme #marketing-previlages div {
+.agile-theme-15 #marketing-previlages div {
     margin-top: 0px !important;
 }
-.agile-new-theme #service-previlages div {
+.agile-theme-15 #service-previlages div {
     margin-top: 0px !important;
   }
 #settings-widgets-tab-content .btn-default , #settings-widgets-tab-content .btn-danger ,  #settings-widgets-tab-content .btn-primary, #widget-settings-tab-pane .btn-primary , #widget-settings-tab-pane .btn-default,#widget-settings-tab-pane .btn-danger
@@ -2223,7 +2008,7 @@ table .headerSortUp::after, table .headerSortDown::after{
   margin-bottom:10px;
 }
 
-.agile-new-theme .mce-btn .mce-txt {
+.agile-theme-15 .mce-btn .mce-txt {
   line-height: normal;
 }
 .user-add-m-sm {

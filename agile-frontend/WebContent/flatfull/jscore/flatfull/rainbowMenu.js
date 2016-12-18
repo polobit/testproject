@@ -32,6 +32,7 @@ function initializeThemeSettingsListeners(){
 				if(true)
 				{
 					window.location.reload(true);
+					return;
 				}
 				enable_save_button($(saveBtn));
 			},
@@ -102,11 +103,11 @@ $('#theme-and-layout').on('change', '#page_size', function(e){
 
 //retrieve the current radio button value	
 $('#theme-and-layout').on('change', '.magicMenu input:radio', function(e){
-		if($(this).val() == 15)
-			$("html").addClass("theme-15");
-		else
-			$("html").removeClass("theme-15");
 		CURRENT_USER_PREFS.theme = $(this).val();
+
+		// Handle agile new theme settings
+		handleNewThemeSettings();
+		
 		$(".theme-save-status").css("display","inline");
 		var asideClassName = $(this).attr("target-aside-class");
 		var logoClassName = $(this).attr("target-logo-class");
@@ -229,5 +230,15 @@ $("#mobile-menu-settings").on("click",function(){
 });
 	
 
-	 
+function handleNewThemeSettings() {
 	
+	// flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>
+	if(CURRENT_USER_PREFS.theme == "15")
+	{
+		$('link[data-agile-theme="15"]').removeAttr('disabled');
+	}
+	else 
+	{
+		$('link[data-agile-theme="15"]').attr('disabled', 'disabled');
+	}
+}
