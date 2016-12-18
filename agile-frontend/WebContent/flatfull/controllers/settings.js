@@ -1344,6 +1344,11 @@ var SettingsRouter = Backbone.Router
 										  return;
 									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
+
+									// Check position for new theme and hide top menu option for new one
+									if(CURRENT_USER_PREFS.theme == "15")
+										$("#menuPosition option[value='top']").hide();
+
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
 									$("#layout").val(CURRENT_USER_PREFS.layout);

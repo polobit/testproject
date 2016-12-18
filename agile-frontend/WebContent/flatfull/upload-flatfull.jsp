@@ -205,7 +205,7 @@ var upload = window.opener._Agile_Resources_Json.upload_window['upload-img-error
 </head>
 
 
-<body class='wrapper-md <%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme");%>' ng-app="app" ng-controller="Ctrl">
+<body class='wrapper-md <%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme agile-theme-15");%>' ng-app="app" ng-controller="Ctrl">
 
 <br/>
 <div class="row">

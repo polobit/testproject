@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.HomeUtil"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.user.access.AdminPanelAccessScopes"%>
 <%@page import="com.itextpdf.text.log.SysoCounter"%>
@@ -44,9 +45,32 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
+<%
+    //Check if it is being access directly and not through servlet
+if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+response.sendRedirect("/login");
+return;
+}
 
+DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
-<html class="theme-15 agile-service-theme">
+AddOn addOn = AddOnUtil.getAddOn();
+
+System.out.println("Domain user " + domainUser);
+
+ObjectMapper mapper = new ObjectMapper();
+
+String panel = request.getParameter("sp");
+if(panel == null)
+  panel = "false";
+String clientIP = request.getRemoteAddr();
+
+// Get current user prefs
+UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
+%>
+
+<html class="<%=HomeUtil.getNewThemeClasses(request, domainUser, currentUserPrefs)%>">
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
@@ -85,31 +109,6 @@ pageEncoding="UTF-8"%>
 
 
 <%
-    //Check if it is being access directly and not through servlet
-if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
-response.sendRedirect("/login");
-return;
-}
-
-
-
-
-DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
-AddOn addOn = AddOnUtil.getAddOn();
-
-System.out.println("Domain user " + domainUser);
-
-ObjectMapper mapper = new ObjectMapper();
-
-String panel = request.getParameter("sp");
-if(panel == null)
-  panel = "false";
-String clientIP = request.getRemoteAddr();
-
-// Get current user prefs
-UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 
 //Update workflow entities if they are not initialized
 //with new is_disabled property
@@ -211,13 +210,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
-<link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
-<link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
-<link href="flatfull/css/material-theme/css/style.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
-<link href="flatfull/css/material-theme/css/agile-theme.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
-<link href="flatfull/css/material-theme/css/dynamic-colors.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" />
-
-
+<%
+	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
+%>
+<link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -341,7 +337,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme");%>'>
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("");%>'>
 
 <script type="text/javascript">
 function isIE() {

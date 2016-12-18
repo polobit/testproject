@@ -32,6 +32,7 @@ function initializeThemeSettingsListeners(){
 				if(true)
 				{
 					window.location.reload(true);
+					return;
 				}
 				enable_save_button($(saveBtn));
 			},
@@ -102,11 +103,11 @@ $('#theme-and-layout').on('change', '#page_size', function(e){
 
 //retrieve the current radio button value	
 $('#theme-and-layout').on('change', '.magicMenu input:radio', function(e){
-		if($(this).val() == 15)
-			$("html").addClass("theme-15");
-		else
-			$("html").removeClass("theme-15");
 		CURRENT_USER_PREFS.theme = $(this).val();
+
+		// Handle agile new theme settings
+		handleNewThemeSettings();
+		
 		$(".theme-save-status").css("display","inline");
 		var asideClassName = $(this).attr("target-aside-class");
 		var logoClassName = $(this).attr("target-logo-class");
@@ -229,5 +230,28 @@ $("#mobile-menu-settings").on("click",function(){
 });
 	
 
-	 
+function handleNewThemeSettings() {
 	
+	$("html").removeClass (function (index, css) {
+    	return (css.match (/(^|\s)agile-theme-\S+/g) || []).join(' ');
+	});
+
+	// Show top menu option
+	$("#menuPosition option[value='top']").show();
+	if(CURRENT_USER_PREFS.theme == "15")
+	{
+		// Hide top menu option
+		if($("#menuPosition").val() == "top")
+			$("#menuPosition").val('leftcol').trigger("change");			
+		
+		$("#menuPosition option[value='top']").hide();
+
+		$('link[data-agile-theme="15"]').removeAttr('disabled');
+		$("head").append($('link[data-agile-theme="15"]')[0]);
+		$("html").addClass("agile-theme-15 agile-theme-" + CURRENT_DOMAIN_USER.role);
+	}
+	else 
+	{
+		$('link[data-agile-theme="15"]').attr('disabled', 'disabled');
+	}
+}
