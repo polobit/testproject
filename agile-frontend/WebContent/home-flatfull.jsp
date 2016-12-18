@@ -337,7 +337,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme agile-theme-15");%>'>
 
 <script type="text/javascript">
 function isIE() {
