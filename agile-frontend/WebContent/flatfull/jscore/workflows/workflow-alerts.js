@@ -149,10 +149,10 @@ function send_verify_email(el)
 
 					if(!isValidDKIM){
 						if($('#verify-email-form').find('div .help-inline').length == 0 ){
-							$('#verify-email-form').find('span.controls').append('<span for="email" generated="true" class="help-inline"><p>Please configure <a style="color: #19a9d5;!important" onclick="popupEmailVerify();">DKIM and SPF</a> to proceed.</p></span>');
+							$('#verify-email-form').find('span.controls').append('<span for="email" generated="true" class="help-inline"><p>Please configure <a href="#analytics-code" target="_blank" style="color: #19a9d5;!important">DKIM and SPF</a> to proceed.</p></span>');
 						}
 						else{
-							$('#verify-email-form').find('span.controls .help-inline').html('<p>Please configure <a style="color: #19a9d5;!important" onclick="popupEmailVerify();">DKIM and SPF</a> to proceed.</p>').show();
+							$('#verify-email-form').find('span.controls .help-inline').html('<p>Please configure <a href="#analytics-code" target="_blank" style="color: #19a9d5;!important">DKIM and SPF</a> to proceed.</p>').show();
 						}
 						$('#verify-email-send').attr('disabled', false).text('Send verification Email');
 
@@ -373,13 +373,3 @@ function isGlobalDomain(domain){
     }
     return false;
 }
-
-function popupEmailVerify(){
-            $("#workflow-verify-email").modal("hide");
-           
-          // window.location.hash="#contacts";
-           Backbone.history.navigate("#api-analytics" , {
-                trigger: true
-            });           
-}
-
