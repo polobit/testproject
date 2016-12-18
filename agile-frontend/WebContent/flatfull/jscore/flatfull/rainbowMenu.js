@@ -232,11 +232,16 @@ $("#mobile-menu-settings").on("click",function(){
 
 function handleNewThemeSettings() {
 	
+	$("html").removeClass (function (index, css) {
+    	return (css.match (/(^|\s)agile-theme-\S+/g) || []).join(' ');
+	});
+
 	// flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>
 	if(CURRENT_USER_PREFS.theme == "15")
 	{
 		$('link[data-agile-theme="15"]').removeAttr('disabled');
 		$("head").append($('link[data-agile-theme="15"]')[0]);
+		$("html").addClass("agile-theme-15 agile-theme-" + CURRENT_DOMAIN_USER.role);
 	}
 	else 
 	{
