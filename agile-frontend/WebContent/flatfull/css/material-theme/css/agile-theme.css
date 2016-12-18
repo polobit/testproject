@@ -391,7 +391,7 @@ form select.form-control{
 .agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
 .agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
 .agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 9999 !important;}
+.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 1035 !important;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -2085,6 +2085,6 @@ table .headerSortUp::after, table .headerSortDown::after{
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
 .import-panel-heading .panel-heading{display: none;}
-.import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
+.import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important; clear: both;}
 .agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
-
+.plan-collection-in.selected-plan .btn-plan:hover, .plan-collection-in.selected-plan .btn-plan:active{color: #fff !important;}
