@@ -67,6 +67,16 @@ String clientIP = request.getRemoteAddr();
 
 // Get current user prefs
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+// Change Prefs for requested new theme
+String uiVersion = request.getParameter("ui");
+if(StringUtils.isNotBlank(uiVersion) && uiVersion.equalsIgnoreCase("v2")) {
+	currentUserPrefs.theme = "15";
+	String menuPosition = currentUserPrefs.menuPosition;
+	if(StringUtils.isNotBlank(menuPosition) && menuPosition.equalsIgnoreCase("top"))
+		currentUserPrefs.menuPosition = "leftcol";
+}
+	
+
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
 
