@@ -2081,10 +2081,13 @@ table .headerSortUp::after, table .headerSortDown::after{
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
 #TrackingTab.nav li.active a{background-color: rgba(17,160,248,0.2);color: #11a0f8 !important;}
 #setting-email-prefs-tab-content .btn-default,#setting-email-prefs-tab-content .btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
+<<<<<<< HEAD
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
-
+#sync-app-data p{
+  padding: 10px 15px;
+}
