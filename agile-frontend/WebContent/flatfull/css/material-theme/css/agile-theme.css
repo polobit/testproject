@@ -1198,7 +1198,7 @@ table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   display: table;
 }
 .agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(5){
-  clear: both;
+  clear: inherit;
 }
 .agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
@@ -2269,7 +2269,6 @@ table .headerSortUp::after, table .headerSortDown::after{
   font-size: 16px;
 }
 #setting-email-prefs-tab-content .btn-default,#setting-email-prefs-tab-content .btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
-<<<<<<< HEAD
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
