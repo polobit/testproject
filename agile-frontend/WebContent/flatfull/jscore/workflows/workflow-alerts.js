@@ -126,9 +126,55 @@ function send_verify_email(el)
 		var json = serializeForm("verify-email-form");
 		
 		if(!json)
-			return;
+			return;;
+
+		var emailDomain = getEmailDomain(json.email);
 		
-		$.ajax({
+		if(!isGlobalDomain(emailDomain)){
+			
+			varifyWhiteLebal(emailDomain, function(data)
+				{
+					var isValidDKIM = true;
+
+					if(data){
+						$.each(data, function(i,value){
+							if(value.valid == false){
+								isValidDKIM = false;
+								}
+	            			});
+					}
+					else{
+						isValidDKIM = false;
+					}
+
+					if(!isValidDKIM){
+						if($('#verify-email-form').find('div .help-inline').length == 0 ){
+							$('#verify-email-form').find('span.controls').append('<span for="email" generated="true" class="help-inline"><p>Please configure <a style="color: #19a9d5;!important" onclick="popupEmailVerify();">DKIM and SPF</a> to proceed.</p></span>');
+						}
+						else{
+							$('#verify-email-form').find('span.controls .help-inline').html('<p>Please configure <a style="color: #19a9d5;!important" onclick="popupEmailVerify();">DKIM and SPF</a> to proceed.</p>').show();
+						}
+						$('#verify-email-send').attr('disabled', false).text('Send verification Email');
+
+						return;
+					}
+					else
+					{
+						verify_from_email(json);
+					}
+				});	
+		}
+		else
+		{
+			verify_from_email(json);
+		}
+		
+	});
+}
+
+function verify_from_email(json)
+{
+	$.ajax({
 			url: 'core/api/emails/verify-from-email',
 			type: 'POST',
 			data: json,
@@ -151,7 +197,7 @@ function send_verify_email(el)
 				$('#verify-email-send').removeAttr('disabled');
 				
 				if(response.responseText == 'Email not verified yet.')
-				{
+				{ 
 					// Hide form elements
 					$(".verification-msg").hide();
 			    
@@ -165,11 +211,9 @@ function send_verify_email(el)
 					return;
 			     }
 
-				$('#workflow-verify-email').modal('hide');
-			}
-		});
-		
-	});
+					$('#workflow-verify-email').modal('hide');
+				}
+			});
 }
 
 function unsubscribe_contact()
@@ -305,3 +349,37 @@ function resubscribe()
 	});
 
 }
+
+function varifyWhiteLebal(emailDomain, callback){
+	accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate?emailDomain='+emailDomain, 
+              		function(data){ 
+              			
+              			if(callback && typeof (callback) == "function")
+              				callback(data);
+              		});
+}
+
+function getEmailDomain(email){
+	var email_string_array = email.split("@");
+	var domain_string_location = email_string_array.length -1;
+	return email_string_array[domain_string_location];
+}
+
+function isGlobalDomain(domain){
+	var validDomains = ["gmail.com","yahoo.com","outlook.com","aol.com","hotmail.com"];
+	for(var index = 0 ; index < validDomains.length ; index++){
+            if(validDomains[index] == domain)
+            	return true;
+    }
+    return false;
+}
+
+function popupEmailVerify(){
+            $("#workflow-verify-email").modal("hide");
+           
+          // window.location.hash="#contacts";
+           Backbone.history.navigate("##api-analytics" , {
+                trigger: true
+            });           
+}
+
