@@ -2080,7 +2080,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-color: #fff;
     background-image: inherit;
     border-radius: 4px;
-    /*border: inherit;*/
+    border: inherit;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
    #owner,#source,#track{
@@ -2088,6 +2088,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-color: #fff;
     background-image: inherit;
     border-radius: 4px;
+    border: inherit;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
   #campaign-reports-select .select-new-theme-nopanel{
@@ -2271,12 +2272,21 @@ table .headerSortUp::after, table .headerSortDown::after{
   font-size: 16px;
 }
 #setting-email-prefs-tab-content .btn-default,#setting-email-prefs-tab-content .btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 840b4493632b8bf6cde8d2a554821026cf0df81a
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+
 #sync-app-data p{
   padding: 10px 15px;
+}
+
+.import-panel-heading .data-block h4,.dash_tabview  .data-block h4{
+  color: #263238 !important;
 }
