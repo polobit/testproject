@@ -1073,11 +1073,9 @@ table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-chec
 .agile-new-theme #portlets-add-listener #marketing_dashlet .col-md-3{
   display: table;
 }
-.agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(5){
-  clear: both;
-}
 .agile-new-theme #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
+  clear: both;
 }
 ul.leader-board-view li div table tr{
   border-top: 0px !important; 
