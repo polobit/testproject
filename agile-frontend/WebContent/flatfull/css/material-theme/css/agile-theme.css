@@ -472,10 +472,10 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 }
 .agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0;}
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
-.agile-new-theme .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
-.agile-new-theme .app-aside-folded .app-aside, .agile-new-theme .app-aside-folded .navbar-header, .agile-new-theme .app-aside-folded .app-aside .fixedicons{width: 60px;}
-.agile-new-theme .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
-.agile-new-theme .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
+.agile-theme-15 .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
+.agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
+.agile-theme-15 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
+.agile-theme-15 .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
 .app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 1035 !important;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
@@ -593,6 +593,9 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 .agile-theme-15 #contact-reports-list-view .agile-table td{
   vertical-align: middle !important;
+}
+.agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
+  padding-bottom: 0px !important;
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
@@ -2308,4 +2311,5 @@ table .headerSortUp::after, table .headerSortDown::after{
 .agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .activities-dropdown{vertical-align:text-bottom!important;}
 .datedropdown{margin-top:5px!important;}
+.agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 
