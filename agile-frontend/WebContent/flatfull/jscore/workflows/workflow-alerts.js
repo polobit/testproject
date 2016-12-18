@@ -378,7 +378,7 @@ function popupEmailVerify(){
             $("#workflow-verify-email").modal("hide");
            
           // window.location.hash="#contacts";
-           Backbone.history.navigate("##api-analytics" , {
+           Backbone.history.navigate("#api-analytics" , {
                 trigger: true
             });           
 }
