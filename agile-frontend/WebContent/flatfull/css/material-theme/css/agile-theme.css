@@ -1,3 +1,4 @@
+
 body, .h1, .h2, .h3, .h4, .h5,.h6  {
   font-family: "Maison Neue" !important;
 }
@@ -1289,8 +1290,9 @@ ul.leader-board-view li div table tr td{
   border-radius: 3px;
 }
 .tag:hover, .tag.btn:hover, .controls .tag.btn:hover{
-  color: #78909c!important;
-  background-color: #f4f8f9!important;
+  
+    background-color: #dadfe2!important;
+    color: #263238!important;
 }
 .tag a{
   color: #78909c!important;
@@ -1653,10 +1655,10 @@ table#contacts-table, table#companies {
 {
   font-size:15px;
 }
-#activities_date_range .icon-calendar 
+#activities_date_range .icon-calendar ,#reportrange .icon-calendar
 {
-  font-size:13px;
-  margin-top:5px;
+  font-size:13px!important;
+  margin-top:5px!important;
 }
 #contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
@@ -2288,3 +2290,5 @@ table .headerSortUp::after, table .headerSortDown::after{
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
+#activities_date_range,#reportrange{border-color: #fff!important;}
+.p-sm-imp{padding:10px;padding-top:0px;padding-bottom:0px;}
