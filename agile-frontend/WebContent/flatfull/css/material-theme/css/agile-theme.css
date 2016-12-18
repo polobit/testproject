@@ -1,3 +1,4 @@
+
 body, .h1, .h2, .h3, .h4, .h5,.h6  {
   font-family: "Maison Neue" !important;
 }
@@ -475,7 +476,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
 .agile-theme-15 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
 .agile-theme-15 .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 9999 !important;}
+.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 1035 !important;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -592,6 +593,9 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 .agile-theme-15 #contact-reports-list-view .agile-table td{
   vertical-align: middle !important;
+}
+.agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
+  padding-bottom: 0px !important;
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
@@ -1266,8 +1270,9 @@ ul.leader-board-view li div table tr td{
   border-radius: 3px;
 }
 .tag:hover, .tag.btn:hover, .controls .tag.btn:hover{
-  color: #78909c!important;
-  background-color: #f4f8f9!important;
+  
+    background-color: #dadfe2!important;
+    color: #263238!important;
 }
 .tag a{
   color: #78909c!important;
@@ -1410,6 +1415,7 @@ ul.tags-management li.tag{
   margin-right:15px;
   line-height:27px!important;
   border-radius:4px;
+  vertical-align: text-top;
 }
 
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
@@ -1630,10 +1636,11 @@ table#contacts-table, table#companies {
 {
   font-size:15px;
 }
-#activities_date_range .icon-calendar 
+#activities_date_range .icon-calendar ,#reportrange .icon-calendar
 {
-  font-size:13px;
-  margin-top:5px;
+  font-size:13px!important;
+  margin-top:5px!important;
+  vertical-align: text-bottom;
 }
 #contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
@@ -2275,6 +2282,8 @@ table .headerSortUp::after, table .headerSortDown::after{
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
+#activities_date_range,#reportrange .text-xs{border-color: #fff!important;vertical-align:text-top!important;}
+.p-sm-imp{padding:10px;padding-top:0px;padding-bottom:0px;}
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
@@ -2282,7 +2291,9 @@ table .headerSortUp::after, table .headerSortDown::after{
 #sync-app-data p{
   padding: 10px 15px;
 }
-
+.actvitiescareticon{vertical-align:text-bottom!important;}
 .import-panel-heading .data-block h4,.dash_tabview  .data-block h4{
   color: #263238 !important;
 }
+.agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+
