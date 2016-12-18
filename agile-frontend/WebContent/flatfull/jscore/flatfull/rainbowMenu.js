@@ -236,9 +236,16 @@ function handleNewThemeSettings() {
     	return (css.match (/(^|\s)agile-theme-\S+/g) || []).join(' ');
 	});
 
-	// flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>
+	// Show top menu option
+	$("#menuPosition option[value='top']").show();
 	if(CURRENT_USER_PREFS.theme == "15")
 	{
+		// Hide top menu option
+		if($("#menuPosition").val() == "top")
+			$("#menuPosition").val('leftcol').trigger("change");			
+		
+		$("#menuPosition option[value='top']").hide();
+
 		$('link[data-agile-theme="15"]').removeAttr('disabled');
 		$("head").append($('link[data-agile-theme="15"]')[0]);
 		$("html").addClass("agile-theme-15 agile-theme-" + CURRENT_DOMAIN_USER.role);
