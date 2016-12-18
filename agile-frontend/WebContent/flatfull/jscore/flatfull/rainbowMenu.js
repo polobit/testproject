@@ -236,6 +236,7 @@ function handleNewThemeSettings() {
 	if(CURRENT_USER_PREFS.theme == "15")
 	{
 		$('link[data-agile-theme="15"]').removeAttr('disabled');
+		$("head").append($('link[data-agile-theme="15"]')[0]);
 	}
 	else 
 	{
