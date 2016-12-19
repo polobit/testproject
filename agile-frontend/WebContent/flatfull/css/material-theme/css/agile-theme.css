@@ -2514,3 +2514,7 @@ margin-left: 5px !important;
 .contacts-grid-view-temp>div{
   border:0;
 }
+
+.tickets-div .panel-heading .btn{
+  font-size: 12px !important;
+}
