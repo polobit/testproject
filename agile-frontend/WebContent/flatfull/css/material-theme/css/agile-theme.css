@@ -2305,7 +2305,7 @@ table .headerSortUp::after, table .headerSortDown::after{
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
 .agile-theme-15 .i-checks-sm input:checked+i::before{width: 0px!important;}
-.agile-theme-15 .agile-table td.checkbox {overflow: hidden;position: inherit;}
+.agile-theme-15 .agile-table td.checkbox {/*overflow: hidden;*/position: inherit;}
 #sync-app-data p{
   padding: 10px 15px;
 }
@@ -2389,4 +2389,8 @@ table.iptable>tbody>tr>td{
 }
 .background-img-service+span.block{
   color: #ffbb44 !important;
+}
+
+.agile-theme-15 table.agile-table thead th .i-checks input[type="checkbox"] {
+  margin: 2px 0px 0px 2px;
 }
