@@ -599,6 +599,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
+  position: relative;
 }
 .agile-theme-15 #admin-settings-users .panel-heading>div:first-child{
   display: none;
@@ -2301,6 +2302,8 @@ table .headerSortUp::after, table .headerSortDown::after{
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
+.agile-theme-15 .i-checks-sm input:checked+i::before{width: 0px!important;}
+.agile-theme-15 .agile-table td.checkbox {overflow: hidden;position: inherit;}
 #sync-app-data p{
   padding: 10px 15px;
 }
