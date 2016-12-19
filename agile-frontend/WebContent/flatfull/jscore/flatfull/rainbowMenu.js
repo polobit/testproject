@@ -231,7 +231,7 @@ $("#mobile-menu-settings").on("click",function(){
 	
 
 function handleNewThemeSettings() {
-	
+	var newThemeURL = "flatfull/css/material-theme/min/agile-theme-15.css?_=" + _AGILE_VERSION;
 	$("html").removeClass (function (index, css) {
     	return (css.match (/(^|\s)agile-theme-\S+/g) || []).join(' ');
 	});
@@ -247,11 +247,11 @@ function handleNewThemeSettings() {
 		$("#menuPosition option[value='top']").hide();
 
 		$('link[data-agile-theme="15"]').removeAttr('disabled');
-		$("head").append($('link[data-agile-theme="15"]')[0]);
+		$('head').append('<link href="' + newThemeURL + '" rel="stylesheet" data-agile-theme="15" />');
 		$("html").addClass("agile-theme-15 agile-theme-" + CURRENT_DOMAIN_USER.role);
 	}
 	else 
 	{
-		$('link[data-agile-theme="15"]').attr('disabled', 'disabled');
+		$('link[data-agile-theme="15"]').remove();
 	}
 }

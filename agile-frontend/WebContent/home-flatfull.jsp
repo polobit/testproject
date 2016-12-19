@@ -222,8 +222,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
 	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
+    if(currentUserPrefs.theme.equals("15")){
 %>
 <link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
+<%} %>
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -348,6 +350,16 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 <body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("");%>'>
+
+<!-- New theme css insert 
+  <iframe class="hide" id="agile-theme-15" src="about:blank"></iframe>
+  <script type="text/javascript">
+	var doc = document.getElementById('agile-theme-15').contentWindow.document;
+	doc.open();
+	doc.write('<html><head><title></title></head><body><link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" data-agile-theme="fr-15" /></body></html>');
+	doc.close();
+  </script> -->
+<!-- End of ne theme insert -->
 
 <script type="text/javascript">
 function isIE() {
