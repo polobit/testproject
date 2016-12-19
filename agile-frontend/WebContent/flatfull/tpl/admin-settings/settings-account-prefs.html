@@ -324,7 +324,7 @@
 <div id="ip_access" class="col-sm-9 panel ">
     {{#unless ipList.length}} {{else}}
     <div class="panel-heading allow_access_panelheading">
-    <div class="pull-left  m-t-xs">IP Address List</div>
+    <!-- <div class="pull-left  m-t-xs">IP Address List</div> -->
     <div class="pull-right">
        <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'admin-settings' 'add-ip-address'}}</a>
     </div>
@@ -341,7 +341,7 @@
             {{/if}}
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
-            <table class="table table-hover table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
+            <table class="table table-hover agile-table table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
                 <colgroup><col width="50%"><col width="4%"></colgroup>
                 <thead>
                 {{#unless ipList.length}} {{else}}
