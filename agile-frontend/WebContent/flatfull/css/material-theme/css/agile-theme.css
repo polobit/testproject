@@ -2348,3 +2348,6 @@ table.iptable>tbody>tr>td{
 }
 
 /*IP Table UI Fix End*/
+#reports-main-div>div{
+  border-bottom: 0 !important;
+}
