@@ -2474,3 +2474,16 @@ margin-left: 5px !important;
 .task-list-heading{
   border-bottom: none !important;
 }
+.agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4
+{
+      margin-top: 10px;
+      margin-bottom:10px;
+}
+.agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs
+{
+  font-size: 11px;
+}
+.agile-theme-15 #DealsFunnel .portlets-modal-icon .icon-filter
+{
+      font-size: 31px!important;
+}
