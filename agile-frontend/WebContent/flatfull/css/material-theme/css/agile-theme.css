@@ -965,7 +965,7 @@ z-index:1;
   background-color: #f4f8f9 !important;
 }
 .agile-theme-15 .ticket-collection-container .i-checks.i-checks-sm{
-  margin-top: 0px !important;
+  margin-top: 15px !important;
 }
 .agile-theme-15 .ticket-collection-container table label.i-checks{
   margin-left: 0px !important;
@@ -996,6 +996,7 @@ z-index:1;
 .agile-theme-15 .tickets-div .panel-heading label.i-checks:first-child{
   padding-left: 0px !important;
   margin-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 .agile-theme-15 .tickets-div .ticket-collection-row{
   min-height: 0px !important;
@@ -1487,7 +1488,6 @@ ul.tags-management li.tag{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;
-  background-color: inherit;
 }
 /** End of panel CSS **/
 
@@ -1763,6 +1763,9 @@ color:#0d1114 !important;
   box-shadow: inherit !important;   
   
 }
+#workflows-collection-container .panel.panel-default{
+  background-color: inherit;
+}
 .tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default{
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
@@ -2001,7 +2004,7 @@ ul#recent-menu-model-list li:nth-child(even){
 #basic-addon1{
   border: 0px;
 }
-#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item{
+#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item, #next-week-activity .list-group-item, #today-activity .list-group-item, #tomorrow-activity .list-group-item{
   border: none !important;
 }
 #widget-settings-tab-pane .btn-primary ,#widget-settings-tab-pane .btn-default ,#settings-widgets-tab-content .btn-danger{
