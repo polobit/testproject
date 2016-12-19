@@ -153,6 +153,8 @@ function appDialer(to, contact){
 		globalCall.contactedContact = contact;
 		globalCall.callNumber = to;
 
+		to = str.replace("+", "%2B");		
+
 		var requestURL = "core/api/android/call?phone_number="+to;	 
 	 	console.log(requestURL);
 	 
