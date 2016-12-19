@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.HomeUtil"%>
 <%@page import="com.agilecrm.util.MobileUADetector"%>
 <%@page import="com.agilecrm.user.access.AdminPanelAccessScopes"%>
 <%@page import="com.itextpdf.text.log.SysoCounter"%>
@@ -44,9 +45,42 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
+<%
+    //Check if it is being access directly and not through servlet
+if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+response.sendRedirect("/login");
+return;
+}
 
+DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
-<html>
+AddOn addOn = AddOnUtil.getAddOn();
+
+System.out.println("Domain user " + domainUser);
+
+ObjectMapper mapper = new ObjectMapper();
+
+String panel = request.getParameter("sp");
+if(panel == null)
+  panel = "false";
+String clientIP = request.getRemoteAddr();
+
+// Get current user prefs
+UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+// Change Prefs for requested new theme
+String uiVersion = request.getParameter("ui");
+if(StringUtils.isNotBlank(uiVersion) && uiVersion.equalsIgnoreCase("v2")) {
+	currentUserPrefs.theme = "15";
+	String menuPosition = currentUserPrefs.menuPosition;
+	if(StringUtils.isNotBlank(menuPosition) && menuPosition.equalsIgnoreCase("top"))
+		currentUserPrefs.menuPosition = "leftcol";
+}
+	
+
+AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
+%>
+
+<html class="<%=HomeUtil.getNewThemeClasses(request, domainUser, currentUserPrefs)%>">
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
@@ -85,31 +119,6 @@ pageEncoding="UTF-8"%>
 
 
 <%
-    //Check if it is being access directly and not through servlet
-if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
-response.sendRedirect("/login");
-return;
-}
-
-
-
-
-DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
-AddOn addOn = AddOnUtil.getAddOn();
-
-System.out.println("Domain user " + domainUser);
-
-ObjectMapper mapper = new ObjectMapper();
-
-String panel = request.getParameter("sp");
-if(panel == null)
-  panel = "false";
-String clientIP = request.getRemoteAddr();
-
-// Get current user prefs
-UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 
 //Update workflow entities if they are not initialized
 //with new is_disabled property
@@ -211,6 +220,12 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
+<%
+	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
+    if(!isDisabledNewThemeStyles){
+%>
+<link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
+<%} %>
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -334,7 +349,17 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("");%>'>
+
+<!-- New theme css insert 
+  <iframe class="hide" id="agile-theme-15" src="about:blank"></iframe>
+  <script type="text/javascript">
+	var doc = document.getElementById('agile-theme-15').contentWindow.document;
+	doc.open();
+	doc.write('<html><head><title></title></head><body><link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" data-agile-theme="fr-15" /></body></html>');
+	doc.close();
+  </script> -->
+<!-- End of ne theme insert -->
 
 <script type="text/javascript">
 function isIE() {
@@ -397,6 +422,8 @@ function isIE() {
             case 13:  out.print("bg-white-only ");
                  break;
             case 14:  out.print("bg-dark ");
+                 break;
+            case 15:  out.print("bg-white ");
                  break;
             default:
                     break;
@@ -490,6 +517,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
          break;
     case 14:  out.print("bg-light ");
          break;
+     case 15:  out.print("bg-white ");
+         break;
     default:
             break;
  
@@ -508,7 +537,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     
   <!-- Sales menu -->   
     <li class="appaside dropdownnavbar  <%if(domainUser.role == ROLE.SALES){ %> agile-menuactive <% } %> " id="agile-sales-menu-navigation-container" data-service-name='SALES' data-dashboard='SalesDashboard'>
-          <a class="auto agile-menu-dropdown-aside">      
+          <a class="auto agile-menu-dropdown-aside1 sales-nav agile-menu-parent-item">      
             <span class="pull-right text-muted">
               <i class="fa fa-fw fa-angle-right text "></i>
               <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -656,7 +685,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   
   <!-- Marketing menu -->  
     <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.MARKETING){ %> agile-menuactive <% } %>" id="agile-marketing-menu-navigation-container" data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
-      <a class="auto ">      
+      <a class="auto agile-menu-parent-item">      
         <span class="pull-right text-muted">
           <i class="fa fa-fw fa-angle-right text"></i>
           <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -666,7 +695,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       </a>
       <ul class="nav nav-sub dk" style="display:block;" > 
         <li id="home_dashboard" class="MarketingDashboard-home">
-            <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/MarketingDashboard">
+            <a class="agile-menu-dropdown-aside1"  href="#navigate-dashboard/MarketingDashboard">
               <i class="icon icon-home"></i>
               <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
             </a>
@@ -675,7 +704,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
       <li id="contactsmenu">
-        <a class="agile-menu-dropdown-aside" href="#contacts">
+        <a class="agile-menu-dropdown-aside1" href="#contacts">
           <i class="icon icon-user"></i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
         </a>
@@ -724,7 +753,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>
   <li id="landing-pages-menu">
-    <a class="agile-menu-dropdown-aside" href="#landing-pages" style="margin-left:2px;"> 
+    <a class="agile-menu-dropdown-aside1" href="#landing-pages" style="margin-left:2px;"> 
       <i class="fa fa-file-code-o"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
     </a>
@@ -756,7 +785,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SOCIAL)){
    %>
    <li id="socialsuitemenu">
-    <a class="agile-menu-dropdown-aside" href="#social">
+    <a class="agile-menu-dropdown-aside1" href="#social">
       <i class="icon-bubbles"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
     </a>
@@ -781,7 +810,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu" class="MarketingDashboard-activitiesnavbar">
-    <a class="agile-menu-dropdown-aside" href="#navbar-activities/MarketingDashboard">
+    <a class="agile-menu-dropdown-aside1" href="#navbar-activities/MarketingDashboard">
       <i class="icon-speedometer icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
@@ -793,7 +822,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu" class="MarketingDashboard-reportsnavbar">
-    <a class="agile-menu-dropdown-aside" href="#navbar-reports/MarketingDashboard">
+    <a class="agile-menu-dropdown-aside1" href="#navbar-reports/MarketingDashboard">
       <i class="icon-bar-chart icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
@@ -801,7 +830,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   
   <li id="tasksmenu" class="hide">
-    <a class="agile-menu-dropdown-aside" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+    <a class="agile-menu-dropdown-aside1" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
       <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
@@ -821,7 +850,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->   
    <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.SERVICE){ %> agile-menuactive <% } %>" id="agile-service-menu-navigation-container" data-service-name='SERVICE' data-dashboard='dashboard'>
-      <a class="auto">      
+      <a class="auto agile-menu-parent-item">      
         <span class="pull-right text-muted">
           <i class="fa fa-fw fa-angle-right text"></i>
           <i class="fa fa-fw fa-angle-down text-active"></i>
@@ -832,7 +861,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <ul class="nav nav-sub dk" style="display:block;" > 
   
   <li id="home_dashboard" class="Dashboard-home">
-    <a class="agile-menu-dropdown-aside"  href="#navigate-dashboard/Dashboard" >
+    <a class="agile-menu-dropdown-aside1"  href="#navigate-dashboard/Dashboard" >
       <i class="icon icon-home"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
@@ -841,7 +870,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
   <li id="contactsmenu">
-    <a class="agile-menu-dropdown-aside" href="#contacts">
+    <a class="agile-menu-dropdown-aside1" href="#contacts">
       <i class="icon icon-user"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
     </a>
@@ -852,14 +881,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
 
   
   <li id="tickets">
-    <a class="agile-menu-dropdown-aside" href="#tickets">
+    <a class="agile-menu-dropdown-aside1" href="#tickets">
       <i class="icon icon-ticket"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
 
   <li id="tasksmenu" class="hide">
-    <a class="agile-menu-dropdown-aside" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
+    <a class="agile-menu-dropdown-aside1" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
       <span>Tasks</span>
       <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
@@ -872,31 +901,31 @@ if(currentUserPrefs.menuPosition.equals("top")){
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>          
   <li id="ticketgroupsmenu">
-    <a class="agile-menu-dropdown-aside" href="#ticket-groups">
+    <a class="agile-menu-dropdown-aside1" href="#ticket-groups">
       <i class="icon icon-users"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
-    <a  class="agile-menu-dropdown-aside"href="#ticket-labels">
+    <a  class="agile-menu-dropdown-aside1"href="#ticket-labels">
       <i class="icon icon-flag"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
-    <a class="agile-menu-dropdown-aside" href="#canned-responses">
+    <a class="agile-menu-dropdown-aside1" href="#canned-responses">
       <i class="icon icon-cursor"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
-    <a class="agile-menu-dropdown-aside" href="#ticket-views">
+    <a class="agile-menu-dropdown-aside1" href="#ticket-views">
       <i class="icon icon-directions"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
-    <a  class="agile-menu-dropdown-aside" href="#knowledgebase">
+    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
       <i class="fa fa-search"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
@@ -909,7 +938,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="feedbackactivitiesmenu">
-    <a class="agile-menu-dropdown-aside" href="#ticket-feedback">
+    <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
       <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
       <span>Feedback</span>
     </a>
@@ -922,7 +951,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
     <li id="activitiesmenu" class="dashboard-activitiesnavbar">
-    <a class="agile-menu-dropdown-aside" href="#navbar-activities/dashboard">
+    <a class="agile-menu-dropdown-aside1" href="#navbar-activities/dashboard">
       <i class="icon-speedometer icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
@@ -934,7 +963,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.REPORT)){
     %>
   <li id="reportsmenu" class="dashboard-reportsnavbar">
-    <a class="agile-menu-dropdown-aside" href="#navbar-reports/dashboard">
+    <a class="agile-menu-dropdown-aside1" href="#navbar-reports/dashboard">
       <i class="icon-bar-chart icon-white"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>

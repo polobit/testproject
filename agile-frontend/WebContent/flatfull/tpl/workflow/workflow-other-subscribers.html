@@ -4,9 +4,9 @@
         
 <h4 class="pull-left font-light">{{get_subscribers_type_from_hash}} {{agile_lng_translate 'report-view' 'subscribers'}}<!--<small> - <span id="subscribers-campaign-name"></span></small>--> <span class="badge bg-primary">{{subscribers_count}}</span></h4>
             <div class="pull-right">
-				<div class="btn-group">
-					<a class="btn btn-sm btn-default m-l-xs">{{get_subscribers_type_from_hash}} {{agile_lng_translate 'report-view' 'subscribers'}}</a>
-  					<button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">
+				<div class="btn-group reports-campaign-stats">
+					<a class="btn btn-sm btn-default m-l-xs btn-primary-imp btn-lg-imp ">{{get_subscribers_type_from_hash}} {{agile_lng_translate 'report-view' 'subscribers'}}</a>
+  					<button class="btn btn-sm dropdown-toggle btn-default btn-primary-imp btn-lg-imp" data-toggle="dropdown">
     					<span class="caret"></span>
   					</button>
   					<ul class="dropdown-menu" role="menu">
@@ -41,7 +41,7 @@
 		<div class="data">
         	<div class="data-container">
 				<div class="table-responsive">
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="workflow-subscribers-list">
 			    <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'all-subscribers-list'}}</div>
             	<table class="table table-striped onlySorting panel agile-table table-layout-mob-view">
                 	<thead>

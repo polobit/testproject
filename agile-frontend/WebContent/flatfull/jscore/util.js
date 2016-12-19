@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-left:10px;padding-right:5px;opacity:0.5;" src= "'+updateImageS3Path("/flatfull/img/ajax-loader-cursor.gif")+'"></img>';
+var LOADING_HTML = "<img class='loading' style='padding-left:10px;padding-right:5px;opacity:0.5;' src= '"+updateImageS3Path('/flatfull/img/ajax-loader-cursor.gif')+"'></img>";
 
 /**
  * Set of loading images
@@ -99,12 +99,10 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	 */
 	});
 
-	// Prepend Loading
-	$loading = '<img class="loading" style="padding-right:5px;opacity:0.5;" src= "'+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+'"></img>';
 	if ($("#" + selectId, el).next().hasClass("select-loading"))
-		$("#" + selectId, el).next().html($loading);
+		$("#" + selectId, el).next().html(LOADING_HTML);
 	else
-		$("#" + selectId, el).after($loading);
+		$("#" + selectId, el).after(LOADING_HTML);
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();
 

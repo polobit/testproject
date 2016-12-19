@@ -1,6 +1,6 @@
 <script id="report-calls-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="wrapper bg-light lter padder-sm padder-v p-r-sm" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+<div class="custom-animated custom-fadeInUp" id="reports-main-div">
+<div class="wrapper bg-light lter padder-sm padder-v p-r-sm agile-sub-header" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
  
      <div class="col-sm-12 col-md-12">
@@ -9,14 +9,14 @@
             <h3 class="font-thin h3 reports-calltype">{{agile_lng_translate 'report-view' 'calls-by-user'}}</h3>
 			<div style="width:46%;display:none" class="pull-right" id="plan-limit-error"></div>
 			</div>
-                  <!-- <div class="clearfix"></div> -->   
+                  <div class="clearfix"></div>   
              <div style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding:5px;" class="pull-right test-class" id="reportrange">
                 <i class="icon-calendar icon-large text-xs"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
 			<div style="padding:0px 4px 10px" class="pull-right">
-				<select class="required form-control {{#is_mobile}} {{else}} text-ellipsis w-175 {{/is_mobile}}" name="group-by" id="typeCall">
+				<select class="required form-control select-new-theme-nopanel {{#is_mobile}} {{else}} text-ellipsis w-175 {{/is_mobile}}" name="group-by" id="typeCall">
 					<option value="number-of-calls" selected="selected">{{agile_lng_translate 'report-add' 'total-calls'}}</option>
 						<option value="call-duration">{{agile_lng_translate 'report-add' 'total-call-duration'}}</option>
                          <option value="average-calls" style="display:none;">{{agile_lng_translate 'report-add' 'average-call-duration'}}</option>
@@ -41,8 +41,8 @@
 
 </script>
 <script id="report-calls-piechart-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="wrapper bg-light lter padder-sm padder-v p-r-sm" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+<div class="custom-animated custom-fadeInUp" id="reports-main-div">
+<div class="wrapper bg-light lter padder-sm padder-v p-r-sm agile-sub-header" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
  
      <div class="col-sm-12 col-md-12">
@@ -50,7 +50,7 @@
             <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'call-outcomes'}}</h3>
 			<div style="width:46%;display:none" class="pull-right" id="plan-limit-error"></div>
 			</div>
-               <!-- <div class="clearfix"></div> -->        
+               <div class="clearfix"></div>        
              <div style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding:5px;" class="pull-right" id="reportrange">
                 <i class="icon-calendar icon-large text-xs"></i>
@@ -83,8 +83,8 @@
 
 </script>
 <script id="report-calls-timeGraph-template" type="text/html">
-<div class="custom-animated custom-fadeInUp">
-<div class="wrapper bg-light lter padder-sm padder-v p-r-sm" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+<div class="custom-animated custom-fadeInUp" id="reports-main-div">
+<div class="wrapper bg-light lter padder-sm padder-v p-r-sm agile-sub-header" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 <div class="row">
  
      <div class="col-sm-12 col-md-12">
@@ -92,7 +92,7 @@
             <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'call-report-time-based'}}</h3>
 
 			</div>
-			<!-- <div class="clearfix"></div> -->     
+			<div class="clearfix"></div>     
              <div style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1);
 			border:1px solid #cfdadd;height:34px;padding:5px;" class="pull-right test-class" id="reportrange">
                 <i class="icon-calendar icon-large text-xs"></i>
@@ -100,7 +100,7 @@
               </div>
 
 			<div class="pull-right" style="padding:0px 4px 10px 2px">
-				<select name="frequency" id="frequency" class="required form-control" style="width:105px">
+				<select name="frequency" id="frequency" class="required form-control select-new-theme-nopanel" style="width:105px">
 					<option value="daily">{{agile_lng_translate 'report-add' 'daily'}}</option>
 					<option value="weekly">{{agile_lng_translate 'report-add' 'weekly'}}</option>
                     <option value="monthly">{{agile_lng_translate 'report-add' 'monthly'}}</option>

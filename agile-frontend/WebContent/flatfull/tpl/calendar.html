@@ -1,6 +1,6 @@
 <script id="calendar-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-	<div class="wrapper-md lter bg-light b-b calender-header">
+	<div class="wrapper-md lter bg-light b-b calender-header agile-page-header">
 		<div class="row">
 			<div class="col-md-12">
 				<h3 class="pull-left font-thin h3" style="margin-bottom: 0px !important;">{{agile_lng_translate 'portlets' 'calendar'}} <small></small></h3>
@@ -21,17 +21,17 @@
 					<li><a href="#" class="c_cal">Calendar</a></li>
 					</ul>
 					</div> -->
-					<div class="inline-block m-r" id="calendarAgendaButtons">
-						<button type="button" class="btn btn-sm btn-default" onclick="today()">{{agile_lng_translate 'portlets' 'today'}}</button>
-						<div class="btn-group m-l-xs">
-							<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}</button>
-							<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_lng_translate 'calendar' 'week'}}</button>
-							<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}</button>
+					<div class="inline-block m-r m-r-sm-imp" id="calendarAgendaButtons">
+						<button type="button" class="btn btn-sm btn-default btn-default-imp-white btn-lg-imp m-r-md-imp" onclick="today()">{{agile_lng_translate 'portlets' 'today'}}</button>
+						<div class="btn-group m-l-xs m-l-n-xs-imp">
+							<button id="agendaDay" class="btn btn-sm btn-default btn-default-imp btn-lg-imp agendaDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}</button>
+							<button id="agendaWeek" class="btn btn-sm btn-default btn-default-imp btn-lg-imp agendaDayWeekMonth" >{{agile_lng_translate 'calendar' 'week'}}</button>
+							<button id="month" class="btn btn-sm btn-default btn-default-imp btn-lg-imp agendaDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}</button>
 						</div>
 					</div>
 					<div class="btn-group  inline-block" id="add-event-div">
-						<div class="btn btn-sm btn-default add-event" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contact-details' 'add-event'}}</div>
-						<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+						<div class="btn btn-sm btn-default btn-primary-imp btn-lg-imp add-event" data-toggle="modal"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contact-details' 'add-event'}}</div>
+						<a class="btn btn-sm btn-default dropdown-toggle btn-primary-imp btn-lg-imp" data-toggle="dropdown">
 							<span class="caret"></span>
 						</a>             
 						<ul class="dropdown-menu pull-right c-p">
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="wrapper-md">
+	<div class="wrapper-md agile-p-t-sm">
 		<div class="row">
 			<div class="col-md-2">
 				<div class="bg-transparent">
@@ -78,11 +78,11 @@
 					</button>
 					<div class="pull-right">
 
-					<button type="button" class="btn btn-sm btn-default" onclick="today()">today</button>
+					<button type="button" class="btn btn-sm btn-default btn-default-imp" onclick="today()">today</button>
 					<div class="btn-group m-l-xs">
-					<button id="agendaDay" class="btn btn-sm btn-default agendaDayWeekMonth" >Day</button>
-					<button id="agendaWeek" class="btn btn-sm btn-default agendaDayWeekMonth" >Week</button>
-					<button id="month" class="btn btn-sm btn-default agendaDayWeekMonth" >Month</button>
+					<button id="agendaDay" class="btn btn-sm btn-default btn-default-imp agendaDayWeekMonth" >Day</button>
+					<button id="agendaWeek" class="btn btn-sm btn-default btn-default-imp agendaDayWeekMonth" >Week</button>
+					<button id="month" class="btn btn-sm btn-default btn-default-imp agendaDayWeekMonth" >Month</button>
 					</div>
 					</div>
 					</div> -->
@@ -208,7 +208,7 @@
 </div>
 <div id="user_cal_sub">
 {{#if this.length}}
-<label><h4 class="m-b-n-sm">{{agile_lng_translate 'calendar' 'team'}}</label></h4><br/>
+<label><h4 class="m-t-sm m-b-sm">{{agile_lng_translate 'calendar' 'team'}}</label></h4>
 {{/if}}
 {{#each this}}
 <label class="i-checks i-checks-sm">

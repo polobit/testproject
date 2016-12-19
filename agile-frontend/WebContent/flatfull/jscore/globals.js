@@ -33,3 +33,10 @@ var DOC_ACL_DETACH_ERROR = "{{agile_lng_translate 'bulk-actions' 'no-pem-to-dele
 
 // Google Maps URL
 var Google_Maps_URL = "https://maps.googleapis.com/maps/api/js";
+
+/*$(function(){
+	if(CURRENT_USER_PREFS.theme == 15){
+		Template_Render_Image_Loader = LOADING_HTML = '<img class="loading" style="padding-right:5px;opacity:0.5;width:25px" src= "/flatfull/img/loader.gif"></img>';
+		LOADING_HTML_IMAGES = [LOADING_HTML];
+	}
+});*/

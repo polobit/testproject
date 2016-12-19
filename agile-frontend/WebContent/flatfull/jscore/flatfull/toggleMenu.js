@@ -30,9 +30,8 @@ $('#app-aside-folded').on('click', function(e) {
 	$('.highcharts-container').each(function(chart) {
 		$(this).parent().highcharts().reflow();
 	});
-	
 
-    
+	
 	});
 
 
@@ -51,6 +50,11 @@ function showTrailAlertMessage(){
 
 	
 $(document).ready(function(){
+
+// Add agile-menu active class to li element
+try{
+	$("aside a[href=" + window.location.hash + "]").closest("li").addClass("agile-menuactive");	
+}catch(e){}
 
 //helpContentPopover();
 $('body').on('click','#speechDectation',function(e){
@@ -451,12 +455,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	}
 
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
+		if(!isTargetAnInputField(event)){
+	   		event.preventDefault();
+	   	}
+
+	   event.stopImmediatePropagation();
 
    	   var $target = $( event.currentTarget ),
        $inp = $target.find( 'input' );
-       if(!$inp.closest("li").hasClass("disabled"))
+       if(!$inp.closest("li").hasClass("disabled") && !isTargetAnInputField(event)){
        		$inp.prop( 'checked', !$inp.is(":checked") );
-
+       }
+       	
        var $allitems = $("#advanced-search-fields-group a input"),
        $inputs = $allitems.not($inp),
        $items = $inputs.closest("li");
@@ -474,7 +484,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
 	   // console.log(list);
 	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
-	   return false;
+	   // return false;
 	});
 
 	var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id),
@@ -551,11 +561,14 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 			}
 		else
 			{
+				var prevRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
 				$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
 				$(this).addClass("agile-menuactive");
 				$(".active").removeClass("active");
 				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
 				$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+				var currentRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
+				$("html").removeClass("agile-theme-"+prevRole).addClass("agile-theme-"+currentRole);
 			}
 	});
 	// initializing need help popover for header page
@@ -728,6 +741,9 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 }
 function updateDashboardRole(prevrole)
 {
+	if(CURRENT_DOMAIN_USER.role == prevrole)
+		return;
+	$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+prevrole);
 	CURRENT_DOMAIN_USER.role = prevrole ;
 			var json = {};
  			json.id = CURRENT_DOMAIN_USER.id;
@@ -745,6 +761,11 @@ function updateDashboardRole(prevrole)
  						}});
 }
 
+
+function isTargetAnInputField(e) {
+	return ($(e.target).prop("tagName").toLowerCase() == "input");
+}
+    	 
 
 
 

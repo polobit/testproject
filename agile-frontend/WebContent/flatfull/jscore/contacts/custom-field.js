@@ -645,7 +645,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div><span for="'+field.field_label+'" generated="true" class="help-inline"></span></div></div>');
+									+'"><i></i>'+field.field_label+'</label><div class="field_req inline-block">*</div><span for="'+field.field_label+'" generated="true" class="help-inline"></span></div></div>');
 
 						}else{
 							el = el.concat('<div class="control-group form-group ">	<label class="i-checks i-checks-sm '+label_style+'">'
@@ -656,7 +656,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label></div>');
+									+'"><i></i>'+field.field_label+'</label></div>');
 						}
 					}else{
 						if(isModal){
@@ -669,7 +669,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label></div></div>');
+									+'"><i></i>'+field.field_label+'</label></div></div>');
 						}else{
 							el = el.concat('<div class="control-group form-group "><label class="i-checks i-checks-sm '+label_style+'">'
 									+'<input type="'
@@ -679,7 +679,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin: 0px 5px;"><i></i>'+field.field_label+'</label></div>');
+									+'"><i></i>'+field.field_label+'</label></div>');
 						}
 					}
 					return;

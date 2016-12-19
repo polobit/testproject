@@ -126,7 +126,19 @@ function send_verify_email(el)
 		var json = serializeForm("verify-email-form");
 		
 		if(!json)
-			return;;
+			return;
+
+		// Validation If email address contains apple and paypal keyword then we will not allow to add.
+		if(json.email.toLocaleLowerCase().search('apple')>= 0 || json.email.toLocaleLowerCase().search('paypal')>= 0 )
+		{
+			if($('#verify-email-form').find('div .help-inline').length == 0 )
+				$('#verify-email-form').find('span.controls').append('<span for="email" generated="true" class="help-inline"><p>Please provide a valid email address.</p></span>');
+			else
+			   $('#verify-email-form').find('span.controls .help-inline').html('<p>Please provide a valid email address.').show();
+			
+			$('#verify-email-send').attr('disabled', false).text('Send verification Email');
+			return;
+		}
 
 		var emailDomain = getEmailDomain(json.email);
 		

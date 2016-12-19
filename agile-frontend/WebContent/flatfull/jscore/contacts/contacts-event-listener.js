@@ -339,16 +339,21 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     },
 
     addOrRemoveContactColumns : function(e){
-    	e.preventDefault();
-    	var $checkboxInput = $(e.currentTarget).find("input");
-    	if($checkboxInput.is(":checked"))
-    	{
-    		$checkboxInput.prop("checked", false);
+    	// e.preventDefault();
+
+    	// Check for target element which invalidates the new theme/Old theme
+    	if(!isTargetAnInputField(e)){
+    		var $checkboxInput = $(e.currentTarget).find("input");
+	    	if($checkboxInput.is(":checked"))
+	    	{
+	    		$checkboxInput.prop("checked", false);
+	    	}
+	    	else
+	    	{
+	    		$checkboxInput.prop("checked", true);
+	    	}
     	}
-    	else
-    	{
-    		$checkboxInput.prop("checked", true);
-    	}
+
     	var json = serializeForm("contact-static-fields");
 		$.ajax({
 			url : 'core/api/contact-view-prefs',
@@ -406,16 +411,19 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     },
 
     addOrRemoveCompanyColumns : function(e){
-    	e.preventDefault();
-    	var $checkboxInput = $(e.currentTarget).find("input");
-    	if($checkboxInput.is(":checked"))
-    	{
-    		$checkboxInput.prop("checked", false);
+    	// e.preventDefault();
+    	if(!isTargetAnInputField(e)){
+	    	var $checkboxInput = $(e.currentTarget).find("input");
+	    	if($checkboxInput.is(":checked"))
+	    	{
+	    		$checkboxInput.prop("checked", false);
+	    	}
+	    	else
+	    	{
+	    		$checkboxInput.prop("checked", true);
+	    	}
     	}
-    	else
-    	{
-    		$checkboxInput.prop("checked", true);
-    	}
+
     	var array = serializeForm('companies-static-fields');
 		$.ajax({
 			url : 'core/api/contact-view-prefs/company',
