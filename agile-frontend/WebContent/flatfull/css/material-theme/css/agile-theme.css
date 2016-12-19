@@ -2360,7 +2360,6 @@ table.iptable>tbody>tr>td{
 .agile-theme-15 .agile-header-btns{top: 2px!important;}
 
 .agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
-    background-color: #16aad8;
     border-radius: 4px 4px 0 0;
 }
 .agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt{
@@ -2372,7 +2371,10 @@ table.iptable>tbody>tr>td{
     display: flex;
     border-radius: 4px 4px 0 0;
 }
-
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt h4{
+    color: #78909c;
+    font-size: 14px;
+}
 .agile-theme-15 .reports_tab_content{
   box-shadow: 0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
   border: none !important;
