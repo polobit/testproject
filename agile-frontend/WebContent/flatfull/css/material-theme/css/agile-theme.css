@@ -1144,8 +1144,8 @@ label.i-checks input{
   padding-left: 23px;
 }
 .getting-started-body label.i-checks input{
-  vertical-align: middle;
-  margin-right: 10px;
+    margin-right: 8px;
+    margin-top: 7px;
  }
 table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   display: none!important;
@@ -1508,7 +1508,7 @@ ul.tags-management li.tag{
   font-size: 16px !important;
 }
 .portlet_header h4 small{
-  font-size: 14px !important;
+  font-size: 13px !important;
   color: #78909c !important;
   font-weight: 400 !important;
 }
@@ -1936,9 +1936,9 @@ table.agile-table>tbody>tr>td{
 .milestone-column>ul, .milestone-column>div.milestones{
   height: calc(100vh - 190px) !important; 
 }
-.milestone-column>div.milestones ul.milestones{
+/*.milestone-column>div.milestones ul.milestones{
   min-height: calc(100vh - 190px) !important; 
-}
+}*/
 /*End of deals*/
 
 .setting-add-tag{
@@ -2310,6 +2310,7 @@ table .headerSortUp::after, table .headerSortDown::after{
 .import-panel-heading .data-block h4,.dash_tabview  .data-block h4{
   color: #263238 !important;
 }
+
 .agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .activities-dropdown{vertical-align:text-bottom!important;}
 .datedropdown{margin-top:5px!important;}
@@ -2360,7 +2361,6 @@ table.iptable>tbody>tr>td{
 .agile-theme-15 .agile-header-btns{top: 2px!important;}
 
 .agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
-    background-color: #16aad8;
     border-radius: 4px 4px 0 0;
 }
 .agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt{
@@ -2372,7 +2372,10 @@ table.iptable>tbody>tr>td{
     display: flex;
     border-radius: 4px 4px 0 0;
 }
-
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt h4{
+    color: #78909c;
+    font-size: 14px;
+}
 .agile-theme-15 .reports_tab_content{
   box-shadow: 0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
   border: none !important;
@@ -2398,4 +2401,76 @@ table.iptable>tbody>tr>td{
 .stats_report_portlet_body .text-white-imp
 {
   color:#fff!important;
+}
+.agile-theme-15 .goals_portlet_body .bg-light {
+  background-color: #edf1f2 !important;
+}
+.agile-theme-15 .getting-started-body>div a {
+    font-size: 13px;
+}
+.agile-theme-15 .getting-started-body>div p{
+    font-size: 13px;
+}
+.getting-started-body label.i-checks i{
+      display: none;
+}
+.getting-started-body .i-checks {
+     padding-bottom: 0px;
+}
+.agile-theme-15 .portlet-error-message, .portlet-error-privilege-message{
+  font-size: 13px;
+}
+
+
+.milestone-main .dealtitle-angular{
+  padding: 20px 5px 17px 5px !important;
+ /* width: 100%;
+  background-color: #e7eef0 !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 4px 4px 0 0;*/
+}
+.milestone-main .milestone-heading{
+  margin-top: -4px;
+}
+.milestone-main{
+  border : none !important;
+}
+.milestone-main .miltstone-title{
+  margin-left: 5px !important;
+}
+.miltstone-title{
+margin-left: 5px !important;
+}
+
+#opportunities-by-paging-model-list{
+  -webkit-box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 4px 4px 0 0;
+}
+
+#new-tasks-lists-model-list .task-list-heading{
+      padding: 20px 5px 17px 5px !important;
+} 
+
+#new-tasks-lists-model-list{
+  -webkit-box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 4px 4px 0 0;
+}  
+#taskheading{
+  margin-left: 6px;
+}
+
+.dealtitle-angular .badge{
+  background-color: #cfdadd !important;
+  margin-right: 5px;
+} 
+#taskheading{
+  font-weight: normal !important;
+  color : #263238 !important;
+}
+.task-list-heading{
+  border-bottom: none !important;
 }
