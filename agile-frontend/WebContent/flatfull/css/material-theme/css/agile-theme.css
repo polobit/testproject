@@ -2313,3 +2313,16 @@ table .headerSortUp::after, table .headerSortDown::after{
 .datedropdown{margin-top:5px!important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .theme-width{width:134px;}
+.agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
+    background-color: #16aad8;
+    border-radius: 4px 4px 0 0;
+}
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt{
+    overflow: hidden;
+    padding: 0 20px;
+    background-color: #e7eef0 !important;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 4px 4px 0 0;
+}
