@@ -54,13 +54,13 @@
 @important:!important;
 @salesColor : #5840eb @important;
 @maColor : #11a0f8 @important;
-@serviceColor : #ffbb44 @important;
+@serviceColor : #66cd2e @important;
 @salesBgColor : #F1EFFE @important;
 @maBgColor : #E7F6FF @important;
-@serviceBgColor :#FFF8EC @important;
+@serviceBgColor :rgba(102, 205, 46, 0.2) @important;
 @salesBgHoverColor : #F9F9FF @important;
 @maBgHoverColor : #f5fbff @important;
-@serviceBgHoverColor : #FFFDF7 @important;
+@serviceBgHoverColor : rgba(102, 205, 46, 0.1) @important;
 
 .agile-theme-SALES.agile-theme-15{
   @themeColor : @salesColor;
@@ -93,8 +93,8 @@
   .agile-menuactive a, .agile-menu-parent-item{
     color: @salesColor
   }
-  li.agile-menuactive ul.nav-sub li a:hover{
-    background-color: @salesBgHoverColor;
+  li.agile-menuactive a:hover{
+    background-color: @salesBgColor;
   }
 }
 .navi #agile-marketing-menu-navigation-container{
@@ -110,8 +110,8 @@
   .agile-menuactive a, .agile-menu-parent-item{
     color: @maColor
   }
-  li.agile-menuactive ul.nav-sub li a:hover{
-    background-color: @maBgHoverColor;
+  li.agile-menuactive a:hover{
+    background-color: @maBgColor;
   }
 }
 .navi #agile-service-menu-navigation-container{
@@ -127,8 +127,8 @@
   .agile-menuactive a, .agile-menu-parent-item{
     color: @serviceColor
   }
-  li.agile-menuactive ul.nav-sub li a:hover{
-    background-color: @serviceBgHoverColor;
+  li.agile-menuactive a:hover{
+    background-color: @serviceBgColor;
   }
 }
 
