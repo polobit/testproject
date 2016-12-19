@@ -1144,8 +1144,8 @@ label.i-checks input{
   padding-left: 23px;
 }
 .getting-started-body label.i-checks input{
-  vertical-align: middle;
-  margin-right: 10px;
+    margin-right: 8px;
+    margin-top: 7px;
  }
 table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   display: none!important;
@@ -1508,7 +1508,7 @@ ul.tags-management li.tag{
   font-size: 16px !important;
 }
 .portlet_header h4 small{
-  font-size: 14px !important;
+  font-size: 13px !important;
   color: #78909c !important;
   font-weight: 400 !important;
 }
@@ -2388,4 +2388,22 @@ table.iptable>tbody>tr>td{
 }
 .background-img-service+span.block{
   color: #ffbb44 !important;
+}
+.agile-theme-15 .goals_portlet_body .bg-light {
+  background-color: #edf1f2 !important;
+}
+.agile-theme-15 .getting-started-body>div a {
+    font-size: 13px;
+}
+.agile-theme-15 .getting-started-body>div p{
+    font-size: 13px;
+}
+.getting-started-body label.i-checks i{
+      display: none;
+}
+.getting-started-body .i-checks {
+     padding-bottom: 0px;
+}
+.agile-theme-15 .portlet-error-message, .portlet-error-privilege-message{
+  font-size: 13px;
 }
