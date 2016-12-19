@@ -2313,7 +2313,6 @@ table .headerSortUp::after, table .headerSortDown::after{
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .theme-width{width:134px;}
 
-
 /*IP Table UI Fix Start*/
 
 #ip_access .panel-heading{
@@ -2357,3 +2356,16 @@ table.iptable>tbody>tr>td{
 #companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;top: 5px;}
 .agile-theme-15 .agile-header-btns{top: 2px!important;}
 
+.agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
+    background-color: #16aad8;
+    border-radius: 4px 4px 0 0;
+}
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt{
+    overflow: hidden;
+    padding: 0 20px;
+    background-color: #e7eef0 !important;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 4px 4px 0 0;
+}
