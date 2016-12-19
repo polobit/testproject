@@ -163,7 +163,7 @@ function isValid(){
 <body class='wrapper-md'>
 <div class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
-<div class="panel panel-default" style="height:215px;">
+<div class="panel panel-default upload-panel" style="height:215px;">
 <div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-attachment") %></div>
 <div class="panel-body">
 <form id="form" action="<%= blobstoreService.createUploadUrl("/uploadattachment") %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();">  

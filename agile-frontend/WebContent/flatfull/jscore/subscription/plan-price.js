@@ -835,6 +835,7 @@ function email_validation(form)
 }
 
 function emailClickEvent() {
+	$(".tab-container").removeClass("hide");
 	$('ul.nav.nav-tabs').removeClass("hide");
 	$("#email").addClass("hide");
 	$("#currentPlan").addClass("p-t-md");

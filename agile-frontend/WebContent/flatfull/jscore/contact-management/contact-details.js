@@ -1678,31 +1678,33 @@ updateScoreValue :function(){
 	},
 
   addOrRemoveContactCompanyColumns :function(e){
-      e.preventDefault();
-      var $checkboxInput = $(e.currentTarget).find("input");
-      if($checkboxInput.is(":checked"))
-      {
-        $checkboxInput.prop("checked", false);
-      }
-      else
-      {
-        $checkboxInput.prop("checked", true);
+      // e.preventDefault();
+      if(!isTargetAnInputField(e)){
+        var $checkboxInput = $(e.currentTarget).find("input");
+        if($checkboxInput.is(":checked"))
+        {
+          $checkboxInput.prop("checked", false);
+        }
+        else
+        {
+          $checkboxInput.prop("checked", true);
+        }
       }
       var json = serializeForm("contact-static-fields");
-    $.ajax({
-      url : 'core/api/contact-view-prefs/contact-company',
-      type : 'PUT',
-      contentType : 'application/json',
-      dataType : 'json',
-      data :JSON.stringify(json),
-      success : function(data)
-      {
-        App_Contacts.contactCompanyViewModel = data;
-        fetchContactCompanyHeadings(function(modelData){
-        getContactofCompanies(modelData, $("#contacts-listener-container"));
-        });
-      } 
-    });
+      $.ajax({
+        url : 'core/api/contact-view-prefs/contact-company',
+        type : 'PUT',
+        contentType : 'application/json',
+        dataType : 'json',
+        data :JSON.stringify(json),
+        success : function(data)
+        {
+          App_Contacts.contactCompanyViewModel = data;
+          fetchContactCompanyHeadings(function(modelData){
+          getContactofCompanies(modelData, $("#contacts-listener-container"));
+          });
+        } 
+      });
     },
 
     toggleCustomFieldsForContacts : function(e){

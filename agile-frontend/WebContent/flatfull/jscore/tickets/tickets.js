@@ -595,15 +595,21 @@ var Tickets = {
 		//Initializing click event on choose columns for single line row view
 		$(el).off('click','ul.choose-columns > li > a');
 	  	$(el).on('click','ul.choose-columns > li > a', function(event){
-	  		event.preventDefault();
+	  		if(!isTargetAnInputField(event)){
+	  			event.preventDefault();
+	  		}
+	  		
 	  		event.stopPropagation();
 
 	  		var $target = $(event.currentTarget);
 	  		$(event.target).blur();
 
 	  		var $chbx = $target.find('input[type="checkbox"]');
-	  		var isChecked = $chbx.is(':checked') ? false : true;
-			$chbx.prop('checked', isChecked);
+	  		if(!isTargetAnInputField(event)){
+	  			var isChecked = $chbx.is(':checked') ? false : true;
+				$chbx.prop('checked', isChecked);
+	  		}
+	  		
 
 			var field_name = $chbx.attr('name');
 

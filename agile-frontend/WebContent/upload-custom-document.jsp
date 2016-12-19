@@ -1,4 +1,5 @@
-
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -12,6 +13,7 @@ try{
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload-custom-document");
 
+UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 %>
 
 <!DOCTYPE html>
@@ -147,6 +149,14 @@ function isValid(){
 	    return $("#form").valid();
 }
 </script>
+
+<%if(currentUserPrefs.theme.equals("15")){%>
+<link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/style.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/agile-theme.css" rel="stylesheet" />
+<%}%>
+
 <style>
 	label.error {
 		color:red;
@@ -156,7 +166,7 @@ function isValid(){
 </head>
 
 
-<body class='wrapper-md'>
+<body  class='wrapper-md <%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme");%>'>
 <div class="row">
 <div class="col-md-3 col-sm-6 col-xs-12">
 <div class="panel panel-default" style="height:215px;">

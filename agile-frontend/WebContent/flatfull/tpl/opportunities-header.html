@@ -2,7 +2,7 @@
 <div class="custom-animated custom-fadeInUp">
 	{{#is_mobile}}
 	{{else}}
-	<div class="wrapper-md bg-light b-b p-b-sm" id="opportunities-header">
+	<div class="wrapper-md bg-light b-b p-b-sm agile-page-header" id="opportunities-header">
     	<div class="btn-toolbar m-l-none pos-rlt">
 			<div class="filters-drp-down btn-group dropdown m-l-none">
 	    		<h3 class="inline-block m-n font-thin" id="opp-header">{{agile_lng_translate 'contact-details' 'deals'}}
@@ -16,8 +16,8 @@
             	<div class="btn-group inline-block m-l-xs" id="deals-tracks"></div>
 				<!-- <div id="deal-list-filters" class="btn-group inline-block m-l-xs"></div> -->
 				<div class="btn-group inline-block m-l-xs" id="deals-view">
-					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
-					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
+					<div class="btn btn-sm btn-default btn-default-imp btn-lg-imp"><i class="icon-list m-l-xs"></i></div>
+					<a class="btn btn-sm btn-default btn-default-imp btn-lg-imp dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret deals-view-caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right" role="menu">
@@ -31,11 +31,11 @@
 						</li>
 					</ul>
 				</div>
-				<div class="btn-group inline-block m-l-xs" id="deals-action">
-					<a href="#deals-add" class="deals-add btn btn-sm  btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')">
+				<div class="btn-group inline-block  m-l-xs" id="deals-action">
+					<a href="#deals-add" class="deals-add btn btn-sm btn-primary-imp btn-lg-imp btn-default" onclick="Agile_GA_Event_Tracker.track_event('Add Deal')">
 						<i class="icon-plus-sign" /> {{agile_lng_translate 'contact-details' 'add-deal'}}
 					</a>
-					<a class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+					<a class="btn btn-sm btn-default btn-primary-imp btn-lg-imp dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu pull-right" role="menu">
@@ -63,7 +63,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="wrapper-md" id="deals-new-milestone-view">
+	<div class="wrapper-md agile-p-t-none" id="deals-new-milestone-view">
 		<div class="row">
 			<div class="col-md-12">
 				<span class="error-status text-danger"></span>

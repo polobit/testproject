@@ -1,0 +1,88 @@
+.mainThemeDependentCss() {
+   .tabs .tab-container .nav-tabs li.active a{
+      color: @themeColor;
+      border-bottom: 3px solid @themeColor;
+    }
+    .tabs .tab-container .nav-tabs li a:hover {
+    color: @themeColor;
+    border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
+    background-color: #e7eef0 !important;
+    }
+    .agile-page-header h1, .agile-page-header h2, .agile-page-header h3, .agile-page-header h4, .agile-page-header .h1, .agile-page-header .h2, .agile-page-header .h3{
+      color: @themeColor;
+    }
+    .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{
+      color: @themeColor;
+      border-left: 3px solid @themeColor;
+      background-color: @menuBgColor;
+    }
+    .nav>li>a:hover, .nav>li>a:focus{
+      color: @themeColor;
+      background-color: @menuBgHoverColor;
+    }
+    .bg-white .agile-menuactive>a{
+      color: @themeColor
+    }
+    .navi ul.nav li.agile-menuactive ul.nav-sub li a:hover{
+      background-color: @menuBgHoverColor;
+    }
+    .list-group-item:hover.select{
+      background-color: @menuBgColor;
+    }
+    a.list-group-item:hover, a.list-group-item:focus{
+      color: @themeColor;
+      background-color: @menuBgHoverColor;
+    }
+    .list-group-item.select{
+      color: @themeColor;
+      background-color: @menuBgColor;
+      border-left: 3px solid @themeColor;
+    }
+
+     #reports-tab-container .report-selected a{
+      color: @themeColor;
+      background-color: @menuBgColor;
+      border-left: 3px solid @themeColor;
+    }
+    #reports-tab-container .maintab a:hover {
+      border: 0px;
+      color: @themeColor;
+      background-color: @menuBgHoverColor;
+    }
+    #reports-tab-container .maintab ul li a {
+      border: 0px !important;
+      color: #555 !important;
+      background-color: #fff !important;
+    }
+    .grid-icon-header{
+      color : @themeColor;
+    }
+    .agile-sub-header h1, .agile-sub-header h2, .agile-sub-header h3{
+      color : @themeColor;
+    }
+    .navbar-brand i{
+      color : @themeColor;
+    }
+
+}
+
+@important:!important;
+
+.agile-theme-MARKETING.agile-theme-15{
+  @themeColor : #11a0f8 @important;
+  @menuBgColor : #E7F6FF @important;
+  @menuBgHoverColor : #f5fbff @important;
+  .mainThemeDependentCss();
+}
+.agile-theme-SERVICE.agile-theme-15{
+  @themeColor : #ffbb44 @important;
+  @menuBgColor :  #FFF8EC @important;
+  @menuBgHoverColor : #FFFDF7 @important;
+  .mainThemeDependentCss();
+}
+.agile-theme-SALES.agile-theme-15{
+  @themeColor : #5840eb @important;
+  @menuBgColor : #F1EFFE @important;
+  @menuBgHoverColor : #F9F9FF @important;
+  .mainThemeDependentCss();
+}

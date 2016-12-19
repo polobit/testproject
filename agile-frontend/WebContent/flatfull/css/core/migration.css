@@ -2231,7 +2231,7 @@ form#addTriggerForm input, form#addTriggerForm select{ width: 100%;}
 .addField > .col-sm-9:nth-of-type(n+3) {margin-left: 25%;}
 .ticket-name, .ticket-subject{ color: #697073;max-width: 20em;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span {padding-top: 10%;}
-.probability-form{width: 92%;}
+/*.probability-form{width: 92%;}*/
 }
 
 .tagsinput li {
