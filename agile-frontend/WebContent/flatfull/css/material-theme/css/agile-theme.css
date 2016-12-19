@@ -1850,7 +1850,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
-.agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .tabs-left-panel, .agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
 .agile-theme-15 .reports-tabs-left-panel{top: 18px;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
@@ -2486,4 +2486,16 @@ margin-left: 5px !important;
 .agile-theme-15 #DealsFunnel .portlets-modal-icon .icon-filter
 {
       font-size: 31px!important;
+}
+.ticket-collection-container #tickets-single-row{
+  table-layout: auto;
+}
+.ticket-collection-container{
+  display: table;
+}
+#admin-prefs-tabs-content .tab-container{
+  width: 75%;
+}
+#admin-prefs-tabs-content .panel{
+  border-radius: 0;
 }
