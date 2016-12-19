@@ -442,6 +442,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    // Send Confirmation email
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
+						String isDefaultTemplate = "false";
 						map.put("unsubscribe_subject",unsubscribe_subject);
 					    
 						// Trigger Unsubscribe
@@ -482,10 +483,14 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								isDefaultTemplate = "true";
 								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text;
+								String bodyString = template_details.text;
+								String htmlString = template_details.html_for_builder;
 								System.out.println("htmlString is"+htmlString);
-								map.put("unsubscribe_body", htmlString);
+								System.out.println("bodyString is"+bodyString);
+								map.put("unsubscribe_body", bodyString);
+								map.put("unsubscribe_html", htmlString);
 							}
 							else
 							{
@@ -509,10 +514,13 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    	if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								isDefaultTemplate = "true";
 								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text;
+								String bodyString = template_details.text;
+								String htmlString = template_details.html_for_builder;								
 								System.out.println("htmlString is"+htmlString);
-								map.put("unsubscribe_body", htmlString);
+								map.put("unsubscribe_body", bodyString);
+								map.put("unsubscribe_html", htmlString);
 							}
 							else
 							{
@@ -521,11 +529,12 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							
 							
 						}
+						map.put("defaultTemplate", isDefaultTemplate);
 					 	// Add unsubscribe log
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
-								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
+								SendMail.sendMails(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
 								System.out.println("Email sent successfully...");
 							}
 						}
