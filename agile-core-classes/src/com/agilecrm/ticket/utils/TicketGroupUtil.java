@@ -95,14 +95,6 @@ public class TicketGroupUtil
 	{
 		List<TicketGroups> ticketGroups = getAllGroupsForCurrentUser();
 
-		if (ticketGroups == null || ticketGroups.size() == 0)
-		{
-			TicketGroups supportGroup = createDefaultGroup();
-
-			ticketGroups = new ArrayList<TicketGroups>();
-			ticketGroups.add(supportGroup);
-		}
-
 		return inclDomainUsers(ticketGroups);
 	}
 	
