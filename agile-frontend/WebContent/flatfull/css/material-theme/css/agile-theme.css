@@ -1423,6 +1423,7 @@ ul.tags-management li.tag{
   line-height:24px!important;
   border-radius:4px;
   vertical-align: middle;
+  border-color:#fff!important;
 }
 
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
@@ -2351,3 +2352,10 @@ table.iptable>tbody>tr>td{
 #reports-main-div>div{
   border-bottom: 0 !important;
 }
+.i-checks input[type="radio"]+i{display:none;}
+.dropdown-menu.pull-right.emailbuilder-copy{right:15px;}
+.dropdown-menu > li > a >i.fa-check.sort-field-check.m-t-xs{margin-top:0px!important;}
+#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important; top: 5px!important;}
+#reportrange{margin-right:0px;}
+#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;top: 5px;}
+
