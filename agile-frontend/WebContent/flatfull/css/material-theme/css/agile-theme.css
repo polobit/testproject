@@ -2474,3 +2474,15 @@ margin-left: 5px !important;
 .task-list-heading{
   border-bottom: none !important;
 }
+.ticket-collection-container #tickets-single-row{
+  table-layout: auto;
+}
+.ticket-collection-container{
+  display: table;
+}
+#admin-prefs-tabs-content .tab-container{
+  width: 75%;
+}
+#admin-prefs-tabs-content .panel{
+  border-radius: 0;
+}
