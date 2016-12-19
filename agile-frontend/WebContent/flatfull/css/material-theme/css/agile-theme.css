@@ -498,7 +498,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-theme-15 .app-header-fixed{padding-top: 70px;}
 .agile-theme-15 .navbar-brand{line-height: 50px;}
 .agile-theme-15 #app-aside-folded{top: 18px !important}
-.agile-theme-15 .navbar-searchicon{padding: 25px 15px;}
+.agile-theme-15 .navbar-searchicon{padding: 24px 15px;}
 .agile-theme-15 .grid-icon-header {
     color: #11a0f8!important;
     padding-bottom: 25px;
@@ -1424,6 +1424,7 @@ ul.tags-management li.tag{
   line-height:24px!important;
   border-radius:4px;
   vertical-align: middle;
+  border-color:#fff!important;
 }
 
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
@@ -1487,6 +1488,7 @@ ul.tags-management li.tag{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;
+  background-color: inherit;
 }
 /** End of panel CSS **/
 
@@ -1632,10 +1634,6 @@ table#contacts-table, table#companies {
 #dialler-page .panel.panel-default{
   border: 1px solid #fafafa !important;
 }
-#contact-sorter
-{
-  margin-top:-5px;
-}
 #refrecal
 {
   color: #11a0f8 !important;
@@ -1760,7 +1758,7 @@ color:#0d1114 !important;
   margin: 0; 
   margin-left: 0px !important
 }
-.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default {
+.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default, #workflows-collection-container .panel.panel-default{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;   
@@ -1781,7 +1779,7 @@ color:#0d1114 !important;
   background-color: #fff !important;
 }
 .agile-theme-15 #content .agile-table>thead>tr>th{
-  padding: 10px 15px 15px 15px !important;
+  padding: 10px 15px 15px 15px;
   border-top: none !important;
   border-bottom: none !important;
   text-transform: uppercase !important;
@@ -1806,7 +1804,7 @@ color:#0d1114 !important;
 }
 .agile-theme-15 #content .agile-table>tbody>tr>td{
    border-top: none !important;
-   padding: 10px 15px !important;
+   padding: 10px 15px;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
@@ -1851,6 +1849,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
 .agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .reports-tabs-left-panel{top: 18px;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
  
@@ -2085,7 +2084,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
 
-  #contact-sorter,.workflow-sortby,.tickets-toolbar .new-theme-sort
+.workflow-sortby,.tickets-toolbar .new-theme-sort
 {
   margin-top:-7px;
 }
@@ -2316,3 +2315,60 @@ table .headerSortUp::after, table .headerSortDown::after{
 .datedropdown{margin-top:5px!important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .theme-width{width:134px;}
+
+/*IP Table UI Fix Start*/
+
+#ip_access .panel-heading{
+  background-color: inherit;
+}
+table.iptable, #ip_access .panel-footer{
+  border: none !important;
+}
+table.iptable thead>tr>th{
+  padding-top: 15px !important;
+  padding-bottom: 5px !important;
+}
+#ip_access{
+  padding: 0 !important;
+}
+#ip_access .panel-footer{
+  display: none;
+}
+.allow_access_panelheading{
+  margin-top: 0 !important;
+}
+#blocked_panel_ips_list .upsert-ip{
+  margin-left: 0 !important;
+}
+#blocked_panel_ips_list .blocked-panel-ip-delete{
+  margin-left: 5px !important;
+}
+table.iptable>tbody>tr>td{
+  padding: 8px !important;
+}
+
+/*IP Table UI Fix End*/
+#reports-main-div>div{
+  border-bottom: 0 !important;
+}
+.i-checks input[type="radio"]+i{display:none;}
+.dropdown-menu.pull-right.emailbuilder-copy{right:15px;}
+.dropdown-menu > li > a >i.fa-check.sort-field-check.m-t-xs{margin-top:0px!important;}
+#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important; top: 5px!important;}
+#reportrange{margin-right:0px;}
+#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;top: 5px;}
+.agile-theme-15 .agile-header-btns{top: 2px!important;}
+
+.agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
+    background-color: #16aad8;
+    border-radius: 4px 4px 0 0;
+}
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt{
+    overflow: hidden;
+    padding: 0 20px;
+    background-color: #e7eef0 !important;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 4px 4px 0 0;
+}
