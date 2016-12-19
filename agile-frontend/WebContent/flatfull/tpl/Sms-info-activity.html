@@ -4,12 +4,12 @@
  <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-info-sign"></i>&nbsp;TwilioSms Info</h3>
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3><i class="icon-info-sign"></i>&nbsp;SMS Info</h3>
     </div>
     <div class="modal-body">
-
-<div style="margin-bottom:5px;"><b>From Number :&nbsp;&nbsp;</b>{{#if custom4}}{{this.custom4}}{{else}}{{this.custom3}}{{/if}}</div>
+<div style="margin-bottom:5px;"><b>{{agile_lng_translate 'contact-details' 'from'}}  :&nbsp;&nbsp;</b>{{this.custom4}}</div>
+<div style="margin-bottom:5px;"><b>{{agile_lng_translate 'contact-details' 'to'}}  :&nbsp;&nbsp;</b>{{this.custom1}}</div>
 <div ><b>{{agile_lng_translate 'other' 'message'}} &nbsp;&nbsp;</b>{{this.custom2}}</div>
        
        

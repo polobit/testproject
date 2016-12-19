@@ -2682,6 +2682,7 @@ public static void createLogForSMS(String toNumber, String fromNumber, String me
 				activity.custom3 = smsStatus;
 				activity.custom4 = fromNumber;
 				activity.label = gatewayName;
+				activity.note_id_call =smsToName ;
 				activity.entity_type = EntityType.CONTACT;
 				activity.entity_id = contact.id;
 				activity.save();

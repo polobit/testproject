@@ -1949,23 +1949,26 @@ function sendPersonalSMS(el, id){
 		$('.sms-message').removeClass("hidden");
 	    $('.sms-message').html(getRandomLoadingImg());
 
-	    if(message == undefined || message=="")
+	    if(message == undefined || message=="" || message.length>160)
         {
-        	if ($('#sms-noty-notes').val() == '') {
         	 $('#sms-noty-notes').css('border-color', 'red');
-        	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
-						$('.sms-message').html($save_info);
-						$save_info.show();
-
-						setTimeout(function()
+        	 if(message.length>160)
+        	 	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message length exceed</i></p></small></div>');
+        	 else
+        	   $save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
+			 
+			 $('.sms-message').html($save_info);
+			 $save_info.show();
+				setTimeout(function()
 						{
 							$('.sms-message').empty();
 						}, 2000);
            return;
-        }
-}else {
-    $('#sms-noty-notes').css('border-color', '');
-}
+      }
+      else
+       {
+          $('#sms-noty-notes').css('border-color', '');
+         }
 						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&from=" + encodeURIComponent(fromNumber) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
 						if ($(el).attr("disabled"))
 							return;

@@ -309,4 +309,31 @@ public class SMSGatewayUtil
 		}
 		return isTwilio;
 	}
+	
+	/**
+	 * This me
+	 * @return
+	 * 			-- Widget
+	 */
+	public static Widget getSMSGatewayWidgetForSMS(){
+		Widget widget=SMSGatewayUtil.getSMSGatewayWidget();
+		if(widget !=null)
+		 {
+			widget.display_name="SMS-Gateway";
+			JSONObject json;
+			try {
+				  json = new JSONObject(widget.prefs);
+			      if(json.getString("sms_api").equalsIgnoreCase("twilio"))
+			    	  widget.mini_logo_url = "/widgets/sms-small-logo.png";
+			      else 
+			    	  widget.mini_logo_url = "/widgets/plivosms-small-logo.png";
+				}
+				catch (JSONException e) {
+					System.out.println("Exception occured while fetching SMS gatway : " + e.getMessage());
+					return null;
+			      }
+			return widget;
+			}
+		return null;
+	}
 }

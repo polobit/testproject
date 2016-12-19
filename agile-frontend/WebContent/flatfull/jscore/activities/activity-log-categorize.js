@@ -75,8 +75,8 @@ $("#activities-listners").on('click', '.sms-details', function(e) {
 			getTemplate("smsModal", resp, undefined, function(template_ui){
 				if(!template_ui)
 					  return;
-				var emailinfo = $(template_ui);
-				emailinfo.modal('show');
+				var smsInfo = $(template_ui);
+				smsInfo.modal('show');
 			}, null);
 		});
 

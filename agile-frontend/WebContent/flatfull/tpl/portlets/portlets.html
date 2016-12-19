@@ -2647,6 +2647,21 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{/unless}}
 {{/if_equals}}
 
+{{#if_equals "SMS_SENT" activity_type}}
+{{#if custom3}}
+{{#if_equals "SMS Sent" custom3}} SMS sent to{{else}} SMS failed to {{/if_equals}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{note_id_call}}</a>{{else}}'{{note_id_call}}'{{/if}} <br/>
+<small class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"> 
+ {{#if_equals "SMS Sent" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+{{else}}
+ {{#if_equals "SMS Failed" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}}Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+{{/if_equals}}
+{{/if_equals}}
+</small>
+{{/if}}
+{{/if_equals}}
+
 <!-- starting of campaign status-->
 
 

@@ -1304,14 +1304,13 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 
 {{#if_equals "SMS_SENT" activity_type}}
 {{#if custom3}}
-ToNumber:{{#if this.entityObject}}
-    <a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{custom1}}</a>{{else}}'{{label}}'{{/if}} <br/>
+{{#if_equals "SMS Sent" custom3}} SMS sent to{{else}} SMS failed to {{/if_equals}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{note_id_call}}</a>{{else}}'{{note_id_call}}'{{/if}} <br/>
 <small class="activities_second_line m-t-none text-sm"> 
- {{#if_equals "Sms Sent" custom3}}
-<i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} SMS Subject - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+ {{#if_equals "SMS Sent" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
 {{else}}
- {{#if_equals "SMS Sending failed" custom3}}
- <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} SMS Sending failed due to - <a href="" class="sms-details" data="{{id}}">Phone Number is invalid<a> 
+ {{#if_equals "SMS Failed" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}}Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
 {{/if_equals}}
 {{/if_equals}}
 </small>

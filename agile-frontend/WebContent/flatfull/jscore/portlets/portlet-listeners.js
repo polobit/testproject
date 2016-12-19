@@ -750,14 +750,13 @@ $('.portlet_body .sms-details').off();
 		var data = $(this).closest('a').attr("data");
 
 		portlet_utility.getActivityObject(data, function(resp) {
-
 			console.log(resp);
 			getTemplate("smsModal", resp, undefined, function(template_ui) {
 				if (!template_ui)
 					return;
 
-				var emailinfo = $(template_ui);
-				emailinfo.modal('show');
+				var smsInfo = $(template_ui);
+				smsInfo.modal('show');
 			}, null);
 		});
 	});

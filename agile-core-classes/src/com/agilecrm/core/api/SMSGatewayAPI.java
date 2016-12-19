@@ -37,11 +37,9 @@ public class SMSGatewayAPI
 	
 	
 	/**creating an variable for the sent sms*/
-	public static final String  SMS_SENT = "Sms Sent";
+	public static final String  SMS_SENT = "SMS Sent";
 	
-	public static final String SMS_SENDING_FAILED = "SMS Sending failed";
-	
-	public static final String NUMBER_NOT_VALID = "SMS Sending failed";
+	public static final String SMS_SENDING_FAILED = "SMS Failed";
 	/**
 	 * Returns current SMSGateway Widget
 	 * 
@@ -177,40 +175,27 @@ public class SMSGatewayAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public void  sendSMS(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("message") String message, @QueryParam("contactId") String contactId) throws JSONException
 	{
-			System.out.println("smsssss "+from +" to "+ to + message);
-					//checking valid number
+			System.out.println("SMS details "+from +" to "+ to + message);
+			JSONObject json;
+			Widget widget= SMSGatewayUtil.getSMSGatewayWidget();
+			json = new JSONObject(widget.prefs);
+			try
+			{
+		      if(SendMessage.checkValidFromNumber(from) && SendMessage.checkValidToNumber(to)){	 						      
+						 String authToken = json.getString(TwilioSMS.TWILIO_AUTH_TOKEN);
+						 String sid = json.getString(TwilioSMS.TWILIO_ACCOUNT_SID);
+						 SMSGatewayUtil.sendSMS(json.getString("sms_api"), from, to, message, sid, authToken);
 
-		      if(SendMessage.checkValidFromNumber(from) && SendMessage.checkValidToNumber(to)){
-					    Widget widget= SMSGatewayUtil.getSMSGatewayWidget();
-					    JSONObject json;
-					    json = new JSONObject(widget.prefs);
-					    try {
-						      //json = new JSONObject(widget.prefs);
-						      
-						      String authToken = json.getString(TwilioSMS.TWILIO_AUTH_TOKEN);
-						      String sid = json.getString(TwilioSMS.TWILIO_ACCOUNT_SID);
-						      
-					          SMSGatewayUtil.sendSMS(json.getString("sms_api"), from, to, message, sid, authToken);
-
-					          ActivityUtil.createLogForSMS(to, from, message, SMS_SENT, json.getString("sms_api"), contactId);
-					          
-					      } catch (JSONException e) {
-					    	  System.out.println("While Sending Error Occured ." +e.getMessage());
-					    	  ActivityUtil.createLogForSMS(to, from, message, SMS_SENDING_FAILED, json.getString("sms_api"), contactId);
-
-						     throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-										.entity("Messege not sent!!").build());
-						     
-					      }
+					     ActivityUtil.createLogForSMS(to, from, message, SMS_SENT, json.getString("sms_api"), contactId);
 					   }
-					else{
-						//JSONObject json = new JSONObject(widget.prefs);
-						//ActivityUtil.createLogForSMS(to, from, message, NUMBER_NOT_VALID,, contactId);
-						ActivityUtil.createLogForSMS(to, from, message, NUMBER_NOT_VALID, SMSGatewayUtil.getTwilioSMSGatewayWidget(), contactId);
-
-						 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-									.entity("Number is not valid").build());
-					}
-					
+					else
+						 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Number is not valid").build());
+		 } 
+		   catch (Exception e) 
+		   {
+			   System.out.println("While Sending Error Occured ." +e.getMessage());
+			   ActivityUtil.createLogForSMS(to, from, message, SMS_SENDING_FAILED, json.getString("sms_api"), contactId);
+			    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Messege not sent!!").build());
 			}
+}
 }
