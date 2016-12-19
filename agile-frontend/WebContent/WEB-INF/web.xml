@@ -1487,6 +1487,15 @@
 		<servlet-name>SingleSignOn</servlet-name>
 		<url-pattern>/access/sso</url-pattern>
 	</servlet-mapping>
+	<!-- Android feature -->
+	<servlet>
+		<servlet-name>AndroidCallFromMB</servlet-name>
+		<servlet-class>com.agilecrm.androidcallwidget.AndroidActivityServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AndroidCallFromMB</servlet-name>
+		<url-pattern>/andoid/activity</url-pattern>
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>ContactsDeleteServlet</servlet-name>
 		<servlet-class>com.agilecrm.DeleteContactsFromTextSearchServlet</servlet-class>
