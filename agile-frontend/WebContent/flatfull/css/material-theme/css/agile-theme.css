@@ -2511,3 +2511,6 @@ margin-left: 5px !important;
 .agile-theme{
   margin-left: -30px;
 }
+.contacts-grid-view-temp>div{
+  border:0;
+}
