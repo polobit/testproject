@@ -32,7 +32,9 @@ cat ../WebContent/flatfull/css/material-theme/icon/material-icons.css > ../WebCo
 cat ../WebContent/flatfull/css/material-theme/css/style.css >> ../WebContent/flatfull/css/material-theme/min/agile-theme-15.css
 cat ../WebContent/flatfull/css/material-theme/css/agile-theme.css >> ../WebContent/flatfull/css/material-theme/min/agile-theme-15.css
 #lessc ../WebContent/flatfull/css/material-theme/css/agile-theme.less ../WebContent/flatfull/css/material-theme/css/agile-theme.css
-#lessc ../WebContent/flatfull/css/material-theme/css/dynamic-colors.less ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css
+lessc ../WebContent/flatfull/css/material-theme/css/dynamic-colors.less ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css
+cat ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css >> ../WebContent/flatfull/css/material-theme/min/agile-theme-15.css
+rm ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css
 ## Combil all CSS for fast load
 cat ../WebContent/flatfull/css/min/lib-all-new.css ../WebContent/flatfull/css/min/core-all-new.css ../WebContent/flatfull/css/min/misc-all-new.css > ../WebContent/flatfull/css/min/css-all-min.css
 

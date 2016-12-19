@@ -701,7 +701,7 @@ header .bg-white a, header button.show-search-dropdown {
 .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus
 {
   color: #141719;
-  background-color: #e7f6ff!important;
+  background-color: #f4f8f9!important;
   background-image: none;
   filter: none;
 }
@@ -2378,3 +2378,12 @@ table.iptable>tbody>tr>td{
   border: none !important;
 }
 
+.background-img-sales+span.block{
+  color: #5840eb !important;
+}
+.background-img-marketing+span.block{
+  color: #11a0f8 !important;
+}
+.background-img-service+span.block{
+  color: #ffbb44 !important;
+}

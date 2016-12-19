@@ -557,11 +557,14 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 			}
 		else
 			{
+				var prevRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
 				$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
 				$(this).addClass("agile-menuactive");
 				$(".active").removeClass("active");
 				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
 				$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+				var currentRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
+				$("html").removeClass("agile-theme-"+prevRole).addClass("agile-theme-"+currentRole);
 			}
 	});
 	// initializing need help popover for header page
@@ -734,6 +737,9 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 }
 function updateDashboardRole(prevrole)
 {
+	if(CURRENT_DOMAIN_USER.role == prevrole)
+		return;
+	$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+prevrole);
 	CURRENT_DOMAIN_USER.role = prevrole ;
 			var json = {};
  			json.id = CURRENT_DOMAIN_USER.id;
