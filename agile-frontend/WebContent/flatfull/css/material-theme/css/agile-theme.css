@@ -306,7 +306,8 @@ form select.form-control{
   font-size: 24px;
 }
 .agile-theme-15 h4, .h4{
-  font-size: 14px;
+  /*font-size: 14px;*/
+  font-size: 16px;
 }
 .agile-theme-15 h5, .h5{
   font-size: 13px;
@@ -1084,7 +1085,7 @@ input.mini-time.ui-timepicker-input{
     font-size: 12px;
 }
 
-.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,.agile-theme-15 .data-block h4,.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
+.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,/*.agile-theme-15 .data-block h4,*/.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
     line-height: 1.1 !important;
     margin-bottom: 10px !important;
     color: inherit !important;
@@ -1093,10 +1094,10 @@ input.mini-time.ui-timepicker-input{
   margin-bottom: 10px !important;
 }
 .agile-theme-15 .workflows-right-body h1, h2, h3, h4, h5, h6{
-  color: #58666e !important;
+  color: #58666e;
 }
 .agile-theme-15 .triggers-right-body  h1, h2, h3, h4, h5, h6{
-  color: #58666e !important;
+  color: #58666e;
 }
 
 .agile-theme-15 p{
@@ -2510,10 +2511,11 @@ margin-left: 5px !important;
 .agile-theme{
   margin-left: -30px;
 }
-.popover
+
+/*.popover
 {
   border:0px solid #fff;
-}
+}*/
 .newtheme-well
 {
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0);
@@ -2524,4 +2526,11 @@ margin-left: 5px !important;
   float:right;
   border-radius: 4px 4px 4px 4px !important;
   margin-top: -10px;
+}
+.contacts-grid-view-temp>div{
+  border:0;
+}
+
+.tickets-div .panel-heading .btn{
+  font-size: 12px !important;
 }
