@@ -25,6 +25,7 @@
         selectLinksPages: document.getElementById('pageLinksDropdown'),
         videoInputYoutube: document.getElementById('youtubeID'),
         videoInputVimeo: document.getElementById('vimeoID'),
+        imageInputURL: document.getElementById('imageURL'),
         inputCustomLink: document.getElementById('internalLinksCustom'),
         linkImage: null,
         linkIcon: null,
@@ -62,8 +63,9 @@
             $(this.buttonRemoveElement).on('click', this.deleteElement);
             $(this.buttonCloneElement).on('click', this.cloneElement);
             $(this.buttonResetElement).on('click', this.resetElement);
-            $(this.videoInputYoutube).on('focus', function(){ $(styleeditor.videoInputVimeo).val(''); });
-            $(this.videoInputVimeo).on('focus', function(){ $(styleeditor.videoInputYoutube).val(''); });
+            $(this.videoInputYoutube).on('focus',this.focusOnInputYoutube);
+            $(this.videoInputVimeo).on('focus',this.focusOnInputVimeo);
+            $(this.imageInputURL).on('focus',this.focusImageInputURL);            
             $(this.inputCustomLink).on('focus', this.resetSelectAllLinks);
             $(this.buttonDetailsAppliedHide).on('click', function(){$(this).parent().fadeOut(500);});
             $(this.buttonCloseStyleEditor).on('click', this.closeStyleEditor);
@@ -482,8 +484,14 @@
             //links
             if( $(styleeditor.activeElement.element).prop('tagName') === 'A' ) {
 
+                var link_text=document.getElementById('internalLinksCustom').value;
+                if($('#internalLinksDropdown').value !==link_text && link_text.match("^(http|https)://")===null){
+                    styleeditor.showErrorMsg('internalLinksCustom');
+                    return;
+                }
                 //change the href prop?
-                styleeditor.activeElement.element.href = document.getElementById('internalLinksCustom').value;
+                styleeditor.activeElement.element.href = link_text;
+
 
                 length = styleeditor.activeElement.element.childNodes.length;
                 
@@ -519,8 +527,15 @@
 
             if( $(styleeditor.activeElement.element).parent().prop('tagName') === 'A' ) {
 
+                var val=document.getElementById('internalLinksCustom').value;
+                if($('#link_Link').parent().hasClass('active'))                    
+                    if(val !== "#" && $('#internalLinksDropdown').val() !==val &&  val.match("^(http|https)://")===null){
+                        styleeditor.showErrorMsg('internalLinksCustom');
+                        return;
+                    }
+
                 //change the href prop?
-                styleeditor.activeElement.element.parentNode.href = document.getElementById('internalLinksCustom').value;
+                styleeditor.activeElement.element.parentNode.href = val;
 
                 length = styleeditor.activeElement.element.childNodes.length;
                 
@@ -534,8 +549,14 @@
                     $('#'+styleeditor.activeElement.sandbox).contents().find('#'+elementID).parent().attr('href', $('input#internalLinksCustom').val());
 
                 }
+                 /* END SANDBOX */
 
-                /* END SANDBOX */
+                //check for open in new tab
+                if($('#newtab-option').prop("checked"))            
+                    $(styleeditor.activeElement.element).parent().attr('target','_blank');
+                else
+                    $(styleeditor.activeElement.element).parent().removeAttr('target');
+               
 
             }
 
@@ -583,9 +604,7 @@
                 if($(styleeditor.activeElement.element).siblings("IMG")!==0 && $('.imageFileTab').hasClass('active')){
                     var url=$('.imageFileTab').find('input#imageURL').val();
                     if(url.match("^(http|https)://")===null|| url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
-                        $('input#imageURL').css("margin-bottom","0px");
-                        $("#error-img-msg").next().css("margin-top","6px");
-                        $("#error-img-msg").show();
+                        styleeditor.showErrorMsg('imageURL');
                         return;
                     }
                     else 
@@ -602,13 +621,10 @@
                             var youtubeId = ytMatch[1];
                             $(styleeditor.activeElement.element).prev().attr('data-video', "//www.youtube.com/embed/"+youtubeId);
                             customAgileEvents.createYoutubeThumbnail(youtubeId,$(styleeditor.activeElement.element));
-                                
-                        
+                             
                         }
                         else{
-                            $('input#youtubeID').removeClass("margin-bottom-20");
-                            $("#err-youtube-msg").next().css("margin-top","6px");
-                            $("#err-youtube-msg").show();
+                            styleeditor.showErrorMsg('youtubeID');
                             return;
                         }
                         
@@ -621,9 +637,7 @@
                             customAgileEvents.createVimeoThumbnail(vimeoId,$(styleeditor.activeElement.element));
                         }
                         else{
-                            $('input#vimeoID').removeClass("margin-bottom-20");
-                            $("#err-vimeo-msg").next().css("margin-top","6px");
-                            $("#err-vimeo-msg").show();
+                            styleeditor.showErrorMsg('vimeoID');
                             return;
                         }
                     } else if ( videoRecord_Id !== '' ) {
@@ -682,9 +696,7 @@
                     var image_url=$('.imageFileTab').find('input#imageURL').val();
                    
                     if( image_url.match("^(http|https)://")===null|| image_url.match(/\.(jpeg|jpg|gif|png|svg|JPEG|JPG|GIF|PNG|SVG)$/) === null){
-                        $('input#imageURL').css("margin-bottom","0px");
-                        $("#error-img-msg").next().css("margin-top","6px");
-                        $("#error-img-msg").show();
+                        styleeditor.showErrorMsg('imageURL');
                         return;
                     }
                     $(styleeditor.activeElement.element).attr('src',decodeURIComponent(image_url));
@@ -808,7 +820,7 @@
             }
 
             //blocks match?
-            for ( x = 0; styleeditor.selectLinksInernal.querySelectorAll('option').length; x++ ) {
+            for ( x = 0; x < styleeditor.selectLinksInernal.querySelectorAll('option').length; x++ ) {
 
                 if ( value === styleeditor.selectLinksInernal.querySelectorAll('option')[x].value ) {
 
@@ -912,6 +924,10 @@
                 $("#newtab-option").prop("checked", "");
             $('a#link_Link').click();
 
+            if($("#err-url-msg").css("display")!=="none"){
+                styleeditor.hideErrorMsg('internalLinksCustom');
+            }
+
             //set theHref
             if( $(el).prop('tagName') === 'A' ) {
                 theHref = $(el).attr('href');
@@ -949,9 +965,7 @@
                 $("a#img_Link").click(); 
     
             if($("#error-img-msg").css("display")!=="none"){
-                $('input#imageURL').css("margin-bottom","");
-                $("#error-img-msg").next().css("margin-top","");
-                $("#error-img-msg").hide();
+                styleeditor.hideErrorMsg('imageURL');
             }
 
             //set the current SRC 
@@ -983,14 +997,10 @@
             $('a#default-tab1').css("display","none");
 
             if($("#err-youtube-msg").css("display")!=="none"){
-                $('input#youtubeID').addClass("margin-bottom-20");
-                $("#err-youtube-msg").next().css("margin-top","");
-                $("#err-youtube-msg").hide();
+                styleeditor.hideErrorMsg('youtubeID');
             }
             if($("#err-vimeo-msg").css("display")!=="none"){
-                $('input#vimeoID').addClass("margin-bottom-20");
-                $("#err-vimeo-msg").next().css("margin-top","");
-                $("#err-vimeo-msg").hide();
+                styleeditor.hideErrorMsg('vimeoID');
             }
             //inject current video ID,check if we're dealing with Youtube or Vimeo or Recorded video
 
@@ -1314,7 +1324,7 @@
         },
 
         resetSelectAllLinks: function() {
-
+            styleeditor.hideErrorMsg('internalLinksCustom');
             $('#internalLinksDropdown').select2('val', '#');
             $('#pageLinksDropdown').select2('val', '#');
             this.select();
@@ -1406,7 +1416,33 @@
                 $(event.currentTarget).prev().find('input').val("none");
             });
             return icon;
-        }       
+        },
+        focusOnInputVimeo : function(e){
+            $(styleeditor.videoInputYoutube).val('');             
+            if($('#err-youtube-msg').css('display')!=="none")
+                styleeditor.hideErrorMsg('youtubeID'); 
+            styleeditor.hideErrorMsg('vimeoID');
+        },
+        focusOnInputYoutube : function(e){
+            $(styleeditor.videoInputVimeo).val(''); 
+            if($('#err-vimeo-msg').css('display')!=="none")                
+                styleeditor.hideErrorMsg('vimeoID');
+            styleeditor.hideErrorMsg('youtubeID'); 
+        },
+        focusImageInputURL :function(el){
+            if($('#error-img-msg').css('display')!== "none")
+                styleeditor.hideErrorMsg('imageURL');
+        },
+        hideErrorMsg : function(el){
+            $('input#'+el).addClass("margin-bottom-20");
+            $("."+el).next().css("margin-top","");
+            $("."+el).hide();
+        },
+        showErrorMsg : function(el){
+            $('input#'+el).removeClass("margin-bottom-20");
+            $("."+el).next().css("margin-top","6px");
+            $("."+el).show();
+        }
 
     };
 

@@ -304,7 +304,9 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                    
                     <div class="form-group fullWidth">
                         <label>URL: </label>
-                        <input type="text" class="form-control" id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
+                        <input type="text" class="form-control margin-bottom-20" 
+                        id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
+                        <span id="err-url-msg" class="internalLinksCustom" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid url</span>
                     </div>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
@@ -328,8 +330,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
-                    <input type="text" class="form-control" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
-                    <span id="error-img-msg" style="font-size: 12px;color:#f05050; display:none;">
+                    <input type="text" class="form-control margin-bottom-20" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
+                    <span id="error-img-msg" class="imageURL" style="font-size: 12px;color:#f05050; display:none;">
                         <%=LanguageUtil.getLocaleJSONValue(localeJSON, "error-image-url")%>
                     </span>
                                  
@@ -1989,7 +1991,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-url")%>" value="">
-                    <span id="err-youtube-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
+                    <span id="err-youtube-msg" class="youtubeID" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
@@ -1997,7 +1999,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-url")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-url")%>" value="">
-                     <span id="err-vimeo-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
+                     <span id="err-vimeo-msg" class="vimeoID" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
