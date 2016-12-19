@@ -215,8 +215,6 @@ $.fn.removeClassPrefix = function(prefix) {
     return this;
 };
 
-
-
 });
 	 
 

@@ -30,9 +30,8 @@ $('#app-aside-folded').on('click', function(e) {
 	$('.highcharts-container').each(function(chart) {
 		$(this).parent().highcharts().reflow();
 	});
-	
 
-    
+	
 	});
 
 
@@ -51,6 +50,11 @@ function showTrailAlertMessage(){
 
 	
 $(document).ready(function(){
+
+// Add agile-menu active class to li element
+try{
+	$("aside a[href=" + window.location.hash + "]").closest("li").addClass("agile-menuactive");	
+}catch(e){}
 
 //helpContentPopover();
 $('body').on('click','#speechDectation',function(e){
