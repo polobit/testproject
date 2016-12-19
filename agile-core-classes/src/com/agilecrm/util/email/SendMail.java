@@ -410,16 +410,16 @@ public class SendMail
 	    String emailBody = "";
 	    JSONObject templateJson = new JSONObject(objectJson);
 	    System.out.println("tempalte+++++  : " + templateJson);
-	    System.out.println(templateJson.getString("unsubscribe_html"));
-	    System.out.println(templateJson.getString("unsubscribe_body"));
-	    System.out.println("tempalte+++++  : " + templateJson);
-	    if(templateJson.has("defaultTemplate") && templateJson.get("defaultTemplate").equals("true")){
+	    if(templateJson.has("defaultTemplate") && templateJson.get("defaultTemplate").equals("true")){	    	
 	    	 // Read template - HTML
 		    emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON, language);
 
 		    // Read template - Body
 		    emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON, language);
 	    }else{
+
+		    System.out.println("unsubscribe_html_html : "+templateJson.getString("unsubscribe_html"));
+		    System.out.println("unsubscribe_body body : "+templateJson.getString("unsubscribe_body"));
 	    	 // Read template - HTML
 		    emailHTML = MustacheUtil.compile(templateJson.getString("unsubscribe_html"), mergedJSON);
 

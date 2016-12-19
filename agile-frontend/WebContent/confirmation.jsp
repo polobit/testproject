@@ -442,7 +442,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    // Send Confirmation email
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
-						String isDefaultTemplate = "false";
+						String isDefaultTemplate = "true";
 						map.put("unsubscribe_subject",unsubscribe_subject);
 					    
 						// Trigger Unsubscribe
@@ -483,7 +483,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
-								isDefaultTemplate = "true";
+								isDefaultTemplate = "false";
 								subjectMessage = template_details.subject ;
 								String bodyString = template_details.text;
 								String htmlString = template_details.html_for_builder;
@@ -514,7 +514,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    	if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
-								isDefaultTemplate = "true";
+								isDefaultTemplate = "false";
 								subjectMessage = template_details.subject ;
 								String bodyString = template_details.text;
 								String htmlString = template_details.html_for_builder;								
