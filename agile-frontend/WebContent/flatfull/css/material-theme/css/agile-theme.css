@@ -1936,9 +1936,9 @@ table.agile-table>tbody>tr>td{
 .milestone-column>ul, .milestone-column>div.milestones{
   height: calc(100vh - 190px) !important; 
 }
-.milestone-column>div.milestones ul.milestones{
+/*.milestone-column>div.milestones ul.milestones{
   min-height: calc(100vh - 190px) !important; 
-}
+}*/
 /*End of deals*/
 
 .setting-add-tag{
@@ -2430,4 +2430,16 @@ margin-left: 5px !important;
 }  
 #taskheading{
   margin-left: 6px;
+}
+
+.dealtitle-angular .badge{
+  background-color: #cfdadd !important;
+  margin-right: 5px;
+} 
+#taskheading{
+  font-weight: normal !important;
+  color : #263238 !important;
+}
+.task-list-heading{
+  border-bottom: none !important;
 }
