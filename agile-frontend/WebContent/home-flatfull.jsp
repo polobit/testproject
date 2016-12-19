@@ -40,6 +40,7 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.dashboards.Dashboard"%>
 <%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="com.agilecrm.account.util.EmailGatewayUtil.isEmailGatewayExist()"%>
 <%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
@@ -1249,6 +1250,9 @@ var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAs
 var LEADS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeContact")))%>;
 // Get Lead company type custom fields
 var LEADS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeCompany")))%>;
+
+//Get email gateway status
+var _IS_EMAIL_GATEWAY = <%=EmailGatewayUtil.isEmailGatewayExist()%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

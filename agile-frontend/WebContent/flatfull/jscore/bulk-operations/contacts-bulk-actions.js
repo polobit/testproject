@@ -733,7 +733,7 @@ function show_bulk_owner_change_page()
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 
-			 if(selected_count > 300 && emails_workflows.hasOwnProperty(workflow_id))
+			 if(selected_count > 300 && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
 				{
 				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id))
 				  	{
