@@ -1393,7 +1393,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					{
 						$("#content [name='contact_company_id']")
 								.html(
-										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+										'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 						$("#content #contact_company").hide();
 						if(data){							
 							$.ajax({
@@ -1587,7 +1587,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 			var no = _agile_get_translated_val("reputation", "Ok");
 			var upgrade_link =  _agile_get_translated_val('contact-details','please') + ' <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('portlets','upgrade')+' </a> ' + _agile_get_translated_val('billing','your-email-subscription');
 			var emialErrormsg = '<div class="m-t-xs">'+_agile_get_translated_val('billing','continue-send-emails')+', ' +_agile_get_translated_val('contact-details','please')+ '<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('plan-and-upgrade','purchase')+' </a>'+_agile_get_translated_val('plan-and-upgrade','more')+'.</div>';
-			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + emialErrormsg;
+			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + (_agile_is_user_from_iphone() ? "" : emialErrormsg);
 			
 			showModalConfirmation(title, 
 					message, 
@@ -1739,7 +1739,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a class="text-white " href="#contact/' + model_json.id + '">' + name + '</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>');									
+
+													'<li class="tag  btn btn-xs btn-default m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');									
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
@@ -1781,7 +1782,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 							.closest("div.controls")
 							.find(".tags")
 							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a class="text-white" href="#contact/' + model.id + '">' + name + '</a><a class="close text-white m-l-xs v-middle" id="remove_tag">&times</a></li>');
+
+									'<li class="tag  btn btn-xs btn-default m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 				}
 				else  if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);

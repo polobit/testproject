@@ -303,10 +303,22 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
    background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
    background-position: 98% 0px;
 }
+.uservoice-icon{
+  position: fixed;
+  bottom: 10px;
+  right: 12px;
+  visibility:hidden;
+  }
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>
     #personModal #import-link{display: none!important;}
+<%}%>
+<%
+   if(MobileUADetector.isiPhone(request.getHeader("user-agent"))){
+%>
+    a[href="#subscribe"] {display: none!important;}
+    .hideInIphone {display: none!important;}
 <%}%>
 </style>
 <!--  responsive table js -->
@@ -339,6 +351,11 @@ function isIE() {
 <div id="contacts_limit_alert_info" class="contacts_plan_alert hide" style="position: relative;width:340px;"> 
 </div>
 </div>
+<div class="pos-abs "><a href="javascript:void(0)" class="uservoice-window uservoice-icon" data-uv-trigger="smartvote">voice</a></div>
+  
+  
+
+<%if(!MobileUADetector.isiPhone(userAgent)) {%>
 <div id="free_plan_alert_info" class="free_plan_alert alert alert-info" role="alert" style="display:none;"> 
   <span class="free_plan_message">
    <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-msg") %>
@@ -347,6 +364,7 @@ function isIE() {
    <%=LanguageUtil.getLocaleJSONValue(localeJSON, "freeplan-new-message") %>
   <span class="free_plan_strip_close p-l-sm c-p">&times</span>
 </div>
+<%}%>
 
 <img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img>
 
@@ -694,17 +712,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </li>
 
 
-     <%
-  if(domainUser.is_admin){
-  %>
+   
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
-  <%}%>
-     
+       
      <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.LANDINGPAGES)){
     %>
@@ -1085,7 +1100,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </aside>
 <div class='app-content <%if("admin".equals(domainUser.domain)) out.print("adminPanelcontainer"); %>' id="agilecrm-container">
 <div id="direct-dialler-div" style = "height:0px;position: absolute!important;"></div>
-<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_info"></div><div class="draggable_noty_notes"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
+<div id="draggable_noty" style = "height:0px;position: absolute!important;"><div style="z-index: 10000;position: relative;"><div class="draggable_noty_notes"></div><div class="draggable_noty_info"></div><div class="draggable_noty_callScript" style="display:none;"></div></div></div>
 <div id="call-campaign-content" class="box-shadow width-min-100p height-min-100p z-lg" style = "background-color: #edf1f2;"></div> 
 <script type="text/javascript">
 // In mobile browsers, don't show animation bar
@@ -1244,6 +1259,8 @@ var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloud
 var _billing_restriction = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(restriction))%>;
 var USER_BILLING_PREFS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(subscription))%>;
 
+// Iphone
+var IS_IPHONE_APP = <%=MobileUADetector.isiPhone(userAgent)%>;
 try{if(!HANDLEBARS_PRECOMPILATION)console.time("startbackbone");}catch(e){}
 
 // Load language JSON

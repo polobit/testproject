@@ -8,33 +8,33 @@
         <h3 class="modal-title"><i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'deal-view' 'add-note'}}</h3>
     </div>
     <div class="modal-body">
-        <form id="dealnoteForm" name="dealnoteForm" method="post">
+        <form id="dealnoteForm" name="dealnoteForm" method="post" class="form-horizontal">
             <fieldset>
                 <input name="from_task" id="from_task" type="hidden" value="" />
                 <input name="task_form" id="task_form" type="hidden" value="" />
                 	            
                 <div class="control-group form-group">
-                    <label class="control-label"><b>{{agile_lng_translate 'contact-details' 'subject'}}
-                    </b> <span class="field_req">*</span></label>
-                    <div class="controls">
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'contact-details' 'subject'}}
+                    <span class="field_req">*</span></label>
+                    <div class="controls col-sm-7">
                         <input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject" class="required form-control" />
                     </div>
                 </div>
                 
 	                <div class="control-group form-group">
 
-	                    <label class="control-label"><b>{{agile_lng_translate 'other' 'description'}}</b></label>
-	                    <div class="controls agiletxexpander">
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'description'}}</label>
+	                    <div class="controls col-sm-7 agiletxexpander">
 	                        <textarea rows="3" class="form-control textarea" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description" data-agileexpand="true" ></textarea> 
 
 	                    </div>
 	                </div>
                 
-                <div class="control-group form-group">
-                    <label class="control-label"><b>{{agile_lng_translate 'deal-view' 'related-to'}}</b></label>
+                <div class="control-group form-group hide">
+                    <label class="control-label col-sm-3"><b>{{agile_lng_translate 'deal-view' 'related-to'}}</b></label>
                     <div class="controls">
                         <div>
-                            <div class="pull-left">
+                            <div class="pull-left col-sm-7">
                                 <ul name="deal_ids" class="contacts tags tagsinput p-n"></ul>
                             </div>
                         </div>

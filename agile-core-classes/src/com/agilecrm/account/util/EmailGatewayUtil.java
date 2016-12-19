@@ -414,37 +414,36 @@ public class EmailGatewayUtil
 	    	
 	    	cc = ContactEmailUtil.normalizeEmailIds(cc);
 	    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
-	    	
 	    	try {
-			AgileUser agileUser = AgileUser.getCurrentAgileUser();
-
-			//As of now Oauth and SMTP doesn't support attachments
-			if((documentIds != null && documentIds.size() == 0) 
-					&& (blobKeys != null && blobKeys.size() == 0)
-					&& (attachments != null && attachments.length == 0)) {
-
-				//Fetch the email options from user's gmail oauth preferences 
-				GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
-				if(gmailPrefs != null) {
-					System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
-					GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
-							html, text, documentIds, blobKeys, attachments);
-					return;
-				}
-
-				//Fetch the email options from user's SMTP preferences 
-				SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
-				if(smtpPrefs != null) {
-					System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
-					GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
-							html, text, documentIds, blobKeys, attachments);
-					return;
-				}
-			} 
-		} catch(Exception ex) {
-			System.err.println("Exception occured while getting smtp prefs...");
-			System.out.println(ExceptionUtils.getFullStackTrace(ex));
-		}
+				AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	
+				//As of now Oauth and SMTP doesn't support attachments
+				if((documentIds != null && documentIds.size() == 0) 
+						&& (blobKeys != null && blobKeys.size() == 0)
+						&& (attachments != null && attachments.length == 0)) {
+	
+					//Fetch the email options from user's gmail oauth preferences 
+					GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
+					if(gmailPrefs != null) {
+						System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
+						GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
+								html, text, documentIds, blobKeys, attachments);
+						return;
+					}
+	
+					//Fetch the email options from user's SMTP preferences 
+					SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
+					if(smtpPrefs != null) {
+						System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
+						GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
+								html, text, documentIds, blobKeys, attachments);
+						return;
+					}
+				} 
+			} catch(Exception ex) {
+				System.err.println("Exception occured while getting smtp prefs...");
+				System.out.println(ExceptionUtils.getFullStackTrace(ex));
+			}
 	
 	    	//Fetch the preferred emailgateway from account preferences
 	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
@@ -565,10 +564,15 @@ public class EmailGatewayUtil
      * @param tasks
      *            - tasks leased from pull queue
      */
-    public static void sendMails(List<TaskHandle> tasks)
+    public static void sendMails(List<TaskHandle> tasks, String queueName)
     {
     	
-	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), queueName);
+    }
+    
+    public static void sendMails(List<TaskHandle> tasks)
+    {
+    	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), null);
     }
 
     public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
@@ -650,7 +654,7 @@ public class EmailGatewayUtil
 	}
     }
 
-    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks)
+    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks, String queueName)
     {
 
 	MailDeferredTask mailDeferredTask = tasks.get(0);
@@ -666,6 +670,9 @@ public class EmailGatewayUtil
 	    NamespaceManager.set(domain);
 
 	    EmailSender emailSender = EmailSender.getEmailSender();
+	    emailSender.setQueueName(queueName);
+	    emailSender.setEmailsToSend(tasks.size());
+	    
 	    EmailGateway emailGateway = emailSender.emailGateway;
 
 	    if (emailSender.canSend())

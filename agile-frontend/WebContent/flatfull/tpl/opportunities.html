@@ -10,7 +10,7 @@
   </div>
 
   <div class="text-ellipsis deals-name" style="font-size:13px; margin-top:-2px;">
-  {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+  {{#if_equals expected_value "0"}}{{currencySymbol}}{{expected_value}}{{/if_equals}}{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if}}
 <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
   </div>
 
@@ -50,6 +50,7 @@
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </div>
 </td>
+
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis" style="width:5em">

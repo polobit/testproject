@@ -730,9 +730,6 @@ public String getSendgridWhitelabelPermission() throws Exception
 	if(emailGateway!=null)
 	   restriction.put("emailGateway", "gateway exist");
 	
-	if(SubscriptionUtil.isFreePlan())
-		restriction.put("plan", "Paid");
-	
 	return restriction.toString();
 	
 }

@@ -670,7 +670,7 @@ var WorkflowsRouter = Backbone.Router
 
 								if (campaign_id)
 								{
-									fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
+									fillSelect('campaign-select', '/core/api/workflows/partial', 'workflow', function(id)
 									{
 										$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
 									}, optionsTemplate, false, el);
@@ -691,7 +691,7 @@ var WorkflowsRouter = Backbone.Router
 									 * @param optionsTemplate-
 									 *            to fill options with workflows
 									 */
-									fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
+									fillSelect('campaign-select', '/core/api/workflows/partial', 'workflow', 'no-callback', optionsTemplate, false, el);
 								}
 							},
 							saveCallback : function() {
@@ -865,7 +865,7 @@ var WorkflowsRouter = Backbone.Router
 								 * @param optionsTemplate-
 								 *            to fill options with workflows
 								 */
-								fillSelect('email-tracking-campaign-id', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
+								fillSelect('email-tracking-campaign-id', '/core/api/workflows/partial?allow_campaign=' + currentTrigger.toJSON().email_tracking_campaign_id, 'workflow', function fillCampaign()
 								{
 									$('#email-tracking-campaign-id option:first').after('<option value="0">{{agile_lng_translate "subscriber_type" "all"}}</option>');
 
@@ -931,7 +931,7 @@ var WorkflowsRouter = Backbone.Router
 						 * @param optionsTemplate-
 						 *            to fill options with workflows
 						 */
-						fillSelect('campaign-select', '/core/api/workflows?allow_campaign=' + currentTrigger.toJSON().campaign_id, 'workflow', function fillCampaign()
+						fillSelect('campaign-select', '/core/api/workflows/partial?allow_campaign=' + currentTrigger.toJSON().campaign_id, 'workflow', function fillCampaign()
 						{
 							var value = currentTrigger.toJSON();
 							if (value)
@@ -1406,7 +1406,7 @@ var WorkflowsRouter = Backbone.Router
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						// fill workflows
-						fillSelect('campaign-reports-select', '/core/api/workflows', 'workflow', function fillCampaign()
+					   fillSelect('campaign-reports-select', '/core/api/workflows/partial', 'workflow', function fillCampaign()
 						{
 							if(id)
 							$('#campaign-reports-select').find('option[value=' + id + ']').attr('selected', 'selected');

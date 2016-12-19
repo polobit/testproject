@@ -120,9 +120,9 @@
             </div>
        {{else}}
       <a href="" class="ticket-feedback-comment" data-id="{{id}}">
-      <div class="ccemail feedback_comment overflow-hidden line-clamp line-clamp-3 no-wrap">
+      <div class="ccemail feedback_comment overflow-hidden line-clamp line-clamp-3 no-wrap" style="word-break:break-word">
                {{feedback_comment}}
-            </div>
+      </div>
       </a> 
 
        {{/if_equals}}     </td>
@@ -199,7 +199,7 @@
        </div>
 
        <hr>
-       <div class="word-break-all" style="margin-bottom:5px;">
+       <div style="margin-bottom:5px;word-break: break-word;">
         {{{note}}}
        </div>
       </div> 
@@ -216,7 +216,7 @@
           <h3>{{agile_lng_translate 'tickets' 'feedback-feedback-comment'}}</h3>
       </div>
       <div class="modal-body">
-       <div class="word-break-all" style="margin-bottom:5px;">
+       <div  style="margin-bottom:5px;word-break: break-word;">
         {{{replace_newline_with_br_feedback feedback_comment}}}
        </div>
       </div> 

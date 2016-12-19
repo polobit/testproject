@@ -1059,3 +1059,6 @@ li.element {
 }
 .left{float:left;}
 .right{float:right;}
+.agile-link:hover{
+	cursor: pointer;
+}

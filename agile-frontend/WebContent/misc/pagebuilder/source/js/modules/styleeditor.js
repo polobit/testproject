@@ -487,7 +487,12 @@
                 
                 //does the link contain an image?
                 if( styleeditor.linkImage ) styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
-                else if ( styleeditor.linkIcon ) styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
+                else if ( styleeditor.linkIcon ) {
+                    if($(styleeditor.activeElement.element.childNodes[length-1]).hasClass('fa'))
+                        styleeditor.activeElement.element.childNodes[0].nodeValue = document.getElementById('linkText').value;
+                    else
+                        styleeditor.activeElement.element.childNodes[length-1].nodeValue = document.getElementById('linkText').value;
+                }  
                 else styleeditor.activeElement.element.innerText = document.getElementById('linkText').value;
 
                 /* SANDBOX */
@@ -578,6 +583,8 @@
                     }
                     else 
                        $(styleeditor.activeElement.element).siblings("IMG").attr('src',decodeURIComponent(url));
+                    // alternate text for image
+                    $(styleeditor.activeElement.element).siblings("IMG").attr('alt',$('.imageFileTab').find('input#alttxt').val());
                 }
                 if(!$('.imageFileTab').hasClass('active')){
                     if( $('input#youtubeID').val() !== '' ) {
@@ -674,7 +681,10 @@
                         return;
                     }
                     $(styleeditor.activeElement.element).attr('src',decodeURIComponent(image_url));
-            
+
+                    //apply alternate text for image
+                    $(styleeditor.activeElement.element).attr('alt',$('.imageFileTab').find('input#alttxt').val());
+                
             }
 
             $('#detailsAppliedMessage').fadeIn(600, function(){
@@ -949,11 +959,16 @@
                 $("#error-img-msg").hide();
             }
             //set the current SRC 
-            if($(el).siblings("IMG").length!==0)
-                $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));            
-            else 
+            if($(el).siblings("IMG").length!==0){
+                $('.imageFileTab').find('input#imageURL').val($(el).siblings("IMG").attr("src"));
+                //set if alternate text for image is exist
+                $('.imageFileTab').find('input#alttxt').val($(el).siblings("IMG").attr("alt"));
+            }            
+            else{ 
+                $('.imageFileTab').find('input#alttxt').val($(el).attr("alt"));
                 $('.imageFileTab').find('input#imageURL').val( $(el).attr('src') );
-
+            }
+            
             //reset the file upload
             $('.imageFileTab').find('a.fileinput-exists').click();
 
@@ -1021,6 +1036,7 @@
         editIcon: function() {
 
             $('a#icon_Link').parent().show();
+            $('a#icon_Link').click();
 
             //get icon class name, starting with fa-
             var get = $.grep(this.activeElement.element.className.split(" "), function(v, i){

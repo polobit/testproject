@@ -14,8 +14,10 @@ function androidSetup(){
 	});
 }
 
-$(function(){
-	//initToPubNub();
+var notifications_sound = true;
+$(function()
+{
+//	initToPubNub();
 	globalCallWidgetSet();
 	androidSetup();
 });
@@ -635,7 +637,7 @@ function closeCallNoty(option){
 		  $("#direct-dialler-div").show();
 		  dialled.using = "default";
 	  }
-	
+	notifications_sound = true;
 }
 
 
@@ -731,7 +733,6 @@ function resetcallConferenceVariables(){
 }
 
 function showContactMergeOption(jsonObj){
-	
 	var phoneNumber = jsonObj.phoneNumber;
 	showModal($("#mergeContactModal"),"newContactAddPhone");
 	$("#call_newNumber_btn_continue", "#mergeContactModal").data("phoneNumber",phoneNumber);

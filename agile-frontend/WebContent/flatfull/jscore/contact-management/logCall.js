@@ -264,7 +264,7 @@ $(function()
 		$("#logCallModal").html(getTemplate("phoneLogModal",logCallParam));
 		
 		
-		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="'+ contact.id +'">'+name+'</li>');
+		$('#phoneLogForm #logPhone_relatedto_tag').html('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="'+ contact.id +'">'+name+'</li>');
 		
 		$('#phoneLogForm #saveActivity').val("true");
 		$("#logCallModal").modal('show');

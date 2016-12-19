@@ -4948,7 +4948,6 @@ ul#recent-menu-model-list li:nth-child(even)
     color: green;
     margin-right: 5px;
 }
-<<<<<<< HEAD
 
 .form-margin
 {
@@ -5055,4 +5054,42 @@ border-top: 0px !important;
 #contact_to_ids .close
 {
   top:-1px!important;
+}
+.support-plan-alert{
+    padding: 7px;
+    align: center;
+    width: 362px;
+    text-align: center;
+    margin:auto;
+    margin-bottom: 8px;
+    margin-top: -12px;   
+}
+.admin-message-info{
+    padding: 6px;
+    margin-bottom: 8px;
+    margin-left: 33%;
+    align: center;
+    width: 212px;
+    text-align: center;
+    margin-top: -14px;
+}
+#calendar_event .fc-header-center h2{
+  text-transform: inherit!important;
+}
+.userVoice-text{
+   text-align: right;
+   margin-bottom: 7px;
+    display: table;
+    width: 87%;
+    margin: 0 auto;
+    font-size:12px !important;
+    margin-top:-10px;
+  }
+
+#task-calendar-based-condition .fc-header-center h2{
+  text-transform: inherit!important;
+
+}
+.uv-icon,.uv-popover-tail{
+  display: none !important;
 }

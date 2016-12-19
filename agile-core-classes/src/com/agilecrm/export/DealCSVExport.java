@@ -139,12 +139,28 @@ public class DealCSVExport
 				if(customContacts != null && customContacts.size() > 0){
 					StringBuffer nameString = new StringBuffer("[");
 					for(Contact cont : customContacts){
+						List<ContactField> prop = cont.properties ;
 						if(cont.type.equals(Contact.Type.PERSON)){
-							nameString.append(cont.first_name);
-							nameString.append(cont.last_name);
+							String fname = null ; String lname = null; 
+		    				for(int k=0;k<prop.size();k++){
+		    					if(prop.get(k).name.equals("first_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+		    						fname = prop.get(k).value ;
+		    					else if(prop.get(k).name.equals("last_name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM))
+		    						lname = prop.get(k).value ;
+		    				}
+		    				nameString.append(fname);
+		    				if(lname != null)
+		    					nameString.append(" "+lname);
 							
-						}else{
-							nameString.append(cont.name);
+						}else{	
+							String name = null;
+							for(int k=0;k<prop.size();k++){
+		    					if(prop.get(k).name.equals("name") && prop.get(k).type.equals(ContactField.FieldType.SYSTEM)){
+		    						name = prop.get(k).value ;
+		    						break;
+		    					}
+		    				}
+		    				nameString.append(name);
 						}
 						nameString.append(",");
 					}

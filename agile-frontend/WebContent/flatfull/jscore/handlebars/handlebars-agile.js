@@ -367,6 +367,9 @@ function getSystemPropertyValue(items, name)
 		if (items[i].name == name && items[i].type == "SYSTEM"){
 			if(items[i].value!=null)
 			 items[i].value=items[i].value.trim();
+			if(name == 'url')
+			return items[i].value.toLowerCase();
+
 			return items[i].value;
 		}
 		}

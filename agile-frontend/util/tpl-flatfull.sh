@@ -29,6 +29,7 @@ cat flatfull/tpl/helpcenter/*.html  > tpl/min/flatfull/helpcenter.js
 cat flatfull/tpl/affiliate/*.html  > tpl/min/flatfull/affiliate.js
 cat flatfull/tpl/formbuilder/*.html > tpl/min/flatfull/formbuilder.js
 
+cat flatfull/tpl/voice-mail/*.html > tpl/min/flatfull/voice-mail.js
 cat flatfull/tpl/widget/zendesk/*.html > tpl/min/flatfull/zendesk.js
 cat flatfull/tpl/widget/helpscout/*.html > tpl/min/flatfull/helpscout.js
 cat flatfull/tpl/widget/clickdesk/*.html > tpl/min/flatfull/clickdesk.js

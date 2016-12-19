@@ -107,4 +107,10 @@
     "enter-image-url" : "{{agile_lng_translate 'landingpage-builder' 'enter-image-url'}}",
     "error-image-url" : "{{agile_lng_translate 'landingpage-builder' 'error-image-url'}}",
     "icons" : "{{agile_lng_translate 'landingpage-builder' 'icons'}}",
+    "alt-text" : "{{agile_lng_translate 'landingpage-builder' 'alt-text'}}",
+    "alt-txt-placeholder" : "{{agile_lng_translate 'landingpage-builder' 'alt-txt-placeholder'}}",
+    "dont-show-me-again" : "{{agile_lng_translate 'landingpages' 'dont-show-me-again'}}",
+    "back-landingpage" : "{{agile_lng_translate 'landingpage-builder' 'back-landingpage'}}",
+    "next-action" : "{{agile_lng_translate 'landingpages' 'next-action'}}",
+    "publish-the-landing-page" : "{{agile_lng_translate 'landingpages' 'publish-the-landing-page'}}",
 }

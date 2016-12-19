@@ -1,9 +1,13 @@
 <script type="text/html" id="js-upgrade-link-template">
+	{{#isUserNotInIphone}}
 	{{agile_lng_translate 'contact-details' 'please'}} <a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny">{{agile_lng_translate 'menu' 'upgrade'}}</a> {{agile_lng_translate 'billing' 'your-email-subscription'}}
+	{{/isUserNotInIphone}}
 </script>
 
 <script type="text/html" id="js-email-error-mssg-template">
+	{{#isUserNotInIphone}}
 	<div>{{agile_lng_translate 'billing' 'continue-send-emails'}}, {{agile_lng_translate 'contact-details' 'please'}}<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> {{agile_lng_translate 'plan-and-upgrade' 'purchase'}}</a>  {{agile_lng_translate 'plan-and-upgrade' 'more'}}.</div>
+	{{/isUserNotInIphone}}
 </script>
 
 <script type="text/html" id="js-referal-program-template">
@@ -80,7 +84,7 @@
 		<td>
 			<div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>{{new_milestone}}</div>
 		</td>
-		<td class='b-r-none'>
+		<td class="b-r-none text-right" style="width:25%">
 			<div class='m-b-n-xs'>
 				<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i>
 				</a>

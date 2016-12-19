@@ -575,7 +575,7 @@ var videoRecordPreview = {
         var url = window.location.origin+"/video/"+selectedVideoId+"?embed=true";
 
         $("#videoPreviewField").show();
-        document.getElementById('loader').style.display='block';
+        //document.getElementById('loader').style.display='block';
         $('iframe[id=videoPreviewIframeId]').attr('src',url);
         
     }

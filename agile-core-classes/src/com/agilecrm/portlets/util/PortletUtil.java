@@ -679,8 +679,9 @@ public class PortletUtil {
 		    	end_date -= (Long.parseLong(time_zone)*60*1000);
 		    }
 			ReportsUtil.check(start_date, end_date);
-			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type).toString();
+			org.json.JSONObject tagCount=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type);
+			if(tagCount!=null)
+			growthGraphString=tagCount.toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
@@ -1647,9 +1648,12 @@ public class PortletUtil {
 			Contact contact=ContactUtil.searchContactByEmail(user.email);
 			if(contact!=null){
 				DomainUser owner=contact.getContactOwner();
-				json.put("Owner_name",owner.name);
-				json.put("Owner_pic",owner.getOwnerPic());
-				json.put("Owner_url", owner.getCalendarURL());
+				if(owner!=null)
+				{
+					json.put("Owner_name",owner.name);
+					json.put("Owner_pic",owner.getOwnerPic());
+					json.put("Owner_url", owner.getCalendarURL());
+				}
 			}
 			
 			
