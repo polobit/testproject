@@ -8165,7 +8165,7 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 	return options.inverse(this);
 });
 
-Handlebars.registerHelper('permissiondeleted', function()
+Handlebars.registerHelper('loading_image', function()
 {
 	return new Handlebars.SafeString(LOADING_HTML);
 });
