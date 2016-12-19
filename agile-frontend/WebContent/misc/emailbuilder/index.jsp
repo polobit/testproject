@@ -78,10 +78,10 @@ var localeJSON = <%=localeJSON%>;
 
             <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
 
-                <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
+                <div id="tosave" style="overflow-y:auto;overflow-x:hidden;padding-bottom:30px;height: 650px;">
                     <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee; font-family: Arial;font-size: 12px;line-height: 21px;color: #000000;" >
                         <tr>
-                            <td width="100%" id="primary" class="demo" align="center" valign="top" >
+                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
                                 <div class="column" style="min-height:150px;">
 
                                     <div class="lyrow dragitem">
@@ -100,7 +100,7 @@ var localeJSON = <%=localeJSON%>;
                                                     <tbody>
                                                         <tr>
                                                             <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;">
-                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
+                                                                <div style="margin:0px 0px 10px 0px;" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -117,13 +117,15 @@ var localeJSON = <%=localeJSON%>;
             </div>
 
             <div class="col-md-4" style="padding-top:15px">
-                <div>
+    
+<!-- start of block-drag -->
+<div id="block-drag">
 
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#add-content" aria-controls="add-content" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add Content</a></li>
     <li role="presentation">
-    <a href="#customize" aria-controls="customize" role="tab" data-toggle="tab" id="custome-val"><i class="glyphicon glyphicon-cog"></i> Customize</a>
+    <a href="#customize" aria-controls="customize" role="tab" data-toggle="tab" id="custom-val"><i class="glyphicon glyphicon-cog"></i> Customize</a>
     </li>
   </ul>
 
@@ -169,13 +171,23 @@ var localeJSON = <%=localeJSON%>;
                     </div>
                 </div>
     </div>
-    <div role="tabpanel" class="form-horizontal tab-pane" id="customize">
+    <div role="tabpanel" class="tab-pane" id="customize">
 
 
- <div class="form-group mr-right">
-                    <div class="col-sm-2 control-label widget-label">Default Font</div>
-    <div class="col-sm-4 dropdown" >
-<select style="min-width: 135px;text-align: right;" class="form-control font-family-picker inline-block">
+ <div class="panel panel-default" style="border: 0; margin: 0;">
+    <div class="panel-heading" style="margin-bottom: 5px;">
+        <h3 class="panel-title">Font Styles
+            <span class="pull-right panel-click" ><i class="glyphicon glyphicon-chevron-up"></i></span>
+        </h3>
+    </div>
+        <div class="panel-body" style="display: block;">
+            
+            <div class="form-horizontal">
+    
+    <div class="form-group">
+            <div class="col-sm-4 control-label">Default Font</div>
+    <div class="col-sm-8">
+        <select class="form-control font-family-picker">
 
         <option style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
         <option style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
@@ -196,69 +208,63 @@ var localeJSON = <%=localeJSON%>;
         <option style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
 
     </select>
-  </div>
-  </div>
-
-
-
-<div class="form-group mr-right">
-                    <div class="col-sm-2 control-label widget-label">Font Size</div>
-    <div class="col-sm-4 dropdown" >
-    <select style="min-width: 135px;text-align: right;" class="form-control font-size-picker inline-block">
-        <option>8px</option>
-        <option>9px</option>
-        <option>10px</option>
-        <option>11px</option>
-        <option>12px</option>
-        <option>14px</option>
-        <option>16px</option>
-        <option>18px</option>
-        <option>20px</option>
-        <option>22px</option>
-        <option>24px</option>
-        <option>26px</option>
-        <option>28px</option>
-        <option>36px</option>
-        <option>48px</option>
-        <option>72px</option>
-    </select>
-  </div>
-  </div>
-
-
-<div class="form-group mr-right">
-                    <div class="col-sm-2 control-label widget-label">Line Height</div>
-    <div class="col-sm-4 dropdown" >
-<select style="min-width: 135px;text-align: right;" class="form-control line-height-picker inline-block">
-        <option>16px</option>
-        <option>21px</option>
-        <option>25px</option>
-        <option>28px</option>
-    </select>
-  </div>
-  </div>
-
-
-
-<div class="form-group mr-right">
-                    <div class="col-sm-2 control-label widget-label">Font Color</div>
-    <div class="col-sm-4 dropdown" >
-    <div class="wrapper-color-selector" id="font-color">
-        <div class="color-style">
-            <div class="color-preview" style="background-color:#000000;"></div>
-        </div>
-        <div class="hex-color" >
-            <div class="hex-col-val">#000000</div>
+            </div>
         </div>
 
-    </div>    
-  </div>
-  <script type="text/javascript">
+    
+    <div class="form-group">
+        <div class="col-sm-4 control-label">Font Size</div>  
+    <div class="col-sm-8">
+        <select class="form-control font-size-picker">
+            <option>8px</option>
+            <option>9px</option>
+            <option>10px</option>
+            <option>11px</option>
+            <option>12px</option>
+            <option>14px</option>
+            <option>16px</option>
+            <option>18px</option>
+            <option>20px</option>
+            <option>22px</option>
+            <option>24px</option>
+            <option>26px</option>
+            <option>28px</option>
+        </select>
+    </div>
+    </div>
+
+
+    
+    <div class="form-group">
+        <div class="col-sm-4 control-label">Line Height</div>  
+        <div class="col-sm-8">
+          <select class="form-control line-height-picker">
+                <option>16px</option>
+                <option>21px</option>
+                <option>25px</option>
+                <option>28px</option>
+            </select>
+        </div>
+    </div>
+
+
+<div class="form-group">
+                    <div class="col-sm-4 control-label">Font Color</div>
+    <div class="col-sm-8" id="font-color">
+  
+        <div class="input-group"> 
+            <div class="input-group-addon color-preview"></div> 
+            <div class="form-control hex-col-val"> </div>
+        </div>
+        
+    </div>
+
+    <script type="text/javascript">
                 $('#font-color').colpick({
                 layout: 'hex',
                 // colorScheme: 'dark',
                 onBeforeShow: function () {
-                $(this).colpickSetColor(rgb2hex($('#background-color').val().replace("#","")));
+                $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
                 },
                 onChange: function (hsb, hex, rgb, el, bySetColor) {
                         if (!bySetColor){
@@ -275,68 +281,79 @@ var localeJSON = <%=localeJSON%>;
                 $(this).colpickSetColor(this.value);
                 });
     </script>
+    
 </div>
 
+        </div> <!-- end of form horizontal -->
+    </div> <!-- end of body -->
+</div>  <!-- end of panel -->
 
 
-<div class="form-group mr-right">
-                    <div class="col-sm-2 control-label widget-label">Content Area </div>
-    <div class="col-sm-4 dropdown" >
-    <div class="wrapper-color-selector" id="content-bg-color">
-        <div class="color-style">
-            <div class="color-preview" style="background-color:#ffffff;"></div>
+  
+
+<div class="panel panel-default" style="border: 0; margin: 0;">
+    <div class="panel-heading" style="margin-bottom: 5px;">
+        <h3 class="panel-title">Background Color
+            <span class="pull-right panel-click panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span>
+        </h3>
+    </div>
+        <div class="panel-body" style="display: none;"> 
+            <div class="form-horizontal">
+
+    <div class="form-group">
+                    <div class="col-sm-4 control-label">Content</div>
+    <div class="col-sm-8" id="content-bg-color">
+  
+        <div class="input-group"> 
+            <div class="input-group-addon color-preview"></div> 
+            <div class="form-control hex-col-val"> </div>
         </div>
-        <div class="hex-color" >
-            <div class="hex-col-val">#ffffff</div>
-        </div>
+        
+    </div>
 
-    </div>    
-  </div>
-  <script type="text/javascript">
+    <script type="text/javascript">
                 $('#content-bg-color').colpick({
                 layout: 'hex',
                 // colorScheme: 'dark',
                 onBeforeShow: function () {
-                $(this).colpickSetColor(rgb2hex($('#background-color').val().replace("#","")));
+                $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
                 },
                 onChange: function (hsb, hex, rgb, el, bySetColor) {
                         if (!bySetColor){
                             $(el).parent().find(".color-preview").css('background-color', '#' + hex);
                             $(el).parent().find(".hex-col-val").text('#' + hex);
-                            $('#tosave').find('.main').css('background-color', '#' + hex);
+                            $('#tosave').find('#primary .main').css('background-color', '#' + hex);
                         }
                 },
                 onSubmit: function (hsb, hex, rgb, el) {
-                    $('#tosave').find('.main').css('background-color', '#' + hex);
+                    $('#tosave').find('#primary .main').css('background-color', '#' + hex);
                     $(el).colpickHide();
                 }
                 }).keyup(function () {
                 $(this).colpickSetColor(this.value);
                 });
     </script>
+    
 </div>
 
 
-
-<div class="form-group mr-right">
-                    <div class="col-sm-2 control-label widget-label"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></div>
-    <div class="col-sm-4 dropdown" >
-    <div class="wrapper-color-selector" id="background-color">
-        <div class="color-style">
-            <div class="color-preview" style="background-color:#eeeeee;"></div>
+<div class="form-group">
+                    <div class="col-sm-4 control-label">Template</div>
+    <div class="col-sm-8" id="background-color">
+  
+        <div class="input-group"> 
+            <div class="input-group-addon color-preview"></div> 
+            <div class="form-control hex-col-val"> </div>
         </div>
-        <div class="hex-color" >
-            <div class="hex-col-val">#eeeeee</div>
-        </div>
+        
+    </div>
 
-    </div>    
-  </div>
-  <script type="text/javascript">
+    <script type="text/javascript">
                 $('#background-color').colpick({
                 layout: 'hex',
                 // colorScheme: 'dark',
                 onBeforeShow: function () {
-                $(this).colpickSetColor(rgb2hex($('#background-color').val().replace("#","")));
+                $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
                 },
                 onChange: function (hsb, hex, rgb, el, bySetColor) {
                         if (!bySetColor){
@@ -355,32 +372,53 @@ var localeJSON = <%=localeJSON%>;
                 $(this).colpickSetColor(this.value);
                 });
     </script>
+    
 </div>
 
 
 
+</div><!-- end of form horizontal -->
+</div> <!-- end of body -->
+</div>  <!-- end of panel --> 
+
+
+
+</div>
  </div>
-  </div>
+  </div> <!-- end of block-drag -->
 
+
+ <!-- settings popup start -->
+<div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
+
+<div class="pull-right settings-panel-close-holder" style="font-size: 24px;"><i class="settings-panel-close" style="cursor: pointer;">&times;</i>
 </div>
-    </div>
 
 
-            <div class="col-md-3" style="width:370px;">
-                <!-- START ELEMENT -->
-                <div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#tiny-editor" aria-controls="tiny-editor" role="tab" data-toggle="tab" aria-expanded="true"><i class="glyphicon"></i> Content</a></li>
+        <li role="presentation" class="">
+        <a href="#block-customize" aria-controls="block-customize" role="tab" data-toggle="tab" aria-expanded="false"><i class="glyphicon glyphicon-cog"></i> Customize</a>
+        </li>
+    </ul>
 
-                    <form id="editor" style="margin-top:5px">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></h4>
-                        <div class="form-inline" id="font-settings" style="margin-top:5px">
+<!-- start of tab-content -->
+<div class="tab-content">
+
+   <!-- start of tiny-editor -->
+    <div role="tabpanel" class="tab-pane active" id="tiny-editor">
+        <div class="sidebar-nav">
+
+            <form id="editor" style="margin-top:5px">
+                        <!-- <div class="form-inline" id="font-settings" style="margin-top:5px">
                             <div class="form-group">
                                 <label for="fontstyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-style") %></label>
                                 <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
 
                             </div>
-                        </div>
+                        </div> -->
 
-                    <div class="hide" id='font-style'>
+                    <!-- <div class="hide" id='font-style'>
                         <div id="mainfontproperties" >
                             <div class="input-group" style="margin-bottom: 5px">
                                 <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "color") %></span>
@@ -440,13 +478,15 @@ var localeJSON = <%=localeJSON%>;
                                 <li class="list-group-item" style="font-family: Helvetica, sans-serif">Helvetica</li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
                     </form>
 
-                    <div id="imageproperties" style="margin-top:5px">
-                        <h4 class="text text-info" id="imageHeaderId"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image") %></h4>
+        </div>
 
+        <!-- start of image properties -->
+        <div id="imageproperties" style="margin-top:5px">
+                        
                         <div class="form-group" id="video-record-btn-holder" style="display:none;">
 
                             <div class="row">
@@ -517,34 +557,48 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div id="image-width-height" >
-                                <div class="col-xs-1">
-                                    W:
-                                </div>
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-w" class="form-control" name="director" />
-                                </div>
+            <div class="form-horizontal" id="image-width-height">
 
-                                <div class="col-xs-1">
-                                    H:
-                                </div>
+<!-- start of image width -->
+    <div class="form-group">
+            <div class="col-sm-2 control-label">Width</div>
+        <div class="col-sm-7" >
+      
+        <div class="input-group"> 
+            <input type="number" class="form-control" placeholder='width' id="image-w" name="ptop" >
+            <div class="input-group-addon color-preview">px</div> 
+        </div>
+            
+        </div>
+    </div> <!-- end of image width -->
 
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-h"class="form-control" name="writer" />
-                                </div>
-                                </div>
-                                <div class="col-xs-4" style="float: right">
 
-                                    <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
-                                </div>
+    <!-- start of image height -->
+     <div class="form-group">
+                        <div class="col-sm-2 control-label">Height</div>
+        <div class="col-sm-7" >
+      
+        <div class="input-group"> 
+            <input type="number" class="form-control" placeholder='Height' id="image-h" name="image-h" >
+            <div class="input-group-addon color-preview">px</div> 
+        </div>
+            
+        </div>
+    </div> <!-- end of image height -->
+</div>
 
-                            </div>
+    <div class="col-xs-4" style="float: right">
+
+        <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
+    
+    </div>
+
+
                         </div>
-                    </div>
+                    </div> <!-- end of image properties -->
 
-                    <div id="social-links">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "social") %></h4>
+        <!-- start of social links -->
+        <div id="social-links">
                         <ul class="list-group" id="social-list">
                             <li>
                                 <div class="input-group">
@@ -589,34 +643,11 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
                             </li>
                         </ul>
-                    </div>
-
-                    <!-- <div id="user-poll">
-                        <h4 class="text text-info">User Poll</h4>
-                        <ul class="list-group" id="poll-list">
-                            <li class="hide" >
-                                <div class="input-group">
-                                <input type="text" class="form-control" name="poll_value" placeholder="poll" style="width:45%">
-                                <input type="text" class="form-control" name="poll_tag" placeholder="Related Tag" style="width:55%">
-                                <span class="input-group-addon delbutton"><a>x</a></span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div>
-                                <div>
-                                    <button class="btn pull-right" id="add-poll">Add More</button>
-                                </div>
-                                <br><br><br>
-                                <div>
-                                <input type="text" class="form-control" name="poll_url" placeholder="Redirect URL">
-                                </div>
-                        </div>
-                        <br>
-                    </div> -->
+                    </div> <!-- end of social links -->
 
 
-                    <div id="buttons" style="max-width: 400px">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "buttons") %></h4>
+        <!-- start of buttons -->
+        <div id="buttons" style="max-width: 400px">
                         <div class="form-group">
                             <select class="form-control">
                                 <option value="center"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-center") %></option>
@@ -773,10 +804,12 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                         <a class="btn btn-default form-control" href="#" id="add-button"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-one-more-btn") %></a>
                     </div>
 
-                </div>
+                </div>  <!-- end of buttons -->
 
+
+
+                <!-- start of buttons text -->
                 <div id="buttonstxt" style="max-width: 400px">
-                    <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "buttons") %></h4>
                     <ul id="buttonstxtlist" class="list-group">
                         <li class="hide"
                             style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px">
@@ -928,72 +961,124 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                         </li>
                     </ul>
 
-                </div>
+                </div> <!-- end of button text -->
 
-                <div id="common-settings">
 
-                    <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "style") %></h4>
-                    <form id="background" class="form-inline">
-                        <div class="form-group">
-                            <label for="bgcolor"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "background") %></label>
-                            <div class="color-circle" id="bgcolor"></div>
-                            <script type="text/javascript">
-                                    $('#bgcolor').colpick({
-                                        layout: 'hex',
-                                        onBeforeShow: function () {
-                                            $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
-                                        },
-                                        onChange: function (hsb, hex, rgb, el, bySetColor) {
-                                            if (!bySetColor)
-                                                $(el).css('background-color', '#' + hex);
-                                        },
-                                        onSubmit: function (hsb, hex, rgb, el) {
-                                            $(el).css('background-color', '#' + hex);
 
-                                            $('#' + $('#path').val()).css('background-color', '#' + hex);
-                                            $(el).colpickHide();
-                                        }
 
-                                    }).keyup(function () {
-                                        $(this).colpickSetColor(this.value);
-                                    });
-                                </script>
-                        </div>
-                    </form>
 
-                    <form id="padding-setting" class="form-inline">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "padding") %></h4>
-                        <left>
-                            <table class="table-condensed">
-                                <tbody>
-                                    <tr class="row">
-                                        <td></td>
-                                        <td>
-                                        Top: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' value="15px" id="ptop" name="ptop"
-                                            style="width: 90px; margin-right: 5px">px</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="row">
-                                        <td></td>
-                                        <td>
-                                        Bottom: &nbsp;&nbsp;<input type="number" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "bottom") %>' value="15px" id="pbottom" name="pbottom"
-                                            style="width: 90px; margin-right: 5px">px</td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </left>
-                    </form>
-                </div>
 
-                <div class="text text-right" style="margin-top: 5px">
-                    <a href="#" id="saveElement" class="btn btn-primary"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "done") %></a>
-                </div>
-            </div>
-            <!-- END SETTINGS -->
+    </div> <!-- end of tiny-editor -->
+
+
+    <!-- start of block-customize -->
+    <div role="tabpanel" class="tab-pane" id="block-customize">
+
+
+<div id="common-settings">
+
+<div class="form-horizontal">
+<!-- start of padding top -->
+    <div class="form-group">
+            <div class="col-sm-5 control-label">Padding Top</div>
+        <div class="col-sm-7" id="padding-setting">
+      
+        <div class="input-group"> 
+            <input type="number" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' id="ptop" name="ptop" >
+            <div class="input-group-addon color-preview">px</div> 
         </div>
+            
+        </div>
+    </div> <!-- end of padding top -->
+
+
+    <!-- start of padding bottom -->
+     <div class="form-group">
+                        <div class="col-sm-5 control-label">Padding Bottom</div>
+        <div class="col-sm-7" id="padding-setting">
+      
+        <div class="input-group"> 
+            <input type="number" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' id="pbottom" name="pbottom" >
+            <div class="input-group-addon color-preview">px</div> 
+        </div>
+            
+        </div>
+    </div> <!-- end of padding bottom -->
+
+
+    <!-- start of block background color -->
+    <div class="form-group">
+                        <div class="col-sm-5 control-label">Background Color</div>
+        <div class="col-sm-7" id="bgcolor">
+      
+            <div class="input-group"> 
+                <div class="input-group-addon color-preview"></div> 
+                <div class="form-control hex-col-val"> </div>
+            </div>
+            
+        </div>
+
+        <script type="text/javascript">
+                    $('#bgcolor').colpick({
+                    layout: 'hex',
+                    // colorScheme: 'dark',
+                    onBeforeShow: function () {
+                    $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
+                    },
+                    onChange: function (hsb, hex, rgb, el, bySetColor) {
+                            if (!bySetColor){
+                                $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                                $(el).parent().find(".hex-col-val").text('#' + hex);
+                                $('#' + $('#path').val()).css('background-color', '#' + hex);
+                            }
+                    },
+                    onSubmit: function (hsb, hex, rgb, el) {
+                        $('#' + $('#path').val()).css('background-color', '#' + hex);
+                        $(el).colpickHide();
+                    }
+                    }).keyup(function () {
+                    $(this).colpickSetColor(this.value);
+                    });
+        </script>
+        
+    </div> <!-- end of block background color -->
+
+</div>
+                
+            
+            </div> <!-- end of settings  -->
+
+    </div> <!-- end of block-customize -->
+
+
+</div> <!-- end of tab-content -->                  
+
+                    <!-- <div id="user-poll">
+                        <h4 class="text text-info">User Poll</h4>
+                        <ul class="list-group" id="poll-list">
+                            <li class="hide" >
+                                <div class="input-group">
+                                <input type="text" class="form-control" name="poll_value" placeholder="poll" style="width:45%">
+                                <input type="text" class="form-control" name="poll_tag" placeholder="Related Tag" style="width:55%">
+                                <span class="input-group-addon delbutton"><a>x</a></span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div>
+                                <div>
+                                    <button class="btn pull-right" id="add-poll">Add More</button>
+                                </div>
+                                <br><br><br>
+                                <div>
+                                <input type="text" class="form-control" name="poll_url" placeholder="Redirect URL">
+                                </div>
+                        </div>
+                        <br>
+                    </div> -->        
+
+
+</div>
+    </div>
 
         <div id="download-layout"></div>
     </div>

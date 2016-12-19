@@ -41,7 +41,7 @@ body {
     /*font-size: 12px;
     padding:1px;*/
 }
-.edit .demo { margin-left:0px; margin-top:10px; padding:0; border: 1px solid #DDDDDD; border-radius: 4px; position:relative; word-wrap: break-word;}
+.edit .demo { margin-left:0px; margin-top:10px; border: 1px solid #DDDDDD; border-radius: 4px; position:relative; word-wrap: break-word; padding: 30px 0 15px;}
 .edit .demo:after {
 
     border: 1px solid #DDDDDD;
@@ -457,32 +457,18 @@ div.view {
 }
 
 .color-preview{
-    height: 26px;
-    width: 26px;
-    cursor: pointer;
-    border: 1px solid #eee;
-    border-radius: 3px;
-    margin-left: 3px;
+    min-width: 31px;
 }
 
-.hex-color{
-    width: 90px;
-    padding: 0 5px 0 23px;
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-}
-
-.hex-col-val{
-    color: #000000;
-    max-width: 100%;
-    border: 0;
-    height: 30px;
-    padding: 0;
-    margin: 0;
-    vertical-align: top;
-    font-size: 13px;
-    line-height: 31px;
-    font-weight: 400;
-    text-overflow: ellipsis;
+.label{
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
 }

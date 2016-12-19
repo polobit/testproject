@@ -71,6 +71,7 @@ function hideSettings() {
     var settings = $('#settings');
     if (!settings.hasClass('hide')) {
         settings.addClass('hide');
+        $('#block-drag').show();
     }
 }
 
@@ -103,6 +104,7 @@ function handleObjects() {
             self.unbind('click');
 
             hideAllSettings();
+            $('#block-drag').show();
 
             self.bind('click', function () {
 
@@ -113,9 +115,15 @@ function handleObjects() {
 
                     $('#ptop').val(parseInt(self.find('td:first').css('padding-top')));
                     $('#pbottom').val(parseInt(self.find('td:first').css('padding-bottom')));
+                    $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                    $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
 
+                
+                hideAllSettings();
                 $('#common-settings').show();
                 $('#padding-setting').show();
+                $('#settings').show();
+
                 switch (t) {
                     case 'title':
 
@@ -169,6 +177,7 @@ function handleObjects() {
                         $('#imageproperties').show();
                         $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
+                        $('#settings').show();
                         //$("#select_alignment").show();
 
                         break;
@@ -201,9 +210,9 @@ function handleObjects() {
                         $('#video-record-btn-holder').show();
                         $("#imageHeaderId").html("Video");
                         $('#videoThumbnail').show();
-                        
-
+                        $('#settings').show();
                         break;
+
                     case 'imgtxtcol':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
@@ -234,7 +243,9 @@ function handleObjects() {
                         $('#imageproperties').show();
                         $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
+                        $('#settings').show();
                         break;
+
                     case 'imgtxtincol':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
 
@@ -250,8 +261,10 @@ function handleObjects() {
                         });
 
                         hideAllSettings();
+                        $('#settings').show();
                         handleButtonsTxt(self);
                         break;
+
                     case 'imgtxt':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         //    $('#'+$('#path').val()).unbind('click');
@@ -286,19 +299,21 @@ function handleObjects() {
                         $('#imageproperties').show();
                         $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
-
+                        $('#settings').show();
                         break;
 
                     case 'line':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         hideAllSettings();
+                        $('#settings').show();
                         break;
 
                     case 'button':
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         hideAllSettings();
+                        $('#settings').show();
                         handleButtons(self);
                         break;
 
@@ -359,6 +374,7 @@ function handleObjects() {
                         $('input.social-input[name="pinterest"]').val(self.find('a.pinterest').attr('href'));
 
                         hideAllSettings();
+                        $('#settings').show();
                         $('#social-links').show();
 
 
@@ -554,6 +570,7 @@ function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
 
     hideAllSettings();
     $('#editor').show();
+    $('#settings').show();
 
     $('#bgcolor').css('backgroundColor', background);
     obj.data('fontcolor', fontcolor);
@@ -648,7 +665,7 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail', '#block-drag', '#settings'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
@@ -740,10 +757,13 @@ function handlePolls(obj){
  
 
 
-$(window).resize(function () {
+/*$(window).resize(function () {
     // $("body").css("min-height", $(window).height() - 90);
     // $(".demo").css("min-height", $(window).height() - 160);
     $("#tosave").css("height", $(window).height() - 30);
+    var closeButton = '<div class="pull-right settings-panel-close-holder" style="font-size: 18px;"><i class="glyphicon glyphicon-remove settings-panel-close" style="cursor: pointer;"></i></div>';
+    $("#settings").prepend(closeButton);
+
     var widthOfWindow = $(window).width();
     if(widthOfWindow <= 1362) {
         var $settings = $("#settings");
@@ -757,7 +777,8 @@ $(window).resize(function () {
         $("#settings").removeClass("settings-panel-fixed");
         $(".settings-panel-close-holder").remove();
     }
-});
+
+});*/
 
 $(document).ready(function () {
 
@@ -1121,6 +1142,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('.selected-item').removeClass('selected-item').css('border', 'none');
         // showElements();
         hideSettings();
+        $('#block-drag').show();
     });
 
 
@@ -1365,6 +1387,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#imageproperties').show();
         $("#imageHeaderId").html("Image");
         $('#image-link-holder').show();
+        $('#settings').show();
+
     });
 
     $('#tosave').on('click','.textFix',function(e) {
@@ -1388,20 +1412,20 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
     });
 
-    $('#custome-val').on('click', function(){
+    $('#custom-val').on('click', function(){
         
         //font styles of template
-        $('#customize').find('.font-family-picker').val($('#tosave').find('table:first').css('font-family'));
-        $('#customize').find('.font-size-picker').val($('#tosave').find('table:first').css('font-size'));
-        $('#customize').find('.line-height-picker').val($('#tosave').find('table:first').css('line-height'));
+        $('#customize').find('.font-family-picker :selected').val($('#tosave').find('table:first').css('font-family'));
+        $('#customize').find('.font-size-picker :selected').val($('#tosave').find('table:first').css('font-size'));
+        $('#customize').find('.line-height-picker :selected').val($('#tosave').find('table:first').css('line-height'));
 
         //template background color
         $('#customize').find('#background-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
         $('#customize').find('#background-color .hex-col-val').text(rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
 
         //template content area background color
-        $('#customize').find('#content-bg-color .color-preview').css('background-color', rgb2hex($('#tosave').find('.main:first').css('background-color').replace("#","")));
-        $('#customize').find('#content-bg-color .hex-col-val').text(rgb2hex($('#tosave').find('.main:first').css('background-color').replace("#","")));
+        $('#customize').find('#content-bg-color .color-preview').css('background-color', rgb2hex($('#tosave').find('#primary .main').css('background-color').replace("#","")));
+        $('#customize').find('#content-bg-color .hex-col-val').text(rgb2hex($('#tosave').find('#primary .main').css('background-color').replace("#","")));
 
         //template font color
         $('#customize').find('#font-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('color').replace("#","")));
@@ -1423,6 +1447,20 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         console.log($(this));
         $('#tosave').find('table:first').css('line-height', $(this).find('option:selected').text());
     });
+
+
+    $('.panel-click').on('click', function(e){
+        var $this = $(this);
+        if(!$this.hasClass('panel-collapsed')) {
+            $this.parents('.panel').find('.panel-body').slideUp();
+            $this.addClass('panel-collapsed');
+            $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+        } else {
+            $this.parents('.panel').find('.panel-body').slideDown();
+            $this.removeClass('panel-collapsed');
+            $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        }
+});
 
 
 
@@ -1492,6 +1530,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     removeElm();
     configurationElm();
     hideAllSettings();
+    $('#block-drag').show();
 
     $(document).on('click', '#videoRecordBtn', function(e){
         e.preventDefault();
@@ -1562,7 +1601,7 @@ function initializeEditor() {
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
         relative_urls : false,
         convert_urls : false,
-        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | merge_fields",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields",
         setup: function (editor) {
             editor.addButton('merge_fields', { type : 'menubutton', text : localeJSON["merge-fields"], icon : false, menu : parent.set_up_merge_fields(editor) });
 
