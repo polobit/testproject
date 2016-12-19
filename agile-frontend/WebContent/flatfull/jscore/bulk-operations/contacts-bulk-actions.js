@@ -681,6 +681,7 @@ function show_bulk_owner_change_page()
 
 			var workflows_collection = [];
 			var emails_workflows = [];
+
 	        $("body").off('fill_campaigns').on("fill_campaigns", function(event)
 			{
 				var optionsTemplate = "<option value='{{id}}'{{#if is_disabled}}disabled=disabled>{{name}} ({{agile_lng_translate 'campaigns' 'disabled'}}){{else}}>{{name}}{{/if}}</option>";
@@ -715,6 +716,7 @@ function show_bulk_owner_change_page()
 			{
 				e.preventDefault();
 
+				console.log("Workflow JSON : "+workflows_collection);
 				var $form = $('#campaignsBulkForm');
 
 				// Button Disabled or Validate Form Failed
@@ -731,10 +733,14 @@ function show_bulk_owner_change_page()
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
 
-				if(selected_count > 500 && emails_workflows.hasOwnProperty(workflow_id))
+			 if(selected_count > 300 && emails_workflows.hasOwnProperty(workflow_id))
 				{
-					accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
-              		function(response){ // success
+				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id))
+				  	{
+				  		return;
+				  	}
+					  accessUrlUsingAjax('core/api/emails/sendgrid/whitelabel/validate', 
+              		    function(response){ // success
 
 	                      if(!response)
 	                      {
@@ -1550,4 +1556,86 @@ function load_bulk_operations_template(callback){
 
 	}, null);
 
+}
+
+
+//Check if send email node having general email domain then blocked to send more than 300
+
+function is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id )
+{
+	
+    if(check_send_email_node_from_email( workflows_collection, workflow_id)) 
+	    {
+	    	showModalConfirmation(
+	                       "Add to Campaign",
+	                       "Please add your domain email as a from email in send email node to send campaign emails to more than 300 contacts.",
+	                        function()
+	                        {
+	                          enable_save_button(saveButton);
+	                          Backbone.history.navigate("workflows", { trigger : true });
+							 },
+							function()
+	                          {
+	                             enable_save_button(saveButton);
+	 							    Backbone.history.navigate("contacts", { trigger : true });
+		                      },
+		                    function()
+		                      {
+		                           	enable_save_button(saveButton);
+		                       },"Go To Campaign", "{{agile_lng_translate 'contact-details' 'CLOSE'}}");
+	    	   return true;
+		   }                   	
+		                      	return false;
+}
+
+
+//Itrate each email node and check from email address
+function check_send_email_node_from_email( workflows, workflow_id){
+
+	if(!workflows)
+		return ;
+
+	var email_workflows = {};
+
+	for (var i = 0, len = workflows.length; i < len; i++){
+        
+        var workflow = workflows[i];
+        var rules = JSON.parse(workflow["rules"]);
+        var nodes = rules["nodes"];
+
+		// Iterate nodes to check SendEmail
+		for(var j=0, length = nodes.length; j < length && workflow.id == workflow_id ; j++){
+
+			var node = nodes[j];
+
+			if((node["NodeDefinition"]["name"] == "Send Email" || node["NodeDefinition"]["name"] == "Send E-mail") && node["NodeDefinition"]["workflow_tasklet_class_name"] == "com.campaignio.tasklets.agile.SendEmail")
+			{
+				if(verify_from_email_domain(node["JsonValues"])){
+					return true;
+				}
+			}
+		}
+    }
+
+    return false;
+}
+
+// This method is used for validating send email node from email address
+function verify_from_email_domain(nodeData){
+	if(!nodeData)
+		return false;
+	
+	for (var i = 0, len = nodeData.length; i < len; i++)
+	    {
+		 var fieldName = nodeData[i]["name"];
+		 var fieldValue = nodeData[i]["value"];
+
+		if(fieldName == "from_email"){
+			if( fieldValue == "{{owner.email}}")
+				return true;
+			else
+			  return isGlobalDomain(getEmailDomain(fieldValue));
+		 }
+	 }
+	 return false;
 }
