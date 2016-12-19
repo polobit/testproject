@@ -443,8 +443,14 @@ function dialFromOzonetel(to,from,contact){
 			globalCall.contactedContact = contact;
 			globalCall.contactedId = contact.id;
 		}
+		var to_number = "";
+		if(to.startsWith("+91")){
+			to_number = to.substr(to.length - 10);
+		}else{
+			to_number = to;
+		}
 	  	$.ajax({ 
-			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to+'&domain_user='+CURRENT_DOMAIN_USER.id, 
+			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to_number+'&domain_user='+CURRENT_DOMAIN_USER.id, 
 			type : 'GET', 
 			success : function(data){
 				if(data == "success"){
