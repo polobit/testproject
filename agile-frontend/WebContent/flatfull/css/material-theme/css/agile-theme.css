@@ -1847,7 +1847,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
-.agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .tabs-left-panel, .agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
 .agile-theme-15 .reports-tabs-left-panel{top: 18px;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
