@@ -1486,6 +1486,7 @@ ul.tags-management li.tag{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;
+  background-color: inherit;
 }
 /** End of panel CSS **/
 
@@ -1759,7 +1760,7 @@ color:#0d1114 !important;
   margin: 0; 
   margin-left: 0px !important
 }
-.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default {
+.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default, #workflows-collection-container .panel.panel-default{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;   
@@ -1780,7 +1781,7 @@ color:#0d1114 !important;
   background-color: #fff !important;
 }
 .agile-theme-15 #content .agile-table>thead>tr>th{
-  padding: 10px 15px 15px 15px !important;
+  padding: 10px 15px 15px 15px;
   border-top: none !important;
   border-bottom: none !important;
   text-transform: uppercase !important;
@@ -1805,7 +1806,7 @@ color:#0d1114 !important;
 }
 .agile-theme-15 #content .agile-table>tbody>tr>td{
    border-top: none !important;
-   padding: 10px 15px !important;
+   padding: 10px 15px;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
@@ -2313,3 +2314,37 @@ table .headerSortUp::after, table .headerSortDown::after{
 .datedropdown{margin-top:5px!important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .theme-width{width:134px;}
+
+
+/*IP Table UI Fix Start*/
+
+#ip_access .panel-heading{
+  background-color: inherit;
+}
+table.iptable, #ip_access .panel-footer{
+  border: none !important;
+}
+table.iptable thead>tr>th{
+  padding-top: 15px !important;
+  padding-bottom: 5px !important;
+}
+#ip_access{
+  padding: 0 !important;
+}
+#ip_access .panel-footer{
+  display: none;
+}
+.allow_access_panelheading{
+  margin-top: 0 !important;
+}
+#blocked_panel_ips_list .upsert-ip{
+  margin-left: 0 !important;
+}
+#blocked_panel_ips_list .blocked-panel-ip-delete{
+  margin-left: 5px !important;
+}
+table.iptable>tbody>tr>td{
+  padding: 8px !important;
+}
+
+/*IP Table UI Fix End*/
