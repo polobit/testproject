@@ -8205,3 +8205,12 @@ Handlebars.registerHelper('isUserNotInIphone', function(options)
 	}
 	return options.inverse(this);
 });
+
+Handlebars.registerHelper('isNewTheme', function(options)
+{
+	if(CURRENT_USER_PREFS.theme == "15")
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
