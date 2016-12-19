@@ -155,7 +155,7 @@ function appDialer(to, contact){
 
 		to = str.replace("+", "%2B");		
 
-		var requestURL = "core/api/android/call?phone_number="+to;	 
+		var requestURL = "core/api/widgets/android/call?phone_number="+to;	 
 	 	console.log(requestURL);
 	 
 	 	$.ajax({	
