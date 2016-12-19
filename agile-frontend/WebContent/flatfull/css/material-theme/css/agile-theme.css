@@ -498,7 +498,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-theme-15 .app-header-fixed{padding-top: 70px;}
 .agile-theme-15 .navbar-brand{line-height: 50px;}
 .agile-theme-15 #app-aside-folded{top: 18px !important}
-.agile-theme-15 .navbar-searchicon{padding: 25px 15px;}
+.agile-theme-15 .navbar-searchicon{padding: 24px 15px;}
 .agile-theme-15 .grid-icon-header {
     color: #11a0f8!important;
     padding-bottom: 25px;
@@ -1624,10 +1624,6 @@ table#contacts-table, table#companies {
 #dialler-page .panel.panel-default{
   border: 1px solid #fafafa !important;
 }
-#contact-sorter
-{
-  margin-top:-5px;
-}
 #refrecal
 {
   color: #11a0f8 !important;
@@ -1837,6 +1833,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
 .agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .reports-tabs-left-panel{top: 18px;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
  
@@ -2071,7 +2068,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
 
-  #contact-sorter,.workflow-sortby,.tickets-toolbar .new-theme-sort
+.workflow-sortby,.tickets-toolbar .new-theme-sort
 {
   margin-top:-7px;
 }
@@ -2296,4 +2293,4 @@ table .headerSortUp::after, table .headerSortDown::after{
   color: #263238 !important;
 }
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
-
+.agile-theme-15 .agile-header-btns{top: 2px!important;}
