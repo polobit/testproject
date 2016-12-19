@@ -89,7 +89,7 @@ public class ScribeUtil {
 	 * @throws Exception 
 	 */
 	public static OAuthService getService(HttpServletRequest req,
-			HttpServletResponse resp, String serviceType) throws Exception {
+			HttpServletResponse resp, String serviceType) {
 		/*
 		 * Get callback url, to which the tokens are returned after
 		 * authentication
@@ -206,7 +206,7 @@ public class ScribeUtil {
 					ScribeServlet.GMAIL_SCOPE);
 		}catch (Exception e){			
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
-			throw new Exception();
+			//throw new Exception();
 		}
 		return service;
 	}

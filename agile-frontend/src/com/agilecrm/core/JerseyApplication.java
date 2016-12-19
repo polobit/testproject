@@ -184,8 +184,6 @@ public class JerseyApplication extends Application
 	//Leads
 	s.add(com.agilecrm.core.api.leads.LeadsAPI.class);
 	
-	//AndroidCallWidgetAPI
-	s.add(com.agilecrm.androidcallwidget.AndroidCallAPI.class);
 	return s;
     }
 }
