@@ -1,5 +1,7 @@
 package com.agilecrm.deals.util;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -10,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -32,6 +35,7 @@ import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.CurrencyConversionRates;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
@@ -50,6 +54,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -3577,5 +3582,47 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesbyTags(String tag){
     	Query<Opportunity> q = dao.ofy().query(Opportunity.class).filter("tagsWithTime.tag = ", tag).limit(25);
     	return dao.fetchAll(q);
+    }
+    public static CurrencyConversionRates getCurrencyConversionRates()
+    {
+    	String domain = NamespaceManager.get();
+    	NamespaceManager.set("");
+    	Scanner scan = null ;
+    	CurrencyConversionRates cuRates = null ;
+		try
+		{
+			try {
+				cuRates = CurrencyConversionRates.dao.get();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println("currency rates are null");
+				e.printStackTrace();
+			}
+			if (cuRates == null || cuRates.currencyRates == null) 
+			{
+				String s = "https://openexchangerates.org/api/latest.json?app_id=0713eecad3e9481dabea356a7f91ca60";
+				URL url = new URL(s);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				scan = new Scanner(con.getInputStream());
+				String string = new String();
+				while(scan != null && scan.hasNext()) {
+					string += scan.nextLine();
+				}
+				org.json.JSONObject jsonObject = new org.json.JSONObject(string);
+				String ratesToDb = jsonObject.getString("rates");
+				cuRates = new CurrencyConversionRates();
+				cuRates.currencyRates = ratesToDb;
+				cuRates.save();
+				scan.close();
+			}
+		}catch(Exception e)
+		{
+			System.out.println("currency conversion rates");
+		}
+		finally
+		{
+			NamespaceManager.set(domain);
+		}
+    	return cuRates ;
     }
 }

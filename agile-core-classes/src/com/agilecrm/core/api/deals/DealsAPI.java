@@ -44,6 +44,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.CurrencyConversionRates;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
@@ -1681,5 +1682,12 @@ public class DealsAPI
     {
 
 	return ActivityUtil.getDealRelatedActivities(dealid, Integer.parseInt(count), cursor);
+    }
+    @Path("/newDeal/currencyRates")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON })
+    public CurrencyConversionRates getCurrencyConversionRates()
+    {
+    	return OpportunityUtil.getCurrencyConversionRates();
     }
 }

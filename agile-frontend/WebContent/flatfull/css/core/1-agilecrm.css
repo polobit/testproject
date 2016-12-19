@@ -3021,7 +3021,7 @@ width: 915px;
  //for new deal model and deal update model 
 #milestone_val{width: 50%;float: left;}
 #milestone_val input{border-radius:0px 2px 2px 0px;width: 58%;float:right;}
-#currencies-list{width: 40%; float: left;border-radius: 2px 0px 0px 2px;border-right: 0px;}
+#currencies-list{width: 50%; float: left;border-radius: 2px 0px 0px 2px;border-right: 0px;font-weight: bold;}
 .ccw_unit_selector, .ccw_selector_bg {
     background-color: whiteSmoke;
     background-image: -webkit-linear-gradient(top,whiteSmoke,#f1f1f1);

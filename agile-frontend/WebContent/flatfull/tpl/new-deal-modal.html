@@ -29,30 +29,16 @@
               <img class="loading-img" style="opacity:0.5; position:absolute; right:45px; top:10px;" src="//doxhze3l6s7v9.cloudfront.net/beta/static//v2/img/ajax-loader-cursor.gif">
             </div>
           </div>
-<!--
-            <div class="control-group form-group">
-            <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'value'}} <span
-              class="field_req">*</span></label>
-            <div class="controls col-sm-7">
-              <div class="ccw_unit_selector_cnt" id="currencies-list">
-                <select  id="currency-conversion-symbols" class="required form-control" name="currency_type">                         
-                </select> <div class="ccw_selector_bg"></div><div class="ccw_selector_arrows"></div></div>
-
-              <span id="milestone_val"><input type="text" name="currency_conversion_value"
-                class="required  number form-control val-deal" min="0" max="1000000000000"
-                placeholder="Value of Deal" /></span>
-
-                 </div>
-
-            </div>    
--->
            <div class="control-group form-group" style="margin-bottom:0px;"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'value'}}<span class="field_req">*</span></label> 
            <div class="controls col-sm-5 value_box"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class=" hidden" id="currencies-list">
+                <select  id="currency-conversion-symbols" class="required form-control" name="currency_type">                         
+                </select> <!-- <div class="ccw_selector_bg"></div><div class="ccw_selector_arrows"></div> --> </div>
              <div class="p-n"> 
-              <input type="text" name="expected_value" class="required  number_with_trim form-control" min="0" max="2147483647"
-                placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"   style="font-size:13px"/> 
+              <input type="text" name="currency_conversion_value" class="required  number_with_trim form-control" min="0" max="2147483647"
+                placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"  style="float:right;" /> 
              </div> 
             </div> 
            </div> 

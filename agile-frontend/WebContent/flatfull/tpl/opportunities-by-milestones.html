@@ -282,30 +282,20 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-<<<<<<< HEAD
-{{#if currency_conversion_value}}
+	{{#if currency_conversion_value}}
 		<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
-		{{else}}
-			{{#if expected_value}}
-				<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
-			{{/if}}
-=======
+	{{else}}
 	{{#if_equals expected_value "0"}}
 			<span>{{currencySymbol}}{{expected_value}}</span>
     {{/if_equals}}
 {{#if expected_value}}
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
->>>>>>> agile_production_1_1
-{{/if}}
+{{/if}}{{/if}}
 		{{#if this.contacts}}
-<<<<<<< HEAD
-			{{#if currency_conversion_value}}
-=======
 		  	{{#if_equals expected_value "0"}}
 		  		<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
             {{/if_equals}}
 			{{#if expected_value}}
->>>>>>> agile_production_1_1
 				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
 			{{/if}}
 			{{#related_to_one contacts}}{{/related_to_one}}

@@ -306,12 +306,12 @@ public class Opportunity extends Cursor implements Serializable
     public boolean isCurrencyUpdateRequired = true ;
     
    //Value of the currency converted at the time of deal created
-    private Double currency_conversion_value = 0.00;
+    public Double currency_conversion_value = null;
     
     
     
   // Type of the currency used for the particular deal
-    private String currency_type = null;
+    public String currency_type = null;
 	
 	 public Double getCurrency_conversion_value() {
 		return currency_conversion_value;
@@ -658,7 +658,7 @@ public class Opportunity extends Cursor implements Serializable
 	if(oldOpportunity != null){
 		if (oldOpportunity.currency_type != null && oldOpportunity.currency_conversion_value != null){
 			int retVal = Double.compare(oldOpportunity.currency_conversion_value, this.currency_conversion_value);
-			if(retVal ==0 && this.currency_type.equals(oldOpportunity.currency_type))
+			if(retVal ==0 && (this.currency_type == null || this.currency_type.equals(oldOpportunity.currency_type)))
 				isCurrencyUpdateRequired = false;
 		}				
 	}
@@ -940,70 +940,50 @@ public class Opportunity extends Cursor implements Serializable
     @PrePersist
     private void PrePersist() throws IOException, JSONException
     {
-   	
-    // Sets the currency conversion value
+    	if(expected_value != null && currency_conversion_value == null){
+    		currency_conversion_value = expected_value ;
+    		isCurrencyUpdateRequired = false;
+    	}
+    	else
+    		if(expected_value == null && currency_conversion_value == null){
+    			isCurrencyUpdateRequired = false;
+    		}
+    	// Sets the currency conversion value
     	if(isCurrencyUpdateRequired){
-    	JSONObject listOfRates = null;String userpref_currency_type = null;Scanner scan = null ;
-    	String domain = NamespaceManager.get();   	
-		try {
-			NamespaceManager.set("");
-			CurrencyConversionRates cuRates = dao.ofy()
-					.query(CurrencyConversionRates.class).get();
-			if (cuRates == null || cuRates.currencyRates == null) {
-				String s = "https://openexchangerates.org/api/latest.json?app_id=0713eecad3e9481dabea356a7f91ca60";
-				URL url = new URL(s);
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				scan = new Scanner(con.getInputStream());
-				String string = new String();
-				while(scan != null && scan.hasNext()) {
-					string += scan.nextLine();
+	    	String userpref_currency_type = null;
+	    	JSONObject listOfRates = null;   	
+			CurrencyConversionRates cuRates = OpportunityUtil.getCurrencyConversionRates();
+			listOfRates = new JSONObject(cuRates.currencyRates);
+			try 
+			{
+				UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
+				if (userPrefs != null)
+					userpref_currency_type = userPrefs.currency;
+				if (userpref_currency_type == null)
+					userpref_currency_type = "USD";
+				else
+					userpref_currency_type = userpref_currency_type.substring(0, 3).toUpperCase();
+				String deal_currency_type = null;
+				if(currency_type != null)
+					deal_currency_type = currency_type.substring(0, 3);
+				if (deal_currency_type == null)
+					deal_currency_type = userpref_currency_type;
+				double pre_conversion_value_numerator = listOfRates.getDouble(deal_currency_type);
+				double pre_conversion_value_denominator = listOfRates.getDouble(userpref_currency_type);
+	
+				if (userpref_currency_type.equalsIgnoreCase(deal_currency_type)) {
+					
+					expected_value = currency_conversion_value;
+				} else {
+	
+					expected_value = (pre_conversion_value_denominator / pre_conversion_value_numerator)
+							* currency_conversion_value;
 				}
-				
-				JSONObject jsonObject = new JSONObject(string);
-				listOfRates = jsonObject.getJSONObject("rates");
-				String ratesToDb = jsonObject.getString("rates");
-				CurrencyConversionRates Rates = new CurrencyConversionRates();
-				Rates.currencyRates = ratesToDb;
-				Rates.save();
-				scan.close();
-			} else {
-				listOfRates = new JSONObject(cuRates.currencyRates);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-			NamespaceManager.set(domain);
-		}
-		try {
-			UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
-			if (userPrefs != null)
-				userpref_currency_type = userPrefs.currency;
-			if (userpref_currency_type == null)
-				userpref_currency_type = "USD";
-			else
-				userpref_currency_type = userpref_currency_type.substring(0, 3)
-						.toUpperCase();
-			String deal_currency_type = currency_type.substring(0, 3);
-			if (deal_currency_type == null)
-				deal_currency_type = userpref_currency_type;
-			double pre_conversion_value_numerator = listOfRates.getDouble(deal_currency_type);
-			double pre_conversion_value_denominator = listOfRates.getDouble(userpref_currency_type);
-
-			if (userpref_currency_type.equalsIgnoreCase(deal_currency_type)) {
-				expected_value = currency_conversion_value;
-			} else {
-
-				expected_value = (pre_conversion_value_denominator / pre_conversion_value_numerator)
-						* currency_conversion_value;
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
+    	}
 
 	if (colorName == null)
 	    colorName = Color.WHITE;
@@ -1171,7 +1151,7 @@ public class Opportunity extends Cursor implements Serializable
     	      
     	      if (userPrefs !=null && userPrefs.currency !=null)
     	      {
-    	       userpref_currency_type = UserPrefsUtil.getCurrentUserPrefs().currency.toUpperCase();
+    	    	  userpref_currency_type = userPrefs.currency ;
     	      }
     	       
     	      if(userpref_currency_type == null)
