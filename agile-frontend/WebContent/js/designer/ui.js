@@ -637,7 +637,7 @@ function openTwitter()
 {
 	
 	var currentDomainUser;
-	if(CURRENT_DOMAIN_USER) {
+	if(typeof CURRENT_DOMAIN_USER != "undefined") {
 		currentDomainUser = CURRENT_DOMAIN_USER;
 	} else if(window.parent.CURRENT_DOMAIN_USER) {
 		currentDomainUser = CURRENT_DOMAIN_USER;
@@ -650,7 +650,7 @@ function openTwitter()
 			newwindow.focus();
 		}
 	}
-	
+
 	// to work in firefox, commented return false statement.
 	//return false;
 }
