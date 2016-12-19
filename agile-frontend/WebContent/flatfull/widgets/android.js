@@ -79,7 +79,6 @@ function saveCallNoteAndroid(message){
 					showDynamicCallLogs(data);
 				});
 			}else{
-
 				var note = {
 					"subject" : noteSub, 
 					"message" : "", 
@@ -137,10 +136,12 @@ function androidCallNoty(message){
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
 						}
 					}
-				}else if(eventType == "CDR"){		
-					closeCallNoty(true);	
-					saveCallNoteAndroid(message);			
 				}
+			}
+
+			if(eventType == "CDR"){		
+				closeCallNoty(true);	
+				saveCallNoteAndroid(message);			
 			}
 		}
 	}	
