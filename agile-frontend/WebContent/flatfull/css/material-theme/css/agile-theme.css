@@ -2387,3 +2387,15 @@ table.iptable>tbody>tr>td{
 .background-img-service+span.block{
   color: #ffbb44 !important;
 }
+.getting-started-body>div p
+{
+  font-size: 13px;
+}
+.text-lg-imp , .stats_report_portlet_body.text-lg-imp
+{
+  font-size: 38px;
+}
+.stats_report_portlet_body .text-white-imp
+{
+  color:#fff!important;
+}
