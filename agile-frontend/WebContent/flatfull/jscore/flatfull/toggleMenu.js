@@ -523,7 +523,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	}
 
 	/*saving the click event when clicking on the heading on the drop-down navbar */
-	$(".appaside.dropdownnavbar").on("click",function(e)
+	/*$(".appaside.dropdownnavbar").on("click",function(e)
 	{
 		e.stopPropagation();
 		if($(this).hasClass("agile-menuactive"))
@@ -552,9 +552,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 					console.log("error");
 					}});
 	 		return;
-	});
+	});*/
 	/*click event for toggling the active class when clicked on the li items */
-	$(".appaside.dropdownnavbar ul li").on("click",function(e)
+/*	$(".appaside.dropdownnavbar ul li").on("click",function(e)
 	{
 		e.stopPropagation();
 		if(agile_is_mobile_browser())
@@ -573,7 +573,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 				var currentRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
 				$("html").removeClass("agile-theme-"+prevRole).addClass("agile-theme-"+currentRole);
 			}
-	});
+	});*/
 	// initializing need help popover for header page
    $(".need_help").popover({ 
    					placement : $(this).attr("data-placement"),
@@ -631,18 +631,20 @@ function initRolehandlers(){
  			e.preventDefault();
 
  			var serviceName = $(this).attr("data-service-name");
- 			if(!serviceName)
+
+ 			if(!serviceName || CURRENT_DOMAIN_USER.role ==  serviceName)
  				  return;
 
  			var dashboardName = $(this).attr("data-dashboard");
  			if(!dashboardName)
  				 dashboardName = "dashboard";
  				$("#rolecontainer").text(serviceName);
+ 			$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+serviceName);
+
  			// Update user with the current service
  			var json = {};
  			json.id = CURRENT_DOMAIN_USER.id;
  			json.role = serviceName;
-
  			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
  			new Role().save( json, 
  						{success :function(model, response){
@@ -762,7 +764,6 @@ function updateDashboardRole(prevrole)
 		return;
 	if(CURRENT_DOMAIN_USER.role == prevrole)
 		return;
-	$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+prevrole);
 	CURRENT_DOMAIN_USER.role = prevrole ;
 			var json = {};
  			json.id = CURRENT_DOMAIN_USER.id;
