@@ -6,7 +6,11 @@ function saveCallNoteOzonetel(message){
 	if(message.state == "not_answered"){
 		notsub_message = "noanswer";
 	}else{
-		notsub_message = message.state;
+		if(message.state == "noanswer"){
+			notsub_message = "Failed";
+		}else{
+			notsub_message = message.state;
+		}
 	}
 
 	var noteSub = message.direction + " Call - " + notsub_message;
