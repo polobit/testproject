@@ -68,14 +68,16 @@ var Leads_Header_Events_View = Base_Model_View.extend({
     {
     	e.preventDefault();
     	var $checkboxInput = $(e.currentTarget).find("input");
-    	if($checkboxInput.is(":checked"))
-    	{
-    		$checkboxInput.prop("checked", false);
-    	}
-    	else
-    	{
-    		$checkboxInput.prop("checked", true);
-    	}
+        if(CURRENT_USER_PREFS.theme == "15"){
+        	if($checkboxInput.is(":checked"))
+        	{
+        		$checkboxInput.prop("checked", false);
+        	}
+        	else
+        	{
+        		$checkboxInput.prop("checked", true);
+        	}
+        }
     	var json = serializeForm("lead-static-fields");
 		$.ajax({
 			url : 'core/api/contact-view-prefs/lead',
