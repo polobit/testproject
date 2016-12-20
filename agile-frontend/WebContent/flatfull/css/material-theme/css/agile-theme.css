@@ -2566,3 +2566,6 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .agile-theme-15 .ticket-collection-container .i-checks-sm>i{
  display:none; 
 }
+.agile-theme-15 #subscribe_plan_change .agile-page-header{
+  padding : 20px 20px 20px !important;
+}
