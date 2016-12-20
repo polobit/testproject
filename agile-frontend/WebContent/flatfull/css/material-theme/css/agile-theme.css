@@ -2737,3 +2737,6 @@ div.chosen-container>ul.chosen-choices>li{
   margin: 8px 3px!important;
   background-color: inherit !important;
 }
+table.dealproducts_table thead th .i-checks input[type="checkbox"]{
+  margin: 4px 0 0 3px !important;
+}
