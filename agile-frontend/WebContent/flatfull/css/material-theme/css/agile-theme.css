@@ -2698,7 +2698,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 
 
-#agile-menu-navigation-container .nav  i.material-icons{
+#agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
   display:block !important;
 }
 
