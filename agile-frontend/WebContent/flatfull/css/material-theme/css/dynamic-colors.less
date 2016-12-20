@@ -11,21 +11,6 @@
     .agile-page-header h1, .agile-page-header h2, .agile-page-header h3, .agile-page-header h4, .agile-page-header .h1, .agile-page-header .h2, .agile-page-header .h3{
       color: @themeColor;
     }
-    .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{
-      color: @themeColor;
-      border-left: 3px solid @themeColor;
-      background-color: @menuBgColor;
-    }
-    .nav>li>a:hover, .nav>li>a:focus{
-      color: @themeColor;
-      background-color: @menuBgHoverColor;
-    }
-    .bg-white .agile-menuactive>a{
-      color: @themeColor
-    }
-    .navi ul.nav li.agile-menuactive ul.nav-sub li a:hover{
-      background-color: @menuBgHoverColor;
-    }
     .list-group-item:hover.select{
       background-color: @menuBgColor;
     }
@@ -57,32 +42,119 @@
     .grid-icon-header{
       color : @themeColor;
     }
-    .agile-sub-header h1, .agile-sub-header h2, .agile-sub-header h3{
+    .agile-sub-header h1, .agile-sub-header h2, .agile-sub-header h3, .tickets-toolbar .filter-name-btn{
       color : @themeColor;
     }
-    .navbar-brand i{
+    .navbar-brand i, .nav-tabs li a#marketing_previlages, .nav-tabs li a#Sales_previlages{
       color : @themeColor;
     }
 
 }
 
 @important:!important;
+@salesColor : #5840eb @important;
+@maColor : #11a0f8 @important;
+@serviceColor : #66cd2e @important;
+@salesBgColor : #F1EFFE @important;
+@maBgColor : #E7F6FF @important;
+@serviceBgColor :rgba(102, 205, 46, 0.2) @important;
+@salesBgHoverColor : #F9F9FF @important;
+@maBgHoverColor : #f5fbff @important;
+@serviceBgHoverColor : rgba(102, 205, 46, 0.1) @important;
 
+.agile-theme-SALES.agile-theme-15{
+  @themeColor : @salesColor;
+  @menuBgColor : @salesBgColor;
+  @menuBgHoverColor : @salesBgHoverColor;
+  .mainThemeDependentCss();
+}
 .agile-theme-MARKETING.agile-theme-15{
-  @themeColor : #11a0f8 @important;
-  @menuBgColor : #E7F6FF @important;
-  @menuBgHoverColor : #f5fbff @important;
+  @themeColor : @maColor;
+  @menuBgColor : @maBgColor;
+  @menuBgHoverColor : @maBgHoverColor;
   .mainThemeDependentCss();
 }
 .agile-theme-SERVICE.agile-theme-15{
-  @themeColor : #ffbb44 @important;
-  @menuBgColor :  #FFF8EC @important;
-  @menuBgHoverColor : #FFFDF7 @important;
+  @themeColor : @serviceColor;
+  @menuBgColor :  @serviceBgColor;
+  @menuBgHoverColor : @serviceBgHoverColor;
   .mainThemeDependentCss();
 }
-.agile-theme-SALES.agile-theme-15{
-  @themeColor : #5840eb @important;
-  @menuBgColor : #F1EFFE @important;
-  @menuBgHoverColor : #F9F9FF @important;
-  .mainThemeDependentCss();
+.navi #agile-sales-menu-navigation-container{
+  li.agile-menuactive a{
+    color: @salesColor;
+    border-left: 3px solid @salesColor;
+    background-color: @salesBgColor;
+  }
+  li a:hover, li a:focus{
+    color: @salesColor;
+    background-color: @salesBgHoverColor;
+  }
+  .agile-menuactive a, .agile-menu-parent-item{
+    color: @salesColor
+  }
+  li.agile-menuactive a:hover{
+    background-color: @salesBgColor;
+  }
+}
+.navi #agile-marketing-menu-navigation-container{
+  li.agile-menuactive a{
+    color: @maColor;
+    border-left: 3px solid @salesColor;
+    background-color: @maBgColor;
+  }
+  li a:hover, li a:focus{
+    color: @maColor;
+    background-color: @maBgHoverColor;
+  }
+  .agile-menuactive a, .agile-menu-parent-item{
+    color: @maColor
+  }
+  li.agile-menuactive a:hover{
+    background-color: @maBgColor;
+  }
+}
+.navi #agile-service-menu-navigation-container{
+  li.agile-menuactive a{
+    color: @serviceColor;
+    border-left: 3px solid @serviceColor;
+    background-color: @serviceBgColor;
+  }
+  li a:hover, li a:focus{
+    color: @serviceColor;
+    background-color: @serviceBgHoverColor;
+  }
+  .agile-menuactive a, .agile-menu-parent-item{
+    color: @serviceColor
+  }
+  li.agile-menuactive a:hover{
+    background-color: @serviceBgColor;
+  }
+}
+.app-aside-folded .bg-white #agile-sales-menu-navigation-container.agile-menuactive>a.agile-menu-parent-item{ 
+  color: @salesColor;
+  background-color: @salesBgColor;
+  border-left: 3px solid @salesColor;
+}
+
+.app-aside-folded .bg-white #agile-marketing-menu-navigation-container.agile-menuactive>a.agile-menu-parent-item{
+  color: @maColor;
+  background-color: @maBgColor;
+  border-left: 3px solid @maColor;
+}
+
+.app-aside-folded .bg-white #agile-service-menu-navigation-container.agile-menuactive>a.agile-menu-parent-item{
+  color: @serviceColor;
+  background-color: @serviceBgColor;
+  border-left: 3px solid @serviceColor;
+}
+
+.menu-service-select.active[data-service-name='SALES'], .menu-service-select[data-service-name='SALES']:hover{
+  background-color: @salesBgHoverColor;
+}
+.menu-service-select.active[data-service-name='MARKETING'], .menu-service-select[data-service-name='MARKETING']:hover{
+  background-color: @maBgHoverColor;
+}
+.menu-service-select.active[data-service-name='SERVICE'], .menu-service-select[data-service-name='SERVICE']:hover{
+  background-color: @serviceBgHoverColor;
 }

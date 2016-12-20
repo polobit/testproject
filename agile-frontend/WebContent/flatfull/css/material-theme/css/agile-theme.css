@@ -306,7 +306,8 @@ form select.form-control{
   font-size: 24px;
 }
 .agile-theme-15 h4, .h4{
-  font-size: 14px;
+  /*font-size: 14px;*/
+  font-size: 16px;
 }
 .agile-theme-15 h5, .h5{
   font-size: 13px;
@@ -1007,7 +1008,7 @@ z-index:1;
   font-size: 22px !important;
 }
 .agile-theme-15 .fa-filter, .icon-filter{
-  font-size: 14px !important;
+  font-size: 14px;
 }
 .no-label-content{
   background-color: white !important;
@@ -1041,7 +1042,7 @@ z-index:1;
 #dashlet_heading .btn-group .btn.btn-sm 
 {
   color: #78909c !important; 
-  margin-top: 3px;
+  /*margin-top: 3px;*/
 }
 #dashlet_heading .caret
 {
@@ -1084,7 +1085,7 @@ input.mini-time.ui-timepicker-input{
     font-size: 12px;
 }
 
-.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,.agile-theme-15 .data-block h4,.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
+.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,/*.agile-theme-15 .data-block h4,*/.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
     line-height: 1.1 !important;
     margin-bottom: 10px !important;
     color: inherit !important;
@@ -1093,10 +1094,10 @@ input.mini-time.ui-timepicker-input{
   margin-bottom: 10px !important;
 }
 .agile-theme-15 .workflows-right-body h1, h2, h3, h4, h5, h6{
-  color: #58666e !important;
+  color: #58666e;
 }
 .agile-theme-15 .triggers-right-body  h1, h2, h3, h4, h5, h6{
-  color: #58666e !important;
+  color: #58666e;
 }
 
 .agile-theme-15 p{
@@ -1766,11 +1767,12 @@ color:#0d1114 !important;
 #workflows-collection-container .panel.panel-default{
   background-color: inherit;
 }
-.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default{
+
+.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default,#subscribe_plan_change .panel{
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel, #import-tabs-content .tab-content.panel{
+#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel,  #admin-previlages .panel, #import-tabs-content .tab-content.panel{
   box-shadow :0px 0px 0px 0px !important;
 }
 
@@ -1850,7 +1852,7 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
-.agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .tabs-left-panel, .agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
 .agile-theme-15 .reports-tabs-left-panel{top: 18px;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
@@ -1983,6 +1985,8 @@ font-size: 24px !important;
   background-color: inherit !important;
   padding: 0 !important;
   border: 0 !important;
+  top: -13px;
+  position: absolute;
 }
 .dashboard-search-scroll-bar .img-inital,.dashboard-search-scroll-bar .thumb-xs.agile-img, #recent-menu-model-list .img-inital{
   height: 35px!important;
@@ -2251,7 +2255,7 @@ table .headerSortUp::after, table .headerSortDown::after{
 
 /*Plan & Upgrade Border Start*/
 
-#planform .line.line-dashed, #users-content .line.line-dashed{
+#planform .line.line-dashed, #users-content .line.line-dashed,.new-theme-purchase-line{
   border-bottom: 1px dashed #dee5e7 !important;
 }
 #users-content .line.ling-lg.b-b{
@@ -2388,9 +2392,20 @@ table.iptable>tbody>tr>td{
   color: #11a0f8 !important;
 }
 .background-img-service+span.block{
-  color: #ffbb44 !important;
+  color: #66cd2e !important;
 }
-
+.getting-started-body>div p
+{
+  font-size: 13px;
+}
+.text-lg-imp , .stats_report_portlet_body.text-lg-imp
+{
+  font-size: 38px;
+}
+.stats_report_portlet_body .text-white-imp
+{
+  color:#fff!important;
+}
 .agile-theme-15 .goals_portlet_body {
   background-color: #edf1f2 !important;
 }
@@ -2463,6 +2478,68 @@ margin-left: 5px !important;
 .task-list-heading{
   border-bottom: none !important;
 }
+
 div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
       vertical-align: middle;
 }
+
+.agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4
+{
+      margin-top: 10px;
+      margin-bottom:10px;
+}
+.agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs
+{
+  font-size: 11px;
+}
+.agile-theme-15 #DealsFunnel .portlets-modal-icon .icon-filter
+{
+      font-size: 31px!important;
+}
+.ticket-collection-container #tickets-single-row{
+  table-layout: auto;
+}
+.ticket-collection-container{
+  display: table;
+}
+#admin-prefs-tabs-content .tab-container{
+  width: 75%;
+}
+#admin-prefs-tabs-content .panel{
+  border-radius: 0;
+}
+#custom-filters-container .i-checks input[type="checkbox"] {
+   vertical-align: middle;
+}
+.plan-collection-content{
+  font-size: 13px !important;
+}
+.agile-theme{
+  margin-left: -30px;
+}
+
+/*.popover
+{
+  border:0px solid #fff;
+}*/
+.newtheme-well
+{
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0);
+}
+.newtheme-well a
+{
+  float:right;
+  border-radius: 4px 4px 4px 4px !important;
+  margin-top: -10px;
+}
+.contacts-grid-view-temp>div{
+  border:0;
+}
+.tickets-div .panel-heading .btn{
+  font-size: 12px !important;
+}
+#contacts-list-view, #companies-list-view{
+  position: relative;
+}
+>>>>>>> 516b097b06bad38a5bd8ab772e0dd58f7a2539de
