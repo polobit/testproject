@@ -2321,3 +2321,6 @@ table .headerSortUp::after, table .headerSortDown::after{
 .background-img-service+span.block{
   color: #66cd2e !important;
 }
+.agile-theme-15 #subscribe_plan_change .agile-page-header{
+  padding : 20px 20px 20px !important;
+}
