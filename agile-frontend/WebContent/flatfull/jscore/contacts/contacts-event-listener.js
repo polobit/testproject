@@ -344,14 +344,16 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	// Check for target element which invalidates the new theme/Old theme
     	if(!isTargetAnInputField(e)){
     		var $checkboxInput = $(e.currentTarget).find("input");
-	    	if($checkboxInput.is(":checked"))
-	    	{
-	    		$checkboxInput.prop("checked", false);
-	    	}
-	    	else
-	    	{
-	    		$checkboxInput.prop("checked", true);
-	    	}
+    		if(CURRENT_USER_PREFS.theme == "15"){
+		    	if($checkboxInput.is(":checked"))
+		    	{
+		    		$checkboxInput.prop("checked", false);
+		    	}
+		    	else
+		    	{
+		    		$checkboxInput.prop("checked", true);
+		    	}
+		    }
     	}
 
     	var json = serializeForm("contact-static-fields");
@@ -414,14 +416,16 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	// e.preventDefault();
     	if(!isTargetAnInputField(e)){
 	    	var $checkboxInput = $(e.currentTarget).find("input");
-	    	if($checkboxInput.is(":checked"))
-	    	{
-	    		$checkboxInput.prop("checked", false);
-	    	}
-	    	else
-	    	{
-	    		$checkboxInput.prop("checked", true);
-	    	}
+	    	if(CURRENT_USER_PREFS.theme == "15"){
+		    	if($checkboxInput.is(":checked"))
+		    	{
+		    		$checkboxInput.prop("checked", false);
+		    	}
+		    	else
+		    	{
+		    		$checkboxInput.prop("checked", true);
+		    	}
+		    }
     	}
 
     	var array = serializeForm('companies-static-fields');

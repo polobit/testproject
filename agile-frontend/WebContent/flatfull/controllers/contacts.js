@@ -105,7 +105,7 @@ var ContactsRouter = Backbone.Router.extend({
 	},
 	navigateDashboard : function(id){
 		// Call dashboard route
-		if(id)
+		/*if(id)
 		{
 			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
 			var prevrole = menuServicerole(id);
@@ -113,7 +113,7 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				updateDashboardRole(prevrole);
 			}
-		}
+		}*/
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -160,9 +160,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		/*$(".nav.nav-sub li").removeClass("agile-menuactive");
 		$(".nav.nav-sub li").removeClass("active");
-		$("."+dashboard_name+"-home").addClass("agile-menuactive");
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");*/
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -213,7 +213,7 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		//$("#home_dashboard").addClass("active");
+		$("#home_dashboard").addClass("active");
 		
 		},
 	

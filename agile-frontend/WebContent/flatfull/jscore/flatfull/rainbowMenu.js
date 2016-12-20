@@ -249,9 +249,15 @@ function handleNewThemeSettings() {
 		$('link[data-agile-theme="15"]').removeAttr('disabled');
 		$("head").append($('link[data-agile-theme="15"]')[0]);
 		$("html").addClass("agile-theme-15 agile-theme-" + CURRENT_DOMAIN_USER.role);
+		$(".grid-v1").addClass("hide");
+		$(".grid-v2").removeClass("hide");
+		$(".grid-icon-header").addClass("hide");
 	}
 	else 
 	{
+		$(".grid-v2").addClass("hide");
+		$(".grid-v1").removeClass("hide");
+		$(".grid-icon-header").removeClass("hide");
 		$('link[data-agile-theme="15"]').attr('disabled', 'disabled');
 	}
 }

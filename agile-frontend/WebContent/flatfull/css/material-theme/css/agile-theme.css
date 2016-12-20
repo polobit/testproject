@@ -1,5 +1,6 @@
+
 body, .h1, .h2, .h3, .h4, .h5,.h6  {
-  font-family: "Maison Neue", sans-serif !important;
+  font-family: "Maison Neue" !important;
 }
 body {
   font-size: 13px;
@@ -58,7 +59,9 @@ body, * {
 .agile-theme-15 .tickets-div .panel-heading:first-child{
   padding: 10px 15px !important;
 }
-
+/*table td a {
+  color: #263238;; 
+}*/
 .bg-light {
   background-color: inherit!important;
 }
@@ -113,6 +116,9 @@ form select.form-control{
   border-bottom: 1px solid #dee5e7;
 }
 
+/*.wrapper-md {
+  padding-bottom: 15px
+}*/
 .app:before {
   background: #f4f8f9;
 }
@@ -128,9 +134,16 @@ form select.form-control{
   opacity: inherit;
 }
 
+.i-checks-sm>i {
+  /*display: none;*/
+}
 .r-switch input[type="checkbox"] {
   position: absolute;
 }
+/*
+.i-checks {
+  padding-left: inherit;
+} */
 
 .tabs .tab-container{
   overflow: hidden;
@@ -248,7 +261,9 @@ form select.form-control{
   background-color: #fff !important;
   color: #11a0f8 !important;
 }
-
+/*.pull-right .btn.dropdown-toggle span {
+  color: #fff !important;
+}*/
 #lhs-contact-filter-form a#lhs-filters-header{
   color: #263238 !important;
 }
@@ -291,7 +306,8 @@ form select.form-control{
   font-size: 24px;
 }
 .agile-theme-15 h4, .h4{
-  font-size: 14px;
+  /*font-size: 14px;*/
+  font-size: 16px;
 }
 .agile-theme-15 h5, .h5{
   font-size: 13px;
@@ -307,6 +323,12 @@ form select.form-control{
   color: #58666e!important;
   font-size: 13px !important;
 }
+/*#filter-list .btn.btn-sm{
+  padding: 0px !important;
+}*/
+/*#filter-list .btn.btn-sm span{
+  color: #58666e!important;
+}*/
 
 #contact-sorter .btn.btn-sm{
   padding: 0px !important;
@@ -342,6 +364,34 @@ form select.form-control{
 }
 
 /** Table CSS **/
+/*.agile-new-theme .portlet_body .highcharts-tooltip>span table tr{
+  border-top: 0px !important; 
+  background-color: transparent !important;
+}
+.agile-new-theme .portlet_body .highcharts-tooltip>span table tr td{
+     border-top: none !important; 
+     padding: 0px !important; 
+} 
+.agile-new-theme #content table thead tr{
+  background-color: #f4f8f9 !important;
+}
+agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i-checks.i-checks-sm, .tickets-div .panel-heading label.i-checks{
+  padding-top: 3px !important;
+}
+.agile-new-theme #contact-reports-list-view table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td:nth-child(2)>div, #contact-reports-list-view table>tbody>tr>td:nth-child(2)>a{
+  padding-left: 8px !important;
+}
+.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr>td{
+   border-top: none !important;
+   padding: 10px 15px !important;
+}
+.table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
+    padding: 10px 15px !important;
+}
+.agile-new-theme #content table:not(.no-new-theme-updates):not(.fc-border-separate):not(.fc-agenda-allday):not(.fc-agenda-slots):not(.fc-header)>tbody>tr{
+  border-top: 10px solid #f4f8f9 !important;
+  background-color: #fff !important;
+}*/
 
 .agile-theme-15 .tickets-div table.ticket-data>tbody>tr{
   border-top: inherit !important;
@@ -350,6 +400,18 @@ form select.form-control{
 .agile-theme-15 .tickets-div table.ticket-data>tbody>tr>td{
   padding: 2px !important;
 }
+
+/*#content table.fc-header>tbody>tr:first-child{
+  border-top: none !important;
+}*/
+/*.agile-new-theme #content table>thead>tr>th{
+  padding: 10px 15px 15px 15px !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  text-transform: uppercase !important;
+  color: #78909c !important;
+  font-size: 12px !important;
+}*/
 /** End of table CSS **/
 
 .img-inital{
@@ -357,7 +419,12 @@ form select.form-control{
   height: 42px!important;
   width: 42px!important;
 }
-
+/*.table-striped>tbody>tr:nth-child(odd)>td{
+  background-color: #fff !important;
+}*/
+/*#content .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td, .table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th, .table-striped>tbody>tr:hover>td{
+  background-color: #e7f6ff !important;
+}*/
 .img-inital , .agile-img img ,.upload_pic ,.thumb img , .thumb-xs img{
   border-radius:50%!important;
 }
@@ -365,16 +432,35 @@ form select.form-control{
 #chrome-extensions, #contacts-view-options{
   margin-right: 10px;
 }
-
+/*#documents_collection_container .panel-heading, #deals-new-list-view .panel-heading{
+  display: none !important;
+}*/
 #documents_collection_container .panel, #deals-new-list-view .panel{
   border: none !important;
 }
+/*#documents_collection_container .panel-footer{
+  border-top: 10px solid #f4f8f9 !important;
+}*/
 .hbox .col.b-r{
   border-right: none;
 }
 .hbox .col.b-l{
   border-left: none;
 }
+/*.tabListCenter .btn-default, .companytabListCenter .btn-default, .dealsTabListCenter .btn-default, .taskListDetails .btn-default, .contact-right-widgetsview .btn, .contDetails .editicon-option.btn{
+    background-color: rgba(17, 160, 248, 0.1);
+    color: #11a0f8!important;
+}
+.tabListCenter .btn-default:hover, .companytabListCenter .btn-default:hover, .dealsTabListCenter .btn-default:hover, .taskListDetails .btn-default:hover, .contact-right-widgetsview .btn:hover, .contDetails .editicon-option.btn:hover{
+    background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;
+}*/
+/*#documents-top-view .wrapper-md, #opportunities-header.wrapper-md{
+  padding-bottom: 0px !important;
+}*/
+/*#task-list-based-condition .panel-heading label:first-child{
+  padding-left: 0px !important;
+}*/
 #task-list-based-condition .panel, .panel-heading{
   border: none !important;
 }
@@ -385,13 +471,13 @@ form select.form-control{
 .navbar-collapse, .app-content, .app-footer {
     margin-left: 239px;
 }
-.agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0;}
+.agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0; z-index: 1;}
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
 .agile-theme-15 .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
 .agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
 .agile-theme-15 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
 .agile-theme-15 .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
-.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 9999 !important;}
+.app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 1035 !important;}
 .app-aside-folded:not(.app-aside-dock) .navi #agile-sales-menu-navigation-container a span{
   padding-top: 0;
 }
@@ -409,11 +495,11 @@ form select.form-control{
 /*.app-aside-dock .app-aside{background-color: #f6f8f8;}*/
 }/*medis 992 end*/
 
-.agile-theme-15 #navbar{box-shadow: inherit; height: 70px !important;}
+.agile-theme-15 #navbar{box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.07); height: 70px !important;}
 .agile-theme-15 .app-header-fixed{padding-top: 70px;}
 .agile-theme-15 .navbar-brand{line-height: 50px;}
 .agile-theme-15 #app-aside-folded{top: 18px !important}
-.agile-theme-15 .navbar-searchicon{padding: 25px 15px;}
+.agile-theme-15 .navbar-searchicon{padding: 24px 15px;}
 .agile-theme-15 .grid-icon-header {
     color: #11a0f8!important;
     padding-bottom: 25px;
@@ -481,7 +567,7 @@ a i, a span{vertical-align: inherit;}
   color: inherit;
 }
 .dropdown-menu{
-  font-size: 14px;
+  font-size: 13px;
 }
 .dropdown-menu li a{
   color: #263238;
@@ -496,6 +582,12 @@ a i, a span{vertical-align: inherit;}
   display: none !important;
 }
 
+/*table.panel, .panel{
+  border: none !important;
+  -webkit-box-shadow: inherit !important;
+  box-shadow: inherit !important;
+   
+} */
 div#contact-reports-list-view, #task-list-based-condition .panel{
   box-shadow: inherit;
   background-color: inherit;
@@ -504,8 +596,10 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   vertical-align: middle !important;
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
-  margin-bottom: 0px !important;
   padding-bottom: 0px !important;
+}
+.agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
+  margin-bottom: 0px !important;
 }
 .agile-theme-15 #admin-settings-users .panel-heading>div:first-child{
   display: none;
@@ -555,6 +649,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   /*margin: 0px !important;*/
   padding-bottom: 0px !important;
   vertical-align: middle;
+  padding-left: 0px;
 }
 #today-heading, #yesterday-heading, #earlier-heading{
   border :none !important;
@@ -578,6 +673,8 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 
 #automation-video{margin-right: 15px !important;}
+/*#document-list thead tr th:first-child .i-checks input{ margin-left: -15px;}*/
+/*#document-list thead tr th:first-child label.i-checks{margin: 0; margin-left: 0px !important}*/
 .grid-icon-header:hover, .grid-icon-header:focus{background-color: inherit;}
 .nav.navbar-right li a:hover, .nav.navbar-right li a:focus {
     background: inherit;
@@ -606,10 +703,19 @@ header .bg-white a, header button.show-search-dropdown {
 .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus
 {
   color: #141719;
-  background-color: #e7f6ff!important;
+  background-color: #f4f8f9!important;
   background-image: none;
   filter: none;
 }
+/*.panel-default .panel-heading
+{
+  background-color : #FFFFFF;
+}*/
+/*.wrapper-md
+{
+  padding-bottom:0px!important;
+  padding-top: 15px;
+}*/
 .route_Portlet
 {
   padding-top:10px;
@@ -692,6 +798,10 @@ header .bg-white a, header button.show-search-dropdown {
 {
   margin-right:0px;
 }
+/*.agile-new-theme form .form-control.textarea
+{
+  height: 72px;
+}*/
 .multiple-template .multiple-remove.m-l-xs ,.multiple-template .multiple-remove .m-l-xs
 {
   margin-left:0px;
@@ -840,6 +950,10 @@ z-index:1;
   background-color: #067dc6!important;
   color: #ffffff;
 }
+/*#data-sync-type a
+{
+  color:#fff!important;
+}*/
 .btn-addon.btn-sm i
 {
   width: 20px;
@@ -852,9 +966,9 @@ z-index:1;
 .agile-theme-15 #right-pane .tickets-toolbar, #tickets-container div.col.bg-white{
   background-color: #f4f8f9 !important;
 }
-.agile-theme-15 .ticket-collection-container .i-checks.i-checks-sm{
-  margin-top: 0px !important;
-}
+/*.agile-theme-15 .ticket-collection-container .i-checks.i-checks-sm{
+  margin-top: 15px !important;
+}*/
 .agile-theme-15 .ticket-collection-container table label.i-checks{
   margin-left: 0px !important;
 }
@@ -884,6 +998,7 @@ z-index:1;
 .agile-theme-15 .tickets-div .panel-heading label.i-checks:first-child{
   padding-left: 0px !important;
   margin-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 .agile-theme-15 .tickets-div .ticket-collection-row{
   min-height: 0px !important;
@@ -894,7 +1009,7 @@ z-index:1;
   font-size: 22px !important;
 }
 .agile-theme-15 .fa-filter, .icon-filter{
-  font-size: 14px !important;
+  font-size: 14px;
 }
 .no-label-content{
   background-color: white !important;
@@ -908,7 +1023,19 @@ z-index:1;
     vertical-align: middle !important; 
   }
 }
-
+/*.agile-new-theme #deals-new-list-view table>tbody>tr>td, #workflows-collection-container table>tbody>tr>td, #campaign-triggers-list table>tbody>tr>td, #email-template-div-id table>tbody>tr>td, #forms-list-view table>tbody>tr>td, #landing-pages-collection-container table>tbody>tr>td, #webrules-list-view table>tbody>tr>td, #push-notify-list-view table>tbody>tr>td, .ticket-settings table>tbody>tr>td{
+  vertical-align: middle !important;
+}
+.agile-new-theme #deals-new-list-view table>thead>tr>th, #documents_collection_container table>thead>tr>th, #workflows-collection-container table>thead>tr>th, #campaign-triggers-list table>thead>tr>th, #email-templates-list-view table>thead>tr>th, #forms-list-view table>thead>tr>th, #landing-pages-collection-container table>thead>tr>th, #webrules-list-view table>thead>tr>th, #push-notify-list-view table>thead>tr>th, #admin-prefs-tabs-content .ticket-settings table>thead>tr>th{
+  vertical-align: bottom !important;
+}
+.agile-new-theme .ticket-settings table>tbody>tr>td:nth-child(3){
+  padding-left: 15px !important;
+}
+.agile-new-theme #ticket-feedback table>tbody>tr>td:first-child>div{
+  width: 40px !important;
+  height: 40px !important;
+}*/
 #dashboard-name
 {
   margin-right:7px!important;
@@ -916,7 +1043,7 @@ z-index:1;
 #dashlet_heading .btn-group .btn.btn-sm 
 {
   color: #78909c !important; 
-  margin-top: 3px;
+  /*margin-top: 3px;*/
 }
 #dashlet_heading .caret
 {
@@ -959,7 +1086,7 @@ input.mini-time.ui-timepicker-input{
     font-size: 12px;
 }
 
-.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,.agile-theme-15 .data-block h4,.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
+.agile-theme-15 .data-block h1,.agile-theme-15 .data-block h2,.agile-theme-15 .data-block h3,/*.agile-theme-15 .data-block h4,*/.agile-theme-15 .data-block h5,.agile-theme-15 .data-block h6 {
     line-height: 1.1 !important;
     margin-bottom: 10px !important;
     color: inherit !important;
@@ -968,10 +1095,10 @@ input.mini-time.ui-timepicker-input{
   margin-bottom: 10px !important;
 }
 .agile-theme-15 .workflows-right-body h1, h2, h3, h4, h5, h6{
-  color: #58666e !important;
+  color: #58666e;
 }
 .agile-theme-15 .triggers-right-body  h1, h2, h3, h4, h5, h6{
-  color: #58666e !important;
+  color: #58666e;
 }
 
 .agile-theme-15 p{
@@ -979,11 +1106,16 @@ input.mini-time.ui-timepicker-input{
   line-height: 1.42857143 !important;
 }
 
+
 .list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
 .list-group-item:hover.select{background-color: #e7f6ff !important;}
+
+/*#content .portlet_body_calendar #calendar_container table td, #content .portlet_body_calendar #calendar_container table th {
+  padding: 0px !important;
+}*/
 
 /** Checkbox/Radio CSS **/
 label.i-checks input{
@@ -1014,10 +1146,10 @@ label.i-checks input{
   padding-left: 23px;
 }
 .getting-started-body label.i-checks input{
-  vertical-align: middle;
-  margin-right: 10px;
+    margin-right: 8px;
+    margin-top: 7px;
  }
-table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-checks i, #bulk-action-btns .i-checks i {
+table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   display: none!important;
 }
 .i-checks>span {
@@ -1033,7 +1165,7 @@ table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-chec
   z-index: 100000;
 }
 .i-checks-sm>i {
-  margin-left: -20px;
+  margin-left: -19px;
   border: 0;
   background: transparent;
 }
@@ -1072,11 +1204,13 @@ table.agile-table thead tr th .i-checks i, table.agile-table tbody tr td .i-chec
 .agile-theme-15 #portlets-add-listener #marketing_dashlet .col-md-3{
   display: table;
 }
+
 .agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(5){
-  clear: both;
+  clear: inherit;
 }
 .agile-theme-15 #portlets-add-listener .wrapper-md div:nth-of-type(4){
   height: 100%;
+  clear: both;
 }
 ul.leader-board-view li div table tr{
   border-top: 0px !important; 
@@ -1139,8 +1273,9 @@ ul.leader-board-view li div table tr td{
   border-radius: 3px;
 }
 .tag:hover, .tag.btn:hover, .controls .tag.btn:hover{
-  color: #78909c!important;
-  background-color: #f4f8f9!important;
+  
+    background-color: #dadfe2!important;
+    color: #263238!important;
 }
 .tag a{
   color: #78909c!important;
@@ -1252,6 +1387,10 @@ ul.tags-management li.tag{
 {
   margin-right:10px!important;
 }
+/*
+.agile-new-theme form .input-group-addon{
+  padding: 12px 25px !important;
+}*/
 
 #advanced-search-fields-group {
   padding-bottom: 5px;
@@ -1279,6 +1418,15 @@ ul.tags-management li.tag{
   margin-right:15px;
   line-height:27px!important;
   border-radius:4px;
+  vertical-align: text-top;
+}
+#reportrange
+{
+  margin-right:15px;
+  line-height:24px!important;
+  border-radius:4px;
+  vertical-align: middle;
+  border-color:#fff!important;
 }
 
 #activity-log-header-div #activities_date_range.activity-date-filter  .caret ,
@@ -1317,6 +1465,11 @@ ul.tags-management li.tag{
    background-color: #11a0f8!important;
   color: #ffffff!important;
 }
+/*.agile-new-theme .btn-addon.btn-sm i:active,.agile-new-theme .btn-addon.btn-sm i:hover,.agile-new-theme .btn-addon.btn-sm i:focus
+{
+    background-color: #067dc6!important;
+    color: #ffffff;
+}*/
 .btn.dropdown-toggle.btn-primary-imp .caret
 {
   color: #ffffff !important;
@@ -1347,13 +1500,17 @@ ul.tags-management li.tag{
 #portlets-tasks-model-list tr td:first-child{
   width: 40px !important;
 }
+/*.scroll div[id*="heading"], .scroll>div>div{
+  border-top: none !important;
+  border-bottom: none !important;
+}*/
 .portlet_header h4 span{
   color: #263238 !important;
   font-weight: 400 !important;
   font-size: 16px !important;
 }
 .portlet_header h4 small{
-  font-size: 14px !important;
+  font-size: 13px !important;
   color: #78909c !important;
   font-weight: 400 !important;
 }
@@ -1363,7 +1520,9 @@ ul.tags-management li.tag{
 .goals_portlet_body .portlet-panel.bg-light{
   background-color: #dde6e9 !important;
 }
-
+/*.agile-new-theme #bulk-action-btns .i-checks{
+  padding-left: 9px !important;
+}*/
 table#contacts-table, table#companies {
   -webkit-box-shadow: none !important; 
   box-shadow: none !important; 
@@ -1476,10 +1635,6 @@ table#contacts-table, table#companies {
 #dialler-page .panel.panel-default{
   border: 1px solid #fafafa !important;
 }
-#contact-sorter
-{
-  margin-top:-5px;
-}
 #refrecal
 {
   color: #11a0f8 !important;
@@ -1488,10 +1643,17 @@ table#contacts-table, table#companies {
 {
   font-size:15px;
 }
-#activities_date_range .icon-calendar 
+#activities_date_range .icon-calendar
 {
-  font-size:13px;
-  margin-top:5px;
+  font-size:13px!important;
+  margin-top:5px!important;
+  vertical-align: text-bottom;
+}
+#reportrange .icon-calendar
+{
+  font-size:13px!important;
+  margin-top:5px!important;
+  /*vertical-align: text-bottom;*/
 }
 #contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
@@ -1589,25 +1751,33 @@ color:#0d1114 !important;
 .agile-theme-15 .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
-.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div .thumb-sm img{
   width: 40px !important;
   height: 40px !important;
+}
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+  width: 105px !important;
+  border-radius: 500px;
 }
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
   margin-left: 0px !important
 }
-.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default {
+.agile-table.panel, .panel, #admin-prefs-tabs-content.tabs .panel.panel-default, #workflows-collection-container .panel.panel-default{
   border: none !important;
   -webkit-box-shadow: inherit !important;
   box-shadow: inherit !important;   
   
 }
-.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default{
+#workflows-collection-container .panel.panel-default{
+  background-color: inherit;
+}
+
+.tab-content .panel, #admin-prefs-tabs-content.tabs #web-to-lead-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #e-commerce-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #cms-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #web-app-integrations-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #email-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #sms-gateways-tab .panel.panel-default, #admin-prefs-tabs-content.tabs #stats-tab-content .panel.panel-default,#subscribe_plan_change .panel{
    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel, #subscribe_plan_change .panel, #admin-previlages .panel, #import-tabs-content .tab-content.panel{
+#settings-user-prefs-tab-content .panel, #settings-widgets-tab-content, #setting-email-prefs-tab-content, #settings-data-sync-tab-content, #online-calendar-content, .tab-content .panel.no-shadow, #settings-account-tab-content .panel, #settings-milestones-tab-content .panel, .tab-container .ticket-settings .panel, #integrationstats .panel, .tab-content #accordion .panel,  #admin-previlages .panel, #import-tabs-content .tab-content.panel{
   box-shadow :0px 0px 0px 0px !important;
 }
 
@@ -1618,7 +1788,7 @@ color:#0d1114 !important;
   background-color: #fff !important;
 }
 .agile-theme-15 #content .agile-table>thead>tr>th{
-  padding: 10px 15px 15px 15px !important;
+  padding: 10px 15px 15px 15px;
   border-top: none !important;
   border-bottom: none !important;
   text-transform: uppercase !important;
@@ -1643,7 +1813,7 @@ color:#0d1114 !important;
 }
 .agile-theme-15 #content .agile-table>tbody>tr>td{
    border-top: none !important;
-   padding: 10px 15px !important;
+   padding: 10px 15px;
 }
 .table.contacts-custom tbody tr td,.table.companies-custom tbody tr td {
     padding: 10px 15px !important;
@@ -1661,6 +1831,16 @@ color:#0d1114 !important;
 .agile-theme-15 #content .portlet_body .agile-table>tbody>tr{
   border-top: none !important;
 }
+/*.tabs .tab-container{
+  margin-bottom: 0px !important;
+}
+.tabs .tab-content{
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    border-top-width: 0;
+    border-radius: 0 0 2px 2px;
+}*/
 
 /***** END TABLES ********/
  
@@ -1677,7 +1857,8 @@ textarea#tinyMCEhtml_email, textarea#agile-push-noty-code {
 }
 
 .tabs-left-panel, .reports-tabs-left-panel{background-color: #fff; position: relative;top: 20px;}
-.agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .tabs-left-panel, .agile-theme-15 .reports-tabs-left-panel{height: 100vh;}
+.agile-theme-15 .reports-tabs-left-panel{top: 18px;}
 
 #activity_model .list-group , #contact_activity_model .list-group {
  
@@ -1762,14 +1943,19 @@ table.agile-table>tbody>tr>td{
 .milestone-column>ul, .milestone-column>div.milestones{
   height: calc(100vh - 190px) !important; 
 }
-.milestone-column>div.milestones ul.milestones{
+/*.milestone-column>div.milestones ul.milestones{
   min-height: calc(100vh - 190px) !important; 
-}
+}*/
 /*End of deals*/
 
 .setting-add-tag{
   padding: 6px 12px !important;
 }
+
+/*.btn-group>.btn:last-child:not(:first-child){
+  border-top-left-radius : 4px;
+  border-bottom-left-radius : 4px;
+}*/
 
 /* star of filters*/
 #contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
@@ -1804,6 +1990,8 @@ font-size: 24px !important;
   background-color: inherit !important;
   padding: 0 !important;
   border: 0 !important;
+  top: -13px;
+  position: absolute;
 }
 .dashboard-search-scroll-bar .img-inital,.dashboard-search-scroll-bar .thumb-xs.agile-img, #recent-menu-model-list .img-inital{
   height: 35px!important;
@@ -1825,7 +2013,7 @@ ul#recent-menu-model-list li:nth-child(even){
 #basic-addon1{
   border: 0px;
 }
-#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item, #today-activity .list-group-item, #tomorrow-activity .list-group-item, #next-week-activity .list-group-item{
+#contact-activity-today-list-log-model-list .list-group-item, #contact-activity-yesterday-list-log-model-list .list-group-item, #contact-activity-earlier-list-log-model-list .list-group-item, #next-week-activity .list-group-item, #today-activity .list-group-item, #tomorrow-activity .list-group-item{
   border: none !important;
 }
 #widget-settings-tab-pane .btn-primary ,#widget-settings-tab-pane .btn-default ,#settings-widgets-tab-content .btn-danger{
@@ -1839,6 +2027,29 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
+/*
+#online-calendar-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#notificationsForm .btn-primary , #theme-and-layout .btn-primary , #settings-user-prefs-tab-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+}
+#admin-prefs-tabs-content .btn-primary
+{
+    background-color: rgba(17, 160, 248, 0.1)!important;
+    color: #11a0f8!important;
+    font-size: 14px; 
+    margin-left:10px;
+}*/
+/*.save{
+ 
+      background-color: #11a0f8!important;
+      color: #ffffff!important;
+}*/
 #contact-tab-content #send-new-email .icon-envelope
 {
   top:-1px;
@@ -1884,7 +2095,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
 
-  #contact-sorter,.workflow-sortby,.tickets-toolbar .new-theme-sort
+.workflow-sortby,.tickets-toolbar .new-theme-sort
 {
   margin-top:-7px;
 }
@@ -1900,7 +2111,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-color: #fff;
     background-image: inherit;
     border-radius: 4px;
-    /*border: inherit;*/
+    border: inherit;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
    #owner,#source,#track{
@@ -1908,6 +2119,7 @@ ul#recent-menu-model-list li:nth-child(even){
     background-color: #fff;
     background-image: inherit;
     border-radius: 4px;
+    border: inherit;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
   #campaign-reports-select .select-new-theme-nopanel{
@@ -2048,7 +2260,7 @@ table .headerSortUp::after, table .headerSortDown::after{
 
 /*Plan & Upgrade Border Start*/
 
-#planform .line.line-dashed, #users-content .line.line-dashed{
+#planform .line.line-dashed, #users-content .line.line-dashed,.new-theme-purchase-line{
   border-bottom: 1px dashed #dee5e7 !important;
 }
 #users-content .line.ling-lg.b-b{
@@ -2075,17 +2287,461 @@ table .headerSortUp::after, table .headerSortDown::after{
   display: none;
 }
 
-#prefs-tabs-content .admin-message-info{position: absolute;left: 20%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
+#prefs-tabs-content .admin-message-info{position: absolute;left: 20%;top:14%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
 .integrationstab .btn.btn-primary,.integrationstab .btn.btn-default{height:30px !important;line-height:30px !important;font-size:12px !important;}
 .m-t-sm-imp{margin-top:10px}
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
 #TrackingTab.nav li.active a{background-color: rgba(17,160,248,0.2);color: #11a0f8 !important;}
+#goal_duration{
+  position: relative;
+}
+#goal_duration i{
+  position: absolute;
+  top: 6px;
+}
+.price_per_month h4{
+  font-size: 16px;
+}
 #setting-email-prefs-tab-content .btn-default,#setting-email-prefs-tab-content .btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
+#activities_date_range,#reportrange .text-xs{border-color: #fff!important;vertical-align:text-top!important;}
+.p-sm-imp{padding:10px;padding-top:0px;padding-bottom:0px;}
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
-/*table.agile-table tr td.checkbox {position: inherit;}*/
+
+#sync-app-data p{
+  padding: 10px 15px;
+}
+.actvitiescareticon{vertical-align:text-bottom!important;}
+.import-panel-heading .data-block h4,.dash_tabview  .data-block h4{
+  color: #263238 !important;
+}
+
+.agile-new-theme .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+.activities-dropdown{vertical-align:text-bottom!important;}
+.datedropdown{margin-top:5px!important;}
+.agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+.theme-width{width:134px;}
+
+/*IP Table UI Fix Start*/
+
+/*#ip_access .panel-heading{
+  background-color: inherit;
+}*/
+table.iptable, #ip_access .panel-footer{
+  border: none !important;
+}
+table.iptable thead>tr>th{
+  padding-top: 15px !important;
+  padding-bottom: 5px !important;
+}
+#ip_access{
+  padding: 0 !important;
+}
+#ip_access .panel-footer{
+  display: none;
+}
+.allow_access_panelheading{
+  margin-top: 0 !important;
+  padding: 10px 0 0 0;
+}
+#blocked_panel_ips_list .upsert-ip{
+  margin-left: 0 !important;
+}
+#blocked_panel_ips_list .blocked-panel-ip-delete{
+  margin-left: 5px !important;
+}
+table.iptable>tbody>tr>td{
+  padding: 8px !important;
+}
+table.iptable>tbody>tr>td:nth-child(2){
+  padding: 0px !important;
+}
+
+/*IP Table UI Fix End*/
+#reports-main-div>div{
+  border-bottom: 0 !important;
+}
+.i-checks input[type="radio"]+i{display:none;}
+.dropdown-menu.pull-right.emailbuilder-copy{right:15px;}
+.dropdown-menu > li > a >i.fa-check.sort-field-check.m-t-xs{margin-top:0px!important;}
+#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important; top: 5px!important;}
+#reportrange{margin-right:0px;}
+#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;top: 5px;}
+.agile-theme-15 .agile-header-btns{top: 2px!important;}
+
+.agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
+    border-radius: 4px 4px 0 0;
+}
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt{
+    color: #78909c;
+    font-size: 14px;
+    background-color: #e7eef0 !important;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 4px 4px 0 0;
+}
+.agile-theme-15 #rep-performance-reports .bg-primary.lt, .bg-primary .lt h4{
+    color: #78909c;
+    font-size: 14px;
+}
+.agile-theme-15 .reports_tab_content{
+  box-shadow: 0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
+  border: none !important;
+}
+
+.background-img-sales+span.block{
+  color: #5840eb !important;
+}
+.background-img-marketing+span.block{
+  color: #11a0f8 !important;
+}
+.background-img-service+span.block{
+  color: #66cd2e !important;
+}
+.getting-started-body>div p
+{
+  font-size: 13px;
+}
+.text-lg-imp , .stats_report_portlet_body.text-lg-imp
+{
+  font-size: 38px;
+}
+.stats_report_portlet_body .text-white-imp
+{
+  color:#fff!important;
+}
+.agile-theme-15 .goals_portlet_body {
+  background-color: #edf1f2 !important;
+}
+.agile-theme-15 .getting-started-body>div a {
+    font-size: 13px;
+}
+.agile-theme-15 .getting-started-body>div p{
+    font-size: 13px;
+}
+.getting-started-body label.i-checks i{
+      display: none;
+}
+.getting-started-body .i-checks {
+     padding-bottom: 0px;
+}
+.agile-theme-15 .portlet-error-message, .portlet-error-privilege-message{
+  font-size: 13px;
+}
+
+
+.milestone-main .dealtitle-angular{
+  padding: 20px 5px 17px 5px !important;
+ /* width: 100%;
+  background-color: #e7eef0 !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 4px 4px 0 0;*/
+}
+.milestone-main .milestone-heading{
+  margin-top: -4px;
+}
+.milestone-main{
+  border : none !important;
+}
+.milestone-main .miltstone-title{
+  margin-left: 5px !important;
+}
+.miltstone-title{
+margin-left: 5px !important;
+}
+
+#opportunities-by-paging-model-list{
+  -webkit-box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 4px 4px 0 0;
+}
+
+#new-tasks-lists-model-list .task-list-heading{
+      padding: 20px 5px 17px 5px !important;
+} 
+
+#new-tasks-lists-model-list{
+  -webkit-box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 4px 4px 0 0;
+}  
+#taskheading{
+  margin-left: 6px;
+}
+
+.dealtitle-angular .badge{
+  background-color: #cfdadd !important;
+  margin-right: 5px;
+} 
+#taskheading{
+  font-weight: normal !important;
+  color : #263238 !important;
+}
+.task-list-heading{
+  border-bottom: none !important;
+}
+
+div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
+      vertical-align: middle;
+}
+
+.agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4
+{
+      margin-top: 10px;
+      margin-bottom:10px;
+}
+.agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs
+{
+  font-size: 11px;
+}
+.agile-theme-15 #DealsFunnel .portlets-modal-icon .icon-filter
+{
+      font-size: 31px!important;
+}
+.ticket-collection-container #tickets-single-row{
+  table-layout: auto;
+}
+.ticket-collection-container{
+  display: table;
+}
+#admin-prefs-tabs-content .tab-container, #settings-milestones-tab-content #lossreasons-tab, #settings-milestones-tab-content #deal-goals-tab, #settings-milestones-tab-content #deal-sources-tab, #settings-milestones-tab-content .products-table{
+  width: 75% !important;
+}
+#admin-prefs-tabs-content .panel{
+  border-radius: 0;
+}
+#custom-filters-container .i-checks input[type="checkbox"] {
+   vertical-align: bottom;
+   margin-right: 6px;
+}
+.plan-collection-content{
+  font-size: 13px !important;
+}
+.agile-theme{
+  margin-left: -30px;
+}
+/*.popover
+{
+  border:0px solid #fff;
+}*/
+.newtheme-well
+{
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0);
+}
+.newtheme-well a
+{
+  float:right;
+  border-radius: 4px 4px 4px 4px !important;
+  margin-top: -10px;
+}
+.contacts-grid-view-temp>div{
+  border:0;
+}
+.tickets-div .panel-heading .btn{
+  font-size: 12px !important;
+}
+.agile-theme-15 .m-l-n-imp
+{
+  margin-left:0px !important;
+}
+.agile-theme-15 .m-t-n-imp
+{
+  margin-top:0px !important;
+}
+#admin-prefs-tabs-content #userForm .col-md-6 #template_id
+{
+      height: 40px !important;
+      padding: 6px 20px !important;
+}
+#ticket-model-list .ticket-data .assignee-change:hover
+{
+  background-color: rgba(17, 160, 248, 0.04) !important;
+}
+#ticket-model-list .ticket-data .assignee-change a
+{
+  font-size:12px;
+}
+.m-t-xs-imp
+{
+  margin-top:5px;
+}
+#send-reply-container #send-reply .arrow.bottom.arrow-light:after
+{
+ border-top-color: rgb(207, 236, 254)!important;
+}
+.lpPreviewView label
+{
+  margin-top:11px;
+}
+.agile-theme-15 .saveLandingPageButton.btn i
+{
+  vertical-align: middle;
+}
+/*.disabled,button[disabled='disabled']
+{
+    background-color: rgba(17, 160, 248, 0.1) !important;
+}*/
+.agile-theme-15 #toggle_previous_tickets
+{
+  margin-top:10px;
+}
+#ticket-feedback.wrapper-lg
+{
+  margin-top:10px;
+}
+#ticket-feedback .ticket-feedback-notes
+{
+  color:#19a9d5;
+}
+
+#contacts-list-view, #companies-list-view{
+  position: relative;
+}
+
+#timeline .year,#timeline .top .year{font-size: 12px;}
+#unsubscribe-modal{top:-10px;}
+.tagsinput.active-campaigns{margin-bottom: 10px;}
+.plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:focus{color: #fff !important}
+.agile-page-header#campaign-logs-list{padding-bottom: 0px !important;} 
+#contacts_dashlet .popover ,#marketing_dashlet .popover ,#deals_dashlet .popover ,#calendar_dashlet .popover, #activity_dashlet .popover,#rss_dashlet .popover,#account_Info_dashlet .popover{
+    font-size: 13px;
+    font-weight: normal;
+    border: none !important;
+    -webkit-box-shadow:0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
+    box-shadow: 0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
+}
+#contacts_dashlet .popover.right>.arrow,#marketing_dashlet .popover.right>.arrow,#deals_dashlet .popover.right>.arrow,#calendar_dashlet .popover.right>.arrow,#activity_dashlet .popover.right>.arrow,#rss_dashlet .popover.right>.arrow,#account_Info_dashlet .popover.right>.arrow
+{
+  border-right-color: transparent !important;
+}
+#contacts_dashlet .popover.left>.arrow,#marketing_dashlet .popover.left>.arrow,#deals_dashlet .popover.left>.arrow,#calendar_dashlet .popover.left>.arrow,#activity_dashlet .popover.right>.arrow,#rss_dashlet .popover.left>.arrow,#account_Info_dashlet .popover.left>.arrow
+{
+  border-left-color: transparent !important;
+}
+.agile-theme-15 .ticket-collection-container .i-checks-sm>i{
+ display:none; 
+}
+.agile-theme-15 #subscribe_plan_change .agile-page-header{
+  padding : 20px 20px 20px !important;
+}
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+#ticket_change_sla{
+  width: 67% !important;
+}
+.ticket_change_slatime,{
+  width: 33% !important;
+}
+
+.tab-container#integrations-tab, #integrationstats .tab-container{
+  width: 100% !important;
+}
+.ticket-settings #service-tab{
+  padding-left: 0;
+  padding-right: 0;
+  background-color: inherit;
+}
+.data-block .canned-video-xs{
+  width: 100%;
+  height: auto;
+}
+@media (min-width: 768px){
+#saveFilterForm .control-label {
+      padding-top: 11px;
+}
+}
+.tickets-main .wrapper.bg-light {
+    background-color: #edf1f2 !important;
+}
+#ticket-notes-model-list .thumb-small{
+       margin-top: 18px; 
+}
+.agile-theme-15 .cus-pad {
+    padding: .2em .5em .2em!important;
+}
+.agile-theme-15 .public-notes-container:HOVER .show-original-div{
+      margin-top: 8px;
+}
+#ticket-contact-details .label.bg-light {
+    background-color: #f4f8f9!important;
+    color: #78909c!important;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users,#aside i.icon-tag,#aside i.icon-bubbles{
+  display: none;
+}
+#aside i.material-icons{
+  display:block !important;
+}
+
+
+
+.ticket_change_slatime
+{
+  width: 33% !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-left: 1px solid #cfdadd !important;
+}
+.sla-due-date .col-sm-12{
+  margin-top: 3px !important;
+}
+#active-campaign{
+  margin-top: 2px !important;
+}
+.cc-emails .new-theme-ticket-cc.tag:hover, .ticket-forwar-email.tag:hover{
+  background-color: #f4f8f9 !important; 
+}
+.ticket-email{
+  border: 0px !important;
+  padding: 0px !important;
+}
+.ticket-email .new-theme-ticket-cc{
+  width: 100%;
+}
+.forward-emails {
+  padding:0px !important;
+  border: none !important
+}
+.ticket-forwar-email .tag{
+  margin:0px !important;
+}
+
+#saveFilterForm input[type="radio"]{
+  top: 5px;
+}
+ul.chosen-choices{
+  height: 40px !important;
+  color: #263238 !important;
+  background-color: #f4f8f9 !important;
+  background-image: inherit !important;
+  border: inherit !important;
+  border-radius: 4px !important;
+}
+div.chosen-container>ul.chosen-choices>li{
+  margin: 8px 3px!important;
+  background-color: inherit !important;
+}
+table.dealproducts_table thead th .i-checks input[type="checkbox"]{
+  margin: 4px 0 0 3px !important;
+}
+
+#workflows-tab-container .tab-container,#triggers-tab-container .tab-container{
+  margin-bottom: 0px !important;
+}

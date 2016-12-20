@@ -8165,7 +8165,7 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 	return options.inverse(this);
 });
 
-Handlebars.registerHelper('permissiondeleted', function()
+Handlebars.registerHelper('loading_image', function()
 {
 	return new Handlebars.SafeString(LOADING_HTML);
 });
@@ -8200,6 +8200,15 @@ Handlebars.registerHelper('if_checked_autoProfile', function(value, target, opti
 Handlebars.registerHelper('isUserNotInIphone', function(options)
 {
 	if(!IS_IPHONE_APP)
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+
+Handlebars.registerHelper('isNewTheme', function(options)
+{
+	if(CURRENT_USER_PREFS.theme == "15")
 	{
 		return options.fn(this);
 	}
