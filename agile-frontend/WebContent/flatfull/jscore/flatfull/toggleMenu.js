@@ -626,7 +626,7 @@ function initRolehandlers(){
 	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").addClass("active");
 
 	// Menu Items select
-	$(".menu-service-select").unbind("click").click(function(e){
+ 			$(".menu-service-select").unbind("click").click(function(e){
  			e.preventDefault();
 
  			var serviceName = $(this).attr("data-service-name");
@@ -638,26 +638,38 @@ function initRolehandlers(){
  				 dashboardName = "dashboard";
 
  			// Update user with the current service
- 			// Close popup
- 			if(CURRENT_DOMAIN_USER.role != serviceName)
- 				updateDashboardRole(serviceName);
+ 			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = serviceName;
 
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 							Backbone.history.navigate("#navigate-dashboard", {
+					                trigger: true
+					            });
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+
+ 			// Close popup
  			// $("div.app-content-body div:first-child").click();
  			$(this).parents(".popover").popover('hide');
+
  			// Update dashboard name here
  			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
 
  			var due_tasks_count = $("#due_tasks_count").text();
  			due_tasks_count = due_tasks_count ? due_tasks_count : "";
- 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive").removeClass("active");;
- 			$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").addClass("agile-menuactive");
- 			// Update UI
- 			//$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 
- 			/*$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
-*/
+ 			// Update UI
+ 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
  			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard/"+dashboardName, {
+ 			Backbone.history.navigate("#navigate-dashboard", {
                 trigger: true
             });
 	});
