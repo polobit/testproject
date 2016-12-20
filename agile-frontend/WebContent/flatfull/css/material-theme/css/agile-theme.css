@@ -567,7 +567,7 @@ a i, a span{vertical-align: inherit;}
   color: inherit;
 }
 .dropdown-menu{
-  font-size: 14px;
+  font-size: 13px;
 }
 .dropdown-menu li a{
   color: #263238;
@@ -965,9 +965,9 @@ z-index:1;
 .agile-theme-15 #right-pane .tickets-toolbar, #tickets-container div.col.bg-white{
   background-color: #f4f8f9 !important;
 }
-.agile-theme-15 .ticket-collection-container .i-checks.i-checks-sm{
+/*.agile-theme-15 .ticket-collection-container .i-checks.i-checks-sm{
   margin-top: 15px !important;
-}
+}*/
 .agile-theme-15 .ticket-collection-container table label.i-checks{
   margin-left: 0px !important;
 }
@@ -1164,7 +1164,7 @@ table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
   z-index: 100000;
 }
 .i-checks-sm>i {
-  margin-left: -20px;
+  margin-left: -19px;
   border: 0;
   background: transparent;
 }
@@ -2509,7 +2509,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   border-radius: 0;
 }
 #custom-filters-container .i-checks input[type="checkbox"] {
-   vertical-align: middle;
+   vertical-align: bottom;
 }
 .plan-collection-content{
   font-size: 13px !important;
@@ -2548,3 +2548,21 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .tagsinput.active-campaigns{margin-bottom: 10px;}
 .plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:focus{color: #fff !important}
 .agile-page-header#campaign-logs-list{padding-bottom: 0px !important;} 
+#contacts_dashlet .popover ,#marketing_dashlet .popover ,#deals_dashlet .popover ,#calendar_dashlet .popover, #activity_dashlet .popover,#rss_dashlet .popover,#account_Info_dashlet .popover{
+    font-size: 13px;
+    font-weight: normal;
+    border: none !important;
+    -webkit-box-shadow:0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
+    box-shadow: 0px 10px 30px 20px rgba(0, 0, 0, 0.07) !important;
+}
+#contacts_dashlet .popover.right>.arrow,#marketing_dashlet .popover.right>.arrow,#deals_dashlet .popover.right>.arrow,#calendar_dashlet .popover.right>.arrow,#activity_dashlet .popover.right>.arrow,#rss_dashlet .popover.right>.arrow,#account_Info_dashlet .popover.right>.arrow
+{
+  border-right-color: transparent !important;
+}
+#contacts_dashlet .popover.left>.arrow,#marketing_dashlet .popover.left>.arrow,#deals_dashlet .popover.left>.arrow,#calendar_dashlet .popover.left>.arrow,#activity_dashlet .popover.right>.arrow,#rss_dashlet .popover.left>.arrow,#account_Info_dashlet .popover.left>.arrow
+{
+  border-right-color: transparent !important;
+}
+.agile-theme-15 .ticket-collection-container .i-checks-sm>i{
+ display:none; 
+}
