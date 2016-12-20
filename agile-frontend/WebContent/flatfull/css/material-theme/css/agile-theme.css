@@ -2561,7 +2561,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 #contacts_dashlet .popover.left>.arrow,#marketing_dashlet .popover.left>.arrow,#deals_dashlet .popover.left>.arrow,#calendar_dashlet .popover.left>.arrow,#activity_dashlet .popover.right>.arrow,#rss_dashlet .popover.left>.arrow,#account_Info_dashlet .popover.left>.arrow
 {
-  border-right-color: transparent !important;
+  border-left-color: transparent !important;
 }
 .agile-theme-15 .ticket-collection-container .i-checks-sm>i{
  display:none; 
