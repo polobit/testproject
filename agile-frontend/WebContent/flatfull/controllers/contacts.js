@@ -1953,7 +1953,7 @@ function sendPersonalSMS(el, id){
         {
         	 $('#sms-noty-notes').css('border-color', 'red');
         	 if(message.length>160)
-        	 	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message length exceed</i></p></small></div>');
+        	 	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message length is 160</i></p></small></div>');
         	 else
         	   $save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
 			 

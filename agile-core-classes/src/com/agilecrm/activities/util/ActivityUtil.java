@@ -1945,9 +1945,9 @@ public class ActivityUtil
 			searchMap.put("entity_type in",items);
 		}
 
-		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT"))
+		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT") && !entitytype.equalsIgnoreCase("SMS_SENT"))
 			searchMap.put("entity_type", entitytype);
-		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
+		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT") || entitytype.equalsIgnoreCase("SMS_SENT"))
 			searchMap.put("activity_type", entitytype);
 		if (entityId != null)
 			searchMap.put("entity_id =", entityId);
