@@ -747,7 +747,7 @@ function show_bulk_owner_change_page()
 	                            
 		                      showModalConfirmation(
 		                                      "Add to Campaign",
-		                                      "Please configure DKIM and SPF settings to send campaign emails to more than 500 contacts.",
+		                                      "Please configure DKIM and SPF settings to send campaign emails to more than 300 contacts.",
 		                                       function()
 		                                      {
 		                                      		  enable_save_button(saveButton);

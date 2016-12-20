@@ -41,7 +41,7 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.dashboards.Dashboard"%>
 <%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
-<%@page import="com.agilecrm.account.util.EmailGatewayUtil.isEmailGatewayExist()"%>
+<%@page import="com.agilecrm.account.util.EmailGatewayUtil"%>
 <%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
