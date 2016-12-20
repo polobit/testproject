@@ -396,7 +396,7 @@ var localeJSON = <%=localeJSON%>;
 
 
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#tiny-editor" aria-controls="tiny-editor" role="tab" data-toggle="tab" aria-expanded="true"><i class="glyphicon"></i> Content</a></li>
+        <li role="presentation" class="active"><a href="#tiny-editor" aria-controls="tiny-editor" role="tab" data-toggle="tab" aria-expanded="true"><i class="glyphicon glyphicon-edit"></i> Content</a></li>
         <li role="presentation" class="">
         <a href="#block-customize" aria-controls="block-customize" role="tab" data-toggle="tab" aria-expanded="false"><i class="glyphicon glyphicon-cog"></i> Customize</a>
         </li>
@@ -485,34 +485,31 @@ var localeJSON = <%=localeJSON%>;
         </div>
 
         <!-- start of image properties -->
-        <div id="imageproperties" style="margin-top:5px">
+        <div id="imageproperties" style="margin-top:5px;margin-left:0;" class="form-horizontal">
                         
                         <div class="form-group" id="video-record-btn-holder" style="display:none;">
 
-                            <div class="row">
-                                <div class="col-xs-8">
+                            <div class="form-group" style="margin-bottom: -10px;">
+                                <div class="col-sm-8" style="margin-left: 35px;">
                                     <h5><span>Record a video</span><h5>
                                 </div>
-                                <div class="col-xs-4">
-                                    <button type="button" class="btn btn-default" id="videoRecordBtnNew" style="width:73px;">
+                                <div class="col-sm-3 ">
+                                    <button type="button" class="btn btn-default" id="videoRecordBtnNew" style="width:65px;">
                                         <span class="fa fa-video-camera"></span>
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-sm-2 text-right">
-                                    <span>(OR)</span>
-                                </div>
-                            </div>
-                            <br/>
-
-                            <div class="row">
-                                <div class="col-xs-8">
+                        
+                            <h5 style="text-align:center;">(OR)</h5>
+                        
+                        
+                            <div class="form-group" style="margin-bottom: -10px;">
+                                <div class="col-sm-8" style="margin-left: 35px;">
                                     <input type="text" id="video-link" class="form-control" placeholder="Link to Video URL" aria-describedby="basic-addon11" data-id="none">
                                 </div>
                                 
-                                <div class="col-xs-4">
+                                <div class="col-sm-3 pull-right" >
                                     <button type="button" class="btn btn-default" id="videoRecordBtn">
                                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select") %></span>
                                     </button>
@@ -523,78 +520,98 @@ var localeJSON = <%=localeJSON%>;
 
                         <div class="form-group">
 
-                            <div class="row" id="videoThumbnail" style="display:none;">
-                                <label for="video-record-Thumbnail" class="col-xs-8 control-label">Thumbnail</label>
+                            <div class="" id="videoThumbnail" style="display:none;">
+                                <!-- <label for="video-record-Thumbnail" class="col-xs-8 control-label">Thumbnail</label> -->
                             </div>
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <input type="text" id="image-url" class="form-control" data-id="none"/>
-                                </div>
-                                <div class="col-xs-4">
-                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "browse") %></a>
-                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
-                                </div>
-                            </div>
+                          
+                              <div class="col-sm-3 control-label">Image</div>
+                                
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                      <input type="text" id="image-url" class="form-control" data-id="none"/>
+                                      <span class="input-group-btn">
+                                        <a id="browseBtn" class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                         <input type="file" id="uploadImageToS3Btn" class="hidden">
+                                      </span>
+                                    </div><!-- /input-group -->
+                                  </div>
 
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="image-link-holder">
                             
-                            <div class="row" id="image-link-holder">
-                                <div class="col-xs-11">
+                            <div >
+                             <div class="col-sm-3 control-label">Link</div>
+                                
+                                <div class="col-sm-9">
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-                                        <input type="text" id="image-link" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-to-web-link") %>' aria-describedby="basic-addon11" data-id="none">
-                                    </div>
-                                    <br>
+                                        
+                                            <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+                                            <input type="text" id="image-link" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-to-web-link") %>' aria-describedby="basic-addon11" data-id="none">
+                                        
+                                    </div><!-- /input-group -->
                                 </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-xs-11">
-                                    <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
-                                    <br>
-                                </div>
-                            </div>
 
-            <div class="form-horizontal" id="image-width-height">
+                            </div>
+                        </div>
+                         
+                        <div class="form-group"> 
+
+                            <div class="col-sm-3 control-label">Alt Text</div>
+                                
+                                <div class="col-sm-9">
+                                    
+                                    <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
+                                                                     
+                                </div>
+
+                           
+                        </div>
+
+
+
+<div id="image-width-height">
 
 <!-- start of image width -->
     <div class="form-group">
-            <div class="col-sm-2 control-label">Width</div>
-        <div class="col-sm-7" >
-      
-        <div class="input-group"> 
-            <input type="number" class="form-control" placeholder='width' id="image-w" name="ptop" >
-            <div class="input-group-addon color-preview">px</div> 
-        </div>
-            
-        </div>
+
+        <div class="col-sm-3 control-label">Width</div>
+
+            <div class="col-sm-9" >
+                <div class="input-group"> 
+                    <input type="number" class="form-control" placeholder='width' id="image-w" name="ptop" >
+                    <div class="input-group-addon color-preview">px</div> 
+                </div>
+                
+            </div>
+
     </div> <!-- end of image width -->
 
 
     <!-- start of image height -->
      <div class="form-group">
-                        <div class="col-sm-2 control-label">Height</div>
-        <div class="col-sm-7" >
-      
-        <div class="input-group"> 
-            <input type="number" class="form-control" placeholder='Height' id="image-h" name="image-h" >
-            <div class="input-group-addon color-preview">px</div> 
-        </div>
+       
+            <div class="col-sm-3 control-label">Height</div>
             
-        </div>
+            <div class="col-sm-9" >
+                <div class="input-group"> 
+                    <input type="number" class="form-control" placeholder='Height' id="image-h" name="image-h" >
+                    <div class="input-group-addon color-preview">px</div> 
+                </div>
+                
+            </div>
+        
     </div> <!-- end of image height -->
 </div>
 
-    <div class="col-xs-4" style="float: right">
+    <!-- <div class="col-xs-4" style="float: right">
 
         <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
     
     </div>
+ -->
 
-
-                        </div>
+                        
                     </div> <!-- end of image properties -->
 
         <!-- start of social links -->

@@ -806,7 +806,7 @@ $(document).ready(function () {
         $(this).attr("target","_blank");
     });
 
-    $('#change-image').on('click', function(e){
+    $(document).on('change', '#image-link,#image-alt-text,#image-w,#image-h', function(e){
         e.preventDefault();
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());
@@ -1400,7 +1400,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $('#tosave').on('click','.textFix',function(e) {
         e.stopPropagation();
-        $('#common-settings').hide();
+        //$('#common-settings').hide();
 
         var self = $(this).closest(".main");
 
@@ -1661,7 +1661,7 @@ function uploadImageToS3ThroughBtn(file) {
               // getting the url of the file from amazon and insert it into the editor
               var url = $(data).find('Location').text();
               $('#image-url').val(decodeURIComponent(url));
-              $('#change-image').trigger('click');
+              $('#image-link').trigger('change');
               $("#browseBtn").prop("disabled",false);
               $("#browseBtn").text(localeJSON['browse']);
             }
