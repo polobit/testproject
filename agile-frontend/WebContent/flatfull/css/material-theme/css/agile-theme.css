@@ -2391,7 +2391,7 @@ table.iptable>tbody>tr>td{
   color: #ffbb44 !important;
 }
 
-.agile-theme-15 .goals_portlet_body .bg-light {
+.agile-theme-15 .goals_portlet_body {
   background-color: #edf1f2 !important;
 }
 .agile-theme-15 .getting-started-body>div a {
@@ -2462,4 +2462,7 @@ margin-left: 5px !important;
 }
 .task-list-heading{
   border-bottom: none !important;
+}
+div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
+      vertical-align: middle;
 }
