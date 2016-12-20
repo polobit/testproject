@@ -860,33 +860,12 @@ if(currentUserPrefs.menuPosition.equals("top")){
       </a>
       <ul class="nav nav-sub dk" style="display:block;" > 
   
-  <li id="home_dashboard" class="Dashboard-home">
-    <a class="agile-menu-dropdown-aside1"  href="#navigate-dashboard/Dashboard" >
-      <i class="icon icon-home"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
-    </a>
-  </li>
-<%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
-  %>      
-  <li id="contactsmenu">
-    <a class="agile-menu-dropdown-aside1" href="#contacts">
-      <i class="icon icon-user"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
-    </a>
-  </li>
-  <%
-      }
-  %>
-
-  
   <li id="tickets">
     <a class="agile-menu-dropdown-aside1" href="#tickets">
       <i class="icon icon-ticket"></i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
-
   <li id="tasksmenu" class="hide">
     <a class="agile-menu-dropdown-aside1" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
@@ -896,10 +875,33 @@ if(currentUserPrefs.menuPosition.equals("top")){
       </span>
     </a>
   </li>
-
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>          
+  %>   
+  <li id="ticketknowledgebasemenu">
+    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
+    </a>
+  </li>
+  <%
+  }
+  %>
+  <%
+  if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
+  <li id="feedbackactivitiesmenu">
+    <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
+      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <span>Feedback</span>
+    </a>
+  </li>
+  <%
+  }
+  %>
+  <%
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>       
   <li id="ticketgroupsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -924,29 +926,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
-  <li id="ticketknowledgebasemenu">
-    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
-      <i class="fa fa-search"></i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
-    </a>
-  </li>
    <%
       }
   %>
-
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
-    %>
-    <li id="feedbackactivitiesmenu">
-    <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
-      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-      <span>Feedback</span>
-    </a>
-  </li>
-    <%
-          }
-    %>  
-
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
