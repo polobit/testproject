@@ -734,7 +734,7 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    // If search results size is less than limit set, the returned doc
 	    // ids are considered as total local available documents.
-	    if (options.getLimit() >= searchResults.size())
+	    if ((options.getLimit() > searchResults.size() || options.getLimit() == 10))
 		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
 	    else
 		documents.put("availableDocuments", index.search(query_string).getNumberFound());
