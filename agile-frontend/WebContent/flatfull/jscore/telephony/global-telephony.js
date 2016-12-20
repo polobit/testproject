@@ -19,11 +19,10 @@ function knowlaritySetup(){
 		success : function(result) {
 			if(result){
 				console.log(result);
-				KnowlarityWidgetPrefs = JSON.parse(result);
-				var authCode = KnowlarityWidgetPrefs.apiKEY;
+				KnowlarityWidgetPrefs = JSON.parse(result);				
 				head.js(LIB_PATH + 'widgets/knowlarity.js', function(){ 
 					if(!knowlaritySource){
-						knowlarityEventsFinder(authCode);
+						knowlarityEventsFinder(KnowlarityWidgetPrefs);
 					}					
 				});								
 			}

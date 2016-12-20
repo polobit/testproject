@@ -258,92 +258,97 @@ function saveCallNoteKnolarity(event){
 
 
 
-function changeCallNotyBasedOnStatus(event){
+function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 
-	if(event){
+	if(event && KnowlarityWidgetPrefs){
+		var agentPhysicalNumber = event.caller_id;
+		var currentKnowlarityNumber = KnowlarityWidgetPrefs.agentNumber;
+		if(agentPhysicalNumber == currentKnowlarityNumber){
+				var callDirection = event.call_direction;
+			var eventType = event.event_type;
+			var type = event.type;
+			var callType = event.Call_Type;
+			var agentNumber = event.agent_number;		
+			var knowlarityNumber = event.knowlarity_number;
+			var customerNumber = event.caller;
+			
+			console.log("*************");
+			console.log("Event type : "+eventType);
+			console.log("Type : "+type);
+			console.log("callDirection : "+callDirection);
+			console.log(event);
+			console.log("_____________");
 
-		var callDirection = event.call_direction;
-		var eventType = event.event_type;
-		var type = event.type;
-		var callType = event.Call_Type;
-		var agentNumber = event.agent_number;		
-		var knowlarityNumber = event.knowlarity_number;
-		var customerNumber = event.caller;
-		
-		console.log("*************");
-		console.log("Event type : "+eventType);
-		console.log("Type : "+type);
-		console.log("callDirection : "+callDirection);
-		console.log(event);
-		console.log("_____________");
-
-		if(callDirection){
-			if(callDirection == "Outbound"){
-				if(eventType){				
-					if(eventType == "AGENT_CALL"){
-						KNOWLARITY_PREVIOUS_EVENT = "AGENT_CALL";						
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];						
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
-					}else if(eventType == "CUSTOMER_CALL"){
-						KNOWLARITY_PREVIOUS_EVENT = "CUSTOMER_CALL";
-						var json = {"callId": agentNumber};				
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];											
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "ringing", globalCall.callNumber, btns, json, callDirection);					
-					}else if(eventType == "BRIDGE"){
-						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];						
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);					
-					}else if(eventType == "HANGUP"){
-						KNOWLARITY_PREVIOUS_EVENT = "HANGUP";										
+			if(callDirection){
+				if(callDirection == "Outbound"){
+					if(eventType){				
+						if(eventType == "AGENT_CALL"){
+							KNOWLARITY_PREVIOUS_EVENT = "AGENT_CALL";						
+							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];						
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
+						}else if(eventType == "CUSTOMER_CALL"){
+							KNOWLARITY_PREVIOUS_EVENT = "CUSTOMER_CALL";
+							var json = {"callId": agentNumber};				
+							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];											
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "ringing", globalCall.callNumber, btns, json, callDirection);					
+						}else if(eventType == "BRIDGE"){
+							KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";
+							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];						
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);					
+						}else if(eventType == "HANGUP"){
+							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";										
+						}
 					}
-				}
-			}else if(callDirection == "Inbound"){
-				if(eventType){			
-					if(eventType == "ORIGINATE"){
-						KNOWLARITY_PREVIOUS_EVENT = "ORIGINATE"; 
-						searchForContactImg(customerNumber, function(currentContact){
-							if(!currentContact){
-								globalCall.contactedContact = {};
-								globalCall.contactedId = "";
-							}else{
-								globalCall.contactedContact = currentContact;
-								globalCall.contactedId = currentContact.id;
-							}
-							
-							globalCall.callNumber = customerNumber;
+				}else if(callDirection == "Inbound"){
+					if(eventType){			
+						if(eventType == "ORIGINATE"){
+							KNOWLARITY_PREVIOUS_EVENT = "ORIGINATE"; 
+							searchForContactImg(customerNumber, function(currentContact){
+								if(!currentContact){
+									globalCall.contactedContact = {};
+									globalCall.contactedId = "";
+								}else{
+									globalCall.contactedContact = currentContact;
+									globalCall.contactedId = currentContact.id;
+								}
+								
+								globalCall.callNumber = customerNumber;
 
+								var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
+								var json = {"callId": customerNumber};
+								showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
+							});									
+						}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
+							KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
-							var json = {"callId": customerNumber};
-							showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
-						});									
-					}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
-						KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
-						var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
-						showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
-					}else if(eventType == "HANGUP"){
-						KNOWLARITY_PREVIOUS_EVENT = "HANGUP";												
-					}
-				}	
+							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
+						}else if(eventType == "HANGUP"){
+							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";												
+						}
+					}	
+				}
 			}
-		}
 
-		if(callType && type && type == "CDR"){
-			if(callType == "Outgoing"){
-				KNOWLARITY_PREVIOUS_EVENT = undefined;
-				closeCallNoty(true);	
-				saveCallNoteKnolarity(event);						
-			}else if(callType == "Incoming"){
-				KNOWLARITY_PREVIOUS_EVENT = undefined;
-				closeCallNoty(true);
-				saveCallNoteKnolarity(event);
+			if(callType && type && type == "CDR"){
+				if(callType == "Outgoing"){
+					KNOWLARITY_PREVIOUS_EVENT = undefined;
+					closeCallNoty(true);	
+					saveCallNoteKnolarity(event);						
+				}else if(callType == "Incoming"){
+					KNOWLARITY_PREVIOUS_EVENT = undefined;
+					closeCallNoty(true);
+					saveCallNoteKnolarity(event);
+				}
 			}
-		}
+		}		
 	}	
 }
 
-function knowlarityEventsFinder(SR_API_KEY){
+function knowlarityEventsFinder(KnowlarityWidgetPrefs){
 	console.log("In event source created");
-	
+
+	var SR_API_KEY = KnowlarityWidgetPrefs.apiKEY;
+
 	var notificationURL = "https://konnect.knowlarity.com:8100/update-stream/"+SR_API_KEY+"/konnect";
 	knowlaritySource = new EventSource(notificationURL);
 	knowlaritySource.onopen = function (event) {
@@ -354,7 +359,7 @@ function knowlarityEventsFinder(SR_API_KEY){
 		console.log('***** Received an event *****');
 		//console.log(event);
 		var data = JSON.parse(event.data);				
-		changeCallNotyBasedOnStatus(data);
+		changeCallNotyBasedOnStatus(data, KnowlarityWidgetPrefs);
 		//console.log(JSON.stringify(data));
 	},
 	knowlaritySource.onerror = function (event) {
