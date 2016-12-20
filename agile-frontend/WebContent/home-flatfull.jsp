@@ -920,7 +920,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li id="home_dashboard">
         <a  href="#">
           <i class="icon icon-home"></i>
-
+           <i class="material-icons" style="display: none">home</i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
       </li>
