@@ -48,13 +48,13 @@ String template = request.getParameter("template");
          </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;">           
-            <a id="form_back" title="Go back to Forms Page" class="btn btn-default navbar-brand">
+            <a id="form_back" class="btn btn-default navbar-brand">
                <span>Back</span>
             </a>
-            <a id="form_preview" class="btn btn-primary navbar-brand" title="View the currently saved Form" target="_blank" disabled>
+            <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
                <span>Preview</span> 
             </a>
-            <a id="form-save" title="Click here for Form Save " class="btn btn-primary navbar-brand  navbar-color">
+            <a id="form-save" class="btn btn-primary navbar-brand  navbar-color">
                <span>Save</span>
             </a>
          </div>
