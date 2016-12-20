@@ -312,6 +312,14 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   right: 12px;
   visibility:hidden;
   }
+  .grid-v2 {
+    position: fixed !important;
+    left: 50%;
+    top: 23px;
+    z-index: 1029;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>
@@ -369,9 +377,77 @@ function isIE() {
 </div>
 <%}%>
 
-<img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img>
+<img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img> 
 
-<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
+<div class="dashboard-select small dropdown grid-v2 hidden-xs <%
+          switch (Integer.parseInt(currentUserPrefs.theme)) {
+            case 1:  out.print("bg-white-only hide ");
+                   break;
+            case 2:  out.print("bg-white-only hide ");
+                 break;
+            case 3:  out.print("bg-white-only hide ");
+                 break;
+            case 4:  out.print("bg-white-only hide ");
+                 break;
+            case 5:  out.print("bg-white-only hide ");
+                 break;
+            case 6:  out.print("bg-white-only hide ");
+                 break;
+            case 7:  out.print("bg-black hide ");
+                 break;
+            case 8:  out.print("bg-info dker hide ");
+                 break;
+            case 9:  out.print("bg-primary hide ");
+                 break;
+            case 10:  out.print("bg-info dk hide ");
+                 break;
+            case 11:  out.print("bg-success hide ");
+                 break;
+            case 12:  out.print("bg-danger dker hide ");
+                 break;
+            case 13:  out.print("bg-white-only hide ");
+                 break;
+            case 14:  out.print("bg-dark hide ");
+                 break;
+            case 15:  out.print("bg-white ");
+                 break;
+            default:
+                    break;
+         
+          }
+              
+         %>" id='need_help_header'>
+          <a href="#" class="dropdown-toggle purple-color" data-toggle="dropdown" aria-expanded="false">
+              <i class="material-icons" style="font-size: 22px;">view_module</i>
+              <div class="dash-name">
+                  <span>Sales</span>
+                  <i class="material-icons">arrow_drop_down</i>
+              </div>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'>
+                <i class="material-icons purple-color">view_module</i>
+                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+                  </a>
+              </li>
+              <li>
+              <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='dashboard'>
+                <i class="material-icons purple-color">view_module</i>
+                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+                  </a>
+              </li><li>
+              <a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'>
+                <i class="material-icons purple-color">view_module</i>
+                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+                  </a>
+              </li>
+          </ul>
+                </div>
+
+
+
+<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center grid-v1 hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
             case 1:  out.print("bg-white-only ");
                    break;
@@ -401,7 +477,7 @@ function isIE() {
                  break;
             case 14:  out.print("bg-dark ");
                  break;
-            case 15:  out.print("bg-white ");
+            case 15:  out.print("bg-white hide");
                  break;
             default:
                     break;
@@ -424,9 +500,8 @@ function isIE() {
 
                 </ul>
                 </div>
-                
-                  </div>">
-                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                	</div>">
+                   <a href="#" class='grid-icon-header block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
         <%
           if(MobileUADetector.isMobile(request.getHeader("user-agent"))){

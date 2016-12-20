@@ -578,7 +578,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     			}).on("show.bs.popover", function(e){ 
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
-    			}); 
+    			});
+    if(CURRENT_USER_PREFS.theme == "15")
+    	initRolehandlers();
 
     /*$('#searchText').on('focus', function () {
 	    $(this).parent().find("label").toggleClass('active');
@@ -737,6 +739,8 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 }
 function updateDashboardRole(prevrole)
 {
+	if(!prevrole)
+		return;
 	if(CURRENT_DOMAIN_USER.role == prevrole)
 		return;
 	$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+prevrole);

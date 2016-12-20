@@ -39,7 +39,7 @@
       color: #555 !important;
       background-color: #fff !important;
     }
-    .grid-icon-header{
+    .grid-icon-header, .grid-v2 .dropdown-toggle .material-icons{
       color : @themeColor;
     }
     .agile-sub-header h1, .agile-sub-header h2, .agile-sub-header h3, .tickets-toolbar .filter-name-btn{
@@ -149,12 +149,20 @@
   border-left: 3px solid @serviceColor;
 }
 
-.menu-service-select.active[data-service-name='SALES'], .menu-service-select[data-service-name='SALES']:hover{
-  background-color: @salesBgHoverColor;
+
+
+.menu-service-select[data-service-name='SALES']{
+  .material-icons{
+    color : @salesColor;
+  }
 }
-.menu-service-select.active[data-service-name='MARKETING'], .menu-service-select[data-service-name='MARKETING']:hover{
-  background-color: @maBgHoverColor;
+.menu-service-select[data-service-name='MARKETING']{
+  .material-icons{
+    color : @maColor;
+  }
 }
-.menu-service-select.active[data-service-name='SERVICE'], .menu-service-select[data-service-name='SERVICE']:hover{
-  background-color: @serviceBgHoverColor;
+.menu-service-select[data-service-name='SERVICE']{
+  .material-icons{
+    color : @serviceColor;
+  }
 }
