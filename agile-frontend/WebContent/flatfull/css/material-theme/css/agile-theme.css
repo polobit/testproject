@@ -2659,9 +2659,9 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 
-.nav i.icon ,.nav i.fa,.nav i.icon-list,.nav i.icon-white,.nav i.icon-envelope-letter,.nav i.icon-docs,.nav i.icon-eye,.nav i.icon-users{
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
   display: none;
 }
-.nav i.material-icons{
+#aside i.material-icons{
   display:block !important;
 }
