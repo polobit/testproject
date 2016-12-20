@@ -649,6 +649,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   /*margin: 0px !important;*/
   padding-bottom: 0px !important;
   vertical-align: middle;
+  padding-left: 0px;
 }
 #today-heading, #yesterday-heading, #earlier-heading{
   border :none !important;
@@ -1750,9 +1751,13 @@ color:#0d1114 !important;
 .agile-theme-15 .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
-.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div .thumb-sm img{
   width: 40px !important;
   height: 40px !important;
+}
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+  width: 105px !important;
+  border-radius: 500px;
 }
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
@@ -2323,9 +2328,9 @@ table .headerSortUp::after, table .headerSortDown::after{
 
 /*IP Table UI Fix Start*/
 
-#ip_access .panel-heading{
+/*#ip_access .panel-heading{
   background-color: inherit;
-}
+}*/
 table.iptable, #ip_access .panel-footer{
   border: none !important;
 }
@@ -2341,6 +2346,7 @@ table.iptable thead>tr>th{
 }
 .allow_access_panelheading{
   margin-top: 0 !important;
+  padding: 10px 0 0 0;
 }
 #blocked_panel_ips_list .upsert-ip{
   margin-left: 0 !important;
@@ -2350,6 +2356,9 @@ table.iptable thead>tr>th{
 }
 table.iptable>tbody>tr>td{
   padding: 8px !important;
+}
+table.iptable>tbody>tr>td:nth-child(2){
+  padding: 0px !important;
 }
 
 /*IP Table UI Fix End*/
@@ -2554,7 +2563,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 #ticket-model-list .ticket-data .assignee-change:hover
 {
-  background-color:#edf1f2;
+  background-color: rgba(17, 160, 248, 0.04) !important;
 }
 #ticket-model-list .ticket-data .assignee-change a
 {
@@ -2632,6 +2641,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .ticket_change_slatime,{
   width: 33% !important;
 }
+
 .tab-container#integrations-tab, #integrationstats .tab-container{
   width: 100% !important;
 }
@@ -2666,4 +2676,64 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
     color: #78909c!important;
     font-size: 12px;
     font-weight: 600;
+}
+
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
+  display: none;
+}
+#aside i.material-icons{
+  display:block !important;
+}
+
+
+
+.ticket_change_slatime
+{
+  width: 33% !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-left: 1px solid #cfdadd !important;
+}
+.sla-due-date .col-sm-12{
+  margin-top: 3px !important;
+}
+#active-campaign{
+  margin-top: 2px !important;
+}
+.cc-emails .new-theme-ticket-cc.tag:hover, .ticket-forwar-email.tag:hover{
+  background-color: #f4f8f9 !important; 
+}
+.ticket-email{
+  border: 0px !important;
+  padding: 0px !important;
+}
+.ticket-email .new-theme-ticket-cc{
+  width: 100%;
+}
+.forward-emails {
+  padding:0px !important;
+  border: none !important
+}
+.ticket-forwar-email .tag{
+  margin:0px !important;
+}
+
+#saveFilterForm input[type="radio"]{
+  top: 5px;
+}
+ul.chosen-choices{
+  height: 40px !important;
+  color: #263238 !important;
+  background-color: #f4f8f9 !important;
+  background-image: inherit !important;
+  border: inherit !important;
+  border-radius: 4px !important;
+}
+div.chosen-container>ul.chosen-choices>li{
+  margin: 8px 3px!important;
+  background-color: inherit !important;
 }

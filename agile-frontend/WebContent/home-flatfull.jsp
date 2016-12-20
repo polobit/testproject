@@ -312,6 +312,14 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
   right: 12px;
   visibility:hidden;
   }
+  .grid-v2 {
+    position: fixed !important;
+    left: 50%;
+    top: 23px;
+    z-index: 1029;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>
@@ -369,9 +377,77 @@ function isIE() {
 </div>
 <%}%>
 
-<img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img>
+<img class='hide' src='https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png'></img> 
 
-<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center hidden-xs <%
+<div class="dashboard-select small dropdown grid-v2 hidden-xs <%
+          switch (Integer.parseInt(currentUserPrefs.theme)) {
+            case 1:  out.print("bg-white-only hide ");
+                   break;
+            case 2:  out.print("bg-white-only hide ");
+                 break;
+            case 3:  out.print("bg-white-only hide ");
+                 break;
+            case 4:  out.print("bg-white-only hide ");
+                 break;
+            case 5:  out.print("bg-white-only hide ");
+                 break;
+            case 6:  out.print("bg-white-only hide ");
+                 break;
+            case 7:  out.print("bg-black hide ");
+                 break;
+            case 8:  out.print("bg-info dker hide ");
+                 break;
+            case 9:  out.print("bg-primary hide ");
+                 break;
+            case 10:  out.print("bg-info dk hide ");
+                 break;
+            case 11:  out.print("bg-success hide ");
+                 break;
+            case 12:  out.print("bg-danger dker hide ");
+                 break;
+            case 13:  out.print("bg-white-only hide ");
+                 break;
+            case 14:  out.print("bg-dark hide ");
+                 break;
+            case 15:  out.print("bg-white ");
+                 break;
+            default:
+                    break;
+         
+          }
+              
+         %>" id='need_help_header'>
+          <a href="#" class="dropdown-toggle purple-color" data-toggle="dropdown" aria-expanded="false">
+              <i class="material-icons" style="font-size: 22px;">view_module</i>
+              <div class="dash-name">
+                  <span>Sales</span>
+                  <i class="material-icons">arrow_drop_down</i>
+              </div>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'>
+                <i class="material-icons purple-color">view_module</i>
+                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+                  </a>
+              </li>
+              <li>
+              <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='dashboard'>
+                <i class="material-icons purple-color">view_module</i>
+                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+                  </a>
+              </li><li>
+              <a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'>
+                <i class="material-icons purple-color">view_module</i>
+                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+                  </a>
+              </li>
+          </ul>
+                </div>
+
+
+
+<div rel="popover" data-custom-popover-class='grid_custom_popover' data-trigger="click"  data-original-title="" title="" data-placement="bottom" class="need_help grid_icon_center grid-v1 hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
             case 1:  out.print("bg-white-only ");
                    break;
@@ -401,7 +477,7 @@ function isIE() {
                  break;
             case 14:  out.print("bg-dark ");
                  break;
-            case 15:  out.print("bg-white ");
+            case 15:  out.print("bg-white hide");
                  break;
             default:
                     break;
@@ -424,9 +500,8 @@ function isIE() {
 
                 </ul>
                 </div>
-                
-                  </div>">
-                   <a href="#" class='grid-icon-header block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                	</div>">
+                   <a href="#" class='grid-icon-header block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
                              </div>
         <%
           if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
@@ -527,6 +602,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li id="home_dashboard" class="SalesDashboard-home">
         <a  href="#navigate-dashboard/SalesDashboard">
           <i class="icon icon-home"></i>
+          <i class="material-icons" style="display: none">home</i>
+
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
       </li>
@@ -544,6 +621,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li id="contactsmenu">
               <a  href="#contacts">
                 <i class="icon icon-user"></i>
+                <i class="material-icons" style="display: none">contacts</i>
                <!--  <i class="icon icon-user"></i> -->
                 <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
               </a>
@@ -554,6 +632,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li id="companiesmenu">
               <a  href="#companies" style="margin-left:2px;">
                 <i class="icon icon-building"></i>
+                <i class="material-icons" style="display: none">business</i>
                 <span ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
               </a>
             </li>
@@ -563,6 +642,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li  id="dealsmenu">
               <a  href="#deals">
                 <i class="fa fa-money"></i>
+                <i class="material-icons" style="display: none">forum</i>
                 <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
               </a>
             </li>
@@ -587,6 +667,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="documentsmenu">
           <a  href="#documents">
             <i class="icon icon-doc"></i>
+              <i class="material-icons" style="display: none">insert_drive_file</i>
             <span class="leftcol-menu-folded">
               <%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %>
             </span>
@@ -606,7 +687,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
         %>
         <li id="calendarmenu">
           <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
-            <i class="icon icon-calendar"></i> 
+            <i class="icon icon-calendar"></i>
+            <i class="material-icons" style="display: none">event</i> 
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> 
           </a>
         </li>
@@ -616,6 +698,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="tasksmenu">
           <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
              <i class="icon-list" data-original-title="" title=""></i>
+             <i class="material-icons" style="display: none">alarm_on</i> 
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
             <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
                 <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
@@ -634,6 +717,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="activitiesmenu" class="SalesDashboard-activitiesnavbar">
           <a  href="#navbar-activities/SalesDashboard">
             <i class="icon-speedometer icon-white"></i>
+             <i class="material-icons" style="display: none">assessment</i> 
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
           </a>
         </li>
@@ -646,6 +730,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="reportsmenu" class="SalesDashboard-reportsnavbar">
           <a  href="#navbar-reports/SalesDashboard">
             <i class="icon-bar-chart icon-white"></i>
+             <i class="material-icons" style="display: none">pie_chart</i> 
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
           </a>
         </li> 
@@ -675,6 +760,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="home_dashboard" class="MarketingDashboard-home">
             <a class="agile-menu-dropdown-aside1"  href="#navigate-dashboard/MarketingDashboard">
               <i class="icon icon-home"></i>
+              <i class="material-icons" style="display: none">home</i>
               <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
             </a>
         </li>
@@ -684,6 +770,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li id="contactsmenu">
         <a class="agile-menu-dropdown-aside1" href="#contacts">
           <i class="icon icon-user"></i>
+          <i class="material-icons" style="display: none">contacts</i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
         </a>
       </li>
@@ -696,6 +783,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="workflowsmenu">
     <a  href="#workflows">
       <i class="icon icon-sitemap"></i>
+       <i class="material-icons" style="display: none">device_hub</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-campaigns") %></span>
     </a>
   </li>
@@ -703,6 +791,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="triggersmenu">
     <a  href="#triggers">
       <i class="icon icon-magic-wand"></i>
+       <i class="material-icons" style="display: none">merge_type</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
     </a>
   </li>
@@ -714,6 +803,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="email-templates-menu">
     <a href="#email-templates">
       <i class="icon-envelope-letter"></i>
+      <i class="material-icons" style="display: none">art_track</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
     </a>
     </li>
@@ -723,6 +813,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
+        <i class="material-icons" style="display: none">web_asset</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
     </a>
   </li>
@@ -733,6 +824,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="landing-pages-menu">
     <a class="agile-menu-dropdown-aside1" href="#landing-pages" style="margin-left:2px;"> 
       <i class="fa fa-file-code-o"></i>
+       <i class="material-icons" style="display: none">web</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
     </a>
   </li>
@@ -745,6 +837,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="web-rules-menu">
     <a  href="#web-rules">
       <i class="icon icon-globe"></i>
+       <i class="material-icons" style="display: none">public</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
     </a>
   </li>
@@ -755,6 +848,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="push-notification-menu">
     <a href="#push-notification">
       <i class="fa fa-bell-o"></i>
+       <i class="material-icons" style="display: none">notifications</i>
       <span>Push Notifications</span>
     </a>
   </li>
@@ -765,6 +859,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="socialsuitemenu">
     <a class="agile-menu-dropdown-aside1" href="#social">
       <i class="icon-bubbles"></i>
+       <i class="material-icons" style="display: none">question answer</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
     </a>
   </li>
@@ -777,6 +872,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
+        <i class="material-icons" style="display: none">person_pin_circle</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
@@ -790,6 +886,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu" class="MarketingDashboard-activitiesnavbar">
     <a class="agile-menu-dropdown-aside1" href="#navbar-activities/MarketingDashboard">
       <i class="icon-speedometer icon-white"></i>
+      <i class="material-icons" style="display: none">assessment</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
@@ -802,6 +899,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="reportsmenu" class="MarketingDashboard-reportsnavbar">
     <a class="agile-menu-dropdown-aside1" href="#navbar-reports/MarketingDashboard">
       <i class="icon-bar-chart icon-white"></i>
+       <i class="material-icons" style="display: none">pie_chart</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
@@ -810,6 +908,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tasksmenu" class="hide">
     <a class="agile-menu-dropdown-aside1" href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
+
       <span>Tasks</span>
       <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
@@ -841,6 +940,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="home_dashboard" class="Dashboard-home">
     <a class="agile-menu-dropdown-aside1"  href="#navigate-dashboard/Dashboard" >
       <i class="icon icon-home"></i>
+      <i class="material-icons" style="display: none">home</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
     </a>
   </li>
@@ -850,6 +950,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="contactsmenu">
     <a class="agile-menu-dropdown-aside1" href="#contacts">
       <i class="icon icon-user"></i>
+      <i class="material-icons" style="display: none">contacts</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
     </a>
   </li>
@@ -861,6 +962,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tickets">
     <a class="agile-menu-dropdown-aside1" href="#tickets">
       <i class="icon icon-ticket"></i>
+       <i class="material-icons" style="display: none">email</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
@@ -881,30 +983,35 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="ticketgroupsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-groups">
       <i class="icon icon-users"></i>
+      <i class="material-icons" style="display: none">group_work</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a  class="agile-menu-dropdown-aside1"href="#ticket-labels">
       <i class="icon icon-flag"></i>
+      <i class="material-icons" style="display: none">label</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a class="agile-menu-dropdown-aside1" href="#canned-responses">
       <i class="icon icon-cursor"></i>
+       <i class="material-icons" style="display: none">message</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-views">
       <i class="icon icon-directions"></i>
+      <i class="material-icons" style="display: none">filter_b_and_w</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
       <i class="fa fa-search"></i>
+      <i class="material-icons" style="display: none">local_library</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
@@ -918,6 +1025,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="feedbackactivitiesmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
       <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <i class="material-icons" style="display: none">thumb_up</i>
       <span>Feedback</span>
     </a>
   </li>
@@ -931,6 +1039,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu" class="dashboard-activitiesnavbar">
     <a class="agile-menu-dropdown-aside1" href="#navbar-activities/dashboard">
       <i class="icon-speedometer icon-white"></i>
+      <i class="material-icons" style="display: none">assessment</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
@@ -943,6 +1052,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="reportsmenu" class="dashboard-reportsnavbar">
     <a class="agile-menu-dropdown-aside1" href="#navbar-reports/dashboard">
       <i class="icon-bar-chart icon-white"></i>
+      <i class="material-icons" style="display: none">pie_chart</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
