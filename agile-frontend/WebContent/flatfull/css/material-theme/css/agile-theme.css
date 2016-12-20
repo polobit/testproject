@@ -1008,7 +1008,7 @@ z-index:1;
   font-size: 22px !important;
 }
 .agile-theme-15 .fa-filter, .icon-filter{
-  font-size: 14px !important;
+  font-size: 14px;
 }
 .no-label-content{
   background-color: white !important;
