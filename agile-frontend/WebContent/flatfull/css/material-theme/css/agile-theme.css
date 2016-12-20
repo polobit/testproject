@@ -1750,9 +1750,13 @@ color:#0d1114 !important;
 .agile-theme-15 .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
-.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div .thumb-sm img{
   width: 40px !important;
   height: 40px !important;
+}
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+  width: 105px !important;
+  border-radius: 500px;
 }
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
