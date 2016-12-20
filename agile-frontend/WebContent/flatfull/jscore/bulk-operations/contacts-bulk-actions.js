@@ -732,10 +732,11 @@ function show_bulk_owner_change_page()
 				// $('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var workflow_id = $('#campaignBulkSelect option:selected').prop('value');
+				var MAX_LIMIT = 500;
 
-			 if(selected_count > 300 && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
+			 if(selected_count > MAX_LIMIT && emails_workflows.hasOwnProperty(workflow_id) && !_IS_EMAIL_GATEWAY)
 				{
-				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id))
+				  if(is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT))
 				  	{
 				  		return;
 				  	}
@@ -747,7 +748,7 @@ function show_bulk_owner_change_page()
 	                            
 		                      showModalConfirmation(
 		                                      "Add to Campaign",
-		                                      "Please configure DKIM and SPF settings to send campaign emails to more than 300 contacts.",
+		                                      "Please configure DKIM and SPF settings to send campaign emails to more than "+ MAX_LIMIT +" contacts.",
 		                                       function()
 		                                      {
 		                                      		  enable_save_button(saveButton);
@@ -1559,17 +1560,17 @@ function load_bulk_operations_template(callback){
 }
 
 
-//Check if send email node having general email domain then blocked to send more than 300
+//Check if send email node having general email domain then blocked to send more than MAX_LIMIT
 
-function is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id )
+function is_valid_send_email_node_from_email(saveButton, workflows_collection, workflow_id, MAX_LIMIT)
 {
 	
     if(check_send_email_node_from_email( workflows_collection, workflow_id)) 
 	    {
 	    	showModalConfirmation(
 	                       "Add to Campaign",
-	                       "Please add your domain email as a from email in send email node to send campaign emails to more than 300 contacts.",
-	                        function()
+	                       "Please configure <a href='#api-analytics' target='_blank' style='color: #19a9d5;!important'>DKIM and SPF</a> settings to send campaign emails to more than "+ MAX_LIMIT +" contacts. We encourage you to use a From email address at a domain owned by your organisation.",
+	                        function() 
 	                        {
 	                          enable_save_button(saveButton);
 	                          Backbone.history.navigate("workflows", { trigger : true });
