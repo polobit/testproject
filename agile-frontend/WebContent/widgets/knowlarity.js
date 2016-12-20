@@ -4,7 +4,6 @@ var showMoreKnowlarityLog = '<div class="widget_tab_footer knowlarity_log_show_m
 
 loadKnowlarityBindings();
 
-
 function loadKnowlarityBindings(){
 	$('body').off('click', '.noty_knowlarity_cancel');
 	$('body').on('click', '.noty_knowlarity_cancel', function(e){
@@ -261,10 +260,20 @@ function saveCallNoteKnolarity(event){
 function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 
 	if(event && KnowlarityWidgetPrefs){
-		var agentPhysicalNumber = event.caller_id;
+		console.log("Event **** ");
+		console.log(event);
+		console.log("_____________");
+		
 		var currentKnowlarityNumber = KnowlarityWidgetPrefs.agentNumber;
-		if(agentPhysicalNumber == currentKnowlarityNumber){
-				var callDirection = event.call_direction;
+		var agentPhysicalNumber = event.agent_number;		
+		var destinationNumber = event.destination;
+		
+		console.log("destinationNumber : "+ destinationNumber);
+		console.log("currentKnowlarityNumber : "+ currentKnowlarityNumber);
+		console.log("agentPhysicalNumber : "+agentPhysicalNumber);
+
+		if((agentPhysicalNumber && currentKnowlarityNumber == agentPhysicalNumber) || (destinationNumber && currentKnowlarityNumber == destinationNumber)){
+			var callDirection = event.call_direction;
 			var eventType = event.event_type;
 			var type = event.type;
 			var callType = event.Call_Type;
@@ -275,9 +284,7 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 			console.log("*************");
 			console.log("Event type : "+eventType);
 			console.log("Type : "+type);
-			console.log("callDirection : "+callDirection);
-			console.log(event);
-			console.log("_____________");
+			console.log("callDirection : "+callDirection);			
 
 			if(callDirection){
 				if(callDirection == "Outbound"){
