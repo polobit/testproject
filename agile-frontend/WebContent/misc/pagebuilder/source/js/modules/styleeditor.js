@@ -529,7 +529,7 @@
 
                 var val=document.getElementById('internalLinksCustom').value;
                 if($('#link_Link').parent().hasClass('active'))                    
-                    if(val !== "#" && $('#internalLinksDropdown').val() !==val &&  val.match("^(http|https)://")===null){
+                    if(val.match("^(http|https)://|#")===null){
                         styleeditor.showErrorMsg('internalLinksCustom');
                         return;
                     }
@@ -769,7 +769,7 @@
             styleeditor.selectLinksInernal.innerHTML = '';
 
             newOption = document.createElement('OPTION');
-            newOption.innerText = _AGILE_LOCALE_JSON['select-on-page-link'];
+            newOption.innerText = _AGILE_LOCALE_JSON['choose-a-block-link'];
             newOption.setAttribute('value', '#');
             styleeditor.selectLinksInernal.appendChild(newOption);
 

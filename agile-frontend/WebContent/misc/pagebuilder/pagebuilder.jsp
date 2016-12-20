@@ -289,7 +289,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <div class="form-group fullWidth">
                         <label>Text to display: </label>
-                        <input type="text" class="form-control" id="linkText" name="linkText" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-text")%>' value="">
+                        <input type="text" class="form-control margin-bottom-20" id="linkText" name="linkText" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-text")%>' value="">
                     </div>
                     
                     <div class="form-group hidden">
@@ -343,8 +343,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
 
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-text")%></label>
                     
-                    <input type="text" class="form-control" id="alttxt" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-txt-placeholder")%>" value=""> 
-                    
+                    <input type="text" class="form-control margin-bottom-20" id="alttxt" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-txt-placeholder")%>" value=""> 
+                   
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
