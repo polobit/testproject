@@ -1652,7 +1652,7 @@ table#contacts-table, table#companies {
 {
   font-size:13px!important;
   margin-top:5px!important;
-  vertical-align: text-bottom;
+  /*vertical-align: text-bottom;*/
 }
 #contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
@@ -2280,7 +2280,7 @@ table .headerSortUp::after, table .headerSortDown::after{
   display: none;
 }
 
-#prefs-tabs-content .admin-message-info{position: absolute;left: 20%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
+#prefs-tabs-content .admin-message-info{position: absolute;left: 20%;top:14%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
 .integrationstab .btn.btn-primary,.integrationstab .btn.btn-default{height:30px !important;line-height:30px !important;font-size:12px !important;}
 .m-t-sm-imp{margin-top:10px}
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
@@ -2503,7 +2503,7 @@ margin-left: 5px !important;
   border-radius: 0;
 }
 #custom-filters-container .i-checks input[type="checkbox"] {
-   vertical-align: middle;
+   vertical-align: bottom;
 }
 .plan-collection-content{
   font-size: 13px !important;
@@ -2511,7 +2511,6 @@ margin-left: 5px !important;
 .agile-theme{
   margin-left: -30px;
 }
-
 /*.popover
 {
   border:0px solid #fff;
@@ -2533,4 +2532,57 @@ margin-left: 5px !important;
 
 .tickets-div .panel-heading .btn{
   font-size: 12px !important;
+}
+.agile-theme-15 .m-l-n-imp
+{
+  margin-left:0px !important;
+}
+.agile-theme-15 .m-t-n-imp
+{
+  margin-top:0px !important;
+}
+#admin-prefs-tabs-content #userForm .col-md-6 #template_id
+{
+      height: 40px !important;
+      padding: 6px 20px !important;
+}
+#ticket-model-list .ticket-data .assignee-change:hover
+{
+  background-color:#edf1f2;
+}
+#ticket-model-list .ticket-data .assignee-change a
+{
+  font-size:12px;
+}
+.m-t-xs-imp
+{
+  margin-top:5px;
+}
+#send-reply-container #send-reply .arrow.bottom.arrow-light:after
+{
+  border-top-color:rgba(17, 160, 248, 0.2)!important;
+}
+.lpPreviewView label
+{
+  margin-top:11px;
+}
+.agile-theme-15 .saveLandingPageButton.btn i
+{
+  vertical-align: middle;
+}
+/*.disabled,button[disabled='disabled']
+{
+    background-color: rgba(17, 160, 248, 0.1) !important;
+}*/
+.agile-theme-15 #toggle_previous_tickets
+{
+  margin-top:10px;
+}
+#ticket-feedback.wrapper-lg
+{
+  margin-top:10px;
+}
+#ticket-feedback .ticket-feedback-notes
+{
+  color:#19a9d5;
 }
