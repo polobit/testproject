@@ -2634,7 +2634,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .agile-theme-15 #subscribe_plan_change .agile-page-header{
   padding : 20px 20px 20px !important;
 }
-#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,#email-plan-form .panel{
   box-shadow: none !important;
 }
 #ticket_change_sla{
@@ -2680,7 +2681,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
     font-weight: 600;
 }
 
-#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,#email-plan-form .panel{
   box-shadow: none !important;
 }
 
