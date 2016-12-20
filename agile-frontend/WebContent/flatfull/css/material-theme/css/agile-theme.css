@@ -2636,6 +2636,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .ticket_change_slatime,{
   width: 33% !important;
 }
+
 .tab-container#integrations-tab, #integrationstats .tab-container{
   width: 100% !important;
 }
@@ -2652,4 +2653,15 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 #saveFilterForm .control-label {
       padding-top: 11px;
 }
+}
+
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+
+.nav i.icon ,.nav i.fa,.nav i.icon-list,.nav i.icon-white,.nav i.icon-envelope-letter,.nav i.icon-docs,.nav i.icon-eye,.nav i.icon-users{
+  display: none;
+}
+.nav i.material-icons{
+  display:block !important;
 }
