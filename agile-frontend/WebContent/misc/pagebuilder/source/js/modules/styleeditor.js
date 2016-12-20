@@ -485,7 +485,7 @@
             if( $(styleeditor.activeElement.element).prop('tagName') === 'A' ) {
 
                 var link_text=document.getElementById('internalLinksCustom').value;
-                if($('#internalLinksDropdown').value !==link_text && link_text.match("^(http|https)://")===null){
+                if(val.match("^(http|https)://|#")===null){
                     styleeditor.showErrorMsg('internalLinksCustom');
                     return;
                 }
