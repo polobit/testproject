@@ -48,6 +48,23 @@
     .navbar-brand i, .nav-tabs li a#marketing_previlages, .nav-tabs li a#Sales_previlages{
       color : @themeColor;
     }
+    #agile-menu-navigation-container{
+      li.active a{
+        color: @themeColor;
+        border-left: 3px solid @themeColor;
+        background-color: @menuBgColor;
+      }
+      li a:hover, li a:focus{
+        color: @themeColor;
+        background-color: @menuBgHoverColor;
+      }
+      .active a{
+        color: @themeColor
+      }
+      li.active a:hover{
+        background-color: @menuBgColor;
+      }
+    }
 
 }
 
