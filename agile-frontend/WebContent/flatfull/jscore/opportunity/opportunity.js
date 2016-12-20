@@ -1291,6 +1291,7 @@ function populateDealSources(el, value){
 function fetchDealsList(data){
 	var filters_collection = data;
 	var dealTag;
+	var reportFilter;
     if(!filters_collection && App_Deals.deal_filters && App_Deals.deal_filters.collection)
     {
     	filters_collection = App_Deals.deal_filters.collection;
@@ -1299,10 +1300,18 @@ function fetchDealsList(data){
     {
 		dealTag = filters_collection.dealToFilter ;
 	}
+	if(filters_collection.reportFilter)
+    {
+		reportFilter = filters_collection.reportFilter ;
+	}
     setNewDealFilters(filters_collection);
 	var query = ''
 	var url = 'core/api/deal/filters/query/list/'+_agile_get_prefs('deal-filter-name')+'?order_by='+getDealSortFilter();
     
+    if(reportFilter)
+    {
+    	url = 'core/api/deal/filters/filter/report-filter/'+reportFilter+'?order_by='+getDealSortFilter();
+    }
     if(dealTag)
     {
     	url = 'core/api/deal/filters/query/list/tags/'+dealTag+'?order_by='+getDealSortFilter();

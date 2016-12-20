@@ -28,6 +28,15 @@ var DealsRouter = Backbone.Router.extend({
 	deals : function()
 	{	
 		var dealTag = null ;
+		var postReportData=null;
+		if(_agile_get_prefs('report_filter')) {
+			_agile_set_prefs("agile_deal_view", "list_view");
+			//url = 'core/api/filters/filter/dynamic-filter';
+			postReportData = _agile_get_prefs('report_filter');
+			_agile_delete_prefs("deal-filter-name");
+			_agile_delete_prefs('deal-filters');
+		} 
+
 		if(window.location.hash.indexOf("filter")==1){
        		dealTag = window.location.hash.substr(window.location.hash.lastIndexOf("/")+1);
        		_agile_set_prefs("agile_deal_view", "list_view");
@@ -70,6 +79,10 @@ var DealsRouter = Backbone.Router.extend({
 			var that = this;
 			DEALS_LIST_COLLECTION = null;
 			setupDealFilters(function(data){
+				if(postReportData)
+				{
+					data["reportFilter"] = postReportData ;
+				}
 				if(dealTag){
 					data["dealToFilter"] = dealTag ;
 				}
