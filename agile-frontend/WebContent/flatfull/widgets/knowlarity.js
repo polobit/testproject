@@ -410,9 +410,13 @@ function knowlarityDailer(responceObject, to, contact){
 		type : "POST",		
 		data : JSON.stringify(dataObj),
 		success : function(result) {
-			console.log("Knowlarity *** success : "+ JSON.stringify(result));						
-			//{{agile_lng_translate 'other' 'cancel'}}			
-			console.log(to + " : "+ contact);				
+			var error = result.error;
+			var success = result.success;
+			if(error){
+				showNotyPopUp("error" , error.message, "bottomRight");
+			}else if(success){
+				showNotyPopUp("success" , success.message, "bottomRight");
+			}			
 		},
 		error : function(result) {
 			console.log("Knowlarity *** error : "+ JSON.stringify(result));								
