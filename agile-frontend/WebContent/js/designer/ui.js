@@ -640,7 +640,7 @@ function openTwitter()
 	if(typeof CURRENT_DOMAIN_USER != "undefined") {
 		currentDomainUser = CURRENT_DOMAIN_USER;
 	} else if(window.parent.CURRENT_DOMAIN_USER) {
-		currentDomainUser = CURRENT_DOMAIN_USER;
+		currentDomainUser = window.parent.CURRENT_DOMAIN_USER;
 	}
 
 	if(currentDomainUser) {
