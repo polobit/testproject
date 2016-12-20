@@ -2566,7 +2566,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 #send-reply-container #send-reply .arrow.bottom.arrow-light:after
 {
-  border-top-color:rgba(17, 160, 248, 0.2)!important;
+ border-top-color: rgb(207, 236, 254)!important;
 }
 .lpPreviewView label
 {
@@ -2648,4 +2648,22 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 #saveFilterForm .control-label {
       padding-top: 11px;
 }
+}
+.tickets-main .wrapper.bg-light {
+    background-color: #edf1f2 !important;
+}
+#ticket-notes-model-list .thumb-small{
+       margin-top: 18px; 
+}
+.agile-theme-15 .cus-pad {
+    padding: .2em .5em .2em!important;
+}
+.agile-theme-15 .public-notes-container:HOVER .show-original-div{
+      margin-top: 8px;
+}
+#ticket-contact-details .label.bg-light {
+    background-color: #f4f8f9!important;
+    color: #78909c!important;
+    font-size: 12px;
+    font-weight: 600;
 }
