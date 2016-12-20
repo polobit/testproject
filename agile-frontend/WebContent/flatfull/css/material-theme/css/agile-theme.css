@@ -308,6 +308,8 @@ form select.form-control{
 .agile-theme-15 h4, .h4{
   /*font-size: 14px;*/
   font-size: 16px;
+  margin: 0px 0px 10px 0px !important;
+
 }
 .agile-theme-15 h5, .h5{
   font-size: 13px;
@@ -2685,7 +2687,18 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 #aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users,#aside i.icon-tag,#aside i.icon-bubbles{
   display: none;
 }
-#aside i.material-icons{
+
+
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users,#aside i.icon-tag,#aside i.icon-bubbles{
+  display: none;
+}
+
+#agile-menu-navigation-container .nav i.icon ,#agile-menu-navigation-container .nav  i.fa,#agile-menu-navigation-container .nav i.icon-list,#agile-menu-navigation-container .nav  i.icon-white,#agile-menu-navigation-container .nav  i.icon-envelope-letter,#agile-menu-navigation-container .nav  i.icon-docs,#agile-menu-navigation-container .nav  i.icon-eye,#agile-menu-navigation-container .nav  i.icon-users,#agile-menu-navigation-container .nav  i.icon-tag,#agile-menu-navigation-container .nav  i.icon-bubbles{
+  display: none;
+}
+
+
+#agile-menu-navigation-container .nav  i.material-icons{
   display:block !important;
 }
 
@@ -2756,3 +2769,16 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 #workflows-tab-container .tab-container,#triggers-tab-container .tab-container{
   margin-bottom: 0px !important;
 }
+
+#socialsuite-streams-model-list .user-profile-img
+{
+  margin-top: -5px;
+}
+#streamDetails .font-15{
+  margin-bottom: 2px !important;
+}
+#new_tag 
+{
+  background-color: #fff !important;
+}
+
