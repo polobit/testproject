@@ -15,13 +15,19 @@ $('#app-aside-folded').on('click', function(e) {
 	$('#wrap').toggleClass('app-aside-folded');
     if( $('#wrap').hasClass('app-aside-folded')) {
 		console.log("folded");
+		if(CURRENT_USER_PREFS.theme != 15){
 		$("#app-aside-folded i").removeClass("fa-dedent");
 		$("#app-aside-folded i").addClass("fa-indent");
+		}
+		$(".fa-cloud").addClass("hide");
 		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
+		if(CURRENT_USER_PREFS.theme != 15){
 		$("#app-aside-folded i").removeClass("fa-indent");
 		$("#app-aside-folded i").addClass("fa-dedent");
+		}
+		$(".fa-cloud").removeClass("hide");
 		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
