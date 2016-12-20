@@ -2665,3 +2665,36 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 #aside i.material-icons{
   display:block !important;
 }
+
+
+.ticket_change_slatime
+{
+  width: 33% !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-left: 1px solid #cfdadd !important;
+}
+.sla-due-date .col-sm-12{
+  margin-top: 3px !important;
+}
+#active-campaign{
+  margin-top: 2px !important;
+}
+.cc-emails .new-theme-ticket-cc.tag:hover, .ticket-forwar-email.tag:hover{
+  background-color: #f4f8f9 !important; 
+}
+.ticket-email{
+  border: 0px !important;
+  padding: 0px !important;
+}
+.ticket-email .new-theme-ticket-cc{
+  width: 100%;
+}
+.forward-emails {
+  padding:0px !important;
+  border: none !important
+}
+.ticket-forwar-email .tag{
+  margin:0px !important;
+}
+
