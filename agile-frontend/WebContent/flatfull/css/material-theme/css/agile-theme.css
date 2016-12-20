@@ -1985,6 +1985,8 @@ font-size: 24px !important;
   background-color: inherit !important;
   padding: 0 !important;
   border: 0 !important;
+  top: -13px;
+  position: absolute;
 }
 .dashboard-search-scroll-bar .img-inital,.dashboard-search-scroll-bar .thumb-xs.agile-img, #recent-menu-model-list .img-inital{
   height: 35px!important;
@@ -2530,7 +2532,9 @@ margin-left: 5px !important;
 .contacts-grid-view-temp>div{
   border:0;
 }
-
 .tickets-div .panel-heading .btn{
   font-size: 12px !important;
+}
+#contacts-list-view, #companies-list-view{
+  position: relative;
 }
