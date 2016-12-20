@@ -712,6 +712,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="schedulingmenu">
           <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
             <i class="icon-tag" data-original-title="" title=""></i>
+             <i class="material-icons">date_range</i>
             <span>Online Calendar</span>
           </a>
         </li>
