@@ -418,7 +418,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color" data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"></span><i class="material-icons" >more_horiz</i>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>

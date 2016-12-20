@@ -52,6 +52,7 @@ function showTrailAlertMessage(){
 	
 $(document).ready(function(){
 
+$("#rolecontainer").text(CURRENT_DOMAIN_USER.role);
 //helpContentPopover();
 $('body').on('click','#speechDectation',function(e){
 	e.preventDefault();
@@ -630,7 +631,7 @@ function initRolehandlers(){
  			var dashboardName = $(this).attr("data-dashboard");
  			if(!dashboardName)
  				 dashboardName = "dashboard";
-
+ 				$("#rolecontainer").text(serviceName);
  			// Update user with the current service
  			// Close popup
  			if(CURRENT_DOMAIN_USER.role != serviceName)
