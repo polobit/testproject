@@ -1653,7 +1653,7 @@ table#contacts-table, table#companies {
 {
   font-size:13px!important;
   margin-top:5px!important;
-  vertical-align: text-bottom;
+  /*vertical-align: text-bottom;*/
 }
 #contact-sorter .fa-sort-desc , #deal-sorter .fa-sort-desc
 {
@@ -1751,9 +1751,13 @@ color:#0d1114 !important;
 .agile-theme-15 .ticket-settings .agile-table>tbody>tr>td:nth-child(3){
   padding-left: 15px !important;
 }
-.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div .thumb-sm img{
   width: 40px !important;
   height: 40px !important;
+}
+.agile-theme-15 #ticket-feedback .agile-table>tbody>tr>td:first-child>div{
+  width: 105px !important;
+  border-radius: 500px;
 }
 #document-list thead tr th:first-child label.i-checks, #deal-list thead tr th:first-child label.i-checks, #workflows-collection-container thead tr th:first-child label.i-checks, #campaign-triggers-list thead tr th:first-child label.i-checks, #email-template-div-id thead tr th:first-child label.i-checks, #forms-list-view thead tr th:first-child label.i-checks, #landing-pages-collection-container thead tr th:first-child label.i-checks, #webrules-list-view thead tr th:first-child label.i-checks, #push-notify-list-view thead tr th:first-child label.i-checks, .ticket-settings thead tr th:first-child label.i-checks{
   margin: 0; 
@@ -2283,7 +2287,7 @@ table .headerSortUp::after, table .headerSortDown::after{
   display: none;
 }
 
-#prefs-tabs-content .admin-message-info{position: absolute;left: 20%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
+#prefs-tabs-content .admin-message-info{position: absolute;left: 20%;top:14%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
 .integrationstab .btn.btn-primary,.integrationstab .btn.btn-default{height:30px !important;line-height:30px !important;font-size:12px !important;}
 .m-t-sm-imp{margin-top:10px}
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
@@ -2505,8 +2509,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .ticket-collection-container{
   display: table;
 }
-#admin-prefs-tabs-content .tab-container{
-  width: 75%;
+#admin-prefs-tabs-content .tab-container, #settings-milestones-tab-content #lossreasons-tab, #settings-milestones-tab-content #deal-goals-tab, #settings-milestones-tab-content #deal-sources-tab, #settings-milestones-tab-content .products-table{
+  width: 75% !important;
 }
 #admin-prefs-tabs-content .panel{
   border-radius: 0;
@@ -2523,7 +2527,6 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .agile-theme{
   margin-left: -30px;
 }
-
 /*.popover
 {
   border:0px solid #fff;
@@ -2545,6 +2548,60 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .tickets-div .panel-heading .btn{
   font-size: 12px !important;
 }
+.agile-theme-15 .m-l-n-imp
+{
+  margin-left:0px !important;
+}
+.agile-theme-15 .m-t-n-imp
+{
+  margin-top:0px !important;
+}
+#admin-prefs-tabs-content #userForm .col-md-6 #template_id
+{
+      height: 40px !important;
+      padding: 6px 20px !important;
+}
+#ticket-model-list .ticket-data .assignee-change:hover
+{
+  background-color:#edf1f2;
+}
+#ticket-model-list .ticket-data .assignee-change a
+{
+  font-size:12px;
+}
+.m-t-xs-imp
+{
+  margin-top:5px;
+}
+#send-reply-container #send-reply .arrow.bottom.arrow-light:after
+{
+  border-top-color:rgba(17, 160, 248, 0.2)!important;
+}
+.lpPreviewView label
+{
+  margin-top:11px;
+}
+.agile-theme-15 .saveLandingPageButton.btn i
+{
+  vertical-align: middle;
+}
+/*.disabled,button[disabled='disabled']
+{
+    background-color: rgba(17, 160, 248, 0.1) !important;
+}*/
+.agile-theme-15 #toggle_previous_tickets
+{
+  margin-top:10px;
+}
+#ticket-feedback.wrapper-lg
+{
+  margin-top:10px;
+}
+#ticket-feedback .ticket-feedback-notes
+{
+  color:#19a9d5;
+}
+
 #contacts-list-view, #companies-list-view{
   position: relative;
 }
@@ -2574,4 +2631,25 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 .agile-theme-15 #subscribe_plan_change .agile-page-header{
   padding : 20px 20px 20px !important;
+}
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+#ticket_change_sla{
+  width: 67% !important;
+}
+.ticket_change_slatime,{
+  width: 33% !important;
+}
+.tab-container#integrations-tab, #integrationstats .tab-container{
+  width: 100% !important;
+}
+.ticket-settings #service-tab{
+  padding-left: 0;
+  padding-right: 0;
+  background-color: inherit;
+}
+.data-block .canned-video-xs{
+  width: 100%;
+  height: auto;
 }

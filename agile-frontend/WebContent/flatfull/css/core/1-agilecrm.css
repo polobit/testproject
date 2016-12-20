@@ -5111,3 +5111,7 @@ border-top: 0px !important;
      width: 25.33333%;
 }
 
+.data-block .canned-video-xs{
+  width: 100%;
+  height: auto;
+}
