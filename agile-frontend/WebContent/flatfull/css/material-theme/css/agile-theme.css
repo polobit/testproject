@@ -471,7 +471,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .navbar-collapse, .app-content, .app-footer {
     margin-left: 239px;
 }
-.agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0;}
+.agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0; z-index: 1;}
 .app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
 .agile-theme-15 .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
 .agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
@@ -495,7 +495,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 /*.app-aside-dock .app-aside{background-color: #f6f8f8;}*/
 }/*medis 992 end*/
 
-.agile-theme-15 #navbar{box-shadow: inherit; height: 70px !important;}
+.agile-theme-15 #navbar{box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.07); height: 70px !important;}
 .agile-theme-15 .app-header-fixed{padding-top: 70px;}
 .agile-theme-15 .navbar-brand{line-height: 50px;}
 .agile-theme-15 #app-aside-folded{top: 18px !important}
@@ -2538,3 +2538,12 @@ margin-left: 5px !important;
 #contacts-list-view, #companies-list-view{
   position: relative;
 }
+
+#timeline .year,#timeline .top .year{font-size: 12px;}
+#unsubscribe-modal{top:-10px;}
+.tagsinput.active-campaigns{margin-bottom: 10px;}
+.plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:focus{color: #fff !important}
+.agile-page-header#campaign-logs-list{padding-bottom: 0px !important;} 
+
+
+
