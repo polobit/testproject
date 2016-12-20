@@ -2787,3 +2787,31 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 {
   background-color: #fff !important;
 }
+#rolecontainer{
+    float: left;
+    font-size: 16px;
+    margin-left: 8px;
+    text-transform: lowercase;
+}
+.dashboard-select a i{
+  float:left;    
+}
+.nav-grid:hover{
+  background-color: #f4f8f9;
+    padding: 8px !important;
+    border-radius: 4px;
+  }
+  .nav-grid{
+     padding: 8px !important;
+  }
+.dashboard-select.small .dropdown-menu{
+    margin-left: -47px !important;
+    margin-top: 0px;
+}
+.dashboard-select a i:nth-child(2){
+    margin-top: 3px;
+    margin-left: 10px;
+  }
+span#rolecontainer::first-letter {
+    text-transform: capitalize;
+}
