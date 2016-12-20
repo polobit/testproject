@@ -2502,8 +2502,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .ticket-collection-container{
   display: table;
 }
-#admin-prefs-tabs-content .tab-container{
-  width: 75%;
+#admin-prefs-tabs-content .tab-container, #settings-milestones-tab-content #lossreasons-tab, #settings-milestones-tab-content #deal-goals-tab, #settings-milestones-tab-content #deal-sources-tab, #settings-milestones-tab-content .products-table{
+  width: 75% !important;
 }
 #admin-prefs-tabs-content .panel{
   border-radius: 0;
@@ -2630,4 +2630,16 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 .ticket_change_slatime,{
   width: 33% !important;
+}
+.tab-container#integrations-tab, #integrationstats .tab-container{
+  width: 100% !important;
+}
+.ticket-settings #service-tab{
+  padding-left: 0;
+  padding-right: 0;
+  background-color: inherit;
+}
+.data-block .canned-video-xs{
+  width: 100%;
+  height: auto;
 }

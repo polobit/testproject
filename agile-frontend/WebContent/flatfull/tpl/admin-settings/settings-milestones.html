@@ -12,7 +12,7 @@
 </script>
 <script id="admin-settings-milestones-collection-template"
 	type="text/html">
-	<div class='col panel wrapper b-t'>
+	<div class='col-sm-9 panel wrapper b-t'>
 		<div class="hbox h-auto m-b-sm">
 			<h4>
 			{{#isTracksEligible}}
@@ -130,7 +130,7 @@
 </script>
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
-<div class="col panel wrapper b-t" style="width: 100%">
+<div class="col panel wrapper b-t" style="width: 100%" id="lossreasons-tab">
 <form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-reason'}}</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -185,7 +185,7 @@
 </script>
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
-<div class="panel wrapper col b-t" style="width: 100%">
+<div class="panel wrapper col b-t" style="width: 100%" id="deal-sources-tab">
 <form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-source'}}</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -244,7 +244,7 @@
 </script>
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
-<div class="panel wrapper col b-t goaltab-main" style="width: 100%">
+<div class="panel wrapper col b-t goaltab-main" style="width: 100%" id="deal-goals-tab">
    <div class="text-right">
       <ul class="list-inline text-sm m-b-xs">
          <li>
