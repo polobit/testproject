@@ -1,7 +1,9 @@
 package com.analytics.util;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -9,6 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.db.GoogleSQL;
 import com.agilecrm.db.util.GoogleSQLUtil;
@@ -437,6 +440,66 @@ public class AnalyticsSQLUtil
 		    System.out.println(e.getMessage());
 		    return null;
 		}
+    }
+    
+    public static JSONArray getVisitors(String query) throws Exception
+    {
+		System.out.println("Query " + query);
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		Statement stmt1 = null;
+		JSONArray segments = null;
+		try
+		{
+		    // get the connection object
+		    Connection conn = GoogleSQL.getWebStatsServerConnection();
+		    if (conn == null)
+			return null;
+	
+		    // creates the statement object
+		    Statement stmt = conn.createStatement();
+		    // get the ResultSet object
+		    rs = stmt.executeQuery(query);
+	
+		    if (rs == null)
+			return null;
+	
+		    System.out.println("RS " + rs);
+	
+		    segments = AnalyticsUtil.parseResultSet(rs);
+	
+		    stmt1 = conn.createStatement();
+	
+		    rs1 = stmt1.executeQuery("select found_rows()");
+	
+		    if (rs1 != null && segments.length() > 0)
+		    {
+			while (rs1.next())
+			{
+			    int count = rs1.getInt(1);
+			    JSONObject finalObject = new JSONObject();
+			    finalObject.put("total_rows_count", "" + count);
+			    segments.put(finalObject);
+			}
+		    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception while mapping result set" + e);
+	    return segments;
+	}
+	finally
+	{
+	    // close the Connection and ResultSet objects
+	    GoogleSQL.closeResultSet(rs);
+	    if (rs1 != null)
+		rs1.close();
+	    if (stmt1 != null)
+		stmt1.close();
+
+	}
+	return segments;
     }
     
 }
