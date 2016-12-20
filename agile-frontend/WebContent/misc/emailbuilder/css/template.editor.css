@@ -472,3 +472,8 @@ div.view {
     vertical-align: baseline;
     border-radius: .25em;
 }
+
+#browseBtn{
+    border-radius: 0 4px 4px 0;
+    background-color: #eee;
+}
