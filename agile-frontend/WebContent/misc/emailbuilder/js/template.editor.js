@@ -151,7 +151,8 @@ function handleObjects() {
 
                     case 'image':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('img');
                         var imageid = img.attr('id');
 
@@ -183,7 +184,8 @@ function handleObjects() {
                         break;
                     case 'video-record':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('img');
                         var imageid = img.attr('id');
 
@@ -215,7 +217,8 @@ function handleObjects() {
 
                     case 'imgtxtcol':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('tbody tr td table tbody tr td img');
 
                         var imageid = img.attr('id');
@@ -249,7 +252,8 @@ function handleObjects() {
                     case 'imgtxtincol':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
 
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var imgs = self.find('td.imageInColumn img');
 
                         imgs.each(function (i) {
@@ -268,7 +272,8 @@ function handleObjects() {
                     case 'imgtxt':
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         //    $('#'+$('#path').val()).unbind('click');
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('tbody tr td table tbody tr td img');
                         // devi mettere un each perchè ci sono piu di un immagine.
 
@@ -303,14 +308,16 @@ function handleObjects() {
                         break;
 
                     case 'line':
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         hideAllSettings();
                         $('#settings').show();
                         break;
 
                     case 'button':
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         hideAllSettings();
                         $('#settings').show();
@@ -319,7 +326,8 @@ function handleObjects() {
 
                     case 'social-links':
 
-                        $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         $('#selector').val('tr td');
 
@@ -380,13 +388,13 @@ function handleObjects() {
 
                         break;
 
-                    case 'user-poll':
+                    /*case 'user-poll':
 
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         hideAllSettings();
                         handlePolls(self);
-                        break;
+                        break;*/
 
                     default:
                         // console.log(t);
@@ -572,7 +580,6 @@ function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
     $('#editor').show();
     $('#settings').show();
 
-    $('#bgcolor').css('backgroundColor', background);
     obj.data('fontcolor', fontcolor);
     obj.data('text', text);
     obj.data('fontsize', fontsize);
