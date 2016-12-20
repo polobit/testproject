@@ -2682,7 +2682,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 
-#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users,#aside i.icon-tag,#aside i.icon-bubbles{
   display: none;
 }
 #aside i.material-icons{
@@ -2739,4 +2739,8 @@ div.chosen-container>ul.chosen-choices>li{
 }
 table.dealproducts_table thead th .i-checks input[type="checkbox"]{
   margin: 4px 0 0 3px !important;
+}
+
+#workflows-tab-container .tab-container,#triggers-tab-container .tab-container{
+  margin-bottom: 0px !important;
 }

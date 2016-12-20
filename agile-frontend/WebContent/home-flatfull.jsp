@@ -708,6 +708,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="schedulingmenu">
           <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
             <i class="icon-tag" data-original-title="" title=""></i>
+             <i class="material-icons">date_range</i>
             <span>Online Calendar</span>
           </a>
         </li>
@@ -859,7 +860,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="socialsuitemenu">
     <a class="agile-menu-dropdown-aside1" href="#social">
       <i class="icon-bubbles"></i>
-       <i class="material-icons" style="display: none">question answer</i>
+       <i class="material-icons" style="display: none">question_answer</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
     </a>
   </li>
