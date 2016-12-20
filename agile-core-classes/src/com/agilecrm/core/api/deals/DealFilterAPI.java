@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.deals;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,10 +21,15 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.ContactFilter;
+import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilter;
 import com.agilecrm.deals.filter.util.DealFilterUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 
 @Path("/api/deal/filters")
 public class DealFilterAPI {
@@ -194,5 +200,26 @@ public class DealFilterAPI {
 	
 	return DealFilterUtil.getDealsCountBasedOnList(oppList, milestone);
 	
+    }
+    
+    @GET
+    @Path("/filter/report-filter/{filterJson}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @SuppressWarnings("unchecked")
+    public List<Opportunity> filterDeals(@PathParam("filterJson") String filterJson,
+    		@QueryParam("page_size") String count, @QueryParam("cursor") String cursor,
+    		@QueryParam("order_by") String sortKey)
+    {
+	DealFilter deal_filter = DealFilterUtil.getFilterFromJSONString(filterJson);
+
+	// Modification to sort based on company name. This is required as
+	// company name lower is saved in different field in text search
+	sortKey = (sortKey != null ? ((sortKey.equals("name") || sortKey.equals("-name")) ? sortKey.replace("name",
+		"name_lower") : sortKey) : null);
+
+	// Sets ACL condition
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Opportunity.toString(), deal_filter.rules, null);
+	return new ArrayList<Opportunity>(deal_filter.queryDeals(Integer.parseInt(count), cursor, sortKey));
     }
 }

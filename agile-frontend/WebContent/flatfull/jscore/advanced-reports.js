@@ -21,6 +21,7 @@ function initFunnelCharts(callback)
 
 	// Init the callback for daterange
 	initDateRange(callback);
+
 	
 	// Init the callback when the frequency selector changes too
 	if ($('#frequency').length > 0)
@@ -262,6 +263,46 @@ function showDealsGrowthReport()
     end_time += (((23*60*60)+(59*60)+59)*1000);
     end_time=end_time+(d.getTimezoneOffset()*60*1000);
     end_time=end_time/1000;
+
+    var filter={};
+    var filter_name="incoming";
+	var reportDealJsonArray=[];
+	$('#reports-listerners-container').off("click")
+			.on(
+					'click',
+					'.filter-reports',function(e)
+	{
+		e.preventDefault();
+		var owner="All";
+		if($('#owner').val()!="")
+			{
+				owner=$('#owner').val();
+				var json_object_1={};
+				json_object_1["LHS"] = "owner_id";
+				json_object_1["CONDITION"] = "EQUALS";
+				json_object_1["RHS"] = owner;
+				json_object_1["RHS_NEW"] = "";
+				reportDealJsonArray.push(json_object_1);
+		}
+			
+				var json_object_1={};
+				json_object_1["LHS"] = "created_time";
+				json_object_1["CONDITION"] = "BETWEEN";
+				json_object_1["RHS"] = start_time*1000;
+				json_object_1["RHS_NEW"] = end_time*1000;
+				reportDealJsonArray.push(json_object_1);
+
+				filter["rules"] = reportDealJsonArray;
+			filter_name=filter_name+'_'+owner+'_'+$('#range').html();
+			//filter["type"] = "opportunity";
+			if (filter != null && (filter.rules.length > 0 || filter.or_rules.length > 0))
+		{
+			_agile_set_prefs('report_filter', JSON.stringify(filter));
+			_agile_set_prefs('report_filter_name', filter_name);
+			//_agile_set_prefs('company_filter', "Companies");
+		}
+		Backbone.history.navigate("deals", { trigger : true });
+	});
 
     if ($('#owner').length > 0)
 	{

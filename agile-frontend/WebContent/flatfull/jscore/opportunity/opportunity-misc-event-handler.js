@@ -512,6 +512,9 @@ function initializeDealListners(el){
 	$('#opportunity-listners').on('click', '.remove_deal_filter', function(e) {
 		_agile_delete_prefs('deal-filter-name');
 		_agile_delete_prefs('deal-filters');
+		_agile_delete_prefs('report_filter');
+		_agile_delete_prefs('report_filter_name');
+		delete App_Deals.deal_filters.collection.reportFilter;
 		setupDefaultDealFilters();
 		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
         if (!_agile_get_prefs("agile_deal_view")){

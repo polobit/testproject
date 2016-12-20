@@ -24,6 +24,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.search.ScoredDocument;
+import com.google.gson.Gson;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 public class DealFilterUtil {
@@ -469,5 +470,21 @@ public class DealFilterUtil {
 	    return null;
 	}
     }
-
+	
+	 public static DealFilter getFilterFromJSONString(String filter)
+	    {
+		Gson gson = new Gson();
+		DealFilter deal_filter = gson.fromJson(filter, DealFilter.class);
+		SearchRule rule = new SearchRule();
+		rule.LHS = "type";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "Opportunity";
+	    deal_filter.rules.add(rule);
+	    rule = new SearchRule();
+	    rule.LHS = "schema_version";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.RHS = "1.0";	
+	    deal_filter.rules.add(rule);
+		return deal_filter;
+	    }
 }
