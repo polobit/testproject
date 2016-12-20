@@ -468,13 +468,13 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 /*header and navbar styles*/
 
 @media (min-width:768px){
-.navbar-collapse, .app-content, .app-footer {
+/*.navbar-collapse, .app-content, .app-footer {
     margin-left: 239px;
-}
+}*/
 .agile-theme-15 .app-aside-fixed .app-header .navbar-header{/*height: 70px; line-height: 70px;*/ border-right: 1px solid #e7eef0; z-index: 1;}
-.app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}
+/*.app-aside, .navbar-header,.app-aside .fixedicons{width: 239px;}*/
 .agile-theme-15 .navbar-nav>li>a{padding-top: 25px; padding-bottom: 25px;}
-.agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}
+/*.agile-theme-15 .app-aside-folded .app-aside, .agile-theme-15 .app-aside-folded .navbar-header, .agile-theme-15 .app-aside-folded .app-aside .fixedicons{width: 60px;}*/
 .agile-theme-15 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed{top: 50px; /*overflow: inherit;*/}
 .agile-theme-15 .app-aside-fixed:not(.app-aside-dock) #aside{border-right: 1px solid #e7eef0;}
 .app-aside-fixed:not(.app-aside-dock) aside{/*overflow-y:auto; padding-bottom: 55px;*/ top: 45px; z-index: 1035 !important;}
@@ -497,8 +497,8 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 
 .agile-theme-15 #navbar{box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.07); height: 70px !important;}
 .agile-theme-15 .app-header-fixed{padding-top: 70px;}
-.agile-theme-15 .navbar-brand{line-height: 50px;}
-.agile-theme-15 #app-aside-folded{top: 18px !important}
+.agile-theme-15 .navbar-brand{line-height: 50px; padding-left: 15px;}
+.agile-theme-15 #app-aside-folded{top: 6px !important; font-size: 1.2em; color: #596165;}
 .agile-theme-15 .navbar-searchicon{padding: 24px 15px;}
 .agile-theme-15 .grid-icon-header {
     color: #11a0f8!important;
@@ -516,7 +516,6 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
     vertical-align: middle;
     font-weight: 600;
     font-size: 15px;
-    margin-left: 10px;
 }
 .agile-theme-15 .navbar-brand{transition: inherit; -webkit-transition: inherit;}
 .agile-theme-15 .free_plan_alert{top: 80px; width:440px; font-size: 12px; padding-top: 8px; padding-bottom: 8px;}
@@ -524,7 +523,7 @@ a i, a span{vertical-align: inherit;}
 
 .agile-theme-15 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a{width: auto;}
 .agile-theme-15 .agile-menu-dropdown-aside{padding-top: 0px !important}
-.agile-theme-15 .navi ul.nav li a{padding-top:9px; padding-bottom: 9px; color:#78909c;}
+.agile-theme-15 .navi ul.nav li a{padding-top:9px; padding-bottom: 9px; color:#596165;}
 .agile-theme-15 .nav>li>a:hover, .agile-theme-15 .nav>li>a:focus{color: #11a0f8 !important; background-color:inherit;}
 .agile-theme-15 .navi ul.nav li a{border-left: 3px solid transparent;}
 .agile-theme-15 .navi ul.nav li.agile-menuactive ul.nav-sub li.agile-menuactive a{color: #11a0f8; background-color: #e7f6ff; border-left: 3px solid rgb(17, 160, 248);}
@@ -2611,6 +2610,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .tagsinput.active-campaigns{margin-bottom: 10px;}
 .plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:focus{color: #fff !important}
 .agile-page-header#campaign-logs-list{padding-bottom: 0px !important;} 
+
 #contacts_dashlet .popover ,#marketing_dashlet .popover ,#deals_dashlet .popover ,#calendar_dashlet .popover, #activity_dashlet .popover,#rss_dashlet .popover,#account_Info_dashlet .popover{
     font-size: 13px;
     font-weight: normal;
@@ -2689,6 +2689,18 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display:block !important;
 }
 
+.agile-theme-15 .agile-beta-tag h3 small{vertical-align: middle; font-size: 13px;}
+.navbar-brand .fa-cloud, #app-aside-folded .fa-dedent,#app-aside-folded .fa-indent{display: none !important;}
+#app-aside-folded i.material-icons,.navbar-brand i.material-icons{display:inline-block !important;}
+#sort_menu .m-t-xs{margin-top: 0px !important;}
+.app-aside-folded #app-aside-folded{
+  width: 50px;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+
+}
+.app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
 
 
 .ticket_change_slatime
