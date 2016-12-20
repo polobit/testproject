@@ -21,6 +21,7 @@ import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.PubNub;
+import com.agilecrm.user.util.AliasDomainUtil;
 
 @SuppressWarnings("serial")
 public class CallNotification extends HttpServlet
@@ -31,7 +32,7 @@ public class CallNotification extends HttpServlet
 	String phoneNumber = req.getParameter("number");
 	String firstName = req.getParameter("fname") == null ? "" : req.getParameter("fname");
 	String lastName = req.getParameter("lname") == null ? "" : req.getParameter("lname");
-	String namespace = NamespaceManager.get();
+	String namespace = AliasDomainUtil.getCachedAliasDomainName(NamespaceManager.get());
 	
 	if (StringUtils.isBlank(apiKey))
 	{
@@ -96,7 +97,7 @@ public class CallNotification extends HttpServlet
 	    obj.put("type", "CALL");
 	    PubNub.pubNubPush(namespace, obj);
 
-	    String domain_url = VersioningUtil.getHostURLByApp(NamespaceManager.get());
+	    String domain_url = VersioningUtil.getHostURLByApp(namespace);
 	    String redire_link = domain_url + "#contact/" + obj.getString("id");
 	    res.sendRedirect(redire_link);
 	}
