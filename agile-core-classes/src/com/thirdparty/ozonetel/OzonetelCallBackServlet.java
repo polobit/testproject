@@ -35,6 +35,7 @@ public class OzonetelCallBackServlet extends HttpServlet {
 	        pubnub_notification.put("contact_number", contact_number);
 	        pubnub_notification.put("phone_no", phone_no);
 	        pubnub_notification.put("duration", duration);
+	        pubnub_notification.put("message_from", "callback");
 	        
 	        PubNub.pubNubPush(domain_user+"_Channel", pubnub_notification);
 	    }catch(Exception e){

@@ -39,7 +39,13 @@ public class OzonetelOutboundCallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	
+    	String phone_no = "";
+        String contact_number ="";
+        String status = ""; 
+        String duration = ""; 
+        String message = "";
+        
     	String uri = request.getRequestURI();
         if (request.getQueryString() != null) {
             uri += "?" + request.getQueryString();
@@ -54,25 +60,41 @@ public class OzonetelOutboundCallServlet extends HttpServlet {
                 Dial dialnumber = new Dial();
                 dialnumber.setNumber(request.getParameter("contact_number"));
                 r.addDial(dialnumber);
+                status = "oncall";
             } else if ((null != kookoo_event) && kookoo_event.equalsIgnoreCase("dial")) {
-                String status = request.getParameter("status");
+            	status = request.getParameter("status");
                 if (status.equalsIgnoreCase("answered")) {
-                    //r.addPlayText("thanks for calling");
                     r.addHangup();
-                }/* else {
-                    r.addPlayText("re trying again");
-                    Dial dialnumber = new Dial();
-                    dialnumber.setNumber(request.getParameter("contact_number"));
-                    r.addDial(dialnumber);
-                }*/
+                } else {
+                	
+                }
             } else if((null != kookoo_event) && kookoo_event.equalsIgnoreCase("hangup")) {
-                
-            	//r.addHangup();
+            	status = request.getParameter("status");
             }else {
                 r.addHangup();
             }
-            System.out.println(r.getXML());/*here I am just printing kookoo final xml prepared*/
+            System.out.println(r.getXML());
             out.println(r.getXML());
+            
+            status = request.getParameter("status");
+            phone_no = request.getParameter("phone_no");
+	        contact_number = request.getParameter("contact_number");
+	        duration = request.getParameter("callduration");
+	        message = request.getParameter("message");
+	        String domain_user = request.getParameter("domain_user");
+	        
+            JSONObject pubnub_notification = new JSONObject();
+	        pubnub_notification.put("direction", "Outgoing");
+   	        pubnub_notification.put("type", "call");
+   	        pubnub_notification.put("callType", "Ozonetel");
+   	        pubnub_notification.put("state", status.toLowerCase());
+   	        pubnub_notification.put("contact_number", contact_number);
+   	        pubnub_notification.put("phone_no", phone_no);
+   	        pubnub_notification.put("duration", duration);
+   	        pubnub_notification.put("oz_message", message);
+   	        pubnub_notification.put("message_from", "notcallback");
+   	        
+   	        PubNub.pubNubPush(domain_user+"_Channel", pubnub_notification);
         } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

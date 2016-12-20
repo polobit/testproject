@@ -6,7 +6,7 @@ var widgetCallName = { "Sip" : "Sip","Ozonetel":"Ozonetel","TwilioIO" : "Twilio"
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
-
+var messagefromcallback = false;
 $(function()
 {
 //	initToPubNub();
@@ -442,6 +442,7 @@ function resetCallLogVariables(){
 function handleCallRequest(message)
 {
 	// Display message in stream.
+
 	if ((message || {}).callType == "Bria")
 	{
 		var index = containsOption(default_call_option.callOption, "name", "Bria");
@@ -584,32 +585,43 @@ function handleCallRequest(message)
 		return;
 	
 		}else if((message || {}).callType == "Ozonetel"){
-			var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
-			if( index == -1){
-				sendCommandToClient("notConfigured","Ozonetel");
-				return;
-			}
-			try{
-				var phone = $("#ozonetel_contact_number").val();
-				if (!phone || phone == ""){
-					phone = agile_crm_get_contact_properties_list("phone")[0].value;
-				}
-				if (phone == num){
-					getLogsForOzonetel(num);
-					//handleLogsForOzonetel(message);
-				}
-			}catch (e){
-
-			}
-			if(message.number){
-				globalCall.callNumber = message.number;
+			if(message.message_from != "callback"){
+					messagefromcallback = true;
 			}else{
-				globalCall.callNumber = message.contact_number;
+				if(!messagefromcallback){
+					messagefromcallback = true;
+				}else{
+					messagefromcallback = false;
+				}
 			}
-			showOzonetelCallNoty(message);
-			if(message.state && message.state != "ringing"){
-				saveCallNoteOzonetel(message);
-				globalCall.callStatus = "Ideal";
+			if(messagefromcallback){
+				var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
+				if( index == -1){
+					sendCommandToClient("notConfigured","Ozonetel");
+					return;
+				}
+				try{
+					var phone = $("#ozonetel_contact_number").val();
+					if (!phone || phone == ""){
+						phone = agile_crm_get_contact_properties_list("phone")[0].value;
+					}
+					if (phone == num){
+						getLogsForOzonetel(num);
+						//handleLogsForOzonetel(message);
+					}
+				}catch (e){
+
+				}
+				if(message.number){
+					globalCall.callNumber = message.number;
+				}else{
+					globalCall.callNumber = message.contact_number;
+				}
+				showOzonetelCallNoty(message);
+				if(message.state && message.state != "ringing"){
+					saveCallNoteOzonetel(message);
+					globalCall.callStatus = "Ideal";
+				}
 			}
 		}
 }

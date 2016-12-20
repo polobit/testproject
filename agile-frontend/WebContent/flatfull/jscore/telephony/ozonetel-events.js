@@ -2,8 +2,14 @@
  * This will show the note to the user after the call is completed sucessfully
  */
 function saveCallNoteOzonetel(message){
+	var notsub_message = "";
+	if(message.state == "not_answered"){
+		notsub_message = "noanswer";
+	}else{
+		notsub_message = message.state;
+	}
 
-	var noteSub = message.direction + " Call - " + message.state;
+	var noteSub = message.direction + " Call - " + notsub_message;
 	var cntId = globalCall.contactedId;
 	var  callStatus = "";
 	if(message.state == "connected"){
@@ -14,11 +20,11 @@ function saveCallNoteOzonetel(message){
 		callStatus = "Missed";
 	}else if(message.state == "connecting"){
 		callStatus = "Connecting";
-	}else if(message.state == "failed"){
+	}else if(message.state == "failed" || message.state == "noanswer"){
 		callStatus = "Failed";
 	}else if(message.state == "busy"){
 		callStatus = "Busy";
-	}else if(message.state == "noanswer" || message.state == "not_answered"){
+	}else if(message.state == "not_answered"){
 		callStatus = "Busy";
 	}else if(message.state == "answered"){
 		callStatus = "Answered";
