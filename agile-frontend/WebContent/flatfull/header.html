@@ -232,13 +232,22 @@
 				   <%
 				      }else {
 				   %>
+
+					<a href="#" id="app-aside-folded" style="top:8px;" class="p-l-sm inline-block pos-rlt pos-t-xs no-shadow" ui-toggle="app-aside-folded" target=".app">
+					<i class="fa fa-dedent fa-fw text"></i>
+					<i class="material-icons" style="display:none;">menu</i>
+					<!--   <i class="fa fa-indent fa-fw text-active"></i> -->
+					</a>
+
 				    <a class="navbar-brand font-bold text-lt" href="#navbar-dashboard">
 				   <%
 				      }
 				   %>
 				    
 				    
-				    <i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-crm") %> </span></a>     
+				    <i class="fa fa-cloud hidden-xs"></i>
+				    <i class="material-icons newtheme-cloud hidden-xs" style="display:none;">cloud</i>
+				     <span class="hidden-folded m-l-xs"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-crm") %> </span></a>     
 
 </div>
 					<div id="navbar" class="collapse pos-rlt hide-xs  navbar-collapse box-shadow   
@@ -286,12 +295,11 @@
 				      if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
 				   %>
 
-					 <div class="nav navbar-nav hidden-xs">
+					<!--  <div class="nav navbar-nav hidden-xs">
 <a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
-             <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
           </a>
-</div> 
+</div>  -->
 
 					<ul class="nav navbar-nav agile-menu">
 					<li>
