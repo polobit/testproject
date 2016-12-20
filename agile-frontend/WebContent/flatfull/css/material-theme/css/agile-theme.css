@@ -2510,6 +2510,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 #custom-filters-container .i-checks input[type="checkbox"] {
    vertical-align: bottom;
+   margin-right: 6px;
 }
 .plan-collection-content{
   font-size: 13px !important;
@@ -2642,4 +2643,9 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .data-block .canned-video-xs{
   width: 100%;
   height: auto;
+}
+@media (min-width: 768px){
+#saveFilterForm .control-label {
+      padding-top: 11px;
+}
 }
