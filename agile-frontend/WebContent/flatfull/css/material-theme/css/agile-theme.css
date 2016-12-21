@@ -40,15 +40,15 @@ body, * {
 }
 #bulk-action-btns .btn {
   background-color: rgba(17, 160, 248, 0.1);
-  color: #11a0f8!important;
+  /*color: #11a0f8!important;*/
   height: 30px !important;
   line-height: 30px !important;
   font-size: 12px !important;
 
 }
 #bulk-action-btns .btn:hover, #bulk-action-btns .btn:focus, #bulk-action-btns .btn:active {
-    background-color: rgba(17, 160, 248, 0.2);
-    color: #11a0f8!important;
+    /*background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;*/
     height: 30px;
     line-height: 30px;
     font-size: 12px;
@@ -251,16 +251,16 @@ form select.form-control{
 .dropdown-menu a[href="#user-prefs"] span {
   display: block;
 }
-#contacts-view-options .contacts-view{
+/*#contacts-view-options .contacts-view{
   background-color: #fff !important;
   color: #78909c !important;
-}
+}*/
 
-#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active
+/*#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active
 {
   background-color: #fff !important;
   color: #11a0f8 !important;
-}
+}*/
 /*.pull-right .btn.dropdown-toggle span {
   color: #fff !important;
 }*/
@@ -978,9 +978,9 @@ z-index:1;
   padding-left: 5px !important;
   vertical-align: middle !important;
 }
-.agile-theme-15 .tickets-div .panel-heading .btn.btn-default{
+/*.agile-theme-15 .tickets-div .panel-heading .btn.btn-default{
   background-color: rgba(17, 160, 248, 0.1) !important;
-}
+}*/
 .agile-theme-15 #tickets-bulk-select div:first-child, .agile-theme-15 .ticket-collection-container .table{
   border-top: 5px solid #f4f8f9 !important;
 }
@@ -1368,7 +1368,7 @@ ul.tags-management li.tag{
 }
 #bulk-action-btns .btn.dropdown-toggle span
 {
-  color: #11a0f8!important;
+  /*color: #11a0f8!important;*/
   margin-left:5px;
 }
 .fa-plus-circle:before
@@ -2965,4 +2965,9 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 
 #contact-reports-list-view .panel-heading.deal-products-btn-heading {
     display:block!important;width :75%;
+}
+.popover{
+  padding: 0px;
+  border: 0px;
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
