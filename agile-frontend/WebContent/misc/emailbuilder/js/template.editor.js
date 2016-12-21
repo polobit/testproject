@@ -1457,7 +1457,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
 
     $('.panel-click').on('click', function(e){
-        var $this = $(this);
+        var $this = $(this).children().find('span');
         if(!$this.hasClass('panel-collapsed')) {
             $this.parents('.panel').find('.panel-body').slideUp();
             $this.addClass('panel-collapsed');

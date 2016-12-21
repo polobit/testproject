@@ -175,9 +175,9 @@ var localeJSON = <%=localeJSON%>;
 
 
  <div class="panel panel-default" style="border: 0; margin: 0;">
-    <div class="panel-heading" style="margin-bottom: 5px;">
+    <div class="panel-heading panel-click" style="margin-bottom: 5px;">
         <h3 class="panel-title">Font Styles
-            <span class="pull-right panel-click" ><i class="glyphicon glyphicon-chevron-up"></i></span>
+            <span class="pull-right " ><i class="glyphicon glyphicon-chevron-up"></i></span>
         </h3>
     </div>
         <div class="panel-body" style="display: block;">
@@ -292,9 +292,9 @@ var localeJSON = <%=localeJSON%>;
   
 
 <div class="panel panel-default" style="border: 0; margin: 0;">
-    <div class="panel-heading" style="margin-bottom: 5px;">
+    <div class="panel-heading panel-click" style="margin-bottom: 5px;">
         <h3 class="panel-title">Background Color
-            <span class="pull-right panel-click panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span>
+            <span class="pull-right panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span>
         </h3>
     </div>
         <div class="panel-body" style="display: none;"> 
@@ -410,75 +410,6 @@ var localeJSON = <%=localeJSON%>;
         <div class="sidebar-nav">
 
             <form id="editor" style="margin-top:5px">
-                        <!-- <div class="form-inline" id="font-settings" style="margin-top:5px">
-                            <div class="form-group">
-                                <label for="fontstyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-style") %></label>
-                                <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
-
-                            </div>
-                        </div> -->
-
-                    <!-- <div class="hide" id='font-style'>
-                        <div id="mainfontproperties" >
-                            <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "color") %></span>
-                                <input type="text" class="form-control picker" id="colortext" >
-                                <span class="input-group-addon"></span>
-                                <script type="text/javascript">
-                                    $('#colortext').colpick({
-                                        layout: 'hex',
-                                        // colorScheme: 'dark',
-                                        onBeforeShow: function () {
-                                            $(this).colpickSetColor(rgb2hex($('#colortext').val().replace("#","")));
-                                        },
-                                        onChange: function (hsb, hex, rgb, el, bySetColor) {
-                                            if (!bySetColor)
-                                                $(el).val('#' + hex);
-                                        },
-                                        onSubmit: function (hsb, hex, rgb, el) {
-                                            $(el).next('.input-group-addon').css('background-color', '#' + hex);
-                                            $(el).colpickHide();
-                                        }
-                                    }).keyup(function () {
-                                        $(this).colpickSetColor(this.value);
-                                    });
-                                </script>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font") %></span>
-                                <input type="text" class="form-control " id="fonttext" readonly>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "size") %></span>
-                                <input type="text" class="form-control " id="sizetext" style="width: 100px">
-                                &nbsp;
-                                <a class="btn btn-default plus" href="#">+</a>
-                                <a class="btn btn-default minus" href="#">-</a>
-                            </div>
-
-                            <hr/>
-                            <div class="text text-right">
-                                <a class="btn btn-primary" id="confirm-font-properties"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
-                            </div>
-                        </div>
-
-                        <div id="fontselector" class="hide" style="min-width: 200px">
-                            <ul class="list-group" style="overflow: auto ;display: block;max-height: 200px" >
-                                <li class="list-group-item" style="font-family:arial,helvetica,sans-serif;">Arial</li>
-                                <li class="list-group-item" style="font-family: Verdana, Geneva, sans-serif">Verdana</li>
-                                <li class="list-group-item" style="Times New Roman, Times, serif">Times New Roman</li>
-                                <li class="list-group-item" style="font-family: georgia,serif">Georgia</li>
-                                <li class="list-group-item" style="font-family:comic sans ms,marker felt-thin,arial,sans-serif;">Comic Sans MS</li>
-                                <li class="list-group-item" style="font-family:courier new,courier,monospace;">Courier New</li>
-                                <li class="list-group-item" style="font-family:lucida sans unicode,lucida grande,sans-serif;">Lucida</li>
-                                <li class="list-group-item" style="font-family: Trebuchet MS,sans-serif">Trebuchet MS</li>
-                                <li class="list-group-item" style="font-family: Tahoma, Geneva, sans-serif;">Tahoma</li>
-                                <li class="list-group-item" style="font-family: Impact,Charcoal, sans-serif">Impact</li>
-                                <li class="list-group-item" style="font-family: Arial Black,Gadget, sans-serif">Arial Black</li>
-                                <li class="list-group-item" style="font-family: Helvetica, sans-serif">Helvetica</li>
-                            </ul>
-                        </div>
-                    </div> -->
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
                     </form>
 
