@@ -2745,3 +2745,11 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 #workflows-tab-container .tab-container,#triggers-tab-container .tab-container{
   margin-bottom: 0px !important;
 }
+
+@-moz-document url-prefix() { 
+  input[type="checkbox"] {
+     margin-left:0px;
+     vertical-align: middle;
+  }
+}
+
