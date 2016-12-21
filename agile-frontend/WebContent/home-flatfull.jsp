@@ -73,6 +73,13 @@ if(currentUserPrefs.theme.equalsIgnoreCase("15")) {
        currentUserPrefs.menuPosition = "leftcol";
 }	
 
+// Request param to show new theme
+String newThemeReq = request.getParameter("ui");
+if(StringUtils.isNotBlank(newThemeReq) && newThemeReq.equalsIgnoreCase("v2")){
+	currentUserPrefs.theme = "15";
+	currentUserPrefs.menuPosition = "leftcol";
+}
+
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
 

@@ -29,11 +29,11 @@ function initializeThemeSettingsListeners(){
 			type : 'PUT',
 			data : json,
 			success : function() {
-				if(true)
+				/*if(true)
 				{
 					window.location.reload(true);
 					return;
-				}
+				}*/
 				enable_save_button($(saveBtn));
 			},
 			error : function() {
