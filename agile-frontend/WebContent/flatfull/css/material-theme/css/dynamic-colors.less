@@ -66,6 +66,60 @@
       }
     }
 
+
+    input[type="checkbox"]:checked:after{
+      border-color : @themeColor;
+      background-color : @themeColor;
+    }
+    input[type="checkbox"]:hover:after, input[type="checkbox"]:active:after, input[type="checkbox"]:focus:after{
+      border-color : @themeColor;
+    }
+
+    input[type="radio"]:hover:after, input[type="radio"]:active:after, input[type="radio"]:focus:after{
+      border-color : @themeColor;
+    }
+    input[type="radio"]:checked:after{
+      border : 6px solid @themeColor;
+    }
+
+
+    .btn-default{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-color;
+    }
+    .btn-default:hover, .btn-default:focus{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-hover-color;
+    }
+    .btn-primary{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-color;
+    }
+    .btn-primary:hover, .btn-primary:focus{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-hover-color;
+    }
+
+    .btn-default-imp{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-color;
+    }
+    .btn-default-imp:hover, .btn-default-imp:focus{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-hover-color;
+    }
+
+    .btn-primary-imp{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-color;
+    }
+    .btn-primary-imp:hover, .btn-primary-imp:focus{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-hover-color;
+    }
+
+    
+
 }
 
 @important:!important;
@@ -79,22 +133,67 @@
 @maBgHoverColor : #f5fbff @important;
 @serviceBgHoverColor : rgba(102, 205, 46, 0.1) @important;
 
+
+
+@sa-btn-default-color : #7460ee @important;
+@sa-btn-default-bg-color : rgba(116, 96, 238, 0.1) @important;
+@sa-btn-default-bg-hover-color : rgba(116, 96, 238, 0.2) @important;
+@sa-btn-primary-color : #fff @important;
+@sa-btn-primary-bg-color : #7460ee @important;
+@sa-btn-primary-bg-hover-color : #5840eb @important;
+
+@ma-btn-default-color : #11a0f8 @important;
+@ma-btn-default-bg-color : rgba(17, 160, 248, 0.1) @important;
+@ma-btn-default-bg-hover-color : rgba(17, 160, 248, 0.2) @important;
+@ma-btn-primary-color : #fff @important;
+@ma-btn-primary-bg-color : #11a0f8 @important;
+@ma-btn-primary-bg-hover-color : #067dc6 @important;
+
+@se-btn-default-color : #66cd2e @important;
+@se-btn-default-bg-color : rgba(102, 205, 46, 0.1) @important;
+@se-btn-default-bg-hover-color : rgba(102, 205, 46, 0.2) @important;
+@se-btn-primary-color : #fff @important;
+@se-btn-primary-bg-color : #66cd2e @important;
+@se-btn-primary-bg-hover-color : #4d9b23 @important;
+
+
+
+
+
 .agile-theme-SALES.agile-theme-15{
   @themeColor : @salesColor;
   @menuBgColor : @salesBgColor;
   @menuBgHoverColor : @salesBgHoverColor;
+  @btn-default-color : @sa-btn-default-color;
+  @btn-default-bg-color : @sa-btn-default-bg-color;
+  @btn-default-bg-hover-color :  @sa-btn-default-bg-hover-color;
+  @btn-primary-color : @sa-btn-primary-color;
+  @btn-primary-bg-color : @sa-btn-primary-bg-color;
+  @btn-primary-bg-hover-color : @sa-btn-primary-bg-hover-color;
   .mainThemeDependentCss();
 }
 .agile-theme-MARKETING.agile-theme-15{
   @themeColor : @maColor;
   @menuBgColor : @maBgColor;
   @menuBgHoverColor : @maBgHoverColor;
+  @btn-default-color : @ma-btn-default-color;
+  @btn-default-bg-color : @ma-btn-default-bg-color;
+  @btn-default-bg-hover-color :  @ma-btn-default-bg-hover-color;
+  @btn-primary-color : @ma-btn-primary-color;
+  @btn-primary-bg-color : @ma-btn-primary-bg-color;
+  @btn-primary-bg-hover-color : @ma-btn-primary-bg-hover-color;
   .mainThemeDependentCss();
 }
 .agile-theme-SERVICE.agile-theme-15{
   @themeColor : @serviceColor;
   @menuBgColor :  @serviceBgColor;
   @menuBgHoverColor : @serviceBgHoverColor;
+  @btn-default-color : @se-btn-default-color;
+  @btn-default-bg-color : @se-btn-default-bg-color;
+  @btn-default-bg-hover-color :  @se-btn-default-bg-hover-color;
+  @btn-primary-color : @se-btn-primary-color;
+  @btn-primary-bg-color : @se-btn-primary-bg-color;
+  @btn-primary-bg-hover-color : @se-btn-primary-bg-hover-color;
   .mainThemeDependentCss();
 }
 .navi #agile-sales-menu-navigation-container{
