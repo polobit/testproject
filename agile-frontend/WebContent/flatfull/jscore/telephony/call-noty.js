@@ -299,6 +299,7 @@ if(message.state == "connected"){
 	
 }else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
 	closeCallNoty(true);
+	$("#agilecrm-container #call-noty-notes").val("");
 }
 	
 	

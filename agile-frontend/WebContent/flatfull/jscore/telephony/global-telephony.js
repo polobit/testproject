@@ -671,7 +671,7 @@ function closeCallNoty(option){
 	$("#draggable_noty").hide();
 	$(".draggable_noty_callScript","#draggable_noty").html("");
 	$("#draggable_noty").removeClass("draggable-popup");
-	
+	$("#agilecrm-container #call-noty-notes").val("");
 	 if(dialled.using == "dialler"){
 		  $("#direct-dialler-div").show();
 		  dialled.using = "default";
