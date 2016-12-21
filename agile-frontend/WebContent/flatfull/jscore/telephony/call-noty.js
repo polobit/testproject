@@ -263,7 +263,6 @@ if(message.state == "connected"){
 		var btns;
 		if(widgetype !=  "ozonetel"){
 			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
-			$("#agilecrm-container #call-noty-notes").val("");
 		}else{
 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 		}
@@ -392,7 +391,6 @@ function showCallNotyMessage(message,type,position,timeout){
 }
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
-	var callnotes = $("#agilecrm-container #call-noty-notes").val();
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -431,9 +429,6 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		
 	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
 		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
-		if(widgetName == "Ozonetel"){
-			$("#agilecrm-container #call-noty-notes").val(callnotes);
-		}
 		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
 			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
 			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
