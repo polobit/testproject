@@ -674,9 +674,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
           <a  href="#documents">
             <i class="icon icon-doc"></i>
               <i class="material-icons" style="display: none">insert_drive_file</i>
-            <span class="leftcol-menu-folded">
+            <!-- <span class="leftcol-menu-folded">
               <%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %>
-            </span>
+            </span> -->
             <span class="leftcol-menu-expanded">
               <%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-documents") %>
             </span>
