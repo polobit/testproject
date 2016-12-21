@@ -1650,6 +1650,7 @@ input[type="radio"].red-color:checked:after {
   /*min-width: 26px;*/
   color: #90a4ae;
   font-style: normal;
+  margin-top: 1px;
 }
 .dropdown-menu > li > a span {
   display: inline-block;

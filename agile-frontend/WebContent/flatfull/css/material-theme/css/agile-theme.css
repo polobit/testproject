@@ -2988,7 +2988,20 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
   position: inherit!important;
 }
+#ticket-model-list > tr > td.b-l-3x {
+  border-left-width: 1px;
+}
 
 #prefs-tabs-content .agile-theme{
   width: 27% !important;
+}
+.btn.btn-xs-imp {
+   height: auto;
+   line-height: 1.5;
+   padding: 0px 7px;
+} 
+.btn.grp-btn-cpy-email {
+    float: none;
+    right: -26px;
+    top: 0px;
 }
