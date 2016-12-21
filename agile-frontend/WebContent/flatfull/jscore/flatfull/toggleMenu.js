@@ -645,6 +645,8 @@ function initRolehandlers(){
  				$("#rolecontainer").text(serviceName);
  			$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+serviceName);
 
+ 			/*set the role before the call to load the dashboard */
+ 			CURRENT_DOMAIN_USER.role = serviceName;
  			// Update user with the current service
  			var json = {};
  			json.id = CURRENT_DOMAIN_USER.id;
@@ -655,9 +657,6 @@ function initRolehandlers(){
  							console.log("success");
  							console.log(model);
  							CURRENT_DOMAIN_USER = model.toJSON();
- 							Backbone.history.navigate("#navigate-dashboard", {
-					                trigger: true
-					            });
  						}, 
  						error: function(model, response){
 							console.log("error");

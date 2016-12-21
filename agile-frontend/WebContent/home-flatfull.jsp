@@ -714,7 +714,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="schedulingmenu">
           <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
             <i class="icon-tag" data-original-title="" title=""></i>
-             <i class="material-icons">date_range</i>
+             <i class="material-icons" style="display: none;">date_range</i>
             <span>Online Calendar</span>
           </a>
         </li>
@@ -916,7 +916,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->   
    <%if(domainUser.role == ROLE.SERVICE){ %>
-      <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+      <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs hide">
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
       </li>
       <li id="home_dashboard">
@@ -929,7 +929,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
-    <li id="contactsmenu">
+    <li id="contactsmenu hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
         <i class="material-icons" style="display: none">contacts</i>
@@ -961,6 +961,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
       <i class="fa fa-search"></i>
+      <i class="material-icons" style="display: none">local_library</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
@@ -972,8 +973,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
   %>
   <li id="feedbackactivitiesmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
-      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-      <span>Feedback</span>
+        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+        <i class="material-icons" style="display: none">thumb_up</i>
+        <span>Feedback</span>
     </a>
   </li>
   <%
@@ -1010,30 +1012,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
-  <li id="ticketknowledgebasemenu">
-    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
-      <i class="fa fa-search"></i>
-      <i class="material-icons" style="display: none">local_library</i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
-    </a>
-  </li>
    <%
       }
   %>
-
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
-  %>
-    <li id="feedbackactivitiesmenu">
-      <a  href="#ticket-feedback">
-        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-        <i class="material-icons" style="display: none">thumb_up</i>
-        <span>Feedback</span>
-      </a>
-    </li>
-    <%
-          }
-    %>  
+    
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
