@@ -2,6 +2,11 @@
 
 $('#app-aside-folded').on('click', function(e) {
 	e.preventDefault();
+
+	if(CURRENT_USER_PREFS.theme == "15") {
+		return;
+	}
+		
 	/*$('.app-aside-folded-inactive .hidden-folded ,.app-aside-folded .navi > ul > li > a span').css('display','none');
 	
 	if ($('#wrap').hasClass("app-aside-folded") ) {
@@ -15,19 +20,13 @@ $('#app-aside-folded').on('click', function(e) {
 	$('#wrap').toggleClass('app-aside-folded');
     if( $('#wrap').hasClass('app-aside-folded')) {
 		console.log("folded");
-		if(CURRENT_USER_PREFS.theme != 15){
-		$("#app-aside-folded i").removeClass("fa-dedent");
-		$("#app-aside-folded i").addClass("fa-indent");
-		}
-		$(".fa-cloud").addClass("hide");
+
+		$("#app-aside-folded i.fa").removeClass("fa-dedent").addClass("fa-indent");
+		
 		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
-		if(CURRENT_USER_PREFS.theme != 15){
-		$("#app-aside-folded i").removeClass("fa-indent");
-		$("#app-aside-folded i").addClass("fa-dedent");
-		}
-		$(".fa-cloud").removeClass("hide");
+		$("#app-aside-folded i.fa").removeClass("fa-indent").addClass("fa-dedent");
 		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	

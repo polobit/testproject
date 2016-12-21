@@ -3079,3 +3079,7 @@ table#deal-sources-table>tbody>tr:last-child{
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
+
+#wrap.app-aside-folded .fa.fa-cloud{
+      display: none!important;
+}
