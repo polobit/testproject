@@ -2705,9 +2705,12 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display: none;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons{
+#agile-menu-navigation-container .nav  i.material-icons,#recent-menu i.material-icons{
   display:block !important;
   color:#78909c !important;
+}
+#recent-menu i.material-icons{
+  margin-top: 3px !important;
 }
 
 #agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
