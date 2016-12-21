@@ -413,9 +413,10 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
-	if(widgetName == "ozonetel"){
+	//if(widgetName == "ozonetel"){
+		console.log(widgetName);
 		$("#agilecrm-container #call-noty-notes").val(callnotes);
-	}
+	//}
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
 			makeDraggableVoicemail();
