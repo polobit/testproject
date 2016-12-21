@@ -12,7 +12,7 @@
 </script>
 <script id="admin-settings-milestones-collection-template"
 	type="text/html">
-	<div class='col-sm-9 panel wrapper b-t'>
+	<div class='col-sm-9 panel wrapper b-t' id="milestones-bg">
 		<div class="hbox h-auto m-b-sm">
 			<h4>
 			{{#isTracksEligible}}
@@ -110,7 +110,7 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-milestone'}}</a></div>
+					<div class="p-l p-t p-b" id="show_milestone_field"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-milestone'}}</a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'admin-settings-deals' 'new-milestone'}}">
 						<a class="btn btn-default btn-addon btn-sm add_milestone m-b-xxs m-t-n-xxs" data-toggle="modal" id="add_milestone" href="#">{{agile_lng_translate 'admin-settings-custom-fields' 'add'}}</a>
@@ -270,7 +270,7 @@
          <div class="clearfix"></div>
       </div>
       <div class="row">
-         <div class="col-md-12 col-sm-12">
+         <div class="col-md-12 col-sm-12" id="products-top-margin">
             <div class=" table-responsive">
                <table class="table table-striped agile-table panel table-layout-mob-view no-sorting" id="deal-sources-table">
                   <thead>
