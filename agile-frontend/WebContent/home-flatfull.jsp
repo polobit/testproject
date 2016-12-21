@@ -41,6 +41,7 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.dashboards.Dashboard"%>
 <%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="com.agilecrm.account.util.EmailGatewayUtil"%>
 <%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
@@ -67,6 +68,16 @@ String clientIP = request.getRemoteAddr();
 
 // Get current user prefs
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+// Change Prefs for requested new theme
+String uiVersion = request.getParameter("ui");
+if(StringUtils.isNotBlank(uiVersion) && uiVersion.equalsIgnoreCase("v2")) {
+	currentUserPrefs.theme = "15";
+	String menuPosition = currentUserPrefs.menuPosition;
+	if(StringUtils.isNotBlank(menuPosition) && menuPosition.equalsIgnoreCase("top"))
+		currentUserPrefs.menuPosition = "leftcol";
+}
+	
+
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
 
@@ -213,9 +224,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <%
 
 	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
-
+    if(!isDisabledNewThemeStyles){
 %>
 <link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
+<%} %>
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -348,16 +360,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 <body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("");%>'>
-
-<!-- New theme css insert 
-  <iframe class="hide" id="agile-theme-15" src="about:blank"></iframe>
-  <script type="text/javascript">
-  var doc = document.getElementById('agile-theme-15').contentWindow.document;
-  doc.open();
-  doc.write('<html><head><title></title></head><body><link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" data-agile-theme="fr-15" /></body></html>');
-  doc.close();
-  </script> -->
-<!-- End of ne theme insert -->
 <script type="text/javascript">
 function isIE() {
   var myNav = navigator.userAgent.toLowerCase();
@@ -429,7 +431,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color nav-grid"  data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"></span><i class="material-icons m-l-sm m-t-xs" >more_horiz</i>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span><i class="material-icons m-l-sm m-t-xs" >more_horiz</i>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>
@@ -914,7 +916,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->   
    <%if(domainUser.role == ROLE.SERVICE){ %>
-      <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
+      <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs hide">
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
       </li>
       <li id="home_dashboard">
@@ -927,7 +929,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
-    <li id="contactsmenu">
+    <li id="contactsmenu hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
         <i class="material-icons" style="display: none">contacts</i>
@@ -955,7 +957,33 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>          
+  %>   
+  <li id="ticketknowledgebasemenu">
+    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <i class="material-icons" style="display: none">local_library</i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
+    </a>
+  </li>
+  <%
+  }
+  %>
+  <%
+  if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
+  <li id="feedbackactivitiesmenu">
+    <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
+        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+        <i class="material-icons" style="display: none">thumb_up</i>
+        <span>Feedback</span>
+    </a>
+  </li>
+  <%
+  }
+  %>
+  <%
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>       
   <li id="ticketgroupsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -984,30 +1012,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
-  <li id="ticketknowledgebasemenu">
-    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
-      <i class="fa fa-search"></i>
-      <i class="material-icons" style="display: none">local_library</i>
-      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
-    </a>
-  </li>
    <%
       }
   %>
-
-  <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
-  %>
-    <li id="feedbackactivitiesmenu">
-      <a  href="#ticket-feedback">
-        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-        <i class="material-icons" style="display: none">thumb_up</i>
-        <span>Feedback</span>
-      </a>
-    </li>
-    <%
-          }
-    %>  
+    
     <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.ACTIVITY)){
     %>
@@ -1336,6 +1344,9 @@ var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAs
 var LEADS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeContact")))%>;
 // Get Lead company type custom fields
 var LEADS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeCompany")))%>;
+
+//Get email gateway status
+var _IS_EMAIL_GATEWAY = <%=EmailGatewayUtil.isEmailGatewayExist()%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

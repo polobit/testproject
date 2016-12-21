@@ -91,11 +91,11 @@ var Workflow_Model_Events = Base_Model_View.extend({
         e.preventDefault();
         $(e.currentTarget).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
         $("#workflow-unsubscribe-block").slideToggle('fast');
-        showHide_UnsubscribeEmail_Status();        
+            
     },
 
-        
-   /**
+
+    /**
      * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
      * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
      * so ids are separated by comma in click event.

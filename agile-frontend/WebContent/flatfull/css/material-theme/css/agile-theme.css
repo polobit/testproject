@@ -601,6 +601,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
+  position: relative;
 }
 .agile-theme-15 #admin-settings-users .panel-heading>div:first-child{
   display: none;
@@ -608,7 +609,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 .agile-theme-15 #admin-settings-users .panel-heading{
   background-color: #f4f8f9 !important;
 }
-.agile-theme-15 #custom-fields-accordion table>tbody>tr, #deal-tracks-accordion table>tbody>tr, table#lost-reasons-table>tbody>tr, table#deal-sources-table>tbody>tr, #task-category table>tbody>tr, #account-stats table>tbody>tr{
+.agile-theme-15 #custom-fields-accordion table>tbody>tr, table#lost-reasons-table>tbody>tr, table#deal-sources-table>tbody>tr, #task-category table>tbody>tr, #account-stats table>tbody>tr{
   border-top: none !important;
 }
 .agile-theme-15 #account-stats .table-bordered>thead>tr>th, #account-stats .table-bordered>tbody>tr>td{
@@ -618,10 +619,10 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
   padding: 15px !important;
 }
 .agile-theme-15 #deal-tracks-accordion table>tbody>tr>td{
-  padding: 5px !important;
+  padding: 10px !important;
 }
 .agile-theme-15 #deal-tracks-accordion .panel-heading{
-  padding-left: 5px !important;
+  padding-left: 10px !important;
 }
 .agile-theme-15 #deal-tracks-accordion .panel-body{
   border-top: none !important;
@@ -2186,12 +2187,12 @@ ul#recent-menu-model-list li:nth-child(even){
 {
   margin-left:10px;
 }
-.agile-theme-15 #settings-milestones-tab-content #lost-reasons-table > tbody>tr{
+/*.agile-theme-15 #settings-milestones-tab-content #lost-reasons-table > tbody>tr{
       border-top: 1px solid #eaeff0 !important;
-}
-.agile-theme-15 #settings-milestones-tab-content #deal-sources-table > tbody>tr{
+}*/
+/*.agile-theme-15 #settings-milestones-tab-content #deal-sources-table > tbody>tr{
    border-top: 1px solid #eaeff0 !important;
-}
+}*/
 .agile-theme-15 #marketing-previlages div>div>div {
     padding-top: 10px !important;
 }
@@ -2312,6 +2313,10 @@ table .headerSortUp::after, table .headerSortDown::after{
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
+.agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
+
+.agile-theme-15 .i-checks-sm input:checked+i::before{width: 0px!important;}
+.agile-theme-15 .agile-table td.checkbox {/*overflow: hidden;*/position: inherit;}
 
 #sync-app-data p{
   padding: 10px 15px;
@@ -2361,6 +2366,9 @@ table.iptable>tbody>tr>td{
 table.iptable>tbody>tr>td:nth-child(2){
   padding: 0px !important;
 }
+#ip_access table.iptable>thead>tr>th{
+  padding: 10px 15px 15px 10px !important;
+}
 
 /*IP Table UI Fix End*/
 #reports-main-div>div{
@@ -2369,9 +2377,9 @@ table.iptable>tbody>tr>td:nth-child(2){
 .i-checks input[type="radio"]+i{display:none;}
 .dropdown-menu.pull-right.emailbuilder-copy{right:15px;}
 .dropdown-menu > li > a >i.fa-check.sort-field-check.m-t-xs{margin-top:0px!important;}
-#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important; top: 5px!important;}
+#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important;}
 #reportrange{margin-right:0px;}
-#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;top: 5px;}
+#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;}
 .agile-theme-15 .agile-header-btns{top: 2px!important;}
 
 .agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
@@ -2525,6 +2533,9 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .plan-collection-content{
   font-size: 13px !important;
 }
+.agile-theme-15 table.agile-table thead th .i-checks input[type="checkbox"] {
+  margin: 2px 0px 0px 2px;
+}
 .agile-theme{
   margin-left: -30px;
 }
@@ -2648,7 +2659,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .tab-container#integrations-tab, #integrationstats .tab-container{
   width: 100% !important;
 }
-.ticket-settings #service-tab{
+.ticket-settings #service-tab, .ticket-settings #section-tab{
   padding-left: 0;
   padding-right: 0;
   background-color: inherit;
@@ -2657,11 +2668,13 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   width: 100%;
   height: auto;
 }
+
 @media (min-width: 768px){
 #saveFilterForm .control-label {
       padding-top: 11px;
 }
 }
+
 .tickets-main .wrapper.bg-light {
     background-color: #edf1f2 !important;
 }
@@ -2687,7 +2700,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 
 
-.agile-theme-15 #aside i.icon ,.agile-theme-15 #aside i.fa,.agile-theme-15 #aside i.icon-list,.agile-theme-15 #aside i.icon-white,.agile-theme-15 #aside i.icon-envelope-letter,.agile-theme-15 #aside i.icon-docs,.agile-theme-15 #aside i.icon-eye,.agile-theme-15 #aside i.icon-users,.agile-theme-15 #aside i.icon-tag,.agile-theme-15 #aside i.icon-bubbles{
+.agile-theme-15 #aside i.icon ,.agile-theme-15 #aside i.fa,.agile-theme-15 #aside i.icon-list,.agile-theme-15 #aside i.icon-white,.agile-theme-15 #aside i.icon-envelope-letter,.agile-theme-15 #aside i.icon-docs,.agile-theme-15 #aside i.icon-eye,.agile-theme-15 #aside i.icon-users,.agile-theme-15 #aside i.icon-tag,.agile-theme-15 #aside i.icon-bubbles,.agile-theme-15 i.icon-clock{
   display: none;
 }
 
@@ -2695,7 +2708,13 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display: none;
 }
 
-
+#agile-menu-navigation-container .nav  i.material-icons,#recent-menu i.material-icons{
+  display:block !important;
+  color:#78909c !important;
+}
+#recent-menu i.material-icons{
+  margin-top: 3px !important;
+}
 
 #agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
   display:block !important;
@@ -2746,6 +2765,17 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   margin:0px !important;
 }
 
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
+  display: none;
+}
+#aside i.material-icons{
+  display:block !important;
+}
+
 #saveFilterForm input[type="radio"]{
   top: 5px;
 }
@@ -2775,6 +2805,13 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
   margin-bottom: 0px !important;
 }
 
+@-moz-document url-prefix() { 
+  input[type="checkbox"] {
+     margin-left:0px;
+     vertical-align: middle;
+  }
+}
+
 #socialsuite-streams-model-list .user-profile-img
 {
   margin-top: -5px;
@@ -2795,14 +2832,6 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 .dashboard-select a i{
   float:left;    
 }
-.nav-grid:hover{
-  background-color: #f4f8f9;
-    padding: 8px !important;
-    border-radius: 4px;
-  }
-  .nav-grid{
-     padding: 8px !important;
-  }
 .dashboard-select.small .dropdown-menu{
     margin-left: -47px !important;
     margin-top: 0px;
@@ -2821,9 +2850,96 @@ span#rolecontainer::first-letter {
     line-height: 35px !important;
     font-size: 12px !important;
 }
+
+table.dealproducts_table thead th .i-checks input[type="checkbox"]{
+  margin: 4px 0 0 3px !important;
+}
 .prettyprint {
   line-height:2em;
 }
 .carousel-inner .tweet-info{
   font-size: 13px !important;
+}
+
+
+#service-tab,#ip_access.panel{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+#service-tab .btn-addon,.allow_access_panelheading .btn-addon{
+  margin-right: 10px !important;
+}
+#service-tab .access_kb{
+  margin-right: 0px !important;
+}
+
+div#need_help_header a:hover {
+    background: #f4f8f9;
+    border-radius: 4px;
+}
+  .nav-grid{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-top: 7px !important;
+    padding-bottom : 7px !important;
+  }
+.dashboard-select.small .dropdown-menu{
+    margin-left: -47px !important;
+    margin-top: 0px;
+}
+.dashboard-select a i:nth-child(2){
+    margin-top: 3px;
+    margin-left: 10px;
+  }
+span#rolecontainer::first-letter {
+    text-transform: capitalize;
+}
+.grid-v2{
+  top: 17px !important;
+}
+.dashboard-select .dropdown-menu li a i{
+  font-size: 22px;
+}
+.goaltab-main{
+  padding-left: 0px !important;
+  padding-right: 0 !important;
+  /*padding-top: 5px !important;*/
+}
+.count_percent, .amount_percent{
+  top: 12px !important;
+  right: 22px !important;
+}
+.goal-form-control{
+  padding-left: 5px !important;
+  padding-right: 45px !important;
+}
+.goaltab-main .panel-default .panel-heading, #milestones-bg{
+  background-color: inherit !important;
+}
+.goaltab-main .panel-heading>div:first-child{
+  display: none;
+}
+#products-top-margin{
+  border-top: 15px solid #f4f8f9; 
+}
+table#deal-sources-table>tbody>tr, #show_milestone_field{
+  border-top: 10px solid #f4f8f9; 
+}
+.show_lost_reason_add, .show_deal_source_add{
+  padding-right: 15px !important;
+}
+#lossreasons-tab, #deal-sources-tab{
+  padding: 0 !important;
+}
+#milestones-bg{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+/*.add-pipeline{
+  margin-right: 15px;
+}*/
+.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
+  border-top: 0 !important;
+}
+.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
+  border-top: 10px solid #f4f8f9;
 }

@@ -255,8 +255,14 @@ var WorkflowsRouter = Backbone.Router
 						$('#workflow-name', el).val(that.workflow_model.get("name"));
 
 						var unsubscribe = that.workflow_model.get("unsubscribe");
+						if(unsubscribe.is_unsubscribe_email_disabled){
+							$('#unsubscribe-email', el).val("");
 						
-						$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						}
+						else{
+							$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
+						}
+						//$('#unsubscribe-email', el).val(unsubscribe.unsubscribe_email);
 						$('#unsubscribe-name', el).val(unsubscribe.unsubscribe_name);
 						$('#unsubscribe-tag', el).val(unsubscribe.tag);
 						$('#unsubscribe-action', el).val(unsubscribe.action);
@@ -274,10 +280,16 @@ var WorkflowsRouter = Backbone.Router
 						var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
 						fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', function(){
 							console.log($(el).html());
-							var mId = unsubscribe.unsubscribe_subject;
+							if(!unsubscribe.is_unsubscribe_email_disabled){
+								var mId = unsubscribe.unsubscribe_subject;
 							//$('#sendEmailSelect').append($("<option></option>").attr("value","None").text("None"));
 							$('select option[value="' + mId + '"]', el).attr("selected",true);
 							//$("select option").val(mId).attr("selected", true);
+						}
+							/*var mId = unsubscribe.unsubscribe_subject;
+							//$('#sendEmailSelect').append($("<option></option>").attr("value","None").text("None"));
+							$('select option[value="' + mId + '"]', el).attr("selected",true);
+							*///$("select option").val(mId).attr("selected", true);
 						}, optionsTemplate, false, el, 'Default template');
 						
 

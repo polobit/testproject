@@ -107,5 +107,19 @@ public interface QueryInterface
     List<ScoredDocument> advancedSearchOnlyIds(SearchFilter filter, Integer count, String cursor, String orderBy);
 
     Collection<?> simpleSearchWithTypeAndQuery(String query, Integer count, String cursor, String type);
+    
+    /**
+     * Declaration of simple search method, takes keyword as an argument and
+     * searches based on keyword and returns plain document objects
+     * 
+     * @param keyword
+     *            {@link String} searches based in the keyword
+     * @return {@link Collection} of entities returned after querying
+     */
+	Collection<?> simpleSearchWithoutDatastoreEntities(String keyword, Integer count, String cursor);
+
+	Collection<?> simpleSearchWithTypeWithoutDatastoreEntities(String keyword, Integer count, String cursor, String type);
+
+	Collection<?> processSearchResults(String keyword, Integer count, String cursor, String type);
 
 }

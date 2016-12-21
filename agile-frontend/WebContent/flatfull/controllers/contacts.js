@@ -114,6 +114,7 @@ var ContactsRouter = Backbone.Router.extend({
 				updateDashboardRole(prevrole);
 			}
 		}*/
+		console.info("navigateDashboard");
 		Backbone.history.navigate("#", {
             trigger: true
         });

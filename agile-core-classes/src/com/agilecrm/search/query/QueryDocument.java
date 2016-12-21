@@ -27,6 +27,7 @@ import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Index;
 import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
+import com.google.appengine.api.search.QueryOptions.Builder;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortExpression.SortDirection;
@@ -105,7 +106,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type){
-		keyword = SearchUtil.normalizeString(keyword);
+    	keyword = SearchUtil.normalizeString(keyword);
 		String typeFields = "";
 		String typeField = null;
 		if(type != null){
@@ -122,12 +123,15 @@ public class QueryDocument<T> implements QueryInterface
 		Collection<T> entities =  null ;
 		try
 		{
-			entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);		
+			Long time = System.currentTimeMillis();
+			entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+			System.out.println("Time to process query and get entities -------- "+(System.currentTimeMillis() - time)+" milli seconds");
 		}
 		catch(Exception e){
 			throw new SearchQueryException("Search input is not supported. Please try again.");
 		}
-		try{			
+		try{
+			Long time = System.currentTimeMillis();
 			if(typeField != null && entities != null){
 				String localKeyword = keyword.toLowerCase();			
 				
@@ -200,7 +204,9 @@ public class QueryDocument<T> implements QueryInterface
 			    }
 			    
 			    mainList.addAll(secondarList);			   
-			    entities = (Collection<T>) mainList;			    
+			    entities = (Collection<T>) mainList;
+			    
+			    System.out.println("Time to manipulate search results -------- "+(System.currentTimeMillis() - time)+" milli seconds");
 			}
 		}catch (Exception e){
 			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
@@ -715,7 +721,9 @@ public class QueryDocument<T> implements QueryInterface
 
 	System.out.println("query string : " + query_string);
 	// Fetches documents based on query options
+	Long time = System.currentTimeMillis();
 	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
+	System.out.println("Query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
 
 	// Results fetched and total number of available contacts are set in map
 	Map<String, Object> documents = new HashMap<String, Object>();
@@ -726,14 +734,15 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    // If search results size is less than limit set, the returned doc
 	    // ids are considered as total local available documents.
-	    if (options.getLimit() > searchResults.size())
+	    if ((options.getLimit() > searchResults.size() || options.getLimit() == 10))
 		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
 	    else
 		documents.put("availableDocuments", index.search(query_string).getNumberFound());
 	}
 
 	documents.put("fetchedDocuments", searchResults);
-
+	
+	System.out.println("Returning docs after query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
 	// Gets sorted documents
 	return documents;
     }
@@ -794,6 +803,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     public Collection getDatastoreEntities(Map<String, Object> results, Integer page, String cursor)
     {
+    Long time = System.currentTimeMillis();
 	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results.get("fetchedDocuments");
 
 	Long availableResults = (Long) results.get("availableDocuments");
@@ -818,6 +828,7 @@ public class QueryDocument<T> implements QueryInterface
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
 	    agileCursor.count = availableResults.intValue();
 	}
+	System.out.println("Time to get only datastore entities ---------- "+(System.currentTimeMillis() - time)+" milli seconds");
 	return entities;
     }
 
@@ -1010,5 +1021,314 @@ public class QueryDocument<T> implements QueryInterface
     {
 	query = SearchUtil.normalizeString(query);
 	return processQuery(query + " AND type:" + type, count, cursor);
+    }
+    
+    /**
+     * Queries for contacts based on keywords(Simple search). Trims spaces in
+     * the keyword and calls processQueryReturnDocs to execute the condition
+     * 
+     * @param keyword
+     *            {@link String}
+     * @return {@link Collection}
+     */
+    @Override
+    public List<ScoredDocument> simpleSearchWithoutDatastoreEntities(String keyword, Integer count, String cursor)
+    {
+	// Normalizes the string. Removes spaces from the string as space are
+	// excluded while saving in documents
+	keyword = SearchUtil.normalizeString(keyword).replace(":", "\\:");
+	/*
+	 * Builds the query, search on field search_tokens(since contact
+	 * properties are split in to fragments, and saved in document with
+	 * filed name search_tokens)
+	 */
+	String query = "search_tokens : " + keyword;
+	
+	return processQueryReturnDocs(query, count, cursor);
+    }
+    
+    public List<ScoredDocument> processQueryReturnDocs(String query, Integer page, String cursor)
+    {
+	// Builds options based on the query string, page size (limit) and sets
+	// cursor.
+	QueryOptions options = buildOptionsForQuickSearch(query, page, cursor);
+
+	Map<String, Object> results = processQueryWithOptions(options, query);
+
+	Collection<ScoredDocument> resultSetDocuments = (Collection<ScoredDocument>) results.get("fetchedDocuments");
+
+	if (resultSetDocuments == null)
+	    return new ArrayList<ScoredDocument>();
+
+	return new ArrayList<ScoredDocument>(resultSetDocuments);
+    }
+    
+    private QueryOptions buildOptionsForQuickSearch(String query, Integer page, String cursor)
+    {
+
+	QueryOptions options;
+
+	/*
+	 * If page size is not null, cursor is set and options are built
+	 * accordingly
+	 */
+	if (page != null)
+	{
+		String[] fieldsToReturn = {"type", "first_name", "last_name", "email", "name", "url", "expected_value", "probability"};
+	    
+		/*
+	     * Set query options only to get id of document (enough to get get
+	     * respective contacts). Number found accuracy should be set to get
+	     * accurate total number of available documents.
+	     */
+	    if (cursor == null)
+	    {
+	    	options = QueryOptions.newBuilder().setFieldsToReturn(fieldsToReturn).setLimit(page)
+	    			.setCursor(Cursor.newBuilder().setPerResult(true).build()).setNumberFoundAccuracy(10000).build();
+	    }
+	    else
+	    {
+	    	options = QueryOptions.newBuilder().setFieldsToReturn(fieldsToReturn).setLimit(page)
+	    			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000).build();
+	    }
+
+	    return options;
+	}
+
+	// If index is null return without querying
+	if (index == null)
+	{
+	    System.out.println("index is null");
+	    return null;
+	}
+
+	return QueryOptions.newBuilder().setReturningIdsOnly(true)
+		.setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
+    }
+    
+    @Override
+    public List<ScoredDocument> simpleSearchWithTypeWithoutDatastoreEntities(String keyword, Integer count, String cursor, String type){
+    	return processSearchResults(keyword, count, cursor, type);
+    }
+    
+    @Override
+    public List processSearchResults(String keyword, Integer count, String cursor, String type){
+		keyword = SearchUtil.normalizeString(keyword);
+		String typeFields = "";
+		String typeField = null;
+		if(type != null){
+			String[] typeStrings = type.split(",");
+			for (int i = 0; i < typeStrings.length; i++) {
+				if(StringUtils.isBlank(typeStrings[i]))
+					continue;
+				
+				typeField  = typeStrings[i].toUpperCase();
+				typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
+			}
+		}
+		
+		List entities =  null ;
+		try
+		{
+			entities = processQueryReturnDocs("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+		}
+		catch(Exception e){
+			throw new SearchQueryException("Search input is not supported. Please try again.");
+		}
+		try{			
+			if(typeField != null && entities != null){
+				String localKeyword = keyword.toLowerCase();			
+				
+				ArrayList<Object> mainList = new ArrayList<Object>();
+				ArrayList<Object> secondarList = new ArrayList<Object>();
+				
+				Iterator<?> itr = entities.iterator();
+				List<ScoredDocument> scoredDocuments = new ArrayList<ScoredDocument>();
+			    //iterate through the ArrayList values using Iterator's hasNext and next methods
+			    while(itr.hasNext()){
+			    	Object object = itr.next();
+			    	String objType = null;
+			    	ScoredDocument sc = (ScoredDocument)object;
+		    		Iterator<com.google.appengine.api.search.Field> scItr = sc.getFields("type").iterator();
+		    		while(scItr.hasNext())
+		    		{
+		    			com.google.appengine.api.search.Field f = scItr.next();
+		    			objType = f.getText();
+		    		}
+			    	if("PERSON".equals(objType) || "LEAD".equals(objType)){
+			    		Contact contact = convertDocToContact(object);
+			    		
+			    		ContactField firstNameField = contact.getContactField(Contact.FIRST_NAME);
+			    		ContactField lastNameField = contact.getContactField(Contact.LAST_NAME);
+			    		String firstName = null;
+			    		String lastName = null;		
+			    		
+			    		if(firstNameField != null){
+			    			firstName = firstNameField.value.toLowerCase();
+			    		}
+			    		if(lastNameField != null){
+			    			lastName = lastNameField.value.toLowerCase();
+			    		}
+			    		
+				    	if(firstName != null && firstName.indexOf(localKeyword) >= 0){
+				    		mainList.add(contact);
+				    	}else if(lastName != null && lastName.indexOf(localKeyword) >= 0){
+				    		mainList.add(contact);
+				    	}else {
+				    		secondarList.add(contact);
+				    	}
+				    }else {
+				    	scoredDocuments.add(sc);
+				    }
+			    }
+			    
+			    List l = getDatastoreEntities(scoredDocuments, 10L);
+			    
+			    itr = l.iterator();		 	
+			    //iterate through the ArrayList values using Iterator's hasNext and next methods
+			    while(itr.hasNext()){
+			    	Object object = itr.next();
+			    	if(object instanceof Contact)
+			    	{
+			    		Contact contact = (Contact) object;
+			    		com.agilecrm.contact.Contact.Type contactType = contact.type;
+			    		if(contactType.equals(com.agilecrm.contact.Contact.Type.COMPANY))
+			    		{
+			    			ContactField nameField = contact.getContactField(Contact.NAME);
+				    		if(nameField != null){
+					    		String name = nameField.value.toLowerCase();
+						    	if(name != null && name.indexOf(localKeyword) >= 0){
+						    		mainList.add(contact);
+						    	}else {
+						    		secondarList.add(contact);
+						    	}
+				    		}
+			    		}
+			    	}else if(object instanceof Opportunity){
+				    	Opportunity deal = (Opportunity) object;
+				    	String name = deal.name;
+			    		if(name != null){
+				    		name = name.toLowerCase();
+					    	if(name != null && name.indexOf(localKeyword) >= 0){
+					    		mainList.add(deal);
+					    	}else {
+					    		secondarList.add(deal);
+					    	}
+			    		}				    	
+				    }else if(object instanceof com.agilecrm.document.Document){
+				    	com.agilecrm.document.Document document  = (com.agilecrm.document.Document) object;
+				    	String name = document.name;
+			    		if(name != null){
+				    		name = name.toLowerCase();
+					    	if(name != null && name.indexOf(localKeyword) >= 0){
+					    		mainList.add(document);
+					    	}else {
+					    		secondarList.add(document);
+					    	}
+			    		}
+				    }else {
+				    	secondarList.add(object);
+				    }
+			    }
+			    
+			    mainList.addAll(secondarList);			   
+			    entities = (List)mainList;			    
+			}
+		}catch (Exception e){
+			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
+		}
+		
+		return entities;
+    }
+    
+    private Contact convertDocToContact(Object object)
+    {
+    	ScoredDocument sc = (ScoredDocument)object;
+    	List<ContactField> properties = new ArrayList<ContactField>();
+    	String objType = null;
+    	
+    	Iterator<com.google.appengine.api.search.Field> typeItr = sc.getFields("type").iterator();
+		while(typeItr.hasNext())
+		{
+			com.google.appengine.api.search.Field f = typeItr.next();
+			objType = f.getText();
+		}
+		
+		if(sc.getFields("first_name") != null)
+		{
+			Iterator<com.google.appengine.api.search.Field> firstNameItr = sc.getFields("first_name").iterator();
+			while(firstNameItr.hasNext())
+			{
+				com.google.appengine.api.search.Field f = firstNameItr.next();
+				ContactField cf = new ContactField(Contact.FIRST_NAME, StringUtils.capitalize(f.getText()), null);
+				properties.add(cf);
+			}
+		}
+		
+		if(sc.getFields("last_name") != null)
+		{
+			Iterator<com.google.appengine.api.search.Field> lastNameItr = sc.getFields("last_name").iterator();
+			while(lastNameItr.hasNext())
+			{
+				com.google.appengine.api.search.Field f = lastNameItr.next();
+				ContactField cf = new ContactField(Contact.LAST_NAME, StringUtils.capitalize(f.getText()), null);
+				properties.add(cf);
+			}
+		}
+		
+		if(sc.getFields("name") != null)
+		{
+			Iterator<com.google.appengine.api.search.Field> nameItr = sc.getFields("name").iterator();
+			while(nameItr.hasNext())
+			{
+				com.google.appengine.api.search.Field f = nameItr.next();
+				ContactField cf = new ContactField(Contact.NAME, f.getText(), null);
+				properties.add(cf);
+			}
+		}
+    	
+		if(sc.getFields("email") != null)
+		{
+			Iterator<com.google.appengine.api.search.Field> emailItr = sc.getFields("email").iterator();
+			while(emailItr.hasNext())
+			{
+				com.google.appengine.api.search.Field f = emailItr.next();
+				ContactField cf = new ContactField(Contact.EMAIL, f.getText(), null);
+				properties.add(cf);
+			}
+		}
+		
+		if(sc.getFields("url") != null)
+		{
+			Iterator<com.google.appengine.api.search.Field> urlItr = sc.getFields("url").iterator();
+			while(urlItr.hasNext())
+			{
+				com.google.appengine.api.search.Field f = urlItr.next();
+				ContactField cf = new ContactField(Contact.URL, f.getText(), null);
+				properties.add(cf);
+			}
+		}
+		
+		Contact contact = new Contact(Contact.Type.valueOf(objType), null, properties);
+		if("PERSON".equals(objType))
+		{
+			contact.entity_type = "contact_entity";
+		}
+		else if("COMPANY".equals(objType))
+		{
+			contact.entity_type = "company_entity";
+		}
+		else if("LEAD".equals(objType))
+		{
+			contact.entity_type = "lead_entity";
+		}
+		
+		if(sc.getId() != null)
+		{
+			contact.id = Long.valueOf(sc.getId());
+		}
+		
+		return contact;
+		
     }
 }

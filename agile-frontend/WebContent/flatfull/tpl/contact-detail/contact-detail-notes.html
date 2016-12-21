@@ -93,22 +93,8 @@
 
 {{/if}}
 	</div>	
-		{{#each contacts}}
-           	{{#if id}}
-				{{#isInCurrentView properties "email"}}
-					{{else}}	
-<div class="inline-block word-break-all">
-					{{#if_contact_type "PERSON"}}
-						<a class="text-info popover_contact text-capitalize" href="#contact/{{id}}" data="{{id}}">{{contact_name_necessary this}}</a>{{#if @last}}{{else}},{{/if}}
-					{{/if_contact_type}}
-					{{#if_contact_type "COMPANY"}}
-        		<a class="text-info text-capitalize popover_contact" href="#company/{{id}}" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
-        			{{/if_contact_type}}
-</div>
-				{{/isInCurrentView}}
-           		
-           	{{/if}}
-       	{{/each}}
+	{{#contact_separated_comma contacts}}
+		 {{/contact_separated_comma}}
 	
 </div>
 <div align="right" class="pos-abs pos-r-0 pos-b-0 icons-text-sm" style="right:19px;">

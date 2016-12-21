@@ -99,21 +99,8 @@
  
 	<div><span class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">Due : <i class="fa fa-clock-o m-r-xs hide"></i><time class="task-created-time" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></div>
     <div class="{{#is_mobile}} {{else}} m-l-md p-l-xs {{/is_mobile}}">	
-		{{#each contacts}}
-           	{{#if id}}
-				{{#isDuplicateContactProperty properties "email"}}
-
-					{{else}}
-						{{#if_contact_type "PERSON"}}	
-							<a  href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{contact_name_necessary this}}</a>{{#if @last}}{{else}},{{/if}}
-        				{{/if_contact_type}}
-						{{#if_contact_type "COMPANY"}}
-        					<a  href="#company/{{id}}" data="{{id}}" class="text-capitalize popover_contact">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
-        				{{/if_contact_type}}
-				{{/isDuplicateContactProperty}}
-           		
-           	{{/if}}
-       	{{/each}}
+		 {{#contact_separated_comma contacts}}
+		 {{/contact_separated_comma}}
 		</div>
 		</div>
 		<div class="clearfix"></div>
