@@ -221,6 +221,7 @@ function saveNode(e) {
         
         // Get Node definition
         var jsonDefinition = $("#nodeui").data('jsonDefinition');
+      	var nodeName = jsonDefinition.name;
         
         // Check if original is present (translated nodes override jsonDefinition)
         if(jsonDefinition.org != undefined)
@@ -230,7 +231,7 @@ function saveNode(e) {
         var displayName = $("#nodeui").find("[name=nodename]").val();
 
         // Node Level validation for some Nodes, if it will return true then all validation fine, if false then the Node will not save
-        var isValidNodeData = nodeLevelValidation(function(isValidNodeData){
+        var isValidNodeData = nodeLevelValidation(nodeName, function(isValidNodeData){
         	if(isValidNodeData == false){    	   
         		return;
         	}
@@ -280,9 +281,9 @@ function saveNode(e) {
 				 
 				 if(!checkWorkflowSize())
 						return;
-				   	
 
-				   	showNodeConnectPopup(nodeId);
+				 showNodeConnectPopup(nodeId);
+
 		        // close the dialog after the node is constructed			
 		        $("#nodeui").dialog('close');
         	}
@@ -518,31 +519,32 @@ function showNodeConnectPopup(nodeId){
 }
 
 // Node Level validation, based on Nodename validation happens
-function nodeLevelValidation(callbackFunction){
-	var urlVisited = 'URL Visited?';
-	var nodeJSONDefinition = $("#nodeui").data('jsonDefinition');	
-	var nodeName = nodeJSONDefinition.name;
+function nodeLevelValidation(nodeName, callbackFunction){
+	var validation_nodes = ['URL Visited?'];
 
-	if(nodeName != undefined){
-		// Validation for URL Visited Node, It will check Tracking code is there or not in website.
-		if(nodeName == urlVisited){
-			validateUrl(function(data){
-				if(data == 0)
-	         	{
-	         		// Display error message
-	         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x'>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: blue'>here</a> to enable.</p>").addClass('ui-state-highlight');
-	         		return callbackFunction(false);    		
-	         	}else{
-	         		return callbackFunction(true);
-	         	}
-			});
-		}
-	}	
+	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
+		return callbackFunction(true);
+
+	// Validation for URL Visited Node, It will check Tracking code is there or not in website.		
+	if(nodeName == 'URL Visited?'){
+				
+		get_dynamic_data('core/api/web-stats/JSAPI-status', function(data){
+			if(data == 0)
+         	{
+         		// Display error message
+         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x'>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: blue'>here</a> to enable.</p>").addClass('ui-state-highlight');
+         		return callbackFunction(false);    		
+         	}
+         	else
+         		return callbackFunction(true);
+		});
+	}
+
 }	
 //Validate the is there or not in website
- function validateUrl(callback)
+ function get_dynamic_data(url, callback)
   {
-	  window.parent.accessUrlUsingAjax('core/api/web-stats/JSAPI-status', 
+	  window.parent.accessUrlUsingAjax(url, 
 	              		function(data){               			
 	              			if(callback && typeof (callback) == "function")
 	              				callback(data);
