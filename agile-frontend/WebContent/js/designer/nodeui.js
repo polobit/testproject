@@ -229,62 +229,65 @@ function saveNode(e) {
         // Get Display name
         var displayName = $("#nodeui").find("[name=nodename]").val();
 
-        // Node Level validation for some Nodes, if it will return true then all validation fine, if false then will not save the Node
-        var isValidNodeData = nodeLevelValidation();                    
-        if(isValidNodeData == false){        	   
-        	return;
-        }
+        // Node Level validation for some Nodes, if it will return true then all validation fine, if false then the Node will not save
+        var isValidNodeData = nodeLevelValidation(function(isValidNodeData){
+        	if(isValidNodeData == false){    	   
+        		return;
+        	}
+        	else
+        	{
+        		// Get the node id and update the old node id
+				var nodeId = $("#nodeui").data('nodeId');
+				// Check if node id is undefined or not 
+				if( nodeId == undefined || nodeId == null ) {
+					// Add designer at given location
+					addNode(jsonDefinition, displayName, jsonValues, 200, 200);
+				}
+				else {					
+			
+						// Get the node object for corresponding node id
+				        var nodeObject = workflow.getFigure(nodeId);
+				
+				      	// If node object is not null then set the form values into property.
+				     	if( nodeObject != null )
+				     	{
+					  		nodeObject.setProperty("JSON", jsonValues);
+					  		nodeObject.setNodeName(displayName);			  		
+					  	}
+					  	
+					  	// If Dynamic Extensions or Dynamic Ports (Geographical Routing) looking at Global Queue
+					  	// Connects to older ports automatically
+					  	if( nodeObject.isDynamicPorts == "yes" )
+					  	{
+					  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
+					  			update_location_ports(nodeObject, jsonValues);
+					  		else
+								editDynamicNode(nodeObject);
+						}	  
+					  				  	
+				}
+				
+				
+				 //templateContinue(nodeId);
+				 
+				 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
+				 
+				 // Shows 'Save Campaign' message. Naresh (21/02/2014)
+				 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
+				 
+				 delete jsonDefinition["x"];
+				 delete jsonDefinition["y"];
+				 
+				 if(!checkWorkflowSize())
+						return;
+				   	
 
-        // Get the node id and update the old node id
-		var nodeId = $("#nodeui").data('nodeId');
-		// Check if node id is undefined or not 
-		if( nodeId == undefined || nodeId == null ) {
-			// Add designer at given location
-			addNode(jsonDefinition, displayName, jsonValues, 200, 200);
-		}
-		else {					
-	
-				// Get the node object for corresponding node id
-		        var nodeObject = workflow.getFigure(nodeId);
-		
-		      	// If node object is not null then set the form values into property.
-		     	if( nodeObject != null )
-		     	{
-			  		nodeObject.setProperty("JSON", jsonValues);
-			  		nodeObject.setNodeName(displayName);			  		
-			  	}
-			  	
-			  	// If Dynamic Extensions or Dynamic Ports (Geographical Routing) looking at Global Queue
-			  	// Connects to older ports automatically
-			  	if( nodeObject.isDynamicPorts == "yes" )
-			  	{
-			  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
-			  			update_location_ports(nodeObject, jsonValues);
-			  		else
-						editDynamicNode(nodeObject);
-				}	  
-			  				  	
-		}
-		
-		
-		 //templateContinue(nodeId);
-		 
-		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
-		 
-		 // Shows 'Save Campaign' message. Naresh (21/02/2014)
-		 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
-		 
-		 delete jsonDefinition["x"];
-		 delete jsonDefinition["y"];
-		 
-		 if(!checkWorkflowSize())
-				return;
-		   	
-
-		   	showNodeConnectPopup(nodeId);
-        // close the dialog after the node is constructed			
-        $("#nodeui").dialog('close');
-       
+				   	showNodeConnectPopup(nodeId);
+		        // close the dialog after the node is constructed			
+		        $("#nodeui").dialog('close');
+        	}
+        });                    
+              
 }
 
 
@@ -515,40 +518,33 @@ function showNodeConnectPopup(nodeId){
 }
 
 // Node Level validation, based on Nodename validation happens
-function nodeLevelValidation(){
+function nodeLevelValidation(callbackFunction){
 	var urlVisited = 'URL Visited?';
 	var nodeJSONDefinition = $("#nodeui").data('jsonDefinition');	
 	var nodeName = nodeJSONDefinition.name;
 
 	if(nodeName != undefined){
-		// Validation for URL Visited Node
+		// Validation for URL Visited Node, It will check Tracking code is there or not in website.
 		if(nodeName == urlVisited){
-			return validateUrl();
+			validateUrl(function(data){
+				if(data == 0)
+	         	{
+	         		// Display error message
+	         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x'>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: blue'>here</a> to enable.</p>").addClass('ui-state-highlight');
+	         		return callbackFunction(false);    		
+	         	}else{
+	         		return callbackFunction(true);
+	         	}
+			});
 		}
 	}	
 }	
 //Validate the is there or not in website
- function validateUrl()
-  {   
-  	var callbackData = false;
-     $.ajax({
-         url : 'core/api/web-stats/JSAPI-status',
-         type : 'GET',
-      //   dataType : 'json', 
-         async: false,
-         success : function(data){
-         	if(data == 0)
-         	{
-         			// Display error message
-         			$("#nodeui").find("#errorsdiv").html("<p><i class='fa fa-times icon-1x' style='color:red;'>It seems tracking code is not setup. Please check how to <a href='http://"+window.location.host+"/#api-analytics' target = '_new'>setup</a></i></p>").addClass('ui-state-highlight');
-         		        		
-         	}else{
-         		callbackData = true;
-         	}
-         },
-         error: function (data) {
-         console.log(data);
-       }
-     });
-     return callbackData;
+ function validateUrl(callback)
+  {
+	  window.parent.accessUrlUsingAjax('core/api/web-stats/JSAPI-status', 
+	              		function(data){               			
+	              			if(callback && typeof (callback) == "function")
+	              				callback(data);
+	              		});     	
  }
