@@ -196,6 +196,10 @@ function saveDocumentURL(url, network, id)
    	if(network != "S3")
    	{
    		$(".uploaded-doc-close", $('#uploadDocumentForm')).trigger("click");
+   		if($(".uploaded-doc-close", $('#uploadDocumentForm')).length == 0)
+   		{
+   			$(".uploaded-doc-close", $('#uploadDocumentUpdateForm')).trigger("click");
+   		}
    	}
 
     //$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
