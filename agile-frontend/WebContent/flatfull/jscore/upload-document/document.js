@@ -193,6 +193,11 @@ function saveDocumentURL(url, network, id)
    	$('#' + form_id).find('#upload_url').val(url);
    	$('#' + form_id).find('#size').val(CUSTOM_DOCUMENT_SIZE);
 
+   	if(network != "S3")
+   	{
+   		$(".uploaded-doc-close", $('#uploadDocumentForm')).trigger("click");
+   	}
+
     //$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
 }
 

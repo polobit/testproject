@@ -652,7 +652,7 @@ function initializeDocumentsListeners()
 		$('#GOOGLE',$('#uploadDocumentForm')).parent().show();
 	});
 
-	$('#uploadDocumentForm').on('change', '#doc-file-up', function(e)
+	$('#uploadDocumentForm, #uploadDocumentUpdateForm').on('change', '#doc-file-up', function(e)
 	{
 		var $form = $(this).closest("form");
 		if(DOC_UPLOAD_REQ)
@@ -707,15 +707,16 @@ function initializeDocumentsListeners()
 	            $('#' + form_id).find("#S3").closest(".link").css("background-color", "");
 	        },
 			success : function(response){
-				var el = "<div class='uploaded-doc-name pull-left text-ellipsis'>"+fileName+"</div>"+
-			             "<div style='margin-top:4px;' class='pull-left'>&nbsp;("+fileSizeKB+"K)</div>"+
+				var tpl = "<div class='uploaded-doc-name pull-left text-ellipsis'>{{fileName}}</div>"+
+			             "<div style='margin-top:4px;' class='pull-left'>&nbsp;({{fileSize}}K)</div>"+
 			             "<div class='uploaded-doc-close'><i class='icon icon-close c-p'></i></div>";
+			    var el = Handlebars.compile(tpl)({"fileName" : fileName, "fileSize" : fileSizeKB});
 				$("#uploaded-doc", $form).html(el);
 				$("#uploaded-doc", $form).removeClass("hide");
 				
 				var url = "https://s3.amazonaws.com/agilecrm/"+key+"?id="+form_id;
 				var network = "S3";
-				CUSTOM_DOCUMENT_SIZE = file.size
+				CUSTOM_DOCUMENT_SIZE = file.size;
 		 		saveDocumentURL(url, network, "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain);
 			},
 			error : function(response){
@@ -742,12 +743,13 @@ function initializeDocumentsListeners()
 			        console.log(evt.lengthComputable); // false
 			        if (evt.lengthComputable) {
 			            var percentComplete = evt.loaded / evt.total;
-			            var el = "<div class='uploaded-doc-name pull-left text-ellipsis'>"+fileName+"</div>"+
-			            		 "<div style='margin-top:4px;' class='pull-left'>&nbsp;("+fileSizeKB+"K)</div>"+
+			            var tpl = "<div class='uploaded-doc-name pull-left text-ellipsis'>{{fileName}}</div>"+
+			            		 "<div style='margin-top:4px;' class='pull-left'>&nbsp;({{fileSize}}K)</div>"+
 			            		 "<div class='uploaded-doc-close'><i class='icon icon-close c-p'></i></div>"+
 			            		 "<div class='doc-progress progress'>"+
 			            		 "<div class='progress-bar bg-info' style='width:"+Math.round(percentComplete * 100)+"%;color:#3a3939;'></div>"+
-			            		 "</div>"
+			            		 "</div>";
+			           	var el = Handlebars.compile(tpl)({"fileName" : fileName, "fileSize" : fileSizeKB});
 			            $("#uploaded-doc", $form).html(el);
 			            $("#uploaded-doc", $form).removeClass("hide");
 			        }
@@ -757,18 +759,23 @@ function initializeDocumentsListeners()
 		});
 	});
 
-	$('#uploadDocumentForm').on('click', '.uploaded-doc-close', function(e)
+	$('#uploadDocumentForm, #uploadDocumentUpdateForm').on('click', '.uploaded-doc-close', function(e)
 	{
 		if(DOC_UPLOAD_REQ)
 		{
 			DOC_UPLOAD_REQ.abort();
 		}
 		var $form = $('#uploadDocumentForm');
+		if($form.length == 0)
+		{
+			$form = $('#uploadDocumentUpdateForm');
+		}
 		$form.find("#S3").closest(".link").find(".icon-ok").css("display", "none");
 	    $form.find("#S3").closest(".link").css("background-color", "");
 	    $("#uploaded-doc", $form).html("");
 		$("#uploaded-doc", $form).addClass("hide");
 		$("#doc-file-up", $form).replaceWith($("#doc-file-up", $form).val('').clone(true));
+		$("#upload_url", $form).val("");
 	});	
 }
 function proc_add_document(model_json)
@@ -1266,6 +1273,16 @@ function load_document_from_edit_model(model)
 						{
 							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
 							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
+							if(model.network_type == "S3")
+							{
+								var fileSizeKB = Math.round(model.size / 1024);
+								var tpl = "<div class='uploaded-doc-name pull-left text-ellipsis'>{{fileName}}</div>"+
+							              "<div style='margin-top:4px;' class='pull-left'>&nbsp;({{fileSize}}K)</div>"+
+							              "<div class='uploaded-doc-close'><i class='icon icon-close c-p'></i></div>";
+							    var el = Handlebars.compile(tpl)({"fileName" : model.extension, "fileSize" : fileSizeKB});
+								$("#uploaded-doc", $("#uploadDocumentUpdateForm")).html(el);
+								$("#uploaded-doc", $("#uploadDocumentUpdateForm")).removeClass("hide");
+							}
 						}
 						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
 						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
