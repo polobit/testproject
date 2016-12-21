@@ -2995,14 +2995,7 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
   width: 27% !important;
 }
 */
-.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
-.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
-.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 #agile-menu-navigation-container .nav .show-icon-folded{
-  display: none !important;
-}
-.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
-  display: block !important;
-}
+
 .btn.btn-xs-imp {
    height: auto;
    line-height: 1.5;
@@ -3085,4 +3078,12 @@ table#deal-sources-table>tbody>tr:last-child{
   padding: 0px;
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 aside #agile-menu-navigation-container .nav .show-icon-folded{
+  display: none !important;
+} 
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
+  display: block !important;
 }
