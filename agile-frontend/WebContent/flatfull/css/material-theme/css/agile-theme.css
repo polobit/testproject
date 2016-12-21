@@ -486,7 +486,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-theme-15 .app-aside-folded:not(.app-aside-dock) .navi ul li .sales-nav:hover span{
   padding-top:25% !important; 
 }
-
+.app-aside-fixed.app-aside-folded .aside-wrap .navi-wrap{width: auto !important; display: inline;}
 }/*medis 768 end*/
 
 @media (min-width: 992px){
@@ -2617,7 +2617,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   position: relative;
 }
 
-#timeline .year,#timeline .top .year{font-size: 12px;}
+#timeline .year,#timeline .top .year{font-size: 12px !important;}
 #unsubscribe-modal{top:-10px;}
 .tagsinput.active-campaigns{margin-bottom: 10px;}
 .plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:focus{color: #fff !important}
