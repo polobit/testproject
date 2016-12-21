@@ -27,13 +27,15 @@ function loadKnowlarityLogs(responceObject, to, contact){
 	var startDate = (d.getFullYear()-5) + dateTemp;
 	var endDate = d.getFullYear() + dateTemp;
 
-	var requestURL = "https://kpi.knowlarity.com/"+channel+"/v1/account/calllog";
-	requestURL += "?start_time="+startDate;
-	requestURL += "&end_time="+endDate;
-	requestURL += "&knowlarity_number="+knowlarityNumber;
-	requestURL += "&customer_number="+to;
-	
-	console.log(requestURL);
+	var mainURL = "https://kpi.knowlarity.com/"+channel+"/v1/account/calllog";
+	var requestURL = "?start_time="+startDate;
+	requestURL += "&end_time="+endDate;	
+	requestURL += "&customer_number="+to;	
+
+	mainURL = encodeURI(mainURL);	
+	mainURL = mainURL.replace(/[+]/g, "%2B");
+
+	console.log(mainURL);
 
 	$.ajax({
 		headers : {
@@ -41,7 +43,7 @@ function loadKnowlarityLogs(responceObject, to, contact){
 			"Authorization" : authCode,
 			"x-api-key" : appCode
 		},
-		url : requestURL,
+		url : mainURL,
 		type : "GET",		
 		success : function(result) {
 			//getKnowlarityLogs(0);
@@ -435,8 +437,10 @@ function startKnowlarityWidget(contact_id){
 
 	KNOWLARITY_Plugin_Id = knowlarity_widget.id;	
 	Email = agile_crm_get_contact_property('email');
+	
+	loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
 
-	$('#Knowlarity').html('<div class="wrapper-sm">No Logs</div>');
+	//$('#Knowlarity').html('<div class="wrapper-sm">No Logs</div>');
 	
 	$(".contact-make-call-div").off("click", ".Knowlarity_call");
 	$(".contact-make-call-div").on("click", ".Knowlarity_call", function(e){
@@ -447,3 +451,7 @@ function startKnowlarityWidget(contact_id){
    		knowlarityDailer(KnowlarityWidgetPrefs, contactPhoneNumber, contactDetailsObj);		
 	});
 }
+
+// start_time=2011-12-20%2018:21:37%20+5:30&end_time=2016-12-20%2018:21:37%20+5:30&knowlarity_number=+919533824900&customer_number=+919052500344
+// start_time=2016-11-01%2000%3A00%3A00%2B5%3A30&end_time=2016-11-02%2023%3A58%3A00%2B5%3A30&customer_number=%2B919908164425
+// start_time=2011-12-21%2010:40:35%20+5:30&end_time=2016-12-21%2010:40:35%20+5:30&customer_number=+919052500344
