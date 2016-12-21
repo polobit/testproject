@@ -1099,7 +1099,7 @@
            </div>
         		{{/unless}}
         		{{#if this.length}}
-              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{#isNewTheme}} table-compact {{/isNewTheme}} {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 							<div class="filter-criteria"></div>
 			 				<thead>
                       			<tr style="text-transform: capitalize;">

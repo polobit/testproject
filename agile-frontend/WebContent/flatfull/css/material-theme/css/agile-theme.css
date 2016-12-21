@@ -2924,8 +2924,11 @@ code span.tag, code span.tag:hover{
   padding-left: 5px !important;
   padding-right: 45px !important;
 }
-.goaltab-main .panel-default .panel-heading, #milestones-bg{
+#milestones-bg{
   background-color: inherit !important;
+}
+.goaltab-main .panel-default .panel-heading, .goaltab-main{
+  background-color: #f4f8f9 !important;
 }
 .goaltab-main .panel-heading>div:first-child{
   display: none;
@@ -2933,7 +2936,7 @@ code span.tag, code span.tag:hover{
 #products-top-margin{
   border-top: 15px solid #f4f8f9; 
 }
-table#deal-sources-table>tbody>tr, #show_milestone_field{
+table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .show_telephony_status_field, .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9; 
 }
 .show_lost_reason_add, .show_deal_source_add{
@@ -2949,10 +2952,10 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 /*.add-pipeline{
   margin-right: 15px;
 }*/
-.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
+/*.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
   border-top: 0 !important;
-}
-.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
+}*/
+/*.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9;
 }
 #data-sync-settings-tab-content form label , #prefs-tabs-content #widget-settings-tab-pane form label,#prefs-tabs-content form label
@@ -2991,4 +2994,28 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
 
 #prefs-tabs-content .agile-theme{
   width: 27% !important;
+}
+*/
+#task-category .agile-table>tbody>tr>td{
+  padding: 8px !important;
+}
+table.products-table>tbody>tr>td{
+  padding: 6px !important;
+}
+table.products-table>tbody>tr>td .i-checks.i-checks-sm{
+  padding-left: 30px;
+}
+table#deal-sources-table>tbody>tr:last-child{
+  border-bottom: 10px solid #f4f8f9 !important;
+}
+#deal-goals-tab ul.list-inline{
+  margin-right: 15px;
+}
+#goal_duration span{
+  /*line-height: 24px!important;*/
+  border-radius: 4px;
+  vertical-align: middle;
+  border-color: #fff!important;
+  border: 0 !important;
+  padding-top: 6px !important;
 }
