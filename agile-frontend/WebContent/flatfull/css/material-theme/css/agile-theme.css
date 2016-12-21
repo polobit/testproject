@@ -2708,15 +2708,15 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display: none;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons,#recent-menu i.material-icons{
+.agile-theme-15 #agile-menu-navigation-container .nav  i.material-icons,.agile-theme-15 #recent-menu i.material-icons{
   display:block !important;
   color:#78909c !important;
 }
-#recent-menu i.material-icons{
+.agile-theme-15 #recent-menu i.material-icons{
   margin-top: 3px !important;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
+.agile-theme-15 #agile-menu-navigation-container .nav  i.material-icons,.agile-theme-15 #aside  i.material-icons{
   display:block !important;
 }
 
@@ -2769,12 +2769,6 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 
-#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
-  display: none;
-}
-#aside i.material-icons{
-  display:block !important;
-}
 
 #saveFilterForm input[type="radio"]{
   top: 5px;
