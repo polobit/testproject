@@ -138,6 +138,8 @@ public class VisitorResponseBuilder
 		contact.put("count", contacts.length());
 		contacts.getJSONObject(contacts.length()-1).put("is_old_model", true);
 		contact.put("has_results", true);
+		JSONObject oldContact = contacts.getJSONObject(contacts.length()-1);
+		oldContact.put("is_old_model", true);
 	    }
 	    contacts.put(contact);
 	}
