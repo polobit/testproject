@@ -2801,7 +2801,7 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 
 @-moz-document url-prefix() { 
   input[type="checkbox"] {
-     margin-left:0px;
+     /*margin-left:0px;*/
      vertical-align: middle;
   }
 }
