@@ -3079,3 +3079,12 @@ table#deal-sources-table>tbody>tr:last-child{
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
+.agile-theme-15 #workflows-tab-container #general .ellipsis-multiline.m-b-md
+{
+  margin-bottom:0px;
+}
+.agile-theme-15 .tickets-main .fa-sitemap.btn-default.show-workflows
+{
+      border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
