@@ -19,9 +19,9 @@ git checkout .
 
 git stash
 
-git checkout agile_production_1_1
+git checkout special_version_1_4
 
-git pull origin agile_production_1_1
+git pull origin special_version_1_4
 
 ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
