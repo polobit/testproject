@@ -3079,6 +3079,7 @@ table#deal-sources-table>tbody>tr:last-child{
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
+
 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
 .agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 aside #agile-menu-navigation-container .nav .show-icon-folded{
@@ -3087,3 +3088,11 @@ table#deal-sources-table>tbody>tr:last-child{
 .agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
   display: block !important;
 }
+
+#ticket-last-notes{
+  border-radius: 4px !important;
+}
+#contact-image-content .editicon span{margin-top: -2px !important;}
+.agile-theme-15 .isotope-item{margin-top: 7px;}
+.agile-theme-15 .company-details-mobile-view .caret{margin-top: -11px;}
+.agile-theme-15 div#tickets-bulk-select {height: 20px;}
