@@ -219,15 +219,21 @@ public class TicketFiltersUtil
 		
 		if( !(isGroupAdded) )
 		{
-			query.append("(");
-			for( String groupId : groupIdsList )
+			if( groupIdsList.size() == 0 )
 			{
-				query.append("group_id = " + groupId);
-				query.append(" OR ");
+				// Return empty list if the user has no groups
+				query.append("(group_id = -1) AND " );
+			} else {
+				query.append("(");
+				for( String groupId : groupIdsList )
+				{
+					query.append("group_id = " + groupId);
+					query.append(" OR ");
+				}
+				query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")).trim());
+				
+				query.append(") AND ");
 			}
-			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")).trim());
-			
-			query.append(") AND ");
 		}
 
 		return query.substring(0, query.lastIndexOf("AND"));
