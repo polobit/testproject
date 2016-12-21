@@ -331,7 +331,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	else{
     		_agile_set_prefs("contactTabelView","true");
     		$(e.currentTarget).find("i").removeClass("fa fa-navicon");
-    		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+    		$(e.currentTarget).find("i").addClass("fa fa-navicon");
     	}
     	$(e.currentTarget).parent().parent().toggleClass("compact");
     	contacts_view_loader.disableBulkActionBtns();
@@ -405,7 +405,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	else{
     		_agile_set_prefs("companyTabelView","true");
     		$(e.currentTarget).find("i").removeClass("fa fa-navicon");
-    		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+    		$(e.currentTarget).find("i").addClass("fa fa-navicon");
     	}
     	$(e.currentTarget).parent().toggleClass("compact");
     	companies_view_loader.disableBulkActionBtns();
