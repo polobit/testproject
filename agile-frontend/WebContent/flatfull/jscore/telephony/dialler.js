@@ -457,6 +457,7 @@ function dialFromOzonetel(to,from,contact){
 					startOzonetelWidget();
 					var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 					showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
+					$("#agilecrm-container #call-noty-notes").val("");
 					globalCall.callStatus = "Oncall";
 				}else{
 					showAlertModal(_agile_get_translated_val('widgets', 'ozonetel-make-call'), undefined, function(){

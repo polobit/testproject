@@ -413,10 +413,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
-	//if(widgetName == "ozonetel"){
-		console.log(widgetName);
-		$("#agilecrm-container #call-noty-notes").val(callnotes);
-	//}
+
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
 			makeDraggableVoicemail();
@@ -434,6 +431,9 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		
 	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
 		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
+		if(widgetName == "Ozonetel"){
+			$("#agilecrm-container #call-noty-notes").val(callnotes);
+		}
 		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
 			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
 			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
