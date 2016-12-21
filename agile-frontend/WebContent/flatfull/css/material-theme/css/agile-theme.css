@@ -2980,3 +2980,11 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 .previous-tickets-panel .padder{
   padding-top: 9px !important;
 }
+
+#contact-reports-list-view .panel-heading.deal-products-btn-heading {
+    display:block!important;width :75%;
+}
+
+table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
+  position: inherit!important;
+}
