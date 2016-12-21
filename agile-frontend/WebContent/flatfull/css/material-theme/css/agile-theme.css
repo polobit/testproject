@@ -3111,3 +3111,6 @@ table#deal-sources-table>tbody>tr:last-child{
 #wrap.app-aside-folded .fa.fa-cloud{
       display: none!important;
 }
+#admin-prefs-tabs-content #admin-previlages .tab-container {
+  width: 100% !important;
+}
