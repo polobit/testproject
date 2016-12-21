@@ -5111,11 +5111,16 @@ border-top: 0px !important;
      width: 25.33333%;
 }
 
-.data-block .canned-video-xs{
+/*.data-block .canned-video-xs{
   width: 100%;
   height: auto;
-}
+}*/
 
 #workflows-tab-container .tab-container,#triggers-tab-container .tab-container {
   margin-bottom: 0px !important;
 }
+
+#general {
+  margin-top: 15px !important;
+}
+

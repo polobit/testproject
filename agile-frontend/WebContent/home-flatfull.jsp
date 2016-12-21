@@ -679,9 +679,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <i class="icon icon-doc"></i>
               <i class="material-icons hidden-icon" style="display: none">insert_drive_file</i>
               <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Documents">insert_drive_file</i>
-            <span class="leftcol-menu-folded">
+            <!-- <span class="leftcol-menu-folded">
               <%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %>
-            </span>
+            </span> -->
             <span class="leftcol-menu-expanded">
               <%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-documents") %>
             </span>
@@ -940,10 +940,10 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->   
    <%if(domainUser.role == ROLE.SERVICE){ %>
-      <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs hide">
+      <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
       </li>
-      <li id="home_dashboard">
+      <li id="home_dashboard" class="hide">
         <a  href="#">
           <i class="icon icon-home"></i>
            <i class="material-icons hidden-icon" style="display: none">home</i>
@@ -954,7 +954,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
-    <li id="contactsmenu hide">
+    <li id="contactsmenu" class="hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
         <i class="material-icons hidden-icon" style="display: none">contacts</i>
