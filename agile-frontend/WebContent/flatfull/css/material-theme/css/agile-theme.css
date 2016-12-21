@@ -2988,17 +2988,17 @@ table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .
     display:block!important;width :75%;
 }
 
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
+}
+*/
+
 table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
   position: inherit!important;
 }
 #ticket-model-list > tr > td.b-l-3x {
   border-left-width: 1px;
 }
-
-#prefs-tabs-content .agile-theme{
-  width: 27% !important;
-}
-*/
 
 .btn.btn-xs-imp {
    height: auto;
