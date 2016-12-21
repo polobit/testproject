@@ -1,11 +1,11 @@
 
 
 $('#app-aside-folded').on('click', function(e) {
-	e.preventDefault();
 
-	if(CURRENT_USER_PREFS.theme == "15") {
+	if(CURRENT_USER_PREFS.theme == "15") {		
 		return;
 	}
+	e.preventDefault();
 		
 	/*$('.app-aside-folded-inactive .hidden-folded ,.app-aside-folded .navi > ul > li > a span').css('display','none');
 	
