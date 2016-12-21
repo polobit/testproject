@@ -42,13 +42,10 @@ function saveCallNoteOzonetel(message){
 				"duration" : message.duration, "contactId" : cntId };
 
 	if(message.direction == "Incoming"){
+		resetCallLogVariables();
 		var number = message.number;
-
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
 	    	if(!responseJson){
-	    		
-	    		resetCallLogVariables();
-
 	    		if(message.state == "answered") {
 	    			var data = {};
 	    			data.url = "/core/api/widgets/ozonetel/";
@@ -72,7 +69,6 @@ function saveCallNoteOzonetel(message){
 		    		jsonObj['phoneNumber'] = number;
 		    		closeCallNoty(true);
 		    		return showContactMergeOption(jsonObj);
-	    		
 	    	}
 	    	contact = responseJson;
 	    	contact_name = getContactName(contact);
@@ -100,6 +96,7 @@ function saveCallNoteOzonetel(message){
 	    	}
 	    });
 	}else{
+		resetCallLogVariables();
 		if(cntId){
 				if( message.state == "answered"){
 					twilioIOSaveContactedTime(cntId);
@@ -128,7 +125,6 @@ function saveCallNoteOzonetel(message){
 					autosaveNoteByUser(note,call,"/core/api/widgets/ozonetel");
 				}
 		}else{
-			resetCallLogVariables();
     		if(message.state == "answered") {
     			var data = {};
     			data.url = "/core/api/widgets/ozonetel/";
