@@ -322,8 +322,15 @@ var visitorsUtils = {
 		    post_data.scanned_upto = model.scannedUpto;
 		    var viewElement = $(collectionView.el);
 		    var message_id = viewElement.find('#message-id');
-		    message_id.find("#scanned_upto").html("Scanned upto " + model.scannedUpto);
-		    //message_id.append("<span id=\"scanned_upto\" style=\"margin-left:35%;\"> Loading... Scanned upto " + model.scannedUpto);
+		    message_id.find("#scanned_upto").html("");
+		  	    
+		    var delay=100;
+		    setTimeout(function() {
+		    	//your code to be executed after 1 second
+		    	message_id.find("#scanned_upto").html("Scanned upto "+ model.scannedUpto);
+		    	//message_id.append("<span id=\"scanned_upto\" style=\"margin-left:35%;\"> Loading... Scanned upto " + model.scannedUpto);
+		    },delay);
+		    
 		    //message_id.find("#load_more").css("display","none");
 		    //var count = parseInt($("#visitors-count").attr("data-t"));
 		    //count = count + parseInt(model.count);
