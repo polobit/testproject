@@ -42,17 +42,16 @@
 {{#if logs.length}}
 	{{#each logs}}
 		<li class="list-group-item r-none b-l-none b-r-none">
-			<p>{{this.call_duration}}</p>
-			<p>{{this.start_time}}</p>
-			<p></p>
-
-			<div class="clear">					
-				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" ></a>
-				<div class="pull-right font-bold"></div>	
-				<div class="clearfix"></div>	
-			</div>		
-			<div class="clearfix"></div>					
-		</li>
+		    <i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
+		    <div class="pull-left">Call unanswered</div>
+		    <div class="pull-right">{{this.call_duration}}</div>
+		    <div class="clearfix"></div>
+		    <small class="text-muted">
+		    	<i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i>
+		    	<time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time>
+		    </small>
+		    <div class="clearfix"></div>		    
+   		</li>
 	{{/each}}
 {{else}}
 	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-invoices'}} </li>
