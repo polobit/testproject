@@ -2823,14 +2823,6 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 .dashboard-select a i{
   float:left;    
 }
-.nav-grid:hover{
-  background-color: #f4f8f9;
-    padding: 8px !important;
-    border-radius: 4px;
-  }
-  .nav-grid{
-     padding: 8px !important;
-  }
 .dashboard-select.small .dropdown-menu{
     margin-left: -47px !important;
     margin-top: 0px;
@@ -2858,4 +2850,31 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 }
 .carousel-inner .tweet-info{
   font-size: 13px !important;
+}
+div#need_help_header a:hover {
+    background: #f4f8f9;
+    border-radius: 4px;
+}
+  .nav-grid{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-top: 7px !important;
+    padding-bottom : 7px !important;
+  }
+.dashboard-select.small .dropdown-menu{
+    margin-left: -47px !important;
+    margin-top: 0px;
+}
+.dashboard-select a i:nth-child(2){
+    margin-top: 3px;
+    margin-left: 10px;
+  }
+span#rolecontainer::first-letter {
+    text-transform: capitalize;
+}
+.grid-v2{
+  top: 17px !important;
+}
+.dashboard-select .dropdown-menu li a i{
+  font-size: 22px;
 }
