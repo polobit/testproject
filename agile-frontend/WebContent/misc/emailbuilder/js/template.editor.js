@@ -123,6 +123,8 @@ function handleObjects() {
                 $('#common-settings').show();
                 $('#padding-setting').show();
                 $('#settings').show();
+                $('#content-tab').show();
+                $('#settings-panel-close').show();
 
                 switch (t) {
                     case 'title':
@@ -313,6 +315,9 @@ function handleObjects() {
                         $('.selected-item').removeClass('selected-item').css('border', 'none');
                         hideAllSettings();
                         $('#settings').show();
+                        $('#content-tab').hide();
+                        $('#settings-panel-close').hide();
+                        $('#customize-tab').trigger('click');
                         break;
 
                     case 'button':
@@ -806,7 +811,7 @@ $(document).ready(function () {
         $(this).attr("target","_blank");
     });
 
-    $(document).on('change', '#image-link,#image-alt-text,#image-w,#image-h', function(e){
+    $(document).on('change', '#image-link,#image-alt-text,#image-w,#image-h,#video-link', function(e){
         e.preventDefault();
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());

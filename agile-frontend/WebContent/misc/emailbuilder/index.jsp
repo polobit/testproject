@@ -78,7 +78,7 @@ var localeJSON = <%=localeJSON%>;
 
             <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
 
-                <div id="tosave" style="overflow-y:auto;overflow-x:hidden;padding-bottom:30px;height: 650px;">
+                <div id="tosave" style="overflow-y:auto;overflow-x:hidden;padding-bottom:30px;height: 800px;">
                     <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee; font-family: Arial;font-size: 12px;line-height: 21px;color: #000000;" >
                         <tr>
                             <td width="100%" id="primary" class="main demo" align="center" valign="top" >
@@ -391,14 +391,12 @@ var localeJSON = <%=localeJSON%>;
  <!-- settings popup start -->
 <div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
 
-<div class="pull-right settings-panel-close-holder" style="font-size: 24px;"><i class="settings-panel-close" style="cursor: pointer;">&times;</i>
-</div>
-
-
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#tiny-editor" aria-controls="tiny-editor" role="tab" data-toggle="tab" aria-expanded="true"><i class="glyphicon glyphicon-edit"></i> Content</a></li>
+        <li role="presentation" class="active">
+            <a href="#tiny-editor" aria-controls="tiny-editor" role="tab" id="content-tab" data-toggle="tab" aria-expanded="true"><i class="glyphicon glyphicon-edit"></i> Content</a>
+        </li>
         <li role="presentation" class="">
-        <a href="#block-customize" aria-controls="block-customize" role="tab" data-toggle="tab" aria-expanded="false"><i class="glyphicon glyphicon-cog"></i> Customize</a>
+        <a href="#block-customize" aria-controls="block-customize" role="tab" id="customize-tab" data-toggle="tab" aria-expanded="false"><i class="glyphicon glyphicon-cog"></i> Customize</a>
         </li>
     </ul>
 
@@ -409,7 +407,7 @@ var localeJSON = <%=localeJSON%>;
     <div role="tabpanel" class="tab-pane active" id="tiny-editor">
         <div class="sidebar-nav">
 
-            <form id="editor" style="margin-top:5px">
+            <form id="editor" style="margin-top:10px;margin-bottom:13px;">
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
                     </form>
 
@@ -533,20 +531,14 @@ var localeJSON = <%=localeJSON%>;
             </div>
         
     </div> <!-- end of image height -->
+
 </div>
-
-    <!-- <div class="col-xs-4" style="float: right">
-
-        <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
-    
-    </div>
- -->
 
                         
                     </div> <!-- end of image properties -->
 
         <!-- start of social links -->
-        <div id="social-links">
+        <div id="social-links" style="margin-top:-10px;">
                         <ul class="list-group" id="social-list">
                             <li>
                                 <div class="input-group">
@@ -595,7 +587,7 @@ var localeJSON = <%=localeJSON%>;
 
 
         <!-- start of buttons -->
-        <div id="buttons" style="max-width: 400px">
+        <div id="buttons" style="max-width: 400px;margin-top:5px;">
                         <div class="form-group">
                             <select class="form-control">
                                 <option value="center"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-center") %></option>
@@ -911,7 +903,15 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                 </div> <!-- end of button text -->
 
+   
+   <div class="form-group" style="padding-top:6px;">
+        <div class="col-xs-4 pull-right" style="text-align:right;padding: 0;">
 
+        <a class="btn btn-primary settings-panel-close" href="#" id="settings-panel-close"></i>Save & Close</a>
+            
+        </div>
+        
+    </div>
 
 
 
@@ -920,7 +920,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
 
     <!-- start of block-customize -->
-    <div role="tabpanel" class="tab-pane" id="block-customize">
+    <div role="tabpanel" class="tab-pane" id="block-customize" style="margin-top: 10px;">
 
 
 <div id="common-settings">
@@ -990,6 +990,16 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
         </script>
         
     </div> <!-- end of block background color -->
+
+    <div class="form-group" style="padding-top:6px;">
+        <div class="col-xs-4 pull-right" style="margin-right: 8px;">
+
+        <a class="btn btn-primary settings-panel-close" href="#" id="settings-panel-close"></i>Save & Close</a>
+            
+        </div>
+        
+    </div>
+
 
 </div>
                 
