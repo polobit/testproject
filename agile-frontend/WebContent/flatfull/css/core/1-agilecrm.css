@@ -5059,13 +5059,13 @@ border-top: 0px !important;
 
 #uploaded-doc
 {
-  margin-top: 5px;
+  margin-top: 10px;
   border-radius: 2px;
   height: 30px;
   vertical-align: middle;
   font-weight : bold;
   border: 1px solid #dee5e7;
-  background: #ededed;
+  background: #f5f5f5;
 }
 .upload-percentage
 {
@@ -5088,6 +5088,7 @@ border-top: 0px !important;
   margin-left: 10px;
   margin-top: 4px;
   max-width: 40%;
+  color: #15c;
 }
 
 .uploaded-doc-close

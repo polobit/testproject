@@ -659,10 +659,6 @@ function initializeDocumentsListeners()
 		{
 			DOC_UPLOAD_REQ.abort();
 		}
-		$form.find("#S3").closest(".link").find(".icon-ok").css("display", "none");
-	    $form.find("#S3").closest(".link").css("background-color", "");
-	    $("#uploaded-doc", $form).html("");
-		$("#uploaded-doc", $form).addClass("hide");
 		var form_id = $(this).closest("form").attr("id");
 		var file = $(this)[0].files[0];
 		if(file && file.size > 10485760)
@@ -676,6 +672,10 @@ function initializeDocumentsListeners()
 			$(this).val("");
 			return;
 		}
+		$form.find("#S3").closest(".link").find(".icon-ok").css("display", "none");
+	    $form.find("#S3").closest(".link").css("background-color", "");
+	    $("#uploaded-doc", $form).html("");
+		$("#uploaded-doc", $form).addClass("hide");
 		var fd = new FormData();
 
 		var fileName = $(this).val();
@@ -1272,7 +1272,7 @@ function load_document_from_edit_model(model)
 						if(model.network_type)
 						{
 							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
-							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
+							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#f5f5f5");
 							if(model.network_type == "S3")
 							{
 								var fileSizeKB = Math.round(model.size / 1024);
