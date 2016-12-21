@@ -2683,12 +2683,13 @@ padding-right:0px !important;
     padding-right: 0px;
 }
 .task-related-contact-tab tr td{padding: 5px 15px 9px !important;}
-#app-aside-folded{top: 0px !important;}
+#app-aside-folded{top: -2px !important;}
 .app-aside-folded #app-aside-folded{
   width: 50px;
   text-align: center;
   height: 50px;
   line-height: 50px;
+  top: 0px !important;
 
 }
 /*end custom css code*/
