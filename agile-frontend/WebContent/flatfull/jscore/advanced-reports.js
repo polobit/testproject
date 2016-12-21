@@ -1002,11 +1002,14 @@ function reportDetails(filter_name,start_time,end_time,date_type)
 		filter_name=filter_name+'_'+owner;
 		}
 		var url='/core/api/milestone/pipelines';
+		 if ($('#track',el).length > 0)
+		{
 		var pipeline_id=$("#track",el).val();
 		if(pipeline_id != "" &&  pipeline_id != "All Tracks")
 		{
 			url='/core/api/milestone/'+pipeline_id;
 		}
+	 }
 		var tracks = new Base_Collection_View({url : url});
 					won_milestone="Won";
 					tracks.collection.fetch({
