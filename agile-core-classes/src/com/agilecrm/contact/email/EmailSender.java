@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.EmailGateway;
@@ -35,8 +36,11 @@ public class EmailSender
     private int totalEmailsSent = 0;
 
     boolean isWhiteLabled = false;
-
-    private EmailSender()
+    
+    private String queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE; 
+    private int emailsToSend = 0;
+    		
+	private EmailSender()
     {
     }
 
@@ -257,5 +261,21 @@ public class EmailSender
 		// Add to pull queue with from email as Tag
 		PullQueueUtil.addToPullQueue(queueName, mailDeferredTask, fromEmail);
     }
+
+	public String getQueueName() {
+		return queueName;
+	}
+
+	public void setQueueName(String queueName) {
+		this.queueName = queueName;
+	}
+	
+	public int getEmailsToSend() {
+		return emailsToSend;
+	}
+
+	public void setEmailsToSend(int emailsToSend) {
+		this.emailsToSend = emailsToSend;
+	}
 
 }

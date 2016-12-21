@@ -197,6 +197,9 @@ public class WorkflowsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Workflow updateWorkflow(Workflow workflow) throws Exception {
 		try {
+			if(workflow.unsubscribe.is_unsubscribe_email_disabled){
+				workflow.unsubscribe.is_unsubscribe_email_disabled=false;
+			}
 			workflow.save();
 			
 			try {

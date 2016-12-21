@@ -41,6 +41,7 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.dashboards.Dashboard"%>
 <%@page import="com.agilecrm.dashboards.util.DashboardUtil"%>
+<%@page import="com.agilecrm.account.util.EmailGatewayUtil"%>
 <%@page import="java.util.List"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
@@ -67,6 +68,16 @@ String clientIP = request.getRemoteAddr();
 
 // Get current user prefs
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
+// Change Prefs for requested new theme
+String uiVersion = request.getParameter("ui");
+if(StringUtils.isNotBlank(uiVersion) && uiVersion.equalsIgnoreCase("v2")) {
+	currentUserPrefs.theme = "15";
+	String menuPosition = currentUserPrefs.menuPosition;
+	if(StringUtils.isNotBlank(menuPosition) && menuPosition.equalsIgnoreCase("top"))
+		currentUserPrefs.menuPosition = "leftcol";
+}
+	
+
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
 
@@ -213,9 +224,10 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <%
 
 	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
-
+    if(!isDisabledNewThemeStyles){
 %>
 <link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
+<%} %>
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -348,16 +360,6 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 <body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("");%>'>
-
-<!-- New theme css insert 
-  <iframe class="hide" id="agile-theme-15" src="about:blank"></iframe>
-  <script type="text/javascript">
-  var doc = document.getElementById('agile-theme-15').contentWindow.document;
-  doc.open();
-  doc.write('<html><head><title></title></head><body><link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" rel="stylesheet" data-agile-theme="fr-15" /></body></html>');
-  doc.close();
-  </script> -->
-<!-- End of ne theme insert -->
 <script type="text/javascript">
 function isIE() {
   var myNav = navigator.userAgent.toLowerCase();
@@ -955,7 +957,31 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
   <%
   if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
-  %>          
+  %>   
+  <li id="ticketknowledgebasemenu">
+    <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
+      <i class="fa fa-search"></i>
+      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
+    </a>
+  </li>
+  <%
+  }
+  %>
+  <%
+  if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>
+  <li id="feedbackactivitiesmenu">
+    <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
+      <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+      <span>Feedback</span>
+    </a>
+  </li>
+  <%
+  }
+  %>
+  <%
+  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  %>       
   <li id="ticketgroupsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -1336,6 +1362,9 @@ var COMPANIES_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAs
 var LEADS_CONTACT_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeContact")))%>;
 // Get Lead company type custom fields
 var LEADS_COMPANY_TYPE_FIELDS = <%=SafeHtmlUtil.sanitize(mapper.writeValueAsString(request.getAttribute("customFieldsScopeLeadTypeCompany")))%>;
+
+//Get email gateway status
+var _IS_EMAIL_GATEWAY = <%=EmailGatewayUtil.isEmailGatewayExist()%>;
 
 //online scheduling url will be filled  only when user goes to calendar route 
 var ONLINE_SCHEDULING_URL ="" ;

@@ -3249,7 +3249,7 @@ table.hide-head-checkbox th label.i-checks {
   padding-right: 0px;padding-top: 0px;
   border-top-width: 1px;     
   height: auto;  
-  font-size: 18px;
+  font-size: 14px;
   }
 
 .well{
@@ -5092,6 +5092,23 @@ border-top: 0px !important;
 }
 .uv-icon,.uv-popover-tail{
   display: none !important;
+}
+#workflow-unsubscribe-option .popover {
+    color: #656565;
+}
+#unsubscribe-endisable-option{
+  display:none;
+}
+#workflow-unsubscribe-block label.control-label.col-sm-2 {
+    width: 8%!important;
+    text-align: right;
+    padding-right: 7px;
+}
+#workflow-unsubscribe-block .template-block {
+    margin-top: -12px;
+}
+#workflow-unsubscribe-block .controls.col-sm-4 {
+     width: 25.33333%;
 }
 
 .data-block .canned-video-xs{

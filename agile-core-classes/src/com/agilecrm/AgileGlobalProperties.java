@@ -27,6 +27,23 @@ public class AgileGlobalProperties implements Serializable
 	
 	private Long created_time = 0l;
 	private Long updated_time = 0l;
+	
+	public enum SendGridIpPools
+	{
+		INTERNAL("internal"), BULK("bulk"), TRANSACTIONAL("transactional");
+		
+		String name = "internal";
+		
+		SendGridIpPools(String name)
+		{
+			this.name = name;
+		}
+		
+		public String getPoolName()
+		{
+			return name;
+		}
+	}
 
 	public static ObjectifyGenericDao<AgileGlobalProperties> dao = new ObjectifyGenericDao<AgileGlobalProperties>(
 			AgileGlobalProperties.class);

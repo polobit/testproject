@@ -1,9 +1,14 @@
 <script id="tasks-list-collection-template" type="text/html">
 {{#unless this.length}}
-<div class="slate p-xs">
-    <div class="slate-content">
-		<h3> <icon class="icon-edit"></icon> {{agile_lng_translate 'tasks' 'no-tasks-found'}}</h3>
-	</div>
+<div id="slate">
+    <div class="alert bg-white">
+        <div class="slate-content">
+          <div class="box-right pull-left">
+    		<h4> {{agile_lng_translate 'portlets' 'no-tasks-found'}}</h4>
+            <a href="#" class="add-task btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate "contact-details" "add-task"}}</a>
+          </div>
+    	</div>
+    </div>
 </div>
 {{else}}
 <div class="data-block">

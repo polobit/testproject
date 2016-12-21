@@ -564,10 +564,15 @@ public class EmailGatewayUtil
      * @param tasks
      *            - tasks leased from pull queue
      */
-    public static void sendMails(List<TaskHandle> tasks)
+    public static void sendMails(List<TaskHandle> tasks, String queueName)
     {
     	
-	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks));
+	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), queueName);
+    }
+    
+    public static void sendMails(List<TaskHandle> tasks)
+    {
+    	sendMailsMailDeferredTask(convertTaskHandlestoMailDeferredTasks(tasks), null);
     }
 
     public static List<MailDeferredTask> convertTaskHandlestoMailDeferredTasks(List<TaskHandle> tasks)
@@ -649,7 +654,7 @@ public class EmailGatewayUtil
 	}
     }
 
-    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks)
+    public static void sendMailsMailDeferredTask(List<MailDeferredTask> tasks, String queueName)
     {
 
 	MailDeferredTask mailDeferredTask = tasks.get(0);
@@ -665,6 +670,9 @@ public class EmailGatewayUtil
 	    NamespaceManager.set(domain);
 
 	    EmailSender emailSender = EmailSender.getEmailSender();
+	    emailSender.setQueueName(queueName);
+	    emailSender.setEmailsToSend(tasks.size());
+	    
 	    EmailGateway emailGateway = emailSender.emailGateway;
 
 	    if (emailSender.canSend())
@@ -708,5 +716,17 @@ public class EmailGatewayUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-    }     
+    }    
+    
+    /**
+     * 
+     * @return
+     */
+    public static boolean isEmailGatewayExist(){
+    	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+    	
+    	if(emailGateway == null)
+    		return false;
+    	return true;
+    }
 }

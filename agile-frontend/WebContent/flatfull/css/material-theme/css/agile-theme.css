@@ -601,6 +601,7 @@ div#contact-reports-list-view, #task-list-based-condition .panel{
 }
 .agile-theme-15 table>tbody>tr>td>label.i-checks.i-checks-sm{
   margin-bottom: 0px !important;
+  position: relative;
 }
 .agile-theme-15 #admin-settings-users .panel-heading>div:first-child{
   display: none;
@@ -2314,6 +2315,9 @@ table .headerSortUp::after, table .headerSortDown::after{
 .agile-theme-15 .agile-page-header#opportunities-header{padding-bottom: 0px!important;}
 .agile-theme-15 .i-checks-sm input:checked+i:before{width: 0px!important;}
 
+.agile-theme-15 .i-checks-sm input:checked+i::before{width: 0px!important;}
+.agile-theme-15 .agile-table td.checkbox {/*overflow: hidden;*/position: inherit;}
+
 #sync-app-data p{
   padding: 10px 15px;
 }
@@ -2370,9 +2374,9 @@ table.iptable>tbody>tr>td:nth-child(2){
 .i-checks input[type="radio"]+i{display:none;}
 .dropdown-menu.pull-right.emailbuilder-copy{right:15px;}
 .dropdown-menu > li > a >i.fa-check.sort-field-check.m-t-xs{margin-top:0px!important;}
-#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important; top: 5px!important;}
+#contacts-listener-container .agile-page-header  .pull-right.pos-abs{right: -20px!important;}
 #reportrange{margin-right:0px;}
-#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;top: 5px;}
+#companies-listener-container .agile-page-header .pull-right.pos-abs{right: -20px!important;}
 .agile-theme-15 .agile-header-btns{top: 2px!important;}
 
 .agile-theme-15 #rep-performance-reports .bg-info.dk, .bg-info-dk, .bg-info .dk{
@@ -2526,6 +2530,9 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 .plan-collection-content{
   font-size: 13px !important;
 }
+.agile-theme-15 table.agile-table thead th .i-checks input[type="checkbox"] {
+  margin: 2px 0px 0px 2px;
+}
 .agile-theme{
   margin-left: -30px;
 }
@@ -2658,11 +2665,13 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   width: 100%;
   height: auto;
 }
+
 @media (min-width: 768px){
 #saveFilterForm .control-label {
       padding-top: 11px;
 }
 }
+
 .tickets-main .wrapper.bg-light {
     background-color: #edf1f2 !important;
 }
@@ -2750,6 +2759,17 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   margin:0px !important;
 }
 
+#starter_plan .panel,#regular_plan .panel,#pro_plan .panel,.email-selected-plan .panel{
+  box-shadow: none !important;
+}
+
+#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
+  display: none;
+}
+#aside i.material-icons{
+  display:block !important;
+}
+
 #saveFilterForm input[type="radio"]{
   top: 5px;
 }
@@ -2830,4 +2850,8 @@ span#rolecontainer::first-letter {
     height: 35px  !important;
     line-height: 35px !important;
     font-size: 12px !important;
+}
+
+table.dealproducts_table thead th .i-checks input[type="checkbox"]{
+  margin: 4px 0 0 3px !important;
 }
