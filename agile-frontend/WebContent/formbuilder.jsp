@@ -74,7 +74,7 @@ String template = request.getParameter("template");
             </div>
             <!-- / whose components -->
          </div>
-         <div class="modal fade in" id="formNextActionModal"></div>
+         <div class="modal fade in" id="formNextActionModal" data-keyboard="false" data-backdrop="static"></div>
       </div>
       <!-- /container back -->
       <script data-main="misc/formbuilder/main-built-5.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>

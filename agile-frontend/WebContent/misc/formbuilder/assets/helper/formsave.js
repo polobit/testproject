@@ -40,13 +40,13 @@ define([
 						"form_fb_link" : 'https://www.facebook.com/sharer.php?u='+encodedLink+'?usp=fb_send_fb&t='+data.formName,
 						"form_tweet_link" : 'https://twitter.com/intent/tweet?url='+form_perm_link+'?usp=fb_send_twt&text='+data.formName,
 						"form_google_link" : 'https://plus.google.com/share?url='+encodedLink+'?usp=fb_send_gp',
-						"form_analytics" : window.location.origin+'/#analytics-code',
+						"form_analytics" : window.location.origin+'/#api-analytics',
 						"form_name" : data.formName
  						});
 					
 						var $formNextActionModal = $("#formNextActionModal");
 						$formNextActionModal.html(next_action_popup).modal("show");
-						$('#success-msg').fadeIn('slow').delay(1000).fadeOut('slow');
+						$('#success-msg').fadeIn('slow').delay(2000).fadeOut('slow');
 					}
 					
 					var $formNextActionModal = $("#formNextActionModal");
