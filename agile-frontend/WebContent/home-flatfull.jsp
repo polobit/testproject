@@ -431,7 +431,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color nav-grid"  data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span><i class="material-icons m-l-sm m-t-xs" >more_horiz</i>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>
