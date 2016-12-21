@@ -1008,7 +1008,7 @@
 							</div>
 					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
-							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactCompanyTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactCompanyTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-navicon {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
 							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
                     		<i class="caret"></i>
                 			</button> -->
@@ -1099,7 +1099,7 @@
            </div>
         		{{/unless}}
         		{{#if this.length}}
-              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{#isNewTheme}} table-compact {{/isNewTheme}} {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 							<div class="filter-criteria"></div>
 			 				<thead>
                       			<tr style="text-transform: capitalize;">

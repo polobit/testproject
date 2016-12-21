@@ -341,7 +341,7 @@
             {{/if}}
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
-            <table class="table table-hover agile-table table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
+            <table class="table table-hover {{#isNewTheme}} agile-table {{/isNewTheme}} table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
                 <colgroup><col width="50%"><col width="4%"></colgroup>
                 <thead>
                 {{#unless ipList.length}} {{else}}

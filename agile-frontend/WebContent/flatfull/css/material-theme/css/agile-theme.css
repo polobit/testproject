@@ -2099,7 +2099,7 @@ ul#recent-menu-model-list li:nth-child(even){
 
 .workflow-sortby,.tickets-toolbar .new-theme-sort
 {
-  margin-top:-7px;
+  margin-top:-15px;
 }
 .tickets-toolbar .new-theme-sort{
    margin-top: -7px !important;
@@ -2288,9 +2288,8 @@ table .headerSortUp::after, table .headerSortDown::after{
 #textModalForm .i-checks-sm>i {
   display: none;
 }
-
 #prefs-tabs-content .admin-message-info{position: absolute;left: 20%;top:14%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
-.integrationstab .btn.btn-primary,.integrationstab .btn.btn-default{height:30px !important;line-height:30px !important;font-size:12px !important;}
+.integrationstab .btn.btn-primary,.integrationstab .btn.btn-default,.integrationstab .btn.btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
 .m-t-sm-imp{margin-top:10px}
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
 #TrackingTab.nav li.active a{background-color: rgba(17,160,248,0.2);color: #11a0f8 !important;}
@@ -2601,10 +2600,10 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 {
     background-color: rgba(17, 160, 248, 0.1) !important;
 }*/
-.agile-theme-15 #toggle_previous_tickets
+/*.agile-theme-15 #toggle_previous_tickets
 {
   margin-top:10px;
-}
+}*/
 #ticket-feedback.wrapper-lg
 {
   margin-top:10px;
@@ -2708,15 +2707,15 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display: none;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons,#recent-menu i.material-icons{
+.agile-theme-15 #agile-menu-navigation-container .nav  i.material-icons,.agile-theme-15 #recent-menu i.material-icons{
   display:block !important;
   color:#78909c !important;
 }
-#recent-menu i.material-icons{
+.agile-theme-15 #recent-menu i.material-icons{
   margin-top: 3px !important;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
+.agile-theme-15 #agile-menu-navigation-container .nav  i.material-icons,.agile-theme-15 #aside  i.material-icons{
   display:block !important;
 }
 
@@ -2769,14 +2768,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 
-#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
-  display: none;
-}
-#aside i.material-icons{
-  display:block !important;
-}
 
-#saveFilterForm input[type="radio"]{
+#saveFilterForm input[type="radio"],#saveSegmentFilterForm input[type="radio"]{
   top: 5px;
 }
 ul.chosen-choices{
@@ -2807,7 +2800,7 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 
 @-moz-document url-prefix() { 
   input[type="checkbox"] {
-     margin-left:0px;
+     /*margin-left:0px;*/
      vertical-align: middle;
   }
 }
@@ -2929,8 +2922,11 @@ code span.tag, code span.tag:hover{
   padding-left: 5px !important;
   padding-right: 45px !important;
 }
-.goaltab-main .panel-default .panel-heading, #milestones-bg{
+#milestones-bg{
   background-color: inherit !important;
+}
+.goaltab-main .panel-default .panel-heading, .goaltab-main{
+  background-color: #f4f8f9 !important;
 }
 .goaltab-main .panel-heading>div:first-child{
   display: none;
@@ -2938,12 +2934,12 @@ code span.tag, code span.tag:hover{
 #products-top-margin{
   border-top: 15px solid #f4f8f9; 
 }
-table#deal-sources-table>tbody>tr, #show_milestone_field{
+table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .show_telephony_status_field, .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9; 
 }
-.show_lost_reason_add, .show_deal_source_add{
+/*.show_lost_reason_add, .show_deal_source_add{
   padding-right: 15px !important;
-}
+}*/
 #lossreasons-tab, #deal-sources-tab{
   padding: 0 !important;
 }
@@ -2954,18 +2950,164 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 /*.add-pipeline{
   margin-right: 15px;
 }*/
-.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
+/*.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
   border-top: 0 !important;
-}
-.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
+}*/
+/*.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9;
 }
+#data-sync-settings-tab-content form label , #prefs-tabs-content #widget-settings-tab-pane form label,#prefs-tabs-content form label
+{
+  margin-bottom: 5px;
+}
+#general .col-md-3 .panel{
+  height: 226px !important;
+}
+#landingPageBuilderForm .controls{
+  margin-top: 5px !important;
+}
+
+.update-segment-name .control-label{
+  margin-top: 5px !important;
+}
+
+.previous-tickets-panel.btn-sm-imp{
+  height: 169px !important;
+  line-height: 18.57px !important
+}
+
+
+*/
 
 #contact-reports-list-view .panel-heading.deal-products-btn-heading {
     display:block!important;width :75%;
+}
+
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
+}
+
+table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
+  position: inherit!important;
+}
+#ticket-model-list > tr > td.b-l-3x {
+  border-left-width: 1px;
+}
+
+.btn.btn-xs-imp {
+   height: auto;
+   line-height: 1.5;
+   padding: 0px 7px;
+} 
+.btn.grp-btn-cpy-email {
+    float: none;
+    right: -26px;
+    top: 0px;
+}
+#contact-reports-list-view .panel-heading.deal-products-btn-heading {
+  display:block!important;
+  width :75%;
+  padding-right: 0;
+  padding-left: 0;
+}
+#task-category .agile-table>tbody>tr>td{
+  padding: 8px !important;
+}
+table.products-table>tbody>tr>td{
+  padding: 6px !important;
+}
+table.products-table>tbody>tr>td .i-checks.i-checks-sm{
+  padding-left: 30px;
+}
+table#deal-sources-table>tbody>tr:last-child{
+  border-bottom: 10px solid #f4f8f9 !important;
+}
+#deal-goals-tab ul.list-inline{
+  margin-right: 15px;
+}
+#goal_duration span{
+  /*line-height: 24px!important;*/
+  border-radius: 4px;
+  vertical-align: middle;
+  border-color: #fff!important;
+  border: 0 !important;
+  padding-top: 6px !important;
+}
+#no-products-slate{
+  width: 75.0%;
+}
+.prefs-option-col .panel.panel-default{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+.userVoice-text{
+  margin-top: 5px;
+}
+#toggle_previous_tickets{
+  margin-top: 2px !important;
+}
+#general .col-md-3 .panel{
+  height: 226px !important;
+}
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
+}
+#landingPageBuilderForm .controls{
+  margin-top: 5px !important;
+}
+.previous-tickets-panel .padder{
+  padding: 5px !important;
+}
+.contacts-inner-div #bulk-select{
+  border: none !important;
+  background-color: #f4f8f9 !important;
+}
+#contact-image-content .editicon span{margin-top: -2px !important;}
+
+#user_cal_sub{
+  margin-top: 20px !important;
+}
+#workflowform label,#verify-email label{
+  margin-bottom: 10px;
+}
+#lossreasons-tab, #deal-sources-tab{
+  background-color: inherit;
 }
 .popover{
   padding: 0px;
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+
+.agile-theme-15 #workflows-tab-container #general .ellipsis-multiline.m-b-md
+{
+  margin-bottom:0px;
+}
+.agile-theme-15 .tickets-main .fa-sitemap.btn-default.show-workflows
+{
+      border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 aside #agile-menu-navigation-container .nav .show-icon-folded{
+  display: none !important;
+} 
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
+  display: block !important;
+}
+
+#ticket-last-notes{
+  border-radius: 4px !important;
+}
+#contact-image-content .editicon span{margin-top: -2px !important;}
+.agile-theme-15 .isotope-item{margin-top: 7px;}
+.agile-theme-15 .company-details-mobile-view .caret{margin-top: -11px;}
+.agile-theme-15 div#tickets-bulk-select {height: 20px;}
+#tickets-container #custom-filters-container .save-as-filter-container
+{
+  margin-top:10px;
+}
+
+#wrap.app-aside-folded .fa.fa-cloud{
+      display: none!important;
 }
