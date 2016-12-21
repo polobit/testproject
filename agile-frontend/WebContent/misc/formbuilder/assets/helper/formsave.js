@@ -45,6 +45,7 @@ define([
  						});
 					
 						var $formNextActionModal = $("#formNextActionModal");
+						$("#header").css("z-index","0");
 						$formNextActionModal.html(next_action_popup).modal("show");
 						$('#success-msg').fadeIn('slow').delay(2000).fadeOut('slow');
 					}
@@ -60,3 +61,13 @@ define([
 			}});
 	}}
 });
+ var hideFormNextActionPopup =function(){
+ 	if($("#form-save-popup").prop("checked"))
+        localStorage.setItem("form-save-popup", true);
+    else
+        localStorage.setItem("form-save-popup", false);
+ }
+  var nextActionCloseClick = function(){
+ 	$("#header").css("z-index","2001");
+ }
+
