@@ -42,7 +42,7 @@ String template = request.getParameter("template");
 
    </head>
    <body>
-      <header id="header" class="navbar" role="menu">
+      <header id="header" class="navbar navbar-fixed-top" role="menu">
          <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
            <i class="fa fa-cloud"></i> 
          </a>
@@ -54,7 +54,7 @@ String template = request.getParameter("template");
             <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
                <span>Preview</span> 
             </a>
-            <a id="form-save" class="btn btn-primary navbar-brand  navbar-color">
+            <a id="form-save" class="btn navbar-brand  navbar-color">
                <span>Save</span>
             </a>
          </div>

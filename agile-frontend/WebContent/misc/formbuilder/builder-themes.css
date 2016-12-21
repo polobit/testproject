@@ -625,6 +625,9 @@ ul li>a[href="#bsourcecodeb"] {
 .container,#header{
   display:none;
 }
+.container{
+  margin-top: 3%;
+}
 #loader{
     max-width: 1000px;
     margin: auto;
