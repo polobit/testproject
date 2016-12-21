@@ -224,269 +224,190 @@ var VisitorsSegmentationRouter = Backbone.Router
 
 var visitorsUtils = {
 		
-	hasContactFilter : 	function(postData)
-	{
-		var hasContactFilter = false;
-		if(postData)
+		hasContactFilter : 	function(postData)
 		{
-		    var rules = JSON.parse(postData).rules; 
-		    for(var i=0;i<rules.length;i++)
+			var hasContactFilter = false;
+			if(postData)
+			{
+			    var rules = JSON.parse(postData).rules; 
+			    for(var i=0;i<rules.length;i++)
+			    {
+			      if(rules[i].LHS === 'tags')
+			      {
+			        hasContactFilter = true;
+			      }
+			    }
+			 } 
+			 return hasContactFilter;
+		},
+
+		hasProperContactFilter : function(postData)
+		{
+			var hasProperContactFilter = false;
+			if(postData)
+			{
+				var rules = JSON.parse(postData).rules;
+				//disabling existing infiniscrolls in this visitors route
+				//    var visitors_scroll = INFINI_SCROLL_JSON.visitors;
+				//    if(visitors_scroll)
+				//      INFINI_SCROLL_JSON.visitors = undefined;
+				if(rules.length > 1)
+				{
+					hasProperContactFilter = true;
+				}
+				else
+				{
+					if($('#lhs_filters_segmentation #error-message').hasClass("hide")){$('#lhs_filters_segmentation #error-message').removeClass("hide");}
+					hasProperContactFilter = false;
+				}
+			}		
+			return hasProperContactFilter;
+		},
+		
+		doPostFetchOperations : function(collectionView)
+		{
+			visitorsUtils.onFetchVisitorsSuccess(collectionView);
+		    var collection = collectionView.collection;
+		    var model = collection.at(collection.length-1).toJSON();
+		    
+		    if(typeof model.is_old_model != "undefined" && model.is_old_model)
 		    {
-		      if(rules[i].LHS === 'tags')
-		      {
-		        hasContactFilter = true;
-		      }
+		    	//completeRequestCycle(collectionView);
+		    	visitorsUtils.hideNotification($(collectionView.el));
 		    }
-		 } 
-		 return hasContactFilter;
-	},
-
-	hasProperContactFilter : function(postData)
-	{
-		var hasProperContactFilter = false;
-		if(postData)
+		    else if(typeof model.has_results != "undefined" && model.has_results)
+		    {
+		      visitorsUtils.completeRequestCycle(collectionView);
+		      if(typeof model.has_emails != "undefined" &&  !(model.has_emails))
+		    	  visitorsUtils.hideNotification($(collectionView.el));
+		      visitorsUtils.removeInfoModel(collectionView);
+		      visitorsUtils.showCollectionView(collectionView);
+		    }
+		    else
+		    {
+		      var post_data = collectionView.post_data;
+		        if (post_data.req_count < 10)
+		        {
+		          visitorsUtils.showNotification($(collectionView.el));
+		          visitorsUtils.removeInfoModel(collectionView);
+		          visitorsUtils.fetchVisitors(collectionView);
+		        }
+		        else if(post_data.req_count >= 10)
+		        {
+		        	visitorsUtils.completeRequestCycle(collectionView);
+		        	visitorsUtils.removeInfoModel(collectionView);
+		        }
+		    }
+		    visitorsUtils.updateVisitorsCount(collection.length);
+		},
+		
+		fetchVisitors : function(collectionView)
 		{
-			var rules = JSON.parse(postData).rules;
-			//disabling existing infiniscrolls in this visitors route
-			//    var visitors_scroll = INFINI_SCROLL_JSON.visitors;
-			//    if(visitors_scroll)
-			//      INFINI_SCROLL_JSON.visitors = undefined;
-			if(rules.length > 1)
-			{
-				hasProperContactFilter = true;
-			}
-			else
-			{
-				if($('#lhs_filters_segmentation #error-message').hasClass("hide")){$('#lhs_filters_segmentation #error-message').removeClass("hide");}
-				hasProperContactFilter = false;
-			}
-		}		
-		return hasProperContactFilter;
-	},
-	
-	doPostFetchOperations : function(collectionView)
-	{
-		visitorsUtils.onFetchVisitorsSuccess(collectionView);
-	    var collection = collectionView.collection;
-	    var model = collection.at(collection.length-1).toJSON();
-	    
-	    if(typeof model.is_old_model != "undefined" && model.is_old_model)
-	    {
-	    	//completeRequestCycle(collectionView);
-	    	visitorsUtils.hideNotification($(collectionView.el));
-	    }
-	    else if(typeof model.has_results != "undefined" && model.has_results)
-	    {
-	      visitorsUtils.completeRequestCycle(collectionView);
-	      if(typeof model.has_emails != "undefined" &&  !(model.has_emails))
-	    	  visitorsUtils.hideNotification($(collectionView.el));
-	      visitorsUtils.removeInfoModel(collectionView);
-	      visitorsUtils.showCollectionView(collectionView);
-	    }
-	    else
-	    {
-	      var post_data = collectionView.post_data;
-	        if (post_data.req_count < 10)
-	        {
-	          visitorsUtils.showNotification($(collectionView.el));
-	          visitorsUtils.removeInfoModel(collectionView);
-	          visitorsUtils.fetchVisitors(collectionView);
-	        }
-	        else if(post_data.req_count >= 10)
-	        {
-	        	visitorsUtils.completeRequestCycle(collectionView);
-	        	visitorsUtils.removeInfoModel(collectionView);
-	        }
-	    }
-	    visitorsUtils.updateVisitorsCount(collection.length);
-	},
-	
-	fetchVisitors : function(collectionView)
-	{
-	    var infiniScroll = collectionView.infiniScroll;
-	    infiniScroll.enableFetch();
-	    infiniScroll.fetchAgain();
-	    var viewElement = $(collectionView.el);
-	    var message_id = viewElement.find('#message-id');
-	    message_id.find("#load_more").css("display","none");
-	},
+		    var infiniScroll = collectionView.infiniScroll;
+		    infiniScroll.enableFetch();
+		    infiniScroll.fetchAgain();
+		    var viewElement = $(collectionView.el);
+		    var message_id = viewElement.find('#message-id');
+		    message_id.find("#load_more").css("display","none");
+		},
 
-	onFetchVisitorsSuccess : function(collectionView)
-	{
-	    var collection = collectionView.collection;
-	    var model = collection.at(collection.length - 1).toJSON();
-	    var post_data = collectionView.post_data;
-	    var request_count = parseInt(post_data.req_count);
-	    var request_count = request_count + 1;
-	    post_data.req_count = request_count;
-	    post_data.scanned_upto = model.scannedUpto;
-	    var viewElement = $(collectionView.el);
-	    var message_id = viewElement.find('#message-id');
-	    message_id.find("#scanned_upto").html("Scanned upto " + model.scannedUpto);
-	    //message_id.append("<span id=\"scanned_upto\" style=\"margin-left:35%;\"> Loading... Scanned upto " + model.scannedUpto);
-	    //message_id.find("#load_more").css("display","none");
-	    //var count = parseInt($("#visitors-count").attr("data-t"));
-	    //count = count + parseInt(model.count);
-	    //updateVisitorsCount(count);
-	    //count = collection.length - 1;
-	},
+		onFetchVisitorsSuccess : function(collectionView)
+		{
+		    var collection = collectionView.collection;
+		    var model = collection.at(collection.length - 1).toJSON();
+		    var post_data = collectionView.post_data;
+		    var request_count = parseInt(post_data.req_count);
+		    var request_count = request_count + 1;
+		    post_data.req_count = request_count;
+		    post_data.scanned_upto = model.scannedUpto;
+		    var viewElement = $(collectionView.el);
+		    var message_id = viewElement.find('#message-id');
+		    message_id.find("#scanned_upto").html("Scanned upto " + model.scannedUpto);
+		    //message_id.append("<span id=\"scanned_upto\" style=\"margin-left:35%;\"> Loading... Scanned upto " + model.scannedUpto);
+		    //message_id.find("#load_more").css("display","none");
+		    //var count = parseInt($("#visitors-count").attr("data-t"));
+		    //count = count + parseInt(model.count);
+		    //updateVisitorsCount(count);
+		    //count = collection.length - 1;
+		},
 
-	completeRequestCycle : function(collectionView)
-	{
-	    var viewElement = $(collectionView.el);
-	    var message_id = viewElement.find('#message-id');
-	    if(collectionView.collection.length > 0)
-	    {
-	        var model = collectionView.collection.at(collectionView.collection.length-1).toJSON();
-	        message_id.find("#scanned_upto").html("Scanned upto " + model.scannedUpto);
-	    }
-	    message_id.find("#load_more").css("display","inline");
-	    var message_id = viewElement.find('#message-id');
-	    message_id.css("display","block");
-	},
+		completeRequestCycle : function(collectionView)
+		{
+		    var viewElement = $(collectionView.el);
+		    var message_id = viewElement.find('#message-id');
+		    if(collectionView.collection.length > 0)
+		    {
+		        var model = collectionView.collection.at(collectionView.collection.length-1).toJSON();
+		        message_id.find("#scanned_upto").html("Scanned upto " + model.scannedUpto);
+		    }
+		    message_id.find("#load_more").css("display","inline");
+		    var message_id = viewElement.find('#message-id');
+		    message_id.css("display","block");
+		},
 
-	removeInfoModel : function(collectionView)
-	{
-		var collection = collectionView.collection;
-	    var model = collection.at(collection.length-1).toJSON();
-	    if(typeof model.is_info_model != "undefined" && model.is_info_model)
-	    {
-	        collection.remove(collection.at(collection.length-1));
-	    }
-	},
+		removeInfoModel : function(collectionView)
+		{
+			var collection = collectionView.collection;
+		    var model = collection.at(collection.length-1).toJSON();
+		    if(typeof model.is_info_model != "undefined" && model.is_info_model)
+		    {
+		        collection.remove(collection.at(collection.length-1));
+		    }
+		},
 
-	hideNotification : function(viewElement)
-	{
-	  var message_id = viewElement.find("#message-id");
-	  message_id.css("display","none");
-	},
+		hideNotification : function(viewElement)
+		{
+		  var message_id = viewElement.find("#message-id");
+		  message_id.css("display","none");
+		},
 
-	showNotification : function(viewElement)
-	{
-	  var message_id = viewElement.find("#message-id");
-	  message_id.css("display","block");
-	},
+		showNotification : function(viewElement)
+		{
+		  var message_id = viewElement.find("#message-id");
+		  message_id.css("display","block");
+		},
 
-	loadContactFilters : function(id,el,callback)
-	{
-	    if(callback == undefined)
-	       callback = 'no-callback';
+		loadContactFilters : function(id,el,callback)
+		{
+		    if(callback == undefined)
+		       callback = 'no-callback';
 
-	    var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-	    fillSelect(id, '/core/api/filters?type=PERSON', undefined, callback,optionsTemplate, undefined, el);
-	},
+		    var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+		    fillSelect(id, '/core/api/filters?type=PERSON', undefined, callback,optionsTemplate, undefined, el);
+		},
 
-	loadContactFilter : function(filter_id,viewElement)
-	{
-	  var contact_filter = viewElement.find("#contact_filter_selector");
-	  contact_filter.val(filter_id);
-	},
+		loadContactFilter : function(filter_id,viewElement)
+		{
+		  var contact_filter = viewElement.find("#contact_filter_selector");
+		  contact_filter.val(filter_id);
+		},
 
-    disableInfiniScroll : function()
-	{
-	  var current_route = window.location.hash.split("#")[1];
-	  // Disables all infini scrolls in the map
-	  $.each(INFINI_SCROLL_JSON, function(key, value) {
-	    if(key === 'visitors')
-	      value.disableFetch();
-	  });
-	},
+	    disableInfiniScroll : function()
+		{
+		  var current_route = window.location.hash.split("#")[1];
+		  // Disables all infini scrolls in the map
+		  $.each(INFINI_SCROLL_JSON, function(key, value) {
+		    if(key === 'visitors')
+		      value.disableFetch();
+		  });
+		},
 
-	showCollectionView : function(collectionView)
-	{
-	  var viewElement = $(collectionView.el);
-	  var message_id = viewElement.find("#visitors-table");
-	  message_id.css("display","block");
-	},
+		showCollectionView : function(collectionView)
+		{
+		  var viewElement = $(collectionView.el);
+		  var visitorsTable = viewElement.find("#visitors-table");
+		  visitorsTable.css("display","table");
+		},
 
-	showSlateConetent : function(viewElement)
-	{
-	  var slate = viewElement.find("#slate");
-	  slate.css("display","block");
-	},
+		showSlateConetent : function(viewElement)
+		{
+		  var slate = viewElement.find("#slate");
+		  slate.css("display","block");
+		},
 
-	updateVisitorsCount : function(count)
-	{
-	   //$("#visitors-count").attr("data-t",count);
-	   $("#visitors-count").html("<small> (" + count + " Total) </small>");
+		updateVisitorsCount : function(count)
+		{
+		   //$("#visitors-count").attr("data-t",count);
+		   $("#visitors-count").html("<small> (" + count + " Total) </small>");
+		}
 	}
-}
-
-function hasContactFilter(postData)
-{
-  var hasContactFilter = false;
-  if(postData)
-  {
-    var rules = JSON.parse(postData).rules; 
-    for(var i=0;i<rules.length;i++)
-    {
-      if(rules[i].LHS === 'tags')
-      {
-        hasContactFilter = true;
-      }
-    }
-  } 
-  return hasContactFilter;
-}
-function hasProperContactFilter(postData)
-{
-  var hasProperContactFilter = false;
-  if(postData)
-  {
-    var rules = JSON.parse(postData).rules;
-    //disabling existing infiniscrolls in this visitors route
-//    var visitors_scroll = INFINI_SCROLL_JSON.visitors;
-//    if(visitors_scroll)
-//      INFINI_SCROLL_JSON.visitors = undefined;
-    if(rules.length > 1)
-    {
-      hasProperContactFilter = true;
-    }
-    else
-    {
-      if($('#lhs_filters_segmentation #error-message').hasClass("hide")){$('#lhs_filters_segmentation #error-message').removeClass("hide");}
-      hasProperContactFilter = false;
-    }
-  }
-  return hasProperContactFilter;
-}
-
-function doPostFetchOperations(collectionView)
-{
-	onFetchVisitorsSuccess(collectionView);
-    var collection = collectionView.collection;
-    var model = collection.at(collection.length-1).toJSON();
-    
-    if(typeof model.is_old_model != "undefined" && model.is_old_model)
-    {
-      //completeRequestCycle(collectionView);
-        hideNotification($(collectionView.el));
-    }
-    else if(typeof model.has_results != "undefined" && model.has_results)
-    {
-      completeRequestCycle(collectionView);
-      if(typeof model.has_emails != "undefined" &&  !(model.has_emails))
-        hideNotification($(collectionView.el));
-      removeInfoModel(collectionView);
-      showCollectionView(collectionView);
-    }
-    else
-    {
-      var post_data = collectionView.post_data;
-        if (post_data.req_count < 10)
-        {
-          showNotification($(collectionView.el));
-          removeInfoModel(collectionView);
-            fetchVisitors(collectionView);
-        }
-        else if(post_data.req_count >= 10)
-        {
-            completeRequestCycle(collectionView);
-            removeInfoModel(collectionView);
-        }
-    }
-    updateVisitorsCount(collection.length);
-}
-
-
-
