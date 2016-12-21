@@ -3049,3 +3049,7 @@ table#deal-sources-table>tbody>tr:last-child{
   background-color: #f4f8f9 !important;
 }
 #contact-image-content .editicon span{margin-top: -2px !important;}
+
+#user_cal_sub{
+  margin-top: 20px !important;
+}
