@@ -140,6 +140,9 @@ public class TicketGroupUtil
 		for( int index = list.size() - 1; index >= 0; index--  )
 		{
 			DomainUserPartial puser = list.get(index);
+			
+			if( user.id.equals(puser.id) )	continue;
+			
 			if( !(commonAgentIds.contains(puser.id)) )	list.remove(index);
 		}
 		
