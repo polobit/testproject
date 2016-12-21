@@ -2969,3 +2969,6 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
+#admin-prefs-tabs-content #admin-previlages .tab-container {
+  width: 100% !important;
+}
