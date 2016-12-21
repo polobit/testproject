@@ -2870,10 +2870,7 @@ div#need_help_header a:hover {
     border-radius: 4px;
 }
   .nav-grid{
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-    padding-top: 7px !important;
-    padding-bottom : 7px !important;
+    padding: 7px 15px !important;
   }
 .dashboard-select.small .dropdown-menu{
     margin-left: -47px !important;
@@ -2888,6 +2885,7 @@ span#rolecontainer::first-letter {
 }
 .grid-v2{
   top: 17px !important;
+  background-color: #fff !important;
 }
 .dashboard-select .dropdown-menu li a i{
   font-size: 22px;
@@ -3078,6 +3076,36 @@ table#deal-sources-table>tbody>tr:last-child{
   padding: 0px;
   border: 0px;
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+
+.agile-theme-15 #workflows-tab-container #general .ellipsis-multiline.m-b-md
+{
+  margin-bottom:0px;
+}
+.agile-theme-15 .tickets-main .fa-sitemap.btn-default.show-workflows
+{
+      border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 aside #agile-menu-navigation-container .nav .show-icon-folded{
+  display: none !important;
+} 
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
+  display: block !important;
+}
+
+#ticket-last-notes{
+  border-radius: 4px !important;
+}
+#contact-image-content .editicon span{margin-top: -2px !important;}
+.agile-theme-15 .isotope-item{margin-top: 7px;}
+.agile-theme-15 .company-details-mobile-view .caret{margin-top: -11px;}
+.agile-theme-15 div#tickets-bulk-select {height: 20px;}
+#tickets-container #custom-filters-container .save-as-filter-container
+{
+  margin-top:10px;
 }
 
 #wrap.app-aside-folded .fa.fa-cloud{

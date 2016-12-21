@@ -426,7 +426,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color nav-grid"  data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span><i class="material-icons m-l-sm m-t-xs" >more_horiz</i>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>
@@ -605,7 +605,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
-        <i class="material-icons" style="display: none">home</i>
+        <i class="material-icons hidden-icon" style="display: none">home</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
     </li>
@@ -621,7 +622,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li id="contactsmenu">
               <a  href="#contacts">
                 <i class="icon icon-user"></i>
-                <i class="material-icons" style="display: none">contacts</i>
+                <i class="material-icons hidden-icon" style="display: none">contacts</i>
+                <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">contacts</i>
                <!--  <i class="icon icon-user"></i> -->
                 <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
               </a>
@@ -633,7 +635,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li id="companiesmenu">
               <a  href="#companies" style="margin-left:2px;">
                 <i class="icon icon-building"></i>
-                <i class="material-icons" style="display: none">business</i>
+                <i class="material-icons hidden-icon" style="display: none">business</i>
+                <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Companies">business</i>
                 <span ><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-companies") %></span>
               </a>
             </li>
@@ -643,7 +646,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
             <li  id="dealsmenu">
               <a  href="#deals">
                 <i class="fa fa-money"></i>
-                <i class="material-icons" style="display: none">forum</i>
+                <i class="material-icons hidden-icon" style="display: none">forum</i>
+                <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Deals">forum</i>
                 <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-deals") %></span>
               </a>
             </li>
@@ -668,7 +672,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="documentsmenu">
           <a  href="#documents">
             <i class="icon icon-doc"></i>
-              <i class="material-icons" style="display: none">insert_drive_file</i>
+              <i class="material-icons hidden-icon" style="display: none">insert_drive_file</i>
+              <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Documents">insert_drive_file</i>
             <!-- <span class="leftcol-menu-folded">
               <%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-docs") %>
             </span> -->
@@ -689,7 +694,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="calendarmenu">
           <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
             <i class="icon icon-calendar"></i>
-            <i class="material-icons" style="display: none">event</i> 
+            <i class="material-icons hidden-icon" style="display: none">event</i>
+            <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Calendar">event</i> 
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "calendar") %></span> 
           </a>
         </li>
@@ -699,7 +705,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="tasksmenu">
           <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
              <i class="icon-list" data-original-title="" title=""></i>
-             <i class="material-icons" style="display: none">alarm_on</i> 
+             <i class="material-icons hidden-icon" style="display: none">alarm_on</i>
+             <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Tasks">alarm_on</i>
+
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks") %></span>
             <span title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "tasks-due") %>" class="navbar_due_tasks pull-right tasks-span-top">
                 <span  id="due_tasks_count" class="badge badge-sm bg-danger"></span>
@@ -709,7 +717,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="schedulingmenu">
           <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
             <i class="icon-tag" data-original-title="" title=""></i>
-             <i class="material-icons" style="display: none;">date_range</i>
+             <i class="material-icons hidden-icon" style="display: none;">date_range</i>
+             <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Online Calendar">date_range</i>
             <span>Online Calendar</span>
           </a>
         </li>
@@ -719,7 +728,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
-        <i class="material-icons" style="display: none">assessment</i> 
+        <i class="material-icons hidden-icon" style="display: none">assessment</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">assessment</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
       </a>
     </li>
@@ -732,7 +742,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="reportsmenu">
       <a  href="#reports">
         <i class="icon-bar-chart icon-white"></i>
-        <i class="material-icons" style="display: none">pie_chart</i> 
+        <i class="material-icons hidden-icon" style="display: none">pie_chart</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Reports">pie_chart</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
       </a>
     </li> 
@@ -754,7 +765,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
-        <i class="material-icons" style="display: none">home</i>
+        <i class="material-icons hidden-icon" style="display: none">home</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
     </li>
@@ -764,7 +776,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
         <li id="contactsmenu">
           <a class="agile-menu-dropdown-aside1" href="#contacts">
             <i class="icon icon-user"></i>
-            <i class="material-icons" style="display: none">contacts</i>
+            <i class="material-icons hidden-icon" style="display: none">contacts</i>
+            <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">contacts</i> 
             <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
           </a>
         </li>
@@ -777,14 +790,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="workflowsmenu">
       <a  href="#workflows">
         <i class="icon icon-sitemap"></i>
-        <i class="material-icons" style="display: none">device_hub</i>
+        <i class="material-icons hidden-icon" style="display: none">device_hub</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Campaigns">device_hub</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-campaigns") %></span>
       </a>
     </li>
     <li id="triggersmenu">
       <a  href="#triggers">
         <i class="icon icon-magic-wand"></i>
-        <i class="material-icons" style="display: none">merge_type</i>
+        <i class="material-icons hidden-icon" style="display: none">merge_type</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">merge_type</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
       </a>
     </li>
@@ -794,14 +809,16 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="email-templates-menu">
       <a href="#email-templates">
         <i class="icon-envelope-letter"></i>
-        <i class="material-icons" style="display: none">art_track</i>
+        <i class="material-icons hidden-icon" style="display: none">art_track</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">art_track</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
       </a>
     </li>
     <li id="formsmenu">
       <a  href="#forms">
          <i class="icon-large1 icon-docs"></i>
-         <i class="material-icons" style="display: none">web_asset</i>
+         <i class="material-icons hidden-icon" style="display: none">web_asset</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Forms">web_asset</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forms") %></span>  
       </a>
     </li>  
@@ -811,7 +828,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="landing-pages-menu">
       <a class="agile-menu-dropdown-aside1" href="#landing-pages" style="margin-left:2px;"> 
         <i class="fa fa-file-code-o"></i>
-        <i class="material-icons" style="display: none">web</i>
+        <i class="material-icons hidden-icon" style="display: none">web</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Landing Pages">web</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-landing-pages") %></span>
       </a>
     </li>
@@ -825,7 +843,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="web-rules-menu">
       <a  href="#web-rules">
         <i class="icon icon-globe"></i>
-        <i class="material-icons" style="display: none">public</i>
+        <i class="material-icons hidden-icon" style="display: none">public</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Web Rules">public</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-web-rules") %></span>
       </a>
     </li>
@@ -836,7 +855,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="push-notification-menu">
     <a href="#push-notification">
       <i class="fa fa-bell-o"></i>
-       <i class="material-icons" style="display: none">notifications</i>
+       <i class="material-icons hidden-icon" style="display: none">notifications</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Push Notifications">notifications</i> 
       <span>Push Notifications</span>
     </a>
   </li>
@@ -847,7 +867,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="socialsuitemenu">
     <a class="agile-menu-dropdown-aside1" href="#social">
       <i class="icon-bubbles"></i>
-       <i class="material-icons" style="display: none">question_answer</i>
+       <i class="material-icons hidden-icon" style="display: none">question_answer</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Social">question_answer</i> 
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-social") %></span>
     </a>
   </li>
@@ -860,7 +881,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
-        <i class="material-icons" style="display: none">person_pin_circle</i>
+        <i class="material-icons hidden-icon" style="display: none">person_pin_circle</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">person_pin_circle</i> 
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
@@ -873,7 +895,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
-        <i class="material-icons" style="display: none">assessment</i>
+        <i class="material-icons hidden-icon" style="display: none">assessment</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">assessment</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
       </a>  
     </li>
@@ -886,7 +909,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
-       <i class="material-icons" style="display: none">pie_chart</i>
+       <i class="material-icons hidden-icon" style="display: none">pie_chart</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Reports">pie_chart</i> 
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
     </a>
   </li> 
@@ -917,7 +941,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li id="home_dashboard" class="hide">
         <a  href="#">
           <i class="icon icon-home"></i>
-           <i class="material-icons" style="display: none">home</i>
+           <i class="material-icons hidden-icon" style="display: none">home</i>
+           <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
       </li>
@@ -927,7 +952,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="contactsmenu" class="hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
-        <i class="material-icons" style="display: none">contacts</i>
+        <i class="material-icons hidden-icon" style="display: none">contacts</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">contacts</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
       </a>
     </li>
@@ -937,7 +963,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="tickets">
     <a class="agile-menu-dropdown-aside1" href="#tickets">
       <i class="icon icon-ticket"></i>
-       <i class="material-icons" style="display: none">email</i>
+       <i class="material-icons hidden-icon" style="display: none">email</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Help Desk">email</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "help-desk") %></span>
     </a>
   </li>
@@ -956,7 +983,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
       <i class="fa fa-search"></i>
-      <i class="material-icons" style="display: none">local_library</i>
+      <i class="material-icons hidden-icon" style="display: none">local_library</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Knowledge Base">local_library</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "knowledge-base") %></span>
     </a>
   </li>
@@ -969,7 +997,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="feedbackactivitiesmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-feedback">
         <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-        <i class="material-icons" style="display: none">thumb_up</i>
+        <i class="material-icons hidden-icon" style="display: none">thumb_up</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Feedback">thumb_up</i>
         <span>Feedback</span>
     </a>
   </li>
@@ -982,28 +1011,32 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="ticketgroupsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-groups">
       <i class="icon icon-users"></i>
-      <i class="material-icons" style="display: none">group_work</i>
+      <i class="material-icons hidden-icon" style="display: none">group_work</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Groups">group_work</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "groups") %></span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a  class="agile-menu-dropdown-aside1"href="#ticket-labels">
       <i class="icon icon-flag"></i>
-      <i class="material-icons" style="display: none">label</i>
+      <i class="material-icons hidden-icon" style="display: none">label</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Labels">label</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "labels") %></span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a class="agile-menu-dropdown-aside1" href="#canned-responses">
       <i class="icon icon-cursor"></i>
-       <i class="material-icons" style="display: none">message</i>
+       <i class="material-icons hidden-icon" style="display: none">message</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Canned Responses">message</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "canned-responses") %></span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <i class="material-icons" style="display: none">filter_b_and_w</i>
+      <i class="material-icons hidden-icon" style="display: none">filter_b_and_w</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Views">filter_b_and_w</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>
@@ -1017,7 +1050,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu" class="dashboard-activitiesnavbar">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
-      <i class="material-icons" style="display: none">assessment</i>
+      <i class="material-icons hidden-icon" style="display: none">assessment</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">assessment</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
@@ -1030,7 +1064,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="reportsmenu">
       <a  href="#reports">
         <i class="icon-bar-chart icon-white"></i>
-        <i class="material-icons" style="display: none">pie_chart</i>
+        <i class="material-icons hidden-icon" style="display: none">pie_chart</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Reports">pie_chart</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-reports") %></span>
       </a>
    </li> 
@@ -1406,6 +1441,7 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
       // console.log("All files loaded. Now continuing with script");
       load_globalize();
       try{
+        $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
         $('[data-toggle="tooltip"]').tooltip();  
         //Code to display alerts of widgets.
         showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
@@ -1496,6 +1532,8 @@ function closeVideo(){
         $('#dashboard_video iframe').removeAttr("src");
     });
 }
+
+
 
 </script>
 

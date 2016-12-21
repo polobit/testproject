@@ -673,6 +673,7 @@ function initRolehandlers(){
 
  			// Update UI
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+ 			$('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
  			// Call dashboard route
  			Backbone.history.navigate("#navigate-dashboard", {
                 trigger: true
