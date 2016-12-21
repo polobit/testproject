@@ -1720,7 +1720,7 @@ updateScoreValue :function(){
       else{
         _agile_set_prefs("contactCompanyTabelView","true");
         $(e.currentTarget).find("i").removeClass("fa fa-navicon");
-        $(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+        $(e.currentTarget).find("i").addClass("fa fa-navicon");
       }
       $(e.currentTarget).parent().parent().toggleClass("compact");
       $(".thead_check", $("#contacts-listener-container")).prop("checked", false);

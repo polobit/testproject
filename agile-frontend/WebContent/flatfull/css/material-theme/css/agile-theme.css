@@ -40,15 +40,15 @@ body, * {
 }
 #bulk-action-btns .btn {
   background-color: rgba(17, 160, 248, 0.1);
-  color: #11a0f8!important;
+  /*color: #11a0f8!important;*/
   height: 30px !important;
   line-height: 30px !important;
   font-size: 12px !important;
 
 }
 #bulk-action-btns .btn:hover, #bulk-action-btns .btn:focus, #bulk-action-btns .btn:active {
-    background-color: rgba(17, 160, 248, 0.2);
-    color: #11a0f8!important;
+    /*background-color: rgba(17, 160, 248, 0.2);
+    color: #11a0f8!important;*/
     height: 30px;
     line-height: 30px;
     font-size: 12px;
@@ -251,16 +251,16 @@ form select.form-control{
 .dropdown-menu a[href="#user-prefs"] span {
   display: block;
 }
-#contacts-view-options .contacts-view{
+/*#contacts-view-options .contacts-view{
   background-color: #fff !important;
   color: #78909c !important;
-}
+}*/
 
-#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active
+/*#contacts-view-options .contacts-view:hover, #contacts-view-options .contacts-view:focus, #contacts-view-options .contacts-view:active
 {
   background-color: #fff !important;
   color: #11a0f8 !important;
-}
+}*/
 /*.pull-right .btn.dropdown-toggle span {
   color: #fff !important;
 }*/
@@ -978,9 +978,9 @@ z-index:1;
   padding-left: 5px !important;
   vertical-align: middle !important;
 }
-.agile-theme-15 .tickets-div .panel-heading .btn.btn-default{
+/*.agile-theme-15 .tickets-div .panel-heading .btn.btn-default{
   background-color: rgba(17, 160, 248, 0.1) !important;
-}
+}*/
 .agile-theme-15 #tickets-bulk-select div:first-child, .agile-theme-15 .ticket-collection-container .table{
   border-top: 5px solid #f4f8f9 !important;
 }
@@ -1368,7 +1368,7 @@ ul.tags-management li.tag{
 }
 #bulk-action-btns .btn.dropdown-toggle span
 {
-  color: #11a0f8!important;
+  /*color: #11a0f8!important;*/
   margin-left:5px;
 }
 .fa-plus-circle:before
@@ -2099,7 +2099,7 @@ ul#recent-menu-model-list li:nth-child(even){
 
 .workflow-sortby,.tickets-toolbar .new-theme-sort
 {
-  margin-top:-7px;
+  margin-top:-15px;
 }
 .tickets-toolbar .new-theme-sort{
    margin-top: -7px !important;
@@ -2939,9 +2939,9 @@ code span.tag, code span.tag:hover{
 table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .show_telephony_status_field, .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9; 
 }
-.show_lost_reason_add, .show_deal_source_add{
+/*.show_lost_reason_add, .show_deal_source_add{
   padding-right: 15px !important;
-}
+}*/
 #lossreasons-tab, #deal-sources-tab{
   padding: 0 !important;
 }
@@ -2972,17 +2972,14 @@ table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .
 .update-segment-name .control-label{
   margin-top: 5px !important;
 }
-.contacts-inner-div #bulk-select{
-  border: none !important;
-  background-color: #f4f8f9 !important;
-}
+
 .previous-tickets-panel.btn-sm-imp{
   height: 169px !important;
   line-height: 18.57px !important
 }
-.previous-tickets-panel .padder{
-  padding: 5px !important;
-}
+
+
+*/
 
 #contact-reports-list-view .panel-heading.deal-products-btn-heading {
     display:block!important;width :75%;
@@ -2991,7 +2988,6 @@ table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .
 #prefs-tabs-content .agile-theme{
   width: 27% !important;
 }
-*/
 
 table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
   position: inherit!important;
@@ -3009,6 +3005,12 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
     float: none;
     right: -26px;
     top: 0px;
+}
+#contact-reports-list-view .panel-heading.deal-products-btn-heading {
+  display:block!important;
+  width :75%;
+  padding-right: 0;
+  padding-left: 0;
 }
 #task-category .agile-table>tbody>tr>td{
   padding: 8px !important;
@@ -3034,7 +3036,7 @@ table#deal-sources-table>tbody>tr:last-child{
   padding-top: 6px !important;
 }
 #no-products-slate{
-  width: 75.7%;
+  width: 75.0%;
 }
 .prefs-option-col .panel.panel-default{
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
@@ -3065,4 +3067,15 @@ table#deal-sources-table>tbody>tr:last-child{
 
 #user_cal_sub{
   margin-top: 20px !important;
+}
+#workflowform label,#verify-email label{
+  margin-bottom: 10px;
+}
+#lossreasons-tab, #deal-sources-tab{
+  background-color: inherit;
+}
+.popover{
+  padding: 0px;
+  border: 0px;
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
