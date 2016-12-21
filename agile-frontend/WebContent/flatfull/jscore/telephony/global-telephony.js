@@ -135,7 +135,7 @@ function globalCallWidgetSet()
 
 												if(name == "TwilioIO" && sms_status){
 													callOptionDiv = callOptionDiv
-													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='" +widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
+													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='/widgets/sms-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" +"SMS"+ "'>");
 												}
 
 											}

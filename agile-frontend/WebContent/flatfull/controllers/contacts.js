@@ -1946,6 +1946,7 @@ function sendPersonalSMS(el, id){
         phone = $("#notyCallDetails").attr("number");
 
 		$('.sms-message').removeClass("hidden");
+		$(".sms-message-count").addClass("hidden");
 	    $('.sms-message').html(getRandomLoadingImg());
 
 	    if(message == undefined || message=="" || message.length>160)
@@ -1978,8 +1979,7 @@ function sendPersonalSMS(el, id){
 										function(data)
 										{
 											console.log("sending sms...");
-											$save_info = $('<div style="display:inline-block;margin-left:-13px;"><small><p class="text-success"><i>SMS will be sent shortly</i></p></small></div>');
-
+											$save_info = $('<div style="display:inline-block;margin-left:-11px;"><small><p class="text-success"><i>SMS will be sent shortly</i></p></small></div>');
 											$('.sms-message').html($save_info);
 
 											$save_info.show();
@@ -2015,6 +2015,7 @@ function countChar(element)
     {
         	var message = element.value;
         	var length = message.length;
+        	$(".sms-message-count").removeClass("hidden");
         	$(".sms-message-count").text("Remaining charater ..."+(160-length));
             
     }
