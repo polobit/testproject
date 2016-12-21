@@ -2686,18 +2686,15 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 
-#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users,#aside i.icon-tag,#aside i.icon-bubbles{
+
+.agile-theme-15 #aside i.icon ,.agile-theme-15 #aside i.fa,.agile-theme-15 #aside i.icon-list,.agile-theme-15 #aside i.icon-white,.agile-theme-15 #aside i.icon-envelope-letter,.agile-theme-15 #aside i.icon-docs,.agile-theme-15 #aside i.icon-eye,.agile-theme-15 #aside i.icon-users,.agile-theme-15 #aside i.icon-tag,.agile-theme-15 #aside i.icon-bubbles{
   display: none;
 }
 
-
-#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users,#aside i.icon-tag,#aside i.icon-bubbles{
+.agile-theme-15 #agile-menu-navigation-container .nav i.icon ,.agile-theme-15 #agile-menu-navigation-container .nav  i.fa,.agile-theme-15 #agile-menu-navigation-container .nav i.icon-list,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-white,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-envelope-letter,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-docs,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-eye,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-users,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-tag,.agile-theme-15 #agile-menu-navigation-container .nav  i.icon-bubbles{
   display: none;
 }
 
-#agile-menu-navigation-container .nav i.icon ,#agile-menu-navigation-container .nav  i.fa,#agile-menu-navigation-container .nav i.icon-list,#agile-menu-navigation-container .nav  i.icon-white,#agile-menu-navigation-container .nav  i.icon-envelope-letter,#agile-menu-navigation-container .nav  i.icon-docs,#agile-menu-navigation-container .nav  i.icon-eye,#agile-menu-navigation-container .nav  i.icon-users,#agile-menu-navigation-container .nav  i.icon-tag,#agile-menu-navigation-container .nav  i.icon-bubbles{
-  display: none;
-}
 
 
 #agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
@@ -2817,9 +2814,14 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 span#rolecontainer::first-letter {
     text-transform: capitalize;
 }
+
 .agile-theme-15 .api-reset-btn
 {
     height: 35px  !important;
     line-height: 35px !important;
     font-size: 12px !important;
+}
+
+.carousel-inner .tweet-info{
+  font-size: 13px !important;
 }
