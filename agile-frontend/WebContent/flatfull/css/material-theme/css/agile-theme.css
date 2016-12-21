@@ -2943,3 +2943,11 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9;
 }
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
+.app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 #agile-menu-navigation-container .nav .show-icon-folded{
+  display: none !important;
+}
+.agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
+  display: block !important;
+}
