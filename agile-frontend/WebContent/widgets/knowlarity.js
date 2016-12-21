@@ -45,13 +45,18 @@ function loadKnowlarityLogs(responceObject, to, contact){
 		},
 		url : mainURL,
 		type : "GET",		
-		success : function(result) {
-			//getKnowlarityLogs(0);
-			console.log("Knowlarity *** success : logs ");
-			console.log(JSON.stringify(result));
+		success : function(result) {			
+			if(result){				
+				var logs = result.objects;				
+				if(logs && logs.length > 0){					
+					knowlarityOBJ.logs = logs;
+					getKnowlarityLogs(0);
+				}else{
+					$('#Knowlarity').html('<div class="wrapper-sm">No logs</div>');
+				}				
+			}			
 		},error : function(result) {
-			console.log("Knowlarity *** error : logs ");
-			console.log(JSON.stringify(result));								
+			$('#Knowlarity').html('<div class="wrapper-sm">Error Occured while fetching logs</div>');
 		}
 	});	
 }
@@ -62,23 +67,23 @@ function getKnowlarityLogs(offSet){
 		result.logs = knowlarityOBJ.logs.slice(0, 5);
 
 		getTemplate('knolarity-call-logs', result, undefined, function(template_log){			
-			$('#invoice_block').append(template_log);
+			$('#Knowlarity').html(template_log);
 		},null);
 
 		if(knowlarityOBJ.logs.length > 5){
-			$('#invoice_block').append(showMoreKnowlarityLog);
+			$('#Knowlarity').append(showMoreKnowlarityLog);
 		}
 	}else if(offSet > 0  && (offSet+5) < knowlarityOBJ.logs.length){
 		var result = {};
 		result.logs = knowlarityOBJ.logs.slice(offSet, (offSet+5));
 		$('.knowlarity_log_show_more').remove();
-		$('#invoice_block').apped(getTemplate('knolarity-call-logs', result));
-		$('#invoice_block').append(showMoreKnowlarityLog);
+		$('#Knowlarity').apped(getTemplate('knolarity-call-logs', result));
+		$('#Knowlarity').append(showMoreKnowlarityLog);
 	}else{
 		var result = {};
 		result.logs = knowlarityOBJ.logs.slice(offSet, knowlarityOBJ.logs.length);
 		$('.knowlarity_log_show_more').remove();
-		$('#invoice_block').append(getTemplate('knolarity-call-logs', result));
+		$('#Knowlarity').append(getTemplate('knolarity-call-logs', result));
 	}
 }
 
@@ -439,8 +444,6 @@ function startKnowlarityWidget(contact_id){
 	Email = agile_crm_get_contact_property('email');
 	
 	loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
-
-	//$('#Knowlarity').html('<div class="wrapper-sm">No Logs</div>');
 	
 	$(".contact-make-call-div").off("click", ".Knowlarity_call");
 	$(".contact-make-call-div").on("click", ".Knowlarity_call", function(e){
@@ -451,7 +454,3 @@ function startKnowlarityWidget(contact_id){
    		knowlarityDailer(KnowlarityWidgetPrefs, contactPhoneNumber, contactDetailsObj);		
 	});
 }
-
-// start_time=2011-12-20%2018:21:37%20+5:30&end_time=2016-12-20%2018:21:37%20+5:30&knowlarity_number=+919533824900&customer_number=+919052500344
-// start_time=2016-11-01%2000%3A00%3A00%2B5%3A30&end_time=2016-11-02%2023%3A58%3A00%2B5%3A30&customer_number=%2B919908164425
-// start_time=2011-12-21%2010:40:35%20+5:30&end_time=2016-12-21%2010:40:35%20+5:30&customer_number=+919052500344

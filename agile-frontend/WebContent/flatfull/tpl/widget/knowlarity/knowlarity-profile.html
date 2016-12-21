@@ -37,3 +37,24 @@
 	    </form>
 	</div>
 </script>
+
+<script id="knolarity-call-logs-template" type="text/html">
+{{#if logs.length}}
+	{{#each logs}}
+		<li class="list-group-item r-none b-l-none b-r-none">
+			<p>{{this.call_duration}}</p>
+			<p>{{this.start_time}}</p>
+			<p></p>
+
+			<div class="clear">					
+				<a class="pull-left" data-toggle="collapse" href="#collapse-{{id}}" ></a>
+				<div class="pull-right font-bold"></div>	
+				<div class="clearfix"></div>	
+			</div>		
+			<div class="clearfix"></div>					
+		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-invoices'}} </li>
+{{/if}}
+</script>
