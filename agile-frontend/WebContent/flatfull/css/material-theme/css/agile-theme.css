@@ -2877,10 +2877,7 @@ div#need_help_header a:hover {
     border-radius: 4px;
 }
   .nav-grid{
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-    padding-top: 7px !important;
-    padding-bottom : 7px !important;
+    padding: 7px 15px !important;
   }
 .dashboard-select.small .dropdown-menu{
     margin-left: -47px !important;
@@ -2895,6 +2892,7 @@ span#rolecontainer::first-letter {
 }
 .grid-v2{
   top: 17px !important;
+  background-color: #fff !important;
 }
 .dashboard-select .dropdown-menu li a i{
   font-size: 22px;
