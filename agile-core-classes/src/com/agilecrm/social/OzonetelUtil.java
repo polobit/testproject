@@ -72,12 +72,17 @@ public class OzonetelUtil {
 					domainUrl = "https://"+domain+"-dot-sandbox-dot-agilecrmbeta.appspot.com";
 				}
 			}
+			String agent_number = "";
+			if(agent_no.startsWith("+91") || (agent_no.startsWith("91") && agent_no.length() >10)){
+				agent_number = agent_no.substring(agent_no.length() - 10);
+			}else{
+				agent_number = agent_no;
+			}
 			Date d = new Date();
 	        String trackId = "" + d.getTime();
 	        URIBuilder uribuilder = new URIBuilder(url);
 	        uribuilder.addParameter("api_key", api_key);
-	        uribuilder.addParameter("phone_no", agent_no.substring(agent_no.length() - 10));
-	        System.out.println(agent_no.substring(agent_no.length() - 10));
+	        uribuilder.addParameter("phone_no", agent_number);
 	        uribuilder.addParameter("caller_id", caller_id);
 	        uribuilder.addParameter("url", domainUrl+"/outboundcall?contact_number=" + user_phone + "&trackId=" + trackId+"&domain_user="+domain_user);
 	        uribuilder.addParameter("callback_url",domainUrl+"/outbound_callstatus?contact_number=" + user_phone + "&trackId=" + trackId+"&domain_user="+domain_user);

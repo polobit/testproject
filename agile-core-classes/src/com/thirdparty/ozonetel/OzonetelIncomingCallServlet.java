@@ -70,6 +70,13 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
         Widget widget = WidgetUtil.getWidget("Ozonetel", aguser.id); //WidgetUtil.getWidget("Ozonetel");
         agent_no = widget.getProperty("agent_no");
         
+        String agent_number = "";
+		if(agent_no.startsWith("+91") || (agent_no.startsWith("91") && agent_no.length() >10)){
+			agent_number = agent_no.substring(agent_no.length() - 10);
+		}else{
+			agent_number = agent_no;
+		}
+		
         try (PrintWriter out = response.getWriter()) {
         	
             Response r = new Response();
@@ -77,7 +84,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
             if ((null != kookoo_event)&& kookoo_event.equalsIgnoreCase("newcall")) {
             	
                 Dial dialnumber = new Dial(); //kookoo dial tag class
-                dialnumber.setNumber(agent_no.substring(agent_no.length() - 10));
+                dialnumber.setNumber(agent_number);
                 r.addDial(dialnumber);
                 
                 contact_number = request.getParameter("cid");
@@ -88,7 +95,8 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
      	        pubnub_notification.put("state", "ringing");
      	        pubnub_notification.put("number", contact_number);
      	        pubnub_notification.put("callId", agent_no);
-
+     	        pubnub_notification.put("message_from", "notcallback");
+     	       
      	        PubNub.pubNubPush(user.id+"_Channel", pubnub_notification);
      		    
             }else if ((null != kookoo_event) && kookoo_event.equalsIgnoreCase("dial")) {
@@ -112,7 +120,8 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
     	        pubnub_notification.put("number", contact_number);
     	        pubnub_notification.put("callId", agent_no);
     	        pubnub_notification.put("duration", callduration);
-                
+    	        pubnub_notification.put("message_from", "notcallback");
+    	        
     	        PubNub.pubNubPush(user.id+"_Channel", pubnub_notification);
             } else {
                 r.addHangup();

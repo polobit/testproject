@@ -391,6 +391,8 @@ function showCallNotyMessage(message,type,position,timeout){
 }
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
+	var callnotes = $("#agilecrm-container #call-noty-notes").val();
+
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -411,6 +413,8 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
+	$("#agilecrm-container #call-noty-notes").val(callnotes);
+	
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
 			makeDraggableVoicemail();
@@ -441,7 +445,6 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 
 
 function showDraggablePopup(param){
-	
 	var position = _agile_get_prefs("dragableNotyPosition");
 	var flag = false;
 	var y = $(window).height()-200;

@@ -442,7 +442,6 @@ function resetCallLogVariables(){
 function handleCallRequest(message)
 {
 	// Display message in stream.
-
 	if ((message || {}).callType == "Bria")
 	{
 		var index = containsOption(default_call_option.callOption, "name", "Bria");
