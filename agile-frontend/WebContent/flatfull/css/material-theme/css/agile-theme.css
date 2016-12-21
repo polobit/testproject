@@ -2956,3 +2956,9 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9;
 }
+#general .col-md-3 .panel{
+  height: 226px !important;
+}
+#landingPageBuilderForm .controls{
+  margin-top: 5px !important;
+}
