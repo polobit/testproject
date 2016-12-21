@@ -54,6 +54,8 @@ var ReportsRouter = Backbone.Router
 						return;
 					}
 				});*/
+				$(".active").removeClass("active");
+				$("#reportsmenu").addClass("active");
 			});
 			},
 

@@ -437,13 +437,13 @@ function isIE() {
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='dashboard'>
+              <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'>
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
                   </a>
               </li>
               <li>
-              <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='dashboard'>
+              <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
                   </a>

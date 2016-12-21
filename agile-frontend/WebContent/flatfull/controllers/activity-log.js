@@ -40,8 +40,9 @@ var ActivitylogRouter = Backbone.Router.extend({
                     $('#activities-listners').html($(template_ui));
 
                     var dashboard_name = _agile_get_prefs("dashboard_"+CURRENT_DOMAIN_USER.id);
-                    $(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
-                    $("."+dashboard_name+"-activitiesnavbar").addClass("agile-menuactive")
+                    /*$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
+                    $("."+dashboard_name+"-activitiesnavbar").addClass("agile-menuactive");*/
+
                     var activities_list;
                     if(!dashboard_name){
                         var role = CURRENT_DOMAIN_USER.role;
@@ -139,6 +140,7 @@ var ActivitylogRouter = Backbone.Router.extend({
             }, "#activities-listners");
 
             $(".active").removeClass("active");
+            $("#activitiesmenu").addClass("active");
             
         })
     },
