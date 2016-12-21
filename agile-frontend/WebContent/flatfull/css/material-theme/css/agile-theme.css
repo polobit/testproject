@@ -2600,10 +2600,10 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 {
     background-color: rgba(17, 160, 248, 0.1) !important;
 }*/
-.agile-theme-15 #toggle_previous_tickets
+/*.agile-theme-15 #toggle_previous_tickets
 {
   margin-top:10px;
-}
+}*/
 #ticket-feedback.wrapper-lg
 {
   margin-top:10px;
@@ -2707,15 +2707,15 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display: none;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons,#recent-menu i.material-icons{
+.agile-theme-15 #agile-menu-navigation-container .nav  i.material-icons,.agile-theme-15 #recent-menu i.material-icons{
   display:block !important;
   color:#78909c !important;
 }
-#recent-menu i.material-icons{
+.agile-theme-15 #recent-menu i.material-icons{
   margin-top: 3px !important;
 }
 
-#agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
+.agile-theme-15 #agile-menu-navigation-container .nav  i.material-icons,.agile-theme-15 #aside  i.material-icons{
   display:block !important;
 }
 
@@ -2768,14 +2768,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 
-#aside i.icon ,#aside i.fa,#aside i.icon-list,#aside i.icon-white,#aside i.icon-envelope-letter,#aside i.icon-docs,#aside i.icon-eye,#aside i.icon-users{
-  display: none;
-}
-#aside i.material-icons{
-  display:block !important;
-}
 
-#saveFilterForm input[type="radio"]{
+#saveFilterForm input[type="radio"],#saveSegmentFilterForm input[type="radio"]{
   top: 5px;
 }
 ul.chosen-choices{
@@ -2898,6 +2892,25 @@ span#rolecontainer::first-letter {
 .dashboard-select .dropdown-menu li a i{
   font-size: 22px;
 }
+
+.agile-theme-15 #TrackingTab.nav>li>a {
+  padding: 10px 10px !important;
+} 
+div#ical_appointment_links {
+    margin-top: 20px;
+}
+
+code span.tag, code span.tag:hover{
+  background-color: transparent !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  color: inherit !important;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: inherit;
+}
+
 .goaltab-main{
   padding-left: 0px !important;
   padding-right: 0 !important;
@@ -2946,4 +2959,24 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 {
   margin-bottom: 5px;
 }
+#general .col-md-3 .panel{
+  height: 226px !important;
+}
+#landingPageBuilderForm .controls{
+  margin-top: 5px !important;
+}
 
+.update-segment-name .control-label{
+  margin-top: 5px !important;
+}
+.contacts-inner-div #bulk-select{
+  border: none !important;
+  background-color: #f4f8f9;
+}
+.previous-tickets-panel .btn-sm-imp{
+  height: 169px !important;
+  line-height: 18.57px !important
+}
+.previous-tickets-panel .padder{
+  padding-top: 9px !important;
+}
