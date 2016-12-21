@@ -2971,7 +2971,7 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 }
 .contacts-inner-div #bulk-select{
   border: none !important;
-  background-color: #f4f8f9;
+  background-color: #f4f8f9 !important;
 }
 .previous-tickets-panel.btn-sm-imp{
   height: 169px !important;
