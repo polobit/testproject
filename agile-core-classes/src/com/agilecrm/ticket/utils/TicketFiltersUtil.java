@@ -236,7 +236,9 @@ public class TicketFiltersUtil
 			}
 		}
 
-		return query.substring(0, query.lastIndexOf("AND"));
+		String finalQuery = query.substring(0, query.lastIndexOf("AND")).replace(" AND ()", "");
+		
+		return finalQuery;
 	}
 
 	/**
