@@ -2601,10 +2601,10 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 {
     background-color: rgba(17, 160, 248, 0.1) !important;
 }*/
-.agile-theme-15 #toggle_previous_tickets
+/*.agile-theme-15 #toggle_previous_tickets
 {
   margin-top:10px;
-}
+}*/
 #ticket-feedback.wrapper-lg
 {
   margin-top:10px;
@@ -2770,7 +2770,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 
 
-#saveFilterForm input[type="radio"]{
+#saveFilterForm input[type="radio"],#saveSegmentFilterForm input[type="radio"]{
   top: 5px;
 }
 ul.chosen-choices{
@@ -2961,4 +2961,19 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 }
 #landingPageBuilderForm .controls{
   margin-top: 5px !important;
+}
+
+.update-segment-name .control-label{
+  margin-top: 5px !important;
+}
+.contacts-inner-div #bulk-select{
+  border: none !important;
+  background-color: #f4f8f9;
+}
+.previous-tickets-panel .btn-sm-imp{
+  height: 169px !important;
+  line-height: 18.57px !important
+}
+.previous-tickets-panel .padder{
+  padding-top: 9px !important;
 }

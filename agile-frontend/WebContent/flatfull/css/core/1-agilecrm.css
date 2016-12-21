@@ -5119,3 +5119,7 @@ border-top: 0px !important;
 #workflows-tab-container .tab-container,#triggers-tab-container .tab-container {
   margin-bottom: 0px !important;
 }
+
+#general {
+  margin-top: 15px !important;
+}
