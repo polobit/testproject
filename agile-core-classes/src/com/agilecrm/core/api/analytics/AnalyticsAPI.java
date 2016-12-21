@@ -164,7 +164,7 @@ public class AnalyticsAPI
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Exception occured while fetching visitors " + e.getMessage());
+	    System.err.println("Exception occured while fetching visitors " + e.getMessage());
 	}
 	String response = null;
 	//contacts = new JSONArray();

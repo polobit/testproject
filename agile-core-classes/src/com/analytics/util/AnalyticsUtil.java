@@ -294,10 +294,45 @@ public class AnalyticsUtil
 		}
 		catch (Exception e)
 		{
-		    System.out.println("exception occured while fetching segmented email count " + e.getMessage());
+		    System.err.println("exception occured while fetching segmented email count " + e.getMessage());
 		}
 	    }
 	    return emails;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println(e.getMessage());
+	    return null;
+	}
+    }
+    
+    /**
+     * Fetched emails from Analytics DB w.r.t visitors LHS 
+     * filters
+     * 
+     * @param filterJSON
+     * @param startTime
+     * @param endTime
+     * @param pageSize
+     * @param cursor
+     * @return
+     */
+    public static JSONArray getVisitorQueryResponse(String filterJSON, String startTime, String endTime, String pageSize,
+	    String cursor)
+    {
+	try
+	{
+	    //List<String> emails = new ArrayList<String>();
+	    //String currentNamespace = NamespaceManager.get();
+	    String currentNamespace = "our";
+	    VisitorSegmentationQueryGenerator segmentationQueryGenerator = new VisitorSegmentationQueryGenerator(
+		    currentNamespace, filterJSON, startTime, endTime, cursor, pageSize);
+	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
+	    JSONArray mergedStats = AnalyticsSQLUtil.getVisitors(segementationQuery);
+	    
+	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats.toString());
+	    return contactEmailsJsonArray;
 	}
 	catch (Exception e)
 	{
