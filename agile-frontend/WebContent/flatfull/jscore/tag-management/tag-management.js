@@ -262,12 +262,35 @@ function append_tag_management(base_model) {
 
 	var element = $('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el);
 	console.log(element.length);
+	var alphabets_array = [];
+	var tag_el_pos = -1;
+	var tag_el = "<div class='row b-b p-b-md'><div class='col-md-1 tag-alphabet' style='font-size:16px;padding-top:20px;'>" + key + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(key) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
+	$("div.tag-alphabet", $("#admin-prefs-tabs-content")).each(function(index){
+		var alphabet = $(this).text();
+		if(alphabet && alphabet < key)
+		{
+			tag_el_pos = index;
+		}
+	});
 	if (element.length > 0)
 		$('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el).append(
 				$(el));
-	else {
-		$(this.model_list_element).append("<div class='clearfix'></div>")
-				.append($(el));
+	else if($('div.tag-alphabet', this.el).length > 0)
+	{
+		if(tag_el_pos == -1)
+		{
+			$('div.tag-alphabet', this.el).eq(0).parent().before(tag_el);
+			$('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el).append($(el));
+		}
+		else
+		{
+			$('div.tag-alphabet', this.el).eq(tag_el_pos).parent().after(tag_el);
+			$('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el).append($(el));
+		}
+	}
+	else
+	{
+		$(this.model_list_element).append(tag_el).append($(el));
 	}
 
 	// $(this.model_list_element).append($(el));
@@ -382,11 +405,12 @@ function saveTag(field) {
 			// Adds tag to global connection
 			if(tagsCollection && tagsCollection.models)
 				tagsCollection.add(response.toJSON());
-            App_Admin_Settings.tagManagement();
+            //App_Admin_Settings.tagManagement();
 		}
 	});
 	console.log(App_Admin_Settings);
 	App_Admin_Settings.tagsview1.collection.add(model);
+	App_Admin_Settings.tagsview1.collection.sort();
 
 }
 
