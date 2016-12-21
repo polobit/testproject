@@ -1938,7 +1938,6 @@ function menuServicerole(dashboard){
 				break;
 		}
 }
-
  // Send a prsonal sms  
 function sendPersonalSMS(el, id){
 
@@ -1969,7 +1968,7 @@ function sendPersonalSMS(el, id){
        {
           $('#sms-noty-notes').css('border-color', '');
          }
-						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&from=" + encodeURIComponent(fromNumber) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
 						if ($(el).attr("disabled"))
 							return;
 
@@ -2012,3 +2011,10 @@ function sendPersonalSMS(el, id){
 										});
 				///	});
 }
+function countChar(element)
+    {
+        	var message = element.value;
+        	var length = message.length;
+        	$(".sms-message-count").text("Remaining charater ..."+(160-length));
+            
+    }

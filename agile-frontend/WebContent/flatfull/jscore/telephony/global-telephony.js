@@ -125,13 +125,17 @@ function globalCallWidgetSet()
 												var temp = { "name" : widget.name, "logo" : widget.mini_logo_url };
 												addtoCallOption(temp);
 												var name = widget.name;
-												if(name != "CallScript" && name != "SMS-Gateway"){
+												if(name != "CallScript" ){
 													callOptionDiv = callOptionDiv
 													.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
 												}
-												 else if(name == "SMS-Gateway"){
+
+												var prefs =JSON.parse(widget.prefs)
+												var sms_status=prefs["twilio_sms"];
+
+												if(name == "TwilioIO" && sms_status){
 													callOptionDiv = callOptionDiv
-													.concat("<img class ='" + name + "_sms c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
+													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='" +widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
 												}
 
 											}

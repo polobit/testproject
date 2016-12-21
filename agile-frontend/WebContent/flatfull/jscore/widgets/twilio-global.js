@@ -15,7 +15,7 @@ TWILIO_DIRECTION = "";
 TWILIO_CALLED_NO = "";
 TWILIO_IS_VOICEMAIL = false;
 var TWILIO_CONTACT ;
-var SMS_From_Number=["sms"];
+//var SMS_From_Number=["sms"];
 
 function initializeTwilioGlobalListeners(){
 	
@@ -30,7 +30,7 @@ $(function(){
 		if (document.readyState === "complete" && CURRENT_DOMAIN_USER)
 		{
 			//globalTwilioIOSetup();
-			SMS_From_Number=getTwilioIncomingListForSms();
+			//SMS_From_Number=getTwilioIncomingListForSms();
 		}
 	}, 10000); // 15 sec
 
@@ -49,10 +49,10 @@ $(function(){
 		contact['phone'] = number;
 		showDraggablePopup(contact, "sms");
 
-       $.each(SMS_From_Number,function(index,num){ 		
+      /* $.each(SMS_From_Number,function(index,num){ 		
          var option = new Option(num,num);	
  		  $("#draggable_noty").find("select").append($(option));
- 	    });
+ 	    });*/
 
 	});
   

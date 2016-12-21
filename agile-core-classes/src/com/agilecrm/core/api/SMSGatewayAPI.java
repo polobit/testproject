@@ -21,7 +21,10 @@ import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.util.ActivityUtil;
+import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.WidgetType;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.campaignio.tasklets.sms.SendMessage;
 import com.thirdparty.twilio.TwilioSMS;
 import com.thirdparty.twilio.TwilioSMSUtil;
@@ -173,20 +176,23 @@ public class SMSGatewayAPI
 	@GET
 	@Path("/send-sms")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void  sendSMS(@QueryParam("from") String from, @QueryParam("to") String to, @QueryParam("message") String message, @QueryParam("contactId") String contactId) throws JSONException
+	public void  sendSMS( @QueryParam("from") String from,@QueryParam("to") String to, @QueryParam("message") String message, @QueryParam("contactId") String contactId) throws JSONException
 	{
-			System.out.println("SMS details "+from +" to "+ to + message);
+			System.out.println("SMS details to "+ to + message);
+			Widget widget= WidgetUtil.getWidget("TwilioIO");
 			JSONObject json;
-			Widget widget= SMSGatewayUtil.getSMSGatewayWidget();
+			//Widget widget= SMSGatewayUtil.getSMSGatewayWidget();
 			json = new JSONObject(widget.prefs);
+			 String from_number = json.getString("twilio_number");
+
 			try
 			{
-		      if(SendMessage.checkValidFromNumber(from) && SendMessage.checkValidToNumber(to)){	 						      
-						 String authToken = json.getString(TwilioSMS.TWILIO_AUTH_TOKEN);
-						 String sid = json.getString(TwilioSMS.TWILIO_ACCOUNT_SID);
-						 SMSGatewayUtil.sendSMS(json.getString("sms_api"), from, to, message, sid, authToken);
+		      if(SendMessage.checkValidToNumber(to)){	 						      
+						 String authToken = json.getString("twilio_auth_token");
+						 String sid = json.getString("twilio_acc_sid");
+					   SMSGatewayUtil.sendSMS("TWILIO", from_number, to, message, sid, authToken);
 
-					     ActivityUtil.createLogForSMS(to, from, message, SMS_SENT, json.getString("sms_api"), contactId);
+					     ActivityUtil.createLogForSMS(to, from_number, message, SMS_SENT, "TWILIO", contactId);
 					   }
 					else
 						 throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Number is not valid").build());
@@ -194,7 +200,7 @@ public class SMSGatewayAPI
 		   catch (Exception e) 
 		   {
 			   System.out.println("While Sending Error Occured ." +e.getMessage());
-			   ActivityUtil.createLogForSMS(to, from, message, SMS_SENDING_FAILED, json.getString("sms_api"), contactId);
+			   ActivityUtil.createLogForSMS(to, from_number, message, SMS_SENDING_FAILED,"TWILIO",contactId);
 			    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Messege not sent!!").build());
 			}
 }
