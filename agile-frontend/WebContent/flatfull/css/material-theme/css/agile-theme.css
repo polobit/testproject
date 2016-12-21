@@ -2823,3 +2823,6 @@ span#rolecontainer::first-letter {
     line-height: 35px !important;
     font-size: 12px !important;
 }
+.prettyprint {
+  line-height:2em;
+}
