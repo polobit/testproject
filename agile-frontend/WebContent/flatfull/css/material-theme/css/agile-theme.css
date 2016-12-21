@@ -2288,9 +2288,8 @@ table .headerSortUp::after, table .headerSortDown::after{
 #textModalForm .i-checks-sm>i {
   display: none;
 }
-
 #prefs-tabs-content .admin-message-info{position: absolute;left: 20%;top:14%;width: 250px;z-index:3;}.tabs-left-panel.agile-pos-t-xs{top: 5px;}
-.integrationstab .btn.btn-primary,.integrationstab .btn.btn-default{height:30px !important;line-height:30px !important;font-size:12px !important;}
+.integrationstab .btn.btn-primary,.integrationstab .btn.btn-default,.integrationstab .btn.btn-danger{height:30px !important;line-height:30px !important;font-size:12px !important;}
 .m-t-sm-imp{margin-top:10px}
 #TrackingTab.nav li a:hover, #TrackingTab.nav li a:active, #TrackingTab.nav  li a:focus, #TrackingTab.nav  li a:active{background-color: rgba(17,160,248,0.2);color: #555;}
 #TrackingTab.nav li.active a{background-color: rgba(17,160,248,0.2);color: #11a0f8 !important;}
@@ -2956,6 +2955,10 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9;
 }
+#data-sync-settings-tab-content form label , #prefs-tabs-content #widget-settings-tab-pane form label,#prefs-tabs-content form label
+{
+  margin-bottom: 5px;
+}
 #general .col-md-3 .panel{
   height: 226px !important;
 }
@@ -2968,9 +2971,9 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 }
 .contacts-inner-div #bulk-select{
   border: none !important;
-  background-color: #f4f8f9;
+  background-color: #f4f8f9 !important;
 }
-.previous-tickets-panel .btn-sm-imp{
+.previous-tickets-panel.btn-sm-imp{
   height: 169px !important;
   line-height: 18.57px !important
 }
@@ -2984,4 +2987,8 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 
 table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
   position: inherit!important;
+}
+
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
 }
