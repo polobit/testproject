@@ -357,7 +357,7 @@ function onEmailBuilderLoad() {
     $("#loadingImgHolder").hide();
     $("#emailBuilderTopOptionsHolder").show();
     $("#attachmentsHolderElement").show();
-    $("#emailBuilderFrame").prop("height",680);
+    $("#emailBuilderFrame").prop("height",800);
 }
 
 function setAttachmentInTemplateEdit(attachmentId) {
@@ -510,7 +510,7 @@ var emailVideoRecord = {
 
     buildVideoPageURL : function(videoId) {
         var videoURL = window.location.origin + "/video/" + videoId + "?n={{first_name}}&c={{owner.calendar_url}}";
-        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL);
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL).trigger("change");
         $("#videoRecordModal").modal("hide");
     }
 
