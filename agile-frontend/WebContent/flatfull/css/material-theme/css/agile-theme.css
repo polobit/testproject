@@ -2705,7 +2705,10 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   display: none;
 }
 
-
+#agile-menu-navigation-container .nav  i.material-icons{
+  display:block !important;
+  color:#78909c !important;
+}
 
 #agile-menu-navigation-container .nav  i.material-icons,#aside  i.material-icons{
   display:block !important;
@@ -2858,4 +2861,14 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
 }
 .carousel-inner .tweet-info{
   font-size: 13px !important;
+}
+
+#service-tab,#ip_access.panel{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+#service-tab .btn-addon,.allow_access_panelheading .btn-addon{
+  margin-right: 10px !important;
+}
+#service-tab .access_kb{
+  margin-right: 0px !important;
 }
