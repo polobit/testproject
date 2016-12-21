@@ -2878,3 +2878,21 @@ span#rolecontainer::first-letter {
 .dashboard-select .dropdown-menu li a i{
   font-size: 22px;
 }
+
+.agile-theme-15 #TrackingTab.nav>li>a {
+  padding: 10px 10px !important;
+} 
+div#ical_appointment_links {
+    margin-top: 20px;
+}
+
+code span.tag, code span.tag:hover{
+  background-color: transparent !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  color: inherit !important;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: inherit !important;
+}
