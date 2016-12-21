@@ -2099,7 +2099,7 @@ ul#recent-menu-model-list li:nth-child(even){
 
 .workflow-sortby,.tickets-toolbar .new-theme-sort
 {
-  margin-top:-7px;
+  margin-top:-15px;
 }
 .tickets-toolbar .new-theme-sort{
    margin-top: -7px !important;
