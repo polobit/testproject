@@ -28,6 +28,7 @@
 <%@page import="java.util.regex.Matcher" %>
 <%@page import="java.util.regex.Pattern" %>
 <%@page import="org.jsoup.Jsoup" %>
+<%@page import="org.json.JSONObject"%>
 
 <html>
 <head>
@@ -374,6 +375,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
 	
 				    Contact contact = ContactUtil.searchContactByEmail(email);
+
+				    JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
 	
 				    String msg = "You are successfully unsubscribed. Thank you.";
 
@@ -442,7 +445,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    // Send Confirmation email
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
-						String isDefaultTemplate = "true";
+						Long templateId = null;
 						map.put("unsubscribe_subject",unsubscribe_subject);
 					    
 						// Trigger Unsubscribe
@@ -482,6 +485,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							map.put("company", company);
 							if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
+								templateId = Long.valueOf(unsubscribe_subject);
+								/*
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
 								isDefaultTemplate = "false";
 								subjectMessage = template_details.subject ;
@@ -491,6 +496,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 								System.out.println("bodyString is"+bodyString);
 								map.put("unsubscribe_body", bodyString);
 								map.put("unsubscribe_html", htmlString);
+								*/
 							}
 							else
 							{
@@ -513,6 +519,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    	map.put("campaign_name", unsubscribeName);
 					    	if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
+								templateId = Long.valueOf(unsubscribe_subject);
+								/*
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
 								isDefaultTemplate = "false";
 								subjectMessage = template_details.subject ;
@@ -521,6 +529,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 								System.out.println("htmlString is"+htmlString);
 								map.put("unsubscribe_body", bodyString);
 								map.put("unsubscribe_html", htmlString);
+								*/
 							}
 							else
 							{
@@ -529,13 +538,18 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							
 							
 						}
-						map.put("defaultTemplate", isDefaultTemplate);
 					 	// Add unsubscribe log
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
-								SendMail.sendMails(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
-								System.out.println("Email sent successfully...");
+								if(templateId ! = null){
+									SendMail.sendMail(email, subjectMessage, templateId, subscriberJSONObject.toStrong(), StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
+									System.out.println("Email sent successfully...");
+								}
+								else{
+									SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
+									System.out.println("Email sent successfully...");
+								}
 							}
 						}
 					}
