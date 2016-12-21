@@ -393,9 +393,6 @@ function showCallNotyMessage(message,type,position,timeout){
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var callnotes = $("#agilecrm-container #call-noty-notes").val();
-	if(widgetName == "Ozonetel"){
-		$("#agilecrm-container #call-noty-notes").val(callnotes);
-	}
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -416,7 +413,9 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
-	
+	if(widgetName == "Ozonetel"){
+		$("#agilecrm-container #call-noty-notes").val(callnotes);
+	}
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
 			makeDraggableVoicemail();
