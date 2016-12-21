@@ -7,7 +7,7 @@
     <div class="clearfix"></div>
  </div>
     <div class="row">
-        <div class="col-md-12 col-sm-12" id="no-products-slate">
+        <div class="col-md-12 col-sm-12">
         {{#if this.length}}
                     <div class=" table-responsive table-list-view-top-margin" style="overflow:hidden;"> 
                     <table class="table table-striped showCheckboxes no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url="core/api/products/bulk">
@@ -26,7 +26,7 @@
                     </table>
                     </div>
                     {{else}}
-                        <div class="panel panel-default " style=" overflow-x:auto;  border:none;box-shadow: none;margin-bottom:0px;">
+                        <div class="panel panel-default " style=" overflow-x:auto;  border:none;box-shadow: none;margin-bottom:0px;" id="no-products-slate">
                             <div class="m-l-sm" id="slate"><div class="alert bg-white " style="padding:0px;">
                                 <div class="slate-content p-md">
                                 <div class="box-left pull-left m-r-md">

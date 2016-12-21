@@ -2984,10 +2984,6 @@ table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .
   padding: 5px !important;
 }
 
-#contact-reports-list-view .panel-heading.deal-products-btn-heading {
-    display:block!important;width :75%;
-}
-
 table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
   position: inherit!important;
 }
@@ -3009,6 +3005,12 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
     float: none;
     right: -26px;
     top: 0px;
+}
+#contact-reports-list-view .panel-heading.deal-products-btn-heading {
+  display:block!important;
+  width :75%;
+  padding-right: 0;
+  padding-left: 0;
 }
 #task-category .agile-table>tbody>tr>td{
   padding: 8px !important;
@@ -3034,7 +3036,7 @@ table#deal-sources-table>tbody>tr:last-child{
   padding-top: 6px !important;
 }
 #no-products-slate{
-  width: 75.7%;
+  width: 75.0%;
 }
 .prefs-option-col .panel.panel-default{
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
