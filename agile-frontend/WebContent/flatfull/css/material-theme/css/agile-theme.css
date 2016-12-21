@@ -2924,8 +2924,11 @@ code span.tag, code span.tag:hover{
   padding-left: 5px !important;
   padding-right: 45px !important;
 }
-.goaltab-main .panel-default .panel-heading, #milestones-bg{
+#milestones-bg{
   background-color: inherit !important;
+}
+.goaltab-main .panel-default .panel-heading, .goaltab-main{
+  background-color: #f4f8f9 !important;
 }
 .goaltab-main .panel-heading>div:first-child{
   display: none;
@@ -2933,7 +2936,7 @@ code span.tag, code span.tag:hover{
 #products-top-margin{
   border-top: 15px solid #f4f8f9; 
 }
-table#deal-sources-table>tbody>tr, #show_milestone_field{
+table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .show_telephony_status_field, .agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9; 
 }
 .show_lost_reason_add, .show_deal_source_add{
@@ -2949,10 +2952,10 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 /*.add-pipeline{
   margin-right: 15px;
 }*/
-.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
+/*.agile-theme-15 #deal-tracks-accordion table>tbody>tr:first-child{
   border-top: 0 !important;
-}
-.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
+}*/
+/*.agile-theme-15 #deal-tracks-accordion table>tbody>tr{
   border-top: 10px solid #f4f8f9;
 }
 #data-sync-settings-tab-content form label , #prefs-tabs-content #widget-settings-tab-pane form label,#prefs-tabs-content form label
@@ -2978,7 +2981,7 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
   line-height: 18.57px !important
 }
 .previous-tickets-panel .padder{
-  padding-top: 9px !important;
+  padding: 5px !important;
 }
 
 #contact-reports-list-view .panel-heading.deal-products-btn-heading {
@@ -2995,6 +2998,8 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
 #prefs-tabs-content .agile-theme{
   width: 27% !important;
 }
+*/
+
 .btn.btn-xs-imp {
    height: auto;
    line-height: 1.5;
@@ -3004,4 +3009,60 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
     float: none;
     right: -26px;
     top: 0px;
+}
+#task-category .agile-table>tbody>tr>td{
+  padding: 8px !important;
+}
+table.products-table>tbody>tr>td{
+  padding: 6px !important;
+}
+table.products-table>tbody>tr>td .i-checks.i-checks-sm{
+  padding-left: 30px;
+}
+table#deal-sources-table>tbody>tr:last-child{
+  border-bottom: 10px solid #f4f8f9 !important;
+}
+#deal-goals-tab ul.list-inline{
+  margin-right: 15px;
+}
+#goal_duration span{
+  /*line-height: 24px!important;*/
+  border-radius: 4px;
+  vertical-align: middle;
+  border-color: #fff!important;
+  border: 0 !important;
+  padding-top: 6px !important;
+}
+#no-products-slate{
+  width: 75.7%;
+}
+.prefs-option-col .panel.panel-default{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+.userVoice-text{
+  margin-top: 5px;
+}
+#toggle_previous_tickets{
+  margin-top: 2px !important;
+}
+#general .col-md-3 .panel{
+  height: 226px !important;
+}
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
+}
+#landingPageBuilderForm .controls{
+  margin-top: 5px !important;
+}
+.previous-tickets-panel .padder{
+  padding: 5px !important;
+}
+.contacts-inner-div #bulk-select{
+  border: none !important;
+  background-color: #f4f8f9 !important;
+}
+#contact-image-content .editicon span{margin-top: -2px !important;}
+
+#user_cal_sub{
+  margin-top: 20px !important;
 }

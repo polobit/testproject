@@ -37,7 +37,7 @@
 
     {{else}}
 
-    <div class="col-sm-9 panel wrapper no-panel-border" id="service-tab">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper no-panel-border" id="service-tab">
         <div class="pull-right m-b-2">
             <a href="#add-ticket-label" class="btn btn-sm btn-default-imp btn-default btn-addon">
             <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
