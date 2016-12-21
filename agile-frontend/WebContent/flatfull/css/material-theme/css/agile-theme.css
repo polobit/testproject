@@ -3053,3 +3053,6 @@ table#deal-sources-table>tbody>tr:last-child{
 #user_cal_sub{
   margin-top: 20px !important;
 }
+#workflowform label,#verify-email label{
+    margin-bottom: 10px;
+}
