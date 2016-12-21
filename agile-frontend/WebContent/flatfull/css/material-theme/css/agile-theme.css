@@ -2973,7 +2973,7 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
   border: none !important;
   background-color: #f4f8f9;
 }
-.previous-tickets-panel .btn-sm-imp{
+.previous-tickets-panel.btn-sm-imp{
   height: 169px !important;
   line-height: 18.57px !important
 }
@@ -2987,4 +2987,8 @@ table#deal-sources-table>tbody>tr, #show_milestone_field{
 
 table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > td:first-child , #ticket-model-list > tr > td {
   position: inherit!important;
+}
+
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
 }
