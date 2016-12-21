@@ -231,8 +231,8 @@ function saveNode(e) {
         var displayName = $("#nodeui").find("[name=nodename]").val();
 
         // Node Level validation for some Nodes, if it will return true then all validation fine, if false then the Node will not save
-        var isValidNodeData = nodeLevelValidation(nodeName, function(isValidNodeData){
-        	if(isValidNodeData == false){    	   
+        nodeLevelValidation(nodeName, function(isValid){
+        	if(isValid == false){    	   
         		return;
         	}
         	else
