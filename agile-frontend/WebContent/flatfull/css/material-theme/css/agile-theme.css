@@ -2981,7 +2981,7 @@ table#deal-sources-table>tbody>tr, #show_milestone_field, #show_task_category, .
   line-height: 18.57px !important
 }
 .previous-tickets-panel .padder{
-  padding-top: 9px !important;
+  padding: 5px !important;
 }
 
 #contact-reports-list-view .panel-heading.deal-products-btn-heading {
@@ -2996,6 +2996,7 @@ table.single-row > thead > tr > th:first-child, table.single-row > tbody > tr > 
   width: 27% !important;
 }
 */
+
 #task-category .agile-table>tbody>tr>td{
   padding: 8px !important;
 }
@@ -3028,3 +3029,23 @@ table#deal-sources-table>tbody>tr:last-child{
 .userVoice-text{
   margin-top: 5px;
 }
+#toggle_previous_tickets{
+  margin-top: 2px !important;
+}
+#general .col-md-3 .panel{
+  height: 226px !important;
+}
+#prefs-tabs-content .agile-theme{
+  width: 27% !important;
+}
+#landingPageBuilderForm .controls{
+  margin-top: 5px !important;
+}
+.previous-tickets-panel .padder{
+  padding: 5px !important;
+}
+.contacts-inner-div #bulk-select{
+  border: none !important;
+  background-color: #f4f8f9 !important;
+}
+#contact-image-content .editicon span{margin-top: -2px !important;}
