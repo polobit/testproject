@@ -129,7 +129,6 @@ function saveCallNoteOzonetel(message){
 				}
 		}else{
 			resetCallLogVariables();
-
     		if(message.state == "answered") {
     			var data = {};
     			data.url = "/core/api/widgets/ozonetel/";

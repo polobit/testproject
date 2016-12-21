@@ -263,6 +263,7 @@ if(message.state == "connected"){
 		var btns;
 		if(widgetype !=  "ozonetel"){
 			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+			$("#agilecrm-container #call-noty-notes").val("");
 		}else{
 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 		}
@@ -299,7 +300,6 @@ if(message.state == "connected"){
 	
 }else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
 	closeCallNoty(true);
-	$("#agilecrm-container #call-noty-notes").val("");
 }
 	
 	
@@ -393,7 +393,9 @@ function showCallNotyMessage(message,type,position,timeout){
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var callnotes = $("#agilecrm-container #call-noty-notes").val();
-
+	if(widgetName == "Ozonetel"){
+		$("#agilecrm-container #call-noty-notes").val(callnotes);
+	}
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -414,7 +416,6 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
-	$("#agilecrm-container #call-noty-notes").val(callnotes);
 	
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
