@@ -3040,9 +3040,9 @@ table#deal-sources-table>tbody>tr:last-child{
 #toggle_previous_tickets{
   margin-top: 2px !important;
 }
-#general .col-md-3 .panel{
+/*#general .col-md-3 .panel{
   height: 226px !important;
-}
+}*/
 #prefs-tabs-content .agile-theme{
   width: 27% !important;
 }
@@ -3143,4 +3143,23 @@ padding-top: 14px;
 .documentsheading .workflow-sortby,.workflow-heading .workflow-sortby
 {
   margin-top:-7px !important
+}
+#filter-list .dropdown-toggle .caret ,#filters-tour-step .dropdown-toggle .caret,.documentsheading  .dropdown-toggle .caret
+{
+   color : #78909c !important;
+}
+#activities_date_range
+{
+  border:none!important;
+}
+.ticket-data  .btn.caret-btn
+{
+  display:none;
+}
+div.show-caret:hover>a.caret-btn
+{
+  display:inline-block;
+}
+.agile-theme-15 i.icon-sitemap{
+  color:#78909c !important;
 }
