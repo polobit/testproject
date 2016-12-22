@@ -7,16 +7,17 @@
 
         agileformId: document.getElementById('agileform_id'),
         refreshFormList: document.querySelector('#refresh-formlist > .refresh-formlist'),
-        lpInstructPopup: document.getElementById('lp-instruct-popup'),
+        lpInstructPopupId: document.getElementById('lp-instruct-popup'),
 
         init: function() {
             //events
             $(this.agileformId).on('change', this.chnageAgileform);
-            $(this.refreshFormList).on('click', this.refreshFormsList);          
+            $(this.refreshFormList).on('click', this.refreshFormsLists);  
+            $(this.lpInstructPopupId).on('click', this.lpInstructPopup);           
 
         },
 
-        refreshFormsList : function(e) {
+        refreshFormsLists : function(e) {
             $('#refresh-formlist .edit-form').hide();
             $.getJSON(appUI.siteUrl+"core/api/forms", function(respData){ 
                 $("#agileform_id option:not(':first')").remove();              
