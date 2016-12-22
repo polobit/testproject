@@ -2016,6 +2016,6 @@ function countChar(element)
         	var message = element.value;
         	var length = message.length;
         	$(".sms-message-count").removeClass("hidden");
-        	$(".sms-message-count").text("Remaining charater ..."+(160-length));
+        	$(".sms-message-count").text("Remaining characters ..."+(160-length));
             
     }
