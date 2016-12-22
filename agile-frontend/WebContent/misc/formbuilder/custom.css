@@ -368,13 +368,4 @@ form .popover form input[type="text"]:focus {
     border: 1px solid #ccc!important;
     border-radius: 4px!important;
 }
-#target legend::after {
-	content: "\00a0";
-	right: 43px;
-	font-size: 15px;
-	background-image: url("https://agilecrm.s3.amazonaws.com/forms/settings-16.png");
-	height: 16px;
-	width: 16px;
-	position: absolute;	
-	top: 80px;
-}
+

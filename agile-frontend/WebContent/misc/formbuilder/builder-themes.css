@@ -636,3 +636,21 @@ ul li>a[href="#bsourcecodeb"] {
     top: 39%;
     position: fixed;
 }
+#target legend::after {
+  content: "\00a0";
+  right: 43px;
+  font-size: 15px;
+  background-image: url("https://agilecrm.s3.amazonaws.com/forms/settings-16.png");
+  height: 16px;
+  width: 16px;
+  position: absolute; 
+  top: 76px;
+}
+#target.theme1 legend::after {
+    top: 88px;
+    right: 55px;
+}
+#target.theme2 legend::after,#target.theme3 legend::after,#target.theme4 legend::after {
+    top: 86px;
+}
+
