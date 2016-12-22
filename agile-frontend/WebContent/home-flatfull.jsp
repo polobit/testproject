@@ -538,7 +538,7 @@ function isIE() {
           
           <% } %>
        
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed
+<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed1
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
   out.print("app-aside-dock ");
@@ -1448,8 +1448,9 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
       // console.log("All files loaded. Now continuing with script");
       load_globalize();
       try{
-        $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+        // $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
         $('[data-toggle="tooltip"]').tooltip();  
+        appendAgileNewThemeSubNavMenu();
         //Code to display alerts of widgets.
         showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
       } catch(e) {
