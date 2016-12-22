@@ -391,6 +391,7 @@ function showCallNotyMessage(message,type,position,timeout){
 }
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
+	var callnotes = $("#agilecrm-container #call-noty-notes").val();
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -411,7 +412,9 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
-
+	if(widgetName == "Ozonetel"){
+		$("#agilecrm-container #call-noty-notes").val(callnotes);
+	}
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
 			makeDraggableVoicemail();
@@ -428,13 +431,16 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		$("#draggable_noty .draggable_noty_notes").html("");
 		
 	}else if(s == "connecting" || s == "outgoing" || s == "ringing" || s == "incoming"){
-		$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
+		//$("#draggable_noty .draggable_noty_notes").html($(getTemplate("call-noty-notes")));	
 		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
 			$("#draggable_noty #call-noty-l2").find(".internal-col").prepend("<div id='' class='noty_call_callScript btn btn-sm btn-default p-xs'>CS</div>");
 			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
 		}
 	}
-	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered" || s == "answered"){
+	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered"){
+		if(widgetName == "Ozonetel"){
+			$("#agilecrm-container #call-noty-notes").val(callnotes);
+		}
 		$("#draggable_noty").show().delay(5000).hide(1);
 	}
 }
