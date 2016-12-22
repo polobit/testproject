@@ -485,10 +485,10 @@
             if( $(styleeditor.activeElement.element).prop('tagName') === 'A' ) {
 
                 var link_text=document.getElementById('internalLinksCustom').value;
-                if(val.match("^(http|https)://|#")===null){
-                    styleeditor.showErrorMsg('internalLinksCustom');
-                    return;
-                }
+                if(link_text.match("^(http|https)://|#")===null){
+                        styleeditor.showErrorMsg('internalLinksCustom');
+                        return;
+                 }
                 //change the href prop?
                 styleeditor.activeElement.element.href = link_text;
 
@@ -793,6 +793,7 @@
 
             $(styleeditor.selectLinksInernal).off('change').on('change', function () {
                 styleeditor.inputCustomLink.value = this.value;
+                styleeditor.hideErrorMsg('internalLinksCustom');
                 styleeditor.resetPageDropdown();
             });
 
