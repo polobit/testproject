@@ -1,7 +1,13 @@
 
 
 $('#app-aside-folded').on('click', function(e) {
+	
+	if(CURRENT_USER_PREFS.theme == "15") {
+		return;
+	}
+
 	e.preventDefault();
+		
 	/*$('.app-aside-folded-inactive .hidden-folded ,.app-aside-folded .navi > ul > li > a span').css('display','none');
 	
 	if ($('#wrap').hasClass("app-aside-folded") ) {
@@ -15,19 +21,13 @@ $('#app-aside-folded').on('click', function(e) {
 	$('#wrap').toggleClass('app-aside-folded');
     if( $('#wrap').hasClass('app-aside-folded')) {
 		console.log("folded");
-		if(CURRENT_USER_PREFS.theme != 15){
-		$("#app-aside-folded i").removeClass("fa-dedent");
-		$("#app-aside-folded i").addClass("fa-indent");
-		}
-		$(".fa-cloud").addClass("hide");
+
+		$("#app-aside-folded i.fa").removeClass("fa-dedent").addClass("fa-indent");
+		
 		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
-		if(CURRENT_USER_PREFS.theme != 15){
-		$("#app-aside-folded i").removeClass("fa-indent");
-		$("#app-aside-folded i").addClass("fa-dedent");
-		}
-		$(".fa-cloud").removeClass("hide");
+		$("#app-aside-folded i.fa").removeClass("fa-indent").addClass("fa-dedent");
 		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
@@ -674,6 +674,8 @@ function initRolehandlers(){
 
  			// Update UI
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+ 			// $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+ 			appendAgileNewThemeSubNavMenu();
  			// Call dashboard route
  			Backbone.history.navigate("#navigate-dashboard", {
                 trigger: true
@@ -787,6 +789,22 @@ function updateDashboardRole(prevrole)
 
 function isTargetAnInputField(e) {
 	return ($(e.target).prop("tagName").toLowerCase() == "input");
+}
+
+
+function appendAgileNewThemeSubNavMenu() {
+	$("#agile-menu-navigation-container ul li").each(function(i, ele){
+		// console.log(ele);
+		$(ele).remove("ul");
+		var $a = $(ele).find("a").clone();
+		if($a.length == 0)
+			 return;
+
+		var $ul = $("<ul class='nav nav-sub dk agile-theme-nav-sub' style='display: none;'><li></li></ul>");
+		$a.find("i").remove();
+		$ul.find('li').append($a);
+		$(ele).append($ul);
+	});
 }
     	 
 

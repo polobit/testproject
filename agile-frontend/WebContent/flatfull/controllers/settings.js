@@ -1346,8 +1346,11 @@ var SettingsRouter = Backbone.Router
 									initializeThemeSettingsListeners();
 
 									// Check position for new theme and hide top menu option for new one
-									if(CURRENT_USER_PREFS.theme == "15")
+									if(CURRENT_USER_PREFS.theme == "15") {
 										$("#menuPosition option[value='top']").hide();
+										$("#menuPosition option[value='left']").hide();
+									}
+										
 
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
