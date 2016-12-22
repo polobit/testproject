@@ -548,7 +548,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
 								if(templateId != null){
-									SendMail.sendMail(email, subjectMessage, templateId, subscriberJSONObject.toString(), StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
+									SendMail.sendMail(email, subjectMessage, templateId, subscriberJSONObject, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
 									System.out.println("Email sent successfully...");
 								}
 								else{
