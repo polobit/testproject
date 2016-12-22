@@ -455,6 +455,7 @@ function dialFromOzonetel(to,from,contact){
 			success : function(data){
 				if(data == "success"){
 					startOzonetelWidget();
+					$("#draggable_noty #call-noty-notes").val("");
 					var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 					showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
 					globalCall.callStatus = "Oncall";
