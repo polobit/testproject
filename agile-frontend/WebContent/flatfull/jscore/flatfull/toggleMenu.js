@@ -643,7 +643,7 @@ function initRolehandlers(){
  			if(!dashboardName)
  				 dashboardName = "dashboard";
 
- 			$("#rolecontainer").text(serviceName);
+ 			$(".rolecontainer").text(serviceName);
  			$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-" + serviceName);
 
  			/*set the role before the call to load the dashboard */

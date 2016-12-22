@@ -433,7 +433,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color nav-grid"  data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer" class="rolecontainer"><%out.print(domainUser.role);%></span>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>
@@ -516,7 +516,11 @@ function isIE() {
                 </ul>
                 </div>
                 	</div>">
-                   <a href="#" class='grid-icon-header block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                   <a href="#" class='grid-icon-header pull-left block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i>
+                      <span id="rolecontainer" class="rolecontainer grid-v1-rolecontainer"><%out.print(domainUser.role);%>
+                      </span> 
+                   </a> 
+                    
                              </div>
         <%
           if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
