@@ -636,14 +636,15 @@ function initRolehandlers(){
 
  			var serviceName = $(this).attr("data-service-name");
 
- 			if(!serviceName || CURRENT_DOMAIN_USER.role ==  serviceName)
- 				  return;
+ 			if(!serviceName)
+ 				return;
 
  			var dashboardName = $(this).attr("data-dashboard");
  			if(!dashboardName)
  				 dashboardName = "dashboard";
- 				$("#rolecontainer").text(serviceName);
- 			$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-"+serviceName);
+
+ 			$("#rolecontainer").text(serviceName);
+ 			$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-" + serviceName);
 
  			/*set the role before the call to load the dashboard */
  			CURRENT_DOMAIN_USER.role = serviceName;
