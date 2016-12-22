@@ -5150,3 +5150,7 @@ span.rolecontainer::first-letter {
     background-color: #dee5e7;
     border-color: #ececec;
 }
+.sms-draggable-noty:hover .move-icon{
+ display:block!important;
+ }
+
