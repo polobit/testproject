@@ -2399,7 +2399,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
             <div class="modal-content">
                 
                 <div class="modal-header">
-                    <button class="close" data-dismiss="modal" style="font-size: 20px;">&times;</button>
+                    <button class="close" data-dismiss="modal" style="margin-top: 3px; font-size: 20px;">&times;</button>
                     <h3 class="modal-title">
                         <label id="success-msg" style="margin:-5px -1px; color: green;">
                             <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 
