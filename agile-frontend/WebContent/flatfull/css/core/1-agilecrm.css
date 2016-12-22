@@ -5136,8 +5136,12 @@ border-top: 0px !important;
 span.rolecontainer {
     text-transform: lowercase;
 }
-
 span.rolecontainer::first-letter {
     text-transform: capitalize;
 }
-
+#agile-menu-navigation-container.navi ul.nav li a {
+  padding-left: 45px;
+}
+.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a {
+  padding-left: 0px; 
+}
