@@ -262,9 +262,9 @@ if(message.state == "connected"){
 		}
 		var btns;
 		if(widgetype !=  "ozonetel"){
-			$("#draggable_noty #call-noty-notes").val("");
 			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
 		}else{
+			$("#draggable_noty #call-noty-notes").val("");
 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 		}
 		var json = {"callId": callId};
@@ -439,9 +439,6 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		}
 	}
 	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered"){
-		if(widgetName == "ozonetel" || widgetName == "Ozonetel"){
-			$("#draggable_noty #call-noty-notes").val(callnotes);
-		}
 		$("#draggable_noty").show().delay(5000).hide(1);
 	}
 }
