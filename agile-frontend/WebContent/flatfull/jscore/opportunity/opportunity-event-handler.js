@@ -17,7 +17,8 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
         'click #bulk_deals_restore' : 'bulkDealsRestore',
         'click #bulk_deals_delete' : 'bulkDealsDelete',
         'click #select-all-available-deals' : 'selectAllAvailableDeals',
-        'click #select-choosen-deals' : 'selectChoosenDeals'
+        'click #select-choosen-deals' : 'selectChoosenDeals',
+        'click #bulk_deals_export' : 'bulkDealsExport'
     },
 
     dealEdit : function(e){
@@ -334,7 +335,21 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
 
         }, '');
     },
+    bulkDealsExport : function(e){
+        e.preventDefault();
+        var template_key = "deal-bulk-export-modal";
+        getTemplate(template_key, {}, undefined, function(template_ui){
+            if(!template_ui)
+                  return;
+            $('#deal_bulk_export_modal').html($(template_ui)).modal("show");
+            $("#deal_bulk_export_modal").off("click", "#deal-bulk-export");
+            $("#deal_bulk_export_modal").on("click", "#deal-bulk-export", function(e){
+                e.preventDefault();
+                deal_bulk_actions.bulkExportDeals(false);
+            });
 
+        },'');
+    },
     selectAllAvailableDeals : function(e){
         e.preventDefault();
         SELECT_ALL_DEALS = true;
