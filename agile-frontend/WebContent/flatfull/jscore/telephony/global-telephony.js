@@ -2,12 +2,14 @@ var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
+var widgetCallName = { "Sip" : "Sip","Ozonetel":"Ozonetel","TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript" };
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 var callJar = {"running" : false};
 var notifications_sound = true;
+var messagefromcallback = false;
+var outboundmessage = true;
 $(function()
 {
 //	initToPubNub();
@@ -573,6 +575,52 @@ function handleCallRequest(message)
 		showSkypeCallNoty(message);
 		return;
 	
+		}else if((message || {}).callType == "Ozonetel"){
+			if(message.message_from != "callback"){
+					messagefromcallback = true;	
+					if(message.direction == "Incoming"){
+						outboundmessage = false;
+					}else{
+						outboundmessage = true;
+					}
+			}else{
+				if(messagefromcallback && outboundmessage){
+					messagefromcallback = false;
+					outboundmessage = true;
+				}else{
+					messagefromcallback = true;
+					outboundmessage = false;
+				}
+			}			
+			if(messagefromcallback == true){				
+				var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
+				if( index == -1){
+					sendCommandToClient("notConfigured","Ozonetel");
+					return;
+				}
+				try{
+					var phone = $("#ozonetel_contact_number").val();
+					if (!phone || phone == ""){
+						phone = agile_crm_get_contact_properties_list("phone")[0].value;
+					}
+					if (phone == num){
+						getLogsForOzonetel(num);
+						//handleLogsForOzonetel(message);
+					}
+				}catch (e){
+
+				}
+				if(message.number){
+					globalCall.callNumber = message.number;
+				}else{
+					globalCall.callNumber = message.contact_number;
+				}
+				showOzonetelCallNoty(message);
+				if(message.state && message.state != "ringing"){
+					saveCallNoteOzonetel(message);
+					globalCall.callStatus = "Ideal";
+				}
+			}
 		}
 }
 
@@ -597,6 +645,7 @@ function checkForActiveCall()
 	{
 
 	}
+
 	try
 	{
 		if (globalCall.callStatus != "Ideal")
@@ -621,7 +670,6 @@ function closeCallNoty(option){
 	$("#draggable_noty").hide();
 	$(".draggable_noty_callScript","#draggable_noty").html("");
 	$("#draggable_noty").removeClass("draggable-popup");
-	
 	 if(dialled.using == "dialler"){
 		  $("#direct-dialler-div").show();
 		  dialled.using = "default";
