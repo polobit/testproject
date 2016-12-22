@@ -735,8 +735,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
-        <i class="material-icons hidden-icon" style="display: none">update</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">update</i> 
+        <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
       </a>
     </li>
@@ -902,8 +902,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
-        <i class="material-icons hidden-icon" style="display: none">update</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">update</i> 
+        <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
       </a>  
     </li>
@@ -1057,8 +1057,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu" class="dashboard-activitiesnavbar">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
-      <i class="material-icons hidden-icon" style="display: none">update</i>
-      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">update</i>
+      <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
