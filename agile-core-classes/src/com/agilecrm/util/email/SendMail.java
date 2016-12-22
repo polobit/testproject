@@ -3,6 +3,7 @@ package com.agilecrm.util.email;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailTemplates;
@@ -366,15 +367,6 @@ public class SendMail
 			// Serialize, Use ObjectMapper
 			String objectJson = null;
 
-			try {
-				ObjectMapper mapper = new ObjectMapper();
-				objectJson = mapper.writeValueAsString(object);
-				System.out.println(objectJson);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
-
 			// Add email properties
 			JSONObject email = new JSONObject();
 			email.put("email_to", to);
@@ -383,25 +375,42 @@ public class SendMail
 			email.put("email_from_name", fromName);
 
 			JSONObject[] jsonObjectArray;
-
-			// If object to mail template is array then data of array can be
-			// accessed with "class name" key in template
-			if (object instanceof Object[]) {
-				JSONObject content = new JSONObject();
-				for (Object eachObject : (Object[]) object) {
-					String className = eachObject.getClass().getSimpleName();
-					content.put(
-							className,
-							new JSONObject(new ObjectMapper()
-									.writeValueAsString(eachObject)));
+			
+			if(object instanceof JSONObject)
+			{
+				jsonObjectArray = new JSONObject[] {email, (JSONObject)object};
+			}
+			else
+			{
+				try {
+				ObjectMapper mapper = new ObjectMapper();
+				objectJson = mapper.writeValueAsString(object);
+				System.out.println(objectJson);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
+				
+				// If object to mail template is array then data of array can be
+				// accessed with "class name" key in template
+				if (object instanceof Object[]) {
+					JSONObject content = new JSONObject();
+					for (Object eachObject : (Object[]) object) {
+						String className = eachObject.getClass().getSimpleName();
+						content.put(
+								className,
+								new JSONObject(new ObjectMapper()
+										.writeValueAsString(eachObject)));
+					}
+	
+					jsonObjectArray = new JSONObject[] { email, content };
+				} else {
+					jsonObjectArray = new JSONObject[] { email,
+							new JSONObject(objectJson) };
 				}
 
-				jsonObjectArray = new JSONObject[] { email, content };
-			} else {
-				jsonObjectArray = new JSONObject[] { email,
-						new JSONObject(objectJson) };
 			}
-
+			
 			// Merge JSONObjects as a single JSONObject in order to get all
 			// values in a single object
 			JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
