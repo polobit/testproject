@@ -338,6 +338,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 }
+.app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {padding: 10px 15px 12px 15px;}
+
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>
