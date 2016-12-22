@@ -3121,15 +3121,18 @@ border-left: 0px !important;
 height: 45px; 
 padding-top: 14px;
 }
-.agile-theme-15 aside #agile-menu-navigation-container li .nav-sub{
-  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.07) !important;
-  -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.07) !important;
+.agile-theme-15 aside #agile-menu-navigation-container li .agile-theme-nav-sub{
+  box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
+  -webkit-box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
 } 
+.agile-theme-15 .agile-theme-nav-sub {
+  display: block!important;
+}
 .agile-theme-15 .app-aside {
-    top: 0px;
+    /*top: 0px;
     position: fixed;
     margin-top: 50px;
-    z-index: 1035!important;
+    z-index: 1035!important; */
 }
 
 
