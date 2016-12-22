@@ -568,15 +568,38 @@ function fillSlotDetails(slot_durations_one_user)
 		{
 			temp += '<div class="radio"><label><input class="c-p selected_meeting_time" type="radio" data="' + json.time + '" name="selected_meeting_time" value="' + meeting_names[meeting_name] + '"><i></i>' + meeting_names[meeting_name] + '</label></div>';
 		}
-		var select = '<div class="panel panel-default">' + '<div class="panel-heading font-bold">' + json.time + ' ' + LOCALES_JSON['mins'] + ' </div>' + '<div class="panel-body">' + '<form class="bs-example form-horizontal">' + '<div class="form-group" style="margin-left:7px;">' + temp + '</div></form></div></div>';
-		$('.segment1').append('<div class="col-sm-' + dataLength + ' show_slots"><p class="timeslot-view">' + select + '</p></div>');
+		var select = '<div class="panel panel-default">' + '<div class="panel-heading font-bold">' + displayTime(json.time) + ' </div>' + '<div class="panel-body">' + '<form class="bs-example form-horizontal">' + '<div class="form-group" style="margin-left:7px;">' + temp + '</div></form></div></div>';
+		$('.segment1').append('<div class="col-sm-4 show_slots"><p class="timeslot-view">' + select + '</p></div>');
 	}
+	
 	if(multi_user_ids.length<2)
 	$(".panel-body").height(parseInt(getPanelBodyMaxHeight()) + 26);
 	$('.segment1').append('<div class="clearfix"></div>');
 
 }
 
+function displayTime(mins){
+	var time ="";
+	if(mins){
+	  var hours = Math.trunc(mins/60);
+	  var minutes = mins % 60;
+	  if(hours > 0){
+		  if(hours > 1){
+		  	time += hours + " hrs ";
+		  }else{
+		  	time += hours +" hr ";
+		  }
+	  }
+	  if(minutes > 0){
+		  if(minutes > 1){
+		  	time += minutes + " " + LOCALES_JSON['mins'];
+		  }else{
+		  	time += minutes + " min";
+		  }
+	  }
+	}
+  return time;
+}
 function getPanelBodyMaxHeight()
 {
 	var max = 0;

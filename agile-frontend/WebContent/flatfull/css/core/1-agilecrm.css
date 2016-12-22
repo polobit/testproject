@@ -5115,3 +5115,16 @@ border-top: 0px !important;
   width: 100%;
   height: auto;
 }
+.dropdown-content {
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 50px;
+    max-height: 100px;
+    overflow: auto;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 9;
+}
+.dropdown-content a {
+    text-decoration: none;
+    display: block;
+}
