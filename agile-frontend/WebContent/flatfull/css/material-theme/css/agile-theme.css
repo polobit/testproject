@@ -2694,7 +2694,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 
 
-.agile-theme-15 #aside i.icon ,.agile-theme-15 #aside i.fa,.agile-theme-15 #aside i.icon-list,.agile-theme-15 #aside i.icon-white,.agile-theme-15 #aside i.icon-envelope-letter,.agile-theme-15 #aside i.icon-docs,.agile-theme-15 #aside i.icon-eye,.agile-theme-15 #aside i.icon-users,.agile-theme-15 #aside i.icon-tag,.agile-theme-15 #aside i.icon-bubbles,.agile-theme-15 #aside i.icon-clock{
+.agile-theme-15 #aside i.icon ,.agile-theme-15 #aside i.fa,.agile-theme-15 #aside i.icon-list,.agile-theme-15 #aside i.icon-white,.agile-theme-15 #aside i.icon-envelope-letter,.agile-theme-15 #aside i.icon-docs,.agile-theme-15 #aside i.icon-eye,.agile-theme-15 #aside i.icon-users,.agile-theme-15 #aside i.icon-tag,.agile-theme-15 #aside i.icon-bubbles,.agile-theme-15 #aside i.icon-clock, .agile-theme-15 #header i.icon-clock{
   display: none;
 }
 
@@ -3161,4 +3161,7 @@ div.show-caret:hover>a.caret-btn
 }
 .agile-theme-15 i.icon-sitemap{
   color:#78909c !important;
+}
+#reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
+  margin-top: 3px;
 }
