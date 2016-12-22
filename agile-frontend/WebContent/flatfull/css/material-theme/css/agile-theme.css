@@ -2828,9 +2828,6 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
     margin-top: 3px;
     margin-left: 10px;
   }
-span#rolecontainer::first-letter {
-    text-transform: capitalize;
-}
 
 .agile-theme-15 .api-reset-btn
 {
@@ -2875,9 +2872,7 @@ div#need_help_header a:hover {
     margin-top: 3px;
     margin-left: 10px;
   }
-span#rolecontainer::first-letter {
-    text-transform: capitalize;
-}
+
 .grid-v2{
   top: 17px !important;
   background-color: #fff !important;
@@ -3093,6 +3088,7 @@ table#deal-sources-table>tbody>tr:last-child{
 } 
 .agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
   display: block !important;
+  line-height: 45px;
 }
 
 #ticket-last-notes{
@@ -3124,9 +3120,14 @@ padding-top: 14px;
   box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
   -webkit-box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
 } 
-.agile-theme-15 .agile-theme-nav-sub {
+.agile-theme-15 .navi ul li:hover .agile-theme-nav-sub {
   display: block!important;
 }
+.agile-theme-15 aside .navi ul li.active .agile-theme-nav-sub {
+  display: none!important;
+}
+
+.agile-theme-15 .navi ul li#companiesmenu a{margin-left: 0px !important;}
 .agile-theme-15 .app-aside {
     /*top: 0px;
     position: fixed;

@@ -433,7 +433,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color nav-grid"  data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer" class="rolecontainer"><%out.print(domainUser.role);%></span>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>
@@ -516,7 +516,11 @@ function isIE() {
                 </ul>
                 </div>
                 	</div>">
-                   <a href="#" class='grid-icon-header block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i></a>   
+                   <a href="#" class='grid-icon-header pull-left block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i>
+                      <span id="rolecontainer" class="rolecontainer grid-v1-rolecontainer"><%out.print(domainUser.role);%>
+                      </span> 
+                   </a> 
+                    
                              </div>
         <%
           if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
@@ -735,8 +739,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
-        <i class="material-icons hidden-icon" style="display: none">update</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">update</i> 
+        <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
       </a>
     </li>
@@ -902,8 +906,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
-        <i class="material-icons hidden-icon" style="display: none">update</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">update</i> 
+        <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
       </a>  
     </li>
@@ -1057,8 +1061,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="activitiesmenu" class="dashboard-activitiesnavbar">
     <a  href="#activities">
       <i class="icon-speedometer icon-white"></i>
-      <i class="material-icons hidden-icon" style="display: none">update</i>
-      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">update</i>
+      <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-activities") %></span>
     </a>
   </li>
