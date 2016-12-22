@@ -434,8 +434,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
 		}
 	}
-	
-	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered"){
+	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered" || s == "answered"){
 		$("#draggable_noty").show().delay(5000).hide(1);
 	}
 }

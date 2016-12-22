@@ -7,6 +7,8 @@ var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 var messagefromcallback = false;
+var outboundmessage = true;
+var callbackmessage = false;
 $(function()
 {
 //	initToPubNub();
@@ -585,15 +587,22 @@ function handleCallRequest(message)
 	
 		}else if((message || {}).callType == "Ozonetel"){
 			if(message.message_from != "callback"){
-					messagefromcallback = true;
+					messagefromcallback = true;	
+					if(message.direction == "Incoming"){
+						outboundmessage = false;
+					}else{
+						outboundmessage = true;
+					}
 			}else{
-				if(!messagefromcallback){
-					messagefromcallback = true;
-				}else{
+				if(messagefromcallback && outboundmessage){
 					messagefromcallback = false;
+					outboundmessage = true;
+				}else{
+					messagefromcallback = true;
+					outboundmessage = false;
 				}
-			}
-			if(messagefromcallback){
+			}			
+			if(messagefromcallback == true){				
 				var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
 				if( index == -1){
 					sendCommandToClient("notConfigured","Ozonetel");
