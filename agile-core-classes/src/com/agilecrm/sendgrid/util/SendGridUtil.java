@@ -1,7 +1,11 @@
 package com.agilecrm.sendgrid.util;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +26,7 @@ import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
@@ -42,6 +47,7 @@ import com.thirdparty.sendgrid.subusers.SendGridSubUser;
  */
 public class SendGridUtil
 {
+	public static final String WHO_IS_API_URL = "http://54.84.112.13/DomainVerification/whois?domain=";
 
     public static final String UNIQUE_ARGUMENTS = "unique_args";
     public static final String SUBSTITUTION_TAG = "sub";
@@ -677,10 +683,10 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 }
 
 	
-	public static void main(String asd[]){
+	public static void main(String asd[]) throws ParseException{
+		isEmailDomainValid(null);
 		
-		
-		System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
+		//System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
 	
 	/**
@@ -839,8 +845,43 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		return false;
 	}
 	
-	
-	
+	/**
+	 * This method is used for verifying email domain on
+	 * the basis of creation date
+	 * 
+	 * @param emailDomain
+	 * @return
+	 * 		-boolean
+	 * @throws ParseException 
+	 */
+	public static boolean isEmailDomainValid(String emailDomain) {
+		
+	try{
+		
+		String whoisData=HTTPUtil.accessURL(WHO_IS_API_URL + emailDomain);
+		
+		String creationDate = StringUtils.substringBetween(whoisData, "Creation Date:", "T");
+		if(StringUtils.isNotBlank(creationDate)){
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = dateFormat.parse(creationDate.trim());
+			
+			long thirtyDaysBackTime = System.currentTimeMillis()/1000;
+			thirtyDaysBackTime = thirtyDaysBackTime -2592000;
+			
+			long createdTimeMillisecond = date.getTime()/1000;
+			
+			if(createdTimeMillisecond <=thirtyDaysBackTime)
+				return false;
+		}
+		
+		System.out.println("Email Domain name and created date" + creationDate + "   "+emailDomain);
+	}
+	catch(Exception e){
+		System.out.println("Exception occured while validatin email domain on whois server : " +e.getMessage());
+		return true;
+	    }
+	return true;
+	}
 	
 	
 	
