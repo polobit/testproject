@@ -408,28 +408,19 @@ public class SendMail
 
 			System.out.println("mergedJson in sendemail" + mergedJSON);
 			
-			JSONObject subscriberJSONObject = new JSONObject(object.toString());
-			
 			String emailHTML = "";
 			String emailBody = "";
 			EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(templateId);
 			String subjectMessage = template_details.subject ;
 			String bodyString = template_details.text;
-			String htmlString = template_details.html_for_builder;	
-			
-			if(StringUtils.isEmpty(htmlString))
-				htmlString = bodyString;
 
 			// Read template - HTML
-			emailHTML = MustacheUtil.compile(htmlString, subscriberJSONObject);
-
-			// Read template - Body
-			emailBody = MustacheUtil.compile(bodyString, subscriberJSONObject);
+			emailHTML = MustacheUtil.compile(bodyString, mergedJSON);
 
 			// If both are null, nothing to be sent
-			if (emailHTML == null && emailBody == null) {
+			if (emailHTML == null) {
 				System.err
-						.println("Email could not be sent as no matching templates were found "
+						.println("Email could not be sent as no html found "
 								+ templateId);
 				return;
 			}
