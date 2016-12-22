@@ -1,11 +1,12 @@
 
 
 $('#app-aside-folded').on('click', function(e) {
-	e.preventDefault();
-
+	
 	if(CURRENT_USER_PREFS.theme == "15") {
 		return;
 	}
+
+	e.preventDefault();
 		
 	/*$('.app-aside-folded-inactive .hidden-folded ,.app-aside-folded .navi > ul > li > a span').css('display','none');
 	
@@ -673,7 +674,8 @@ function initRolehandlers(){
 
  			// Update UI
  			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
- 			$('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+ 			// $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+ 			appendAgileNewThemeSubNavMenu();
  			// Call dashboard route
  			Backbone.history.navigate("#navigate-dashboard", {
                 trigger: true
@@ -787,6 +789,22 @@ function updateDashboardRole(prevrole)
 
 function isTargetAnInputField(e) {
 	return ($(e.target).prop("tagName").toLowerCase() == "input");
+}
+
+
+function appendAgileNewThemeSubNavMenu() {
+	$("#agile-menu-navigation-container ul li").each(function(i, ele){
+		// console.log(ele);
+		$(ele).remove("ul");
+		var $a = $(ele).find("a").clone();
+		if($a.length == 0)
+			 return;
+
+		var $ul = $("<ul class='nav nav-sub dk agile-theme-nav-sub'><li></li></ul>");
+		$a.find("i").remove();
+		$ul.find('li').append($a);
+		$(ele).append($ul);
+	});
 }
     	 
 

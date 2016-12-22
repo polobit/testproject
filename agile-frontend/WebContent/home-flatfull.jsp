@@ -538,7 +538,7 @@ function isIE() {
           
           <% } %>
        
-<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed
+<div id="wrap" class="app app-aside-folded-inactive app-header-fixed app-aside-fixed1
 <% 
 if(currentUserPrefs.menuPosition.equals("top")){
   out.print("app-aside-dock ");
@@ -609,14 +609,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
     </li>
-    <li id="home_dashboard">
+    <!-- <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
         <i class="material-icons hidden-icon" style="display: none">home</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
-    </li>
+    </li> -->
    <!-- <li id="leadsmenu">
     <a  href="#leads">
       <i class="icon icon-group"></i>
@@ -769,14 +769,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
       </li>
-      <li id="home_dashboard">
+     <!--  <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
         <i class="material-icons hidden-icon" style="display: none">home</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
-    </li>
+    </li> -->
     <%
         if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
     %>      
@@ -945,14 +945,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
       </li>
-      <li id="home_dashboard" class="hide">
+      <!-- <li id="home_dashboard" class="hide">
         <a  href="#">
           <i class="icon icon-home"></i>
            <i class="material-icons hidden-icon" style="display: none">home</i>
            <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
-      </li>
+      </li> -->
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
@@ -1448,8 +1448,9 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
       // console.log("All files loaded. Now continuing with script");
       load_globalize();
       try{
-        $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+        // $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
         $('[data-toggle="tooltip"]').tooltip();  
+        appendAgileNewThemeSubNavMenu();
         //Code to display alerts of widgets.
         showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
       } catch(e) {
