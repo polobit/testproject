@@ -77,11 +77,12 @@
 
 
     input[type="checkbox"]:checked:after{
-      border-color : @basic-color;
-      background-color : @basic-color;
+      border-color : @checkbox-color;
+      background-color : #fff !important;
+      color : @checkbox-color;
     }
     input[type="checkbox"]:hover:after, input[type="checkbox"]:active:after, input[type="checkbox"]:focus:after{
-      border-color : @basic-color;
+      border-color : @checkbox-color;
     }
 
     input[type="radio"]:hover:after, input[type="radio"]:active:after, input[type="radio"]:focus:after{
@@ -146,10 +147,11 @@
 @service-color : #66cd2e @important;
 @sales-bg-color : #F1EFFE @important;
 @ma-bg-color : #E7F6FF @important;
-@service-bg-color :rgba(102, 205, 46, 0.2) @important;
+@service-bg-color :#E0F5D5 @important;
 @sales-bg-hover-color : #F9F9FF @important;
 @ma-bg-hover-color : #f5fbff @important;
-@service-bg-hover-color : rgba(102, 205, 46, 0.1) @important;
+@service-bg-hover-color : #F0FAEA @important;
+@checkbox-color : @ma-color;
 
 
 
