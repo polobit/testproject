@@ -800,7 +800,7 @@ function appendAgileNewThemeSubNavMenu() {
 		if($a.length == 0)
 			 return;
 
-		var $ul = $("<ul class='nav nav-sub dk agile-theme-nav-sub'><li></li></ul>");
+		var $ul = $("<ul class='nav nav-sub dk agile-theme-nav-sub' style='display: none;'><li></li></ul>");
 		$a.find("i").remove();
 		$ul.find('li').append($a);
 		$(ele).append($ul);
