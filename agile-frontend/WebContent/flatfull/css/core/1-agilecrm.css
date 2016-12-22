@@ -5142,7 +5142,7 @@ span.rolecontainer::first-letter {
 #agile-menu-navigation-container.navi ul.nav li a {
   padding-left: 45px;
 }
-.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a {
+.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a, .app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {
   padding-left: 0px; 
 }
 
