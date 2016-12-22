@@ -3138,3 +3138,7 @@ padding-top: 14px;
       color: #263238!important;
       background-color: #f4f8f9 !important;
 }
+.documentsheading .workflow-sortby
+{
+  margin-top:-7px !important
+}
