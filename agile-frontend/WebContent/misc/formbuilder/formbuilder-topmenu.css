@@ -41,10 +41,12 @@ input.cancel-btn:hover {
     border-color: #fff;
     color: black;
     font-size: 15px;
+    border-left-color:#ccc;
 }
 #form_preview:hover{
     background-color: #eee;
-    border-color: #eee;
+    border-top-color: #eee;
+    border-bottom-color: #eee;
 }
 .tabbable{
     margin-right: 15px;

@@ -47,12 +47,12 @@ String template = request.getParameter("template");
            <i class="fa fa-cloud"></i> 
          </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
-        <div style="float: right;">           
+        <div style="float: right;"> 
+             <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
+               <span>Preview</span> 
+            </a>          
             <a id="form_back" class="btn btn-default navbar-brand">
                <span>Back</span>
-            </a>
-            <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
-               <span>Preview</span> 
             </a>
             <a id="form-save" class="btn navbar-brand  navbar-color">
                <span>Save</span>
