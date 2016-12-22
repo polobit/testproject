@@ -6,7 +6,7 @@
 
 function startOzonetelWidget(contact_id){
 	getLogsForOzonetel();
-
+	$("#Ozonetel-container").css({"display":"none"});
 	 OZONETEL_PLUGIN_NAME = "Ozonetel";
 	 OZONETEL_UPDATE_LOAD_IMAGE = '<center><img id="knowlarity_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
