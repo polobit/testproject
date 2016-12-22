@@ -3139,7 +3139,7 @@ padding-top: 14px;
       color: #263238!important;
       background-color: #f4f8f9 !important;
 }
-.documentsheading .workflow-sortby,.workflow-heading .workflow-sortby
+.documentsheading .workflow-sortby
 {
   margin-top:-7px !important
 }
@@ -3164,4 +3164,7 @@ div.show-caret:hover>a.caret-btn
 }
 #reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
   margin-top: 3px;
+}
+ .agile-theme-15  ul.new-theme-ul{
+width: 169px !important;
 }
