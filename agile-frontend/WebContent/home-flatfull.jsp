@@ -796,9 +796,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     %>
     <li id="workflowsmenu">
       <a  href="#workflows">
-        <i class="icon icon-sitemap"></i>
-        <i class="material-icons hidden-icon" style="display: none">device_hub</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Campaigns">device_hub</i> 
+        <i class="icon icon-sitemap" style="display: block !important;"></i>
+        <!-- <i class="material-icons hidden-icon" style="display: none">device_hub</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Campaigns">device_hub</i>  -->
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-campaigns") %></span>
       </a>
     </li>
