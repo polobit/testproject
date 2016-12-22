@@ -162,6 +162,9 @@
 		               	  {{else}}
 		               	 {{#if_equals name "Sip"}}
 		               	  <a></a>
+		               	 {{else}}
+		               	 {{#if_equals name "Ozonetel"}}
+		               	  <a></a>
 		                {{else}}
 		                	{{#isAdmin}}
                            		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
@@ -171,6 +174,7 @@
   				   		   {{/if_equals}}
   				   		     {{/if_equals}}
                 {{/if_equals}}
+                  {{/if_equals}}
                   {{/if_equals}}
                
 				           <a href="#{{name}}/{{id}}" class="btn btn-sm btn-default" id="setting-widget" set-widget-name="{{name}}">{{agile_lng_translate 'preferences' 'settings'}}</a>	

@@ -37,6 +37,8 @@ var WidgetsRouter = Backbone.Router
                 "Twilio/:id" : "Twilio",
                 "TwilioIO" : "TwilioIO",
                 "TwilioIO/:id" : "TwilioIO",
+                "Ozonetel" : "Ozonetel",
+                "Ozonetel/:id" : "Ozonetel",
                 "callscript/rules" : "CallScriptShow",
                 "callscript/add-rules" : "CallScriptAdd",
                 "callscript/editrules/:id" : "CallScriptEdit",
@@ -143,6 +145,13 @@ var WidgetsRouter = Backbone.Router
              */
             TwilioIO : function(id) {
                 addConfigurableWidget(id, "TwilioIO", 'twilioio-login');
+            },
+
+            /**
+             * Manages TwilioIo widget
+             */
+            Ozonetel : function(id) {
+                addConfigurableWidget(id, "Ozonetel", 'ozonetel-login');
             },
 
             Custom : function(id){                
@@ -441,6 +450,11 @@ function renderWidgetView(templateName, url, model, renderEle){
              }
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
+            var url_oz = window.location.href;
+            if(url_oz.indexOf("#") > -1){
+                url_oz = url_oz.split("/#")[0];
+            }
+            $('#prefs-tabs-content').find('#ozonetelurl').text(url_oz.split("/#")[0]+"/incomingcall?email="+CURRENT_DOMAIN_USER.email);
             initializeTabListeners("widget_tab", "add-widget");
             $("#twilioio_login_form .question-tag" ).popover({
               template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'

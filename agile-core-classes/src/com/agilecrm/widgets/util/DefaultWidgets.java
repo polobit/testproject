@@ -23,7 +23,7 @@ public class DefaultWidgets {
 	 */
 	public static List<Widget> getAvailableDefaultWidgets() {
 		List<Widget> widgets = new ArrayList<Widget>();
-		
+
 		/**
 		 * Call widgets Order
 		 */
@@ -61,6 +61,12 @@ public class DefaultWidgets {
 			"Make and receive calls with your customers using SIP account.",
 			"/widgets/sip.js", "/widgets/sip-logo-small.png",
 			"/widgets/sip-logo-small.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+			"Ozonetel",
+			"Ozonetel",
+			"Make and receive calls, and send and receive text messages with your customers using Twilio account.",
+			"/widgets/ozonetel.js", "/widgets/ozonetel.png",
+			"/widgets/ozonetel_fullsize.png", null, WidgetType.CALL));
 		/**
 		 * Social widgets Order
 		 */
@@ -214,7 +220,7 @@ public class DefaultWidgets {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
 				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript",
-						"Bria", "Skype" }).contains(widgetName)) {
+						"Bria", "Skype", "Ozonetel"}).contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })
 				.contains(widgetName)) {
