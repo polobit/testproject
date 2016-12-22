@@ -68,15 +68,17 @@ String clientIP = request.getRemoteAddr();
 
 // Get current user prefs
 UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-// Change Prefs for requested new theme
-String uiVersion = request.getParameter("ui");
-if(StringUtils.isNotBlank(uiVersion) && uiVersion.equalsIgnoreCase("v2")) {
+String menuPosition = currentUserPrefs.menuPosition;
+if(currentUserPrefs.theme.equalsIgnoreCase("15")) {
+       currentUserPrefs.menuPosition = "leftcol";
+}	
+
+// Request param to show new theme
+String newThemeReq = request.getParameter("ui");
+if(StringUtils.isNotBlank(newThemeReq) && newThemeReq.equalsIgnoreCase("v2")){
 	currentUserPrefs.theme = "15";
-	String menuPosition = currentUserPrefs.menuPosition;
-	if(StringUtils.isNotBlank(menuPosition) && menuPosition.equalsIgnoreCase("top"))
-		currentUserPrefs.menuPosition = "leftcol";
+	currentUserPrefs.menuPosition = "leftcol";
 }
-	
 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
@@ -431,7 +433,7 @@ function isIE() {
               
          %>" id='need_help_header'>
           <a href="#" class="dropdown-toggle purple-color nav-grid"  data-toggle="dropdown" aria-expanded="false">
-              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span><i class="material-icons m-l-sm m-t-xs" >more_horiz</i>
+              <i class="material-icons" style="font-size: 22px;">view_module</i><span id="rolecontainer"><%out.print(domainUser.role);%></span>
               <div class="dash-name">
                   <span>Sales</span>
                   <i class="material-icons">arrow_drop_down</i>
@@ -607,14 +609,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
     </li>
-    <li id="home_dashboard">
+    <!-- <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
         <i class="material-icons hidden-icon" style="display: none">home</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
-    </li>
+    </li> -->
    <!-- <li id="leadsmenu">
     <a  href="#leads">
       <i class="icon icon-group"></i>
@@ -767,14 +769,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
       </li>
-      <li id="home_dashboard">
+     <!--  <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
         <i class="material-icons hidden-icon" style="display: none">home</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
-    </li>
+    </li> -->
     <%
         if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
     %>      
@@ -943,22 +945,22 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
       </li>
-      <li id="home_dashboard" class="hide">
+      <!-- <li id="home_dashboard" class="hide">
         <a  href="#">
           <i class="icon icon-home"></i>
            <i class="material-icons hidden-icon" style="display: none">home</i>
            <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
-      </li>
+      </li> -->
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
     <li id="contactsmenu" class="hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
-        <i class="material-icons hidden-icon" style="display: none">contacts</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">contacts</i>
+        <i class="material-icons hidden-icon" style="display: none">people</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">people</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
       </a>
     </li>
@@ -1446,8 +1448,9 @@ head.load([{'js-core-1': CLOUDFRONT_PATH + 'jscore/min/locales/' + _LANGUAGE  +'
       // console.log("All files loaded. Now continuing with script");
       load_globalize();
       try{
-        $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+        // $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
         $('[data-toggle="tooltip"]').tooltip();  
+        appendAgileNewThemeSubNavMenu();
         //Code to display alerts of widgets.
         showNotyPopUp('<%=session.getAttribute("widgetMsgType") %>', '<%=session.getAttribute("widgetMsg") %>' , "bottomRight");
       } catch(e) {

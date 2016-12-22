@@ -29,11 +29,11 @@ function initializeThemeSettingsListeners(){
 			type : 'PUT',
 			data : json,
 			success : function() {
-				if(true)
+				/*if(true)
 				{
 					window.location.reload(true);
 					return;
-				}
+				}*/
 				enable_save_button($(saveBtn));
 			},
 			error : function() {
@@ -236,12 +236,15 @@ function handleNewThemeSettings() {
 
 	// Show top menu option
 	$("#menuPosition option[value='top']").show();
+	$("#menuPosition option[value='left']").show();
+	
 	if(CURRENT_USER_PREFS.theme == "15")
 	{
 		// Hide top menu option
-		if($("#menuPosition").val() == "top")
-			$("#menuPosition").val('leftcol').trigger("change");			
+		// if($("#menuPosition").val() == "top")
+		$("#menuPosition").val('leftcol').trigger("change");			
 		
+		$("#menuPosition option[value='left']").hide();
 		$("#menuPosition option[value='top']").hide();
 
 		$('link[data-agile-theme="15"]').removeAttr('disabled');
@@ -253,6 +256,7 @@ function handleNewThemeSettings() {
 	}
 	else 
 	{
+
 		$(".grid-v2").addClass("hide");
 		$(".grid-v1").removeClass("hide");
 		$(".grid-icon-header").removeClass("hide");

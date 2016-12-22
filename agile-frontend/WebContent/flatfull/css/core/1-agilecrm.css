@@ -3713,10 +3713,10 @@ opacity: .3;
 }
 
 
-.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
+/*.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
 {
  color:#555!important;
-}
+}*/
 
 
 .deal-edit-dropdown{
@@ -5124,3 +5124,6 @@ border-top: 0px !important;
   margin-top: 15px !important;
 }
 
+#wrap.app-aside-folded .fa.fa-cloud{
+      display: none!important;
+}
