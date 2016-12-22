@@ -377,6 +377,11 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				    Contact contact = ContactUtil.searchContactByEmail(email);
 
 				    JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
+
+				     if(subscriberJSONObject == null)
+				    	subscriberJSONObject = new JSONObject();
+
+				    System.out.println("subscriberJSON : " +subscriberJSONObject);
 	
 				    String msg = "You are successfully unsubscribed. Thank you.";
 
@@ -542,7 +547,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
-								if(templateId ! = null){
+								if(templateId != null){
 									SendMail.sendMail(email, subjectMessage, templateId, subscriberJSONObject.toStrong(), StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
 									System.out.println("Email sent successfully...");
 								}

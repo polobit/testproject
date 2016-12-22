@@ -416,6 +416,9 @@ public class SendMail
 			String subjectMessage = template_details.subject ;
 			String bodyString = template_details.text;
 			String htmlString = template_details.html_for_builder;	
+			
+			if(StringUtils.isEmpty(htmlString))
+				htmlString = bodyString;
 
 			// Read template - HTML
 			emailHTML = MustacheUtil.compile(htmlString, subscriberJSONObject);
