@@ -3033,8 +3033,8 @@ table#deal-sources-table>tbody>tr:last-child{
   border: 0 !important;
   padding-top: 6px !important;
 }
-#no-products-slate{
-  width: 75.0%;
+#no-products-slate, .no-label-content{
+  width: 75%;
 }
 .prefs-option-col .panel.panel-default{
   box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;

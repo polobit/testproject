@@ -609,14 +609,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
     </li>
-    <li id="home_dashboard">
+    <!-- <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
         <i class="material-icons hidden-icon" style="display: none">home</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
-    </li>
+    </li> -->
    <!-- <li id="leadsmenu">
     <a  href="#leads">
       <i class="icon icon-group"></i>
@@ -769,14 +769,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
       </li>
-      <li id="home_dashboard">
+     <!--  <li id="home_dashboard">
       <a  href="#">
         <i class="icon icon-home"></i>
         <i class="material-icons hidden-icon" style="display: none">home</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
       </a>
-    </li>
+    </li> -->
     <%
         if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
     %>      
@@ -945,14 +945,14 @@ if(currentUserPrefs.menuPosition.equals("top")){
       <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
       </li>
-      <li id="home_dashboard" class="hide">
+      <!-- <li id="home_dashboard" class="hide">
         <a  href="#">
           <i class="icon icon-home"></i>
            <i class="material-icons hidden-icon" style="display: none">home</i>
            <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
           <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "home")%></span>
         </a>
-      </li>
+      </li> -->
   <%
       if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
   %>      
