@@ -687,7 +687,7 @@ public class EmailsAPI
     public String getSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
     {
 	
-    	if(SendGridUtil.isEmailDomainValid(emailDomain)){
+    	if(!SendGridUtil.isEmailDomainValid(emailDomain)){
     		
     		return "{\"Error\" : \"Email domain is not valid\"}";
     	}

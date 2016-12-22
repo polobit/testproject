@@ -684,7 +684,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 
 	
 	public static void main(String asd[]) throws ParseException{
-		isEmailDomainValid(null);
+		System.out.println(isEmailDomainValid("email-apple.fr"));
 		
 		//System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
@@ -860,27 +860,36 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		
 		String whoisData=HTTPUtil.accessURL(WHO_IS_API_URL + emailDomain);
 		
+		long thirtyDaysBackTime = System.currentTimeMillis()/1000;
+		thirtyDaysBackTime = thirtyDaysBackTime -2592000;
+		
+		String format = "yyyy-MM-dd";
+		
 		String creationDate = StringUtils.substringBetween(whoisData, "Creation Date:", "T");
+		
+		if(StringUtils.isBlank(creationDate))
+		{
+			creationDate = StringUtils.substringBetween(whoisData, "created:", "last-update");
+			format = "dd/MM/yyyy";
+		}
+		
 		if(StringUtils.isNotBlank(creationDate)){
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			DateFormat dateFormat = new SimpleDateFormat(format);
 			Date date = dateFormat.parse(creationDate.trim());
-			
-			long thirtyDaysBackTime = System.currentTimeMillis()/1000;
-			thirtyDaysBackTime = thirtyDaysBackTime -2592000;
 			
 			long createdTimeMillisecond = date.getTime()/1000;
 			
 			if(createdTimeMillisecond <=thirtyDaysBackTime)
-				return false;
+				return true;
 		}
 		
 		System.out.println("Email Domain name and created date" + creationDate + "   "+emailDomain);
 	}
 	catch(Exception e){
 		System.out.println("Exception occured while validatin email domain on whois server : " +e.getMessage());
-		return true;
+		return false;
 	    }
-	return true;
+	return false;
 	}
 	
 	
