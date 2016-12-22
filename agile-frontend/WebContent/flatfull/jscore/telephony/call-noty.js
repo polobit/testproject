@@ -412,7 +412,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	c.msg = msg;
 	showDraggablePopup(c);
 	$("#noty_text_msg").html(txt);
-	if(widgetName == "Ozonetel"){
+	if(widgetName == "ozonetel" || widgetName == "Ozonetel"){
 		$("#draggable_noty #call-noty-notes").val(callnotes);
 	}
 	if(s == "connected"){
@@ -438,7 +438,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 		}
 	}
 	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered"){
-		if(widgetName == "Ozonetel"){
+		if(widgetName == "ozonetel" || widgetName == "Ozonetel"){
 			$("#draggable_noty #call-noty-notes").val(callnotes);
 		}
 		$("#draggable_noty").show().delay(5000).hide(1);

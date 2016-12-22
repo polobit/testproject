@@ -452,6 +452,11 @@ function renderWidgetView(templateName, url, model, renderEle){
              }
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
+            var url_oz = window.location.href;
+            if(url_oz.indexOf("#") > -1){
+                url_oz = url_oz.split("/#")[0];
+            }
+            $('#prefs-tabs-content').find('#ozonetelurl').text(url_oz.split("/#")[0]+"/incomingcall?email="+CURRENT_DOMAIN_USER.email);
             initializeTabListeners("widget_tab", "add-widget");
         }
     });
