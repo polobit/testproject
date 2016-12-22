@@ -744,7 +744,7 @@ function initializePortletsListeners() {
 	});
 
 
-$('.portlet_body .sms-details').off();
+  $(".portlet_body").off('click','.sms-details');
 	$('.portlet_body').on('click', '.sms-details', function(e) {
 		e.preventDefault();
 		var data = $(this).closest('a').attr("data");
@@ -755,8 +755,8 @@ $('.portlet_body .sms-details').off();
 				if (!template_ui)
 					return;
 
-				var smsInfo = $(template_ui);
-				smsInfo.modal('show');
+				var emailinfo = $(template_ui);
+				emailinfo.modal('show');
 			}, null);
 		});
 	});
