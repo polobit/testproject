@@ -959,8 +959,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="contactsmenu" class="hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
-        <i class="material-icons hidden-icon" style="display: none">contacts</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">contacts</i>
+        <i class="material-icons hidden-icon" style="display: none">people</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">people</i>
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-contacts") %></span>
       </a>
     </li>
