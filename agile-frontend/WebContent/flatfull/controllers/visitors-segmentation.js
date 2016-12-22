@@ -185,6 +185,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                      else
                                      {
                                       visitorsUtils.doPostFetchOperations(web_scope.webstatsListView);
+                                      web_scope.webstatsListView.infiniScroll.disableFetch();
                                      }
                                 }
                                 else
@@ -194,7 +195,7 @@ var VisitorsSegmentationRouter = Backbone.Router
                                   visitorsUtils.hideNotification(el);
                                   visitorsUtils.showSlateConetent(el);
                                   fill_slate("slate", el, slateKey);
-                                }
+                                }                                
                              }
                          });
                         

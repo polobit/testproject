@@ -267,7 +267,8 @@ public class AnalyticsUtil
 	{
 	    List<String> emails = new ArrayList<String>();
 	    String currentNamespace = NamespaceManager.get();
-	    //String currentNamespace = "our";
+	    if(StringUtils.equalsIgnoreCase(currentNamespace,"rameshr"))
+	    	currentNamespace = "our";
 	    VisitorSegmentationQueryGenerator segmentationQueryGenerator = new VisitorSegmentationQueryGenerator(
 		    currentNamespace, filterJSON, startTime, endTime, cursor, pageSize);
 	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
