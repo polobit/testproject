@@ -148,12 +148,15 @@ function androidCallNoty(message){
 }
 
 function appDialer(to, contact){
+	console.log("app dialer called **** ");
+	console.log(to);
+	console.log(contact);
 	if(to){
-		
+
 		globalCall.contactedContact = contact;
 		globalCall.callNumber = to;
 
-		to = str.replace("+", "%2B");		
+		to = to.replace("+", "%2B");		
 
 		var requestURL = "core/api/widgets/android/call?phone_number="+to;	 
 	 	console.log(requestURL);
