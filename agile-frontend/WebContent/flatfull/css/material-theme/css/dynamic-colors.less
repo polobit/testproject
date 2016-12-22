@@ -146,7 +146,7 @@
 @service-bg-color :rgba(102, 205, 46, 0.2) @important;
 @sales-bg-hover-color : #F9F9FF @important;
 @ma-bg-hover-color : #f5fbff @important;
-@service-hg-hover-color : rgba(102, 205, 46, 0.1) @important;
+@service-bg-hover-color : rgba(102, 205, 46, 0.1) @important;
 
 
 
@@ -180,8 +180,8 @@
   @basic-bg-color : @ma-bg-color;
   @basic-bg-hover-color : @ma-bg-hover-color;
   @theme-color : @sales-color;
-  @menu-bg-color : @ma-bg-color;
-  @menu-bg-hover-color : @ma-bg-hover-color;
+  @menu-bg-color : @sales-bg-color;
+  @menu-bg-hover-color : @sales-bg-hover-color;
   @btn-default-color : @ma-btn-default-color;
   @btn-default-bg-color : @ma-btn-default-bg-color;
   @btn-default-bg-hover-color :  @ma-btn-default-bg-hover-color;
@@ -210,8 +210,8 @@
   @basic-bg-color : @ma-bg-color;
   @basic-bg-hover-color : @ma-bg-hover-color;
   @theme-color : @service-color;
-  @menu-bg-color :  @ma-bg-color;
-  @menu-bg-hover-color : @ma-bg-hover-color;
+  @menu-bg-color :  @service-bg-color;
+  @menu-bg-hover-color : @service-bg-hover-color;
   @btn-default-color : @ma-btn-default-color;
   @btn-default-bg-color : @ma-btn-default-bg-color;
   @btn-default-bg-hover-color :  @ma-btn-default-bg-hover-color;
@@ -262,7 +262,7 @@
   }
   li a:hover, li a:focus{
     color: @service-color;
-    background-color: @service-hg-hover-color;
+    background-color: @service-bg-hover-color;
   }
   .agile-menuactive a, .agile-menu-parent-item{
     color: @service-color
