@@ -422,7 +422,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var msg = {};
 	msg['buttons'] = arr;
 	c.msg = msg;
-	showDraggablePopup(c);
+	showDraggablePopup(c, "call");
 	$("#noty_text_msg").html(txt);
 	if(widgetName == "ozonetel" || widgetName == "Ozonetel"){
 		$("#draggable_noty #call-noty-notes").val(callnotes);
@@ -459,8 +459,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	}
 }
 
-
-function showDraggablePopup(param){
+function showDraggablePopup(param, sms){
 	var position = _agile_get_prefs("dragableNotyPosition");
 	var flag = false;
 	var y = $(window).height()-200;
@@ -471,8 +470,14 @@ function showDraggablePopup(param){
 		x = a[0]*1;
 		y = a[1]*1;
 	}
-	var popup = $(getTemplate("call-noty",param));
-	//$(".noty_twilio_voicemail").html("<img src='../widgets/voicemail.png' />");
+
+	  if(sms == "sms"){
+        var popup = $(getTemplate("sms-noty",param));
+        $("#draggable_noty .draggable_noty_notes").html("");
+    }
+    else
+    	var popup = $(getTemplate("call-noty",param));
+    
 	$("#draggable_noty .draggable_noty_info").html(popup);
 	$("#draggable_noty").css({'left':x,'top': y});
 	$(".icon-call-out").css({'font-size':'12px'});

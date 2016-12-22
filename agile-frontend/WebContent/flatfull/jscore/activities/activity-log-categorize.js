@@ -64,6 +64,24 @@ $("#activities-listners").on('click', '.email-details', function(e) {
 		});
 
 });
+/*SMS related click event to show the model when requester or assignee replies*/
+$("#activities-listners").on('click', '.sms-details', function(e) {
+	e.preventDefault();
+	var data = $(this).closest('a').attr("data");
+
+	getActivityObject(data, function(resp) {
+			console.log(resp);
+
+			getTemplate("smsModal", resp, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				var smsInfo = $(template_ui);
+				smsInfo.modal('show');
+			}, null);
+		});
+
+});
+
 	/*Ticket related click event to show the modal when requester or assignee replies*/
 	$("#activities-listners").on('click', '.ticket-activity-notes', function(e) 
 {
