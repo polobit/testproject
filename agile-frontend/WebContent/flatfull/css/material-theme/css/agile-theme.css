@@ -3124,9 +3124,10 @@ padding-top: 14px;
   box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
   -webkit-box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
 } 
-.agile-theme-15 .agile-theme-nav-sub {
+.agile-theme-15 .navi ul li:hover .agile-theme-nav-sub {
   display: block!important;
 }
+.agile-theme-15 .navi ul li#companiesmenu a{margin-left: 0px !important;}
 .agile-theme-15 .app-aside {
     /*top: 0px;
     position: fixed;
