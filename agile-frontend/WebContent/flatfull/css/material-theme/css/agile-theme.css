@@ -3150,3 +3150,11 @@ padding-top: 14px;
 {
   border:none!important;
 }
+.ticket-data  .btn.caret-btn
+{
+  display:none;
+}
+div.show-caret:hover>a.caret-btn
+{
+  display:inline-block;
+}
