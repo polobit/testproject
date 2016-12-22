@@ -136,13 +136,16 @@ public class AnalyticsAPI
 	   
 	    if (hasEmails)
 	    {
-		String emailCountString = contactEmails.get(contactEmails.size() - 1);
-		newScannedTime = contactEmails.get(contactEmails.size() - 2);
-		newScannedTime = DateUtil.addTime(newScannedTime, Calendar.SECOND, -1);
-		contactEmails.remove(contactEmails.size() - 1);
-		contactEmails.remove(contactEmails.size() - 1);
-		totalEmailCount = AnalyticsUtil.getTotalEmailCount(emailCountString);		
-		contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails,tagFilter);
+			String emailCountString = contactEmails.get(contactEmails.size() - 1);
+			newScannedTime = contactEmails.get(contactEmails.size() - 2);
+			newScannedTime = DateUtil.addTime(newScannedTime, Calendar.SECOND, -1);
+			contactEmails.remove(contactEmails.size() - 1);
+			contactEmails.remove(contactEmails.size() - 1);
+			totalEmailCount = AnalyticsUtil.getTotalEmailCount(emailCountString);	
+			if(hasContactFilter)
+				contacts = AnalyticsUtil.getContactsFromTextSearch(contactEmails, tagFilter, limit);
+			else
+				contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails);				
 	    }
 	    
 	    hasEmails = (contactEmails.size() > 0);

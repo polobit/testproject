@@ -18,9 +18,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.visitors.VisitorSegmentationQueryGenerator;
 import com.analytics.VisitorFilter;
@@ -316,80 +321,163 @@ public class AnalyticsUtil
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static JSONArray getContactsFromDataStore(List<String> contactEmails,JSONObject tagFilter)
+    public static JSONArray getContactsFromDataStore(List<String> contactEmails)
     {
 	JSONArray contactsArray = new JSONArray();
-	String tag = null;
-	String condition = null;
-	boolean hasTagFilter = false;
-	try
-	{
-	    if(tagFilter!=null)
-	    {
-		tag = tagFilter.get("RHS").toString();
-		condition = tagFilter.getString("CONDITION").toString();
-		hasTagFilter = true;
-	    }
-	}
-	catch(Exception e)
-	{
-	    System.err.println(e.getMessage());
-	}
+//	String tag = null;
+//	String condition = null;
+//	boolean hasTagFilter = false;
+//	try
+//	{
+//	    if(tagFilter!=null)
+//	    {
+//		tag = tagFilter.get("RHS").toString();
+//		condition = tagFilter.getString("CONDITION").toString();
+//		hasTagFilter = true;
+//	    }
+//	}
+//	catch(Exception e)
+//	{
+//	    System.err.println(e.getMessage());
+//	}
 	if (contactEmails != null && contactEmails.size() > 0)
 	{
 	    try
 	    {
-		Objectify ofy = ObjectifyService.begin();
-		for (int i = 0; i < contactEmails.size(); i++)
-		{
-		    /**
-		     * converting searching email-id into the lowercase and then
-		     * it should not be blank
-		     * */
-		    
-		    if (StringUtils.isNotBlank(contactEmails.get(i)))
-		    {
-			com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
-			Map<String, Object> searchMap = new HashMap<String, Object>();
-			searchMap.put("type", Contact.Type.PERSON);
-			searchMap.put("properties.name", "email");
-			searchMap.put("properties.value", contactEmails.get(i).toLowerCase());
-			if(StringUtils.isNotBlank(tag) && StringUtils.isNotBlank(condition))
+			Objectify ofy = ObjectifyService.begin();
+			for (int i = 0; i < contactEmails.size(); i++)
 			{
-			    if(condition.equalsIgnoreCase("EQUALS"))
-				searchMap.put("tagsWithTime.tag",tag);
-			    else
+			    /**
+			     * converting searching email-id into the lowercase and then
+			     * it should not be blank
+			     * */
+			    
+			    if (StringUtils.isNotBlank(contactEmails.get(i)))
 			    {
-			    	searchMap.put("tagsWithTime.tag !",tag);
+					com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
+					Map<String, Object> searchMap = new HashMap<String, Object>();
+					searchMap.put("type", Contact.Type.PERSON);
+					searchMap.put("properties.name", "email");
+					searchMap.put("properties.value", contactEmails.get(i).toLowerCase());
+		//			if(StringUtils.isNotBlank(tag) && StringUtils.isNotBlank(condition))
+		//			{
+		//			    if(condition.equalsIgnoreCase("EQUALS"))
+		//				searchMap.put("tagsWithTime.tag",tag);
+		//			    else
+		//			    {
+		//			    	searchMap.put("tagsWithTime.tag !",tag);
+		//			    }
+		//			}
+					
+					for (String propName : searchMap.keySet())
+					    query.filter(propName, searchMap.get(propName));
+					System.out.println(query.toString());
+					Contact contact = dao.fetch(query);
+					if (contact != null)
+					{
+					    ObjectMapper mapper = new ObjectMapper();
+					    String contactString = mapper.writeValueAsString(contact);
+					    JSONObject contactJSON = new JSONObject(contactString);
+					    contactsArray.put(contactJSON);
+					}
+					else
+					{
+					    JSONObject contactJSON = buildVisitorData(contactEmails.get(i));
+					    contactsArray.put(contactJSON);
+					}
 			    }
 			}
-			
-			for (String propName : searchMap.keySet())
-			    query.filter(propName, searchMap.get(propName));
-			System.out.println(query.toString());
-			Contact contact = dao.fetch(query);
-			if (contact != null)
-			{
-			    ObjectMapper mapper = new ObjectMapper();
-			    String contactString = mapper.writeValueAsString(contact);
-			    JSONObject contactJSON = new JSONObject(contactString);
-			    contactsArray.put(contactJSON);
-			}
-			else if(!hasTagFilter)
-			{
-			    JSONObject contactJSON = buildVisitorData(contactEmails.get(i));
-			    contactsArray.put(contactJSON);
-			}
-		    }
-		}
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("Exception occured while fetching contacts for visitors" + e.getMessage());
-	    }
-	    
+	    	System.out.println("Exception occured while fetching contacts for visitors" + e.getMessage());
+	    }	    
 	}
 	return contactsArray;
+    }
+    
+    /**
+     * Fetches contacts from TextSearch DB because customer applied contact
+     * filter along web filters in visitors page
+     * 
+     * @param contactEmails
+     * @param contactFilterId
+     * @param count
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static JSONArray getContactsFromTextSearch(List<String> contactEmails, JSONObject tagFilter, int count)
+    {
+    	JSONArray contactsArray = new JSONArray();
+    	String tag = null;
+    	String tagCondition = null;
+    	List<SearchRule> aclRules = null;
+    	try
+    	{
+    		if(tagFilter!=null)
+    		{
+    			tag = tagFilter.get("RHS").toString();
+    			tagCondition = tagFilter.getString("CONDITION").toString();
+    		}
+    		// Sets ACL condition
+    		aclRules = new ArrayList<SearchRule>();
+    		UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+    			UserAccessControl.AccessControlClasses.Contact.toString(),aclRules, null);
+    	}
+    	catch(Exception e)
+    	{
+    		System.err.println(e.getMessage());
+    	}
+    	if (tagFilter!=null)
+    	{
+    		for (int i = 0; i < contactEmails.size(); i++)
+    		{
+    			if (StringUtils.isNotBlank(contactEmails.get(i)) && StringUtils.isNotBlank(tag) && StringUtils.isNotBlank(tagCondition))
+    			{
+    				try
+    				{
+	    				ContactFilter filter = new ContactFilter();	
+	    				//email filter Rule
+	    				SearchRule emailRule = new SearchRule();
+	    				emailRule.LHS = "email";
+	    				emailRule.CONDITION = RuleCondition.EQUALS;
+	    				emailRule.RHS = contactEmails.get(i).toLowerCase();
+	    				filter.rules.add(emailRule);
+	    				//tag filter Rule
+	    				SearchRule tagRule = new SearchRule();
+	    				tagRule.LHS = "tags";
+	    				if(tagCondition.equalsIgnoreCase("EQUALS"))
+	    					tagRule.CONDITION = RuleCondition.EQUALS;
+	    				else
+	    					tagRule.CONDITION = RuleCondition.NOTEQUALS;
+	    				tagRule.RHS = tag;
+	    				filter.rules.add(tagRule);	
+	    				//acl Rules
+	    				if(aclRules!=null && aclRules.size() > 0)
+	    					filter.rules.addAll(aclRules);
+	    					
+	    				List<Contact> contacts = new ArrayList<Contact>(filter.queryContacts(count, null, null));
+	    				Contact contact = null;
+	    				if (contacts != null && contacts.size() > 0)
+	    					contact = contacts.get(0);
+				
+	    				if (contact != null)
+	    				{
+	    					ObjectMapper mapper = new ObjectMapper();
+	    					String contactString = mapper.writeValueAsString(contact);
+	    					JSONObject contactJSON = new JSONObject(contactString);
+	    					contactsArray.put(contactJSON);
+	    				}
+    				}
+    				catch (Exception e)
+    				{
+    					System.err.println("Exception occured while fetching contacts for visitors page "
+    							+ e.getMessage());
+    				}
+    			}
+    		}
+    	}
+    	return contactsArray;
     }
     
     /**
