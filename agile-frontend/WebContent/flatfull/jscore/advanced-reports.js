@@ -322,7 +322,7 @@ function showWonDealsReport()
     end_time += (((23*60*60)+(59*60)+59)*1000);
     end_time=end_time+(d.getTimezoneOffset()*60*1000);
     end_time=end_time/1000;
-    reportDetails("wonDeals",start_time,end_time,"won_date");
+    reportDetails("wonDeals",start_time,end_time,"won_time");
     if ($('#owner').length > 0)
 	{
     var owner_id=0;
@@ -507,7 +507,7 @@ function showLossReasonGraphs()
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
-	reportDetails("LossReason",start_time/1000,end_time/1000,"milestone_changed_time");
+	reportDetails("LossReason",start_time/1000,end_time/1000,"loss_reason_time");
 	if ($('#owner').length > 0)
 	{
 		// Get owner
@@ -1022,12 +1022,6 @@ function reportDetails(filter_name,start_time,end_time,date_type)
 			if($("#track",el).val() != "" &&  $("#track",el).val() != "All Tracks")
 				{
 					track=$("#track option:selected",el).html();
-					/*var json_object_1={};
-					json_object_1["LHS"] = "pipeline_id";
-					json_object_1["CONDITION"] = "EQUALS";
-					json_object_1["RHS"] = $("#track",el).val();
-					json_object_1["RHS_NEW"] = "";
-					reportDealJsonArray.push(json_object_1);*/
 				}
 			filter_name+='_'+track;
 
@@ -1040,10 +1034,21 @@ function reportDetails(filter_name,start_time,end_time,date_type)
 			{
 				source=$("#source option:selected",el).html();
 				var json_object_1={};
-				json_object_1["LHS"] = "source_id";
+
+				if($("#source",el).val()=="1")
+				{
+				json_object_1["LHS"] = "deal_source";
+				json_object_1["CONDITION"] = "NOT_DEFINED";
+				//json_object_1["RHS"] = $("#source",el).val();
+				//json_object_1["RHS_NEW"] = "";
+
+				}
+				else{
+				json_object_1["LHS"] = "deal_source";
 				json_object_1["CONDITION"] = "EQUALS";
 				json_object_1["RHS"] = $("#source",el).val();
 				json_object_1["RHS_NEW"] = "";
+				}
 				reportDealJsonArray.push(json_object_1);
 			}
 			filter_name+='_'+source;
@@ -1058,106 +1063,53 @@ function reportDetails(filter_name,start_time,end_time,date_type)
 			if(name_Deal=='RevenueBySource' || name_Deal=='wonDeals')
 			{
 				var won_milestone="Won";
-				/*if(track!="")
-				{
+				var jsonModel = data.toJSON();
+				$.each(jsonModel,function(index,mile){
+					//var internal_and=[];
+				if(mile.won_milestone)
+				won_milestone=mile.won_milestone;
+				//var json_object_milestone={};
+				var json_object_pipeline={};
+				json_object_pipeline["LHS"] = "track_milestone";
+				json_object_pipeline["CONDITION"] = "EQUALS";
+				json_object_pipeline["RHS"] = mile.id+'_'+won_milestone;
+				json_object_pipeline["RHS_NEW"] ="";
 
-					var milestoneModel = Backbone.Model.extend({ url : '/core/api/milestone/'+track });
-					var model = new milestoneModel();
-					model.fetch({ 
-				success : function(data){
-						var json = data.toJSON();
-						won_milestone="Won";
-						if(json.won_milestone)
-						won_milestone=json.won_milestone;
-						var json_object_1={};
-						json_object_1["LHS"] = "milestone";
-						json_object_1["CONDITION"] = "EQUALS";
-						json_object_1["RHS"] = won_milestone;
-						json_object_1["RHS_NEW"] ="";
-						reportDealJsonArray.push(json_object_1);
-				}
+				 reportDealJsonArray_or.push(json_object_pipeline);
 				});
-				}
-				else
-				{
-					var tracks = new Base_Collection_View({url : '/core/api/milestone/pipelines'});
-					won_milestone="Won";
-					tracks.collection.fetch({
-						success: function(data){*/
-							var jsonModel = data.toJSON();
-						$.each(jsonModel,function(index,mile){
-							var internal_and=[];
-						if(mile.won_milestone)
-						won_milestone=mile.won_milestone;
-						var json_object_milestone={};
-						var json_object_pipeline={};
-						json_object_pipeline["LHS"] = "pipeline";
-						json_object_pipeline["CONDITION"] = "EQUALS";
-						json_object_pipeline["RHS"] = mile.id;
-						json_object_pipeline["RHS_NEW"] ="";
-							internal_and.push(json_object_pipeline);
-						json_object_1["LHS"] = "milestone";
-						json_object_1["CONDITION"] = "EQUALS";
-						json_object_1["RHS"] = won_milestone;
-						json_object_1["RHS_NEW"] ="";
-						 internal_and.push(json_object_1);
-
-						 reportDealJsonArray_or.push(internal_and);
-						});
 						
-				/*}
-				});
-				}*/
-/*				var json_object_1={};
-				json_object_1["LHS"] = "milestone";
-				json_object_1["CONDITION"] = "BETWEEN";
-				json_object_1["RHS"] = won_milestone;
-				json_object_1["RHS_NEW"] ="";
-				reportDealJsonArray.push(json_object_1);*/
 			}
-			if(filter_name=='LossReason')
+			if(name_Deal=='LossReason')
 			{
 				var lost_milestone="Lost";
-							var jsonModel = data.toJSON();
-						$.each(jsonModel,function(index,mile){
-							var internal_and=[];
-						if(mile.lost_milestone)
-						lost_milestone=mile.lost_milestone;
-						var json_object_1={};
-						json_object_1["LHS"] = "pipeline";
-						json_object_1["CONDITION"] = "EQUALS";
-						json_object_1["RHS"] = mile.id;
-						json_object_1["RHS_NEW"] ="";
-							internal_and.push(json_object_1);
-						json_object_1["LHS"] = "milestone";
-						json_object_1["CONDITION"] = "EQUALS";
-						json_object_1["RHS"] = lost_milestone;
-						json_object_1["RHS_NEW"] ="";
-						 internal_and.push(json_object_1);
-
-						 reportDealJsonArray_or.push(internal_and);
-						});
-				/*var json_object_1={};
-				json_object_1["LHS"] = "milestone";
-				json_object_1["CONDITION"] = "BETWEEN";
-				json_object_1["RHS"] = "Lost";
-				json_object_1["RHS_NEW"] ="";
-				reportDealJsonArray.push(json_object_1);*/
+				var jsonModel = data.toJSON();
+				$.each(jsonModel,function(index,mile){
+					//var internal_and=[];
+				if(mile.lost_milestone)
+				lost_milestone=mile.lost_milestone;
+				var json_object_pipeline={};
+				json_object_pipeline["LHS"] = "track_milestone";
+				json_object_pipeline["CONDITION"] = "EQUALS";
+				json_object_pipeline["RHS"] = mile.id+'_'+lost_milestone;
+				json_object_pipeline["RHS_NEW"] ="";
+				 reportDealJsonArray_or.push(json_object_pipeline);
+				});
+			
 			}
-				filter["rules"] = reportDealJsonArray;
-				if(reportDealJsonArray_or.length>0)
-					filter["or_rules"] = reportDealJsonArray_or;
-				var start_date=en.dateFormatter({raw: 'dd MMM,yyyy'})(new Date(start_time*1000));
-				var end_date=en.dateFormatter({raw: 'dd MMM,yyyy'})(new Date(end_time*1000));
-				filter_name+='_'+start_date+'_'+end_date;
+			filter["rules"] = reportDealJsonArray;
+			if(reportDealJsonArray_or.length>0)
+				filter["or_rules"] = reportDealJsonArray_or;
+			var start_date=en.dateFormatter({raw: 'dd MMM,yyyy'})(new Date(start_time*1000));
+			var end_date=en.dateFormatter({raw: 'dd MMM,yyyy'})(new Date(end_time*1000));
+			filter_name+='_'+start_date+'_'+end_date;
 			//filter["type"] = "opportunity";
 			if (filter != null && (filter.rules.length > 0 || filter.or_rules.length > 0))
-		{
-			_agile_set_prefs('report_filter', JSON.stringify(filter));
-			_agile_set_prefs('report_filter_name', filter_name);
-			//_agile_set_prefs('company_filter', "Companies");
-		}
-		Backbone.history.navigate("deals", { trigger : true });
+			{
+				_agile_set_prefs('report_filter', JSON.stringify(filter));
+				_agile_set_prefs('report_filter_name', filter_name);
+				//_agile_set_prefs('company_filter', "Companies");
+			}
+			Backbone.history.navigate("deals", { trigger : true });
 	}
 });
 	});

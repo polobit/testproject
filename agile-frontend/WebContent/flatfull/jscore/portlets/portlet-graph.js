@@ -120,6 +120,13 @@ var portlet_graph_utility = {
 														name : 'Deal',
 														data : data
 													} ],
+											                 exporting : {
+														buttons: {
+											   			 contextButton: {
+								       					    menuItems: buttons.slice(0,8)
+								       					  },
+								       					}
+											       	},	
 																									});
 							}
 						});
@@ -239,6 +246,13 @@ var portlet_graph_utility = {
 														name : 'Contact',
 														data : data
 													} ],
+									                 exporting : {
+													buttons: {
+										   			 contextButton: {
+							       					    menuItems: buttons.slice(0,8)
+							       					  },
+							       					}
+										       	},	
 																									});
 							}
 						});
@@ -297,6 +311,13 @@ var portlet_graph_utility = {
 							name : name,
 							data : data
 						} ],
+		                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},	
 					});
 		});
 	},
@@ -381,6 +402,13 @@ var portlet_graph_utility = {
 													name : series_name,
 													data : funnel_data
 												} ],
+								                 exporting : {
+														buttons: {
+											   			 contextButton: {
+								       					    menuItems: buttons.slice(0,8)
+								       					  },
+								       					}
+											       	},										
 											
 											});
 						});
@@ -446,7 +474,14 @@ var portlet_graph_utility = {
 													}
 												},
 												series : series,
-									
+
+								                 exporting : {
+														buttons: {
+											   			 contextButton: {
+								       					    menuItems: buttons.slice(0,8)
+								       					  },
+								       					}
+											       	},										
 												colors : colors
 											});
 						});
@@ -562,6 +597,13 @@ var portlet_graph_utility = {
 							colors : [ "#23b7e5", "#27c24c", "#7266ba",
 									"#fad733", "#f05050", "#aaeeee", "#ff0066",
 									"#eeaaee", "#55BF3B", "#DF5353" ],
+			                 exporting : {
+								buttons: {
+					   			 contextButton: {
+		       					    menuItems: buttons.slice(0,8)
+		       					  },
+		       					}
+					       	},	
 						});
 			});
 		}
@@ -633,6 +675,13 @@ var portlet_graph_utility = {
 													name : 'Assigned Deals',
 													data : dealsCountList
 												} ],
+								                 exporting : {
+												buttons: {
+									   			 contextButton: {
+						       					    menuItems: buttons.slice(0,8)
+						       					  },
+						       					}
+									       	},	
 									
 											});
 						});
@@ -812,6 +861,13 @@ var portlet_graph_utility = {
 						    		}
 						        },
 						        series: series,
+				                 exporting : {
+									buttons: {
+						   			 contextButton: {
+			       					    menuItems: buttons.slice(0,8)
+			       					  },
+			       					}
+						       	},	
 							    //colors : [ "#27c24c", "#23b7e5", "#f05050", "#7266ba", '#fad733','#FF9900','#7AF168','#167F80','#0560A2','#D3E6C7','#7798BF'],
 						        colors : colorsToShow,
 							    legend : {
@@ -972,6 +1028,13 @@ var portlet_graph_utility = {
 		            name: "",
 		            data: data
 		        }],
+                 exporting : {
+						buttons: {
+			   			 contextButton: {
+       					    menuItems: buttons.slice(0,8)
+       					  },
+       					}
+			       	},			        
 
 		    });
 		}
@@ -1244,7 +1307,14 @@ var portlet_graph_utility = {
 															return this.name;
 														}
 													}
-												}
+												},
+								                 exporting : {
+													buttons: {
+										   			 contextButton: {
+							       					    menuItems: buttons.slice(0,8)
+							       					  },
+							       					}
+										       	},					
 											});
 						});
 	},
@@ -1386,6 +1456,13 @@ var portlet_graph_utility = {
 														"#aaeeee", "#ff0066",
 														"#eeaaee", "#55BF3B",
 														"#DF5353" ],
+								                 exporting : {
+													buttons: {
+										   			 contextButton: {
+							       					    menuItems: buttons.slice(0,8)
+							       					  },
+							       					}
+										       	},				
 											});
 						});
 	},
@@ -1491,7 +1568,13 @@ setupCharts(function(){
 													name : 'Deal',
 													data : data
 												} ],
-												
+								                 exporting : {
+												buttons: {
+									   			 contextButton: {
+						       					    menuItems: buttons.slice(0,8)
+						       					  },
+						       					}
+									       	},											
 											});
 						});
 	},
@@ -1669,7 +1752,13 @@ setupCharts(function(){
 													// name: 'Deal',
 													data : data
 												} ],
-										
+								                 exporting : {
+												buttons: {
+									   			 contextButton: {
+						       					    menuItems: buttons.slice(0,8)
+						       					  },
+						       					}
+									       	},									
 											});
 						});
 	},
@@ -1765,6 +1854,13 @@ setupCharts(function(){
 													name : 'Goal',
 													data : series
 												} ],
+								                 exporting : {
+														buttons: {
+											   			 contextButton: {
+								       					    menuItems: buttons.slice(0,8)
+								       					  },
+								       					}
+											       	},			
 											
 											});
 						});
@@ -1878,6 +1974,13 @@ setupCharts(function(){
 														name : 'Visits',
 														data : series
 													} ],
+									                 exporting : {
+														buttons: {
+											   			 contextButton: {
+								       					    menuItems: buttons.slice(0,8)
+								       					  },
+								       					}
+											       	},	
 																									});
 						});
 	},

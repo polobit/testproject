@@ -487,4 +487,24 @@ public class DealFilterUtil {
 	    deal_filter.rules.add(rule);
 		return deal_filter;
 	    }
+
+	public static void lostDeals(DealFilter deal_filter)
+	{
+		List<SearchRule> andRules=deal_filter.rules;
+		List<SearchRule> modifiedRules = new ArrayList<SearchRule>();
+		List<SearchRule> modifiedRules_or = new ArrayList<SearchRule>();
+		for(SearchRule rule : andRules)
+		{
+			if(rule.LHS != null && rule.LHS.equalsIgnoreCase("loss_reason_time"))
+			{
+				modifiedRules_or.add(rule);
+			}
+			else
+			{
+				modifiedRules.add(rule);
+			}
+		}
+		deal_filter.rules=modifiedRules;
+		deal_filter.or_rules.addAll(modifiedRules_or);
+	}
 }

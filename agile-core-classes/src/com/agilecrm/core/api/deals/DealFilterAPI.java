@@ -211,7 +211,9 @@ public class DealFilterAPI {
     		@QueryParam("order_by") String sortKey)
     {
 	DealFilter deal_filter = DealFilterUtil.getFilterFromJSONString(filterJson);
-
+	
+	DealFilterUtil.setTrackAndMilestoneFilters(deal_filter, null, null);
+	DealFilterUtil.lostDeals(deal_filter);
 	// Modification to sort based on company name. This is required as
 	// company name lower is saved in different field in text search
 	sortKey = (sortKey != null ? ((sortKey.equals("name") || sortKey.equals("-name")) ? sortKey.replace("name",
