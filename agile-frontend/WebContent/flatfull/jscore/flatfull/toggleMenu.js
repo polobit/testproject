@@ -799,7 +799,9 @@ function appendAgileNewThemeSubNavMenu() {
 		var $a = $(ele).find("a").clone();
 		if($a.length == 0)
 			 return;
-
+		// Delete title
+		$(ele).find("[data-icon-toggle='tooltip']").attr("title", "");
+		
 		var $ul = $("<ul class='nav nav-sub dk agile-theme-nav-sub' style='display: none;'><li></li></ul>");
 		$a.find("i").remove();
 		$ul.find('li').append($a);
