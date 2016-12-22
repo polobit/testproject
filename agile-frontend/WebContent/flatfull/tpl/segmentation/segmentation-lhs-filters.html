@@ -466,9 +466,9 @@
                      <input type="hidden" name="LHS" value="tags">
                      <select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
                         <option value="EQUALS" class="tags">is</option>
-                        <!--<option value="NOTEQUALS" class="tags">isn't</option>-->
+                        <option value="NOTEQUALS" class="tags">isn't</option>
                      </select>
-                     <div class="EQUALS condition_container m-t-xs">
+                     <div class="EQUALS NOTEQUALS condition_container m-t-xs">
                         <span id="RHS">
                         <input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
                         </span>

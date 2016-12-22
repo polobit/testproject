@@ -360,7 +360,7 @@ public class AnalyticsUtil
 				searchMap.put("tagsWithTime.tag",tag);
 			    else
 			    {
-			    	searchMap.put("tagsWithTime.tag <> ",tag);
+			    	searchMap.put("tagsWithTime.tag !",tag);
 			    }
 			}
 			
