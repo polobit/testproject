@@ -66,7 +66,7 @@ body, * {
   background-color: inherit!important;
 }
 .btn.dropdown-toggle span{
-  color: #58666e!important;
+/*  color: #58666e!important;*/
 }
 .btn-group>.btn-group:last-child>.btn:first-child{
   border-top-left-radius: 4px;
@@ -231,10 +231,10 @@ form select.form-control{
  float: none;
  border-right:0px;
 }
-:not("#bulk-action-btns") .agile-theme-15 .btn.dropdown-toggle span
+/*:not("#bulk-action-btns") .agile-theme-15 .btn.dropdown-toggle span
 {
  color: #fff!important;
-}
+}*/
 .btn.dropdown-toggle:hover,
 .btn.dropdown-toggle:focus,
 .btn.dropdown-toggle:active{
@@ -486,7 +486,7 @@ agile-new-theme table:not(.no-new-theme-updates)>tbody>tr>td:first-child label.i
 .agile-theme-15 .app-aside-folded:not(.app-aside-dock) .navi ul li .sales-nav:hover span{
   padding-top:25% !important; 
 }
-
+.app-aside-fixed.app-aside-folded .aside-wrap .navi-wrap{width: auto !important; display: inline;}
 }/*medis 768 end*/
 
 @media (min-width: 992px){
@@ -1049,7 +1049,7 @@ z-index:1;
 }
 #dashlet_heading .caret
 {
-  color: #78909c !important;
+  /*color: #78909c !important;*/
 }
 #scheduleid .line.line-dashed.b-b.line-lg ,#subscribe_plan_change .line.line-dashed.b-b.line-lg{
     border-bottom: 1px solid #dee5e7;
@@ -1308,7 +1308,7 @@ ul.tags-management li.tag{
 {
     margin-left: 3px;
     margin-right: 2px;
-    color:#78909c !important;
+    /*color:#78909c !important;*/
 }
 #contacts-view-options .contacts-view i
 {
@@ -1333,30 +1333,25 @@ ul.tags-management li.tag{
 {
   margin-right:13px;
 }
-.tab-content  .btn.dropdown-toggle .caret
+/*.tab-content  .btn.dropdown-toggle .caret
 {
   color:#11a0f8!important;
-}
-.btn.btn-default-imp,.btn.btn-default.btn-default-imp.dropdown-toggle span
-{
-  background-color: rgba(17, 160, 248, 0.1)!important;
-  color: #11a0f8!important;
-}
+}*/
 .btn.btn-default-imp:hover,.btn.btn-default-imp:focus,.btn.btn-default-imp:active,.open .dropdown-toggle.btn-default.btn-default-imp
 {
     background-color: rgba(17, 160, 248, 0.2)!important;
     color: #11a0f8!important;
 }
-.btn.btn-default.btn-default-imp-white,.btn.btn-default.btn-default-imp-white.dropdown-toggle span
+/*.btn.btn-default.btn-default-imp-white,.btn.btn-default.btn-default-imp-white.dropdown-toggle span
 {
   background-color: #ffffff!important;
   color: #78909c!important;
-}
-.btn.btn-default.btn-default-imp-white:hover,.btn.btn-default.btn-default-imp-white:focus,.btn.btn-default.btn-default-imp-white:active,.open .dropdown-toggle.btn-default.btn-default-imp-white,.btn.btn-default.btn-default-imp-white.dropdown-toggle span:hover,.btn.btn-default.btn-default-imp-white.dropdown-toggle span:focus,.btn.btn-default.btn-default-imp-white.dropdown-toggle span:active,.open .btn.btn-default.btn-default-imp-white.dropdown-toggle span
+}*/
+/*.btn.btn-default.btn-default-imp-white:hover,.btn.btn-default.btn-default-imp-white:focus,.btn.btn-default.btn-default-imp-white:active,.open .dropdown-toggle.btn-default.btn-default-imp-white,.btn.btn-default.btn-default-imp-white.dropdown-toggle span:hover,.btn.btn-default.btn-default-imp-white.dropdown-toggle span:focus,.btn.btn-default.btn-default-imp-white.dropdown-toggle span:active,.open .btn.btn-default.btn-default-imp-white.dropdown-toggle span
 {
   background-color: #ffffff!important;
   color: #11a0f8!important;
-}
+}*/
 
 .btn.btn-default.btn-default-imp.bg-light {
    background-color: rgba(17, 160, 248, 0.2)!important;
@@ -1457,11 +1452,11 @@ ul.tags-management li.tag{
   padding-left:13px;
   padding-right:13px;
 }
-.btn.btn-default.btn-primary-imp:hover,.btn.btn-default.btn-primary-imp:focus,.btn.btn-default.btn-primary-imp:active,.open .dropdown-toggle.btn-default.btn-primary-imp
+/*.btn.btn-default.btn-primary-imp:hover,.btn.btn-default.btn-primary-imp:focus,.btn.btn-default.btn-primary-imp:active,.open .dropdown-toggle.btn-default.btn-primary-imp
 {
   background-color: #067dc6!important;
   color: #fff!important;
-}
+}*/
 .btn-default.btn-primary-imp
 {
    background-color: #11a0f8!important;
@@ -1472,10 +1467,10 @@ ul.tags-management li.tag{
     background-color: #067dc6!important;
     color: #ffffff;
 }*/
-.btn.dropdown-toggle.btn-primary-imp .caret
+/*.btn.dropdown-toggle.btn-primary-imp .caret
 {
   color: #ffffff !important;
-}
+}*/
 /*css for the caret icon in the campaigns page */
 #campaign-video-tutorial , #lp-video-tutorial , #addLandingPage , #document_validate ,#document_update_validate
 {
@@ -2307,7 +2302,7 @@ table .headerSortUp::after, table .headerSortDown::after{
 #verification-website .control-group .control-label.col-sm-3,#sendgrid-dkim-accordian-template .control-group .control-label.col-sm-3{margin-top:8px!important;}
 .reports-campaign-stats{margin-bottom: 10px}
 #campaign-analysis-tabs-content .btn-lg-imp{margin-bottom:10px;}
-#activities_date_range,#reportrange .text-xs{border-color: #fff!important;vertical-align:text-top!important;}
+#activities_date_range,#reportrange .text-xs{border:none!important;/*border-color: #fff!important;*/vertical-align:text-top!important;}
 .p-sm-imp{padding:10px;padding-top:0px;padding-bottom:0px;}
 .import-panel-heading .panel-heading{display: none;}
 .import-panel-heading  .panel-footer{border-top: 10px solid #f4f8f9 !important;}
@@ -2617,7 +2612,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   position: relative;
 }
 
-#timeline .year,#timeline .top .year{font-size: 12px;}
+#timeline .year,#timeline .top .year{font-size: 12px !important;}
 #unsubscribe-modal{top:-10px;}
 .tagsinput.active-campaigns{margin-bottom: 10px;}
 .plan-collection-in.selected-plan .btn-plan:hover,.plan-collection-in.selected-plan .btn-plan:focus{color: #fff !important}
@@ -2833,9 +2828,6 @@ table.dealproducts_table thead th .i-checks input[type="checkbox"]{
     margin-top: 3px;
     margin-left: 10px;
   }
-span#rolecontainer::first-letter {
-    text-transform: capitalize;
-}
 
 .agile-theme-15 .api-reset-btn
 {
@@ -2880,9 +2872,7 @@ div#need_help_header a:hover {
     margin-top: 3px;
     margin-left: 10px;
   }
-span#rolecontainer::first-letter {
-    text-transform: capitalize;
-}
+
 .grid-v2{
   top: 17px !important;
   background-color: #fff !important;
@@ -3045,9 +3035,9 @@ table#deal-sources-table>tbody>tr:last-child{
 #toggle_previous_tickets{
   margin-top: 2px !important;
 }
-#general .col-md-3 .panel{
+/*#general .col-md-3 .panel{
   height: 226px !important;
-}
+}*/
 #prefs-tabs-content .agile-theme{
   width: 27% !important;
 }
@@ -3087,6 +3077,10 @@ table#deal-sources-table>tbody>tr:last-child{
       border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
 }
+#tickets-container #custom-filters-container .save-as-filter-container
+{
+  margin-top:10px;
+}
 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover span{display: none;}
 .app-aside-folded:not(.app-aside-dock) .navi>ul>li>a:hover i{margin-top: 0px !important;}
 .agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .hidden-icon, .agile-theme-15 aside #agile-menu-navigation-container .nav .show-icon-folded{
@@ -3094,6 +3088,7 @@ table#deal-sources-table>tbody>tr:last-child{
 } 
 .agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
   display: block !important;
+  line-height: 45px;
 }
 
 #ticket-last-notes{
@@ -3113,4 +3108,57 @@ table#deal-sources-table>tbody>tr:last-child{
 }
 #admin-prefs-tabs-content #admin-previlages .tab-container {
   width: 100% !important;
+}
+
+.app-aside-fixed .aside-wrap{overflow: inherit !important;}
+.agile-theme-15 aside #agile-menu-navigation-container li .nav-sub li a{
+border-left: 0px !important;
+height: 45px; 
+padding-top: 14px;
+}
+.agile-theme-15 aside #agile-menu-navigation-container li .agile-theme-nav-sub{
+  box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
+  -webkit-box-shadow: 12px -1px 26px 1px rgba(0, 0, 0, 0.07) !important;
+} 
+.agile-theme-15 .navi ul li:hover .agile-theme-nav-sub {
+  display: block!important;
+}
+.agile-theme-15 aside .navi ul li.active .agile-theme-nav-sub {
+  display: none!important;
+}
+
+.agile-theme-15 .navi ul li#companiesmenu a{margin-left: 0px !important;}
+.agile-theme-15 .app-aside {
+    /*top: 0px;
+    position: fixed;
+    margin-top: 50px;
+    z-index: 1035!important; */
+}
+.modal-body select
+{
+      color: #263238!important;
+      background-color: #f4f8f9 !important;
+}
+.documentsheading .workflow-sortby,.workflow-heading .workflow-sortby
+{
+  margin-top:-7px !important
+}
+#filter-list .dropdown-toggle .caret ,#filters-tour-step .dropdown-toggle .caret,.documentsheading  .dropdown-toggle .caret
+{
+   color : #78909c !important;
+}
+#activities_date_range
+{
+  border:none!important;
+}
+.ticket-data  .btn.caret-btn
+{
+  display:none;
+}
+div.show-caret:hover>a.caret-btn
+{
+  display:inline-block;
+}
+.agile-theme-15 i.icon-sitemap{
+  color:#78909c !important;
 }
