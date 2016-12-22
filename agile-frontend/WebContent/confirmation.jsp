@@ -375,11 +375,14 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
 	
 				    Contact contact = ContactUtil.searchContactByEmail(email);
-
+				    
 				    JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
 
-				     if(subscriberJSONObject == null)
+				    if(subscriberJSONObject == null)
 				    	subscriberJSONObject = new JSONObject();
+
+				    if(subscriberJSONObject.has("data"))
+				    	subscriberJSONObject = subscriberJSONObject.getJSONObject("data");
 
 				    System.out.println("subscriberJSON : " +subscriberJSONObject);
 	
