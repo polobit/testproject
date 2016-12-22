@@ -3093,6 +3093,7 @@ table#deal-sources-table>tbody>tr:last-child{
 } 
 .agile-theme-15 .app-aside-folded #agile-menu-navigation-container .nav .show-icon-folded{
   display: block !important;
+  line-height: 45px;
 }
 
 #ticket-last-notes{
