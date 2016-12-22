@@ -63,18 +63,21 @@ var VisitorsSegmentationRouter = Backbone.Router
             
             if(visitorsUtils.hasContactFilter(postData))
             {
-              visitorsUtils.disableInfiniScroll();
               cursorStr = false;
               has_fetch = false;            
               if(!visitorsUtils.hasProperContactFilter(postData))
-                {
+              {
                   postData = undefined;
                     _agile_delete_prefs('dynamic_visitors_filter');
                     if(is_lhs_filter)
                       return;
                     else
                       clearLhsFilters();
-                }
+              }
+              else
+              {
+            	  visitorsUtils.disableInfiniScroll();
+              }
             }
 
             var slateKey = getSegmentPadcontentKey(url);
