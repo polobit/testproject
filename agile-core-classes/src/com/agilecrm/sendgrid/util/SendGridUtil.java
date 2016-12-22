@@ -684,7 +684,7 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 
 	
 	public static void main(String asd[]) throws ParseException{
-		System.out.println(isEmailDomainValid("email-apple.fr"));
+		System.out.println(isEmailDomainValid("mailme.net.in"));
 		
 		//System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
@@ -879,17 +879,17 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 			
 			long createdTimeMillisecond = date.getTime()/1000;
 			
-			if(createdTimeMillisecond <=thirtyDaysBackTime)
-				return true;
+			if(createdTimeMillisecond >=thirtyDaysBackTime)
+				return false;
 		}
 		
 		System.out.println("Email Domain name and created date" + creationDate + "   "+emailDomain);
 	}
 	catch(Exception e){
 		System.out.println("Exception occured while validatin email domain on whois server : " +e.getMessage());
-		return false;
+		return true;
 	    }
-	return false;
+	return true;
 	}
 	
 	
