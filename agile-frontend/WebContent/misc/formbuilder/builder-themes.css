@@ -626,7 +626,8 @@ select:not([multiple]){
  -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url(" http://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
+  background: url("https://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
+}
 #agile-tweet-redirect:hover,#agile-tweet-redirect:focus{
   color:#141719!important;
 }
