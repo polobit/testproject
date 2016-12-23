@@ -2091,8 +2091,7 @@ ul#recent-menu-model-list li:nth-child(even){
     border-radius: 4px;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
-
-.workflow-sortby,.tickets-toolbar .new-theme-sort
+.tickets-toolbar .new-theme-sort
 {
   margin-top:-15px;
 }
@@ -3196,8 +3195,6 @@ div.show-caret:hover>a.caret-btn
 .portlet_header h4, .portlet_header .h4 {
     margin-bottom: 0px!important;
 }
-
-
 /*Service Module Changes Start*/
 
 #ticket-last-notes{
@@ -3233,3 +3230,11 @@ form#new-ticket ul.chosen-choices{
 }
 
 /*Service Module Changes End*/
+.workflow-heading .workflow-sortby
+{
+  margin-top: -15px!important;
+}
+#Landingpages-top-view .workflow-heading .workflow-sortby
+{
+  margin-top:0px!important;
+}
