@@ -171,7 +171,19 @@ var deal_bulk_actions = {
 			}
 		},DEALS_BULK_MESSAGE);
 	},
-	
+	bulkExportDeals : function(isACLCondition){
+		var url = '/core/api/opportunity/exportList';
+		deal_bulk_actions.postBulkActionDealsData(url,undefined,function(){
+			if(isACLCondition)
+			{
+				$("#deal_bulk_export_acl_modal").modal('hide');
+			}
+			else
+			{
+				$("#deal_bulk_export_modal").modal('hide');
+			}
+		},DEALS_BULK_MESSAGE);
+	},	
 	bulkMilestoneChange : function(saveBtn){
 		// Returns, if the save button has disabled attribute
 		if (saveBtn.attr('disabled'))

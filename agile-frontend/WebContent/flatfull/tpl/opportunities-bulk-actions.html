@@ -280,3 +280,23 @@
 		</div>
 	</div>
 </script>
+
+<script id="deal-bulk-export-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">{{agile_lng_translate 'deal-view' 'export'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'selected-deals'}}</h3>
+			</div>
+			<div class="modal-body">
+				<div id="deal-bulk-confirm">
+					<p>{{agile_lng_translate 'contacts-view' 'csv-file-desc-with-activity'}}</p>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-export" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+			</div>
+		</div>
+	</div>
+</script>

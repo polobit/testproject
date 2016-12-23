@@ -2497,8 +2497,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 
 .agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4
 {
-      margin-top: 10px;
-      margin-bottom:10px;
+      margin-top: 5px!important;
+      margin-bottom:10px !important;
 }
 .agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs
 {
@@ -3139,7 +3139,7 @@ padding-top: 14px;
       color: #263238!important;
       background-color: #f4f8f9 !important;
 }
-.documentsheading .workflow-sortby,.workflow-heading .workflow-sortby
+.documentsheading .workflow-sortby
 {
   margin-top:-7px !important
 }
@@ -3164,4 +3164,7 @@ div.show-caret:hover>a.caret-btn
 }
 #reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
   margin-top: 3px;
+}
+ .agile-theme-15  ul.new-theme-ul{
+width: 169px !important;
 }

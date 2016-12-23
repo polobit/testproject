@@ -225,6 +225,10 @@ function getTemplateUrls(templateName)
 	{
 	template_relative_urls.push("sip.js");
 	}
+	else if (templateName.indexOf("ozonetel") == 0)
+	{
+	template_relative_urls.push("ozonetel.js");
+	}
 	else if (templateName.indexOf("twitter") == 0)
 	{
 		template_relative_urls.push("twitter.js");

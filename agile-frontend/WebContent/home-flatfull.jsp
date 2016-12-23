@@ -97,7 +97,7 @@ AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
   if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
   {
 %>
-<%@ include file="file-hash.json"%>
+
 <%
   }
 %>
@@ -224,12 +224,14 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
 <%
-
 	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
     if(!isDisabledNewThemeStyles){
 %>
 <link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
 <%} %>
+
+<!-- Material icons update -->
+<link href="flatfull/css/material-theme/min/material-icons.css" rel="stylesheet" />
 <style>
 .clickdesk_bubble {
   display: none !important;
@@ -336,6 +338,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
 }
+.app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {padding: 10px 15px 12px 15px;}
+
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>

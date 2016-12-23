@@ -426,10 +426,6 @@ body .sp-input {
 	left: auto;
 }
 
-.styleEditor .link_Tab input {
-	margin-bottom: 20px;
-}
-
 .styleEditor .form-group.fullWidth > input {
     float: none;
     width: 100%;
@@ -442,10 +438,6 @@ body .sp-input {
 
 .styleEditor .fileinput .thumbnail {
 	border-radius: 0px;
-}
-
-.styleEditor .imageFileTab > input {
-	margin-bottom: 20px;
 }
 
 .styleEditor .imageFileTab > .form-group {

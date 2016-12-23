@@ -26,6 +26,9 @@ function initToPubNub(callback)
 		// Pubnub.ready();
 
 		// Subscribe to client channel. Receive tweet from social server.
+		/*Pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-6b11bf61-b2c4-4662-83da-003dea06707f', 'subscribe_key' : 'sub-c-20574022-a7e6-11e6-80fa-02ee2ddab7fe',
+			ssl : true, origin : 'pubsub.pubnub.com', });*/
+
 		subscribeClientChannel(callback);
 	});
 }
@@ -46,6 +49,7 @@ function subscribeClientChannel(callback)
 			}catch(e){
 				return;
 			}
+			//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
 			if((message || {}).type  == "call"){
 				handleCallRequest(message);
 			}else{
