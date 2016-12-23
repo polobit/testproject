@@ -13,7 +13,7 @@ var Ticket_Utils = {
 
 		//Initializing base collection with groups URL
 		Assingees_Collection = new Base_Collection_View({
-			url : '/core/api/users/partial',
+			url : '/core/api/tickets/groups/current-user/common-assignees',
 			preserveAcrossRoutes: true
 		});
 
@@ -40,7 +40,7 @@ var Ticket_Utils = {
 
 		//Initializing base collection with groups URL
 		Groups_Collection = new Base_Collection_View({
-			url : '/core/api/tickets/groups',
+			url : '/core/api/tickets/groups/current-user',
 			preserveAcrossRoutes: true
 		});
 
