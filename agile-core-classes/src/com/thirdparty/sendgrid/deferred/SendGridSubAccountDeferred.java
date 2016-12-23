@@ -1,8 +1,12 @@
 package com.thirdparty.sendgrid.deferred;
 
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser.SendGridStats;
 
 /**
  * <code>SendGridSubAccountsDeferred</code> It will create sub account of 
@@ -15,7 +19,16 @@ public class SendGridSubAccountDeferred implements DeferredTask
 {
 	private static final long serialVersionUID = 1L;
 	String domain=null;
+	private Boolean checkSubUserExists = false;
 	
+	public Boolean getCheckSubUserExists() {
+		return checkSubUserExists;
+	}
+
+	public void setCheckSubUserExists(Boolean checkSubUserExists) {
+		this.checkSubUserExists = checkSubUserExists;
+	}
+
 	public SendGridSubAccountDeferred(String domain)
 	{
 		this.domain = domain;
@@ -26,14 +39,26 @@ public class SendGridSubAccountDeferred implements DeferredTask
 	{
 		try
 		{
+			// Boolean flag whether to check SubUser exists or not
+			if(checkSubUserExists)
+			{
+				SendGridStats stats = new SendGridStats();
+				stats.setStartTime(System.currentTimeMillis());
+				
+				String response = SendGridSubUser.getSubUserStatistics(domain, null, stats);
+				
+				if(response != null)
+					return;
+			}
+			
 			SendGridUtil.createSendGridSubUser(domain);
 		}
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
+			System.out.println("Exception occured in SendgridSubAccountDeferredtask...");
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
 			e.printStackTrace();
 		}
 		
 	}
-
 }
