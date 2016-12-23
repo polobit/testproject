@@ -1,6 +1,7 @@
 package com.thirdparty.sendgrid.deferred;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.sendgrid.util.SendGridUtil;
@@ -47,8 +48,14 @@ public class SendGridSubAccountDeferred implements DeferredTask
 				
 				String response = SendGridSubUser.getSubUserStatistics(domain, null, stats);
 				
-				if(response != null)
-					return;
+				System.out.println("Response obtained is " + response);
+				
+				// If response doesn't contain errors return
+				if(!(response != null &&
+					StringUtils.containsIgnoreCase(response, "error") &&
+					StringUtils.containsIgnoreCase(response, "one or more usernames do not belong to this parent account")))
+						return;
+					
 			}
 			
 			SendGridUtil.createSendGridSubUser(domain);
