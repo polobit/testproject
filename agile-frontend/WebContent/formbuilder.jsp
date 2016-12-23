@@ -10,8 +10,11 @@ String template = request.getParameter("template");
       <title>Form Builder</title>
       <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
-      <link href="misc/formbuilder/builder-themes.css?v=4" rel="stylesheet">
-      <link href="misc/formbuilder/custom.css?v=3-3" rel="stylesheet">
+      <link href="misc/formbuilder/builder-themes.css?v=5" rel="stylesheet">
+      <link href="misc/formbuilder/custom.css?v=3-4" rel="stylesheet">
+      <link href="misc/formbuilder/formbuilder-topmenu.css?t=1" rel="stylesheet">
+      <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
+     
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -39,13 +42,34 @@ String template = request.getParameter("template");
 
    </head>
    <body>
+      <header id="header" class="navbar navbar-fixed-top" role="menu">
+         <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
+           <i class="fa fa-cloud"></i> 
+         </a>
+         <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
+        <div style="float: right;"> 
+             <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
+               <span>Preview</span> 
+            </a>          
+            <a id="form_back" class="btn btn-default navbar-brand">
+               <span>Back</span>
+            </a>
+            <a id="form-save" class="btn navbar-brand  navbar-color">
+               <span>Save</span>
+            </a>
+         </div>
+      </header>
+      <div id="loader">
+         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>
+         <span>Loading...</span>
+      </div>
       <div class="container">
          <div class="row">
             <!-- Building Form. -->
             <div class="col-md-6">
                <div class="clearfix">
-                  <h2 id="form-label">Your Form</h2>
-                  <input id="form-save" type="button" class="btn btn-info" value="Save Form">
+                  <!-- <h2 id="form-label">Your Form</h2> -->
+                  <!-- <input id="form-save" type="button" class="btn btn-info" value="Save Form"> -->
                   <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
@@ -56,7 +80,7 @@ String template = request.getParameter("template");
             <!-- / Building Form. -->
             <!-- components children -->
             <div class="col-md-6">
-               <h2>Drag & Drop components</h2>
+               <!-- <h2>Drag & Drop components</h2> -->
                <div class="clearfix"></div>
                <hr>
                <div class="tabbable">
@@ -77,6 +101,17 @@ String template = request.getParameter("template");
          <div class="modal fade in" id="formNextActionModal" data-keyboard="false" data-backdrop="static"></div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built-5.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-6.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script type="text/javascript">
+      if(formNumber){
+         var a = document.getElementById('form_preview');
+         a.removeAttribute("disabled");
+         a.href = window.location.origin+"/forms/"+formNumber;
+      }  
+         var a = document.getElementById('agile-logo');
+         a.href = window.location.origin;
+         var a = document.getElementById('form_back');
+         a.href = window.location.origin+"/#forms";
+      </script>
    </body>
 </html>

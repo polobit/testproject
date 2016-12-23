@@ -15,6 +15,7 @@ define([
 		if(formNumber){
 			form.id = formNumber;
 		}
+		$("#form-save").text("Saving...");
 		$.ajax({
 			type : 'POST',
 			url : url,
@@ -24,15 +25,26 @@ define([
 			success: function(data){
 				if(data != null){
 
-					var embedbaselink;
+					//alert("Form saved successfuly.Click on Preview option to view the updated form.");
+					$("#form-save").text("Save");
 					target.removeAttr("disabled");
-					if(window.location.hostname.indexOf(".")>0){
-						embedbaselink = window.location.hostname.substr(0,window.location.hostname.indexOf("."));
+					$("#form_preview").removeAttr("disabled");
+					if(!formNumber){
+						formNumber=data.id;
+						if(window.history)
+							window.history.replaceState(null,null,window.location.origin+"/formbuilder?form="+formNumber);
 					}
-					else{
-						embedbaselink = window.location.hostname;
-					}
-				
+					$("#form_preview").attr("href",window.location.origin+"/forms/"+formNumber);
+					
+					if(localStorage.getItem("form-save-popup") == null || localStorage.getItem("form-save-popup") == "false"){
+						var embedbaselink;
+						if(window.location.hostname.indexOf(".")>0){
+							embedbaselink = window.location.hostname.substr(0,window.location.hostname.indexOf("."));
+						}
+						else{
+							embedbaselink = window.location.hostname;
+						}
+	
 						var form_perm_link = window.location.origin + "/forms/"+data.id;
 						var encodedLink=encodeURIComponent(form_perm_link);
 						var next_action_popup = _.template(NextActionPopUp)({"permanentlink" : form_perm_link,
@@ -42,22 +54,22 @@ define([
 						"form_google_link" : 'https://plus.google.com/share?url='+encodedLink+'?usp=fb_send_gp',
 						"form_analytics" : window.location.origin+'/#api-analytics',
 						"form_name" : data.formName
- 						});
-					
+						});
+
+						$("#form_preview").attr("href",form_perm_link);
+
 						var $formNextActionModal = $("#formNextActionModal");
 						$("#header").css("z-index","0");
 						$formNextActionModal.html(next_action_popup).modal("show");
 						$('#success-msg').fadeIn('slow').delay(2000).fadeOut('slow');
 					}
-					
-					var $formNextActionModal = $("#formNextActionModal");
-					$formNextActionModal.html(next_action_popup).modal("show");
-				
 				}
 			},
 			error: function(){
 				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
 				target.removeAttr("disabled");
+				$("#form-save").text("Save");
+					
 			}});
 	}}
 });
