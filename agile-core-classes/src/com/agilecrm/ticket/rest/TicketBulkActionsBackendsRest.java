@@ -149,8 +149,10 @@ public class TicketBulkActionsBackendsRest
 
 			// Cannot set DomainUserPartial to SessionManager so fetching
 			// domainUserObject
-			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
-			BulkActionUtil.setSessionManager(user);
+//			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+//			BulkActionUtil.setSessionManager(user);
+//			DomainUser user = DomainUserUtil.getDomainUser(domainUserID);
+			BulkActionUtil.setSessionManager(domainUserID);
 
 			ITicketIdsFetcher idsFetcher = null;
 
