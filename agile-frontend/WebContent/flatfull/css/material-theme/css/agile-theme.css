@@ -176,7 +176,7 @@ form select.form-control{
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
   color: #78909c;
-  font-size: 14px;
+  font-size: 13px;
 }
 .tabs .tab-container .nav-tabs>li:hover>a, .tabs .tab-container .nav-tabs>li:focus>a, .tabs .tab-container .nav-tabs>li.active>a{
   background-color: inherit;
