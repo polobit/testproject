@@ -5142,7 +5142,7 @@ span.rolecontainer::first-letter {
 #agile-menu-navigation-container.navi ul.nav li a {
   padding-left: 45px;
 }
-.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a {
+.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a, .app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {
   padding-left: 0px; 
 }
 
@@ -5152,5 +5152,11 @@ span.rolecontainer::first-letter {
 }
 .sms-draggable-noty:hover .move-icon{
  display:block!important;
- }
+}
 
+.grid-v2 {
+  display: none;
+}
+.grid-v1 {
+  display: block;
+}
