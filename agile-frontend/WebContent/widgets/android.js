@@ -165,6 +165,9 @@ function appDialer(to, contact){
 	 		url : requestURL,
 	 		type : "GET",	 		
 	 		success : function(result) {
+	 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
+				showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
+				
 	 			console.log("android *** success : "+ JSON.stringify(result));	 			
 	 			console.log(to + " : "+ contact);	
 	 			//androidCallNoty(result);			

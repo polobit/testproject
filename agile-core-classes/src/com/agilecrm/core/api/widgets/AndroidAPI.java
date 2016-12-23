@@ -122,17 +122,6 @@ public class AndroidAPI {
 				CallTriggerUtil.executeTriggerForCall(contact, "Android",
 						Call.OUTBOUND, status.toLowerCase(), duration);
 			}
-
-			if (direction.equalsIgnoreCase("Incoming")
-					|| direction.equalsIgnoreCase("Missed")
-					|| direction.equalsIgnoreCase("inbound")) {
-				ActivityUtil.createLogForCalls("Android", phone, Call.INBOUND,
-						status.toLowerCase(), duration, note_id);
-
-				// Trigger for inbound
-				CallTriggerUtil.executeTriggerForCall(contact, "Android",
-						Call.INBOUND, status.toLowerCase(), duration);
-			}
 		}
 		return "";
 	}
@@ -168,16 +157,6 @@ public class AndroidAPI {
 				// Trigger for outbound
 				CallTriggerUtil.executeTriggerForCall(contact, "Android",
 						Call.OUTBOUND, status.toLowerCase(), duration);
-			}
-
-			if (direction.equalsIgnoreCase("Incoming")
-					|| direction.equalsIgnoreCase("inbound")) {
-				ActivityUtil.createLogForCalls("Android", phone, Call.INBOUND,
-						status.toLowerCase(), duration, contact, note_id);
-
-				// Trigger for inbound
-				CallTriggerUtil.executeTriggerForCall(contact, "Android",
-						Call.INBOUND, status.toLowerCase(), duration);
 			}
 		}
 		return "";
