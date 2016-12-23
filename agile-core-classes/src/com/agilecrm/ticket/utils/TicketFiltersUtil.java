@@ -113,6 +113,8 @@ public class TicketFiltersUtil
 			{
 				String LHS = condition.LHS.toString(), operator = String.valueOf(condition.CONDITION).toLowerCase(), RHS = (condition.RHS == null ? ""
 						: condition.RHS).toString();
+				
+				boolean appendOR = true;
 
 				switch (LHS)
 				{
@@ -140,10 +142,12 @@ public class TicketFiltersUtil
 					}
 					case "group_id":
 					{
+						appendOR = false;
 						if( LHS.equalsIgnoreCase("group_id") && groupIdsList.contains(RHS) )
 						{
 							query.append(LHS + "=" + RHS);
 							isGroupAdded = true;
+							appendOR = true;
 						}
 
 						break;
@@ -210,7 +214,7 @@ public class TicketFiltersUtil
 						break;
 				}
 
-				query.append(" OR ");
+				if( appendOR )	query.append(" OR ");
 			}
 
 			query = new StringBuffer(query.substring(0, query.lastIndexOf("OR")).trim());
