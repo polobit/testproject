@@ -28,6 +28,7 @@
 <%@page import="java.util.regex.Matcher" %>
 <%@page import="java.util.regex.Pattern" %>
 <%@page import="org.jsoup.Jsoup" %>
+<%@page import="org.json.JSONObject"%>
 
 <html>
 <head>
@@ -374,6 +375,16 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email + "_");
 	
 				    Contact contact = ContactUtil.searchContactByEmail(email);
+				    
+				    JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
+
+				    if(subscriberJSONObject == null)
+				    	subscriberJSONObject = new JSONObject();
+
+				    if(subscriberJSONObject.has("data"))
+				    	subscriberJSONObject = subscriberJSONObject.getJSONObject("data");
+
+				    System.out.println("subscriberJSON : " +subscriberJSONObject);
 	
 				    String msg = "You are successfully unsubscribed. Thank you.";
 
@@ -442,6 +453,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    // Send Confirmation email
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
+						Long templateId = null;
 						map.put("unsubscribe_subject",unsubscribe_subject);
 					    
 						// Trigger Unsubscribe
@@ -481,11 +493,18 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							map.put("company", company);
 							if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
+								templateId = Long.valueOf(unsubscribe_subject);
+								/*
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								isDefaultTemplate = "false";
 								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text;
+								String bodyString = template_details.text;
+								String htmlString = template_details.html_for_builder;
 								System.out.println("htmlString is"+htmlString);
-								map.put("unsubscribe_body", htmlString);
+								System.out.println("bodyString is"+bodyString);
+								map.put("unsubscribe_body", bodyString);
+								map.put("unsubscribe_html", htmlString);
+								*/
 							}
 							else
 							{
@@ -508,11 +527,17 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    	map.put("campaign_name", unsubscribeName);
 					    	if(!StringUtils.isBlank(unsubscribe_subject))	
 							{
+								templateId = Long.valueOf(unsubscribe_subject);
+								/*
 								EmailTemplates template_details = EmailTemplatesUtil.getEmailTemplate(Long.valueOf(unsubscribe_subject));
+								isDefaultTemplate = "false";
 								subjectMessage = template_details.subject ;
-								String htmlString = template_details.text;
+								String bodyString = template_details.text;
+								String htmlString = template_details.html_for_builder;								
 								System.out.println("htmlString is"+htmlString);
-								map.put("unsubscribe_body", htmlString);
+								map.put("unsubscribe_body", bodyString);
+								map.put("unsubscribe_html", htmlString);
+								*/
 							}
 							else
 							{
@@ -525,8 +550,14 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						if(map.size() != 0){
 							if(!(is_unsubscribe_email_disabled !=null && is_unsubscribe_email_disabled.trim().equalsIgnoreCase("true"))){
-								SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
-								System.out.println("Email sent successfully...");
+								if(templateId != null){
+									SendMail.sendMail(email, subjectMessage, templateId, subscriberJSONObject, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
+									System.out.println("Email sent successfully...");
+								}
+								else{
+									SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company, language);
+									System.out.println("Email sent successfully...");
+								}
 							}
 						}
 					}
