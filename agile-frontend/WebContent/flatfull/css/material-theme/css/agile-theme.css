@@ -1109,7 +1109,7 @@ input.mini-time.ui-timepicker-input{
 }
 
 
-.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
+.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; /*border-left: 3px solid rgb(17, 160, 248) !important;*/}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
@@ -1195,7 +1195,7 @@ table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
 #reports-tab-container .report-selected a{
   color: #11a0f8;
   background-color: #e7f6ff !important;
-  border-left: 3px solid rgb(17, 160, 248) !important;
+  /*border-left: 3px solid rgb(17, 160, 248) !important;*/
 }
 #reports-tab-container .maintab ul li a{
   border: 0px !important;
@@ -3164,6 +3164,7 @@ div.show-caret:hover>a.caret-btn
 #reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
   margin-top: 3px;
 }
+
 .agile-theme-15  ul.new-theme-ul{
   width: 169px !important;
 }
@@ -3220,10 +3221,10 @@ div.show-caret:hover>a.caret-btn
 #send-reply-container span.arrow.bottom.arrow-light{
   border-top-color: transparent !important; 
 }
-.ticket-subject, .ticket-id{
+/*.ticket-subject, .ticket-id{
   font-weight: 600px !important;
   font-size: 14px !important;
-}
+}*/
 form#new-ticket ul.chosen-choices{
   height: 40px !important;
   padding-left: 12px !important;
@@ -3239,6 +3240,7 @@ form#new-ticket ul.chosen-choices{
 {
   margin-top:0px!important;
 }
+
 .agile-theme-15 .tagheading
 {
   margin-left:20px;
@@ -3258,3 +3260,19 @@ form#new-ticket ul.chosen-choices{
 {
   color:#78909c!important;
 }
+
+.ticket-subject-md {
+  width: 50%;
+}
+
+ .agile-theme-15  ul.new-theme-ul{
+width: 169px !important;
+}
+#tickets-inner{
+  border-bottom: 1px solid #dee5e7 !important;
+}
+.agile-theme-15 #triggersmenu i.icon-magic-wand {
+    color: #78909c !important;
+    font-weight: bold;
+}
+
