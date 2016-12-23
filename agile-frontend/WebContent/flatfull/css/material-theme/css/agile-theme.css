@@ -1109,7 +1109,7 @@ input.mini-time.ui-timepicker-input{
 }
 
 
-.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
+.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; /*border-left: 3px solid rgb(17, 160, 248) !important;*/}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
@@ -1195,7 +1195,7 @@ table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
 #reports-tab-container .report-selected a{
   color: #11a0f8;
   background-color: #e7f6ff !important;
-  border-left: 3px solid rgb(17, 160, 248) !important;
+  /*border-left: 3px solid rgb(17, 160, 248) !important;*/
 }
 #reports-tab-container .maintab ul li a{
   border: 0px !important;
@@ -3141,4 +3141,7 @@ padding-top: 14px;
 .documentsheading .workflow-sortby,.workflow-heading .workflow-sortby
 {
   margin-top:-7px !important
+}
+.ticket-subject-md {
+  width: 50%;
 }
