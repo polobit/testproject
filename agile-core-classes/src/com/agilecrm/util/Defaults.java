@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Activity.ActivityType;
@@ -22,6 +23,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
+import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.Reports.Duration;
@@ -33,6 +35,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.ticket.utils.TicketFiltersUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.InvitedUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.InvitedUsersUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -214,7 +217,24 @@ public class Defaults
 		deal.save();
 		try
 		{
-		    ActivitySave.createDealAddActivity(deal);
+			List<ContactPartial> contacts = deal.getContacts();
+			JSONArray jsn = null;
+			if (contacts != null && contacts.size() > 0)
+			{
+			    jsn = ActivityUtil.getContactIdsJson(contacts);
+			}
+
+			String owner_name = "" ; 
+			try {
+				if(deal.owner_id != null)
+					owner_name = DomainUserUtil.getDomainUser(Long.parseLong(deal.owner_id)).name;
+				else if(deal.getOwner().name != null)
+					owner_name = deal.getOwner().name ;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			ActivityUtil.createDealActivity(ActivityType.DEAL_ADD, deal, owner_name,
+			        deal.expected_value.toString(), String.valueOf(deal.probability), jsn);
 		}
 		catch (Exception e)
 		{

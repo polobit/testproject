@@ -73,13 +73,6 @@ if(currentUserPrefs.theme.equalsIgnoreCase("15")) {
        currentUserPrefs.menuPosition = "leftcol";
 }	
 
-// Request param to show new theme
-String newThemeReq = request.getParameter("ui");
-if(StringUtils.isNotBlank(newThemeReq) && newThemeReq.equalsIgnoreCase("v2")){
-	currentUserPrefs.theme = "15";
-	currentUserPrefs.menuPosition = "leftcol";
-}
-
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
 
@@ -337,9 +330,8 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
     z-index: 1029;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
-}
-.app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {padding: 10px 15px 12px 15px;}
-
+  }
+  .app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {padding: 10px 15px 12px 15px;}
 <%
    if(MobileUADetector.isMobile(request.getHeader("user-agent"))){
 %>
@@ -365,7 +357,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 
 
-<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("");%>'>
+<body class='<%if(!currentUserPrefs.animations) out.print("disable-anim");%>'>
 <script type="text/javascript">
 function isIE() {
   var myNav = navigator.userAgent.toLowerCase();
@@ -400,33 +392,33 @@ function isIE() {
 
 <div class="dashboard-select small dropdown grid-v2 hidden-xs <%
           switch (Integer.parseInt(currentUserPrefs.theme)) {
-            case 1:  out.print("bg-white-only hide ");
+            case 1:  out.print("bg-white-only ");
                    break;
-            case 2:  out.print("bg-white-only hide ");
+            case 2:  out.print("bg-white-only ");
                  break;
-            case 3:  out.print("bg-white-only hide ");
+            case 3:  out.print("bg-white-only ");
                  break;
-            case 4:  out.print("bg-white-only hide ");
+            case 4:  out.print("bg-white-only ");
                  break;
-            case 5:  out.print("bg-white-only hide ");
+            case 5:  out.print("bg-white-only ");
                  break;
-            case 6:  out.print("bg-white-only hide ");
+            case 6:  out.print("bg-white-only ");
                  break;
-            case 7:  out.print("bg-black hide ");
+            case 7:  out.print("bg-black ");
                  break;
-            case 8:  out.print("bg-info dker hide ");
+            case 8:  out.print("bg-info dker ");
                  break;
-            case 9:  out.print("bg-primary hide ");
+            case 9:  out.print("bg-primary ");
                  break;
-            case 10:  out.print("bg-info dk hide ");
+            case 10:  out.print("bg-info dk ");
                  break;
-            case 11:  out.print("bg-success hide ");
+            case 11:  out.print("bg-success ");
                  break;
-            case 12:  out.print("bg-danger dker hide ");
+            case 12:  out.print("bg-danger dker ");
                  break;
-            case 13:  out.print("bg-white-only hide ");
+            case 13:  out.print("bg-white-only ");
                  break;
-            case 14:  out.print("bg-dark hide ");
+            case 14:  out.print("bg-dark ");
                  break;
             case 15:  out.print("bg-white ");
                  break;
@@ -496,7 +488,7 @@ function isIE() {
                  break;
             case 14:  out.print("bg-dark ");
                  break;
-            case 15:  out.print("bg-white hide");
+            case 15:  out.print("bg-white");
                  break;
             default:
                     break;
@@ -520,7 +512,7 @@ function isIE() {
                 </ul>
                 </div>
                 	</div>">
-                   <a href="#" class='grid-icon-header pull-left block wrapper <%if(currentUserPrefs.theme.equals("15")){out.print("hide");}%>' onclick="return false;"><i class="glyphicon glyphicon-th"></i>
+                   <a href="#" class='grid-icon-header pull-left block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i>
                       <span id="rolecontainer" class="rolecontainer grid-v1-rolecontainer"><%out.print(domainUser.role);%>
                       </span> 
                    </a> 
@@ -812,9 +804,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </li>
     <li id="triggersmenu">
       <a  href="#triggers">
-        <i class="icon icon-magic-wand"></i>
-        <i class="material-icons hidden-icon" style="display: none">merge_type</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">merge_type</i> 
+        <i class="icon icon-magic-wand" style="display:block !important"></i>
+        <i class="material-icons hidden-icon" style="display: none">play_for_work</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">play_for_work</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
       </a>
     </li>
@@ -824,8 +816,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="email-templates-menu">
       <a href="#email-templates">
         <i class="icon-envelope-letter"></i>
-        <i class="material-icons hidden-icon" style="display: none">art_track</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">art_track</i> 
+        <i class="material-icons hidden-icon" style="display: none">email</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">email</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
       </a>
     </li>
@@ -896,8 +888,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
-        <i class="material-icons hidden-icon" style="display: none">person_pin_circle</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">person_pin_circle</i> 
+        <i class="material-icons hidden-icon" style="display: none">visibility</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">visibility</i> 
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>

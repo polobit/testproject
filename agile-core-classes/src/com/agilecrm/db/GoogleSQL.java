@@ -569,5 +569,57 @@ public class GoogleSQL
 	return futuredate;
 
     }
+    
+    public static Connection getWebStatsServerConnection() throws PropertyVetoException, SQLException
+    {
+	String url = "jdbc:mysql://104.197.76.249:3306/stats?user=root&password=GunsFounder127";
+	Connection conn = null;
+	
+	try
+	{
+	    if (SystemProperty.environment.value() != null
+		    && SystemProperty.environment.value() != SystemProperty.Environment.Value.Development)
+	    {
+		// Load the class that provides the new "jdbc:google:mysql://"
+		// prefix.
+		Class.forName("com.mysql.jdbc.Driver");
+		//System.out.println("Google sql url is " + url);
+	    }
+	    else
+	    {
+		Class.forName("com.mysql.jdbc.Driver");
+		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
+		// Alternatively, connect to a Google Cloud SQL instance using:
+		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
+		
+		
+//		    Class.forName("com.mysql.jdbc.Driver");
+//		    conn = DriverManager.getConnection("jdbc:mysql://104.197.76.249:3306/stats", "root",
+//			    "GunsFounder127");
+		    
+		
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println(e.getMessage());
+	}
+	
+	try
+	{
+	    System.out.println("The connection url is  " + url);
+	    Long startTime = System.currentTimeMillis();
+	    conn = DriverManager.getConnection(url);
+	    System.out.println(conn.isClosed());
+	    System.out.println("Time taken to get sql connection  : " + (System.currentTimeMillis() - startTime));
+	}
+	catch (Exception ex)
+	{
+	    System.err.println(" Error getting the connection object " + ex.getMessage());
+	    ex.printStackTrace();
+	}
+	
+	return conn;
+    }
 
 }

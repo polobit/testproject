@@ -221,7 +221,7 @@
              
             <div class="pull-right {{#is_mobile}} icons-left {{/is_mobile}}">
             <div class="btn-group dropdown" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'campaigns' 'workflows'}}">
-              <button class="fa fa-sitemap btn btn-sm btn-default btn-lg-imp show-workflows p-ver-2" data-toggle="dropdown"></button>
+              <button class="fa fa-sitemap btn btn-sm btn-default  show-workflows p-ver-2" data-toggle="dropdown"></button>
 
               <ul id="workflows_list" class="dropdown-menu">
                 <li><a href="javascript:void(0);">{{agile_lng_translate 'tickets' 'loading'}}</a></li>
@@ -230,23 +230,23 @@
 
             <div class="btn-group m-l-xs">
 
-              <button class="btn-default w-xxs btn btn-sm p-ver-2  btn-lg-imp btn btn-sm " style="padding-left: 15px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_favorite "true"}}{{agile_lng_translate 'tickets' 'not-favourate'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-favourate'}}{{/if_equals}}">
+              <button class="btn-default w-xxs btn btn-sm p-ver-2   btn btn-sm " style="padding-left: 15px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_favorite "true"}}{{agile_lng_translate 'tickets' 'not-favourate'}}{{else}}{{agile_lng_translate 'tickets' 'mark-as-favourate'}}{{/if_equals}}">
               <i style="font-size: 14px;" class="m-r-xs fa {{#if_equals is_favorite "true"}}fa-star text-warning {{else}}fa-star-o text-light{{/if_equals}} toggle-favorite"></i>
               </button>
 
-              <button class="fa fa-ban btn btn-sm btn-lg-imp p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'unspam'}}{{else}}{{agile_lng_translate 'tickets' 'markspam'}}{{/if_equals}}"></button>
+              <button class="fa fa-ban btn btn-sm  p-ver-2 {{#if_equals is_spam "true"}}btn-danger{{else}}btn-default{{/if_equals}} w-xxs w-auto-xs toggle-spam" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{#if_equals is_spam "true"}}{{agile_lng_translate 'tickets' 'unspam'}}{{else}}{{agile_lng_translate 'tickets' 'markspam'}}{{/if_equals}}"></button>
               
-              <button class="fa fa-trash-o btn btn-sm btn-lg-imp p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'delete-ticket'}}">
+              <button class="fa fa-trash-o btn btn-sm  p-ver-2 btn-default w-xxs w-auto-xs delete-ticket" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'delete-ticket'}}">
               </button>
 
-                <button class="fa fa-check btn btn-sm p-ver-2 btn-default btn-lg-imp w-xxs w-auto-xs close-current-ticket" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'close-ticket'}}"></button>
+                <button class="fa fa-check btn btn-sm p-ver-2 btn-default  w-xxs w-auto-xs close-current-ticket" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'close-ticket'}}"></button>
                 
             </div> 
 
             {{#is_mobile}}
             {{else}}
 
-            <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default btn-lg-imp m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'toggle-widgets'}}"></button>
+            <button class="fa fa-dedent btn btn-sm p-ver-2 btn-default  m-l-xs toggle-widgets" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'toggle-widgets'}}"></button>
             {{/is_mobile}}             
             </div>
             <div class="clearfix"></div>
@@ -260,7 +260,7 @@
             </div>
 
 
-            <div class="b-b b-light m-b-sm position-relative">
+            <div class="b-b b-light m-b-sm position-relative" id="tickets-inner">
               <span class="label label-default toggle-timeline cursor-pointer pull-right position-relative" style="bottom: 8px;">{{agile_lng_translate 'tickets' 'show-timeline-cap'}}</span>
 
               <span class="label label-default cursor-pointer pull-right position-relative toggle-activities-notes" style="bottom: 8px;right: 1px;" data-toggle="tooltip" data-container="body" data-placement="bottom" data-original-title="{{agile_lng_translate 'tickets' 'show-activities'}}" rel="notes">
@@ -312,14 +312,14 @@
       <div>
 
         <div class="btn-group">
-          <button type="button" class="btn btn-default btn-default-imp btn-sm btn-lg-imp reply-btn {{#if_equals reply_type "reply"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="reply">{{agile_lng_translate 'contact-details' 'reply'}}
+          <button type="button" class="btn btn-default btn-default-imp btn-sm  reply-btn {{#if_equals reply_type "reply"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="reply">{{agile_lng_translate 'contact-details' 'reply'}}
             {{#if_equals reply_type "reply"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
-          <button type="button" class="btn btn-default  btn-default-imp btn-sm btn-lg-imp reply-btn {{#if_equals reply_type "comment"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="comment">{{agile_lng_translate 'contact-details' 'notes'}}
+          <button type="button" class="btn btn-default  btn-default-imp btn-sm  reply-btn {{#if_equals reply_type "comment"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="comment">{{agile_lng_translate 'contact-details' 'notes'}}
             {{#if_equals reply_type "comment"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
 
-          <button type="button" class="btn btn-default btn-sm btn-default-imp btn-lg-imp reply-btn {{#if_equals reply_type "forward"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="forward">{{agile_lng_translate 'tickets' 'forward'}}
+          <button type="button" class="btn btn-default btn-sm btn-default-imp  reply-btn {{#if_equals reply_type "forward"}}active box-shadow-none border-dee5e7{{/if_equals}}" rel="forward">{{agile_lng_translate 'tickets' 'forward'}}
             {{#if_equals reply_type "forward"}}<span class="arrow bottom arrow-light" style="top:100%;"></span>{{/if_equals}}
           </button>
           
@@ -375,8 +375,8 @@
 
                     {{#if_equals reply_type "reply"}}
                     <div class="btn-group dropdown p-none  ticket-send-reply">
-                        <button class="btn btn-gray btn-sm btn-default-imp btn-lg-imp send-reply"{{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-loading-text="Sending...">{{agile_lng_translate 'tickets' 'send-reply'}}</button>
-                        <button class="btn btn-gray btn-sm btn-default-imp btn-lg-imp" data-toggle="dropdown"  {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} aria-expanded="false"><span class="caret"></span></button>
+                        <button class="btn btn-gray btn-sm btn-default-imp  send-reply"{{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-loading-text="Sending...">{{agile_lng_translate 'tickets' 'send-reply'}}</button>
+                        <button class="btn btn-gray btn-sm btn-default-imp " data-toggle="dropdown"  {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply close-ticket">{{agile_lng_translate 'tickets' 'send-reply'}} &amp; {{agile_lng_translate 'tickets' 'close-ticket'}}</a></li>
                         </ul>
@@ -386,8 +386,8 @@
                       {{#if_equals reply_type "comment"}} 
 
                       <div class="btn-group dropdown p-none">
-                        <button class="btn btn-gray btn-sm send-reply private btn-default-imp btn-lg-imp" data-loading-text="Add Notes">{{agile_lng_translate 'tickets' 'add-notes'}}</button>
-                        <button class="ticket-addnote-close btn btn-gray btn-default-imp btn-lg-imp  btn-sm" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                        <button class="btn btn-gray btn-sm send-reply private btn-default-imp " data-loading-text="Add Notes">{{agile_lng_translate 'tickets' 'add-notes'}}</button>
+                        <button class="ticket-addnote-close btn btn-gray btn-default-imp   btn-sm" {{#if_equals status 'CLOSED'}}disabled="disabled"{{/if_equals}} data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="javascript:void(0);" class="send-reply private close-ticket" data-loading-text="Add Notes & Close Ticket">{{agile_lng_translate 'tickets' 'add-notes'}} & {{agile_lng_translate 'tickets' 'close-ticket'}}</a></li>
                         </ul>
@@ -395,7 +395,7 @@
                       {{/if_equals}} 
 
                       {{#if_equals reply_type "forward"}} 
-                        <button class="btn btn-sm btn-gray send-reply forward btn-default-imp btn-lg-imp" data-loading-text="Sending...">{{agile_lng_translate 'tickets' 'forward'}}</button>
+                        <button class="btn btn-sm btn-gray send-reply forward btn-default-imp " data-loading-text="Sending...">{{agile_lng_translate 'tickets' 'forward'}}</button>
                       {{/if_equals}}
 
                       <span class="error-msg text-sm" style="color: #d9534f;"></span>
