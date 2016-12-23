@@ -29,13 +29,14 @@ public class KnowlarityAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String makeACall() throws Exception {
+		String result = "";
 		Widget widget = WidgetUtil.getWidget("Knowlarity");
 		if (widget != null) {
 			JSONObject object = new JSONObject(widget.prefs);
 			object.put("app_code", KnowlarityUtil.APP_ACCESS_KEY);
-			return object.toString();
+			result = object.toString();
 		}
-		return null;
+		return result;
 	}
 
 	@Path("getLogs/{customer_number}")

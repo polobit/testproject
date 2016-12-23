@@ -114,7 +114,7 @@ function saveCallNoteKnolarity(event){
 			state = "answered";
 		}else if(state == "Agent Missed"){
 			state = "failed";
-		}else if(state == "Customer Missed"){
+		}else if(state == "Customer Missed" || state == "Unanswered"){
 			state = "busy";
 		}
 	}
@@ -146,7 +146,7 @@ function saveCallNoteKnolarity(event){
 
 	console.log(callType +" : "+ state);
 
-	if(callType == "Incoming"){		
+	if(callType == "Incoming"){	
 
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(responseJson){
 	    	if(!responseJson){
@@ -178,7 +178,7 @@ function saveCallNoteKnolarity(event){
 				data.contId = contact.id;
 				data.contact_name = contact_name;
 				showDynamicCallLogs(data);
-	    	}else{    
+	    	}else{
 
 	    		var call = { 
 					"direction" : callType,
@@ -337,7 +337,8 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
 						}else if(eventType == "HANGUP"){
-							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";												
+							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";	
+							saveCallNoteKnolarity(event);											
 						}
 					}	
 				}
@@ -364,6 +365,7 @@ function knowlarityEventsFinder(KnowlarityWidgetPrefs){
 	var SR_API_KEY = KnowlarityWidgetPrefs.apiKEY;
 
 	var notificationURL = "https://konnect.knowlarity.com:8100/update-stream/"+SR_API_KEY+"/konnect";
+	console.log("Knowlarity notificationURL "+ notificationURL);
 	knowlaritySource = new EventSource(notificationURL);
 	knowlaritySource.onopen = function (event) {
 		console.log("*** event source onopened *** ");

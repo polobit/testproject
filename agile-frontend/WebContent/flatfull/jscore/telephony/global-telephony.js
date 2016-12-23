@@ -17,7 +17,7 @@ function knowlaritySetup(){
 		url : requestURL,
 		type : "GET",	
 		success : function(result) {
-			if(result){
+			if(result && result.length > 0){
 				console.log(result);
 				KnowlarityWidgetPrefs = JSON.parse(result);				
 				head.js(LIB_PATH + 'widgets/knowlarity.js', function(){ 
