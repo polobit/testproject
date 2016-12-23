@@ -328,7 +328,7 @@ var visitorsUtils = {
 		    var message_id = viewElement.find('#message-id');
 		    message_id.find("#scanned_upto").html("");
 		  	    
-		    var delay=100;
+		    var delay=150;
 		    setTimeout(function() {
 		    	//your code to be executed after 1 second
 		    	message_id.find("#scanned_upto").html("Scanned upto "+ model.scannedUpto);
