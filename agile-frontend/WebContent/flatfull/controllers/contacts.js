@@ -115,9 +115,15 @@ var ContactsRouter = Backbone.Router.extend({
 			}
 		}*/
 		console.info("navigateDashboard");
-		Backbone.history.navigate("#", {
-            trigger: true
-        });
+		if(CURRENT_DOMAIN_USER.role == "SERVICE"){
+			Backbone.history.navigate("#tickets", {
+	            trigger: true
+	        });
+		}else{
+			Backbone.history.navigate("#", {
+	            trigger: true
+	        });
+		}
 	},
 
 	dashboard : function()
