@@ -133,7 +133,7 @@ public class VisitorFilterAPI
 	    System.out.println(filter.segmentConditions);
 	    List<String> contactEmails = AnalyticsUtil.getEmails(filter.segmentConditions.toString(), startTimeString,
 		    endTimeString, countString, cursorString);
-	    contacts = AnalyticsUtil.getContacts(contactEmails, cursor, count);
+	    contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails,null);
 	}
 	
 	catch (Exception e)
