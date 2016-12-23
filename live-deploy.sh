@@ -27,7 +27,7 @@ ant create-target  -DRELEASE_VERSION=$2 -DPRODUCTION=true;
 
 echo "deploying in version $2"
 
-appcfg.sh --oauth2 -A agile-crm-cloud -V $2 update $PROJECT_TARGET_LOCATION/agile-java-server/"$1".war/
+appcfg.sh --oauth2 -A agile-crm-cloud -V $2 --enable_jar_classes update $PROJECT_TARGET_LOCATION/agile-java-server/"$1".war/
 
 notify-send "Version Update Notification" "Verstion Updation Completed"
 
