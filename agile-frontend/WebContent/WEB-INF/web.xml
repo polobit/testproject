@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
@@ -9,7 +13,7 @@
 		<servlet-name>Home</servlet-name>
 		<url-pattern>/home</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>DownloadBlob</servlet-name>
 		<servlet-class>com.agilecrm.DownloadBlobFileServlet</servlet-class>
@@ -19,7 +23,7 @@
 		<servlet-name>DownloadBlob</servlet-name>
 		<url-pattern>/download-attachment</url-pattern>
 	</servlet-mapping>
-	
+
 
 	<servlet>
 		<servlet-name>Scribe</servlet-name>
@@ -29,8 +33,8 @@
 		<servlet-name>Scribe</servlet-name>
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<servlet>
 		<servlet-name>Inviteusers</servlet-name>
 		<jsp-file>/invited-users-mails.jsp</jsp-file>
@@ -39,7 +43,7 @@
 		<servlet-name>Inviteusers</servlet-name>
 		<url-pattern>/invite-users</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>PaypalScribe</servlet-name>
 		<servlet-class>com.agilecrm.scribe.PaypalScribeServlet</servlet-class>
@@ -57,7 +61,7 @@
 		<servlet-name>Shopify</servlet-name>
 		<url-pattern>/shopify</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>ShopifyApp</servlet-name>
 		<servlet-class>com.thirdparty.shopify.ShopifyAppServlet</servlet-class>
@@ -66,7 +70,7 @@
 		<servlet-name>ShopifyApp</servlet-name>
 		<url-pattern>/shopifyapp</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>ShopifyAppUnInstall</servlet-name>
 		<servlet-class>com.thirdparty.shopify.ShopifyAppUnInstallServlet</servlet-class>
@@ -160,7 +164,7 @@
 		<url-pattern>/login</url-pattern>
 		<url-pattern>/login/normal</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>DomainContactAddressFix</servlet-name>
 		<servlet-class>com.agilecrm.misc.DomainContactAddressFix</servlet-class>
@@ -178,7 +182,7 @@
 		<servlet-name>register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>inviteuser</servlet-name>
 		<servlet-class>com.agilecrm.InviteUserServlet</servlet-class>
@@ -196,7 +200,7 @@
 		<servlet-name>registration checker</servlet-name>
 		<url-pattern>backend/register-check</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>share campaign</servlet-name>
 		<servlet-class>com.agilecrm.CampaignShareServlet</servlet-class>
@@ -258,7 +262,7 @@
 		<servlet-name>Jersey Developers REST Service</servlet-name>
 		<url-pattern>/dev/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Jersey Helpcenter REST Service</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
@@ -273,7 +277,7 @@
 		<url-pattern>/helpcenterapi/*</url-pattern>
 	</servlet-mapping>
 
-<servlet>
+	<servlet>
 		<servlet-name>Jersey Feedback REST Service</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
 		<init-param>
@@ -302,11 +306,11 @@
 		<servlet-class>com.agilecrm.session.CalendarServlet</servlet-class>
 		<init-param>
 			<param-name>consumer_key</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 		<init-param>
 			<param-name>consumer_secret</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 
@@ -315,29 +319,21 @@
 		<url-pattern>/meeting</url-pattern>
 	</servlet-mapping>
 
-	<!--
-	<servlet>
-		<servlet-name>ActivityReports</servlet-name>
-		<servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class>
-	</servlet>
+	<!-- <servlet> <servlet-name>ActivityReports</servlet-name> <servlet-class>com.agilecrm.reports.ActivityReportServlet</servlet-class> 
+		</servlet> <servlet-mapping> <servlet-name>ActivityReports</servlet-name> 
+		<url-pattern>/backend/cron/activity-reports/*</url-pattern> </servlet-mapping> -->
 
-	<servlet-mapping>
-		<servlet-name>ActivityReports</servlet-name>
-		<url-pattern>/backend/cron/activity-reports/*</url-pattern>
-	</servlet-mapping>
-	-->
-	
-	
+
 	<servlet>
 		<servlet-name>TaskletCounter</servlet-name>
 		<servlet-class>com.agilecrm.queues.cron.TaskletCounterServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>TaskletCounter</servlet-name>
 		<url-pattern>/backend/cron/taskletcounter</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Reports</servlet-name>
 		<servlet-class>com.agilecrm.reports.ReportServlet</servlet-class>
@@ -347,8 +343,8 @@
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<servlet>
 		<servlet-name>ThemeCount</servlet-name>
 		<servlet-class>com.agilecrm.NewThemeCountServlet</servlet-class>
@@ -358,7 +354,7 @@
 		<servlet-name>ThemeCount</servlet-name>
 		<url-pattern>/theme-count</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>CampaignReports</servlet-name>
 		<servlet-class>com.agilecrm.reports.CampaignReportServlet</servlet-class>
@@ -368,7 +364,7 @@
 		<servlet-name>CampaignReports</servlet-name>
 		<url-pattern>/backend/cron/campaignReports/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Triggers</servlet-name>
 		<servlet-class>com.agilecrm.workflows.triggers.TriggerServlet</servlet-class>
@@ -387,7 +383,7 @@
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern>/backend/cron/tasks</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>EventReminder</servlet-name>
 		<servlet-class>com.agilecrm.EventReminderServlet</servlet-class>
@@ -396,7 +392,7 @@
 		<servlet-name>EventReminder</servlet-name>
 		<url-pattern>/backend/cron/events</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>ContactSchemaChange</servlet-name>
 		<servlet-class>com.agilecrm.ContactSchemaChangeServlet</servlet-class>
@@ -405,7 +401,7 @@
 		<servlet-name>ContactSchemaChange</servlet-name>
 		<url-pattern>/backend/cron/contact-schema-change</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>FailedDomainEventReminder</servlet-name>
 		<servlet-class>com.agilecrm.FailedDomainEventReminderServlet</servlet-class>
@@ -424,7 +420,7 @@
 		<servlet-name>AccountLimitChecker</servlet-name>
 		<url-pattern>/backend/billing/restrictions</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
 		<servlet-class>com.agilecrm.subscription.limits.cron.DomainUserDbUpdateServlet</servlet-class>
@@ -434,7 +430,7 @@
 		<servlet-name>DomainUserDbUpdateServlet</servlet-name>
 		<url-pattern>/backend/domainuserdbupdate</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>AgileDbUpdateServlet</servlet-name>
 		<servlet-class>com.agilecrm.subscription.limits.cron.AgileDbUpdateServlet</servlet-class>
@@ -474,7 +470,7 @@
 		<servlet-name>Mandrill Webhook</servlet-name>
 		<url-pattern>/backend/mandrillwebhook/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Mailgun Webhook</servlet-name>
 		<servlet-class>com.thirdparty.mailgun.webhook.MailgunWebhook</servlet-class>
@@ -485,7 +481,7 @@
 		<url-pattern>/backend/mailgunwebhook/*</url-pattern>
 	</servlet-mapping>
 
-    <servlet>
+	<servlet>
 		<servlet-name>SendGrid Webhook</servlet-name>
 		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridWebhook</servlet-class>
 	</servlet>
@@ -494,9 +490,9 @@
 		<servlet-name>SendGrid Webhook</servlet-name>
 		<url-pattern>/backend/sendgridwebhook/*</url-pattern>
 	</servlet-mapping>
-	
-	 <!-- SendGrid Inbound -->
-	 <servlet>
+
+	<!-- SendGrid Inbound -->
+	<servlet>
 		<servlet-name>SendGridInboundWebhook</servlet-name>
 		<servlet-class>com.thirdparty.sendgrid.webhook.SendGridInboundWebhook</servlet-class>
 	</servlet>
@@ -505,7 +501,7 @@
 		<servlet-name>SendGridInboundWebhook</servlet-name>
 		<url-pattern>/sendgrid/inbound/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.TwilioServlet</servlet-class>
@@ -525,66 +521,66 @@
 		<url-pattern>/backend/voice</url-pattern>
 		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
-	
 
-    <servlet>
-        <servlet-name>TwilioIOVoiceServlet</servlet-name>
-        <servlet-class>com.thirdparty.twilio.TwilioIOVoiceServlet</servlet-class>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>TwilioIOVoiceServlet</servlet-name>
-        <url-pattern>/twilioiovoice</url-pattern>
-    </servlet-mapping>
-	
+
 	<servlet>
-        <servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
-        <servlet-class>com.thirdparty.twilio.TwilioIOStatusCallBackServlet</servlet-class>
-    </servlet>   
- 
-    <servlet-mapping>
-        <servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
-        <url-pattern>/twilioiostatuscallback</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>AffiliateReportServlet</servlet-name>
-        <servlet-class>com.agilecrm.affiliate.cron.AffiliateReportServlet</servlet-class>
-    </servlet>   
- 
-    <servlet-mapping>
-        <servlet-name>AffiliateReportServlet</servlet-name>
-        <url-pattern>/backend/cron/affiliateReport</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
-        <servlet-class>com.agilecrm.affiliate.AffiliateDetailsEditServlet</servlet-class>
-    </servlet>   
- 
-    <servlet-mapping>
-        <servlet-name>AffiliateDetailsEditServlet</servlet-name>
-        <url-pattern>/editAffiliateDetails</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>TwilioIOTwiml</servlet-name>
-        <servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
-    </servlet> 
-    <servlet-mapping>
-        <servlet-name>TwilioIOTwiml</servlet-name>
-        <url-pattern>/twiml</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>TwilioIOConfTwiml</servlet-name>
-        <servlet-class>com.thirdparty.twilio.TwilioIOConferenceTwiml</servlet-class>
-    </servlet> 
-    <servlet-mapping>
-        <servlet-name>TwilioIOConfTwiml</servlet-name>
-        <url-pattern>/conftwiml</url-pattern>
-    </servlet-mapping>
-    
+		<servlet-name>TwilioIOVoiceServlet</servlet-name>
+		<servlet-class>com.thirdparty.twilio.TwilioIOVoiceServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TwilioIOVoiceServlet</servlet-name>
+		<url-pattern>/twilioiovoice</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
+		<servlet-class>com.thirdparty.twilio.TwilioIOStatusCallBackServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
+		<url-pattern>/twilioiostatuscallback</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AffiliateReportServlet</servlet-name>
+		<servlet-class>com.agilecrm.affiliate.cron.AffiliateReportServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AffiliateReportServlet</servlet-name>
+		<url-pattern>/backend/cron/affiliateReport</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AffiliateDetailsEditServlet</servlet-name>
+		<servlet-class>com.agilecrm.affiliate.AffiliateDetailsEditServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AffiliateDetailsEditServlet</servlet-name>
+		<url-pattern>/editAffiliateDetails</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TwilioIOTwiml</servlet-name>
+		<servlet-class>com.thirdparty.twilio.TwilioIOTwiml</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TwilioIOTwiml</servlet-name>
+		<url-pattern>/twiml</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>TwilioIOConfTwiml</servlet-name>
+		<servlet-class>com.thirdparty.twilio.TwilioIOConferenceTwiml</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TwilioIOConfTwiml</servlet-name>
+		<url-pattern>/conftwiml</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
@@ -620,47 +616,47 @@
 		<servlet-name>EnterDomain</servlet-name>
 		<url-pattern>/enter-domain</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- Appstats -->
 	<servlet>
-	  <servlet-name>appstats</servlet-name>
-	  <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
-	  <init-param>
-	    <param-name>requireAdminAuthentication</param-name>
-	    <param-value>false</param-value>
-	  </init-param>
+		<servlet-name>appstats</servlet-name>
+		<servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+		<init-param>
+			<param-name>requireAdminAuthentication</param-name>
+			<param-value>false</param-value>
+		</init-param>
 	</servlet>
-	
+
 	<servlet-mapping>
-	  <servlet-name>appstats</servlet-name>
-	  <url-pattern>/appstats/*</url-pattern>
+		<servlet-name>appstats</servlet-name>
+		<url-pattern>/appstats/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<listener>
 		<listener-class>com.agilecrm.frontend.AgileServletContextListener</listener-class>
 	</listener>
-	
+
 	<security-constraint>
-	  <web-resource-collection>
-	    <web-resource-name>appstats</web-resource-name>
-	    <url-pattern>/appstats/*</url-pattern>
-	  </web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>appstats</web-resource-name>
+			<url-pattern>/appstats/*</url-pattern>
+		</web-resource-collection>
 	</security-constraint>
 	<filter>
-	  <filter-name>appstats</filter-name>
-	   <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
-	   <init-param>
-	    <param-name>calculateRpcCosts</param-name>
-	    <param-value>true</param-value>
-	  </init-param>
+		<filter-name>appstats</filter-name>
+		<filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+		<init-param>
+			<param-name>calculateRpcCosts</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
-	
+
 	<filter-mapping>
-	  <filter-name>appstats</filter-name>
-	  <url-pattern>/*</url-pattern>
+		<filter-name>appstats</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- End of appstats -->
-	
+
 	<filter>
 		<filter-name>NamespaceFilter</filter-name>
 		<filter-class>com.agilecrm.filter.NamespaceFilter</filter-class>
@@ -696,7 +692,7 @@
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
-			
+
 	</filter-mapping>
 
 	<filter-mapping>
@@ -736,7 +732,7 @@
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- JSON Filter gadget -->
 	<filter>
 		<filter-name>JSONPFilterPHP</filter-name>
@@ -748,12 +744,12 @@
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
 	<!-- JSON Filter -->
-	
+
 	<filter>
 		<filter-name>WebhooksFilter</filter-name>
 		<filter-class>com.agilecrm.filter.WebhooksFilter</filter-class>
 	</filter>
-		
+
 	<filter-mapping>
 		<filter-name>WebhooksFilter</filter-name>
 		<url-pattern>/core/hook/*</url-pattern>
@@ -834,7 +830,7 @@
 		<url-pattern>/backend/open/*</url-pattern>
 		<url-pattern>/open/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>OnlineLinkForEmail</servlet-name>
 		<servlet-class>com.campaignio.servlets.OnlineLinkForEmail</servlet-class>
@@ -889,7 +885,7 @@
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>AgileForm</servlet-name>
 		<servlet-class>com.thirdparty.forms.AgileForm</servlet-class>
@@ -898,7 +894,7 @@
 		<servlet-name>AgileForm</servlet-name>
 		<url-pattern>/formsubmit</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>AgileFormRedirect</servlet-name>
 		<servlet-class>com.thirdparty.forms.AgileFormRedirect</servlet-class>
@@ -907,7 +903,7 @@
 		<servlet-name>AgileFormRedirect</servlet-name>
 		<url-pattern>/agileformredirect</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>FormRenderingServlet</servlet-name>
 		<servlet-class>com.agilecrm.forms.FormRenderingServlet</servlet-class>
@@ -916,7 +912,7 @@
 		<servlet-name>FormRenderingServlet</servlet-name>
 		<url-pattern>/forms/*</url-pattern>
 	</servlet-mapping>
-	
+
 
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
@@ -970,7 +966,7 @@
 	<servlet-mapping>
 		<servlet-name>upload_contacts</servlet-name>
 		<url-pattern>/upload</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>upload_attachment</servlet-name>
 		<servlet-class>com.agilecrm.contact.upload.blob.UploadAttachmentServlet</servlet-class>
@@ -980,14 +976,9 @@
 		<url-pattern>/uploadattachment</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
-		<servlet-name>CleanBlobStore</servlet-name>
-		<servlet-class>com.agilecrm.contact.upload.blob.cron.BlobDeleteCron</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>CleanBlobStore</servlet-name>
-		<url-pattern>/backend/cron/blobs-delete</url-pattern>
-	</servlet-mapping>-->
+	<!-- <servlet> <servlet-name>CleanBlobStore</servlet-name> <servlet-class>com.agilecrm.contact.upload.blob.cron.BlobDeleteCron</servlet-class> 
+		</servlet> <servlet-mapping> <servlet-name>CleanBlobStore</servlet-name> 
+		<url-pattern>/backend/cron/blobs-delete</url-pattern> </servlet-mapping> -->
 
 	<servlet>
 		<servlet-name>CronPullServlet</servlet-name>
@@ -1024,7 +1015,7 @@
 		<servlet-name>Confirmation</servlet-name>
 		<url-pattern>/confirmation</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>FromEmailVerification</servlet-name>
 		<jsp-file>/verify_from_email.jsp</jsp-file>
@@ -1066,7 +1057,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 	<servlet-mapping>
@@ -1090,7 +1081,7 @@
 		<servlet-name>NormalInstantiator</servlet-name>
 		<url-pattern>/normal-instantiator</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- Online Calendar in localhost -->
 	<servlet>
 		<servlet-name>WebEventCalendar</servlet-name>
@@ -1099,7 +1090,7 @@
 	<servlet-mapping>
 		<servlet-name>WebEventCalendar</servlet-name>
 		<url-pattern>/calendar-version/*</url-pattern>
-	</servlet-mapping> 
+	</servlet-mapping>
 	<servlet>
 		<servlet-name>CancelWebAppointment</servlet-name>
 		<jsp-file>/cancel-web-appointment.jsp</jsp-file>
@@ -1135,7 +1126,7 @@
 		<filter-name>EcommerceWebhookFilter</filter-name>
 		<url-pattern>/ecommerce</url-pattern>
 	</filter-mapping>
-	
+
 	<servlet>
 		<servlet-name>FacebookPageTab</servlet-name>
 		<servlet-class>com.thirdparty.FacebookPageTab</servlet-class>
@@ -1160,7 +1151,7 @@
 		<servlet-name>FacebookPageCallbackServlet</servlet-name>
 		<url-pattern>/fbpagecallback</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>NamespaceLimit</servlet-name>
 		<servlet-class>com.agilecrm.test.NamespaceTest</servlet-class>
@@ -1169,7 +1160,7 @@
 		<servlet-name>NamespaceLimit</servlet-name>
 		<url-pattern>/backend/printallnamespaces</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<display-name>Remote API Servlet</display-name>
 		<servlet-name>RemoteApiServlet</servlet-name>
@@ -1192,7 +1183,7 @@
 		<servlet-name>TicketSendgridWebhook</servlet-name>
 		<url-pattern>/ticket-module/backend/sendgrid_hook</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>TicketOpenServlet</servlet-name>
 		<servlet-class>com.agilecrm.ticket.servlets.TicketOpenServlet</servlet-class>
@@ -1210,13 +1201,13 @@
 		<servlet-name>TicketSLAServlet</servlet-name>
 		<url-pattern>/backend/ticket/slacron</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>RemoteApiServlet</servlet-name>
 		<url-pattern>/remote_api</url-pattern>
 	</servlet-mapping>
 
-	
+
 	<servlet>
 		<servlet-name>LandingPagesTemplateServlet</servlet-name>
 		<servlet-class>com.agilecrm.landingpages.TemplateServlet</servlet-class>
@@ -1252,7 +1243,7 @@
 		<servlet-name>InvoicePdfServlet</servlet-name>
 		<url-pattern>/InvoicePdfServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>invoice</servlet-name>
 		<servlet-class>com.agilecrm.InvoicePdfServlet</servlet-class>
@@ -1261,48 +1252,48 @@
 		<servlet-name>invoice</servlet-name>
 		<url-pattern>/invoice</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-        <servlet-name>InformUserServlet</servlet-name>
-        <servlet-class>com.thirdparty.call.InformUserServlet</servlet-class>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>InformUserServlet</servlet-name>
-        <url-pattern>/InformUser</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>GetInformUserServlet</servlet-name>
-        <servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
 
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>GetInformUserServlet</servlet-name>
-        <url-pattern>/GetInformUser</url-pattern>
-    </servlet-mapping>
-    
-   	<servlet>
-   		<servlet-name>AdmnLoginServlet</servlet-name>
-   		<servlet-class>com.agilecrm.AdminLoginServlet</servlet-class>
-   	</servlet>  
-   	<servlet-mapping>
-        <servlet-name>AdmnLoginServlet</servlet-name>
-        <url-pattern>/custLogin</url-pattern>
-    </servlet-mapping>
- 
-   
-    	<servlet>
-        <servlet-name>TaskReminderUnitTest</servlet-name>
-        <servlet-class>com.agilecrm.reminder.test.TaskReminderUnitTestServlet</servlet-class>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>TaskReminderUnitTest</servlet-name>
-        <url-pattern>test/taskreminder/unit-test</url-pattern>
-    </servlet-mapping>
-   <servlet>
+	<servlet>
+		<servlet-name>InformUserServlet</servlet-name>
+		<servlet-class>com.thirdparty.call.InformUserServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>InformUserServlet</servlet-name>
+		<url-pattern>/InformUser</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetInformUserServlet</servlet-name>
+		<servlet-class>com.thirdparty.call.GetInformUserServlet</servlet-class>
+
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GetInformUserServlet</servlet-name>
+		<url-pattern>/GetInformUser</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AdmnLoginServlet</servlet-name>
+		<servlet-class>com.agilecrm.AdminLoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdmnLoginServlet</servlet-name>
+		<url-pattern>/custLogin</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>TaskReminderUnitTest</servlet-name>
+		<servlet-class>com.agilecrm.reminder.test.TaskReminderUnitTestServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TaskReminderUnitTest</servlet-name>
+		<url-pattern>test/taskreminder/unit-test</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>TicketsPdfServlet</servlet-name>
 		<servlet-class>com.agilecrm.ticket.servlets.TicketsPdfServlet</servlet-class>
 	</servlet>
@@ -1318,19 +1309,19 @@
 		<servlet-name>EmailPollServlet</servlet-name>
 		<url-pattern>/emailPollServlet</url-pattern>
 	</servlet-mapping>
-	
-    <servlet>
-    
-        <servlet-name>AllDomainStatsServlet</servlet-name>
-        <servlet-class>com.agilecrm.alldomainstats.util.AllDomainStatsServlet</servlet-class>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>AllDomainStatsServlet</servlet-name>
-        <url-pattern>/backend/stats-report</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
+
+	<servlet>
+
+		<servlet-name>AllDomainStatsServlet</servlet-name>
+		<servlet-class>com.agilecrm.alldomainstats.util.AllDomainStatsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AllDomainStatsServlet</servlet-name>
+		<url-pattern>/backend/stats-report</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
 		<servlet-class>com.agilecrm.AgileGlobalPropertyServlet</servlet-class>
 	</servlet>
@@ -1339,8 +1330,8 @@
 		<servlet-name>AgileGlobalPropertyServlet</servlet-name>
 		<url-pattern>/ag-global-props/*</url-pattern>
 	</servlet-mapping>
-    
-    <servlet>
+
+	<servlet>
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<servlet-class>com.agilecrm.OpportunitySchemaChangeServlet</servlet-class>
 	</servlet>
@@ -1348,7 +1339,7 @@
 		<servlet-name>OpportunitySchemaChange</servlet-name>
 		<url-pattern>/backend/cron/opportunity-schema-change</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>DealCurrencyConverter</servlet-name>
 		<servlet-class>com.agilecrm.DealCurrencyConverter</servlet-class>
@@ -1361,7 +1352,7 @@
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<servlet-class>com.google.apphosting.utils.servlet.SessionCleanupServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<url-pattern>/_ah/sessioncleanup</url-pattern>
@@ -1375,7 +1366,7 @@
 		<servlet-name>CompanyNameUpdate</servlet-name>
 		<url-pattern>/backend/cron/company-name-update</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>CustomFieldDelete</servlet-name>
 		<servlet-class>com.agilecrm.CustomFieldDeletionServlet</servlet-class>
@@ -1384,7 +1375,7 @@
 		<servlet-name>CustomFieldDelete</servlet-name>
 		<url-pattern>/backend/cron/delete-custom-field</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>MassMergeDuplicates</servlet-name>
 		<servlet-class>com.agilecrm.ContactMassDuplicateMergeServlet</servlet-class>
@@ -1393,9 +1384,9 @@
 		<servlet-name>MassMergeDuplicates</servlet-name>
 		<url-pattern>/backend/cron/mass-merge-duplicates</url-pattern>
 	</servlet-mapping>
-  
-  	<!--  Helpcenter filter -->
-  	<filter>
+
+	<!-- Helpcenter filter -->
+	<filter>
 		<filter-name>HelpcenterFilter</filter-name>
 		<filter-class>com.agilecrm.filter.KnowledgebaseAuthFilter</filter-class>
 	</filter>
@@ -1405,9 +1396,9 @@
 		<url-pattern>/helpcenter/*</url-pattern>
 		<url-pattern>/helpcenterapi/*</url-pattern>
 	</filter-mapping>
-  	<!-- Helpcenter filter -->
-  	
-  	<!-- HelpCenter -->
+	<!-- Helpcenter filter -->
+
+	<!-- HelpCenter -->
 	<servlet>
 		<servlet-name>HelpCenter</servlet-name>
 		<jsp-file>/helpcenter.jsp</jsp-file>
@@ -1421,7 +1412,7 @@
 		<servlet-name>HelpCenterLogin</servlet-name>
 		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseLoginServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>HelpCenterLogin</servlet-name>
 		<url-pattern>/helpcenter/login</url-pattern>
@@ -1431,17 +1422,17 @@
 		<servlet-name>HelpCenterRegister</servlet-name>
 		<servlet-class>com.agilecrm.knowledgebase.servlets.KnowledgebaseRegister</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>HelpCenterRegister</servlet-name>
 		<url-pattern>/helpcenter/register</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>HelpCenter</servlet-name>
 		<url-pattern>/help</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>HelpcenterVerifyEmail</servlet-name>
 		<jsp-file>/helpcenter/helpcenter_verify_from_email.jsp</jsp-file>
@@ -1450,7 +1441,7 @@
 		<servlet-name>HelpcenterVerifyEmail</servlet-name>
 		<url-pattern>/helpcenter/verify_email</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Help Center Panel REST Service</servlet-name>
 		<servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
@@ -1475,16 +1466,16 @@
 		<url-pattern>/feedback</url-pattern>
 	</servlet-mapping>
 	<servlet>
-        <servlet-name>VoiceCallTwilioServlet</servlet-name>
-        <servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
-    </servlet>  
- 
-    <servlet-mapping>
-        <servlet-name>VoiceCallTwilioServlet</servlet-name>
-        <url-pattern>/twiliovoicecall</url-pattern>
-        <url-pattern>/Twiliovoicecall</url-pattern>
-    </servlet-mapping>
-    <servlet>
+		<servlet-name>VoiceCallTwilioServlet</servlet-name>
+		<servlet-class>com.thirdparty.twilio.VoiceCallTwilioServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>VoiceCallTwilioServlet</servlet-name>
+		<url-pattern>/twiliovoicecall</url-pattern>
+		<url-pattern>/Twiliovoicecall</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>QuerySubmitServlet</servlet-name>
 		<servlet-class>com.agilecrm.webrules.util.QuerySubmitServlet</servlet-class>
 	</servlet>
@@ -1493,7 +1484,7 @@
 		<servlet-name>QuerySubmitServlet</servlet-name>
 		<url-pattern>/querysubmit</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>WebruleServlet</servlet-name>
 		<servlet-class>com.agilecrm.webrules.WebruleServlet</servlet-class>
@@ -1502,7 +1493,7 @@
 		<servlet-name>WebruleServlet</servlet-name>
 		<url-pattern>/push_notification</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- SSO feature -->
 	<servlet>
 		<servlet-name>SingleSignOn</servlet-name>
@@ -1536,9 +1527,9 @@
 	<servlet-mapping>
 		<servlet-name>PageBuilder</servlet-name>
 		<url-pattern>/pagebuilder/*</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
 
-	 <servlet>
+	<servlet>
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<servlet-class>com.thirdparty.amazon.httpendpoint.AmazonSESWebhook</servlet-class>
 	</servlet>
@@ -1547,26 +1538,27 @@
 		<servlet-name>AmazonSESWebhook</servlet-name>
 		<url-pattern>/backend/amazonseswebhook</url-pattern>
 	</servlet-mapping>
+
 	<!-- Push notification -->
-    <servlet>
-        <servlet-name>PushNotification</servlet-name>
-        <servlet-class>com.agilecrm.notification.push.PushNotificationServlet</servlet-class>
-    </servlet>  
-    <servlet-mapping>
-        <servlet-name>PushNotification</servlet-name>
-        <url-pattern>/push</url-pattern>
-    </servlet-mapping>
-    
-     <servlet>
-        <servlet-name>PushNotificationDownload</servlet-name>
-        <servlet-class>com.agilecrm.notification.push.PushNotificationDownloadServlet</servlet-class>
-    </servlet>  
-    <servlet-mapping>
-        <servlet-name>PushNotificationDownload</servlet-name>
-        <url-pattern>/downloadpush</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
+	<servlet>
+		<servlet-name>PushNotification</servlet-name>
+		<servlet-class>com.agilecrm.notification.push.PushNotificationServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PushNotification</servlet-name>
+		<url-pattern>/push</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PushNotificationDownload</servlet-name>
+		<servlet-class>com.agilecrm.notification.push.PushNotificationDownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PushNotificationDownload</servlet-name>
+		<url-pattern>/downloadpush</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<servlet-class>com.agilecrm.forms.FormSubmitServlet</servlet-class>
 	</servlet>
@@ -1574,18 +1566,18 @@
 		<servlet-name>FormSubmitServlet</servlet-name>
 		<url-pattern>/formtrigger</url-pattern>
 	</servlet-mapping>
-	<!-- message url for sendmessage node-->
-       <servlet>
-         <servlet-name>ReplySMSTwilioServlet</servlet-name>
-         <servlet-class>com.thirdparty.twilio.ReplySMSTwilioServlet</servlet-class>
-      </servlet>
-     
-      <servlet-mapping>
-         <servlet-name>ReplySMSTwilioServlet</servlet-name>
-         <url-pattern>/msgReplyActionUrl</url-pattern>
-      </servlet-mapping> 
-      
-    <servlet>
+	<!-- message url for sendmessage node -->
+	<servlet>
+		<servlet-name>ReplySMSTwilioServlet</servlet-name>
+		<servlet-class>com.thirdparty.twilio.ReplySMSTwilioServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ReplySMSTwilioServlet</servlet-name>
+		<url-pattern>/msgReplyActionUrl</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>SaveWebruleData</servlet-name>
 		<servlet-class>com.analytics.servlets.WebruleReportsServlet</servlet-class>
 	</servlet>
@@ -1594,7 +1586,7 @@
 		<servlet-name>SaveWebruleData</servlet-name>
 		<url-pattern>/savedata</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>VideoServingServlet</servlet-name>
 		<servlet-class>com.agilecrm.videorecords.VideoRecordServlet</servlet-class>
@@ -1613,32 +1605,32 @@
 		<servlet-name>SaveFormData</servlet-name>
 		<url-pattern>/addformstats</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-        <servlet-name>OpenDocumentViewer</servlet-name>
-        <jsp-file>/open-documentviewer.jsp</jsp-file>
-    </servlet>
-     <servlet-mapping>
-        <servlet-name>OpenDocumentViewer</servlet-name>
-        <url-pattern>/sendemail/*</url-pattern>
- </servlet-mapping>
- <servlet>
-        <servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<servlet-name>OpenDocumentViewer</servlet-name>
+		<jsp-file>/open-documentviewer.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpenDocumentViewer</servlet-name>
+		<url-pattern>/sendemail/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>DeleteDuplicateMilestone</servlet-name>
 		<servlet-class>com.agilecrm.DeleteDuplicateMilestoneServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DeleteDuplicateMilestone</servlet-name>
 		<url-pattern>/backend/cron/delete-duplicate-servlet</url-pattern>
 	</servlet-mapping>
-<servlet>
-	<servlet-name>TwilioIOTransferTwiml</servlet-name>
-	<servlet-class>com.thirdparty.twilio.TwilioIOTransferTwiml</servlet-class>
-</servlet>  
-<servlet-mapping>
-	<servlet-name>TwilioIOTransferTwiml</servlet-name>
-	<url-pattern>/transfercall</url-pattern>
-</servlet-mapping>
- <servlet>
+	<servlet>
+		<servlet-name>TwilioIOTransferTwiml</servlet-name>
+		<servlet-class>com.thirdparty.twilio.TwilioIOTransferTwiml</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TwilioIOTransferTwiml</servlet-name>
+		<url-pattern>/transfercall</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>OzonetelOutboundCallServlet</servlet-name>
 		<servlet-class>com.thirdparty.ozonetel.OzonetelOutboundCallServlet</servlet-class>
 	</servlet>
@@ -1646,8 +1638,8 @@
 		<servlet-name>OzonetelOutboundCallServlet</servlet-name>
 		<url-pattern>/outboundcall</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<servlet>
 		<servlet-name>OzonetelCallBackServlet</servlet-name>
 		<servlet-class>com.thirdparty.ozonetel.OzonetelCallBackServlet</servlet-class>
@@ -1656,7 +1648,7 @@
 		<servlet-name>OzonetelCallBackServlet</servlet-name>
 		<url-pattern>/outbound_callstatus</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>OzonetelIncomingCallServlet</servlet-name>
 		<servlet-class>com.thirdparty.ozonetel.OzonetelIncomingCallServlet</servlet-class>
@@ -1666,11 +1658,41 @@
 		<url-pattern>/incomingcall</url-pattern>
 	</servlet-mapping>
 	<servlet>
-        <servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
+		<servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
 		<servlet-class>com.agilecrm.DeleteDuplicateCompanyServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
 		<url-pattern>/backend/cron/delete-duplicate-companies-to-contact</url-pattern>
 	</servlet-mapping>
-</web-app>
+
+	<servlet>
+		<servlet-name>IMAPServlet</servlet-name>
+		<servlet-class>com.agilecrm.imap.IMAPServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+
+		<servlet-name>IMAPServlet</servlet-name>
+		<url-pattern>/imap</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>IMAPInboxServlet</servlet-name>
+		<servlet-class>com.agilecrm.imap.IMAPInboxServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+
+		<servlet-name>IMAPInboxServlet</servlet-name>
+		<url-pattern>/imapinbox</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>IMAPSendReplyServlet</servlet-name>
+		<servlet-class>com.agilecrm.imap.IMAPSendReplyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+
+		<servlet-name>IMAPSendReplyServlet</servlet-name>
+		<url-pattern>/imapinboxreply</url-pattern>
+	</servlet-mapping>
+</web-app>	
+
