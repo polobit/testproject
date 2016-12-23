@@ -588,7 +588,6 @@ function showDynamicCallLogs(data)
 		CallLogVariables.duration = data.duration;
 		CallLogVariables.phone = data.number;
 		CallLogVariables.url = data.url;
-		
 	}catch(e){
 		$('#logCallModal').modal('hide');
 		console.log ("an error has occured");

@@ -716,5 +716,17 @@ public class EmailGatewayUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-    }     
+    }    
+    
+    /**
+     * 
+     * @return
+     */
+    public static boolean isEmailGatewayExist(){
+    	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+    	
+    	if(emailGateway == null)
+    		return false;
+    	return true;
+    }
 }

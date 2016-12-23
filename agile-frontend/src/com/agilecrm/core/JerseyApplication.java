@@ -66,6 +66,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.widgets.RapleafWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.StripeWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.TwilioWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.OzonetelWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.ZendeskWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.HelpScoutWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.XeroWidgetsAPI.class);

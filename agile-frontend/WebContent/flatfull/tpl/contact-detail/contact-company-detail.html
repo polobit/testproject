@@ -171,15 +171,15 @@
 
 	<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>				
 					<div class="change-owner-succes"></div>
-     <div title="Owner" class="contact-owner-view">
+     <div title="Owner" class="contact-owner-view m-t-xs">
       	<div class="contact-owner text-xs" id="change-owner-element">
         	
 			{{#if owner}}
-        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
+        	<span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+			<span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
  			{{/if}}
-        	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
+        	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name v-middle">{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul" style="display: none">
@@ -614,11 +614,11 @@
       	<div class="contact-owner text-xs" id="change-owner-element">
         	
 			{{#if owner}}
-        	<span class="contact-owner-pic" style="visibility:visible;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span>
+        	<span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic" style="visibility:hidden;"><img class="user-img"  alt="" src="{{getS3ImagePath 'img/company.png'}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+			<span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
  			{{/if}}
-        	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name">{{owner.name}}</a>
+        	<a href="#" id="contact-owner" data={{owner.id}}  class="contact-owner-name v-middle">{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown" id="change-owner-ul" style="display: none">
@@ -987,18 +987,28 @@
 						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
 						    {{/hasMenuScope}}
 						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
-						    <button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
-						    {{#hasScope "EXPORT_CONTACTS"}}
-						    	<button id="bulk-contacts-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</button>
-						    {{/hasScope}}
 						    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}}
 						    {{else}}
 						    	<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							{{/hasRestrictedMenuScope}}
+						    <div class="dropdown inline-block">
+						    <button class="btn btn-default btn-sm disabled txt-small  dropdown-toggle"  data-toggle="dropdown">More  <span class="caret m-l-xs" ></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							 {{#hasScope "EXPORT_CONTACTS"}}
+							 <li>
+						    	<a id="bulk-contacts-export" style="opacity:0.7;" class="bulk-action-btn _contact_bulk_action disabled " onclick="Agile_GA_Event_Tracker.track_event('Export as CSV');">{{agile_lng_translate 'deal-view' 'export-as-csv'}}</a>
+							 </li>
+							 {{/hasScope}}
+							 <li>
+							  <a id="bulk-owner" style="opacity:0.7;" class="bulk-action-btn _contact_bulk_action  disabled ">{{agile_lng_translate 'contacts-view' 'change-owner'}}</a>
+							 </li>
+							</ul>
+							</div>
 							</div>
 					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
-							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactCompanyTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactCompanyTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-navicon {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
 							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
                     		<i class="caret"></i>
                 			</button> -->
@@ -1089,7 +1099,7 @@
            </div>
         		{{/unless}}
         		{{#if this.length}}
-              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{#isNewTheme}} table-compact {{/isNewTheme}} {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 							<div class="filter-criteria"></div>
 			 				<thead>
                       			<tr style="text-transform: capitalize;">

@@ -585,9 +585,13 @@ getRepPerformanceLog : function(url) {
 	                         case "dashboard" :
 	                             reports_list = "service-reports"
 	                             break;
+	                         case "Dashboard" :
+	                             reports_list = "service-reports"
+	                             break;
 	                     }
-	                     $(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
-                    	$("."+dashboard_name+"-reportsnavbar").addClass("agile-menuactive")
+	                     /*$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive");
+                    	$("."+dashboard_name+"-reportsnavbar").addClass("agile-menuactive") */
+                    	$("aside #reportsmenu").addClass("active");
 	                     getTemplate(reports_list, {}, undefined, function(template) {
 	                         if (!template)
 	                             return;

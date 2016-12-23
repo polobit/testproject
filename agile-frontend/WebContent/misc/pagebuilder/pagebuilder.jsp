@@ -288,7 +288,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                 <div class="tab-pane link_Tab" id="link_Tab">
                     
                     <div class="form-group fullWidth">
-                        <input type="text" class="form-control" id="linkText" name="linkText" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-text")%>' value="">
+                        <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text-to-display")%></label>
+                        <input type="text" class="form-control margin-bottom-20" id="linkText" name="linkText" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-text")%>' value="">
                     </div>
                     
                     <div class="form-group hidden">
@@ -299,20 +300,28 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <p class="text-center or hidden">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or")%></span>
+                    </p>                  
+                   
+                    <div class="form-group fullWidth">
+                        <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "url")%>: </label>
+                        <input type="text" class="form-control margin-bottom-20" 
+                        id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
+                        <span id="err-url-msg" class="internalLinksCustom" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid url</span>
+                    </div>
+                    <p class="text-center or">
+                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
-                    
+
                     <div class="form-group">
                         <!--<select id="pageLinksDropdown" class="form-control select select-primary btn-block mbl">-->
                         <select id="internalLinksDropdown" class="form-control select select-primary btn-block mbl">
-                            <option value="#"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-a-block")%></option>
+                            <option value="#"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "choose-a-block-link")%></option>
+
                         </select>
                     </div>
-                    
-                    <p class="text-center or">
-                        <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or")%></span>
-                    </p>
-                    
-                    <input type="text" class="form-control" id="internalLinksCustom" placeholder="http://somewhere.com/somepage" value="">
+                    <div class="checkbox form-group " style="margin-top:4px; margin-bottom:4px;">
+                        <label class="pull-left"  style="padding-left: 0px; margin-top: -16px;"><input type="checkbox" id="newtab-option" value="false"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "open-in-new-tab")%></label>
+                    </div>
                     
                 </div>
             
@@ -321,8 +330,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image-url")%>:</label>
                     
-                    <input type="text" class="form-control" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
-                    <span id="error-img-msg" style="font-size: 12px;color:#f05050; display:none;">
+                    <input type="text" class="form-control margin-bottom-20" id="imageURL" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-image-url")%>" value=""> 
+                    <span id="error-img-msg" class="imageURL" style="font-size: 12px;color:#f05050; display:none;">
                         <%=LanguageUtil.getLocaleJSONValue(localeJSON, "error-image-url")%>
                     </span>
                                  
@@ -334,8 +343,8 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
 
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-text")%></label>
                     
-                    <input type="text" class="form-control" id="alttxt" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-txt-placeholder")%>" value=""> 
-                    
+                    <input type="text" class="form-control margin-bottom-20" id="alttxt" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alt-txt-placeholder")%>" value=""> 
+                   
                 </div><!-- /.tab-pane -->
 
                 <div class="tab-pane agileFormTab" id="agileform_Tab">
@@ -1982,7 +1991,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "youtube-video-url")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="youtubeID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-youtube-video-url")%>" value="">
-                    <span id="err-youtube-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
+                    <span id="err-youtube-msg" class="youtubeID" style="font-size: 12px;color:#f05050; display:none;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "validate-video-url")%></span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
@@ -1990,7 +1999,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
                     <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "vimeo-video-url")%>:</label>
                     
                     <input type="text" class="form-control margin-bottom-20" id="vimeoID" placeholder="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "enter-vimeo-video-url")%>" value="">
-                     <span id="err-vimeo-msg" style="font-size: 12px;color:#f05050; display:none;">Please enter a valid video url</span>
+                     <span id="err-vimeo-msg" class="vimeoID" style="font-size: 12px;color:#f05050; display:none;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "validate-video-url")%></span>
                     <p class="text-center or">
                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "or-cap")%></span>
                     </p>
@@ -2390,7 +2399,7 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "page
             <div class="modal-content">
                 
                 <div class="modal-header">
-                    <button class="close" data-dismiss="modal" style="font-size: 20px;">&times;</button>
+                    <button class="close" data-dismiss="modal" style="margin-top: 3px; font-size: 20px;">&times;</button>
                     <h3 class="modal-title">
                         <label id="success-msg" style="margin:-5px -1px; color: green;">
                             <%=LanguageUtil.getLocaleJSONValue(localeJSON, "saved-successfully")%>! 

@@ -105,7 +105,7 @@ var ContactsRouter = Backbone.Router.extend({
 	},
 	navigateDashboard : function(id){
 		// Call dashboard route
-		if(id)
+		/*if(id)
 		{
 			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
 			var prevrole = menuServicerole(id);
@@ -113,7 +113,8 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				updateDashboardRole(prevrole);
 			}
-		}
+		}*/
+		console.info("navigateDashboard");
 		Backbone.history.navigate("#", {
             trigger: true
         });
@@ -160,9 +161,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		/*$(".nav.nav-sub li").removeClass("agile-menuactive");
 		$(".nav.nav-sub li").removeClass("active");
-		$("."+dashboard_name+"-home").addClass("agile-menuactive");
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");*/
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -213,7 +214,7 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		//$("#home_dashboard").addClass("active");
+		$("#home_dashboard").addClass("active");
 		
 		},
 	
@@ -1940,3 +1941,84 @@ function menuServicerole(dashboard){
 				break;
 		}
 }
+ // Send a prsonal sms  
+function sendPersonalSMS(el, id){
+
+        var fromNumber = $("#from-number").val();
+        var message = $("#sms-noty-notes").val();
+        phone = $("#notyCallDetails").attr("number");
+
+		$('.sms-message').removeClass("hidden");
+		$(".sms-message-count").addClass("hidden");
+	    $('.sms-message').html(getRandomLoadingImg());
+
+	    if(message == undefined || message=="" || message.length>160)
+        {
+        	 $('#sms-noty-notes').css('border-color', 'red');
+        	 if(message.length>160)
+        	 	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message length is 160</i></p></small></div>');
+        	 else
+        	   $save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
+			 
+			 $('.sms-message').html($save_info);
+			 $save_info.show();
+				setTimeout(function()
+						{
+							$('.sms-message').empty();
+						}, 2000);
+           return;
+      }
+      else
+       {
+          $('#sms-noty-notes').css('border-color', '');
+         }
+						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						if ($(el).attr("disabled"))
+							return;
+
+						$(el).attr("disabled", "disabled");
+						$.get(
+										url,
+										function(data)
+										{
+											console.log("sending sms...");
+											$save_info = $('<div style="display:inline-block;margin-left:-11px;"><small><p class="text-success"><i>SMS will be sent shortly</i></p></small></div>');
+											$('.sms-message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.sms-message').empty();
+												$("#send-sms").removeAttr("disabled");
+												closeCallNoty(true);
+											}, 2000);
+
+										})		
+						         .fail(
+										function(response)
+										{
+											$save_info = $('<div style="display:inline-block; margin-left:-13px;"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+											$('.sms-message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.sms-message').empty();
+												$("#send-sms").removeAttr("disabled");
+												closeCallNoty(true);
+											}, 2000);
+
+										});
+				///	});
+}
+function countChar(element)
+    {
+        	var message = element.value;
+        	var length = message.length;
+        	$(".sms-message-count").removeClass("hidden");
+        	$(".sms-message-count").text("Remaining characters ..."+(160-length));
+            
+    }

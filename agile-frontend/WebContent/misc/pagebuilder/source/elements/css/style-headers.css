@@ -284,7 +284,7 @@ form.headerForm input {
 	background-color: rgba(0, 0, 0, 0);
 }
 
-.header11 h1 {
+.header11 h1,.header11 h2,.header11 h3,.header11 h4,.header11 h5,.header11 h6 {
 	color: #F5F7F8;
 	font-weight: 200;
 	font-size: 45px;

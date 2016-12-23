@@ -376,7 +376,9 @@ function callToNumber(to,from,widgetName,contact,dialler){
 			dialFromSkype(to,from,contact)
 		}else if(widgetName == "Android"){
 			dialFromMobileAPP(to, from, contact);
-		}		
+		}else if(widgetName == "Ozonetel"){
+			dialFromOzonetel(to,from,contact)
+		}	
 	}catch(e){
 		console.log("error occured in calltonumber function " + e);
 		 $("#direct-dialler-div").show();
@@ -425,7 +427,58 @@ function dialFromTwilio(to,from,contact){
 		  }
 	twiliocall(to, name, null, contact);
 }
+function dialFromOzonetel(to,from,contact){
+	if(checkForActiveCall()){
+		alert("Already on call.");
+		return;
+	}
+	var action ={};
+  	action['command'] = "startCall";
+  	action['number'] = to;
+  	action['callId'] = "";
+	//alert(contact)
+	try{
+		resetglobalCallVariables();
+		resetglobalCallForActivityVariables();
+		globalCall.callStatus = "dialing";
+		globalCall.calledFrom = "Ozonetel";
+		setTimerToCheckDialing("ozonetel");
+		
+		if(!contact){
+			globalCall.contactedContact = {};
+			globalCall.contactedId = "";
+		}else{
+			globalCall.contactedContact = contact;
+			globalCall.contactedId = contact.id;
+		}
+		var to_number = "";
+		if(to.startsWith("+91")){
+			to_number = to.substr(to.length - 10);
+		}else{
+			to_number = to;
+		}
+	  	$.ajax({ 
+			url : 'core/api/widgets/ozonetel/connect?user_phone=' + to_number+'&domain_user='+CURRENT_DOMAIN_USER.id, 
+			type : 'GET', 
+			success : function(data){
+				if(data == "success"){
+					startOzonetelWidget();
+					$("#draggable_noty #call-noty-notes").val("");
+					var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+					showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
+					globalCall.callStatus = "Oncall";
+				}else{
+					showAlertModal(_agile_get_translated_val('widgets', 'ozonetel-make-call'), undefined, function(){
 
+					},undefined, "Ozonetel");
+				}
+			}, error : function(response){
+				console.log(response);
+			} 
+		});
+	}catch (e) {
+	}
+}
 function dialFromBria(to,from,contact){
 
 	var command = "startCall";
@@ -539,6 +592,8 @@ function getIcon(widgetName){
 		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
 	}else if(widgetName == "Android"){
 		icon = "<img src='/img/plugins/android-sm-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Android' >Android";
+	}else if(widgetName == "Ozonetel"){
+		icon = "<img src='/widgets/ozonetel_fullsize.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
 	}
 	return icon;
 }

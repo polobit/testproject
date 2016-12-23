@@ -7,6 +7,9 @@ var dialled;
 var CallLogVariables;
 var callConference;
 var callJar;
+var notifications_sound;
+var messagefromcallback;
+var outboundmessage;
 
 function androidSetup(){
 	head.js(LIB_PATH + 'widgets/android.js', function(){
@@ -21,11 +24,14 @@ $(function(){
 	callOptionDiv = "" ;
 	globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 	globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android"};
+	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel"};
 	dialled = {"using" : "default"};
 	CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 	callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 	callJar = {"running" : false};
+	notifications_sound = true;
+	messagefromcallback = false;
+	outboundmessage = true;
 
 	//	initToPubNub();
 	globalCallWidgetSet();
@@ -142,10 +148,19 @@ function globalCallWidgetSet()
 												var temp = { "name" : widget.name, "logo" : widget.mini_logo_url };
 												addtoCallOption(temp);
 												var name = widget.name;
-												if(name != "CallScript"){
+												if(name != "CallScript" ){
 													callOptionDiv = callOptionDiv
 													.concat("<img class ='" + name + "_call c-p active' src='" + widget.mini_logo_url + "' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" + widgetCallName[name] + "'>");
 												}
+
+												var prefs =JSON.parse(widget.prefs)
+												var sms_status=prefs["twilio_sms"];
+
+												if(name == "TwilioIO" && sms_status){
+													callOptionDiv = callOptionDiv
+													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='/widgets/sms-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" +"SMS"+ "'>");
+												}
+
 											}
 										});
 
@@ -590,10 +605,55 @@ function handleCallRequest(message)
 		}
 		showSkypeCallNoty(message);
 		return;
-	
-		}else if ((message || {}).callType == "Android"){
-			
+
+	}else if ((message || {}).callType == "Android"){
 			androidCallNoty(message);	
+	}else if((message || {}).callType == "Ozonetel"){
+			if(message.message_from != "callback"){
+					messagefromcallback = true;	
+					if(message.direction == "Incoming"){
+						outboundmessage = false;
+					}else{
+						outboundmessage = true;
+					}
+			}else{
+				if(messagefromcallback && outboundmessage){
+					messagefromcallback = false;
+					outboundmessage = true;
+				}else{
+					messagefromcallback = true;
+					outboundmessage = false;
+				}
+			}			
+			if(messagefromcallback == true){				
+				var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
+				if( index == -1){
+					sendCommandToClient("notConfigured","Ozonetel");
+					return;
+				}
+				try{
+					var phone = $("#ozonetel_contact_number").val();
+					if (!phone || phone == ""){
+						phone = agile_crm_get_contact_properties_list("phone")[0].value;
+					}
+					if (phone == num){
+						getLogsForOzonetel(num);
+						//handleLogsForOzonetel(message);
+					}
+				}catch (e){
+
+				}
+				if(message.number){
+					globalCall.callNumber = message.number;
+				}else{
+					globalCall.callNumber = message.contact_number;
+				}
+				showOzonetelCallNoty(message);
+				if(message.state && message.state != "ringing"){
+					saveCallNoteOzonetel(message);
+					globalCall.callStatus = "Ideal";
+				}
+			}
 		}
 }
 
@@ -618,6 +678,7 @@ function checkForActiveCall()
 	{
 
 	}
+
 	try
 	{
 		if (globalCall.callStatus != "Ideal")
@@ -642,7 +703,6 @@ function closeCallNoty(option){
 	$("#draggable_noty").hide();
 	$(".draggable_noty_callScript","#draggable_noty").html("");
 	$("#draggable_noty").removeClass("draggable-popup");
-	
 	 if(dialled.using == "dialler"){
 		  $("#direct-dialler-div").show();
 		  dialled.using = "default";

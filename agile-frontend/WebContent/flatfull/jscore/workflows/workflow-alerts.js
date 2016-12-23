@@ -142,7 +142,7 @@ function send_verify_email(el)
 
 		var emailDomain = getEmailDomain(json.email);
 		
-		if(!isGlobalDomain(emailDomain)){
+		if(!isGlobalDomain(emailDomain) && !_IS_EMAIL_GATEWAY){
 			
 			varifyWhiteLebal(emailDomain, function(data)
 				{

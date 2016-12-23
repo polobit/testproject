@@ -1644,12 +1644,13 @@ input[type="radio"].red-color:checked:after {
   text-transform: none;
 }
 .dropdown-menu > li > a i {
-  display: inline-block;
+ /* display: inline-block;*/
   vertical-align: middle;
   padding-right: 10px;
-  min-width: 26px;
+  /*min-width: 26px;*/
   color: #90a4ae;
   font-style: normal;
+  margin-top: 1px;
 }
 .dropdown-menu > li > a span {
   display: inline-block;

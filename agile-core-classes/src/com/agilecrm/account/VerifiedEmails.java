@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.AliasDomainUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -37,6 +39,7 @@ public class VerifiedEmails
 	public Verified verified = Verified.NO;
 	
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	private String token = null;
 	
    private static ObjectifyGenericDao<VerifiedEmails> sss = new ObjectifyGenericDao<VerifiedEmails>(VerifiedEmails.class);
@@ -54,6 +57,7 @@ public class VerifiedEmails
 		this.token = token;
 	}
 	
+	@JsonIgnore
 	public String getToken()
 	{
 		return token;

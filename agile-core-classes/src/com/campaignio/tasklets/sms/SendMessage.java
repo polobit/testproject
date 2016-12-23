@@ -152,7 +152,7 @@ public class SendMessage extends TaskletAdapter
 
 	}
 
-	private boolean checkValidFromNumber(String from)
+	public static boolean checkValidFromNumber(String from)
 	{
 
 		List<String> verifiedNumbers = getVerifiedNumbers(from);
@@ -166,7 +166,7 @@ public class SendMessage extends TaskletAdapter
 		return false;
 	}
 
-	private List<String> getVerifiedNumbers(String from)
+	public static List<String> getVerifiedNumbers(String from)
 	{
 		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
 
@@ -189,7 +189,7 @@ public class SendMessage extends TaskletAdapter
 		return SMSGatewayUtil.incomingNumbers(widget);
 	}
 
-	private boolean checkValidToNumber(String to)
+	public static boolean checkValidToNumber(String to)
 	{
 
 		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
