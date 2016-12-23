@@ -3168,3 +3168,12 @@ div.show-caret:hover>a.caret-btn
  .agile-theme-15  ul.new-theme-ul{
 width: 169px !important;
 }
+.grid-icon-header {
+  display: none;
+}
+.grid-v1 {
+  display: none;
+}
+.grid-v2 {
+  display: block;
+}

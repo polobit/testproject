@@ -5142,10 +5142,9 @@ span.rolecontainer::first-letter {
 #agile-menu-navigation-container.navi ul.nav li a {
   padding-left: 45px;
 }
-.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a {
+.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a, .app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {
   padding-left: 0px; 
 }
-
 .agile-service-theme.theme-15 .i-checks input[disabled]:after, .agile-service-theme.theme-15 .i-checks input[disabled]:focus, .agile-service-theme.theme-15 .i-checks input[disabled]:hover {
     background-color: #dee5e7;
     border-color: #ececec;
@@ -5153,4 +5152,9 @@ span.rolecontainer::first-letter {
 .sms-draggable-noty:hover .move-icon{
  display:block!important;
  }
-
+ .grid-v2 {
+  display: none;
+}
+.grid-v1 {
+  display: block;
+}
