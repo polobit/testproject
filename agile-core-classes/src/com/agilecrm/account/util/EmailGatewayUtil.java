@@ -746,6 +746,10 @@ public class EmailGatewayUtil
 			if(StringUtils.isBlank(domain))
 				return;
 			
+			// If gateway exists return
+			if(isEmailGatewayExist())
+				return;
+			
 			Queue queue = QueueFactory.getQueue(AgileQueues.ACCOUNT_STATS_UPDATE_QUEUE);
 			SendGridSubAccountDeferred task = new SendGridSubAccountDeferred(domain);
 			task.setCheckSubUserExists(true);
