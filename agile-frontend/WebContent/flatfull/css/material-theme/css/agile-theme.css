@@ -2581,7 +2581,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 #send-reply-container #send-reply .arrow.bottom.arrow-light:after
 {
- border-top-color: rgb(207, 236, 254)!important;
+ border-top-color: rgb(231, 246, 255)!important;
 }
 .lpPreviewView label
 {
@@ -3165,8 +3165,8 @@ div.show-caret:hover>a.caret-btn
 #reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
   margin-top: 3px;
 }
- .agile-theme-15  ul.new-theme-ul{
-width: 169px !important;
+.agile-theme-15  ul.new-theme-ul{
+  width: 169px !important;
 }
 .grid-icon-header {
   display: none;
@@ -3196,3 +3196,40 @@ width: 169px !important;
 .portlet_header h4, .portlet_header .h4 {
     margin-bottom: 0px!important;
 }
+
+
+/*Service Module Changes Start*/
+
+#ticket-last-notes{
+  border: 0;
+}
+.public-notes-container .show-original-div>button:first-child{
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+.ticket-send-reply>button:nth-child(2){
+  border-radius: 4px !important;
+}
+.tkts-status-changed{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+.tkts-status-changed span.arrow.left{
+  border-right-color: transparent !important;
+}
+#tkts-status-changed-text{
+  font-size: 13px;
+}
+#send-reply-container span.arrow.bottom.arrow-light{
+  border-top-color: transparent !important; 
+}
+.ticket-subject, .ticket-id{
+  font-weight: 600px !important;
+  font-size: 14px !important;
+}
+form#new-ticket ul.chosen-choices{
+  height: 40px !important;
+  padding-left: 12px !important;
+  padding-top: 0px !important;
+}
+
+/*Service Module Changes End*/
