@@ -123,7 +123,7 @@ public class VisitorFilterAPI
 	JSONArray contacts = new JSONArray();
 	try
 	{
-		/*
+		
 	    int cursor = AnalyticsUtil.getIntegerValue(cursorString, 0);
 	    int count = AnalyticsUtil.getIntegerValue(countString, 20);
 	    if (StringUtils.isBlank(cursorString))
@@ -134,8 +134,8 @@ public class VisitorFilterAPI
 	    System.out.println(filter.segmentConditions);
 	    List<String> contactEmails = AnalyticsUtil.getEmails(filter.segmentConditions.toString(), startTimeString,
 		    endTimeString, countString, cursorString);
-	    contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails,null);
-	    */
+	    contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails);
+	   
 	}
 	
 	catch (Exception e)
