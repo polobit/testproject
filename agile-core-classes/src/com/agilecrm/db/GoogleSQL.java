@@ -572,7 +572,7 @@ public class GoogleSQL
     
     public static Connection getWebStatsServerConnection() throws PropertyVetoException, SQLException
     {
-	String url = "jdbc:google:mysql://agiledbs:us-central1:agile-sql-2gen/stats?user=root&password=GunsFounder127";
+	String url = "jdbc:mysql://104.197.76.249:3306/stats?user=root&password=GunsFounder127";
 	Connection conn = null;
 	
 	try
@@ -583,19 +583,19 @@ public class GoogleSQL
 		// Load the class that provides the new "jdbc:google:mysql://"
 		// prefix.
 		Class.forName("com.mysql.jdbc.Driver");
-		System.out.println("Google sql url is " + url);
+		//System.out.println("Google sql url is " + url);
 	    }
 	    else
 	    {
 		Class.forName("com.mysql.jdbc.Driver");
-		//url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
+		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
 		// Alternatively, connect to a Google Cloud SQL instance using:
 		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
 		
 		
-		    Class.forName("com.mysql.jdbc.Driver");
-		    conn = DriverManager.getConnection("jdbc:mysql://104.197.76.249:3306/stats", "root",
-			    "GunsFounder127");
+//		    Class.forName("com.mysql.jdbc.Driver");
+//		    conn = DriverManager.getConnection("jdbc:mysql://104.197.76.249:3306/stats", "root",
+//			    "GunsFounder127");
 		    
 		
 	    }
@@ -615,7 +615,7 @@ public class GoogleSQL
 	}
 	catch (Exception ex)
 	{
-	    System.out.println(" Error getting the connection object " + ex.getMessage());
+	    System.err.println(" Error getting the connection object " + ex.getMessage());
 	    ex.printStackTrace();
 	}
 	
