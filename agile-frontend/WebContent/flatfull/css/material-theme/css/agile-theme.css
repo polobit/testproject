@@ -3219,10 +3219,10 @@ div.show-caret:hover>a.caret-btn
 #send-reply-container span.arrow.bottom.arrow-light{
   border-top-color: transparent !important; 
 }
-.ticket-subject, .ticket-id{
+/*.ticket-subject, .ticket-id{
   font-weight: 600px !important;
   font-size: 14px !important;
-}
+}*/
 form#new-ticket ul.chosen-choices{
   height: 40px !important;
   padding-left: 12px !important;
