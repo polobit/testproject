@@ -97,7 +97,7 @@ AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
   if( !(SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) )
   {
 %>
-<%@ include file="file-hash.json"%>
+
 <%
   }
 %>

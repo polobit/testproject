@@ -325,7 +325,7 @@ var Ticket_Custom_Filters = {
 
 		  		var assigneeCollection = new Base_Collection_View({
 		  			data: Assingees_Collection.collection.toArray(),
-	 				url : '/core/api/users/partial',
+	 				url : '/core/api/tickets/groups/current-user/common-assignees',
 	 				templateKey : "ticket-lhs-assignees",
 	 				individual_tag_name : 'div'
 	 			});
@@ -336,7 +336,7 @@ var Ticket_Custom_Filters = {
 
 			  		var groupsCollection = new Base_Collection_View({
 			  			data : Groups_Collection.collection.toArray(),
-		 				url : '/core/api/tickets/groups',
+		 				url : '/core/api/tickets/groups/current-user',
 		 				templateKey : "ticket-lhs-groups",
 		 				individual_tag_name : 'div'
 		 			});

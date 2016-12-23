@@ -743,6 +743,29 @@ function initializePortletsListeners() {
 		});
 	});
 
+
+  $(".portlet_body").off('click','.sms-details');
+	$('.portlet_body').on('click', '.sms-details', function(e) {
+		e.preventDefault();
+		var data = $(this).closest('a').attr("data");
+
+		portlet_utility.getActivityObject(data, function(resp) {
+			console.log(resp);
+			getTemplate("smsModal", resp, undefined, function(template_ui) {
+				if (!template_ui)
+					return;
+
+				var emailinfo = $(template_ui);
+				emailinfo.modal('show');
+			}, null);
+		});
+	});
+
+
+
+
+
+
 	$('.portlet_body .activity-event-edit').off();
 	$('.portlet_body').on('click', '.activity-event-edit', function(e) {
 		e.preventDefault();

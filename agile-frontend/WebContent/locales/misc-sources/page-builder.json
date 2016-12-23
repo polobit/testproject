@@ -113,4 +113,9 @@
     "back-landingpage" : "{{agile_lng_translate 'landingpage-builder' 'back-landingpage'}}",
     "next-action" : "{{agile_lng_translate 'landingpages' 'next-action'}}",
     "publish-the-landing-page" : "{{agile_lng_translate 'landingpages' 'publish-the-landing-page'}}",
+    "choose-a-block-link" : "{{agile_lng_translate 'landingpage-builder' 'choose-a-block-link'}}",
+    "open-in-new-tab" : "{{agile_lng_translate 'landingpage-builder' 'open-in-new-tab'}}",
+    "text-to-display" : "{{agile_lng_translate 'landingpage-builder' 'text-to-display'}}",
+    "url" : "{{agile_lng_translate 'widgets' 'url'}}",
+    "validate-video-url" : "{{agile_lng_translate 'landingpage-builder' 'validate-video-url'}}",
 }

@@ -712,7 +712,7 @@ public class DealsAPI
 	    // in
 	    // the backend.
 	    OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-		    + SessionManager.get().getDomainId(), filter);
+			    + SessionManager.get().getDomainId(), filter);
 	}
 	catch (JSONException e)
 	{
@@ -1683,4 +1683,40 @@ public class DealsAPI
 
 	return ActivityUtil.getDealRelatedActivities(dealid, Integer.parseInt(count), cursor);
     }
+    /**
+     * Export list of opportunities. Create a CSV file with list of deals and
+     * add it as a attachment and send the email.
+     */
+    @Path("/exportList")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void exportSelectedOpportunities(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    {
+		try
+		{
+		    if (StringUtils.isNotEmpty(ids))
+		    {
+			JSONArray idsArray = new JSONArray(ids);
+			System.out.println("------------" + idsArray.length());
+		    }
+	      try{
+		    org.json.JSONObject filterJSON = new org.json.JSONObject(filters);
+		    System.out.println("------------" + filterJSON.toString());
+	      }
+	      catch(Exception e){
+	    	  e.printStackTrace();
+	      }
+	       
+	
+		    String uri = "/core/api/opportunity/backend/exportSelected/"+ SessionManager.get().getDomainId();
+	
+		    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+		}
+		catch (Exception je)
+		{
+		    je.printStackTrace();
+		}    
+    }
+
 }

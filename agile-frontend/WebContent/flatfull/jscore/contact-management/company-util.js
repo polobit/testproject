@@ -512,7 +512,8 @@
 		    	// Replaces old owner details with changed one
 				$('#contact-owner').text(new_owner_name);
 				$('#contact-owner').attr('data', new_owner_id);
-				
+				var changed_owner=model.toJSON().owner;
+           		$('.contact-owner-pic img').attr('src',changed_owner.pic);
 				// Showing updated owner
 				show_owner(); 
 				App_Companies.companyDetailView.model = model;

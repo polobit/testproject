@@ -8,6 +8,7 @@ String template = request.getParameter("template");
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <title>Form Builder</title>
+      <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
       <link href="misc/formbuilder/builder-themes.css?v=4" rel="stylesheet">
       <link href="misc/formbuilder/custom.css?v=3-3" rel="stylesheet">
@@ -73,6 +74,7 @@ String template = request.getParameter("template");
             </div>
             <!-- / whose components -->
          </div>
+         <div class="modal fade in" id="formNextActionModal" data-keyboard="false" data-backdrop="static"></div>
       </div>
       <!-- /container back -->
       <script data-main="misc/formbuilder/main-built-5.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>

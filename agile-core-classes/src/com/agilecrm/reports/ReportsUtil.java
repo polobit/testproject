@@ -1102,6 +1102,13 @@ public class ReportsUtil {
 		Calendar endCalendar = Calendar.getInstance(TimeZone
 				.getTimeZone(timeZone));
 		endCalendar.setTimeInMillis(maxTime * 1000);
+		boolean isDST=TimeZone.getTimeZone(timeZone).inDaylightTime(new Date(minTime*1000));
+		if(isDST)
+		{
+			int sec= TimeZone.getTimeZone(timeZone).getDSTSavings()/1000;
+			startCalendar.add(Calendar.SECOND,-sec);
+			endCalendar.add(Calendar.SECOND,-sec);
+		}
 		if (StringUtils.equalsIgnoreCase(frequency, "monthly")) {
 			startCalendar.set(Calendar.DAY_OF_MONTH, 1);
 			endCalendar.set(Calendar.DAY_OF_MONTH, 1);

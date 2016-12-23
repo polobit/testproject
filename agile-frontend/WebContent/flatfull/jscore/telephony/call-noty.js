@@ -270,7 +270,13 @@ if(message.state == "connected"){
 			globalCall.contactedContact = currentContact;
 			globalCall.contactedId = currentContact.id;
 		}
-		var btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+		var btns;
+		if(widgetype !=  "ozonetel"){
+			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+		}else{
+			$("#draggable_noty #call-noty-notes").val("");
+			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+		}
 		var json = {"callId": callId};
 		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 	});
@@ -293,6 +299,14 @@ if(message.state == "connected"){
 	
 	var btns = [];
 	showDraggableNoty(widgetype, globalCall.contactedContact , "busy", globalCall.callNumber, btns);
+	
+}else if(message.state == "noanswer" || message.state == "not_answered"){
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "Not Answered", globalCall.callNumber, btns);
+	
+}else if(message.state == "answered"){
+	var btns = [];
+	showDraggableNoty(widgetype, globalCall.contactedContact , "answered", globalCall.callNumber, btns);
 	
 }else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
 	closeCallNoty(true);
@@ -346,7 +360,11 @@ function showBriaCallNoty(message){
 			// write new noty code here ...
 
 }
-
+function showOzonetelCallNoty(message){
+	//_getMessageOzonetel(message);
+	ShowWidgetCallNoty(message);
+	return;
+}
 
 //added by prakash for skype call notification
 function showSkypeCallNoty(message){
@@ -385,6 +403,7 @@ function showCallNotyMessage(message,type,position,timeout){
 
 function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	notifications_sound = false;
+	var callnotes = $("#agilecrm-container #call-noty-notes").val();
 	var w = widgetName;
 	//var c = contact;
 	var c = {};
@@ -403,8 +422,11 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	var msg = {};
 	msg['buttons'] = arr;
 	c.msg = msg;
-	showDraggablePopup(c);
+	showDraggablePopup(c, "call");
 	$("#noty_text_msg").html(txt);
+	if(widgetName == "ozonetel" || widgetName == "Ozonetel"){
+		$("#draggable_noty #call-noty-notes").val(callnotes);
+	}
 	if(s == "connected"){
 		if(widgetName == "Twilioio"){
 			//makeDraggableVoicemail();
@@ -431,16 +453,13 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 			$(".noty_call_callScript","#draggable_noty").data("contact",contact);
 		}
 	}
-	
-	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed"){
+	if(s == "missedCall" || s == "missed" || s == "busy" || s == "failed" || s == "Not Answered"){
 		$("#draggable_noty").show().delay(5000).hide(1);
 		notifications_sound = true;
 	}
 }
 
-
-function showDraggablePopup(param){
-	
+function showDraggablePopup(param, sms){
 	var position = _agile_get_prefs("dragableNotyPosition");
 	var flag = false;
 	var y = $(window).height()-200;
@@ -451,8 +470,14 @@ function showDraggablePopup(param){
 		x = a[0]*1;
 		y = a[1]*1;
 	}
-	var popup = $(getTemplate("call-noty",param));
-	//$(".noty_twilio_voicemail").html("<img src='../widgets/voicemail.png' />");
+
+	  if(sms == "sms"){
+        var popup = $(getTemplate("sms-noty",param));
+        $("#draggable_noty .draggable_noty_notes").html("");
+    }
+    else
+    	var popup = $(getTemplate("call-noty",param));
+    
 	$("#draggable_noty .draggable_noty_info").html(popup);
 	$("#draggable_noty").css({'left':x,'top': y});
 	$(".icon-call-out").css({'font-size':'12px'});
@@ -510,6 +535,10 @@ function makeDraggableMessage(status){
 		return "Call Failed";
 	}else if(status == "busy"){
 		return "Call Busy";
+	}else if(status == "Not Answered"){
+		return "Call not answered";
+	}else if(status == "answered"){
+		return "Call completed";
 	}else if(status == "dialing"){
 		return "Dialing <img src='/img/ajax-loader-cursor.gif' width='15px' height='5px'  style='margin-left:8px;margin-right:-3px;'></img>";
 	}else{
