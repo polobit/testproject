@@ -793,8 +793,8 @@ header .bg-white a, header button.show-search-dropdown {
   margin-top: -7px!important;
 }
 #widgets-model-list h4,#widgets-model-list .h4,#widgets-model-list h5,#widgets-model-list .h5,#widgets-model-list h6,#widgets-model-list .h6
-{
-
+{ 
+    margin-bottom: -5px!important;
 }
 .contact-right-widgetsview i
 {
@@ -3176,4 +3176,23 @@ width: 169px !important;
 }
 .grid-v2 {
   display: block;
+}
+.agile-theme-15 #admin-settings-users .panel-heading>div:first-child
+{
+  display:block;
+  font-size: 20px;
+  color:#11A0F8;
+}
+
+#custom-fields-accordion .collapse.in{
+      box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+#custom-fields-accordion .panel-title>a{
+      font-size: 14px !important
+}
+ .tickets-main .wrapper.bg-light button{
+  font-weight: normal !important;
+}
+.portlet_header h4, .portlet_header .h4 {
+    margin-bottom: 0px!important;
 }

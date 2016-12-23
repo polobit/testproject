@@ -5161,3 +5161,9 @@ span.rolecontainer::first-letter {
 .grid-v1 {
   display: block;
 }
+.theme-beta-tag
+{
+  position: absolute;
+    top: 88%;
+    left: 77%;
+}
