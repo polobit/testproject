@@ -108,6 +108,7 @@ var WidgetsRouter = Backbone.Router
                                     $(that).height(socialHeight);
                                 });
                             }, 1000);*/
+                            $('#settings-widgets-tab-content').find('#call div:nth-child(6)').css({"display":"none"});
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
