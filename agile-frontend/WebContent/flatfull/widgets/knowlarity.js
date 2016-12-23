@@ -332,7 +332,7 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 								var json = {"callId": customerNumber};
 								showDraggableNoty("Knowlarity", globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
 							});									
-						}else if(KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
+						}else if(KNOWLARITY_PREVIOUS_EVENT && KNOWLARITY_PREVIOUS_EVENT == "ORIGINATE" && eventType == "BRIDGE"){
 							KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
