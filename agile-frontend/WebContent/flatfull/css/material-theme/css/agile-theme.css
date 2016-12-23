@@ -3249,3 +3249,7 @@ width: 169px !important;
 #tickets-inner{
   border-bottom: 1px solid #dee5e7 !important;
 }
+.agile-theme-15 #triggersmenu i.icon-magic-wand {
+    color: #78909c !important;
+    font-weight: bold;
+}

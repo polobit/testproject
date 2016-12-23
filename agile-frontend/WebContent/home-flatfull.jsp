@@ -804,7 +804,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </li>
     <li id="triggersmenu">
       <a  href="#triggers">
-        <i class="icon icon-magic-wand"></i>
+        <i class="icon icon-magic-wand" style="display:block !important"></i>
         <i class="material-icons hidden-icon" style="display: none">play_for_work</i>
         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">play_for_work</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
