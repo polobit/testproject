@@ -804,9 +804,9 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </li>
     <li id="triggersmenu">
       <a  href="#triggers">
-        <i class="icon icon-magic-wand"></i>
-        <i class="material-icons hidden-icon" style="display: none">merge_type</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">merge_type</i> 
+        <i class="icon icon-magic-wand" style="display:block !important"></i>
+        <i class="material-icons hidden-icon" style="display: none">play_for_work</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">play_for_work</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "triggers") %></span>
       </a>
     </li>
@@ -816,8 +816,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
     <li id="email-templates-menu">
       <a href="#email-templates">
         <i class="icon-envelope-letter"></i>
-        <i class="material-icons hidden-icon" style="display: none">art_track</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">art_track</i> 
+        <i class="material-icons hidden-icon" style="display: none">email</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">email</i> 
         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "email-templates") %></span>
       </a>
     </li>
@@ -888,8 +888,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
    <li id="segmentationmenu">
     <a  href="#visitors">
        <i class="icon-eye"></i>
-        <i class="material-icons hidden-icon" style="display: none">person_pin_circle</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">person_pin_circle</i> 
+        <i class="material-icons hidden-icon" style="display: none">visibility</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">visibility</i> 
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-visitors") %></span> 
     </a>
   </li>
