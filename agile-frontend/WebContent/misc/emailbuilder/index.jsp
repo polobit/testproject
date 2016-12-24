@@ -79,7 +79,7 @@ var localeJSON = <%=localeJSON%>;
             <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
 
                 <div id="tosave" style="overflow-y:auto;overflow-x:hidden;padding-bottom:30px;height: 800px;">
-                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee; font-family: Arial;font-size: 12px;line-height: 21px;color: #000000;" >
+                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px;line-height: 21px;color: #000000;" >
                         <tr>
                             <td width="100%" id="primary" class="main demo" align="center" valign="top" >
                                 <div class="column" style="min-height:150px;">
@@ -189,23 +189,23 @@ var localeJSON = <%=localeJSON%>;
     <div class="col-sm-8">
         <select class="form-control font-family-picker">
 
-        <option style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
-        <option style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
-        <option style="font-family: Georgia, Times, 'Times New Roman', serif">Georgia</option>
-        <option style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica</option>
-        <option style="font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Geneva, Verdana, sans-serif">Lucida Sans</option>
-        <option style="font-family: Tahoma, Verdana, Segoe, sans-serif">Tahoma</option>
-        <option style="font-family: TimesNewRoman, 'Times New Roman', Times, Beskerville, Georgia, serif">Times New Roman</option>
-        <option style="font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Trebuchet MS</option>
-        <option style="font-family: Verdana, Geneva, sans-serif">Verdana</option>
-        <option style="font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif">Bitter</option>
-        <option style="font-family: 'Droid Serif', Georgia, Times, 'Times New Roman', serif">Droid Serif</option>
-        <option style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif">Lato</option>
-        <option style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Open Sans</option>
-        <option style="font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif">Roboto</option>
-        <option style="font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif"> Source Sans Pro</option>
-        <option style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Montserrat</option>
-        <option style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
+        <option value= 'Arial, "Helvetica Neue", Helvetica, sans-serif' style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
+        <option value='"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace' style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
+        <option value='Georgia, Times, "Times New Roman", serif' style="font-family: Georgia, Times, 'Times New Roman', serif">Georgia</option>
+        <option value='"Helvetica Neue", Helvetica, Arial, sans-serif' style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica</option>
+        <option value='"Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Geneva, Verdana, sans-serif' style="font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Geneva, Verdana, sans-serif">Lucida Sans</option>
+        <option value='Tahoma, Verdana, Segoe, sans-serif' style="font-family: Tahoma, Verdana, Segoe, sans-serif">Tahoma</option>
+        <option value='TimesNewRoman, "Times New Roman", Times, Beskerville, Georgia, serif' style="font-family: TimesNewRoman, 'Times New Roman', Times, Beskerville, Georgia, serif">Times New Roman</option>
+        <option value='"Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif' style="font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Trebuchet MS</option>
+        <option value='Verdana, Geneva, sans-serif' style="font-family: Verdana, Geneva, sans-serif">Verdana</option>
+        <option value='Bitter, Georgia, Times, "Times New Roman", serif' style="font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif">Bitter</option>
+        <option value='"Droid Serif", Georgia, Times, "Times New Roman", serif' style="font-family: 'Droid Serif', Georgia, Times, 'Times New Roman', serif">Droid Serif</option>
+        <option value='Lato, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif">Lato</option>
+        <option value='"Open Sans, "Helvetica Neue", Helvetica, Arial, sans-serif' style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Open Sans</option>
+        <option value='Roboto, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif">Roboto</option>
+        <option value='"Source Sans Pro", Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif"> Source Sans Pro</option>
+        <option value='Montserrat, "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif' style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Montserrat</option>
+        <option value='Ubuntu, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
 
     </select>
             </div>

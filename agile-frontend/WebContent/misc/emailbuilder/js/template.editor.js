@@ -1427,9 +1427,9 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $('#custom-val').on('click', function(){
         
         //font styles of template
-        $('#customize').find('.font-family-picker :selected').val($('#tosave').find('table:first').css('font-family'));
-        $('#customize').find('.font-size-picker :selected').val($('#tosave').find('table:first').css('font-size'));
-        $('#customize').find('.line-height-picker :selected').val($('#tosave').find('table:first').css('line-height'));
+        $('#customize').find('.font-family-picker').val($('#tosave').find('table:first').css('font-family'));
+        $('#customize').find('.font-size-picker').val($('#tosave').find('table:first').css('font-size'));
+        $('#customize').find('.line-height-picker').val($('#tosave').find('table:first').css('line-height'));
 
         //template background color
         $('#customize').find('#background-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
@@ -1447,7 +1447,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $('.font-family-picker').on('change', function(){
         console.log($(this));
-        $('#tosave').find('table:first').css('font-family', $(this).find('option:selected').css('font-family'));
+        $('#tosave').find('table:first').css('font-family', $(this).val());
     });
 
     $('.font-size-picker').on('change', function(){
