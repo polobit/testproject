@@ -49,11 +49,13 @@ function chainWebRules(el, data, isNew, actions)
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value == "CALL_POPUP")
 			{
-				if(value == "MODAL_POPUP"  || value=="CALL_POPUP" || value == "REQUEST_PUSH_POPUP")
-				$("#tiny_mce_webrules_link", self).show();
+				if(value == "MODAL_POPUP") {
+					$("#tiny_mce_webrules_link", self).show();
+				}
 
 				if(value=="CALL_POPUP"){
-					loadSavedTemplate("call/callpopup.html");
+					// loadSavedTemplate("call/callpopup.html");
+					$("#tiny_mce_webrules_link", self).show();
 					$.ajax({
 						url: '/core/api/sms-gateway/twilio',
 						type : 'GET',
@@ -68,12 +70,12 @@ function chainWebRules(el, data, isNew, actions)
 				self.find(".web-rule-preview").show();
 			return;
 			} else if(value == "SITE_BAR") {
-				loadSavedTemplate("bar/sitebar.html");
+				// loadSavedTemplate("bar/sitebar.html");
 				$("#tiny_mce_webrules_link", self).show();
 				self.find(".web-rule-preview").show();
 				return;
 			}else if(value == "REQUEST_PUSH_POPUP"){
-				loadSavedTemplate("pushnoty/pushnoty.html");
+				// loadSavedTemplate("pushnoty/pushnoty.html");
 				$("#tiny_mce_webrules_link", self).show();
 				self.find(".web-rule-preview").show();
 				return;
@@ -87,7 +89,7 @@ function chainWebRules(el, data, isNew, actions)
 	
 	
 	if(data && data.actions)
-		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
+		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone);
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
@@ -140,6 +142,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
 					$(".webrule-actions").append(htmlContent);
+					$(htmlContent).find(".actionSelectBox").trigger("change");
 
 				}, null);
 
@@ -429,4 +432,25 @@ function webruleVideoPopup(){
        data.title="Web Rules Tutorial";
        data.videourl="//www.youtube.com/embed/NcUFum-_kqE?enablejsapi=10&amp;autoplay=1";
        showHelpVideoModal(data);
+}
+
+function setupTinymceForWebRulePopups() {
+	if(typeof tinymce != "undefined")
+		tinymce.EditorManager.execCommand("mceRemoveEditor", false, "tinyMCEhtml_email");
+	setupTinyMCEEditor("#tinyMCEhtml_email", false, undefined, function(){});
+}
+
+function initializeWebRuleActionListeners() {   
+    $('#content').on('change', '.actionSelectBox', function(e){
+        var action = $(e.target).val();
+    	if(action == "MODAL_POPUP") {
+			setupTinymceForWebRulePopups();
+		} else if(action == "CALL_POPUP") {
+			loadSavedTemplate("call/callpopup.html",setupTinymceForWebRulePopups);
+		} else if(action == "SITE_BAR") {
+			loadSavedTemplate("bar/sitebar.html",setupTinymceForWebRulePopups);
+		} else if(action == "REQUEST_PUSH_POPUP") {
+			loadSavedTemplate("pushnoty/pushnoty.html",setupTinymceForWebRulePopups);
+		}
+    });
 }

@@ -5056,3 +5056,10 @@ border-top: 0px !important;
 {
   top:-1px!important;
 }
+
+.web-rule-popup-textarea {
+  display: none !important;
+}
+.web-rule-actions-table i {
+  font-size: 16px !important;
+}

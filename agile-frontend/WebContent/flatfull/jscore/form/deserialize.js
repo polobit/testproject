@@ -596,6 +596,7 @@ function deserializeChainedElementWebrule(data, rule_element)
 				{
 					$(input_element).val(value.value);
 				}
+				setupTinymceForWebRulePopups();
 				// setupHTMLEditor($(input_element), value.value);
 				// }
 				// else
