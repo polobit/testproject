@@ -811,7 +811,7 @@ $(document).ready(function () {
         $(this).attr("target","_blank");
     });
 
-    $(document).on('change', '#image-link,#image-alt-text,#image-w,#image-h,#video-link', function(e){
+    $(document).on('change', '#image-link,#image-alt-text,#image-w,#image-h,#video-link,#image-url', function(e){
         e.preventDefault();
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());
