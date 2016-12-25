@@ -510,8 +510,9 @@ var emailVideoRecord = {
 
     buildVideoPageURL : function(videoId) {
         var videoURL = window.location.origin + "/video/" + videoId + "?n={{first_name}}&c={{owner.calendar_url}}";
-        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL).trigger("change");
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL).trigger('change');
         $("#videoRecordModal").modal("hide");
+        document.getElementById("emailBuilderFrame").contentWindow.$("#image-url").trigger('change');
     }
 
 };
