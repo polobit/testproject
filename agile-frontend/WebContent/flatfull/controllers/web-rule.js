@@ -220,6 +220,9 @@ var WebreportsRouter = Backbone.Router.extend({
 
             getTemplate("webrule-categories", null, undefined, function(ui){
             	$("#webrule-listeners").append($(ui));
+            	getTemplate("webrule-templates-list", null, undefined, function(ui2){
+            		$("#webrule-listeners").find("#web-rule-templates-holder").html(ui2);
+            	});
             },"#webrule-listeners");
 
             

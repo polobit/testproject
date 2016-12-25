@@ -111,7 +111,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 		 		'click i.filter-contacts-web-rule-multiple-add' : 'webruleMultipleAdd',
 		 		'click i.filter-contacts-web-rule-multiple-remove' : 'webruleMultipleRemove',
 		 		'click .web-rule-preview' : 'webrulePreview',
-		 		'click #tiny_mce_webrules_link' : 'tinymceWebruleLink',
+		 		'click #tiny_mce_webrules_link' : 'openWebRuleTemplateModal',
 		 		'change #uploadImageToS3Btn' : 'uploadImageToS3BtnChange',
 		    },
 
@@ -245,6 +245,58 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 		        var fileInput = document.getElementById('uploadImageToS3Btn');
 		        uploadImageToS3ThroughBtn(fileInput.files[0],e.currentTarget.parentElement.getElementsByClassName("btn")[0]);
     		},
+
+    		openWebRuleTemplateModal : function(e) {
+    			e.preventDefault();
+
+    			$("#modal-backdrop").hide();
+		        var $webRuleTemplatesModal = $("#webRuleTemplatesModal");
+		        getTemplate("webrule-templates-modal",{}, undefined, function(ui){
+		        	$webRuleTemplatesModal.html(ui).modal("show");
+		        	getTemplate("webrule-templates-list",{}, undefined, function(ui2){
+		        		$webRuleTemplatesModal.find("#web-rule-templates-holder").html(ui2);
+		        		
+		        		$webRuleTemplatesModal.find(".web_fancybox").attr("onclick","return false;");
+						$webRuleTemplatesModal.find(".web_fancybox").removeClass("web_fancybox");
+						$webRuleTemplatesModal.find("img").attr("onclick","return false;");	
+
+						$('#webRuleTemplatesModal').off('click', '.panel a.btn');
+						$('#webRuleTemplatesModal').on('click', '.panel a.btn', function(e){
+							e.preventDefault();
+							
+							var path = $(this).parent().parent().find(".theme-preview a").attr("data-link");
+							var actions_list = $("#action select");
+							$.each(actions_list,function(k,v) {						
+								
+								if(actions_list[k].value === "MODAL_POPUP" ||
+									actions_list[k].value === "CALL_POPUP" ||
+									actions_list[k].value === "SITE_BAR" ||
+									actions_list[k].value === "REQUEST_PUSH_POPUP") {									
+
+									if(path.includes("callpopup.html")) {
+										actions_list[k].value = "CALL_POPUP";
+										$(actions_list[k]).trigger("change");
+									} else if(path.includes("sitebar.html")) {
+										actions_list[k].value = "SITE_BAR";
+										$(actions_list[k]).trigger("change");
+									} else if(path.includes("pushnoty.html")) {
+										actions_list[k].value = "REQUEST_PUSH_POPUP";
+										$(actions_list[k]).trigger("change");
+									} else {
+										actions_list[k].value = "MODAL_POPUP";
+										$(actions_list[k]).trigger("change");
+										loadSavedTemplate(path,setupTinymceForWebRulePopups);
+									}
+								}
+															
+							});
+
+							$webRuleTemplatesModal.find(".close").trigger("click");
+						});
+
+		        	});
+		        });
+    		}
 
 		});
 
