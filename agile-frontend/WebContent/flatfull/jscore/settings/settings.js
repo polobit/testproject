@@ -321,21 +321,6 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		}, optionsTemplate, false, el);
 	},
 
-	onOfficeFoldersOptionsSelect :  function(e){
-		e.preventDefault();
-		var target_el = $(e.currentTarget);
-
-		var el = $(target_el).closest("div");
-		var id = $(target_el).attr("oid");
-		$(target_el).css("display", "none");
-		el.find(".office-folders-select").css("display", "inline");
-		var optionsTemplate = "<option {{selected}}>{{name}}</option>";
-		fillSelect('office-folders-multi-select', 'core/api/office/' + id
-				+ '/office-folders', 'folders', function fillNew() {
-			$("#office-folders-multi-select .default-select", el)
-					.remove();
-		}, optionsTemplate, false, el);
-	},
 
 	/**
 	 * To cancel the imap folder settings
@@ -348,17 +333,6 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		el.find('#imap-folders-multi-select').empty();
 		el.find(".imap-folders-select").css("display", "none");
 		el.find(".imap-folders-settings-click").css("display", "inline");
-	},
-
-
-	onOfficeFoldersOptionsCancel :  function(e){
-		e.preventDefault();
-		var target_el = $(e.currentTarget);
-
-		var el = $(target_el).closest("div");
-		el.find('#office-folders-multi-select').empty();
-		el.find(".office-folders-select").css("display", "none");
-		el.find(".office-folders-settings-click").css("display", "inline");
 	},
 
 
@@ -402,6 +376,25 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		el.find(".office-share-settings-txt").css("display", "inline");
 	},
 
+	/**
+	 * Select Office folder, will fetch mails from these folders
+	 */
+	onOfficeFoldersOptionsSelect :  function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+		if($(target_el).hasClass("text-info")){
+			$(target_el).removeClass("text-info").removeAttr("style").addClass("m-b-md");
+			$(target_el).find("i").removeClass("icon-plus-sign").addClass("icon-minus-sign");
+			$(".office-folders-select").show();
+
+		}else{
+			$(target_el).removeClass("m-b-md").addClass("text-info").css("color", "#23b7e5");
+			$(target_el).find("i").removeClass("icon-minus-sign").addClass("icon-plus-sign");
+			$(".office-folders-select").hide();
+		}
+
+	},
+
 
 	events: {
 		'click .gmail-share-settings-select': 'onGmailShareOptionsSelect',
@@ -412,8 +405,7 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		'click .imap-folders-settings-cancel': 'onImapFoldersOptionsCancel',	
 		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
 		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',
-		'click .office-folders-settings-click': 'onOfficeFoldersOptionsSelect',
-		'click .office-folders-settings-cancel': 'onOfficeFoldersOptionsCancel',	
+		'click .office-folders-settings-click': 'onOfficeFoldersOptionsSelect',	
 	},
 
 });

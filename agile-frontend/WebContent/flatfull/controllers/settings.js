@@ -420,6 +420,7 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Gets Office Prefs
+					var i = 0;
 					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
 						postRenderCallback : function(el)
 						{
@@ -435,7 +436,11 @@ var SettingsRouter = Backbone.Router
 								itemView3.render(true);
 								var el = itemView3.el;
 								var model = itemView3.model;
-								load_office_folders(el, model);
+								if(i == 2){
+									load_office_properties(model, el);
+								}
+								i++;
+
 							}
 							// $("#office-prefs-form").find("#office-password").val("");
 							// App_Settings.navigate("email", { trigger : true });
@@ -469,13 +474,17 @@ var SettingsRouter = Backbone.Router
 					var office_model = App_Settings.officeListView.collection.get(id);
 
 					// Gets Office Prefs
+					var i = 0;
 					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
 						postRenderCallback : function(el)
 						{
 							var model = itemView3.model;
 							var id = model.id;
 							itemView3.model.set("password", "");
-							load_office_properties(model, el);
+							if(i == 2){
+								load_office_properties(model, el);
+							}
+							i++;
 
 						}, saveCallback : function()
 						{
