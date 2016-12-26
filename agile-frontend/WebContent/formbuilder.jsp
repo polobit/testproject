@@ -1,3 +1,9 @@
+<%@page import="com.agilecrm.customtheme.util.CustomThemesUtil"%>
+<%@page import="com.agilecrm.customthemes.CustomTheme"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONObject"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONArray"%>
+<%@page import="com.google.appengine.repackaged.com.google.gson.Gson"%>
 <%
 String formId = request.getParameter("form");
 String template = request.getParameter("template");
@@ -14,7 +20,12 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/custom.css?v=3-4" rel="stylesheet">      
       <link href="misc/formbuilder/builder-themes.css?v=5" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css?t=1" rel="stylesheet">
-     
+      <!-- <link href="flatfull/css/min/lib-all-new.css" rel="stylesheet"> -->
+      <link href="misc/formbuilder/formthemes.css?t=2" rel="stylesheet">
+      <script src="misc/formbuilder/formthemes/jscolor.js"></script>
+      <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
+      <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
+      
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -33,12 +44,12 @@ String template = request.getParameter("template");
            }
          .tooltip.in{opacity:1 !important;}
       </style>
-	<script>
-		var formNumber = <%=formId%>;
+  <script>
+    var formNumber = <%=formId%>;
    <% if(template != null) { %>
    var formTemplate = '<%=template%>';
    <% } %>
-	</script>
+  </script>
 
    </head>
    <body>
@@ -70,6 +81,333 @@ String template = request.getParameter("template");
                <div class="clearfix">
                   <!-- <h2 id="form-label">Your Form</h2> -->
                   <!-- <input id="form-save" type="button" class="btn btn-info" value="Save Form"> -->
+                 
+                  <div class="form-group themesSelectEleDiv col-md-4" style="margin-top: -35px;margin-left: 230px;padding-right: 10px;">
+                    <select class="form-control themesSelectEle">
+                      <option id="chooseTheme">Choose Theme</option>
+                      <option id="addNewTheme">+ Add new</option>
+                    </select>
+                  </div>
+            <div class="modal fade" id="customThemeModal" role="dialog">
+                      <div class="modal-dialog" style="width: 1032px;height: 365px;left:0px;">
+    
+                         <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
+                        <div class="modal-title">
+                        <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="15"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
+
+                      </div>
+                        </div>
+                        
+                        <div class="modal-body" style="height: 400px;">
+                        
+    <!--ThemeBuilder Div-->
+    <div class ="col-sm-6 outerSelectTheme" >
+      <!--Select Div Start-->
+      <div class="selectDiv">
+        <label>Select</label>
+          
+            <div class="">
+              <select class="form-control">
+                  <option value="alignment">Alignment</option>
+                  <option value="border">Border</option>
+                  <option value="font">Font</option>
+                  <!--<option value="background">Background</option> --> 
+                  <option value="color">Color</option>
+               </select>
+              </div>
+      </div>
+      <!--Select Div End-->
+      
+      <!--Alignment Div Start-->
+      <div class="outerAlignmentTheme">
+        <!--Align Form Elements Start-->
+        <div class="innerAlignmentTheme innerAlignmentFormEle">
+          <label>Form Elements</label>
+          <div class="">
+            <select class="form-control">
+                <option value="formtitle">Form Title</option>
+                  <!-- <option value="submitbutton">Submit Button</option> -->
+              </select>
+            </div>
+        </div>
+        <!--Align Form Elements Start-->
+        <!--Align Start-->
+        <div class="innerAlignmentTheme innerAlignmentAlignStart">
+          <span style="font-weight: bold;">Align</span>
+          <div class="">
+            <select class="form-control">
+                  <option value="center">Center</option>
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                  
+              </select>
+            </div>
+        </div>
+        <!--Align End-->
+      </div>
+      <!--Alignment Div End-->
+      <!--Border Div Start -->
+        <div class="outerBorderTheme">
+          <!-- Border Form Elements Start-->
+          <div class="innerBorderTheme innerBorderThemeFormEle ">
+            <label>Form Elements</label>
+            <div>
+              <select class="form-control">
+                <option>Form</option>
+              </select>
+            </div>
+          </div>
+          <!-- Border Form Elements End-->
+          <!-- Border Width Start-->
+          <div class="innerBorderTheme innerBorderWidthTheme">
+            <label>Width</label>
+            <div>
+              <select class="form-control">
+                <option>None</option>
+                <option>Thin</option>
+                <option>Medium</option>
+                <option>Thick</option>
+              </select>
+            </div>
+          </div>
+          <!-- Border Width End-->
+          <!-- Border Style Start-->
+          <div class="innerBorderTheme innerBorderStyleTheme">
+            <label>Border Style:</label>
+            <div class="ulDiv"> 
+              <ul>
+                <li class="selected"><p class="solidBorder" name="solid"></p></li>
+                <li><p class="dottedBorder" name="dotted"></p></li>
+                <li><p class="dashedBorder" name="dashed"></p></li>
+                <li><p class="doubledBorder" name="doubled"></p></li>
+              </ul>
+            </div>
+          </div>
+          <!-- Border Style End-->
+          <!-- Border Color Start-->
+          <!-- <div class="innerBorderTheme colorTheme innerBorderColorTheme">
+            <div><label>Choose Color</label></div>
+             <input class="jscolor innerColorTheme" style="color:#000000;" size="11" value="000000">
+          </div> -->
+          <!-- Border Color End-->
+        </div>
+      <!--Border Div  End-->
+
+      <!--Font Div Start-->
+      <div class="outerFontTheme">
+         <!--Font Form Elements Start -->
+        <div class="innerFontTheme innerFontEleTheme">
+          <label>Form Elements</label>
+          <div>
+              <select class="form-control">
+                <option>Title</option>
+                <option>Field Label</option>
+                <option>Button Text</option>
+              </select>
+            </div>
+        </div>
+        <!--Font Form Elements End -->
+        <!--Font Type Start -->
+        <div class="innerFontTheme innerFontFamilyTheme">
+          <label>Font</label>
+          <div>
+              <select class="form-control">
+                <option value="Arial,Arial,Helvetica,sans-serif">Arial</option>
+                <option value="Arial Black,Arial Black,Gadget,sans-serif">Arial Black</option>
+                <option value="Courier New,Courier New,Courier,monospace">Courier New</option>
+                <option value="Georgia,Georgia,serif">Georgia</option>
+                <option value="Impact,Charcoal,sans-serif">Impact</option>
+                <option value="Lucida Console,Monaco,monospace">Lucida Console</option>
+                <option value="Lucida Sans Unicode,Lucida Grande,sans-serif">Lucida Sans Unicode</option>
+                <option value="Palatino Linotype,Book Antiqua,Palatino,serif">Palatino Linoty</option>
+                <option value="Tahoma,Geneva,sans-serif">Tahoma</option>
+                <option value="Times New Roman,Times,serif">Times New Roman</option>
+                <option value="Trebuchet MS,Helvetica,sans-serif">Trebuchet MS</option>
+                <option value="Verdana,Geneva,sans-serif">Verdana</option>
+                <option value="Gill Sans,Geneva,sans-serif">Gill Sans</option>
+
+              </select>
+            </div>
+        </div>
+        <!--Font Type End -->
+        <div class="row">
+        <!--Font Style Start -->
+        <div class="innerFontTheme innerFontStyleDiv col-md-4">
+          <label>Font Style</label>
+          <div class="innerFontSizeUlDiv">
+            <select class="form-control" style="padding:0px;">
+              <option value="normal">Normal</option>
+              <option value="italic">Italic</option>
+            </select>
+          </div>
+
+        </div>
+        <!--Font Style End-->
+        <!--Font Weight Start -->
+        <div class="innerFontTheme innerFontWeightDiv col-md-4">
+          <label>Font Weight</label>
+          <div class="innerFontSizeUlDiv">
+            <select class="form-control" style="padding:0px;">
+              <option value="normal">Normal</option>
+              <!-- <option value="lighter">Lighter</option> -->
+              <option value="bold">Bold</option>
+              <!-- <option value="bolder">Bolder</option> -->
+            </select>
+          </div>
+        </div>
+        <!--Font Weight End -->
+        <!--Font Size Start -->
+        <div class="innerFontTheme innerFontSizeDiv col-md-4">
+          <label>Font Size</label>
+          <div class="innerFontSizeUlDiv">
+            <select class="form-control" style="padding:0px;">
+              <option>8</option>
+              <option>10</option>
+              <option>12</option>
+              <option>14</option>
+              <option>18</option>
+              <option>24</option>
+              <option>28</option>
+              <option>34</option>
+              <option>54</option>
+              <option>78</option>
+            </select>
+          </div>
+        </div>
+        <!--Font Size End -->
+        </div>
+        <!--Font Color Start -->
+        <!-- <div class="innerFontTheme colorTheme">
+          <div class="colorTheme">
+            <div><label>Choose Color</label></div>
+             <input class="jscolor innerColorTheme" style="color:#000000;" size="11" value="000000">
+          </div>
+        </div> -->
+        <!--Font Color End -->
+      </div>
+      <!--Font Div End-->
+      <!--Background ThemeComponent Start -->
+      <!--<div class="outerBackgroundTheme">
+        
+        <div class="innerBackgroundTheme innerBackgroundFormEle">
+          <label>Form Elements</label>
+          <div>
+            <select>
+              <option>Form</option>
+              <option>Header</option>
+              <option>Body</option> 
+              <option>Footer</option>
+              <option>Button</option>
+            </select>
+          </div>
+        </div>
+       
+        <div class="innerBackgroundTheme innerBackgroundImageTheme">
+          <div class="ulDiv bgImgLit">
+            <ul>
+              <li class="selected" name="img1">
+                <img src="" alt="" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/0.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/1.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/4.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/5.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/28.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/9.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/15.png" alt="Smiley face" height="42" width="42">
+              </li>
+              <li>
+                <img src="/misc/landingpage/public/images/textures/16.png" alt="Smiley face" height="42" width="42">
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="innerBackgroundTheme colorTheme">
+          <div class="colorTheme">
+            <div><label>Choose Color</label></div>
+             <input class="jscolor innerColorTheme" style="color: rgb(0, 0, 0);" size="11" value="FFFFFF
+             ">
+          </div>
+        </div>
+        
+      </div>-->
+      <!--Background ThemeComponent End -->
+      <!--Color ThemeComponent Start -->
+      <div class="outerColorThemeEle">
+        <div class="innerColorThemeEle">
+           <label>Form Elements</label>
+          <div>
+            <select class="form-control">
+                <option value="formBorder">Form Border</option>
+                <option value="formBackground">Form Background</option>
+                <option value="title">Title</option>
+                <option value="fieldLabel">Field Label</option>
+                <option value="buttonText">Button Text</option>
+                <option value="buttonBackground">Button Background</option>
+            </select>
+          </div>
+        </div>
+        <div class="innerColorThemeEle">
+          <div class="colorTheme">
+            <label>Choose Color</label>
+             <input class="jscolor innerColorTheme form-control" style="color: rgb(0, 0, 0);" size="11" value="000000
+             ">
+          </div>
+        </div>
+      </div>
+      <!--Color ThemeComponent End -->
+    </div>
+    <!--ThemeBuilder Div-->                  
+    <div class="col-sm-6 createCustomFormContent" style="margin:0 auto;width:450px;margin-top:20px;margin-left: 10%;">
+    </div>
+        </div>
+              <div class="modal-footer">
+              
+                <button type="button" class="btn btn-sm btn-default" onclick="closeAddTheme()" data-dismiss="modal" >Close</button>
+                <button type="button" class="btn btn-sm btn-primary save" style="color: #fff;background-color: #7266ba;/*margin-right: 44px;float: right;*/text-align: center;" onclick="saveCustTheme()">Save</button>
+              </div>
+             </div>
+      
+                     </div>
+                  </div>
+
+                <!-- Apply or delete theme popup--> 
+                <div class="modal fade" id="customThemeAppyDelModal" role="dialog">
+                    <div class="modal-dialog" style="    left: 0;position: static;margin-top: 107px;margin-left: 504px;height: 68px;width: 250px;">
+                      
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" id="closetheme" class="close" data-dismiss="modal" onclick="closeApplyTheme(this)">&times;</button>
+                          <div class="modal-title">Choose the option</div>
+                        </div>
+                        <div class="modal-body">
+                         <button type="button" id="applytheme" class="btn btn-sm btn-default" onclick="closeApplyTheme(this)" data-dismiss="modal">Apply Theme</button>
+                         <button type="button" id="deltheme" class="btn btn-sm btn-default" onclick="closeApplyTheme(this)" data-dismiss="modal">Delete Theme</button>
+                        </div>
+                        <!-- <div class="modal-footer"></div> -->
+                      </div>
+                    </div>
+                  </div>      
+                <!-- Apply or delete theme popup--> 
+                  <input id="form-save" type="button" class="btn btn-info" style="/*background-color: #fff;color: #000;border-color: #ccc;*/font-size: 13px;padding-left: 19px;padding-right: 19px;padding-bottom: 8px;padding-top: 10px;margin-right: 35px;margin-top: -36px;" value="Save Form">
+>>>>>>> Custom_Themes_FormBuilder_Task_Latest
                   <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
@@ -101,7 +439,272 @@ String template = request.getParameter("template");
          <div class="modal fade in" id="formNextActionModal" data-keyboard="false" data-backdrop="static"></div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built-6.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script>
+                  var formtheme="default";
+                  var chooseThemeFuncHitCount=0;
+                  var customthemes=null;
+                  var formClasses=null;
+                  var themesListAsArr=["default"];
+                  var currApplThm=null;
+                  <%
+                    List<CustomTheme> custThmList=CustomThemesUtil.fetchAllCustomThemes();
+                    System.out.println("hi..........."+custThmList);
+                    %>
+                    customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
+                  function chooseThemeFunc(){
+                    /*if($(".dropdown-content").css("display") == "none"){
+                      $(".dropdown-content").css("display","block");
+                    }
+                    else if($(".dropdown-content").css("display") == "block"){
+                      $(".dropdown-content").css("display","none");
+                    }*/
+                    if(currApplThm==null){
+                      currApplThm="Choose Theme";
+                    }
+                   chooseThemeFuncHitCount++;
+                    if(chooseThemeFuncHitCount==1){
+                      
+
+                    /*Edit Form CustTheme Class Fetching*/
+                    console.log("No of Custom Themes::"+customthemes.length);
+                    if(customthemes!=null){
+                      for(i=0;i<customthemes.length;i++){
+                        var custId=customthemes[i].id;
+                        var custName=customthemes[i].name;
+                        themesListAsArr.push(custName);
+                        var custCss=customthemes[i].themeCss;
+                        var custIdName=custName+":"+custId;
+                        var inputTheme='<option id="form'+custId+'">'+custName+'</option>';
+                         $(inputTheme).insertAfter("#chooseTheme");
+                         if(formClasses!=null){
+                          var formClassesList=formClasses.split(" ");
+                              if(formClassesList.indexOf("form"+custId)>-1){
+                                    $("#form"+custId).attr("selected","true");
+                            }
+                         }
+                        }
+                      }
+                    }
+                  }
+                  
+                  function selectedThemeFunc(identifier){
+                    var themeId=$(".themesSelectEle option:selected").attr("id");
+                    var themeVal=$(".themesSelectEle option:selected").text();
+                    console.log("Selected Theme Value:"+themeVal);
+                    if(themeVal=="Choose Theme"){
+                      formtheme="Choose Theme";
+                      currApplThm="Choose Theme";
+                    }
+                    else{
+                      formtheme=themeVal;
+                    }
+                    if(formtheme != null){
+                        $.each( customthemes, function( index, value ) {
+                            $(document.getElementById("target")).removeClass("form"+value.id);
+                            $(document.getElementById("agileCustTheme")).empty();
+                        });
+                        if(formtheme != "Choose Theme"){
+                            $.each( customthemes, function( index, value ) {
+                              if(value.name==formtheme){
+                                  currApplThm=value.name;
+                                  $(document.getElementById("target")).addClass("form"+value.id);
+                                  $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                              }
+                            }); 
+                        }
+                    }
+                  
+                  }
+                  
+                  function saveCustTheme(){
+                    var thmExist=validThemeNameFunc();
+                    console.log(themeArray);
+                    var custTheme="";
+                    var themeName=$("#themeName").val();
+                    
+                    if(themeName!=null && (themeName.length>0)){
+                      if(thmExist!=undefined && !thmExist){
+                        $.ajax({
+                          type : 'POST',
+                          url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/saveThemeOnlyWithName',
+                          contentType : 'application/json',
+                          data : themeName,
+                          success:function(data){
+                            console.log("SAVED CUSTOM DATA ID COMING!!!"+data.id);
+                            if(data!=null && data!=""){
+                              themeclass = "form"+data.id;
+                              for(i=0;i<themeArray.length;i++){
+                                for(j=0;j<themeArray[i].form_element.length;j++){
+                                  var ele=themeArray[i].form_element[j].ele;
+                                  var elecss=themeArray[i].form_element[j].css;
+                                  /*if(ele.includes("Field Label")){
+                                    var eleProp = elecss.substring(0,elecss.indexOf("{"));
+                                    var elepropArr = eleProp.split(",");
+                                    var finalEleProp = "";
+                                    $.each(elepropArr,function(index,value){
+                                      if(index == elepropArr.length-1){
+                                        finalEleProp = finalEleProp+"."+themeclass+"\t"+value;
+                                      }
+                                      else{
+                                        finalEleProp = finalEleProp+"."+themeclass+"\t"+value+",";
+                                      }
+                                    });
+                                    custTheme=custTheme+finalEleProp+"\t"+elecss.substring(elecss.indexOf("{"),elecss.length);
+                                  }
+                                  else{*/
+                                    custTheme=custTheme+"."+themeclass+"\t"+elecss;
+                                  /*}*/
+                                }
+                              }
+                              var customTheme = {};
+                              customTheme.id = data.id;
+                              customTheme.name=themeName;
+                              customTheme.themecss=custTheme;
+                              $.ajax({
+                                type : 'POST',
+                                url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/updateTheme',
+                                contentType : 'application/json',
+                                data : JSON.stringify(customTheme),
+                                success: function(data){
+                                     console.log("Final CustomTheme:"+data);
+                                    if(data!=undefined && data!=""){
+                                    customthemes.push(data);
+                                    var inputTheme='<option id="form'+data.id+'">'+data.name+'</option>';
+                                    $(inputTheme).insertAfter("#chooseTheme");
+                                   }
+                                  },
+                                  error: function(){
+                                    alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
+                                  }
+                              });
+                          }
+                          },
+                        });
+
+                          $(".themesSelectEle").val(currApplThm);
+                          $(".createCustomFormContent").empty();
+                          $('#customThemeModal').modal('hide');
+                          $("#errorSpan").text("");
+                          $("#themeName").val("");
+                        }
+                        
+                      }
+                      
+                    }
+                  function validThemeNameFunc(){
+                    var themeName=$("#themeName").val();
+                    var themeNamePattern=/^[a-z][a-zA-Z0-9]+/;
+                    var isThemeNameExist=false;
+                    if(themeName==null || themeName.length<=0){
+                      $("#errorSpan").text("Please provide valid theme name ");
+                    }
+                    else{
+                          $.each( themesListAsArr, function( index, value ) {
+                              if(value==themeName){
+                                isThemeNameExist=true;
+                                $("#errorSpan").text("Provided theme name matches with existing themes.Please provide valid theme name.");
+                              }
+                          });
+                          if(!isThemeNameExist){
+                            $("#errorSpan").text("");
+                          }
+                    }
+                    
+                     return isThemeNameExist;
+                  }
+
+                function deleteTheme(themeName){
+                  var deleteThemeVal = themeName;
+                  var deleteThemeId = $(".themesSelectEle option:selected").attr("id");
+                    
+                  console.log("Requsted deleteThemeVal is:"+deleteThemeVal);
+                  $.ajax({
+                                type : 'GET',
+                                url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/deleteTheme?themeName='+deleteThemeVal,
+                                success: function(data){
+                                  console.log("DELETED THEME?"+data);
+                                  
+                                    /*$(parentDiv).remove();*/
+                                    $.each( themesListAsArr, function( index, value ){
+                                      if(value==deleteThemeVal)
+                                      themesListAsArr.splice(index,1);
+                                    });
+
+                                    $.each( customthemes, function( index, value ) {
+                                        /*if(this.name==deleteThemeVal){*/
+                                        if(deleteThemeId.includes(this.id)){
+                                            customthemes.splice(index,1);
+                                            if($(document.getElementById("target")).hasClass(deleteThemeId)){
+                                            $(document.getElementById("target")).removeClass(deleteThemeId);
+                                            $(document.getElementById("agileCustTheme")).empty();
+                                            } 
+                                        }  
+                                    });
+                                    if(currApplThm==themeName){
+                                      currApplThm="Choose Theme";
+                                      selectedThemeFunc();
+                                    }
+                                    $(".themesSelectEle option:selected").remove();
+                                    $(".themesSelectEle").val(currApplThm);
+                                },
+                                error: function(err){
+                                  alert("Theme is not getting deleted AJAX ERROR is::"+JSON.stringify(err, null, 2));
+                                }
+                      });
+                  }
+
+                  function createCustTheme(){
+
+                    if($("#render")!=undefined && $("#render")!=null){
+                          var pContent=document.getElementById("render").value;
+                          $(".createCustomFormContent").html(pContent);
+                      
+                    }
+                    defaultFormEleFun();
+                    custThemePopUpCode();
+                  }
+
+                  function closeAddTheme(){
+                     $(".createCustomFormContent").empty();
+                     $("#themeName").val("");
+                     $("#errorSpan").text("");
+                     $(".themesSelectEle").val(currApplThm);
+                     $(".createCustomFormContent").empty();
+                  }
+
+                  $(".themesSelectEle").change(function(identifier){
+                        chooseThemeFunc();
+                        var themeId=$(".themesSelectEle option:selected").attr("id");
+                        /*console.log(themeId);*/
+                        if(themeId == "addNewTheme"){
+                          
+                          createCustTheme();
+                          $('#customThemeModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+                        }
+                        else if(themeId=="chooseTheme"){
+                          selectedThemeFunc(identifier);
+                        }
+                        else{
+                          $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+                          }
+                  });
+                  function closeApplyTheme(identifier){
+
+                    /*console.log(identifier);*/
+                    var selectedVal = identifier.id;
+                    if(selectedVal == "applytheme"){
+                      selectedThemeFunc(identifier);
+                    }
+                    else if(selectedVal == "deltheme"){
+                      var currThm=$(".themesSelectEle").val();
+                      deleteTheme(currThm);
+                    }
+                    else if(selectedVal == "closetheme"){
+                      $(".themesSelectEle").val(currApplThm);
+                    }
+                  }
+                  
+      </script>
       <script type="text/javascript">
       if(formNumber){
          var a = document.getElementById('form_preview');
@@ -113,5 +716,8 @@ String template = request.getParameter("template");
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
       </script>
+      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <style id="agileCustTheme" type="text/css"></style>
+
    </body>
 </html>

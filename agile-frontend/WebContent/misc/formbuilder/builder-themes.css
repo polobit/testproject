@@ -68,7 +68,7 @@ border-radius: 20px;
 
 .theme1 legend{
 border-bottom: 3px solid #f6f6f6!important;
-text-align: center!important;
+text-align: center;
 font-size: 18px;
 font-weight: 600;
 margin-bottom: 10px;

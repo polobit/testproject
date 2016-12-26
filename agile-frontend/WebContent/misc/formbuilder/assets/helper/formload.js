@@ -5,12 +5,12 @@ define([
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
 		var orderedSaveform=[];
+		console.log("customthemes in formload page::"+customthemes);
 		$.ajax({
 			url : url,
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
-				
 				saveform = JSON.parse(data.formJson);
 				
 				var agilethemeObj=saveform[0].fields.agiletheme;
@@ -26,7 +26,23 @@ define([
 					}
 				}
 				
-				
+				 var custThmDiv = document.createElement("div");
+				 custThmDiv.setAttribute("id","formContent");
+				 $("body").append(custThmDiv);
+				 $("#formContent").html(data.formHtml);
+				 formClasses=$("#formContent .form-view").attr("class");
+				 $("#formContent").remove();
+				 $.each(customthemes,function(index,value){
+                      /*if(formClasses.indexOf(value.name)>-1){*/
+                      	if(formClasses.indexOf("form"+value.id)>-1){
+                      	/*$(document.getElementById("target")).addClass(value.name);*/
+                      		currApplThm=value.name;
+                      		$(document.getElementById("target")).addClass("form"+value.id);
+                            $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                      		$(".themesSelectEle").val(currApplThm);
+                      }
+                     });
+				 
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
 					$('#form-label').text('Edit Form');
@@ -34,9 +50,8 @@ define([
 					var formHtml = $("#render").val();
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
-			    		  // $('#agileFormHolder style').remove();
-
-			    		  if(typeof data.formHtml == "undefined" || data.formHtml == "") {
+			    		 
+							if(typeof data.formHtml == "undefined" || data.formHtml == "") {
 			    		  	data.formHtml = formHtml;
 			    		  	try{window.parent.updateAgileFormDB(data);}catch(err){}
 			    		  }
