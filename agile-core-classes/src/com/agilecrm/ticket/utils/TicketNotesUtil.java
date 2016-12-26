@@ -243,6 +243,17 @@ public class TicketNotesUtil
 				count++;
 		}
 		
+		
+		long lastNoteId = notesList.get(notesList.size() -1).id;
+		//creating encoded urls for feedback
+		for(int i=1;i<=5;i++ ){
+			
+			String url= Base62.fromDecimalToOtherBase(62, i)+"-"+Base62.fromDecimalToOtherBase(62, lastNoteId)+"-"+Base62.fromDecimalToOtherBase(62, contact.id);
+	
+			json.put("url"+i, url);
+		}
+		
+		
 		json.put("agent_reply", TicketNotesUtil.convertNewLinesToBreakTags(ticket.last_reply_text));
 		
 		json.put("note_json_array", notesArray);
@@ -473,19 +484,8 @@ public class TicketNotesUtil
 		String oldNamespace = NamespaceManager.get();
 		
 		JSONObject json = new JSONObject();
-
-		
-
 		
 		if(count == 0){
-			
-		//creating encoded urls for feedback
-		for(int i=1;i<=5;i++ ){
-			
-			String url= Base62.fromDecimalToOtherBase(62, i)+"-"+Base62.fromDecimalToOtherBase(62, notes.id)+"-"+Base62.fromDecimalToOtherBase(62, contact.id);
-	
-			json.put("url"+i, url);
-		}
 		
 		json.put("count", true);
 		json.put("namespace", oldNamespace);
