@@ -518,6 +518,8 @@ public class DealsBulkActionsAPI
 
 	    dealsExporter.finalize();
 	    dealsExporter.sendEmail(user.email);
+	    dealsExporter.addToActivity(ActivityType.DEAL_EXPORT, EntityType.DEAL);
+	    BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_DEALS_CSV);
 	}
 	catch (JSONException e)
 	{

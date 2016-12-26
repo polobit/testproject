@@ -759,7 +759,8 @@ public class SendEmail extends TaskletAdapter
 	// Send Email using email gateway
 	   String queueName = AgileQueues.NORMAL_EMAIL_PULL_QUEUE;
 	   
-	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()))
+	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName())
+			   || Globals.BULK_ACTION_BACKENDS_URL.equals(ModuleUtil.getCurrentModuleName()))
 		   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
 	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut != null && isTimeOut)
 		   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;

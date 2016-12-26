@@ -109,7 +109,6 @@
         </copy>
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/zendesk-widget">
               <fileset dir="../agile-frontend/WebContent/misc/zendesk-widget" />
-        </copy>="../agile-frontend/WebContent/misc/zendesk-widget" />
         </copy>
         <!--Copy application libraries to target -->
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/WEB-INF/lib">
