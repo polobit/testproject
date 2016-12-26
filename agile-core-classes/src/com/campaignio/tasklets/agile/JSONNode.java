@@ -217,21 +217,19 @@ public class JSONNode extends TaskletAdapter
 		    
 		    String finalOutput = "";
 		    
-		    if(output != null){
-			    	Response response = (Response)output.get("response");
-			    	System.out.println("Response : " + response);
-			    	if(response.getCode() >= 400){
-			    		String exceptionMessage = "while processing request </br>Response Code: "
-								+ response.getCode()
-								+ "</br>Response Message: "
-								+ response.getMessage();
-						throw new Exception(exceptionMessage);
-			    	}
-			    	else
-			    	{
-			    		finalOutput = response.getMessage();
-			    	}
+			if (output != null) {
+				Response response = (Response) output.get("response");
+				System.out.println("Response : " + response);
+				if (response.getCode() >= 400) {
+					String exceptionMessage = "while processing request </br>Response Code: "
+							+ response.getCode()
+							+ "</br>Response Message: "
+							+ response.getMessage();
+					throw new Exception(exceptionMessage);
+				} else {
+					finalOutput = response.getMessage();
 				}
+			}
 
 		    JSONObject returnJSON = new JSONObject(finalOutput);
 
@@ -396,9 +394,9 @@ public class JSONNode extends TaskletAdapter
 	   try{
 		   JSONObject jsonObject = new JSONObject(responseMessage);
 		   
-		   if(jsonObject.has("message"))
-			   responseInner.setMessage(jsonObject.getString("message"));
-		   else	   
+		   if(responseCode >= 400 && jsonObject.has("message"))
+			   responseInner.setMessage(jsonObject.getString("message"));   
+		   else
 			   responseInner.setMessage(responseMessage);
 		   
 	   }catch (Exception e) {

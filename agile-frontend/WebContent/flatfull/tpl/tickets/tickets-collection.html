@@ -3,7 +3,7 @@
 	{{#unless this.length}}
 		<div class="tickets-div">
 			<div class="wrapper p-n">
-	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+	    		<div class="panel panel-default no-radius no-shadow no-panel-border" style="border-left: 0;border-right: 0;">
 	    		{{#is_mobile}}		
 					{{else}}
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
@@ -54,7 +54,7 @@
 											{{agile_lng_translate 'tickets' 'configure-your-help-desk-system-desc'}}
 										</div>
 										<div>
-											<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+											<a href="#ticket-groups" class="btn btn-sm btn-default-imp btn-lg-img btn-default blue btn-slate-action m-t-xs">
 												{{agile_lng_translate 'tickets' 'configure-help-desk'}}
 											</a>
 										</div>
@@ -75,7 +75,7 @@
 	{{else}}
 		<div class="tickets-div">
 			<div class="wrapper p-n">
-	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+	    		<div class="panel panel-default no-radius no-shadow no-panel-border" style="border-left: 0;border-right: 0;">
 	    		{{#is_mobile}}		
 					{{else}}
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
@@ -119,7 +119,7 @@
 			    		<div class="row m-n">
 			    			<div id="tickets-bulk-select" class="text-center"></div>
 			    			<div class="col-sm-12 p-n ticket-collection-container {{#is_mobile}}ticket-b-t{{/is_mobile}}">
-			    				<table class="table table-striped onlySorting m-b-none t-l-fix">
+			    				<table class="table table-striped agile-table onlySorting m-b-none t-l-fix">
 									<tbody id="ticket-model-list" route="ticket/" class="tickets-collection"></tbody>
 								</table>
 			    			</div>
@@ -135,7 +135,7 @@
 		{{#unless this.length}}
 			<div class="tickets-div">
 				<div class="wrapper p-n">
-		    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+		    		<div class="panel panel-default no-radius no-shadow no-panel-border" style="border-left: 0;border-right: 0;">
 						<div class="panel-heading no-shadow" style="border-bottom: 0;">
 					      	<label class="i-checks i-checks-sm" style="margin-left: 3px;">
 						      <input class="ticket-checkbox select-all" type="checkbox" disabled><i></i>
@@ -181,7 +181,7 @@
 												{{agile_lng_translate 'tickets' 'configure-your-help-desk-system-desc'}}
 											</div>
 											<div>
-												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+												<a href="#ticket-groups" class="btn btn-sm btn-default blue btn-slate-action m-t-xs btn-default-imp btn-lg-img">
 													{{agile_lng_translate 'tickets' 'configure-help-desk'}}
 												</a>
 											</div>
@@ -202,7 +202,7 @@
 	    {{/unless}}
 	    {{#if this.length}}
 	    	<div class="wrapper p-n">
-	    		<div class="panel panel-default no-radius no-shadow" style="border-left: 0;border-right: 0;">
+	    		<div class="panel panel-default no-radius no-shadow no-panel-border ticket-bulk-actions" style="border-left: 0;border-right: 0;">
 					<div class="panel-heading no-shadow" style="border-bottom: 0;">
 						<label class="i-checks i-checks-sm m-b-none select-all" style="margin-left: 1px;vertical-align: text-top;">
 							<input type="checkbox" class="ticket-checkbox select-all"><i></i>
@@ -324,7 +324,7 @@
 			    		<div class="row m-n ticket-collection-row" style="overflow-x:auto;">
 			    			<div id="tickets-bulk-select" class="text-center"></div>
 			    			<div class="col-sm-12 p-n ticket-collection-container">
-			    				<table class="table table-striped single-row m-b-none b-t b-b no-sorting">
+			    				<table class="table table-striped single-row m-b-none b-t b-b no-sorting {{#isNewTheme}} agile-table {{/isNewTheme}}" id="tickets-single-row">
 									<thead>
 										<tr>
 											<th></th>
@@ -395,7 +395,7 @@
 	<div class="wrapper p-n">
 	{{#is_mobile}}		
 		{{else}}
-		<div class="panel panel-default no-radius no-shadow" style="border-bottom: 0;border-left: 0;">
+		<div class="panel panel-default no-radius no-shadow no-panel-border" style="border-bottom: 0;border-left: 0;">
 			<div class="panel-heading">
 				<label class="i-checks i-checks-sm" style="margin-left: 1px;vertical-align: text-top;">
 			      <input class="ticket-checkbox select-all" type="checkbox"><i></i>

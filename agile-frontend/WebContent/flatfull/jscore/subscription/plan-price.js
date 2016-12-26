@@ -835,6 +835,7 @@ function email_validation(form)
 }
 
 function emailClickEvent() {
+	$(".tab-container").removeClass("hide");
 	$('ul.nav.nav-tabs').removeClass("hide");
 	$("#email").addClass("hide");
 	$("#currentPlan").addClass("p-t-md");
@@ -899,11 +900,14 @@ $(function(){
 		var $that = $(this);
 		$.post("core/api/subscription/auto_recharge", json, function(data){
 			$that.closest(".modal").modal("hide");
+			var msg = "Auto recharge has been enabled successfully.";
+			if(!_billing_restriction.isAutoRenewalEnabled && !USER_BILLING_PREFS.emailpurchaseStatus)
+				msg = "Thank you for setting up Auto recharge. We are processing your request. It will be activated within in 24 Hours.";
 			_billing_restriction.isAutoRenewalEnabled = json.isAutoRenewalEnabled;
 			_billing_restriction.nextRechargeCount = json.nextRechargeCount;
 			_billing_restriction.autoRenewalPoint = json.autoRenewalPoint;
 			$that.html("save").removeAttr("disabled");
-			showNotyPopUp("information","Auto recharge has been enabled successfully.", "top");
+			showNotyPopUp("information",msg, "top");
 		}).fail(function(data) {
 			$that.closest(".modal").modal("hide");
 		    showNotyPopUp("warning", data.responseText, "top");

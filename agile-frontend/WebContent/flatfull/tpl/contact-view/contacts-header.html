@@ -68,7 +68,7 @@
 			</div>
 			<div class="col">
 				<div id="right-pane">
-					<div class="wrapper-md bg-light padder-md padder-v m-r-sm p-r-none b-b" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+					<div class="wrapper-md bg-light padder-md padder-v m-r-sm p-r-none b-b agile-page-header" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 	    				<div class="btn-toolbar m-l-none pos-rlt">
 	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 	    						<div class="">
@@ -83,13 +83,13 @@
 	    							<br>
 								</div>
 							</div>
-	    					<div class="pull-right pos-abs" style="right: 0; top: 5px;">
+	    					<div class="pull-right pos-abs agile-header-btns" style="right: 0; top: 5px;">
 			    				<div class="btn-group pull-left m-r-xs" id="contacts-view-options" style="pointer-events: auto;"></div>
 								<div id="view-list" class="pull-left btn-group">
 									{{#hasRestrictedMenuScope 'CREATE_CONTACT'}}
 										<div class="btn-group">
-											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled"><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
-        									<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm disabled btn-primary-imp btn-lg-imp"><i class="icon icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
+        									<button class="btn btn-default btn-sm dropdown-toggle btn-primary-imp btn-lg-imp" data-toggle="dropdown"><span class="caret"></span></button>
 											<ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
 												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
 													<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
@@ -99,8 +99,8 @@
 										</div>
     								{{else}}
 										<div class="btn-group">
-											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-sm "><i class="icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
-											<button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+											<button href="#contacts" onclick="$('.person').click();Agile_GA_Event_Tracker.track_event('Add Contact');" class="btn btn-default btn-primary-imp btn-lg-imp btn-sm "><i class="icon icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact'}}</button>
+											<button class="btn btn-default btn-primary-imp btn-lg-imp btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 											<ul class="dropdown-menu pull-right" role="menu" style="z-index:999;">
 												{{#hasRestrictedMenuScope 'IMPORT_CONTACTS'}} {{else}}
 													<li><a href="#import" onclick="Agile_GA_Event_Tracker.track_event('Import Contact');">{{agile_lng_translate 'contacts-view' 'import'}}</a></li>
@@ -137,20 +137,33 @@
 				                	<i></i>                
 				          		</label>
 							</span>
+							<div class="inline-block bulk-action-wrapper">
 							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
+						    
 						    <button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>
+						    
 						    {{#hasMenuScope 'CAMPAIGN'}}
+						   
 						    	<button id="bulk-campaigns" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Add to Campaign');">{{agile_lng_translate 'contacts-view' 'add-to-campaign'}}</button>
+						   
 						    {{/hasMenuScope}}
+						    
 						    <button id="show-callcampaignModal" class="btn btn-default bulk-action-btn btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'start-call-campaign'}}</button>
+						   
+						   
 						    <button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm disabled txt-small" onclick="Agile_GA_Event_Tracker.track_event('Send Email');">{{agile_lng_translate 'contacts-view' 'send-email'}}</button>
 						    {{#hasRestrictedMenuScope 'DELETE_CONTACT'}}
 							{{else}}
 								<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'delete'}}</button>
 							{{/hasRestrictedMenuScope}}
 						    <div class="dropdown inline-block">
+						    {{#isNewTheme}}
+						    <button class="btn btn-default btn-sm disabled txt-small  dropdown-toggle"  data-toggle="dropdown"><span class="material-icons fs22 m-l-n-imp">more_horiz</span>
+							</button>
+						    {{else}}
 						     <button class="btn btn-default btn-sm disabled txt-small  dropdown-toggle"  data-toggle="dropdown">More  <span class="caret m-l-xs" ></span>
 							</button>
+							{{/isNewTheme}}
 							 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							 <li>
 							 	<a id="bulk-owner" style="opacity:0.7;" class="bulk-action-btn _contact_bulk_action  disabled ">{{agile_lng_translate 'contacts-view' 'change-owner'}}
@@ -164,9 +177,10 @@
 							 {{/hasScope}}
 							 </ul>
 							 </div>
+							 </div>
 						    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 								<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
-									<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+									<button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-navicon {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
 	                				<ul class="pull-right dropdown-menu  p-l filter-dynamic-scrollbar"  role="menu" style="overflow-y:auto;max-height:500px">
 	                					<form id="contact-static-fields" class="">
 	                						<div class="multiple-checkbox" name="fields_set" id="contact-static-fields-group"></div>
@@ -175,7 +189,7 @@
 								</div>
 							</div>
 						</div>
-						<div id="contacts-list-view"></div>
+						<div id="contacts-list-view" class="table-list-view-top-margin"></div>
         			</div>
 	 			</div>
 			</div>

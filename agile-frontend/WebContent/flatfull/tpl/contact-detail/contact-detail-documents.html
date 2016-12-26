@@ -31,16 +31,16 @@
 						{{/isCompany}}
 					{{/hasMenuScope}}
 						<span class="contact-document-select upload-doc-field" style="display:none;">
-							<select id="document-select" class="form-control inline-block w">
+							<select id="document-select" class="form-control inline-block w select-new-theme">
 								<option value="">{{agile_lng_translate 'contacts-view' 'select'}}</option>
 							</select>
  					<div class="m-t-sm">
  					{{#isCompany}}
 							<a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
-                    		<a href="#" class="btn btn-sm btn-primary add-company-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+                    		<a href="#" class="btn btn-sm btn-primary m-r-sm-imp add-company-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
                     {{else}}
                     <a href="#" class="btn btn-default btn-sm add-document-cancel m-r-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
-                    		<a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+                    		<a href="#" class="btn btn-sm btn-primary m-r-sm-imp add-contact-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
                     {{/isCompany}}		
 							<span class="save-status"></span>
 						</span>
@@ -76,7 +76,7 @@
 													<option value="">Select...</option>
 												</select>
 												<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-								                <a href="#" class="btn btn-sm btn-primary add-company-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+								                <a href="#" class="btn btn-sm btn-primary m-r-sm-imp add-company-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
 								                <a href="#" class="btn btn-default btn-sm add-document-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
 												<span class="save-status"></span>
 											</span>
@@ -94,7 +94,7 @@
 													<option value="">Select...</option>
 												</select>
 												<span class="select-loading">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-								                <a href="#" class="btn btn-sm btn-primary add-contact-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+								                <a href="#" class="btn btn-sm btn-primary m-r-sm-imp add-contact-document-confirm">{{agile_lng_translate 'contact-details' 'add'}}</a> 
 								                <a href="#" class="btn btn-default btn-sm add-document-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
 												<span class="save-status"></span>
 											</span>
@@ -136,21 +136,8 @@
 <div class="clearfix"></div>
 	
 		<div class="agile-thumb">	
-		{{#each contacts}}
-           	{{#if id}}
-				{{#isDuplicateContactProperty properties "email"}}
-
-					{{else}}
-						{{#if_contact_type "PERSON"}}	
-							<a href="#contact/{{id}}" data="{{id}}" class="popover_contact text-capitalize">{{contact_name_necessary this}}</a>{{#if @last}}{{else}},{{/if}}
-        				{{/if_contact_type}}
-						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}" class="text-capitalize popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
-        				{{/if_contact_type}}
-				{{/isDuplicateContactProperty}}
-    
-           	{{/if}}
-       	{{/each}}
+		 {{#contact_separated_comma contacts}}
+		 {{/contact_separated_comma}}
 
        	{{#each deals}}
 

@@ -24,6 +24,10 @@ import com.googlecode.objectify.ObjectifyService;
  * 
  */
 public class SMTPPrefsUtil {
+	
+	//private static final String SMTP_URL = "http://localhost:8081/agile-smtp/smtpMailSender";
+	private static final String SMTP_URL = "http://54.234.153.217:80/agile-smtp/smtpMailSender";		// SMTP server
+	
 	/**
 	 * SMTPPrefs Dao
 	 */
@@ -39,12 +43,23 @@ public class SMTPPrefsUtil {
 	 */
 	public static List<SMTPPrefs> getSMTPPrefsList(AgileUser user) {
 		System.out.println("Retrieving Userid " + user.id);
-
 		Objectify ofy = ObjectifyService.begin();
 		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
 
 		System.out.println("Count " + ofy.query(SMTPPrefs.class).ancestor(agileUserKey).count());
 		return ofy.query(SMTPPrefs.class).ancestor(agileUserKey).list();
+	}
+	
+	/**
+	 * get SMTP prefs based on the Agileuser and fromemail
+	 * @param user
+	 * @param fromEmail
+	 * @return
+	 */
+	public static SMTPPrefs getPrefs(AgileUser user, String fromEmail) {
+		Objectify ofy = ObjectifyService.begin();
+		Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
+		return ofy.query(SMTPPrefs.class).ancestor(agileUserKey).filter("user_name", fromEmail).get();
 	}
 
 	/**
@@ -76,13 +91,10 @@ public class SMTPPrefsUtil {
 		String errorMsg = "Error saving: [ALERT] Your account is not enabled for SMTP use. "
 				+ "Please enable your email settings. (Failure) \n";
 
-		//String url = "http://localhost:8081/agile-smtp/smtpMailSender";
-		String url = "http://54.87.153.50:8080/agile-smtp/smtpMailSender";
-		
 		String data = ContactSMTPUtil.getSMTPURLForPrefs(prefs, "noreply@agilecrm.com", "0", "1");
-		System.err.println("+++ SMTP URL +++ " + url+"?"+data);
+		System.err.println("+++ SMTP URL +++ " + SMTP_URL+"?"+data);
 		
-		String resp = HTTPUtil.accessURLUsingPost(url, data);
+		String resp = HTTPUtil.accessURLUsingPost(SMTP_URL, data);
 		System.err.println("+++ SMTP response +++ " + resp);
 		
 		String[] smtpResponse = null;

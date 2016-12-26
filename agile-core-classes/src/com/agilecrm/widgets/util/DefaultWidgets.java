@@ -23,7 +23,7 @@ public class DefaultWidgets {
 	 */
 	public static List<Widget> getAvailableDefaultWidgets() {
 		List<Widget> widgets = new ArrayList<Widget>();
-		
+
 		/**
 		 * Call widgets Order
 		 */
@@ -62,12 +62,18 @@ public class DefaultWidgets {
 			"/widgets/sip.js", "/widgets/sip-logo-small.png",
 			"/widgets/sip-logo-small.png", null, WidgetType.CALL));
 		widgets.add(new Widget(
+			"Ozonetel",
+			"Ozonetel",
+			"Make and receive calls, and send and receive text messages with your customers using Twilio account.",
+			"/widgets/ozonetel.js", "/widgets/ozonetel.png",
+			"/widgets/ozonetel_fullsize.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
 			 "Knowlarity",
 			 "Knowlarity",
 			 "Know your customers Klout score, a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.",
 			 "/widgets/knowlarity.js", "widgets/knowlarity-lg-logo.png",
 			 "widgets/knowlarity-md-logo.png", null, WidgetType.CALL));
-		
+	
 		/**
 		 * Social widgets Order
 		 */
@@ -220,7 +226,7 @@ public class DefaultWidgets {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
 				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript",
-						"Bria", "Skype" }).contains(widgetName)) {
+						"Bria", "Skype", "Ozonetel"}).contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })
 				.contains(widgetName)) {

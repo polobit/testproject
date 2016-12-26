@@ -23,17 +23,17 @@
 			<fieldset>
     		<div class="control-group m-b-none">  	 
                     <div id="task-category-values-{{name}}">
-					<table class="table table-hover  custom-fields-table bg-white table-hover m-b-none" >
+					<table class="table table-hover {{#isNewTheme}} agile-table {{/isNewTheme}} custom-fields-table bg-white table-hover m-b-none">
 					<colgroup><col width="50%"><col width="4%"></colgroup>
 					<tbody id="admin-settings-categories-model-list" class="task-categories-tbody ui-sortable">
 		
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}} </a></div>
+					<div class="p-l p-t p-b" id="show_task_category"><a href="#" class="show_task_category_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-tasks' 'add-category'}} </a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_task_category" class="add_new_category form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'admin-settings-tasks' 'new-category'}}">
-						<a class="btn btn-info btn-addon btn-sm add_task_category" data-toggle="modal" id="add_task_category" href="#">{{agile_lng_translate 'admin-settings-custom-fields' 'add'}}</a>
+						<a class="btn btn-info btn-addon btn-sm btn-defailt-imp add_task_category" data-toggle="modal" id="add_task_category" href="#">{{agile_lng_translate 'admin-settings-custom-fields' 'add'}}</a>
 						<span class="save-status"></span>
 					</div>
     				<div class="hidden"><input name="milestones" type="text" class="required form-control" value="{{milestones}}"/></div>

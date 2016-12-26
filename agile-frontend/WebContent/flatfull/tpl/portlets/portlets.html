@@ -153,7 +153,7 @@
 			<div class="w-full pull-left text-ellipsis text-cap custom-link">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
 		<div class="pull-right text-right font-bold m-b-xs text-ellipsis" style="width: 30%; white-space: nowrap;">
-			<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+			<span>{{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if_equals}}</span>
 		</div>
 		<!-- <div class="clearfix"></div> -->
 	</div>
@@ -437,7 +437,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>You</div>
-						<div class="text-xlg calls_popover"  data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						<div class="text-xlg calls_popover"  data-container="body" data-toggle="tooltip" title='<div><table class="no-new-theme-updates" style="background-color:transparent!important">
 							
 							{{#each eachCallStatus}} 
 									<tr><td style="color:{{selectJsonValue ../colors @key}}">{{convertToi18ForCall @key}}:&nbsp</td><td>{{this}}</td></tr>
@@ -459,7 +459,7 @@
 					</div>
 					<div class="agile-thumb agile-thumb-view p-b-xs">
 						<div>{{userName}}</div>
-						<div class="text-xlg calls_popover" data-toggle="tooltip" title='<div><table style="background-color:transparent!important">
+						<div class="text-xlg calls_popover" data-container="body" data-toggle="tooltip" title='<div><table class="no-new-theme-updates" style="background-color:transparent!important">
 							
 							{{#each eachCallStatus}} 
 									<tr><td style="color:{{selectJsonValue ../colors @key}}">{{convertToi18ForCall @key}}:&nbsp</td><td>{{this}}</td></tr>
@@ -474,6 +474,7 @@
 			{{/each}}
 		</li>
 		{{/if}}
+
 		{{#if tasks}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
@@ -734,6 +735,7 @@
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
+
 <script id="portlets-tasksandevents-agenda-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
@@ -817,11 +819,11 @@
 </script>
 
 <script id="portlets-status-report-model-template" type="text/html">	
-     <div class="stats_report_portlet_body panel-body p-n b-n" style="cursor:move">
+     <div class="stats_report_portlet_body  panel-body p-n b-n" style="cursor:move">
 	 <div class="row row-sm text-center">
 	<div class="col-xs-6">
 		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
-			<div class="h1 text-info font-thin h1" id="new-contacts-count">&nbsp;</div>
+			<div class="h1 text-info font-thin h1 text-lg-imp" id="new-contacts-count">&nbsp;</div>
 			<span class="text-muted text-xs" id="new-contacts-label">&nbsp;</span>
 			<div class="top text-right w-full">
 				<!-- <i class="fa fa-caret-down text-warning m-r-sm"></i> -->
@@ -835,7 +837,7 @@
 				<i id="{{id}}-settings" class="portlet-settings fa fa-wrench p-r-xs c-p"></i>
 				<i id="{{id}}-close" class="c-p fa fa-times StatsReport-close p-r-sm" onclick="deletePortlet(this);"></i>
 			</div>
-			<span class="text-white font-thin h1 block p-t text-ellipsis" id="won-deal-value">&nbsp;</span>
+			<span class="text-white font-thin h1 text-lg-imp block p-t text-ellipsis text-white-imp" id="won-deal-value">&nbsp;</span>
 			<span class="text-muted text-xs text-ellipsis" id="won-deal-count">&nbsp;</span>
 			<span class="bottom text-right w-full">
 				<!-- <i class="fa fa-cloud-upload text-muted m-r-sm"></i> -->
@@ -844,8 +846,8 @@
 	</div>
 	<div class="col-xs-6">
 		<div class="block panel padder-v bg-info item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
-			<span class="text-white font-thin h1 block" id="emails-sent-count">&nbsp;</span>
-			<span class="text-muted text-xs" id="emails-sent-label">&nbsp;</span>
+			<span class="text-white font-thin h1 text-lg-imp text-white-imp block" id="emails-sent-count">&nbsp;</span>
+			<span class="text-muted text-xs text-white-imp" id="emails-sent-label">&nbsp;</span>
 			<span class="top text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm m-l-none"></i> -->
 			</span>
@@ -853,7 +855,7 @@
 	</div>
 	<div class="col-xs-6">
 		<div class="panel padder-v item m-l-none overflow-hidden portlet-panel" style="cursor:auto;">
-			<div class="font-thin h1 text-ellipsis" id="new-deal-value">&nbsp;</div>
+			<div class="font-thin h1 text-lg-imp text-ellipsis" id="new-deal-value">&nbsp;</div>
 			<span class="text-muted text-xs text-ellipsis block" id="new-deal-count">&nbsp;</span>
 			<div class="bottom text-left">
 				<!-- <i class="fa fa-caret-up text-warning m-l-sm"></i> -->
@@ -1276,7 +1278,7 @@
                	{{agile_lng_translate 'portlets' 'dashlets-help-msg'}}  
             </div>
           		{{agile_lng_translate 'portlets' 'get-start-by-add-dashlet'}}<br>
-                <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs">
+                <a href="#add-dashlet" id="add-portlet" class="add-portlet btn-primary-imp btn-lg-imp add-stream-tab btn btn-default btn-sm m-t-xs">
  		          <i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 		        </a> 
 	   </div>
@@ -1296,7 +1298,7 @@
                	{{agile_lng_translate 'portlets' 'dashlets-help-msg'}}  
             </div>
           		{{agile_lng_translate 'portlets' 'get-start-by-add-dashlet'}}<br>
-                <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs">
+                <a href="#add-dashlet" id="add-portlet" class="add-portlet add-stream-tab btn btn-default btn-sm m-t-xs btn-default-imp btn-lg-imp">
  		          <i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 		        </a> 
 	   </div>
@@ -1319,7 +1321,7 @@
 
 <script id="portlets-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-	<div class="wrapper-md bg-light lter b-b">
+	<div class="wrapper-md bg-light lter b-b white-theme-portlets agile-page-header">
 	<div id="dashlet_heading" class="row">
     	<div class="col-md-12">
 			<div class="pull-left">
@@ -1387,7 +1389,7 @@
 <!--<a id="chrome-extension-button"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title=" Agile CRM Chrome Extension is available now. Please click here to install the extension." class="hide  text-info inline-block dashboart_tooltip chromeExtension" target="_blank">
 					 <img src = "{{getS3ImagePath '../flatfull/img/dashboard/google.png'}}">
 				</a> -->
-<a id="chrome-extensions" class="btn btn-sm btn-default need_help" data-html="true"
+<a id="chrome-extensions" class="btn btn-sm btn-default btn-default-imp-white btn-lg-imp need_help" data-html="true"
    data-toggle="popover" rel="popover" data-content=""  data-placement="bottom" title=""   target="_blank">
 					<i class=" icon-cloud-download"></i>
 				</a> 
@@ -1404,10 +1406,10 @@
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
 			{{else}}
-				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+				<a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-lg-imp btn-primary-imp btn-sm btn-addon add-portlet add-stream-tab pos-rlt" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{agile_lng_translate 'portlets' 'dashlet-help-main'}}">
 					<i class="icon icon-plus-sign"></i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 				</a>
-				<a id="automation-video" class="btn btn-sm btn-default" data-toggle="tooltip"  style="display:none; line-height: 1px;float:left;margin-right:3px" 
+				<a id="automation-video" class="btn btn-sm btn-default btn-lg-imp btn-default-imp-white" data-toggle="tooltip"  style="display:none; line-height: 1px;float:left;margin-right:3px" 
 					   data-placement="bottom" data-original-title="{{agile_lng_translate 'dashlet-video' 'video-tooltip'}}">
 					<i class="fa fa-play-circle" aria-hidden="true" style="font-size:18px;"></i>
 				</a>
@@ -1428,7 +1430,7 @@
     	</div>
 	</div>
 	</div>
-	<div class="wrapper-md">
+	<div class="wrapper-md agile-p-t-none">
 	<div class="row">
 		<div class="col-md-12">
 			<div>
@@ -1751,9 +1753,9 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{agile_lng_translate 'contacts-view' 'created-deal'}} {{#if entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a> {{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
 {{#if custom2}}
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}} {{/unless}}Deal ({{currencySymbol}}{{numberWithCommasForActivities custom2}} - {{custom3}}%) {{agile_lng_translate 'contacts-view' 'added'}} {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}} {{/unless}}Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommasForActivities custom2}}{{/if_equals}} - {{custom3}}%) {{agile_lng_translate 'contacts-view' 'added'}} {{#if entityObject}}to track '{{entityObject.pipeline.name}}'{{/if}}. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 {{else}}
-<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'added-to-track'}} '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'added-to-track'}} '{{entityObject.pipeline.name}}'.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}} 
 {{/if}}	
 </small></div>	
 {{/if_equals}}
@@ -1762,14 +1764,14 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_ARCHIVE" activity_type}}
  {{agile_lng_translate 'contacts-view' 'archived-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} 
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'archived'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'archived'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
 {{#if_equals "DEAL_RESTORE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'restored-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}} 
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'restored-item'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'restored-item'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1778,7 +1780,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_CLOSE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'won-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}">{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if this.entityObject}} Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) Won.{{/if}} {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1786,7 +1788,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_EDIT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'modified-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i>{{#unless this.entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}} ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}} {{displayActivityFieldText custom3}} modified. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1805,19 +1807,19 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "removed_all_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'removed-contacts-from-deal'}}{{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}} {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}} {{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </small><div>
 {{/if_equals}} 
 {{#if_equals "removed_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'removed-contacts-from-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}}{{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}  {{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'contacts-view' 'removed-from-deal'}}{{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </small></div>
 {{/if_equals}} 
 {{#if_equals "added_relatedcontacts" custom3}}
 {{agile_lng_translate 'contacts-view' 'added-contacts-to-deal'}}{{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}{{label}}{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
- <i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'campaigns' 'added-to-deal'}} {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}.{{/if}}
+ <i class="icon-money icon-white"></i> {{#unless this.entityObject}}{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}}{{#if related_contact_ids}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}} {{agile_lng_translate 'campaigns' 'added-to-deal'}} {{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}.{{/if}}
 </small></div>
 {{/if_equals}}
 {{else}}
@@ -1841,7 +1843,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'reassigned-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}} to {{custom1}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i> {{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal{{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
+<i class="icon-money icon-white"></i> {{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal{{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}} assigned to '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}	
 </small></div>
 {{/if_equals}}
 
@@ -1851,7 +1853,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
 {{agile_lng_translate 'contacts-view' 'changed-milestone-of-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small> 
-<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}}{{#if this.entityObject}}Deal ({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%){{/if}}  {{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} '{{custom2}}' {{agile_lng_translate 'contacts-view' 'to'}} '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i> {{#unless entityObject}} Deal deleted later.{{/unless}}{{#if this.entityObject}}Deal ({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%){{/if}}  {{agile_lng_translate 'contacts-view' 'milestone-changed-from'}} '{{custom2}}' {{agile_lng_translate 'contacts-view' 'to'}} '{{custom1}}'. {{#if related_contact_ids}}{{agile_lng_translate 'contacts-view' 'deal-related-to'}} {{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -1860,7 +1862,10 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{/if_equals}}
 
 {{#if_equals "DEAL_EXPORT" activity_type}}
- {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} Deals <br/>	
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contact-details' 'deals'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-export' 'this-link-is-valid'}}</span>{{/if}} 
+</small> 
 {{/if_equals}}
 
 {{#if_equals "DEAL_TAG_CHANGE" activity_type}}
@@ -1882,7 +1887,7 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{#if_equals "DEAL_LOST" activity_type}}
 {{agile_lng_translate 'contacts-view' 'lost-deal'}} {{#if this.entityObject}}<a  href="#deal/{{entity_id}}" >{{label}}</a>{{else}}'{{label}}'{{/if}}
 <div class="activities_second_line p-t-xs m-t-none text-ellipsis"><small>
-<i class="icon-money icon-white"></i>{{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}}({{currencySymbol}}{{numberWithCommas entityObject.expected_value}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
+<i class="icon-money icon-white"></i>{{#unless entityObject}} {{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}{{/unless}} Deal {{#if this.entityObject}}({{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}} - {{entityObject.probability}}%) {{/if}} Lost. {{#if related_contact_ids}} {{agile_lng_translate 'contacts-view' 'deal-related-to'}}{{#stringToJSON this "related_contact_ids"}}{{#toLinkTrigger this}} <a href="#contact/{{this.contactid}}" data="{{this.contactid}}" class="popover_contact">{{this.contactname}}</a>{{/toLinkTrigger}}{{/stringToJSON}}.{{/if}}
 </small></div>	
 {{/if_equals}}
 
@@ -2241,7 +2246,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{#if_equals "CONTACT_EXPORT" activity_type}}
 {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contacts-view' 'contacts'}} <br/>	
 <small class="activities_second_line m-t-none text-sm">
-{{#if custom2}}<span> <a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+{{#if custom2}}<span> <a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-export' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
 {{/if_equals}}
 {{#if_equals "COMPANY_EXPORT" activity_type}}
@@ -2252,7 +2257,7 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 {{/if_equals}}	
 <br/>
 <small class="activities_second_line m-t-none text-sm">
-{{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-view' 'this-link-is-valid'}}</span>{{/if}} 
+{{#if custom2}}<span><a  style="color:#337ab7;text-decoration:underline;"  href="{{custom2}}" target="blank">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-export' 'this-link-is-valid'}}</span>{{/if}} 
 </small> 
 {{/if_equals}}
 
@@ -2645,6 +2650,21 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small></div>
 {{/if_equals}}
 {{/unless}}
+{{/if_equals}}
+
+{{#if_equals "SMS_SENT" activity_type}}
+{{#if custom3}}
+{{#if_equals "SMS Sent" custom3}} SMS sent to{{else}} SMS failed to {{/if_equals}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{note_id_call}}</a>{{else}}'{{note_id_call}}'{{/if}} <br/>
+<small class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"> 
+ {{#if_equals "SMS Sent" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+{{else}}
+ {{#if_equals "SMS Failed" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}}Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+{{/if_equals}}
+{{/if_equals}}
+</small>
+{{/if}}
 {{/if_equals}}
 
 <!-- starting of campaign status-->

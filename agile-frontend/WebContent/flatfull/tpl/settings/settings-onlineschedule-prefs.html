@@ -21,10 +21,11 @@
 
 			</ul>
 		</div>
-		<div class="tab-content panel wrapper" id="online-calendar-content" style="margin-right: -26px; padding: 10px">
+
+		<div class="tab-content panel wrapper p-b-none" id="online-calendar-content"  style="margin-right: -26px; padding: 10px">
 			<div class="tab-pane" id="calendar-tab">
 				<div class="col" id="schedule-preferences">
-					<div class="hbox h-auto m-b-lg">
+					<div class="hbox h-auto">
 						
 							<div class="panel-body">
 								<form id="scheduleid" name="scheduleid" method="post" action=""
@@ -78,7 +79,7 @@
 
 										<div class="control-group form-group">
 
-											<label class="control-label col-sm-3" for="addToSite"></label>
+											<label class="control-label col-xs-12 col-sm-3" for="addToSite"></label>
 											<div class="controls col-sm-9">
 
 												<div>
@@ -116,7 +117,7 @@
 			<div class="tab-pane" id="businesshours-tab">
 
 				<div class="col" id="schedule-preferences">
-					<div class="hbox h-auto m-b-lg">
+					<div class="hbox h-auto">
 							<div class="panel-body">
 
 								<form class="form-horizontal">
@@ -155,7 +156,7 @@
 			<div class="tab-pane" id="meeting-types-tab">
 
 				<div class="col" id="schedule-preferences">
-					<div class="hbox h-auto m-b-lg">
+					<div class="hbox h-auto">
 						
 							<div class="panel-body">
 
@@ -270,7 +271,7 @@
 			</div>
 			<div class="tab-pane" id="advanced-tab">
 				<div class="col" id="schedule-preferences">
-					<div class="hbox h-auto m-b-lg">
+					<div class="hbox h-auto">
 						
 							<div class="panel-body">
 
@@ -302,7 +303,7 @@
 																		placeholder="{{agile_lng_translate 'prefs-online-calendar' 'buffer-time'}}">
 																</div>
 																<div class="col-sm-3 m-t-xs">
-																	<select class="form-control" id="bufferTimeUnit"
+																	<select class="form-control theme-width" id="bufferTimeUnit"
 																		name="bufferTimeUnit">
 																		<option value="minutes">{{agile_lng_translate 'web-rules' 'minutes'}}</option>
 																		<option value="hours">{{agile_lng_translate 'prefs-online-calendar' 'hours'}}</option>
@@ -347,7 +348,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="word-break-full col-sm-12 col-lg-3">
+	<div class="word-break-full col-sm-12 col-lg-3 agile-theme">
 		<div class="data-block">
 			<div class="p-l p-r">
 				<h4 class="m-t-none">{{agile_lng_translate 'prefs-online-calendar' 'online-appointment-scheduling'}}</h4>

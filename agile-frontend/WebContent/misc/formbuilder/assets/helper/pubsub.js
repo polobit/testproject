@@ -61,7 +61,7 @@ var addAgileApi = function(json, api, callback)
 	var formemailnotification = {};
 	formemailnotification.label = "Email Notification <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to true, owner will be notified via email on form submission' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	formemailnotification.type = "select";
-	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
+	formemailnotification.value = [{value : false, selected : false, label : "false"}, {value : true, selected : true, label: "true"}];
     //Adding the Recaptcha for the website 
 
    //var integrationUrl = window.location.protocol + '//' + window.location.host +'/#integrations' ;

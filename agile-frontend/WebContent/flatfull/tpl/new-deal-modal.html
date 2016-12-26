@@ -39,7 +39,7 @@
              </div> 
             </div> 
            </div> 
-           <div class="toggleHead col-sm-2 text-left" id="showtoggle_show" style="display:none;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
+           <div class="toggleHead col-sm-3 text-left" id="showtoggle_show" style="display:none;margin-top: 5px;"><i class="icon-plus-sign" style="cursor:pointer;color: #23b7e5;"><span class="text-info" style="cursor:pointer;"> Products</span></i></div>
           <div class="advances hide p-r p-l" id="showproducts">
             <div class="row">
             <div class="col-md-10" style="margin-left: 8%;">           
@@ -70,20 +70,17 @@
           </div> 
 
           <div class="text-muted no-products" style="display:none;">
-                   <div class="col-sm-offset-3 col-sm-7" style="font-size:12px;margin-bottom:10px;
-                            margin-top:-15px;padding-left: 9px">
-                                 {{agile_lng_translate 'documents' 'no-products'}}  <a href="#" data-dismiss="modal" class="navigate-products text-info">{{agile_lng_translate 'contact-details' 'here'}}</a>
+                   <div class="col-sm-offset-3 col-sm-7 dealValuehelptext" style="font-size:12px;margin-bottom:10px;padding-left: 9px;margin-top:-11px;">
+                                 {{agile_lng_translate 'documents' 'no-products-deals'}}  <a href="#" data-dismiss="modal" class="navigate-products text-info">{{agile_lng_translate 'contact-details' 'here'}}</a>
                      </div>
             </div>   
-          <div class="control-group form-group" style="margin-bottom:0px;"> 
+          <div class="control-group form-group"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
            <div class="controls col-sm-7"> 
-            <div class="form-group row" style="margin-left:0;margin-right:0"> 
-             <div class="col-md-10 p-n" style="width:92%"> 
-              <input type="text" value="20" class="form-control digits deal-pro required positive_number" id="probability" name="probability" placeholder="{{agile_lng_translate 'deal-view' 'probability'}} " max="100" style="border-radius:2px 0px 0px 2px;"> 
-             </div> 
-             <span class="col-md-1 form-control input-group-addon" style="border-left:none;border-radius:0px 2px 2px 0px;padding-top:9px;"><span style="margin-left:-4px;">%</span></span> 
-            </div> 
+              <div class="input-group probability-form" style="width:100%"> 
+                <input type="text" value="20" class="form-control digits deal-pro required positive_number" id="probability" name="probability" placeholder="{{agile_lng_translate 'deal-view' 'probability'}} " max="100"> 
+                <span class="input-group-addon no-border" id="basic-addon2" style="/* background: #fff; */">%</span> 
+              </div> 
            </div> 
           </div>
           <div class="control-group form-group">

@@ -40,6 +40,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.prefs.IMAPAPI.class);
 	s.add(com.agilecrm.core.api.prefs.OfficePrefsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.SMTPAPI.class);
+	s.add(com.agilecrm.core.api.prefs.GmailSendAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.CampaignReportsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.EmailTemplatesPrefsAPI.class);
 	s.add(com.agilecrm.core.api.search.SearchAPI.class);
@@ -65,6 +66,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.widgets.RapleafWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.StripeWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.TwilioWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.OzonetelWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.ZendeskWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.HelpScoutWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.XeroWidgetsAPI.class);

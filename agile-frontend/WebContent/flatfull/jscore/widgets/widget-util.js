@@ -136,6 +136,9 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				if (pluginName == "Bria"){
 					globalCallWidgetSet();
 				}
+				if (pluginName == "Ozonetel"){
+					globalCallWidgetSet();
+				}
 				
 				if (pluginName == "Skype"){
 					globalCallWidgetSet();
@@ -159,6 +162,8 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				callback(data);
 			}
 
+			Backbone.history.navigate('add-widget', { trigger : true });
+			
 		}, error : function(data){
 			console.log(data);
 

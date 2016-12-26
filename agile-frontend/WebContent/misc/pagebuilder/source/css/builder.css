@@ -426,10 +426,6 @@ body .sp-input {
 	left: auto;
 }
 
-.styleEditor .link_Tab input {
-	margin-bottom: 20px;
-}
-
 .styleEditor .form-group.fullWidth > input {
     float: none;
     width: 100%;
@@ -442,10 +438,6 @@ body .sp-input {
 
 .styleEditor .fileinput .thumbnail {
 	border-radius: 0px;
-}
-
-.styleEditor .imageFileTab > input {
-	margin-bottom: 20px;
 }
 
 .styleEditor .imageFileTab > .form-group {
@@ -940,24 +932,18 @@ li.element {
 }
 
 #canvasOverlay {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
+	display: flex;
+    -webkit-box-pack: center;
+	justify-content: center;
+    -webkit-box-align: center;
+	align-items: center;
 	background: RGBA(45, 62, 79, 0.5);
-	display: -webkit-box;
-  	display: -webkit-flex;
-  	display: -ms-flexbox;
-  	display: none;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: baseline;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
 }
 
 @-webkit-keyframes pulse {
@@ -1059,3 +1045,6 @@ li.element {
 }
 .left{float:left;}
 .right{float:right;}
+.agile-link:hover{
+	cursor: pointer;
+}

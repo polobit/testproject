@@ -1,20 +1,22 @@
 <script id="subscribe-new-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 		<div class="row">
   			<div class="col-md-12">
 				<h3 class="pull-left h3 font-thin">{{agile_lng_translate 'plan-and-upgrade' 'plan-and-upgrade'}}</h3>
 			</div>
 		</div>
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-xs">
 <div class="row">
-	<div class="col-md-9">
-		<div class="tab-container">
+	<div class="col-md-9 tabs">
 {{#check_plan "FREE"}}
-<div class="" style="font-size: 13px;position: relative;top: -10px;margin: 0 auto;z-index: 9;width: 202px;bottom: -8px;"><span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{agile_lng_translate 'plan-and-upgrade' 'you-are-currently-on-free-plan'}}</span></div>
-
-			<ul class="nav nav-tabs {{#if billingData}}{{else}}hide{{/if}}" id="subTab" style="margin-top: -18px;">
+      <div class="text-center m-b">
+        <span style="padding: 5px 15px 5px 15px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{agile_lng_translate 'plan-and-upgrade' 'you-are-currently-on-free-plan'}}</span>
+      </div>
+      <div class="tab-container m-b-none {{#if billingData}}{{else}}hide{{/if}}">
+			<ul class="nav nav-tabs {{#if billingData}}{{else}}hide{{/if}}" id="subTab">
 {{else}}
+<div class="tab-container m-b-none">
 <ul class="nav nav-tabs {{#if billingData}}{{else}}hide{{/if}}" id="subTab">
 {{/check_plan}}
 										    <li role="presentation" id="usertab" class="active" data-tab="1">
@@ -34,7 +36,8 @@
   											{{/checkPlan}}
 											{{/if}}
 </ul>
-            <div class="tab-content" style=" display: block;">
+</div>
+            <div class="tab-content wrapper-md bg-white" style=" display: block;">
             	<div class="tab-pane active" role="tab-panel" id="users-content">
 <div class="panel-body p-t-none">
               		 <div class="row">
@@ -189,7 +192,7 @@
         </label> 
                <div class="controls col-sm-3">
 
-			<select name="quantity" id="user_quantity" class="form-control">
+			<select name="quantity" id="user_quantity" class="form-control select-new-theme">
 						{{#fillSelectOptionWithNumbers "1" "100"}}{{/fillSelectOptionWithNumbers}}
 
 						<option disabled="disabled">{{agile_lng_translate 'plan-and-upgrade' 'contact-us-if-you-need-more-users'}}</option>
@@ -213,7 +216,7 @@
 	<div class="col-md-2"></div>
 	<label class="control-label col-sm-3">{{agile_lng_translate 'plan-and-upgrade' 'billing-cycle'}}</label> 
 		<div class="controls col-sm-3">
-			<select name="cycle" id="billing_cycle" class="form-control">
+			<select name="cycle" id="billing_cycle" class="form-control select-new-theme">
 				<option value="monthly" selected>Monthly</option>
 				<option value="yearly">Yearly {{agile_lng_translate 'plan-and-upgrade' 'yearly-20-percent-off'}}
 				</option>
@@ -567,10 +570,9 @@ Proceed to Trial
 
 	        </div>  <!-- End of tab-content -->
 
-        </div> <!-- End of tab container -->
 		
     </div> <!-- End of col-md-9 -->
-<div class="col-md-3">
+<div class="col-md-3 new-them-upgrade">
 	{{#if billingData}}
 	{{else}}
 		<div id="email" class="panel panel-default wrapper-md">
@@ -878,15 +880,20 @@ Proceed to Trial
 			     <fieldset> 
 			      <div class="control-group form-group m-b-none"> 
 			       <label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'emails'}}<span class="field_req">*</span></label> 
-			       <div class="controls col-sm-9"> 
-					<input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" {{#is_mobile}} style="width:75%;" {{else}} style="width:25%;" {{/is_mobile}}>
-			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>
+			       <div class="controls col-sm-5"> 
+					<!-- <input type="text" id="email_credits_count" name="nextRechargeCount" value="" class="form-control required digits inline-block pull-left" min="5" {{#is_mobile}} style="width:75%;" {{else}} style="width:25%;" {{/is_mobile}}>
+			        <span class="input-group-addon form-control pull-left" style="width:25%;padding-top:9px;">× 1000</span>  -->
 			        
+             <div class="input-group"> 
+                <input type="text"  class="form-control digits required " value="" id="email_credits_count" name="nextRechargeCount" min="5" > 
+                <span class="input-group-addon no-border" id="basic-addon2" style="/* background: #fff; */">*1000</span> 
+              </div> 
+
 			       </div>
-			       <div class="col-sm-offset-3 p-l help-block m-b-none"> 
+			       <div class="col-sm-offset-3 col-sm-8 p-l help-block m-b-none"> 
 				     {{agile_lng_translate 'billing' 'email-credits-tooltip'}} @ $4/1000 {{agile_lng_translate 'portlets' 'emails'}}.
 				   </div>
-			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 p-l {{#is_mobile}} inline-block p-t {{else}} block {{/is_mobile}}"></span> 
+			       <span for="email_credits_count" generated="true" class="help-inline col-sm-offset-3 col-sm-8 p-l {{#is_mobile}} inline-block p-t {{else}} block {{/is_mobile}}"></span> 
 			      </div>
 			      <div class="control-group form-group m-b-xs"> 
 			       <label class="control-label {{#is_mobile}} col-xs-4 {{else}} col-sm-3 {{/is_mobile}}">{{agile_lng_translate 'plan-and-upgrade' 'total-cost'}}</label> 
@@ -916,8 +923,12 @@ Proceed to Trial
 				 <div class="form-group">
 			      <label class="col-sm-5 control-label">Recharge Emails With<span class="field_req">*</span></label>
 			      <div class="col-sm-6">
-			        <input type="text" name="nextRechargeCount" value="{{nextRechargeCount}}" style="width:38%;" class="form-control required digits inline-block pull-left" min="1">
-			        <span class="input-group-addon form-control pull-left" style="width:25%;">*1000</span>
+			        <!-- <input type="text" name="nextRechargeCount" value="{{nextRechargeCount}}" style="width:38%;" class="form-control required digits inline-block pull-left" min="1">
+			        <span class="input-group-addon form-control pull-left" style="width:25%;">*1000</span> -->
+              <div class="input-group"> 
+                <input type="text"  class="form-control digits required " value="{{nextRechargeCount}}" id="email_credits_count" name="nextRechargeCount"  min="1" > 
+                <span class="input-group-addon no-border" id="basic-addon2" style="/* background: #fff; */">*1000</span> 
+              </div> 
 			        <span class="clearfix"></span>
 			        <span id="nextRechargeCountError" style="font-size: 11px;" for="nextRechargeCount" generated="true" class="help-inline p-t-xs"></span>
 			     </div>
@@ -925,7 +936,7 @@ Proceed to Trial
 
 				<div class="form-group m-b-sm">
 			      <label class="col-sm-5 control-label">When Emails Falls To<span class="field_req">*</span></label>
-			      <div class="col-sm-4">
+			      <div class="col-sm-6">
 			        <input type="text" name="autoRenewalPoint" value="{{autoRenewalPoint}}" class="form-control required digits" min="0">
 			        <span id="autoRechargeLimitError" style="font-size: 11px;" for="autoRenewalPoint" generated="true" class="help-inline p-t-xs"></span>
 			      </div>

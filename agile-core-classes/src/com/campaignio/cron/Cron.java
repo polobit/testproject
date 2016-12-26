@@ -129,6 +129,7 @@ public class Cron extends HttpServlet
 	public static final String CRON_TYPE_INTERRUPT = "interrupt";
 	public static final String CRON_TYPE_TIME_OUT = "timeout";
 
+	public static final String CRON_TYPE="__cron-type__";
 	/**
 	 * Cron Dao.
 	 */

@@ -21,9 +21,9 @@ git checkout .
 
 git stash
 
-git checkout maven_version29-2
+git checkout theme-1-1
 
-git pull origin maven_version29-2
+git pull origin theme-1-1
 
 # Change queue acls in beta before deploy
 
@@ -32,7 +32,7 @@ sed -i 's/yaswanth@agilecrm.com/naresh@faxdesk.com/g' "$PROJECT_TARGET_LOCATION"
 ant create-target  -DRELEASE_VERSION="$2" -DPRODUCTION=false;
 
 
-appcfg.sh --oauth2 --email=naresh@faxdesk.com -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
+appcfg.sh --oauth2 -A agilecrmbeta -V "$2" update "$PROJECT_TARGET_LOCATION"/agile-java-server/"$1".war/
 
 # Reset queue acls after deploy
 
@@ -40,3 +40,4 @@ sed -i 's/naresh@faxdesk.com/yaswanth@agilecrm.com/g' "$PROJECT_TARGET_LOCATION"
 
 #cd ../
 
+git checkout sandbox_pre_live_new

@@ -2,9 +2,9 @@
 <div class="custom-animated custom-fadeInUp"> 
 {{#hasMenuScope 'LANDINGPAGES'}}
 <div id="Landingpages-top-view"></div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-none">
 <div class="row">
-<div class="col-md-9" id="landing-pages-collection-container"></div>
+<div class="col-md-9 no-panel-border" id="landing-pages-collection-container"></div>
 {{#is_mobile}}
     <div class="col-md-3" id="learn-workflows">
         <h4 class="m-t-none m-b-sm">
@@ -64,7 +64,7 @@
 </div>
 </script>
         <script id="landing-pages-top-header-template" type="text/html">
-                    <div class="wrapper-md lter bg-light b-b">
+                    <div class="wrapper-md lter bg-light b-b agile-page-header">
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                  <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
@@ -132,10 +132,10 @@
                                 {{else}}
                                     <div class="pull-right">
                                         <div class="btn-group right pos-rlt pull-right">
-                                            <a id="lp-video-tutorial" onclick="lpVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
+                                            <a id="lp-video-tutorial" onclick="lpVideoPopup();" class="help-video btn btn-sm btn-lg-imp btn-default btn-default-imp-white" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
                                                 <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
                                             </a>
-                                            <a href="pagebuilder" class="btn btn-default btn-addon  btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                            <a href="pagebuilder" class="btn btn-default btn-primary-imp btn-lg-imp btn-addon  btn-sm" id="addLandingPage"><i class="icon-plus-sign"></i> {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
                                         </div>  
                                      </div> 
                                     <div class="clearfix"></div>
@@ -156,7 +156,7 @@
                                     <div class="text">
                                         {{agile_lng_translate 'landing-pages' 'about'}}
                                     </div>
-                                    <a href="pagebuilder" class="m-t-xs btn btn-default btn-sm"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
+                                    <a href="pagebuilder" class="m-t-xs btn btn-default btn-default-imp btn-lg-imp btn-default-imp btn-sm"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'landing-pages' 'add-landing-page'}}</a>
                                 </div>
                                 <div class="clearfix">
                                 </div>

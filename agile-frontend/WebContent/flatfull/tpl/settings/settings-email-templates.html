@@ -1,6 +1,6 @@
 <script id="settings-email-templates-collection-template" type="text/html">
     <div class="col-md-9" {{#is_mobile}} style="display:block;"{{/is_mobile}}>
-        <div class="hbox h-auto {{#is_mobile}} {{else}} m-b-lg {{/is_mobile}}">
+        <div class="hbox h-auto {{#is_mobile}} {{else}} m-b-lg {{/is_mobile}} no-panel-border" id="email-templates-list-view">
             <div class="panel panel-default">
                 <div class="panel-heading {{#is_mobile}} b-n {{/is_mobile}}">
                     <div class="pull-left m-t-xs">{{agile_lng_translate 'preferences' 'email-templates-list'}}</div>
@@ -128,10 +128,10 @@
 
 <script id="settings-email-templates-top-header-template" type="text/html">
 <div>
-    <div class="wrapper-md lter bg-light b-b">
+    <div class="wrapper-md lter bg-light b-b agile-page-header">
         <div class="btn-toolbar m-l-none pos-rlt">
             <div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
-                <div class="">
+                <div id="email-templates-header">
                     <h4 class="inline-block m-n">
                     {{agile_lng_translate 'preferences' 'email-templates'}}
                     <div class="inline-block" id="filter-email-ctg-div" data-id="new">
@@ -158,7 +158,7 @@
             {{else}}
                 <div class="pull-right">  
                      <div>
-                         <a href="#emailbuilder-templates" class="btn btn-default btn-sm btn-addon" 
+                         <a href="#emailbuilder-templates" class="btn btn-default btn-primary-imp btn-lg-imp btn-sm btn-addon" 
                          id="addEmailTemplate">
                             <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'other' 'add'}}&nbsp;{{agile_lng_translate 'tickets' 'email-template'}}</a>
                     </div>

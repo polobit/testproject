@@ -16,7 +16,7 @@
 </script>
 
 <script id="import-contacts-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-sm-12 col-md-12">
         
@@ -25,7 +25,7 @@
     </div>
 </div>
 </div>
-<div class="tab-content wrapper-md">
+<div class="tab-content wrapper-md agile-p-t-sm">
 			<div class="tabs" id="import-tabs-content">
 				<div class="tab-container m-b-none">
 			       <ul class="nav nav-tabs">
@@ -53,7 +53,7 @@
 								{{agile_lng_translate 'leads-view' 'import-upto-10000-leads-from-a-CSV-file'}}
 							</div>
 							<input type="hidden" id="type" value="leads" class="form-control">
-        					<fieldset>
+        					<fieldset class="btn-group">
 							{{#canSyncContacts}}
 	           					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
 	           					<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
@@ -82,7 +82,7 @@
 									{{agile_lng_translate 'contacts-view' 'import-upto-10,000-contacts-from-a-CSV-file'}}
 								</div>
 								<input type="hidden" id="type" value="contacts" class="form-control">
-	        					<fieldset>
+	        					<fieldset class="btn-group">
 								{{#canSyncContacts}}
 				{{#if ../type}}
 						<span class="btn btn-sm btn-default inline-block" disabled="">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</span>
@@ -123,7 +123,7 @@
 								{{agile_lng_translate 'contacts-view' 'import-upto-10,000-companies-from-a-CSV-file'}}
 							</div>
 							<input type="hidden" id="type" value="company" class="form-control">
-        					<fieldset>
+        					<fieldset class="btn-group">
 							{{#canSyncContacts}}
            					<div class="btn btn-sm upload upload-contacts-ele btn-default inline-block">{{agile_lng_translate 'contacts-view' 'upload-csv-file'}}</div>
            					<a href="/flatfull/images/SampleCompanies.csv" title="{{agile_lng_translate 'other' 'sample-csv-file'}}" download><i class="fa fa-download btn btn-sm  btn-default inline-block" style="margin-left: -2px;border-left: 0px;    border-radius: 0px 2px 2px 0px;"></i></a>
@@ -186,7 +186,7 @@
 							{{agile_lng_translate 'contacts-view' 'import-contacts-from-google'}}
 							</div>
 							<a href="#sync" onclick='_agile_set_prefs("datasync_tab","google-tab");'>
-							<div class="btn btn-sm btn-default inline-block" sync_type="GOOGLE" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}
+							<div class="btn btn-sm btn-default inline-block btn-default-imp btn-lg-imp" sync_type="GOOGLE" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}
 							</div></a>
 						</div>
 					</div>
@@ -207,7 +207,7 @@
 						<fieldset>
 						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
 
-						 <div class="btn btn-sm btn-default inline-block m-t-60" sync_type="QUICKBOOK" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}</a>
+						 <div class="btn btn-sm btn-default inline-block btn-default-imp btn-lg-imp m-t-60" sync_type="QUICKBOOK" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}</a>
 						 </fieldset>
 						 </div>
 						</div>
@@ -229,7 +229,7 @@
 						{{agile_lng_translate 'contacts-view' 'import-contacts-from-shopify'}}
 						</div>
 						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","ecommerce-tab");'>
-						<div class="btn btn-sm btn-default inline-block m-t-60" sync_type="SHOPIFY" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}
+						<div class="btn btn-sm btn-default inline-block btn-default-imp btn-lg-imp m-t-60" sync_type="SHOPIFY" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}
 						</div></a>
 						
 						</div>
@@ -251,7 +251,7 @@
 						 {{agile_lng_translate 'contacts-view' 'import-contacts-from-stripe'}}
 						</div>
 						<a href="#sync" onclick='_agile_set_prefs("datasync_tab","payment-tab");'>
-						 <div class="btn btn-sm btn-default inline-block m-t-60" sync_type="STRIPE" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}</div> </a>
+						 <div class="btn btn-sm btn-default inline-block btn-default-imp btn-lg-imp m-t-60" sync_type="STRIPE" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}</div> </a>
 						</div>
 					</div>
 					</div>
@@ -269,7 +269,7 @@
 							{{agile_lng_translate 'contacts-view' 'import-contacts-from-freshbooks'}}
 						 </div>
 						 <a href="#sync" onclick='_agile_set_prefs("datasync_tab","accounting-tab");'>
-						 <div class="btn btn-sm btn-default inline-block m-t-60" sync_type="FRESHBOOKS" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}</div></a>
+						 <div class="btn btn-sm btn-default inline-block btn-default-imp btn-lg-imp m-t-60" sync_type="FRESHBOOKS" id="data-sync-type">{{agile_lng_translate 'contacts-view' 'import'}}</div></a>
 						</div>
 					
 					</div>
@@ -327,14 +327,14 @@
 </div>
 </script>
 <script id="import-contacts-2-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-sm-12 col-md-12">
             <h3 class="font-thin h3">{{agile_lng_translate 'contacts-view' 'csv-contacts-import'}} <br><small> {{agile_lng_translate 'contacts-view' 'field-mapping'}} </small></h3>
     </div>
 </div>
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-none import-panel-heading">
 <div class="row">
     <div class="col-sm-9 col-md-9">
 		<div class="panel panel-default">
@@ -390,8 +390,8 @@
 			<div class="row">
 			<div class="col-ms-12 col-sm-12 col-xs-12">
 			<span class="pull-left m-b-xs">{{agile_lng_translate 'other' 'campaign-webhooks-will-not-be-triggered-modified'}}</span>
-			<a class="btn btn-sm btn-primary pull-right" id="import-contacts" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
-			<a class="btn btn-default btn-sm pull-right" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+			<a class="btn btn-sm btn-primary pull-right btn-lg-imp" id="import-contacts" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
+			<a class="btn btn-default btn-sm pull-right btn-lg-imp" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
 			<div id="import-validation-error"></div>
 			</div>
 			</div>
@@ -401,7 +401,7 @@
 	<div class="col-sm-3 col-md-3 p-none">
         <div class="data-block">
             <div class="wrapper-sm">
-				<h4 class="m-t-none h4">
+				<h4 class="m-t-none h4 font-new-theme">
                     {{agile_lng_translate 'contacts-view' 'import-help'}}
                 </h4>
                 
@@ -424,7 +424,7 @@
 
 
 <script id="import-companies-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-sm-12 col-md-12">
      
@@ -433,13 +433,12 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-none import-panel-heading">
 <div class="row">
     <div class="col-sm-9 col-md-9">
     <div class="panel panel-default">
     <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'csv-companies-import-list'}}</div>
-		<div class="col-sm-9 col-md-9">
-			
+		
 				<table class="table table-striped m-b-none agile-table panel">
 			    <thead id="import-header">
 			       </thead><thead>
@@ -466,7 +465,6 @@
 					{{/each_with_index1}}
 				 </tbody>
 			</table>
-		</div>
 		<footer class="panel-footer">
 		<div class="row">
 		  <div class="col-md-12 col-sm-12 col-xs-12">
@@ -489,8 +487,8 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 		
 			
-			<a class="btn btn-sm btn-primary pull-right" id="import-comp" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
-			<a class="btn btn-default btn-sm pull-right" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+			<a class="btn btn-sm btn-primary pull-right btn-lg-imp" id="import-comp" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
+			<a class="btn btn-default btn-sm pull-right btn-lg-imp" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
 			<div id="import-validation-error"></div>
 			
 		</div>
@@ -629,14 +627,14 @@
 </script>
 
 <script id="csv_upload_options-template" type="text/html">
-<select class="import-select form-control contacts-import-select">
+<select class="import-select form-control contacts-import-select select-new-theme">
 <option value="properties__ignore_">-{{agile_lng_translate 'contacts-view' 'ignore'}}-</option>
 <option value="properties_first_name">{{agile_lng_translate 'other' 'first-name'}}</option>
 <option value="properties_last_name">{{agile_lng_translate 'other' 'last-name'}}</option>
 <option value="properties_company">{{agile_lng_translate 'other' 'company'}}</option>
 <option value="tags">{{agile_lng_translate 'contact-edit' 'tag'}}</option>
 <option value="note">{{agile_lng_translate 'menu' 'note'}}</option>
-<option value="properties_title">{{agile_lng_translate 'contact-edit' 'job-description'}}</option>
+<option value="properties_title">{{agile_lng_translate 'contact-edit' 'title'}}</option>
 <optgroup label="Email">
     <option value="properties_home-email">{{agile_lng_translate 'contacts-view' 'email-personal'}}</option>
     <option value="properties_work-email">{{agile_lng_translate 'contacts-view' 'email-work'}}</option>
@@ -685,7 +683,7 @@
 
 
 <script id="csv_companies_upload_options-template" type="text/html">
-<select class="import-select form-control">
+<select class="import-select form-control select-new-theme">
 <option value="properties__ignore_">-{{agile_lng_translate 'contacts-view' 'ignore'}}-</option>
 <option value="properties_name">{{agile_lng_translate 'companies-edit' 'organization'}}</option>
 <option value="tags">{{agile_lng_translate 'contact-edit' 'tag'}} </option>
@@ -739,7 +737,7 @@
 
 
 <script id="csv_deals_options-template" type="text/html">
-<select class="import-select form-control">
+<select class="import-select form-control select-new-theme">
 <option value="properties__ignore_">-{{agile_lng_translate 'contacts-view' 'ignore'}}-</option>
 <option value="properties_id">{{agile_lng_translate 'deal-view' 'deal-id'}}</option>
 <option value="properties_name">{{agile_lng_translate 'documents' 'deal-name'}}</option>
@@ -830,8 +828,8 @@
 			</div>
 			<div class="row">
 			<div class="col-ms-12 col-sm-12 col-xs-12">
-			<a class="btn btn-sm btn-primary pull-right" id="import-leads" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
-			<a class="btn btn-default btn-sm pull-right" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+			<a class="btn btn-sm btn-primary pull-right btn-lg-imp" id="import-leads" style="margin-left:2px">{{agile_lng_translate 'contacts-view' 'import'}}</a>
+			<a class="btn btn-default btn-sm pull-right btn-lg-imp" id="import-cancel">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
 			<div id="import-validation-error"></div>
 			</div>
 			</div>
@@ -862,7 +860,7 @@
 </script>
 
 <script id="leads_csv_upload_options-template" type="text/html">
-<select class="import-select form-control contacts-import-select">
+<select class="import-select form-control contacts-import-select select-new-theme">
 <option value="properties__ignore_">-{{agile_lng_translate 'contacts-view' 'ignore'}}-</option>
 <option value="properties_first_name">{{agile_lng_translate 'other' 'first-name'}}</option>
 <option value="properties_last_name">{{agile_lng_translate 'other' 'last-name'}}</option>

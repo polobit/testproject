@@ -31,7 +31,7 @@ public class VoiceMailAPI
 	 * @return list of voice mails.
 	 */
 	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({  MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	public List<VoiceMail> getAllVoiceMails(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
 	{
 		if (count != null)

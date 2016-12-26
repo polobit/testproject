@@ -3,11 +3,11 @@
 <div>
 	<div class="text-xs" style="padding: 0px;">
 
-		<div class="col-lg-12  drag-pop-div" style="padding:0px;width: 350px;background: white;"> 
+		<div class="col-lg-12  drag-pop-div" style="padding:0px;width: 350px;background: white;max-height: 198px;min-height: 148px;"> 
 
 			<div class="panel panel-default" style="border-bottom: none;margin-bottom: 0px;">
 
-				<div class="panel-heading noty-heading" style="background:#D6E6F4;height: 85px;">
+				<div class="panel-heading noty-heading" style="background:#D6E6F4;height: auto;">
 
 					<div class="col-lg-12" style="padding: 0px;margin: 0px;height: 0px;top:7px;left: 15px;">
 						<div class="col-lg-10"></div>
@@ -24,15 +24,16 @@
 								{{/if}}
 							</span>
 						</div>
-						<div class="col-lg-10" style="padding-left: 0px;padding-right: 0px;">
+						<div class="col-lg-10" style="padding-left: 0px;padding-right: 0px;overflow-wrap: break-word;">
+							{{#if properties}}
+								<div class="col-lg-7"><a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}} </a></div>
+							{{/if}}
+							<!--<div class="col-lg-5 pull-right"><a href="#" class="noty_twilio_add_contact pull-right" title="add to contact"><i class="icon icon-user"></i></a></div>-->
 							<div class="col-lg-12" style="padding-right: 0px;">
 								<span class="text-base" id="noty_text_msg">
 									{{text-msg}}
 								</span> &nbsp;&nbsp; <span id="notyCallDetails" callId="{{callId}}" number="{{phone}}"> {{phone}} </span>
 							</div>
-								{{#if properties}}
-							<div class="col-lg-12"><a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}} </a></div>
-								{{/if}}
 						</div>
 					</div>
 					
@@ -40,18 +41,32 @@
 
 				</div>
 
+				<div class="col-lg-12" style="padding: 0px;width: 350px;background: white; border-top: solid 1px #d6e6f4;">
+					<div class="call_noty_description" style="border: solid 1px #DEE5E7;border-top: none;">
+						<div class="">
+							<textarea id="call-noty-notes" placeholder="{{agile_lng_translate 'other' 'notes'}}" rows="4" cols="50" style="width: 344px;border: none;margin-left: 2px;margin-top: 3px;"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-lg-12" id="calltransferdiv" style="display:none;padding: 5px;border-bottom: solid 1px #d6e6f4;">
+					<div class="col-lg-6" style = "padding: 0px;">
+					<select name="account" id="calltransferoptions" class="calltransferoptions form-control pull-left" style="margin-bottom: 3px;"></select></div>
+					<div class="col-lg-6" style = "padding: 0px;"><a href="#" class="noty_twilio_transefer btn btn-sm btn-primary pull-right">Transfer</a></div>
+				</div>
 				{{#if_equals msg.buttons.length "0"}}
 				
 				{{else}}
-					<div class="panel-body noty_buttons" id="panel-body1" style="height: 45px;padding: 5px;">
+					<div class="clearfix"></div>
+					<div class="panel-body noty_buttons voice-buttons" id="panel-body1" style="height: 45px;padding: 5px;">
 						
-						<div class="col-lg-5" id="call-noty-l1" class = "call-voicemail" style = "padding: 0px;margin-top: 5px;">
+						<div class="col-lg-3" id="call-noty-l1" class = "call-voicemail" style = "padding: 0px;">
 						</div>
-
-						<div class="col-lg-7" id="call-noty-l2" style="padding-right: 0px">
+						<!-- <div calss="col-lg-2"><a href="#" class="noty_twilio_transefer">Call transfer</a></div>-->
+						<div class="col-lg-9 pull-right" id="call-noty-l2" style="padding-right: 0px;padding-left: 0px;">
 							<div class="internal-col pull-right">
 								{{#each msg.buttons}} 
-									<div id="{{this.id}}"  class="{{this.class}}">{{this.title}}</div>
+									<div id="{{this.id}}"  class="{{this.class}}" title="{{this.popover-date}}">{{this.title}}</div>
 								{{/each}}
 							</div>
 						</div>						
@@ -70,7 +85,7 @@
 </script>
 
 <script type="text/html" id="call-noty-notes-template">
-<div class="col-lg-12" style="position: relative;z-index: 10000;padding: 0px;width: 350px;background: white; border-top: solid 1px #d6e6f4;">
+<div class="col-lg-12" style="padding: 0px;width: 350px;background: white; border-top: solid 1px #d6e6f4;">
 	<div class="call_noty_description" style="border: solid 1px #DEE5E7;border-top: none;">
 		<div class="">
 			<textarea id="call-noty-notes" placeholder="{{agile_lng_translate 'other' 'notes'}}" rows="4" cols="50" style="width: 344px;border: none;margin-left: 2px;margin-top: 3px;"></textarea>
@@ -99,5 +114,76 @@
             </fieldset>
 
         </form>
+</div>
+</script>
+//sms noty template
+<script type="text/html" id="sms-noty-template">
+<div class="sms-draggable-noty" id= "sms-noty" style="z-index: 10000;position: relative;">
+<div>
+	<div class="text-xs" style="padding: 0px;">
+
+		<div class="col-lg-12  drag-pop-div" style="padding:0px;width: 350px;background: white;"> 
+
+			<div class="panel panel-default" style="border-bottom: none;margin-bottom: 0px;">
+
+				<div class="panel-heading noty-heading" style="background:#D6E6F4;height: 85px;">
+
+					<div class="col-lg-12" style="padding: 0px;margin: 0px;height: 0px;top:7px;left: 15px;">
+						<div class="col-lg-10"></div>
+						<div class="col-lg-2 move-icon none"><i class="icon-move"></i></div>
+					</div>	
+
+					<div class="col-lg-12" style="padding-left : 0px">
+						<div class="col-lg-2" style="padding-left : 0px">
+							<span class="img-inital r r-2x call_img thumb-sm">
+								{{#if properties}}
+									<img class='w-full img-circle' src="{{gravatarurl properties 80}}" />
+								{{else}}
+									<img class='w-full img-circle' src="https://test55-dot-sandbox-dot-agilecrmbeta.appspot.com/flatfull/images/user-default.jpg" />
+								{{/if}}
+							</span>
+						</div>
+						<div class="col-lg-10" style="padding-left: 0px;padding-right: 0px;">
+							<div class="col-lg-12" style="padding-right: 0px;">
+								<span class="text-base" id="noty_text_msg">
+									{{text-msg}}
+								</span> <span id="notyCallDetails" callId="{{callId}}" number="{{phone}}"> {{phone}} </span>
+							</div>
+								{{#if properties}}
+							<div class="col-lg-12"><a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}} </a></div>
+								{{/if}}
+						</div>
+					</div>
+					
+					<div class="clearfix"></div>
+
+				</div>
+					<div id="panel-body1" style=" height: 160px; border: 1px solid #d6e6f4;">
+						<div class="col-lg-12" id="sms-noty-l1" class = "call-voicemail" style = "margin-top: 5px;">
+						</div>
+
+						<div class="sms_noty_description">
+						<label style="margin-left:2px"><b>Message:<span style="color:red;">*</span></b></label>
+						<textarea id="sms-noty-notes" placeholder="Enter messgae text" rows="4" cols="50" style="width: 345px;border: 1px solid #d6e6f4;" maxlength="160" onkeyup="countChar(this);" 
+                         ></textarea>
+						</div>
+						<div class="col-lg-12" id="call-noty-l2" style="padding-right: 0px">
+
+						<span class="sms-message-count font-bold" style="margin-right:6px ; margin-left: -12px; margin-left:-13px;"></span>
+						<span class="sms-message hidden" style="margin-right:5px"></span>
+							<a id="send-sms " class="btn-sm btn-primary" href="javascript:void(0);" onclick="sendPersonalSMS(this,{{id}});" style="float: right;  margin-right: 5px;">Send SMS</a>
+							<a id="" class="btn-sm btn-default" href="javascript:void(0);" onclick="closeCallNoty(true);" style="float: right;margin-right: 5px;width: 76px;text-align: center;background-color: #d6d6d6;">Cancel</a>
+						</div>
+					</div>					
+
+					</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
 </div>
 </script>

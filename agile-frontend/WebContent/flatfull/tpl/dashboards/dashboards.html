@@ -1,10 +1,10 @@
 <script id="dashboard-collection-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 	<div class="row">
     	<div class="col-md-12">
         	  <h3 class="pull-left font-thin h3">{{agile_lng_translate 'portlets' 'dashboards'}}</h3>
             <div class="text-center">
-                <a href="#add-dashboard" class="btn btn-sm btn-default right" id="addDashboard">
+                <a href="#add-dashboard" class="btn btn-sm btn-default  btn-primary-imp btn-lg-imp right" id="addDashboard">
                     <span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'portlets' 'add-dashboard'}}
                 </a>
             </div>
@@ -14,9 +14,9 @@
 </div>
 <div class="wrapper-md">
 	<div class="row">
-    	<div class="col-md-9"> 
+    	<div class="col-md-9 no-panel-border"> 
 	        {{#if this.length}}
-	        	<div class="panel panel-default">
+	        	<div class="panel panel-default" id="user-dashboard-list">
 					<div class="table-responsive">
 	        			<table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/dashboards/bulk" id="dashboard-list">  
 	            			<thead>

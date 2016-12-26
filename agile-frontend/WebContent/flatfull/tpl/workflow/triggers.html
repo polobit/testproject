@@ -52,14 +52,14 @@
     {{/is_mobile}}
 </script>
 <script id="triggers-collection-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-sm-12 col-md-12">
 			
                     <h3 class="pull-left font-thin h3">{{agile_lng_translate 'campaigns' 'triggers-title'}}</h3>
 
                     <div class="pull-right add-campaign-btn">
-                    <a href="#trigger-add" class="btn right btn-default btn-sm btn-addon" id="addTrigger">
+                    <a href="#trigger-add" class="btn right btn-default btn-sm btn-addon btn-lg-imp btn-primary-imp" id="addTrigger">
                     <i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-trigger'}}
                     </a>
                     </div>
@@ -68,7 +68,7 @@
     </div>
 </div>
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-sm">
 <div class="row">
         {{#unless this.length}}
 		<div class="col-md-9 col-sm-9 table-responsive">
@@ -83,7 +83,7 @@
                     <p class="m-b-none">
                         {{agile_lng_translate 'campaigns' 'no-triggers-desc'}}
                     </p>
-                    <a href="#trigger-add" class="btn btn-slate-action btn-default btn-sm m-t-xs">
+                    <a href="#trigger-add" class="btn btn-slate-action btn-default-imp btn-lg-imp btn-default btn-sm m-t-xs">
 						<i class="icon-plus-sign"></i>  {{agile_lng_translate 'campaigns' 'add-trigger'}} 
 					</a>
                 </div>
@@ -109,8 +109,8 @@
 
             {{else}}
 
-            <div class="col-md-9 col-sm-9 table-responsive">
-				<div class="panel panel-default">
+            <div class="col-md-9 col-sm-9 table-responsive" id="campaign-triggers-list">
+				<div class="panel panel-default no-panel-border">
 			    <div class="panel-heading">{{agile_lng_translate 'campaigns' 'triggers-list'}}</div>
                 <table class="table table-striped showCheckboxes m-b-none agile-table panel" url="core/api/triggers/bulk">
                     <thead>
@@ -142,7 +142,7 @@
 			<p>
 				{{agile_lng_translate 'campaigns' 'triggers-desc-3'}}
 			</p>
-            <p>{{agile_lng_translate 'campaigns' 'advanced-triggers-can-be-customised'}}<br>
+            <p>{{agile_lng_translate 'campaigns' 'advanced-triggers-can-be-customised'}}
             {{agile_lng_translate 'campaigns' 'further-in-workflows-based-on-their'}}
                (eg:&#123&#123 deal.value&#125&#125). {{agile_lng_translate 'campaigns' 'complete-list-is-provided'}}
               <a href="#triggers" class="text-info" onClick="window.open('https://github.com/agilecrm/campaigns-merge-fields#detailed-list-of-trigger-event-and-properties','blank')">{{agile_lng_translate 'contact-details' 'here'}}</a>

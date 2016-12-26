@@ -38,6 +38,8 @@ var WidgetsRouter = Backbone.Router
                 "Twilio/:id" : "Twilio",
                 "TwilioIO" : "TwilioIO",
                 "TwilioIO/:id" : "TwilioIO",
+                "Ozonetel" : "Ozonetel",
+                "Ozonetel/:id" : "Ozonetel",
                 "callscript/rules" : "CallScriptShow",
                 "callscript/add-rules" : "CallScriptAdd",
                 "callscript/editrules/:id" : "CallScriptEdit",
@@ -111,6 +113,7 @@ var WidgetsRouter = Backbone.Router
                                     $(that).height(socialHeight);
                                 });
                             }, 1000);*/
+                            $('#settings-widgets-tab-content').find('#call div:nth-child(6)').css({"display":"none"});
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
@@ -132,7 +135,6 @@ var WidgetsRouter = Backbone.Router
 
                     // Shows available widgets in the content
                     $('#prefs-tabs-content').html(that.Catalog_Widgets_View.el);
-
                 });
 
             },
@@ -149,6 +151,13 @@ var WidgetsRouter = Backbone.Router
              */
             TwilioIO : function(id) {
                 addConfigurableWidget(id, "TwilioIO", 'twilioio-login');
+            },
+
+            /**
+             * Manages TwilioIo widget
+             */
+            Ozonetel : function(id) {
+                addConfigurableWidget(id, "Ozonetel", 'ozonetel-login');
             },
 
             Custom : function(id){                
@@ -437,7 +446,6 @@ function getAgileConfiguredWidgetCollection(callback) {
 }
 
 function renderWidgetView(templateName, url, model, renderEle){
-
     var widgetModel = new Widget_Model_Events({
         template : templateName,
         url : url,
@@ -452,11 +460,24 @@ function renderWidgetView(templateName, url, model, renderEle){
              }
             var widgetTab = _agile_get_prefs("widget_tab");
             $("#prefs-tabs-content").find('a[href="#'+widgetTab+'"]').closest("li").addClass("active");
+            var url_oz = window.location.href;
+            if(url_oz.indexOf("#") > -1){
+                url_oz = url_oz.split("/#")[0];
+            }
+            $('#prefs-tabs-content').find('#ozonetelurl').text(url_oz.split("/#")[0]+"/incomingcall?email="+CURRENT_DOMAIN_USER.email);
             initializeTabListeners("widget_tab", "add-widget");
+            $("#twilioio_login_form .question-tag" ).popover({
+              template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+            });
+            $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
         }
     });
     var output = widgetModel.render().el;
     $(renderEle).html(output);
+    $("#twilioio_login_form .question-tag" ).popover({
+      template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+    });
+    $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
 }
 function closesupportnoty(){
     $("#support_plan_alert_info").hide();

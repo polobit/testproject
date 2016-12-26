@@ -76,12 +76,12 @@
 <div class="modal-dialog">
     <div class="modal-content">
 		<div class="modal-header">
-			<button class="close" data-dismiss="modal">x</button>
+			<button class="close" data-dismiss="modal">&times;</button>
 			<h3 class="modal-title"><i class="icon-edit"></i> {{title}} </h3>
 		</div>
 		<div class="modal-body">
 			<span class="verification-msg">
-				{{agile_lng_translate 'Verify-email' 'encourage-msg'}}
+				{{agile_lng_translate 'Verify-email' 'encourage-msg-dkim'}}
 			</span>
 				<form id="verify-email-form">
 					<fieldset>            
@@ -224,7 +224,7 @@
     					<label class="pull-left" onclick="hideCampaignPopup();"><input type="checkbox" id="campaign-save-popup" value="false">{{agile_lng_translate 'landingpages' 'dont-show-me-again'}}</label>
 					</div>
   					<div class="col-xs-4 col-sm-6">	
- 						<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" id="ok">{{agile_lng_translate 'contact-details' 'CLOSE'}}</button>
+ 						<button type="button" class="btn btn-sm btn-primary btn-default-imp" data-dismiss="modal" id="ok">{{agile_lng_translate 'contact-details' 'CLOSE'}}</button>
   					</div>
   				</div>	
 			</div>

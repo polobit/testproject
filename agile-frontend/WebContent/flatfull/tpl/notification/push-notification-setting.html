@@ -1,5 +1,5 @@
 <script id="push-notification-collection-template" type="text/html">
-	<div class="wrapper-md lter bg-light b-b">
+	<div class="wrapper-md lter bg-light b-b agile-page-header agile-beta-tag">
 		<div class="row">
     		<div class="col-md-12">
         		{{#is_mobile}}
@@ -10,13 +10,13 @@
 					<div class="clearfix"></div>
         		{{else}}
         			<h3 class="font-thin h3 pull-left">Push Notifications <small> <span class="label label-sm bg-danger">Beta</span></small></h3>
-					<a href="#push-notification-add" class="btn btn-sm btn-default pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
+					<a href="#push-notification-add" class="btn btn-sm btn-default btn-primary-imp btn-lg-imp pull-right btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> Add Push Notification</a>
 					<div class="clearfix"></div>
         		{{/is_mobile}}
     		</div>
 		</div>
 	</div>
-	<div class="wrapper-md">
+	<div class="wrapper-md agile-p-t-sm">
 	<div class="row">
  		<div class="col-md-9">
 			{{#unless this.length}}
@@ -30,7 +30,7 @@
 							<h4 class="m-t-none">Engage with your audience easily through Browser Push Notification.</h4>
 								<div class="text">Define the Push Notifications and engage with your audience both on the web page and off the web page.
 								</div>
-								<a href="#push-notification-add" class="m-t-xs btn btn-sm btn-default btn-slate-action"><i class="icon-plus-sign"></i> Add Push Notification</a>
+								<a href="#push-notification-add" class="m-t-xs btn btn-lg-imp btn-default-imp btn-sm btn-default btn-slate-action"><i class="icon-plus-sign"></i> Add Push Notification</a>
 						</div>
 						<div class="clearfix"></div>
 							
@@ -52,7 +52,7 @@
 			</div>
 		{{else}}
 			<div class="data-block">
-				<div class="data-container">
+				<div class="data-container no-panel-border" id="push-notify-list-view">
 					<div class="panel panel-default">
 						<div class="panel-heading">Push Notifications List</div>
 						<table class="table table-striped showCheckboxes c-p agile-table tableHeader tab-layout" url="core/api/push/notifications/bulk" data-resizable-columns-id="push-notification-template">
@@ -126,7 +126,7 @@
 </script>
 
 <script id="push-notification-add-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 	<div class="row">
 		<div class="col-md-12" id="edit-add-push-notify-title">
 			{{#if id}}
@@ -139,7 +139,7 @@
 	</div>
 </div>
 
-<div class="wrapper-sm">
+<div class="wrapper-sm agile-p-t-xs">
 <div class="row">
 <div class="col-md-7">
     <div class="panel panel-default">
@@ -188,7 +188,7 @@
                 	 <div class="controls col-sm-6 col-xs-12">
                     	 <input type="url" placeholder="Image url" class="form-control" id="notification-icon" name="notificationIcon"/>
                     	</div>
-                	 <a class="btn btn-xs btn-default" id="browseBtn" onclick="$('#uploadIconToS3Btn').click() " style="margin-top:11px;">Upload</a>
+                	 <a class="btn btn-xs btn-default btn-default-imp btn-lg-imp " id="browseBtn" onclick="$('#uploadIconToS3Btn').click() " style="margin-top:11px;">Upload</a>
 			        <input type="file" id="uploadIconToS3Btn" class="hidden">
                 </div>
 
@@ -216,8 +216,8 @@
 				<div class="clearfix"></div>           
 				<div class="line ling-lg b-b"></div>
                 <div class="form-actions col-sm-offset-4 col-sm-8">          
-					<a href="#push-notification" class="btn btn-sm btn-default " id="push-notification-close">Close</a>
-                    <a href="#push-notification"  id="saveNotification" class="btn btn-sm btn-primary save">Save Notification</a>
+					<a href="#push-notification" class="btn btn-sm btn-default-imp btn-lg-imp  btn-default " id="push-notification-close">Close</a>
+                    <a href="#push-notification"  id="saveNotification" class="btn btn-sm btn-primary btn-primary-imp btn-lg-imp save">Save Notification</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
                 </div>
 

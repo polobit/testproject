@@ -1,7 +1,7 @@
 <script id="workflows-model-template" type="text/html">
     {{#is_mobile}}
     <td class="hide data" data="{{id}}">{{id}}</td>
-    <td>
+    <td class="v-middle">
     <div class="table-resp"><a class="text-cap">{{name}}</a></div>
 
     <div class="table-resp">
@@ -55,9 +55,9 @@
     {{else}}
 
     <td class="hide data" data="{{id}}">{{id}}</td>
-    <td><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
+    <td class="v-middle"><div class="table-resp"><a class="text-cap">{{name}}</a></div></td>
 
-    <td class="workflow-triggers" workflow-id={{id}}>
+    <td class="workflow-triggers v-middle" workflow-id={{id}}>
         <div class="table-resp">
             <a href="#trigger-add/{{id}}" class="stop-propagation">
                 <i class="icon-plus text-xs" style="margin-right:3px"></i>{{agile_lng_translate 'other' 'add'}}
@@ -65,7 +65,7 @@
         </div>  
     </td>
 
-    <td> 
+    <td class="v-middle"> 
         {{#if updated_time}}
         <div class="table-resp">
             <small class="edit-hover text-muted"> 
@@ -84,14 +84,14 @@
         </div>
         {{/if}}
     </td> 
-    <td>
+    <td class="v-middle">
     <div>
     {{#if is_disabled}}
             <div><label class="label label-danger m-b-none">{{agile_lng_translate 'campaigns' 'disabled'}}</label></div>
             {{/if}}
      </div>
     </td>
-    <td>
+    <td class="v-middle">
         <div class="table-resp hide" id="camp_reports">
             <div class="pull-left text-ellipsis">
                 <a href="#email-reports/{{id}}" class="stop-propagation"><i class="icon icon-bar-chart"></i></a>
@@ -99,7 +99,7 @@
         </div> 
     </td>
 
-    <td>   
+    <td class="v-middle">   
 
     <div class="table-resp hide" id="camp_history">
         <div class="pull-left">
@@ -116,9 +116,9 @@
       <!-- Top header view -->
       <div id="workflows-top-view"></div>
       <!-- End of Top header view -->
-      <div class="wrapper-md">
+      <div class="wrapper-md agile-p-t-xs">
          <div class="row">
-            <div class="col-md-9 col-sm-9" id="workflows-collection-container"></div>
+            <div class="col-md-9 col-sm-9 no-panel-border" id="workflows-collection-container"></div>
             <div class="col-md-3 workflows-right-body" id="learn-workflows">
                <h4 class="m-t-none h4 m-b-sm">
                   {{agile_lng_translate 'campaigns' 'what-is-workflow-automation'}}
@@ -219,7 +219,7 @@
 </script>
 
 <script id="workflows-top-header-template" type="text/html">
-<div class="wrapper bg-light padder-md" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+<div class="wrapper bg-light padder-md agile-page-header" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
    <div class="btn-toolbar m-l-none">
       <div class="btn-group dropdown m-l-none workflow-heading" style="float: none;">
          <div class="">
@@ -270,11 +270,11 @@
             <a href="#triggers" class="btn right btn-default btn-sm pos-rlt {{#is_mobile}} m-r-xs {{else}} m-r-sm {{/is_mobile}} pull-left btn-addon" id="add-trigger"><i class="icon-cog"></i>  {{agile_lng_translate 'campaigns' 'manage-triggers'}}</a> -->
             
             <div class="btn-group right pos-rlt pull-left">
-              <a id="campaign-video-tutorial" onclick="workflowVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
+              <a id="campaign-video-tutorial" onclick="workflowVideoPopup();" class="help-video m-r-md-imp btn btn-sm btn-default btn-default-imp-white btn-lg-imp" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="margin-right: 3px; line-height: 1px;">
                  <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
               </a>
-               <a href="#workflow-templates" class="btn btn-default btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-campaign'}}</a>
-               <a id="campaign-stats" class="btn dropdown-toggle btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
+               <a href="#workflow-templates" class="btn btn-default btn-lg-imp btn-primary-imp btn-sm" id="addWorkflow"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'add-campaign'}}</a>
+               <a id="campaign-stats" class="btn dropdown-toggle btn-lg-imp btn-primary-imp btn-sm btn-default" data-toggle="dropdown"><span class="caret"></span></a>
                <ul class="dropdown-menu pull-right">
                   <li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> {{agile_lng_translate 'campaigns' 'compare-campaigns'}}</a></li>
                </ul>

@@ -1,10 +1,10 @@
 <script id="report-collection-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-md-12">
     <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-add' 'email-reports'}}</h3>
-            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  {{agile_lng_translate 'report-view' 'add-report'}}</a>
+            <a href="#report-add" class="btn btn-default btn-sm pull-right btn-primary-imp btn-lg-imp btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span>  {{agile_lng_translate 'report-view' 'add-report'}}</a>
             <div class="clearfix">
     </div>
    
@@ -17,7 +17,7 @@
          </div>
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
-        <div class="panel panel-default">
+        <div class="panel panel-default no-panel-border" id="contact-reports-list-view">
         <div class="panel-heading">{{agile_lng_translate 'report-view' 'email-reports-list'}}</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
@@ -26,6 +26,8 @@
                     <th>{{agile_lng_translate 'report-view' 'name'}}</th>
                     <th>{{agile_lng_translate 'report-view' 'duration'}}</th>
                     <th>{{agile_lng_translate 'report-view' 'fields'}}</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="report-model-list" route="report-edit/">
@@ -80,7 +82,7 @@
 <script type="text/html" id="report-categories-template">
 <div id='reports-listerners-container'>
 <div class="">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'reports'}}</h3>
@@ -94,7 +96,7 @@
 <div class="p-t-none">
 
 <div class="hbox hbox-auto-xs hbox-auto-sm bg-light agile-tab">
-<div class="col w b-r">
+<div class="col w b-r reports-tabs-left-panel">
      <div class="vbox" "="">
 
         <div id="reports-tab-container">
@@ -209,7 +211,7 @@
      <div class="tab-pane" id="RepPerformance">
         <!-- Description -->
         {{#isAllowedInCurrentPlan "is_activity_reports_enabled"}}
-         <a class="btn btn-sm btn-default" href="#rep-reports">
+         <a class="" href="#rep-reports">
         <div class="text-center show_screenshot">
         <div class=" m-b-sm" rel="tooltip" title="{{description}}">
          {{agile_lng_translate 'report-view' 'know-the-performance-by-each-user'}}

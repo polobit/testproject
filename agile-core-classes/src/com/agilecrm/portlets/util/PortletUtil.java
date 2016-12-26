@@ -679,8 +679,9 @@ public class PortletUtil {
 		    	end_date -= (Long.parseLong(time_zone)*60*1000);
 		    }
 			ReportsUtil.check(start_date, end_date);
-			
-			growthGraphString=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type).toString();
+			org.json.JSONObject tagCount=TagSearchUtil.getTagCount(null, tags, String.valueOf(start_date), String.valueOf(end_date), type);
+			if(tagCount!=null)
+			growthGraphString=tagCount.toString();
 		}
 		if(growthGraphString!=null)
 			growthGraphJSON = (JSONObject)JSONSerializer.toJSON(growthGraphString);
@@ -1647,9 +1648,12 @@ public class PortletUtil {
 			Contact contact=ContactUtil.searchContactByEmail(user.email);
 			if(contact!=null){
 				DomainUser owner=contact.getContactOwner();
-				json.put("Owner_name",owner.name);
-				json.put("Owner_pic",owner.getOwnerPic());
-				json.put("Owner_url", owner.getCalendarURL());
+				if(owner!=null)
+				{
+					json.put("Owner_name",owner.name);
+					json.put("Owner_pic",owner.getOwnerPic());
+					json.put("Owner_url", owner.getCalendarURL());
+				}
 			}
 			
 			
@@ -2083,43 +2087,43 @@ public class PortletUtil {
 			CategoriesUtil categoriesUtil = new CategoriesUtil();
 			MilestoneUtil.getMilestones();
 			categoriesUtil.getCategoriesByType(Category.EntityType.TELEPHONY_STATUS.toString());
-			Portlet dummySalesPortlet = new Portlet("Dummy Sales Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,3,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,4,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet activityOverViewPortlet = new Portlet("User Activities",PortletType.USERACTIVITY,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet revenueDealsGraphPortlet = new Portlet("Revenue Graph",PortletType.DEALS,2,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet leaderBoardPortlet = new Portlet("Leaderboard",PortletType.USERACTIVITY,2,2,2,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,4,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet callsPortlet = new Portlet("Calls Per Person",PortletType.USERACTIVITY,3,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
-			Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+		//	Portlet dummySalesPortlet = new Portlet("Dummy Sales Blog",PortletType.RSS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet filterBasedContactsPortlet = new Portlet("Filter Based",PortletType.CONTACTS,1,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+		//	Portlet dealsFunnelPortlet = new Portlet("Deals Funnel",PortletType.DEALS,1,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+		//	Portlet incomingDealsPortlet = new Portlet("Incoming Deals",PortletType.DEALS,3,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet miniCalendarPortlet = new Portlet("Mini Calendar",PortletType.TASKSANDEVENTS,1,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet activityOverViewPortlet = new Portlet("User Activities",PortletType.USERACTIVITY,3,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+		//	Portlet revenueDealsGraphPortlet = new Portlet("Revenue Graph",PortletType.DEALS,2,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet leaderBoardPortlet = new Portlet("Leaderboard",PortletType.USERACTIVITY,2,1,2,1,Portlet.PortletRoute.SalesDashboard.toString());
+			Portlet tasksPortlet = new Portlet("Today Tasks",PortletType.TASKSANDEVENTS,2,2,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+		//	Portlet callsPortlet = new Portlet("Calls Per Person",PortletType.USERACTIVITY,3,3,1,1,Portlet.PortletRoute.SalesDashboard.toString());
+		//	Portlet dealGoalsPortlet = new Portlet("Deal Goals",PortletType.DEALS,2,1,1,1,Portlet.PortletRoute.SalesDashboard.toString());
 			
 			
 			JSONObject filterBasedContactsPortletJSON = new JSONObject();
 			filterBasedContactsPortletJSON.put("filter","myContacts");
 			filterBasedContactsPortlet.prefs = filterBasedContactsPortletJSON.toString();
 			
-			JSONObject dealsFunnelPortletJSON = new JSONObject();
+			/*JSONObject dealsFunnelPortletJSON = new JSONObject();
 			dealsFunnelPortletJSON.put("deals","my-deals");
 			dealsFunnelPortletJSON.put("track",0);
 			dealsFunnelPortletJSON.put("due-date",(new Date().getTime())/1000);
-			dealsFunnelPortlet.prefs = dealsFunnelPortletJSON.toString();
+			dealsFunnelPortlet.prefs = dealsFunnelPortletJSON.toString();*/
 			
-			JSONObject incomingDealsPortletJSON = new JSONObject();
+			/*JSONObject incomingDealsPortletJSON = new JSONObject();
 			incomingDealsPortletJSON.put("type","deals");
 			incomingDealsPortletJSON.put("frequency","daily");
 			incomingDealsPortletJSON.put("duration","1-week");
-			incomingDealsPortlet.prefs = incomingDealsPortletJSON.toString();
+			incomingDealsPortlet.prefs = incomingDealsPortletJSON.toString();*/
 			
 			JSONObject activityOverViewPortletJSON = new JSONObject();			
-			activityOverViewPortletJSON.put("duration","yesterday");
+			activityOverViewPortletJSON.put("duration","1-day");
 			activityOverViewPortlet.prefs = activityOverViewPortletJSON.toString();
 			
-			JSONObject revenueDealsGraphPortletJSON = new JSONObject();			
+			/*JSONObject revenueDealsGraphPortletJSON = new JSONObject();			
 			revenueDealsGraphPortletJSON.put("duration","this-quarter");
 			revenueDealsGraphPortletJSON.put("track","anyTrack");
-			revenueDealsGraphPortlet.prefs = revenueDealsGraphPortletJSON.toString();
+			revenueDealsGraphPortlet.prefs = revenueDealsGraphPortletJSON.toString();*/
 			
 			JSONObject leaderBoardPortletJSON = new JSONObject();
 			leaderBoardPortletJSON.put("type","deals");
@@ -2137,28 +2141,28 @@ public class PortletUtil {
 			tasksPortletJSON.put("duration","today-and-tomorrow");
 			tasksPortlet.prefs = tasksPortletJSON.toString();
 			
-			JSONObject callsPortletJSON = new JSONObject();			
+			/*JSONObject callsPortletJSON = new JSONObject();			
 			callsPortletJSON.put("group-by","number-of-calls");
 			callsPortletJSON.put("duration","1-day");
-			callsPortlet.prefs = callsPortletJSON.toString(); 
+			callsPortlet.prefs = callsPortletJSON.toString();*/ 
 			
-			JSONObject dealGoalsPortletJSON = new JSONObject();			
+			/*JSONObject dealGoalsPortletJSON = new JSONObject();			
 			dealGoalsPortletJSON.put("group-by","number-of-calls");
 			dealGoalsPortletJSON.put("duration","1-day");
-			dealGoalsPortlet.prefs = dealGoalsPortletJSON.toString();
+			dealGoalsPortlet.prefs = dealGoalsPortletJSON.toString();*/
 				
-			dummySalesPortlet.save();
+		//	dummySalesPortlet.save();
 			filterBasedContactsPortlet.save();
-			dealsFunnelPortlet.save();
-			incomingDealsPortlet.save();
+		//	dealsFunnelPortlet.save();
+		//	incomingDealsPortlet.save();
 			miniCalendarPortlet.save();
 			
 			activityOverViewPortlet.save();
-			revenueDealsGraphPortlet.save();
+		//	revenueDealsGraphPortlet.save();
 			leaderBoardPortlet.save();
 			tasksPortlet.save();
-			callsPortlet.save();
-			dealGoalsPortlet.save();
+		//	callsPortlet.save();
+		//	dealGoalsPortlet.save();
 		}
 		catch (Exception e) 
 		{

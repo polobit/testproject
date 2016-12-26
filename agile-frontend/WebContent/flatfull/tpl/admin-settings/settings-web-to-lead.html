@@ -1,5 +1,5 @@
 <script id="admin-settings-web-to-lead-new-collection-template"	type="text/html">
-	<div class="tab-container m-b-none">
+	<div class="tab-container m-b-none" id="integrations-tab">
        <ul class="nav nav-tabs {{#is_mobile}} icons-space-m {{/is_mobile}}">
          {{#is_mobile}}
 
@@ -22,7 +22,7 @@
 
        </ul>
 	</div>
-	<div class="tab-content wrapper-md panel">
+	<div class="tab-content wrapper-md panel no-shadow integrationstab">
 		<div class="tab-pane" id="web-to-lead-tab">
 		<div class="row">
 			<div class="col-md-4 col-sm-6 col-xs-12" >
@@ -320,8 +320,7 @@
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+            						 		{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -339,8 +338,7 @@
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        								{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+            						    {{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -383,8 +381,7 @@
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -402,8 +399,7 @@
            				{{else}}
             				<div>
             				    <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         						<div class="clearfix"></div>
@@ -445,8 +441,7 @@
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -463,8 +458,7 @@
            				{{else}}
             				<div>
             					<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         						</div>
         						<div class="clearfix"></div>
         						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
@@ -511,8 +505,7 @@
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
-        									Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -530,8 +523,7 @@
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mailgun-upgrade fade in p-xs m-b-xs pos-abs">
-        								Please  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'portlets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        								{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -579,8 +571,7 @@
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 {{agile_lng_translate 'contact-details' 'please'}}  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>{{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+											 {{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
 										</div>
 										<div class="clearfix"></div>
 										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
@@ -596,8 +587,7 @@
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 {{agile_lng_translate 'contact-details' 'please'}}  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+											 {{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
 										</div>
 										<div class="clearfix"></div>
 										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
@@ -636,8 +626,7 @@
            						 {{else}}
             						<div>
 			                          <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-			                            {{agile_lng_translate 'contact-details' 'please'}}  
-			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+			                            {{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
 			                          </div>
 			                          <div class="clearfix"></div>
 			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
@@ -652,8 +641,7 @@
            						 {{else}}
             						<div>
                           				<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-                            				{{agile_lng_translate 'contact-details' 'please'}}   
-                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+                            				{{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
                           				</div>
                           				<div class="clearfix"></div>
             						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
@@ -904,8 +892,7 @@
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -923,8 +910,7 @@
            						 {{else}}
             						<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="mandrill-upgrade fade in p-xs m-b-xs pos-abs">
-        								{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        								{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -964,8 +950,7 @@
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -983,8 +968,7 @@
            				{{else}}
             				<div>
             				    <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="sendgrid-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>{{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         						<div class="clearfix"></div>
@@ -1024,8 +1008,7 @@
            					 {{else}}
             					<div>
             						<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         							</div>
 
         							<div class="clearfix"></div>
@@ -1044,8 +1027,7 @@
            				{{else}}
             				<div>
             					<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="ses-upgrade fade in p-xs m-b-xs pos-abs">
-        									{{agile_lng_translate 'contact-details' 'please'}}  
-        									<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+        									{{{get_template_type "subscribe-to-enterprise-plan"}}}
         						</div>
         						<div class="clearfix"></div>
         						<div class="btn btn-sm btn-default _upgrade" id="ses-upgrade">
@@ -1095,8 +1077,7 @@
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											 {{agile_lng_translate 'contact-details' 'please'}}  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+											{{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
 										</div>
 										<div class="clearfix"></div>
 										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
@@ -1112,8 +1093,7 @@
            						 {{else}}
             						<div>
 										<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="twilio-upgrade fade in p-xs m-b-xs pos-abs">
-											  {{agile_lng_translate 'contact-details' 'please'}}  
-									      <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong>{{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+											  {{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
 										</div>
 										<div class="clearfix"></div>
 										<div class="btn btn-sm btn-default _upgrade" id="twilio-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>
@@ -1151,8 +1131,7 @@
            						 {{else}}
             						<div>
 			                          <div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-			                            {{agile_lng_translate 'contact-details' 'please'}}  
-			                              <strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+			                            {{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
 			                          </div>
 			                          <div class="clearfix"></div>
 			            			  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
@@ -1167,8 +1146,7 @@
            						 {{else}}
             						<div>
                           				<div style="display:none;width: 65%;left: 18%;z-index: 9;border: 1px solid #E2E29C;background-color: #F7F7D0;" class="plivo-upgrade fade in p-xs m-b-xs pos-abs">
-                            				{{agile_lng_translate 'contact-details' 'please'}}  
-                              				<strong><a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>{{agile_lng_translate 'widgets' 'upgrade'}}</a></strong> {{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+                            				{{{get_template_type "subscribe-to-regular-or-enterprise-plan"}}}
                           				</div>
                           				<div class="clearfix"></div>
             						  <div class="btn btn-sm btn-default _upgrade" id="plivo-upgrade">{{agile_lng_translate 'prefs-email' 'enable'}}</div>		
@@ -1230,4 +1208,32 @@
 	<div class="tab-content wrapper-md panel">
 		<div class="tab-pane active" id="admin-settings-integrations-tab-content"></div>
 	</div>
+</script>
+
+<script id="subscribe-to-enterprise-plan-template"	type="text/html">
+	{{#isUserNotInIphone}}
+		{{agile_lng_translate 'contact-details' 'please'}}  
+	    <strong>
+	    	<a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>
+	    		{{agile_lng_translate 'widgets' 'upgrade'}}
+	    	</a>
+	    </strong> 
+	    {{agile_lng_translate 'widgets' 'to-enterprise-plan'}}
+	{{else}}
+		You cannot add Please contact support
+    {{/isUserNotInIphone}}
+</script>
+
+<script id="subscribe-to-regular-or-enterprise-plan-template"	type="text/html">
+	{{#isUserNotInIphone}}
+		{{agile_lng_translate 'contact-details' 'please'}}  
+		<strong>
+			<a href="#subscribe-plan" style="color:#337ab7;" class='c-p'>
+				{{agile_lng_translate 'widgets' 'upgrade'}}
+			</a>
+		</strong>
+		{{agile_lng_translate 'admin-settings-integrations' 'to-regular-or-enterprise-plan'}}
+	{{else}}
+		You cannot add Please contact support
+    {{/isUserNotInIphone}}
 </script>

@@ -6,9 +6,13 @@
     module.exports.editableItems = {
         'div#agileform_div' : [],
         'span.fa': ['color', 'font-size'],
-        '.bg.bg1': ['background-color'],
+        '.bg.bg1,.item': ['background-color'],
+        'nav': ['background-color','color'],
+        '.pricing2 > .top' : ['background-color'],
+        'header.wrapper' : ['background-color'],
+        '.dividerel' : ['background-color'],
         'nav a': ['color', 'font-weight', 'text-transform', 'dynamic-button'],
-        'img': ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
+        'img': ['width','height','border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
         'hr.dashed': ['border-color', 'border-width'],
         '.divider > span': ['color', 'font-size'],
         'hr.shadowDown': ['margin-top', 'margin-bottom'],
@@ -17,8 +21,8 @@
         '.bg.bg1, .bg.bg2, .header10, .header11, .search-box1': ['background-image', 'background-color'],
         '.frameCover': [],
         '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family', 'dynamic-text'],
-        'a.btn, button.btn': ['border-radius', 'font-size', 'background-color','dynamic-button'],
-        '#pricing_table2 .pricing2 .bottom li': ['content']
+        'a.btn, button.btn': ['border-radius', 'font-size', 'background-color','dynamic-button']
+        
     };
     
     module.exports.editableItemOptions = {

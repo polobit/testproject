@@ -1,7 +1,7 @@
 <script id="tickets-toolbar-container-template" type="text/html">
 
 <div class="tickets-toolbar">
-	<div class="wrapper bg-light padder-md" style="padding-top: 10px; padding-bottom: 10px;">
+	<div class="wrapper bg-light padder-md agile-page-header" style="padding-top: 10px; padding-bottom: 10px;">
 	    <div class="btn-toolbar m-l-none pos-rlt inline-block ticket-head-filters">
 	    	<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;"></div>
 	    <div class="btn-toolbar m-l-none" style="margin-top: -5px;">
@@ -19,8 +19,12 @@
 							{{else}}
 								{{#if_equals sort_field "priority_code"}}
 									{{agile_lng_translate 'tasks' 'priority'}}
-								{{else}}
-									{{agile_lng_translate 'portlets' 'due-date'}}
+								{{else}}	
+									{{#if_equals sort_field "requester_name"}}
+										{{agile_lng_translate 'tickets' 'sort_Requester'}}
+									{{else}}
+										{{agile_lng_translate 'portlets' 'due-date'}}
+									{{/if_equals}}
 								{{/if_equals}}
 							{{/if_equals}}
 						{{/if_equals}}
@@ -29,7 +33,7 @@
 				<button class="btn btn-sm no-shadow dropdown-toggle bg-transparent b-n p-t-none p-b-none" data-toggle="dropdown" aria-expanded="false" style="padding-left: 2px;">
 					<span class="caret"></span>
 				</button>
-			    <ul class="dropdown-menu">
+			    <ul class="dropdown-menu new-theme-ul">
 			    	<li>
 			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="last_updated_time">{{agile_lng_translate 'tickets' 'last-updated-time'}} 
 			    			<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs 
@@ -51,6 +55,12 @@
 				    		{{agile_lng_translate 'portlets' 'due-date'}} <i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs {{#if_equals sort_field "due_date"}}{{else}}display-none{{/if_equals}} sort-field-check"></i> 
 				    	</a>
 			    	</li>
+		    		<li>
+			    		<a class="sort-link sort-field" href="javascript:void(0);" data-sort-key="requester_name">{{agile_lng_translate 'tickets' 'sort_Requester'}} 
+			    			<i class="fa fa-check pos-abs pos-r-sm txt-small m-t-xs 
+			    				{{#if_equals sort_field "requester_name"}}{{else}}display-none{{/if_equals}} sort-field-check"></i>
+		    			</a>
+		    		</li>
 			    	<li class="divider"></li>
 			    	<li>
 			    		<a class="sort-by" data-sort-by="-" href="javascript:void(0);">{{agile_lng_translate 'contacts-view' 'descending'}} 

@@ -24,7 +24,7 @@
 
 		{{#if_equals created_by "REQUESTER"}}
 		  	<div class="btn-group dropdown show-original-div">
-		      <button class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false">
+		      <button class="btn btn-default btn-xs btn-lg-imp" data-toggle="dropdown" aria-expanded="false">
 			  	<span class="caret"></span>
 			  </button>
 		      <ul class="dropdown-menu  pull-right">
@@ -52,7 +52,7 @@
 	   	{{/if_equals}}
 	  </div>
 
-	  <div class="inline-block w-full word-break-all {{#if plain_text}}plain-text-comment{{/if}}">
+	  <div class="inline-block w-full word-break-all {{#if plain_text}}plain-text-comment{{/if}}" style="word-break:break-word;">
 
 	  {{#if plain_text}}
 	  	{{{convert_to_html plain_text}}}
@@ -103,7 +103,7 @@
 
 	  </span>
 
-	  <div class="block p-sm m-t-xxs bg-lightyellow b-a-lightyellow word-break-all {{#if plain_text}}plain-text-comment{{/if}}">
+	  <div class="block p-sm m-t-xxs bg-lightyellow b-a-lightyellow word-break-all {{#if plain_text}}plain-text-comment{{/if}}" style="word-break:break-word;">
 	  
 	  	{{#if plain_text}}
 

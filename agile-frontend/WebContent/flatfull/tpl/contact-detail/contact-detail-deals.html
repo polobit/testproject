@@ -54,7 +54,7 @@
 		<div class="contact-desc-dynamic">
         
 		<div><span class="m-r-xs hide">Value : </span>
-			{{currencySymbol}}{{numberWithCommas expected_value}}  <span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
+		{{#if_equals expected_value "0"}}{{currencySymbol}}{{expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if_equals}}  <span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
 		</div>
          {{#if description}}
           <div>{{description}}</div>
@@ -62,23 +62,8 @@
 <div class="clearfix"></div>
        
        <div>	
-		{{#each contacts}}
-           	{{#if id}}
-				{{#isDuplicateContactProperty properties "email"}}
-
-					{{else}}
-						{{#if_contact_type "PERSON"}}	
-
-							<a href="#contact/{{id}}" style="color: #4d759e;" data="{{id}}" class="popover_contact text-capitalize">{{contact_name_necessary this}}</a>{{#if @last}}{{else}},{{/if}}
-
-        				{{/if_contact_type}}
-						{{#if_contact_type "COMPANY"}}
-        					<a href="#company/{{id}}" style="color: #4d759e;" data="{{id}}" class="text-capitalize popover_contact">{{getPropertyValue properties "name"}}</a>{{#if @last}}{{else}},{{/if}}
-        				{{/if_contact_type}}
-				{{/isDuplicateContactProperty}}
-           		
-           	{{/if}}
-       	{{/each}}
+       {{#contact_separated_comma contacts}}
+		 {{/contact_separated_comma}}
 		</div>
       
 		</div>

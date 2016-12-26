@@ -1,7 +1,7 @@
 define([
 		'jquery', 'underscore', 'backbone', 'helper/pubsub', 'collections/my-form-snippets', 'views/my-form'], function($, _, Backbone, PubSub, MyFormSnippetsCollection, MyFormView)
 {
-	return { agile_template_load : function(api)
+	return { agile_template_load : function(api,fields)
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'misc/formbuilder/templates/' +formTemplate + '/index.json';
 		console.log(url);
@@ -46,7 +46,7 @@ define([
 			    		  }
 			    	  }
 				} else {
-					$.getJSON( "/core/api/custom-fields", function(fields) {
+				if(fields) {
 					
 					var count = 0;
 					if(fields.length != 0)
@@ -86,8 +86,11 @@ define([
 				}
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
-				});
+					$("#loader").fadeOut('fast');
+					$("#header").css("display","block");
+					$(".container").css("display","block");
 				}
+			}
 				
 			}
 		});

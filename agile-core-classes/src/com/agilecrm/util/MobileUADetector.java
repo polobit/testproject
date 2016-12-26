@@ -2,6 +2,8 @@ package com.agilecrm.util;
 
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
@@ -28,11 +30,21 @@ public class MobileUADetector {
 	private MobileUADetector() {
 	}
 
+	public static boolean isMobile(HttpServletRequest request) {
+		String userAgent = request.getHeader("user-agent");
+		return isMobile(userAgent);
+	}
+	
 	public static boolean isMobile(String ua) {
 		return ua != null
 				&& (mobile_b.matcher(ua).find() || ua.length() >= 4 && mobile_v.matcher(ua.substring(0, 4)).find());
 	}
 
+	public static boolean isMobileOrTablet(HttpServletRequest request) {
+		String userAgent = request.getHeader("user-agent");
+		return isMobileOrTablet(userAgent);
+	}
+	
 	/**
 	 * See comment in http://detectmobilebrowsers.com/about
 	 */
@@ -88,6 +100,7 @@ public class MobileUADetector {
 	}
 
 	public static boolean isiPhone(String ua) {
+		// return true;
 		return getMobileOperatingSystem(ua).equals(OS_NAME.IPHONE);
 	}
 }

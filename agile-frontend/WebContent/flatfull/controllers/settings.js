@@ -6,7 +6,8 @@
 var HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
 var EMAIL_PREFS_WIDGET_SIZE = 0;
-var SMTP_ACCOUNT_LIMIT = 0;
+var SMTP_ACCOUNT_LIMIT = 1;
+var OAUTH_GMAIL_SEND_LIMIT = 1;
 
 var SettingsRouter = Backbone.Router
 		.extend({
@@ -36,17 +37,22 @@ var SettingsRouter = Backbone.Router
 			/* Office edit prefs */
 			"office/:id" : "officeEdit",
 
+			/* Social preferences */
+			"social-prefs" : "socialPrefs",
+
+			/* Gmail share preferences */
+			"gmail/:id" : "gmailShare",
+
+
 			/* smtp add prefs */
 			"smtp" : "smtpAdd",
 
 			/* smtp edit prefs */
 			"smtp/:id" : "smtpEdit",
 
-			/* Social preferences */
-			"social-prefs" : "socialPrefs",
+			/* Gmail send preferences */
+			"gmail-send" : "gmailSendPrefs",
 
-			/* Gmail share preferences */
-			"gmail/:id" : "gmailShare",
 
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
@@ -285,6 +291,8 @@ var SettingsRouter = Backbone.Router
 							that.imapListView = {};
 							that.officeListView = {};
 							that.gmailListView = {};
+							
+							that.gmailSendListView = {};
 							that.smtpListView = {};
 
 							$('#PrefsTab .select').removeClass('select');
@@ -313,15 +321,15 @@ var SettingsRouter = Backbone.Router
 						else
 							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
-						SMTP_ACCOUNT_LIMIT = 1;
-
+						
 						var limit = data.emailAccountsLimit;
 
 						load_gmail_widgets(limit);
 						load_imap_widgets(limit);
 						load_office365_widgets(limit);
 
-						load_smtp_widgets(limit);
+						load_smtp_widgets();
+						load_gmail_send_widgets();
 					});
 
 				}, "#content");
@@ -527,9 +535,10 @@ var SettingsRouter = Backbone.Router
 							itemView3.model.set("password", "");
 							$("#server_host").val(smtp_model.server_url);
 
-							if(el.find("div [id = server_host]").val() == "smtp.live.com" || el.find("div [id = server_host]").val() == "smtp.office365.com"){
+							if(el.find("div [id = server_host]").val() == "smtp.live.com" 
+									|| el.find("div [id = server_host]").val() == "smtp.office365.com"){
 								el.find("div [id = useSSLCheckboxHolder]").hide();
-							}else{
+							} else {
 								el.find("div [id = useSSLCheckboxHolder]").show();
 							}
 
@@ -544,6 +553,25 @@ var SettingsRouter = Backbone.Router
 					$('#prefs-tabs-content').html(itemView3.render().el);
 					$('#PrefsTab .active').removeClass('select');
 					$('.email-tab').addClass('select');
+					$(".active").removeClass("active");
+
+				}, "#content");
+			},
+
+			gmailSendPrefs : function()
+			{
+				getTemplate('settings', {}, undefined, function(template_ui){
+					if(!template_ui)
+						  return;
+					$('#content').html($(template_ui));
+
+					var data = { "service" : "gmail_send" };
+					var itemView = new Settings_Modal_Events({ url : '/core/api/email-send', template : "settings-gmail-send", data : data, postRenderCallback : function(el){
+					} });
+
+					$('#prefs-tabs-content').html(itemView.render().el);
+					$('#PrefsTab .select').removeClass('select');
+					$('.social-prefs-tab').addClass('select');
 					$(".active").removeClass("active");
 
 				}, "#content");
@@ -1311,12 +1339,19 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
-								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
+
+									// Check position for new theme and hide top menu option for new one
+									if(CURRENT_USER_PREFS.theme == "15") {
+										$("#menuPosition option[value='top']").hide();
+										$("#menuPosition option[value='left']").hide();
+									}
+										
+
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
 									$("#layout").val(CURRENT_USER_PREFS.layout);

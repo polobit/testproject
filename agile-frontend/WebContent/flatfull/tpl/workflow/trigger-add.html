@@ -1,5 +1,5 @@
 <script id="trigger-add-template" type="text/html">
-<div class="wrapper-md bg-light lter b-b">
+<div class="wrapper-md bg-light lter b-b agile-page-header">
 
                       {{#if id}}
                        <h3 class="h3 font-thin">{{agile_lng_translate 'campaigns' 'edit-trigger'}}</h3>
@@ -8,7 +8,7 @@
                     {{/if}} 
 
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-sm">
 <div class="row">
     
         <div class="col-md-9">
@@ -281,8 +281,8 @@
                         </div>
 						<div class="line line-bg b-b"></div>
                         <div class="form-actions trigger-save-btns col-sm-offset-4 col-sm-8">          							
-                            <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
-							<a href="#" id="trigger-cancel" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
+                            <a href="#triggers" id="trigger-save" class="save btn btn-sm btn-lg-imp btn-primary-imp m-r-sm-imp btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
+							<a href="#" id="trigger-cancel" class="btn btn-default btn-lg-imp btn-default-imp btn-sm">{{agile_lng_translate 'contact-details' 'cancel'}}</a>
                         </div>
                     </fieldset>
                 </form>
@@ -323,6 +323,7 @@
     </div>
     <div class="wrapper-md p-t-none" id = "triggeradd">
 <div id="triggers-tab-container">
+<div class="tabs">
 <div class="tab-container p-t-sm">
 
 <!-- Tabs for Triggers -->
@@ -416,8 +417,9 @@
 </ul>
 
 {{/is_mobile}}
+</div>
 
-            <div class="tab-content" style=" display: block;">
+            <div class="tab-content panel wrapper" style=" display: block;">
 <!-- Start of tab-pane - contact -->
             	<div class="tab-pane active" role="tab-panel" id="contact">
 

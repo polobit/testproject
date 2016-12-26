@@ -743,6 +743,29 @@ function initializePortletsListeners() {
 		});
 	});
 
+
+  $(".portlet_body").off('click','.sms-details');
+	$('.portlet_body').on('click', '.sms-details', function(e) {
+		e.preventDefault();
+		var data = $(this).closest('a').attr("data");
+
+		portlet_utility.getActivityObject(data, function(resp) {
+			console.log(resp);
+			getTemplate("smsModal", resp, undefined, function(template_ui) {
+				if (!template_ui)
+					return;
+
+				var emailinfo = $(template_ui);
+				emailinfo.modal('show');
+			}, null);
+		});
+	});
+
+
+
+
+
+
 	$('.portlet_body .activity-event-edit').off();
 	$('.portlet_body').on('click', '.activity-event-edit', function(e) {
 		e.preventDefault();
@@ -1162,7 +1185,7 @@ function initializeAddPortletsListeners() {
 	//$('#ms-category-list', elData).remove();
 
 
-	$('.col-md-3')
+	$('.col-md-4')
 			.on(
 					"mouseenter",
 					'.show_screeshot',
@@ -1199,17 +1222,12 @@ function initializeAddPortletsListeners() {
 							"Referralurlstats" : updateImageS3Path("flatfull/img/dashboard_images/Refferalurl-Stats-new.png"),
 						};
 						var placements_json = {
-							"GrowthGraph" : "left",
 							"DealsFunnel" : "left",
 							"CallsPerPerson" : "left",
 							"TaskReport" : "left",
-							"RevenueGraph" : "left",
-							"MiniCalendar" : "left",
-							"UserActivities" : "left",
 							//"Campaignstats" : "",
 							"Campaigngraph" : "left",
-							"LostDealAnalysis" : "left",
-							"Referralurlstats" :"left"
+							"IncomingDeals" : "left",
 						};
 						if (placements_json[p_name]) {
 							placement = "left";

@@ -245,7 +245,10 @@ public class HomeServlet extends HttpServlet
     		}
     		// Avoid saving the DomainUser twice.
     		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-    		
+    		if(domainUser == null){
+    			resp.sendRedirect("/login");
+    			return;
+    		}
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req, domainUser);
     	    

@@ -9,7 +9,7 @@
 			<div class="modal-body agile-modal-body">
 				<form id="icalForm" name="icalForm" method="post">
 					<fieldset>
-							<table>
+							<table class="agile-table">
 				<tr>
 					<td><b>{{agile_lng_translate 'icalfeed' 'subscribe-to-your-events'}}
 									</b></td>
@@ -22,7 +22,7 @@
 									class="ical-apple-logo"
 									src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/apple_logo.png" /></a></li>
 							<li><b>{{agile_lng_translate 'referrals' 'copy'}}</b> {{agile_lng_translate 'icalfeed' 'below-ical-url'}}</li>
-							<li style="list-style-type:none;" id="ical-feed"></li>
+							<li style="list-style-type:none; word-wrap: break-word;" id="ical-feed"></li>
 						</ol></td>
 				</tr>
 			</table>
@@ -69,7 +69,10 @@
 			</fieldset>
 			</form>
 
-			<div class="text-center p-sm"><div class="btn btn-default"><a class="text-info" href="#" id="send-ical-email"><i class="icon-envelope"></i> {{agile_lng_translate 'icalfeed' 'send-the-calendar-fee-url-via-email'}}</a></div></div>
+			<div class="text-center p-t-sm p-b-sm">
+				<div class="btn btn-default">
+					<a class="text-info" href="#" id="send-ical-email">
+						<i class="icon-envelope pos-rlt" style="top:1px;"></i> {{agile_lng_translate 'icalfeed' 'send-the-calendar-fee-url-via-email'}}</a></div></div>
      </div>
 </div>
 </div>

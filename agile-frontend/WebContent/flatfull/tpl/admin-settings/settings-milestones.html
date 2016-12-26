@@ -8,11 +8,11 @@
 			 <li class="settings-deal-products"><a href="#products">{{agile_lng_translate 'documents' 'deal-products'}}</a></li>
            </ul>
 	</div>
-	<div class="tab-pane active" id="settings-milestones-tab-content">
+	<div class="tab-pane active no-box-shadow" id="settings-milestones-tab-content">
 </script>
 <script id="admin-settings-milestones-collection-template"
 	type="text/html">
-	<div class='col panel wrapper b-t'>
+	<div class='col-sm-9 panel wrapper b-t' id="milestones-bg">
 		<div class="hbox h-auto m-b-sm">
 			<h4>
 			{{#isTracksEligible}}
@@ -25,7 +25,7 @@
             <div class="clearfix"></div>
 			{{#isTracksEligible}}
 			{{else}}
-			<div class="pull-right m-t-n-sm m-b-sm"><i>{{agile_lng_translate 'admin-settings-deals' 'regular-or-enterprise-plan-only'}}</i></div>
+			<div class="pull-right m-t-n-sm m-b-sm m-t-sm-imp"><i>{{agile_lng_translate 'admin-settings-deals' 'regular-or-enterprise-plan-only'}}</i></div>
 			<div class="clearfix"></div>
 			{{/isTracksEligible}}
 		</div>
@@ -110,7 +110,7 @@
 					</tbody>
 					</table>
 					</div>
-					<div class="p-l p-t p-b"><a href="#" class="show_milestone_field btn btn-sm btn-default btn-addon"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-milestone'}}</a></div>
+					<div class="p-l p-t p-b" id="show_milestone_field"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-milestone'}}</a></div>
 					<div class="show_field p-l p-t p-b" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone form-control input-sm" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'admin-settings-deals' 'new-milestone'}}">
 						<a class="btn btn-default btn-addon btn-sm add_milestone m-b-xxs m-t-n-xxs" data-toggle="modal" id="add_milestone" href="#">{{agile_lng_translate 'admin-settings-custom-fields' 'add'}}</a>
@@ -130,9 +130,9 @@
 </script>
 
 <script id="admin-settings-lost-reasons-collection-template" type="text/html">
-<div class="col panel wrapper b-t" style="width: 100%">
+<div class="col panel wrapper b-t" style="width: 100%" id="lossreasons-tab">
 <form id="lostReasonsForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
-		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-reason'}}</a></div>
+		<div class="p-l p-t p-b show_lost_reason_add"><a href="#" class="show_milestone_field text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-reason'}}</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
 			<input id="lost_reason_name" name="label" class="form-control input-sm required" style="width:145px;display:inline-block" type="text" placeholder="{{agile_lng_translate 'admin-settings-deals' 'new-loss-reason'}}">
 			<input type="hidden" name="entity_type" value="DEAL_LOST_REASON" />
@@ -185,7 +185,7 @@
 </script>
 
 <script id="admin-settings-deal-sources-collection-template" type="text/html">
-<div class="panel wrapper col b-t" style="width: 100%">
+<div class="panel wrapper col b-t" style="width: 100%" id="deal-sources-tab">
 <form id="dealSourcesForm" class="form-horizontal m-b-none pipeline" method=post style="float:right;">
 		<div class="p-l p-t p-b show_deal_source_add"><a href="#" class="show_milestone_field btn btn-default btn-sm btn-addon"><i class="icon-plus-sign"></i> {{agile_lng_translate 'admin-settings-deals' 'add-source'}}</a></div>
 		<div class="show_field p-l p-t p-b" style="display:none;">
@@ -244,7 +244,7 @@
 </script>
 
 <script id="admin-settings-deal-goals-collection-template" type="text/html">
-<div class="panel wrapper col b-t goaltab-main" style="width: 100%">
+<div class="panel wrapper col b-t goaltab-main" style="width: 100%" id="deal-goals-tab">
    <div class="text-right">
       <ul class="list-inline text-sm m-b-xs">
          <li>
@@ -270,9 +270,9 @@
          <div class="clearfix"></div>
       </div>
       <div class="row">
-         <div class="col-md-12 col-sm-12">
+         <div class="col-md-12 col-sm-12" id="products-top-margin">
             <div class=" table-responsive">
-               <table class="table table-striped agile-table panel table-layout-mob-view no-sorting" id="deal-sources-table">
+               <table class="table table-striped {{#isNewTheme}} agile-table {{/isNewTheme}} panel table-layout-mob-view no-sorting" id="deal-sources-table">
                   <thead>
                      <tr>
                         <th style="width:5%"></th>

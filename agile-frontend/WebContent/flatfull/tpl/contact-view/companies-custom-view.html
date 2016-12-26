@@ -116,7 +116,7 @@
 
 				    
 					<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
-					    	<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
+					    	<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-navicon {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
 							 <!--<button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="companies_columns"> 
                     		<i class="caret" ></i>
                 			</button> -->
@@ -144,7 +144,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}} {{getCompactTableView 'companies'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -196,7 +196,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table table-striped  showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table table-striped  showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}} {{getCompactTableView 'companies'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -230,6 +230,9 @@
 	                  <li>
 	       		  		<a href="javascript:void(0);" class="p-b-none">
 							<label class="i-checks i-checks-sm companycoloumn "><input name="name" value = "name"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'name'}}</a></li>
+					  <li>
+	       		  			<a href="javascript:void(0);" class="p-b-none">
+								<label class="i-checks i-checks-sm companycoloumn "><input name="email" value="email"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'Email'}}</a></li>
 					<li>
 	       		  			<a href="javascript:void(0);" class="p-b-none">
 								<label class="i-checks i-checks-sm companycoloumn"><input name="tags"value = "tags"type="checkbox" class="choose-column-chbx"><i></i></label>{{agile_lng_translate 'contacts-view' 'tags'}}</a></li>

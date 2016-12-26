@@ -224,6 +224,10 @@ var SubscribeRouter = Backbone.Router
 			 */
 			subscribe : function(id, plan)
 			{
+				if(IS_IPHONE_APP){
+					// alert("No route with the name.");
+					return;
+				}
 
 				IS_HAVING_MANDRILL = false;
 				if(window.location.href.split("#")[1] == "subscribe")

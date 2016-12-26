@@ -75,6 +75,8 @@
 								 break;
 				 		case 14:  out.print("bg-dark ");
 								 break;
+						case 15:  out.print("bg-white ");
+								 break;
 				 		default:
 				        		break;
 				 
@@ -119,9 +121,9 @@
 				   %>
 		        <li class="pull-right list-none">
 					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
-					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
+					<button class="fa fa-search text-base p-n btn1 btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
 					<ul class="dropdown-menu search-view animated fadeInRight agile-search mobile-search-view pos-r-0" style="left:auto">
-							<div class="pos-abs search-close" data-toggle="tooltip" data-placement="bottom" title="Close" style="right: 16px;top:-3px;z-index:1;color: #363f44!important;">
+							<div class="pos-abs search-close" data-toggle="tooltip" data-placement="bottom" title="Close" style="right: 6px;top:-1px;z-index:1;color: #363f44!important;">
 							<span class="c-p" style="font-size:15px;">&times;</span>
 						</div>
 					<div class="col-sm-12">
@@ -230,13 +232,22 @@
 				   <%
 				      }else {
 				   %>
-				    <a class="navbar-brand font-bold text-lt" href="#navbar-dashboard">
+
+					<a href="#navigate-dashboard" id="app-aside-folded" style="top:8px;" class="p-l-sm inline-block pos-rlt pos-t-xs no-shadow" ui-toggle="app-aside-folded">
+					<i class="fa fa-dedent fa-fw text"></i>
+					<i class="material-icons" style="display:none;color: #409de4;">cloud</i>
+					<!--   <i class="fa fa-indent fa-fw text-active"></i> -->
+					</a>
+
+				    <a class="navbar-brand font-bold text-lt" href="#navigate-dashboard">
 				   <%
 				      }
 				   %>
 				    
 				    
-				    <i class="fa fa-cloud hidden-xs"></i> <span class="hidden-folded m-l-xs"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-crm") %> </span></a>     
+				    <i class="fa fa-cloud hidden-xs"></i>
+				    <i class="material-icons newtheme-cloud hidden-xs" style="display:none;">cloud</i>
+				     <span class="hidden-folded m-l-xs"> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "agile-crm") %> </span></a>     
 
 </div>
 					<div id="navbar" class="collapse pos-rlt hide-xs  navbar-collapse box-shadow   
@@ -271,6 +282,8 @@
 								 break;
 				 		case 14:  out.print("bg-dark ");
 								 break;
+						case 15:  out.print("bg-white ");
+								 break;
 				 		default:
 				        		break;
 				 
@@ -282,19 +295,18 @@
 				      if(!MobileUADetector.isMobile(request.getHeader("user-agent"))){
 				   %>
 
-					 <div class="nav navbar-nav hidden-xs">
+					<!--  <div class="nav navbar-nav hidden-xs">
 <a href="#" id="app-aside-folded" style="top:8px;" class="p-b-sm p-l-sm p-r-sm inline-block pos-rlt pos-t-xs  no-shadow navbar-btn" ui-toggle="app-aside-folded" target=".app">
             <i class="fa fa-dedent fa-fw text"></i>
-             <!--   <i class="fa fa-indent fa-fw text-active"></i> -->
           </a>
-</div> 
+</div>  -->
 
 					<ul class="nav navbar-nav agile-menu">
 					<li>
 					<div class="dropdown m-l-sm navbar-searchicon searchicon-dropdown">
-					<button class="fa fa-search text-base p-n btn btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
+					<button class="fa fa-search text-base p-n btn1 btn-sm dropdown-toggle no-shadow bg-transparent b-n show-search-dropdown" type="button"></button>
 					<ul class="dropdown-menu search-view animated fadeInRight agile-search">
-						<div class="pos-abs search-close" data-toggle="tooltip" data-placement="bottom" title="Close" style="right: 16px;top:-3px;z-index:1;color: #363f44!important;">
+						<div class="pos-abs search-close" data-toggle="tooltip" data-placement="bottom" title="Close" style="right:6px;top:-1px;z-index:1;color: #363f44!important;">
 							<span class="c-p" style="font-size:15px;">&times;</span>
 						</div>
 					<div class="col-sm-12">
@@ -555,6 +567,7 @@
 
 						     <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "recent") %>"><a
 								class="dropdown-toggle" data-toggle="dropdown" href="" onclick="Agile_GA_Event_Tracker.track_event('Activity Option in Nav Bar')"> <i class='icon-clock'></i>
+								<i class='material-icons' style="display: none;">history</i>
 								<span class="visible-xs"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "recent-activity") %></span>
 							</a><ul class="dropdown-menu animated fadeInRight recent-view" style="width:23em; right:-11px;"></ul>
 							</li>  

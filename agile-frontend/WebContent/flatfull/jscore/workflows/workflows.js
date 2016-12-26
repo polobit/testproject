@@ -91,11 +91,11 @@ var Workflow_Model_Events = Base_Model_View.extend({
         e.preventDefault();
         $(e.currentTarget).find('i').toggleClass('icon-plus').toggleClass('icon-minus');
         $("#workflow-unsubscribe-block").slideToggle('fast');
-        showHide_UnsubscribeEmail_Status();        
+            
     },
 
-        
-   /**
+
+    /**
      * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.
      * Separate ids are given for buttons (as IDs are unique in html) but having same functionality, 
      * so ids are separated by comma in click event.
@@ -144,7 +144,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
          */      
         if(!is_start_active(designerJSON)){
             var $save_info = '<span style="color: red;">{{agile_lng_translate "campaigns" "connect-start-node"}}</span>';
-            $("#workflow-msg").html($save_info).show().fadeOut(3000);
+            $("#workflow-msg").html($save_info).show().fadeOut(8000);
             return false;
         }
 
@@ -633,7 +633,7 @@ function show_campaign_save(e,message,color)
     if(color)
         save_info = $(save_info).css("color", color);
 
-    $("#workflow-msg").html(save_info).show().fadeOut(3000);
+    $("#workflow-msg").html(save_info).show().fadeOut(5000);
 }
 
 function is_start_active(designerJSON){
@@ -665,7 +665,7 @@ function populate_workflows_list(id, el, callback)
         callback = 'no-callback';
 
      var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-     fillSelect(id, '/core/api/workflows', 'workflow', callback , optionsTemplate, undefined, el);
+     fillSelect(id, '/core/api/workflows/partial', 'workflow', callback , optionsTemplate, undefined, el);
 }
 
 function shareCampaign()

@@ -1,6 +1,6 @@
 <script id="ticket-canned-response-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col panel wrapper">
+    <div class="col panel wrapper no-panel-border">
         <div class="hbox h-auto m-b-sm">
             <div class="text-center padder-v">
                 <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-canned-responses'}}</h4>
@@ -8,7 +8,7 @@
                     {{agile_lng_translate 'tickets' 'tickets-canned-responses-desc'}}
                 </div>
                 <div>
-                    <a href="#add-canned-response" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    <a href="#add-canned-response" class="btn btn-sm btn-default btn-default-imp blue btn-slate-action m-t-xs">
                         {{agile_lng_translate 'tickets' 'add-canned-response'}}
                     </a>
                 </div>
@@ -38,10 +38,10 @@
 
     {{else}}
 
-    <div class="col panel wrapper p-b-xs">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper p-b-xs no-panel-border" id="service-tab">
         <div class="hbox h-auto">
             <div class="pull-right">
-                <a href="#add-canned-response" class="btn btn-sm btn-default btn-addon">
+                <a href="#add-canned-response" class="btn btn-sm btn-default btn-default-imp btn-addon">
                     <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-canned-response'}}
                 </a>
             </div>

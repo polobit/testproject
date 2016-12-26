@@ -715,6 +715,26 @@ Handlebars.registerHelper('return_feedback_title', function(feedback,options) {
 	return feedback_title;        
 	
 });
+
+Handlebars.registerHelper('get_status_label_details', function(status, options) {
+	var important="";
+	if(CURRENT_USER_PREFS.theme != 15)
+		important = "!important;";
+	switch(status){
+		case 'NEW':
+			return '<span class="label status_label label-warning cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em'+important+'">{{agile_lng_translate "tickets" "new_status"}}</span>';
+			break;
+		case 'OPEN':
+			return '<span class="label status_label label-danger cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em'+important+'">{{agile_lng_translate "tickets" "open_status"}}</span>';
+			break;
+		case 'PENDING':
+			return '<span class="label status_label label-info cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em'+important+'">{{agile_lng_translate "tickets" "pending_status"}}</span>';
+			break;
+		case 'CLOSED':
+			return '<span class="label status_label label-success cus-pad" style="margin-right: 5px;padding: 0.0em 0.5em 0.2em'+important+'">{{agile_lng_translate "tickets" "closed_status"}}</span>';
+			break;
+	}
+});
 /** End of ticketing handlebars* */
 
 function get_ticket_translated_text(module, key){

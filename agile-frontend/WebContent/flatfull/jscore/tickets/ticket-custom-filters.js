@@ -1,6 +1,8 @@
 //Ticket_Custom_Filters allows you to initialize events on LHS filters, cancel and save as options.
 var Ticket_Custom_Filters = {
 
+	is_date_selected : false,
+
 	customFilters: new Array(),
 	filters: [],
 	//template_ui: '',
@@ -14,6 +16,12 @@ var Ticket_Custom_Filters = {
 	initEvents: function(){
 
 		var $container = $('#custom-filters-container');
+
+		$(".created-date-input").off('click');
+		$(".created-date-input").on('click',function(){ 
+			$(".calendar.left").show();
+			$(".calendar.right").show();
+		})
 
 		//Initializing date picker
 		Ticket_Utils.loadDateChartAndDatePicker(function()
@@ -39,7 +47,7 @@ var Ticket_Custom_Filters = {
 			$('.daterangepicker').remove();
 
 			// Bootstrap date range picker.
-			$('#created-date-input').daterangepicker({
+			$('#created-date-input').daterangepicker({								
 				drops: 'up', 
 				locale : 
 				{  applyLabel: '{{agile_lng_translate "calendar" "Apply"}}',
@@ -55,8 +63,16 @@ var Ticket_Custom_Filters = {
 				{
 					var range = $('#created-date-input').val();
 
-					if(!range)
+					if(range)
+						Ticket_Custom_Filters.is_date_selected = true;
+
+					if(!range){						
+						if(Ticket_Custom_Filters.is_date_selected){
+							Ticket_Custom_Filters.changeCreatedDate();
+							Ticket_Custom_Filters.is_date_selected = false;
+						}
 						return;
+					}	
 					
 					var range_array = range.split('-');
 
@@ -65,6 +81,7 @@ var Ticket_Custom_Filters = {
 					Ticket_Custom_Filters.changeCreatedDate(range_array[0], range_array[1]);
 				});
 			});
+
 
 		var options = [];
 		
@@ -84,10 +101,10 @@ var Ticket_Custom_Filters = {
 	  	$container.off('click','a#clear-created-date');
 	  	$container.on('click','a#clear-created-date', function(event){
 
-	  		$(this).hide();
-
-	  		$('input.created-date-input').val('');
+	  		Ticket_Custom_Filters.is_date_selected = false;
 	  		
+	  		$(this).hide();
+	  		$('input.created-date-input').val('');
 	  		//Re-render collection with updated filter conditions
 	  		Ticket_Custom_Filters.changeCreatedDate();
 	  	});
@@ -308,7 +325,7 @@ var Ticket_Custom_Filters = {
 
 		  		var assigneeCollection = new Base_Collection_View({
 		  			data: Assingees_Collection.collection.toArray(),
-	 				url : '/core/api/users/partial',
+	 				url : '/core/api/tickets/groups/current-user/common-assignees',
 	 				templateKey : "ticket-lhs-assignees",
 	 				individual_tag_name : 'div'
 	 			});
@@ -319,7 +336,7 @@ var Ticket_Custom_Filters = {
 
 			  		var groupsCollection = new Base_Collection_View({
 			  			data : Groups_Collection.collection.toArray(),
-		 				url : '/core/api/tickets/groups',
+		 				url : '/core/api/tickets/groups/current-user',
 		 				templateKey : "ticket-lhs-groups",
 		 				individual_tag_name : 'div'
 		 			});

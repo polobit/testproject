@@ -1,9 +1,14 @@
 <script id="tasks-list-collection-template" type="text/html">
 {{#unless this.length}}
-<div class="slate p-xs">
-    <div class="slate-content">
-		<h3> <icon class="icon-edit"></icon> {{agile_lng_translate 'tasks' 'no-tasks-found'}}</h3>
-	</div>
+<div id="slate">
+    <div class="alert bg-white">
+        <div class="slate-content">
+          <div class="box-right pull-left">
+    		<h4> {{agile_lng_translate 'portlets' 'no-tasks-found'}}</h4>
+            <a href="#" class="add-task btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate "contact-details" "add-task"}}</a>
+          </div>
+    	</div>
+    </div>
 </div>
 {{else}}
 <div class="data-block">
@@ -27,7 +32,7 @@
 
     <div class="table-responsive">
         <div class="panel panel-default">
-        <div class="panel-heading">  
+        <div class="panel-heading" id="bulk-action-btns">  
             <label class="i-checks i-checks-sm m-b-none"><input type="checkbox" class="thead_check" value=""><i></i></label>   
             <button id="bulk-change-owner" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
             <button id="bulk-change-priority" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'bulk-task' 'priority'}}</button>
@@ -36,7 +41,7 @@
             <button id="bulk-delete-tasks" class="btn btn-default task_bulk_action btn-sm disabled txt-small">{{agile_lng_translate 'contact-details' 'delete'}}</button>
             <span id="select_all_tasks"></span>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive table-list-view-top-margin">
         <table class="table table-striped showCheckboxes agile-table no-sorting panel m-b-none table-layout-mob-view no-header-checkbox noDelete" url="core/api/tasks/bulk" id="task-list">
             
             <thead>
@@ -47,6 +52,7 @@
                     <th style="width:10%;" class="header">{{agile_lng_translate 'widgets' 'priority'}}</th>
                     <th style="width:10%;" class="header">{{agile_lng_translate 'portlets' 'due-date'}}</th>
                     <th style="width:15%;" class="header">{{agile_lng_translate 'deal-view' 'related-to'}}</th>
+                    <th class="header"></th>
                 </tr>
             </thead>
 

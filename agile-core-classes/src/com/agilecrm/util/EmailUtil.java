@@ -11,6 +11,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -201,9 +202,9 @@ public class EmailUtil
 	
 	String trackingImage = "<div class=\"ag-img\"><img src="
 	        + trackURL + "?" + queryParams
-	        + " nosend=\"1\" style=\"display:none!important;\" width=\"1\" height=\"1\"></img></div>";
+	        + " nosend=\"1\" alt=\"\" style=\"display:block;width:1px!important;min-width:1px!important;max-width:1px!important;height:1px!important;border:0;overflow:hidden;\" border=\"0\" width=\"1\" height=\"1\"></img></div>";
 
-	return html + trackingImage;
+	return replaceLastOccurence(html, "</body>", trackingImage);
     }
 
     /**
@@ -243,15 +244,15 @@ public class EmailUtil
     {
 
 	// Returns only html if Agile label exits
-	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by") || StringUtils.contains(html, "http://www.crm.io?utm_source=powered-by")
-	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com") || isWhiteLableEnabled)
+	if (isWhiteLableEnabled || StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by") || StringUtils.contains(html, "http://www.crm.io?utm_source=powered-by")
+	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com"))
 	    return html;
 
 	// For Campaign HTML emails, Powered by should be right aligned
 	if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-	    html = html + "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+	    html = replaceLastOccurence(html, "</body>", "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>");
 	else
-	    html = html + "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+	    html = replaceLastOccurence(html, "</body>", "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>");
 
 	return html;
     }
@@ -613,4 +614,31 @@ public class EmailUtil
 		res.put("emailPrefs", mailUrls);
 		return res.toString();
     }
+    
+    /**
+     * Replaces last occurence in a String
+     * 
+     * @param text
+     * @param searchString
+     * @param replacement
+     * @return
+     */
+    public static String replaceLastOccurence(String text, String searchString, String replacement)
+	{
+    	try
+		{
+			if(StringUtils.isBlank(text) || StringUtils.isBlank(searchString) || StringUtils.isBlank(replacement))
+				return text;
+			
+			int index = text.lastIndexOf(searchString);
+			
+			return text.substring(0, index) + replacement + text.substring(index);
+		}
+		catch (Exception e)
+		{
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+			return text;
+		}
+	}
+    
    }

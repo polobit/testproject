@@ -1,6 +1,6 @@
 <script id="admin-settings-products-collection-template" type="text/html">
-<div class="panel">
- <div class="panel-heading">
+<div class="panel no-panel-border" id="contact-reports-list-view"> 
+ <div class="panel-heading deal-products-btn-heading">
     <div class="pull-right p-t ">
         <a href="#product-add" role="button" data-toggle="modal" type="submit"  class="btn btn-sm btn-default btn-addon" id="addProduct"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'products' 'add-product'}}</a>
     </div>
@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12">
         {{#if this.length}}
-                    <div class=" table-responsive" style="overflow:hidden;"> 
+                    <div class=" table-responsive table-list-view-top-margin" style="overflow:hidden;"> 
                     <table class="table table-striped showCheckboxes no-sorting agile-table panel table-layout-mob-view table table-hover noCheckboxes  custom-fields-table products-table table-hover m-b-none agile-table " url="core/api/products/bulk">
                         <thead>
                             <tr class="hide product-header">
@@ -26,7 +26,7 @@
                     </table>
                     </div>
                     {{else}}
-                        <div class="panel panel-default " style=" overflow-x:auto;  border:none;box-shadow: none;margin-bottom:0px;">
+                        <div class="panel panel-default " style=" overflow-x:auto;  border:none;box-shadow: none;margin-bottom:0px;" id="no-products-slate">
                             <div class="m-l-sm" id="slate"><div class="alert bg-white " style="padding:0px;">
                                 <div class="slate-content p-md">
                                 <div class="box-left pull-left m-r-md">

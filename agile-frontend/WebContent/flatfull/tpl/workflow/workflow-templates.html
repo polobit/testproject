@@ -1,6 +1,6 @@
 <script type="text/html" id="workflow-categories-template">
 <div class="custom-animated custom-fadeInUp">
-    <div class="wrapper-md lter bg-light b-b">
+    <div class="wrapper-md lter bg-light b-b agile-page-header">
         <div class="row">
             <div class="col-md-12">
                <div class="pull-left"> 
@@ -12,7 +12,7 @@
                     </div>
                 </div>   
                 <div class="pull-right">
-                    <a href="#workflow-add" class="btn btn-default btn-sm btn-addon"
+                    <a href="#workflow-add" class="btn btn-default btn-sm btn-lg-imp btn-primary-imp btn-addon"
                         title="{{agile_lng_translate 'campaigns' 'start-with-an-empty-campaign'}}">{{agile_lng_translate 'campaigns' 'custom'}}</a>
                 </div>
                 <div class="clearfix"></div>
@@ -20,68 +20,69 @@
             </div>
         </div>
     </div>
-    <div class="wrapper-md lter b-b" style="border-bottom: none">
+    <div class="wrapper-md lter b-b agile-p-t-xs" style="border-bottom: none">
         <div id="workflows-tab-container">
-            <div class="tab-container">
+            <div class="tabs">
+                <div class="tab-container">
+                {{#is_mobile}}
 
-            {{#is_mobile}}
+                    <ul class="nav nav-tabs campaign-sub-tabs" id="subTab">
 
-                <ul class="nav nav-tabs campaign-sub-tabs" id="subTab">
-
-                    <li role="presentation" class="active" data-tab="1">
-                    <a href="#general" role="tab" name="general" data-toggle="tab"
-                        aria-control="general" id="general1" title="{{agile_lng_translate 'campaigns' 'general'}}">
-                        <i class="icon icon-home"></i>
+                        <li role="presentation" class="active" data-tab="1">
+                        <a href="#general" role="tab" name="general" data-toggle="tab"
+                            aria-control="general" id="general1" title="{{agile_lng_translate 'campaigns' 'general'}}">
+                            <i class="icon icon-home"></i>
+                            </a>
+                        </li>
+                        <li role="presentation" data-tab="2">
+                        <a href="#marketing-automation" name="marketing-automation"
+                            aria-control="marketing-automation" role="tab" data-toggle="tab" id="marketing-automation1" title="{{agile_lng_translate 'campaigns' 'marketing-automation'}}">
+                            <i class="icon icon-rocket"></i>
                         </a>
-                    </li>
-                    <li role="presentation" data-tab="2">
-                    <a href="#marketing-automation" name="marketing-automation"
-                        aria-control="marketing-automation" role="tab" data-toggle="tab" id="marketing-automation1" title="{{agile_lng_translate 'campaigns' 'marketing-automation'}}">
-                        <i class="icon icon-rocket"></i>
-                    </a>
-                    </li>
-                    <li role="presentation" data-tab="3">
-                    <a href="#saas" role="tab" name="saas" data-toggle="tab" aria-control="saas" id="saas1" title="{{agile_lng_translate 'campaigns' 'saas'}}">
-                        <i class="icon icon-disc"></i>
-                    </a>
-                    </li>
-                    <li role="presentation" data-tab="4">
-                    <a href="#ecommerce" name="ecommerce" aria-control="ecommerce" role="tab" data-toggle="tab" id="ecommerce1" title="{{agile_lng_translate 'campaigns' 'e-commerce'}}">
-                        <i class="icon icon-basket-loaded"></i>
-                    </a>
-                    </li>
-                    <li role="presentation" data-tab="5">
-                    <a href="#service" name="service" aria-control="service" role="tab" data-toggle="tab" id="service1" title="{{agile_lng_translate 'campaigns' 'service'}}">
-                        <i class="icon icon-support"></i>
-                    </a>
-                    </li>
-                </ul>
+                        </li>
+                        <li role="presentation" data-tab="3">
+                        <a href="#saas" role="tab" name="saas" data-toggle="tab" aria-control="saas" id="saas1" title="{{agile_lng_translate 'campaigns' 'saas'}}">
+                            <i class="icon icon-disc"></i>
+                        </a>
+                        </li>
+                        <li role="presentation" data-tab="4">
+                        <a href="#ecommerce" name="ecommerce" aria-control="ecommerce" role="tab" data-toggle="tab" id="ecommerce1" title="{{agile_lng_translate 'campaigns' 'e-commerce'}}">
+                            <i class="icon icon-basket-loaded"></i>
+                        </a>
+                        </li>
+                        <li role="presentation" data-tab="5">
+                        <a href="#service" name="service" aria-control="service" role="tab" data-toggle="tab" id="service1" title="{{agile_lng_translate 'campaigns' 'service'}}">
+                            <i class="icon icon-support"></i>
+                        </a>
+                        </li>
+                    </ul>
 
-            {{else}}
+                {{else}}
 
-                <ul class="nav nav-tabs" id="subTab">
+                    <ul class="nav nav-tabs" id="subTab">
 
-                    <li role="presentation" class="active" data-tab="1"><a
-                        href="#general" role="tab" name="general" data-toggle="tab"
-                        aria-control="general" id="general1">{{agile_lng_translate 'campaigns' 'general'}}</a></li>
-                    <li role="presentation" data-tab="2"><a
-                        href="#marketing-automation" name="marketing-automation"
-                        aria-control="marketing-automation" role="tab" data-toggle="tab"
-                        id="marketing-automation1">{{agile_lng_translate 'campaigns' 'marketing-automation'}}</a></li>
-                    <li role="presentation" data-tab="3"><a href="#saas"
-                        role="tab" name="saas" data-toggle="tab" aria-control="saas"
-                        id="saas1">{{agile_lng_translate 'campaigns' 'saas'}}</a></li>
-                    <li role="presentation" data-tab="4"><a href="#ecommerce"
-                        name="ecommerce" aria-control="ecommerce" role="tab"
-                        data-toggle="tab" id="ecommerce1">{{agile_lng_translate 'campaigns' 'e-commerce'}}</a></li>
-                    <li role="presentation" data-tab="5"><a href="#service"
-                        name="service" aria-control="service" role="tab" data-toggle="tab"
-                        id="service1">{{agile_lng_translate 'campaigns' 'service'}}</a></li>
-                </ul>
-            {{/is_mobile}}
+                        <li role="presentation" class="active" data-tab="1"><a
+                            href="#general" role="tab" name="general" data-toggle="tab"
+                            aria-control="general" id="general1">{{agile_lng_translate 'campaigns' 'general'}}</a></li>
+                        <li role="presentation" data-tab="2"><a
+                            href="#marketing-automation" name="marketing-automation"
+                            aria-control="marketing-automation" role="tab" data-toggle="tab"
+                            id="marketing-automation1">{{agile_lng_translate 'campaigns' 'marketing-automation'}}</a></li>
+                        <li role="presentation" data-tab="3"><a href="#saas"
+                            role="tab" name="saas" data-toggle="tab" aria-control="saas"
+                            id="saas1">{{agile_lng_translate 'campaigns' 'saas'}}</a></li>
+                        <li role="presentation" data-tab="4"><a href="#ecommerce"
+                            name="ecommerce" aria-control="ecommerce" role="tab"
+                            data-toggle="tab" id="ecommerce1">{{agile_lng_translate 'campaigns' 'e-commerce'}}</a></li>
+                        <li role="presentation" data-tab="5"><a href="#service"
+                            name="service" aria-control="service" role="tab" data-toggle="tab"
+                            id="service1">{{agile_lng_translate 'campaigns' 'service'}}</a></li>
+                    </ul>
+                {{/is_mobile}}
+                </div>
 
                 <!-- start of tab1 -->
-                <div class="tab-content" style="display: block;">
+                <div class="tab-content panel wrapper" style="display: block;">
                     <div class="tab-pane active" role="tab-panel" id="general">
                         <div class="row">
                             <div class="col-md-3 col-sm-6 col-xs-12">

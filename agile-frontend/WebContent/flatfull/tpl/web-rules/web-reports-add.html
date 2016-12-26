@@ -3,7 +3,7 @@
  </Script> 
 
 <Script id="webrules-add-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
 <div class="col-md-12">
 
@@ -18,7 +18,7 @@
 </div>
 </div>
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-xs">
 <div class="row">
 <div class="col-md-9">
 	<div class="panel wrapper">
@@ -481,10 +481,10 @@
 											</optgroup>
 											<optgroup label="{{agile_lng_translate 'contact-details' 'campaign'}}">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
-													related="WEB_RULE_RHS" url="core/api/workflows"
+													related="WEB_RULE_RHS" url="core/api/workflows/partial"
 													parse_key="id" parse_value="name" template="campaign-options">{{agile_lng_translate 'contact-details' 'add-to-campaign'}}</option>
 												<option value="UNSUBSCRIBE_CAMPAIGN" class="campaign" 
-													related="WEB_RULE_RHS" url="core/api/workflows"
+													related="WEB_RULE_RHS" url="core/api/workflows/partial"
 													parse_key="id" parse_value="name" template="campaign-options">{{agile_lng_translate 'contact-details' 'remove-from-campaign'}}</option>
 											</optgroup>
 											<optgroup label="{{agile_lng_translate 'other' 'tags'}}">
@@ -657,8 +657,8 @@
 <div class="row">
 <div class="col-sm-offset-2 col-sm-10">
 			<div class="form-actions web-rules-actions">
-				<a href="#web-rules" class="btn btn-sm btn-default">{{agile_lng_translate 'report-add' 'close'}}</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'report-add' 'save'}}</a> 
+				<a href="#web-rules" class="btn btn-sm btn-default btn-default-imp btn-lg-imp">{{agile_lng_translate 'report-add' 'close'}}</a>
+				<a href="#" type="submit" class="save btn btn-sm btn-primary btn-primary-imp btn-lg-imp">{{agile_lng_translate 'report-add' 'save'}}</a> 
 				<small id="twilio_call_setup">Please enable your Twilio integration <a href="#integrations" class="text-info">here.</a></small>
 			</div>
 </div>
