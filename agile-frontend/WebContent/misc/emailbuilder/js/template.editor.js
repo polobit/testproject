@@ -1447,8 +1447,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#customize').find('#content-bg-color .hex-col-val').text(rgb2hex($('#tosave').find('#primary .main').css('background-color').replace("#","")));
 
         //template font color
-        $('#customize').find('#font-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('color').replace("#","")));
-        $('#customize').find('#font-color .hex-col-val').text(rgb2hex($('#tosave').find('table:first').css('color').replace("#","")));
+        $('#customize').find('#font-color .color-preview').css('background-color', rgb2hex($('#tosave').find('.textFix:first').css('color').replace("#","")));
+        $('#customize').find('#font-color .hex-col-val').text(rgb2hex($('#tosave').find('.textFix:first').css('color').replace("#","")));
 
     });
 

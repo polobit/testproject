@@ -270,11 +270,11 @@ var localeJSON = <%=localeJSON%>;
                         if (!bySetColor){
                             $(el).parent().find(".color-preview").css('background-color', '#' + hex);
                             $(el).parent().find(".hex-col-val").text('#' + hex);
-                            $('#tosave').find('table:first').css('color', '#'+ hex);
+                            $('#tosave').find('.textFix').css('color', '#'+ hex);
                         }
                 },
                 onSubmit: function (hsb, hex, rgb, el) {
-                    $('#tosave').find('table:first').css('color', '#'+ hex);
+                    $('#tosave').find('.textFix').css('color', '#'+ hex);
                     $(el).colpickHide();
                 }
                 }).keyup(function () {
