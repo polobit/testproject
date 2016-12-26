@@ -3,6 +3,11 @@ package com.agilecrm.widgets.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.social.TwilioUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 
@@ -238,11 +243,23 @@ public class DefaultWidgets {
 	 */
 	public static Widget checkAndFixWidgetType(Widget widget) {
 		System.out.println("In default widget type check " + widget);
-		if (widget.widget_type == null) {
-			WidgetType widgetType = getWidgetType(widget.name);
-			if (widgetType != null) {
-				widget.widget_type = widgetType;
+		try{
+			if (widget.widget_type == null) {
+				WidgetType widgetType = getWidgetType(widget.name);
+				if (widgetType != null) {
+					widget.widget_type = widgetType;
+				}
 			}
+			if(StringUtils.equals(widget.name,"TwilioIO") && StringUtils.equals(widget.getProperty("twilio_twimlet_url"),"None")){
+				Long domainuserid = AgileUser.getCurrentAgileUser().domain_user_id;
+				String appsid = TwilioUtil.createAppSidTwilioIO(widget.getProperty("twilio_acc_sid"), widget.getProperty("twilio_auth_token"), widget.getProperty("twilio_number_sid"), widget.getProperty("twilio_record"), "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
+				System.out.println("appsid == "+appsid);
+				widget.addProperty("twilio_app_sid", appsid);
+				widget.addProperty("twilio_twimlet_url", "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
+				widget.save(widget);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return widget;
 	}
