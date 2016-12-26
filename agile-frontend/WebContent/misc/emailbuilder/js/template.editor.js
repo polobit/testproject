@@ -816,8 +816,11 @@ $(document).ready(function () {
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());
 
-         if(!parseInt($('#'+id).css("max-width")) && !parseInt($('#'+id).css("max-width")) >= parseInt($('#image-w').val()))           
+         if(parseInt($('#'+id).css("max-width")) < parseInt($('#image-w').val())) 
+         {          
             alert("Image width must be less than or equal to "+$('#'+id).css("max-width"));
+            $('#image-w').val($('#image-w').val()-1);
+        }
          else
             $('#'+id).attr('width', $('#image-w').val());
 
@@ -1428,9 +1431,9 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $('#custom-val').on('click', function(){
         
         //font styles of template
-        $('#customize').find('.font-family-picker').val($('#tosave').find('table:first').css('font-family'));
-        $('#customize').find('.font-size-picker').val($('#tosave').find('table:first').css('font-size'));
-        $('#customize').find('.line-height-picker').val($('#tosave').find('table:first').css('line-height'));
+        $('#customize').find('.font-family-picker').val($('#tosave').find('.textFix:first').css('font-family'));
+        $('#customize').find('.font-size-picker').val($('#tosave').find('.textFix:first').css('font-size'));
+        $('#customize').find('.line-height-picker').val($('#tosave').find('.textFix:first').css('line-height'));
 
         //template background color
         $('#customize').find('#background-color .color-preview').css('background-color', rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
@@ -1448,17 +1451,19 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
     $('.font-family-picker').on('change', function(){
         console.log($(this));
-        $('#tosave').find('table:first').css('font-family', $(this).val());
+        $('#tosave').find('.textFix').css('font-family', $(this).val());
+        $('#tosave').find('.textbuttonsimg').css('font-family', $(this).val());
     });
 
     $('.font-size-picker').on('change', function(){
         console.log($(this));
-        $('#tosave').find('table:first').css('font-size', $(this).find('option:selected').text());
+        $('#tosave').find('.textFix').css('font-size', $(this).find('option:selected').text());
+        $('#tosave').find('.textbuttonsimg').css('font-size', $(this).find('option:selected').text());
     });
 
     $('.line-height-picker').on('change', function(){
         console.log($(this));
-        $('#tosave').find('table:first').css('line-height', $(this).find('option:selected').text());
+        $('#tosave').find('.textFix').css('line-height', $(this).find('option:selected').text());
     });
 
 
