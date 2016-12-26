@@ -61,11 +61,15 @@ String template = request.getParameter("template");
         <div style="float: right;"> 
              <select class="themesSelectEle navbar-brand">
                   <option id="chooseTheme">Choose Theme</option>
+                  <option id="addNewTheme">+ Add new</option>
+                  <optgroup id="defaultThmEle"  label="Default Themes">
                   <option id="theme1">theme1</option>
                   <option id="theme2">theme2</option>
                   <option id="theme3">theme3</option>
                   <option id="theme4">theme4</option>
-                  <option id="addNewTheme">+ Add new</option>
+                  </optgroup>
+                  <optgroup id="custThmEle" label="Custom Themes">
+                  </optgroup>
              </select>
              <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
                <span>Preview</span> 
@@ -99,7 +103,8 @@ String template = request.getParameter("template");
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
-                        <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="15" style="width: 30%;"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
+                        <form class="form-inline"><div><label style="margin-right: 25px;
+                        ">Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="40" style="width: 30%;"><span id="errorSpan" style="margin-left:8px;color:#d9534f;"></span></div></form>
 
                       </div>
                         </div>
@@ -239,7 +244,7 @@ String template = request.getParameter("template");
         <div class="row">
         <!--Font Style Start -->
         <div class="innerFontTheme innerFontStyleDiv col-md-4">
-          <label>Font Style</label>
+          <label>Style</label>
           <div class="innerFontSizeUlDiv">
             <select class="form-control" style="padding:0px;">
               <option value="normal">Normal</option>
@@ -251,7 +256,7 @@ String template = request.getParameter("template");
         <!--Font Style End-->
         <!--Font Weight Start -->
         <div class="innerFontTheme innerFontWeightDiv col-md-4">
-          <label>Font Weight</label>
+          <label>Weight</label>
           <div class="innerFontSizeUlDiv">
             <select class="form-control" style="padding:0px;">
               <option value="normal">Normal</option>
@@ -264,7 +269,7 @@ String template = request.getParameter("template");
         <!--Font Weight End -->
         <!--Font Size Start -->
         <div class="innerFontTheme innerFontSizeDiv col-md-4">
-          <label>Font Size</label>
+          <label>Size</label>
           <div class="innerFontSizeUlDiv">
             <select class="form-control" style="padding:0px;">
               <option>8</option>
@@ -384,7 +389,7 @@ String template = request.getParameter("template");
               <div class="modal-footer">
               
                 <button type="button" class="btn btn-sm btn-default" onclick="closeAddTheme()" data-dismiss="modal" >Close</button>
-                <button type="button" class="btn btn-sm btn-primary save" style="color: #fff;background-color: #7266ba;/*margin-right: 44px;float: right;*/text-align: center;" onclick="saveCustTheme()">Save</button>
+                <button type="button" class="btn btn-sm btn-primary save" style="background-color: #7266ba;border-color: #7266ba;" onclick="saveCustTheme()">Save</button>
               </div>
              </div>
       
@@ -476,7 +481,10 @@ String template = request.getParameter("template");
                         var custCss=customthemes[i].themeCss;
                         var custIdName=custName+":"+custId;
                         var inputTheme='<option id="form'+custId+'">'+custName+'</option>';
-                         $(inputTheme).insertAfter("#theme4");
+                         //$(inputTheme).insertAfter("#theme4");
+                         //$("#custThmEle").add(inputTheme);
+                         var custOptionEle = $("#custThmEle");
+                         $(inputTheme).appendTo(custOptionEle);
                          if(formClasses!=null){
                           var formClassesList=formClasses.split(" ");
                               if(formClassesList.indexOf("form"+custId)>-1){
@@ -567,8 +575,12 @@ String template = request.getParameter("template");
                                      console.log("Final CustomTheme:"+data);
                                     if(data!=undefined && data!=""){
                                     customthemes.push(data);
+                                    themesListAsArr.push(data.name);
                                     var inputTheme='<option id="form'+data.id+'">'+data.name+'</option>';
-                                    $(inputTheme).insertAfter("#chooseTheme");
+                                    //$(inputTheme).insertAfter("#chooseTheme");
+                                    var custOptionEle = $("#custThmEle");
+
+                                    $(inputTheme).appendTo(custOptionEle);
                                    }
                                   },
                                   error: function(){
@@ -596,15 +608,26 @@ String template = request.getParameter("template");
                     var themeNamePattern=/^[a-z][a-zA-Z0-9]+/;
                     var isThemeNameExist=false;
                     if(themeName==null || themeName.length<=0){
-                      $("#errorSpan").text("Please provide valid theme name ");
+                      $("#errorSpan").text("Provide valid theme name.");
                     }
                     else{
-                          $.each( themesListAsArr, function( index, value ) {
-                              if(value==themeName){
-                                isThemeNameExist=true;
-                                $("#errorSpan").text("Provided theme name matches with existing themes.Please provide valid theme name.");
+                          $.each(defaultThemes,function(index,value){
+                              if(value == themeName){
+                                 isThemeNameExist=true;
+                                 $("#errorSpan").text("Duplicate names are not allowed.");
+                                 return;
                               }
                           });
+                          if(isThemeNameExist == false){
+                              $.each( themesListAsArr, function( index, value ) {
+                                 if(value==themeName){
+                                   isThemeNameExist=true;
+                                   $("#errorSpan").text("Duplicate names are not allowed.");
+                                   return;
+                                 }
+                              });
+                          } 
+                          
                           if(!isThemeNameExist){
                             $("#errorSpan").text("");
                           }
@@ -656,10 +679,16 @@ String template = request.getParameter("template");
                     if($("#render")!=undefined && $("#render")!=null){
                           var pContent=document.getElementById("render").value;
                           $(".createCustomFormContent").html(pContent);
-                      
-                    }
+                          $.each(defaultThemes,function(index,value){
+                              var classesList =  $(".createCustomFormContent .form-view").attr("class")
+                              if(value!="form-view" &&classesList.indexOf(value)>-1){
+                                 $(".createCustomFormContent .form-view").removeClass(value);
+                              }
+                          });
+                     }
                     defaultFormEleFun();
                     custThemePopUpCode();
+
                   }
 
                   function closeAddTheme(){
