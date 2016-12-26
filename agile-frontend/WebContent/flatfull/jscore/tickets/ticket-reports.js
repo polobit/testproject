@@ -133,6 +133,20 @@ var Ticket_Reports = {
 
 	feedbackReports: function(){
 		var range = $('#range').html().split("-");
+
+		var group = 0; 
+		var assignee = 0; 
+
+			if($('#group_names').find('option:selected').val()){
+
+	    	group = $('#group_names').find('option:selected').val();
+
+	    }
+
+    	if($('#group_names').find('option:selected').data('assignee-id')){
+    		
+    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+    	}
     
 	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 	    var d = new Date();
@@ -151,7 +165,7 @@ var Ticket_Reports = {
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 		
-		Ticket_Reports.pieforfeedbackReport('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time,
+		Ticket_Reports.pieforfeedbackReport('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee,
 			'feedback', '', true);
 		
 	},

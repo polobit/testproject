@@ -20,15 +20,18 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.document.TicketsDocument;
+import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketNotes;
 import com.agilecrm.ticket.entitys.Tickets;
 import com.agilecrm.ticket.entitys.Tickets.Priority;
 import com.agilecrm.ticket.entitys.Tickets.Status;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.ScoredDocument;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.googlecode.objectify.Key;
 
 /**
  * 
@@ -325,35 +328,71 @@ public class TicketReportsUtil
 	public static String getFeedbackReport(Long startTime, Long endTime,Long group,Long assignee)
 	{	
 		System.out.println("in feedback:  "+startTime);
+		
 		Map<String, Object> map = new HashMap<String, Object>();
+		
 		map.put("created_time >", startTime);
 		map.put("created_time <", endTime);
 		map.put("feedback_flag", true);
 		map.put("feed_back", "1");
+		
+		if(assignee != 0){
+			
+			Key<DomainUser> assignee_key = new Key<DomainUser>(DomainUser.class, assignee);
+			
+			Key<TicketGroups> group_key = new Key<TicketGroups>(TicketGroups.class, group);
+			
+			map.put("assignee_key", assignee_key);
+			map.put("group_key", group_key);
+		}
+		
+		if(assignee == 0 && group != 0){
+			
+			Key<TicketGroups> group_key = new Key<TicketGroups>(TicketGroups.class, group);
+			
+			map.put("group_key", group_key);
+		}
+		
+		
 		JSONObject feedbackcount_1 =new JSONObject();
+		
 		feedbackcount_1.put("count" , TicketNotes.ticketNotesDao.getCountByProperty(map));
+		
 		map.remove("feed_back");
 		map.put("feed_back", "2");
+		
 		JSONObject feedbackcount_2 =new JSONObject();
-		 feedbackcount_2.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
+		
+		feedbackcount_2.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
+		
 		map.remove("feed_back");
 		map.put("feed_back", "3");
+		
 		JSONObject feedbackcount_3 =new JSONObject();
+		
 		feedbackcount_3.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
+		
 		map.remove("feed_back");
 		map.put("feed_back", "4");
+		
 		JSONObject feedbackcount_4 =new JSONObject();
+		
 		feedbackcount_4.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
+		
 		map.remove("feed_back");
 		map.put("feed_back", "5");
+		
 		JSONObject feedbackcount_5 =new JSONObject();
+		
 		feedbackcount_5.put("count", TicketNotes.ticketNotesDao.getCountByProperty(map));
 		JSONObject feedback_array = new JSONObject() ;
+		
 		feedback_array.put("1",feedbackcount_1 );
 		feedback_array.put("2",feedbackcount_2 );
 		feedback_array.put("3",feedbackcount_3 );
 		feedback_array.put("4",feedbackcount_4 );
 		feedback_array.put("5",feedbackcount_5 );
+		
 		return feedback_array.toString();
 	}
 
