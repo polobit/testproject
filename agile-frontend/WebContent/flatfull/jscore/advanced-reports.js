@@ -667,7 +667,7 @@ var options='';
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
-	reportDetails("RevenueBySource",start_time/1000,end_time/1000,"won_date");
+	reportDetails("RevenueBySource",start_time/1000,end_time/1000,"won_time");
 	if ($('#owner').length > 0)
 	{
 		// Get owner
@@ -977,8 +977,8 @@ function reportDetails(filter_name,start_time,end_time,date_type)
 	var el=$(".reports-Container");
 	var reportDealJsonArray=[];
 	var reportDealJsonArray_or = [];
-	$('#reports-listerners-container').off("click")
-			.on('click','.filter-reports',function(e)
+	$('#reports-listerners-container').off('click','.filter-reports');
+	$('#reports-listerners-container').on('click','.filter-reports',function(e)
 	{
 		e.preventDefault();
 			var json_object_1={};
