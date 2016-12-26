@@ -132,7 +132,7 @@ var localeJSON = <%=localeJSON%>;
   <!-- Tab panes -->
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="add-content">
-        <div class="sidebar-nav" style="margin-top: 10px;">
+        <div class="sidebar-nav" style="margin-top: 10px;margin-left: -15px;">
                     <div id="elements" style="position:relative;">
                         <ul class="nav nav-list accordion-group">
                             <li class="rows" id="estRows">

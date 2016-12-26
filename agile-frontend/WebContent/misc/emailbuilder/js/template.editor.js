@@ -1251,6 +1251,9 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             handleObjects();
             $(".demo .column").sortable({opacity: .35, connectWith: ".column"});
             $(".demo .column .lyrow").find('.drag').removeClass('hide');
+            $('.font-family-picker').trigger('change');
+            $('.font-size-picker').trigger('change');
+            $('.line-height-picker').trigger('change');
         }});
 
 
