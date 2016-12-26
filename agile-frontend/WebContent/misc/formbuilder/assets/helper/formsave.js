@@ -14,44 +14,46 @@ define([
 		
         var themeVal =$(".themesSelectEle option:selected").text();
     
-		 
-		 /*$.ajax({
-			type : 'POST',
-			url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/getCustomThemeByName',
-			async : false,
-			contentType : 'application/json',
-			data : themeVal,
-			success: function(data){
-				console.log("DATA COMING!!!"+data);
-				if(!(data==""||data==undefined)){
-				var style='<style id="custTheme'+data.id+'" type="text/css">'+data.themeCss+'</style>';
-				$("#formContent .form-view").addClass("form"+data.id);
-				$("#formContent").append(style);
-				}
-			},
-			error: function(e){
-				console.log("Theme not found!!"+e);
-			}
-		});*/
-
-		if(themeVal!="Choose Theme"){
+		if(themeVal){
 			 var custThmDiv = document.createElement("div");
 			 custThmDiv.setAttribute("id","formContent");
 			 $("body").append(custThmDiv);
 			 $("#formContent").css("display","none");
 			 $("#formContent").html($("#render").val());
-			$.each( customthemes, function( index, value ) {
-			if(value.name==themeVal){
-				var style='<style id="custTheme'+value.id+'" type="text/css">'+value.themeCss+'</style>';
-				$("#formContent .form-view").addClass("form"+value.id);
-				$("#formContent").append(style);
-				$("#render").val($("#formContent").html());
-			}
-		}); 
+			 var renderformArr = $("#formContent .form-view").attr("class").split(" ");
+			 $.each(renderformArr,function(index,value){
+			 	if(value != "form-view"){
+			 		$("#formContent .form-view").removeClass(value);
+			 	}
+			 });
+			 var styleArr = $("#formContent").find("style");
+			 $.each(styleArr,function(index,value){
+			 	if(value.id && value.id.indexOf("custTheme")>-1)
+			 		$("#"+value.id).remove();
+			});
+			 var hasTemplateTheme =false;
+			 var defaultThemes = ["theme1","theme2","theme3","theme4"];
+				 $.each(defaultThemes,function(index,value){
+				 	if(value==themeVal){
+				 		$("#formContent .form-view").addClass(value);
+						hasTemplateTheme = true;
+				 		return;
+				 	}
+				 });
+			if(hasTemplateTheme ==false){
+				$.each( customthemes, function( index, value ) {
+					if(value.name==themeVal){
+						var style='<style id="custTheme'+value.id+'" type="text/css">'+value.themeCss+'</style>';
+						$("#formContent .form-view").addClass("form"+value.id);
+						$("#formContent").append(style);
+					}
+			    });
+			} 
+			$("#render").val($("#formContent").html());    
 		}
 		
 		form.formHtml = $("#render").val();
-		/*console.log("render val:::"+form.formHtml);*/
+		$("#formContent").remove();
 		if(formNumber){
 			form.id = formNumber;
 		}
@@ -64,8 +66,7 @@ define([
 			data : JSON.stringify(form),
 			success: function(data){
 				if(data != null){
-
-					//alert("Form saved successfuly.Click on Preview option to view the updated form.");
+					
 					$("#form-save").text("Save");
 					target.removeAttr("disabled");
 					$("#form_preview").removeAttr("disabled");
@@ -100,6 +101,7 @@ define([
 
 						var $formNextActionModal = $("#formNextActionModal");
 						$("#header").css("z-index","0");
+						$(".popover").css("z-index","50");
 						$formNextActionModal.html(next_action_popup).modal("show");
 						$('#success-msg').fadeIn('slow').delay(2000).fadeOut('slow');
 					}
@@ -121,5 +123,6 @@ define([
  }
   var nextActionCloseClick = function(){
  	$("#header").css("z-index","2001");
+ 	$(".popover").css("z-index","2000");
  }
 

@@ -59,6 +59,14 @@ String template = request.getParameter("template");
          </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;"> 
+             <select class="themesSelectEle navbar-brand">
+                  <option id="chooseTheme">Choose Theme</option>
+                  <option id="theme1">theme1</option>
+                  <option id="theme2">theme2</option>
+                  <option id="theme3">theme3</option>
+                  <option id="theme4">theme4</option>
+                  <option id="addNewTheme">+ Add new</option>
+             </select>
              <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
                <span>Preview</span> 
             </a>          
@@ -82,12 +90,7 @@ String template = request.getParameter("template");
                   <!-- <h2 id="form-label">Your Form</h2> -->
                   <!-- <input id="form-save" type="button" class="btn btn-info" value="Save Form"> -->
                  
-                  <div class="form-group themesSelectEleDiv col-md-4" style="margin-top: -35px;margin-left: 230px;padding-right: 10px;">
-                    <select class="form-control themesSelectEle">
-                      <option id="chooseTheme">Choose Theme</option>
-                      <option id="addNewTheme">+ Add new</option>
-                    </select>
-                  </div>
+                 
             <div class="modal fade" id="customThemeModal" role="dialog">
                       <div class="modal-dialog" style="width: 1032px;height: 365px;left:0px;">
     
@@ -96,7 +99,7 @@ String template = request.getParameter("template");
                         <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
-                        <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="15"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
+                        <form class="form-inline"><div><label>Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="15" style="width: 30%;"><span id="errorSpan" style="margin-left:8px;color:red"></span></div></form>
 
                       </div>
                         </div>
@@ -406,12 +409,13 @@ String template = request.getParameter("template");
                     </div>
                   </div>      
                 <!-- Apply or delete theme popup--> 
-                  <input id="form-save" type="button" class="btn btn-info" style="/*background-color: #fff;color: #000;border-color: #ccc;*/font-size: 13px;padding-left: 19px;padding-right: 19px;padding-bottom: 8px;padding-top: 10px;margin-right: 35px;margin-top: -36px;" value="Save Form">
->>>>>>> Custom_Themes_FormBuilder_Task_Latest
+                  <!-- <input id="form-save" type="button" class="btn btn-info" style="/*background-color: #fff;color: #000;border-color: #ccc;*/font-size: 13px;padding-left: 19px;padding-right: 19px;padding-bottom: 8px;padding-top: 10px;margin-right: 35px;margin-top: -36px;" value="Save Form"> -->
+
                   <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
                      </form>
+                     <style id="agileCustTheme" type="text/css"></style>
                   </div>
                </div>
             </div>
@@ -446,18 +450,15 @@ String template = request.getParameter("template");
                   var formClasses=null;
                   var themesListAsArr=["default"];
                   var currApplThm=null;
+                  var defaultThemes = ["theme1","theme2","theme3","theme4"];
+                  
                   <%
                     List<CustomTheme> custThmList=CustomThemesUtil.fetchAllCustomThemes();
                     System.out.println("hi..........."+custThmList);
                     %>
                     customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
                   function chooseThemeFunc(){
-                    /*if($(".dropdown-content").css("display") == "none"){
-                      $(".dropdown-content").css("display","block");
-                    }
-                    else if($(".dropdown-content").css("display") == "block"){
-                      $(".dropdown-content").css("display","none");
-                    }*/
+                    
                     if(currApplThm==null){
                       currApplThm="Choose Theme";
                     }
@@ -475,7 +476,7 @@ String template = request.getParameter("template");
                         var custCss=customthemes[i].themeCss;
                         var custIdName=custName+":"+custId;
                         var inputTheme='<option id="form'+custId+'">'+custName+'</option>';
-                         $(inputTheme).insertAfter("#chooseTheme");
+                         $(inputTheme).insertAfter("#theme4");
                          if(formClasses!=null){
                           var formClassesList=formClasses.split(" ");
                               if(formClassesList.indexOf("form"+custId)>-1){
@@ -503,16 +504,29 @@ String template = request.getParameter("template");
                             $(document.getElementById("target")).removeClass("form"+value.id);
                             $(document.getElementById("agileCustTheme")).empty();
                         });
+                        $.each(defaultThemes,function(index,value){
+                           $(document.getElementById("target")).removeClass(value);
+                           $(document.getElementById("agileCustTheme")).empty();
+                        });
+
                         if(formtheme != "Choose Theme"){
+                           $.each(defaultThemes,function(index,value){
+                                 if(value==formtheme){
+                                    currApplThm=value;
+                                    $(document.getElementById("target")).addClass(value);
+                                    return;
+                                 }
+                           });
                             $.each( customthemes, function( index, value ) {
-                              if(value.name==formtheme){
-                                  currApplThm=value.name;
-                                  $(document.getElementById("target")).addClass("form"+value.id);
-                                  $(document.getElementById("agileCustTheme")).text(value.themeCss);
-                              }
+                                 if(value.name==formtheme){
+                                     currApplThm=value.name;
+                                     $(document.getElementById("target")).addClass("form"+value.id);
+                                     $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                                     return;
+                                 }
                             }); 
                         }
-                    }
+                     }
                   
                   }
                   
@@ -537,24 +551,8 @@ String template = request.getParameter("template");
                                 for(j=0;j<themeArray[i].form_element.length;j++){
                                   var ele=themeArray[i].form_element[j].ele;
                                   var elecss=themeArray[i].form_element[j].css;
-                                  /*if(ele.includes("Field Label")){
-                                    var eleProp = elecss.substring(0,elecss.indexOf("{"));
-                                    var elepropArr = eleProp.split(",");
-                                    var finalEleProp = "";
-                                    $.each(elepropArr,function(index,value){
-                                      if(index == elepropArr.length-1){
-                                        finalEleProp = finalEleProp+"."+themeclass+"\t"+value;
-                                      }
-                                      else{
-                                        finalEleProp = finalEleProp+"."+themeclass+"\t"+value+",";
-                                      }
-                                    });
-                                    custTheme=custTheme+finalEleProp+"\t"+elecss.substring(elecss.indexOf("{"),elecss.length);
-                                  }
-                                  else{*/
-                                    custTheme=custTheme+"."+themeclass+"\t"+elecss;
-                                  /*}*/
-                                }
+                                  custTheme=custTheme+"."+themeclass+"\t"+elecss;
+                                 }
                               }
                               var customTheme = {};
                               customTheme.id = data.id;
@@ -586,6 +584,8 @@ String template = request.getParameter("template");
                           $('#customThemeModal').modal('hide');
                           $("#errorSpan").text("");
                           $("#themeName").val("");
+                          $("#header").css("z-index","2001");
+                          $(".popover").css("z-index","2000");
                         }
                         
                       }
@@ -624,15 +624,13 @@ String template = request.getParameter("template");
                                 success: function(data){
                                   console.log("DELETED THEME?"+data);
                                   
-                                    /*$(parentDiv).remove();*/
-                                    $.each( themesListAsArr, function( index, value ){
+                                   $.each( themesListAsArr, function( index, value ){
                                       if(value==deleteThemeVal)
                                       themesListAsArr.splice(index,1);
                                     });
 
                                     $.each( customthemes, function( index, value ) {
-                                        /*if(this.name==deleteThemeVal){*/
-                                        if(deleteThemeId.includes(this.id)){
+                                       if(deleteThemeId.includes(this.id)){
                                             customthemes.splice(index,1);
                                             if($(document.getElementById("target")).hasClass(deleteThemeId)){
                                             $(document.getElementById("target")).removeClass(deleteThemeId);
@@ -670,37 +668,48 @@ String template = request.getParameter("template");
                      $("#errorSpan").text("");
                      $(".themesSelectEle").val(currApplThm);
                      $(".createCustomFormContent").empty();
+                     $("#header").css("z-index","2001");
+                     $(".popover").css("z-index","2000");
                   }
 
                   $(".themesSelectEle").change(function(identifier){
                         chooseThemeFunc();
                         var themeId=$(".themesSelectEle option:selected").attr("id");
-                        /*console.log(themeId);*/
+                        
                         if(themeId == "addNewTheme"){
                           
                           createCustTheme();
+                          $("#header").css("z-index","0");
+                          $(".popover").css("z-index","50");
                           $('#customThemeModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                         }
-                        else if(themeId=="chooseTheme"){
+                        else if(themeId=="chooseTheme" || themeId == "theme1" || themeId == "theme2" || themeId == "theme3" || themeId == "theme4"){
                           selectedThemeFunc(identifier);
                         }
                         else{
+                          $("#header").css("z-index","0");
+                          $(".popover").css("z-index","50");
                           $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                           }
                   });
                   function closeApplyTheme(identifier){
 
-                    /*console.log(identifier);*/
                     var selectedVal = identifier.id;
                     if(selectedVal == "applytheme"){
                       selectedThemeFunc(identifier);
+                      $("#header").css("z-index","2001");
+                      $(".popover").css("z-index","2000");
                     }
                     else if(selectedVal == "deltheme"){
                       var currThm=$(".themesSelectEle").val();
                       deleteTheme(currThm);
+                      $("#header").css("z-index","2001");
+                      $(".popover").css("z-index","2000");
                     }
                     else if(selectedVal == "closetheme"){
                       $(".themesSelectEle").val(currApplThm);
+                      $("#header").css("z-index","2001");
+                      $(".popover").css("z-index","2000");
                     }
                   }
                   
@@ -717,7 +726,80 @@ String template = request.getParameter("template");
          a.href = window.location.origin+"/#forms";
       </script>
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
-      <style id="agileCustTheme" type="text/css"></style>
+      <style>
 
+      .modal-content{
+          position: relative;
+          border: 1px solid rgba(0,0,0,.2);
+          border-radius: 0;
+          outline: 0;
+          box-shadow: 0 3px 9px rgba(0,0,0,.5);
+      }
+
+      .modal-header .close{
+         opacity: .2;
+         outline:none;
+      }
+      .modal-title{
+          font-weight: normal;
+          margin: 0;
+          font-size: 16px;
+          line-height: 1.42857143;
+          color: #58666e;
+      }
+      .modal-body{
+          background: #fff;
+          position: relative;
+          padding: 15px;
+      }
+      .modal-footer{
+          padding: 10px;
+          background-color: rgba(0,0,0,0.025);
+
+
+          text-align: right;
+          border-top: 1px solid #e5e5e5;
+      }
+      .modal-footer .checkbox{
+          margin-top: 4px;
+          margin-bottom: 4px;
+          position: relative;
+          display: block;
+      }
+
+      .modal-footer .checkbox label{
+            min-height: 20px;
+          padding-left: 20px;
+          margin-bottom: 0;
+          font-weight: normal;
+          cursor: pointer;
+          float: left!important;
+          display: inline-block;
+          max-width: 100%;
+          font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+          font-size: 13px;
+          -webkit-font-smoothing: antialiased;
+          line-height: 1.69;
+          color: #58666e;
+      }
+
+
+      .close-button{
+          outline:none;
+          color: #fff!important;
+          background-color: #7266ba;
+          border-color: #7266ba;
+          border-radius: 2px;
+          outline: 0!important;
+          padding: 4px 9px;
+          font-size: 12px;
+          line-height: 1.7;
+          border: 1px solid transparent;
+      }
+      #formVideoModal .modal-dialog{
+         position:initial!important
+      }
+     
+</style>
    </body>
 </html>
