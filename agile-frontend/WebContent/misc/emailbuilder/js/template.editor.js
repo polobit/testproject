@@ -816,10 +816,10 @@ $(document).ready(function () {
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());
 
-         if(parseInt($('#'+id).css("max-width")) >= parseInt($('#image-w').val()))           
-            $('#'+id).attr('width', $('#image-w').val());
-         else
+         if(!parseInt($('#'+id).css("max-width")) && !parseInt($('#'+id).css("max-width")) >= parseInt($('#image-w').val()))           
             alert("Image width must be less than or equal to "+$('#'+id).css("max-width"));
+         else
+            $('#'+id).attr('width', $('#image-w').val());
 
          $('#'+id).attr('height', $('#image-h').val());
          $('#'+id).attr('alt', $('#image-alt-text').val());
@@ -1150,6 +1150,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
          e.data('fontfamily');
          e.data('background');
          */
+        $("#settings").find("#image-link,#image-alt-text,#image-h,#video-link,#image-url").trigger('change');
         $('div.row').removeClass('active');
         $('.selected-item').removeClass('selected-item').css('border', 'none');
         // showElements();
