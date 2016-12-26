@@ -284,8 +284,10 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 										$(actions_list[k]).trigger("change");
 									} else {
 										actions_list[k].value = "MODAL_POPUP";
-										$(actions_list[k]).trigger("change");
-										loadSavedTemplate(path,setupTinymceForWebRulePopups);
+										// $(actions_list[k]).trigger("change");
+										loadSavedTemplate(path,function(data){
+											set_tinymce_content("tinyMCEhtml_email",data);
+										});
 									}
 								}
 															
