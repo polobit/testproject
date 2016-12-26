@@ -88,10 +88,10 @@ function getKnowlarityLogs(offSet){
 }
 
 
-function saveCallNoteKnolarity(event){
+function saveCallNoteKnolarity(event, disableMergeContact){
 
-	console.log("Event data : **** ");
-	console.log(event);
+	//console.log("Event data : **** ");
+	//console.log(event);
 
 	var callDirection = event.call_direction;
 	var eventType = event.event_type;
@@ -103,7 +103,10 @@ function saveCallNoteKnolarity(event){
 	var state = event.business_call_type;
 	var callDuration = 0;
 
-	console.log("callDirection : in knowlarity_load "+callDirection);
+	console.log("*************");
+	console.log("event type : "+eventType);
+	console.log("type : "+type);
+	console.log("CallDirection : "+callDirection);
 
 	if(event.call_duration){
 		callDuration = event.call_duration;
@@ -119,6 +122,14 @@ function saveCallNoteKnolarity(event){
 		}
 	}
 
+	if(!callType){
+		if(callDirection == "Inbound"){
+			callType = "Incoming";
+		}else if(callDirection == "Outbound"){
+			callType = "Outgoing";
+		}
+	}
+
 	var noteSub = callType + " Call - " + state;
 	var cntId;
 
@@ -126,7 +137,7 @@ function saveCallNoteKnolarity(event){
 		cntId = globalCall.contactedContact.id; // agilecrm DB ID
 	}
 
-	var call = { 
+	var call = {
 		"direction" : callType,
 		"phone" : customerNumber,
 		"status" : state, 
@@ -146,7 +157,7 @@ function saveCallNoteKnolarity(event){
 
 	console.log(callType +" : "+ state);
 
-	if(callType == "Incoming"){	
+	if(callType == "Incoming"){
 
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(responseJson){
 	    	if(!responseJson){
@@ -168,7 +179,11 @@ function saveCallNoteKnolarity(event){
 	    		var jsonObj = {};
 	    		jsonObj['phoneNumber'] = customerNumber;
 
-	    		return showContactMergeOption(jsonObj);	    		
+	    		if(!disableMergeContact){
+	    			return showContactMergeOption(jsonObj);	    		
+	    		}else{
+	    			closeCallNoty(true);
+	    		}
 	    	}
 
 	    	contact = responseJson;
@@ -275,9 +290,9 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 		var agentPhysicalNumber = event.agent_number;		
 		var destinationNumber = event.destination;
 		
-		console.log("destinationNumber : "+ destinationNumber);
-		console.log("currentKnowlarityNumber : "+ currentKnowlarityNumber);
-		console.log("agentPhysicalNumber : "+agentPhysicalNumber);
+		// console.log("destinationNumber : "+ destinationNumber);
+		// console.log("currentKnowlarityNumber : "+ currentKnowlarityNumber);
+		// console.log("agentPhysicalNumber : "+agentPhysicalNumber);
 
 		if((agentPhysicalNumber && currentKnowlarityNumber == agentPhysicalNumber) || (destinationNumber && currentKnowlarityNumber == destinationNumber)){
 			var callDirection = event.call_direction;
@@ -286,12 +301,7 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 			var callType = event.Call_Type;
 			var agentNumber = event.agent_number;		
 			var knowlarityNumber = event.knowlarity_number;
-			var customerNumber = event.caller;
-			
-			console.log("*************");
-			console.log("Event type : "+eventType);
-			console.log("Type : "+type);
-			console.log("callDirection : "+callDirection);			
+			var customerNumber = event.caller;					
 
 			if(callDirection){
 				if(callDirection == "Outbound"){
@@ -338,7 +348,7 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
 						}else if(eventType == "HANGUP"){
 							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";	
-							saveCallNoteKnolarity(event);											
+							saveCallNoteKnolarity(event, true);											
 						}
 					}	
 				}

@@ -421,4 +421,4 @@ var visitorsUtils = {
 		   //$("#visitors-count").attr("data-t",count);
 		   $("#visitors-count").html("<small> (" + count + " Total) </small>");
 		}
-	}
+	};
