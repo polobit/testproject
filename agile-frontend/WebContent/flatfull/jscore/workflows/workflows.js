@@ -188,119 +188,86 @@ var Workflow_Model_Events = Base_Model_View.extend({
         disable_save_button($(targetEl));
 
         track_with_save_success_model($(targetEl));
-                
-        var workflowJSON = {};
 
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(targetEl).attr('id') === 'duplicate-workflow-top' || $(targetEl).attr('id') === 'duplicate-workflow-bottom') 
         {
-            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, undefined, access_permission);   
+            //create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, undefined, access_permission);
+            // Verify for non connected nodes
+            all_nodes_active(designerJSON,function(callbackData){
+                // if callbackData is true, then all nodes are connected
+                var isdismissed = false;
+                if(callbackData){
+                    // creating new workflow
+                    create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, undefined, access_permission);
+                }
+                else
+                {  
+                    // showing a popup alert model for non connected nodes information
+                    showModalConfirmation("Non-connected Nodes",
+                        "It seems some Nodes are not connected.",
+                        function(){
+                            // while click on continue button
+                            // creating new workflow and show next action
+                            create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, undefined, access_permission);
+                            isdismissed = true;
+                        },  
+                        function(){
+                            // while click on cancel button
+                            enable_save_button($clicked_button);
+                            return;                           
+                        }, 
+                        function(){
+                            if(!isdismissed){
+                                enable_save_button($clicked_button); 
+                                return;
+                            }                        
+                        },"Continue", "Cancel");
+                }                
+            });
 
         }
-        // Update workflow
         else
-        {
-            workflowJSON = App_Workflows.workflow_model;
+        {  
+            //Verifying any nodes are non-connected
+            all_nodes_active(designerJSON,function(callbackData){
+                // if callbackData is true, then all nodes are connected
+                var isdismissed = false;
+                if(callbackData){
+                    // Update workflow
+                    update_workflow(e,name, designerJSON, unsubscribe_json, trigger_data, is_disabled, access_permission,callback);
+                }
+                else
+                {   
+                    var previousAttributes = App_Workflows.workflow_model.previousAttributes();
+                    showModalConfirmation("Non-connected Nodes",
+                        "It seems some Nodes are not connected.",
+                        function(){
+                            // while click on continue button
+                            // update previous workflow
+                            update_workflow(e,name, designerJSON, unsubscribe_json, trigger_data, is_disabled, access_permission,callback);
+                            isdismissed = true;
 
-            // To reset model on error
-            var previousAttributes = App_Workflows.workflow_model.previousAttributes();
+                        },  
+                        function(){
+                            // while click on cancel button
+                            enable_save_button($clicked_button);
+                            // Reset model with previous
+                            App_Workflows.workflow_model.set(previousAttributes);
+                            return;                           
+                        }, 
+                        function(){
+                            if(!isdismissed){
+                                enable_save_button($clicked_button);
+                                // Reset model with previous
+                                App_Workflows.workflow_model.set(previousAttributes);
+                                return;
+                            }                        
+                        },"Continue", "Cancel");
 
-            App_Workflows.workflow_model.set("name", name);
-            App_Workflows.workflow_model.set("rules", designerJSON);
-            App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
-            App_Workflows.workflow_model.set("is_disabled", is_disabled);
-            App_Workflows.workflow_model.set("access_level", access_permission);
-
-            var are_all_Nodes_Active = all_nodes_active(designerJSON);
-            
-            App_Workflows.workflow_model.save({}, {success: function(){
+                }
                 
-                enable_save_button($clicked_button);
-                //Verifying any nodes are non-connected
-                if(are_all_Nodes_Active){
-                    show_campaign_save(e);
-                }
-                else{
-                    show_campaign_save(e,null,null,"{{agile_lng_translate 'campaigns'  'non-connected-nodes-saved'}}");   
-                }
-
-                if(callback)
-                    callback();
-                
-                try{
-                // Adds tag in our domain
-                add_tag_our_domain(CAMPAIGN_TAG);
-                }catch(err){
-                }
-                // Hide message
-                $('#workflow-edit-msg').hide();
-                $("#unsubscribe-email_status-msg").html(""); 
-
-                if(e.type == "change"){
-                     var disabled = $(".is-disabled-top");
-                 var status = $('#disable-switch').bootstrapSwitch('status');
-                if (is_disabled && status) {
-                        disabled.attr("data", true);
-                        $('#designer-tour').addClass("blur").removeClass("anti-blur");
-                        window.frames[1].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
-                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
-                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'campaign-has-been-disabled-successfully'}}","red");
-                    } else {
-                        disabled.attr("data", false);
-                        $('#designer-tour').addClass("anti-blur").removeClass("blur");
-                        window.frames[1].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
-                        window.frames[1].$('#toolbartabs').removeClass("disable-iframe");
-                       // $('#designer-tour').css("pointer-events","none");
-                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
-                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'enabled-campaign'}}");
-                    }
-                }
-
-                // Show success message of access level property
-                if($(targetEl).attr('id') === 'campaign_access_level'){
-                    if(access_permission == "1")
-                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'made-public'}}");
-                       //show_campaign_save(e,"The Campaign is now Public.");
-
-                    else 
-                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'made-private'}}");
-                }
-
-                // Boolean data used on clicking on Done
-                if(trigger_data && trigger_data["navigate"])
-                {
-                    Backbone.history.navigate("workflows", {
-                      trigger: true
-                  });
-                }
-
-                 // Adds tag in our domain
-                add_tag_our_domain(CAMPAIGN_TAG);
-                
-            },
-            
-            error: function(jqXHR, status, errorThrown){ 
-              enable_save_button($clicked_button);
-
-              // Reset model with previous on error
-              App_Workflows.workflow_model.set(previousAttributes);
-              
-              console.log(status);
-                    // Show cause of error in saving
-                    $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-                            + status.responseText
-                            + '</i></p></small></div>');
-
-                    // Appends error info to form actions
-                    // block.
-                    $("#workflow-msg").html(
-                            $save_info).show();
-              //var json = JSON.parse(status.responseText);
-              //workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
-              // shows Exception message
-              //alert(status.responseText);
-                }
-            });        
+            });                   
             
         } 
         var unsubscribe_subject = "";
@@ -375,7 +342,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                    var iframe = document.getElementById("designer");
                    iframe.src = iframe.src;
 
-                   show_campaign_save(e, "{{agile_lng_translate 'campaigns'  'non-connected-nodes-saved'}}");
+                   show_campaign_save(e, "Restored workflow successfully.");
                 }, 
                 error: function() {
                    show_campaign_save(e, "Backup of earlier version is not available.", "red");
@@ -387,6 +354,115 @@ var Workflow_Model_Events = Base_Model_View.extend({
     }
 
 });
+
+/**
+ * Update existing workflow with new data and add to workflows collection
+ * 
+ * @param name - workflow name
+ * @param designerJSON - campaign workflow in json
+ * @param unsubscribe_json - unsubscribe data of workflow
+ **/
+function update_workflow(e,name, designerJSON, unsubscribe_json, trigger_data, is_disabled, access_permission,callback){
+    var targetEl = $(e.currentTarget);
+    var $clicked_button = $(targetEl);
+
+    var workflowJSON = {};
+
+    workflowJSON = App_Workflows.workflow_model;
+
+    // To reset model on error
+    var previousAttributes = App_Workflows.workflow_model.previousAttributes();
+
+    App_Workflows.workflow_model.set("name", name);
+    App_Workflows.workflow_model.set("rules", designerJSON);
+    App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
+    App_Workflows.workflow_model.set("is_disabled", is_disabled);
+    App_Workflows.workflow_model.set("access_level", access_permission);
+    App_Workflows.workflow_model.save({}, {
+            success: function(){
+
+                enable_save_button($clicked_button);
+                show_campaign_save(e);
+
+                if(callback)
+                    callback();
+                
+                try{
+                // Adds tag in our domain
+                add_tag_our_domain(CAMPAIGN_TAG);
+                }catch(err){
+                }
+                // Hide message
+                $('#workflow-edit-msg').hide();
+                $("#unsubscribe-email_status-msg").html(""); 
+
+                if(e.type == "change"){
+                     var disabled = $(".is-disabled-top");
+                 var status = $('#disable-switch').bootstrapSwitch('status');
+                if (is_disabled && status) {
+                        disabled.attr("data", true);
+                        $('#designer-tour').addClass("blur").removeClass("anti-blur");
+                        window.frames[1].$('#paintarea').addClass("disable-iframe").removeClass("enable-iframe");
+                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("disable-iframe").removeClass("enable-iframe");
+                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'campaign-has-been-disabled-successfully'}}","red");
+                    } else {
+                        disabled.attr("data", false);
+                        $('#designer-tour').addClass("anti-blur").removeClass("blur");
+                        window.frames[1].$('#paintarea').addClass("enable-iframe").removeClass("disable-iframe");
+                        window.frames[1].$('#toolbartabs').removeClass("disable-iframe");
+                       // $('#designer-tour').css("pointer-events","none");
+                        window.frames[1].$('#paintarea .nodeItem table>tbody').addClass("enable-iframe").removeClass("disable-iframe");
+                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'enabled-campaign'}}");
+                    }
+                }
+
+                // Show success message of access level property
+                if($(targetEl).attr('id') === 'campaign_access_level'){
+                    if(access_permission == "1")
+                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'made-public'}}");
+                       //show_campaign_save(e,"The Campaign is now Public.");
+
+                    else 
+                        show_campaign_save(e,"{{agile_lng_translate 'campaigns' 'made-private'}}");
+                }
+
+                // Boolean data used on clicking on Done
+                if(trigger_data && trigger_data["navigate"])
+                {
+                    Backbone.history.navigate("workflows", {
+                      trigger: true
+                  });
+                }
+
+                 // Adds tag in our domain
+                add_tag_our_domain(CAMPAIGN_TAG);
+            
+            },
+        
+            error: function(jqXHR, status, errorThrown){ 
+                  enable_save_button($clicked_button);
+
+                  // Reset model with previous on error
+                  App_Workflows.workflow_model.set(previousAttributes);
+                  
+                  console.log(status);
+                        // Show cause of error in saving
+                        $save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+                                + status.responseText
+                                + '</i></p></small></div>');
+
+                        // Appends error info to form actions
+                        // block.
+                        $("#workflow-msg").html(
+                                $save_info).show();
+                  //var json = JSON.parse(status.responseText);
+                  //workflow_alerts(json["title"], json["message"],"workflow-alert-modal");
+                  // shows Exception message
+                  //alert(status.responseText);
+            }
+    });
+
+}
 
 function initializeLogReportHandlers(){
 
@@ -491,25 +567,17 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
     workflowJSON.unsubscribe = unsubscribe_json;
     workflowJSON.is_disabled = is_disabled;
     workflowJSON.was_disabled = was_disabled;
-    workflowJSON.access_level = access_level;
-    
-    var is_node_active = all_nodes_active(designerJSON);
+    workflowJSON.access_level = access_level; 
+
     var workflow = new Backbone.Model(workflowJSON);
+
     App_Workflows.workflow_list_view.collection.create(workflow,{
             success:function(){  
-
                 // Removes disabled attribute of save button
                 enable_save_button($clicked_button);
-                //Verifying any nodes are non-connected
-                if(is_node_active){
-                    show_campaign_save(e);
-                }
-                else{
-                    show_campaign_save(e,null,null,"Some nodes are not connected.");   
-                }
                 
                 // Shows Campaign save message
-                //show_campaign_save(e);
+                show_campaign_save(e);
 
                 // $('#workflowform').find('#save-workflow').removeAttr('disabled');
                 
@@ -565,7 +633,7 @@ function create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_bu
                             $save_info).show();
                   }
                 }
-    });
+    });      
 }
 
 /**
@@ -630,7 +698,7 @@ function fill_logs_slate(id, type)
 
 }
 
-function show_campaign_save(e,message,color,alertMsg)
+function show_campaign_save(e,message,color)
 {
     // Campaign save message
     var save_info;
@@ -638,13 +706,10 @@ function show_campaign_save(e,message,color,alertMsg)
         save_info = '<span style="color: green;">'+message+'</span>';
     else
     {
-        if(alertMsg)
-            save_info = '<span style="color: green;">'+alertMsg+'{{agile_lng_translate "campaigns" "saved"}}</span>';
-       else
-            save_info = '<span style="color: green;">{{agile_lng_translate "campaigns" "saved"}}</span>';
+        save_info = '<span style="color: green;">{{agile_lng_translate "campaigns" "saved"}}</span>';
        
        //Show popup modal for adding campaign in trigger or contac
-        showCampaignPopup(e,alertMsg);
+        showCampaignPopup(e);
        
     }
 
@@ -743,7 +808,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
      *
      **/
    
-     function showCampaignPopup(e,alertMsg)
+     function showCampaignPopup(e)
      {
          e.preventDefault();
 
@@ -756,7 +821,7 @@ $('body').on('mouseleave','#workflows-model-list tr', function(e){
             while($("#workflow-save-popup").length)
                   $("#workflow-save-popup").remove();
 
-            workflow_alerts("{{agile_lng_translate 'landingpages' 'next-action'}}" , alertMsg , "workflow-save-popup-modal", function(el){
+            workflow_alerts("{{agile_lng_translate 'landingpages' 'next-action'}} ", "null" , "workflow-save-popup-modal", function(el){
                
                 window.setTimeout(function () {   $(el).find("#popup-msg").fadeOut(8000); }, 500); 
             });
@@ -1128,62 +1193,65 @@ function showHelpVideoModal(data){
     }, null);
 }
 
-function all_nodes_active(designerJSON){
-    
+// Verify all nodes are connnected or not wit another node
+function all_nodes_active(designerJSON,callback){
+    // getting all nodes of the Campaign
     var nodes  = JSON.parse(designerJSON).nodes;
     var is_active = true;
     var hangup_nodes = 0;
+    var possible_hangup_nodes_count = 1;
     var multiNodes_States_HangUp = 0;
-    var no_OfNode_States = 0;
     
     try{
         $.each(nodes,function(node_name,node_value){
             
             var node_states= node_value.States;
             var node_value_length = node_states.length;
-
+            // checking for "start" node
             if(node_value.displayname == "Start"){
-                    if(node_states[0].start == "hangup"){
-                        is_active = false;
-                        hangup_nodes++;
-                    }
-                    
+                if(node_states[0].start == "hangup"){
+                    is_active = false;
+                    hangup_nodes++;
+                }                    
             }
-                else {
-                    
-                     if(node_value_length == 1){
-                            $.each(node_states[0], function(key, value) {
-                                if(value == "hangup"){
-                                    hangup_nodes++;
-                                }
-                                return;
-                            });
-                         }
-                         else{
-                                $.each(node_states, function(key, value) {
-                                     no_OfNode_States++;
-                                    $.each(value,function(key,value){
-
-                                        if(value == "hangup")
-                                            multiNodes_States_HangUp++;
-                                    });
-                                    
-                                });
-                                if(no_OfNode_States == multiNodes_States_HangUp){
-                                    hangup_nodes++;
-                                }
-                        }
+            else {
+                // This is for the nodes which have 1 outgoing path like "wait" node    
+                if(node_value_length == 1){
+                    $.each(node_states[0], function(key, value) {
+                         // "hangup" means not connected to any node
+                        if(value == "hangup")
+                            hangup_nodes++;
                         
+                        return;
+                    });
                 }
-        
+                // This is for the nodes which have 2 outgoing path like "Opened?" node
+                else{
+                    multiNodes_States_HangUp = 0 ;
+                    $.each(node_states, function(key, value) {
+                        $.each(value,function(key,value){
+                            // "hangup" means not connected to any node
+                            if(value == "hangup")
+                                multiNodes_States_HangUp++;
+
+                            return;
+                        });                                    
+                    });
+                    // If both outgoing path not connected with other node 
+                    if(multiNodes_States_HangUp == 2)
+                        hangup_nodes++;
+
+                    // If both outgoing path are connected with other node
+                    if(multiNodes_States_HangUp == 0)
+                        possible_hangup_nodes_count++;                    
+                }                        
+            }        
         });
-        if(hangup_nodes>1){
-            is_active = false;
-        }
+        if(hangup_nodes > possible_hangup_nodes_count)
+            is_active = false;        
     }
     catch(err){
-        return is_active;
+        callback(is_active);
     }
-
-    return is_active;
+    callback(is_active);
 }
