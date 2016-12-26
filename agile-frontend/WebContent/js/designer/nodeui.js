@@ -532,7 +532,7 @@ function nodeLevelValidation(nodeName, callbackFunction){
 			if(data == 0)
          	{
          		// Display error message
-         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x'>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: blue'>here</a> to enable.</p>").addClass('ui-state-highlight');
+         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x' style='color:red'><i>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: blue'>here</a> to enable.</i></p>").addClass('ui-state-highlight');
          		return callbackFunction(false);    		
          	}
          	else
@@ -541,7 +541,7 @@ function nodeLevelValidation(nodeName, callbackFunction){
 	}
 
 }	
-//Validate the is there or not in website
+//Validate the Tracking code is there or not in website
  function get_dynamic_data(url, callback)
   {
 	  window.parent.accessUrlUsingAjax(url, 
