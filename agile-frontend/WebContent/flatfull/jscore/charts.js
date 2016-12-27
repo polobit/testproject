@@ -19,7 +19,7 @@ function setupCharts(callback)
 		{
 			buttons = Highcharts.getOptions().exporting.buttons.contextButton.menuItems;
 			buttons.push({
-			    text: "View Data",
+			    text: "{{agile_lng_translate 'highcharts' 'view-data'}}",
 			    onclick: triggerReportDetails
 			});
 		}
