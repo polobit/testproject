@@ -248,13 +248,16 @@ public class PortletsAPI {
 		if (portlet == null)
 			return null;
 		Portlet portlt = PortletUtil.getPortlet(portlet.id);
-		portlt.prefs = portlet.prefs;
-		portlt.is_minimized = portlet.is_minimized;
-
-		portlt.save();
-		if (portlt.prefs != null) {
-			JSONObject json = (JSONObject) JSONSerializer.toJSON(portlt.prefs);
-			portlt.settings = json;
+		if(portlt!=null)
+		{
+			portlt.prefs = portlet.prefs;
+			portlt.is_minimized = portlet.is_minimized;
+	
+			portlt.save();
+			if (portlt.prefs != null) {
+				JSONObject json = (JSONObject) JSONSerializer.toJSON(portlt.prefs);
+				portlt.settings = json;
+			}
 		}
 		// PortletUtil.setPortletContent(portlt);
 		return portlt;
