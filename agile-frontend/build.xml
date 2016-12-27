@@ -90,6 +90,9 @@
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/pagebuilder/source/build">
                <fileset dir="WebContent/misc/pagebuilder/source/build" />
         </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/formbuilder/assets/lib">
+               <fileset dir="WebContent/misc/formbuilder/assets/lib" />
+        </copy>
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore/backbone">
                <fileset dir="WebContent/flatfull/jscore/backbone" />
         </copy>
