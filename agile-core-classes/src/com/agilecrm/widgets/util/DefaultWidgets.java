@@ -251,8 +251,13 @@ public class DefaultWidgets {
 				}
 			}
 			if(StringUtils.equals(widget.name,"TwilioIO") && StringUtils.equals(widget.getProperty("twilio_twimlet_url"),"None")){
+				String numberSid = "None";
+				String twil_num_sid = widget.getProperty("twilio_number_sid");
+				if(StringUtils.isNotBlank(twil_num_sid)){
+					numberSid = widget.getProperty("twilio_number_sid");
+				}
 				Long domainuserid = AgileUser.getCurrentAgileUser().domain_user_id;
-				String appsid = TwilioUtil.createAppSidTwilioIO(widget.getProperty("twilio_acc_sid"), widget.getProperty("twilio_auth_token"), widget.getProperty("twilio_number_sid"), widget.getProperty("twilio_record"), "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
+				String appsid = TwilioUtil.createAppSidTwilioIO(widget.getProperty("twilio_acc_sid"), widget.getProperty("twilio_auth_token"), numberSid, widget.getProperty("twilio_record"), "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
 				System.out.println("appsid == "+appsid);
 				widget.addProperty("twilio_app_sid", appsid);
 				widget.addProperty("twilio_twimlet_url", "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
