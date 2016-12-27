@@ -1625,6 +1625,7 @@ function initializeEditor() {
         relative_urls : false,
         convert_urls : false,
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields",
+        fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
         setup: function (editor) {
             editor.addButton('merge_fields', { type : 'menubutton', text : localeJSON["merge-fields"], icon : false, menu : parent.set_up_merge_fields(editor) });
 
