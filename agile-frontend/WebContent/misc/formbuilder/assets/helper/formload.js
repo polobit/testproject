@@ -5,7 +5,6 @@ define([
 	{
 		var url = window.location.protocol + '//' + window.location.host + '/' + 'core/api/forms/form?formId=' + formNumber;
 		var orderedSaveform=[];
-		console.log("customthemes in formload page::"+customthemes);
 		$.ajax({
 			url : url,
 			type: 'GET',

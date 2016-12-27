@@ -20,7 +20,6 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/custom.css?v=3-4" rel="stylesheet">      
       <link href="misc/formbuilder/builder-themes.css?v=5" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css?t=1" rel="stylesheet">
-      <!-- <link href="flatfull/css/min/lib-all-new.css" rel="stylesheet"> -->
       <link href="misc/formbuilder/formthemes.css?t=2" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
       <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
@@ -104,7 +103,7 @@ String template = request.getParameter("template");
                         <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
                         <form class="form-inline"><div><label style="margin-right: 25px;
-                        ">Theme Name:</label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="40" style="width: 30%;"><span id="errorSpan" style="margin-left:8px;color:#d9534f;"></span></div></form>
+                        ">Theme Name<span class="field_req">*</span></label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="20" style="width: 30%;"><span id="errorSpan" style="margin-left:8px;color:#d9534f;"></span></div></form>
 
                       </div>
                         </div>
@@ -540,7 +539,6 @@ String template = request.getParameter("template");
                   
                   function saveCustTheme(){
                     var thmExist=validThemeNameFunc();
-                    console.log(themeArray);
                     var custTheme="";
                     var themeName=$("#themeName").val();
                     
@@ -572,7 +570,7 @@ String template = request.getParameter("template");
                                 contentType : 'application/json',
                                 data : JSON.stringify(customTheme),
                                 success: function(data){
-                                     console.log("Final CustomTheme:"+data);
+                                    
                                     if(data!=undefined && data!=""){
                                     customthemes.push(data);
                                     themesListAsArr.push(data.name);
@@ -608,21 +606,21 @@ String template = request.getParameter("template");
                     var themeNamePattern=/^[a-z][a-zA-Z0-9]+/;
                     var isThemeNameExist=false;
                     if(themeName==null || themeName.length<=0){
-                      $("#errorSpan").text("Provide valid theme name.");
+                      $("#errorSpan").text("This field is required.");
                     }
                     else{
                           $.each(defaultThemes,function(index,value){
-                              if(value == themeName){
+                              if(value.toUpperCase() === themeName.toUpperCase()){
                                  isThemeNameExist=true;
-                                 $("#errorSpan").text("Duplicate names are not allowed.");
+                                 $("#errorSpan").text("Sorry,duplicate names are not allowed.");
                                  return;
                               }
                           });
                           if(isThemeNameExist == false){
                               $.each( themesListAsArr, function( index, value ) {
-                                 if(value==themeName){
+                                 if(value.toUpperCase() === themeName.toUpperCase()){
                                    isThemeNameExist=true;
-                                   $("#errorSpan").text("Duplicate names are not allowed.");
+                                   $("#errorSpan").text("Sorry,duplicate names are not allowed.");
                                    return;
                                  }
                               });
@@ -639,8 +637,6 @@ String template = request.getParameter("template");
                 function deleteTheme(themeName){
                   var deleteThemeVal = themeName;
                   var deleteThemeId = $(".themesSelectEle option:selected").attr("id");
-                    
-                  console.log("Requsted deleteThemeVal is:"+deleteThemeVal);
                   $.ajax({
                                 type : 'GET',
                                 url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/deleteTheme?themeName='+deleteThemeVal,
@@ -825,10 +821,7 @@ String template = request.getParameter("template");
           line-height: 1.7;
           border: 1px solid transparent;
       }
-      #formVideoModal .modal-dialog{
-         position:initial!important
-      }
-     
+           
 </style>
    </body>
 </html>

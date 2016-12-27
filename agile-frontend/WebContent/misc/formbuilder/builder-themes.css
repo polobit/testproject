@@ -684,3 +684,6 @@ select:not([multiple]){
 #target.theme2 legend::after,#target.theme3 legend::after,#target.theme4 legend::after {
     top: 86px;
 }
+.field_req{
+  color:red;
+}
