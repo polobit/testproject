@@ -461,13 +461,16 @@
                     if(styleeditor.activeElement.element.tagName ==='NAV'){
                         if(nameAttrOfEl === 'color')
                             $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
-                        if(nameAttrOfEl=== 'fixed-header'){
+                         if(nameAttrOfEl=== 'fixed-header'){
                             if($(this).val() === "yes") {
-                                $(styleeditor.activeElement.element).toggleClass("navbar-static-top navbar-fixed-top");
-                            } else {
-                                $(styleeditor.activeElement.element).toggleClass("navbar-fixed-top navbar-static-top");
+                                $(styleeditor.activeElement.element).addClass("navbar-fixed-top");
+                                $(styleeditor.activeElement.element).removeClass("navbar-static-top");
+                            } else {                                
+                                $(styleeditor.activeElement.element).addClass("navbar-static-top");
+                                $(styleeditor.activeElement.element).removeClass("navbar-fixed-top");
                             }
-                        }
+                        }   
+                    
                     }
                     
                     if( nameAttrOfEl === "dynamic-text" || nameAttrOfEl === "dynamic-button" || nameAttrOfEl === "dynamic-image") {
