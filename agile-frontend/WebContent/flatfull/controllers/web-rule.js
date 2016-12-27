@@ -120,6 +120,8 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	web_reports_add : function()
 	{
+		$("#content").off("change",".actionSelectBox");
+
 		$('.fancybox-wrap').hide();
 
 		if(!tight_acl.checkPermission('WEBRULE'))
@@ -137,6 +139,8 @@ var WebreportsRouter = Backbone.Router.extend({
 						$("#content").html(el);
 						if($('#LHS select').val()=="page")
 							$('#RHS input').val("http");
+						initializeWebRuleActionListeners();
+						setupTinymceForWebRulePopups();
 					}, true);
 
 				})
@@ -148,6 +152,8 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	web_reports_edit : function(id)
 	{
+		$("#content").off("change",".actionSelectBox");
+
 		$('.fancybox-wrap').hide();
 
 		if(!tight_acl.checkPermission('WEBRULE'))
@@ -178,6 +184,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, webrule.toJSON(), false, webrule.toJSON()["actions"]);
 						$("#content").html(el);
+						initializeWebRuleActionListeners();
 					}, true);
 
 				})
@@ -213,6 +220,9 @@ var WebreportsRouter = Backbone.Router.extend({
 
             getTemplate("webrule-categories", null, undefined, function(ui){
             	$("#webrule-listeners").append($(ui));
+            	getTemplate("webrule-templates-list", null, undefined, function(ui2){
+            		$("#webrule-listeners").find("#web-rule-templates-holder").html(ui2);
+            	});
             },"#webrule-listeners");
 
             
@@ -231,7 +241,9 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	webrules_template_load : function(path){
 
-			$('.fancybox-wrap').hide();
+		$("#content").off("change",".actionSelectBox");
+
+		$('.fancybox-wrap').hide();
 
 		if(!tight_acl.checkPermission('WEBRULE'))
 			return;
@@ -254,7 +266,9 @@ var WebreportsRouter = Backbone.Router.extend({
 						if($('#LHS select').val()=="page")
 							$('#RHS input').val("http");
 						loadSavedTemplate(path, function(data) {
-							$("#tiny_mce_webrules_link").trigger('click');
+							initializeWebRuleActionListeners();
+							setupTinymceForWebRulePopups();
+							// $("#tiny_mce_webrules_link").trigger('click');
 						});
 					}, true);
 				})
@@ -298,7 +312,7 @@ var WebreportsRouter = Backbone.Router.extend({
 						if($('#LHS select').val()=="page")
 							$('#RHS input').val("http");
 						$("#tinyMCEhtml_email").text(" ");
-						$("#tiny_mce_webrules_link").trigger('click');
+						// $("#tiny_mce_webrules_link").trigger('click');
 					}, true);
 
 				})
@@ -371,13 +385,13 @@ function loadSavedTemplate(templateURL, callback){
 					showError("Please enter a valid html message");
 					return;
 				}
-				if(templateUrl.includes("callpopup.html"))
+				/*if(templateUrl.includes("callpopup.html"))
 					$("#callwebrule-code").text(data);
 				else if(templateUrl.includes("sitebar.html"))
 					$("#agile-bar-code").text(data);
 				else if(templateUrl.includes("pushnoty.html"))
 					$("#agile-push-noty-code").text(data);
-				else
+				else*/
                 	$("#tinyMCEhtml_email").text(data);
 				
 				if( callback && typeof(callback) === 'function' )	callback(data);
