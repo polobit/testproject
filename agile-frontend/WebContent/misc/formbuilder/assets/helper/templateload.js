@@ -22,7 +22,7 @@ define([
 						if(agilethemeObjValArr[i].selected){
 						     themeClassName=agilethemeObjValArr[i].value;
 						     $("#target").addClass(themeClassName);
-						     currApplThm = themeClassName;
+						     currApplThm = $.trim(themeClassName);
 						     $(".themesSelectEle").val(currApplThm);
 						     break;
 						}

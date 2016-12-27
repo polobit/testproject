@@ -70,5 +70,11 @@ define(
 				$('#form-save').click(function(event){
 					formSave.agile_form_save(event);
 				});
+				$(document).keydown(function(e) {
+                     // ESCAPE key pressed
+                     if (e.keyCode == 27) {
+                        $(".popover").remove();
+                     }
+                });
 			}}
 		});

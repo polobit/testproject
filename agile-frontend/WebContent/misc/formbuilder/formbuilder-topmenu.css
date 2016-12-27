@@ -39,8 +39,11 @@ input.cancel-btn:hover {
 #form_preview{
     background-color: #fff;
     border-color: #fff;
+    border-right-color: #ccc;
     color: black;
     font-size: 15px;
+    margin-right: 100px;
+
 }
 #form_preview:hover{
     background-color: #eee;
@@ -97,5 +100,11 @@ border-radius: 0px;font-size: 15px;
     border: 1px solid #ccc;
     border-top-color: #fff;
     border-bottom-color: #fff;
+}
+.themesSelectEle:hover,.themesSelectEle:focus,.themesSelectEle:active{
+    border-left-color: #ccc!important;
+    border-right-color: #ccc!important;
+    border-top-color: #fff!important;
+    border-bottom-color: #fff!important;
 }
 

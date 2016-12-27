@@ -60,14 +60,14 @@ String template = request.getParameter("template");
         <div style="float: right;"> 
              <select class="themesSelectEle navbar-brand">
                   <option id="chooseTheme">Choose Theme</option>
-                  <option id="addNewTheme">+ Add new</option>
                   <optgroup id="defaultThmEle"  label="Default Themes">
-                  <option id="theme1">theme1</option>
-                  <option id="theme2">theme2</option>
-                  <option id="theme3">theme3</option>
-                  <option id="theme4">theme4</option>
+                  <option id="theme1" value="theme1">Theme1</option>
+                  <option id="theme2" value="theme2">Theme2</option>
+                  <option id="theme3" value="theme3">Theme3</option>
+                  <option id="theme4" value="theme4">Theme4</option>
                   </optgroup>
                   <optgroup id="custThmEle" label="Custom Themes">
+                  <option id="addNewTheme">+ Add new</option>
                   </optgroup>
              </select>
              <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
@@ -103,7 +103,7 @@ String template = request.getParameter("template");
                         <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
                         <div class="modal-title">
                         <form class="form-inline"><div><label style="margin-right: 25px;
-                        ">Theme Name<span class="field_req">*</span></label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="20" style="width: 30%;"><span id="errorSpan" style="margin-left:8px;color:#d9534f;"></span></div></form>
+                        ">Theme Name<span class="field_req">*</span></label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="20" style="width: 21%;"><span id="errorSpan" style="margin-left:8px;color:#d9534f;"></span></div></form>
 
                       </div>
                         </div>
@@ -471,8 +471,8 @@ String template = request.getParameter("template");
                       
 
                     /*Edit Form CustTheme Class Fetching*/
-                    console.log("No of Custom Themes::"+customthemes.length);
                     if(customthemes!=null){
+                     console.log("No of Custom Themes::"+customthemes.length);
                       for(i=0;i<customthemes.length;i++){
                         var custId=customthemes[i].id;
                         var custName=customthemes[i].name;
@@ -482,8 +482,9 @@ String template = request.getParameter("template");
                         var inputTheme='<option id="form'+custId+'">'+custName+'</option>';
                          //$(inputTheme).insertAfter("#theme4");
                          //$("#custThmEle").add(inputTheme);
-                         var custOptionEle = $("#custThmEle");
-                         $(inputTheme).appendTo(custOptionEle);
+                        /* var custOptionEle = $("#custThmEle");
+                         $(inputTheme).appendTo(custOptionEle);*/
+                         $(inputTheme).insertBefore("#addNewTheme");
                          if(formClasses!=null){
                           var formClassesList=formClasses.split(" ");
                               if(formClassesList.indexOf("form"+custId)>-1){
@@ -497,7 +498,7 @@ String template = request.getParameter("template");
                   
                   function selectedThemeFunc(identifier){
                     var themeId=$(".themesSelectEle option:selected").attr("id");
-                    var themeVal=$(".themesSelectEle option:selected").text();
+                    var themeVal=$(".themesSelectEle option:selected").val();
                     console.log("Selected Theme Value:"+themeVal);
                     if(themeVal=="Choose Theme"){
                       formtheme="Choose Theme";
@@ -576,9 +577,10 @@ String template = request.getParameter("template");
                                     themesListAsArr.push(data.name);
                                     var inputTheme='<option id="form'+data.id+'">'+data.name+'</option>';
                                     //$(inputTheme).insertAfter("#chooseTheme");
-                                    var custOptionEle = $("#custThmEle");
-
-                                    $(inputTheme).appendTo(custOptionEle);
+                                    /*var custOptionEle = $("#custThmEle");
+                                    $(inputTheme).appendTo(custOptionEle);*/
+                                    $(inputTheme).insertBefore("#addNewTheme");
+                                    $(".themesSelectEle").val(data.name);
                                    }
                                   },
                                   error: function(){
@@ -589,13 +591,16 @@ String template = request.getParameter("template");
                           },
                         });
 
-                          $(".themesSelectEle").val(currApplThm);
+                          //$(".themesSelectEle").val(currApplThm);
                           $(".createCustomFormContent").empty();
                           $('#customThemeModal').modal('hide');
                           $("#errorSpan").text("");
                           $("#themeName").val("");
-                          $("#header").css("z-index","2001");
-                          $(".popover").css("z-index","2000");
+                          /*$("#header").css("z-index","2001");
+                          $(".popover").css("z-index","2000");*/
+                          $("#header").css("z-index","0");
+                          $(".popover").css("z-index","50");
+                          $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                         }
                         
                       }
@@ -716,6 +721,11 @@ String template = request.getParameter("template");
                           $(".popover").css("z-index","50");
                           $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                           }
+                  });
+                  $("#themeName").keypress(function(event){
+                     if (event.which == '13') {
+                        event.preventDefault();
+                     }
                   });
                   function closeApplyTheme(identifier){
 
