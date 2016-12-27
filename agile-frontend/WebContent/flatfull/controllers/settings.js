@@ -420,7 +420,6 @@ var SettingsRouter = Backbone.Router
 					$('#content').html($(template_ui));	
 
 					// Gets Office Prefs
-					var i = 0;
 					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office', template : "settings-office-prefs", isNew : true, change : false,
 						postRenderCallback : function(el)
 						{
@@ -436,11 +435,7 @@ var SettingsRouter = Backbone.Router
 								itemView3.render(true);
 								var el = itemView3.el;
 								var model = itemView3.model;
-								if(i == 2){
-									load_office_properties(model, el);
-								}
-								i++;
-
+								load_office_properties(model, el);
 							}
 							// $("#office-prefs-form").find("#office-password").val("");
 							// App_Settings.navigate("email", { trigger : true });
