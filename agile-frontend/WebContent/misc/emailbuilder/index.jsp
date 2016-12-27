@@ -79,7 +79,7 @@ var localeJSON = <%=localeJSON%>;
             <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
 
                 <div id="tosave" style="overflow-y:auto;overflow-x:hidden;padding-bottom:30px;height: 800px;">
-                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px;line-height: 21px;color: #000000;" >
+                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px;line-height: 21px;color: #000000;" >
                         <tr>
                             <td width="100%" id="primary" class="main demo" align="center" valign="top" >
                                 <div class="column" style="min-height:150px;">
@@ -100,7 +100,7 @@ var localeJSON = <%=localeJSON%>;
                                                     <tbody>
                                                         <tr>
                                                             <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;">
-                                                                <div style="margin:0px 0px 10px 0px;" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
+                                                                <div style="margin:0px 0px 10px 0px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px;line-height: 21px;color: #000000;" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -220,7 +220,7 @@ var localeJSON = <%=localeJSON%>;
             <option>9px</option>
             <option>10px</option>
             <option>11px</option>
-            <option>12px</option>
+            <option selected="selected">12px</option>
             <option>14px</option>
             <option>16px</option>
             <option>18px</option>
@@ -587,7 +587,7 @@ var localeJSON = <%=localeJSON%>;
 
 
         <!-- start of buttons -->
-        <div id="buttons" style="max-width: 400px;margin-top:5px;">
+        <div id="buttons" style="max-width: 400px;margin-top:5px;margin-left: -5px;">
                         <div class="form-group">
                             <select class="form-control">
                                 <option value="center"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-center") %></option>
@@ -595,8 +595,8 @@ var localeJSON = <%=localeJSON%>;
                                 <option value="right"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-right") %></option>
                             </select>
                         </div>
-                        <ul id="buttonslist" class="list-group">
-                            <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px">
+                        <ul id="buttonslist" class="list-group" style="list-style: none;">
+                            <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px;margin-bottom:10px;">
                                 <span class="orderbutton"><i class="fa fa-bars"></i></span>
                                 <span class="pull-right trashbutton"><i class="fa fa-trash"></i></span>
 
@@ -608,9 +608,9 @@ var localeJSON = <%=localeJSON%>;
                                     <input type="text" class="form-control"  placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-link-to-btn") %>' aria-describedby="basic-addon1" name="btn_link"/>
                                 </div>
                                 <div class="input-group" style="margin-top:10px">
-                                    <label for="buttonStyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
+                                    <label for="buttonStyle" style="margin-top: 5px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
                                     <div   class="color-circle buttonStyle" data-original-title="" title="">
-                                        <i class="fa fa-font"></i>
+                                        <i class="fa fa-font" style="line-height: 26px;"></i>
                                     </div>
                                     <div class="stylebox hide" style="width:400px">
                                         <!--
@@ -750,9 +750,9 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
                 <!-- start of buttons text -->
                 <div id="buttonstxt" style="max-width: 400px">
-                    <ul id="buttonstxtlist" class="list-group">
+                    <ul id="buttonstxtlist" class="list-group" style="margin-left:-5px;list-style: none;">
                         <li class="hide"
-                            style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px">
+                            style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px; margin-bottom: 10px;">
                             <span class="pull-right trashbutton"><i
                                 class="fa fa-trash"></i></span>
 
@@ -767,10 +767,10 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                                     aria-describedby="basic-addon1" name="btn_link" />
                             </div>
                             <div class="input-group" style="margin-top: 10px">
-                                <label for="buttonStyleTxt"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
+                                <label for="buttonStyleTxt" style="margin-top: 5px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
                                 <div class="color-circle buttonStyleTxt" data-original-title=""
                                     title="">
-                                    <i class="fa fa-font"></i>
+                                    <i class="fa fa-font" style="line-height:26px;"></i>
                                 </div>
                                 <div class="styleboxtxt hide" style="width: 400px">
                                     <!--
