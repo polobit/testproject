@@ -95,82 +95,86 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
 
     bulkDealsOwnerChange : function(e){
         e.preventDefault();
-        getTemplate('deal-owner-change-modal', {}, undefined, function(template_ui){
-            if(!template_ui)
-                  return;
+        getSelectedDealsCount(function(count){
+            getTemplate('deal-owner-change-modal', {"selected_count" : count}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;
 
-            $("#deal_owner_change_modal").html($(template_ui));
-            if(!hasScope("EDIT_CONTACT"))
-            {
-                $("#owners", $("#deal_owner_change_modal")).parent().before("<div class='control-group form-group col-md-12'>"+DEALS_CONTACTS_BULK_OWNER_CHANGE_ERROR+"</div>");
-            }
-            $("#deal_owner_change_modal").modal("show");
-            
-            // Fills owner select element
-            populateUsers("owners-list-bulk", $(template_ui), undefined, undefined, function(data, optionsHTML){
-                console.log(optionsHTML);
-                $("#deal_owner_change_modal").find("#owners-list-bulk").html(optionsHTML);
-                $("#owners-list-bulk", $("#deal_owner_change_modal")).closest('div').find('.loading').hide(); 
-            });
+                $("#deal_owner_change_modal").html($(template_ui));
+                if(!hasScope("EDIT_CONTACT"))
+                {
+                    $("#owners", $("#deal_owner_change_modal")).parent().before("<div class='control-group form-group col-md-12'>"+DEALS_CONTACTS_BULK_OWNER_CHANGE_ERROR+"</div>");
+                }
+                $("#deal_owner_change_modal").modal("show");
+                
+                // Fills owner select element
+                populateUsers("owners-list-bulk", $(template_ui), undefined, undefined, function(data, optionsHTML){
+                    console.log(optionsHTML);
+                    $("#deal_owner_change_modal").find("#owners-list-bulk").html(optionsHTML);
+                    $("#owners-list-bulk", $("#deal_owner_change_modal")).closest('div').find('.loading').hide(); 
+                });
 
-            $("#deal_owner_change_modal").off("click", "#deal-bulk-owner");
-            $("#deal_owner_change_modal").on("click", "#deal-bulk-owner", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkOwnerChangeDeals();
-            });
+                $("#deal_owner_change_modal").off("click", "#deal-bulk-owner");
+                $("#deal_owner_change_modal").on("click", "#deal-bulk-owner", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkOwnerChangeDeals();
+                });
 
-        }, '#owners-list-bulk');
+            }, '#owners-list-bulk');
+        });
     },
 
     bulkDealsMilestoneChange : function(e){
         e.preventDefault();
-        getTemplate('deal-mile-change-modal', {}, undefined, function(template_ui){
-            if(!template_ui)
-                  return;
+        getSelectedDealsCount(function(count){
+            getTemplate('deal-mile-change-modal', {"selected_count" : count}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;
 
-            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
-            {
-                showModalConfirmation("Bulk Update", 
-                        "{{agile_lng_translate 'bulk-actions' 'no-perm-to-some-deals'}}<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}", 
-                        function (){
-                            $("#deal_mile_change_modal").html($(template_ui)).modal("show");
-                        });
-            }else
-            {
-                $("#deal_mile_change_modal").html($(template_ui));
-                if(!hasScope("EDIT_CONTACT"))
+                if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
                 {
-                    $("#bulk_mile_Form", $("#deal_mile_change_modal")).children(":first").before("<div class='control-group form-group'>"+DEALS_CONTACTS_BULK_UPDATE_ERROR+"</div>");
+                    showModalConfirmation("Bulk Update", 
+                            "{{agile_lng_translate 'bulk-actions' 'no-perm-to-some-deals'}}<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}", 
+                            function (){
+                                $("#deal_mile_change_modal").html($(template_ui)).modal("show");
+                            });
+                }else
+                {
+                    $("#deal_mile_change_modal").html($(template_ui));
+                    if(!hasScope("EDIT_CONTACT"))
+                    {
+                        $("#bulk_mile_Form", $("#deal_mile_change_modal")).children(":first").before("<div class='control-group form-group'>"+DEALS_CONTACTS_BULK_UPDATE_ERROR+"</div>");
+                    }
+                    $("#deal_mile_change_modal").modal("show");
                 }
-                $("#deal_mile_change_modal").modal("show");
-            }
-            
-            // Fills tracks
-            populateTracks($(template_ui), undefined, undefined, function(data, optionsHTML){
-                console.log(optionsHTML);  
-                $("#deal_mile_change_modal").find("#pipeline-list-bulk").html(optionsHTML);
-                $("#pipeline-list-bulk", $("#deal_mile_change_modal")).closest('div').find('.loading').hide(); 
-                $("#pipeline-list-bulk, #deal_mile_change_modal").trigger('change');
-            });
-
-            $("#deal_mile_change_modal").off("change", "#pipeline-list-bulk");
-            $("#deal_mile_change_modal").on("change", "#pipeline-list-bulk", function(e){
-                e.preventDefault();
-                var pipeline_id = $("#pipeline-list-bulk", $("#deal_mile_change_modal")).val();
-                populateMilestones($(template_ui), undefined, pipeline_id, undefined, function(optionsHTML){
-                    console.log(optionsHTML);
-                    $("#deal_mile_change_modal").find("#milestone-list-bulk").html(optionsHTML);
-                    $("#milestone-list-bulk", $("#deal_mile_change_modal")).closest('div').find('.loading').hide(); 
+                
+                // Fills tracks
+                populateTracks($(template_ui), undefined, undefined, function(data, optionsHTML){
+                    console.log(optionsHTML);  
+                    $("#deal_mile_change_modal").find("#pipeline-list-bulk").html(optionsHTML);
+                    $("#pipeline-list-bulk", $("#deal_mile_change_modal")).closest('div').find('.loading').hide(); 
+                    $("#pipeline-list-bulk, #deal_mile_change_modal").trigger('change');
                 });
-            });
 
-            $("#deal_mile_change_modal").off("click", "#deal-bulk-mile");
-            $("#deal_mile_change_modal").on("click", "#deal-bulk-mile", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkMilestoneChange($(e.currentTarget));
-            });
+                $("#deal_mile_change_modal").off("change", "#pipeline-list-bulk");
+                $("#deal_mile_change_modal").on("change", "#pipeline-list-bulk", function(e){
+                    e.preventDefault();
+                    var pipeline_id = $("#pipeline-list-bulk", $("#deal_mile_change_modal")).val();
+                    populateMilestones($(template_ui), undefined, pipeline_id, undefined, function(optionsHTML){
+                        console.log(optionsHTML);
+                        $("#deal_mile_change_modal").find("#milestone-list-bulk").html(optionsHTML);
+                        $("#milestone-list-bulk", $("#deal_mile_change_modal")).closest('div').find('.loading').hide(); 
+                    });
+                });
 
-        }, '#pipeline-list-bulk');
+                $("#deal_mile_change_modal").off("click", "#deal-bulk-mile");
+                $("#deal_mile_change_modal").on("click", "#deal-bulk-mile", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkMilestoneChange($(e.currentTarget));
+                });
+
+            }, '#pipeline-list-bulk');
+        });
     },
 
     bulkDealsAddTagToContacts : function(e){
@@ -223,36 +227,38 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             template_key = "deal-bulk-archive-acl-modal";
         }
 
-        getTemplate(template_key, {}, undefined, function(template_ui){
-            if(!template_ui)
-                  return;
+        getSelectedDealsCount(function(count){
+            getTemplate(template_key, {"selected_count" : count}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;
 
-            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
-            {
-                $('#deal_bulk_archive_acl_modal').html($(template_ui)).modal("show");
-            }else
-            {
-                $('#deal_bulk_archive_modal').html($(template_ui));
-                if(!hasScope("EDIT_CONTACT"))
+                if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
                 {
-                    $(".modal-body", $('#deal_bulk_archive_modal')).html(DEALS_CONTACTS_BULK_ARCHIVE_ERROR);
+                    $('#deal_bulk_archive_acl_modal').html($(template_ui)).modal("show");
+                }else
+                {
+                    $('#deal_bulk_archive_modal').html($(template_ui));
+                    if(!hasScope("EDIT_CONTACT"))
+                    {
+                        $(".modal-body", $('#deal_bulk_archive_modal')).html(DEALS_CONTACTS_BULK_ARCHIVE_ERROR);
+                    }
+                    $('#deal_bulk_archive_modal').modal("show");
                 }
-                $('#deal_bulk_archive_modal').modal("show");
-            }
 
-            $("#deal_bulk_archive_modal").off("click", "#deal-bulk-archive");
-            $("#deal_bulk_archive_modal").on("click", "#deal-bulk-archive", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkArchiveDeals(false);
-            });
+                $("#deal_bulk_archive_modal").off("click", "#deal-bulk-archive");
+                $("#deal_bulk_archive_modal").on("click", "#deal-bulk-archive", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkArchiveDeals(false);
+                });
 
-            $("#deal_bulk_archive_acl_modal").off("click", "#deal-bulk-archive-acl");
-            $("#deal_bulk_archive_acl_modal").on("click", "#deal-bulk-archive-acl", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkArchiveDeals(true);
-            });
+                $("#deal_bulk_archive_acl_modal").off("click", "#deal-bulk-archive-acl");
+                $("#deal_bulk_archive_acl_modal").on("click", "#deal-bulk-archive-acl", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkArchiveDeals(true);
+                });
 
-        }, '');
+            }, '');
+        });
     },
 
     bulkDealsRestore : function(e){
@@ -263,36 +269,38 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             template_key = "deal-bulk-restore-acl-modal";
         }
 
-        getTemplate(template_key, {}, undefined, function(template_ui){
-            if(!template_ui)
-                  return;
+        getSelectedDealsCount(function(count){
+            getTemplate(template_key, {"selected_count" : count}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;
 
-            if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
-            {
-                $('#deal_bulk_restore_acl_modal').html($(template_ui)).modal("show");
-            }else
-            {
-                $('#deal_bulk_restore_modal').html($(template_ui));
-                if(!hasScope("EDIT_CONTACT"))
+                if(!hasScope("UPDATE_DEALS") && hasScope("VIEW_DEALS"))
                 {
-                    $(".modal-body", $('#deal_bulk_restore_modal')).html(DEALS_CONTACTS_BULK_RESTORE_ERROR);
+                    $('#deal_bulk_restore_acl_modal').html($(template_ui)).modal("show");
+                }else
+                {
+                    $('#deal_bulk_restore_modal').html($(template_ui));
+                    if(!hasScope("EDIT_CONTACT"))
+                    {
+                        $(".modal-body", $('#deal_bulk_restore_modal')).html(DEALS_CONTACTS_BULK_RESTORE_ERROR);
+                    }
+                    $('#deal_bulk_restore_modal').modal("show");
                 }
-                $('#deal_bulk_restore_modal').modal("show");
-            }
 
-            $("#deal_bulk_restore_modal").off("click", "#deal-bulk-restore");
-            $("#deal_bulk_restore_modal").on("click", "#deal-bulk-restore", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkRestoreDeals(false);
-            });
+                $("#deal_bulk_restore_modal").off("click", "#deal-bulk-restore");
+                $("#deal_bulk_restore_modal").on("click", "#deal-bulk-restore", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkRestoreDeals(false);
+                });
 
-            $("#deal_bulk_restore_acl_modal").off("click", "#deal-bulk-restore-acl");
-            $("#deal_bulk_restore_acl_modal").on("click", "#deal-bulk-restore-acl", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkRestoreDeals(true);
-            });
+                $("#deal_bulk_restore_acl_modal").off("click", "#deal-bulk-restore-acl");
+                $("#deal_bulk_restore_acl_modal").on("click", "#deal-bulk-restore-acl", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkRestoreDeals(true);
+                });
 
-        }, '');
+            }, '');
+        });
     },
 
     bulkDealsDelete : function(e){
@@ -303,37 +311,39 @@ var Deals_Milestone_Events_Collection_View = Base_Collection_View.extend({
             template_key = "deal-bulk-delete-acl-modal";
         }
 
-        getTemplate(template_key, {}, undefined, function(template_ui){
-            if(!template_ui)
-                  return;
+        getSelectedDealsCount(function(count){
+            getTemplate(template_key, {"selected_count" :count}, undefined, function(template_ui){
+                if(!template_ui)
+                      return;
 
-            if(!hasScope("DELETE_DEALS"))
-            {
-                $('#deal_bulk_delete_acl_modal').html($(template_ui)).modal("show");
-                return;
-            }else
-            {
-                $('#deal_bulk_delete_modal').html($(template_ui));
-                if(!hasScope("EDIT_CONTACT"))
+                if(!hasScope("DELETE_DEALS"))
                 {
-                    $(".modal-body", $('#deal_bulk_delete_modal')).html(DEALS_CONTACTS_BULK_DELETE_ERROR);
+                    $('#deal_bulk_delete_acl_modal').html($(template_ui)).modal("show");
+                    return;
+                }else
+                {
+                    $('#deal_bulk_delete_modal').html($(template_ui));
+                    if(!hasScope("EDIT_CONTACT"))
+                    {
+                        $(".modal-body", $('#deal_bulk_delete_modal')).html(DEALS_CONTACTS_BULK_DELETE_ERROR);
+                    }
+                    $('#deal_bulk_delete_modal').modal("show");
                 }
-                $('#deal_bulk_delete_modal').modal("show");
-            }
 
-            $("#deal_bulk_delete_modal").off("click", "#deal-bulk-delete");
-            $("#deal_bulk_delete_modal").on("click", "#deal-bulk-delete", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkDeleteDeals(false);
-            });
+                $("#deal_bulk_delete_modal").off("click", "#deal-bulk-delete");
+                $("#deal_bulk_delete_modal").on("click", "#deal-bulk-delete", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkDeleteDeals(false);
+                });
 
-            $("#deal_bulk_delete_acl_modal").off("click", "#deal-bulk-delete-acl");
-            $("#deal_bulk_delete_acl_modal").on("click", "#deal-bulk-delete-acl", function(e){
-                e.preventDefault();
-                deal_bulk_actions.bulkDeleteDeals(true);
-            });
+                $("#deal_bulk_delete_acl_modal").off("click", "#deal-bulk-delete-acl");
+                $("#deal_bulk_delete_acl_modal").on("click", "#deal-bulk-delete-acl", function(e){
+                    e.preventDefault();
+                    deal_bulk_actions.bulkDeleteDeals(true);
+                });
 
-        }, '');
+            }, '');
+        });
     },
     bulkDealsExport : function(e){
         e.preventDefault();

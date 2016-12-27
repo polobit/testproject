@@ -5214,3 +5214,18 @@ span.rolecontainer::first-letter {
   margin-top: 5px;
   margin-right: 1%;
 }
+
+.web-rule-popup-textarea {
+  display: none !important;
+}
+.web-rule-actions-table i {
+  font-size: 16px !important;
+}
+
+.modal.fullview .modal-dialog {
+  width: 90%;
+}
+.modal.fullview .modal-body {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}

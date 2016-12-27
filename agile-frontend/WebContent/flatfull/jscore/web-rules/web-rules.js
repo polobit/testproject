@@ -49,11 +49,13 @@ function chainWebRules(el, data, isNew, actions)
 	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY" || value == "CALL_POPUP")
 			{
-				if(value == "MODAL_POPUP"  || value=="CALL_POPUP" || value == "REQUEST_PUSH_POPUP")
-				$("#tiny_mce_webrules_link", self).show();
+				if(value == "MODAL_POPUP") {
+					$("#tiny_mce_webrules_link", self).show();
+				}
 
 				if(value=="CALL_POPUP"){
-					loadSavedTemplate("call/callpopup.html");
+					// loadSavedTemplate("call/callpopup.html");
+					$("#tiny_mce_webrules_link", self).show();
 					$.ajax({
 						url: '/core/api/sms-gateway/twilio',
 						type : 'GET',
@@ -68,12 +70,12 @@ function chainWebRules(el, data, isNew, actions)
 				self.find(".web-rule-preview").show();
 			return;
 			} else if(value == "SITE_BAR") {
-				loadSavedTemplate("bar/sitebar.html");
+				// loadSavedTemplate("bar/sitebar.html");
 				$("#tiny_mce_webrules_link", self).show();
 				self.find(".web-rule-preview").show();
 				return;
 			}else if(value == "REQUEST_PUSH_POPUP"){
-				loadSavedTemplate("pushnoty/pushnoty.html");
+				// loadSavedTemplate("pushnoty/pushnoty.html");
 				$("#tiny_mce_webrules_link", self).show();
 				self.find(".web-rule-preview").show();
 				return;
@@ -87,7 +89,7 @@ function chainWebRules(el, data, isNew, actions)
 	
 	
 	if(data && data.actions)
-		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
+		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone);
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
@@ -109,7 +111,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 		 		'click i.filter-contacts-web-rule-multiple-add' : 'webruleMultipleAdd',
 		 		'click i.filter-contacts-web-rule-multiple-remove' : 'webruleMultipleRemove',
 		 		'click .web-rule-preview' : 'webrulePreview',
-		 		'click #tiny_mce_webrules_link' : 'tinymceWebruleLink',
+		 		'click #tiny_mce_webrules_link' : 'openWebRuleTemplateModal',
 		 		'change #uploadImageToS3Btn' : 'uploadImageToS3BtnChange',
 		    },
 
@@ -140,6 +142,7 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 					// var htmlContent = $(this).closest("tr").clone();
 					$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
 					$(".webrule-actions").append(htmlContent);
+					$(htmlContent).find(".actionSelectBox").trigger("change");
 
 				}, null);
 
@@ -242,6 +245,60 @@ var Web_Rules_Event_View = Base_Model_View.extend({
 		        var fileInput = document.getElementById('uploadImageToS3Btn');
 		        uploadImageToS3ThroughBtn(fileInput.files[0],e.currentTarget.parentElement.getElementsByClassName("btn")[0]);
     		},
+
+    		openWebRuleTemplateModal : function(e) {
+    			e.preventDefault();
+
+    			$("#modal-backdrop").hide();
+		        var $webRuleTemplatesModal = $("#webRuleTemplatesModal");
+		        getTemplate("webrule-templates-modal",{}, undefined, function(ui){
+		        	$webRuleTemplatesModal.html(ui).modal("show");
+		        	getTemplate("webrule-templates-list",{}, undefined, function(ui2){
+		        		$webRuleTemplatesModal.find("#web-rule-templates-holder").html(ui2);
+		        		
+		        		$webRuleTemplatesModal.find(".web_fancybox").attr("onclick","return false;");
+						$webRuleTemplatesModal.find(".web_fancybox").removeClass("web_fancybox");
+						$webRuleTemplatesModal.find("img").attr("onclick","return false;");	
+
+						$('#webRuleTemplatesModal').off('click', '.panel a.btn');
+						$('#webRuleTemplatesModal').on('click', '.panel a.btn', function(e){
+							e.preventDefault();
+							
+							var path = $(this).parent().parent().find(".theme-preview a").attr("data-link");
+							var actions_list = $("#action select");
+							$.each(actions_list,function(k,v) {						
+								
+								if(actions_list[k].value === "MODAL_POPUP" ||
+									actions_list[k].value === "CALL_POPUP" ||
+									actions_list[k].value === "SITE_BAR" ||
+									actions_list[k].value === "REQUEST_PUSH_POPUP") {									
+
+									if(path.includes("callpopup.html")) {
+										actions_list[k].value = "CALL_POPUP";
+										$(actions_list[k]).trigger("change");
+									} else if(path.includes("sitebar.html")) {
+										actions_list[k].value = "SITE_BAR";
+										$(actions_list[k]).trigger("change");
+									} else if(path.includes("pushnoty.html")) {
+										actions_list[k].value = "REQUEST_PUSH_POPUP";
+										$(actions_list[k]).trigger("change");
+									} else {
+										actions_list[k].value = "MODAL_POPUP";
+										// $(actions_list[k]).trigger("change");
+										loadSavedTemplate(path,function(data){
+											set_tinymce_content("tinyMCEhtml_email",data);
+										});
+									}
+								}
+															
+							});
+
+							$webRuleTemplatesModal.find(".close").trigger("click");
+						});
+
+		        	});
+		        });
+    		}
 
 		});
 
@@ -429,4 +486,25 @@ function webruleVideoPopup(){
        data.title="Web Rules Tutorial";
        data.videourl="//www.youtube.com/embed/NcUFum-_kqE?enablejsapi=10&amp;autoplay=1";
        showHelpVideoModal(data);
+}
+
+function setupTinymceForWebRulePopups() {
+	if(typeof tinymce != "undefined")
+		tinymce.EditorManager.execCommand("mceRemoveEditor", false, "tinyMCEhtml_email");
+	setupTinyMCEEditor("#tinyMCEhtml_email", false, undefined, function(){});
+}
+
+function initializeWebRuleActionListeners() {   
+    $('#content').on('change', '.actionSelectBox', function(e){
+        var action = $(e.target).val();
+    	if(action == "MODAL_POPUP") {
+			setupTinymceForWebRulePopups();
+		} else if(action == "CALL_POPUP") {
+			loadSavedTemplate("call/callpopup.html",setupTinymceForWebRulePopups);
+		} else if(action == "SITE_BAR") {
+			loadSavedTemplate("bar/sitebar.html",setupTinymceForWebRulePopups);
+		} else if(action == "REQUEST_PUSH_POPUP") {
+			loadSavedTemplate("pushnoty/pushnoty.html",setupTinymceForWebRulePopups);
+		}
+    });
 }

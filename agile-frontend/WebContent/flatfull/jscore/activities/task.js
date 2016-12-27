@@ -379,7 +379,7 @@ function initializeTasksListeners(){
 				saveBulkTaskAction(task_ids,priorityJson,form_id);
 			}
 								
-			}, undefined, "Bulk Task Delete");
+			}, undefined, "{{agile_lng_translate 'bulk-delete' 'bulk-delete'}}");
 	});
 	$('#tasks-list-template').off('click', '.tbody_check');
 	$('#tasks-list-template').on('click', '.tbody_check', function(event)

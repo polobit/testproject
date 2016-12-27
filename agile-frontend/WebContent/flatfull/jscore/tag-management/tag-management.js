@@ -380,7 +380,7 @@ function saveTag(field) {
 					return;
 				},function() {
 					return;
-				}, '{{agile_lng_translate "reputation" "Ok"}}');
+				}, '{{agile_lng_translate "reputation" "ok"}}');
 
 		return;
 	}
@@ -494,7 +494,7 @@ function showModalConfirmation(title, body, yes_callback, no_callback,
 	if(yes_button_text)
 		yes_action = '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">'+yes_button_text+'</a>';
 	if(no_button_text)
-		no_action = '<a  href="#" id="deny" class="btn btn-danger action" data-dismiss="modal" action="deny">'+no_button_text+'</a>';
+		no_action = '<a  href="#" id="deny" class="btn btn-default action" data-dismiss="modal" action="deny">'+no_button_text+'</a>';
 		
 	var confirmationModal = $('<div id="confirmation" class="modal fade in">'
 			+ '<div class="modal-dialog">'
