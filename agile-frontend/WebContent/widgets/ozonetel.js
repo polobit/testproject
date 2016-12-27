@@ -3,19 +3,11 @@
  * If the pubnub is not connected then it will reenter in timeout function
  * @author - Rajesh
  */
-
-function startOzonetelWidget(contact_id){
-	getLogsForOzonetel();
-	$("#Ozonetel-container").css({"display":"none"});
-	 OZONETEL_PLUGIN_NAME = "Ozonetel";
-	 OZONETEL_UPDATE_LOAD_IMAGE = '<center><img id="knowlarity_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
-
-	 var ozonetel_widget = agile_crm_get_widget(OZONETEL_PLUGIN_NAME);
-	 var contactDetailsObj = agile_crm_get_contact();
-
-	 KNOWLARITY_Plugin_Id = ozonetel_widget.id; 
-	 Email = agile_crm_get_contact_property('email')
-
+ function startOzonetelWidget(){
+ 	getLogsForOzonetel();
+ 	$("#Ozonetel-container").css({"display":"none"});
+ }
+$(function(){
 	$('body').off('click', '.Ozonetel_call');
 	$('body').on('click', '.Ozonetel_call', function(e){
 		e.preventDefault();
@@ -34,4 +26,4 @@ function startOzonetelWidget(contact_id){
 	$('body').on('click', '.noty_ozonetel_cancel', function(e){		
 		closeCallNoty(true);
 	});
-}
+});

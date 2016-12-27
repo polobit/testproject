@@ -345,6 +345,11 @@ $(function()
 			  	$("#dail_phone_number").val(newText);*/
 			  	
 			});
+
+	$('body').off('click', '.noty_ozonetel_cancel');
+	$('body').on('click', '.noty_ozonetel_cancel', function(e){		
+		closeCallNoty(true);
+	});
 });
 
 
@@ -444,8 +449,8 @@ function dialFromOzonetel(to,from,contact){
 			globalCall.contactedId = contact.id;
 		}
 		var to_number = "";
-		if(to.startsWith("+91")){
-			to_number = to.substr(to.length - 10);
+		if(to.startsWith("+91") || (to.startsWith("91") && to.length > 10)){
+			to_number = "0"+to.trim().slice(-10)
 		}else{
 			to_number = to;
 		}
@@ -454,7 +459,6 @@ function dialFromOzonetel(to,from,contact){
 			type : 'GET', 
 			success : function(data){
 				if(data == "success"){
-					startOzonetelWidget();
 					$("#draggable_noty #call-noty-notes").val("");
 					var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
 					showDraggableNoty("Ozonetel", contact, "outgoing", to, btns);
