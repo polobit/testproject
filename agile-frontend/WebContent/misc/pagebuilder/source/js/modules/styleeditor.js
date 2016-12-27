@@ -316,6 +316,10 @@
                 $('[name="dynamic-image"]').val("yes");
                 $('[name="dynamic-image"]').trigger("change");
             }
+            if($currentClickedEl.hasClass("navbar-fixed-top")){
+                $('[name="fixed-header"]').val("yes");
+                $('[name="fixed-header"]').trigger("change");
+            }
 
             return false;
 
@@ -448,15 +452,24 @@
                 if( $(this).attr('name') !== undefined ) {
 
                     $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
-                    if($(this).attr("name") === 'font-size'){
+                    var nameAttrOfEl = $(this).attr("name");
+                    if(nameAttrOfEl === 'font-size'){
                         var nodeName=styleeditor.activeElement.element.nodeName;
                         if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
                             $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
                     }
-                    if($(this).attr("name") === 'color' && styleeditor.activeElement.element.tagName ==='NAV'){
-                        $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
+                    if(styleeditor.activeElement.element.tagName ==='NAV'){
+                        if(nameAttrOfEl === 'color')
+                            $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
+                        if(nameAttrOfEl=== 'fixed-header'){
+                            if($(this).val() === "yes") {
+                                $(styleeditor.activeElement.element).toggleClass("navbar-static-top navbar-fixed-top");
+                            } else {
+                                $(styleeditor.activeElement.element).toggleClass("navbar-fixed-top navbar-static-top");
+                            }
+                        }
                     }
-                    var nameAttrOfEl = $(this).attr("name");
+                    
                     if( nameAttrOfEl === "dynamic-text" || nameAttrOfEl === "dynamic-button" || nameAttrOfEl === "dynamic-image") {
                         if($(this).val() === "yes") {
                             $(styleeditor.activeElement.element).addClass("agile-" + nameAttrOfEl);
