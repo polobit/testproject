@@ -819,7 +819,7 @@ $(document).ready(function () {
          if(parseInt($('#'+id).css("max-width")) < parseInt($('#image-w').val())) 
          {          
             alert("Image width must be less than or equal to "+$('#'+id).css("max-width"));
-            $('#image-w').val($('#image-w').val()-1);
+            $('#image-w').val(parseInt($('#'+id).css("max-width")));
         }
          else
             $('#'+id).attr('width', $('#image-w').val());
