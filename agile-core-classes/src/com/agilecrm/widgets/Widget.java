@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.core.api.widgets.WidgetsAPI;
@@ -390,7 +391,7 @@ public class Widget {
 		 * Some widgets are saved before setting widget type, those return
 		 * widget type as null, set widget type to those widgets based on name
 		 */
-		if (this.widget_type == null)
+		if (this.widget_type == null || StringUtils.equals(this.getProperty("twilio_twimlet_url"), "None"))
 			DefaultWidgets.checkAndFixWidgetType(this);
 
 	}
