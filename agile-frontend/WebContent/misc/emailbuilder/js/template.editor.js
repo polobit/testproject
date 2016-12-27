@@ -1253,7 +1253,9 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             $(".demo .column .lyrow").find('.drag').removeClass('hide');
             $('.font-family-picker').trigger('change');
             $('.font-size-picker').trigger('change');
-            $('.line-height-picker').trigger('change');
+            $('.line-height-picker').trigger('change');     
+            $('#tosave').find('.textFix').css('color', $('#font-color').find('.hex-col-val').text());
+            $('#tosave').find('.textFix').css('background-color', $('#content-bg-color').find('.hex-col-val').val());
         }});
 
 
