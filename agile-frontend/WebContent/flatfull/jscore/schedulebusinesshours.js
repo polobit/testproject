@@ -56,7 +56,10 @@ function initializeOnlineCalendarListners(el){
 	 	if($('#meeting_durations').children().length > 1){
 	 		$(this).closest('.meeting-row').remove();	 	
 	 	}else{
-	 		alert('Please keep at least one meeting.');
+	 		$("#cancel_error_message").removeClass('hide').removeClass('text-success').addClass('text-danger').html("{{agile_lng_translate 'calendar' 'keep-one-meeting'}}");					
+					setTimeout(function(){
+						$("#cancel_error_message").addClass('hide').empty();							
+					}, 5000);
 	 	}	 
 	 });
 	 
