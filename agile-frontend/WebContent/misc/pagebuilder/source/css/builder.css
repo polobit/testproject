@@ -561,6 +561,7 @@ body .sp-input {
 	box-shadow: inset 5px 0px 5px rgba(0,0,0,0.3);
 	z-index: 1000;
 	overflow-y: auto !important;
+	left: 210px;
 }
 
 .menu .second ul {
