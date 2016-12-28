@@ -101,7 +101,7 @@ border-radius: 0px;font-size: 15px;
     border-top-color: #fff;
     border-bottom-color: #fff;
     outline: 0;
-    padding-right: 25px;
+    padding-right: 25px!important;
 }
  .modal-content{
           position: relative;
