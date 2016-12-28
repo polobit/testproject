@@ -387,7 +387,7 @@ public class AgileTaskletUtil {
 			}
 
 			subscriberJSON.put("powered_by",
-					EmailUtil.getPoweredByAgileLink("campaign", "Powered by"));
+					EmailUtil.getPoweredByAgileLink("campaign", "Powered by",  false));
 
 			System.out.println("SubscriberJSON in WorkflowUtil: "
 					+ subscriberJSON);

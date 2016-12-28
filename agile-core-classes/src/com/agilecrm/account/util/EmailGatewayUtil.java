@@ -760,4 +760,28 @@ public class EmailGatewayUtil
 		}
     }
     
+    /**
+     * This method will return true and false based on email category
+     * @param emailSender
+     * @return
+     * 		- boolean
+     */
+    public static boolean isEmailCategoryTransactional(EmailSender emailSender) 
+    {
+    	final int MAX_LIMIT = 15;
+    	
+    	if(emailSender == null)
+    		return true;
+    	if(StringUtils.equalsIgnoreCase(emailSender.getQueueName(), AgileQueues.BULK_EMAIL_PULL_QUEUE))
+			return false;
+		
+		if(StringUtils.equalsIgnoreCase(emailSender.getQueueName(), AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE) && emailSender.getEmailsToSend() > MAX_LIMIT)
+			return false;
+		
+		if(StringUtils.equalsIgnoreCase(emailSender.getQueueName(), AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE) && emailSender.getEmailsToSend() > MAX_LIMIT)
+			return false;
+    	
+		return true;
+	}
+    
 }
