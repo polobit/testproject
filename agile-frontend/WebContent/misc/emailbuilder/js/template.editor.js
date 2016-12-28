@@ -1255,7 +1255,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             $('.font-size-picker').trigger('change');
             $('.line-height-picker').trigger('change');     
             $('#tosave').find('.textFix').css('color', $('#font-color').find('.hex-col-val').text());
-            $('#tosave').find('.textFix').css('background-color', $('#content-bg-color').find('.hex-col-val').val());
+            $('#tosave').find('#primary .main').css('background-color', $('#content-bg-color').find('.hex-col-val').text());
         }});
 
 
@@ -1626,6 +1626,8 @@ function initializeEditor() {
         convert_urls : false,
         toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields",
         fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+        height: "200px",
+        statusbar: false,
         setup: function (editor) {
             editor.addButton('merge_fields', { type : 'menubutton', text : localeJSON["merge-fields"], icon : false, menu : parent.set_up_merge_fields(editor) });
 
