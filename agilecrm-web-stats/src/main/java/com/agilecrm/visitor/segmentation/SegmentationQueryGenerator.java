@@ -56,7 +56,7 @@ public class SegmentationQueryGenerator
 	String segmentationQuery = "";
 	try
 	{
-	    segmentationQuery = "select SQL_CALC_FOUND_ROWS email from page_visits where domain = '" + domain
+	    segmentationQuery = "select email,stats_time from page_visits where domain = '" + domain
 		    + "' and email!='' and email!='null' and stats_time between '" + startTime + "' and  '" + endTime
 		    + "' ";
 	    String groupByEmail = " group by email ";
@@ -103,6 +103,7 @@ public class SegmentationQueryGenerator
 		else
 		{
 		    segmentationQuery = segmentationQuery + groupByEmail;
+		    segmentationQuery = segmentationQuery + orderByTime;
 		    segmentationQuery = segmentationQuery + StatsSQLUtil.appendLimitToQuery(cursor, pageSize);
 		    log.info(segmentationQuery);
 		}

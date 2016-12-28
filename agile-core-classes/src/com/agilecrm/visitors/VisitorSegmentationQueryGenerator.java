@@ -105,6 +105,7 @@ public class VisitorSegmentationQueryGenerator
 		else
 		{
 		    segmentationQuery = segmentationQuery + groupByEmail;
+		    segmentationQuery = segmentationQuery + orderByTime;
 		    segmentationQuery = segmentationQuery + GoogleSQLUtil.appendLimitToQuery(cursor, pageSize);
 		    log.info(segmentationQuery);
 		}

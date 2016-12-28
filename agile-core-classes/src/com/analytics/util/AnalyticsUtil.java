@@ -43,9 +43,7 @@ import com.googlecode.objectify.Query;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
-   public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
-    
-    public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
     
     public static String getEmails(Set<String> emails)
     {
@@ -254,256 +252,11 @@ public class AnalyticsUtil
 	    return null;
     }
     
-    /**
-     * Fetched emails from Analytics DB w.r.t visitors LHS 
-     * filters
-     * 
-     * @param filterJSON
-     * @param startTime
-     * @param endTime
-     * @param pageSize
-     * @param cursor
-     * @return
-     */
-    public static List<String> getEmails(String filterJSON, String startTime, String endTime, String pageSize,
-	    String cursor)
-    {
-	try
-	{
-	    List<String> emails = new ArrayList<String>();
-	    String currentNamespace = NamespaceManager.get();
-	    VisitorSegmentationQueryGenerator segmentationQueryGenerator = new VisitorSegmentationQueryGenerator(
-		    currentNamespace, filterJSON, startTime, endTime, cursor, pageSize);
-	    String segementationQuery = segmentationQueryGenerator.generateSegmentationQuery();
-	    JSONArray mergedStats = AnalyticsSQLUtil.getVisitors(segementationQuery);
-	    
-	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats.toString());
-	    int emailsSize = contactEmailsJsonArray.length();
-	    if (emailsSize > 1)
-	    {
-		for (int i = 0; i < emailsSize - 1; i++)
-		{
-		    JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
-		    emails.add(contactEmail.get("email").toString());
-		}
-		try
-		{
-		    JSONObject firstObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 2);
-		    JSONObject lastObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 1);
-		    String emailCountString = lastObject.get("total_rows_count").toString();
-		    String scannedUpto = firstObject.getString("stats_time");
-		    // emails.add(firstObject.get("email").toString());
-		    emails.add(scannedUpto);
-		    emails.add(emailCountString);
-		}
-		catch (Exception e)
-		{
-		    System.err.println("exception occured while fetching segmented email count " + e.getMessage());
-		}
-	    }
-	    return emails;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println(e.getMessage());
-	    return null;
-	}
-    }
     
-    /**
-     * Fetches contacts from Datastore DB because customer applied only web
-     * filters in visitors page
-     * 
-     * @param contactEmails
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public static JSONArray getContactsFromDataStore(List<String> contactEmails)
-    {
-	JSONArray contactsArray = new JSONArray();
-//	String tag = null;
-//	String condition = null;
-//	boolean hasTagFilter = false;
-//	try
-//	{
-//	    if(tagFilter!=null)
-//	    {
-//		tag = tagFilter.get("RHS").toString();
-//		condition = tagFilter.getString("CONDITION").toString();
-//		hasTagFilter = true;
-//	    }
-//	}
-//	catch(Exception e)
-//	{
-//	    System.err.println(e.getMessage());
-//	}
-	if (contactEmails != null && contactEmails.size() > 0)
-	{
-	    try
-	    {
-			Objectify ofy = ObjectifyService.begin();
-			for (int i = 0; i < contactEmails.size(); i++)
-			{
-			    /**
-			     * converting searching email-id into the lowercase and then
-			     * it should not be blank
-			     * */
-			    
-			    if (StringUtils.isNotBlank(contactEmails.get(i)))
-			    {
-					com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
-					Map<String, Object> searchMap = new HashMap<String, Object>();
-					searchMap.put("type", Contact.Type.PERSON);
-					searchMap.put("properties.name", "email");
-					searchMap.put("properties.value", contactEmails.get(i).toLowerCase());
-		//			if(StringUtils.isNotBlank(tag) && StringUtils.isNotBlank(condition))
-		//			{
-		//			    if(condition.equalsIgnoreCase("EQUALS"))
-		//				searchMap.put("tagsWithTime.tag",tag);
-		//			    else
-		//			    {
-		//			    	searchMap.put("tagsWithTime.tag !",tag);
-		//			    }
-		//			}
-					
-					for (String propName : searchMap.keySet())
-					    query.filter(propName, searchMap.get(propName));
-					System.out.println(query.toString());
-					Contact contact = dao.fetch(query);
-					if (contact != null)
-					{
-					    ObjectMapper mapper = new ObjectMapper();
-					    String contactString = mapper.writeValueAsString(contact);
-					    JSONObject contactJSON = new JSONObject(contactString);
-					    contactsArray.put(contactJSON);
-					}
-					else
-					{
-					    JSONObject contactJSON = buildVisitorData(contactEmails.get(i));
-					    contactsArray.put(contactJSON);
-					}
-			    }
-			}
-	    }
-	    catch (Exception e)
-	    {
-	    	System.out.println("Exception occured while fetching contacts for visitors" + e.getMessage());
-	    }	    
-	}
-	return contactsArray;
-    }
     
-    /**
-     * Fetches contacts from TextSearch DB because customer applied contact
-     * filter along web filters in visitors page
-     * 
-     * @param contactEmails
-     * @param contactFilterId
-     * @param count
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public static JSONArray getContactsFromTextSearch(List<String> contactEmails, JSONObject tagFilter, int count)
-    {
-    	JSONArray contactsArray = new JSONArray();
-    	String tag = null;
-    	String tagCondition = null;
-    	List<SearchRule> aclRules = null;
-    	try
-    	{
-    		if(tagFilter!=null)
-    		{
-    			tag = tagFilter.get("RHS").toString();
-    			tagCondition = tagFilter.getString("CONDITION").toString();
-    		}
-    		// Sets ACL condition
-    		aclRules = new ArrayList<SearchRule>();
-    		UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-    			UserAccessControl.AccessControlClasses.Contact.toString(),aclRules, null);
-    	}
-    	catch(Exception e)
-    	{
-    		System.err.println(e.getMessage());
-    	}
-    	if (tagFilter!=null)
-    	{
-    		for (int i = 0; i < contactEmails.size(); i++)
-    		{
-    			if (StringUtils.isNotBlank(contactEmails.get(i)) && StringUtils.isNotBlank(tag) && StringUtils.isNotBlank(tagCondition))
-    			{
-    				try
-    				{
-	    				ContactFilter filter = new ContactFilter();	
-	    				//email filter Rule
-	    				SearchRule emailRule = new SearchRule();
-	    				emailRule.LHS = "email";
-	    				emailRule.CONDITION = RuleCondition.EQUALS;
-	    				emailRule.RHS = contactEmails.get(i).toLowerCase();
-	    				filter.rules.add(emailRule);
-	    				//tag filter Rule
-	    				SearchRule tagRule = new SearchRule();
-	    				tagRule.LHS = "tags";
-	    				if(tagCondition.equalsIgnoreCase("EQUALS"))
-	    					tagRule.CONDITION = RuleCondition.EQUALS;
-	    				else
-	    					tagRule.CONDITION = RuleCondition.NOTEQUALS;
-	    				tagRule.RHS = tag;
-	    				filter.rules.add(tagRule);	
-	    				//acl Rules
-	    				if(aclRules!=null && aclRules.size() > 0)
-	    					filter.rules.addAll(aclRules);
-	    					
-	    				List<Contact> contacts = new ArrayList<Contact>(filter.queryContacts(count, null, null));
-	    				Contact contact = null;
-	    				if (contacts != null && contacts.size() > 0)
-	    					contact = contacts.get(0);
-				
-	    				if (contact != null)
-	    				{
-	    					ObjectMapper mapper = new ObjectMapper();
-	    					String contactString = mapper.writeValueAsString(contact);
-	    					JSONObject contactJSON = new JSONObject(contactString);
-	    					contactsArray.put(contactJSON);
-	    				}
-    				}
-    				catch (Exception e)
-    				{
-    					System.err.println("Exception occured while fetching contacts for visitors page "
-    							+ e.getMessage());
-    				}
-    			}
-    		}
-    	}
-    	return contactsArray;
-    }
     
-    /**
-     * param email having webstats data w.r.t this domain but not having a
-     * contact in Datastore. So creating a JSON object which includes this mail.
-     * 
-     * @param email
-     * @return
-     */
-    private static JSONObject buildVisitorData(String email)
-    {
-	JSONObject contact = new JSONObject();
-	JSONArray properties = new JSONArray();
-	JSONObject emailProperty = new JSONObject();
-	try
-	{
-	    emailProperty.put("type", "SYSTEM");
-	    emailProperty.put("name", "email");
-	    emailProperty.put("value", email);
-	    properties.put(emailProperty);
-	    contact.put("properties", properties);
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception occured while building dummy contact " + e.getMessage());
-	}
-	return contact;
-    }
+    
+   
     
     public static int getIntegerValue(String value, int defaultValue)
     {
@@ -583,25 +336,7 @@ public class AnalyticsUtil
  	}
      }
      
-     public static JSONObject getTagFilter(String filterJsonString) throws JSONException
-     {
- 	JSONObject tagFilter = null;
- 	if (StringUtils.isNotBlank(filterJsonString))
- 	{
- 	    JSONObject filterJsonObject = new JSONObject(filterJsonString);
- 	    JSONArray filters = filterJsonObject.getJSONArray("rules");
- 	    for (int i = 0; i < filters.length(); i++)
- 	    {
- 		JSONObject filter = (JSONObject) filters.get(i);
- 		String lhs = filter.get("LHS").toString();
- 		if (lhs.equalsIgnoreCase("tags"))
- 		{
- 		    tagFilter = filter;
- 		}
- 	    }
- 	}
- 	return tagFilter;
-     }
+    
      
      public static JSONArray parseResultSet(ResultSet rs) throws Exception
      {
@@ -655,5 +390,7 @@ public class AnalyticsUtil
  	}
  	return agentDetailsArray;
      }
+     
+     
     
 }

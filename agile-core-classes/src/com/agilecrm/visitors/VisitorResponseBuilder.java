@@ -17,24 +17,24 @@ import org.json.JSONObject;
  */
 public class VisitorResponseBuilder
 {
-    private JSONArray contacts	  = null;
-    private String    scannedUpto       = null;
-    private boolean   contactFilter     = false;
-    private int       cursor	    = 0;
-    private int       totalContactCount = 0;
-    private int       pageSize;
-    private boolean   hasEmails = true;
+    private JSONArray contacts      = null;
+    private String    scannedUpto   = null;
+    private boolean   contactFilter = false;
+    // private int cursor = 0;
+    // private int totalContactCount = 0;
+    // private int pageSize;
+    private boolean   hasEmails     = true;
     
     public boolean isHasEmails()
     {
-        return hasEmails;
+	return hasEmails;
     }
-
+    
     public void setHasEmails(boolean hasEmails)
     {
-        this.hasEmails = hasEmails;
+	this.hasEmails = hasEmails;
     }
-
+    
     public VisitorResponseBuilder(JSONArray contacts, boolean contactFilter, String scannedUpto)
     {
 	this.contacts = contacts;
@@ -49,17 +49,17 @@ public class VisitorResponseBuilder
     
     public void setCursor(int cursor)
     {
-	this.cursor = cursor;
+	// /this.cursor = cursor;
     }
     
     public void setPageSize(int pageSize)
     {
-	this.pageSize = pageSize;
+	// this.pageSize = pageSize;
     }
     
     public void setTotalContactCount(int totalContactCount)
     {
-	this.totalContactCount = totalContactCount;
+	// this.totalContactCount = totalContactCount;
     }
     
     public JSONArray getResponse()
@@ -84,21 +84,25 @@ public class VisitorResponseBuilder
 	    JSONObject contact = new JSONObject();
 	    contact.put("is_info_model", true);
 	    contact.put("has_emails", hasEmails);
+	    contact.put("scannedUpto", scannedUpto);
 	    if (contacts == null || contacts.length() == 0)
 	    {
 		contacts = new JSONArray();
-		contact.put("count", "0");
+		// contact.put("count", "0");
+		contact.put("has_results", false);
 	    }
 	    else
 	    {
-		JSONObject finalContact = contacts.getJSONObject(contacts.length() - 1);
-		if (contacts.length() == pageSize)
-		{
-		    cursor = cursor + pageSize;
-		    finalContact.put("cursor", cursor);
-		    contact.put("cursor", cursor);
-		}
-		contact.put("count", totalContactCount);
+		// JSONObject finalContact =
+		// contacts.getJSONObject(contacts.length() - 1);
+		// if (contacts.length() == pageSize)
+		// {
+		// cursor = cursor + pageSize;
+		// finalContact.put("cursor", cursor);
+		// contact.put("cursor", cursor);
+		// }
+		contact.put("has_results", true);
+		// contact.put("count", totalContactCount);
 	    }
 	    contact.put("is_web_filter", true);
 	    contacts.put(contact);
@@ -123,23 +127,25 @@ public class VisitorResponseBuilder
 	try
 	{
 	    contact.put("is_info_model", true);
-	    contact.put("cursor", "0");
+	    // contact.put("cursor", "0");
 	    contact.put("scannedUpto", scannedUpto);
 	    contact.put("is_web_filter", false);
 	    contact.put("has_emails", hasEmails);
 	    if (contacts == null || contacts.length() == 0)
 	    {
-		contact.put("count", 0);
+		// contact.put("count", 0);
 		contact.put("has_results", false);
 		contacts = new JSONArray();
 	    }
 	    else
 	    {
-		contact.put("count", contacts.length());
-		contacts.getJSONObject(contacts.length()-1).put("is_old_model", true);
+		// contact.put("count", contacts.length());
+		// contacts.getJSONObject(contacts.length()-1).put("is_old_model",
+		// true);
 		contact.put("has_results", true);
-		JSONObject oldContact = contacts.getJSONObject(contacts.length()-1);
-		oldContact.put("is_old_model", true);
+		// JSONObject oldContact =
+		// contacts.getJSONObject(contacts.length()-1);
+		// oldContact.put("is_old_model", true);
 	    }
 	    contacts.put(contact);
 	}
