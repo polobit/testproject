@@ -362,3 +362,31 @@ $(function(){
 		$(this).find('.help-line').remove();
 	});
 });
+
+function getSelectedDealsCount(callback)
+{
+	deal_bulk_actions.getAvailableDeals(function(deals_cnt){
+		var total_available_deals = deals_cnt;
+		var deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals);
+		if(total_available_deals > 1000)
+		{
+			deals_count_with_commas = deal_bulk_actions.numberWithCommas(total_available_deals - 1)+"+";
+		}
+
+		RELOAD_DEALS = false;
+
+		var count = 0;
+		if(SELECT_ALL_DEALS)
+		{
+			count = deals_count_with_commas;
+		}
+		else
+		{
+			count = deal_bulk_actions.numberWithCommas(deal_bulk_actions.getDealsBulkIds().length);
+		}
+		if(callback && typeof callback == "function")
+		{
+			return callback(count);
+		}
+	});
+}

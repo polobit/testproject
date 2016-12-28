@@ -1,3 +1,5 @@
+var CUSTOM_DOCUMENT_SIZE;
+var DOC_UPLOAD_REQ;
 /**
  * Creates backbone router for Documents create, read and update operations
  */
@@ -650,13 +652,140 @@ function initializeDocumentsListeners()
 		if(id && id == "GOOGLE"){
 			pageURL = "upload-google-document.jsp?id="+ form_id;
 			pageSettings = "height=510,width=800";
+			agileOpenWindowAndFocus(pageURL, 'name', pageSettings);
+			return;
 		}
 		
-		agileOpenWindowAndFocus(pageURL, 'name', pageSettings);
-		return false;
+		$(this).closest('form').find("#doc-file-up").trigger("click");
 	});
 	$('#uploadDocumentForm').on('hidden.bs.modal', function(e){
 		$('#GOOGLE',$('#uploadDocumentForm')).parent().show();
+	});
+
+	$('#uploadDocumentForm, #uploadDocumentUpdateForm').on('change', '#doc-file-up', function(e)
+	{
+		var $form = $(this).closest("form");
+		if(DOC_UPLOAD_REQ)
+		{
+			DOC_UPLOAD_REQ.abort();
+		}
+		var form_id = $(this).closest("form").attr("id");
+		var file = $(this)[0].files[0];
+		if(file && file.size > 10485760)
+		{
+			showAlertModal(
+				"{{agile_lng_translate 'upload-custom-doc' 'doc-size-limit-exceeded'}}",
+				undefined,
+				undefined,
+				undefined,
+				"{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}");
+			$(this).val("");
+			return;
+		}
+		$form.find("#S3").closest(".link").find(".icon-ok").css("display", "none");
+	    $form.find("#S3").closest(".link").css("background-color", "");
+	    $("#uploaded-doc", $form).html("");
+		$("#uploaded-doc", $form).addClass("hide");
+		var fd = new FormData();
+
+		var fileName = $(this).val();
+		
+		if(fileName.lastIndexOf("\\") > 0)
+	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+
+		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+fileName;
+		var fileSizeKB = Math.round(file.size / 1024);
+
+		fd.append("key", key);
+		fd.append("acl", "public-read");
+		fd.append("content-type", "image/*");
+		fd.append("success_action_redirect", "");
+		fd.append("AWSAccessKeyId", "AKIAIBK7MQYG5BPFHSRQ");
+		fd.append("policy", "IHsKImV4cGlyYXRpb24iOiAiMjAyMC0wMS0wMVQxMjowMDowMC4wMDBaIiwKICAiY29uZGl0aW9ucyI6IFsKICAgIHsiYnVja2V0IjogImFnaWxlY3JtIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAicGFuZWwvdXBsb2FkZWQtbG9nbyJdLAogICAgWyJzdGFydHMtd2l0aCIsICIkQ29udGVudC1UeXBlIiwgImltYWdlLyJdLAogICAgWyAiY29udGVudC1sZW5ndGgtcmFuZ2UiLCA1MTIsIDEwNDg1NzYwXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IiwgIiIgXQogIF0KfQ==");
+		fd.append("signature", "lJaO/ZQyMANyulpZrP/FcxVLz5M=");
+		fd.append("file", file);
+		
+		DOC_UPLOAD_REQ = $.ajax({ 
+			url : "https://agilecrm.s3.amazonaws.com/",
+			method: "POST",
+			//headers : { 'Content-Type' : 'multipart/form-data' },
+			processData: false,
+			contentType : false,
+			data : fd,
+			beforeSend: function () {
+	            $('#' + form_id).find("#S3").closest(".link").find(".icon-ok").css("display", "none");
+	            $('#' + form_id).find("#S3").closest(".link").css("background-color", "");
+	        },
+			success : function(response){
+				var tpl = "<div class='uploaded-doc-name pull-left text-ellipsis'>{{fileName}}</div>"+
+			             "<div style='margin-top:4px;' class='pull-left'>&nbsp;({{fileSize}}K)</div>"+
+			             "<div class='uploaded-doc-close'><i class='icon icon-close c-p'></i></div>";
+			    var el = Handlebars.compile(tpl)({"fileName" : fileName, "fileSize" : fileSizeKB});
+				$("#uploaded-doc", $form).html(el);
+				$("#uploaded-doc", $form).removeClass("hide");
+				
+				var url = "https://s3.amazonaws.com/agilecrm/"+key+"?id="+form_id;
+				var network = "S3";
+				CUSTOM_DOCUMENT_SIZE = file.size;
+		 		saveDocumentURL(url, network, "upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain);
+			},
+			error : function(response){
+				$("#uploaded-doc", $form).html("");
+				$("#uploaded-doc", $form).addClass("hide");
+				var $messageEle = $(response.responseXML).find("Message");
+				var $minSizeAllowedEle = $(response.responseXML).find("MinSizeAllowed");
+				if($messageEle.length > 0 && $minSizeAllowedEle.length > 0)
+				{
+					showAlertModal($messageEle.text()+" - "+$minSizeAllowedEle.text()+" bytes", undefined, 
+						undefined, undefined, "{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}");
+					return;
+				}
+				if(response.responseText)
+				{
+					showAlertModal(response.responseText, undefined, 
+						undefined, undefined, "{{agile_lng_translate 'upload-custom-doc' 'upload-doc'}}");
+				}
+			},
+			xhr : function() {
+		        var xhr = new window.XMLHttpRequest();
+		        //Download progress
+		        xhr.upload.addEventListener("progress", function (evt) {
+			        console.log(evt.lengthComputable); // false
+			        if (evt.lengthComputable) {
+			            var percentComplete = evt.loaded / evt.total;
+			            var tpl = "<div class='uploaded-doc-name pull-left text-ellipsis'>{{fileName}}</div>"+
+			            		 "<div style='margin-top:4px;' class='pull-left'>&nbsp;({{fileSize}}K)</div>"+
+			            		 "<div class='uploaded-doc-close'><i class='icon icon-close c-p'></i></div>"+
+			            		 "<div class='doc-progress progress'>"+
+			            		 "<div class='progress-bar bg-info' style='width:"+Math.round(percentComplete * 100)+"%;color:#3a3939;'></div>"+
+			            		 "</div>";
+			           	var el = Handlebars.compile(tpl)({"fileName" : fileName, "fileSize" : fileSizeKB});
+			            $("#uploaded-doc", $form).html(el);
+			            $("#uploaded-doc", $form).removeClass("hide");
+			        }
+			    }, false);
+		        return xhr;
+		    }
+		});
+	});
+
+	$('#uploadDocumentForm, #uploadDocumentUpdateForm').on('click', '.uploaded-doc-close', function(e)
+	{
+		if(DOC_UPLOAD_REQ)
+		{
+			DOC_UPLOAD_REQ.abort();
+		}
+		var $form = $('#uploadDocumentForm');
+		if($form.length == 0)
+		{
+			$form = $('#uploadDocumentUpdateForm');
+		}
+		$form.find("#S3").closest(".link").find(".icon-ok").css("display", "none");
+	    $form.find("#S3").closest(".link").css("background-color", "");
+	    $("#uploaded-doc", $form).html("");
+		$("#uploaded-doc", $form).addClass("hide");
+		$("#doc-file-up", $form).replaceWith($("#doc-file-up", $form).val('').clone(true));
+		$("#upload_url", $form).val("");
 	});	
 }
 function proc_add_document(model_json)
@@ -1153,7 +1282,17 @@ function load_document_from_edit_model(model)
 						if(model.network_type)
 						{
 							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").find(".icon-ok").css("display", "inline");
-							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#EDEDED");
+							$('#uploadDocumentUpdateForm').find("#" + model.network_type).closest(".link").css("background-color", "#f5f5f5");
+							if(model.network_type == "S3")
+							{
+								var fileSizeKB = Math.round(model.size / 1024);
+								var tpl = "<div class='uploaded-doc-name pull-left text-ellipsis'>{{fileName}}</div>"+
+							              "<div style='margin-top:4px;' class='pull-left'>&nbsp;({{fileSize}}K)</div>"+
+							              "<div class='uploaded-doc-close'><i class='icon icon-close c-p'></i></div>";
+							    var el = Handlebars.compile(tpl)({"fileName" : model.extension, "fileSize" : fileSizeKB});
+								$("#uploaded-doc", $("#uploadDocumentUpdateForm")).html(el);
+								$("#uploaded-doc", $("#uploadDocumentUpdateForm")).removeClass("hide");
+							}
 						}
 						$(".senddoc",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");
 						$(".send-doc-button",'#uploadDocumentForm,#uploadDocumentUpdateForm').addClass("hide ");

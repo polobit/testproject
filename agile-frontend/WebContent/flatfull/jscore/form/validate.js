@@ -411,6 +411,10 @@ function isValidForm(form) {
 		},
 		invalidHandler : function(form, validator) {
 			var errors = validator.numberOfInvalids();
+			if (errors) {                    
+				var firstInvalidElement = $(validator.errorList[0].element);
+				firstInvalidElement.focus();
+			}
 		},
 		errorPlacement: function(error, element) {
     		if (element.hasClass('checkedMultiSelect')) {

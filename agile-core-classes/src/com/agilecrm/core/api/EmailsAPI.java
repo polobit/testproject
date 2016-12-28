@@ -686,7 +686,13 @@ public class EmailsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
     {
-	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+    	if(!SendGridUtil.isEmailDomainValid(emailDomain)){
+    		
+    		return "{\"Error\" : \"Email domain is not valid\"}";
+    	}
+    	
+    EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
 	String domain = NamespaceManager.get();
 	
