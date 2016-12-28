@@ -25,6 +25,7 @@ import com.agilecrm.user.util.AliasDomainUtil;
 
 //import com.agilecrm.user.util.AliasDomainUtil;
 
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.util.exceptions.AgileExceptionUtil;
@@ -120,7 +121,8 @@ public class NamespaceFilter implements Filter
 
 	// If not agilecrm.com or helptor.com etc. - show chooseDomain
 	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase())
-		&& !url.toLowerCase().contains(Globals.SUB_VERSION_URL))
+		&& !url.toLowerCase().contains(Globals.SUB_VERSION_URL) 
+		&& !Arrays.asList(EmailLinksConversion.trackURLDomains).contains(url.toLowerCase()))
 	{
 	    redirectToChooseDomain(request, response);
 	    return false;
