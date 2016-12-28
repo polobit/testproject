@@ -1,7 +1,8 @@
 {"elements": {
     "{{agile_lng_translate 'landingpage-builder' 'header'}}":[
     	{"url":"elements/header11.html","height":70, "thumbnail":"elements/images/thumbs/header10.png"},
-    	{"url":"elements/header5.html","height":70, "thumbnail":"elements/images/thumbs/header5.png"}
+    	{"url":"elements/header5.html","height":70, "thumbnail":"elements/images/thumbs/header5.png"},
+        {"url":"elements/newheader1.html","height":70, "thumbnail":"elements/images/thumbs/header5.png"}
     	
     ],
     "{{agile_lng_translate 'landingpage-builder' 'content'}}":[
