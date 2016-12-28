@@ -245,7 +245,7 @@ String template = request.getParameter("template");
         <div class="innerFontTheme innerFontStyleDiv col-md-4">
           <label>Style</label>
           <div class="innerFontSizeUlDiv">
-            <select class="form-control" style="padding:0px;">
+            <select class="form-control" style="padding-left:11px;">
               <option value="normal">Normal</option>
               <option value="italic">Italic</option>
             </select>
@@ -257,7 +257,7 @@ String template = request.getParameter("template");
         <div class="innerFontTheme innerFontWeightDiv col-md-4">
           <label>Weight</label>
           <div class="innerFontSizeUlDiv">
-            <select class="form-control" style="padding:0px;">
+            <select class="form-control" style="padding-left:11px;">
               <option value="normal">Normal</option>
               <!-- <option value="lighter">Lighter</option> -->
               <option value="bold">Bold</option>
@@ -270,7 +270,7 @@ String template = request.getParameter("template");
         <div class="innerFontTheme innerFontSizeDiv col-md-4">
           <label>Size</label>
           <div class="innerFontSizeUlDiv">
-            <select class="form-control" style="padding:0px;">
+            <select class="form-control" style="padding-left:11px;">
               <option>8</option>
               <option>10</option>
               <option>12</option>
@@ -397,20 +397,22 @@ String template = request.getParameter("template");
 
                 <!-- Apply or delete theme popup--> 
                 <div class="modal fade" id="customThemeAppyDelModal" role="dialog">
-                    <div class="modal-dialog" style="    left: 0;position: static;margin-top: 107px;margin-left: 504px;height: 68px;width: 250px;">
+                    <div class="modal-dialog" style="left: 0;position: static;margin-top: 107px;">
                       
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" id="closetheme" class="close" data-dismiss="modal" onclick="closeApplyTheme(this)">&times;</button>
-                          <div class="modal-title">Choose the option</div>
+                        <div class="modal-content">
+                           <div class="modal-header">
+                             <button type="button" id="closetheme" class="close" data-dismiss="modal" onclick="closeApplyTheme(this)">&times;</button>
+                             <div class="modal-title">Confirmation</div>
+                           </div>
+                           <div id="applyThemeBody" class="modal-body">
+                           
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" id="deltheme" class="btn btn-sm btn-danger" onclick="closeApplyTheme(this)" data-dismiss="modal">Delete</button>
+                              <button type="button" id="applytheme" class="btn btn-sm" onclick="closeApplyTheme(this)" data-dismiss="modal">Apply</button>
+                           </div>
                         </div>
-                        <div class="modal-body">
-                         <button type="button" id="applytheme" class="btn btn-sm btn-default" onclick="closeApplyTheme(this)" data-dismiss="modal">Apply Theme</button>
-                         <button type="button" id="deltheme" class="btn btn-sm btn-default" onclick="closeApplyTheme(this)" data-dismiss="modal">Delete Theme</button>
-                        </div>
-                        <!-- <div class="modal-footer"></div> -->
-                      </div>
-                    </div>
+                     </div>
                   </div>      
                 <!-- Apply or delete theme popup--> 
                   <!-- <input id="form-save" type="button" class="btn btn-info" style="/*background-color: #fff;color: #000;border-color: #ccc;*/font-size: 13px;padding-left: 19px;padding-right: 19px;padding-bottom: 8px;padding-top: 10px;margin-right: 35px;margin-top: -36px;" value="Save Form"> -->
@@ -617,7 +619,7 @@ String template = request.getParameter("template");
                           $.each(defaultThemes,function(index,value){
                               if(value.toUpperCase() === themeName.toUpperCase()){
                                  isThemeNameExist=true;
-                                 $("#errorSpan").text("Sorry,duplicate names are not allowed.");
+                                 $("#errorSpan").text("Same kind of name already exists.");
                                  return;
                               }
                           });
@@ -625,7 +627,7 @@ String template = request.getParameter("template");
                               $.each( themesListAsArr, function( index, value ) {
                                  if(value.toUpperCase() === themeName.toUpperCase()){
                                    isThemeNameExist=true;
-                                   $("#errorSpan").text("Sorry,duplicate names are not allowed.");
+                                   $("#errorSpan").text("Same kind of name already exists.");
                                    return;
                                  }
                               });
@@ -719,6 +721,7 @@ String template = request.getParameter("template");
                         else{
                           $("#header").css("z-index","0");
                           $(".popover").css("z-index","50");
+                          $("#applyThemeBody").html("Are you sure you want to delete or apply <strong>"+$(".themesSelectEle").val()+"</strong> theme?");
                           $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                           }
                   });
@@ -759,6 +762,11 @@ String template = request.getParameter("template");
          a.href = window.location.origin;
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
+         window.onbeforeunload = function(event) {
+               var closeText = "Do you want to Close?";
+               event.returnValue = closeText;
+               return closeText;
+         }
       </script>
       <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       <style>

@@ -12,7 +12,7 @@ define([
 		form.formName = saveform[0].fields.name.value;
 		form.formJson = saveform;
 		
-        var themeVal =$(".themesSelectEle option:selected").text();
+        var themeVal =$(".themesSelectEle option:selected").val();
     
 		if(themeVal){
 			 var custThmDiv = document.createElement("div");
@@ -101,10 +101,11 @@ define([
 
 						var $formNextActionModal = $("#formNextActionModal");
 						$("#header").css("z-index","0");
-						$(".popover").css("z-index","50");
+						//$(".popover").css("z-index","50");
 						$formNextActionModal.html(next_action_popup).modal("show");
 						$('#success-msg').fadeIn('slow').delay(2000).fadeOut('slow');
 					}
+					$(".popover").remove();
 				}
 			},
 			error: function(){
@@ -123,6 +124,6 @@ define([
  }
   var nextActionCloseClick = function(){
  	$("#header").css("z-index","2001");
- 	$(".popover").css("z-index","2000");
+ 	//$(".popover").css("z-index","2000");
  }
 
