@@ -15,9 +15,6 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-import sun.security.krb5.internal.Ticket;
-
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
