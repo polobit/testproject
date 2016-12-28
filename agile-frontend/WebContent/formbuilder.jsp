@@ -397,7 +397,7 @@ String template = request.getParameter("template");
 
                 <!-- Apply or delete theme popup--> 
                 <div class="modal fade" id="customThemeAppyDelModal" role="dialog">
-                    <div class="modal-dialog" style="left: 0;position: static;margin-top: 107px;">
+                    <div class="modal-dialog" style="left: 0;position: static;margin-top: 107px;width: 450px;">
                       
                         <div class="modal-content">
                            <div class="modal-header">
@@ -583,6 +583,11 @@ String template = request.getParameter("template");
                                     $(inputTheme).appendTo(custOptionEle);*/
                                     $(inputTheme).insertBefore("#addNewTheme");
                                     $(".themesSelectEle").val(data.name);
+                                    $("#applyThemeBody").html("Are you sure you want to apply or delete <strong>"+$(".themesSelectEle").val()+"</strong> theme?");
+                                    $("#header").css("z-index","0");
+                                    $(".popover").css("z-index","50");
+                                    $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+
                                    }
                                   },
                                   error: function(){
@@ -598,11 +603,7 @@ String template = request.getParameter("template");
                           $('#customThemeModal').modal('hide');
                           $("#errorSpan").text("");
                           $("#themeName").val("");
-                          /*$("#header").css("z-index","2001");
-                          $(".popover").css("z-index","2000");*/
-                          $("#header").css("z-index","0");
-                          $(".popover").css("z-index","50");
-                          $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+                          
                         }
                         
                       }
@@ -721,7 +722,7 @@ String template = request.getParameter("template");
                         else{
                           $("#header").css("z-index","0");
                           $(".popover").css("z-index","50");
-                          $("#applyThemeBody").html("Are you sure you want to delete or apply <strong>"+$(".themesSelectEle").val()+"</strong> theme?");
+                          $("#applyThemeBody").html("Are you sure you want to apply or delete <strong>"+$(".themesSelectEle").val()+"</strong> theme?");
                           $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
                           }
                   });
@@ -809,7 +810,6 @@ String template = request.getParameter("template");
           position: relative;
           display: block;
       }
-
       .modal-footer .checkbox label{
             min-height: 20px;
           padding-left: 20px;
@@ -825,8 +825,6 @@ String template = request.getParameter("template");
           line-height: 1.69;
           color: #58666e;
       }
-
-
       .close-button{
           outline:none;
           color: #fff!important;
