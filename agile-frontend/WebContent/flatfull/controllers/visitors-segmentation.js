@@ -56,14 +56,17 @@ var VisitorsSegmentationRouter = Backbone.Router
                 postData = _agile_get_prefs('dynamic_visitors_filter');
             }
             
-            if(!visitorsUtils.hasProperFilter(postData))
-            {           
-              postData = undefined;
-              _agile_delete_prefs('dynamic_visitors_filter');
-              if(is_lhs_filter)
-                return;
-              else
-               	clearLhsFilters();
+            if(typeof postData !== "undefined" && postData)
+            {
+            	if(!visitorsUtils.hasProperFilter(postData))
+	            {           
+	              postData = undefined;
+	              _agile_delete_prefs('dynamic_visitors_filter');
+	              if(is_lhs_filter)
+	                return;
+	              else
+	               	clearLhsFilters();
+	            }
             }
 
             var slateKey = getSegmentPadcontentKey(url);
@@ -184,7 +187,7 @@ var visitorsUtils = {
 				 contentType: "application/x-www-form-urlencoded",
 				 url: "core/api/web-stats/visitors/filter/dynamic-filter",
 				 success: function(visitors) {
-					 if(typeof visitors!= undefined && visitors)
+					 if(typeof visitors!== "undefined" && visitors)
 					 {
 					 	 collectionView.collection.add(visitors);
 					 	 if(collectionView.collection.length > 0)
@@ -212,7 +215,7 @@ var visitorsUtils = {
 		hasProperFilter : function(postData)
 		{
 			var hasProperFilter = false;
-			if(typeof postData!=undefined && postData)
+			if(typeof postData!=="undefined" && postData)
 			{
 				var rules = JSON.parse(postData).rules;
 				for(var i=0;i<rules.length;i++)
@@ -238,15 +241,15 @@ var visitorsUtils = {
 		    var model = collection.at(collection.length-1).toJSON();
 		    var el = $(collectionView.el);
 		    
-		    if(typeof model.has_results != "undefined" && model.has_results)
+		    if(typeof model.has_results !== "undefined" && model.has_results)
 		    {
 		      visitorsUtils.completeRequestCycle(collectionView);
-		      if(typeof model.has_emails != "undefined" &&  !(model.has_emails))
+		      if(typeof model.has_emails !== "undefined" &&  !(model.has_emails))
 		    	  visitorsUtils.hideNotification(el);
 		      visitorsUtils.removeInfoModel(collectionView);
 		      visitorsUtils.showCollectionView(collectionView);
 		    }
-		    else if(typeof model.has_emails !="undefined" && !model.has_emails)
+		    else if(typeof model.has_emails !== "undefined" && !model.has_emails)
 		    {
 		       visitorsUtils.removeInfoModel(collectionView);
 		       visitorsUtils.hideNotification(el);
@@ -292,7 +295,7 @@ var visitorsUtils = {
 		    var delay=200;
 		    setTimeout(function() {
 		    	//code to be executed after 200 milli seconds
-		    	if(typeof model.scannedUpto != undefined && model.scannedUpto)
+		    	if(typeof model.scannedUpto !== "undefined" && model.scannedUpto)
 		    		message_id.find("#scanned_upto").html("Scanned upto "+ model.scannedUpto);
 		    	//message_id.append("<span id=\"scanned_upto\" style=\"margin-left:35%;\"> Loading... Scanned upto " + model.scannedUpto);
 		    },delay);
