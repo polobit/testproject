@@ -532,7 +532,7 @@ function nodeLevelValidation(nodeName, callbackFunction){
 			if(data == 0)
          	{
          		// Display error message
-         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x' style='color:red'><i>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: blue'>here</a> to enable.</i></p>").addClass('ui-state-highlight');
+         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x' style='color:red'><i>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: #19a9d5;!important ;text-decoration: none;'>here</a> to enable.</i></p>").addClass('ui-state-highlight');
          		return callbackFunction(false);    		
          	}
          	else
