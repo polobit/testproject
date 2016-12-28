@@ -399,9 +399,12 @@ public class DealsAPI
 	
 	opportunity.save();
 	
-	List<Contact> relatedContactsOldList = oldOpportunity.relatedContacts();
-	List<Contact> relatedContactsList = opportunity.relatedContacts();
-	
+	List<Contact> relatedContactsOldList =  new ArrayList<Contact>() ;
+	List<Contact> relatedContactsList =  new ArrayList<Contact>() ; 
+	if(oldOpportunity != null && opportunity != null){
+		relatedContactsOldList = oldOpportunity.relatedContacts();
+		relatedContactsList = opportunity.relatedContacts();
+	}
 	if(relatedContactsOldList != null && relatedContactsOldList.size() > 0)
 	{
 		relatedContactsList.addAll(relatedContactsOldList);
