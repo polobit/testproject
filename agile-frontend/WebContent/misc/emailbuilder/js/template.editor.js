@@ -1245,9 +1245,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     });
 
 
-    $(".demo .column").sortable({connectWith: ".column", opacity: .35, handle: ".drag"});
+    $(".demo .column").sortable({connectWith: ".column", opacity: .35, handle: ".drag",axis:"y"});
     $(".sidebar-nav .lyrow").draggable({connectToSortable: ".column", helper: 'clone',
         stop: function (e, t) {
+            $('html, body').animate({scrollTop: $('body').offset().top}, 500);
             handleObjects();
             $(".demo .column").sortable({opacity: .35, connectWith: ".column"});
             $(".demo .column .lyrow").find('.drag').removeClass('hide');
