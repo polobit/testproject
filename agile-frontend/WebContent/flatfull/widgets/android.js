@@ -1,5 +1,3 @@
-
-
 function loadAndroidEvents(){
 	$('body').off('click', '.noty_android_cancel');
 	$('body').on('click', '.noty_android_cancel', function(e){
@@ -9,6 +7,7 @@ function loadAndroidEvents(){
 	});
 }
 
+var isAndNotificationCame = false;
 loadAndroidEvents();
 
 function saveCallNoteAndroid(message){
@@ -122,6 +121,7 @@ function saveCallNoteAndroid(message){
 
 function androidCallNoty(message){
 	if(message){
+		isAndNotificationCame = true;
 		var callDirection = message.direction;
 		var state = message.state;
 		var customerNumber = message.contact_number;
@@ -141,7 +141,8 @@ function androidCallNoty(message){
 
 			if(eventType == "CDR"){		
 				closeCallNoty(true);	
-				saveCallNoteAndroid(message);			
+				saveCallNoteAndroid(message);	
+				isAndNotificationCame = false;		
 			}
 		}
 	}	
@@ -156,7 +157,7 @@ function appDialer(to, contact){
 		globalCall.contactedContact = contact;
 		globalCall.callNumber = to;
 
-		to = to.replace("+", "%2B");		
+		to = to.replace("+", "%2B");
 
 		var requestURL = "core/api/widgets/android/call?phone_number="+to;	 
 	 	console.log(requestURL);
@@ -167,7 +168,12 @@ function appDialer(to, contact){
 	 		success : function(result) {
 	 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
 				showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
-				
+				setTimeout(function(){ 
+					if(!isAndNotificationCame){
+						closeCallNoty(true);
+					}
+				}, 10000);
+
 	 			console.log("android *** success : "+ JSON.stringify(result));	 			
 	 			console.log(to + " : "+ contact);	
 	 			//androidCallNoty(result);			
