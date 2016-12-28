@@ -15,6 +15,9 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
+import sun.security.krb5.internal.Ticket;
+
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.AccountPrefsUtil;
@@ -244,7 +247,10 @@ public class TicketNotesUtil
 		}
 		
 		
-		long lastNoteId = notesList.get(notesList.size() -1).id;
+		long lastNoteId = ticket.last_notes_key.getId();
+				
+		System.out.println(lastNoteId+"notes list sree");
+		
 		//creating encoded urls for feedback
 		for(int i=1;i<=5;i++ ){
 			
