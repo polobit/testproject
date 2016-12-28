@@ -329,11 +329,11 @@ var localeJSON = <%=localeJSON%>;
                         if (!bySetColor){
                             $(el).parent().find(".color-preview").css('background-color', '#' + hex);
                             $(el).parent().find(".hex-col-val").text('#' + hex);
-                            $('#tosave').find('#primary .main:not(.bg-color-added)').css('background-color', '#' + hex);
+                            $('#tosave').find('#primary .main:not([data-color=true])').css('background-color', '#' + hex);
                         }
                 },
                 onSubmit: function (hsb, hex, rgb, el) {
-                    $('#tosave').find('#primary .main:not(.bg-color-added)').css('background-color', '#' + hex);
+                    $('#tosave').find('#primary .main:not([data-color=true])').css('background-color', '#' + hex);
                     $(el).colpickHide();
                 }
                 }).keyup(function () {
@@ -985,12 +985,12 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                                 $(el).parent().find(".color-preview").css('background-color', '#' + hex);
                                 $(el).parent().find(".hex-col-val").text('#' + hex);
                                 $('#' + $('#path').val()).css('background-color', '#' + hex);
-                                $('#' + $('#path').val()).addClass('bg-color-added');
+                                $('#' + $('#path').val()).attr('data-color',true);
                             }
                     },
                     onSubmit: function (hsb, hex, rgb, el) {
                         $('#' + $('#path').val()).css('background-color', '#' + hex);
-                        $('#' + $('#path').val()).addClass('bg-color-added')
+                        $('#' + $('#path').val()).attr('data-color',true);
                         $(el).colpickHide();
                     }
                     }).keyup(function () {

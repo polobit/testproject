@@ -1448,8 +1448,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#customize').find('#background-color .hex-col-val').text(rgb2hex($('#tosave').find('table:first').css('background-color').replace("#","")));
 
         //template content area background color
-        $('#customize').find('#content-bg-color .color-preview').css('background-color', rgb2hex($('#tosave').find('#primary .main').css('background-color').replace("#","")));
-        $('#customize').find('#content-bg-color .hex-col-val').text(rgb2hex($('#tosave').find('#primary .main').css('background-color').replace("#","")));
+        $('#customize').find('#content-bg-color .color-preview').css('background-color', rgb2hex($('#tosave').find('#primary .main:not([data-color=true])').css('background-color').replace("#","")));
+        $('#customize').find('#content-bg-color .hex-col-val').text(rgb2hex($('#tosave').find('#primary .main:not([data-color=true])').css('background-color').replace("#","")));
 
         //template font color
         $('#customize').find('#font-color .color-preview').css('background-color', rgb2hex($('#tosave').find('.textFix:first').css('color').replace("#","")));
