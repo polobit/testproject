@@ -1,7 +1,7 @@
 {"elements": {
     "{{agile_lng_translate 'landingpage-builder' 'header'}}":[
-    	{"url":"elements/header11.html","height":567, "thumbnail":"elements/images/thumbs/header10.png"},
-    	{"url":"elements/header5.html","height":694, "thumbnail":"elements/images/thumbs/header5.png"}
+    	{"url":"elements/header11.html","height":70, "thumbnail":"elements/images/thumbs/header10.png"},
+    	{"url":"elements/header5.html","height":70, "thumbnail":"elements/images/thumbs/header5.png"}
     	
     ],
     "{{agile_lng_translate 'landingpage-builder' 'content'}}":[
@@ -9,7 +9,7 @@
         {"url":"elements/header2.html","height":498, "thumbnail":"elements/images/thumbs/header2.png"},
         {"url":"elements/header3.html","height":500, "thumbnail":"elements/images/thumbs/header3.png"},
         {"url":"elements/header4.html","height":500, "thumbnail":"elements/images/thumbs/header4.png"},
-    	{"url":"elements/content_section12.html","height":376, "thumbnail":"elements/images/thumbs/content_section11.png"},
+    	{"url":"elements/content_section12.html","height":376, "thumbnail":"elements/images/thumbs/content_section12.png"},
     	{"url":"elements/content_section3.html","height":774, "thumbnail":"elements/images/thumbs/content_section3.png"},
     	{"url":"elements/content_section4.html","height":331, "thumbnail":"elements/images/thumbs/content_section4.png"},
     	{"url":"elements/content_section5.html","height":846, "thumbnail":"elements/images/thumbs/content_section5.png"},
@@ -19,12 +19,16 @@
     	{"url":"elements/content_section10.html","height":376, "thumbnail":"elements/images/thumbs/content_section10.png"},
     	{"url":"elements/content_section11.html","height":376, "thumbnail":"elements/images/thumbs/content_section11.png"}
     ],
-    "{{agile_lng_translate 'landingpage-builder' 'contents-media'}}":[
+    "{{agile_lng_translate 'landingpage-builder' 'layout'}}":[
         {"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/content_section1.png"},
         {"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/content_section2.png"},
-        {"url":"elements/content_section9.html","height":567, "thumbnail":"elements/images/thumbs/content_section9.png"}
+        {"url":"elements/content_section9.html","height":500, "thumbnail":"elements/images/thumbs/content_section9.png"},
+        {"url":"elements/layout1.html","height":500, "thumbnail":"elements/images/thumbs/layout1.png"},
+        {"url":"elements/layout2.html","height":500, "thumbnail":"elements/images/thumbs/layout2.png"},
+        {"url":"elements/layout3.html","height":500, "thumbnail":"elements/images/thumbs/layout3.png"},
+        {"url":"elements/layout4.html","height":500, "thumbnail":"elements/images/thumbs/layout4.png"},
+        {"url":"elements/layout5.html","height":500, "thumbnail":"elements/images/thumbs/layout5.png"}
     ],
-    "{{agile_lng_translate 'landingpage-builder' 'layout'}}":[],
     "{{agile_lng_translate 'landingpage-builder' 'form'}}":[
         {"url":"elements/agileform1.html","height":700, "thumbnail":"elements/images/thumbs/agileform1.png"},
         {"url":"elements/agileform2.html","height":700, "thumbnail":"elements/images/thumbs/agileform2.png"},
