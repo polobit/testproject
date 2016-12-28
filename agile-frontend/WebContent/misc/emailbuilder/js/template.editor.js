@@ -374,17 +374,17 @@ function handleObjects() {
                         }
 
 
-                        $('input.social-input[name="facebook"]').val(self.find('a.facebook').attr('href'));
+                        /*$('input.social-input[name="facebook"]').val(addhttp(self.find('a.facebook').attr('href')));
 
-                        $('input.social-input[name="twitter"]').val(self.find('a.twitter').attr('href'));
+                        $('input.social-input[name="twitter"]').val(addhttp(self.find('a.twitter').attr('href')));
 
-                        $('input.social-input[name="linkedin"]').val(self.find('a.linkedin').attr('href'));
+                        $('input.social-input[name="linkedin"]').val(addhttp(self.find('a.linkedin').attr('href')));
 
-                        $('input.social-input[name="youtube"]').val(self.find('a.youtube').attr('href'));
+                        $('input.social-input[name="youtube"]').val(addhttp(self.find('a.youtube').attr('href')));
 
-                        $('input.social-input[name="instagram"]').val(self.find('a.instagram').attr('href'));
+                        $('input.social-input[name="instagram"]').val(addhttp(self.find('a.instagram').attr('href')));
 
-                        $('input.social-input[name="pinterest"]').val(self.find('a.pinterest').attr('href'));
+                        $('input.social-input[name="pinterest"]').val(addhttp(self.find('a.pinterest').attr('href')));*/
 
                         hideAllSettings();
                         $('#settings').show();
@@ -876,6 +876,11 @@ $(document).ready(function () {
          
     });
 
+    $(document).on('change', 'input.social-input', function(e){
+        console.log("hai"+e);
+         $('input.social-input[name="'+e.target.name+'"]').val($(this).val().length >0 ? addhttp($(this).val()) : $(this).val());
+    });
+
     
     // paddings functions;
     $(document).on('change', '#ptop,#pbottom,#pleft,#pright', function (e) {
@@ -1253,9 +1258,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
             $(".demo .column .lyrow").find('.drag').removeClass('hide');
             $('.font-family-picker').trigger('change');
             $('.font-size-picker').trigger('change');
-            $('.line-height-picker').trigger('change');     
-            $('#tosave').find('.textFix').css('color', $('#font-color').find('.hex-col-val').text());
-            $('#tosave').find('#primary .main').css('background-color', $('#content-bg-color').find('.hex-col-val').text());
+            $('.line-height-picker').trigger('change');
         }});
 
 
