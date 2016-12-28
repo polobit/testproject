@@ -130,7 +130,7 @@ function handleObjects() {
                     case 'title':
 
                         var titleElement = self.find('.title');
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         var fontcolor = titleElement.css('fontColor');
                         var text =        titleElement.html();
                         var fontsize =    titleElement.css('font-size');
@@ -141,7 +141,7 @@ function handleObjects() {
                         break;
 
                     case 'text-block' :
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         var fontcolor = $('#' + $('#path').val() + ' tbody tr td').css('fontColor');
                         var text = $('#' + $('#path').val()).find('div.textFix').html();
                         var fontsize = $('#' + $('#path').val()).find('div').css('font-size');
@@ -152,7 +152,7 @@ function handleObjects() {
                         break;
 
                     case 'image':
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('img');
@@ -166,8 +166,8 @@ function handleObjects() {
                         $('#image-url').val(img.attr('src'));
                         $('#image-url').data('id', imageid );
 
-                        $('#image-w').val(img.width());
-                        $('#image-h').val(img.height());
+                        $('#image-w').val(parseFloat(0 + img.attr("width")));
+                        $('#image-h').val(parseFloat(0 + img.attr("height")));
                         $('#image-alt-text').val(img.attr('alt'));
 
                         $('#video-link').val("");
@@ -185,7 +185,7 @@ function handleObjects() {
 
                         break;
                     case 'video-record':
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('img');
@@ -199,8 +199,8 @@ function handleObjects() {
                         $('#image-url').val(img.attr('src'));
                         $('#image-url').data('id', imageid );
 
-                        $('#image-w').val(img.width());
-                        $('#image-h').val(img.height());
+                        $('#image-w').val(parseFloat(0 + img.attr("width")));
+                        $('#image-h').val(parseFloat(0 + img.attr("height")));
                         $('#image-alt-text').val(img.attr('alt'));
 
                         $('#image-link').val("");
@@ -218,7 +218,7 @@ function handleObjects() {
                         break;
 
                     case 'imgtxtcol':
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
                         var img = self.find('tbody tr td table tbody tr td img');
@@ -234,8 +234,8 @@ function handleObjects() {
                         $('#image-url').val(img.attr('src'));
                         $('#image-url').data('id', imageid );
 
-                        $('#image-w').val(img.width());
-                        $('#image-h').val(img.height());
+                        $('#image-w').val(parseFloat(0 + img.attr("width")));
+                        $('#image-h').val(parseFloat(0 + img.attr("height")));
                         $('#image-alt-text').val(img.attr('alt'));
 
                         $('#video-link').val("");
@@ -252,7 +252,7 @@ function handleObjects() {
                         break;
 
                     case 'imgtxtincol':
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
 
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
@@ -272,7 +272,7 @@ function handleObjects() {
                         break;
 
                     case 'imgtxt':
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         //    $('#'+$('#path').val()).unbind('click');
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
@@ -292,8 +292,8 @@ function handleObjects() {
                         $('#image-url').val(img.attr('src'));
                         $('#image-url').data('id', imageid );
 
-                        $('#image-w').val(img.width());
-                        $('#image-h').val(img.height());
+                        $('#image-w').val(parseFloat(0 + img.attr("width")));
+                        $('#image-h').val(parseFloat(0 + img.attr("height")));
                         $('#image-alt-text').val(img.attr('alt'));
 
                         $('#video-link').val("");
@@ -312,7 +312,7 @@ function handleObjects() {
                     case 'line':
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         hideAllSettings();
                         $('#settings').show();
                         $('#content-tab').hide();
@@ -323,7 +323,7 @@ function handleObjects() {
                     case 'button':
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         hideAllSettings();
                         $('#settings').show();
                         handleButtons(self);
@@ -333,7 +333,7 @@ function handleObjects() {
 
                         $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                         $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         $('#selector').val('tr td');
 
 
@@ -396,7 +396,7 @@ function handleObjects() {
                     /*case 'user-poll':
 
                         $('#bgcolor').css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
-                        $('.selected-item').removeClass('selected-item').css('border', 'none');
+                        $('.selected-item').removeClass('selected-item').css('outline', 'none');
                         hideAllSettings();
                         handlePolls(self);
                         break;*/
@@ -1160,7 +1160,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
          */
         $("#settings").find("#image-link,#image-alt-text,#image-h,#video-link,#image-url").trigger('change');
         $('div.row').removeClass('active');
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        $('.selected-item').removeClass('selected-item').css('outline', 'none');
         // showElements();
         hideSettings();
         $('#block-drag').show();
@@ -1250,9 +1250,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     });
 
 
-    $(".demo .column").sortable({connectWith: ".column", opacity: .35, handle: ".drag"});
+    $(".demo .column").sortable({connectWith: ".column", opacity: .35, handle: ".drag",axis:"y"});
     $(".sidebar-nav .lyrow").draggable({connectToSortable: ".column", helper: 'clone',
         stop: function (e, t) {
+            $('html, body').animate({scrollTop: $('body').offset().top}, 500);
             handleObjects();
             $(".demo .column").sortable({opacity: .35, connectWith: ".column"});
             $(".demo .column .lyrow").find('.drag').removeClass('hide');
@@ -1265,7 +1266,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $("#save").click(function () {
 
         $('div.row').removeClass('active');
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        $('.selected-item').removeClass('selected-item').css('outline', 'none');
 
         downloadLayoutSrc();
 
@@ -1296,7 +1297,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $("#sendTestEmail").click(function () {
 
         $('div.row').removeClass('active');
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        $('.selected-item').removeClass('selected-item').css('outline', 'none');
 
         downloadLayoutSrc();
 
@@ -1345,7 +1346,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $("#sourcepreview").click(function (i) {
         i.preventDefault();
         $('div.row').removeClass('active');
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        $('.selected-item').removeClass('selected-item').css('outline', 'none');
         showElements();
 
         downloadLayoutSrc();
@@ -1388,7 +1389,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     });
 
     $('#tosave').on('click', 'td.imageInColumn img', function(e) {
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        $('.selected-item').removeClass('selected-item').css('outline', 'none');
         var img = $(this);
         var imageid = $(this).attr('id');
         $('#imageid').val(imageid);
@@ -1397,10 +1398,10 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $('#image-url').val($(this).attr('src'));
         $('#image-url').data('id', imageid );
 
-        $('#image-w').val($(this).width());
-        $('#image-h').val($(this).height());
+        $('#image-w').val(parseFloat(0 + img.attr("width")));
+        $('#image-h').val(parseFloat(0 + img.attr("height")));
         $('#image-alt-text').val($(this).attr('alt'));
-        $(this).css('border', '1px dotted red');
+        $(this).css('outline', '1px dotted red');
 
         $('#video-link').val("");
         $('#image-link').val("");
@@ -1421,7 +1422,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         var self = $(this).closest(".main");
 
-        $('.selected-item').removeClass('selected-item').css('border', 'none');
+        $('.selected-item').removeClass('selected-item').css('outline', 'none');
 
         var fontcolor = $(this).css('fontColor');
         var text =        $(this).html();
@@ -1431,7 +1432,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
 
         $('#selector').val(".selected-item");
         $(this).addClass('selected-item');
-        $(this).css('border','1px dotted red');
+        $(this).css('outline','1px dotted red');
 
         storeValues(self, fontcolor, text, fontsize, fontfamily, background);
     });

@@ -60,6 +60,9 @@ var localeJSON = <%=localeJSON%>;
 .mce-btn button {
     padding: 2px 4px !important;
 }
+.mce-listbox button {
+    padding-right: 15px !important;
+}
 .main {
     width: 638px !important;
 }
@@ -396,7 +399,7 @@ var localeJSON = <%=localeJSON%>;
 
 
  <!-- settings popup start -->
-<div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
+<div class="hide" id="settings" style="height:625px;overflow-y:auto;overflow-x:hidden;">
 
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
@@ -807,7 +810,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                                     </div>
 
                                     <div class="input-group fontcolor" style="margin-bottom: 5px">
-                                        <span class="input-group-addon" style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "bg-color") %></span> <span class="input-group-addon pickerTxt"
+                                        <span class="input-group-addon" style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-color") %></span> <span class="input-group-addon pickerTxt"
                                             data-color="font"></span>
 
                                         <script type="text/javascript">
