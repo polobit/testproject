@@ -25,7 +25,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
-import com.amazonaws.services.simpleemail.model.Message;
 import com.agilecrm.user.EmailPrefs;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -49,7 +48,29 @@ public class EmailUtil
      * Live open email track url
      */
     public static final String LIVE_OPEN_TRACKING_URL = "http://open.agle.me";
-
+    
+    /**
+     * Live powered by url agilecrm.com
+     */
+    public static final String POWERED_BY_URL_AGILECRM = "https://www.agilecrm.com?utm_source=powered-by";
+    
+    /**
+     * Live powered by url crm.io
+     */
+    public static final String POWERED_BY_URL_CRM = "http://www.crm.io?utm_source=powered-by";
+    
+    /**
+     * Live powered by url agle.me
+     */
+    public static final String POWERED_BY_URL_AGLE_ME = "http://www.agle.me?utm_source=powered-by";
+    
+    /**
+     * Live powered by url agle1.me
+     */
+    public static final String POWERED_BY_URL_AGLE2_ME = "http://www.agle2.me?utm_source=powered-by";
+    
+    
+    
     /**
      * Parses html body of an email using jsoup.
      * 
@@ -150,7 +171,7 @@ public class EmailUtil
 	    EmailSender emailSender = EmailSender.getEmailSender();
 
 	    // Agile label to outgoing emails
-	    html = appendAgileToHTML(html, "email", "Sent using", emailSender.isEmailWhiteLabelEnabled());
+	    html = appendAgileToHTML(html, "email", "Sent using", emailSender.isEmailWhiteLabelEnabled(), true);
 	    text = appendAgileToText(text, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds,
@@ -214,10 +235,13 @@ public class EmailUtil
      *            - utm medium type like campaign, personal
      * @return String
      */
-    public static String getPoweredByAgileURL(String medium)
+    public static String getPoweredByAgileURL(String medium, boolean emailCategory)
     {
-	return "http://www.crm.io?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
-	        + NamespaceManager.get();
+    	if(emailCategory)
+	          return POWERED_BY_URL_AGLE_ME + "&utm_medium=" + medium + "&utm_campaign=" + NamespaceManager.get();
+    
+    	return POWERED_BY_URL_AGLE2_ME + "&utm_medium=" + medium + "&utm_campaign=" + NamespaceManager.get();
+    
     }
 
     /**
@@ -225,9 +249,9 @@ public class EmailUtil
      * @param medium
      * @return
      */
-    public static String getPoweredByAgileLink(String medium, String labelText)
+    public static String getPoweredByAgileLink(String medium, String labelText, boolean emailCategory)
     {
-	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
+	return labelText + " <a href=\"" + getPoweredByAgileURL(medium, emailCategory)
 	        + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
@@ -240,19 +264,19 @@ public class EmailUtil
      *            - utm medium type like campaign, personal
      * @return String
      */
-    public static String appendAgileToHTML(String html, String medium, String labelText, boolean isWhiteLableEnabled)
+    public static String appendAgileToHTML(String html, String medium, String labelText, boolean isWhiteLableEnabled, boolean emailCategory)
     {
 
 	// Returns only html if Agile label exits
-	if (isWhiteLableEnabled || StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by") || StringUtils.contains(html, "http://www.crm.io?utm_source=powered-by")
+	if (isWhiteLableEnabled || StringUtils.isBlank(html) || StringUtils.contains(html, POWERED_BY_URL_AGLE_ME) || StringUtils.contains(html, POWERED_BY_URL_AGLE2_ME) || StringUtils.contains(html, POWERED_BY_URL_AGILECRM) || StringUtils.contains(html, POWERED_BY_URL_CRM)
 	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com"))
 	    return html;
 
 	// For Campaign HTML emails, Powered by should be right aligned
 	if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-	    html = replaceLastOccurence(html, "</body>", "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>");
+	    html = replaceLastOccurence(html, "</body>", "<div style=\"float:right;margin-top:5px\">" + getPoweredByAgileLink(medium, labelText, emailCategory) + "</div>");
 	else
-	    html = replaceLastOccurence(html, "</body>", "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText) + "</div>");
+	    html = replaceLastOccurence(html, "</body>", "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText, emailCategory) + "</div>");
 
 	return html;
     }

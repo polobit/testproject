@@ -1,7 +1,6 @@
 package com.agilecrm.sendgrid.util;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,6 +14,7 @@ import com.agilecrm.AgileGlobalProperties.SendGridIpPools;
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
@@ -122,6 +122,9 @@ public class SendGridUtil
 
 	    // To split json
 	    JSONArray tempArray = new JSONArray();
+	    
+	    //To check email is transactional or not
+	    boolean emailCategory = EmailGatewayUtil.isEmailCategoryTransactional(emailSender);
 
 	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
@@ -134,7 +137,7 @@ public class SendGridUtil
 		    {
 			// Appends Agile label
 			mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
-				EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+				EmailUtil.getPoweredByAgileLink("campaign", "Powered by", emailCategory), "Sent using Agile");
 			mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
 				emailSender.isEmailWhiteLabelEnabled());
 		    }
@@ -143,9 +146,9 @@ public class SendGridUtil
 		    // html
 		    if (!StringUtils.isBlank(mailDeferredTask.html)
 			    && !StringUtils.contains(mailDeferredTask.html,
-				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by", emailCategory)))
 			mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
-				"Powered by", emailSender.isEmailWhiteLabelEnabled());
+				"Powered by", emailSender.isEmailWhiteLabelEnabled(), emailCategory);
 		}
 
 		// If same To email or CC or BCC exists, send email without
@@ -273,7 +276,9 @@ public class SendGridUtil
 	}
     }
 
-    /**
+   
+
+	/**
      * Returns constructed SMTP JSON
      * 
      * @param json
