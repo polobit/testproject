@@ -13,18 +13,31 @@ function load_imap_folders(el, model) {
 }
 
 function load_office_folders(el, model) {
+
 	var id = model.id;
-	var optionsTemplate = "<option {{selected}}>{{name}}</option>";
-	fillSelect('office-folders-multi-select', '/core/api/office/' + id
-			+ '/office-folders', 'folders', function fillNew() {
+	var optionsTemplate1 = "<option value='{{id}}' {{selected}}>{{name}}</option>";
+	var el1 = $('.office-share-settings-select', el).closest("div");
+	fillSelect('office-share-user-select', 'core/api/office/shared-to-users?id='
+			+ id, 'users', function fillNew() {
+		$("#office-share-user-select .default-select", el).remove();
+		$(".office-share-select .loading", el).hide();
+	}, optionsTemplate1, false, el1);
+
+	var el2 = $('.office-folders-settings-click', el).closest("div");
+	var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
+	fillSelect('office-folders-multi-select', 'core/api/office/folders/' + id,
+		 'folders', function fillNew() {
 		$("#office-folders-multi-select .default-select", el).remove();
 
-	}, optionsTemplate, false, el);
-	var el2 = $(".office-folders-settings-click", el).closest("div");
-	$(".office-folders-settings-click", el).css("display", "none");
-	el2.find(".imap-folders-settings-txt").css("display", "none");
-	el2.find(".office-folders-select").css("display", "inline");
+	}, optionsTemplate2, false, el2);
+	
+	var el3 = $('.office-folders-settings-click', el).closest("div");
+	el3.find(".office-folders-settings-click").removeClass("text-info").removeAttr("style").addClass("m-b-md");
+	el3.find("#icon_id").removeClass("icon-plus-sign").addClass("icon-minus-sign");
+	el3.find(".office-folders-select").show();
+	el3.find(".office-folders-select").css("display", "inline");
 }
+
 
 function load_gmail_widgets(limit) {
 	// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
@@ -206,8 +219,8 @@ function load_office_properties(model, el) {
 
 	var el2 = $('.office-folders-settings-click', el).closest("div");
 	var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
-	fillSelect('office-folders-multi-select', 'core/api/office/' + id
-			+ '/office-folders', 'folders', function fillNew() {
+	fillSelect('office-folders-multi-select', 'core/api/office/folders/' + id,
+		 'folders', function fillNew() {
 		$("#office-folders-multi-select .default-select", el).remove();
 
 	}, optionsTemplate2, false, el2);

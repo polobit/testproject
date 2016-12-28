@@ -181,7 +181,7 @@ public class OfficePrefsAPI
     }
     
     
-    @Path("{id}/office-folders")
+    @Path("/folders/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
     public String getOfficeFolders(@PathParam("id") String sid)
@@ -228,7 +228,7 @@ public class OfficePrefsAPI
 	}
 	catch (Exception e)
 	{
-	    System.out.println("Got an exception in IMAPAPI while fetching folders: " + e.getMessage());
+	    System.err.println("Got an exception in Office365 while fetching folders: " + e.getMessage());
 	    e.printStackTrace();
 	}
 	return newFolders.toString();
