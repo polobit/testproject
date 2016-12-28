@@ -241,19 +241,15 @@ var localeJSON = <%=localeJSON%>;
     <div class="form-group">
         <div class="col-sm-4 control-label">Line Height</div>  
         <div class="col-sm-8">
-          <select class="form-control line-height-picker">
-                <option>2px</option>
-                <option>4px</option>
-                <option>6px</option>
-                <option>8px</option>
-                <option>10px</option>
-                <option>12px</option>
-                <option>14px</option>
-                <option>16px</option>
-                <option>18px</option>
-                <option>20px</option>
-                <option>22px</option>
-            </select>
+        <select class="form-control line-height-picker">
+            <option>16px</option>
+            <option>18px</option>
+            <option>20px</option>
+            <option>22px</option>
+            <option>24px</option>
+            <option>26px</option>
+            <option>28px</option>
+        </select>
         </div>
     </div>
 
