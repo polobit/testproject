@@ -12,6 +12,7 @@ import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -96,7 +97,7 @@ public class ContactOfficeUtil
 	if (OfficePrefs.is_secure)
 	    protocal = "https://";
 	
-	if (folderList != null)
+	if (folderList != null && fetch_items.equalsIgnoreCase("mails"))
 	{
 	    StringBuffer buffer = new StringBuffer();
 	    for (int i = 0; i < folderList.size(); i++)
@@ -107,8 +108,15 @@ public class ContactOfficeUtil
 	    }
 	    foldersString = buffer.toString();
 	}
+	
+	String applicationId = SystemProperty.applicationId.get();
 
-	String hostUrl = "http://54.234.153.217:80/agile-imap";
+	System.out.println("Application id is " + applicationId);
+
+	String hostUrl = "http://54.87.153.50:8080/exchange-app";
+	
+	if (StringUtils.equals(applicationId, "agilecrmbeta"))
+		hostUrl = "http://54.87.153.50:8080/exchange-app-beta";
 	
 	String url = null;
 
