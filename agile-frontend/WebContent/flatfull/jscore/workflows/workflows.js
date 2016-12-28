@@ -205,7 +205,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 {  
                     // showing a popup alert model for non connected nodes information
                     showModalConfirmation("Alert",
-                        "It seems some Nodes are not connected. Do you want to continue?",
+                        "It seems some nodes are not connected. Do you want to continue?",
                         function(){
                             // while click on continue button
                             // creating new workflow and show next action
@@ -241,7 +241,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
                 {   
                     var previousAttributes = App_Workflows.workflow_model.previousAttributes();
                     showModalConfirmation("Alert",
-                        "It seems some Nodes are not connected. Do you want to continue?",
+                        "It seems some nodes are not connected. Do you want to continue?",
                         function(){
                             // while click on continue button
                             // update previous workflow
