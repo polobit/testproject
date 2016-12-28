@@ -243,6 +243,16 @@ public class EmailUtil
     	return POWERED_BY_URL_AGLE2_ME + "&utm_medium=" + medium + "&utm_campaign=" + NamespaceManager.get();
     
     }
+    
+    /**
+     * This method is overloaded
+     * @param medium
+     * @return
+     */
+    public static String getPoweredByAgileURL(String medium)
+    {
+    	return getPoweredByAgileURL(medium, true);    
+    }
 
     /**
      * @param labelText
@@ -253,6 +263,18 @@ public class EmailUtil
     {
 	return labelText + " <a href=\"" + getPoweredByAgileURL(medium, emailCategory)
 	        + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
+    }
+    
+    /**
+     * This method is overloaded
+     * 
+     * @param medium
+     * @param labelText
+     * @return
+     */
+    public static String getPoweredByAgileLink(String medium, String labelText)
+    {
+	return getPoweredByAgileLink(medium, labelText, true);
     }
 
     /**
@@ -279,6 +301,18 @@ public class EmailUtil
 	    html = replaceLastOccurence(html, "</body>", "<div style=\"margin-top:5px\">" + getPoweredByAgileLink(medium, labelText, emailCategory) + "</div>");
 
 	return html;
+    }
+    
+    /**
+     * This method is overloaded
+     * @param html
+     * @param medium
+     * @param labelText
+     * @param isWhiteLableEnabled
+     * @return
+     */
+    public static String appendAgileToHTML(String html, String medium, String labelText, boolean isWhiteLableEnabled){
+    	return appendAgileToHTML(html, medium, labelText, isWhiteLableEnabled, true);
     }
 
     /**
