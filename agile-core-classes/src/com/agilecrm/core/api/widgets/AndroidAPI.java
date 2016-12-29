@@ -66,9 +66,9 @@ public class AndroidAPI {
 				token = agileUserPushNotificationId.registrationId;
 
 				System.out.println("token received = " + token);
+				long startTimeForCall = System.currentTimeMillis();
 
-				message = "callToBeta:" + phone_number + ":" + domain + ":"
-						+ agileUserPushNotificationId.domainUserId + "";
+				message = "callToBeta:" + phone_number + ":" + domain + ":" + agileUserPushNotificationId.domainUserId + ":" + startTimeForCall + "";
 				System.out.println("Message = " + message);
 				if (token != null) {
 					System.out.println("Sending...");
