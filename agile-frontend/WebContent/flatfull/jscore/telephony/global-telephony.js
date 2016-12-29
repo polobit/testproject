@@ -2,19 +2,41 @@ var default_call_option = { "callOption" : [] };
 var callOptionDiv = "" ;
 var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel"};
+var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity"};
 var dialled = {"using" : "default"};
 var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
 var callJar = {"running" : false};
+var KnowlarityWidgetPrefs;
+var knowlaritySource;
 var notifications_sound = true;
 var messagefromcallback = false;
 var outboundmessage = true;
+
+function knowlaritySetup(){
+	var requestURL = "core/api/widgets/knowlarity/getPrefs";
+	$.ajax({
+		url : requestURL,
+		type : "GET",	
+		success : function(result) {
+			if(result && result.length > 0){
+				console.log(result);
+				KnowlarityWidgetPrefs = JSON.parse(result);				
+				head.js('widgets/knowlarity.js', function(){ 
+					if(!knowlaritySource){
+						knowlarityEventsFinder(KnowlarityWidgetPrefs);
+					}					
+				});								
+			}
+		}
+	});
+}
+
 $(function()
 {
-//	initToPubNub();
+	//initToPubNub();
 	globalCallWidgetSet();
-	
+	knowlaritySetup();
 });
 
 function getContactImage(number, type, callback)

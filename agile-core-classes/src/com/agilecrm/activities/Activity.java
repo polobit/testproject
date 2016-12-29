@@ -107,6 +107,9 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     @Indexed
     public String note_id_call = null;
+    
+    @NotSaved(IfDefault.class)    
+    public String uuid = null;
 
     /**
      * List of contact keys related to a task

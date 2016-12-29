@@ -346,9 +346,12 @@ public class TasksAPI
 		}
     task.save();
     
-    List<Contact> relatedContactsList = oldTask.relatedContacts();
-	List<Opportunity> relatedDealsList = oldTask.relatedDeals();
-    
+    List<Contact> relatedContactsList = new ArrayList<Contact>();
+	List<Opportunity> relatedDealsList = new ArrayList<Opportunity>();
+    if(oldTask != null){
+    	relatedContactsList = oldTask.relatedContacts();
+    	relatedDealsList = oldTask.relatedDeals();
+    }    
     List<Contact> relatedConList = task.relatedContacts();
 	List<Opportunity> relatedDeList = task.relatedDeals();
 	
