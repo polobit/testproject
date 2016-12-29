@@ -990,7 +990,7 @@ function jsonioTest(button){
         window.parent.showModalConfirmation("Server Response",
             data,
             null,null,null                      
-            ,"{{agile_lng_translate 'contact-details' 'CLOSE'}}", "");       
+            ,"Close", "");       
     });
 }
 // Send the request through ajax and get the response data
