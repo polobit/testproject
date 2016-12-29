@@ -231,9 +231,12 @@ public class SendEmail extends TaskletAdapter
     /**
      * Unsubscribe link that is shortened
      */
-    private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
+    //private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
+    //private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
     
-    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
+    private static final String UNSUBSCRIBE_LINK = "http://list-manage.agle2.me/unsubscribe";
+    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://list-manage.agle2.me/unsubscribe";
+    
 
     /*
      * (non-Javadoc)
