@@ -181,6 +181,10 @@ public class JerseyApplication extends Application
 	
 	//Leads
 	s.add(com.agilecrm.core.api.leads.LeadsAPI.class);
+	
+	//JSONIO
+	s.add(com.agilecrm.core.api.JsonIOAPI.class);
+	
 	return s;
     }
 }
