@@ -40,6 +40,7 @@ cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
 cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
 cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
 cat flatfull/tpl/widget/klout/*.html > tpl/min/flatfull/klout.js
+cat flatfull/tpl/widget/knowlarity/*.html > tpl/min/flatfull/knowlarity.js
 cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
 cat flatfull/tpl/widget/sip/*.html > tpl/min/flatfull/sip.js
 cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js

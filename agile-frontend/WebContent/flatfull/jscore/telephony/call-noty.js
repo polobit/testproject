@@ -401,7 +401,7 @@ function showCallNotyMessage(message,type,position,timeout){
 		});
 }
 
-function showDraggableNoty(widgetName, contact, status, number, btns, json){
+function showDraggableNoty(widgetName, contact, status, number, btns, json, callDirection){
 	notifications_sound = false;
 	var callnotes = $("#agilecrm-container #call-noty-notes").val();
 	var w = widgetName;
@@ -417,7 +417,8 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json){
 	if(json){
 		c['callId'] = json.callId;
 	}
-	var txt = makeDraggableMessage(s);
+	console.log(" callDirection in method "+callDirection);
+	var txt = makeDraggableMessage(s, callDirection);
 	c['phone'] = n;
 	var msg = {};
 	msg['buttons'] = arr;
@@ -521,12 +522,16 @@ function showDraggablePopup(param, sms){
 	
 }
 
-function makeDraggableMessage(status){
-	
+function makeDraggableMessage(status, callDirection){
+	console.log("callDirection "+callDirection);
 	if(status == "connecting" || status == "outgoing" ){
 		return "Calling";
 	}else if(status == "ringing" || status == "incoming"){
-		return "Incoming call";
+		if(callDirection == "Outbound"){
+			return "Dialing";
+		}else{
+			return "Incoming call";
+		}		
 	}else if(status == "connected"){
 		return "On call";
 	}else if(status == "missedCall" || status == "missed"){

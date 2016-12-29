@@ -71,6 +71,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.widgets.HelpScoutWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.XeroWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.QuickBooksWidgetAPI.class);
+	s.add(com.agilecrm.core.api.widgets.KnowlarityAPI.class);	
 	s.add(com.agilecrm.core.api.widgets.FacebookWidgetsApi.class);
 	s.add(com.agilecrm.core.api.widgets.ChargifyWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.account.AccountDeletionAPI.class);

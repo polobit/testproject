@@ -1,0 +1,59 @@
+<script id="knowlarity-login-template" type="text/html">
+	<div>
+		<form  id="knowlarity_login_form" name="knowlarity_login_form" method="post">
+	    	<fieldset>	
+				<label><b>Please enter your knowlarity details</b></label>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="email" placeholder="Email" class="input-medium required widget_input_box form-control" value="" name="email">
+						</input>
+					</div>
+				</div>
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="apiKEY" placeholder="API key" class="input-medium required widget_input_box form-control" value="" name="apiKEY">
+						</input>
+					</div>
+				</div>	
+				<input type="text" id="knowlarity_channel" class="hidden" name="knowlarity_channel" value="Basic">
+				</input>												
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="knowlarityNumber" placeholder="Knowlarity Number" class="input-medium required widget_input_box form-control" value="" name="knowlarityNumber">
+						</input>
+					</div>
+				</div>												
+				<div class="control-group form-group">
+					<div class="controls">
+						<input type="text" id="agentNumber" placeholder="Agent Number" class="input-medium required widget_input_box form-control" value="" name="agentNumber">
+						</input>
+					</div>
+				</div>
+				<div class="text-center">		
+				<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}}</a>
+				</div>
+			</fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="knolarity-call-logs-template" type="text/html">
+{{#if logs.length}}
+	{{#each logs}}
+		<li class="list-group-item r-none b-l-none b-r-none">
+		    <i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle"></i>
+		    <div class="pull-left">Call unanswered</div>
+		    <div class="pull-right">{{this.call_duration}}</div>
+		    <div class="clearfix"></div>
+		    <small class="text-muted">
+		    	<i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i>
+		    	<time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time>
+		    </small>
+		    <div class="clearfix"></div>		    
+   		</li>
+	{{/each}}
+{{else}}
+	<li class="list-group-item r-none b-l-none b-r-none"> {{agile_lng_translate 'widgets' 'no-invoices'}} </li>
+{{/if}}
+</script>
