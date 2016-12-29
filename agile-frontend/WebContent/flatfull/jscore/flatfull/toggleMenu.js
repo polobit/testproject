@@ -1,7 +1,13 @@
 
 
 $('#app-aside-folded').on('click', function(e) {
+	
+	if(CURRENT_USER_PREFS.theme == "15") {
+		return;
+	}
+
 	e.preventDefault();
+		
 	/*$('.app-aside-folded-inactive .hidden-folded ,.app-aside-folded .navi > ul > li > a span').css('display','none');
 	
 	if ($('#wrap').hasClass("app-aside-folded") ) {
@@ -15,13 +21,13 @@ $('#app-aside-folded').on('click', function(e) {
 	$('#wrap').toggleClass('app-aside-folded');
     if( $('#wrap').hasClass('app-aside-folded')) {
 		console.log("folded");
-		$("#app-aside-folded i").removeClass("fa-dedent");
-		$("#app-aside-folded i").addClass("fa-indent");
+
+		$("#app-aside-folded i.fa").removeClass("fa-dedent").addClass("fa-indent");
+		
 		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
-		$("#app-aside-folded i").removeClass("fa-indent");
-		$("#app-aside-folded i").addClass("fa-dedent");
+		$("#app-aside-folded i.fa").removeClass("fa-indent").addClass("fa-dedent");
 		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
@@ -30,9 +36,8 @@ $('#app-aside-folded').on('click', function(e) {
 	$('.highcharts-container').each(function(chart) {
 		$(this).parent().highcharts().reflow();
 	});
-	
 
-    
+	
 	});
 
 
@@ -51,6 +56,12 @@ function showTrailAlertMessage(){
 
 	
 $(document).ready(function(){
+
+// Add agile-menu active class to li element
+try{
+	/* $("#rolecontainer").text(CURRENT_DOMAIN_USER.role); */
+	/*$("aside a[href=" + window.location.hash + "]").closest("li").addClass("agile-menuactive");	*/
+}catch(e){}
 
 //helpContentPopover();
 $('body').on('click','#speechDectation',function(e){
@@ -77,6 +88,19 @@ $("#prefsDropdownModal").on('click','#clickdesk_live_chat',function(e){
 		$(this).closest(".modal").modal("hide");
 		$(this).closest(".dropdown").removeClass("open");
 		CLICKDESK_LIVECHAT.show();
+});
+
+$("#prefsDropdownModal").on('click','#showUserVoice',function(e){
+		if(typeof UserVoice != undefined){
+			if(!agile_is_mobile_browser())
+				load_user_voice('lib/user-voice.js', function(){
+				$(".uservoice-window")[0].click();
+			});
+		}		
+		/*setTimeout(function(){
+		$(".uservoice-window")[0].click();
+		},100);*/
+
 });
 
 $("#help-options").click(function(e){
@@ -438,12 +462,18 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	}
 
 	$( '#advanced-search-fields-group a' ).on( 'click', function( event ) {
+		if(!isTargetAnInputField(event)){
+	   		event.preventDefault();
+	   	}
+
+	   event.stopImmediatePropagation();
 
    	   var $target = $( event.currentTarget ),
        $inp = $target.find( 'input' );
-       if(!$inp.closest("li").hasClass("disabled"))
+       if(!$inp.closest("li").hasClass("disabled") && !isTargetAnInputField(event)){
        		$inp.prop( 'checked', !$inp.is(":checked") );
-
+       }
+       	
        var $allitems = $("#advanced-search-fields-group a input"),
        $inputs = $allitems.not($inp),
        $items = $inputs.closest("li");
@@ -461,7 +491,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	   var list = $allitems.not("[value='']").filter(':checked').map(function(){return $(this).prop("value");}).get();	
 	   // console.log(list);
 	   _agile_set_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id,JSON.stringify(list));     	   
-	   return false;
+	   // return false;
 	});
 
 	var search_filters = _agile_get_prefs('agile_search_filter_'+CURRENT_DOMAIN_USER.id),
@@ -497,7 +527,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 	}
 
 	/*saving the click event when clicking on the heading on the drop-down navbar */
-	$(".appaside.dropdownnavbar").on("click",function(e)
+	/*$(".appaside.dropdownnavbar").on("click",function(e)
 	{
 		e.stopPropagation();
 		if($(this).hasClass("agile-menuactive"))
@@ -526,9 +556,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 					console.log("error");
 					}});
 	 		return;
-	});
+	});*/
 	/*click event for toggling the active class when clicked on the li items */
-	$(".appaside.dropdownnavbar ul li").on("click",function(e)
+/*	$(".appaside.dropdownnavbar ul li").on("click",function(e)
 	{
 		e.stopPropagation();
 		if(agile_is_mobile_browser())
@@ -538,13 +568,16 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
 			}
 		else
 			{
+				var prevRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
 				$(".appaside.dropdownnavbar ul li").removeClass("agile-menuactive")
 				$(this).addClass("agile-menuactive");
 				$(".active").removeClass("active");
 				$(".appaside.dropdownnavbar").removeClass("agile-menuactive");
 				$(this).closest(".appaside.dropdownnavbar").addClass("agile-menuactive");
+				var currentRole = $(".appaside.dropdownnavbar ul li.agile-menuactive").closest(".appaside.dropdownnavbar").attr("data-service-name");
+				$("html").removeClass("agile-theme-"+prevRole).addClass("agile-theme-"+currentRole);
 			}
-	});
+	});*/
 	// initializing need help popover for header page
    $(".need_help").popover({ 
    					placement : $(this).attr("data-placement"),
@@ -556,7 +589,9 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     			}).on("show.bs.popover", function(e){ 
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
-    			}); 
+    			});
+    			
+    	initRolehandlers();
 
     /*$('#searchText').on('focus', function () {
 	    $(this).parent().find("label").toggleClass('active');
@@ -596,38 +631,54 @@ function initRolehandlers(){
 	$(".menu-service-select[data-service-name='" + CURRENT_DOMAIN_USER.role + "']").addClass("active");
 
 	// Menu Items select
-	$(".menu-service-select").unbind("click").click(function(e){
+ 			$(".menu-service-select").unbind("click").click(function(e){
  			e.preventDefault();
 
  			var serviceName = $(this).attr("data-service-name");
+
  			if(!serviceName)
- 				  return;
+ 				return;
 
  			var dashboardName = $(this).attr("data-dashboard");
  			if(!dashboardName)
  				 dashboardName = "dashboard";
 
- 			// Update user with the current service
- 			// Close popup
- 			if(CURRENT_DOMAIN_USER.role != serviceName)
- 				updateDashboardRole(serviceName);
+ 			$(".rolecontainer").text(serviceName);
+ 			$('html').removeClass("agile-theme-"+CURRENT_DOMAIN_USER.role).addClass("agile-theme-" + serviceName);
 
+ 			/*set the role before the call to load the dashboard */
+ 			CURRENT_DOMAIN_USER.role = serviceName;
+ 			// Update user with the current service
+ 			var json = {};
+ 			json.id = CURRENT_DOMAIN_USER.id;
+ 			json.role = serviceName;
+ 			var Role = Backbone.Model.extend({url : '/core/api/users/update-role'});
+ 			new Role().save( json, 
+ 						{success :function(model, response){
+ 							console.log("success");
+ 							console.log(model);
+ 							CURRENT_DOMAIN_USER = model.toJSON();
+ 						}, 
+ 						error: function(model, response){
+							console.log("error");
+ 						}});
+
+ 			// Close popup
  			// $("div.app-content-body div:first-child").click();
  			$(this).parents(".popover").popover('hide');
+
  			// Update dashboard name here
  			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, dashboardName);
 
  			var due_tasks_count = $("#due_tasks_count").text();
  			due_tasks_count = due_tasks_count ? due_tasks_count : "";
- 			$(".appaside.dropdownnavbar").removeClass("agile-menuactive").removeClass("active");;
- 			$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").addClass("agile-menuactive");
- 			// Update UI
- 			//$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
 
- 			/*$("#agile-"+serviceName.toLowerCase()+"-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
-*/
+ 			// Update UI
+ 			$("#agile-menu-navigation-container").html(getTemplate(serviceName.toLowerCase() + "-menu-items", {due_tasks_count : due_tasks_count}));
+ 			// $('[data-icon-toggle="tooltip"]').tooltip({container : "body", placement : "right"});
+ 			appendAgileNewThemeSubNavMenu();
  			// Call dashboard route
- 			Backbone.history.navigate("#navigate-dashboard/"+dashboardName, {
+ 			Backbone.history.navigate("#navigate-dashboard", {
                 trigger: true
             });
 	});
@@ -715,6 +766,10 @@ function renderDashboardOnMenuServiceSelect(role,options_el){
 }
 function updateDashboardRole(prevrole)
 {
+	if(!prevrole)
+		return;
+	if(CURRENT_DOMAIN_USER.role == prevrole)
+		return;
 	CURRENT_DOMAIN_USER.role = prevrole ;
 			var json = {};
  			json.id = CURRENT_DOMAIN_USER.id;
@@ -732,6 +787,29 @@ function updateDashboardRole(prevrole)
  						}});
 }
 
+
+function isTargetAnInputField(e) {
+	return ($(e.target).prop("tagName").toLowerCase() == "input");
+}
+
+
+function appendAgileNewThemeSubNavMenu() {
+	$("#agile-menu-navigation-container ul li").each(function(i, ele){
+		// console.log(ele);
+		$(ele).remove("ul");
+		var $a = $(ele).find("a").clone();
+		if($a.length == 0)
+			 return;
+		// Delete title
+		$(ele).find("[data-icon-toggle='tooltip']").attr("title", "");
+		
+		var $ul = $("<ul class='nav nav-sub dk agile-theme-nav-sub' style='display: none;'><li></li></ul>");
+		$a.find("i").remove();
+		$ul.find('li').append($a);
+		$(ele).append($ul);
+	});
+}
+    	 
 
 
 

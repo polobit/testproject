@@ -1,7 +1,7 @@
 <script id="opportunities-model-template" type="text/html">
 
 {{#is_mobile}}
-
+<td class="hide"></td>
 <td data="{{id}}" class="data" style="padding-bottom:12px;">
 
   <div class="text-ellipsis deals-name"> 
@@ -10,7 +10,7 @@
   </div>
 
   <div class="text-ellipsis deals-name" style="font-size:13px; margin-top:-2px;">
-  {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+  {{#if_equals expected_value "0"}}{{currencySymbol}}{{expected_value}}{{/if_equals}}{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if}}
 <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
   </div>
 
@@ -21,7 +21,7 @@
 
 
 </td>
-<td>
+<td class="data-contact" width="40"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
 
 
 {{else}}
@@ -50,6 +50,7 @@
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </div>
 </td>
+
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis" style="width:5em">
@@ -77,8 +78,8 @@
         {{else}}
       <div>
         <div class="btn-group pull-left" id="bulk-actions" style="display:none;">
-          <div class="btn btn-sm btn-default">{{agile_lng_translate 'deal-view' 'bulk-actions'}}</div>
-          <a class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown" href="#">
+          <div class="btn btn-sm btn-default btn-default-imp">{{agile_lng_translate 'deal-view' 'bulk-actions'}}</div>
+          <a class="btn btn-sm dropdown-toggle btn-default-imp btn-default" data-toggle="dropdown" href="#">
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" id="view-actions" role="menu">
@@ -95,6 +96,7 @@
             <li><a href="#" id="bulk_deals_archive" data-toggle="modal">{{agile_lng_translate 'deal-view' 'archive'}}</a></li>
             <li><a href="#" id="bulk_deals_restore" data-toggle="modal">{{agile_lng_translate 'deal-view' 'restore'}}</a></li>
             <li class="divider"></li>
+            <li><a href="#" id="bulk_deals_export" data-toggle="modal" >{{agile_lng_translate 'deal-view' 'export'}}</a></li>
             <li><a href="#" id="bulk_deals_delete" data-toggle="modal">{{agile_lng_translate 'deal-view' 'delete'}}</a></li>
             
           </ul>
@@ -104,16 +106,29 @@
         <br>
       </div>
       {{/is_mobile}}
-      <div class="panel panel-default" {{#is_mobile}} style="border:0px; border-radius:0px;" {{/is_mobile}}>
-      {{#is_mobile}} {{else}} <div class="panel-heading"> {{agile_lng_translate 'deal-view' 'deals'}}
-      </div>{{/is_mobile}}
+
+    {{#is_mobile}}
+
+    <div class="panel panel-default" style="border:0px; border-radius:0px;">
+      <div class="table-responsive no-panel-border">
+
+                <table class="table m-b-none onlySorting agile-table panel noDelete" url="core/api/opportunity/bulk" id="deal-list" style="border-radius:0px;">
+
+                    <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
+    {{else}}
+
+      <div class="panel panel-default">
+     <div class="panel-heading"> {{agile_lng_translate 'deal-view' 'deals'}}</div>
       <div class="table-responsive">
 
-                <table class="table {{#is_mobile}} {{else}} table-striped {{/is_mobile}} showCheckboxes m-b-none no-sorting agile-table panel table-layout-mob-view deals-table deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="{{#is_mobile}} border-radius:0px; {{/is_mobile}} table-layout:auto;">
+                <table class="table table-striped showCheckboxes table-layout-mob-view m-b-none no-sorting agile-table panel  deals-table deals-nowrap noDelete" url="core/api/opportunity/bulk" id="deal-list" style="table-layout:auto;">
 
-          {{#is_mobile}}
-           {{else}}
-          <thead>
+                      <thead>
                         <tr>
                             <th>{{agile_lng_translate 'deal-view' 'name'}}</th>
                             <th>{{agile_lng_translate 'deal-view' 'value'}}</th>
@@ -123,12 +138,13 @@
                             <th>{{agile_lng_translate 'deal-view' 'owner'}}</th>
                         </tr>
                     </thead>
-                    {{/is_mobile}}
                     <tbody id="opportunities-model-list" class="c-p"><!--route="deals/"-->
                     </tbody>
                 </table>
             </div>
             </div>
+
+      {{/is_mobile}}
         
         {{/if}}
         </div>

@@ -86,7 +86,9 @@
 						<div class="span4" style="float:right; ">
 							{{#if_equals "Monthly" cycle}}
 							<div class="info-block" style="margin: 10px;">
+								{{#isUserNotInIphone}}
 								<i class="icon-info-sign"></i><strong>{{agile_lng_translate 'plan-and-upgrade' 'upgrade-cap'}}</strong>
+								{{/isUserNotInIphone}}
 								<p>
 									{{agile_lng_translate 'plan-and-upgrade' 'you-can-save'}} $<b>{{yearly_discount}}</b> {{agile_lng_translate 'plan-and-upgrade' 'by-upgrading-to-yearly-or-save'}} $<b>{{bi_yearly_discount}}</b> {{agile_lng_translate 'plan-and-upgrade' 'by-upgrading-to-2-year-plan'}}<br />{{agile_lng_translate 'other' 'hurry'}}!<b><a href="#subscribe">{{agile_lng_translate 'plan-and-upgrade' 'change-plan'}}</a></b>
 									{{agile_lng_translate 'Plan-and-upgrade' 'claim-your-savings'}}!!
@@ -95,7 +97,9 @@
 							</div>
 							{{/if_equals}} {{#if_equals "Yearly" cycle}}
 							<div class="info-block" style="margin: 10px;">
+								{{#isUserNotInIphone}}
 								<i class="icon-info-sign"></i><strong>{{agile_lng_translate 'plan-and-upgrade' 'upgrade-cap'}}</strong>
+								{{/isUserNotInIphone}}
 								<p>
 									{{agile_lng_translate 'plan-and-upgrade' 'you-can-save'}} $<b>{{bi_yearly_discount}}</b> {{agile_lng_translate 'plan-and-upgrade' 'by-upgrading-to-2-year-plan'}}<br />{{agile_lng_translate 'other' 'hurry'}}! <b><a href="#subscribe">{{agile_lng_translate 'plan-and-upgrade' 'change-plan'}}</a></b> {{agile_lng_translate 'Plan-and-upgrade' 'claim-your-savings'}}!!
 								</p>
@@ -200,7 +204,9 @@
 	<br/>
 			<div class="form-actions" style="padding-left: 160px;">
 				<a href="#subscribe" class="btn btn-sm">{{agile_lng_translate 'contact-details' 'CLOSE'}}</a>
+				{{#isUserNotInIphone}}
 				<a href="#" type="submit" id="subscribe" class="save btn btn-sm btn-primary">{{agile_lng_translate 'other' 'upgrade-plan'}}</a> 
+				{{/isUserNotInIphone}}
 			</div>
 
 		</div>

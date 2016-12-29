@@ -3,16 +3,20 @@
   <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
     <span>{{agile_lng_translate 'menu' 'sales'}}</span>
   </li>
-   <li id="home_dashboard">
+   <!-- <li id="home_dashboard">
     <a  href="#">
       <i class="icon  icon-home"></i>
+      <i class="material-icons hidden-icon" style="display: none">home</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
       <span>{{agile_lng_translate 'menu' 'home'}}</span>
     </a>
-  </li>
+  </li> -->
   {{#isRestrictedMenuScope "CONTACT"}} {{else}}
     <li id="contactsmenu">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
+        <i class="material-icons hidden-icon" style="display: none">people</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">people</i>
         <span>{{agile_lng_translate 'menu' 'menu-contacts'}}</span>
       </a>
     </li>
@@ -20,6 +24,8 @@
   <li id="companiesmenu">
     <a  href="#companies">
       <i class="icon icon-building"></i>
+        <i class="material-icons hidden-icon" style="display: none">business</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Companies">business</i>
       <span>{{agile_lng_translate 'menu' 'menu-companies'}}</span>
     </a>
   </li>
@@ -28,6 +34,8 @@
    <li  id="dealsmenu">
     <a  href="#deals">
       <i class="fa fa-money"></i>
+      <i class="material-icons hidden-icon" style="display: none">monetization_on</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Deals">monetization_on</i>
       <span>{{agile_lng_translate 'menu' 'menu-deals'}}</span>
     </a>
   </li>
@@ -49,7 +57,9 @@
    <li id="documentsmenu">
     <a  href="#documents">
       <i class="icon icon-doc"></i>
-      <span class="leftcol-menu-folded">{{agile_lng_translate 'menu' 'menu-docs'}}</span>
+       <i class="material-icons hidden-icon" style="display: none">insert_drive_file</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Documents">insert_drive_file</i>
+      <!-- <span class="leftcol-menu-folded">{{agile_lng_translate 'menu' 'menu-docs'}}</span> -->
       <span class="leftcol-menu-expanded">{{agile_lng_translate 'menu' 'menu-documents'}}</span>
     </a>
   </li>
@@ -59,6 +69,8 @@
    <li id="calendarmenu">
     <a href="#calendar" onclick="Agile_GA_Event_Tracker.track_event('Calendar Option in Nav Bar')">
       <i class="icon icon-calendar"></i> 
+      <i class="material-icons hidden-icon" style="display: none">event</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Calendar">event</i>
       <span>{{agile_lng_translate 'menu' 'calendar'}}</span> 
     </a>
   </li>
@@ -67,6 +79,8 @@
   <li id="tasksmenu">
     <a href="#tasks" onclick="Agile_GA_Event_Tracker.track_event('Tasks Option in Nav Bar')">
       <i class="icon-list" data-original-title="" title=""></i>
+      <i class="material-icons hidden-icon" style="display: none">alarm_on</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Tasks">alarm_on</i>
       <span>{{agile_lng_translate 'menu' 'tasks'}}</span>
       <span title="{{agile_lng_translate 'menu' 'tasks-due'}}" class="navbar_due_tasks pull-right tasks-span-top">
           <span  id="due_tasks_count" class="badge badge-sm bg-danger">{{due_tasks_count}}</span>
@@ -77,6 +91,8 @@
   <li id="schedulingmenu">
     <a href="#scheduler-prefs" onclick="Agile_GA_Event_Tracker.track_event('Appointment scheduling Option in Nav Bar')">
       <i class="icon-tag" data-original-title="" title=""></i>
+      <i class="material-icons hidden-icon" style="display: none">date_range</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Online Calendar">date_range</i>
       <span>{{agile_lng_translate 'preferences' 'online-calendar'}}</span>
     </a>
   </li>
@@ -84,7 +100,9 @@
   {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
    <li id="activitiesmenu">
     <a  href="#activities">
-      <i class="icon-speedometer icon-white"></i>
+      <i class="icon-speedometer icon-white hidden-icon"></i>
+      <i class="material-icons hidden-icon" style="display: none">hourglass_full</i> 
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i>
       <span>{{agile_lng_translate 'menu' 'menu-activities'}}</span>
     </a>
   </li>
@@ -94,6 +112,8 @@
    <li id="reportsmenu">
     <a  href="#reports">
       <i class="icon-bar-chart icon-white"></i>
+       <i class="material-icons hidden-icon" style="display: none">pie_chart</i> 
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Reports">pie_chart</i>
       <span>{{agile_lng_translate 'menu' 'menu-reports'}}</span>
     </a>
   </li>
@@ -111,17 +131,21 @@
     <li class="hidden-folded padder m-t-xs m-b-xs text-muted text-xs">
                 <span>{{agile_lng_translate 'menu' 'menu-marketing'}}</span>
     </li>
-    <li id="home_dashboard">
+    <!-- <li id="home_dashboard">
     <a  href="#">
       <i class="icon  icon-home"></i>
+       <i class="material-icons hidden-icon" style="display: none">home</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
       <span>{{agile_lng_translate 'menu' 'home'}}</span>
     </a>
-    </li>
+    </li> -->
     
     {{#isRestrictedMenuScope "CONTACT"}} {{else}}
     <li id="contactsmenu">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
+         <i class="material-icons hidden-icon" style="display: none">people</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">people</i>
         <span>{{agile_lng_translate 'menu' 'menu-contacts'}}</span>
       </a>
     </li>
@@ -132,13 +156,17 @@
    {{#isRestrictedMenuScope "CAMPAIGN"}} {{else}}
     <li id="workflowsmenu">
       <a  href="#workflows">
-        <i class="icon icon-sitemap"></i>
+        <i class="icon icon-sitemap" style="display: block !important;"></i>
+        <!-- <i class="material-icons hidden-icon" style="display: none">device_hub</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Campaigns">device_hub</i> -->
         <span>{{agile_lng_translate 'menu' 'menu-campaigns'}}</span>
       </a>
     </li>
     <li id="triggersmenu">
       <a  href="#triggers">
-        <i class="icon icon-magic-wand"></i>
+        <i class="icon icon-magic-wand" style="display:block !important"></i>
+        <i class="material-icons  hidden-icon" style="display: none">play_for_work</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">play_for_work</i>
         <span>{{agile_lng_translate 'campaigns' 'triggers'}}</span>
       </a>
     </li>
@@ -147,25 +175,29 @@
 	<li id="email-templates-menu">
     <a href="#email-templates">
       <i class="icon-envelope-letter"></i>
+      <i class="material-icons hidden-icon" style="display: none">email</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">email</i>
       <span>{{agile_lng_translate 'preferences' 'email-templates'}}</span>
     </a>
   </li>
 
 
-{{#isAdmin}}
   <li id="formsmenu">
     <a  href="#forms">
        <i class="icon-large1 icon-docs"></i>
+       <i class="material-icons hidden-icon" style="display: none">web_asset</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Forms">web_asset</i>
       <span>{{agile_lng_translate 'form-builder' 'forms'}}</span>  
     </a>
   </li>
-  {{/isAdmin}}
 
   
   {{#isRestrictedMenuScope "LANDINGPAGES"}} {{else}}
     <li id="landing-pages-menu">
       <a href="#landing-pages">
           <i class="fa fa-file-code-o"></i>
+           <i class="material-icons  hidden-icon" style="display: none">web</i>
+           <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Landing Pages">web</i>
           <span>Landing Pages</span>
       </a>
     </li>
@@ -175,6 +207,8 @@
     <li id="web-rules-menu">
       <a  href="#web-rules">
         <i class="icon icon-globe"></i>
+        <i class="material-icons  hidden-icon" style="display: none">public</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Web Rules">public</i>
         <span>{{agile_lng_translate 'menu' 'menu-web-rules'}}</span>
       </a>
     </li>
@@ -183,6 +217,8 @@
   <li id="push-notification-menu">
     <a href="#push-notification">
       <i class="fa fa-bell-o"></i>
+       <i class="material-icons hidden-icon" style="display: none">notifications</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Push Notifications">notifications</i>
       <span>Push Notifications</span>
     </a>
   </li>
@@ -191,6 +227,8 @@
     <li id="socialsuitemenu">
       <a  href="#social">
         <i class="icon-bubbles"></i>
+         <i class="material-icons hidden-icon" style="display: none">question_answer</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Social">question_answer</i>
         <span>{{agile_lng_translate 'menu' 'menu-social'}}</span>
       </a>
     </li>
@@ -200,6 +238,8 @@
     <li id="segmentationmenu">
       <a  href="#visitors">
          <i class="icon-eye"></i>
+          <i class="material-icons hidden-icon" style="display: none">visibility</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">visibility</i>
         <span>Visitors</span>  
       </a>
     </li>
@@ -209,6 +249,8 @@
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
+        <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i>
         <span>{{agile_lng_translate 'menu' 'menu-activities'}}</span>
       </a>
     </li>
@@ -218,6 +260,8 @@
     <li id="reportsmenu">
       <a  href="#reports">
         <i class="icon-bar-chart icon-white"></i>
+         <i class="material-icons  hidden-icon" style="display: none">pie_chart</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Reports">pie_chart</i>
         <span>{{agile_lng_translate 'menu' 'menu-reports'}}</span>
       </a>
     </li> 
@@ -249,18 +293,22 @@
     <span>{{agile_lng_translate 'menu' 'service'}}</span>
   </li>
 
-  <li id="home_dashboard">
+<!--   <li id="home_dashboard" class="hide">
     <a  href="#">
       <i class="icon  icon-home"></i>
+       <i class="material-icons hidden-icon" style="display: none">home</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Home">home</i>
       <span>{{agile_lng_translate 'menu' 'home'}}</span>
     </a>
-  </li>
+  </li> -->
 
   
     {{#isRestrictedMenuScope "CONTACT"}} {{else}}
-    <li id="contactsmenu">
+    <li id="contactsmenu" class="hide">
       <a  href="#contacts">
         <i class="icon icon-user"></i>
+         <i class="material-icons hidden-icon" style="display: none">contacts</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Contacts">Contacts</i>
         <span>{{agile_lng_translate 'menu' 'menu-contacts'}}</span>
       </a>
     </li>
@@ -270,6 +318,8 @@
     <li id="tickets">
       <a href="#tickets">
         <i class="icon icon-ticket"></i>
+        <i class="material-icons hidden-icon" style="display: none">email</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Help Desk">email</i>
         <span>{{agile_lng_translate 'menu' 'help-desk'}}</span>
       </a>
     </li>
@@ -279,30 +329,40 @@
     <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
+      <i class="material-icons hidden-icon" style="display: none">group_work</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Groups">group_work</i>
       <span>{{agile_lng_translate 'tickets' 'groups'}}</span>
     </a>
   </li>
   <li id="ticketlabelsmenu">
     <a href="#ticket-labels">
       <i class="icon icon-flag"></i>
+       <i class="material-icons hidden-icon" style="display: none">label</i>
+       <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Labels">label</i>
       <span>{{agile_lng_translate 'tickets' 'labels'}}</span>
     </a>
   </li>
   <li id="ticketcannedmessagesmenu">
     <a href="#canned-responses">
       <i class="icon icon-cursor"></i>
+       <i class="material-icons hidden-icon" style="display: none">message</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Canned Responses">message</i>
       <span>{{agile_lng_translate 'tickets' 'canned-responses'}}</span>
     </a>
   </li>
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
       <i class="icon icon-directions"></i>
+      <i class="material-icons hidden-icon" style="display: none">filter_b_and_w</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Views">filter_b_and_w</i>
       <span>{{agile_lng_translate 'contacts-view' 'views'}}</span>
     </a>
   </li>
   <li id="ticketknowledgebasemenu">
     <a href="#knowledgebase">
       <i class="fa fa-search"></i>
+       <i class="material-icons hidden-icon" style="display: none">local_library</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Knowledge Base">local_library</i>
       <span>{{agile_lng_translate 'other' 'knowledge-base'}}</span>
     </a>
   </li>
@@ -313,6 +373,8 @@
     <li id="feedbackactivitiesmenu">
       <a  href="#ticket-feedback">
         <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+         <i class="material-icons hidden-icon" style="display: none">thumb_up</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Feedback">thumb_up</i>
         <span>Feedback</span>
       </a>
     </li>
@@ -323,6 +385,8 @@
     <li id="activitiesmenu">
       <a  href="#activities">
         <i class="icon-speedometer icon-white"></i>
+        <i class="material-icons hidden-icon" style="display: none">hourglass_full</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Activities">hourglass_full</i>
         <span>{{agile_lng_translate 'menu' 'menu-activities'}}</span>
       </a>
     </li>
@@ -332,6 +396,8 @@
     <li id="reportsmenu">
       <a  href="#reports">
         <i class="icon-bar-chart icon-white"></i>
+         <i class="material-icons hidden-icon" style="display: none">pie_chart</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Reports">pie_chart</i>
         <span>{{agile_lng_translate 'menu' 'menu-reports'}}</span>
       </a>
     </li> 

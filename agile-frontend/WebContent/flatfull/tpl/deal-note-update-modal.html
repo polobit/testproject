@@ -5,32 +5,32 @@
 <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-plus-sign"></i>&nbsp;{{agile_lng_translate 'modals' 'edit-note'}}</h3>
+        <h3>{{agile_lng_translate 'modals' 'edit-note'}}</h3>
     </div>
     <div class="modal-body">
-        <form id="dealnoteUpdateForm" name="dealnoteUpdateForm" method="post">
+        <form id="dealnoteUpdateForm" name="dealnoteUpdateForm" method="post" class="form-horizontal">
             <fieldset>
                 <input name="from_task" id="from_task" type="hidden" value="" />
                 <input name="task_form" id="task_form" type="hidden" value="" />
                  <input name="id" id="id" type="hidden" value="{{id}}" />
                  <input name="created_time" id="created_time" type="hidden" value="{{created_time}}" />
                 	            
-                <div class="control-group">
-                    <label class="control-label"><b>{{agile_lng_translate 'contact-details' 'subject'}}
-                    </b> <span class="field_req">*</span></label>
-                    <div class="controls">
+                <div class="control-group form-group">
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'contact-details' 'subject'}}
+                    <span class="field_req">*</span></label>
+                    <div class="controls col-sm-7">
                         <input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject" class="required form-control" />
                     </div>
                 </div>
                 <div class="row-fluid">
-	                <div class="control-group">
-	                    <label class="control-label"><b>{{agile_lng_translate 'other' 'description'}}</b></label>
-	                    <div class="controls agiletxexpander">
+	                <div class="control-group form-group">
+	                    <label class="control-label col-sm-3">{{agile_lng_translate 'other' 'description'}}</label>
+	                    <div class="controls col-sm-7 agiletxexpander">
 	                        <textarea rows="3" class="input form-control textarea" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}" name="description" id="description" data-agileexpand="true" ></textarea> 
 	                    </div>
 	                </div>
                 </div>
-                <div class="control-group">
+                <div class="control-group hide">
                     <label class="control-label"><b>{{agile_lng_translate 'deal-view' 'related-to'}}</b></label>
                     <div class="controls">
                         <div>
@@ -45,7 +45,7 @@
     </div>
     <div class="modal-footer" id="deal-note-update-footer">
         <span class="error-status"></span>
-        <a href="#" class="btn btn-sm btn-primary" id="dealnote_update">{{agile_lng_translate 'report-add' 'save'}}
+        <a href="#" class="btn btn-sm btn-primary" id="dealnote_update">{{agile_lng_translate 'contact-edit' 'update'}}
         </a>
         <span class="save-status"></span>
     </div>

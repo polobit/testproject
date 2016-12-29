@@ -1,6 +1,6 @@
 <!-- New (Activity) Modal views -->
 <script type="text/html" id="new-event-modal-template">
- <div class="modal-dialog">
+ <div class="modal-dialog event-modal">
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
@@ -42,7 +42,7 @@
                           <div class="controls col-sm-7">
                             <span class="input">
                                     <select name="status" id="status" class="input-small form-control">
-                                        <option value="">{{agile_lng_translate 'deal-view' 'select'}}</option>
+                                        <option value="" selected disabled>{{agile_lng_translate 'deal-view' 'select'}}</option>
                                         <option value="completed">{{agile_lng_translate 'portlets' 'completed'}}</option>
                                         <option value="rescheduled">{{agile_lng_translate 'events' 'rescheduled'}}</option>
                                         <option value="Cancelled">{{agile_lng_translate 'events' 'cancelled'}}</option>
@@ -105,7 +105,8 @@
                 <div class="control-group form-group">
                         <div class="checkbox col-sm-offset-3 col-sm-6">
                             <label class="i-checks i-checks-sm c-p">
-                                <input type="checkbox" name="allDay" id="allDay" /><i></i>  {{agile_lng_translate 'tasks' 'all-day-event'}}
+                                <input type="checkbox" name="allDay" id="allDay" /><i></i> {{agile_lng_translate 'tasks' 'all-day-event'}}
+                               
                             </label>
                         </div>
                     </div>
@@ -144,7 +145,7 @@
 
                     <div class="form-group m-b-none">
                     <div class="col-sm-offset-3 col-sm-7 text-left">
-        <a href="javascript:;" id="eventDescriptionLink" class="text-info"><i class="icon-plus"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
+        <a href="javascript:;" id="eventDescriptionLink" class="text-info"><i class="icon-plus-sign"></i> {{agile_lng_translate 'tasks' 'add-description'}}</a>
                     </div>
                     <div class="clearfix"></div>
                 </div>

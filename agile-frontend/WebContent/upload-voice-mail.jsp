@@ -13,7 +13,7 @@ try{
 }catch(Exception e){}
 
 //Locales JSON
-JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload");
+JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload-voicemail");
 
 %>
 
@@ -91,6 +91,12 @@ $(function()
 	    // To remove error message while change
 	    isValid();
 	  });
+	
+	$("#submit_upload").click(function(){
+		if(isValid()){
+			$("#upload_voice_mail").html('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "/img/21-0.gif"></img>');
+		}
+	});
 }); 
 
 $.validator.addMethod("validWaveFile", 
@@ -166,7 +172,8 @@ function isValid(){
 
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
-<input name="upload" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary' type="submit"/> 
+<input name="upload" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary' id="submit_upload" type="submit" style="float: left;" />
+<p id="upload_voice_mail"></p> 
 </form> 
 </div>
 </div>

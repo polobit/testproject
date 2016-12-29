@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.analytics;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -12,14 +13,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.visitors.VisitorResponseBuilder;
 import com.analytics.Analytics;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.analytics.util.AnalyticsUtil;
@@ -98,30 +102,79 @@ public class AnalyticsAPI
     @POST
     @Path("/filter/dynamic-filter")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON + ";charset=utf-8" , MediaType.APPLICATION_XML })
-    public String filterCustomers(@FormParam("filterJson") String filterJson,
+    @Produces({ MediaType.APPLICATION_JSON + ";charset=utf-8", MediaType.APPLICATION_XML })
+    public String filterCustomers(@FormParam("filter_json") String filterJson,
 	    @FormParam("page_size") String countString, @FormParam("cursor") String cursorString,
 	    @FormParam("start_time") Long startTime, @FormParam("end_time") Long endTime,
-	    @FormParam("timeZone") String timeZone)
+	    @FormParam("scanned_upto") String scannedUpto, @FormParam("time_zone") String timeZone)
     {
 	JSONArray contacts = new JSONArray();
 	try
 	{
 	    int cursor = AnalyticsUtil.getIntegerValue(cursorString, 0);
-	    int count = AnalyticsUtil.getIntegerValue(countString, 20);
+	    int limit = AnalyticsUtil.getIntegerValue(countString, 20);
+	    
+	    //checking are dynamic filters having tag filter or not
+	    JSONObject tagFilter = AnalyticsUtil.getTagFilter(filterJson);
+	    Boolean hasContactFilter = tagFilter != null;
+	    
 	    if (StringUtils.isBlank(cursorString))
 		cursorString = "0";
+	    
 	    String startTimeString = DateUtil.getMySQLNowDateFormat(startTime, timeZone);
 	    String endTimeString = DateUtil.getMySQLNowDateFormat(endTime, timeZone);
-	    List<String> contactEmails = AnalyticsUtil.getEmails(filterJson, startTimeString, endTimeString,
-		    countString, cursorString);
-	    contacts = AnalyticsUtil.getContacts(contactEmails, cursor, count);
+	    
+	    List<String> contactEmails = null;
+	    //continue fetch from previous check point (last time we fetched till 'scannedUpto')
+	    //Here scannedUpto is previous checkpoint
+	    if (StringUtils.isBlank(scannedUpto))
+		scannedUpto = endTimeString;
+	    contactEmails = AnalyticsUtil.getEmails(filterJson, startTimeString, scannedUpto, countString,cursorString);
+	    int totalEmailCount = 0;
+	    String newScannedTime = null;
+	    boolean hasEmails = (contactEmails != null && contactEmails.size() > 1);
+	   
+	    if (hasEmails)
+	    {
+			String emailCountString = contactEmails.get(contactEmails.size() - 1);
+			newScannedTime = contactEmails.get(contactEmails.size() - 2);
+			newScannedTime = DateUtil.addTime(newScannedTime, Calendar.SECOND, -1);
+			contactEmails.remove(contactEmails.size() - 1);
+			contactEmails.remove(contactEmails.size() - 1);
+			totalEmailCount = AnalyticsUtil.getTotalEmailCount(emailCountString);	
+			if(hasContactFilter)
+				contacts = AnalyticsUtil.getContactsFromTextSearch(contactEmails, tagFilter, limit);
+			else
+				contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails);				
+	    }
+	    
+	    hasEmails = (contactEmails.size() > 0);
+	    
+	    if(hasEmails)
+	    {
+		//Building response to submit client. Response includes all necessary parameters to continue 
+		//fetch next time.
+		if(contactEmails.size() < 20)
+		    hasEmails = false;
+		VisitorResponseBuilder responseBuilder = new VisitorResponseBuilder(contacts, hasContactFilter,newScannedTime);						
+		responseBuilder.setTotalContactCount(totalEmailCount);
+		responseBuilder.setCursor(cursor);
+		responseBuilder.setPageSize(limit);
+		responseBuilder.setHasEmails(hasEmails);
+		contacts = responseBuilder.getResponse();
+	    }
+	    
 	}
 	catch (Exception e)
 	{
-	    return contacts.toString();
+	    System.err.println("Exception occured while fetching visitors " + e.getMessage());
 	}
-	return contacts.toString();
+	String response = null;
+	//contacts = new JSONArray();
+	if (contacts != null)
+	    response = contacts.toString();
+	return response;
+	
     }
     /**
      * Returns webstats known contacts and anonymouscontacts visits count

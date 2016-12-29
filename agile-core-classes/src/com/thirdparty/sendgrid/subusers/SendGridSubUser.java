@@ -172,7 +172,7 @@ public class SendGridSubUser extends SendGridLib
 		public SubUser()
 		{
 			this.ips = new ArrayList<String>();
-			ips.add("167.89.30.183");
+			ips.add("167.89.30.173");
 		}
 		
 		public String getName()
@@ -491,7 +491,7 @@ public class SendGridSubUser extends SendGridLib
 	public static class SendGridStats
 	{
 		long startTime=0;
-		String duration="daily";
+		String duration="day";
 		
 	    public void setStartTime(long startTime)
 	    {

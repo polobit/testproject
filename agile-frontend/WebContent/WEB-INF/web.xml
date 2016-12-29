@@ -1588,4 +1588,55 @@
         <servlet-name>OpenDocumentViewer</servlet-name>
         <url-pattern>/sendemail/*</url-pattern>
  </servlet-mapping>
+ <servlet>
+        <servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<servlet-class>com.agilecrm.DeleteDuplicateMilestoneServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteDuplicateMilestone</servlet-name>
+		<url-pattern>/backend/cron/delete-duplicate-servlet</url-pattern>
+	</servlet-mapping>
+<servlet>
+	<servlet-name>TwilioIOTransferTwiml</servlet-name>
+	<servlet-class>com.thirdparty.twilio.TwilioIOTransferTwiml</servlet-class>
+</servlet>  
+<servlet-mapping>
+	<servlet-name>TwilioIOTransferTwiml</servlet-name>
+	<url-pattern>/transfercall</url-pattern>
+</servlet-mapping>
+ <servlet>
+		<servlet-name>OzonetelOutboundCallServlet</servlet-name>
+		<servlet-class>com.thirdparty.ozonetel.OzonetelOutboundCallServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OzonetelOutboundCallServlet</servlet-name>
+		<url-pattern>/outboundcall</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>OzonetelCallBackServlet</servlet-name>
+		<servlet-class>com.thirdparty.ozonetel.OzonetelCallBackServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OzonetelCallBackServlet</servlet-name>
+		<url-pattern>/outbound_callstatus</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OzonetelIncomingCallServlet</servlet-name>
+		<servlet-class>com.thirdparty.ozonetel.OzonetelIncomingCallServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OzonetelIncomingCallServlet</servlet-name>
+		<url-pattern>/incomingcall</url-pattern>
+	</servlet-mapping>
+	<servlet>
+        <servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
+		<servlet-class>com.agilecrm.DeleteDuplicateCompanyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
+		<url-pattern>/backend/cron/delete-duplicate-companies-to-contact</url-pattern>
+	</servlet-mapping>
 </web-app>

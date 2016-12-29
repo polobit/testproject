@@ -121,7 +121,7 @@
                  */
             
                 $('body').off('fill_campaigns_contact').on('fill_campaigns_contact', function(event){
-                    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+                    fillSelect('campaign-select','/core/api/workflows/partial', 'workflow', 'no-callback ', optionsTemplate); 
 	    		});
 	    		
 	    		// Navigate to controller to show the form and then to trigger the custom event
@@ -152,7 +152,7 @@
                 
                 $('.show_campaigns_list').css('display','inline-block');
                 
-                fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+                fillSelect('campaign-select','/core/api/workflows/partial', 'workflow', 'no-callback ', optionsTemplate); 
             }
 
             /*
@@ -299,7 +299,7 @@ function fill_relation(el){
 		json = App_Contacts.contactDetailView.model.toJSON();
 	}
  	var contact_name = getContactName(json);//getPropertyValue(json.properties, "first_name")+ " " + getPropertyValue(json.properties, "last_name");
- 	var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+ 	var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 
  	// Adds contact name to tags ul as li element

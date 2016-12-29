@@ -1,6 +1,6 @@
 <script id="ticket-helpcenter-categories-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col panel wrapper">
+    <div class="col panel wrapper no-panel-border">
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
             <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-dont-have-any-categories'}}</h4>
@@ -47,7 +47,7 @@
 
     {{else}}
 
-    <div class="col panel wrapper p-b-xs">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper p-b-xs no-panel-border" id="service-tab">
         <div class="hbox h-auto">
             <div class="pull-right" style="margin-left:10px">
                 <a href="#knowledgebase/add-category" class="btn btn-sm btn-default btn-addon">
@@ -55,7 +55,7 @@
                 </a>
              </div>
              <div class="pull-right">
-                <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-addon access_kb">
+                <a href="#selectlandingpage"  class="btn btn-sm btn-default btn-default-imp btn-addon access_kb">
                     {{agile_lng_translate 'preferences' 'settings'}}
                 </a>
             </div>
@@ -67,6 +67,7 @@
                             <th class="hide">Id</th>
                             <th style="width:40%">{{agile_lng_translate 'category' 'name'}}</th>
                             <th style="width:40%">&nbsp;</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="ticket-helpcenter-categories-model-list" class="c-p ui-sortable deal-tracks-tbody"> </tbody>

@@ -1,0 +1,39 @@
+<div class="modal-dialog" style="left:0">
+    <div class="modal-content" style="border-radius: 0;">
+        <div class="modal-header b-b-none" style="border-bottom:0px;padding-bottom: 0px;">
+            <div>
+                <p id="success-msg">Form saved Successfully...</p>
+                <button class="close" data-dismiss="modal" onclick="nextActionCloseClick()">&times;</button>
+                <i class="glyphicon glyphicon-arrow-right"></i> <strong> Next Actions  </strong>
+            </div>
+            <br>
+            <div class="tab-content" id="source-code-modal" style="border: 1px solid #ccc;background-color: #f5f5f5;">
+                <div  class="tab-pane active" id="link" style="padding: 10px;">
+                    <div style="margin-top: 5px;text-align: center;margin-bottom:8px"><b>Share form</b>
+                        <a href="<%=form_tweet_link%>" id="agile-tweet-redirect" title="Share on Twitter" target="_blank" style="margin-left: 12px;color: #1da1f2;"><i class="fa fa-twitter" aria-hidden="true" style="font-size: 18px;"></i></a>
+                        <a href="<%=form_fb_link%>" id="agile-fb-redirect" title="Share on Facebook" target="_blank" style="margin-left: 4px;color: #3b5998;"><i class="fa fa-facebook-square" aria-hidden="true" style="font-size: 18px;"></i></a>
+                        <a href="<%=form_google_link%>" id="agile-google-redirect" title="Share on Google+" target="_blank" style="margin-left: 7px;color: #dd4b39;"><i class="fa fa-google-plus" aria-hidden="true" style="font-size: 18px;"></i></a>
+                    </div>
+                    <textarea style="height:34px;" rows="3" class="form-control" onClick="this.select();"><%=permanentlink%></textarea>
+                    <p class="m-t-sm" style="text-align:left;color: #a9a9a9;font-size: 12px;margin-top: 5px;">Don’t worry about hosting it. Recommended if you just want to share the form.</p>
+                </div>
+            <div class="tab-pane active" id="embed" style="border-top: 1px solid #eee;padding: 10px;">
+                <div style="font-weight:bold;text-align: center;margin-bottom:5px">Add form to your website</div>
+                <textarea id="embedCodeArea" rows="5" class="form-control" onClick="this.select();"><div id="<%=embed_formid%>" class="agile_crm_form_embed"><span style="display:none">Fill out my <a href="<%=permanentlink%>">online form</a></span></div></textarea>
+                <div style="color: #a9a9a9;font-size: 12px;margin-top: 5px;">
+                <p class="m-t-sm" style="color: #a9a9a9;font-size: 12px;margin-bottom: 5px;">Copy and paste the code directly into HTML of your web page</p>
+                <p><strong>Note: </strong>Include <a target="_blank" href="<%=form_analytics%>" class="text-info" id="agile_analytics_code">Analytics Code</a> in the web page for the form to work.</p></div>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer bg-white" style="padding: 10px;
+    background-color: rgba(0,0,0,0.025);">
+        <div class="checkbox col-xs-8 col-sm-6" style="margin-top:4px; margin-bottom:4px;padding-left:4px;">
+                <label class="pull-left" onclick="hideFormNextActionPopup();" style="color: #58666e;font-size: 13px;line-height: 1.69;"><input type="checkbox" id="form-save-popup" value="false">Don't show me again</label>
+        </div>
+        <span class="error-status text-danger"></span>
+        <button class="btn btn-primary" id="formsave-close" data-dismiss="modal" style="margin-right:5px;" onclick="nextActionCloseClick()">Close</button>
+    </div>
+</div>
+</div>

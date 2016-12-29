@@ -108,7 +108,7 @@ public class Subscription implements Serializable{
 	 * Emails type
 	 */
 	public static enum BlockedEmailType{
-		SUBSCRIPTION, CREDIT
+		SUBSCRIPTION, CREDIT, AUTO_RECHARGE
 	}
 
 	/**

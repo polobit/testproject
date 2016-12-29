@@ -170,8 +170,9 @@ function initializeEmailBuilderListeners() {
                 }
             } else {
                 var selectedVal = $("#video-record-select").val();
+                var videoThumbS3URL = $("#video-record-select option:selected").attr('data-thumb');
                 if(selectedVal != "" && selectedVal != "AGILE_CREATE_NEW_VIDEO") {
-                    emailVideoRecord.buildVideoPageURL(selectedVal);
+                    emailVideoRecord.buildVideoPageURL(selectedVal,videoThumbS3URL);
                 } else {
                     $(".videoRecordFormMessageHolder").html("Please select a video.");
                 }
@@ -452,7 +453,7 @@ var emailVideoRecord = {
             var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
             filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
 
-            formData = new FormData();
+            var formData = new FormData();
             formData.append('key',  "videos/" + CURRENT_DOMAIN_USER.domain + "/" + filename);
             formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
             formData.append('acl', 'public-read');
@@ -474,7 +475,8 @@ var emailVideoRecord = {
                   emailVideoRecordRecordedData = undefined;
                   // getting the url of the file from amazon and insert it into the editor
                   var url = $(data).find('Location').text();
-                  emailVideoRecord.saveVideoRecord(decodeURIComponent(url));
+                  // emailVideoRecord.saveVideoRecord(decodeURIComponent(url));
+                  emailVideoRecord.uploadVideoThumbToS3(decodeURIComponent(url));
                 }
             });
         } else {
@@ -485,10 +487,45 @@ var emailVideoRecord = {
         }
     },
 
-    saveVideoRecord : function(videoS3URL) {
+    uploadVideoThumbToS3 : function(videoS3URL) {
+        if(typeof emailVideoRecordRecordedVideoThumbnailBlob != "undefined") {
+
+            var file = emailVideoRecordRecordedVideoThumbnailBlob;
+            var filename = new Date().getTime() + ".png";
+
+            var formData = new FormData();
+            formData.append('key',  "videos/" + CURRENT_DOMAIN_USER.domain + "/thumbs/" + filename);
+            formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+            formData.append('acl', 'public-read');
+            formData.append('content-type', 'image/png');
+            formData.append('policy', 'ewogICJleHBpcmF0aW9uIjogIjIwMjUtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJhZ2lsZWNybSIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInZpZGVvcy8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJHN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyIsICIyMDEiXSwKICBdCn0=');
+            formData.append('signature', 'EbyHr1XkZjWpXWlYNKDTssrRv4I=');
+            formData.append('success_action_status', '201');
+            formData.append('file', file);
+            
+            $.ajax({
+                data: formData,
+                dataType: 'xml',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                url: "https://agilecrm.s3.amazonaws.com/",
+                success: function(data) {
+                  emailVideoRecordRecordedVideoThumbnailBlob = undefined;
+                  // getting the url of the file from amazon and insert it into the editor
+                  var url = $(data).find('Location').text();
+                  emailVideoRecord.saveVideoRecord(videoS3URL,decodeURIComponent(url));
+                }
+            });
+        }
+    },
+
+    saveVideoRecord : function(videoS3URL,videoThumbS3URL) {
         var videoMeta = {
             "name": $("#video-record-name").val(),
-            "url": videoS3URL
+            "url": videoS3URL,
+            "thumb_url": videoThumbS3URL
         };
 
         var requestType = "post";
@@ -503,15 +540,18 @@ var emailVideoRecord = {
                 $("#videoRecordSaveBtn").text("Save");
                 $("#videoRecordSaveBtn").prop('disabled', false);
                 $("#videoRecordSaveBtn").attr("data-id", "new");
-                emailVideoRecord.buildVideoPageURL(data.id);
-            },
+                emailVideoRecord.buildVideoPageURL(data.id,videoThumbS3URL);
+            }
         });
     },
 
-    buildVideoPageURL : function(videoId) {
+    buildVideoPageURL : function(videoId,videoThumbS3URL) {
         var videoURL = window.location.origin + "/video/" + videoId + "?n={{first_name}}&c={{owner.calendar_url}}";
-        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL).trigger('change');
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL);
+        if(videoThumbS3URL)
+            document.getElementById('emailBuilderFrame').contentWindow.$("#image-url").val(videoThumbS3URL);
         $("#videoRecordModal").modal("hide");
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL).trigger('change');
         document.getElementById("emailBuilderFrame").contentWindow.$("#image-url").trigger('change');
     }
 
@@ -537,7 +577,7 @@ var videoRecordPreview = {
         var url = window.location.origin+"/video/"+selectedVideoId+"?embed=true";
 
         $("#videoPreviewField").show();
-        document.getElementById('loader').style.display='block';
+        //document.getElementById('loader').style.display='block';
         $('iframe[id=videoPreviewIframeId]').attr('src',url);
         
     }

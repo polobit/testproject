@@ -7,7 +7,6 @@ var Agile_GA_Event_Tracker = {
 	 * Set category
 	 */
 	category : "Agile Dashboard",
-
 	/**
 	 * Send track event to google analytics
 	 */

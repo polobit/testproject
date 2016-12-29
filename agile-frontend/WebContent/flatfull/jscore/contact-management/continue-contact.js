@@ -228,7 +228,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         // checking the condition for the when tweeterId is saving into the
 		// datastore
         if(isValidField(form_id +' #handle'))
-        	properties.push({ "name" : "website", "value" :$('#handle').val(), "subtype" : "TWITTER" })
+        	properties.push({ "name" : "website", "value" :$('#handle').val().toLowerCase(), "subtype" : "TWITTER" })
 
       
 		// /give preference to autofilled company, ignore any text in textfield
@@ -858,7 +858,7 @@ function deserialize_contact(contact, template, callback)
 		{
 			$("#content [name='"+related_company_id+"']")
 					.html(
-							'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+							'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + data + '"><span><a class="m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 			$("#content #contact_company").hide();
 			if(data){							
 				$.ajax({
@@ -906,7 +906,7 @@ function deserialize_contact(contact, template, callback)
 					$("#content #contact_company").hide();
 					$("#content [name='"+related_company_id+"']")
 							.html(
-									'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="text-white m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+									'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + contact.contact_company_id + '"><span><a class="m-r-xs" href="#contact/' + contact.contact_company_id + '">' + contact.properties[i].value + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 				}
 			}
 		}
@@ -1019,7 +1019,7 @@ function fill_multi_options(field_element, element)
 			else
 				$(sub_field_element).val(json[name]);
 
-			if(name == 'country' && !$(sub_field_element).val())
+			if(name == 'country' && json[name] && $(sub_field_element).find("option[value='"+json[name]+"']").length == 0)
 			{
 				var warning_msg_tpl = Handlebars.compile("<span class='country-mismatch-error' style='color:#B94A48; font-size:14px'><i>{{agile_lng_translate 'contacts-view' 'country'}} {{country}} {{agile_lng_translate 'country' 'not-found-error'}}</i></span>");
 				$(sub_field_element).after(warning_msg_tpl(json));
@@ -1357,13 +1357,13 @@ function setReferenceContacts(name, ele, valJSON, referenceContactIds)
 					{
 						$("ul[name='"+name+"']", ele)
 						.append(
-								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#contact/' + value + '">' + contact_name + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + value + '"><a class="m-r-xs" href="#contact/' + value + '">' + contact_name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 					}
 					else
 					{
 						$("ul[name='"+name+"']", ele)
 						.append(
-								'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + value + '"><a class="text-white m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag">&times</a></li>');
+								'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + value + '"><a class="m-r-xs" href="#company/' + value + '">' + getPropertyValue(data.get(value).get("properties"), "name") + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 					}
 					
 				});

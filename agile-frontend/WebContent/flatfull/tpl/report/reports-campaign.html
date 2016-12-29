@@ -5,7 +5,7 @@
     <div class="col-md-12">
        
             <h3 class="pull-left font-thin h3">{{agile_lng_translate 'report-view' 'campaignreports'}}</h3>
-            <a href="#campaign-report-add" class="btn btn-default btn-sm pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'portlets' 'reports-btn-text'}}</a>
+            <a href="#campaign-report-add" class="btn btn-default btn-sm btn-primary-imp btn-lg-imp pull-right btn-addon" id="addReport"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'portlets' 'reports-btn-text'}}</a>
             <div class="clearfix">
         </div>
    
@@ -18,7 +18,7 @@
          </div>
         {{#if this.length}}
         <div class="col-md-9 col-sm-9">
-        <div class="panel panel-default">
+        <div class="panel panel-default no-panel-border" id="contact-reports-list-view">
         <div class="panel-heading">{{agile_lng_translate 'report-view' 'campaignreports-list'}}</div>
        <div class="table-responsive">
         <table class="table table-bordered table-striped showCheckboxes agile-table panel table-layout-mob-view " url="core/api/reports/bulk">
@@ -27,6 +27,8 @@
                     <th>{{agile_lng_translate 'report-add' 'name'}}</th>
                     <th>{{agile_lng_translate 'portlets' 'duration'}}</th>
                     <th>{{agile_lng_translate 'report-view' 'campaign-name'}}</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="report-campaign-model-list" route="campaign-report-edit/">

@@ -271,10 +271,6 @@ public class RegisterServlet extends HttpServlet
 
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
-	
-	if(password == null){
-		password = "";
-	}
 
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 	// when domain created we are storing timezone in domain level
@@ -593,12 +589,11 @@ public class RegisterServlet extends HttpServlet
 
 	// Get Domain
 	String domain = NamespaceManager.get();
-	if (StringUtils.isEmpty(domain)) {
+	String type = request.getParameter("type");
+	if (StringUtils.isEmpty(domain) && StringUtils.isNotBlank(type) && type.equalsIgnoreCase("oauth")) {
 		request.getRequestDispatcher("/register-new2.jsp").forward(request, response);
 		return null;
 	}
-	String isOAUTH = (String)request.getSession().getAttribute("REGISTER_FROM_OAUTH");
-
 	
 	/*if (StringUtils.isEmpty(domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
@@ -782,8 +777,7 @@ public class RegisterServlet extends HttpServlet
     }
     
     public static void main(String[] args) {
-    	String email = "info@mpagenciadigital.com.br";
-    	String emailType = (email.split("@")[1]).split("\\.")[0];
-    	System.out.println(emailType);
+		String password = null;
+		System.out.println(StringUtils.isEmpty(password));
 	}
 }

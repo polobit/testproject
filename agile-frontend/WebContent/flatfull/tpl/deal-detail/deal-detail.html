@@ -10,17 +10,16 @@
 <div class="row-row">
 <div  id="deal-detail-actions-dropdown" class="wrapper">
 <div class="contact-navigation-view hide"><span class="navigation  contact-switching"></span></div>
-
-<div class="inline-block w-full"><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
-<span class="h3 font-thin custom-color m-b-xs block" id="deals-inline">
-{{#if name}}{{name}}{{/if}}</span></div>
-
-{{#if expected_value}}
-<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
-{{/if}}
+<div class="p-t-none pos-rlt">
+  <div class="panel panel-default m-b">
+    <div class="panel-body text-center">
+<div class="h3 font-thin custom-color text-ellipsis" style="width: calc(100% - 14px);">{{#if name}}{{name}}{{/if}}</div>
 {{#if_equals expected_value "0"}}
-<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{expected_value}}</div>
+<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
 {{/if_equals}}
+{{#if expected_value}}
+<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+{{/if}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
@@ -42,7 +41,7 @@
 {{#if this.archived}}
 
 <div class="btn-group pos-abs " style="left:192px;top:29px;">
-<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i>{{agile_lng_translate 'deal-view' 'restore'}} </a>
+<a href="#" class="deal-restore-detail-view btn btn-sm btn-default"><i class="icon-mail-reply"></i> {{agile_lng_translate 'deal-view' 'restore'}}</a>
 </div>
     
               
@@ -51,6 +50,12 @@
               <div title="Owner">
                  <div class="contact-owner" id="change-owner-element">
                  <div><small class="text-base text-muted"> {{agile_lng_translate 'contact-details' 'owner'}}&nbsp;&nbsp;</small></div>
+
+                {{#if owner}}
+                    <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+                {{else}}
+                <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+                {{/if}}
                  <a href="#"  data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
@@ -61,18 +66,17 @@
 <div class="pos-abs isotope-item deal-detail-dropdown deal-edit-dropdown dealEditDropdown opa-full">
                 
                 
-                <button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+              <button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
                 <span class="caret m-l-none" style="margin-top:-11px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right deals-edit text-sm">
-       <!--<li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>
+        <!--<li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>    
                                     <li class="divider"></li>-->
-                  <li><a href='#'  id="dealshow-note" class="deal-note"><i
-                      class="icon-note" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
+                  <li><a href='#'  id="dealshow-note" class="deal-note">
+                  <i class="icon-note" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
                                     <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="fa fa-file-archive-o" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'archive'}}</a></li>
               
-                  <li><a href='#'  data="{{id}}" class="deal_detail_delete" id='opportunity-actions-delete'><i
-                      class="icon-trash"></i> {{agile_lng_translate 'contact-details' 'delete'}}</a></li>
+                  <li><a href='#'  data="{{id}}" class="deal_detail_delete" id='opportunity-actions-delete'><i class="icon-trash"></i> {{agile_lng_translate 'contact-details' 'delete'}}</a></li>
                 </ul>
 </div>
 
@@ -83,27 +87,36 @@
      <div title="Owner" class="contact-owner-view">
         <div class="contact-owner" id="change-owner-element">
           <div><small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'owner'}}&nbsp;&nbsp;</small></div>
-    
 
-
+      {{#if owner}}
+          <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+      {{else}}
+      <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+      {{/if}}
           <div id="deal-owner" data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-p text-xs">{{owner.name}}</div>
 
-          {{#hasScope "UPDATE_DEALS"}}
+           {{#hasScope "UPDATE_DEALS"}}
 
-							
-							<div  class="deal-owner-block">
-						<div class="change-owner-succes"></div>
-     <div title="Owner">
-      	<div class="contact-owner" id="change-owner-element">
-        	<div><small class="text-xs text-muted"> {{agile_lng_translate 'deal-view' 'owner'}}:&nbsp;&nbsp;</small></div>
-		
-        	<a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</a>
-        
+           <div  class="deal-owner-block">    
+            <div class="change-owner-succes"></div>   
+     <div title="Owner">    
+        <div class="contact-owner" id="change-owner-element">   
+          <div><small class="text-xs text-muted"> {{agile_lng_translate 'deal-view' 'owner'}}:&nbsp;&nbsp;</small></div>    
+          
+      {{#if owner}}
+          <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+      {{else}}
+      <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+      {{/if}}
+          <a href="#"  data={{owner.id}} class="deal-owner-name contact-owner-name c-d">{{owner.name}}</a>
           <div class="btn-group v-middle dropdown deal-owner" id="change-deal-owner-ul" style="display: none">
              <a href="javascript:void(0);" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">Change Owner <span class="caret"></span></a>
 
              <ul id='deal-detail-owner' class="dropdown-menu"></ul>
           </div>
+          </div>
+    </div>
+  </div>
           {{/hasScope}} 
        </div>
     </div>
@@ -117,6 +130,7 @@
 
 </div>
 </div>
+
 <div>
 {{#if_equals pipeline.won_milestone milestone}}
   {{#if won_date}}
@@ -155,7 +169,7 @@
 
   <div class="content-tabs-show moreDetailsTab m-t-none p-t-none" id="contactDetailsTab" role="tablist" aria-multiselectable="true">
    <div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
-   <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> {{agile_lng_translate 'contacts-view' 'more-details'}}</a> </h4> 
+   <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> {{agile_lng_translate 'contacts-view' 'more-details'}}</a></h4> 
    </div> <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
    <div class="panel-body text-left">
 
@@ -169,7 +183,7 @@
                   <div class="panel panel-default m-b-none ">
                     <div class="panel-body">
                                      
-                                      <small class="text-base text-muted">{{agile_lng_translate 'Deal-detail' 'custom-view'}}</small>
+                        <small class="text-base text-muted">{{agile_lng_translate 'Deal-detail' 'custom-view'}}</small>
                       <div>                
                   {{#getDealCustomProperties custom_data}}
                   {{#each_with_index this}}               
@@ -225,13 +239,13 @@
 
     {{#each contacts}}
           {{#if_contact_type "PERSON"}}
-      <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+            <a href="#contact/{{id}}" class="activate-link thumb-sm m-b-xs text-xs popover_contact" data="{{id}}"><img data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
           {{#if_contact_type "LEAD"}}
             <a href="#lead/{{id}}" class="activate-link thumb-sm m-b-xs text-xs" data="{{id}}"><img  data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"   title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
           {{/if_contact_type}}
       {{#if_contact_type "COMPANY"}}
-            <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img  {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
+            <a href="#company/{{id}}" class="activate-link thumb-sm m-b-xs popover_contact" data="{{id}}"><img {{getCompanyImage "50" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
           {{/if_contact_type}}
       {{/each}}
       
@@ -245,7 +259,7 @@
   <div class="panel panel-default m-b-none ">
     <div class="panel-body">
 <div>
-          <small class="text-base text-muted">{{agile_lng_translate 'misc-keys' 'description'}}</small>
+<small class="text-base text-muted">{{agile_lng_translate 'misc-keys' 'description'}}</small>
 </div>
 <div class="text-xs custom-color">{{{show_link_in_statement description}}}</div>
 </div>
@@ -281,15 +295,14 @@
 <div class="inline-block w-full "><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
 <span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" title="{{#if name}}{{name}}{{/if}}">
 {{#if name}}{{name}}{{/if}}</span></div>
-{{#if expected_value}}
-<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
-{{/if}}
 {{#if_equals expected_value "0"}}
-<div class="m-b-sm text-base font-thin">{{currencySymbol}}{{expected_value}}</div>
+<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
 {{/if_equals}}
-
+{{#if expected_value}}
+<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+{{/if}}
 <div class=" text-muted deal-track text-xs">
-{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
+{{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn-sm-imp btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
 {{#getTracksCount}}<span>{{#if pipeline.name}}{{pipeline.name}} , {{/if}}</span>{{/getTracksCount}}         
             
@@ -323,6 +336,12 @@
               <div title="Owner">
                  <div class="contact-owner" id="change-owner-element">
                  <div><small class="text-base text-muted"> {{agile_lng_translate 'deal-view' 'owner'}}&nbsp;&nbsp;</small></div>
+
+              {{#if owner}}
+                  <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+              {{else}}
+              <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+              {{/if}}
                  <a href="#"  data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-d text-xs">      {{owner.name}}</a>
               </div>
               </div>
@@ -361,8 +380,13 @@
      <div title="Owner" class="contact-owner-view">
         <div class="contact-owner" id="change-owner-element">
           <div><small class="text-base text-muted">{{agile_lng_translate 'deal-view' 'owner'}}&nbsp;&nbsp;</small></div>
-    
-          <div id="deal-owner" data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-p text-xs">{{owner.name}}</div>
+            
+          {{#if owner}}
+              <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+          {{else}}
+          <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add" ><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+          {{/if}}
+              <div id="deal-owner" data={{owner.id}} class="deal-owner-name custom-color contact-owner-name c-p text-xs">{{owner.name}}</div>
 
           {{#hasScope "UPDATE_DEALS"}}
 
@@ -533,7 +557,7 @@
                 {{#each tagsWithTime}}
                     <li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}"><span><a
                 class="anchor m-r-xs custom-color" style="color:#363f44" href="#filter/{{this.tag}}">{{this.tag}}</a><a
-                class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+                class="close remove-tags" tag="{{this.tag}}" style="top: -1px">&times</a></span></li> 
                 {{/each}}
                 {{else}}
                   {{#each tagsWithTime}}
@@ -590,7 +614,7 @@
 <div class="col  dealsTabListCenter bg-white">
 <div class="vbox" style="display:block">
 <div class="row-row" style="display:block">			
-<div id="deal-details">
+<div id="deal-details" class="tabs">
 	<div class="tab-container">
            <ul class="nav nav-tabs bg-light content-tabs" id="deal-details-tab">
              <li><a href="#dealactivities" data-toggle="tab" >{{agile_lng_translate 'contact-details' 'timeline'}}</a></li>
@@ -603,7 +627,7 @@
 			 <li><a href="#dealevents" data-toggle="tab">{{agile_lng_translate 'deal-view' 'events'}}</a></li> 
            </ul>
 	</div>
- 	<div class="tab-content {{#is_mobile}}  {{else}}  {{/is_mobile}}" id="deal-tab-content">
+ 	<div class="tab-content" id="deal-tab-content">
  		<div class="tab-pane" id="dealactivities">
             <div class="m-auto">
                         <div id="timeline" style="float:left; z-index:1;">
@@ -639,14 +663,14 @@
     <div id="deal-bulk-confirm">
 		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
 		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		  {{agile_lng_translate 'deal-view' 'deals-can-be-archived-desc'}}
+		  {{agile_lng_translate 'deal-view' 'deals-archive-warn-msg'}}
 		<br/> {{agile_lng_translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
   <span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-default btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 </div>
@@ -670,8 +694,8 @@
 	</div>
   </div>
   <div class="modal-footer">
-	<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+	<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+    <a href="#" id="deal-quick-restore" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>
 <!-- End of Restore confirmation-->

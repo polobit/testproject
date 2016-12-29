@@ -30,6 +30,9 @@ public class VideoRecord {
   @NotSaved(IfDefault.class)
   public String url = null;
 
+  @NotSaved(IfDefault.class)
+  public String thumb_url = null;
+
   @NotSaved
   public String owner_id = null;
 

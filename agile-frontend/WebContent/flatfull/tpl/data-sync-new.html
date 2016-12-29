@@ -122,9 +122,11 @@
 <script id="admin-settings-import-skeleton-template"
 	type="text/html">
 	{{#if_equals type "GOOGLE"}}
-	<div class="panel panel-default widget-add h-230 googleBox">
+	<div class="panel panel-default widget-add googleBox" style="
+    min-height: 275px;">
 	{{else}}
-	<div class="panel panel-default widget-add h-230 googleBox">
+	<div class="panel panel-default widget-add googleBox"style="
+    min-height: 275px;">
 	{{/if_equals}}
 	<div class="panel-heading">
 	    <center>
@@ -133,11 +135,11 @@
     </div>
     <div class="panel-body">
     {{#if_equals type "GOOGLE"}}
-	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:80px" rel="tooltip" title="{{get_datasync_translation type 'content'}}">
+	    <div class="text-flow-ellipsis line-clamp line-clamp-4" style="min-height:125px" rel="tooltip" title="{{get_datasync_translation type 'content'}}">
 			{{get_datasync_translation type 'content'}}
 		</div>
 	{{else}}
-		<div class="text-flow-ellipsis line-clamp line-clamp-4" style="height:85px" rel="tooltip" title="{{get_datasync_translation type 'content'}}">
+		<div class="text-flow-ellipsis line-clamp line-clamp-4" style="min-height:125px" rel="tooltip" title="{{get_datasync_translation type 'content'}}">
 			{{get_datasync_translation type 'content'}}
 		</div>
 	{{/if_equals}}

@@ -321,7 +321,7 @@ if(isSafari && isWin)
 			<div id="openid_btns" class="login-social-btns">
 					<input type='hidden' name='type' value='oauth'></input>
 					<input type='hidden' name='server' id='oauth-name' value=''></input>
-					<small class="text-white">Sign up using <small>
+					<small class="text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "signup-Using")%> <small>
 					<a title="Sign up using Google Apps" data='google' href='#'  class="openid_large_btn google tags-color text-white"><i class="fa fa-google"></i><small>Google Apps</small></a>
 					
 			</div>
@@ -329,7 +329,7 @@ if(isSafari && isWin)
 <div class="text-center text-white m-b">
 	<div class="text-top">
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "already-have-account")%>?
-		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-in")%></a></small>
+		<a href="/enter-domain?to=login&lang=<%=_LANGUAGE%>" class="tags-color text-white"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sign-In")%></a></small>
 	</div>
 	<div class="text-top">
 		<small><%=LanguageUtil.getLocaleJSONValue(localeJSON, "forgot")%>

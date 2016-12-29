@@ -267,7 +267,7 @@
                 $(overlay).hide();
                 overlay.id = 'canvasOverlay';
 
-                overlay.innerHTML = '<div class="loader"><span>{</span><span>}</span></div>';
+                overlay.innerHTML = '<div class="loader"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><br/><span>Loading...</span></div>';
 
                 document.getElementById('frameWrapper').appendChild(overlay);
 
@@ -1955,8 +1955,8 @@
 
                     appUI.agilePageId = res.id;
 
-                    if(reqMethod === "POST"){
-                        window.location.href  = window.location.origin+"/#landing-pages";
+                   if(reqMethod === "POST" && typeof(window.history.replaceState) === 'function'){
+                        window.history.replaceState("","",appUI.siteUrl+"pagebuilder/"+appUI.agilePageId);
                     }
         
                     if( showConfirmModal ) {
@@ -1972,9 +1972,19 @@
                         publishPageBtn.attr("href", window.location.origin+"/#landing-page-settings/"+appUI.agilePageId);
                         pagebuilderCopyBtn.attr("href", window.location.origin+"/pagebuilder/copy-"+appUI.agilePageId);
         
-                        $('#successModal .modal-body').html(_AGILE_LOCALE_JSON['saved-successfully'] + "!");
-                        $('#successModal').modal('show');
-                
+                       // $('#successModal .modal-body').html(_AGILE_LOCALE_JSON['saved-successfully'] + "!");
+                        
+                        $("#lp-save-msg").show();
+                        $("#lp-save-msg").fadeOut(8000);
+                        if(localStorage.getItem("lp-instruct-popup")!=="true"){
+                            
+                            $('.lp-view-link').attr("href",window.location.origin+"/landing/"+res.id);
+                            $('.lp-publish-link').attr("href",window.location.origin+"/#landing-page-settings/"+res.id);
+                            $("#success-msg").show();
+                            $("#success-msg").fadeOut(8000);                            
+                            $('#instructionModal').modal('show');
+                        }
+                                       
                     }
             
             

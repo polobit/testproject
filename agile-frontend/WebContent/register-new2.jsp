@@ -13,10 +13,10 @@ pageEncoding="UTF-8"%>
 <%
 
 
-if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
+/*if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
     response.sendRedirect("/register");
     return;
-}
+}*/
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 
 String CSS_PATH = "/";
@@ -442,6 +442,8 @@ $(document).ready(function(){
 
 	$("#login_phone_number").intlTelInput({
 	  initialCountry: "auto",
+	  autoHideDialCode:false,
+	  nationalMode:false,
 	  geoIpLookup: function(callback) {
 	    $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
 	      var countryCode = (resp && resp.country) ? resp.country : "";

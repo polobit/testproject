@@ -34,6 +34,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
 
     	'click #lhs-customfilters-header' : 'toggleMobileCustomFilters',
     	'click #lhs-company-customfilters-header' : 'toggleMobileCustomFilters',
+    	'mouseover .bulk-action-wrapper' : 'showTooltipOnHoverBulkAction',
 
     },
 
@@ -330,7 +331,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	else{
     		_agile_set_prefs("contactTabelView","true");
     		$(e.currentTarget).find("i").removeClass("fa fa-navicon");
-    		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+    		$(e.currentTarget).find("i").addClass("fa fa-navicon");
     	}
     	$(e.currentTarget).parent().parent().toggleClass("compact");
     	contacts_view_loader.disableBulkActionBtns();
@@ -338,16 +339,23 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     },
 
     addOrRemoveContactColumns : function(e){
-    	e.preventDefault();
-    	var $checkboxInput = $(e.currentTarget).find("input");
-    	if($checkboxInput.is(":checked"))
-    	{
-    		$checkboxInput.prop("checked", false);
+    	// e.preventDefault();
+
+    	// Check for target element which invalidates the new theme/Old theme
+    	if(!isTargetAnInputField(e)){
+    		var $checkboxInput = $(e.currentTarget).find("input");
+    		if(CURRENT_USER_PREFS.theme == "15"){
+		    	if($checkboxInput.is(":checked"))
+		    	{
+		    		$checkboxInput.prop("checked", false);
+		    	}
+		    	else
+		    	{
+		    		$checkboxInput.prop("checked", true);
+		    	}
+		    }
     	}
-    	else
-    	{
-    		$checkboxInput.prop("checked", true);
-    	}
+
     	var json = serializeForm("contact-static-fields");
 		$.ajax({
 			url : 'core/api/contact-view-prefs',
@@ -397,7 +405,7 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     	else{
     		_agile_set_prefs("companyTabelView","true");
     		$(e.currentTarget).find("i").removeClass("fa fa-navicon");
-    		$(e.currentTarget).find("i").addClass("fa fa-ellipsis-h");
+    		$(e.currentTarget).find("i").addClass("fa fa-navicon");
     	}
     	$(e.currentTarget).parent().toggleClass("compact");
     	companies_view_loader.disableBulkActionBtns();
@@ -405,16 +413,21 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
     },
 
     addOrRemoveCompanyColumns : function(e){
-    	e.preventDefault();
-    	var $checkboxInput = $(e.currentTarget).find("input");
-    	if($checkboxInput.is(":checked"))
-    	{
-    		$checkboxInput.prop("checked", false);
+    	// e.preventDefault();
+    	if(!isTargetAnInputField(e)){
+	    	var $checkboxInput = $(e.currentTarget).find("input");
+	    	if(CURRENT_USER_PREFS.theme == "15"){
+		    	if($checkboxInput.is(":checked"))
+		    	{
+		    		$checkboxInput.prop("checked", false);
+		    	}
+		    	else
+		    	{
+		    		$checkboxInput.prop("checked", true);
+		    	}
+		    }
     	}
-    	else
-    	{
-    		$checkboxInput.prop("checked", true);
-    	}
+
     	var array = serializeForm('companies-static-fields');
 		$.ajax({
 			url : 'core/api/contact-view-prefs/company',
@@ -443,7 +456,25 @@ var Contacts_And_Companies_Events_View = Base_Model_View.extend({
             _agile_set_prefs("companiesFilterStatus", "display:none");
             $(e.currentTarget).attr("data-original-title", "{{agile_lng_translate 'tickets' 'show-filters'}}").tooltip("hide");
         }
-    }
+    },
+
+    showTooltipOnHoverBulkAction: function(e){
+    	var bulk_disable = $(e.currentTarget).children(".disabled");
+    	var message="{{agile_lng_translate 'contacts' 'select-contact-bulk-message'}}";
+    	if (company_util.isCompanyContact())
+    		message="{{agile_lng_translate 'contacts' 'select-contact-bulk-message'}}";
+    	else if (company_util.isCompany())
+    		message="{{agile_lng_translate 'contacts' 'select-company-bulk-message'}}";
+    	if(bulk_disable.length>0)
+    	{
+    		$(e.currentTarget).attr("data-original-title", message).tooltip("show");
+    	}
+    	else
+    		{
+    			$(e.currentTarget).tooltip("hide");
+    			$(e.currentTarget).removeAttr("data-original-title");
+    		}
+    },
 
    
 });

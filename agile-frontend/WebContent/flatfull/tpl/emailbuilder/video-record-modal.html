@@ -24,7 +24,7 @@
 						<select class="form-control" id="video-record-select" name="video-record-select">
 						<option value="">Select</option>
 						{{#each this}}
-							<option value="{{id}}">{{name}}</option>
+							<option data-thumb="{{thumb_url}}" value="{{id}}">{{name}}</option>
 						{{/each}}
 							<!-- <option value="AGILE_CREATE_NEW_VIDEO">Record new video</option> -->
 						</select>
@@ -36,7 +36,7 @@
 					<h5>Preview</h5>
 					<div class="form-group">
 						<div class="col-sm-12 text-center" id="videoPreview">
-							<img id="loader" src="img/loader.gif" class="img-responsive " alt="loading gif" style="position: absolute;top: 35%;left: 42%;" />
+							<!-- <img id="loader" src="img/loader.gif" class="img-responsive " alt="loading gif" style="position: absolute;top: 35%;left: 42%;" /> -->
 							
 							<iframe src="" frameborder="0" width="100%" height="320" id="videoPreviewIframeId" allowfullscreen 	></iframe>
 						</div>

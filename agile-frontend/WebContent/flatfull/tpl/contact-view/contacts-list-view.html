@@ -7,7 +7,7 @@
 		        		<div class="m-l-sm" id="slate"></div>
 		        	{{/unless}}
 		        	{{#if this.length}}
-	                	<table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
+	                	<table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE">                
 							<div class="filter-criteria"></div>
 							<tbody id="contacts-list-view-model-list" route="contact/"></tbody>
 	                	</table>
@@ -23,7 +23,7 @@
         			<div class="m-l-sm" id="slate"></div>
         		{{/unless}}
         		{{#if this.length}}
-              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+              			<table id="contacts-table" class="table contacts-custom noDelete table-striped showCheckboxes no-sorting panel agile-table no-header-checkbox {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 							<div class="filter-criteria"></div>
 			 				<thead>
                       			<tr style="text-transform: capitalize;">

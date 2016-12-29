@@ -20,10 +20,11 @@
 						<a href="#" id="route-select-none" class="text-info">{{agile_lng_translate 'portlets' 'select-none'}}</a>
 					</span>
 					<select id="route-list" name="route-list" class="required form-control" multiple="multiple">
-						 <option value="DashBoard">{{agile_lng_translate 'portlets' 'dashboard'}}</option>
 						{{#if_equals name "Mini Calendar"}}
+						<option value="SalesDashboard">{{agile_lng_translate 'menu' 'sales'}}</option>
 						{{else}}
 							{{#if_equals name "Agenda"}}
+							<option value="SalesDashboard">{{agile_lng_translate 'menu' 'sales'}}</option>
 							{{else}}
 							   {{#getCurrentUserDashboards 'portlet'}}{{/getCurrentUserDashboards}}
 						     
@@ -48,7 +49,7 @@
     									<span class="sr-only">{{agile_lng_translate 'widgets' 'toggle-dropdown'}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
+    									<li><a class="btn btn-sm btn-default-imp add_to_all">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}

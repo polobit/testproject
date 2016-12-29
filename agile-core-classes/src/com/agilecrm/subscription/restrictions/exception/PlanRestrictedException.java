@@ -10,18 +10,18 @@ public class PlanRestrictedException extends WebApplicationException
     {
 
 	super(Response.status(Response.Status.NOT_ACCEPTABLE)
-		.entity(reason + ". Please <a href=\"#subscribe\" class=\"hideCurrentModal\">upgrade</a>").build());
+		.entity(reason + ". <span class=\"hideInIphone\">Please <a href=\"#subscribe\" class=\"hideCurrentModal\">upgrade</a></span>").build());
     }
 
     public PlanRestrictedException(String reason, boolean attachUpgradeMessage)
     {
 	super(Response.status(Response.Status.NOT_ACCEPTABLE)
-		.entity(reason + (attachUpgradeMessage ? ". Please <a href=\"#subscribe\"  class=\"hideCurrentModal\">upgrade</a>" : "")).build());
+		.entity(reason + (attachUpgradeMessage ? ". <span class=\"hideInIphone\">Please <a href=\"#subscribe\"  class=\"hideCurrentModal\">upgrade</a></span>" : "")).build());
     }
     
     public PlanRestrictedException(String reason, String info)
     {
 	super(Response.status(Response.Status.NOT_ACCEPTABLE)
-			.entity(reason + ". Please <a href=\"#subscribe\" class=\"hideCurrentModal\">upgrade</a>.<br>If contacts are deleted, <a href=\"/login\">re-login</a> to refresh the contacts count.").build());
+			.entity(reason + ". <span class=\"hideInIphone\">Please <a href=\"#subscribe\" class=\"hideCurrentModal\">upgrade</a>.<br></span>If contacts are deleted, <a href=\"/login\">re-login</a> to refresh the contacts count.").build());
     }
 }

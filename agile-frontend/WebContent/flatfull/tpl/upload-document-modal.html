@@ -1,21 +1,22 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-modal-template">
 
-    <div class="wrapper-md lter  bg-light b-b">
+    <div class="wrapper-md lter  bg-light b-b agile-page-header">
       <div class="row">
           <div class="col-md-12 h3 font-thin m-n">&nbsp;{{agile_lng_translate 'modals' 'new-document'}}</div>
       </div>
     </div>
      
-     <div class="wrapper-md">
+     <div class="wrapper-md agile-p-t-xs">
       <div class="row">  
         <div class="col-md-9" {{#is_mobile}}{{else}}style="padding-right:0px;"{{/is_mobile}}>
-          <div class="panel wrapper" style="padding-bottom:35px;">
+          <div class="panel wrapper p-b-md">
             <form id="uploadDocumentForm" name="uploadDocumentForm" method="post" class="form-horizontal">
               <fieldset>
                   <input id="id" type="hidden"/>
                   <input name="extension" id="extension" type="hidden"/>
                   <input type="hidden" name="template_type" id="template_type"/>
+                  <input type="file" id="doc-file-up" class="hidden"/>
                   <div class="control-group form-group hide {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                      <label class="control-label  col-sm-3"><b>Type </b><span
                         class="field_req">*</span></label>
@@ -37,7 +38,7 @@
                           </div>
                     </div>
                     <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
-                    <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}<span
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-to'}}<span
                           class="field_req related-contacts-required">*</span></label></label>
                     <div class="controls col-sm-9" id="contactTypeAhead">
                       <div>
@@ -62,7 +63,7 @@
                           placeholder="{{agile_lng_translate 'documents' 'deal-name'}}" class="typeahead typeahead_deals form-control"
                           data-provide="typeahead" data-mode="multiple" />
                         <div style="padding-top:2px;">
-                          <ul name="deal_ids" class="deals tagsinput deal_tags p-n"></ul>
+                          <ul name="deal_ids" class="deals tagsinput deal_tags p-n m-b-none"></ul>
                         </div>
                         <div class="clearfix"></div>
                       </div>
@@ -76,17 +77,18 @@
                           <input type="hidden" name="size" id="size" class="required"/>
                           <input type="hidden" name="network_type" id="network_type" class="required"/>
                           <div class="row" id="document-link">
-                          <div class="col-md-4 col-sm-6 col-xs-6" style="width:39%;">
+                          <div class="col-md-4 col-sm-6 col-xs-6" style="width:50%;">
                           <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
                             <a href="#" id="S3"><i class="icon-desktop icon-2x" title="{{agile_lng_translate 'campaigns' 'custom'}}"></i><br/><span>{{agile_lng_translate 'documents' 'my-computer'}}</span></a>
                           </div>
                         </div>
-                        <div class="col-md-4 col-sm-6 col-xs-6 " style="width:39%;">
+                        <div class="col-md-4 col-sm-6 col-xs-6 " style="width:50%;">
                           <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
                             <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="{{agile_lng_translate 'prefs-data-sync' 'google'}}"></i><br/><span>{{agile_lng_translate 'documents' 'google-drive'}}</span></a>
                           </div>
                         </div>
                         </div>
+                        <div id="uploaded-doc" class="hide"></div>
                       </div>
                     </div>
                   <div class="senddoc hide">
@@ -101,12 +103,12 @@
                   <div id="error"></div>
                   <div class="form-actions">      
                            <div class="col-sm-offset-3 col-sm-9">    
-                              <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
-                              <a  class="c-p m-t-xs m-r-xs btn btn-sm hide btn-success text-white generate-send-doc">{{agile_lng_translate 'document' 'document-generate'}}</a>
+                              <a href="#" class="btn btn-default btn-default-imp btn-lg-imp btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
+                              <a  class="c-p m-t-xs m-r-xs btn btn-sm hide btn-primary-imp btn-lg-imp btn-success text-white generate-send-doc">{{agile_lng_translate 'document' 'document-generate'}}</a>
                               
                               <div class="btn-group ">
-                                        <a href="#documents/attachment" id="document_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" class1="btn btn-default btn-sm"> {{agile_lng_translate 'modals' 'save'}}</a>
-                                        <a class="btn btn-default btn-sm email-send-doc-group hide dropdown-toggle m-t-xs " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+                                        <a href="#documents/attachment" id="document_validate" class="btn-primary btn btn-default btn-primary-imp btn-lg-imp btn-sm  m-t-xs" class1="btn btn-default btn-sm"> {{agile_lng_translate 'modals' 'save'}}</a>
+                                        <a class="btn btn-default btn-sm btn-primary-imp btn-lg-imp email-send-doc-group hide dropdown-toggle m-t-xs " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right" style="margin-top:-3px;">
                                             <li style="padding:0px 0px;border:0px;"><a href="#"  class="email-send-doc hide">{{agile_lng_translate 'documents' 'document-sendemail'}}</a></li>
@@ -123,14 +125,14 @@
           </div>
           </div>
           <div class="col-md-3" style="padding-left:0px;">
-           <div class="wrapper">
+           <div class="panel wrapper p-b-xs">
                <h4 class="m-t-none font-thin">
                    {{agile_lng_translate 'documents' 'document-what-are-docs-title'}}
                </h4>
                
                
            <p>{{agile_lng_translate 'documents' 'newdocuments-helptext-paragraph1'}}</p>
-           <p>{{agile_lng_translate 'documents' 'newdocuments-helptext-paragraph2'}}</p> 
+           <p>{{agile_lng_translate 'documents' 'new-documents-helptext-paragraph2'}}</p> 
            <!-- <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para4'}}</p>
    
            <p>{{agile_lng_translate 'documents' 'document-what-are-docs-para5'}} <a class="text-info" href="https://github.com/agilecrm/agile-popups#usage" target="_blank"> {{agile_lng_translate 'documents' 'document-what-are-docs-para6'}}</a></p> -->

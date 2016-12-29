@@ -676,7 +676,12 @@
     <datastore-index kind="DocumentNote" ancestor="false" source="manual">
         <property name="document_id" direction="asc"/>
         <property name="created_time" direction="desc"/>
-    </datastore-index>    
+    </datastore-index> 
+    <datastore-index kind="Workflow" ancestor="false" source="manual">
+        <property name="access_level" direction="asc"/>
+        <property name="is_disabled" direction="asc"/>
+        <property name="name" direction="asc"/>
+    </datastore-index>   
 </datastore-indexes>
 
 

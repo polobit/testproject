@@ -1,6 +1,6 @@
 <script id="ticket-filters-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col panel wrapper">
+    <div class="col panel wrapper no-panel-border">
         <div class="hbox h-auto m-b-sm">
             <div class="text-center padder-v">
                 <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-filters'}}
@@ -9,7 +9,7 @@
                     {{agile_lng_translate 'tickets' 'ticket-filters-desc'}} 
                 </div>
                 <div>
-                    <a href="#add-ticket-filter" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                    <a href="#add-ticket-filter" class="btn btn-sm btn-default btn-default-imp blue btn-slate-action m-t-xs">
                         {{agile_lng_translate 'contacts-view' 'add-filter'}}
                     </a>
                 </div>
@@ -37,9 +37,9 @@
 
     {{else}}
 
-    <div class="col panel wrapper">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper no-panel-border" id="service-tab">
         <div class="pull-right">
-            <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon">
+            <a href="#add-ticket-view" class="btn btn-sm btn-default btn-addon btn-default-imp">
                 <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contacts-view' 'add-view'}}
             </a>
         </div>

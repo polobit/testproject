@@ -7,6 +7,8 @@
 <%@page import="java.util.Date"%>
 <%@page import="com.google.appengine.api.blobstore.BlobstoreService"%>
 <%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -20,6 +22,7 @@ try{
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload-csv");
 
+UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 %>
 
 <html>
@@ -37,6 +40,13 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "uplo
 
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" />
 <link rel="stylesheet" type="text/css" href="/flatfull/css/app.css" />
+
+<%if(currentUserPrefs.theme.equals("15")){%>
+<link href="flatfull/css/material-theme/icon/material-icons.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/style.css" rel="stylesheet" />
+<link href="flatfull/css/material-theme/css/agile-theme.css" rel="stylesheet" />
+<%}%>
 
 <script type='text/javascript' src='/lib/jquery-new/jquery-2.1.1.min.js'></script>
 <script type="text/javascript" src="/lib/bootstrap.v3.min.js"></script>
@@ -155,6 +165,7 @@ function isValid(){
 
 
 </script>
+
 <style>
   label.error {
     color:red;
@@ -171,7 +182,7 @@ function isValid(){
 
 <div class="row">
 <div class="col-md-12 col-sm-12 col-xs-12">
-<div class="panel panel-default mobile-popup">
+<div class="panel panel-default mobile-popup upload-panel">
 <div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-csv-file") %></div>
 <div class="panel-body">
 <br/>

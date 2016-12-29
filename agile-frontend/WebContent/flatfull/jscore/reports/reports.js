@@ -243,7 +243,12 @@ function initializeReportsListeners(){
 						var upgrade_id=$('._upgrade','#'+tab_id).attr('id');
 						var upgrade_span=$('.'+upgrade_id,'#'+tab_id);
 						if(upgrade_span.length!=0)
-						{$('#reportsUpgradeModal').html(getTemplate('upgradeModal'));
+						{
+							// Dont show upgrade modal to iphone users
+							if(_agile_is_user_from_iphone())
+								return;
+
+							$('#reportsUpgradeModal').html(getTemplate('upgradeModal'));
 					var cloned_upgrade=upgrade_span.clone();
 							$('.modal-body','#reportsUpgradeModal').html(cloned_upgrade);
 							$(cloned_upgrade,'.modal-body').show();

@@ -7,7 +7,7 @@
                 {{agile_lng_translate 'tickets' 'configure-your-help-desk-system-desc'}}
             </div>
             <div>
-                <a href="#add-ticket-group" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                <a href="#add-ticket-group" class="btn btn-sm btn-default btn-default-imp blue btn-slate-action m-t-xs">
                     {{agile_lng_translate 'tickets' 'create-group'}}
                 </a>
             </div>
@@ -39,10 +39,10 @@
 
     {{else}}
 
-    <div class="col panel wrapper">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper no-panel-border" id="service-tab">
         <div class="hbox h-auto">
             <div class="pull-right">
-                <a href="#add-ticket-group" class="btn btn-sm btn-default btn-addon">
+                <a href="#add-ticket-group" class="btn btn-sm btn-default btn-default-imp btn-addon">
                     <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'report-view' 'add-group'}}
                 </a>
             </div>

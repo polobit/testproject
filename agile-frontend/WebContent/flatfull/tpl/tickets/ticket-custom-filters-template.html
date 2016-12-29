@@ -1,6 +1,6 @@
 <script id="ticket-custom-filters-template" type="text/html">
 <div class="wrapper hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
+  <div class="panel panel-default m-b-none no-panel-border">
     <div class="panel-body">
         <div class="col-md-12 p-n m-b-xs">{{agile_lng_translate 'tickets' 'assignees'}}</div>
         <div class="col-md-12 p-n assignee-select txt-small" style="max-height: 230px; overflow-y: auto;"><small>{{agile_lng_translate 'tickets' 'loading'}}</small></div>
@@ -10,15 +10,15 @@
   </div>
 </div>
 <div class="wrapper hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
+  <div class="panel panel-default m-b-none no-panel-border">
     <div class="panel-body">
       <div class="col-md-12 p-n m-b-xs">{{agile_lng_translate 'tickets' 'labels'}}</div>
       <div class="col-md-12 p-n m-b-xs cusom-filter-labels choose-labels txt-small">
         <select data-placeholder="{{agile_lng_translate 'tickets' 'search-labels'}}" class="chosen-select form-control" multiple class="w-md"></select>
       </div>
       <div class="col-md-12 p-n m-t-xs">
-        {{agile_lng_translate 'contacts-view' 'created-date'}} 
-        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">{{agile_lng_translate 'contacts-view' 'clear'}}</a>
+        {{agile_lng_translate 'contacts-view' 'created-date'}}
+        <a class="pull-right txt-small display-none m-t-xs link-color" href="javascript:void(0);" id="clear-created-date" style="font-size: 10px;">{{agile_lng_translate 'contacts-view' 'clear'}}</a> 
       </div>
       <div class="col-md-12 p-n m-t-xs">
         <input id="created-date-input" name="created-date-input" type="text" class="form-control input-sm created-date-input" placeholder="{{agile_lng_translate 'tickets' 'choose-date'}}">
@@ -30,7 +30,7 @@
       <div class="col-md-12 p-n m-t-xs">
         <input type="text" name="due-date-input" class="form-control input-sm due-date-input" placeholder="{{agile_lng_translate 'tickets' 'choose-date'}}">
       </div>
-      <div class="col-md-12 p-n">
+      <div class="col-md-12 p-n m-t-xs-imp ">
         <div class="col-md-2 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">{{agile_lng_translate 'tasks' 'Overdue'}}</a>
         </div>
@@ -55,7 +55,7 @@
   </div>
 </div>
 <div class="wrapper hidden-sm hidden-xs p-b-xs">
-  <div class="panel panel-default m-b-none">
+  <div class="panel panel-default m-b-none no-panel-border">
       <div class="panel-body">
         <div class="col-md-12 p-n m-b-xs">{{agile_lng_translate 'widgets' 'status'}}</div>
         <div class="col-md-12 p-n txt-small">

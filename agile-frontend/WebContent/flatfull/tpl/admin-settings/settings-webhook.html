@@ -46,7 +46,10 @@
             </fieldset>
             </form>
     {{else}}
-            <div class="m-xs " style="text-align:center;font-size: 13px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;"> Please <a href="#subscribe-plan" class="c-p text-info">{{agile_lng_translate 'widgets' 'upgrade'}}</a> {{agile_lng_translate 'widgets' 'to-enterprise-plan'}} </span>
+            <div class="m-xs " style="text-align:center;font-size: 13px;">
+                <span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">
+                    {{{get_template_type "subscribe-to-enterprise-plan"}}}
+                </span>
             </div>
            <form id="webhookPrefs" class="form-horizontal" style="margin-top:15px;">
         <fieldset>

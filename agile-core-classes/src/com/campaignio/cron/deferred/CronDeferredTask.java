@@ -124,7 +124,10 @@ public class CronDeferredTask implements DeferredTask
 			if (tasklet != null)
 			{
 				System.out.println("Executing tasklet from CRON ");
-
+				
+				// To know wakeup or interrupt
+				data.put(Cron.CRON_TYPE, wakeupOrInterrupt);
+				
 				if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
 					tasklet.timeOutComplete(campaignJSON, subscriberJSON, data, updatedNodeJSON);
 				else

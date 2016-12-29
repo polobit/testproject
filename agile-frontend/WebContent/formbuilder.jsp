@@ -1,3 +1,9 @@
+<%@page import="com.agilecrm.customtheme.util.CustomThemesUtil"%>
+<%@page import="com.agilecrm.customthemes.CustomTheme"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONObject"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONArray"%>
+<%@page import="com.google.appengine.repackaged.com.google.gson.Gson"%>
 <%
 String formId = request.getParameter("form");
 String template = request.getParameter("template");
@@ -8,9 +14,17 @@ String template = request.getParameter("template");
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <title>Form Builder</title>
+      
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
-      <link href="misc/formbuilder/builder-themes.css?v=3" rel="stylesheet">
-      <link href="misc/formbuilder/custom.css?v=3-3" rel="stylesheet">
+      <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
+      <link href="misc/formbuilder/custom.css?v=3-5" rel="stylesheet">  
+      <link href="misc/formbuilder/builder-themes.css?v=6" rel="stylesheet">
+      <link href="misc/formbuilder/formbuilder-topmenu.css?t=2" rel="stylesheet">
+      <link href="misc/formbuilder/formthemes.css?t=1" rel="stylesheet">
+      <script src="misc/formbuilder/formthemes/jscolor.js"></script>
+      <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
+      <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
+      
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -29,33 +43,77 @@ String template = request.getParameter("template");
            }
          .tooltip.in{opacity:1 !important;}
       </style>
-	<script>
-		var formNumber = <%=formId%>;
+  <script>
+    var formNumber = <%=formId%>;
    <% if(template != null) { %>
    var formTemplate = '<%=template%>';
    <% } %>
-	</script>
+   var customthemes=null;
+      <%
+        List<CustomTheme> custThmList=CustomThemesUtil.fetchAllCustomThemes();
+        System.out.println("hi..........."+custThmList);
+        %>
+   customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
+  </script>
 
    </head>
    <body>
+      <header id="header" class="navbar navbar-fixed-top" role="menu">
+         <a id="agile-logo" title="Go to Agile Dashboard" class="navbar-brand" href="#navbar-dashboard">
+           <i class="fa fa-cloud"></i> 
+         </a>
+         <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
+        <div style="float: right;"> 
+             <select class="themesSelectEle navbar-brand">
+                  <option id="chooseTheme">Choose Theme</option>
+                  <optgroup id="defaultThmEle"  label="Default Themes">
+                  <option id="theme1" value="theme1">Theme1</option>
+                  <option id="theme2" value="theme2">Theme2</option>
+                  <option id="theme3" value="theme3">Theme3</option>
+                  <option id="theme4" value="theme4">Theme4</option>
+                  </optgroup>
+                  <optgroup id="custThmEle" label="Custom Themes">
+                  <option id="addNewTheme">+ Add new</option>
+                  </optgroup>
+             </select>
+             <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
+               <span>Preview</span> 
+            </a>          
+            <a id="form_back" class="btn btn-default navbar-brand">
+               <span>Back</span>
+            </a>
+            <a id="form-save" class="btn navbar-brand  navbar-color">
+               <span>Save</span>
+            </a>
+         </div>
+      </header>
+      <div id="loader">
+         <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>
+         <span>Loading...</span>
+      </div>
       <div class="container">
          <div class="row">
             <!-- Building Form. -->
             <div class="col-md-6">
                <div class="clearfix">
-                  <h2 id="form-label">Your Form</h2>
-                  <input id="form-save" type="button" class="btn btn-info" value="Save Form">
-                  <hr style="margin-top: 30px;">
+                  <!-- <h2 id="form-label">Your Form</h2> -->
+                  <!-- <input id="form-save" type="button" class="btn btn-info" value="Save Form"> -->
+                 
+                 
+                <%@ include file="/misc/formbuilder/custom-theme-builder.html" %>     
+                
+                <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
                      </form>
+                     <style id="agileCustTheme" type="text/css"></style>
                   </div>
                </div>
             </div>
             <!-- / Building Form. -->
             <!-- components children -->
             <div class="col-md-6">
-               <h2>Drag & Drop components</h2>
+               <!-- <h2>Drag & Drop components</h2> -->
                <div class="clearfix"></div>
                <hr>
                <div class="tabbable">
@@ -73,8 +131,27 @@ String template = request.getParameter("template");
             </div>
             <!-- / whose components -->
          </div>
+         <div class="modal fade in" id="formNextActionModal" data-keyboard="false" data-backdrop="static"></div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built-v2-9.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      
+      <script type="text/javascript">
+      if(formNumber){
+         var a = document.getElementById('form_preview');
+         a.removeAttribute("disabled");
+         a.href = window.location.origin+"/forms/"+formNumber;
+      }  
+         var a = document.getElementById('agile-logo');
+         a.href = window.location.origin;
+         var a = document.getElementById('form_back');
+         a.href = window.location.origin+"/#forms";
+         window.onbeforeunload = function(event) {
+               var closeText = "Do you want to Close?";
+               event.returnValue = closeText;
+               return closeText;
+         }
+      </script>
+      <script data-main="misc/formbuilder/main-built-7.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      
    </body>
 </html>

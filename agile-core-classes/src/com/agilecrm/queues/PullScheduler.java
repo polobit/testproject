@@ -287,7 +287,7 @@ public class PullScheduler
 		    try
 		    {
 			 System.out.println("Executing Maigun mail tasks...");
-			EmailGatewayUtil.sendMails(tasks);
+			EmailGatewayUtil.sendMails(tasks, queueName);
 		    }
 		    catch (Exception e)
 		    {

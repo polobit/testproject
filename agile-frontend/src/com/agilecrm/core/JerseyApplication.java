@@ -66,10 +66,12 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.widgets.RapleafWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.StripeWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.TwilioWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.OzonetelWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.ZendeskWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.HelpScoutWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.XeroWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.QuickBooksWidgetAPI.class);
+	s.add(com.agilecrm.core.api.widgets.KnowlarityAPI.class);	
 	s.add(com.agilecrm.core.api.widgets.FacebookWidgetsApi.class);
 	s.add(com.agilecrm.core.api.widgets.ChargifyWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.account.AccountDeletionAPI.class);
@@ -181,6 +183,10 @@ public class JerseyApplication extends Application
 	
 	//Leads
 	s.add(com.agilecrm.core.api.leads.LeadsAPI.class);
+
+	//CustomTheme
+	s.add(com.agilecrm.core.api.customthemes.CustomThemesAPI.class);
+
 	return s;
     }
 }

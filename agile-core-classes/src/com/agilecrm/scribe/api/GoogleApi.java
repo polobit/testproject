@@ -89,6 +89,7 @@ public class GoogleApi extends DefaultApi20
 		else if (oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_CONTACTS_SCOPE)
 				|| oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_CALENDAR_SCOPE)
 				|| oauthScope.equalsIgnoreCase(ScribeServlet.GMAIL_SCOPE)
+				|| oauthScope.equalsIgnoreCase(ScribeServlet.GMAIL_SEND_SCOPE)
 				|| oauthScope.equalsIgnoreCase(ScribeServlet.GOOGLE_PLUS_OAUTH2_SCOPE))
 			url = AUTHORIZE_URL_GOOGLE_APPS;
 

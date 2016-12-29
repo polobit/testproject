@@ -407,12 +407,25 @@ box-sizing: content-box;
 	.segment p.choose {
 		margin-bottom: 25px;
 	}
+
+#mainwrap .event-title{text-align: center;}
+#mainwrap .datetimezone, #mainwrap .timezone{float: none !important;}
+#mainwrap .datepickerContainer{left: 0; padding: 0px; width: 100% !important;}
+#mainwrap .datepicker table{width: 100%; table-layout: fixed;}
+#mainwrap .timezone #user_timezone{ margin-top: 5px !important; margin-bottom: 5px !important;}
+#mainwrap .segment{padding-left:0px; padding-right: 0px; padding-bottom: 10px; }
+.datepickerDays td a, .datepickerMonths td a, .datepickerYears td a{width:auto !important;}
+#mainwrap .checkbox-grid li{margin-right:20px;}
+.appointment-wrap{width:auto !important; margin-left:20px; margin-right:20px;}
+.appointment-wrap #create_new_appointment{margin-top:10px !important;}
+.appointment-body h3{font-size:18px;}
 	
 }
 
 .segment p.choose {
 		margin-bottom: 25px;
 	}
+.appointment-body{padding:5px 10px 25px; font-size:15px;}
 
 @media screen and (max-width: 435px) {
 	.segment2 {

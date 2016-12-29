@@ -47,7 +47,7 @@ $(function(){
 	$('body').off('click', '#merge-companies-model');
 	$('body').on('click', '#merge-companies-model', function(event){
 		event.preventDefault();
-		var confirm_message = _agile_get_translated_val('contacts','merge-confirm');
+		var confirm_message = "{{agile_lng_translate 'contacts-view' 'merge-records-desc'}}";
 	
 		var $that = $(this);
 		showAlertModal(confirm_message, "confirm", function(){
@@ -145,7 +145,7 @@ $(function(){
 				var properties = master_record_dup.properties;
 				master_record.set({ "tags" : tags });
 				merge_duplicate_companies(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
-			}, undefined, "Delete duplicate Companies");
+			}, undefined, "{{agile_lng_translate 'contacts-view' 'merge-records'}}");
 		});	
 });
 

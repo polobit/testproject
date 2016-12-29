@@ -84,12 +84,14 @@ var Tickets = {
 	//Fetches new ticket collection
 	fetchTicketsCollection: function(){
 
+
 		Ticket_Labels.fetchCollection(function() {
 
 			App_Ticket_Module.ticketsCollection = new Base_Collection_View({
 				url : '/core/api/tickets/filter?filter_id=' + Ticket_Filter_ID + '&custom_filters=' + encodeURI(JSON.stringify(Ticket_Custom_Filters.customFilters)),
 				global_sort_key: Sort_By + Sort_Field,
-				sort_collection: false,
+				sort_collection: (Sort_Field == "assignee_name") ? true : false,
+				sortKey : (Sort_Field == "assignee_name") ? 'assignee.name' : '',
 				templateKey : Tickets.isSingleRowView() ? 'ticket-single-row' : 'ticket',
 				customLoader: true,
 				preserveAcrossRoutes: true,
@@ -104,8 +106,9 @@ var Tickets = {
 					//Updating "showing ticket count" text
 					Tickets.setCountText();
 				},
-				postRenderCallback: function(el){
 
+				postRenderCallback: function(el){
+					
 					//Initializing click event on each ticket li
 					Tickets.initEvents(el);
 
@@ -489,6 +492,14 @@ var Tickets = {
 			Ticket_Bulk_Ops.clearSelection();
 		});
 
+		if(Sort_By == "-assignee_name"){
+		
+			App_Ticket_Module.ticketsCollection.collection.sort_collection = true;
+
+			App_Ticket_Module.ticketsCollection.collection.sortKey = "assignee_name";						
+
+		}
+
 		//Initialization click event on toggle custom filters btn
 		$('.tickets-toolbar').on('click', '.toggle-custom-filters', function(e){
 			e.preventDefault();
@@ -584,15 +595,21 @@ var Tickets = {
 		//Initializing click event on choose columns for single line row view
 		$(el).off('click','ul.choose-columns > li > a');
 	  	$(el).on('click','ul.choose-columns > li > a', function(event){
-	  		event.preventDefault();
+	  		if(!isTargetAnInputField(event)){
+	  			event.preventDefault();
+	  		}
+	  		
 	  		event.stopPropagation();
 
 	  		var $target = $(event.currentTarget);
 	  		$(event.target).blur();
 
 	  		var $chbx = $target.find('input[type="checkbox"]');
-	  		var isChecked = $chbx.is(':checked') ? false : true;
-			$chbx.prop('checked', isChecked);
+	  		if(!isTargetAnInputField(event)){
+	  			var isChecked = $chbx.is(':checked') ? false : true;
+				$chbx.prop('checked', isChecked);
+	  		}
+	  		
 
 			var field_name = $chbx.attr('name');
 

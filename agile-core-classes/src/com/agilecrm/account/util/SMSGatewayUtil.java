@@ -3,11 +3,17 @@ package com.agilecrm.account.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
+import com.agilecrm.activities.Activity;
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.sms.util.deferred.SMSDeferredTask;
@@ -15,10 +21,12 @@ import com.agilecrm.social.PlivoUtil;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.widgets.Widget;
+import com.campaignio.tasklets.sms.SendMessage;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.thirdparty.plivo.PlivoSMSUtil;
+import com.thirdparty.twilio.TwilioSMS;
 import com.thirdparty.twilio.TwilioSMSUtil;
 
 /**
@@ -300,5 +308,32 @@ public class SMSGatewayUtil
 		    return isTwilio;
 		}
 		return isTwilio;
+	}
+	
+	/**
+	 * This me
+	 * @return
+	 * 			-- Widget
+	 */
+	public static Widget getSMSGatewayWidgetForSMS(){
+		Widget widget=SMSGatewayUtil.getSMSGatewayWidget();
+		if(widget !=null)
+		 {
+			widget.display_name="SMS-Gateway";
+			JSONObject json;
+			try {
+				  json = new JSONObject(widget.prefs);
+			      if(json.getString("sms_api").equalsIgnoreCase("twilio"))
+			    	  widget.mini_logo_url = "/widgets/sms-small-logo.png";
+			      else 
+			    	  widget.mini_logo_url = "/widgets/plivosms-small-logo.png";
+				}
+				catch (JSONException e) {
+					System.out.println("Exception occured while fetching SMS gatway : " + e.getMessage());
+					return null;
+			      }
+			return widget;
+			}
+		return null;
 	}
 }

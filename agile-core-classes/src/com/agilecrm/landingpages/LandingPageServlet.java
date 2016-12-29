@@ -51,6 +51,10 @@ public class LandingPageServlet extends HttpServlet {
 				if(landingPage == null)
 				throw new Exception("No landing page found.");
 				
+				if(lpUtil.requestingDomain != null) {
+					NamespaceManager.set(lpUtil.requestingDomain);
+				}
+				
 				LandingPageHelper lpHelper = new LandingPageHelper(landingPage);
 				lpHelper.requestingDomain = lpUtil.requestingDomain;
 				lpHelper.cnameHost = lpUtil.cnameHost;

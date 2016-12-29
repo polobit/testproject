@@ -176,11 +176,15 @@ public class PortletsAPI {
 
 		// UI sends only ID and Position
 		for (Portlet portlet : portlets) {
+			System.out.println("Current Portlet"+portlet.name+portlet.id);
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
-			portlt.column_position = portlet.column_position;
-			portlt.row_position = portlet.row_position;
-			portlt.isForAll = portlet.isForAll;
-			portlt.save();
+			if(portlt!=null)
+			{
+				portlt.column_position = portlet.column_position;
+				portlt.row_position = portlet.row_position;
+				portlt.isForAll = portlet.isForAll;
+				portlt.save();
+			}
 		}
 	}
 
@@ -199,7 +203,7 @@ public class PortletsAPI {
 			return;
 
 		// UI sends only ID and Position
-		for (Portlet portlet : portlets) {
+		for (Portlet portlet : portlets) {	
 			Portlet portlt = PortletUtil.getPortlet(portlet.id);
 			portlt.size_x = portlet.size_x;
 			portlt.size_y = portlet.size_y;
@@ -244,13 +248,16 @@ public class PortletsAPI {
 		if (portlet == null)
 			return null;
 		Portlet portlt = PortletUtil.getPortlet(portlet.id);
-		portlt.prefs = portlet.prefs;
-		portlt.is_minimized = portlet.is_minimized;
-
-		portlt.save();
-		if (portlt.prefs != null) {
-			JSONObject json = (JSONObject) JSONSerializer.toJSON(portlt.prefs);
-			portlt.settings = json;
+		if(portlt!=null)
+		{
+			portlt.prefs = portlet.prefs;
+			portlt.is_minimized = portlet.is_minimized;
+	
+			portlt.save();
+			if (portlt.prefs != null) {
+				JSONObject json = (JSONObject) JSONSerializer.toJSON(portlt.prefs);
+				portlt.settings = json;
+			}
 		}
 		// PortletUtil.setPortletContent(portlt);
 		return portlt;

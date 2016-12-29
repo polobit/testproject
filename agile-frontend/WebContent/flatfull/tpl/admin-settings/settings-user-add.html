@@ -1,7 +1,7 @@
 <script id="admin-settings-user-add-template" type="text/html">
 <div class="wrapper">
   <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-9 admin-users">
       <div class="panel panel-default">
         <div class="panel-heading">
           {{#if id}}
@@ -164,11 +164,11 @@
 {{else}}
 <input type="hidden" id="owner" name='is_account_owner' value=''/><i></i> 
 {{/is_domain_owner}}
-<div class="col-sm-offset-3 col-md-9 p-l-xs" id="admin-previlages">
+<div class="col-sm-offset-3 col-md-9 p-l-xs tabs" id="admin-previlages">
+  <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
+        </label>
 {{#is_admin_domain}}
     <div class="tab-container m-b-none">
-        <label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}
-        </label>
             <div class="control-group form-group">
               <div class="controls" >
                 <div class="multiple-checkbox" name="adminPanelAccessScopes" style="margin-top: 10px;">
@@ -261,7 +261,6 @@
     </div>
 {{/is_admin_domain}}
 <div class="tab-container m-b-none {{#is_admin_domain}} hide {{/is_admin_domain}}">
-<label class="p-b-xs" style="color:#363f44;"> {{agile_lng_translate 'admin-settings-users' 'permissions'}}</label>
   <ul class="nav nav-tabs b-b-none">
 
         <li class="p-none active">
@@ -280,11 +279,11 @@
         {{#isAllowedInCurrentPlan "is_ACL_allowed"}}
          {{else}}
         {{#is_mobile}}
-          <div style="font-size: 12px;top: 5px;padding: 3px 10px 3px 10px;border: 1px solid #ccc;background-color: #fafafa;border-radius: 2px">
+          <div style="font-size: 12px;top: 5px;padding: 3px 10px 3px 10px;border: 1px solid #ccc;background-color: #fafafa;border-radius: 2px" class="hideInIphone">
             <span>{{toSafeString message}}</span>
           </div>
         {{else}}
-          <div class="m-xs " style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
+          <div class="m-xs hideInIphone" style="font-size: 13px;position: relative;top: 5px;"><span style="padding: 3px 10px 3px 10px;border: 1px solid #E2E29C;background-color: #F7F7D0;">{{toSafeString message}}</span>
           </div>
         {{/is_mobile}}
         {{/isAllowedInCurrentPlan}}
@@ -376,7 +375,7 @@
                                     {{agile_lng_translate 'admin-settings-users' 'delete-deals'}}
                                     </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small>
+                                <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small>
                                 </div>
                             </div>
                             <div>
@@ -387,7 +386,7 @@
                                     
                                     </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small>
+                                <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small>
                                 </div>
                             </div>
                               <div  class="newMenuScopesCalendardiv m-t">
@@ -430,7 +429,7 @@
                                         {{agile_lng_translate 'admin-settings-users' 'delete-events'}}
                                     </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small>
+                                <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small>
                                 </div>
                             </div>
                             <div>
@@ -441,7 +440,7 @@
                                     
                                     </label>
                                 </div>
-                                <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
+                                <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
                                 </div>
                             </div>
                             </div>
@@ -525,7 +524,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'delete-deals'}}
                                        </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small></div>
+                                       <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small></div>
                                       </div>
                                       <div>
                                       <div class="pull-left" style="width:100%;">
@@ -535,7 +534,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
                                        </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
+                                       <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
                                      </div>
 
                                       <div  class="newMenuScopesCalendardiv m-t">
@@ -577,7 +576,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'delete-events'}}
                                        </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small></div>
+                                       <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small></div>
                                       </div>
                                       <div>
                                       <div class="pull-lefta" style="width:40%;">
@@ -586,7 +585,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
                                        </label>
                                        </div>
-                                       <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small></div>
+                                       <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small></div>
                                        </div>
                                 </div>
                                
@@ -672,7 +671,7 @@
                                             {{agile_lng_translate 'admin-settings-users' 'delete-deals'}}
                                         </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small></div>
+                                    <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-deals-content'}}</small></div>
                                 </div>
                                  <div>
                                     <div class="pull-left" style="width:100%;">
@@ -681,7 +680,7 @@
                                                 {{agile_lng_translate 'admin-settings-users' 'view-all-deals'}}
                                         </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
+                                    <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'view-deals-owned-by-others'}}</small></div>
                                 </div>
                                 
                                       <div  class="newMenuScopesCalendardiv m-t">
@@ -724,7 +723,7 @@
                                                 {{agile_lng_translate 'admin-settings-users' 'delete-events'}}
                                         </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small>
+                                    <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'create-update-delete-events-content'}}</small>
                                     </div>
                                 </div>
                                 <div>
@@ -734,7 +733,7 @@
                                                 {{agile_lng_translate 'admin-settings-users' 'view-all-events'}}
                                         </label>
                                     </div>
-                                    <div style="margin-left:26px;"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
+                                    <div style="margin-left:26px;" class="user-add-m-sm"><small>  {{agile_lng_translate 'admin-settings-users' 'view-events-owned-by-others'}}</small>
                                     </div>
                                 </div>
                             </div>
@@ -959,7 +958,7 @@
 
             <div class="form-actions">
             <a type="reset" href='#users' class="btn btn-default btn-sm {{#is_mobile}} m-r-xs {{/is_mobile}}">{{agile_lng_translate 'other' 'cancel'}}</a>
-                    <button type="submit" class="save saveAuth btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
+                    <button type="submit" class="save saveAuth btn btn-sm btn-primary btn-primary-imp btn-lg-imp m-l-sm">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</button>
                   </div>
 </div>
 </div>

@@ -89,7 +89,10 @@ public class FreshbooksSyncImpl extends OneWaySyncService
 				{
 				    Contact subContact = wrapContactToAgileSchemaAndSave(contacts.get(j),null);
 				    // check if company already set in contact
-				    subContact.properties.add(organization);
+				    
+				    ContactField sub_organization = subContact.getContactFieldByName(Contact.COMPANY);
+				    if(sub_organization==null)
+				    	subContact.properties.add(organization);
 
 				    subContact.save();
 

@@ -1,24 +1,24 @@
 <script id="new-tasks-list-header-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-  <div class="wrapper-md lter bg-light b-b">
+  <div class="wrapper-md lter bg-light b-b agile-page-header">
     <div class="row">  
        <div class="col-md-12">   
          <h3 id="new-task-heading" class="task-heading pull-left font-thin h3">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}<small class="tasks-count"></small></h3>
           <div class="pull-right">
             <div class="inline-block m-r hide" id="calendarTasksButtons">
-                <button type="button" class="btn btn-sm btn-default" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}
+                <button type="button" class="btn btn-sm btn-default btn-default-imp-white btn-lg-imp" onclick="taskCalendarToday()">{{agile_lng_translate 'calendar' 'Today'}}
                 </button>
                 <div class="btn-group m-l-xs">
-                  <button id="agendaDay" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}
+                  <button id="agendaDay" class="btn btn-sm btn-default btn-default-imp btn-lg-imp taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'day'}}
                   </button>
-                  <button id="month" class="btn btn-sm btn-default taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}
+                  <button id="month" class="btn btn-sm btn-default btn-default-imp btn-lg-imp taskDayWeekMonth" >{{agile_lng_translate 'calendar' 'month'}}
                   </button>
                 </div>
             </div>
             <div class="btn-group owner-task-button m-r">
-              <button class="btn btn-default btn-sm fnew-task-subject selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
+              <button class="btn btn-default btn-sm fnew-task-subject btn-default-imp-white  btn-lg-imp selected_name">{{agile_lng_translate 'tasks' 'My Pending Tasks'}}
               </button>
-              <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+              <a class="btn btn-default btn-sm btn-default-imp-white btn-lg-imp dropdown-toggle" data-toggle="dropdown" href="#">
                  <span class="caret">
                  </span>
               </a>
@@ -28,9 +28,9 @@
             {{#is_mobile}}
             {{else}}
              <div class="btn-group type-task-button c-p m-r">
-                <button class="btn btn-default btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
+                <button class="btn btn-default btn-default-imp btn-lg-imp btn-sm selected_name">{{agile_lng_translate 'tasks' 'due'}}
                 </button>
-                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                <button class="btn btn-default btn-default-imp btn-lg-imp btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
                   <span class="caret">
                   </span>
                 </button>
@@ -76,7 +76,7 @@
                 </ul>
             </div>
             <div class="btn-group type-task-button c-p pull-right">
-                <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
+                <a href="#add-dashlet" id="add-portlet" class="btn btn-default btn-primary-imp btn-lg-imp btn-sm btn-addon add-portlet add-stream-tab pos-rlt">
                  <i class="icon icon-plus-sign">
                  </i> {{agile_lng_translate 'portlets' 'add-dashlet'}}
 
@@ -99,7 +99,7 @@
         </div>
        </div>
   </div>
-  <div class="wrapper-md p-b-none" style="position:relative;">
+  <div class="wrapper-md p-b-none agile-p-t-sm" style="position:relative;">
      <div id="new-task-list-based-condition"> 
         <img class="loading_task_img thumb-xs p-r-xs" src= "{{getS3ImagePath 'img/21-0-new.gif'}}">
         </img>
@@ -138,7 +138,7 @@
     </div>
 <div class=" panel-default w-full m-r-none m-b-none" style="border:none;"> 
 
-        <div class="list-header panel-heading task-list-heading" style="border-bottom: 1px solid #dee5e7!important;"attr="{{heading}}" ownerID={{owner_id}}>
+        <div class="list-header panel-heading task-list-heading" {{#isNewTheme}} {{else}} style="border-bottom: 1px solid #dee5e7!important; {{/isNewTheme}} "attr="{{heading}}" ownerID={{owner_id}}>
 <div class="pull-left" style="margin-top:-2px;"> 
 </div> 
 <div class="pull-left" style="width:60%;"> 
@@ -283,14 +283,14 @@
 
      
 
-<p class="word-break-all white-space-normal text-xs m-r-sm  m-b-xs m-t-n-xs m-l">{{taskDescription}}</p>
-
+<p class="word-break-all white-space-normal text-xs m-r-sm  m-b-xs m-t-n-xs m-l p-sm-imp">{{taskDescription}}</p>
+<label class="label bg-light dk text-tiny pull-right m-b-sm m-r-sm m-l-xs text-ellipsis" style="max-width:100px" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
 <div class="clearfix"></div>
     </div> <!--task-body--> 
 
     
 <div class="clearfix"></div>
- <hr class="taskhead">
+ <hr class="taskhead taskdivider">
    <div class="new-task-footer taskfooter">
   
 <div class="pull-left text-ellipsis" style="width:100%; margin-top:-11px;">
@@ -305,7 +305,7 @@
   </div>  
   <div style="display:inline-flex;margin-top:6px;">
 <i class="fa fa-clock-o  m-l-sm m-r-xs" style="margin-top:4px;"></i>
-    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToHumanDate "mmm dd yyyy HH:MM:ss" due}}</time> <label class="label bg-light dk text-tiny m-l-xs text-ellipsis" style="max-width:100px" title="Category" data-toggle="tooltip" data-placement="top" data-container="body">{{capFirstLetter type}}</label>
+    <time class="new-task-due-time time-ago" title="{{epochToHumanDate "" due}}"  >{{epochToHumanDate "mmm dd yyyy HH:MM:ss" due}}</time> 
 
  </div>
    

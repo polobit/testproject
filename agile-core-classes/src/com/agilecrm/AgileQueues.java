@@ -55,6 +55,9 @@ public class AgileQueues
     public static final String NORMAL_CAMPAIGN_PULL_QUEUE = "normal-campaign-pull-queue";
     public static final String BULK_CAMPAIGN_PULL_QUEUE_1 = "bulk-campaign-pull-queue-1";
     
+    //Time out noraml campaign pull queue
+    public static final String TIME_OUT_EMAIL_PULL_QUEUE = "time-out-email-pull-queue";
+    
     // Campaign push queues
     public static final String NORMAL_CAMPAIGN_PUSH_QUEUE = "normal-campaign-push-queue";
     

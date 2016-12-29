@@ -1,0 +1,1467 @@
+<script id="contact-details-block-template" type="text/html">
+		{{#is_mobile}}
+
+		<div class="vbox">
+  			<div class="row-row">
+  				<div>
+  				<div>
+    				<div class="contactView details-mobile-view text-center-mobile-view">
+						<!-- starting section one -->
+						<div class="wrapper">
+						  <div class="panel panel-default m-b-none">
+						    <div class="panel-body">
+    							<div class="pos-rlt w-full">
+									<div class="contact-navigation-view">
+										<span class="navigation  contact-switching"></span>
+									</div>
+									<div class="clearfix"></div>
+    				    		</div>
+                        		<div class="text-center   pos-rlt">
+									<div class="thumb-lg">
+										<div id="contact_delete_image" style="display:none">{{id}}</div>
+										<form id="contact-container">
+											{{#is_mobile}} 
+												<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit" src="{{gravatarurl properties 80}}" />
+											{{else}}
+												<a class="contact-image-view"> 
+													<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit" src="{{gravatarurl properties 80}}" />
+												</a>
+												<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
+													<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option">
+														<a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}">
+															<i class='glyphicon glyphicon-edit'></i>
+														</a>
+													</div>
+													{{#property_is_exists "image" properties}}
+														<div style="float:right" class="contact-delete-option">
+															<a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}">
+																<i class="glyphicon glyphicon-trash" style="color:red"></i>
+															</a>
+														</div>
+													{{/property_is_exists}}
+												</div>
+											{{/is_mobile}}
+											<input type="hidden" id="upload_url" name="gravatarurl">
+											<a style="display: none;" class="save_img submit" type="submit"> 
+												{{agile_lng_translate 'modals' 'save'}}
+											</a>
+										</form>
+									</div>
+								<div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:14px;">
+									<div class="dropdown contact-detail-edit" >
+										<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+											<span class="caret m-l-none" style="margin-top:-11px;"></span>
+										</button>
+										<ul class="dropdown-menu pull-right text-sm" role="menu">
+                                   			
+                                   			<!--<li role="menuitem"><a href='#contact-edit'>
+                                     		<div class="pull-left"><i class="fa fa-edit"></i> Edit</div> 
+                                     		{{#if_keyboard_shortcuts_enabled}}
+                                     			<div class='shortcuts pull-right'>Shift + E</div>
+                                     		{{/if_keyboard_shortcuts_enabled}}
+                                     		<div class="clearfix"></div>
+                                     		</a></li>
+											<li class="divider"></li>-->
+
+											<li>
+												<a href='#' class="contact-add-note">
+													<i class="icon-note"></i>
+													{{agile_lng_translate 'contact-details' 'add-note'}}
+												</a>
+											</li>
+											<li>
+												<a href='#' class="contact-add-task">
+													<i class="icon-tasks"></i> 
+													{{agile_lng_translate 'contact-details' 'add-task'}}
+												</a>
+											</li>
+											{{#hasMenuScope 'DEALS'}}
+												<li>
+													<a href='#' class="contact-add-deal">
+														<i class="icon-money"></i>
+														{{agile_lng_translate 'contact-details' 'add-deal'}}
+													</a>
+												</li>
+											{{/hasMenuScope}}
+											{{#canEditContact owner.id}}
+												<li class='divider'></li>
+												<li>
+													<a href='#bulk-campaigns' class="contact-add-campaign" id="contact-add-campaign">
+														<i class="icon-sitemap"></i> 
+														{{agile_lng_translate 'contact-details' 'add-to-campaign'}}
+													</a>
+												</li>
+												<li>
+													<a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email">
+														<i class="icon-envelope"></i> 
+														{{agile_lng_translate 'contact-details' 'send-email'}}
+													</a>
+												</li>
+												<li class='divider'></li>
+												<li>
+													<a href='#contact-duplicate'>
+														<i class="icon-docs"></i>
+														{{agile_lng_translate 'contact-details' 'duplicate'}}
+													</a>
+												</li>
+												<li>
+													<a href='#duplicate-contacts/{{id}}'>
+														<i class="icon-code-fork"></i>
+														{{agile_lng_translate 'contact-details' 'merge-duplicates'}}
+													</a>
+												</li>
+											{{/canEditContact}}
+											{{#canDeleteContact owner.id}}
+													<li class='divider'></li>
+													<li>
+														<a href='#' id='contact-actions-delete'>
+															<i class="icon-trash"></i> 
+															{{agile_lng_translate 'contact-details' 'delete'}}
+														</a>
+													</li>
+											{{/canDeleteContact}}		
+		                                    {{#property_is_exists "phone" properties}}
+			                                    <li style="display:none;">
+			                                    	<a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
+													"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
+													"image"}}" phone="{{getPropertyValue properties "phone"}}">
+														<i class="icon-phone"></i> 
+															Call
+													</a>
+												</li>
+		                                    {{/property_is_exists}}
+										</ul>
+									</div>
+                           		</div>  
+								<div class="w-full  m-t-xs  h3 font-thin custom-color p-r-sm" style="padding-bottom:1px;">
+									<div class="hidden" id="Contact-input"><input type="text"id="Contact-input-firstname" class=" m-l-xs pull-left inlineditor" style="height:28px;width:100px;" maxlength="100" value='{{getPropertyValue properties
+										"first_name"}} '>
+										<input type="text"id="Contact-input-lastname" class="m-l-xs m-n pull-left inlineditor" style="height:28px;width:100px;" maxlength="100" value="{{getPropertyValue properties
+										"last_name"}}">
+									</div>
+									<div class="text-ellipsis" id="contactName">
+										{{contact_name_necessary this}}
+								 		<!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
+								 	</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class=" m-b-xs text-cap" style="padding-right:5px;">	
+									<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">
+										{{#if_propertyName "title"}}
+											{{value}}
+										{{/if_propertyName}} 
+										{{#if contact_company_id}}
+											<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+										{{else}}
+											{{getPropertyValue properties "company"}}
+										{{/if}}
+									</div>
+									<div class="clearfix"></div>	
+									<!-- <div class="contact-company-name text-ellipsis pull-left w-half font-thin">
+																	
+			                         {{#if contact_company_id}} 
+												<a href="#contact/{{contact_company_id}}">{{getPropertyValue properties "company"}}</a>
+											{{else}}
+												{{getPropertyValue properties "company"}}
+											{{/if}}
+			                        </div> -->
+                         			<div class="clearfix">
+                         		</div>
+                         	</div>
+						</div>
+						<!-- ending section one -->						
+						<div class="clearfix"></div>
+						<div class="contact-website   text-base text-center m-b-xs">                                    
+						            {{#property_is_exists "website" properties}}
+									{{#multiple_Property_Element "website" properties}}
+									{{#each this}}
+										{{#if_equals subtype "TWITTER"}}									
+											 <span class="m-r-xs">
+											 	<a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Twitter"
+												href="https://twitter.com/{{getTwitterHandleByURL value}}"
+												style="text-decoration: none">
+													<i class="{{get_social_icon "TWITTER"}}    text-base text-muted tooltip_info" ></i>
+												</a>
+											</span> 
+										{{else}} {{#if_equals subtype "SKYPE"}}
+											<span class="m-r-xs"><a class="text-l-none tooltip_info" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype"
+											href="{{getSkypeURL value}}"> <i
+												class="{{get_social_icon "
+												SKYPE"}}   text-base text-muted tooltip_info"></i>
+										</a>
+										</span>
+										{{else}} {{#if_equals subtype "FACEBOOK"}} 
+											<span
+											class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook"
+											href="{{buildFacebookProfileURL value}}"> <i
+												class="{{get_social_icon "
+												FACEBOOK"}}   text-base text-muted tooltip_info"></i>
+										</a>
+										</span>
+										{{else}} {{#if_equals subtype "LINKEDIN"}}
+											<span
+											class="m-r-xs"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="LinkedIn"
+											href="{{getHyperlinkFromURL value}}"> <i
+												class="{{get_social_icon "
+												LINKEDIN"}}   text-base text-muted tooltip_info"></i>
+										</a>
+										</span>
+										{{else}}	{{#if_equals subtype "GOOGLE-PLUS"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Google+"
+										href="https://plus.google.com/{{getTwitterHandleByURL value}}/" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "
+											GOOGLE-PLUS"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "URL"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon subtype}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "XING"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Xing"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "XING"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FEED"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Blog"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FEED"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FLICKR"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Flickr"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FLICKR"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "GITHUB"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="GitHub"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "GITHUB"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "YOUTUBE"}} <span
+										class="m-r-xs"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="YouTube"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "YOUTUBE"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}
+									<span class="m-r-xs"> <a
+										target="_blank" href="{{getHyperlinkFromURL value}}" class="text-l-none">
+											<i class="{{get_social_icon subtype}} text-base text-muted"></i>
+									</a>
+									</span>
+								
+									 {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}} {{/each}}
+									
+
+                                       
+
+									  {{/multiple_Property_Element}}
+									{{/property_is_exists}}
+									</div>
+											
+							<div class="clearfix"></div>
+						
+						<!--  starting section 3  -->
+                     
+<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> {{agile_lng_translate 'admin-settings-tasks' 'call'}} </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> {{agile_lng_translate 'modals' 'email'}} </a> </div>
+
+                    <div class=" panel-middle-align-mobile">	
+
+					<div class="row">
+					<div class="col-xs-12 col-sm-7 text-center">
+					 <div id='star' class="contact-star stars-m-l"></div>
+					</div>		
+						
+
+		<div class="text-right hidden-xs col-sm-5" style="left:5px;width: 90px;padding-left: 1px;padding-right: 1px;">		
+								<!--  starting score -->
+						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div class="text-lg score-view text-left">
+							<div style="position:relative;">
+
+ 								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="{{agile_lng_translate 'contact-details' 'score-your-leads'}}" id="element" data-trigger="hover" ></i>
+
+								</span>
+
+							  		{{#canEditContact owner.id}}
+								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-contactscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+										{{/if}}
+									</span>
+
+									<span class="inline-block v-middle">
+									<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control scorebox" id="scorebox">
+									</span>
+									
+									<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
+										<ul class="inline-block list-none m-n p-n">
+											<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
+											<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+										 </ul>
+								</span>
+								{{else}}
+								<span class="inline-block v-middle" style="margin-left:21px">
+
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{/if}}		
+								</span>
+								
+							{{/canEditContact}}
+							</div>
+							</div>
+
+							</div>
+
+						</div>
+
+
+						</div>
+						</div>
+						
+
+		</div>
+
+		<a href='#contact-edit'  class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow">
+							<div class=""><i class="fa fa-edit"></i> Edit Contact</div> {{#if_keyboard_shortcuts_enabled}}
+							<div class='shortcuts pull-right'>Shift + E</div>
+							{{/if_keyboard_shortcuts_enabled}}
+							<div class="clearfix"></div>
+							</a>
+	</div>
+
+
+<!--  start more details tab section -->	
+
+	<div class="content-tabs-show moreDetailsTab" role="tablist" aria-multiselectable="true">
+	 <div class="panel panel-default m-b-none"> <div class="panel-heading" role="tab" id="headingOne"> 
+	 <h4 class="panel-title text-left"> <a role="button" data-toggle="collapse" data-parent="#contactDetailsTab" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed"> 
+	 {{agile_lng_translate 'contacts-view' 'more-details'}}</a> </h4> 
+	 </div> <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;"> 
+	 <div class="panel-body">
+
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+			<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>
+			<div class="change-owner-succes"></div>
+			<div title="Owner">
+			<div class="contact-owner text-xs" id="change-owner-element">
+
+			{{#if owner}}
+			<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+			{{/if}}
+			<a id="contact-owner" class="custom-color text-xs v-middle" data={{owner.id}}>{{owner.name}}</a>
+
+			{{#canEditContact owner.id}}
+			<div class="dropdown" id="change-owner-ul"  style="display: none">
+			<button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">{{agile_lng_translate 'deal-view' 'change-owner'}} <span class="caret"></span></button>
+			<ul id='contact-detail-owner' class="dropdown-menu" role="menu"></ul>
+			</div> 
+			{{/canEditContact}}
+			</div>
+			</div>
+			</div>
+			</div>
+			</div>
+
+			
+
+<div class="wrapper text-left m-b-sm p-none">
+<div class="panel panel-default m-b-none">
+<div class="panel-body">
+
+<small class="text-muted text-base">{{agile_lng_translate 'report-add' 'tags'}}</small>
+<div class="contact-tags m-b-xs m-t-xs">
+<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+{{#if tagsWithTime.length}} 
+{{#canEditContact owner.id}}
+{{#each tagsWithTime}}
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
+class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+{{/each}}
+{{else}}
+{{#each tagsWithTime}}
+<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
+class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+{{/each}}
+{{/canEditContact}}
+{{/if}}
+
+
+</ul>
+<div class="inline-block m-t-xs">
+<div id="addTagsForm" style="display: none;" class="m-b-none">
+<div class="control-group save-tag m-b-none">
+<input name="" type="text" id="addTags"
+class="tags-typeahead ignore-comma-keydown form-control inline-block text-xs pull-left addInput"
+style="width: 60%" placeholder="{{agile_lng_translate 'contact-details' 'enter-tag'}}" />
+<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">{{agile_lng_translate 'contact-details' 'add'}}</a></span>
+</div>
+</div>
+{{#canEditContact owner.id}}
+<a href="#" id="add-tags" rel="tooltip"
+data-original-title="addtag" data-placement="top" class="text-xs text-muted"><i
+class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</span></a>
+{{/canEditContact}}
+
+
+</div>
+</div>	
+
+</div>
+</div>
+</div>	
+
+
+
+			<!--  starting section 5 -->		
+
+
+
+
+			{{#property_is_exists "phone" properties}}
+
+
+			<div class="widget_container contact-rightpanel phone m-t-sm" id="{{name}}-container">
+			{{else}} 
+			{{#property_is_exists "skypePhone" properties}}
+			<div class="widget_container contact-rightpanel skypePhone m-t-sm" id="{{name}}-container">
+			{{else}} 
+			{{#property_is_exists "email" properties}}
+			<div class="widget_container contact-rightpanel email m-t-sm" id="{{name}}-container">
+			{{else}} 
+			{{#property_is_exists "address" properties}}
+			<div class="widget_container contact-right-panel address m-t-sm" id="{{name}}-container">
+			{{else}}
+			{{#getContactCustomProperties properties}}
+			<div class="widget_container contact-right  customfiled m-t-sm" id="{{name}}-container">
+			{{else}}
+			<div class="widget_container hide m-t-sm" id="{{name}}-container">
+			{{/getContactCustomProperties }}
+			{{/property_is_exists}} 
+			{{/property_is_exists}}
+			{{/property_is_exists}} 
+			{{/property_is_exists}}
+			<h4 class="m-t-xs m-b-xs hide">
+
+			<i class="icon-user text-lg"></i>{{agile_lng_translate 'menu' 'contact'}}
+			<span class="text-cap">{{getPropertyValue properties "first_name"}}</span>
+
+			</h4>
+			<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div>
+			For refreshing the contact in the model list -->
+			<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">{{agile_lng_translate 'contacts-view' 'this-contact-has-been-updated'}}
+			<a id="action_refresh_contact" class="c-p">
+			<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="{{agile_lng_translate 'Contacts-view' 'click-to-view-the-updated-contact-details'}}" data-trigger="hover"></i>
+			</a>
+			</div>
+
+			<div class="clearfix"></div>
+
+
+			{{#property_is_exists "phone" properties}}
+
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+			{{#multiple_Property_Element "phone" properties}}
+
+			<!-- <div style="display: inline-block; text-align: right" class="span4">
+			<span><strong style="color: gray">{{agile_lng_translate 'contacts-view' 'Phone'}}</strong><span>
+			</div> -->
+
+
+
+
+
+			<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>				
+
+			<div class="contact-phone">
+			{{#each this}}
+			<div class="pull-left contact-phone-icon hide">
+			<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+			</div>
+			<div class="text-sm">
+
+			<!--
+			<a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
+			{{value}}
+			</a>            
+			<a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+			phone="{{value}}">
+			{{value}}
+			</a>    
+
+			<span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
+			<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
+			{{#if subtype}}<span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+			</span>
+			-->
+			<div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+
+
+			<a href="tel:{{remove_spaces value}}" class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+			</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			{{/each}}
+			</div>
+
+
+			{{/multiple_Property_Element}}
+
+			<div class="clearfix"></div>
+			{{/property_is_exists}}
+
+			<!-- added by prakash for skype field.. -->
+			<!--
+			{{#property_is_exists "skypePhone" properties}}
+			<div>
+			{{#multiple_Property_Element "skypePhone" properties}}
+
+			{{#property_is_exists "phone" ../properties}}
+
+
+			{{else}}
+
+			<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'contact-info'}}</small>	
+			{{/property_is_exists}}
+
+			<div class="contact-phone">
+			{{#each this}}
+			<div class="pull-left contact-phone-icon hide">
+			<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+			</div>
+			<div class="text-sm">
+
+
+			<span class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+			<a class="contact-make-skype-call c-progress" phone="{{value}}">{{value}}</a> 
+
+			</span>
+
+			</div>
+			<div class="clearfix"></div>
+			{{/each}}
+			</div>
+
+
+			{{/multiple_Property_Element}}
+			</div>
+			<div class="clearfix"></div>
+			{{/property_is_exists}}
+			-->
+			<!-- editing done for skype-->
+			{{#property_is_exists "email" properties}}
+
+			{{#multiple_Property_Element "email" properties}}
+			<!--  <div style="display: inline-block; text-align: right" class="span4">
+			<span><strong style="color: gray">Email</strong></span>
+			</div> -->
+
+
+			{{#property_is_exists "phone" ../properties}}
+
+			{{else}}
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+
+			<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>
+
+			{{/property_is_exists}}
+			<div class="contact-email text-sm l-h"> 
+			{{#each this}}
+
+			<div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
+			<div class="text-ellipsis text-xs">
+			<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+			</div>
+
+			<div class="clearfix"></div>
+			{{/each}}
+			</div>
+
+
+
+			{{/multiple_Property_Element}}
+
+
+			{{/property_is_exists}}
+			{{#property_is_exists "phone" properties}}
+			</div></div></div>
+			{{else}}
+			{{#property_is_exists "email" ../properties}}
+			</div></div></div>
+			{{/property_is_exists}}
+			{{/property_is_exists}}
+
+
+
+
+
+			{{#getContactCustomPropertiesExclusively
+			properties}}
+
+
+
+			<div class="custom-data">
+			<div class="wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+
+
+
+			<small class=" text-muted text-base" >{{agile_lng_translate 'contact-details' 'custom-info'}}</small>
+
+			<div>
+			<div class="contact-custom-icon pull-left hide" style="width:19px;"><i class="icon icon-info text-sm"></i></div>			
+			<div class="l-h">
+			{{#each_with_index this}}
+
+
+			{{#if custom_field_type}}
+			<div class="m-b-xs">
+			<span class="contact-custom-name custom-color word-break ">
+			<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+			</span>
+			</div>
+			{{else}}
+			<span class="contact-custom-name custom-color word-break ">
+			<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+			</span>
+			{{/if}}
+
+
+			{{#if_equals index ../this.length}}
+			<span class="contact-custom-value  word-break custom-color custom-value text-xs" name="{{name}}">
+			{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+			{{else}}
+			{{#if custom_field_type}}
+			{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+			{{else}}
+			{{value}}
+			{{/if}}
+			{{/if_equals}}
+			</span>
+			{{else}}
+			<span class="contact-custom-value text-base word-break custom-color custom-value text-xs" name="{{name}}">
+			{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+		+	{{else}}
+			{{#if custom_field_type}}
+			{{getContactTypeCustomFields custom_field_type value name}}
+			{{else}}
+			{{value}}
+			{{/if}}
+			{{/if_equals}}
+			</span>
+			{{/if_equals}}
+
+
+
+			<div class="clearfix"></div>
+
+
+			{{/each_with_index}}
+			</div>
+			</div>
+			</div>
+
+			</div>
+			</div>
+			</div>
+			{{/getContactCustomPropertiesExclusively}}
+
+			<div class="clearfix"></div>
+			<!--{{#if source}}
+			{{#if_equals source 'manual'}}{{else}}
+				<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+					<div class="panel panel-default m-b-none">
+				    	<div class="panel-body">
+							<small class="text-muted text-base">{{agile_lng_translate 'portlets' 'source'}}</small>
+							<div class="text-cap">{{source}}</div>
+				    	</div>
+				   	</div>
+				</div>
+			{{/if_equals}}{{/if}} -->
+
+			{{#property_is_exists "address" properties}} 
+			
+
+			{{#property_json_is_not_empty "address" properties}}
+			<div class=" wrapper text-left m-b-sm p-none">
+			<div class="panel panel-default m-b-none">
+			<div class="panel-body">
+
+			<small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'location'}}</small>
+
+			<div>{{#address_Element properties}}{{/address_Element}}</div>
+			<div class="clearfix"></div>
+			<div class="pull-left m-t-sm m-b-sm w-full text-xs">
+			<div id="map" class="w-auto m-n" style="height: 200px; display: none;">
+			</div>
+			<div id="contacts-local-time" class="text-xs" style="display:none;">                                             
+			<div class="contacts-time" style="width:89%"></div>                                               
+			</div>
+			</div> 
+			<div class="clearfix"></div> 
+			</div>   
+			</div>
+			</div>
+			</div>                                      
+			{{/property_json_is_not_empty}}
+			
+			{{/property_is_exists}}
+
+
+
+			<div class="clearfix"></div>
+			</div>	
+
+
+
+
+			<!-- ending section 5 -->	
+		
+
+       </div> </div> </div>   </div>
+
+       <!--  end more details tab section -->
+</div>
+						
+ 	<!--  ending section 3 -->
+ 
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{{else}}
+
+<div class="vbox">
+  <div class="row-row">
+  <div>
+  <div>
+    <div class=" contactView details-mobile-view text-center-mobile-view">
+	
+
+<!-- starting section one -->
+<div class="wrapper p-t">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+    					<div class="pos-rlt w-full">
+						<div class="contact-navigation-view"><span class="navigation  contact-switching"></span></div>
+						<div class="clearfix"></div>
+    				    </div>
+                        <div class="text-center   pos-rlt" id="contact-image-content">
+						<div class="thumb-lg">
+						<div id="contact_delete_image" style="display:none">{{id}}</div>
+						<form id="contact-container">
+									{{#is_mobile}} 
+										<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit" src="{{gravatarurl properties 80}}" />
+									{{else}}
+										<a class="contact-image-view"> 
+										<img class='upload_pic imgholder submit w-full img-circle' style="width:75px;height:75px;" type="submit"
+										src="{{gravatarurl properties 80}}" /></a>
+										
+										<div style="width: 32px;top:53px;position:absolute;font-size: 11px;" class="toggle-contact-image">
+											<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
+											</div>
+											{{#property_is_exists "image" properties}}
+											|<div style="float:right" class="contact-delete-option"><a name="Delete" value="Delete" onClick="deleteConfirmation();" class="tooltip_info" data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'contact-details' 'delete'}}"><i class="glyphicon glyphicon-trash" style="color:red"></i></a>
+											</div>{{/property_is_exists}}
+										</div>
+									{{/is_mobile}}
+									<input type="hidden" id="upload_url" name="gravatarurl">
+								<a style="display: none;" class="save_img submit" type="submit">{{agile_lng_translate 'report-add' 'save'}}</a>
+							</form>
+						</div>
+						 <div class="pos-abs pos-r-0 m-t-sm isotope-item" style="margin-top:13px;">
+						<div>
+								
+								
+								<button class="dropdown-toggle bg-transparent editicon" data-toggle="dropdown">
+								<span class="caret m-l-none" style="margin-top:-11px;"></span>
+								</button>
+								<ul class="dropdown-menu pull-right text-sm" role="menu">
+                                   <!--<li><a href='#contact-edit'>
+                                     <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
+                                     <div class='shortcuts pull-right'>Shift + E</div>
+                                     {{/if_keyboard_shortcuts_enabled}}
+                                     <div class="clearfix"></div>
+                                     </a></li>
+
+<li class="divider"></li>-->
+								
+									<li><a href='#' class="contact-add-note">
+									<i class="icon-note"></i> {{agile_lng_translate 'contact-details' 'add-note'}}</a></li>
+									<li><a href='#' class="contact-add-task"><i
+											class="icon-tasks"></i> {{agile_lng_translate 'contact-details' 'add-task'}}</a></li>
+									{{#hasMenuScope 'DEALS'}}
+									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
+											{{agile_lng_translate 'contact-details' 'add-deal'}}</a></li>
+									{{/hasMenuScope}}
+							{{#canEditContact owner.id}}
+									<li class='divider'></li>
+									<li><a href='#bulk-campaigns' class="contact-add-campaign"
+										id="contact-add-campaign"><i class="icon-sitemap"></i> {{agile_lng_translate 'contact-details' 'add-to-campaign'}}</a></li>
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email">
+									<i class="icon-envelope"></i> {{agile_lng_translate 'contact-details' 'send-email'}}</a></li>
+
+									<li class='divider'></li>
+									<li><a href='#contact-duplicate'><i class="icon-docs"></i>
+											{{agile_lng_translate 'contact-details' 'duplicate'}}</a></li>
+									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
+											{{agile_lng_translate 'contact-details' 'merge-duplicates'}}</a></li>
+
+							{{/canEditContact}}
+
+							{{#canDeleteContact owner.id}}
+									<li class='divider'></li>
+									<li><a href='#' id='contact-actions-delete'><i
+											class="icon-trash"></i> {{agile_lng_translate 'contact-details' 'delete'}}</a></li>
+							{{/canDeleteContact}}		
+
+                                    {{#property_is_exists "phone" properties}}
+                                    <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
+										"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
+										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> {{agile_lng_translate 'campaigns' 'call'}}</a></li>
+                                    {{/property_is_exists}}
+								</ul>
+							</div>
+                            </div>  
+					<div class="w-full  m-t-xs  h3 font-thin hidden text-capitalize custom-color p-r-sm" style="padding-bottom:1px;height:28px;" id="Contact-input">
+					{{#contactsnamestatus}}
+							<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
+										"first_name"}} '>
+							<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
+										"last_name"}}">
+						{{else}}
+						<input type="text"id="Contact-input-lastname" class="m-l-n-xs inlineditor" style="height:26px;width:100px;" maxlength="100" value="{{getPropertyValue properties
+										"last_name"}}">
+						<input type="text"id="Contact-input-firstname" autofocus class=" m-l-xs inlineditor" maxlength="100" style="height:26px;width:100px;"value='{{getPropertyValue properties
+										"first_name"}} '>
+						{{/contactsnamestatus}}
+					</div>
+					<div class="w-full  m-t-xs  text-lg font-thin custom-color text-ellipsis p-l-md p-r-md" style="padding-bottom:1px;height:28px;" id ="contactName">
+						<span class="text-capitalize " id="contact_name">{{contact_name_necessary this}}</span>
+							
+
+								 <!-- {{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}} -->
+						</div>
+						
+							<div class=" m-b-xs text-cap">	
+
+						<div class="contact-job-title text-base text-center font-thin custom-color text-ellipsis" style="max-width:100%;">{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}   {{#if contact_company_id}}
+
+
+									<a class = "block text-xs"  href="#company/{{contact_company_id}}">{{getSystemPropertyValue properties "company"}}</a>
+								{{else}}
+									{{getSystemPropertyValue properties "company"}}
+								{{/if}}</div>
+								
+								
+							<div class="clearfix"></div>	
+								
+								
+						<!-- <div class="contact-company-name text-ellipsis pull-left w-half font-thin">
+														
+                         {{#if contact_company_id}} 
+									<a href="#contact/{{contact_company_id}}">{{getSystemPropertyValue properties "company"}}</a>
+								{{else}}
+									{{getSystemPropertyValue properties "company"}}
+								{{/if}}
+                         </div> -->
+                         <div class="clearfix"></div>
+                         </div>
+						</div>
+	<!-- ending section one -->					
+						
+						
+	
+	<div class="clearfix"></div>
+	<div class="contact-website   text-base text-center m-b-xs">
+					
+                                    
+						            {{#property_is_exists "website" properties}}
+									{{#multiple_Property_Element "website" properties}} {{#each
+									this}} {{#if_equals subtype "TWITTER"}}
+									
+									 <span class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Twitter"
+										href="https://twitter.com/{{getTwitterHandleByURL value}}"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											TWITTER"}}    text-base text-muted tooltip_info" ></i>
+									</a>
+									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a class="text-l-none tooltip_info" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Skype"
+										href="{{getSkypeURL value}}"> <i
+											class="{{get_social_icon "
+											SKYPE"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="Facebook"
+										href="{{buildFacebookProfileURL value}}"> <i
+											class="{{get_social_icon "
+											FACEBOOK"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "LINKEDIN"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" class="text-l-none tooltip_info" data-toggle="tooltip" data-placement="bottom" data-original-title="LinkedIn"
+										href="{{getHyperlinkFromURL value}}"> <i
+											class="{{get_social_icon "
+											LINKEDIN"}}   text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "GOOGLE-PLUS"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Google+"
+										href="https://plus.google.com/{{getTwitterHandleByURL value}}/" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "
+											GOOGLE-PLUS"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}	{{#if_equals subtype "URL"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Website"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon subtype}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "XING"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Xing"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "XING"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FEED"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Blog"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FEED"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "FLICKR"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="Flickr"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "FLICKR"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "GITHUB"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="GitHub"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "GITHUB"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}} {{#if_equals subtype "YOUTUBE"}} <span
+										class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"><a target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="YouTube"
+										href="{{getHyperlinkFromURL value}}" class="text-l-none tooltip_info"> <i
+											class="{{get_social_icon "YOUTUBE"}} text-base text-muted tooltip_info"></i>
+									</a>
+									</span>{{else}}
+									<span class="{{#if_greater @index "1"}}m-l-xs{{/if_greater}}"> <a
+										target="_blank" href="{{getHyperlinkFromURL value}}" class="text-l-none">
+											<i class="{{get_social_icon subtype}} text-base text-muted"></i>
+									</a>
+									</span>
+								
+									 {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}}{{/if_equals}} {{/each}}
+									
+
+                                       
+
+									  {{/multiple_Property_Element}}
+									{{/property_is_exists}}
+									</div>
+											
+							<div class="clearfix"></div>
+						
+						<!--  starting section 3  -->
+                     
+<div class="btn-group btn-group-justified m-b hide"> <a class="btn btn-primary btn-rounded" data-toggle="button"> <span class="text"> <i class="fa fa-phone"></i> {{agile_lng_translate 'campaigns' 'call'}} </span> </a> <a class="btn btn-info btn-rounded"> <i class="fa fa-envelope-o"></i> {{agile_lng_translate 'other' 'email'}} </a> </div>
+
+                    <div class=" panel-middle-align-mobile">	
+
+					<div class="row">
+					<div class="col-xs-12 col-sm-7 text-center">
+					 <div id='star' class="contact-star stars-m-l"></div>
+					</div>		
+
+
+		<div class="text-right hidden-xs col-sm-5" style="left:5px;width: 90px;padding-left: 1px;padding-right: 1px;">		
+								<!--  starting score -->
+						<div class="unselectable m-t-n-xs" id="score" unselectable="on" onselectstart="return false">
+							<div class="text-lg score-view text-left">
+							<div style="position:relative;">
+
+ 								<span class="m-l-n-xs pos-rlt" style="font-size:14px;float:left;margin-left:8px;top:6px">
+								<i class="icon-trophy" border="0" style="height: 6px; vertical-align: middle" rel="popover" data-placement="bottom" data-title="Lead Score" data-content="{{agile_lng_translate 'contact-details' 'score-your-leads'}}" id="element" data-trigger="hover" ></i>
+								</span>
+
+							  		{{#canEditContact owner.id}}
+								<span class="inline-block v-middle" style="margin-top: -5px;margin-left: 6px;">
+									{{#if lead_score}}<span title="{{lead_score}}" id="lead-contactscore"class="inline-block text-ellipsis" style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: absolute;top: 5px;width:55px;font-size: 18px;left:27px">0</span>&nbsp;
+										{{/if}}
+									</span>
+
+									<span class="inline-block v-middle">
+									<input type="text" maxlength="10" autofocus="true" class="hide pos-abs form-control" id="scorebox">
+									 </span>
+									
+									<span class="contact-score-control m-l-xs" style="left:79px;position:absolute;top:5px;">
+										<ul class="inline-block list-none m-n p-n">
+											<li style="height: 12px"><i class="icon-sort-up c-p" id="add" style="height: 6px;"></i></li>
+											<li><i class="icon-sort-down c-p" id="minus" style="height: 10px;"></i></li>
+										</ul>
+								</span>
+								{{else}}
+								<span class="inline-block v-middle" style="margin-left:21px">
+
+									{{#if lead_score}} <span title="{{lead_score}}" id="lead_score_uneditable"class="inline-block text-ellipsis" style="text-align:center;position: relative;top: 5px;width:48px;font-size: 14px;">{{lead_score}}</span>&nbsp;
+									{{else}} <span title="0" id="lead-contactscore"class="inline-block text-ellipsis"style="text-align:center;position: relative;top: 4px;width:48px;font-size: 14px;">0</span>&nbsp;
+									{{/if}}		
+								</span>
+								
+							{{/canEditContact}}
+							</div>
+							</div>
+							</div>
+
+						</div>
+						</div>
+						</div>
+						
+
+		</div>
+
+							
+							<a href='#contact-edit'  class="btn btn-default btn-lg editicon-option text-base w-full b-n r-n b-t no-shadow">
+							<div class=""><i class="fa fa-edit"></i> Edit Contact</div> {{#if_keyboard_shortcuts_enabled}}
+							<div class='shortcuts pull-right'>Shift + E</div>
+							{{/if_keyboard_shortcuts_enabled}}
+							<div class="clearfix"></div>
+							</a>
+
+							 
+
+	</div>
+
+
+ 
+</div>
+						
+	 <!--  ending section 3 -->
+
+ 				
+		
+		
+<div class="text-md ">
+<div class="p-t-none p-r-xs p-b-none p-l-xs" style="display:none;"> {{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}</div>
+<div class="clearfix"></div>
+</div>
+
+ 
+
+<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+	<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>
+	<div class="change-owner-succes"></div>
+     <div title="Owner" class="m-t-xs">
+      	<div class="contact-owner text-xs" id="change-owner-element">
+        	
+			{{#if owner}}
+        	<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
+			{{else}}
+			<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+ 			{{/if}}
+        	<a id="contact-owner" class="custom-color text-xs v-middle" data={{owner.id}}>{{owner.name}}</a>
+        
+        	{{#canEditContact owner.id}}
+        	<div class="dropdown change-owner" id="change-owner-ul"  style="display: none">
+        		 <button class="btn btn-sm dropdown-toggle btn-default" data-toggle="dropdown">{{agile_lng_translate 'contact-details' 'change-owner'}} <span class="caret"></span></button>
+
+        		 <ul id='contact-detail-owner' class="dropdown-menu" role="menu"></ul>
+        	</div> 
+			{{/canEditContact}}
+       </div>
+    </div>
+    </div>
+   </div>
+ </div>
+   
+{{#property_is_exists "klout_score" properties}}
+<div id="klout-data-panel" class="hide">
+ <div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+    	<span class="text-muted text-base">Klout Score: </span>{{getPropertyValue properties "klout_score"}}
+	</div>
+  </div>
+ </div>
+</div>
+{{/property_is_exists}}
+
+<div class="wrapper hidden-sm hidden-xs p-b-xs" style="padding-top:0px;">
+  <div class="panel panel-default m-b-none">
+    <div class="panel-body">
+
+<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'tags'}}</small>
+						<div class="contact-tags m-b-xs m-t-xs">
+					<ul id="added-tags-ul" class="tagsinput inline v-top m-b-sm p-n">
+							{{#if tagsWithTime.length}} 
+							 {{#canEditContact owner.id}}
+								{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
+								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+								{{/each}}
+								{{else}}
+									{{#each tagsWithTime}}
+										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="{{this.tag}}" title="{{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" this.createdTime}}"><span><a
+											class="anchor" style="color:#363f44" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+									{{/each}}
+							 {{/canEditContact}}
+							{{/if}}
+						 
+						
+					</ul>
+					<div class="inline-block m-t-xs">
+						<div id="addTagsForm" style="display: none;" class="m-b-none">
+							<div class="control-group save-tag m-b-none">
+								<input name="" type="text" id="addTags"
+									class="tags-typeahead ignore-comma-keydown form-control inline-block"
+									style="width: 60%" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" />
+								<span><a href="#" class="btn btn-sm btn-default m-l-sm m-r-xs" id="contact-add-tags">{{agile_lng_translate 'contact-details' 'add'}}</a></span>
+							</div>
+						</div>
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
+							data-original-title="addtag" data-placement="top" class="text-xs text-muted">
+							<i class="fa fa-plus-square"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</span></a>
+						{{/canEditContact}}
+
+						
+					</div>
+				</div>	
+
+		</div>
+	</div>
+</div>				
+				<!--  starting section 5 -->		
+	
+<div class="wrapper p-b-s hidden" id="contacts-type-custom-fields" style="padding-top:10px;"></div>	
+		
+
+			 {{#property_is_exists "phone" properties}}
+
+			 
+			<div class="widget_container contact-rightpanel phone m-t-sm" id="{{name}}-container">
+				{{else}} 
+					{{#property_is_exists "skypePhone" properties}}
+						<div class="widget_container contact-rightpanel skypePhone m-t-sm" id="{{name}}-container">
+						{{else}} 
+					{{#property_is_exists "email" properties}}
+						<div class="widget_container contact-rightpanel email m-t-sm" id="{{name}}-container">
+						{{else}} 
+							{{#property_is_exists "address" properties}}
+									<div class="widget_container contact-right-panel address m-t-sm" id="{{name}}-container">
+									{{else}}
+										{{#getContactCustomProperties properties}}
+											<div class="widget_container contact-right  customfiled m-t-sm" id="{{name}}-container">
+											{{else}}
+												<div class="widget_container hide m-t-sm" id="{{name}}-container">
+										{{/getContactCustomProperties }}
+							{{/property_is_exists}} 
+					{{/property_is_exists}}
+			{{/property_is_exists}} 
+		{{/property_is_exists}}
+						<h4 class="m-t-xs m-b-xs hide">
+							
+							<i class="icon-user text-lg"></i>{{agile_lng_translate 'menu' 'contact'}}
+									<span class="text-cap">{{getPropertyValue properties "first_name"}}</span>
+							
+						</h4>
+						<!-- <div id="qrcode"><img src="{{getS3ImagePath 'img/1-0.gif'}}"></div>
+						For refreshing the contact in the model list -->
+						<div id="refresh_contact" class="m-t-sm m-r-md m-l-md text-sm" style="display:none;">{{agile_lng_translate 'contacts-view' 'this-contact-has-been-updated'}}
+							<a id="action_refresh_contact" class="c-p">
+								<i class="icon-refresh" rel="popover" data-placement="top" data-title="{{agile_lng_translate 'contacts-view' 'refresh-contact'}}" data-content="Click to get updated contact details." data-trigger="hover"></i>
+							</a>
+						</div>
+
+						<div class="clearfix"></div>
+
+						
+							{{#property_is_exists "phone" properties}}
+							
+							<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+								{{#multiple_Property_Element "phone" properties}}
+								  
+								<!-- <div style="display: inline-block; text-align: right" class="span4">
+									<span><strong style="color: gray">{{agile_lng_translate 'contacts-view' 'Phone'}}</strong><span>
+								</div> -->
+								
+								
+
+						
+
+				<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>				
+
+								<div class="contact-phone">
+									{{#each this}}
+									<div class="pull-left contact-phone-icon hide">
+									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+									</div>
+									<div class="text-sm">
+
+<!--
+                                        <a href='#' class="contact-make-sip-call" style="display:none;" phone="{{value}}">
+                                           {{value}}
+                                        </a>            
+                                        <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>    
+                                        	
+										<span class="contact-call-button-div"  data-toggle="tooltip" data-placement="top" title="">
+										<a href="tel:{{remove_spaces value}}" class="contact-make-call contact-call-button" phone="{{value}}">{{value}}</a> 
+                                        {{#if subtype}}<span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+										</span>
+-->
+<div class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+
+			<a href="tel:{{remove_spaces value}}" class="contact-make-call c-progress text-xs" phone="{{value}}" >{{value}}   {{#if subtype}} <span class="label bg-light dk text-tiny">{{subtype}}</span> {{/if}} </a>
+</div>
+
+
+									</div>
+									<div class="clearfix"></div>
+									{{/each}}
+								</div>
+
+								
+								{{/multiple_Property_Element}}
+							
+							<div class="clearfix"></div>
+							{{/property_is_exists}}
+		
+<!-- added by prakash for skype field.. -->
+<!--
+							{{#property_is_exists "skypePhone" properties}}
+							<div>
+								{{#multiple_Property_Element "skypePhone" properties}}
+								 
+								{{#property_is_exists "phone" ../properties}}
+								
+
+									{{else}}
+
+										<small class="text-muted text-base">Contact Info</small>	
+								{{/property_is_exists}}
+			
+								<div class="contact-phone">
+									{{#each this}}
+									<div class="pull-left contact-phone-icon hide">
+									<i class="icon icon-call-end text-sm m-r-xs v-middle"></i>
+									</div>
+									<div class="text-sm">
+
+
+										<span class="contact-make-call-div" style="height:25px;" data-toggle="tooltip" data-placement="top" title="">
+										<a class="contact-make-skype-call c-progress" phone="{{value}}">{{value}}</a> 
+
+                                        </span>
+
+									</div>
+									<div class="clearfix"></div>
+									{{/each}}
+								</div>
+
+
+								{{/multiple_Property_Element}}
+							</div>
+							<div class="clearfix"></div>
+							{{/property_is_exists}}
+-->
+<!-- editing done for skype-->
+ 							{{#property_is_exists "email" properties}}
+							
+								{{#multiple_Property_Element "email" properties}}
+								<!--  <div style="display: inline-block; text-align: right" class="span4">
+									<span><strong style="color: gray">Email</strong></span>
+								</div> -->
+							   
+									
+								{{#property_is_exists "phone" ../properties}}
+								
+									{{else}}
+									<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+   							    <div class="panel-body">
+
+									<small class="text-muted text-base" >{{agile_lng_translate 'contact-details' 'contact-info'}}</small>
+									
+										{{/property_is_exists}}
+										<div class="contact-email text-sm l-h"> 
+									{{#each this}}
+
+<div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
+										<div class="text-ellipsis text-xs">
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+										</div>
+
+<div class="clearfix"></div>
+									{{/each}}
+									</div>
+									
+									
+
+									{{/multiple_Property_Element}}
+								
+
+								{{/property_is_exists}}
+								{{#property_is_exists "phone" properties}}
+								</div></div></div>
+								{{else}}
+									{{#property_is_exists "email" ../properties}}
+									</div></div></div>
+									{{/property_is_exists}}
+								{{/property_is_exists}}
+								
+
+ 
+
+
+
+{{#getContactCustomPropertiesExclusively
+								properties}}
+
+	
+
+								<div class="custom-data">
+								<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  								<div class="panel panel-default m-b-none">
+    							<div class="panel-body">
+
+
+
+<small class=" text-muted text-base" >{{agile_lng_translate 'contact-details' 'custom-info'}}</small>
+
+								<div>
+					<div class="contact-custom-icon pull-left hide" style="width:19px;"><i class="icon icon-info text-sm"></i></div>			
+								<div class="l-h">
+									{{#each_with_index this}}
+										{{#if custom_field_type}}
+											<div class="m-b-xs">
+											<span class="contact-custom-name custom-color word-break ">
+												<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+											</span>
+											</div>
+										{{else}}
+											<span class="contact-custom-name custom-color word-break ">
+												<span class="text-light word-break text-base" title="{{name}}"  >{{name}}</span>
+											</span>
+										{{/if}}
+
+										
+										{{#if_equals index ../this.length}}
+											<span class="contact-custom-value  word-break custom-color custom-value text-xs" name="{{name}}">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{#getContactTypeCustomFields custom_field_type value name}}{{/getContactTypeCustomFields}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</span>
+										{{else}}
+											<span class="contact-custom-value text-base word-break custom-color custom-value text-xs" name="{{name}}">
+											{{#if_equals subtype "DATE"}} <i class="fa fa-clock-o m-r-xs"></i><time class="note-created-time" >{{stringToHumanDateInFormat value}}</time>
+											{{else}}
+												{{#if custom_field_type}}
+													{{getContactTypeCustomFields custom_field_type value name}}
+												{{else}}
+													{{value}}
+												{{/if}}
+											{{/if_equals}}
+											</span>
+										{{/if_equals}}
+										
+										
+											
+<div class="clearfix"></div>
+										
+										
+									{{/each_with_index}}
+</div>
+									</div>
+									</div>
+
+</div>
+</div>
+</div>
+					{{/getContactCustomPropertiesExclusively}}
+									
+									<div class="clearfix"></div>
+					<!--{{#if source}}
+					{{#if_equals source 'manual'}}{{else}}
+						<div class="wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+							<div class="panel panel-default m-b-none">
+						    	<div class="panel-body">
+									<small class="text-muted text-base">{{agile_lng_translate 'portlets' 'source'}}</small>
+									<div class="text-cap">{{source}}</div>
+						    	</div>
+						   	</div>
+						</div>
+					{{/if_equals}}{{/if}} -->
+							
+			{{#property_is_exists "address" properties}} 
+				{{#property_json_is_not_empty "address" properties}}
+				
+				 <div class=" wrapper hidden-sm hidden-xs" style="padding-top:0px;">
+  						<div class="panel panel-default m-b-none">
+    						<div class="panel-body">
+									<small class="text-base text-muted">{{agile_lng_translate 'contact-details' 'location'}}</small>
+										<div>{{#address_Element properties}}{{/address_Element}}</div>
+                                        <div class="clearfix"></div>
+                                        <div class="pull-left m-t-sm m-b-sm w-full text-xs">
+											<div id="map" class="w-auto m-n" style="height: 200px; display: none;">
+											</div>
+                                            <div id="contacts-local-time" class="text-xs" style="display:none;">                                             
+                                               <div class="contacts-time" style="width:89%"></div>                                               
+                                            </div>
+										</div> 
+                           	            <div class="clearfix"></div> 
+                                     </div>   
+                                     </div>
+									 </div>
+									  </div>
+                              
+                                     {{/property_json_is_not_empty}}
+                                      
+									{{/property_is_exists}}
+
+								
+
+							<div class="clearfix"></div>
+                            </div>	
+                  
+							
+				<!-- ending section 5 -->	
+					
+
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+{{/is_mobile}}
+		<!--  ending top header  view -->
+</script>

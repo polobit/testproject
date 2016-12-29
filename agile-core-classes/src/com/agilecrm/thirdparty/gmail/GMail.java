@@ -3,6 +3,7 @@ package com.agilecrm.thirdparty.gmail;
 import static javax.mail.Message.RecipientType.BCC;
 import static javax.mail.Message.RecipientType.CC;
 import static javax.mail.Message.RecipientType.TO;
+import static javax.mail.internet.InternetAddress.parse;
 import static org.apache.commons.lang.StringEscapeUtils.escapeJava;
 
 import java.io.ByteArrayOutputStream;
@@ -59,7 +60,6 @@ import com.thirdparty.sendgrid.SendGrid;
 public class GMail {
 
 	//private static final String SMTP_URL ="http://localhost:8081/agile-smtp/smtpMailSender";
-	//private static final String SMTP_URL ="http://54.87.153.50:8080/agile-smtp/smtpMailSender";	// exchange server
 	private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp/smtpMailSender";		// SMTP server
 
     private static String applicationName = "gmail_oauth2";
@@ -133,15 +133,15 @@ public class GMail {
     		if(gmailPrefs.expires_at == null || gmailPrefs.expires_at < System.currentTimeMillis()) {
 				gcredential.refreshToken();
 				gmailPrefs.refresh_token = gcredential.getRefreshToken();
+				gmailPrefs.token = gcredential.getAccessToken();
 				gmailPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
-				//prefsUpdated = true;
 				GmailSendPrefsUtil.save(gmailPrefs);
     		}
     		
-			System.out.println("2222 accessToken :: " + gmailPrefs.token + " -- refreshToken :: " + gmailPrefs.refresh_token);
-			System.out.println("expires at :: " + gmailPrefs.expires_at + " -- Current time:: " + System.currentTimeMillis());
-			
-			//if(prefsUpdated) GmailSendPrefsUtil.save(gmailPrefs);
+    		System.out.println("accessToken :: " + gmailPrefs.token);
+			System.out.println("refreshToken :: " + gmailPrefs.refresh_token);
+			System.out.println("expires at :: " + gmailPrefs.expires_at);
+			System.out.println("Current time:: " + System.currentTimeMillis());
 			
 			sendByGmailAPI(to, cc, bcc, subject, fromName, html, from, gmailPrefs.name, attachFile, 
 					gcredential);
@@ -156,6 +156,7 @@ public class GMail {
 				sendReconfigureMail(gmailPrefs, from);
 			}
 			else if(gmailPrefs.refresh_token == null || gmailPrefs.token == null) {
+				System.out.println("invalid_grant222");
 				System.out.println("accessToken :: " + gmailPrefs.token 
 						+ " -- refreshToken :: " + gmailPrefs.refresh_token);
 				sendReconfigureMail(gmailPrefs, from);
@@ -239,10 +240,10 @@ public class GMail {
 			
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
-			message.addRecipients(TO, InternetAddress.parse(to, false));
-            message.addRecipients(CC, InternetAddress.parse(cc, false));
-            message.addRecipients(BCC, InternetAddress.parse(bcc, false));
-           // String encodedSubject = new String(subject.getBytes("UTF-8"),"UTF-8");
+			//message.addFrom(parse(escapeJava(name) + " <" + from + ">"));
+			message.addRecipients(TO, parse(escapeJava(to), false));
+            message.addRecipients(CC, parse(escapeJava(cc), false));
+            message.addRecipients(BCC, parse(escapeJava(bcc), false));
 			message.setSubject(subject, "UTF-8");
 			message.setContent(body, "text/html; charset=UTF-8");
 			
@@ -383,7 +384,7 @@ public class GMail {
 			url.append("&bcc=" + ((bcc != null) ? URLEncoder.encode(bcc, "UTF-8"):null));
 			url.append("&from_name=" + ((fromName != null) ? URLEncoder.encode(fromName, "UTF-8"):null));
 			
-			url.append("&subject=" + ((subject != null) ? URLEncoder.encode(subject, "UTF-8"):null));
+			url.append("&subject=" + ((subject != null) ? URLEncoder.encode(escapeJava(subject), "UTF-8"):null));
 			url.append("&html=" + ((html != null) ? URLEncoder.encode(escapeJava(html), "UTF-8"):null));
 			url.append("&text=" + ((text != null) ? URLEncoder.encode(text, "UTF-8"):null));
 			

@@ -1,10 +1,10 @@
 <script id="contact-filter-collection-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-md-12">
         
             <h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'filters'}}</h3>
-            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'contacts-view' 'add-filter'}}</a>
+            <a href="#contact-filter-add" class="btn btn-sm btn-default right btn-primary-imp btn-lg-imp contact-add-filter" id="addFilter"><span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'contacts-view' 'add-filter'}}</a>
             <div class="clearfix"></div>
            
         </div>
@@ -16,6 +16,18 @@
 		<div id="slate">
          </div>
         {{#if this.length}}
+
+{{#is_mobile}}
+<div class="table-responsive b-n">
+        <table class="table agile-table panel" url="core/api/filters/bulk" id="contact-filter-list">  
+          
+            <tbody id='contact-filter-model-list' route='contact-filter-edit/'>
+            </tbody>
+        </table>
+</div>
+
+{{else}}
+
 <div class="table-responsive">
         <table class="table table-bordered showCheckboxes agile-table panel table-layout-mob-view" url="core/api/filters/bulk" id="contact-filter-list">  
             <thead>
@@ -28,10 +40,13 @@
             </tbody>
         </table>
 </div>
+{{/is_mobile}}
+
 		{{/if}}
+
     </div>
     <div class='col-md-3'>
-        <div class="wrapper" id='addview'>
+        <div id='addview'>
              <h4 class="m-t-none m-b-sm">
               {{agile_lng_translate 'contacts-view' 'what-are-filters'}}
              </h4>
@@ -43,7 +58,25 @@
 </script>
 
 <script id="contact-filter-model-template" type="text/html">
-	<td data='{{id}}' class='data c-p'>
+	{{#is_mobile}}
+  <td class="hide"></td>
+  <td data='{{id}}' class='data c-p'>
+  <div class="text-ellipsis">
+    {{name}} 
+  </div>
+
+  {{#if created_time}}
+      <div class="text-ellipsis">
+         <small class="text-muted text-ellipsis">{{agile_lng_translate 'contact-details' 'created'}} <i class="fa fa-clock-o"></i> <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> </small>
+         <div class="text-ellipsis">{{agile_lng_translate 'contact-details' 'by'}} {{filterOwner.name}}</div>
+      </div>
+  {{/if}}
+
+</td>
+
+  {{else}}
+
+  <td data='{{id}}' class='data c-p'>
   <div>
     {{name}} 
   </div>
@@ -55,6 +88,7 @@
       </div>
   {{/if}}
 </td>
+{{/is_mobile}}
 </script>
 <script id="company-filter-collection-template" type="text/html">
 <div class="wrapper-md lter bg-light b-b">
@@ -62,7 +96,7 @@
     <div class="col-md-12">
         
             <h3 class="pull-left font-thin h3">{{agile_lng_translate 'deal-view' 'filters'}}</h3>
-            <a href="#contact-filter-add" class="btn btn-sm btn-default right" id="addFilter"><span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'contacts-view' 'add-filter'}}</a>
+            <a href="#contact-filter-add" class="btn btn-sm btn-default right btn-primary-imp btn-lg-imp" id="addFilter"><span><i class='icon-plus-sign'/></span>  {{agile_lng_translate 'contacts-view' 'add-filter'}}</a>
             <div class="clearfix"></div>
            
         </div>

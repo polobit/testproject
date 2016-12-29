@@ -4,8 +4,10 @@
 package com.thirdparty.quickbook;
 
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,9 @@ import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.IContactWrapper;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.scribe.util.SignpostUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.FailedContactBean;
 
 /**
@@ -223,10 +228,36 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			// get last item contains total info
 			int lastIndex = items.length() - 1;
 			JSONObject totalPriceDetail = (JSONObject) items.get(lastIndex);
-			note.description += "\n Total Price :" + totalPriceDetail.get("Amount") + " ("
-				+ currencyRef.get("value") + ")";
-
+				if(note.description == null){
+					note.description = "\n Total Price :" + totalPriceDetail.get("Amount") + " ("
+							+ currencyRef.get("value") + ")";
+				}else{
+					note.description += "\n Total Price :" + totalPriceDetail.get("Amount") + " ("
+						+ currencyRef.get("value") + ")";
+				}
 		    }
+		    
+		    JSONObject metaItems = (JSONObject) invoice.get("MetaData");
+		    String datefrom = (String)metaItems.get("CreateTime");
+		    String date_format = "";
+		    UserPrefs userprefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUser());
+		    if(userprefs.dateFormat != null){
+		    	date_format = userprefs.dateFormat;
+		    }else{
+		    	date_format = "MM/dd/yyyy";
+		    }
+		    String formatted = "";
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		    try {
+		         Date date = sdf.parse(datefrom);
+		         Calendar cal = Calendar.getInstance();
+		         cal.setTime(date);
+		         SimpleDateFormat format1 = new SimpleDateFormat(date_format.replaceAll("m", "M"));
+		         formatted = format1.format(cal.getTime());
+		     } catch (ParseException e) {
+		         e.printStackTrace();
+		     }
+		    note.description += "\n Created date :" + formatted;
 		    note.addRelatedContacts(contact.id.toString());
 		    note.save();
 		    

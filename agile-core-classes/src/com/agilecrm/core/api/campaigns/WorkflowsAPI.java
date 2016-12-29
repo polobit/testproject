@@ -31,6 +31,7 @@ import com.agilecrm.alldomainstats.util.AllDomainStatsUtil;
 import com.agilecrm.cms.CMSPlugin;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.projectedpojos.WorkflowPartial;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.AliasDomainUtil;
@@ -196,6 +197,9 @@ public class WorkflowsAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Workflow updateWorkflow(Workflow workflow) throws Exception {
 		try {
+			if(workflow.unsubscribe.is_unsubscribe_email_disabled){
+				workflow.unsubscribe.is_unsubscribe_email_disabled=false;
+			}
 			workflow.save();
 			
 			try {
@@ -605,7 +609,7 @@ public class WorkflowsAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public String getWorkflowCount() {
 		try {
-			return  String.valueOf(WorkflowUtil.getAllWorkflows().size());
+			return  String.valueOf(WorkflowUtil.getAllPartialWorkflows().size());
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
@@ -649,6 +653,16 @@ public class WorkflowsAPI {
                  throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("No backup yet").build());
          
          return backup;
+     }
+     
+     @Path("/partial")
+     @GET
+     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+     public List<WorkflowPartial> getPartialWorkflows(@QueryParam("allow_campaign") Long allowCampaign){
+	 if(allowCampaign == null)
+	     return WorkflowUtil.getAllPartialWorkflows();
+	 else
+	     return WorkflowUtil.getAllPartialWorkflows(allowCampaign);
      }
 
 }

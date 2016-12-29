@@ -1,0 +1,126 @@
+<script id="ozonetel-logs-template" type="text/html">
+{{#if_equals num.length "0"}}
+    <div class="wrapper-sm">
+
+      <div class="word-break p-n text-base" id="ozonetel_no_phone">
+        {{agile_lng_translate 'widgets' 'no-phone-number-associated'}}
+      </div>
+
+    </div>
+
+{{else}}
+  <div>
+      {{#if_equals num.length "1"}}<div id="ozonetel_contact_number"></div>
+      {{else}}
+      <div class="wrapper-sm">
+      <!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs">To&nbsp;:</h4></div>-->
+      <div class="pull-left" style="width:100%;">
+        <select name="ozonetel_number" id="ozonetel_contact_number" class="required form-control" style="height:27px;padding-top:2px;width:100%;">
+          {{#each num}}
+            <option value="{{value}}">{{value}} 
+              {{#if subtype}}({{subtype}}){{/if}}
+            </option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="clearfix"></div>
+      {{/if_equals}}
+  </div>
+  <div>
+  <ul id="ozonetel-logs-panel" class="list-group m-b-none text-xs">
+    <li class="list-group-item b-n" id="ozonetel_logs_load">
+      <center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+    </li>
+  </ul>
+  </div>
+{{/if_equals}}
+</script>
+
+<script id="ozonetel-logs-fetch-template" type="text/html">
+
+    <li class="list-group-item b-n " style="display:none;" id="ozonetel_logs_load">
+      <center><img src="img/ajax-loader-cursor.gif" class="m-t"></img></center>
+    </li>
+{{#if this}}
+
+    {{#each this}}          
+      <li class="list-group-item r-none b-l-none b-r-none">
+          {{#if_equals duration "0"}}
+            <i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-unanswer"></i>
+          {{else}}
+            <i class="icon pull-left icon-phone text-muted text-md m-r-xs m-t-xxs v-middle twilio-widget-answer"></i>
+          {{/if_equals}}
+        
+<div class="pull-left text-sm">{{#if_equals duration "0"}}{{agile_lng_translate 'widgets' 'call-unanswered'}}{{else}}{{agile_lng_translate 'widgets' 'call-connected'}}{{/if_equals}}</div>
+        
+<div class="pull-right">{{#is_string duration}}{{toProperFormat duration}}{{else}}0s{{/is_string}}</div>
+        
+<div class="clearfix"></div>
+  
+<small class="text-muted block pos-rlt"><i class="fa fa-clock-o m-r-xs pull-left m-t-xxs"></i><time class="time-ago pull-left" datetime="{{convert_toISOString startTime}}">{{toLocalTimezone startTime}}</time></small>
+        
+<div class="clearfix"></div>
+      </li>
+    {{/each}}
+  {{else}}
+    <li class="list-group-item wrapper-md r-none b-l-none b-r-none text-center">
+        {{agile_lng_translate 'widgets' 'sorry-we-could-not-find-any-call-data'}}
+    </li>
+  {{/if}}
+
+</script>
+
+
+<script id="ozonetel-profile-template" type="text/html">
+<div class="widget_content">
+  <div class="row-fluid">  
+     <div>
+        <p>{{msg}}</p>
+     </div>  
+  </div>
+<div>
+</script>
+
+<script id="ozonetel-login-template" type="text/html">
+<div>
+	<form class="p-xs" id="ozonetel_login_form" name="ozonetel_login_form" method="post">
+    	<fieldset>
+		      <p class="m-t-sm">
+                   {{agile_lng_translate 'widgets' 'Ozonetel-content'}}
+              </p>
+			  
+				<label><b>{{agile_lng_translate 'widgets' 'enter-ozonetel-details'}} </b></label>
+                <label id="sip_reg_status"></label>
+				      <div class="control-group form-group">
+                     <div class="controls">
+                         <input type="text" id="ozontel_auth_key" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'ozonetel-auth-key'}}" value="" name="ozontel_auth_key" placeholder="{{agile_lng_translate 'widgets' 'ozonetel-auth-key'}}"></input>
+                     </div>
+                </div>
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="text" id="agent_no" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'agent-no'}}" value="" name="agent_no" placeholder="{{agile_lng_translate 'widgets' 'agent-no'}}"></input>
+                     </div>
+                </div>        
+                <div class="control-group form-group">
+                     <div class="controls">
+                          <input type="text" id="caller_id" class="form-control input-medium required widget_input_box"  title="{{agile_lng_translate 'widgets' 'caller-id'}}" value="" name="caller_id" placeholder="{{agile_lng_translate 'widgets' 'caller-id'}}"></input>
+                     </div>
+                </div>				
+				<!--<div class="checkbox">
+					<label class="i-checks i-checks-sm">
+              			<input type="checkbox" id="sip_wsenable" name="sip_wsenable" title="{{agile_lng_translate 'widgets' 'websocket-url'}}"></input><i></i> {{agile_lng_translate 'widgets' 'enable-sip-legacy-mode'}}
+					</label>
+				</div>-->
+              <div class="text-center">
+			  	<a href="#add-widget" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+			  	<a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary ml_5">{{agile_lng_translate 'portlets' 'save'}}</a>
+			 </div>
+            <div style="font-size:10px;margin-top:5px;text-align: justify;">
+              <a class="text-info" style="font-size: 13px;">Note:</a>
+              <p>({{agile_lng_translate 'widgets' 'ozonetel-url-content'}})</p>
+              <span id="ozonetelurl"></span>
+            </div>
+		 </fieldset>
+    </form>
+</div>
+</script>

@@ -3,29 +3,31 @@
 <div class="app-content-full  h-full dock-view-fixing">
 <div class="hbox hbox-auto-xs  bg-light taskListDetails">
 <div class="col w-xl bg-light lter b-r text-center-mobile-view taskDetailsCol" >
-<div class="vbox">
-<div class="row-row">
-<div id="task-detail-lhs" class="wrapper pos-rlt details-mobile-view">
+<div class="vbox inline-block">
+<div class="row-row" style="display:block">
+<div class="wrapper">
+<div class="panel panel-default m-b-none pos-rlt">
+<div id="task-detail-lhs" class="panel-body p-b-sm">
 
                   <div> 
-                    <div class="text-cap h3 font-thin custom-color w-full">
+                    <div class="text-cap h3 font-thin custom-color w-full p-r-md">
                     	{{#is_link subject}}
                     		<span class="activate-link">
                     	{{else}}
                     		<span class="block text-ellipsis" style="margin-right:7px;">
                     	{{/is_link}}
                     	{{safe_string subject}}</span>
-                    <span class="label bg-light dk inline-block m-r-sm text-xs pos-rlt pos-t-n-xs text-ellipsis"
-                     style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px;">{{task_property type}}</span>                
+                    <span class="label bg-light dk inline-block m-r-xs text-xs text-ellipsis"
+                     style="max-width:200px;min-width:auto;vertical-align:bottom; font-size:12px; padding:3px 5px;">{{task_property type}}</span>                
 
                     
-                   <span style="font-size:12px;" class="label label-{{task_label_color priority_type}} inline-block  text-xs pos-rlt pos-t-n-xs">{{ucfirst priority_type}}</span>
+                   <span style="font-size:12px; padding:3px 5px;" class="label label-{{task_label_color priority_type}} inline-block text-xs">{{ucfirst priority_type}}</span>
                          </div>
                   </div>
 					
                  	<!--  starting rating,edit,owner -->
                    
-					<div class="pos-abs pos-r-xs pos-t">
+					<div class="pos-abs pos-r-sm pos-t">
 					   
                         <button class="dropdown-toggle bg-transparent editicon m-t-sm" data-toggle="dropdown">
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
@@ -76,7 +78,7 @@
 </div>
 {{/is_mobile}}
 
-<div class="contact-owner-position m-t-sm">
+<div class="contact-owner-position m-t-xs m-b-sm">
 <div class="change-owner-succes"></div>
   <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner" id="change-owner-element">
@@ -84,9 +86,9 @@
         	<small class="text-xs text-muted">{{agile_lng_translate 'contact-details' 'owner'}}</small>
 </div>
 			{{#if taskOwner}}
-        	<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
+        	 <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{taskOwner.pic}}" /></span> 
 			{{else}}
-			<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
+			 <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> 
             <span class="task-owner-add text-sm"><a style="cursor:pointer;"> {{agile_lng_translate 'contact-details'  'assign-owner'}}</a></span>
  			{{/if}}
         	<a href="#" id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</a>
@@ -101,14 +103,35 @@
     </div>
 </div>
 
+<!--  starting related conatcts -->
 
+{{#is_mobile}}
 
+	<div class="m-t-xs">
+	<div id="task-contact-img">
+	{{#if contacts}}        	
+	<div class="">
+	<small class="text-xs text-muted"> {{agile_lng_translate 'contact-details' 'Contacts'}}</small>
+	</div>
+	{{/if}}
 
-<div class="m-t-sm">
+	{{#each contacts}}
+	{{#if_contact_type "PERSON"}}
+	<a href="#contact/{{id}}" class="activate-link text-info m-b-xs popover_contact" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}{{#if @last}}{{else}},{{/if}}</a>
+	{{/if_contact_type}}
+	{{#if_contact_type "COMPANY"}}
+	<a href="#company/{{id}}" class="activate-link text-info m-b-xs popover_contact" data="{{id}}">{{getPropertyValue properties "name"}}{{#if @last}}{{else}},{{/if}}</a>
+	{{/if_contact_type}}
+	{{/each}}
+	</div>
+	</div>
 
+{{else}}
+
+<div class="m-t-xs">
 <div id="task-contact-img">
 {{#if contacts}}        	
-<div class="m-b-xs">
+<div class="">
         	<small class="text-xs text-muted"> {{agile_lng_translate 'contact-details' 'Contacts'}}</small>
 </div>
 {{/if}}
@@ -126,11 +149,15 @@
         	{{/each}}
 </div>
 </div>
-<div class="m-t-sm">
+{{/is_mobile}}
+
+<!--  end related conatcts -->
+
+<div class="m-t-xs">
 
 <div id="task-contact-img">
 {{#if deals}}        	
-<div class="m-b-xs">
+<div class="">
         	<small class="text-xs text-muted"> {{agile_lng_translate 'contact-details' 'deals'}}</small>
 </div>
 {{/if}}
@@ -138,14 +165,14 @@
 {{#each deals}}
 	<div class="task-deals-mobile-view">
   		<div style="width:60%" class="text-ellipsis pull-left">
-			<a href="#deal/{{id}}" class="activate-link thumb m-b-xs text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
+			<a href="#deal/{{id}}" class="activate-link thumb l-h-sm text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
 		</div>
   		<div style="width:40%" class="pull-left text-ellipsis">({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)</div>
 	</div>
 {{/each}}
 <div class="clearfix"></div>
 {{#if taskDescription}} 
-<div class="m-t-sm task-view-description-outbox">
+<div class="task-view-description-outbox">
   	<div>
     	<small class="text-xs text-muted"> {{agile_lng_translate 'misc-keys' 'description'}}</small>
 	</div>
@@ -155,13 +182,15 @@
 </div>
 </div>
 </div>
+</div>
+</div>
   </div>
 </div>
 </div>
 
 <div class="col bg-white taskTabListCenter">
 <div class="vbox" style="display:block">
-<div class="row-row" style="display:block">
+<div class="row-row tabs" style="display:block">
 		<div id="task-tab-container-header" class="tab-container">
 			<ul class="nav nav-tabs bg-light" id="taskDetailsTab">
                 <li  class="active"><a data-toggle="tab" href="#activity">{{agile_lng_translate 'portlets' 'activity'}}</a></li>
@@ -193,6 +222,18 @@
 			<span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contact-details' 'add-contact'}}
 		</a>
 	</div>
+
+	{{#is_mobile}}
+
+	<div class="table-responsive b-n panel">
+			<table  class="table agile-table onlySorting m-b-none">
+				
+				<tbody id="task-related-model-list" class="task-related-model-list agile-edit-row overflow-scroll task-related-contact-tab"	route="contact/" >
+				</tbody>
+			</table>
+			</div>
+
+	{{else}}
 	<br/>
 	<div class="table-responsive">
 			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b showCheckboxes m-b-none  panel table-layout-mob-view" style=" border-collapse: separate;">
@@ -210,6 +251,8 @@
 				</tbody>
 			</table>
 			</div>
+	{{/is_mobile}}
+
 		{{else}}
 			<div class="wrapper p-t-none">
             	<div class="slate-content mobile-pad-content">
@@ -235,6 +278,42 @@
 </script>
 
 <script id="task-related-model-template" type="text/html">
+
+{{#is_mobile}}
+
+<td class="hide"></td>
+
+<td class="data no-wrap" data="{{id}}" {{#if_equals type "PERSON"}}route="contact/"{{else}}route="company/"{{/if_equals}}>
+	<div class="table-resp">
+          {{#if_contact_type "PERSON"}}
+			<div class="thumb-sm agile-img m-r-sm m-t-xs">
+        		<img class="img-inital r r-2x" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" />
+			</div>
+            <div class="agile-thumb-sm text-ellipsis">
+        		<a class="">{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </a>
+        		<br />
+        		<small class="text-muted">{{getPropertyValue properties "email"}}</small>
+        	<div class="text-muted text-xs">{{getPropertyValue properties "company"}}</div>
+    		</div>
+          {{/if_contact_type}}
+
+		  {{#if_contact_type "COMPANY"}}
+			<div class="thumb-sm agile-img m-r-sm m-t-xs">
+        	 <img class="thumbnail m-b-none" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/>
+			</div>
+           	<div class="agile-thumb-sm text-ellipsis">
+        		<b>{{getPropertyValue properties "name"}}        	
+    		</div>
+          {{/if_contact_type}} 
+
+          </div>   	 	
+	</td>
+
+	<td class="data-contact" width="40"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
+
+{{else}}
+
 	<td></td>
 
 	<td class="data no-wrap" data="{{id}}" {{#if_equals type "PERSON"}}route="contact/"{{else}}{{#if_equals type "LEAD"}}route="lead/"{{else}}route="company/"{{/if_equals}}{{/if_equals}}>
@@ -281,6 +360,9 @@
 </div>
 	</td>
 	<td><div class="table-resp">{{lead_score}}</div></td>
+
+{{/is_mobile}}
+
 </script>
 
 
@@ -401,9 +483,23 @@
 			<span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'contact-details' 'add-deal'}}
 		</a>
 	</div>
+	
+	{{#is_mobile}}
+
+	<div class="table-responsive panel b-n">
+			<table  class="table agile-table onlySorting m-b-none">
+				
+				<tbody id="task-related-deals-model-list" class="task-related-deals-model-list agile-edit-row overflow-scroll"
+					route="deal/" >
+				</tbody>
+			</table>
+		</div>
+
+	{{else}}
+
 	<br/>
 	<div class="table-responsive">
-			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b    m-b-none agile-table panel table-layout-mob-view" style=" border-collapse: separate;">
+			<table  class="table table-striped agile-table onlySorting r-5x overflow-scroll m-b-none b panel table-layout-mob-view" style=" border-collapse: separate;">
 				<!-- <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup> -->
 				<thead>
 					<tr>
@@ -421,6 +517,8 @@
 				</tbody>
 			</table>
 		</div>
+	{{/is_mobile}}
+
 		{{else}}
 			<div class="wrapper p-t-none">
             	<div class="slate-content mobile-pad-content">
@@ -433,7 +531,7 @@
 							
 							{{agile_lng_translate 'task' 'all-deals-which-are-related-to-this'}}
 							<br/>
-							<a href="#" class="task-add-deal btn btn-default btn-sm left m-t-xs">
+							<a href="#" class="task-add-deal btn btn-default btn-sm m-t-xs">
 								<i class="icon-plus-sign"></i> {{agile_lng_translate 'contact-details' 'add-deal'}}
 							</a>
                     	</div>
@@ -446,6 +544,29 @@
 </script>
 
 <script id="task-related-deals-model-template" type="text/html">
+{{#is_mobile}}
+
+<td class="hide"></td>
+<td data="{{id}}" class="data">
+	<div class="table-resp"> 
+		<a class="text-cap">{{name}}</a>
+	</div>
+	<div value="{{expected_value}}">
+	<div class="text-ellipsis text-muted text-sm" >{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+	<span class="table-resp p-l-sm">{{milestone}} ({{probability}}%) </span>
+	</div>
+	</div>
+
+	<div class="text-ellipsis text-muted text-xs" style="margin-top:-3px;">
+       {{owner.name}}
+    </div>
+
+</td>
+
+<td class="data-contact" width="40"><div class="text-md text-muted m-t contact-list-mobile text-right block"><i class="fa fa-angle-right"></i></div></td>
+
+{{else}}
+
 <td data="{{id}}" class="data"></td>
 <td>
 	<div class="table-resp"> 
@@ -484,6 +605,7 @@
     </div>
 </div>
 </td>
+{{/is_mobile}}
 </script>
 
 <!-- New (Note) Modal views -->
@@ -498,7 +620,7 @@
 		</h3>
 	</div>
 	<div class="modal-body">
-		<form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post">
+		<form id="tasknoteUpdateForm" name="tasknoteUpdateForm" method="post" class="form-horizontal">
 			<fieldset>
 
 				<input name="id" id="id" type="hidden" value="{{id}}" /> <input
@@ -506,17 +628,17 @@
 					value="{{created_time}}" />
 
 				<div class="control-group form-group">
-					<label class="control-label"><b>{{agile_lng_translate 'widgets' 'subject'}}</b> <span
+					<label class="control-label col-sm-3">{{agile_lng_translate 'widgets' 'subject'}}<span
 						class="field_req">*</span></label>
-					<div class="controls">
+					<div class="controls col-sm-7">
 						<input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject"
 							class="required form-control" />
 					</div>
 				</div>
 				
 					<div class="control-group form-group">
-						<label class="control-label"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
-						<div class="controls agiletxexpander">
+						<label class="control-label col-sm-3">{{agile_lng_translate 'misc-keys' 'description'}}</label>
+						<div class="controls col-sm-7 agiletxexpander">
 							<textarea rows="3" class=" form-control textarea" data-agileexpand="true" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
 								name="description" id="description"></textarea>
 						</div>
@@ -528,7 +650,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="task_note_update"> {{agile_lng_translate 'modals' 'save'}}</a> <span
+		<a href="#" class="btn btn-sm btn-primary" id="task_note_update"> {{agile_lng_translate 'contact-edit' 'update'}}</a> <span
 			class="save-status"></span>
 	</div>
 </div>
@@ -550,20 +672,20 @@
 		</h3>
 	</div>
 	<div class="modal-body">
-		<form id="tasknoteForm" name="tasknoteForm" method="post">
+		<form id="tasknoteForm" name="tasknoteForm" method="post" class="form-horizontal">
 			<fieldset>
 				<div class="control-group form-group">
-					<label class="control-label"><b>{{agile_lng_translate 'widgets' 'subject'}}</b> <span
+					<label class="control-label col-sm-3">{{agile_lng_translate 'widgets' 'subject'}}<span
 						class="field_req">*</span></label>
-					<div class="controls">
+					<div class="controls col-sm-7">
 						<input type="text" placeholder="{{agile_lng_translate 'help' 'about'}}" name="subject" id="subject"
 							class="required form-control" />
 					</div>
 				</div>
 				
 					<div class="control-group form-group">
-						<label class="control-label"><b>{{agile_lng_translate 'misc-keys' 'description'}}</b></label>
-						<div class="controls agiletxexpander">
+						<label class="control-label col-sm-3">{{agile_lng_translate 'misc-keys' 'description'}}</label>
+						<div class="controls col-sm-7 agiletxexpander">
 							<textarea rows="3" data-agileexpand="true" class="form-control textarea" placeholder="{{agile_lng_translate 'deal-view' 'detailed-note'}}"
 								name="description" id="description"></textarea>
 						</div>

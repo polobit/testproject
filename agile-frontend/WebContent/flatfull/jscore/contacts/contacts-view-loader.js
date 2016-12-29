@@ -199,7 +199,7 @@ var contacts_view_loader = {
 	{
 		if (_agile_get_prefs("agile_contact_view"))
 		{
-			$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'deal-view' 'list-view'}}' class='btn btn-default btn-sm contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
+			$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'deal-view' 'list-view'}}' class='btn btn-default btn-sm btn-default-imp-white btn-lg-imp contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
 			$("#contacts-grid-view-checkbox", cel).show();
 			$("#contacts-list-view-checkbox", cel).hide();
 			$("#contactTabelView", cel).hide();
@@ -207,7 +207,8 @@ var contacts_view_loader = {
 			return;
 		}
 		
-		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'tasks' 'grid-view'}}' class='btn btn-default btn-sm contacts-view' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
+			$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'deal-view' 'list-view'}}' class='btn btn-default btn-sm btn-default-imp-white btn-lg-imp contacts-view' data='list'><i class='fa fa-list'  style='margin-right:3px'></i></a>");
+		$('#contacts-view-options', cel).html("<a data-toggle='tooltip' data-placement='bottom' data-original-title='{{agile_lng_translate 'tasks' 'grid-view'}}' class='btn btn-default btn-sm contacts-view btn-default-imp-white btn-lg-imp ' data='grid'><i class='fa fa-th-large' style='margin-right:3px'></i></a>");
 		$("#contacts-grid-view-checkbox", cel).hide();
 		$("#contacts-list-view-checkbox", cel).show();
 		$("#bulk-action-btns", cel).css("border-bottom", "0");

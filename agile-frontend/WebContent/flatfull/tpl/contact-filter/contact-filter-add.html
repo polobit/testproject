@@ -1,6 +1,6 @@
 <script id="filter-contacts-template" type="text/html">
-<div class="bg-light lter b-b wrapper-md">
- {{#if id}} 
+<!-- <div class="bg-light lter b-b wrapper-md">
+  {{#if id}} 
                         <h3  class="formheading h3 font-thin m-n"> {{agile_lng_translate 'contacts-view' 'edit-contact-company-filter'}}<span
 						style="vertical-align: text-top; margin-left: -3px"> <img
 							border="0" src="{{getS3ImagePath '/img/help.png'}}"
@@ -23,11 +23,35 @@
 				
 
 
-</div>
+</div> -->
 <div class="wrapper-md">
 <div class="row">
 <div class="col-md-12">
-	
+	<div class="panel panel-default">
+	<div class="panel-heading">
+		{{#if id}} 
+                        <h3  class="formheading h3 font-thin m-n"> {{agile_lng_translate 'contacts-view' 'edit-contact-company-filter'}}<span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px;" rel="popover"
+							data-placement="bottom"
+							data-content="{{agile_lng_translate 'contacts-view' 'contact-filter-popover-content'}}"
+							id="element" data-trigger="hover">
+					</span></h3>
+                        {{else}}
+                        <h3 class="formheading h3 font-thin m-n"><i class="notaddon-imp icon-plus-sign"></i> {{agile_lng_translate 'contacts-view' 'add-contact-filter'}}<span
+						style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 6px;" rel="popover"
+							data-placement="bottom"
+							data-content="{{agile_lng_translate 'contacts-view' 'contact-filter-popover-content'}}"
+							id="element" data-trigger="hover">
+					</span>
+				</h3>
+                        {{/if}}
+				
+	</div>
+	 <div class="panel-body">
 		<form id="filterContactForm" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">
 					
@@ -145,19 +169,19 @@
 													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
 													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
 													<option value="NOT_CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'not-contains-word'}}</option>
-													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'never-added'}}
+													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'never-added'}}
 													</option>
-													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'active'}}</option>
-													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'completed'}}
+													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'active'}}</option>
+													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'completed'}}
 													</option>
-													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
-													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}
+													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}
 													</option>
-													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}
 													</option>
-													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}
+													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}
 													</option>
-													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'spam-reported'}}
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'spam-reported'}}
 													</option>
 													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-defined'}}
 													</option>
@@ -239,16 +263,26 @@
 											</div>
 										</td>
 									<td>
-									<div class="m-l-sm">
+									{{#is_mobile}}
+
+									<div class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove c-p text-info text-xs"
+											>Close</i></div>
+
+									{{else}}
+									<div class="m-l-xs m-t-xs">
 										<i
 											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
+											></i></div>
+									{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
 							</table>
 								<a href="#" class="filter-contacts-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add-condition'}}</a>
-							<br/><br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
+							<br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
 							<br/>
 							<div>{{agile_lng_translate 'report-add' 'meet-any-of-the-foll-cond'}}
 							</div>
@@ -340,19 +374,19 @@
 													<option value="ANYOF" class="tag">{{agile_lng_translate 'contacts-view' 'is-any-of'}}</option>
 													<option value="CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'contains-word'}}</option>
 													<option value="NOT_CONTAINS" class="address">{{agile_lng_translate 'contacts-view' 'not-contains-word'}}</option>
-													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'never-added'}}
+													<option value="NOT_ADDED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'never-added'}}
 													</option>
-													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'active'}}</option>
-													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'completed'}}
+													<option value="ACTIVE" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'active'}}</option>
+													<option value="DONE" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'completed'}}
 													</option>
-													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
-													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}
+													<option value="REMOVED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'removed'}}</option>
+													<option value="SOFTBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'soft-bounced'}}
 													</option>
-													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}
+													<option value="HARDBOUNCED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'hard-bounced'}}
 													</option>
-													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}
+													<option value="UNSUBSCRIBED" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'unsubscribed'}}
 													</option>
-													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'spam-reported'}}
+													<option value="SPAM" class="campaign_status" related="RHS" url="core/api/workflows/partial" parse_key="id" parse_value="name">{{agile_lng_translate 'contacts-view' 'spam-reported'}}
 													</option>
 													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-defined'}}
 													</option>
@@ -437,10 +471,19 @@
 											</div>
 										</td>
 									<td>
-									<div  class="m-l-sm">
+									{{#is_mobile}}
+									<div  class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove c-p text-info text-xs"
+											>Close</i></div>
+
+									{{else}}
+									<div  class="m-l-xs m-t-xs">
 										<i
 											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
+											></i></div>
+									{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
@@ -583,16 +626,26 @@
 											</div>
 										</td>
 									<td>
-									<div class="m-l-sm">
+									{{#is_mobile}}
+
+									<div class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove text-info text-xs c-p"
+											>Close</i></div>
+
+									{{else}}
+									<div class="m-l-xs m-t-xs">
 										<i
 											class="filter-contacts-multiple-remove icon-remove-circle c-p"
-											></i></div></td>
+											></i></div>
+											{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
 							</table>
 						<a href="#" class="filter-companies-multiple-add text-l-none m-t-xs text-info"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add-condition'}}</a>
-							<br/><br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
+							<br/><small>{{agile_lng_translate 'contacts-view' 'and'}}</small>
 							<br/>
 							<div>{{agile_lng_translate 'report-add' 'meet-any-of-the-foll-cond'}}
 							</div>
@@ -722,9 +775,18 @@
 											</div>
 										</td>
 									<td>
-									<div style="margin-left:10px">
+									{{#is_mobile}}
+
+									<div class="pull-right">
+										<i style="font-style: normal;"
+											class="filter-contacts-multiple-remove c-p text-info text-xs">Close</i></div>
+
+									{{else}}
+									<div class="m-l-xs m-t-xs">
 										<i
-											class="filter-contacts-multiple-remove icon-remove-circle c-p"></i></div></td>
+											class="filter-contacts-multiple-remove icon-remove-circle c-p"></i></div>
+											{{/is_mobile}}
+											</td>
 									</tr>
 								
 								</tbody>
@@ -740,12 +802,15 @@
 <div class="line line-lg b-b"></div>
 <div class="row">
 			<div class="form-actions col-sm-offset-2 col-sm-10">
-				<a href="#contact-filters" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel'}}</a>
-				<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a> 
+				<a href="#contact-filters" class="btn btn-sm btn-default btn-default-imp btn-lg-imp ">{{agile_lng_translate 'other' 'cancel'}}</a>
+				<a href="#" type="submit" class="save btn btn-sm btn-primary btn-primary-imp btn-lg-imp" id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a> 
 			</div>
 </div>
 			</fieldset>
 		</form>
+		</div>
+		</div>
+
 	
 </div>
 </div>

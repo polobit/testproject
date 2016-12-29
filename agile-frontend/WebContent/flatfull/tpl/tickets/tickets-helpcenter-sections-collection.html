@@ -1,6 +1,6 @@
 <script id="ticket-helpcenter-sections-collection-template" type="text/html">
 {{#unless this.length}}
-    <div class="col panel wrapper">
+    <div class="col panel wrapper no-panel-border">
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
             <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-dont-have-any-sections'}}</h4>
@@ -39,7 +39,7 @@
 
 {{else}}
 
-    <div class="col panel wrapper p-b-xs">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper p-b-xs no-panel-border" id="section-tab">
         <div class="hbox h-auto">
             <div class="pull-right">
                 <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
@@ -54,6 +54,7 @@
                             <th class="hide">Id</th>
                             <th style="width:30%">Section Name</th>
                             <th style="width:50%">&nbsp;</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="ticket-helpcenter-sections-model-list"  class="c-p"> </tbody>

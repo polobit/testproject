@@ -1,17 +1,21 @@
 package com.agilecrm.workflows.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.projectedpojos.PartialDAO;
+import com.agilecrm.projectedpojos.WorkflowPartial;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -41,6 +45,11 @@ public class WorkflowUtil
 	 * Initialize DataAccessObject.
 	 */
 	private static ObjectifyGenericDao<Workflow> dao = new ObjectifyGenericDao<Workflow>(Workflow.class);
+	
+	 /**
+	   * ObjectifyDao of WorkflowPartial.
+	 */
+	 private static PartialDAO<WorkflowPartial> partialDAO = new PartialDAO<WorkflowPartial>(WorkflowPartial.class);
 
 	/**
 	 * Locates workflow based on id.
@@ -345,5 +354,120 @@ public class WorkflowUtil
 	    		}
 	    	}
 	    	return maxNodes;
+	}
+	
+	/**
+	 * parse ids into Long if exception occurs then it will delete extra
+	 * characters and also some extra digit from last based on given number(lastDigits)
+	 * 
+	 * @param id
+	 * 
+	 * @param lastDigits
+	 * 
+	 * @return Long
+	 */
+	public static Long getValidId(String id, int lastDigits){
+		Long cId = 0l; 
+		if(StringUtils.isNotEmpty(id)){
+			try{
+				cId = Long.parseLong(id);
+			}catch(NumberFormatException nfe){
+				// if there are extra characters at last then it will give only
+				// numeric number from beginning  
+				String arr[] = id.trim().split("[^(0-9)]+");
+				try{
+					cId = Long.parseLong(arr[0]);
+				}catch(NumberFormatException nf){	
+					try{
+						// delete extra digit based on lastDigit, if value of lastDigit
+						// is 4 then it will delete last 4 digit  
+						String camp = arr[0].substring(0, arr[0].length()-lastDigits);
+						cId = Long.parseLong(camp);
+					}catch(Exception e){
+						return 0l;
+					}
+				}catch (ArrayIndexOutOfBoundsException aioobe) {
+					return 0l;
+				}	
+			}catch(Exception e){
+				return cId;
+			}
+		}
+		return cId;
+	}
+	
+	/* This method is responsible for fetching partial workflows.
+	 * Each Partial workflow contains 
+	 * @return
+	 */
+	public static List<WorkflowPartial> getAllPartialWorkflows()
+	{
+	    Map<String,Object> map = new HashMap<String,Object>();
+	    Long userId = DomainUserUtil.getCurentUserId();
+	    if(userId != null)
+	    {
+	    	List<Long> list = new ArrayList<Long>();
+	    	list.add(1L);
+	    	list.add(userId);
+	    	map.put("access_level IN ", list);
+	    }
+	    return partialDAO.listByProperty(map);	    	
+	}
+	
+	public static List<WorkflowPartial> getAllPartialWorkflows(Long allowCampaign)
+	{
+	    Map<String,Object> map = new HashMap<String,Object>();
+	    Long userId = DomainUserUtil.getCurentUserId();
+	    if(userId != null)
+	    {
+	    	List<Long> list = new ArrayList<Long>();
+	    	list.add(1L);
+	    	list.add(userId);
+	    	map.put("access_level IN ", list);
+	    }
+	    List<WorkflowPartial> partialWorkflows =  partialDAO.listByProperty(map);
+
+	    try
+	    {
+		boolean idPresent = false;
+		for(WorkflowPartial workflowPartial : partialWorkflows){
+		    if(workflowPartial.id.equals(allowCampaign))
+			  idPresent = true;
+		}
+		if(!idPresent)
+		{
+		    WorkflowPartial workflowPartial = WorkflowUtil.getPartialWorkflow(allowCampaign);
+		    if(workflowPartial!=null)
+		    {
+			partialWorkflows.add(workflowPartial);
+		    }
+		}
+	    }
+	    catch(Exception e)
+	    {
+		System.err.println(e.getMessage());
+	    }
+	    return partialWorkflows;	    
+	}
+	
+	/**
+	 * Locates workflow based on id.
+	 * 
+	 * @param id
+	 *            Workflow id.
+	 * @return workflow object with that id if exists, otherwise null.
+	 */
+	public static WorkflowPartial getPartialWorkflow(Long id)
+	{
+	    try
+	    {
+		return partialDAO.get(id);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println(ExceptionUtils.getFullStackTrace(e));
+		e.printStackTrace();
+		return null;
+	    }
 	}
 }

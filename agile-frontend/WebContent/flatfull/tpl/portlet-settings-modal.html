@@ -232,7 +232,7 @@
 			<div class="control-group form-group">
 				<label class="control-label col-sm-3">{{agile_lng_translate 'portlets' 'frequency'}}</label>
 				<div class="controls col-sm-7">
-					<select name="frequency" id="frequency" class="required form-control">
+					<select name="frequency" id="frequency" class="required form-control select-new-theme-nopanel">
 						<option value="daily">{{agile_lng_translate 'portlets' 'daily'}}</option>
 						<option value="weekly">{{agile_lng_translate 'portlets' 'weekly'}}</option>
 						<option value="monthly">{{agile_lng_translate 'portlets' 'monthly'}}</option>
@@ -1589,6 +1589,7 @@
 						<option value="CAMPAIGN">{{agile_lng_translate 'report-view' 'campaigns'}}
 						</option>
 						<option value="CONTACT">{{agile_lng_translate 'portlets' 'contacts'}}</option>
+						<option value="SMS_SENT">SMS</option>
                      
 					{{#hasMenuScope 'DEALS'}}
                      	<option value="DEAL">{{agile_lng_translate 'report-view' 'deals'}}</option>

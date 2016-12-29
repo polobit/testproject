@@ -29,6 +29,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.email.wrappers.ContactEmailWrapper;
 import com.agilecrm.email.wrappers.EmailWrapper;
+import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -240,7 +241,7 @@ public class ContactEmailUtil
 		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
-		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, null, documentIds, blobKeys);
+		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, MandrillUtil.getText(body, null), documentIds, blobKeys);
 		System.out.println("After send email");
 				
 		// it is for calculating total contact emails
@@ -777,27 +778,6 @@ public class ContactEmailUtil
 				hasEmailAccountsConfigured = true;
 			}
 			
-			// Get SMTP prefs
-		    List<SMTPPrefs> smtpPrefsList = SMTPPrefsUtil.getSMTPPrefsList(agileUser);
-		    if (smtpPrefsList != null && smtpPrefsList.size() > 0)
-		    {
-				List<String> smtpUserNames = new ArrayList<String>();
-				for (SMTPPrefs smtpPrefs : smtpPrefsList)
-				    smtpUserNames.add(smtpPrefs.user_name);
-				emailPrefs.setSmtpUserNames(smtpUserNames);
-				hasEmailAccountsConfigured = true;
-		    }
-		    
-		    // Get GmailSend prefs
-		    List<GmailSendPrefs> gmailSendPrefsList = GmailSendPrefsUtil.getPrefsList(agileUser);
-		    if (gmailSendPrefsList != null && gmailSendPrefsList.size() > 0)
-		    {
-				List<String> userNames = new ArrayList<String>();
-				for (GmailSendPrefs prefs : gmailSendPrefsList)
-				    userNames.add(prefs.name);
-				emailPrefs.setGmailSendUserNames(userNames);
-				hasEmailAccountsConfigured = true;
-		    }
 		    
 			// Get Shared Gmail Prefs
 			List<SocialPrefs> sharedGmailPrefs = getSharedGmailPrefs(agileUserKey);
@@ -998,21 +978,6 @@ public class ContactEmailUtil
 		return sharedOfficePrefs;
 	}
 	
-	/**
-	 * Gets list of Shared Office prefs with this current user
-	 * 
-	 * @param agileUserKey
-	 * @return
-	 */
-	private static List<SMTPPrefs> getSharedToSMTPPrefs(Key<AgileUser> agileUserKey)
-	{
-		Objectify ofy = ObjectifyService.begin();
-		List<SMTPPrefs> sharedOfficePrefs = ofy.query(SMTPPrefs.class)
-				.filter("sharedWithUsers", agileUserKey).list();
-		return sharedOfficePrefs;
-	}
-
-
 	/**
 	 * Returns emails opened by individual user in specific duration
 	 * 

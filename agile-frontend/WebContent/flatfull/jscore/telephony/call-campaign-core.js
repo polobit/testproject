@@ -645,7 +645,7 @@ function getNextContactsId(callback)
 		method = "GET";
 	}else{
 		param = {};
-		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size=pageSize&global_sort_key=' + sortKey;
+		url = '/core/api/contacts?cursor=' + CALL_CAMPAIGN.cursor + '&page_size='+pageSize+'&global_sort_key=' + sortKey;
 		method = "GET";
 	}
 

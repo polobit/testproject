@@ -181,11 +181,12 @@ function updateImageS3Path(imageUrl){
 
 	if(!imageUrl)
 		  imageUrl = "";
-	
+	if(CURRENT_USER_PREFS.theme == 15 && (imageUrl.indexOf("ajax-loader-cursor.gif") != -1 || imageUrl.indexOf("21-0-new.gif") != -1))
+		imageUrl = "img/loader2.gif";
 	try{
 		if(imageUrl){
 			imageUrl = imageUrl.replace("flatfull/", "").replace(/\.{2}/g, '');
-	    }	
+	    }
 	}catch(e){}
 		  
 

@@ -1,7 +1,11 @@
 package com.agilecrm.sendgrid.util;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,8 +14,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileGlobalProperties;
+import com.agilecrm.AgileGlobalProperties.SendGridIpPools;
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
@@ -19,6 +27,7 @@ import com.agilecrm.queues.backend.ModuleUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.HttpClientUtil;
@@ -39,6 +48,7 @@ import com.thirdparty.sendgrid.subusers.SendGridSubUser;
  */
 public class SendGridUtil
 {
+	public static final String WHO_IS_API_URL = "http://54.84.112.13/DomainVerification/whois?domain=";
 
     public static final String UNIQUE_ARGUMENTS = "unique_args";
     public static final String SUBSTITUTION_TAG = "sub";
@@ -63,9 +73,12 @@ public class SendGridUtil
 	public static final String SENDGRID_USERNAME = "username";
 	public static final String SENDGRID_AUTOMATIC_SECURITY = "automatic_security";
 	
+	public static final String IP_POOL = "ip_pool";
+	
      // 
-     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "paypal", "unknown device"};
-     private static final String[] blockedSubjectStringList = new String[] {"unknown device"};
+     private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "unknown device","unknown source","appleid.billing-update.net"
+    	 ,"https://appleid.apple.com/ca","Apple ID"};
+     private static final String[] blockedSubjectStringList = new String[] {"unknown device","unknown source","https://appleid.apple.com/ca","Apple ID"};
 
     /**
      * Substitution tags
@@ -116,6 +129,9 @@ public class SendGridUtil
 
 	    // To split json
 	    JSONArray tempArray = new JSONArray();
+	    
+	    //To check email is transactional or not
+	    boolean emailCategory = EmailGatewayUtil.isEmailCategoryTransactional(emailSender);
 
 	    for (MailDeferredTask mailDeferredTask : tasks)
 	    {
@@ -128,7 +144,7 @@ public class SendGridUtil
 		    {
 			// Appends Agile label
 			mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
-				EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+				EmailUtil.getPoweredByAgileLink("campaign", "Powered by", emailCategory), "Sent using Agile");
 			mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
 				emailSender.isEmailWhiteLabelEnabled());
 		    }
@@ -137,9 +153,9 @@ public class SendGridUtil
 		    // html
 		    if (!StringUtils.isBlank(mailDeferredTask.html)
 			    && !StringUtils.contains(mailDeferredTask.html,
-				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by", emailCategory)))
 			mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
-				"Powered by", emailSender.isEmailWhiteLabelEnabled());
+				"Powered by", emailSender.isEmailWhiteLabelEnabled(), emailCategory);
 		}
 
 		// If same To email or CC or BCC exists, send email without
@@ -147,7 +163,7 @@ public class SendGridUtil
 		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
 			|| isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
-		    sendWithoutMerging(mailDeferredTask, apiUser, apiKey);
+		    sendWithoutMerging(mailDeferredTask, apiUser, apiKey, emailSender);
 		    continue;
 		}
 
@@ -192,7 +208,7 @@ public class SendGridUtil
 			firstSendGridDefferedTask.fromName, tempArray.getJSONObject(i).getString("to"), null, null,
 			SendGridSubVars.SUBJECT.getString(), firstSendGridDefferedTask.replyTo,
 			SendGridSubVars.HTML.getString(), SendGridSubVars.TEXT.getString(),
-			getSMTPJSON(tempArray.getJSONObject(i), firstSendGridDefferedTask).toString());
+			getSMTPJSON(tempArray.getJSONObject(i), firstSendGridDefferedTask, emailSender).toString());
 
 //			System.out.println("POST Data in SendGridUtil \n" + postData);
 		
@@ -267,7 +283,9 @@ public class SendGridUtil
 	}
     }
 
-    /**
+   
+
+	/**
      * Returns constructed SMTP JSON
      * 
      * @param json
@@ -275,7 +293,7 @@ public class SendGridUtil
      * @return
      * @throws JSONException
      */
-    private static JSONObject getSMTPJSON(JSONObject json, MailDeferredTask deferredtask) throws JSONException
+    private static JSONObject getSMTPJSON(JSONObject json, MailDeferredTask deferredtask, EmailSender emailSender) throws JSONException
     {
 	JSONObject SMTPJSON = new JSONObject();
 
@@ -292,6 +310,10 @@ public class SendGridUtil
 			.put(SendGridSubVars.TEXT.getString(), json.getJSONArray(SENDGRID_TEXT_LIST)));
 	
 	SMTPJSON.put(FILTERS, getFilterJSON());
+	
+	// If default gateway add pool
+	if(emailSender.emailGateway == null)
+		SMTPJSON.put(IP_POOL, getIPPool(deferredtask.domain, emailSender.getQueueName(), emailSender.getEmailsToSend()));
 	
 	return SMTPJSON;
     }
@@ -335,7 +357,7 @@ public class SendGridUtil
      * 
      * @param sendGridDeferred
      */
-    public static void sendWithoutMerging(MailDeferredTask sendGridDeferred, String apiUser, String apiKey)
+    public static void sendWithoutMerging(MailDeferredTask sendGridDeferred, String apiUser, String apiKey, EmailSender emailSender)
     {
 
     	// Send Unique arguments in SMTP Header JSON
@@ -348,6 +370,9 @@ public class SendGridUtil
 					new JSONObject().put("domain", sendGridDeferred.domain).put("subject", sendGridDeferred.subject)
 						.put("campaign_id", sendGridDeferred.campaignId));
 			SMTPJSON.put(FILTERS, getFilterJSON());
+			
+			if(emailSender.emailGateway == null)
+				SMTPJSON.put(IP_POOL, getIPPool(sendGridDeferred.domain, emailSender.getQueueName(), emailSender.getEmailsToSend()));
 			
 			SendGrid.sendMail(apiUser, apiKey, sendGridDeferred.fromEmail, sendGridDeferred.fromName, sendGridDeferred.to, sendGridDeferred.cc, sendGridDeferred.bcc, 
 	    			sendGridDeferred.subject, sendGridDeferred.replyTo, sendGridDeferred.html, sendGridDeferred.text, SMTPJSON.toString(), null, null, new String[]{});
@@ -365,6 +390,25 @@ public class SendGridUtil
     	
     	
     }
+
+	public static SendGridIpPools getIPPool(String domain, String queueName, int emailsCount)
+	{
+		
+		final int MAX_LIMIT = 15;
+		
+		// For our domain and empty namespace
+		if(StringUtils.equalsIgnoreCase(domain, "our") ||
+				StringUtils.isEmpty(domain))
+			return AgileGlobalProperties.SendGridIpPools.INTERNAL;
+		
+		if(StringUtils.equalsIgnoreCase(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE))
+			return AgileGlobalProperties.SendGridIpPools.BULK;
+		
+		if(StringUtils.equals(queueName, AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE) && emailsCount > MAX_LIMIT)
+			return AgileGlobalProperties.SendGridIpPools.BULK;
+			
+		return AgileGlobalProperties.SendGridIpPools.TRANSACTIONAL;
+	}
 
     /**
      * Verifies whether To email exists in list. When multiple send email nodes
@@ -566,6 +610,8 @@ public class SendGridUtil
 public static String getSendgridWhiteLabelDomain(String emailDomain, String username, String password, String domain)
 {
 	String response = null, queryString="?domain="+emailDomain, url = "https://api.sendgrid.com/v3/whitelabel/domains";
+	
+	queryString += "&username="+SendGridSubUser.getAgileSubUserName(domain);
 	try
 	 {
 	   response = HTTPUtil.accessURLUsingAuthentication(url+queryString, username, password,"GET", null, false, "application/json", "application/json");
@@ -643,16 +689,10 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 }
 
 	
-	public static void main(String asd[]){
-//		MailDeferredTask mt = new MailDeferredTask(null, null, null, "naresh", "naresh@agilecrm.com", "Naresh", "naresh@faxdesk.com", null, null, "Hello", null, "<b>Hello</b>", null, null, "333", "222");
-//		
-//		List<MailDeferredTask> lt = new ArrayList<MailDeferredTask>();
-//		lt.add(mt);
-//		
-//		sendSendGridMails(lt, null);
+	public static void main(String asd[]) throws ParseException{
+		System.out.println(isEmailDomainValid("mailme.net.in"));
 		
-		
-		getAllWhiteLabelDomains(null);
+		//System.out.println(getSendgridWhiteLabelDomain("devi.com", "agilecrm1", "send@agile1", "prashannjeet"));
 	}
 	
 	/**
@@ -811,8 +851,52 @@ public static String validateSendgridWhiteLabelDomain(String emailDomain, EmailG
 		return false;
 	}
 	
-	
-	
+	/**
+	 * This method is used for verifying email domain on
+	 * the basis of creation date
+	 * 
+	 * @param emailDomain
+	 * @return
+	 * 		-boolean
+	 * @throws ParseException 
+	 */
+	public static boolean isEmailDomainValid(String emailDomain) {
+		
+	try{
+		
+		String whoisData=HTTPUtil.accessURL(WHO_IS_API_URL + emailDomain);
+		
+		long thirtyDaysBackTime = System.currentTimeMillis()/1000;
+		thirtyDaysBackTime = thirtyDaysBackTime -2592000;
+		
+		String format = "yyyy-MM-dd";
+		
+		String creationDate = StringUtils.substringBetween(whoisData, "Creation Date:", "T");
+		
+		if(StringUtils.isBlank(creationDate))
+		{
+			creationDate = StringUtils.substringBetween(whoisData, "created:", "last-update");
+			format = "dd/MM/yyyy";
+		}
+		
+		if(StringUtils.isNotBlank(creationDate)){
+			DateFormat dateFormat = new SimpleDateFormat(format);
+			Date date = dateFormat.parse(creationDate.trim());
+			
+			long createdTimeMillisecond = date.getTime()/1000;
+			
+			if(createdTimeMillisecond >=thirtyDaysBackTime)
+				return false;
+		}
+		
+		System.out.println("Email Domain name and created date" + creationDate + "   "+emailDomain);
+	}
+	catch(Exception e){
+		System.out.println("Exception occured while validatin email domain on whois server : " +e.getMessage());
+		return true;
+	    }
+	return true;
+	}
 	
 	
 	

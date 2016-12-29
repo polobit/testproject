@@ -1597,6 +1597,11 @@ function loadSavedTemplate() {
                         $("select#emailTemplate-category-select",parent.document).val(data.emailTemplate_category_id);
                         parent._agile_set_prefs('emailTempCtg_id', data.emailTemplate_category_id);
                     }
+                }else if(AGILE_EB_OPTIONS['action'] == "copy"){
+                    if(data.emailTemplate_category_id && data.emailTemplate_category_id != "0"){
+                        $("select#emailTemplate-category-select",parent.document).val(data.emailTemplate_category_id);
+                        parent._agile_set_prefs('emailTempCtg_id', data.emailTemplate_category_id);
+                    }
                 }
 
                 $("#tosave").html(data.html_for_builder);

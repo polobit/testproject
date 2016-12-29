@@ -11,8 +11,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.examples.HtmlToPlainText;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -115,6 +117,8 @@ public class MandrillUtil
 
 	String apiKey = emailSender.getMandrillAPIKey();
 	boolean isPaid = emailSender.isPaid();
+
+    boolean emailCategory = EmailGatewayUtil.isEmailCategoryTransactional(emailSender);
 	
 	System.out.println("API key obtained is..." + apiKey);
 	
@@ -152,7 +156,7 @@ public class MandrillUtil
 		    {
 			// Appends Agile label
 			mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
-				EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+				EmailUtil.getPoweredByAgileLink("campaign", "Powered by",  emailCategory), "Sent using Agile");
 			mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
 				emailSender.isEmailWhiteLabelEnabled());
 		    }
@@ -161,9 +165,9 @@ public class MandrillUtil
 		    // html
 		    if (!StringUtils.isBlank(mailDeferredTask.html)
 			    && !StringUtils.contains(mailDeferredTask.html,
-				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+				    EmailUtil.getPoweredByAgileLink("campaign", "Powered by",  emailCategory)))
 			mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
-				"Powered by", emailSender.isEmailWhiteLabelEnabled());
+				"Powered by", emailSender.isEmailWhiteLabelEnabled(),  emailCategory);
 
 		}
 

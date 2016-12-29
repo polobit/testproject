@@ -6,7 +6,7 @@
 	  <div class="row">
 	    <div class="col-md-6">
         <div class="text-md font-bold">Users</div>
-  	      <div class="multiple-checkbox" name="aclUsers">
+  	      <div class="multiple-checkbox checkbox" name="aclUsers">
   	      	{{#each users}}
         			<label class="i-checks i-checks-sm checkbox">
         			  <input type="checkbox" value="{{this.id}}"><i></i>
@@ -176,34 +176,34 @@
                   <div class="col-md-12">
 
                     <div class="control-group form-group m-b-xs">
-                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'addon' 'addon'}} :</label>
-                      <div class="controls col-sm-6 text-cap ">{{plan_name}}</div>
+                      <label class="col-sm-4 control-label p-t-none" align="right">{{agile_lng_translate 'addon' 'addon'}} :</label>
+                      <div class="controls col-sm-7 text-cap ">{{plan_name}}</div>
                     </div>
                     <div class="clearfix"></div>
 
                     <div class="control-group form-group m-b-xs">
-                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}} :</label>
-                      <div class="controls col-sm-6 text-cap ">{{quantity}}</div>
+                      <label class="col-sm-4 control-label p-t-none" align="right">{{agile_lng_translate 'plan-and-upgrade' 'quantity'}} :</label>
+                      <div class="controls col-sm-7 text-cap ">{{quantity}}</div>
                     </div>
                     <div class="clearfix"></div>
 
                     <div class="control-group form-group m-b-xs">
-                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'billing-cycle'}}</label>
-                      <div class="controls col-sm-6 text-cap ">{{duration}}</div>
+                      <label class="col-sm-4 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'billing-cycle'}}</label>
+                      <div class="controls col-sm-7 text-cap ">{{duration}}</div>
                     </div>
                     <div class="clearfix"></div>
 
                     <div class="control-group form-group m-b-xs">
-                      <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'next-billing-date'}}</label>
-                      <div class="controls col-sm-6 text-cap ">{{epochToHumanDate "mmm dd, yyyy" period_end}}</div>
+                      <label class="col-sm-4 control-label p-t-none" align="right">{{agile_lng_translate 'other' 'next-billing-date'}}</label>
+                      <div class="controls col-sm-7 text-cap ">{{epochToHumanDate "mmm dd, yyyy" period_end}}</div>
                     </div>
                     <div class="clearfix"></div>
 
                     <div class="line line-dashed b-b line-lg"></div>
 
                     <div class="control-group form-group m-b-none">
-                      <label class="col-sm-3 control-label" align="right">{{agile_lng_translate 'other' 'total-cost'}}</label>
-                      <div class="controls col-sm-6">
+                      <label class="col-sm-4 control-label" align="right">{{agile_lng_translate 'other' 'total-cost'}}</label>
+                      <div class="controls col-sm-7">
                         <span style="font-size: 22px;color: #FA782D;font-weight: bold;">$</span>
                         <b class="p-r-xs" style="font-size: 22px;color: #FA782D;">{{final_amount_due}}</b>
                         {{#if_equals final_amount_due amount_due}}  
@@ -228,8 +228,8 @@
                     </div>
                     {{#if remaining_starting_balance}}
                       <div class="control-group form-group m-b-xs">
-                        <label class="col-sm-3 control-label p-t-none" align="right">{{agile_lng_translate 'plan-and-upgrade' 'remaining-credit'}}</label>
-                        <div class="controls col-sm-6 text-cap ">${{remaining_starting_balance}}</div>
+                        <label class="col-sm-4 control-label p-t-none" align="right">{{agile_lng_translate 'plan-and-upgrade' 'remaining-credit'}}</label>
+                        <div class="controls col-sm-7 text-cap ">${{remaining_starting_balance}}</div>
                       </div>
                       <div class="clearfix"></div>
                     {{/if}}

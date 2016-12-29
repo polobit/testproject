@@ -18,6 +18,7 @@ import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.file.readers.BlobFileInputStream;
 import com.agilecrm.file.readers.DocumentFileInputStream;
 import com.agilecrm.file.readers.IFileInputStream;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
@@ -274,6 +275,9 @@ public class SendGrid
 			subjectJSON.put(SENDGRID_API_PARAM_SUBJECT,subject );
 			SMTPJSON.put(SENDGRID_API_PARAM_UNIQUE_ARGUMENTS, subjectJSON);
 			
+			if(StringUtils.equalsIgnoreCase(apiUser, Globals.SENDGRID_API_USER_NAME))
+				SMTPJSON.put(SendGridUtil.IP_POOL, SendGridUtil.getIPPool(null, null, 0));
+			
 			queryString += "&" + SENDGRID_API_PARAM_X_SMTPAPI + "=" + URLEncoder.encode(SMTPJSON.toString(), "UTF-8");
 		 } 
     	catch (JSONException e) {
@@ -395,6 +399,12 @@ public class SendGrid
     		
     		apiUser = (StringUtils.isBlank(domain)) ? Globals.SENDGRID_API_USER_NAME : SendGridSubUser.getAgileSubUserName(domain);
     		apiKey = (StringUtils.isBlank(domain)) ? Globals.SENDGRID_API_KEY : SendGridSubUser.getAgileSubUserPwd(domain);
+    		
+    		// Added IP pools
+    		if(StringUtils.isEmpty(SMTPHeaderJSON))
+    		{
+    			SMTPHeaderJSON = new JSONObject().put(SendGridUtil.IP_POOL, SendGridUtil.getIPPool(domain, null, 0)).toString();
+    		}
     	}
     	
     	SendGridLib sendGrid = new SendGridLib(apiUser, apiKey);

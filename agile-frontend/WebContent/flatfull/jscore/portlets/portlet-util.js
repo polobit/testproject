@@ -820,8 +820,7 @@ var portlet_utility = {
 						if (that.find('#emails-sent-count').text().trim() == "")
 							that
 									.find('#emails-sent-count')
-									.html(
-											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
+									.html(LOADING_HTML);
 					}, 1000);
 
 			portlet_graph_data_utility
@@ -995,9 +994,9 @@ var portlet_utility = {
 								if (tagName != "")
 									li += "<li data='"
 											+ tagName
-											+ "' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>"
+											+ "' class='tag btn btn-xs btn-default m-r-xs m-b-xs inline-block'>"
 											+ tagName
-											+ "<a id='remove_tag' class='close m-l-xs'>&times</a></li>";
+											+ "<a id='remove_tag' class='close m-l-xs' style='color: #363f44; top: -1px'>&times</a></li>";
 							});
 			$('#' + base_model.get("id") + '-portlet-ul-tags').append(li);
 
@@ -1099,8 +1098,7 @@ var portlet_utility = {
 						if (that.find('#new-contacts-count').text().trim() == "")
 							that
 									.find('#new-contacts-count')
-									.html(
-											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
+									.html(LOADING_HTML);
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -1127,8 +1125,7 @@ var portlet_utility = {
 						if (that.find('#won-deal-value').text().trim() == "")
 							that
 									.find('#won-deal-value')
-									.html(
-											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
+									.html(LOADING_HTML);
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -1163,8 +1160,7 @@ var portlet_utility = {
 						if (that.find('#new-deal-value').text().trim() == "")
 							that
 									.find('#new-deal-value')
-									.html(
-											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
+									.html(LOADING_HTML);
 					}, 1000);
 			portlet_graph_data_utility
 					.fetchPortletsGraphData(
@@ -1199,8 +1195,7 @@ var portlet_utility = {
 						if (that.find('#emails-sent-count').text().trim() == "")
 							that
 									.find('#emails-sent-count')
-									.html(
-											"<img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' />");
+									.html(LOADING_HTML);
 					}, 1000);
 			var emailsSentCount = 0;
 			if (_agile_get_prefs('dashboard_campaign_count_'+CURRENT_DOMAIN_USER.id)) {
@@ -1368,7 +1363,7 @@ var portlet_utility = {
 					.html(
 							"<div class='text-center v-middle opa-half' style='margin-top:"
 									+ topPos
-									+ "px'><img src='"+updateImageS3Path('../flatfull/img/ajax-loader-cursor.gif')+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+									+ "px'>"+LOADING_HTML+"</div>");
 			$("#"+selector).addClass("lost-deal-analysis-portlet-pie");
 			pieforReports(url, selector, '', undefined, true);
 				setPortletContentHeight(base_model);
@@ -1407,7 +1402,7 @@ var portlet_utility = {
 			if (sizey == 2 || sizey == 3)
 				topPos += 50;
 			$('.'+selector).html("<div class='text-center v-middle opa-half' style='margin-top:"+ topPos
-								+ "px'><img src='"+updateImageS3Path("../flatfull/img/ajax-loader-cursor.gif")+"' style='width:12px;height:10px;opacity:0.5;' /></div>");
+								+ "px'>"+LOADING_HTML+"</div>");
 			var url = '/core/api/web-stats/refurl-stats?start_time='
 								+ portlet_utility
 										.getStartAndEndDatesOnDue(start_date_str,base_model.get('settings')["start-date"])*1000
@@ -1560,9 +1555,9 @@ var portlet_utility = {
 								if (tagName != "")
 									li += "<li data='"
 											+ tagName
-											+ "' class='tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block'>"
+											+ "' class='tag btn btn-xs btn-default m-r-xs m-b-xs inline-block'>"
 											+ tagName
-											+ "<a id='remove_tag' class='close m-l-xs'>&times</a></li>";
+											+ "<a id='remove_tag' class='close m-l-xs' style='color: #363f44; top: -1px'>&times</a></li>";
 							});
 			$('#portlet-ul-tags').append(li);
 
@@ -1679,7 +1674,7 @@ var portlet_utility = {
 			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
-				url : '/core/api/workflows',
+				url : '/core/api/workflows/partial',
 				dataType : 'json',
 				success : function(data) {
 					$.each(data, function(index, campaignfilter) {
@@ -1996,7 +1991,7 @@ var portlet_utility = {
 			var options = "<option value='All'>{{agile_lng_translate 'campaigns' 'all-campaigns'}}</option>";
 			$.ajax({
 				type : 'GET',
-				url : '/core/api/workflows',
+				url : '/core/api/workflows/partial',
 				dataType : 'json',
 				success : function(data) {
 					$.each(data, function(index, campaignfilter) {

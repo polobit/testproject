@@ -53,15 +53,15 @@ var addAgileApi = function(json, api, callback)
 
 
 	var agilepreloadfields = {};
-	agilepreloadfields.label = "Preload Fields <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to Yes, the form fields will be pre populated if info available in cookies' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
+	agilepreloadfields.label = "Preload Fields <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to yes, the form fields will be pre populated if info available in cookies' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agilepreloadfields.type = "select";
 	agilepreloadfields.value = [{value : false, selected : false, label : "no"}, {value : true, selected : true, label: "yes"}];
    // adding the tag for the TO SEND EMAIL Notification 
 
 	var formemailnotification = {};
-	formemailnotification.label = "Email Notification <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to True, owner will be notified via email on form submission' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
+	formemailnotification.label = "Email Notification <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' If set to true, owner will be notified via email on form submission' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	formemailnotification.type = "select";
-	formemailnotification.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
+	formemailnotification.value = [{value : false, selected : false, label : "false"}, {value : true, selected : true, label: "true"}];
     //Adding the Recaptcha for the website 
 
    //var integrationUrl = window.location.protocol + '//' + window.location.host +'/#integrations' ;
@@ -71,7 +71,7 @@ var addAgileApi = function(json, api, callback)
 	agileformcaptcha.value = [{value : false, selected : true, label : "false"}, {value : true, selected : false, label: "true"}];
 
 	var agileformidtag = {};
-	agileformidtag.label = "Form Tags <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' On form submission, Tag will be added to the contact created/modified' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
+	agileformidtag.label = "Form Tags <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title=' On form submission, tag will be added to the contact created/modified' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agileformidtag.type = "input";
 	agileformidtag.value = "";
 
@@ -166,10 +166,24 @@ var addAgileFields = function(json, fields, callback)
 
 			}
 			else{
-			json[k][i].fields["agilefield"] = agilefield;
-
-		   }
+				json[k][i].fields["agilefield"] = agilefield;
+				if(json[k][i].title.includes('Input') || json[k][i].title.includes('Select')){
+					var reqField = json[k][i].fields["required"];
+					delete json[k][i].fields["required"];
+					json[k][i].fields["required"] = reqField;
+				}
+				else if(json[k][i].title.includes('Text') || json[k][i].title.includes('Checkbox')){
+					var reqField = json[k][i].fields["required"];
+					var checkField = json[k][i].fields["checked"];
+					delete json[k][i].fields["checked"];
+					delete json[k][i].fields["required"];
+					json[k][i].fields["checked"] = checkField;
+					json[k][i].fields["required"] = reqField;
+					
+				}
+			}
 			/*json[k][i].fields["agilefield"] = agilefield;*/
+
 		}
 	}
 	callback(json);

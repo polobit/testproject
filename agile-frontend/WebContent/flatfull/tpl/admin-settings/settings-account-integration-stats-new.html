@@ -3,7 +3,7 @@
 <script type="text/html" id="admin-settings-integrations-stats-new-template">
 
 <div id="integrationstats">
-	<div class="">
+	<div class="tab-container">
            <ul class="nav nav-tabs stats-tabs-border" id="integration-stats">
            {{#is_mobile}}
 
@@ -254,27 +254,14 @@
 <script id="sync-stats-new-template" type="text/html">
 <div class="{{#is_mobile}} m-b-none {{else}} m-b-sm {{/is_mobile}}" id="sync-app-data">
 <!--<h4 class="h4 m-b-sm">Sync Data</h4>-->
-<div class="row {{#is_mobile}} m-n {{/is_mobile}}">
-<table calss="table" {{#is_mobile}} style="width: 100%;font-size: 16px;text-align: right;padding: 1px;" {{else}} style="width: 28%;font-size: 16px;text-align: right;padding: 1px;" {{/is_mobile}}>
-  	<tbody>
-  		<tr class="spacer">
-    		<td>{{agile_lng_translate 'contact-details' 'Contacts'}} &amp; {{agile_lng_translate 'companies-view' 'companies'}} :</td>
-    		<td><a onclick="syncAppData();" class="btn-sm sync-app-con" style="margin-left: -16px; color: #23b7e5; font-size: 14px">{{agile_lng_translate 'contact-edit' 'update'}}</a></td>
-  		</tr>
-  		<tr>
-  			<td style="padding-top: 8px;">{{agile_lng_translate 'contact-details' 'deals'}} :</td>
-    		<td class="{{#is_mobile}} m-t-sm block {{else}} m-t-sm inline-block {{/is_mobile}}">
-    			<a onclick="syncAppDatatoDeals();" class="btn-sm sync-app-con" {{#is_mobile}} style="margin-left:0px;font-size: 14px; color: #23b7e5;" {{else}} style="margin-left:-16px; color: #23b7e5; font-size: 14px" {{/is_mobile}}>{{agile_lng_translate 'contact-edit' 'update'}}</a>
-    		</td>
 
-  		</tr>
-  	</tbody>
-</table>
-<div {{#is_mobile}} style="position:relative;margin-top: 10px !important" {{else}} style="position:relative;margin: 15px 0px -18px 15px;" {{/is_mobile}}>
+<div class="row">
 
-    <p>{{agile_lng_translate 'datasync' 'resync-info'}}</p>
-   	<p>* {{agile_lng_translate 'integration-stats' 'sync-in-month'}}</p>
-</div>
+    	<p style="margin-left: 26px">{{agile_lng_translate 'contact-details' 'sync-message'}}
+    		<a onclick="syncAppData();" class="btn-sm sync-app-con" style="margin-left: -8px;margin-right: -6px; color: #23b7e5;font-size: 14px;">{{agile_lng_translate 'contact-edit' 'click-here'}}</a>{{agile_lng_translate 'contact-details' 'to-update-contact-company'}}<a onclick="syncAppDatatoDeals();" class="btn-sm sync-app-con" style="margin-left:-6px; margin-right: -6px; color: #23b7e5;font-size: 14px">{{agile_lng_translate 'contact-edit' 'click-here'}}</a>{{agile_lng_translate 'contact-details' 'to-update-deals'}}
+    		</p>        
+  		
+
 </div>
 </div>
 </script>

@@ -170,6 +170,11 @@ public class TicketsRest
 
 			if (pageSize == null)
 				pageSize = DEFAULT_PAGE_SIZE;
+			
+			if(StringUtils.equals(sortField, "-assignee_name") || StringUtils.equals(sortField, "assignee_name") ){
+				
+				sortField = "-last_updated_time";
+			}
 
 			JSONObject resultJSON = new TicketsDocument().searchDocuments(queryString.trim(), cursor, sortField,
 					pageSize);
@@ -198,7 +203,7 @@ public class TicketsRest
 					ticket.count = count;
 					ticket.cursor = resultJSON.getString("cursor");
 				}
-			}
+			}		
 
 			return tickets;
 		}

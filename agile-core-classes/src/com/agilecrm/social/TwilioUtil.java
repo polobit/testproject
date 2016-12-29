@@ -19,10 +19,14 @@ import org.json.XML;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.campaignio.tasklets.sms.SendMessage;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestException;
@@ -1064,6 +1068,8 @@ public class TwilioUtil
 			}
 			
 				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+			//params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/conftwiml?conference=" + conferenceName + "&endConferenceOnExit=yes&recordConference=" + record+ "&maxParticipants=3");
+			
 				params.put("Method", "POST");
 				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/" +childCallSid, "POST", params);
 				System.out.println("respomse for modify call is -" + XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse"));
@@ -1280,4 +1286,108 @@ public class TwilioUtil
  		
  	    }
 	}    
+ 	
+ 	
+ 	/**
+	 * Call Transfer
+	 * 
+	 * @author Rajesh
+	 * @created 23-Nov-2016
+	 * 
+	 */
+ 	
+	public static String transferCall(Widget widget, String from, String to, String callSid, String direction)
+			throws JSONException, Exception
+	{
+		String status = "400";
+		try
+		{
+			System.out.println("In transfer call method");
+			String account_sid = widget.getProperty("twilio_acc_sid");
+			String auth_token = widget.getProperty("twilio_auth_token");
+			
+			TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+			String record = widget.getProperty("twilio_record");
+			
+			Map<String, String> params = new HashMap<String, String>();
+			String childCallSid = "";
+
+			// we only need the to number to forward so we find the call sid which have to number
+			if(direction.equalsIgnoreCase("Outgoing")){
+				params.put("ParentCallSid", callSid);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls.json",
+						"GET", params);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				JSONArray calls = responseTextJson.getJSONArray("calls");
+				JSONObject call = (JSONObject) calls.get(0);
+				childCallSid = call.getString("sid");
+				System.out.println("child call sid is " +  childCallSid);
+			}else{
+				childCallSid = callSid;
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"
+						+ callSid + ".json", "GET", null);
+				JSONObject responseJSON = new JSONObject(response);
+				String responseText = response.getResponseText();
+				JSONObject responseTextJson = new JSONObject(responseText);
+				childCallSid = responseTextJson.getString("parent_call_sid");
+			}
+			
+			
+			//Map<String, String> params = new HashMap<String, String>();
+				params.put("From",from);
+				params.put("To", to);
+				params.put("Url","https://"+NamespaceManager.get()+".agilecrm.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				//params.put("Url","https://rajesh-dot-sandbox-dot-agilecrmbeta.appspot.com/transfercall?from=" + from +  "&to="+to+"&recordConference=" + record);
+				TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid + "/Calls/"+childCallSid, "POST", params);
+				JSONObject responseTextJson = XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
+				JSONObject callResponse = responseTextJson.getJSONObject("Call");
+				if(callResponse == null){
+					callResponse = responseTextJson.getJSONObject("RestException");
+				}
+				if(callResponse != null){
+					status = callResponse.getString("Status");
+				}
+				System.out.println("status for adding in conference is " + status);
+				return status;
+		}
+		catch (Exception e)
+		{
+			System.out.println( "Error occured in adding call to conference" + e.getMessage());
+		}
+		return status;
+	}
+	
+	public static JSONArray getTwillioUsersAndNumbers() throws JSONException{
+		JSONArray result = new JSONArray();
+		List<Widget> widgetList =  WidgetUtil.getActiveWidgetsByName("TwilioIO");
+		try{
+			if(widgetList != null){
+				result = new JSONArray();
+				for (Widget widget : widgetList) {
+					try{
+						JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
+						System.out.println("Agile User Id"+widget.getUserID());
+						AgileUser agileUser = AgileUser.getCurrentAgileUser(widget.getUserID());
+						DomainUser domainUser = DomainUserUtil.getDomainUser(agileUser.domain_user_id);			
+						JSONObject object = new JSONObject();
+						object.put("username", domainUser.name);
+						object.put("domainUserId", domainUser.id);
+						object.put("twillioNumber", widgetPrefs.get("twilio_number"));	
+						object.put("pic", domainUser.pic);	
+						object.put("domainusernumber", domainUser.phone);	
+						result.put(object);
+					}catch(Exception e){
+						System.out.println("widget id"+widget.id);
+						e.printStackTrace();
+					}
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
 }

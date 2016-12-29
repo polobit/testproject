@@ -1,5 +1,5 @@
 <script id="forms-collection-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="row">
     <div class="col-md-12">
         {{#is_mobile}}
@@ -14,10 +14,10 @@
         {{else}}
         	<h3 class="font-thin h3 pull-left">{{agile_lng_translate 'form-builder' 'forms'}}</h3>
         	<div class="pull-right">
-	        	<a id="form-video-tutorial" onclick="formVideoPopup();" class="help-video btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="line-height: 1px;">
+	        	<a id="form-video-tutorial" onclick="formVideoPopup();" class="help-video m-r-sm-imp btn-default-imp-white btn-lg-imp btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Help Video" style="line-height: 1px;">
 	                <i class="fa fa-play-circle" aria-hidden="true" style="font-size: 18px;"></i>
 	            </a>
-	        	<a href="#form-builder-templates" class="btn btn-sm btn-default btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+	        	<a href="#form-builder-templates" class="btn btn-sm btn-primary-imp btn-lg-imp btn-default btn-addon" style="position:relative"><span><i class="icon-plus-sign" /></span> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
         	</div>
         	<div class="clearfix"></div>
         {{/is_mobile}} 
@@ -44,7 +44,7 @@
 				<div class="text">
 				     {{agile_lng_translate 'form-builder' 'create-and-place-the-form-desc'}} 
 				</div>
-				<a href="#form-builder-templates" class="btn btn-default m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
+				<a href="#form-builder-templates" class="btn btn-default btn-default-imp btn-lg-imp m-t-xs btn-sm blue btn-slate-action"><i class="icon-plus-sign"></i> {{agile_lng_translate 'form-builder' 'add-form'}}</a>
 			</div>
 			<div class="clearfix">
 			</div>
@@ -66,7 +66,7 @@
 		</div>
 	{{else}}
 		<div class="data-block">
-		<div class="data-container">
+		<div class="data-container no-panel-border" id="forms-list-view">
 			<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'form-builder' 'forms-list'}}</div>
 			<table class="table table-striped showCheckboxes c-p agile-table" url="core/api/forms/bulk">
@@ -75,8 +75,8 @@
 						<th class="text-ellipsis">{{agile_lng_translate 'form-builder' 'form-title'}}
 						</th>
 						<th class="text-ellipsis">{{agile_lng_translate 'form-builder' 'last-modified'}}</th>
-						<th style="display:none;width:15%"></th>
-						<th style="display:none;width:10%"></th>
+						<th style="width:15%"></th>
+						<th style="width:10%"></th>
 					</tr>
 				</thead>
 				<tbody id="forms-model-list" class="c-p"></tbody>
@@ -118,7 +118,7 @@
 		<div class="text-base table-resp"><a target="_blank" href="formbuilder?form={{id}}">{{formName}}</a></div>
 		<div class="text-xs table-resp">
 			<span class="pull-left">
-				<a target="_blank" href="formbuilder?form={{id}}">
+				<a href="formbuilder?form={{id}}">
 					<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
 						<small class="edit-hover text-muted">
 							<i class="fa fa-clock-o"></i>
@@ -146,9 +146,9 @@
 		</div>
 	</td>
 {{else}}
-	<td><a target="_blank" href="formbuilder?form={{id}}"><span  style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
+	<td><a href="formbuilder?form={{id}}"><span  style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">{{formName}}</span></a></td>
     <td>
-		<a target="_blank" href="formbuilder?form={{id}}">
+		<a href="formbuilder?form={{id}}">
 			<span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;">
 				<small class="edit-hover text-muted">
 					<i class="fa fa-clock-o m-r-xs"></i>
@@ -169,6 +169,7 @@
 		<a class="codeshare" data-formid="{{id}}"><i class="fa icon-code" ></i><span style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:100%;"></span></a>
 		</div>
 	</td>
+	<td></td>
 	</br>
 {{/is_mobile}}
 </script>

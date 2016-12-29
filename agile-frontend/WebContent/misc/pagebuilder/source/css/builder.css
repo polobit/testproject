@@ -69,23 +69,14 @@ body .drop-hover {
 	z-index: 10000;
 }
 
-#loader span {
-  	color: #ecf0f1;
-  	font-family: Consolas, Menlo, Monaco, monospace;
-  	font-weight: bold;
-  	font-size: 30vh;
-  	opacity: 0.8;
+#loader i, #canvasOverlay .loader i{
+	animation: fa-spin 1.5s infinite steps(8);
+    color: white;
 }
-
-#loader span {
-  	display: inline-block;
-    -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
-          animation: pulse 0.4s alternate infinite ease-in-out;
-}
-
-#loader span:nth-child(odd) {
-     -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
+#loader span, #canvasOverlay .loader span {
+    color: #ecf0f1;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-size: 1em;
 }
 @-webkit-keyframes pulse {
   to {
@@ -328,6 +319,7 @@ header .slick:hover .slide {
 	height: 35px;
 	background: #fff;
 	padding: 6px;
+	margin-top:5px;
 }
 
 .styleEditor .form-group .sp-preview {
@@ -404,7 +396,7 @@ body .sp-input {
 
 .styleEditor .sideButtons > * {
 	float: left;
-	width: 33.33%;
+	width: 49.97%;
 }
 
 .styleEditor p.or {
@@ -434,10 +426,6 @@ body .sp-input {
 	left: auto;
 }
 
-.styleEditor .link_Tab input {
-	margin-bottom: 20px;
-}
-
 .styleEditor .form-group.fullWidth > input {
     float: none;
     width: 100%;
@@ -450,10 +438,6 @@ body .sp-input {
 
 .styleEditor .fileinput .thumbnail {
 	border-radius: 0px;
-}
-
-.styleEditor .imageFileTab > input {
-	margin-bottom: 20px;
 }
 
 .styleEditor .imageFileTab > .form-group {
@@ -948,44 +932,20 @@ li.element {
 }
 
 #canvasOverlay {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
+	display: flex;
+    -webkit-box-pack: center;
+	justify-content: center;
+    -webkit-box-align: center;
+	align-items: center;
 	background: RGBA(45, 62, 79, 0.5);
-	display: -webkit-box;
-  	display: -webkit-flex;
-  	display: -ms-flexbox;
-  	display: none;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
 }
 
-#canvasOverlay .loader {
-	color: #fff;
-  	font-family: Consolas, Menlo, Monaco, monospace;
-  	font-weight: bold;
-  	font-size: 20vh;
-  	opacity: 0.8;
-}
-
-#canvasOverlay .loader span {
-  display: inline-block;
-  -webkit-animation: pulse 0.4s alternate infinite ease-in-out;
-          animation: pulse 0.4s alternate infinite ease-in-out;
-}
-
-#canvasOverlay .loader span:nth-child(odd) {
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
-}
 @-webkit-keyframes pulse {
   to {
     -webkit-transform: scale(0.8);
@@ -1072,7 +1032,7 @@ li.element {
    max-width:none;
 }
 
-#refresh-formlist .agile-tooltip:hover{
+.agile-tooltip:hover{
 	cursor:pointer;
 }
 
@@ -1085,3 +1045,6 @@ li.element {
 }
 .left{float:left;}
 .right{float:right;}
+.agile-link:hover{
+	cursor: pointer;
+}

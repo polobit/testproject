@@ -128,6 +128,25 @@ public class ContactFullDetails
 			return null;
 		}
 	}
+	/**
+	 * @author Priyanka
+	 * fetches contact_owner_change activity and call activity from Activity
+	 * Table
+	 * 
+	 * */
+	public List<Activity> getSms(){
+		
+		try{
+			List<Activity> sms = ActivityUtil.getActivitiesByFilter(null, EntityType.CONTACT.toString(), "SMS_SENT",
+					contact_id, null, null);
+			List<Activity> list = new ArrayList<Activity>();
+			list.addAll(sms);
+			return list;
+		}catch(Exception e){
+			System.out.println("Exception Occred while fetching the sms :"+e.getMessage());
+			return null;
+		}
+	}
 
 	@XmlElement
 	public List<Case> getCases()

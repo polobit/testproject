@@ -8,7 +8,7 @@
 	        <h3>{{#if_equals "TICKET_PRIVATE_NOTES_ADD" activity_type}}{{agile_lng_translate 'campaigns' 'private'}}{{/if_equals}} {{agile_lng_translate 'contact-details' 'notes'}}</h3>
 	    </div>
 	    <div class="modal-body">
-			<div class="word-break-all" style="margin-bottom:5px;">
+			<div class="word-break-all" style="margin-bottom:5px;word-break: break-word;">
 				{{#if_equals activity_type "TICKET_CREATED"}}
 				
 					{{{replace_newline_with_ticket_br custom2}}}

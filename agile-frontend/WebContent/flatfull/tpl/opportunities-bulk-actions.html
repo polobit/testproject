@@ -8,16 +8,16 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="control-group form-group col-md-5">
-						<p class="m-t-xs">{{agile_lng_translate 'deal-view' 'changing-owner-for'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'Deals?'}}</p>
+						<p class="m-t-xs">{{agile_lng_translate 'deal-view' 'change-owner-for-n-selected-deals'}}</p>
 						<label class="control-label"><b>{{agile_lng_translate 'contacts-view' 'select-owner'}}</b><span class="field_req">*</span></label>
 						<div class="controls" id="owners">
-							<select id="owners-list-bulk" class="required form-control" name="owner_id"></select>
+							<select id="owners-list-bulk" class="required form-control select-new-theme" name="owner_id"></select>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<a href="#" id="deal-bulk-owner" class="btn btn-sm btn-primary">{{agile_lng_translate 'deal-view' 'done'}}</a>
+				<a href="#" id="deal-bulk-owner" class="btn btn-sm btn-primary">{{agile_lng_translate 'contacts-view' 'change-owner'}}</a>
 			</div>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 			</div>
 			<div class="modal-body">
 				<form id="bulk_mile_Form" name="opportunityForm" method="post">
-					<p> {{agile_lng_translate 'deal-view' 'changing-track-milestone-for'}}<span class="count"> </span> {{agile_lng_translate 'deal-view' 'Deals'}}</p>
+					<p> {{agile_lng_translate 'deal-view' 'change-track-milestone-for-n-selected-deals'}}</p>
 					<div class="row">
 						<div class="control-group form-group col-md-5">
 							<label class="control-label"><b>{{agile_lng_translate 'deal-view' 'select-track'}} </b>
@@ -67,16 +67,16 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h3 class="modal-title">{{agile_lng_translate 'deal-view' 'archive'}}</h3>
+				<h3 class="modal-title">{{agile_lng_translate 'deal-view' 'archive-deal'}}</h3>
 			</div>
 			<div class="modal-body">
 				<div id="deal-bulk-confirm">
-					{{agile_lng_translate 'deal-view' 'archive'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'Deals?'}}
+					{{agile_lng_translate 'deal-view' 'archive-n-selected-deals'}}
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-				<a href="#" id="deal-bulk-archive" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+				<button type="button" class="btn btn-sm btn-default btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-archive" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>
@@ -92,12 +92,12 @@
 			</div>
 			<div class="modal-body">
 				<div id="deal-bulk-confirm">
-					{{agile_lng_translate 'deal-view' 'restore'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'Deals?'}}
+					{{agile_lng_translate 'deal-view' 'restore-n-selected-deals'}}
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-				<a href="#" id="deal-bulk-restore" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+				<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-restore" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>
@@ -112,12 +112,12 @@
 			</div>
 			<div class="modal-body">
 				<div id="deal-bulk-confirm">
-					{{agile_lng_translate 'contact-details' 'delete'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'Deals?'}}
+					{{agile_lng_translate 'deal-view' 'delete-n-selected-deals'}}
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-				<a href="#" id="deal-bulk-delete" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+				<button type="button" class="btn btn-sm btn-default btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-delete" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>
@@ -134,7 +134,7 @@
 				<div class="row">
 					<form id="dealContactTagsBulkForm">
 						<div class="control-group form-group col-md-7">
-							<p class="m-t-xs">{{agile_lng_translate 'deal-view' 'add-tag-to-related-contacts-of-selected'}}<span class="count"> </span> {{agile_lng_translate 'deal-view' 'Deals'}}</p>
+							<p class="m-t-xs">{{agile_lng_translate 'deal-view' 'add-tag-to-related-contacts-of'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'selected-deals'}}</p>
 							<label class="control-label"><b>{{agile_lng_translate 'contacts-view' 'add-tags'}}</b> <span class="field_req">*</span></label>
 							<div class="controls">
 								<div class="pull-left">
@@ -158,8 +158,8 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<!-- <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button> -->
-				<a href="#" id="deal-contact-add-tag" class="btn btn-primary btn-sm">{{agile_lng_translate 'deal-view' 'done'}}</a> 
+				<!-- <button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">Cancel</button> -->
+				<a href="#" id="deal-contact-add-tag" class="btn btn-primary btn-sm btn-primary-imp">{{agile_lng_translate 'modals' 'save'}}</a> 
 				<span class="save-status"></span>
 			</div>
 		</div>
@@ -180,7 +180,7 @@
 						<label class="control-label"><b>{{agile_lng_translate 'contact-details' 'select-campaign'}} </b><span
 							class="field_req">*</span></label>
 						<div class="controls" id="workflows">
-							<select id="workflows-list-bulk" class="required form-control" name="workflow_id"></select>
+							<select id="workflows-list-bulk" class="required form-control select-new-theme" name="workflow_id"></select>
 						</div>
 					</div>
 				</div>
@@ -203,8 +203,8 @@
 				{{agile_lng_translate 'deal-view' 'permission-to-archive-deals'}}<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-				<a href="#" id="deal-bulk-archive-acl" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+				<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-archive-acl" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>
@@ -222,8 +222,8 @@
 				{{agile_lng_translate 'deal-view' 'permission-to-restore-deals'}}<br/><br/> {{agile_lng_translate 'deal-view' 'do-you-want-to-proceed'}}
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
-				<a href="#" id="deal-bulk-restore-acl" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
+				<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-restore-acl" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>
@@ -240,7 +240,7 @@
 			<div class="modal-body">{{agile_lng_translate 'deal-view' 'you-do-not-have-permission-to-update-deal'}}</div>
 			<div class="modal-footer">
 				<div>
-					<a href="#" class="btn btn-primary" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</a>
+					<a href="#" class="btn btn-primary btn-default-imp" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</a>
 				</div>
 			</div>
 		</div>
@@ -257,7 +257,7 @@
 			<div class="modal-body">{{agile_lng_translate 'deal-view' 'permission-to-delete-this-deal'}}</div>
 			<div class="modal-footer">
 				<div>
-					<a href="#" class="btn btn-primary" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</a>
+					<a href="#" class="btn btn-primary btn-default-imp" data-dismiss="modal">{{agile_lng_translate 'other' 'cancel'}}</a>
 				</div>
 			</div>
 		</div>
@@ -275,7 +275,27 @@
 				{{agile_lng_translate 'deal-view' 'persmission-to-delete-deals'}}
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'other' 'cancel'}}</button>
+				<button type="button" class="btn btn-primary btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'other' 'cancel'}}</button>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="deal-bulk-export-modal-template" type="text/html">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 class="modal-title">{{agile_lng_translate 'deal-view' 'export'}} <span class="count"> </span> {{agile_lng_translate 'deal-view' 'selected-deals'}}</h3>
+			</div>
+			<div class="modal-body">
+				<div id="deal-bulk-confirm">
+					<p>{{agile_lng_translate 'contacts-view' 'csv-file-desc-with-activity'}}</p>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+				<a href="#" id="deal-bulk-export" class="btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'yes'}}</a>
 			</div>
 		</div>
 	</div>

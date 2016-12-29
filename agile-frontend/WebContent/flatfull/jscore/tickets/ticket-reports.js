@@ -137,8 +137,8 @@ var Ticket_Reports = {
 	pieforfeedbackReport: function(url, selector, name){
 
 
-		$('#' + selector).html("<div class='text-center v-middle opa-half'>" + 
-			"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>" +LOADING_HTML+
+			"</div>");
 
 		var chart;
 		var AllData=[];
@@ -333,8 +333,8 @@ var Ticket_Reports = {
 	pieforReports: function(url, selector, name){
 
 
-		$('#' + selector).html("<div class='text-center v-middle opa-half'>" + 
-			"<img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>" +LOADING_HTML+
+			"</div>");
 
 		var chart;
 		var AllData=[];

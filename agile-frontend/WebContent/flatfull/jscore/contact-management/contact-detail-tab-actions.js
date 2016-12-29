@@ -208,7 +208,7 @@ var contact_details_documentandtasks_actions = {
 
 				var contact_name = getContactName(json);
 
-				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 			 	// Adds contact name to tags ul as li element
 			 	$('#contactTypeAhead .tags',e).html(template({name : contact_name, id : json.id}));
@@ -237,7 +237,7 @@ var contact_details_documentandtasks_actions = {
 				}
 				var contact_name = getContactName(json);
 
-				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 			 	// Adds contact name to tags ul as li element
 			 	$('.tags',el).html(template({name : contact_name, id : json.id}));
@@ -283,7 +283,7 @@ var contact_details_documentandtasks_actions = {
 					{
 						Backbone.history.navigate("contact-add" , {trigger: true});
 						setTimeout(function(){ 
-						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="text-white m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close text-white" id="remove_tag">×</a></span></li>');
+						$("#continueform").find("ul[name=contact_company_id]").html('<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="'+forceCompany.id+'"><span><a class="m-r-xs" href="#contact/'+forceCompany.id+'">'+forceCompany.name+'</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">×</a></span></li>');
 						console.log(comp_addr_prop);
 						if(comp_addr_prop){
 							$("#content .address-type").val("office");
@@ -326,7 +326,7 @@ var contact_details_documentandtasks_actions = {
 				json = App_Contacts.contactDetailView.model.toJSON();
 			}
 			var contact_name = getContactName(json);
-			var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+			var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
   
 		 	// Adds contact name to tags ul as li element
 		 	$('.tags',el).html(template({name : contact_name, id : json.id}));
@@ -475,7 +475,7 @@ var contact_details_documentandtasks_actions = {
 				}
 				var contact_name = getContactName(json);
 
-				var template = Handlebars.compile('<li class="tag btn btn-xs btn-primary m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
+				var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="{{id}}">{{name}}</li>');
 	  
 			 	// Adds contact name to tags ul as li element
 			 	$('.tags',el).html(template({name : contact_name, id : json.id}));

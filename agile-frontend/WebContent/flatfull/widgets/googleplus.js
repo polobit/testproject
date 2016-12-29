@@ -210,17 +210,29 @@ function googlePlusApiCall(apiURL, reqData, callback) {
 				success: function(data){
 					callback(data);
 				},error:function(data){
-					var errorObj = JSON.parse(data.responseText);
-					if(errorObj){
-						displayError(WIDGET_NAME, errorObj.error.message);
+					var errorMessage;
+					try{
+						var errorObj = JSON.parse(data.responseText);
+						if(errorObj){
+							errorMessage = errorObj.error.message;
+						}					
+					}catch(e){
+						errorMessage = "Error occured while fetching profile";
 					}
+					displayError(WIDGET_NAME, errorMessage);
 				}
 			});
 		},error:function(data){
-			var errorObj = JSON.parse(data.responseText);
-			if(errorObj){
-				displayError(WIDGET_NAME, errorObj.error.message);
+			var errorMessage;
+			try{
+				var errorObj = JSON.parse(data.responseText);
+				if(errorObj){
+					errorMessage = errorObj.error.message;
+				}
+			}catch(e){
+				errorMessage = "Error occured while fetching profile";
 			}
+			displayError(WIDGET_NAME, errorMessage);
 		}
 	});
 }

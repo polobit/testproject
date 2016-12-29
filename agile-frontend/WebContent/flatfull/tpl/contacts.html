@@ -157,7 +157,7 @@
             <div class="table-responsive">
 			<div class="panel panel-default">
 			    <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'contacts-list'}}</div>
-			<table id="contacts-table" class="table table-striped showCheckboxes  no-sorting panel"
+			<table id="contacts-table" class="table table-striped showCheckboxes  no-sorting panel {{getCompactTableView 'contacts'}}"
 				url="core/api/contacts/delete?action=DELETE">
 				
 				<div class="filter-criteria"></div>
@@ -291,7 +291,7 @@
 			<div class="table-responsive">
 			<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'companies-view' 'companies-list'}}</div>
-			<table id="companies" class="table table-striped showCheckboxes panel"
+			<table id="companies" class="table table-striped showCheckboxes panel {{getCompactTableView 'companies'}}"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
 					
@@ -326,7 +326,7 @@
 			<div class="data-container"></div>
 			<div class="panel panel-default">
 			    <div class="panel-heading">{{agile_lng_translate 'contacts-view' 'contacts-list'}}</div>
-			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting"
+			<table id="contacts-table" class="table table-striped showCheckboxes agile-ellipsis-dynamic no-sorting {{getCompactTableView 'contacts'}}"
 				url="core/api/bulk/update?action_type=DELETE">
 				<col width="30px">
 				<col width="41%">
@@ -365,7 +365,7 @@
 			<div class="data-container"></div>
 			<div class="panel panel-default">
 			<div class="panel-heading">{{agile_lng_translate 'companies-view' 'companies-list'}}</div>
-			<table id="companies" class="table table-striped showCheckboxes"
+			<table id="companies" class="table table-striped showCheckboxes {{getCompactTableView 'companies'}}"
 				url="core/api/bulk/update?action_type=DELETE">
 				<div class="filter-criteria">
 					

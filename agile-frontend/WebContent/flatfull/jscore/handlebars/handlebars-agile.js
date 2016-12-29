@@ -124,6 +124,10 @@ function getTemplateUrls(templateName)
 	{
 	template_relative_urls.push("sip.js");
 	}
+	else if (templateName.indexOf("ozonetel") == 0)
+	{
+	template_relative_urls.push("ozonetel.js");
+	}
 	else if (templateName.indexOf("twitter") == 0)
 	{
 		template_relative_urls.push("twitter.js");
@@ -135,6 +139,10 @@ function getTemplateUrls(templateName)
 	else if (templateName.indexOf("paypal") == 0)
 	{
 		template_relative_urls.push("paypal.js");
+	}
+	else if (templateName.indexOf("knowlarity") == 0)
+	{
+		template_relative_urls.push("knowlarity.js");
 	}
 	else if (templateName.indexOf("xero") == 0)
 	{
@@ -363,6 +371,9 @@ function getSystemPropertyValue(items, name)
 		if (items[i].name == name && items[i].type == "SYSTEM"){
 			if(items[i].value!=null)
 			 items[i].value=items[i].value.trim();
+			if(name == 'url')
+			return items[i].value.toLowerCase();
+
 			return items[i].value;
 		}
 		}
@@ -1462,3 +1473,54 @@ function updateLeadCustomData(el)
 
  	return false;
  }
+function isDuplicateContactProperty(properties,key)
+{
+	if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model && Current_Route.indexOf("contact/") == 0)
+		{
+			var contact_properties = App_Contacts.contactDetailView.model.get('properties');
+			var currentContactEntity = getPropertyValue(contact_properties, key);
+			var contactEntity = getPropertyValue(properties, key);
+
+			if (!currentContactEntity || !contactEntity)
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " ";
+				if(getPropertyValue(contact_properties, "last_name"))
+					currentContactEntity=currentContactEntity+getPropertyValue(contact_properties, "last_name");
+				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Contacts.contactDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
+
+			if (currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
+				return true;
+
+			return false;
+		}
+		if (App_Companies.companyDetailView && App_Companies.companyDetailView.model && Current_Route.indexOf("company/") == 0)
+		{
+			var contact_properties = App_Companies.companyDetailView.model.get('properties');
+			var currentContactEntity = getPropertyValue(contact_properties, key);
+			var contactEntity = getPropertyValue(properties, key);
+
+			if (!currentContactEntity || !contactEntity)
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
+			}
+			
+			if(App_Companies.companyDetailView.model.get('type') == 'COMPANY')
+			{
+				currentContactEntity = getPropertyValue(contact_properties, "name") ;
+				contactEntity = getPropertyValue(properties, "name");
+			}
+
+			if (currentContactEntity && contactEntity && currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
+				return true;
+
+			return false;
+		}
+	}	

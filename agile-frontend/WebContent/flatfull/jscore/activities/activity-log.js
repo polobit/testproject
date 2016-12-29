@@ -306,7 +306,15 @@ function getActivityFilterParameters(loadingFirstTime,campaignHistory)
 		params += ("&activityTypeArray=" +listItems);
 		return params;
 	}
-	else
+	else if (entitytype == 'SMS_SENT')
+	{
+		params += ("&entity_type=" + entitytype);
+		b.push(entitytype);
+		listItems = b.join(",");
+		params += ("&activityTypeArray=" +listItems);
+		return params;
+	}
+	else 
 	{
 		params += ("&entity_type=ALL");
 		$(".dashboard-activities li").each(function( index ) {

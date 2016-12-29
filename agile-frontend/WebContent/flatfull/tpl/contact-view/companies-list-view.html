@@ -21,7 +21,7 @@
 					<div class="m-l-sm" id="slate"></div>
 		        {{/unless}}
 		        {{#if this.length}}
-		        	<table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}} no-header-checkbox"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+		        	<table id="companies" class="table table-striped companies-custom tableNewView noDelete showCheckboxes no-sorting panel agile-table {{#is_mobile}} noDelete {{/is_mobile}} no-header-checkbox {{getCompactTableView 'companies'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 						<div class="filter-criteria"></div>
 						<thead>
 							<tr style="text-transform: capitalize;">

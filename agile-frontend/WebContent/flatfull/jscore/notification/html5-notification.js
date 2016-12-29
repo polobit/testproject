@@ -51,7 +51,7 @@ function show_desktop_notification(imageURL, title, message, link, tag,timeout) 
 	// Show when tab is inactive
 	if (!window.closed)
 	{	
-		if (notification_prefs.notification_sound != 'no_sound')
+		if (notification_prefs.notification_sound != 'no_sound' && notifications_sound)
 			play_sound(notification_prefs.notification_sound);
 		
 	}

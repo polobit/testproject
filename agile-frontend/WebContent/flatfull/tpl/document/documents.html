@@ -39,10 +39,10 @@
 <script id="documents-static-container-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
 <div id="documents-top-view"></div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-xs">
 <div class="row">
 <div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
-<div class="col-md-3">
+<div id="historydocument" class="col-md-3">
         <div class="data-block  documents-activities">
                 
             
@@ -53,7 +53,7 @@
     </div>
 </script>
 <script id="documents-top-header-template" type="text/html">
-<div class="wrapper-md lter bg-light b-b">
+<div class="wrapper-md lter bg-light b-b agile-page-header">
 <div class="btn-toolbar m-l-none">
 <div class="btn-group dropdown m-l-none documentsheading" style="float:none;">
 <div>
@@ -97,9 +97,9 @@
                                     </div>
                                     </div>
                                     </div>
-                                    <div class="btn-group  pull-right ">
-                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
-                                        <a class="btn btn-default btn-sm dropdown-toggle m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
+                                    <div class="btn-group  pull-right add-doc-btn-center">
+                                        <a href="#documents/attachment" class="btn btn-default btn-sm documents-add m-t-xs btn-primary-imp btn-lg-imp" class1="btn btn-default btn-sm"><i class="icon-plus-sign"></i> {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                                        <a class="btn btn-default btn-sm dropdown-toggle btn-primary-imp btn-lg-imp m-t-xs" data-toggle="dropdown"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right" style="margin-top:3px;">
                                             <li style="padding:0px 0px;border:0px;"><a href="#documents/edoc" class="edocuments-add">{{agile_lng_translate 'deal-view' 'add-edocument'}}</a></li>
@@ -126,7 +126,7 @@
 <script id="documents-collection-template" type="text/html">
 
         {{#unless this.length}}
-        <div class="col-md-12 documents-collection">
+        <div class="col-md-12 documents-collection p-n">
         <div class="alert bg-white">
             <div class="slate-content  p-md">
                 <div class="box-left pull-left m-r-md">
@@ -137,7 +137,7 @@
                     <div class="text">
                         {{agile_lng_translate 'documents' 'you-can-add-document-by-clicking'}}
                     </div>
-                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-addon btn-sm m-t-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
+                    <a href="#documents/edoc" class="edocuments-add btn btn-default btn-default-imp btn-lg-imp btn-addon btn-sm m-t-xs "><i class="fa fa-plus-circle" /> {{agile_lng_translate 'deal-view' 'add-edocument'}}</a> <a href="#documents/attachment" class="documents-add btn btn-default btn-addon btn-default-imp btn-lg-imp  btn-sm m-t-xs m-l-xs"><i class="fa fa-plus-circle"></i>  {{agile_lng_translate 'deal-view' 'add-document'}}</a>
                 </div>
                 <div class="clearfix">
                 </div>
@@ -146,7 +146,21 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-            <div class="panel panel-default  documents-collection">
+            {{#is_mobile}}
+            <div class="panel panel-default documents-collection">
+                <div class="panel-heading b-n"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
+                <div class="table-responsive" >
+                <table class="table m-b-none panel agile-table onlySorting" url="core/api/documents/bulk" id="document-list"  >
+                    
+                    <tbody id="documents-model-list" class="c-p">
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+            {{else}}
+
+            <div class="panel panel-default  documents-collection no-panel-border">
                 <div class="panel-heading"> {{agile_lng_translate 'documents' 'documents-list'}}</div>
                 <div class="table-responsive" >
                 <table class="table table-striped showCheckboxes m-b-none panel agile-table table-layout-mob-view no-sorting" url="core/api/documents/bulk" id="document-list"  >
@@ -163,12 +177,70 @@
                     </tbody>
                 </table>
                 </div>
-            </div>        
+            </div>
+        {{/is_mobile}}        
         {{/if}}
     
 </script>
 
 <script id="documents-model-template" type="text/html">
+{{#is_mobile}}
+
+<td data="{{id}}" class="data">
+
+    <div class="thumb-sm agile-img m-t-xs" style="margin-right:10px;">
+       {{#if owner.pic}}
+        <img class="r r-2x" src="{{owner.pic}}"  title="{{owner.name}}" />
+       {{else}}
+             <div class="pull-left inline-block table-resp" style="max-width:90%;width:auto;">{{owner.name}}</div>
+       {{/if}}
+    </div>
+
+<div class="agile-thumb agile-thumb-view">
+        <div class="pull-left" title="{{name}}" style="width: calc(100% - 0px);">
+        <div class="pull-left text-ellipsis" style="width: calc(100% - 20px);">
+        <a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a>
+        </div>
+
+        {{#unless url}}
+        <div class="send-document text-center label pos-rlt" style="top:2px; font-size:12px;">
+        <a href="#send-email/documents/{{id}}" title="Send Email"><i class="icon icon-envelope"></i></a>
+        </div>   
+        {{/unless}}
+
+        <div class="pull-right" style="margin-top:2px;">
+        <b class="activate-link">{{#if url}}<a href="{{url}}" target="_blank"><i class="icon-external-link" title="{{agile_lng_translate 'documents' 'open-document'}}"></i></a>{{/if}}</b>
+        </div>
+        </div>
+        
+        {{#if_equals network_type "NONE"}}
+        {{else}}
+        <div class="text-ellipsis w-full pull-left l-h-xs">
+        <small class="text-muted">{{network network_type}}&nbsp;&nbsp;</small>
+        </div>
+        {{/if_equals}}
+
+        <div class="pull-left word-break-all l-h-sm" style="white-space:normal;">
+        {{#each contacts}}
+        {{#if_contact_type "PERSON"}}
+        <a href="#contact/{{id}}" class="activate-link popover_contact text-info text-xs" data="{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}{{#if @last}}{{else}},{{/if}}</a>
+        {{/if_contact_type}}
+        {{#if_contact_type "COMPANY"}}
+        <a href="#company/{{id}}" class="activate-link popover_contact text-info text-xs" data="{{id}}">{{getPropertyValue properties "name"}}{{#if @last}}{{else}},{{/if}}</a>
+        {{/if_contact_type}}
+        {{/each}}
+        </div>
+
+        <div class="text-ellipsis w-full pull-left text-muted l-h-xs">
+        <i class="fa fa-clock-o"></i>
+        <time class="document-created-time b-b-dotted" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}"> {{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
+        </div>
+
+</div> 
+</td>
+
+{{else}}
+
 <td data="{{id}}" class="data">
 <div class="pull-left inline-block table-resp line-clamp line-clamp-3"  title="{{name}}"  style="max-width:90%;width:20em;"><a class="text-cap document-url" href="#documents/{{id}}" data="{{id}}">{{name}}</a></div>
 <div class="pull-left m-l-xs">
@@ -212,17 +284,18 @@
 <td class="v-middle">
     {{#unless url}}
     <div class="send-document text-center label text-xs">
-        <a href="#send-email/documents/{{id}}" title="Send Email"><i class="fa fa-envelope"></i></a>
+        <a href="#send-email/documents/{{id}}" title="Send Email"><i class="icon icon-envelope"></i></a>
     </div>   
     {{/unless}} 
 </td>
+{{/is_mobile}}
 </script>
 <script id="document-etype-select-collection-template" type="text/html">
         {{#unless this.length}}
-        <div class="bg-light lter b-b wrapper-md">
-            <h1 class="m-n font-thin h3"><i class="icon-plus-sign">
+        <div class="bg-light lter b-b wrapper-md agile-page-header">
+            <h1 class="m-n font-thin h3"><i class="icon-plus-sign notaddon-imp">
             </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
-            <a href="#document-template-add" class="btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add eDocument Template</a>
+            <a href="#document-template-add" class="btn btn-default btn-addon btn-primary-imp btn-lg-imp pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle"></i> Add eDocument Template</a>
                         <div class="clearfix"></div>
         </div>
         <div class="alert bg-white">
@@ -242,10 +315,10 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-                <div class="bg-light lter b-b wrapper-md">
-                    <h1 class="m-n font-thin h3 pull-left"><i class="icon-plus-sign">
+                <div class="bg-light lter b-b wrapper-md agile-page-header">
+                    <h1 class="m-n font-thin h3 pull-left"><i class="icon-plus-sign notaddon-imp">
                     </i> {{agile_lng_translate 'documents' 'document-select-doc-template'}} </h1>
-                    <a href="#document-template-add" class="documents-add btn btn-default btn-addon pull-right btn-sm m-l-xs"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'documents' 'document-add-doc-template'}}</a>
+                    <a href="#document-template-add" class="documents-add btn btn-primary-imp btn-lg-imp btn-default btn-addon pull-right btn-sm m-l-xs add-doc-btn-center"><i class="fa fa-plus-circle" /> {{agile_lng_translate 'documents' 'document-add-doc-template'}}</a>
                     <div class="clearfix"></div>
                 </div>
                 <div class="wrapper-md">
@@ -275,9 +348,9 @@
          </div>
          <div class="text-center m-t">
          {{#if contactcompanydealtype}}
-            <a class="btn btn-sm btn-default add-widget" href="#documents/{{contactcompanydealtype}}/{{contactcompanydealid}}/edoc/{{id}}">Go</a>
+            <a class="btn btn-sm btn-default add-widget btn-default-imp " href="#documents/{{contactcompanydealtype}}/{{contactcompanydealid}}/edoc/{{id}}">Go</a>
           {{else}}  
-          <a class="btn btn-sm btn-default add-widget" href="#documents/edoc/{{id}}">Go</a>
+          <a class="btn btn-sm btn-default add-widget btn-default-imp" href="#documents/edoc/{{id}}">Go</a>
           {{/if}}  
             <div class="clearfix"></div>
          </div>

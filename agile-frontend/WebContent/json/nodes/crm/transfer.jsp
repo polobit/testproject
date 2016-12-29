@@ -18,7 +18,7 @@
             "name": "campaign_id",
             "id": "campaign_id",
             "title": "Select campaign from the list.",
-            "url": "/core/api/workflows",
+            "url": "/core/api/workflows/partial",
             "dynamicName": "name",
             "dynamicValue": "id",
             "fieldType": "dynamicselect",

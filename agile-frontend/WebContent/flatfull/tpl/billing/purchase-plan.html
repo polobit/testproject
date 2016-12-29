@@ -174,7 +174,7 @@
 
 {{#if billingData}}
 {{else}}
-<div class="line line-dashed b-b line-lg"></div>
+<div class="line line-dashed b-b line-lg new-theme-purchase-line"></div>
 <form id="CCform" class="form-horizontal card_details"
 			name="card_details">
 			<fieldset>
@@ -266,7 +266,7 @@
 							<div class="panel text-center p-b" style="border: 0;">
 <div class="panel-body" style="background-color: #E0E0E0;">
                            <img src="{{getS3ImagePath '/flatfull/img/save-doller1.png'}}" height="110" width="132">
-  <h4>{{agile_lng_translate 'plan-and-upgrade' 'upgrade-cap'}}</h4>
+  {{#isUserNotInIphone}}<h4>{{agile_lng_translate 'plan-and-upgrade' 'upgrade-cap'}}</h4>{{/isUserNotInIphone}}
                         </div>
 								
 								<p class="p-t-sm p-l-sm p-r-sm">
@@ -286,7 +286,7 @@
 							<div class="panel text-center p-b" style="border: 0;">
 <div class="panel-body" style="background-color: #E0E0E0;">
                            <img src="{{getS3ImagePath '/flatfull/img/save-doller1.png'}}" height="110" width="132">
-  <h4>{{agile_lng_translate 'plan-and-upgrade' 'upgrade-cap'}}</h4>
+  {{#isUserNotInIphone}}<h4>{{agile_lng_translate 'plan-and-upgrade' 'upgrade-cap'}}</h4>{{/isUserNotInIphone}}
                         </div>
 								
 								<p class="p-t-sm p-l-sm p-r-sm">

@@ -227,7 +227,7 @@
 {{else}}
     <div class="col-md-8 col-xs-8">
         <div class="col-sm-offset-4 col-sm-8 col-xs-offset-4 col-xs-8">
-            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+            <a href="#" type="submit" class="save btn btn-sm btn-primary  btn-lg-imp">{{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
         </div>
     </div>
 {{/is_mobile}}
@@ -324,7 +324,7 @@
 <div id="ip_access" class="col-sm-9 panel ">
     {{#unless ipList.length}} {{else}}
     <div class="panel-heading allow_access_panelheading">
-    <div class="pull-left  m-t-xs">IP Address List</div>
+    <!-- <div class="pull-left  m-t-xs">IP Address List</div> -->
     <div class="pull-right">
        <a class="upsert-ip btn btn-sm btn-default btn-addon" ><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'admin-settings' 'add-ip-address'}}</a>
     </div>
@@ -341,7 +341,7 @@
             {{/if}}
             <input name="domain" class="form-control" type="hidden" value="{{get_current_domain}}" />
             
-            <table class="table table-hover table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
+            <table class="table table-hover {{#isNewTheme}} agile-table {{/isNewTheme}} table-striped custom-fields-table bg-white m-b-none iptable" style="border:1px solid #eee">
                 <colgroup><col width="50%"><col width="4%"></colgroup>
                 <thead>
                 {{#unless ipList.length}} {{else}}
@@ -498,10 +498,10 @@
                         <div class="col-sm-8 col-xs-12">
                             {{#if id}}
                                 {{#if url}}
-                                <a href="#" type="submit" class="delete btn btn-sm btn-danger">{{agile_lng_translate 'deal-view' 'delete'}}</a>
+                                <a href="#" type="submit" class="delete btn btn-sm  btn-danger">{{agile_lng_translate 'deal-view' 'delete'}}</a>
                                 {{/if}}
                             {{/if}}
-                            <a href="#" type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
+                            <a href="#" type="submit" class="save btn btn-sm btn-default-imp btn-lg-imp btn-primary">{{agile_lng_translate 'admin-settings' 'submit'}}</a>
                         </div>
                     </div>
                 </div>

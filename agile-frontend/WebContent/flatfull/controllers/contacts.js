@@ -105,7 +105,7 @@ var ContactsRouter = Backbone.Router.extend({
 	},
 	navigateDashboard : function(id){
 		// Call dashboard route
-		if(id)
+		/*if(id)
 		{
 			_agile_set_prefs("dashboard_" + CURRENT_DOMAIN_USER.id, id);
 			var prevrole = menuServicerole(id);
@@ -113,10 +113,17 @@ var ContactsRouter = Backbone.Router.extend({
 			{
 				updateDashboardRole(prevrole);
 			}
+		}*/
+		console.info("navigateDashboard");
+		if(CURRENT_DOMAIN_USER.role == "SERVICE"){
+			Backbone.history.navigate("#tickets", {
+	            trigger: true
+	        });
+		}else{
+			Backbone.history.navigate("#", {
+	            trigger: true
+	        });
 		}
-		Backbone.history.navigate("#", {
-            trigger: true
-        });
 	},
 
 	dashboard : function()
@@ -160,9 +167,9 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		dashboard_name = dashboard_name ? dashboard_name : "DashBoard";
-		$(".nav.nav-sub li").removeClass("agile-menuactive");
+		/*$(".nav.nav-sub li").removeClass("agile-menuactive");
 		$(".nav.nav-sub li").removeClass("active");
-		$("."+dashboard_name+"-home").addClass("agile-menuactive");
+		$("."+dashboard_name+"-home").addClass("agile-menuactive");*/
 		var dashboardJSON = {};
 		if(CURRENT_USER_DASHBOARDS && dashboard_name != "DashBoard") {
 			$.each(CURRENT_USER_DASHBOARDS, function(index, value){
@@ -213,7 +220,7 @@ var ContactsRouter = Backbone.Router.extend({
 				loadPortlets(dashboard_name,el);
 
 		}, "#content");
-		//$("#home_dashboard").addClass("active");
+		$("#home_dashboard").addClass("active");
 		
 		},
 	
@@ -1393,7 +1400,7 @@ $('#content').html('<div id="import-contacts-event-listener"></div>');
 					{
 						$("#content [name='contact_company_id']")
 								.html(
-										'<li class="inline-block tag btn btn-xs btn-primary m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag">&times</a></span></li>');
+										'<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs" data="' + data + '"><span><a class="text-white m-r-xs" href="#contact/' + data + '">' + item + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></span></li>');
 						$("#content #contact_company").hide();
 						if(data){							
 							$.ajax({
@@ -1587,7 +1594,7 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 			var no = _agile_get_translated_val("reputation", "Ok");
 			var upgrade_link =  _agile_get_translated_val('contact-details','please') + ' <a  href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('portlets','upgrade')+' </a> ' + _agile_get_translated_val('billing','your-email-subscription');
 			var emialErrormsg = '<div class="m-t-xs">'+_agile_get_translated_val('billing','continue-send-emails')+', ' +_agile_get_translated_val('contact-details','please')+ '<a href="#subscribe" class="action text-info" data-dismiss="modal" subscribe="subscribe" action="deny"> '+_agile_get_translated_val('plan-and-upgrade','purchase')+' </a>'+_agile_get_translated_val('plan-and-upgrade','more')+'.</div>';
-			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + emialErrormsg;
+			var message = "<div>" +_agile_get_translated_val('billing','email-quota-exceed')+ "</div>" + (_agile_is_user_from_iphone() ? "" : emialErrormsg);
 			
 			showModalConfirmation(title, 
 					message, 
@@ -1739,7 +1746,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 											.closest("div.controls")
 											.find(".tags")
 											.append(
-													'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + email + '"><a class="text-white " href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');									
+
+													'<li class="tag  btn btn-xs btn-default m-r-xs inline-block" data="' + email + '"><a href="#contact/' + model_json.id + '">' + name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');									
 												}
 							});
 					    	$("#edoc_contact_id","#emailForm").val(model.contacts[0].id);
@@ -1781,7 +1789,8 @@ function sendMail(id,subject,body,cc,bcc,that,custom_view,id_type)
 							.closest("div.controls")
 							.find(".tags")
 							.append(
-									'<li class="tag  btn btn-xs btn-primary m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag">&times</a></li>');
+
+									'<li class="tag  btn btn-xs btn-default m-r-xs inline-block" data="' + data + '"><a href="#contact/' + model.id + '">' + name + '</a><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 				}
 				else  if(!id_type)
 					$("#emailForm", el).find('input[name="to"]').val(id);
@@ -1903,7 +1912,7 @@ function confirmandVerifyEmail()
 					if(typeof(ownerEmail) !== "undefined")
 						$select.find('option[value = \"'+CURRENT_DOMAIN_USER.email+'\"]').attr("selected", "selected");
 					else{
-						$select.find("option:first").before("<option value='SELECTEMAIL'>- Select Email -</option>");
+						$select.find("option:first").before("<option value='SELECTEMAIL'>Select Email</option>");
 						$select.find('option[value ="SELECTEMAIL"]').attr("selected", "selected");
 					}
 				}
@@ -1938,3 +1947,84 @@ function menuServicerole(dashboard){
 				break;
 		}
 }
+ // Send a prsonal sms  
+function sendPersonalSMS(el, id){
+
+        var fromNumber = $("#from-number").val();
+        var message = $("#sms-noty-notes").val();
+        phone = $("#notyCallDetails").attr("number");
+
+		$('.sms-message').removeClass("hidden");
+		$(".sms-message-count").addClass("hidden");
+	    $('.sms-message').html(getRandomLoadingImg());
+
+	    if(message == undefined || message=="" || message.length>160)
+        {
+        	 $('#sms-noty-notes').css('border-color', 'red');
+        	 if(message.length>160)
+        	 	$save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message length is 160</i></p></small></div>');
+        	 else
+        	   $save_info = $('<div style="display:inline-block ;margin-left:-13px;"><small><p class="text-danger"><i>Message text needed</i></p></small></div>');
+			 
+			 $('.sms-message').html($save_info);
+			 $save_info.show();
+				setTimeout(function()
+						{
+							$('.sms-message').empty();
+						}, 2000);
+           return;
+      }
+      else
+       {
+          $('#sms-noty-notes').css('border-color', '');
+         }
+						var url= "/core/api/sms-gateway/send-sms?to=" + encodeURIComponent(phone) + "&message=" + encodeURIComponent(message) + "&contactId=" + encodeURIComponent(id);
+						if ($(el).attr("disabled"))
+							return;
+
+						$(el).attr("disabled", "disabled");
+						$.get(
+										url,
+										function(data)
+										{
+											console.log("sending sms...");
+											$save_info = $('<div style="display:inline-block;margin-left:-11px;"><small><p class="text-success"><i>SMS will be sent shortly</i></p></small></div>');
+											$('.sms-message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.sms-message').empty();
+												$("#send-sms").removeAttr("disabled");
+												closeCallNoty(true);
+											}, 2000);
+
+										})		
+						         .fail(
+										function(response)
+										{
+											$save_info = $('<div style="display:inline-block; margin-left:-13px;"><small><p style="color:#B94A48; font-size:14px"><i>' + response.responseText + '</i></p></small></div>');
+
+											$('.sms-message').html($save_info);
+
+											$save_info.show();
+
+											setTimeout(function()
+											{
+												$('.sms-message').empty();
+												$("#send-sms").removeAttr("disabled");
+												closeCallNoty(true);
+											}, 2000);
+
+										});
+				///	});
+}
+function countChar(element)
+    {
+        	var message = element.value;
+        	var length = message.length;
+        	$(".sms-message-count").removeClass("hidden");
+        	$(".sms-message-count").text("Remaining characters ..."+(160-length));
+            
+    }

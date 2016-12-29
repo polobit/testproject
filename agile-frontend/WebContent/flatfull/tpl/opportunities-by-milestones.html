@@ -15,7 +15,7 @@
 			<div id="deal-list-filters" class="btn-group inline-block m-l-xs">
 							
 			</div>
-			<div class="btn-group inline-block m-l-xs" id="deals-view">
+			<div class="btn-group inline-block m-l-xs " id="deals-view">
 					<div class="btn btn-sm btn-default"><i class="icon-list m-l-xs"></i></div>
 					<a class="btn btn-sm btn-default  dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret deals-view-caret"></span>
@@ -100,7 +100,7 @@
     <div id="deal-bulk-confirm">
 		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
 		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		{{agile_lng_translate 'deal-view' 'deals-can-be-archived-desc'}}  
+		{{agile_lng_translate 'deal-view' 'deals-archive-warn-msg'}}  
 		<br/> {{agile_lng_translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
 	</div>
   </div>
@@ -211,9 +211,12 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
-{{#if expected_value}}
+	{{#if_equals expected_value "0"}}
+			<span>{{currencySymbol}}{{expected_value}}</span>
+    {{/if_equals}}
+    {{#if expected_value}}
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
-{{/if}}
+   {{/if}}
 	</div>
 
 	{{#if this.contacts}}
@@ -275,11 +278,17 @@
 		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis" style="white-space:initial;">
+	{{#if_equals expected_value "0"}}
+			<span>{{currencySymbol}}{{expected_value}}</span>
+    {{/if_equals}}
 {{#if expected_value}}
 		<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
 {{/if}}
 
 		{{#if this.contacts}}
+		  	{{#if_equals expected_value "0"}}
+		  		<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
+            {{/if_equals}}
 			{{#if expected_value}}
 				<span class="m-t-none m-b-none m-l-xs m-r-xs" style="border:1px solid #d5d5d5"></span>
 			{{/if}}
@@ -357,9 +366,9 @@
     {{/if_contact_type}}
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">
-<div class="btn-group"  id="pipeline-tour-step">
-	<button class="btn btn-sm btn-default filter-dropdown " id="milestone-view-track"><i class="icon-road m-r-xs"/></button>
-	<button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+<div class="btn-group m-r-sm-imp"  id="pipeline-tour-step">
+	<button class="btn btn-sm btn-default btn-default-imp-white btn-lg-imp filter-dropdown " id="milestone-view-track"><i class="icon-road m-r-xs"/></button>
+	<button class="btn btn-sm btn-default btn-default-imp-white btn-lg-imp dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>
 	<ul id = "opportunity-track-list-model-list" class="pull-right dropdown-menu" role="menu">

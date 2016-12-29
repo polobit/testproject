@@ -16,6 +16,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     console.log("constructNodeFromDefinition "+nodeId);
 	console.log(nodeJSONDefinition);
 
+	$("#nodeui").find("#errorsdiv").html("").removeClass('ui-state-highlight');
+
     // Remove old data
     $("#nodeui").removeData();
     $("#nodeui").empty();
@@ -52,8 +54,10 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     
     // Deserialize form values. 2nd condition is needed to avoid deserialize 
     // for Send Email node in addons.
-    if(jsonData != undefined && jsonData != "/json/nodes/email/send_email.jsp")
+    //Select defult emty in merged field select box
+    if(jsonData != undefined && jsonData != "/json/nodes/email/send_email.jsp"){
 	    $("#nodeui").deserialize(jsonData);
+    }
     
     //Select default empty in selecte merged filed
      if(jsonData != undefined && nodeJSONDefinition.name == "Send Email"){
@@ -84,7 +88,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         $("#nodeui").find("[name=from_name]").val(current_user["from_name"]);
         $("#nodeui").find("[name=from_email]").val(current_user["from_email"]);
     }
-    
+
     // Init validator
     initValidator($("#nodeui"), saveNode);
     
@@ -217,6 +221,7 @@ function saveNode(e) {
         
         // Get Node definition
         var jsonDefinition = $("#nodeui").data('jsonDefinition');
+      	var nodeName = jsonDefinition.name;
         
         // Check if original is present (translated nodes override jsonDefinition)
         if(jsonDefinition.org != undefined)
@@ -224,58 +229,66 @@ function saveNode(e) {
         
         // Get Display name
         var displayName = $("#nodeui").find("[name=nodename]").val();
-                       
-        
-        // Get the node id and update the old node id
-		var nodeId = $("#nodeui").data('nodeId');
-		// Check if node id is undefined or not 
-		if( nodeId == undefined || nodeId == null ) {
-			// Add designer at given location
-			addNode(jsonDefinition, displayName, jsonValues, 200, 200);
-		}
-		else {					
-	
-				// Get the node object for corresponding node id
-		        var nodeObject = workflow.getFigure(nodeId);
-		
-		      	// If node object is not null then set the form values into property.
-		     	if( nodeObject != null )
-		     	{
-			  		nodeObject.setProperty("JSON", jsonValues);
-			  		nodeObject.setNodeName(displayName);			  		
-			  	}
-			  	
-			  	// If Dynamic Extensions or Dynamic Ports (Geographical Routing) looking at Global Queue
-			  	// Connects to older ports automatically
-			  	if( nodeObject.isDynamicPorts == "yes" )
-			  	{
-			  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
-			  			update_location_ports(nodeObject, jsonValues);
-			  		else
-						editDynamicNode(nodeObject);
-				}	  
-			  				  	
-		}
-		
-		
-		 //templateContinue(nodeId);
-		 
-		 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
-		 
-		 // Shows 'Save Campaign' message. Naresh (21/02/2014)
-		 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
-		 
-		 delete jsonDefinition["x"];
-		 delete jsonDefinition["y"];
-		 
-		 if(!checkWorkflowSize())
-				return;
-		   	
 
-		   	showNodeConnectPopup(nodeId);
-        // close the dialog after the node is constructed			
-        $("#nodeui").dialog('close');
-       
+        // Node Level validation for some Nodes, if it will return true then all validation fine, if false then the Node will not save
+        nodeLevelValidation(nodeName, function(isValid){
+        	if(isValid == false){    	   
+        		return;
+        	}
+        	else
+        	{
+        		// Get the node id and update the old node id
+				var nodeId = $("#nodeui").data('nodeId');
+				// Check if node id is undefined or not 
+				if( nodeId == undefined || nodeId == null ) {
+					// Add designer at given location
+					addNode(jsonDefinition, displayName, jsonValues, 200, 200);
+				}
+				else {					
+			
+						// Get the node object for corresponding node id
+				        var nodeObject = workflow.getFigure(nodeId);
+				
+				      	// If node object is not null then set the form values into property.
+				     	if( nodeObject != null )
+				     	{
+					  		nodeObject.setProperty("JSON", jsonValues);
+					  		nodeObject.setNodeName(displayName);			  		
+					  	}
+					  	
+					  	// If Dynamic Extensions or Dynamic Ports (Geographical Routing) looking at Global Queue
+					  	// Connects to older ports automatically
+					  	if( nodeObject.isDynamicPorts == "yes" )
+					  	{
+					  		if(nodeObject.name == NODES_CONSTANTS.TERRITORY)
+					  			update_location_ports(nodeObject, jsonValues);
+					  		else
+								editDynamicNode(nodeObject);
+						}	  
+					  				  	
+				}
+				
+				
+				 //templateContinue(nodeId);
+				 
+				 var $save_info = '<span id="workflow-edit-msg" style="color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>';
+				 
+				 // Shows 'Save Campaign' message. Naresh (21/02/2014)
+				 window.parent.$("#workflow-msg").html($save_info).fadeIn(1000);
+				 
+				 delete jsonDefinition["x"];
+				 delete jsonDefinition["y"];
+				 
+				 if(!checkWorkflowSize())
+						return;
+
+				 showNodeConnectPopup(nodeId);
+
+		        // close the dialog after the node is constructed			
+		        $("#nodeui").dialog('close');
+        	}
+        });                    
+              
 }
 
 
@@ -503,5 +516,37 @@ function showNodeConnectPopup(nodeId){
 	{
 		window.parent.workflow_alerts("Message", "Title", "show-connect-node-popup-modal", null);
 	}
-
 }
+
+// Node Level validation, based on Nodename validation happens
+function nodeLevelValidation(nodeName, callbackFunction){
+	var validation_nodes = ['URL Visited?'];
+
+	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
+		return callbackFunction(true);
+
+	// Validation for URL Visited Node, It will check Tracking code is there or not in website.		
+	if(nodeName == 'URL Visited?'){
+				
+		get_dynamic_data('core/api/web-stats/JSAPI-status', function(data){
+			if(data == 0)
+         	{
+         		// Display error message
+         		$("#nodeui").find("#errorsdiv").html("<p class='fa fa-times icon-1x' style='color:red'><i>Web Tracking is not enabled for the web pages. Please click <a href='http://"+window.location.host+"/#api-analytics' target = '_blank' style='color: #19a9d5;!important ;text-decoration: none;'>here</a> to enable.</i></p>").addClass('ui-state-highlight');
+         		return callbackFunction(false);    		
+         	}
+         	else
+         		return callbackFunction(true);
+		});
+	}
+
+}	
+//Validate the Tracking code is there or not in website
+ function get_dynamic_data(url, callback)
+  {
+	  window.parent.accessUrlUsingAjax(url, 
+	              		function(data){               			
+	              			if(callback && typeof (callback) == "function")
+	              				callback(data);
+	              		});     	
+ }

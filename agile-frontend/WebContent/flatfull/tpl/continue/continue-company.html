@@ -1,5 +1,5 @@
 <script id="continue-company-template" type="text/html">
-<div class="bg-light lter b-b wrapper-md">
+<div class="bg-light lter b-b wrapper-md agile-page-header">
 	<h3 class="h3 font-thin m-n">{{agile_lng_translate 'companies-edit' 'company-continue-editing'}}</h3>
 </div>
 <div class="wrapper-md">
@@ -17,7 +17,7 @@
                 <div class="control-group form-group">
                     <label class="control-label col-sm-3">{{agile_lng_translate 'widgets' 'url'}}</label>
                     <div class="controls col-sm-9 company_input">
-                        <input class="form-control  field_length" max_len="500" name="url" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
+                        <input class="form-control  field_length" max_len="500" name="url" style="" placeholder="http://www." type="text" id="company_url" value="{{getPropertyValue properties "url"}}"/>
                     </div>
                 </div>
 				<div class="control-group form-group" id="tags_source_continue_company">
@@ -26,7 +26,7 @@
                         <div class="pull-left">
                             <ul name="tags" class="tagsinput tags p-n">
                                 {{#each tags}}
-                                <li class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" data="{{this}}">{{this}}<a class="close m-l-xs" id="remove_tag" style="color: #363f44;">&times</a></li>
+                                <li class="tag inline-block btn btn-xs btn-default m-r-xs m-b-xs" data="{{this}}">{{this}}<a class="close m-l-xs" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>
                                 {{/each}}
                             </ul>
                         </div>
@@ -125,7 +125,7 @@
                     <div class="controls col-sm-9  hide">
                         <div class=" website multiple-template style="display:none" data="website">
                         <div class="pull-left w-half">
-                            <input class="form-control inline-block field_length validateWebsite"  max_len="500" type="text" id="website" name="website"  placeholder="{{agile_lng_translate 'other' 'website'}}" /> 
+                            <input class="form-control inline-block field_length validateWebsite"  max_len="500" type="text" id="website" name="website" style="" placeholder="{{agile_lng_translate 'other' 'website'}}" /> 
                             </div>
                         <div class="pull-left w-half">    
             <select class="website-select form-control inline-block m-l-sm" name="website-select" style="width:calc(100% - 32px);">
@@ -152,7 +152,7 @@
                     <div class="controls col-sm-9 second">
                         <div class="website multiple-template"  data="website">
                         <div class="pull-left w-half">
-                            <input class="form-control field_length validateWebsite" max_len="500" type="text" id="website"  name="website" placeholder="{{agile_lng_translate 'other' 'website'}}" />
+                            <input class="form-control field_length validateWebsite" max_len="500" type="text" id="website"  name="website" style="" placeholder="{{agile_lng_translate 'other' 'website'}}" />
                             </div>
                             <div class="pull-left w-half"> 
          <select class="website-select form-control m-l-sm inline-block" name="website-select" style="width:calc(100% - 32px);">
@@ -458,8 +458,8 @@
                 <div class="form-actions">
 				<div class="row">
 	            	<div class="controls col-sm-9 pull-right">
-						<a onclick="history.back();" class="btn btn-sm btn-default m-r-xs">{{agile_lng_translate 'contact-details' 'close'}}</a>
-                    	<a href="#" type="submit" class="save btn-sm btn btn-primary" id="company-update">{{agile_lng_translate 'contact-edit' 'update'}}</a>
+						<a onclick="history.back();" class="btn btn-sm btn-default m-r-xs btn-default-imp btn-lg-imp">{{agile_lng_translate 'contact-details' 'close'}}</a>
+                    	<a href="#" type="submit" class="save btn-sm btn btn-primary btn-primary-imp btn-lg-imp" id="company-update">{{agile_lng_translate 'contact-edit' 'update'}}</a>
 						<span class="form-action-error"></span>
                     	<span class="save-status"></span>
 					</div>

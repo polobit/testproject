@@ -1,7 +1,7 @@
 <!-- initial script which displayes social suite tabs with Add Stream and Added Streams. -->
 <script id="socialsuite-show-streams-template" type="text/html">
 <div class="custom-animated custom-fadeInUp">
-<div class="wrapper-md bg-light lter b-b">
+<div class="wrapper-md bg-light lter b-b agile-page-header">
 <div class="row">
     <div class="col-md-12">
         {{#is_mobile}}
@@ -20,7 +20,7 @@
             </a>
         </div>
     {{else}}
-        <a id="add-stream" class="add-stream add-stream-tab btn btn-default btn-addon btn-sm">
+        <a id="add-stream" class="add-stream add-stream-tab btn-lg-imp btn-primary-imp btn btn-default btn-addon btn-sm">
             <i class="icon icon-plus-sign"></i> {{agile_lng_translate 'social' 'add-stream'}}
         </a>
     {{/is_mobile}}   
@@ -34,7 +34,7 @@
     </div>
 </div>         
 </div>
-<div class="wrapper-md">
+<div class="wrapper-md agile-p-t-sm">
 <div class="row">
            <div class="col-md-12">              
                 <div id="socialsuite-tabs-content">

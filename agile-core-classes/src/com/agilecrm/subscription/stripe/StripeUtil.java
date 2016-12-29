@@ -76,7 +76,10 @@ public class StripeUtil {
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 		try{
-			String versionNumber = CacheUtil.getCache("stripe_test_key").toString();
+			Object versionNumberObj = CacheUtil.getCache("stripe_test_key");
+			if(versionNumberObj == null)
+				return false;
+			String versionNumber = versionNumberObj.toString();
 			if(versionNumber != null && versionNumber.equals(VersioningUtil.getVersion()))
 				return true;
 			return false;

@@ -35,7 +35,7 @@
 </div>
 
 <div id="incoming_log_details" style="display:none;">
-	<ul id="twilio-incoming-logs-panel" class="list-group m-b-none text-base>
+	<ul id="twilio-incoming-logs-panel" class="list-group m-b-none text-base">
 		<li>
 			<center><img id="logs_load" src="{{getS3ImagePath 'img/ajax-loader-cursor.gif'}}" class="m-t"></img></center>
 		</li>
@@ -45,48 +45,50 @@
 
 <script id="twilioio-login-template" type="text/html">
 <div>
-	<form  id="twilioio_login_form" name="twilioio_login_form" method="post">
+	<form autocomplete="off" id="twilioio_login_form" name="twilioio_login_form" method="post" >
     	<fieldset>
               <input type="hidden" id="twilio_number_sid" value="" name="twilio_number_sid"></input>
 		      <p class="m-t-sm">
-                   {{agile_lng_translate 'widgets' 'TwilioIO-content'}}
+                   {{agile_lng_translate 'widgets' 'TwilioIO-content-new'}}
               </p>
 			  
 				<label><b>{{agile_lng_translate 'widgets' 'enter-twilio-widget-details'}} </b>
                        <span>         
-       				      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'twilio-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'how-to-get-this'}}">
+       				      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'twilio-tooltip'}}" id="element-title" data-original-title="{{agile_lng_translate 'widgets' 'how-to-get-this'}}">
         			   </span>
                 </label>                
 				<div class="control-group form-group">
                      <div class="controls">
-                         <input type="text" id="twilio_acc_sid" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'account-sid-validation'}}" value="" name="twilio_acc_sid" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  minlength= "34" maxlength= "34" required></input>
+                        <input type="text" id=""  value="" name="twilio_acc_sid" style="display:none" />
+                         <input autocomplete="off" type="text" id="twilio_acc_sid"  value="" name="twilio_acc_sid" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'account-sid-validation'}}" placeholder="{{agile_lng_translate 'admin-settings-integrations' 'account-sid'}}"  minlength= "34" maxlength= "34" required></input>
                      </div>
                 </div>
                 <div class="control-group form-group">
                      <div class="controls">
-                          <input type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'auth-token-validation'}}" value="" name="twilio_auth_token" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'auth-token'}}"  minlength= "32" maxlength= "32" required></input>
+                          <input type="password" style="display:none" />
+                          <input autocomplete="off"  type="password" id="twilio_auth_token" class="input-medium required widget_input_box form-control"  title="{{agile_lng_translate 'widgets' 'auth-token-validation'}}" value="" name="twilio_auth_token" placeholder="{{agile_lng_translate 'admin-settings-prefs' 'auth-token'}}" minlength= "32" maxlength= "32" required></input>
                      </div>
                 </div>            
 
                 <div class="control-group form-group" id="twilio_numbers" style="display:none;">
 				    <label class="control-label">{{agile_lng_translate 'widgets' 'twilio-numbers'}}
                           <span class="v-top">         
-       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag"  rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'twilio-numbers-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
+       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag"  rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'twilio-numbers-tooltip-new'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
         			      </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
-			          <select name="twilio_number" id="twilio_number" class="form-control">	</select>
+			          <select name="twilio_number" id="twilio_number" class="form-control" required>	</select>
   			        </div> 
 			    </div>     
 
                 <div class="control-group form-group" id="twilio_from_numbers" style="display:none;">
 				    <label class="control-label">{{agile_lng_translate 'widgets' 'verified-caller-ids'}}
                          <span class="v-top">         
-       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'verified-caller-ids-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
+       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" rel="popover" data-trigger="hover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'verified-caller-ids-tooltip-new'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
         			     </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
-			          <select name="twilio_from_number" id="twilio_from_number" class="form-control">	</select>
+			          <select name="twilio_from_number" id="twilio_from_number" class="form-control" required>	</select>
   			        </div> 
 			    </div>  
                 
@@ -95,33 +97,38 @@
                 <div class="control-group form-group m-t-sm" id="twilio_twimlet_url_controls" style="display:none;">
 				    <label class="control-label">{{agile_lng_translate 'widgets' 'redirect-twimlet-url'}}
                         <span class="v-top m-l-n-xs">         
-       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top" style="height: 8px;margin: 2px;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'redirect-twimlet-url-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
+       				        <img border="0" src="{{getS3ImagePath '/img/help.png'}}" class="v-top question-tag" style="height: 8px;margin: 2px;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'widgets' 'redirect-twimlet-url-tooltip-new'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'widgets' 'what-is-this'}}">
         			      </span>
                     </label>
 				    <div class="controls">
                       <input type="text" id="twilio_twimlet_url" class="input-medium widget_input_box form-control"  title="Twimlet Url" value="" name="twilio_twimlet_url" placeholder="{{agile_lng_translate 'widgets' 'twimlet-url'}}">
                       </input>
                     </div> 
-			    </div>    
-
-                <span id="twilio_recording" style="display:none;">
-<div class="checkbox">
-<label class="i-checks i-checks-sm">
-<input type="checkbox" id="twilio_record" name="twilio_record" title="{{agile_lng_translate 'widgets' 'record-calls'}}"></input><i></i> {{agile_lng_translate 'widgets' 'record-calls'}}
-</label>
-</div>
-</span>                         
-              
-                 
+			    </div> 
+			    
               <span id="error-number-not-selected" class="help-inline text-danger" style="display:none;">{{agile_lng_translate 'widgets' 'please-select-twilio-number'}}</span>
               <span id="note-number-not-available" class="help-inline text-danger" style="display:none;"></span>
+          <span id="twilio_recording" >
+        <div class="checkbox">
+        <label class="i-checks i-checks-sm">
+        <input type="checkbox" id="twilio_record" name="twilio_record" title="{{agile_lng_translate 'widgets' 'record-calls'}}"></input><i></i> {{agile_lng_translate 'widgets' 'record-calls'}}
+        </label>
+	 &nbsp;
+        <label class="i-checks i-checks-sm">
+        <input type="checkbox" id="twilio_sms" name="twilio_sms" title="Enable SMS"></input><i></i> Enable SMS
+        </label>
+        </div>
+        </span>    
 <div class="m-t text-center">
               <a href="#" id="validate_account" class="btn btn-sm btn-primary">{{agile_lng_translate 'widgets' 'validate'}}</a>
 			  <a href="#" id="save_prefs" class="save-agile-widget btn btn-sm btn-primary" style="display:none;">{{agile_lng_translate 'portlets' 'save'}}</a>
 			  <a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
 </div>              
 		 </fieldset>
-<br><a href="#voicemail" class="text-info">{{agile_lng_translate 'widgets' 'manage-voicemails'}}</a>
+<br>
+    
+    <a href="#voicemail" class="text-info">{{agile_lng_translate 'widgets' 'manage-voicemails-drops'}}</a><br/>
+    <span style="font-size: 10px;">{{agile_lng_translate 'widgets' 'manage-voicemails-tooltip'}}</span>
     </form>
 </div>
 </script>
@@ -160,16 +167,88 @@
 
 <script id="twilioio-voicemail-template" type="text/html">
 {{#if this}}
-<div class="btn-group dropup pull-left">
-<button class="btn btn-xs btn-default" id="noty_twilio_voicemail" data-length="{{length}}" data-src="{{this.0.extension}}">{{agile_lng_translate 'widgets' 'leave-voicemail'}}</button>
-{{#ifCond length "greaterthan" 1}}
-<button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" onclick="voiceMailDropAction()" id="splitButtonVoicemail" ><span class="caret"></span></button>
-<ul class="dropdown-menu text-left text-base">
-{{#each this}}
-<li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
-{{/each}}
-</ul>
-{{/ifCond}}
-</div>
+  <div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+      <div type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-length="{{length}}" data-src="{{this.0.extension}}" style="box-shadow: none;">
+        <span class="caret"></span>
+      </div>
+      <ul class="dropdown-menu">
+      {{#each this}}
+        <li><a href="#" data-src="{{extension}}" class="voiceMailItem">{{name}}</a></li>
+      {{/each}}
+      </ul>
+    </div>
+  </div>
 {{/if}}
 </script>
+
+<script id="twilioio-users-template" type="text/html">
+  <div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+      <div type="button" class="icon-call-out dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="box-shadow: none;">
+        <span class="caret" style="margin-top: -5px;"></span>
+      </div>
+      <ul class="dropdown-menu portlet_body panel-body p-n b-n" style="max-height: 225px;overflow-y: scroll;">
+      {{#each this}}
+        {{#if this.twillioNumber}}
+          <li>
+            <a href="#" data-src="{{twillioNumber}}" data-name="{{username}}" class="twiliousers">
+              <div class="pull-left m-r-xs">
+              <img class="img-inital r r-2x" data-name="" src="{{pic}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
+            </div>
+            <div class="pull-left agile-thumb recent-top">
+              <div class="text-cap block recent-view-line-height"> <div class="text-ellipsis">
+              {{username}}</div>
+                <div class="text-lowercase">
+                  <small>{{twillioNumber}}</small>
+                </div>
+              </div>
+            </div>
+            </a>
+          </li>
+          {{/if}}
+        {{/each}}
+        {{#each this}}
+          <li>
+          {{#if this.domainusernumber}}
+            <a href="#" data-src="{{domainusernumber}}" data-name="{{username}}" class="twiliousers">
+               <div class="pull-left m-r-xs">
+                <img class="img-inital r r-2x" data-name="" src="{{pic}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
+              </div>
+              <div class="pull-left agile-thumb recent-top">
+                <div class="text-cap block recent-view-line-height"> <div class="text-ellipsis">
+                {{username}}</div>
+                  <div class="text-lowercase">
+                    <small>{{domainusernumber}}</small>
+                  </div>
+                </div>
+              </div>
+            </a>
+          {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</script>
+<script id="twilioio-users-conference-template" type="text/html">
+  <div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+      <div type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="box-shadow: none;">
+        <span class="caret"></span>
+      </div>
+      <ul class="dropdown-menu">
+      {{#each this}}
+        <li>
+        {{#if this.domainusernumber}}
+          <a href="#" data-src="{{domainusernumber}}" class="twiliousersconf">{{username}}({{domainusernumber}})</a>
+        {{else}}
+          <a href="#" data-src="{{twillioNumber}}" class="twiliousersconf">{{username}}({{twillioNumber}})</a>
+        {{/if}}
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</script>
+

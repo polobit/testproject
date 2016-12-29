@@ -351,7 +351,7 @@ public class TicketsUtil
 		Tickets ticket = TicketsUtil.getTicketByID(ticket_id);
 
 		if(is_spam == true)
-		ticket.status = Status.CLOSED;
+			ticket = changeStatus(ticket_id, Status.CLOSED, set_user_key);
 		
 		
 		if (ticket.is_spam.equals(is_spam))

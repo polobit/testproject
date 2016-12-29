@@ -836,15 +836,15 @@ $(function()
 							{
 								html += "<tr data='" + milestones[i] + "' style='display: table-row;'><td><div class='milestone-name-block inline-block v-top text-ellipsis' style='width:80%'>";
 								if(milestones[i] == data.won_milestone){
-									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+wonMsg+"' class='icon-like mark-won m-l-sm'></i></div></td><td class='b-r-none text-right' style='width:25%'><div class='m-b-n-xs'>";
 									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
 									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else if(milestones[i] == data.lost_milestone){
-									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += milestones[i] + "<i data-toogle='tooltip' title='"+lostMsg+"' class='icon-dislike mark-lost m-l-sm'></i></div></td><td class='b-r-none text-right' style='width:25%'><div class='m-b-n-xs'>";
 									html += "<a class='milestone-won text-l-none-hover c-p text-xs not-applicable hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
 									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show disabled' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								} else{
-									html += milestones[i] + "</div></td><td class='b-r-none'><div class='m-b-n-xs'>";
+									html += milestones[i] + "</div></td><td class='b-r-none text-right' style='width:25%'><div class='m-b-n-xs'>";
 									html += "<a class='milestone-won text-l-none-hover c-p text-xs hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-won-milestone'}}'><i class='icon-like'></i></a>";
 									html += "<a class='milestone-lost text-l-none-hover c-p text-xs m-l-sm hover-show' style='visibility:hidden;' data-toggle='tooltip' title='{{agile_lng_translate 'admin-settings-deals' 'set-as-lost-milestone'}}'><i class='icon-dislike'></i></a>";
 								}
@@ -1684,32 +1684,36 @@ $(function()
 									el = el
 											.concat('<div class="contact-addressview text-xs"><div><div class="pull-left hide text-xs" style="width:18px"><i class="icon icon-pointer"></i></div><div class="custom-color text-xs">');
 
-								if(address.address !== undefined)
-									el = el.concat(address.address+", ");
+								var addressValues = [];
 
-								if(address.city !== undefined)
-									el = el.concat(address.city+", ");
+								if(address.address && address.address.trim())
+									addressValues.push(address.address.trim());
 
-								if(address.state !== undefined)
-									el = el.concat(address.state+", ");
+								if(address.city && address.city.trim())
+									addressValues.push(address.city.trim());
 
-								if(address.zip !== undefined)
-									el = el.concat(address.zip+", ");
+								if(address.state && address.state.trim())
+									addressValues.push(address.state.trim());
 
-								if(address.country !== undefined)
-									el = el.concat(address.country+".");
+								if(address.zip)
+									addressValues.push(address.zip);
 
-								/*$.each(address, function(key, val)
-								{
-									if (--count == 0)
+								if(address.countryname && address.countryname.trim())
+									addressValues.push(address.countryname.trim());
+
+								if(!address.countryname && address.country && address.country.trim())
+									addressValues.push(getCode(address.country.trim()));
+
+								$.each(addressValues, function(index, addressField){
+									if(index == addressValues.length - 1)
 									{
-										el = el.concat(val + ".");
+										el = el.concat(addressField);
 										return;
 									}
-									el = el.concat(val + ", ");
-								});*/
+									el = el.concat(addressField + ", ");
+								});
 
-								if (properties[i].subtype){
+								if (properties[i].subtype && properties[i].subtype != "SYSTEM"){
 									if(properties[i].subtype=="office")
 										properties[i].subtype="work";
 									el = el.concat('<span class="label bg-light dk text-tiny">' + properties[i].subtype + '</span>');
@@ -1723,49 +1727,6 @@ $(function()
 							}
 						}
 					});
-
-	Handlebars.registerHelper('address_Template', function(properties)
-	{
-
-		for (var i = 0, l = properties.length; i < l; i++)
-		{
-
-			if (properties[i].name == "address")
-			{
-				var el = '';
-
-				var address = {};
-				try
-				{
-					address = JSON.parse(properties[i].value);
-				}
-				catch (err)
-				{
-					address['address'] = properties[i].value;
-				}
-
-				// Gets properties (keys) count of given json
-				// object
-				var count = countJsonProperties(address);
-
-				$.each(address, function(key, val)
-				{
-					if (--count == 0)
-					{
-						el = el.concat(val + ".");
-						return;
-					}
-					el = el.concat(val + ", ");
-				});
-				/*
-				 * if (properties[i].subtype) el = el.concat(" <span
-				 * class='label'>" + properties[i].subtype + "</span>");
-				 */
-
-				return new Handlebars.SafeString(el);
-			}
-		}
-	});
 	
 	/**
 	 * To represent a number with commas in deals
@@ -1940,7 +1901,7 @@ $(function()
 	{
 		if (data && data.indexOf("Tweet about Agile") == -1 && data.indexOf("Like Agile on Facebook") == -1)
 				data = data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		
+		if(data)
 		data = data.replace(/\n/, "<br/>");
 		return new Handlebars.SafeString(data);
 	});
@@ -2042,7 +2003,9 @@ $(function()
 
 			if (!currentContactEntity || !contactEntity)
 			{
-				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " " + getPropertyValue(contact_properties, "last_name");
+				currentContactEntity = getPropertyValue(contact_properties, "first_name") + " ";
+				if(getPropertyValue(contact_properties, "last_name"))
+					currentContactEntity=currentContactEntity+getPropertyValue(contact_properties, "last_name");
 				contactEntity = getPropertyValue(properties, "first_name") + " " + getPropertyValue(properties, "last_name");
 			}
 			
@@ -2052,7 +2015,7 @@ $(function()
 				contactEntity = getPropertyValue(properties, "name");
 			}
 
-			if (currentContactEntity == contactEntity)
+			if (currentContactEntity.toLowerCase() == contactEntity.toLowerCase())
 				return options.fn(this);
 
 			return options.inverse(this)
@@ -3166,7 +3129,7 @@ $(function()
 							
 
 
-							html_temp += "<div class='row b-b p-b-md'><div class='col-md-1 p-t' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
+							html_temp += "<div class='row b-b p-b-md'><div class='col-md-1 p-t tag-alphabet' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
 
 						console.log(html_temp);
 						return new Handlebars.SafeString(html_temp);
@@ -3536,23 +3499,41 @@ $(function()
 					address['address'] = properties[i].value;
 				}
 
-				// Gets properties (keys) count of given json
-				// object
-				var count = countJsonProperties(address);
+				var addressValues = [];
 
-				$.each(address, function(key, val)
+				if(address['address'] && address['address'].trim())
 				{
-					if (--count == 0)
+					addressValues.push(address['address'].trim());
+				}
+				if(address['city'] && address['city'].trim())
+				{
+					addressValues.push(address['city'].trim());
+				}
+				if(address['state'] && address['state'].trim())
+				{
+					addressValues.push(address['state'].trim());
+				}
+				if(address['zip'])
+				{
+					addressValues.push(address['zip']);
+				}
+				if(address['countryname'] && address['countryname'].trim())
+				{
+					addressValues.push(address['countryname'].trim());
+				}
+				if(!address['countryname'] && address['country'] && address['country'].trim())
+				{
+					addressValues.push(getCode(address['country'].trim()));
+				}
+
+				$.each(addressValues, function(index, addressField){
+					if(index == addressValues.length - 1)
 					{
-						el = el.concat(val + ".");
+						el = el.concat(addressField);
 						return;
 					}
-					el = el.concat(val + ", ");
+					el = el.concat(addressField + ", ");
 				});
-				/*
-				 * if (properties[i].subtype) el = el.concat(" <span
-				 * class='label'>" + properties[i].subtype + "</span>");
-				 */
 
 				return new Handlebars.SafeString(el);
 			}
@@ -5092,7 +5073,7 @@ $(function()
 						var html_temp = "";
 
 						for (var i = 0; i < keys.length; i++)
-							html_temp += "<div class='row b-b p-b-md'><div class='col-md-1' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
+							html_temp += "<div class='row b-b p-b-md'><div class='col-md-1 tag-alphabet' style='font-size:16px;padding-top:20px;'>" + keys[i] + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";
 
 						console.log(html_temp);
 						return new Handlebars.SafeString(html_temp);
@@ -8184,4 +8165,77 @@ Handlebars.registerHelper('isAccessToLeads', function(options)
 		return options.fn(this);
 	}
 	return options.inverse(this);
+});
+
+Handlebars.registerHelper('loading_image', function()
+{
+	return new Handlebars.SafeString(LOADING_HTML);
+});
+
+Handlebars.registerHelper('getCompactTableView', function(type)
+{
+	if(type == "contacts"){
+		if(_agile_get_prefs("contactTabelView"))
+			 return "table-compact";
+	}
+	else if(type == "companies"){
+		if(_agile_get_prefs("companyTabelView"))
+			 return "table-compact";	
+	}
+});
+
+Handlebars.registerHelper('renderTemplate', function(key, data){
+	return getTemplate(key, data);
+});
+
+Handlebars.registerHelper('if_checked_autoProfile', function(value, target, options){
+	if(!value || value == target){
+		return options.fn(this);
+	}else{
+		return options.inverse(this);
+	}
+});
+
+/*
+* Helper to identify the user is in Iphone
+*/
+Handlebars.registerHelper('isUserNotInIphone', function(options)
+{
+	if(!IS_IPHONE_APP)
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+Handlebars.registerHelper('isNewTheme', function(options)
+{
+	if(CURRENT_USER_PREFS.theme == "15")
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
+{
+	var html='';
+	for(var i=0;i<contacts.length;i++)
+	{
+		if(contacts[i].id)
+		{
+			if(!isDuplicateContactProperty(contacts[i].properties,"email"))
+			{
+				if(contacts[i].type=='PERSON')
+				{
+					html=html+' <a href="#contact/'+contacts[i].id+'" style="color: #4d759e;" data="'+contacts[i].id+'" class="popover_contact text-capitalize">'+ getContactName(contacts[i])+'</a>,';
+				}
+				if(contacts[i].type=='COMPANY')
+				{
+   					html=html+' <a href="#company/'+contacts[i].id+'"style="color: #4d759e;" data="'+contacts[i].id+'" class="text-capitalize popover_contact">'+getPropertyValue(contacts[i].properties, 'name')+'</a>,';
+				}
+			}
+		}
+	}
+	if(html.endsWith(','))
+		html=html.substring(0, html.length - 1)
+	return html;
 });

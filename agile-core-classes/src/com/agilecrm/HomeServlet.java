@@ -15,6 +15,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.addon.AddOn;
 import com.agilecrm.contact.CustomFieldDef;
@@ -245,7 +246,10 @@ public class HomeServlet extends HttpServlet
     		}
     		// Avoid saving the DomainUser twice.
     		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-    		
+    		if(domainUser == null){
+    			resp.sendRedirect("/login");
+    			return;
+    		}
     	    // Saves logged in time in domain user.
     	    setLoggedInTime(req, domainUser);
     	    
@@ -254,6 +258,9 @@ public class HomeServlet extends HttpServlet
     	    
     	    try {
     	    	domainUser.save();
+    	    	
+    	    	// Check whether SubUser is created or not
+    	    	EmailGatewayUtil.checkSubUserExists(domainUser.domain);
     	    } catch(Exception e) {
     	    	e.printStackTrace();
     	    }

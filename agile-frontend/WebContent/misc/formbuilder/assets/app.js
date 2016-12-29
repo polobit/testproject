@@ -36,6 +36,9 @@ define(
 
 					new TabView({ title : "<b>Source code</b>", content : renderTab });
 
+					if($("b").text()=="Source code"){
+						$("b").parent().parent().css("display","none");
+					}
 					// Make the first tab active!
 					$("#components .tab-pane").first().addClass("active");
 					$("#formtabs li").first().addClass("active");
@@ -50,12 +53,16 @@ define(
 							}
 							else{
 								if(typeof formTemplate != "undefined") {
-									templateLoad.agile_template_load(api);
+									templateLoad.agile_template_load(api,fields);
 								} else {
 									saveform = json;
 									new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(json) });
+									$("#loader").fadeOut('fast');
+									$("#header").css("display","block");
+									$(".container").css("display","block");
 								}	
 							}
+							chooseThemeFunc();
 						});
 					});
 				});
@@ -63,5 +70,11 @@ define(
 				$('#form-save').click(function(event){
 					formSave.agile_form_save(event);
 				});
+				$(document).keydown(function(e) {
+                     // ESCAPE key pressed
+                     if (e.keyCode == 27) {
+                        $(".popover").remove();
+                     }
+                });
 			}}
 		});

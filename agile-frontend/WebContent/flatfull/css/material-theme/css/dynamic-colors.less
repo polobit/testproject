@@ -1,0 +1,341 @@
+.mainThemeDependentCss() {
+
+   .tabs .tab-container .nav-tabs li.active a{
+      color: @basic-color;
+      border-bottom: 3px solid @basic-color;
+    }
+    .tabs .tab-container .nav-tabs li.active:hover a{
+      border-bottom: 3px solid @basic-color;
+    }
+    .tabs .tab-container .nav-tabs li a:hover {
+    color: @basic-color;
+    border-bottom: 3px solid rgba(116, 96, 238, 0.12) !important;
+    background-color: #e7eef0 !important;
+    }
+    .agile-page-header h1, .agile-page-header h2, .agile-page-header h3, .agile-page-header h4, .agile-page-header .h1, .agile-page-header .h2, .agile-page-header .h3{
+      color: @basic-color;
+    }
+
+    .list-group-item:hover.select{
+      background-color: @basic-bg-color;
+    }
+    a.list-group-item:hover, a.list-group-item:focus{
+      color: @basic-color;
+      background-color: @basic-bg-hover-color;
+    }
+    .list-group-item.select{
+      color: @basic-color;
+      background-color: @basic-bg-color;
+    }
+
+     #reports-tab-container .report-selected a{
+      color: @basic-color;
+      background-color: @basic-bg-color;
+    }
+    #reports-tab-container .maintab a:hover {
+      border: 0px;
+      color: @basic-color;
+      background-color: @basic-bg-hover-color;
+    }
+    #reports-tab-container .maintab ul li a {
+      border: 0px !important;
+      color: #555 !important;
+      background-color: #fff !important;
+    }
+    .grid-icon-header, .grid-v2 .dropdown-toggle{
+      color : @theme-color;
+    }
+    .agile-sub-header h1, .agile-sub-header h2, .agile-sub-header h3, .tickets-toolbar .filter-name-btn{
+      color : @basic-color;
+    }
+
+    #agile-menu-navigation-container{
+      li:hover, li:focus{
+        background-color: @menu-bg-hover-color;
+      }
+      li.active a{
+        color: @theme-color;
+        border-left: 3px solid @theme-color;
+        background-color: @menu-bg-color;
+      }
+      li a:hover, li a:focus{
+        color: @theme-color;
+        background-color: @menu-bg-hover-color;
+      }
+      .active a{
+        color: @theme-color
+      }
+      li.active a:hover{
+        background-color: @menu-bg-color;
+      }
+      .agile-theme-nav-sub li a {
+          background-color: @menu-bg-hover-color;
+          border-left: 0px solid transparent!important;
+      }
+    }
+
+
+    input[type="checkbox"]:checked:after{
+      border-color : @checkbox-color;
+      background-color : #fff !important;
+      color : @checkbox-color;
+    }
+    input[type="checkbox"]:hover:after, input[type="checkbox"]:active:after, input[type="checkbox"]:focus:after{
+      border-color : @checkbox-color;
+    }
+
+    input[disabled][type="checkbox"]:checked:after, .i-checks input[disabled]:after, .i-checks input[disabled]:focus, .i-checks input[disabled]:hover {
+      background-color: #dee5e7!important;
+      border-color: #ececec!important;
+      color: #fff!important;
+    }
+
+    input[type="radio"]:hover:after, input[type="radio"]:active:after, input[type="radio"]:focus:after{
+      border-color : @basic-color;
+    }
+    input[type="radio"]:checked:after{
+      border : 6px solid @basic-color;
+    }
+
+
+    .btn-default{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-color;
+    }
+    .btn-default:hover, .btn-default:focus{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-hover-color;
+    }
+    .btn-primary{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-color;
+    }
+    .btn-primary:hover, .btn-primary:focus{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-hover-color;
+    }
+
+    .btn-default-imp{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-color;
+    }
+    .btn-default-imp:hover, .btn-default-imp:focus{
+      color : @btn-default-color;
+      background-color : @btn-default-bg-hover-color;
+    }
+
+    .btn-primary-imp{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-color;
+    }
+    .btn-primary-imp:hover, .btn-primary-imp:focus{
+      color : @btn-primary-color;
+      background-color : @btn-primary-bg-hover-color;
+    }
+
+    .btn-default-imp-white{
+      color : rgb(120, 144, 156) !important; 
+      background-color : @btn-primary-color;
+    }
+    .btn-default-imp-white:hover{
+      color : @btn-primary-bg-color;
+      background-color : @btn-primary-color;
+    }
+
+    
+
+}
+
+@important:!important;
+@sales-color : #5840eb @important;
+@ma-color : #11a0f8 @important;
+@service-color : #66cd2e @important;
+@sales-bg-color : #F1EFFE @important;
+@ma-bg-color : #E7F6FF @important;
+@service-bg-color :#E0F5D5 @important;
+@sales-bg-hover-color : #F9F9FF @important;
+@ma-bg-hover-color : #f5fbff @important;
+@service-bg-hover-color : #F0FAEA @important;
+@checkbox-color : @ma-color;
+
+
+
+@sa-btn-default-color : #7460ee @important;
+@sa-btn-default-bg-color : rgba(116, 96, 238, 0.1) @important;
+@sa-btn-default-bg-hover-color : rgba(116, 96, 238, 0.2) @important;
+@sa-btn-primary-color : #fff @important;
+@sa-btn-primary-bg-color : #7460ee @important;
+@sa-btn-primary-bg-hover-color : #5840eb @important;
+
+@ma-btn-default-color : #11a0f8 @important;
+@ma-btn-default-bg-color : rgba(17, 160, 248, 0.1) @important;
+@ma-btn-default-bg-hover-color : rgba(17, 160, 248, 0.2) @important;
+@ma-btn-primary-color : #fff @important;
+@ma-btn-primary-bg-color : #11a0f8 @important;
+@ma-btn-primary-bg-hover-color : #067dc6 @important;
+
+@se-btn-default-color : #66cd2e @important;
+@se-btn-default-bg-color : rgba(102, 205, 46, 0.1) @important;
+@se-btn-default-bg-hover-color : rgba(102, 205, 46, 0.2) @important;
+@se-btn-primary-color : #fff @important;
+@se-btn-primary-bg-color : #66cd2e @important;
+@se-btn-primary-bg-hover-color : #4d9b23 @important;
+
+
+
+
+
+.agile-theme-SALES.agile-theme-15{
+  @basic-color : @ma-color;
+  @basic-bg-color : @ma-bg-color;
+  @basic-bg-hover-color : @ma-bg-hover-color;
+  @theme-color : @sales-color;
+  @menu-bg-color : @sales-bg-color;
+  @menu-bg-hover-color : @sales-bg-hover-color;
+  @btn-default-color : @ma-btn-default-color;
+  @btn-default-bg-color : @ma-btn-default-bg-color;
+  @btn-default-bg-hover-color :  @ma-btn-default-bg-hover-color;
+  @btn-primary-color : @ma-btn-primary-color;
+  @btn-primary-bg-color : @ma-btn-primary-bg-color;
+  @btn-primary-bg-hover-color : @ma-btn-primary-bg-hover-color;
+  .mainThemeDependentCss();
+}
+.agile-theme-MARKETING.agile-theme-15{
+  @basic-color : @ma-color;
+  @basic-bg-color : @ma-bg-color;
+  @basic-bg-hover-color : @ma-bg-hover-color;
+  @theme-color : @ma-color;
+  @menu-bg-color : @ma-bg-color;
+  @menu-bg-hover-color : @ma-bg-hover-color;
+  @btn-default-color : @ma-btn-default-color;
+  @btn-default-bg-color : @ma-btn-default-bg-color;
+  @btn-default-bg-hover-color :  @ma-btn-default-bg-hover-color;
+  @btn-primary-color : @ma-btn-primary-color;
+  @btn-primary-bg-color : @ma-btn-primary-bg-color;
+  @btn-primary-bg-hover-color : @ma-btn-primary-bg-hover-color;
+  .mainThemeDependentCss();
+}
+.agile-theme-SERVICE.agile-theme-15{
+  @basic-color : @ma-color;
+  @basic-bg-color : @ma-bg-color;
+  @basic-bg-hover-color : @ma-bg-hover-color;
+  @theme-color : @service-color;
+  @menu-bg-color :  @service-bg-color;
+  @menu-bg-hover-color : @service-bg-hover-color;
+  @btn-default-color : @ma-btn-default-color;
+  @btn-default-bg-color : @ma-btn-default-bg-color;
+  @btn-default-bg-hover-color :  @ma-btn-default-bg-hover-color;
+  @btn-primary-color : @ma-btn-primary-color;
+  @btn-primary-bg-color : @ma-btn-primary-bg-color;
+  @btn-primary-bg-hover-color : @ma-btn-primary-bg-hover-color;
+  .mainThemeDependentCss();
+}
+.navi #agile-sales-menu-navigation-container{
+  li.agile-menuactive a{
+    color: @sales-color;
+    border-left: 3px solid @sales-color;
+    background-color: @sales-bg-color;
+  }
+  li a:hover, li a:focus{
+    color: @sales-color;
+    background-color: @sales-bg-hover-color;
+  }
+  .agile-menuactive a, .agile-menu-parent-item{
+    color: @sales-color
+  }
+  li.agile-menuactive a:hover{
+    background-color: @sales-bg-color;
+  }
+}
+.navi #agile-marketing-menu-navigation-container{
+  li.agile-menuactive a{
+    color: @ma-color;
+    border-left: 3px solid @sales-color;
+    background-color: @ma-bg-color;
+  }
+  li a:hover, li a:focus{
+    color: @ma-color;
+    background-color: @ma-bg-hover-color;
+  }
+  .agile-menuactive a, .agile-menu-parent-item{
+    color: @ma-color
+  }
+  li.agile-menuactive a:hover{
+    background-color: @ma-bg-color;
+  }
+}
+.navi #agile-service-menu-navigation-container{
+  li.agile-menuactive a{
+    color: @service-color;
+    border-left: 3px solid @service-color;
+    background-color: @service-bg-color;
+  }
+  li a:hover, li a:focus{
+    color: @service-color;
+    background-color: @service-bg-hover-color;
+  }
+  .agile-menuactive a, .agile-menu-parent-item{
+    color: @service-color
+  }
+  li.agile-menuactive a:hover{
+    background-color: @service-bg-color;
+  }
+}
+.app-aside-folded .bg-white #agile-sales-menu-navigation-container.agile-menuactive>a.agile-menu-parent-item{ 
+  color: @sales-color;
+  background-color: @sales-bg-color;
+  border-left: 3px solid @sales-color;
+}
+
+.app-aside-folded .bg-white #agile-marketing-menu-navigation-container.agile-menuactive>a.agile-menu-parent-item{
+  color: @ma-color;
+  background-color: @ma-bg-color;
+  border-left: 3px solid @ma-color;
+}
+
+.app-aside-folded .bg-white #agile-service-menu-navigation-container.agile-menuactive>a.agile-menu-parent-item{
+  color: @service-color;
+  background-color: @service-bg-color;
+  border-left: 3px solid @service-color;
+}
+
+
+
+.menu-service-select[data-service-name='SALES']{
+  .material-icons{
+    color : @sales-color;
+  }
+}
+.menu-service-select[data-service-name='MARKETING']{
+  .material-icons{
+    color : @ma-color;
+  }
+}
+.menu-service-select[data-service-name='SERVICE']{
+  .material-icons{
+    color : @service-color;
+  }
+}
+.plan-collection-in.selected-plan .btn-plan, .plan-collection-in.selected-plan .btn-plan:hover {
+  background-color: #48c5a3 !important;
+  border-color: #50c7a7 !important;
+  color: #fff !important;
+}
+.agile-theme-15 .agile-page-header .dropdown-toggle span , .agile-theme-15 .agile-page-header .dropdown-toggle .caret
+{
+       color: #58666e!important; 
+}
+.agile-theme-15 .agile-page-header .pull-right .btn-default.dropdown-toggle .caret
+{
+    color: #11a0f8!important;
+}
+.agile-theme-15 .agile-page-header .pull-right .btn-primary.dropdown-toggle .caret ,.agile-theme-15 .agile-page-header .pull-right .btn-primary-imp.dropdown-toggle .caret
+{
+       color: #fff!important; 
+}
+.agile-theme-15 .agile-page-header .pull-right .btn-default-imp-white.dropdown-toggle .caret
+{
+       color: #58666e!important; 
+}
+
+

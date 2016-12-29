@@ -7,12 +7,13 @@
 
 <script id="tag-management-collection-template" type="text/html">
 <div class='row'>
+	<h1 class="pull-left font-thin h3 tagheading" style="display:none;">Tags</h1>
 	<div class="pull-right m-b-md ">
 		<div class=" pull-left m-r-xs" style="display:inline;">
 			
 		</div>
 		<div class="pull-left"><a href="#" id="add-new-tag" class="btn btn-default btn-addon btn-sm"><i class="icon-plus-sign" ></i> {{agile_lng_translate 'web-rules' 'add-tag'}}</a>
-		<label class="btn btn-default btn-sm m-l-xs allow_users_switch" id="disable_new_tags" >
+		<label class="btn btn-default btn-primary-imp  btn-sm m-l-xs allow_users_switch" id="disable_new_tags" >
 			{{#hasTagPermission}}
 		 	<span  id="disable_new_tags" >  {{agile_lng_translate 'Web-rules' 'Disable-Access'}}</span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
 		 	{{else}}
@@ -20,7 +21,7 @@
 <span  id="disable_new_tags" > {{agile_lng_translate 'Web-rules' 'enable-Access'}} </span><input type="checkbox" id="new_tag_acl" class="left hidden" name="new_tag_acl" value="true" checked="checked"> 
 		 	{{/hasTagPermission}}
 			</label></div>
-		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="{{agile_lng_translate 'admin-settings-tags' 'new-tag'}}"/><a class="btn btn-info pull-left v-top  btn-sm" id="add_new_tag" href="#">{{agile_lng_translate 'other' 'add'}}</a></div>
+		<div id="new_tag_field_block" style="display:none;" class="inline pull-right"><input id="new_tag" type="text" class="form-control pull-left m-r-sm w" placeholder="{{agile_lng_translate 'admin-settings-tags' 'new-tag'}}"/><a class="btn btn-info pull-left v-top btn-default-imp  btn-sm" id="add_new_tag" href="#">{{agile_lng_translate 'other' 'add'}}</a></div>
 		<div class="clearfix"></div>
 	</div>
 	<div class="clearfix"></div>

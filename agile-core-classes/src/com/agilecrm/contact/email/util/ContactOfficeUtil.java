@@ -4,11 +4,15 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
+import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -34,7 +38,7 @@ public class ContactOfficeUtil
 	if (officePrefs == null || officePrefs.size() <= 0)
 	    return null;
 
-	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs.get(0), searchEmail, offset, count);
+	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs.get(0), searchEmail, offset, count, "");
     }
 
     /**
@@ -60,7 +64,9 @@ public class ContactOfficeUtil
 	if (officePrefs == null)
 	    return null;
 
-	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs, searchEmail, offset, count);
+	String fetchItems = "mails";
+	
+	return ContactOfficeUtil.getOfficeURLForPrefs(officePrefs, searchEmail, offset, count, fetchItems);
     }
 
     /**
@@ -78,17 +84,44 @@ public class ContactOfficeUtil
      */
 
     public static String getOfficeURLForPrefs(OfficeEmailPrefs OfficePrefs, String searchEmail, String offset,
-	    String count)
+	    String count, String fetch_items)
     {
 
 	String userName = OfficePrefs.user_name;
 	String host = OfficePrefs.server_url;
 	String password = OfficePrefs.password;
+	List<String> folderList = OfficePrefs.folders;
+	String foldersString = "";
 
 	String protocal = "http://";
 	if (OfficePrefs.is_secure)
 	    protocal = "https://";
+	
+	if (folderList != null && fetch_items.equalsIgnoreCase("mails"))
+	{
+	    StringBuffer buffer = new StringBuffer();
+	    for (int i = 0; i < folderList.size(); i++)
+	    {
+		buffer.append(folderList.get(i));
+		if (i < folderList.size() - 1)
+		    buffer.append(",");
+	    }
+	    foldersString = buffer.toString();
+	    
+	    if(foldersString != null && foldersString.equalsIgnoreCase("{\"default_folders\":[\"AllItems\"]}")){
+	    	foldersString = "";
+	    }
+	}
+	
+	String applicationId = SystemProperty.applicationId.get();
 
+	System.out.println("Application id is " + applicationId);
+
+	String hostUrl = "http://54.87.153.50:8080/exchange-app";
+	
+	if (StringUtils.equals(applicationId, "agilecrmbeta"))
+		hostUrl = "http://54.87.153.50:8080/exchange-app-beta";
+	
 	String url = null;
 
 	String namespace = NamespaceManager.get();
@@ -98,10 +131,27 @@ public class ContactOfficeUtil
 
 	try
 	{
-	    url = "http://54.87.153.50:8080/exchange-app/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
-		    + "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
-		    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
-		    + "&domain=" + URLEncoder.encode(namespace, "UTF-8");
+		if(fetch_items.equalsIgnoreCase("mails"))
+		{
+			url  = 	hostUrl+"/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+					+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8") + "&fetch_items=mails&folder_names=" + URLEncoder.encode(foldersString, "UTF-8");;
+		}
+		else if(fetch_items.equalsIgnoreCase("folders"))
+		{
+			url  = 	hostUrl+"/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+					+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8") + "&fetch_items=folders";
+		}
+		else
+		{
+			url  = 	hostUrl+"/exchange?user_name=" + URLEncoder.encode(userName, "UTF-8")
+					+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(protocal + host, "UTF-8")
+				    + "&offset=" + offset + "&count=" + count + "&password=" + URLEncoder.encode(password, "UTF-8")
+				    + "&domain=" + URLEncoder.encode(namespace, "UTF-8") + "&fetch_items=default_folders";
+		}
 	}
 	catch (Exception e)
 	{
@@ -111,5 +161,43 @@ public class ContactOfficeUtil
 
 	return url;
     }
+
+	public static String getOfficeURLForFetchingDefaultFolders(OfficeEmailPrefs officeEmailPrefs) {
+		// TODO Auto-generated method stub
+		if (officeEmailPrefs == null)
+		    return null;
+		return ContactOfficeUtil.getOfficeURLForPrefs(officeEmailPrefs, "info@agilecrm.com", "0", "1", "default_folders");
+	}
+
+	public static JSONArray getOfficeFoldersFromServer(String officeURL) {
+		// TODO Auto-generated method stub
+		JSONArray foldersArray = null;
+		try
+		{
+		    // Returns imap folders, usually in form of {folders:[]}, if not
+		    // build result like that.
+		    String jsonResult = HTTPUtil.accessURL(officeURL);
+		    // Convert folders to json.
+		    JSONObject folders = ContactEmailUtil.convertFoldersToJSON(jsonResult);
+		    // Fetches JSONArray from {folders:[]}
+		    foldersArray = folders.getJSONArray("folders");
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.out.println(e.getMessage());
+		    return null;
+		}
+		return foldersArray;
+	}
+
+	public static String getOfficeURLForFetchingFolders(OfficeEmailPrefs officeEmailPrefs, String fetchItems) {
+		if (officeEmailPrefs == null)
+		    return null;
+
+		return ContactOfficeUtil.getOfficeURLForPrefs(officeEmailPrefs, "info@agilecrm.com", "0", "1", fetchItems);
+	}
+
+	
 
 }

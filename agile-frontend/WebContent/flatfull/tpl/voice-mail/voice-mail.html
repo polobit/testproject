@@ -1,6 +1,6 @@
 <script id="voice-mail-collection-template" type="text/html">
-<div class="col">
-    <div class="hbox h-auto {{#is_mobile}} m-b-none {{else}} m-b-lg{{/is_mobile}}">
+<div class="col no-panel-border">
+    <div class="hbox h-auto {{#is_mobile}} m-b-none {{else}} m-b-lg{{/is_mobile}}"  id="voicemail-list">
 	  <div class="panel panel-default">
 		<div class="panel-heading {{#is_mobile}} b-b-none {{/is_mobile}}">
             <div class="pull-left m-t-xs">{{agile_lng_translate 'voice-mail' 'voicemail-list'}}</div>
@@ -89,9 +89,9 @@
     </td>
 {{else}}
     <td data="{{id}}" class="data">
-    <div>{{name}}</div>
+    <div class="table-resp">{{name}}</div>
     </td>
-    <td>{{extension}}</td>
+    <td><div class="table-resp">{{extension}}</div></td>
     <td class="text-muted"><div style="width:10em;"><i class="fa fa-clock-o m-r-xs"></i><time class="document-created-time" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time></div></td>
     <td><div class="tdVoiceMailOver" style="display:none;"><span class="audioPlay">&nbsp;&nbsp;
     <i class="icon-play"></i>

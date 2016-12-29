@@ -39,7 +39,9 @@ public class TicketStats implements Serializable
 	public Long tickets_received = 0l;
 	public Long artices_created = 0l;
 	public Long sections_created = 0l;
-
+	public Long notes_created = 0l;
+	public Long our_notes_created = 0l;
+	
 	/**
 	 * Stores the property names in final variables, for reading flexibility of
 	 * the property values
@@ -51,7 +53,9 @@ public class TicketStats implements Serializable
 	public static final String TICKETS_COUNT = "tickets_received";
 	public static final String Article_Count = "artices_created";
 	public static final String Section_Count = "sections_created";
-
+	public static final String Notes_Count = "notes_created";
+	public static final String OUR_Notes_Count = "our_notes_created";
+	
 	/**
 	 * ObjectifyDAO
 	 */
@@ -114,6 +118,12 @@ public class TicketStats implements Serializable
 				break;	
 			case TicketStats.Section_Count:
 				this.sections_created++;
+				break;
+			case TicketStats.Notes_Count:
+				this.notes_created++;
+				break;	
+			case TicketStats.OUR_Notes_Count:
+				this.our_notes_created++;
 				break;	
 		}
 	}

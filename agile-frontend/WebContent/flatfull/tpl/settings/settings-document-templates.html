@@ -1,10 +1,10 @@
 <script id="settings-document-templates-collection-template" type="text/html">
 
 <div class="panel panel-default">
- <div class="panel-heading">
-    <div class="pull-left  m-t-xs">{{agile_lng_translate 'document' 'document-templates'}}</div>
-    <div class="pull-right">
-       <a href="#documents" class="btn btn-sm btn-default btn-addon" id=""><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'deal-view' 'documents'}}</a> <a href="#document-template-add" class="btn btn-sm btn-default btn-addon" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-new-template'}}</a>
+ <div class="panel-heading {{#is_mobile}}b-n{{/is_mobile}}">
+    <div class="pull-left  m-t-xs add-btn-mobile">{{agile_lng_translate 'document' 'document-templates'}}</div>
+    <div class="pull-right add-btn-mobile add-doc-template-btns">
+       <a href="#documents" class="btn btn-sm btn-default m-r-sm-imp btn-addon" id=""><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'deal-view' 'documents'}}</a> <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp btn-addon" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-new-template'}}</a>
     </div>
     <div class="clearfix"></div>
  </div>
@@ -18,7 +18,7 @@
                      <div class="box-right pull-left">
                         <h4 class="m-t-none">{{agile_lng_translate 'document' 'document-no-document-template'}}</h4>
                          <div class="text">{{agile_lng_translate 'document' 'document-add-document-template-comment'}}</div>
-                            <a href="#document-template-add" class="btn btn-sm btn-default blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
+                            <a href="#document-template-add" class="btn btn-sm btn-default btn-default-imp blue btn-slate-action m-t-xs"><i class="icon-plus-sign"></i>  {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
                     </div>
                     <div class="clearfix"></div>
         </div>
@@ -27,6 +27,22 @@
     
  {{/unless}}
 {{#if this.length}}
+
+{{#is_mobile}}
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+                    <div class=" table-responsive b-n"> 
+                    <table class="table agile-table panel" url="core/api/document/templates/bulk?action_type=DELETE">
+                        
+                         <tbody id='settings-document-templates-model-list' route='document-template/'>
+                         </tbody>
+                    </table>
+                    </div>
+            </div>
+        </div>
+
+{{else}}
+
     <div class="row">
         <div class="col-md-12 col-sm-12">
                     <div class=" table-responsive" style="overflow:hidden;"> 
@@ -46,11 +62,36 @@
                     </div>
             </div>
         </div>
+
+{{/is_mobile}}
+
     </div>
  {{/if}}    
 </script>
 
  <script id="settings-document-templates-model-template" type="text/html">
+    {{#is_mobile}}
+    <td class='data hide' data='{{id}}'></td>
+
+    <td>
+        <div class="table-resp">
+            {{name}}
+        </div>
+
+        <div class="table-resp text-muted text-sm">
+            {{description}}
+        </div>
+
+       {{#if created_time}}
+          <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o"></i>
+               Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{documentTemplateOwner.name}}
+          </div>
+       {{/if}}
+
+    </td>
+
+    {{else}}
+
     <td class='data hide' data='{{id}}'></td>
     <td>
 		<div class="table-resp">
@@ -69,4 +110,5 @@
           </div>
        {{/if}}
     </td>
+    {{/is_mobile}}
 </script>

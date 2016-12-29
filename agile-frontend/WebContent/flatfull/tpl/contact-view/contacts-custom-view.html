@@ -102,7 +102,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete"  url="core/api/contacts/delete?action=DELETE">                
+                <table id="contacts-table" class="table b-n no-radius no-sorting onlySorting panel agile-table noDelete {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -154,7 +154,7 @@
 </div></div>
 	    	<div class="pull-right pos-abs" style="right: 0; top: 5px;">
 	    	
-            <div class="btn-group pull-left m-r-xs" id="contacts-view-options" style="pointer-events: auto;"></div>
+            <div class="btn-group pull-left btn-default-imp-white btn-lg-imp m-r-xs" id="contacts-view-options" style="pointer-events: auto;"></div>
 
 			
 		
@@ -247,7 +247,7 @@
 
 					    <div class="btn-group dropdown pull-right {{#iscompactTabel 'PERSON'}}compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="contact-custom-coloumns">
 							<div class="btn-group dropdown  multiple-checkbox" style="padding-right: 10px;position:absolute;right:0px;" id="contact-custom-coloumns">
-							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-ellipsis-h {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
+							 <button class="btn btn-default dropdown-toggle  btn-sm" data-toggle="dropdown" aria-expanded="true" id="contactTabelView"><i class="{{#iscompactTabel 'PERSON'}} fa fa-navicon {{else}} fa fa-navicon {{/iscompactTabel}}"></"></i></button> 
 							<!-- <button class="dropdown-toggle btn btn-default  btn-sm " data-toggle="dropdown" aria-expanded="true" id="contact_columns" >
                     		<i class="caret"></i>
                 			</button> -->
@@ -275,7 +275,7 @@
 		        </div>
 		        {{/unless}}
 		        {{#if this.length}}
-                <table id="contacts-table" class="table contacts-custom noDelete   table-striped showCheckboxes no-sorting panel agile-table"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
+                <table id="contacts-table" class="table contacts-custom noDelete   table-striped showCheckboxes no-sorting panel agile-table {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">                
 					<div class="filter-criteria">
 					
 					</div>
@@ -332,7 +332,7 @@
 		        {{#if this.length}}
 		        <div class="btn-group inline-block  text-center" style="display: none;border:1px solid #dee5e7;width:100%;padding:5px;background-color:#edf1f2;" id="bulk-select"></div>
                 <table id="contacts-table" class="table table-striped    noDelete  no-sorting panel agile-table 
-                {{#is_mobile}}contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">
+                {{#is_mobile}}contactTableHeadName onlySorting{{else}} showCheckboxes {{/is_mobile}} {{getCompactTableView 'contacts'}}"  url="core/api/contacts/delete?action=DELETE" style="table-layout:auto">
 					<div class="filter-criteria">
 					
 					</div>

@@ -229,6 +229,7 @@
     "account-email.cc-on-file" : "{{agile_lng_translate 'account-email' 'cc-on-file'}}",
     "account-email.end" : "{{agile_lng_translate 'account-email' 'end'}}",
     "account-email.charge-appear-as-stmt" : "{{agile_lng_translate 'account-email' 'charge-appear-as-stmt'}}",
+    "account-email.domain" : "{{agile_lng_translate 'account-email' 'domain'}}",
     
     "subscription-email.plan-changed" : "{{agile_lng_translate 'subscription-email' 'plan-changed'}}",
     "subscription-email.plan-changed-done-by-you-or-support-team" : "{{agile_lng_translate 'subscription-email' 'plan-changed-done-by-you-or-support-team'}}",

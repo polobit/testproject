@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.text.ParseException;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -161,5 +162,23 @@ public class DateUtil
 		DateFormat format = new SimpleDateFormat(dateFormat);
 		format.setTimeZone(TimeZone.getTimeZone(timezone));
 		return format.format(date);
+	}
+	
+	public static String addTime(String timestamp,int field,int amount)
+	{
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");		
+		Date date;
+		try
+		{
+		    date = format.parse(timestamp);
+		}
+		catch (ParseException e)
+		{
+		    return timestamp;
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(field,amount);
+		return format.format(calendar.getTime());
 	}
 }

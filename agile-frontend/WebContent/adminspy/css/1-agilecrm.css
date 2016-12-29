@@ -3142,4 +3142,6 @@ table.hide-head-checkbox th label.i-checks {
 .deals-nowrap .no-wrap {
  white-space: nowrap !important;
 }
-
+#reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
+margin-top: 3px;
+}

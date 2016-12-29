@@ -61,16 +61,16 @@ public class SMTPAPI {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public SMTPPrefs createSMTPPrefs(SMTPPrefs prefs) {
-		int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null)
+		/*int emailAccountLimitCount = BillingRestrictionUtil.getBillingRestriction(null, null)
 				.getCurrentLimits().getEmailAccountLimit();
 		int smtpPrefsCount = ContactEmailUtil.getSMTPPrefsCount();
-		if(smtpPrefsCount < emailAccountLimitCount) {
+		if(smtpPrefsCount < emailAccountLimitCount) { */
 			prefs.setAgileUser(new Key<AgileUser>(AgileUser.class,
 					AgileUser.getCurrentAgileUser().id));
 			prefs.save();
 			return prefs;
-		} else
-			return null;
+		/*} else
+			return null;*/
 	}
 
 	/**
@@ -113,73 +113,4 @@ public class SMTPAPI {
 		}
 	}
 
-
-	/**
-	 * /** Returns list of users ,current user SMTPPrefs shared with these users
-	 * 
-	 * @return
-	 */
-	/*@Path("shared-to-users")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8",
-			MediaType.APPLICATION_XML + " ;charset=utf-8" })
-	public String getSharedToUsersList(@QueryParam("id") String sid) {
-
-		List<AgileUser> agileUsers = null;
-		JSONArray users = new JSONArray();
-		String result = null;
-		try {
-			agileUsers = AgileUser.getUsers();
-			if(agileUsers != null) {
-				Iterator<AgileUser> itr = agileUsers.iterator();
-				AgileUser currentAgileUser = AgileUser.getCurrentAgileUser();
-				Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class,
-						currentAgileUser.id);
-				while(itr.hasNext()) {
-					AgileUser user = itr.next();
-					if(user.id.longValue() == currentAgileUser.id.longValue())
-						itr.remove();
-				}
-				List<Key<AgileUser>> sharedUsers = null;
-				if(StringUtils.isNotBlank(sid)) {
-					Long uid = Long.parseLong(sid);
-					SMTPPrefs imapEmailPrefs = SMTPPrefsUtil.getSMTPPrefs(uid, agileUserKey);
-					if(imapEmailPrefs != null) {
-						sharedUsers = imapEmailPrefs.getSharedWithUsers();
-					}
-				}
-				for(AgileUser agileUser : agileUsers) {
-					DomainUser domainUser = agileUser.getDomainUser();
-					if(domainUser != null) {
-						String name = domainUser.name;
-						Long id = agileUser.id;
-						JSONObject user = new JSONObject();
-						user.put("id", id.toString());
-						user.put("name", name);
-
-						if(sharedUsers != null) {
-							for(Key<AgileUser> sharedUser : sharedUsers) {
-								if(sharedUser.getId() == id.longValue()) {
-									user.put("selected", "selected=selected");
-								}
-							}
-						}
-						users.put(user);
-					}
-				}
-			}
-		} catch(Exception e) {
-			System.out.println("Got an exception in EmailsAPI: " + e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-		result = users.toString();
-		return result;
-	}*/
-
-	public static void main(String[] args) {
-		SMTPPrefs sp = new SMTPPrefs("smtp.gmail.com", "agileravi@gmail.com", "mypass", true);
-		sp.save();
-
-	}
 }

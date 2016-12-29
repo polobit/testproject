@@ -390,8 +390,10 @@ var Base_Collection_View = Backbone.View
               that.options.infini_scroll_cbk(that.el);
 
             // Remove More option when there is no cursor
-            if(!that.collection.last().get("cursor") || that.collection.first().get("count") == that.collection.models.length){
-                $(".searchFetchNext", that.el).remove();
+            if(that.collection.length > 0){
+	            if(!that.collection.last().get("cursor") || that.collection.first().get("count") == that.collection.models.length){
+	                $(".searchFetchNext", that.el).remove();
+	            }
             }
           }, untilAttr : 'cursor', param : 'cursor', strict : true, pageSize : this.page_size, target : this.options.scroll_target ? this.options.scroll_target: $(window),
 

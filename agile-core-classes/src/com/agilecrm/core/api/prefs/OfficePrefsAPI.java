@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.email.util.ContactImapUtil;
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.email.wrappers.EmailWrapper;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -177,6 +178,60 @@ public class OfficePrefsAPI
 	    return null;
 	}
 	return emails;
+    }
+    
+    
+    @Path("/folders/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8", MediaType.APPLICATION_XML + " ;charset=utf-8" })
+    public String getOfficeFolders(@PathParam("id") String sid)
+    {
+	JSONArray newFolders = new JSONArray();
+	try
+	{
+	    AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	    Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
+	    Long id = Long.parseLong(sid);
+	    if (id != null)
+	    {
+		OfficeEmailPrefs officeEmailPrefs = OfficeEmailPrefsUtil.getOfficeEmailPrefs(id, agileUserKey);
+		if (officeEmailPrefs != null)
+		{
+			String officeURL = ContactOfficeUtil.getOfficeURLForFetchingFolders(officeEmailPrefs, "folders");
+		    if (StringUtils.isNotBlank(officeURL))
+		    {
+			// Gets IMAP server folders
+			JSONArray allFolders = ContactImapUtil.getIMAPFoldersFromServer(officeURL);
+			if (allFolders != null)
+			{
+			    List<String> existingFolders = null;
+			    if (officeEmailPrefs != null)
+				existingFolders = officeEmailPrefs.getFoldersList();
+			    for (int i = 0; i < allFolders.length(); i++)
+			    {
+				JSONObject folder = new JSONObject();
+				folder.put("name", allFolders.get(i));
+				if (existingFolders != null)
+				{
+				    for (int j = 0; j < existingFolders.size(); j++)
+				    {
+					if (existingFolders.get(j).equals(allFolders.get(i)))
+					    folder.put("selected", "selected=selected");
+				    }
+				}
+				newFolders.put(folder);
+			    }
+			}
+		    }
+		}
+	    }// end if id!=null
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Got an exception in Office365 while fetching folders: " + e.getMessage());
+	    e.printStackTrace();
+	}
+	return newFolders.toString();
     }
 
     /**

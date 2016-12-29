@@ -3060,7 +3060,7 @@ width : 150px;
   padding-bottom:9px;
 }
 
-#portlets-add-listener .wrapper-md div:nth-of-type(4)
+#portlets-add-listener .wrapper-md div:nth-of-type(3)
 {
   height: 243px;
 }
@@ -3105,6 +3105,13 @@ table.hide-head-checkbox th label.i-checks {
 .app-aside-fixed.app-aside-folded .app-aside.aside-menu-fixed {
   top:50px;
 }
+#agile-menu-navigation-container.navi ul.nav li a {
+  padding-left: 45px;
+}
+.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a {
+  padding-left: 0px; 
+}
+
 }
 
 #calls-chart .highcharts-legend , #calls-chart .highcharts-tooltip
@@ -3249,7 +3256,7 @@ table.hide-head-checkbox th label.i-checks {
   padding-right: 0px;padding-top: 0px;
   border-top-width: 1px;     
   height: auto;  
-  font-size: 18px;
+  font-size: 14px;
   }
 
 .well{
@@ -3713,10 +3720,10 @@ opacity: .3;
 }
 
 
-.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
+/*.nav-tabs li a#Sales_previlages, .nav-tabs li a#marketing_previlages
 {
  color:#555!important;
-}
+}*/
 
 
 .deal-edit-dropdown{
@@ -4948,7 +4955,6 @@ ul#recent-menu-model-list li:nth-child(even)
     color: green;
     margin-right: 5px;
 }
-<<<<<<< HEAD
 
 .form-margin
 {
@@ -5055,4 +5061,171 @@ border-top: 0px !important;
 #contact_to_ids .close
 {
   top:-1px!important;
+}
+.support-plan-alert{
+    padding: 7px;
+    align: center;
+    width: 362px;
+    text-align: center;
+    margin:auto;
+    margin-bottom: 8px;
+    margin-top: -12px;   
+}
+.admin-message-info{
+    padding: 6px;
+    margin-bottom: 8px;
+    margin-left: 33%;
+    align: center;
+    width: 212px;
+    text-align: center;
+    margin-top: -14px;
+}
+#calendar_event .fc-header-center h2{
+  text-transform: inherit!important;
+}
+.userVoice-text{
+   text-align: right;
+   margin-bottom: 7px;
+    display: table;
+    width: 87%;
+    margin: 0 auto;
+    font-size:12px !important;
+    margin-top:-10px;
+  }
+
+#task-calendar-based-condition .fc-header-center h2{
+  text-transform: inherit!important;
+
+}
+.uv-icon,.uv-popover-tail{
+  display: none !important;
+}
+#workflow-unsubscribe-option .popover {
+    color: #656565;
+}
+#unsubscribe-endisable-option{
+  display:none;
+}
+#workflow-unsubscribe-block label.control-label.col-sm-2 {
+    width: 8%!important;
+    text-align: right;
+    padding-right: 7px;
+}
+#workflow-unsubscribe-block .template-block {
+    margin-top: -12px;
+}
+#workflow-unsubscribe-block .controls.col-sm-4 {
+     width: 25.33333%;
+}
+
+/*.data-block .canned-video-xs{
+  width: 100%;
+  height: auto;
+}*/
+
+#workflows-tab-container .tab-container,#triggers-tab-container .tab-container {
+  margin-bottom: 0px !important;
+}
+
+#general {
+  margin-top: 15px !important;
+}
+
+#wrap.app-aside-folded .fa.fa-cloud{
+      display: none!important;
+}
+.grid-v1-rolecontainer {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+span.rolecontainer {
+    text-transform: lowercase;
+}
+span.rolecontainer::first-letter {
+    text-transform: capitalize;
+}
+#agile-menu-navigation-container.navi ul.nav li a {
+  padding-left: 45px;
+}
+.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a, .app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {
+  padding-left: 0px; 
+}
+
+.agile-service-theme.theme-15 .i-checks input[disabled]:after, .agile-service-theme.theme-15 .i-checks input[disabled]:focus, .agile-service-theme.theme-15 .i-checks input[disabled]:hover {
+    background-color: #dee5e7;
+    border-color: #ececec;
+}
+.sms-draggable-noty:hover .move-icon{
+ display:block!important;
+ }
+
+.grid-v2 {
+  display: none;
+}
+.grid-v1 {
+  display: block;
+}
+.theme-beta-tag
+{
+  position: absolute;
+    top: 88%;
+    left: 77%;
+}
+
+#uploaded-doc
+{
+  margin-top: 10px;
+  border-radius: 2px;
+  height: 30px;
+  vertical-align: middle;
+  font-weight : bold;
+  border: 1px solid #dee5e7;
+  background: #f5f5f5;
+}
+.upload-percentage
+{
+  width: 36%;
+  margin-top: -40px;
+}
+
+#uploaded-doc .progress
+{
+  width: 25%;
+  background: white;
+  float: right;
+  margin-right: 4%;
+  margin-top: 6px;
+  height: 15px;
+}
+
+.uploaded-doc-name
+{
+  margin-left: 10px;
+  margin-top: 4px;
+  max-width: 40%;
+  color: #15c;
+}
+
+.uploaded-doc-close
+{
+  float: right;
+  margin-top: 5px;
+  margin-right: 1%;
+}
+
+.web-rule-popup-textarea {
+  display: none !important;
+}
+.web-rule-actions-table i {
+  font-size: 16px !important;
+}
+
+.modal.fullview .modal-dialog {
+  width: 90%;
+}
+.modal.fullview .modal-body {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
 }

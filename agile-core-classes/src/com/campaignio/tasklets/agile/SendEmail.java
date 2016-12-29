@@ -24,6 +24,7 @@ import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
+import com.campaignio.cron.Cron;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -216,6 +217,12 @@ public class SendEmail extends TaskletAdapter
      */
     public static String EMAIL_OPEN = "email_open";
     public static String EMAIL_CLICK = "email_click";
+    
+    /**
+     * Time out true and time out false
+     */
+    public static boolean TIME_OUT_FALSE = false;
+    public static boolean TIME_OUT_TRUE = true;
 
     /*
      * Unsubscribe Links public static String UNSUBSCRIBE_LINK =
@@ -578,6 +585,7 @@ public class SendEmail extends TaskletAdapter
      *            Data within the workflow
      * @param nodeJSON
      *            Current Node data
+     * @param timeOut 
      * @throws Exception
      */
     public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
@@ -640,6 +648,18 @@ public class SendEmail extends TaskletAdapter
 	// Appends name in format e.g., Naresh <naresh@agilecrm.com>
 	to = EmailUtil.appendNameToEmail(to, subscriberJSON);
 	
+	Boolean isTimeOut = false;
+	
+	// Checks whether current node came after scheduled
+	if(data.has(Cron.CRON_TYPE))
+	{
+		// If true
+		String cronType = data.getString(Cron.CRON_TYPE);
+		
+		if(cronType != null && cronType.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
+			isTimeOut = true;
+	}
+	
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
@@ -650,14 +670,14 @@ public class SendEmail extends TaskletAdapter
 	    // Send HTML Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
-		    campaignId);
+		    campaignId, isTimeOut);
 	}
 	else
 	{
 	    // Send Text Email
 	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, null, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString(), subscriberId,
-		    campaignId);
+		    campaignId, isTimeOut);
 	}
 
 	// Creates log for sending email
@@ -715,9 +735,10 @@ public class SendEmail extends TaskletAdapter
      *            - HTML body
      * @param text
      *            - text body
+     * @param timeOut 
      */
     private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId)
+	    String replyTo, String html, String text, String mandrillMetadata, String subscriberId, String campaignId, Boolean isTimeOut)
     {
 	String domain = NamespaceManager.get();
 
@@ -736,9 +757,15 @@ public class SendEmail extends TaskletAdapter
   	}else{
 	
 	// Send Email using email gateway
-	EmailGatewayUtil.sendBulkEmail(
-			Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
-	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, domain, fromEmail, fromName, to, cc, bcc, subject,
+	   String queueName = AgileQueues.NORMAL_EMAIL_PULL_QUEUE;
+	   
+	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName())
+			   || Globals.BULK_ACTION_BACKENDS_URL.equals(ModuleUtil.getCurrentModuleName()))
+		   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
+	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut != null && isTimeOut)
+		   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;
+	  		
+		EmailGatewayUtil.sendBulkEmail(queueName, domain, fromEmail, fromName, to, cc, bcc, subject,
 	        replyTo, html, text, mandrillMetadata, subscriberId, campaignId);
   	}
 	}catch(Exception e){

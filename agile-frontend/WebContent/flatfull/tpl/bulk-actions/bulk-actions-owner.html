@@ -8,8 +8,8 @@
         <form id="ownerBulkForm" class="form-horizontal">
             <fieldset>
 				<div class="control-group form-group">    
-                    <label class="control-label col-sm-2">{{agile_lng_translate 'contacts-view' 'select-owner'}} <span class="field_req">*</span></label>
-                    <div class="controls col-sm-10">
+                    <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'select-owner'}} <span class="field_req">*</span></label>
+                    <div class="controls col-sm-9">
                         <select class="ownerBulkSelect required form-control" id='ownerBulkSelect'>
                             <option class="ownerBulkSelectOption" value="">{{agile_lng_translate 'contact-details' 'select'}}</option>
                         </select>
@@ -22,9 +22,9 @@
 					 {{#if company_route}}   
                     <a href="#{{company_route}}" class="btn btn-default btn-sm">{{agile_lng_translate 'contact-details' 'close'}}</a> 
             {{else}}
-					<a href="#contacts" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
+					<a href="#contacts" class="btn btn-sm btn-default btn-default-imp">{{agile_lng_translate 'contact-details' 'close'}}</a>
                 {{/if}}
-                    <a href="#" type="submit" id="changeOwnerToBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+                    <a href="#" type="submit" id="changeOwnerToBulk" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'contact-details' 'add'}}</a> 
                     <span class="save-status"></span>
                 </div>
                 </div>
@@ -58,8 +58,8 @@
 				<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
                 <div class="form-actions">          
-					<a href="#companies" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
-                    <a href="#" type="submit" id="changeOwnerToBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+					<a href="#companies" class="btn btn-sm btn-default btn-default-imp">{{agile_lng_translate 'contact-details' 'close'}}</a>
+                    <a href="#" type="submit" id="changeOwnerToBulk" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'contact-details' 'add'}}</a> 
                     <span class="save-status"></span>
                 </div>
                 </div>
@@ -97,8 +97,8 @@
                             <div class="row">
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <div class="form-actions">          
-                                        <a href="#leads" class="btn btn-sm btn-default">{{agile_lng_translate 'contact-details' 'close'}}</a>
-                                        <a href="#" type="submit" id="changeOwnerToLeadsBulk" class="btn btn-sm btn-primary">{{agile_lng_translate 'contact-details' 'add'}}</a> 
+                                        <a href="#leads" class="btn btn-sm btn-default btn-default-imp">{{agile_lng_translate 'contact-details' 'close'}}</a>
+                                        <a href="#" type="submit" id="changeOwnerToLeadsBulk" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'contact-details' 'add'}}</a> 
                                         <span class="save-status"></span>
                                     </div>
                                 </div>

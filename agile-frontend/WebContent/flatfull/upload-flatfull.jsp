@@ -19,6 +19,8 @@
 <%@page import= "com.agilecrm.session.SessionCache"%>
 <%@page import="com.agilecrm.session.SessionManager"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
+<%@page import="com.agilecrm.user.UserPrefs"%>
+<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 
@@ -32,6 +34,7 @@ try{
 //Locales JSON
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "upload");
 
+UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 %>
 <html>
 
@@ -59,6 +62,14 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "uplo
 <script type="text/javascript" src="/flatfull/lib/ng-img-crop/ng-img-crop-util.js?_=12"></script>
 <%}%>
 <link rel="stylesheet" type="text/css" href="/flatfull/lib/ng-img-crop/ng-img-crop.css" />
+
+<%if(currentUserPrefs.theme.equals("15")){%>
+<link href="css/material-theme/icon/material-icons.css" rel="stylesheet" />
+<link href="css/material-theme/icon/flaticons-social.css" rel="stylesheet" />
+<link href="css/material-theme/css/style.css" rel="stylesheet" />
+<link href="css/material-theme/css/agile-theme.css" rel="stylesheet" />
+<%}%>
+
 <style>
     .cropArea {
       background: #E4E4E4;
@@ -194,12 +205,12 @@ var upload = window.opener._Agile_Resources_Json.upload_window['upload-img-error
 </head>
 
 
-<body class="wrapper-md" ng-app="app" ng-controller="Ctrl">
+<body class='wrapper-md <%if(!currentUserPrefs.animations) out.print("disable-anim");%> <%if(currentUserPrefs.theme.equals("15")) out.print("agile-new-theme agile-theme-15");%>' ng-app="app" ng-controller="Ctrl">
 
 <br/>
 <div class="row">
 <div class="col-md-12 col-sm-12 col-xs-12">
-<div class="panel panel-default mobile-popup">
+<div class="panel panel-default mobile-popup upload-panel">
 <div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-your-image") %></div>
 <div class="panel-body">
 <p><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-image-format") %></i></p>

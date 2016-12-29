@@ -20,7 +20,7 @@
     									<span class="sr-only">{{agile_lng_translate 'widgets' 'toggle-dropdown'}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
+    									<li><a class="btn btn-sm btn-default-imp add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}
@@ -36,7 +36,7 @@
     									<span class="sr-only">{{agile_lng_translate 'widgets' 'toggle-dropdown'}}</span>
   									</a>
   									<ul class="dropdown-menu" role="menu">
-    									<li><a class="btn btn-sm add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
+    									<li><a class="btn btn-sm btn-default-imp add_to_all" portlet_type="{{portlet_type}}" portlet_name="{{name}}">{{agile_lng_translate 'widgets' 'add-for-all-users'}}</a></li>    									
   									</ul>
 								</div>
 					{{else}}
@@ -53,13 +53,12 @@
 	</form>
 </script>
 <script id="portlets-add-collection-template" type="text/html">
-	<div class="bg-light lter b-b wrapper-md">
+	<div class="bg-light lter b-b wrapper-md agile-page-header">
 		<h3 class="m-n font-thin h3">{{agile_lng_translate 'portlets' 'dashlets'}} </h3>
 	</div>
 
-
-	<div class="tab-container wrapper-md dash_tabview">
-		<div class="tabs" id="dashlet-tabs-content">
+	<div class="tab-container wrapper-md dash_tabview agile-p-t-sm">
+		<div class="tabs" id="dashlet-tabs-content" style="width:75%">
 			<div class="tab-container m-b-none">
 				<ul class="nav nav-tabs ">
 
@@ -87,7 +86,7 @@
 									</div>
 
 
-									<div class="tab-content wrapper-md panel">
+									<div class="tab-content wrapper-md panel col-sm-9">
 										<div class="tab-pane active" id="contacts_dashlet">
 											<div id="contacts" class="row"></div><br/>
 
@@ -127,5 +126,14 @@
 										</div>
 
 									</div>
-								</div>
-							</script>
+			<div class="col-sm-3">
+		       <div class="data-block">
+		        <div class="p-l p-r">
+		         <h4 class="m-t-none">{{agile_lng_translate 'portlets' 'dashlets'}}</h4>   
+			       <p>{{agile_lng_translate 'portlets' 'dashlets-help-text-message'}}
+	       	 	   </p>
+     			</div>
+    	   	   </div>
+   			</div>
+			</div>	
+</script>

@@ -199,7 +199,7 @@ function setup_tags_typeahead(callback, el) {
 
             // If tag is not added already, then add new tag.
     		if($.inArray(tag, tags_temp) == -1){
-                var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block"   data="{{name}}"><span class="m-r-xs v-middle">{{name}}</span><a class="close" id="remove_tag" style="color: #363f44;">&times</a></li>');
+                var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block"   data="{{name}}"><span class="m-r-xs v-middle">{{name}}</span><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
                 // Adds contact name to tags ul as li element
                 (this.$element).closest(".control-group").find('ul.tags').append(template({name : tag}));
             }
@@ -339,7 +339,7 @@ function setup_tags_typeahead(callback, el) {
     		});
     		
     		if(add_tag){
-                var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block"  data="{{name}}">{{name}}<a class="close m-l-xs" id="remove_tag" style="color: #363f44;" tag="{{name}}">&times</a></li>');
+                var template = Handlebars.compile('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block"  data="{{name}}">{{name}}<a class="close m-l-xs" id="remove_tag" style="color: #363f44; top: -1px" tag="{{name}}">&times</a></li>');
                 // Adds contact name to tags ul as li element
                 tags_list.append(template({name : tag}));
                 

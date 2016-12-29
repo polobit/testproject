@@ -466,7 +466,7 @@ function updateDeal(ele, editFromMilestoneView)
 				var data =value.tagsWithTime[i].tag ; 
 				$('#tags_source_deal_modal', dealForm)
 				.find(".tags")
-				.append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag" style="color: #363f44">&times</a></li>');
+				.append('<li class="tag btn btn-xs btn-default m-r-xs m-b-xs inline-block" data="' + data + '"><span class="m-r-xs v-middle">' + data + '</span><a class="close" id="remove_tag" style="color: #363f44; top: -1px">&times</a></li>');
 			} 
 	}
 	

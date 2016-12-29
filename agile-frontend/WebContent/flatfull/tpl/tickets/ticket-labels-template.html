@@ -1,6 +1,6 @@
 <script id="ticket-label-collection-template" type="text/html">
 {{#unless this.length}}
-<div class="col panel wrapper">
+<div class="col panel wrapper no-panel-border no-label-content">
     <div class="hbox h-auto m-b-sm">
         <div class="text-center padder-v">
             <h4 class="m-t-none m-b-xs">{{agile_lng_translate 'tickets' 'you-do-not-have-any-labels'}}</h4>
@@ -8,7 +8,7 @@
                 {{agile_lng_translate 'tickets' 'create-lables-to-streamline-your-tickets'}}
             </div>
             <div>
-                <a href="#add-ticket-label" class="btn btn-sm btn-default blue btn-slate-action m-t-xs">
+                <a href="#add-ticket-label" class="btn btn-sm btn-default btn-default-imp blue btn-slate-action m-t-xs">
                    <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
                 </a>
             </div>
@@ -37,9 +37,9 @@
 
     {{else}}
 
-    <div class="col panel wrapper">
+    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper no-panel-border" id="service-tab">
         <div class="pull-right m-b-2">
-            <a href="#add-ticket-label" class="btn btn-sm btn-default btn-addon">
+            <a href="#add-ticket-label" class="btn btn-sm btn-default-imp btn-default btn-addon">
             <span><i class="icon-plus-sign"></i></span> {{agile_lng_translate 'tickets' 'add-label'}}
             </a>
         </div>

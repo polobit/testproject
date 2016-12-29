@@ -41,7 +41,7 @@
 									{{#if is_new}}
 										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 										<div class="right m-r-sm">
-						                    <label class="btn btn-default btn-sm m-l-xs" id="campaign_access_level"> 
+						                    <label class="btn btn-default btn-sm m-l-xs btn-default-imp btn-lg-imp" id="campaign_access_level"> 
 						                    		<span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
 						                    </label>
 										</div>
@@ -66,9 +66,8 @@
                                            <li>
 												<a href="javascript:void(0)" id="campaign_access_level">
 												<i class="" style="width:20px;">&nbsp;</i>
-
-												 <span></span></a>
-												</li>
+												 <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span></a>
+													</li>
 											<li>
 												<a href="javascript:void(0)" id="campaign-restore-alert">
 												<i class="fa fa-undo" style="width:20px;">&nbsp;</i>
@@ -116,7 +115,7 @@
 									<a data-toggle="modal" id="workflow-designer-help" class="right m-t-n-md c-p text-xs text-info" style="clear:both;">{{agile_lng_translate 'campaigns' 'need-help-watch-our-tutorial'}}</a>
 									<input type="hidden" id="was-disabled" data = {{was_disabled}}>
 									{{#if is_new}}
-										<button class="btn btn-primary btn-sm  right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
+										<button class="btn btn-primary btn-sm btn-primary-imp btn-lg-imp right pos-rlt m-r-xs" id="save-workflow-top">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
 									 <!--
 										{{#is_mobile}}
 
@@ -128,8 +127,8 @@
 										-->
 									{{else}}
 										<div class="btn-group right m-r-xs m-r-n-sm">									
-											<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
+											<button class="btn btn-primary btn-sm btn-lg-imp btn-primary-imp btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
+                            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle  btn-lg-imp btn-primary-imp m-r-sm" data-toggle="dropdown" aria-expanded="false"> 
             									<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu">
@@ -146,8 +145,8 @@
                                            <li>
 												<a href="javascript:void(0)" id="campaign_access_level">
 												<i class="" style="width:20px;">&nbsp;</i>
-
-												 <span></span></a>
+												 	 <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
+												 	 </a>
 												</li>
 											<li>
 												<a href="javascript:void(0)" id="campaign-restore-alert">
@@ -183,14 +182,32 @@
                     </div>
                     <div class="m-t {{#is_mobile}}{{else}}m-b{{/is_mobile}}">
 						<a href="#" class="text-info" id="workflow-unsubscribe-option">
-							<i class="icon-plus"></i> {{agile_lng_translate 'campaigns' 'manage-unsubscription'}}
+							<i class="icon-plus" style="margin-right:3px"></i>{{agile_lng_translate 'campaigns' 'manage-unsubscription'}}
+							<span
+							style="vertical-align: text-top; margin-left: -3px"> <img
+							border="0" src="{{getS3ImagePath '/img/help.png'}}"
+							style="height: 8px; vertical-align: top" rel="popover"
+							data-placement="right"
+							data-title:" data-content="{{agile_lng_translate 'campaigns' 'unsubscribed-contacts-are-not-sent'}}"
+							id="element" data-trigger="hover" />
+						</span>
 						</a>
 					</div>
-					<div id="workflow-unsubscribe-block" class="m-t-sm" style="display:none">
-						<div class="row">
+					<br/>
+					<div id="workflow-unsubscribe-block" style="display:none">
+											
+					<!-- <div class="row"> -->
                          <div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-action'}}:</b>
+								<!-- <span
+									style="color:#656565; vertical-align: text-top; margin-left: -3px"> <img
+									border="0" src="{{getS3ImagePath '/img/help.png'}}"
+									style="height: 8px; vertical-align: top" rel="popover"
+									data-placement="right"
+									data-title:" data-content="{{agile_lng_translate 'campaigns' 'agilecan-unsubscribe-desc'}}"
+									id="element" data-trigger="hover" />
+								</span> -->
 							</label>
 							<div class="controls col-sm-4">
 								<select name="action" id="unsubscribe-action" class="form-control">
@@ -200,99 +217,122 @@
 								</select>
 							</div>
                     	</div>
-                        </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agilecan-unsubscribe-desc'}}</div>
-                        <br/>
-                    	<div class="row">
-                         <div class="control-group form-group">
-							<label class="control-label col-sm-2">
-								<b>{{agile_lng_translate 'other' 'tags'}}:</b>
-							</label>
-							<div class="controls col-sm-4">
-								<input type="text" name="tag" id="unsubscribe-tag" placeholder="{{agile_lng_translate 'campaigns' 'separate-tags-with-comma'}}" class="form-control">
-							</div>
-                    	</div>
-                        </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}</div>
-                        <br/>
-						<div class="row">
-                         <div class="control-group form-group">
+                    	<div class="control-group form-group">
 							<label class="control-label col-sm-2">
 								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-name'}}:</b>
+								<!-- <span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate  'campaigns' 'contact-unsubscribes-from-your-campaign-desc'}}"
+								id="element" data-trigger="hover" />
+							</span> -->
 							</label>
 
 							<div class="controls col-sm-4">
 								<input type="text" name="unsubscribe_name" id="unsubscribe-name" class="form-control">
 							</div>
                     	</div>
-                        </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc'}}</div>
-						
-
-						<br/>
-						<div class="row">
-							<div class="control-group form-group">
-								<div class="controls col-sm-2">
-									{{#if is_new}}
-										<label class="radio-inline">
-											<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" checked="checked" value="false" onclick="showHide_UnsubscribeEmail_Status()">Enable
-										</label>
-										<label class="radio-inline">
-											<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" value="true" onclick="showHide_UnsubscribeEmail_Status()">Disable
-										</label>
-									{{else}}
-										{{#if is_unsubscribe_email_disabled}}
+                        
+                        <div class="control-group form-group">
+							<label class="control-label col-sm-2">
+								<b>{{agile_lng_translate 'other' 'tags'}}:</b>
+								<!-- <span
+								style="vertical-align: text-top; margin-left: -3px"> <img
+								border="0" src="{{getS3ImagePath '/img/help.png'}}"
+								style="height: 8px; vertical-align: top" rel="popover"
+								data-placement="right"
+								data-title:" data-content="{{agile_lng_translate 'campaigns' 'agile-can-add-the-tags-desc'}}"
+								id="element" data-trigger="hover" />
+							</span> -->
+							</label>
+							<div class="controls col-sm-4">
+								<input type="text" name="tag" id="unsubscribe-tag" placeholder="{{agile_lng_translate 'campaigns' 'separate-tags-with-comma'}}" class="form-control">
+							</div>
+                    	</div>
+                        <br/><br/> <br/>
+                         
+							<div class="row" id="unsubscribe-endisable-option">
+								<div class="control-group form-group">
+									<div class="controls col-sm-2">
+										{{#if is_new}}
 											<label class="radio-inline">
-												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" value="false" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Enable
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" checked="checked" value="false" onclick="showHide_UnsubscribeEmail_Status()">Enable
 											</label>
 											<label class="radio-inline">
-												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" checked="checked" value="true" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Disable
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" value="true" onclick="showHide_UnsubscribeEmail_Status()">Disable
 											</label>
 										{{else}}
-		                      				<label class="radio-inline">
+											{{#if is_unsubscribe_email_disabled}}
+												<label class="radio-inline">
 												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" checked="checked" value="false" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Enable
-											</label>
-											<label class="radio-inline">
+												</label>
+												<label class="radio-inline">
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable"  value="true" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Disable
+												</label>
+											{{else}}
+		                      					<label class="radio-inline">
+												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-enable" checked="checked" value="false" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Enable
+												</label>
+												<label class="radio-inline">
 												<input type="radio" name="is_unsubscribe_email_disabled" id="unsubscribe-email-disable" value="true" onclick="showHide_UnsubscribeEmail_Status('alertMsg')">Disable
-											</label>
-		                         		{{/if}}
-									{{/if}}
+												</label>
+		                         			{{/if}}
+										{{/if}}
 
-								</div>
-								<div class="col-md-4 col-sm-4">
-									<span id="unsubscribe-email_status-msg" class="text-center"></span>
+									</div>
+									<!-- <div class="col-md-4 col-sm-4">
+										<span id="unsubscribe-email_status-msg" class="text-center"></span>
+									</div> -->
 								</div>
 							</div>
+
+	                    	<!-- <div class="row"> -->
+	                         <div class="control-group form-group">
+								<label class="control-label col-sm-2">
+									<b>{{agile_lng_translate 'campaigns' 'unsubscribe-email'}}:</b>
+									<!-- <span
+									style="vertical-align: text-top; margin-left: -3px"> <img
+									border="0" src="{{getS3ImagePath '/img/help.png'}}"
+									style="height: 8px; vertical-align: top" rel="popover"
+									data-placement="right"
+									data-title:" data-content="{{agile_lng_translate 'campaigns' 'when-a-contact-unsubscribes-from-your-campaign'}}"
+									id="element" data-trigger="hover" />
+								</span> -->
+								</label>
+								<div class="controls col-sm-4">
+									<input type="text" name="unsubscribe_email" id="unsubscribe-email" placeholder="{{agile_lng_translate 'campaigns' 'from-email-address'}}" class="email form-control">	
+									
+								</div>
+	                    	</div>
+	                        <!-- </div> -->
+							<!-- <div class="row"> -->
+	                         <div class="control-group form-group">
+								<label class="control-label col-sm-2 template-block">
+									<b>{{agile_lng_translate 'campaigns' 'unsubscribe-template'}}:</b>
+									<!-- <span
+									style="vertical-align: text-top; margin-left: -3px"> <img
+									border="0" src="{{getS3ImagePath '/img/help.png'}}"
+									style="height: 8px; vertical-align: top;float:right;" rel="popover"
+									data-placement="right"
+									data-title:" data-content="{{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc1'}}"
+									id="element" data-trigger="hover" />
+								</span> -->
+								</label>
+								<div class="controls col-sm-4 template-block">
+									<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="{{agile_lng_translate 'other' 'fill-from-template'}}" name="unsubscribe_subject"><option class="default-select" value="">{{agile_lng_translate 'campaigns' 'default-template'}}</option></select>
+								</div>
+	                    	</div>
+	                        <!-- </div> -->
+							<br/>
+							<br/>
+							
+							
 						</div>
-
-                    	<div class="row">
-                         <div class="control-group form-group">
-							<label class="control-label col-sm-2">
-								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-email'}}:</b>
-							</label>
-							<div class="controls col-sm-4">
-								<input type="text" name="unsubscribe_email" id="unsubscribe-email" placeholder="{{agile_lng_translate 'campaigns' 'from-email-address'}}" class="email form-control">
-							</div>
-                    	</div>
-                        </div>
-						<div class="text-sm text-light">{{agile_lng_translate 'campaigns' 'when-a-contact-unsubscribes-from-your-campaign'}}</div>
-						<br/>
-						<div class="row">
-                         <div class="control-group form-group">
-							<label class="control-label col-sm-2">
-								<b>{{agile_lng_translate 'campaigns' 'unsubscribe-template'}}</b>
-							</label>
-							<div class="controls col-sm-4">
-								<select class="emailSelect form-control pull-left" id="sendEmailSelect" title="{{agile_lng_translate 'other' 'fill-from-template'}}" name="unsubscribe_subject"><option class="default-select" value="">{{agile_lng_translate 'campaigns' 'default-template'}}</option></select>
-							</div>
-                    	</div>
-                        </div>
-                        <div class="text-sm text-light"> {{agile_lng_translate 'campaigns' 'contact-unsubscribes-from-your-campaign-desc1'}}</div>
-						<br/>
-                        <small>{{agile_lng_translate 'campaigns' 'unsubscribed-contacts-are-not-sent'}}</small>
-                        <br/>
-					</div>
-
+					    <!--Unsubscribe Advance Block -->
+				    <!-- </div> -->	
+				    <br>
 					<div class="row">
                      <div class="control-group form-group hidden">
 						<label class="control-label col-sm-2">
@@ -305,43 +345,7 @@
 							</select>
 						</div>
                 	</div>
-                    </div>
-
-                    {{#is_mobile}}
-
-                    {{else}}
-
-                    {{#if is_new}}
-                   	<div>
-						<button class="btn btn-sm btn-primary" id="save-workflow-bottom">{{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-						<div class="left m-r-sm">
-						    <label class="btn btn-default btn-sm " id="campaign_access_level"> 
-						        <span> {{agile_lng_translate 'campaigns' 'make'}} {{#if access_level}}{{#if_equals access_level "1"}}Private {{else}}Public{{/if_equals}}{{else}}Private{{/if}}</span>
-						    </label>
-						</div>
-					</div>
-					{{else}}
-						<div class="btn-group left m-r-xs">
-							<button class="btn btn-primary btn-sm btn-addon" id="save-workflow-top"><i class="icon-plus-sign"></i> {{agile_lng_translate 'campaigns' 'save-campaign'}}</button>
-            				<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> 
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="#" id="duplicate-workflow-top">
-										<i class="fa fa-clipboard"></i> {{agile_lng_translate 'campaigns' 'create-a-copy'}}
-									</a>
-								</li>
-								<li>
-									<a href="javascript:void(0)" id="share-campaign" onclick="shareCampaign()" class="share-Campaign">
-										<i class="fa fa-share-alt" style="width: 20px;"></i> {{agile_lng_translate 'campaigns' 'share-with'}}
-									</a>
-								</li>
-							</ul>
-           				</div>
-                    {{/if}}
-                    {{/is_mobile}}
-
+                    </div>	
                     <div class="save-workflow-img inline-block"></div>
                     <br />
                 </fieldset>

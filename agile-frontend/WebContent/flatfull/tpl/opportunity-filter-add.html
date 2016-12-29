@@ -1,6 +1,29 @@
 <script id="filter-deals-template" type="text/html">
-<div class="bg-light lter b-b wrapper-md">
+<!-- <div class="bg-light lter b-b wrapper-md agile-page-header">
 	{{#if id}}
+		<h3  class="formheading h3 font-thin m-n">
+			{{agile_lng_translate 'deal-view' 'edit-deal-filter'}}
+			<!-- <span style="vertical-align: text-top; margin-left: -3px">
+				<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height: 6px;" rel="popover" data-placement="bottom" 
+				data-content="{{agile_lng_translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover">
+			</span> -->
+		</h3>
+	{{else}}
+		<h3 class="formheading h3 font-thin m-n">
+			{{agile_lng_translate 'deals' 'add-deal-filter'}}
+			<!-- <span style="vertical-align: text-top; margin-left: -3px">
+				<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height: 6px;" rel="popover" data-placement="bottom" 
+				data-content="{{agile_lng_translate 'deal-view' 'edit-deal-filter-popover-content-1'}}" id="element" data-trigger="hover">
+			</span> -->
+		</h3>
+	{{/if}}
+</div> -->
+<div class="wrapper-md">
+	<div class="row">
+		<div class="col-md-12">
+		<div class="panel panel-default">
+		<div class="panel-heading">
+			{{#if id}}
 		<h3  class="formheading h3 font-thin m-n">
 			{{agile_lng_translate 'deal-view' 'edit-deal-filter'}}
 			<span style="vertical-align: text-top; margin-left: -3px">
@@ -10,7 +33,7 @@
 		</h3>
 	{{else}}
 		<h3 class="formheading h3 font-thin m-n">
-			<i class="icon-plus-sign"></i>
+			<i class="icon-plus-sign notaddon-imp"></i>
 			{{agile_lng_translate 'deals' 'add-deal-filter'}}
 			<span style="vertical-align: text-top; margin-left: -3px">
 				<img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height: 6px;" rel="popover" data-placement="bottom" 
@@ -18,10 +41,8 @@
 			</span>
 		</h3>
 	{{/if}}
-</div>
-<div class="wrapper-md">
-	<div class="row">
-		<div class="col-md-12">
+		</div>
+		<div class="panel-body">
 			<form id="filterOpportunityForm" class="form-horizontal">
 				<div name="rules" class="formsection chainedSelect">	
 					<fieldset>
@@ -305,13 +326,15 @@
 						<div class="line line-lg b-b"></div>
 						<div class="row">
 							<div class="form-actions col-sm-offset-2 col-sm-10">
-								<a href="#deal-filters" class="btn btn-sm btn-default">{{agile_lng_translate 'other' 'cancel'}}</a>
-								<a href="#" type="submit" class="save btn btn-sm btn-primary" id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a> 
+								<a href="#deal-filters" class="btn btn-sm btn-default m-r-sm-imp btn-default-imp btn-lg-imp">{{agile_lng_translate 'other' 'cancel'}}</a>
+								<a href="#" type="submit" class="save btn btn-sm btn-primary btn-primary-imp btn-lg-imp" id="filtersAdd">{{agile_lng_translate 'report-add' 'save'}}</a> 
 							</div>
 						</div>
 					</fieldset>
 				</div>
 			</form>
+			</div>
+			</div>
 		</div>
 	</div>
 </div>

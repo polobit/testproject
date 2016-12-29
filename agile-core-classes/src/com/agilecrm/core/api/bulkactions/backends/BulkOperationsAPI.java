@@ -19,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -256,137 +257,152 @@ public class BulkOperationsAPI
 	    @FormParam("tracker") String tracker, @PathParam("current_user_id") Long current_user_id,
 	    @FormParam("dynamic_filter") String dynamicFilter) throws JSONException
     {
-	System.out.println(contact_ids + " model ids " + filter + " filter " + workflowId + " workflow id");
-
-	try
-	{
-	    // To avoid running same bulk action twice
-	    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
-		{
-	    	System.err.println("Avoiding running same campaign twice..." + tracker);
-	    	return;
-		}
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	DomainUser user = DomainUserUtil.getDomainUser(current_user_id);
-	if (user == null)
-	    return;
-
-	ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
-		contact_ids, null, 200, current_user_id);
-
-	idsFetcher.setLimits();
-
-	int count = 0;
-	UserInfo info = new UserInfo(user);
-	while (idsFetcher.hasNext())
-	{
-
-	    try
-	    {
-		Set<Key<Contact>> contactSet = idsFetcher.next();
-		count += contactSet.size();
-		CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
-			NamespaceManager.get(), contactSet, info);
-
-		// Add to queue
-		Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
+    
+    	try
+    	{
+		    System.out.println("Form Params: ");
+		    System.out.println("Filter: " + filter + " Tracker " + tracker + " Dynamic filter " + dynamicFilter);
+		    System.out.println("Contact ids " + contact_ids);
+		//	System.out.println(contact_ids + " model ids " + filter + " filter " + workflowId + " workflow id");
 		
-		// Added Retries 5 with 120 secs interval gap for next retry
-		queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
-
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-
-	System.out.println("completed assigning" + NamespaceManager.get() + ", " + workflowId + ", " + filter + ", "
-		+ dynamicFilter + ", " + current_user_id + ", " + contact_ids);
-
-	try
-	{
-	    // Notifies that campaigns initiated in Production
-		if(VersioningUtil.isProductionAPP())
-	    	SendGrid.sendMail("campaigns@agilecrm.com",
-			    "Campaign Observer",
-			    "naresh@agilecrm.com",
-			    "prashannjeet@agilecrm.com, rahul@agilecrm.com",
-			    null,
-			    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
-			    null,
-			    "Hi,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-				    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
-				    + "<br><br>Dynamic Filter: " + dynamicFilter
-				    + "<br><br>User email: " + user.email
-				    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
-			    null);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
-	}
-
-	/*
-	 * ContactFilterResultFetcher fetcher = new
-	 * ContactFilterResultFetcher(id, dynamicFilter, 200, contact_ids,
-	 * current_user_id);
-	 * 
-	 * // Sets limit on free user fetcher.setLimits();
-	 * 
-	 * // while (fetcher.hasNextSet()) // { //
-	 * ContactUtil.deleteContactsbyListSupressNotification
-	 * (fetcher.nextSet()); //
-	 * WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), //
-	 * workflowId);
-	 * 
-	 * // }
-	 * 
-	 * int count = fetcher.getTotalFetchedCount(); count = (count == 0) ?
-	 * fetcher.getAvailableContacts() : count;
-	 * 
-	 * System.out.println("contacts : " + fetcher.getAvailableContacts());
-	 * System.out.println("companies : " + fetcher.getAvailableCompanies());
-	 * 
-	 * System.out.println("Total contacts subscribed to campaign " +
-	 * workflowId + " is " + String.valueOf(count));
-	 * 
-	 * BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.
-	 * ENROLL_CAMPAIGN, String.valueOf(count));
-	 * 
-	 * try { Mailgun.sendMail( "campaigns@agile.com", "Campaign Observer",
-	 * "naresh@agilecrm.com", null, null, "Campaign Initiated in " +
-	 * NamespaceManager.get(), null,
-	 * "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " +
-	 * current_user_id + "<br><br>Campaign-id: " + workflowId +
-	 * "<br><br>Filter-id: " + filter + "<br><br>Fetched Count: " + count +
-	 * "<br><br>Filter count: " + fetcher.getAvailableContacts(), null); }
-	 * catch (Exception e) { e.printStackTrace(); System.err.println(
-	 * "Exception occured while sending campaign initiated mail " +
-	 * e.getMessage()); }
-	 */
-
-	Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
-	String workflowname = workflow.name;
-
-	ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ASIGN_WORKFLOW", workflowname, "contacts",
-		"");
-
-	try
-	{
-	    BulkActionLog.delete(tracker);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+			try
+			{
+			    // To avoid running same bulk action twice
+			    if (!StringUtils.isEmpty(tracker) && BulkActionLog.checkAndSaveNewEntity(tracker))
+				{
+			    	System.err.println("Avoiding running same campaign twice..." + tracker);
+			    	return;
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception occured while checking tracker " + e.getMessage());
+			    System.out.println(ExceptionUtils.getFullStackTrace(e));
+			}
+		
+			DomainUser user = DomainUserUtil.getDomainUser(current_user_id);
+			
+			if (user == null)
+			{
+				System.out.println("User is null");
+				return;
+			}
+		
+			System.out.println("Getting contacts based on filter...");
+			
+			ContactFilterIdsResultFetcher idsFetcher = new ContactFilterIdsResultFetcher(filter, dynamicFilter,
+				contact_ids, null, 200, current_user_id);
+		
+			idsFetcher.setLimits();
+		
+			int count = 0;
+			UserInfo info = new UserInfo(user);
+			while (idsFetcher.hasNext())
+			{
+		
+			    try
+			    {
+				Set<Key<Contact>> contactSet = idsFetcher.next();
+				count += contactSet.size();
+				CampaignSubscriberDeferredTask task = new CampaignSubscriberDeferredTask(current_user_id, workflowId,
+					NamespaceManager.get(), contactSet, info);
+		
+				// Add to queue
+				Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_SUBSCRIBE_SUBTASK_QUEUE);
+				
+				// Added Retries 5 with 120 secs interval gap for next retry
+				queue.add(TaskOptions.Builder.withPayload(task).retryOptions(RetryOptions.Builder.withTaskRetryLimit(5).minBackoffSeconds(120).maxBackoffSeconds(300)));
+		
+			    }
+			    catch (Exception e)
+			    {
+			    	System.out.println("Exception occured while adding to queue " + e.getMessage());
+			    	System.out.println(ExceptionUtils.getFullStackTrace(e));
+			    }
+		
+			}
+	
+		System.out.println("completed assigning" + NamespaceManager.get() + ", " + workflowId + ", " + filter + ", "
+			+ dynamicFilter + ", " + current_user_id + ", " + contact_ids);
+	
+		try
+		{
+		    // Notifies that campaigns initiated in Production
+			if(VersioningUtil.isProductionAPP())
+		    	SendGrid.sendMail("campaigns@agilecrm.com",
+				    "Campaign Observer",
+				    "naresh@agilecrm.com",
+				    "prashannjeet@agilecrm.com, rahul@agilecrm.com, raja@agilecrm.com",
+				    null,
+				    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
+				    null,
+				    "Hi,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
+					    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter
+					    + "<br><br>Dynamic Filter: " + dynamicFilter
+					    + "<br><br>User email: " + user.email
+					    + "<br><br>Fetched Count: " + count + "<br><br>Filter count: " + idsFetcher.getTotalCount(),
+				    null);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
+		}
+	
+		/*
+		 * ContactFilterResultFetcher fetcher = new
+		 * ContactFilterResultFetcher(id, dynamicFilter, 200, contact_ids,
+		 * current_user_id);
+		 * 
+		 * // Sets limit on free user fetcher.setLimits();
+		 * 
+		 * // while (fetcher.hasNextSet()) // { //
+		 * ContactUtil.deleteContactsbyListSupressNotification
+		 * (fetcher.nextSet()); //
+		 * WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), //
+		 * workflowId);
+		 * 
+		 * // }
+		 * 
+		 * int count = fetcher.getTotalFetchedCount(); count = (count == 0) ?
+		 * fetcher.getAvailableContacts() : count;
+		 * 
+		 * System.out.println("contacts : " + fetcher.getAvailableContacts());
+		 * System.out.println("companies : " + fetcher.getAvailableCompanies());
+		 * 
+		 * System.out.println("Total contacts subscribed to campaign " +
+		 * workflowId + " is " + String.valueOf(count));
+		 * 
+		 * BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.
+		 * ENROLL_CAMPAIGN, String.valueOf(count));
+		 * 
+		 * try { Mailgun.sendMail( "campaigns@agile.com", "Campaign Observer",
+		 * "naresh@agilecrm.com", null, null, "Campaign Initiated in " +
+		 * NamespaceManager.get(), null,
+		 * "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " +
+		 * current_user_id + "<br><br>Campaign-id: " + workflowId +
+		 * "<br><br>Filter-id: " + filter + "<br><br>Fetched Count: " + count +
+		 * "<br><br>Filter count: " + fetcher.getAvailableContacts(), null); }
+		 * catch (Exception e) { e.printStackTrace(); System.err.println(
+		 * "Exception occured while sending campaign initiated mail " +
+		 * e.getMessage()); }
+		 */
+	
+		
+			Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+			String workflowname = workflow.name;
+		
+			ActivitySave.createBulkActionActivity(idsFetcher.getTotalCount(), "ASIGN_WORKFLOW", workflowname, "contacts",
+				"");
+	
+		
+		    BulkActionLog.delete(tracker);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception occured " + e.getMessage());
+		    System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
 
     }
 

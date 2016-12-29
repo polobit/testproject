@@ -166,7 +166,7 @@ function getCampaignList(type) {
 
 	var workflows = $.ajax({
 		type : "GET",
-		url : '/core/api/workflows',
+		url : '/core/api/workflows/partial',
 		async : false,
 		dataType : 'json'
 	}).responseText;
@@ -312,15 +312,13 @@ function url_visited_select_callback(ele, target_id) {
 	// if 'contains' selected, make type attribute 'text'
 	if (curValue === 'contains') {
 		// replacing type attribute from url to text
-		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj)
-				.focus();
+		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj);
 	}
 
 	// if 'exact_match' selected, make type attribute 'url'
 	if (curValue === 'exact_match') {
 		// replacing type attribute to url.
-		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj)
-				.focus();
+		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj);
 	}
 
 	tempObj.remove();
@@ -628,7 +626,6 @@ function getMergeFieldsWithOptGroups(uiFieldDefinition, selectEventHandler) {
 	    	selectoption= "<select '"+ getStyleAttribute(uiFieldDefinition.style) +"' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' +  id='" + uiFieldDefinition.id + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
 	    else
 	    	selectoption= "<select style='position:relative;float:right;cursor:pointer;width: 152px;margin-right: -5px' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"></select>";
-
 
 	$.each(options, function(name, option_value) {
 		if (typeof (option_value) == 'object') {

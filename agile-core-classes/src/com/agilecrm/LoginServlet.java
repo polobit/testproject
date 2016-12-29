@@ -62,6 +62,13 @@ public class LoginServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		if(request.getParameter("resendotp")!=null){
+			UserInfo userInfo = (UserInfo) SessionManager.getFromRequest(request);
+			if(userInfo == null) {
+				response.sendRedirect("/login");
+				return;
+			}
+			
+			// Re send verification code from different service
 			resendVerficationCode(request);
 			return;
 		}
@@ -187,7 +194,7 @@ public class LoginServlet extends HttpServlet {
 		// Forward to OpenID Authenticaiton which will set the cookie and then
 		// forward it to /
 		if (server.equals("google"))
-			response.sendRedirect("/oauth?hd=" + server+"&loginoauth=true");
+			response.sendRedirect("/oauth?hd=" + server);
 		else
 			response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
 		return;

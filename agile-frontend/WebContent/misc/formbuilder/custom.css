@@ -1,5 +1,5 @@
 body {
-	padding-top: 10px;
+	/*padding-top: 10px;*/
 	/* 60px to make the container go all the way to the bottom of the topbar */
 	padding-bottom: 10px;
 	position: relative;
@@ -69,8 +69,9 @@ textarea {
 }
 
 #form-save {
-	float: right;
-	margin-top: -40px;
+	/*float: right;
+	margin-top: -40px;*/
+	outline: 0;
 }
 
 /* Popovers now are appended to their parent rather
@@ -284,6 +285,7 @@ legend {
 	width: 100%;
 	font-weight: bold;
 	font-size: 20px;
+	padding: 0px 31px 6px 0px;
 }
 
 fieldset {
@@ -367,6 +369,4 @@ form .popover form input[type="text"]:focus {
     border: 1px solid #ccc!important;
     border-radius: 4px!important;
 }
-
-
 

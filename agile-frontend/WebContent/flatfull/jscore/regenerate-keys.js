@@ -44,6 +44,22 @@ function regenerate_api_key(url) {
     });
 }
 
+ function validateWhitelable(){
+       // e.preventDefault();
+         $("#validate_whitelabel").html("Validating..");
+          $("#validate_whitelabel").attr("disabled",true);
+          
+        var whitelabel_domain = $("#whitelabel-domain").val();
+        var pattern = /^[a-z0-9-\.]+\.[a-z]{2,4}/;
+        if(!pattern.test(whitelabel_domain))
+             $("#empty_domain_message").removeClass("hide");
+         else
+         {
+             $("#empty_domain_message").addClass("hide");
+             validateSendgridWhitelabel(whitelabel_domain)
+         }
+    }
+
 function prettify_api_add_events() {
     prettyPrint();
 
@@ -70,7 +86,7 @@ $("#webhook_accordian").on('click', function(e) {
         },500)
        
     });
-/*
+
  $("sendgrid-dkim_accordian").off('click');
  $("#sendgrid-dkim_accordian").on('click', function(e) {
     e.preventDefault();
@@ -96,7 +112,7 @@ $("#webhook_accordian").on('click', function(e) {
        });
     $("#sendgrid-dkim-restriction-template").html(view.render().el);
     return;
-    });*/
+    });
 
 $("#js-security_accordian").on('click', function(e) {
         e.preventDefault();
@@ -167,6 +183,12 @@ $("#sso-login_accordian").on('click', function(e) {
     });
 
     //Sendgrid DKIM and SPF verification
+
+    $("#whitelabel-domain").on('keypress', function(event){
+      if(event.keyCode == 13)
+         $("#get_whitelabel_key").click();
+    });
+
     $("#get_whitelabel_key").off('click');
     $("#get_whitelabel_key").on('click', function(e) {
         e.preventDefault();
@@ -183,21 +205,6 @@ $("#sso-login_accordian").on('click', function(e) {
          }
     });
 
-    $("#validate_whitelabel").off('click');
-    $("#validate_whitelabel").on('click', function(e) {
-        e.preventDefault();
-         $("#sendgrid-whitelabel-key-template").html("");
-
-        var whitelabel_domain = $("#whitelabel-domain").val();
-        var pattern = /^[a-z0-9-\.]+\.[a-z]{2,4}/;
-        if(!pattern.test(whitelabel_domain))
-             $("#empty_domain_message").removeClass("hide");
-         else
-         {
-             $("#empty_domain_message").addClass("hide");
-             validateSendgridWhitelabel(whitelabel_domain)
-         }
-    });
     //@function for the to call the validate 
   //method and returns the result as per the validation
  $("#validate_anaytical_code").off('click');

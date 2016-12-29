@@ -25,6 +25,34 @@ var Tickets_Rest={
 				 if(status != "NEW")
                      $('.ticket_status option[value="NEW"]').hide()
 
+                var $satusLabel = $(".status_label"); 
+				
+				switch(status){
+					case 'NEW':
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'new_status'}}");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-warning");
+						break;
+
+					case 'OPEN':
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'open_status'}}");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-danger");
+						break;
+
+					case 'PENDING':
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'pending_status'}}");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-info");
+						break;
+
+					case 'CLOSED':
+						$satusLabel.html("{{agile_lng_translate 'tickets' 'closed_status'}}");
+						$satusLabel.removeAttr("class");
+						$satusLabel.attr("class","label status_label label-success");
+						break;			
+				}
+
 				if(status != "CLOSED")
 				{
 				    $(".ticket-addnote-close").removeAttr("disabled");
@@ -161,6 +189,12 @@ var Tickets_Rest={
 					$('.ticket_change_slatime').attr("disabled","disabled");
 					$(".close-current-ticket").attr("disabled","disabled");
 					$(".ticket_status").val("CLOSED");
+					
+					var $satusLabel = $(".status_label");
+					$satusLabel.html("{{agile_lng_translate 'tickets' 'closed_status'}}");
+					$satusLabel.removeAttr("class");
+					$satusLabel.attr("class","label status_label label-success");
+
 				}	
 			}
 			else

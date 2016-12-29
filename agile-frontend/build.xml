@@ -84,10 +84,14 @@
                 <exclude name="flatfull/jscore/**/*"/>
                 <exclude name="misc/pagebuilder/source/**/*"/>
                 <exclude name="misc/landingpage/source/**/*"/>
+                <exclude name="misc/formbuilder/assets/**/*"/>
             </fileset>
         </copy>
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/pagebuilder/source/build">
                <fileset dir="WebContent/misc/pagebuilder/source/build" />
+        </copy>
+        <copy todir="${TARGET_DIR}/${ant.project.name}.war/misc/formbuilder/assets/lib">
+               <fileset dir="WebContent/misc/formbuilder/assets/lib" />
         </copy>
         <copy todir="${TARGET_DIR}/${ant.project.name}.war/flatfull/jscore/backbone">
                <fileset dir="WebContent/flatfull/jscore/backbone" />

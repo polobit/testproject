@@ -635,10 +635,20 @@ function addLabel(text, container, inputType)
 // Twitter has popup
 function openTwitter()
 {
-	var newwindow = window.open('https://' + CURRENT_DOMAIN_USER.domain + '-dot-agile-crm-cloud.appspot.com/cd_twitter.jsp','twitter','height=700,width=700,location=1');
-	if (window.focus)
-	{
-		newwindow.focus();
+	
+	var currentDomainUser;
+	if(typeof CURRENT_DOMAIN_USER != "undefined") {
+		currentDomainUser = CURRENT_DOMAIN_USER;
+	} else if(window.parent.CURRENT_DOMAIN_USER) {
+		currentDomainUser = window.parent.CURRENT_DOMAIN_USER;
+	}
+
+	if(currentDomainUser) {
+		var newwindow = window.open('https://' + currentDomainUser.domain + '-dot-agile-crm-cloud.appspot.com/cd_twitter.jsp','twitter','height=700,width=700,location=1');
+		if (window.focus)
+		{
+			newwindow.focus();
+		}
 	}
 
 	// to work in firefox, commented return false statement.

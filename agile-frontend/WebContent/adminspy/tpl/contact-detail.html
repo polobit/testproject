@@ -258,7 +258,7 @@
 								{{#each tags}}
 										<li class="inline-block tag btn btn-xs btn-default m-r-xs m-b-xs text-xs" data="{{this}}"><span><a
 								class="anchor m-r-xs custom-color" style="color:#363f44" href="#tags/{{encodeString this}}">{{this}}</a><a
-								class="close remove-tags" tag="{{this}}">&times</a></span></li> 
+								class="close remove-tags" tag="{{this}}" style="top: -1px">&times</a></span></li> 
 								{{/each}}
 								{{else}}
 									{{#each tags}}
@@ -619,7 +619,7 @@
 		<!--  starting middle view col -->
 		
 		<!--  starting time line view -->
-		<div  id="contacts-inner-tabs">
+		<div  id="contacts-inner-tabs" class="tabs">
         <div class="tab-container bg-light hide-margin-mobile">
 
 			<ul class="nav nav-tabs bg-light pull-left b-n content-tabs"  role="tablist" id="adminDetailsTab">

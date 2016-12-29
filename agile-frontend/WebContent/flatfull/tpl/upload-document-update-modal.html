@@ -1,6 +1,6 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-update-modal-template">
-    <div class="wrapper-md lter bg-light b-b">
+    <div class="wrapper-md lter bg-light b-b agile-page-header">
         <div class="row">
           <div class="col-md-12">&nbsp;{{agile_lng_translate 'documents' 'edit-document'}}</div>
         </div> 
@@ -9,11 +9,12 @@
       <div class="row">
         <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal">
           <div class="col-md-9">
-            <div class="panel wrapper" style="padding-bottom:35px;">
+            <div class="panel wrapper p-b-md">
               <div class="formsection chainedSelect">
              <fieldset>
               <input id="id" name="id" type="hidden"/>
               <input name="extension" id="extension" type="hidden"/>
+              <input type="file" id="doc-file-up" class="hidden"/>
               <div class="control-group form-group hide">
                         <label class="control-label  col-sm-3"><b>Type </b><span
                            class="field_req">*</span></label>
@@ -36,7 +37,7 @@
                        </div>
             </div>
             <div class="control-group form-group">
-                 <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-contacts'}}
+                 <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'related-to'}}
                  <span class="field_req related-contacts-required">*</span></label></label>
                  <div class="controls col-sm-9" id="contactTypeAhead">
                     <div>
@@ -86,6 +87,7 @@
                                 </div>
                              </div>
                           </div>
+                          <div id="uploaded-doc" class="hide"></div>
                        </div>
                     </div>
                 <div class="senddoc hide">
@@ -110,10 +112,10 @@
                 </div>      
               <div id="error"></div>
               <div class="form-actions">      
-                       <div class="col-sm-offset-3 col-sm-9">    
-                          <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
+                       <div class="col-sm-offset-3 col-sm-9 doc-form-actions">    
+                          <a href="#" class="btn btn-default btn-default-imp btn-lg-imp btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
                           <div class="btn-group ">
-                                        <a href="#documents/attachment" id="document_update_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" > {{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+                                        <a href="#documents/attachment" id="document_update_validate" class="btn-primary btn-primary-imp btn-lg-imp btn btn-default btn-sm  m-t-xs" > {{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                                         <a class="btn btn-default btn-sm email-send-doc-group hide dropdown-toggle m-t-xs " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right " style="margin-top:-3px;">

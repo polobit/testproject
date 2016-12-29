@@ -64,7 +64,7 @@
 			{{/is_mobile}}
 			<div class="{{#is_mobile}}{{else}}col{{/is_mobile}} ">
 				<div id="right-pane">
-					<div class="wrapper-md bg-light padder-md padder-v m-r-sm b-b {{#is_mobile}} {{else}}  p-r-none {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
+					<div class="wrapper-md bg-light padder-md padder-v m-r-sm b-b agile-page-header {{#is_mobile}} {{else}}  p-r-none {{/is_mobile}}" style="border-bottom: 1px solid rgba(140, 139, 139, 0.2);">
 	    				<div class="btn-toolbar m-l-none pos-rlt">
 	    					<div class="filters-drp-down btn-group dropdown m-l-none" style="float: none;">
 	    						<div class="">
@@ -82,7 +82,7 @@
 	    							<br>
 				 				</div>
 		  					</div>
-	    					<div class="pull-right pos-abs" style="right: 0; top: 5px;">
+	    					<div class="pull-right pos-abs agile-header-btns" style="right: 0; top: 5px;">
 	    						<div id="view-list" class="pull-left btn-group"></div>
             				</div>
 	    				</div>
@@ -95,17 +95,19 @@
 				                	<input type="checkbox" class="thead_check">
 				                	<i></i>                
 				          		</label>
-							</span>							
+							</span>	
+							<div class="inline-block bulk-action-wrapper">						
 							<button id="bulk-tags" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'add-tags'}}</button>
 							<button id="bulk-tags-remove" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'remove-tags'}}</button>	
 							<button id="bulk-email" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'send-email'}}</button>	
 							<button id="bulk-owner" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'change-owner'}}</button>
 							{{#hasScope "EXPORT_CONTACTS"}}
 								<button id="bulk-companies-export" class="btn btn-default bulk-action-btn _contact_bulk_action btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'export-as-csv'}}</button>
-							{{/hasScope}}				    
+							{{/hasScope}}			    
 							<button class="btn btn-default bulk-action-btn delete-checked-contacts btn-sm m-r-xs txt-small disabled" >{{agile_lng_translate 'contacts-view' 'delete'}}</button>
+							</div>
 							<div class="btn-group dropdown pull-right {{#iscompactTabel 'company'}} compact {{/iscompactTabel}} multiple-checkbox" style="padding-right: 10px;" id="companies-custom-coloumns">
-					    		<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-ellipsis-h {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
+					    		<button class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown" aria-expanded="true" id="companiesTabelView"><i class="{{#iscompactTabel 'company'}} fa fa-navicon {{else}}fa fa-navicon {{/iscompactTabel}}"></i></button>
                 				<ul class="pull-right dropdown-menu  p-l filter-dynamic-scrollbar"  role="menu" style="overflow-y:auto;max-height:500px">
                 					<form id="companies-static-fields" class="">
                 						<div class="multiple-checkbox" name="fields_set" id="companies-static-fields-group"></div>
@@ -113,7 +115,7 @@
                 				</ul>
 							</div>
             			</div>
-						<div id="companies-list-view"></div>
+						<div id="companies-list-view" class="table-list-view-top-margin"></div>
             		</div>
             	</div>
             </div>

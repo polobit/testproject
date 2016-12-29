@@ -176,7 +176,7 @@ function showBar(url, selector, name, yaxis_name, stacked, selected_colors)
 	var chart;
 
 	// Shows loading image
-	$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+	$('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 
 
 	// Builds graph with the obtained json data.
@@ -431,7 +431,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 	
 	
 	var chart;
@@ -695,7 +695,7 @@ function showFunnel(url, selector, name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 	var chart;
 
 	// Loads Highcharts plugin using setupCharts and sets up line chart in the
@@ -900,7 +900,7 @@ function showAreaSpline(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 	
 	
 	var chart;
@@ -1163,7 +1163,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 	
 	
 	var chart;
@@ -1531,7 +1531,7 @@ function showDealsGrowthgraph(url, selector, name, yaxis_name, show_loading)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+        $('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
     
     
     var chart;
@@ -1906,7 +1906,7 @@ function pieforReports(url, selector, name,show_loading, is_lost_analysis)
         // Old calls were not showing loading image..
     }
     else
-        $('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+        $('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 
 	var chart;
 	var AllData=[];
@@ -2174,7 +2174,7 @@ function showGuage(selector, data,goal_data,name,show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html("<div class='text-center v-middle opa-half'><img src='../flatfull/img/ajax-loader-cursor.gif' style='width:12px;height:10px;opacity:0.5;' /></div>");
+		$('#' + selector).html("<div class='text-center v-middle opa-half'>"+LOADING_HTML+"</div>");
 
 	var chart;
 	var series=[];
