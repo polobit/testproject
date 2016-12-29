@@ -70,7 +70,7 @@ public class TwilioIOConferenceTwiml extends HttpServlet {
 				c.setStartConferenceOnEnter(true);	
 
 				if(endConferenceOnExit!= null && endConferenceOnExit.equalsIgnoreCase("yes")){
-					//c.setEndConferenceOnExit(true);
+					c.setEndConferenceOnExit(true);
 				}
 				if(recordConference!= null && recordConference.equalsIgnoreCase("true")){
 					c.set("record", "record-from-start");
