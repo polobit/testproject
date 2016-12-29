@@ -194,7 +194,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         {
             //create_new_workflow(e,name, designerJSON, unsubscribe_json, $clicked_button, trigger_data, is_disabled, undefined, access_permission);
             // Verify for non connected nodes
-            all_nodes_active(designerJSON,function(callbackData){
+            all_nodes_active(targetEl, designerJSON,function(callbackData){
                 // if callbackData is true, then all nodes are connected
                 var isdismissed = false;
                 if(callbackData){
@@ -230,7 +230,7 @@ var Workflow_Model_Events = Base_Model_View.extend({
         else
         {  
             //Verifying any nodes are non-connected
-            all_nodes_active(designerJSON,function(callbackData){
+            all_nodes_active(targetEl, designerJSON,function(callbackData){
                 // if callbackData is true, then all nodes are connected
                 var isdismissed = false;
                 if(callbackData){
@@ -1194,15 +1194,21 @@ function showHelpVideoModal(data){
 }
 
 // Verify all nodes are connnected or not wit another node
-function all_nodes_active(designerJSON,callback){
-    // getting all nodes of the Campaign
-    var nodes  = JSON.parse(designerJSON).nodes;
-    var is_active = true;
-    var hangup_nodes = 0;
-    var possible_hangup_nodes_count = 1;
-    var multiNodes_States_HangUp = 0;
+function all_nodes_active(el, designerJSON,callback){
+    
     
     try{
+        if ($(el).attr('id') && $(el).attr('id') =='disable-workflow') {
+            callback(true);
+            return;
+        }
+        // getting all nodes of the Campaign
+        var nodes  = JSON.parse(designerJSON).nodes;
+        var is_active = true;
+        var hangup_nodes = 0;
+        var possible_hangup_nodes_count = 1;
+        var multiNodes_States_HangUp = 0;
+
         $.each(nodes,function(node_name,node_value){
             
             var node_states= node_value.States;
