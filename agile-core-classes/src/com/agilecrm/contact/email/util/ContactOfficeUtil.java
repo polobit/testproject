@@ -107,6 +107,10 @@ public class ContactOfficeUtil
 		    buffer.append(",");
 	    }
 	    foldersString = buffer.toString();
+	    
+	    if(foldersString != null && foldersString.equalsIgnoreCase("{\"default_folders\":[\"AllItems\"]}")){
+	    	foldersString = "";
+	    }
 	}
 	
 	String applicationId = SystemProperty.applicationId.get();
