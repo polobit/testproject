@@ -117,7 +117,7 @@ public class ContactBulkEmailUtil
 						
 						// Agile label to outgoing emails
 						replacedBody = EmailUtil.appendAgileToHTML(replacedBody, "email", "Sent using",
-								emailSender.isEmailWhiteLabelEnabled());
+								emailSender.isEmailWhiteLabelEnabled(), true);
 						String emailGatewayName = null;
 						if(emailSender!=null && emailSender.emailGateway!=null && emailSender.emailGateway.email_api!=null){
 							emailGatewayName = emailSender.emailGateway.email_api.name();

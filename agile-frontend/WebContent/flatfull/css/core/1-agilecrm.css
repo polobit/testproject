@@ -5173,3 +5173,59 @@ span.rolecontainer::first-letter {
     top: 88%;
     left: 77%;
 }
+
+#uploaded-doc
+{
+  margin-top: 10px;
+  border-radius: 2px;
+  height: 30px;
+  vertical-align: middle;
+  font-weight : bold;
+  border: 1px solid #dee5e7;
+  background: #f5f5f5;
+}
+.upload-percentage
+{
+  width: 36%;
+  margin-top: -40px;
+}
+
+#uploaded-doc .progress
+{
+  width: 25%;
+  background: white;
+  float: right;
+  margin-right: 4%;
+  margin-top: 6px;
+  height: 15px;
+}
+
+.uploaded-doc-name
+{
+  margin-left: 10px;
+  margin-top: 4px;
+  max-width: 40%;
+  color: #15c;
+}
+
+.uploaded-doc-close
+{
+  float: right;
+  margin-top: 5px;
+  margin-right: 1%;
+}
+
+.web-rule-popup-textarea {
+  display: none !important;
+}
+.web-rule-actions-table i {
+  font-size: 16px !important;
+}
+
+.modal.fullview .modal-dialog {
+  width: 90%;
+}
+.modal.fullview .modal-body {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}

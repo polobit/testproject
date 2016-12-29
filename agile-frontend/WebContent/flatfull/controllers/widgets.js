@@ -464,7 +464,7 @@ function renderWidgetView(templateName, url, model, renderEle){
             if(url_oz.indexOf("#") > -1){
                 url_oz = url_oz.split("/#")[0];
             }
-            $('#prefs-tabs-content').find('#ozonetelurl').text(url_oz.split("/#")[0]+"/incomingcall?email="+CURRENT_DOMAIN_USER.email);
+            $('#prefs-tabs-content').find('#ozonetelurl').text(url_oz+"/incomingcall?email="+CURRENT_DOMAIN_USER.email);
             initializeTabListeners("widget_tab", "add-widget");
             $("#twilioio_login_form .question-tag" ).popover({
               template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
@@ -478,6 +478,11 @@ function renderWidgetView(templateName, url, model, renderEle){
       template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
     });
     $('#prefs-tabs-content').find('#twilio_twimlet_url').attr('value',"http://twimlets.com/voicemail?Email="+CURRENT_DOMAIN_USER.email);
+    var url_oz = window.location.href;
+    if(url_oz.indexOf("#") > -1){
+        url_oz = url_oz.split("/#")[0];
+    }
+    $('#prefs-tabs-content').find('#ozonetelurl').text(url_oz+"/incomingcall?email="+CURRENT_DOMAIN_USER.email);
 }
 function closesupportnoty(){
     $("#support_plan_alert_info").hide();

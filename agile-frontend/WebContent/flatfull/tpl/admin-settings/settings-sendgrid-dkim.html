@@ -16,27 +16,34 @@
       <tr>
       <td style="text-transform: uppercase;">{{mail_server.type}}</td>
         <td>
-        <span class="prettyprint pull-left Api_span">{{mail_server.host}}</span>
+        <span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span">{{mail_server.host}}</span>
         </td>
-        <td><span class="prettyprint pull-left Api_span" >{{mail_server.data}}</span></td>
+        <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{mail_server.data}}</span></td>
       </tr>
       <tr>
       <td style="text-transform: uppercase;">{{subdomain_spf.type}}</td>
-        <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.host}}</span></td>
-        <td><span class="prettyprint pull-left Api_span" >{{subdomain_spf.data}}</span></td>
+        <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{subdomain_spf.host}}</span></td>
+        <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{subdomain_spf.data}}</span></td>
       </tr>
       <tr>
       <td style="text-transform: uppercase;">{{dkim.type}}</td>
-        <td><span class="prettyprint pull-left Api_span" >{{dkim.host}}</span></td>
-        <td><span class="prettyprint pull-left Api_span" >{{dkim.data}}</span></td>
+        <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{dkim.host}}</span></td>
+        <td><span style="user-select:all;" title="Click to copy" onclick="document.execCommand('copy')" class="prettyprint pull-left Api_span" >{{dkim.data}}</span></td>
       </tr>
     </tbody>
   </table>
+  </div>
+  </div>
+   <div class="{{#is_mobile}} text-center {{/is_mobile}}">
+        <a href="#api-analytics" class="btn btn-sm btn-success" onclick="validateWhitelable();" style="margin: -8px 15px 8px 1px; float:right" id="validate_whitelabel">{{agile_lng_translate 'landing-pages' 'verify'}}</a>
+     </div>
+  {{else}}
+  {{#if Error}}
+  <div style="margin-left:15px; margin-bottom:10px; color:red">We need additional verification. Please contact our <a target="_blank" style="color: #19a9d5;!important" href="https://www.agilecrm.com/support">support</a> for DKIM & SPF settings.</div>
   {{else}}
   <label>{{agile_lng_translate 'widgets' 'try-again'}}</label>
   {{/if}}
-</div>
-</div>
+  {{/if}}
 </script>
 
 <script id="admin-setting-sendgrid-whitelabel-validate-template" type="text/html">

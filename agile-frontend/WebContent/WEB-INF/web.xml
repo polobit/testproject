@@ -1631,4 +1631,12 @@
 		<servlet-name>OzonetelIncomingCallServlet</servlet-name>
 		<url-pattern>/incomingcall</url-pattern>
 	</servlet-mapping>
+	<servlet>
+        <servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
+		<servlet-class>com.agilecrm.DeleteDuplicateCompanyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteDuplicateCompaniesOfContact</servlet-name>
+		<url-pattern>/backend/cron/delete-duplicate-companies-to-contact</url-pattern>
+	</servlet-mapping>
 </web-app>

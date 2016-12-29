@@ -138,12 +138,15 @@ var Widget_Model_Events = Base_Model_View.extend({
          createAppSid(prefs, function(data){
                // Update prefs
                console.log(data);
-               prefs["twilio_app_sid"] = data;
-               // Saves the preferences into widget with name
-               save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
-                  console.log(data);
-                  $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
-               });
+              prefs["twilio_app_sid"] = data;
+              if (prefs["twilio_twimlet_url"] == "" || prefs["twilio_twimlet_url"] == "None"){
+                prefs["twilio_twimlet_url"] = "";
+              }
+             // Saves the preferences into widget with name
+             save_widget_prefs(widgetName, JSON.stringify(prefs), function(data){
+                console.log(data);
+                $(ele).removeAttr("disabled").val("{{agile_lng_translate 'modals' 'save'}}");
+             });
          });
       }
 

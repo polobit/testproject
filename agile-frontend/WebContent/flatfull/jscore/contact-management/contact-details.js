@@ -1630,10 +1630,10 @@ updateScoreValue :function(){
 		}
 
 		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
-      showAlertModal("number_validation", undefined, function(){
+      showAlertModal("{{agile_lng_translate 'validation-msgs' 'number'}}", undefined, function(){
         scoreboxval=prvs;
         setleadScoreStyles(scoreboxval);
-      });
+      }, undefined, "{{agile_lng_translate 'web-rules' 'add-score'}}");
       return;
 		}
 		else{
@@ -1665,10 +1665,10 @@ updateScoreValue :function(){
 				});							
 		}
 		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
-      showAlertModal("number_validation", undefined, function(){
+      showAlertModal("{{agile_lng_translate 'validation-msgs' 'number'}}", undefined, function(){
         scoreboxval=prvs;
         setleadCScoreStyles(scoreboxval);
-      });
+      }, undefined, "{{agile_lng_translate 'web-rules' 'add-score'}}");
       return;
 		}
 		else{

@@ -72,7 +72,7 @@ public class OzonetelIncomingCallServlet extends HttpServlet {
         
         String agent_number = "";
 		if(agent_no.startsWith("+91") || (agent_no.startsWith("91") && agent_no.length() >10)){
-			agent_number = agent_no.substring(agent_no.length() - 10);
+			agent_number = "0"+agent_no.substring(agent_no.length() - 10);
 		}else{
 			agent_number = agent_no;
 		}

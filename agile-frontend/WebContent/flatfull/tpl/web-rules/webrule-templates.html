@@ -1,9 +1,9 @@
 <script type="text/html" id="webrule-categories-template">
 
-<div class="wrapper-md lter bg-light b-b agile-page-header">
-<div class="row">
+<div class="wrapper-md lter bg-light b-b">
+  <div class="row">
     <div class="col-md-12">
-      <div class="pull-left">      
+      <div class="pull-left">
         <div class="btn-group">
           <h1 class="m-n font-thin h3 text-black pull-left c-p">{{agile_lng_translate 'web-rules' 'add-new'}}</h1>          
         </div>
@@ -11,480 +11,343 @@
           <small class="text-muted">{{agile_lng_translate 'web-rules' 'templates-sub-heading'}}</small>
         </div>        
       </div>
-       <div class="pull-right add-campaign-btn">
-            <a href="#webrules-add" class="btn btn-default  btn-primary-imp btn-lg-imp btn-sm btn-addon">{{agile_lng_translate 'campaigns' 'custom'}}</a>
-
-       </div>
-       <div class="clearfix"></div>
-
-     </div>
-</div>
+      <div class="pull-right add-campaign-btn">
+        <a href="#webrules-add" class="btn btn-default btn-sm btn-addon">{{agile_lng_translate 'campaigns' 'custom'}}</a>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
 </div>
 
+<div class="wrapper-md lter {{#is_mobile}}webrules-tabview{{/is_mobile}}">
+  <div id="web-rule-templates-holder"></div>
+</div>
 
+</script>
 
-<div class="wrapper-md dash_tabview agile-p-t-xs{{#is_mobile}}webrules-tabview{{/is_mobile}}">
-    <div class="tabs" id="webrules-tabs-content">
-    <div class="tab-container m-b-none">
-
+<script type="text/html" id="webrule-templates-list-template">
+<div id="webrules-tabs-content">
+  <div class="tab-container">
+  
   {{#is_mobile}}
     <ul class="nav nav-tabs webrules-sub-tabs">
-
-       <li class="p-none active">
-       <a  href="#email_form" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Email Form'}}" >
-       <i class="icon icon-envelope"></i>
-       </a>
-       </li>
-       <li class="p-none ">
-       <a  href="#conformation" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Confirmation'}}" >
-       <i class="icon icon-check"></i>
-       </a>
-       </li>
-       <li class="p-none ">
-       <a  href="#information" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Information'}}" >
-       <i class="icon icon-info"></i>
-       </a>
-       </li>
-       <li class="p-none ">
-       <a  href="#schedule_meeting" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Schedule Meeting'}}" >
-       <i class="icon icon-calendar"></i>
-       </a>
-       </li>
-       <li class="p-none ">
-       <a  href="#survey_templet" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Survey'}}">
-       <i class="icon icon-note"></i>
-       </a>
-       </li>
-       <li class="p-none ">
-       <a  href="#calling_webrule" data-toggle="tab" title="{{agile_lng_translate 'admin-settings-tasks' 'call'}}">
-       <i class="icon icon-call-out"></i>
-       </a>
-       </li>
-        <li class="p-none ">
-       <a  href="#service_template" data-toggle="tab" title="{{agile_lng_translate 'campaigns' 'service'}}">
-       <i class="icon icon-support"></i>
-       </a>
-       </li>
-        <li class="p-none ">
-       <a  href="#pushnoty_template" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Pushnoty'}}">
-       <i class="icon icon-bell"></i>
-       </a>
-       </li>
-   </ul>
-
-   {{else}}
-
-    <ul class="nav nav-tabs ">
-
-       <li class="p-none active">
-       <a  href="#email_form" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Email Form'}}</a></li>
-       <li class="p-none ">
-       <a  href="#conformation" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Confirmation'}}</a></li>
-       <li class="p-none ">
-       <a  href="#information" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Information'}}</a></li>
-       <li class="p-none ">
-       <a  href="#schedule_meeting" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Schedule Meeting'}}</a></li>
-       <li class="p-none ">
-       <a  href="#survey_templet" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Survey'}}</a></li>
-       <li class="p-none ">
-       <a  href="#calling_webrule" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'admin-settings-tasks' 'call'}}</a></li>
-        <li class="p-none ">
-       <a  href="#service_template" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'campaigns' 'service'}}</a></li>
-        <li class="p-none ">
-       <a  href="#pushnoty_template" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Pushnoty'}}</a></li>
-   </ul>
+      <li class="p-none active"><a href="#email_form" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Email Form'}}"><i class="icon icon-envelope"></i></a></li>
+      <li class="p-none"><a href="#conformation" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Confirmation'}}"><i class="icon icon-check"></i></a></li>
+      <li class="p-none"><a href="#information" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Information'}}"><i class="icon icon-info"></i></a></li>
+      <li class="p-none"><a href="#schedule_meeting" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Schedule Meeting'}}"><i class="icon icon-calendar"></i></a></li>
+      <li class="p-none"><a href="#survey_templet" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Survey'}}"><i class="icon icon-note"></i></a></li>
+      <li class="p-none"><a href="#calling_webrule" data-toggle="tab" title="{{agile_lng_translate 'admin-settings-tasks' 'call'}}"><i class="icon icon-call-out"></i></a></li>
+      <li class="p-none"><a href="#service_template" data-toggle="tab" title="{{agile_lng_translate 'campaigns' 'service'}}"><i class="icon icon-support"></i></a></li>
+      <li class="p-none"><a href="#pushnoty_template" data-toggle="tab" title="{{agile_lng_translate 'web-rules' 'Pushnoty'}}"><i class="icon icon-bell"></i></a></li>
+    </ul>
+  {{else}}
+    <ul class="nav nav-tabs">
+      <li class="p-none active"><a href="#email_form" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Email Form'}}</a></li>
+      <li class="p-none"><a href="#conformation" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Confirmation'}}</a></li>
+      <li class="p-none"><a href="#information" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Information'}}</a></li>
+      <li class="p-none"><a href="#schedule_meeting" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Schedule Meeting'}}</a></li>
+      <li class="p-none"><a href="#survey_templet" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Survey'}}</a></li>
+      <li class="p-none"><a  href="#calling_webrule" data-toggle="tab" >{{agile_lng_translate 'admin-settings-tasks' 'call'}}</a></li>
+      <li class="p-none"><a href="#service_template" data-toggle="tab" >{{agile_lng_translate 'campaigns' 'service'}}</a></li>
+      <li class="p-none"><a href="#pushnoty_template" data-toggle="tab" >{{agile_lng_translate 'web-rules' 'Pushnoty'}}</a></li>
+    </ul>
   {{/is_mobile}}
 
-</div>
-</div>
+    <div class="tab-content wrapper-md panel">
 
-<div class="tab-content wrapper-md panel">
-    <div class="tab-pane" id="information">
-        <div class="row">
+<div class="tab-pane" id="information">
+  <div class="row">
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
         <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="sleak" href="misc/modal-templates/information/sleak/images/sleak.png" title="sleak-information" data-link="information/sleak/sleak.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/information/sleak/images/sleak.png" alt="Template image"></a>
-           </div>
+          <div class="p-b-sm p-l-none p-r-none theme-preview">
+          <a class="web_fancybox" id="sleak" href="misc/modal-templates/information/sleak/images/sleak.png" title="sleak-information" data-link="information/sleak/sleak.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/information/sleak/images/sleak.png" alt="Template image"></a>
+          </div>
         </div>
-        <!-- Add button -->
         <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/information/sleak/sleak.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+          <a class="btn btn-sm btn-default" href="#webrules-add/information/sleak/sleak.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
         </div>
+      </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="radiant" href="misc/modal-templates/information/radiant/images/radiant.png" title="radiant-information" data-link="information/radiant/radiant.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/information/radiant/images/radiant.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/information/radiant/radiant.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="radiant" href="misc/modal-templates/information/radiant/images/radiant.png" title="radiant-information" data-link="information/radiant/radiant.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/information/radiant/images/radiant.png" alt="Template image"></a>
+               </div>
             </div>
-        </div>   
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/information/radiant/radiant.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+                </div>
+            </div>   
     </div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="site-bar" href="misc/modal-templates/bar/screenshot.png" title="site bar" data-link="bar/sitebar.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/bar/screenshot.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/bar/sitebar.html">Go</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="site-bar" href="misc/modal-templates/bar/screenshot.png" title="site bar" data-link="bar/sitebar.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/bar/screenshot.png" alt="Template image"></a>
+               </div>
             </div>
-        </div>   
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/bar/sitebar.html">Go</a>
+                </div>
+            </div>   
     </div>
-
         
-</div>          
+  </div>          
 </div>
 
 <div class="tab-pane" id="conformation">
-    <div class="row">
-        
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="fullscreen" href="misc/modal-templates/confirmation/fullscreen/images/fullscreen.png" title="fullscreen-confirmation" data-link="confirmation/fullscreen/fullscreen.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/confirmation/fullscreen/images/fullscreen.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/confirmation/fullscreen/fullscreen.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="elegant" href="misc/modal-templates/confirmation/elegant/images/elegant.png" title="elegant-confirmation" data-link="confirmation/elegant/elegant.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/confirmation/elegant/images/elegant.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/confirmation/elegant/elegant.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="elegant" href="misc/modal-templates/confirmation/elegant/images/elegant.png" title="elegant-confirmation" data-link="confirmation/elegant/elegant.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/confirmation/elegant/images/elegant.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/confirmation/elegant/elegant.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
-    </div>
-</div>
-
-</div>        
+  </div>        
 </div>
 
 <div class="tab-pane active" id="email_form">
-    <div class="row">
-    
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color border-color">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="bold" href="misc/modal-templates/form/bold/images/bold.png" title="bold-form" data-link="form/bold/bold.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/bold/images/bold.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/bold/bold.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="splitmessage" href="misc/modal-templates/form/split-message/images/split-message-update.png" title="splitmessage-form" data-link="form/split-message/split-message.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/split-message/images/split-message-update.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/form/split-message/split-message.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="splitmessage" href="misc/modal-templates/form/split-message/images/split-message.png" title="splitmessage-form" data-link="form/split-message/split-message.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/split-message/images/split-message.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/split-message/split-message.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="standout" href="misc/modal-templates/form/standout/images/standout.png" title="standout-form" data-link="form/standout/standout.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/standout/images/standout.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/form/standout/standout.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="standout" href="misc/modal-templates/form/standout/images/standout.png" title="standout-form" data-link="form/standout/standout.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/standout/images/standout.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/standout/standout.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->   
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="minimal" href="misc/modal-templates/form/minimal/images/minimal.png" title="minimal-form" data-link="form/minimal/minimal.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/minimal/images/minimal.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/form/minimal/minimal.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="imagesplit" href="misc/modal-templates/form/image-split/images/image-split.png" title="imagesplit-form" data-link="form/image-split/image-split.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/image-split/images/image-split.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/image-split/image-split.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->    
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="elegant" href="misc/modal-templates/form/elegant/images/elegant.png" title="elegant-form" data-link="form/elegant/elegant.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/elegant/images/elegant.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/form/elegant/elegant.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="mouseflow" href="misc/modal-templates/form/mouseflow/images/mouseflow.png" title="mouseflow-form" data-link="form/mouseflow/mouseflow.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/mouseflow/images/mouseflow.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/mouseflow/mouseflow.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">  
+        <!-- <span class="responsive-label">Responsive</span> --> 
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="popout" href="misc/modal-templates/form/pop-out/images/pop-out.png" title="popout-form" data-link="form/pop-out/pop-out.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/pop-out/images/pop-out.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/form/pop-out/pop-out.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>   
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="minimal" href="misc/modal-templates/form/minimal/images/minimal.png" title="minimal-form" data-link="form/minimal/minimal.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/minimal/images/minimal.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/minimal/minimal.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="valentine" href="misc/modal-templates/form/valentine/images/valentine.png" title="valentine-form" data-link="form/valentine/valentine.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/valentine/images/valentine.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/form/valentine/valentine.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>    
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="elegant" href="misc/modal-templates/form/elegant/images/elegant.png" title="elegant-form" data-link="form/elegant/elegant.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/elegant/images/elegant.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/elegant/elegant.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="newsletter" href="misc/modal-templates/form/newsletter/images/newsletter.png" title="newsletter-form" data-link="form/newsletter/newsletter.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/newsletter/images/newsletter.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/newsletter/newsletter.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">  
-    <span class="responsive-label">Responsive</span> 
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="popout" href="misc/modal-templates/form/pop-out/images/pop-out.png" title="popout-form" data-link="form/pop-out/pop-out.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/pop-out/images/pop-out.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/pop-out/pop-out.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="valentine" href="misc/modal-templates/form/valentine/images/valentine.png" title="valentine-form" data-link="form/valentine/valentine.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/form/valentine/images/valentine.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/form/valentine/valentine.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
-    </div>
-</div>
-
-</div>            
+  </div>            
 </div>
 
 <div class="tab-pane" id="schedule_meeting">
-        <div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-     <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="popout" href="misc/modal-templates/schedule/popout/images/pop-out.jpg" title="popout-schedule" data-link="schedule/popout/pop-out.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/schedule/popout/images/pop-out.jpg" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/schedule/popout/pop-out.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+  <div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+         <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="popout" href="misc/modal-templates/schedule/popout/images/pop-out.jpg" title="popout-schedule" data-link="schedule/popout/pop-out.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/schedule/popout/images/pop-out.jpg" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/schedule/popout/pop-out.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
-
-</div>      
+  </div>      
 </div>
 
 <div class="tab-pane" id="survey_templet">
-    <div class="row">
+  <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="choicefour" href="misc/modal-templates/survey/choice-four/images/choice-four.png" title="choicefour-survey" data-link="survey/choice-four/choice-four.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/survey/choice-four/images/choice-four.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/survey/choice-four/choice-four.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
-        </div>
-    </div>
-</div>
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="choicemulti" href="misc/modal-templates/survey/choice-multi/images/choice-multi.png" title="choicemulti-survey" data-link="survey/choice-multi/choice-multi.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/survey/choice-multi/images/choice-multi.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/survey/choice-multi/choice-multi.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="choicemulti" href="misc/modal-templates/survey/choice-multi/images/choice-multi.png" title="choicemulti-survey" data-link="survey/choice-multi/choice-multi.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/survey/choice-multi/images/choice-multi.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/survey/choice-multi/choice-multi.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
-
-<div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="choicetwo" href="misc/modal-templates/survey/choice-two/images/choice-two.png" title="choicetwo-survey" data-link="survey/choice-two/choice-two.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/survey/choice-two/images/choice-two.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/survey/choice-two/choice-two.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="choicetwo" href="misc/modal-templates/survey/choice-two/images/choice-two.png" title="choicetwo-survey" data-link="survey/choice-two/choice-two.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/survey/choice-two/images/choice-two.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/survey/choice-two/choice-two.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
-
-</div>  
+  </div>  
 </div>
 
 <div class="tab-pane" id="calling_webrule">
-    <div class="row">
+  <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="callpopup" href="misc/modal-templates/call/images/call-popup.png" title="calling-webrule" data-link="call/callpopup.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/call/images/call-popup.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/call/callpopup.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="callpopup" href="misc/modal-templates/call/images/call-popup.png" title="calling-webrule" data-link="call/callpopup.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/call/images/call-popup.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/call/callpopup.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
-</div>
+  </div>
 </div>
 
 <div class="tab-pane" id="service_template">
-    <div class="row">
+  <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="servicetemplate" href="misc/modal-templates/help/images/helppopup.png" title="help-webrule" data-link="help/help-popup.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/help/images/helppopup.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/help/help-popup.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="servicetemplate" href="misc/modal-templates/help/images/helppopup.png" title="help-webrule" data-link="help/help-popup.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/help/images/helppopup.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/help/help-popup.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
-</div>
+  </div>
 </div>
 
 <div class="tab-pane" id="pushnoty_template">
-    <div class="row">
+  <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="panel wrapper text-center border-color">
-    <span class="responsive-label">Responsive</span>
-        <!-- Thumbnail and Title -->
-        <div>
-           <div class="p-b-sm p-l-none p-r-none theme-preview">
-            <a class="web_fancybox" id="pushnoty_template" href="misc/modal-templates/pushnoty/images/pushnoty.png?v=1" title="help-webrule" data-link="pushnoty/pushnoty.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/pushnoty/images/pushnoty.png" alt="Template image"></a>
-           </div>
-        </div>
-        <!-- Add button -->
-        <div>
-            <a class="btn btn-sm btn-default" href="#webrules-add/pushnoty/pushnoty.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+        <div class="panel wrapper text-center border-color">
+        <!-- <span class="responsive-label">Responsive</span> -->
+            <!-- Thumbnail and Title -->
+            <div>
+               <div class="p-b-sm p-l-none p-r-none theme-preview">
+                <a class="web_fancybox" id="pushnoty_template" href="misc/modal-templates/pushnoty/images/pushnoty.png?v=1" title="help-webrule" data-link="pushnoty/pushnoty.html" onclick="show_fancy_box(this)"><img style="width:98%;" src="misc/modal-templates/pushnoty/images/pushnoty.png" alt="Template image"></a>
+               </div>
+            </div>
+            <!-- Add button -->
+            <div>
+                <a class="btn btn-sm btn-default" href="#webrules-add/pushnoty/pushnoty.html">{{agile_lng_translate 'campaigns' 'go'}}</a>
+            </div>
         </div>
     </div>
-</div>
-</div>
+  </div>
 </div>
 
-</div>
+    </div> <!-- end of tab-content-->
+
+  </div>
 </div>
 </script>

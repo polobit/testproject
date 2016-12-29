@@ -172,7 +172,7 @@
 			var pipeId = $(this).parents(".milestones-table").attr('data');
 			var response = $.ajax({ type : "GET", url :'core/api/opportunity/numberOfDeals?id='+pipeId, async : false, dataType : 'json' }).responseText;
 			if(response == "success"){
-				showAlertModal("won_milestone_delete_error");
+				showAlertModal("{{agile_lng_translate 'deals' 'milestone-change-error'}}", undefined, undefined, undefined, "{{agile_lng_translate 'others' 'alert'}}");
 				return;
 				
 			}

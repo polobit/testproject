@@ -79,7 +79,7 @@ $(function()
 				$('body').on('click', '#merge-contacts-model', function(event)
 				{
 								event.preventDefault();
-								var confirm_message = _agile_get_translated_val("contact-details", "delete") + " 1 " + _agile_get_translated_val('contacts','single-duplicate-merge-confirm');
+								var confirm_message = "{{agile_lng_translate 'contacts-view' 'merge-records-desc'}}";
 								if(dup_contacts1_array.length > 1)
 									confirm_message = _agile_get_translated_val("contact-details", "delete") + dup_contacts1_array.length + " "+ _agile_get_translated_val('contacts','duplicate-merge-confirm');
 								var $that = $(this);
@@ -194,7 +194,7 @@ $(function()
 									var properties = master_record_dup.properties;
 									master_record.set({ "tags" : tags });
 									merge_duplicate_contacts(master_record, properties, selected_fields, custom_fields, remove_fields, websites, emails, phones);
-								},undefined, _agile_get_translated_val('contacts','delete-duplicates'));
+								},undefined, "{{agile_lng_translate 'contacts-view' 'merge-records'}}");
 
 								
 				});

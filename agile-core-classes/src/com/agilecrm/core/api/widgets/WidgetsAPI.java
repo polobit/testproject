@@ -370,9 +370,9 @@ public class WidgetsAPI {
 		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
 	    
 		//Adding sms widgets if Plivo or twilio is there
-		Widget widget = SMSGatewayUtil.getSMSGatewayWidgetForSMS();
+		/*Widget widget = SMSGatewayUtil.getSMSGatewayWidgetForSMS();
 		if(widget !=null)
-			widgets.add(widget);
+			widgets.add(widget);*/
 		/*
 		 * if(!widgets.isEmpty()){ for(Widget widget : widgets){
 		 * callOptionName.add(widget.name); }

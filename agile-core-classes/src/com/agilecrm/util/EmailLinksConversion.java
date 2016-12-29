@@ -74,7 +74,8 @@ public class EmailLinksConversion
 
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https"))
 	        && !str.toLowerCase().contains("unsubscribe")
-	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
+	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign", true))
+	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign", false))
 	        && (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
 	                ".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
 	        && !str.toLowerCase().startsWith("http://agle.cc")

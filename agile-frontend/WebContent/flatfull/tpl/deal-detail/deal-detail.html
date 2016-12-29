@@ -663,13 +663,13 @@
     <div id="deal-bulk-confirm">
 		<input id="archived-deal-id" name="id" type="hidden" value="{{id}}" />
 		<input id="archived-deal-milestone" name="milestone" type="hidden" value="{{milestone}}"/>
-		  {{agile_lng_translate 'deal-view' 'deals-can-be-archived-desc'}}
+		  {{agile_lng_translate 'deal-view' 'deals-archive-warn-msg'}}
 		<br/> {{agile_lng_translate 'deal-view' 'are-you-sure-to-archive-this-deal'}}
 	</div>
   </div>
   <div class="modal-footer">
   <span class="error-status text-danger"></span>
-	<button type="button" class="btn btn-sm btn-danger btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
+	<button type="button" class="btn btn-sm btn-default btn-default-imp" data-dismiss="modal" aria-hidden="true">{{agile_lng_translate 'portlets' 'no'}}</button>
     <a href="#" id="deal-quick-archive" class="btn btn-sm btn-primary btn-primary-imp">{{agile_lng_translate 'portlets' 'yes'}}</a>
   </div>
 </div>

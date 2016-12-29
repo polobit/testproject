@@ -155,7 +155,7 @@ function updateDocument(ele) {
 	var documentUpdateForm = $("#uploadDocumentUpdateForm");
 	deserializeForm(value, $("#uploadDocumentUpdateForm"));
 	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").find(".icon-ok").css("display", "inline");
-	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").css("background-color", "#EDEDED");
+	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").css("background-color", "#f5f5f5");
 
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("document_relates_to_contacts", documentUpdateForm, contacts_typeahead);
@@ -189,9 +189,18 @@ function saveDocumentURL(url, network, id)
 	$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
 	$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
 	$('#' + form_id).find("#" + network).closest(".link").find(".icon-ok").css("display", "inline");
-	$('#' + form_id).find('#' + network).closest(".link").css("background-color", "#EDEDED");
+	$('#' + form_id).find('#' + network).closest(".link").css("background-color", "#f5f5f5");
    	$('#' + form_id).find('#upload_url').val(url);
    	$('#' + form_id).find('#size').val(CUSTOM_DOCUMENT_SIZE);
+
+   	if(network != "S3")
+   	{
+   		$(".uploaded-doc-close", $('#uploadDocumentForm')).trigger("click");
+   		if($(".uploaded-doc-close", $('#uploadDocumentForm')).length == 0)
+   		{
+   			$(".uploaded-doc-close", $('#uploadDocumentUpdateForm')).trigger("click");
+   		}
+   	}
 
     //$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
 }
