@@ -60,6 +60,9 @@ var localeJSON = <%=localeJSON%>;
 .mce-btn button {
     padding: 2px 4px !important;
 }
+.mce-listbox button {
+    padding-right: 15px !important;
+}
 .main {
     width: 638px !important;
 }
@@ -74,10 +77,65 @@ var localeJSON = <%=localeJSON%>;
         <a class="hide" href="#save" id="save" ><i class="glyphicon glyphicon-floppy-disk"></i> <%=LanguageUtil.getLocaleJSONValue(localeJSON, "save") %></a>
         <textarea id="templateHtmlContent" class="hidden"><%@ include file="template.html" %></textarea>
 
-        <div class="row">
+        <div class="row" style="margin:0">
 
-            <div class="col-md-2" style="width:222px;">
-                <div class="sidebar-nav">
+            <div class="col-md-8" style="padding-top:15px;border-right:1px solid #dee5e7">
+
+                <div id="tosave" style="overflow-y:auto;overflow-x:hidden;padding-bottom:30px;height: 800px;">
+                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px;line-height: 21px;color: #000000;" >
+                        <tr>
+                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
+                                <div class="column" style="min-height:150px;">
+
+                                    <div class="lyrow dragitem">
+                                        <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
+
+                                        <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
+                                        <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
+
+                                        <div class="preview">
+                                            <div class="icon text-block"></div>
+                                            <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></label>
+                                        </div>
+                                        <div class="view">
+                                            <div class="row clearfix">
+                                                <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;">
+                                                                <div style="margin:0px 0px 10px 0px;font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px;line-height: 21px;color: #000000;" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-4" style="padding-top:15px">
+    
+<!-- start of block-drag -->
+<div id="block-drag">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#add-content" aria-controls="add-content" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add Content</a></li>
+    <li role="presentation">
+    <a href="#customize" aria-controls="customize" role="tab" data-toggle="tab" id="custom-val"><i class="glyphicon glyphicon-cog"></i> Customize</a>
+    </li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="add-content">
+        <div class="sidebar-nav" style="margin-top: 10px;margin-left: -15px;">
                     <div id="elements" style="position:relative;">
                         <ul class="nav nav-list accordion-group">
                             <li class="rows" id="estRows">
@@ -115,156 +173,280 @@ var localeJSON = <%=localeJSON%>;
                         </ul>
                     </div>
                 </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="customize">
+
+
+ <div class="panel panel-default" style="border: 0; margin: 0;">
+    <div class="panel-heading panel-click" style="margin-bottom: 5px;">
+        <h3 class="panel-title">Font Styles
+            <span class="pull-right " ><i class="glyphicon glyphicon-chevron-up"></i></span>
+        </h3>
+    </div>
+        <div class="panel-body" style="display: block;">
+            
+            <div class="form-horizontal">
+    
+    <div class="form-group">
+            <div class="col-sm-4 control-label">Default Font</div>
+    <div class="col-sm-8">
+        <select class="form-control font-family-picker">
+
+        <option value= 'Arial, "Helvetica Neue", Helvetica, sans-serif' style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif" >Arial</option>
+        <option value='"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace' style="font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace">Courier</option>
+        <option value='Georgia, Times, "Times New Roman", serif' style="font-family: Georgia, Times, 'Times New Roman', serif">Georgia</option>
+        <option value='"Helvetica Neue", Helvetica, Arial, sans-serif' style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica</option>
+        <option value='"Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Geneva, Verdana, sans-serif' style="font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Geneva, Verdana, sans-serif">Lucida Sans</option>
+        <option value='Tahoma, Verdana, Segoe, sans-serif' style="font-family: Tahoma, Verdana, Segoe, sans-serif">Tahoma</option>
+        <option value='TimesNewRoman, "Times New Roman", Times, Beskerville, Georgia, serif' style="font-family: TimesNewRoman, 'Times New Roman', Times, Beskerville, Georgia, serif">Times New Roman</option>
+        <option value='"Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif' style="font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Trebuchet MS</option>
+        <option value='Verdana, Geneva, sans-serif' style="font-family: Verdana, Geneva, sans-serif">Verdana</option>
+        <option value='Bitter, Georgia, Times, "Times New Roman", serif' style="font-family: 'Bitter', Georgia, Times, 'Times New Roman', serif">Bitter</option>
+        <option value='"Droid Serif", Georgia, Times, "Times New Roman", serif' style="font-family: 'Droid Serif', Georgia, Times, 'Times New Roman', serif">Droid Serif</option>
+        <option value='Lato, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif">Lato</option>
+        <option value='"Open Sans, "Helvetica Neue", Helvetica, Arial, sans-serif' style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Open Sans</option>
+        <option value='Roboto, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Roboto', Tahoma, Verdana, Segoe, sans-serif">Roboto</option>
+        <option value='"Source Sans Pro", Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif"> Source Sans Pro</option>
+        <option value='Montserrat, "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif' style="font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif">Montserrat</option>
+        <option value='Ubuntu, Tahoma, Verdana, Segoe, sans-serif' style="font-family: 'Ubuntu', Tahoma, Verdana, Segoe, sans-serif">Ubuntu</option>
+
+    </select>
             </div>
+        </div>
 
-            <div class="col-md-7" style="width:800px;">
+    
+    <div class="form-group">
+        <div class="col-sm-4 control-label">Font Size</div>  
+    <div class="col-sm-8">
+        <select class="form-control font-size-picker">
+            <option>8px</option>
+            <option>9px</option>
+            <option>10px</option>
+            <option>11px</option>
+            <option selected="selected">12px</option>
+            <option>14px</option>
+            <option>16px</option>
+            <option>18px</option>
+            <option>20px</option>
+            <option>22px</option>
+            <option>24px</option>
+            <option>26px</option>
+            <option>28px</option>
+        </select>
+    </div>
+    </div>
 
-                <a href="#" class="btn btn-info btn-xs" id="edittamplate" style="margin-bottom: 2px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "edit-background") %></a>
-                <div id="tosave" style="width:98%;overflow-y:auto;overflow-x:hidden;padding-bottom:30px;">
-                    <table  width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #eeeeee" >
-                        <tr>
-                            <td width="100%" id="primary" class="main demo" align="center" valign="top" >
-                                <div class="column" style="min-height:150px;">
 
-                                    <div class="lyrow dragitem">
-                                        <a href="#close" class="remove label label-danger"><i class="glyphicon-remove glyphicon"></i></a>
+    
+    <div class="form-group">
+        <div class="col-sm-4 control-label">Line Height</div>  
+        <div class="col-sm-8">
+        <select class="form-control line-height-picker">
+            <option>16px</option>
+            <option>18px</option>
+            <option>20px</option>
+            <option>21px</option>
+            <option>22px</option>
+            <option>24px</option>
+            <option>25px</option>
+            <option>26px</option>
+            <option>28px</option>
+        </select>
+        </div>
+    </div>
 
-                                        <span class="drag label label-default"><i class="glyphicon glyphicon-move"></i></span>
-                                        <span class="configuration"> <a href="#" class="btn btn-default btn-xs clone"><i class="fa fa-clone"></i> </a>  </span>
 
-                                        <div class="preview">
-                                            <div class="icon text-block"></div>
-                                            <label><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></label>
-                                        </div>
-                                        <div class="view">
-                                            <div class="row clearfix">
-                                                <table width="640" class="main" cellspacing="0" cellpadding="0" border="0" style="background-color:#FFFFFF" align="center" data-type='text-block'>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="block-text" data-clonable="true" align="left" style="padding:10px 50px 10px 50px;font-family:Arial;font-size:13px;color:#000000;line-height:22px">
-                                                                <div style="margin:0px 0px 10px 0px;line-height:22px" class="textFix"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "builder-edit-info") %></div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+<div class="form-group">
+                    <div class="col-sm-4 control-label">Font Color</div>
+    <div class="col-sm-8" id="font-color">
+  
+        <div class="input-group"> 
+            <div class="input-group-addon color-preview"></div> 
+            <div class="form-control hex-col-val"> </div>
+        </div>
+        
+    </div>
 
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+    <script type="text/javascript">
+                $('#font-color').colpick({
+                layout: 'hex',
+                // colorScheme: 'dark',
+                onBeforeShow: function () {
+                $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
+                },
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        if (!bySetColor){
+                            $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                            $(el).parent().find(".hex-col-val").text('#' + hex);
+                            $('#tosave').find('.textFix').css('color', '#'+ hex);
+                        }
+                },
+                onSubmit: function (hsb, hex, rgb, el) {
+                    $('#tosave').find('.textFix').css('color', '#'+ hex);
+                    $(el).colpickHide();
+                }
+                }).keyup(function () {
+                $(this).colpickSetColor(this.value);
+                });
+    </script>
+    
+</div>
 
-            <div class="col-md-3" style="width:370px;">
-                <!-- START ELEMENT -->
-                <div class="hide" id="settings" style="height:660px;overflow-y:auto;overflow-x:hidden;">
+        </div> <!-- end of form horizontal -->
+    </div> <!-- end of body -->
+</div>  <!-- end of panel -->
 
-                    <form id="editor" style="margin-top:5px">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "text") %></h4>
-                        <div class="form-inline" id="font-settings" style="margin-top:5px">
-                            <div class="form-group">
-                                <label for="fontstyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-style") %></label>
-                                <div id="fontstyle" class="color-circle"><i class="fa fa-font"></i></div>
 
-                            </div>
-                        </div>
+  
 
-                    <div class="hide" id='font-style'>
-                        <div id="mainfontproperties" >
-                            <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "color") %></span>
-                                <input type="text" class="form-control picker" id="colortext" >
-                                <span class="input-group-addon"></span>
-                                <script type="text/javascript">
-                                    $('#colortext').colpick({
-                                        layout: 'hex',
-                                        // colorScheme: 'dark',
-                                        onBeforeShow: function () {
-                                            $(this).colpickSetColor(rgb2hex($('#colortext').val().replace("#","")));
-                                        },
-                                        onChange: function (hsb, hex, rgb, el, bySetColor) {
-                                            if (!bySetColor)
-                                                $(el).val('#' + hex);
-                                        },
-                                        onSubmit: function (hsb, hex, rgb, el) {
-                                            $(el).next('.input-group-addon').css('background-color', '#' + hex);
-                                            $(el).colpickHide();
-                                        }
-                                    }).keyup(function () {
-                                        $(this).colpickSetColor(this.value);
-                                    });
-                                </script>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font") %></span>
-                                <input type="text" class="form-control " id="fonttext" readonly>
-                            </div>
-                            <div class="input-group" style="margin-bottom: 5px">
-                                <span class="input-group-addon" style="min-width: 60px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "size") %></span>
-                                <input type="text" class="form-control " id="sizetext" style="width: 100px">
-                                &nbsp;
-                                <a class="btn btn-default plus" href="#">+</a>
-                                <a class="btn btn-default minus" href="#">-</a>
-                            </div>
+<div class="panel panel-default" style="border: 0; margin: 0;">
+    <div class="panel-heading panel-click" style="margin-bottom: 5px;">
+        <h3 class="panel-title">Background Color
+            <span class="pull-right panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span>
+        </h3>
+    </div>
+        <div class="panel-body" style="display: none;"> 
+            <div class="form-horizontal">
 
-                            <hr/>
-                            <div class="text text-right">
-                                <a class="btn btn-primary" id="confirm-font-properties"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "Ok") %></a>
-                            </div>
-                        </div>
+    <div class="form-group">
+                    <div class="col-sm-4 control-label">Content</div>
+    <div class="col-sm-8" id="content-bg-color">
+  
+        <div class="input-group"> 
+            <div class="input-group-addon color-preview"></div> 
+            <div class="form-control hex-col-val"> </div>
+        </div>
+        
+    </div>
 
-                        <div id="fontselector" class="hide" style="min-width: 200px">
-                            <ul class="list-group" style="overflow: auto ;display: block;max-height: 200px" >
-                                <li class="list-group-item" style="font-family:arial,helvetica,sans-serif;">Arial</li>
-                                <li class="list-group-item" style="font-family: Verdana, Geneva, sans-serif">Verdana</li>
-                                <li class="list-group-item" style="Times New Roman, Times, serif">Times New Roman</li>
-                                <li class="list-group-item" style="font-family: georgia,serif">Georgia</li>
-                                <li class="list-group-item" style="font-family:comic sans ms,marker felt-thin,arial,sans-serif;">Comic Sans MS</li>
-                                <li class="list-group-item" style="font-family:courier new,courier,monospace;">Courier New</li>
-                                <li class="list-group-item" style="font-family:lucida sans unicode,lucida grande,sans-serif;">Lucida</li>
-                                <li class="list-group-item" style="font-family: Trebuchet MS,sans-serif">Trebuchet MS</li>
-                                <li class="list-group-item" style="font-family: Tahoma, Geneva, sans-serif;">Tahoma</li>
-                                <li class="list-group-item" style="font-family: Impact,Charcoal, sans-serif">Impact</li>
-                                <li class="list-group-item" style="font-family: Arial Black,Gadget, sans-serif">Arial Black</li>
-                                <li class="list-group-item" style="font-family: Helvetica, sans-serif">Helvetica</li>
-                            </ul>
-                        </div>
-                    </div>
+    <script type="text/javascript">
+                $('#content-bg-color').colpick({
+                layout: 'hex',
+                // colorScheme: 'dark',
+                onBeforeShow: function () {
+                $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
+                },
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        if (!bySetColor){
+                            $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                            $(el).parent().find(".hex-col-val").text('#' + hex);
+                            $('#tosave').find('#primary .main:not([data-color=true])').css('background-color', '#' + hex);
+                        }
+                },
+                onSubmit: function (hsb, hex, rgb, el) {
+                    $('#tosave').find('#primary .main:not([data-color=true])').css('background-color', '#' + hex);
+                    $(el).colpickHide();
+                }
+                }).keyup(function () {
+                $(this).colpickSetColor(this.value);
+                });
+    </script>
+    
+</div>
+
+
+<div class="form-group">
+                    <div class="col-sm-4 control-label">Template</div>
+    <div class="col-sm-8" id="background-color">
+  
+        <div class="input-group"> 
+            <div class="input-group-addon color-preview"></div> 
+            <div class="form-control hex-col-val"> </div>
+        </div>
+        
+    </div>
+
+    <script type="text/javascript">
+                $('#background-color').colpick({
+                layout: 'hex',
+                // colorScheme: 'dark',
+                onBeforeShow: function () {
+                $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
+                },
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                        if (!bySetColor){
+                            $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                            $(el).parent().find(".hex-col-val").text('#' + hex);
+                            $('#path').val('tosave table:first');
+                            $('#' + $('#path').val()).css('background-color', '#' + hex);
+                        }
+                },
+                onSubmit: function (hsb, hex, rgb, el) {
+                    $('#path').val('tosave table:first');
+                    $('#' + $('#path').val()).css('background-color', '#' + hex);
+                    $(el).colpickHide();
+                }
+                }).keyup(function () {
+                $(this).colpickSetColor(this.value);
+                });
+    </script>
+    
+</div>
+
+
+
+</div><!-- end of form horizontal -->
+</div> <!-- end of body -->
+</div>  <!-- end of panel --> 
+
+
+
+</div>
+ </div>
+  </div> <!-- end of block-drag -->
+
+
+ <!-- settings popup start -->
+<div class="hide" id="settings" style="height:625px;overflow-y:auto;overflow-x:hidden;">
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#tiny-editor" aria-controls="tiny-editor" role="tab" id="content-tab" data-toggle="tab" aria-expanded="true"><i class="glyphicon glyphicon-edit"></i> Content</a>
+        </li>
+        <li role="presentation" class="">
+        <a href="#block-customize" aria-controls="block-customize" role="tab" id="customize-tab" data-toggle="tab" aria-expanded="false"><i class="glyphicon glyphicon-cog"></i> Customize</a>
+        </li>
+    </ul>
+
+<!-- start of tab-content -->
+<div class="tab-content">
+
+   <!-- start of tiny-editor -->
+    <div role="tabpanel" class="tab-pane active" id="tiny-editor">
+        <div class="sidebar-nav">
+
+            <form id="editor" style="margin-top:10px;margin-bottom:13px;">
                         <div class="panel panel-body panel-default html5editor" id="html5editor"></div>
                     </form>
 
-                    <div id="imageproperties" style="margin-top:5px">
-                        <h4 class="text text-info" id="imageHeaderId"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "image") %></h4>
+        </div>
 
+        <!-- start of image properties -->
+        <div id="imageproperties" style="margin-top:5px;margin-left:0;" class="form-horizontal">
+                        
                         <div class="form-group" id="video-record-btn-holder" style="display:none;">
 
-                            <div class="row">
-                                <div class="col-xs-8">
+                            <div class="form-group" style="margin-bottom: -10px;">
+                                <div class="col-sm-8" style="margin-left: 35px;">
                                     <h5><span>Record a video</span><h5>
                                 </div>
-                                <div class="col-xs-4">
-                                    <button type="button" class="btn btn-default" id="videoRecordBtnNew" style="width:73px;">
+                                <div class="col-sm-3 ">
+                                    <button type="button" class="btn btn-default" id="videoRecordBtnNew" style="width:65px;">
                                         <span class="fa fa-video-camera"></span>
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-sm-2 text-right">
-                                    <span>(OR)</span>
-                                </div>
-                            </div>
-                            <br/>
-
-                            <div class="row">
-                                <div class="col-xs-8">
+                        
+                            <h5 style="text-align:center;">(OR)</h5>
+                        
+                        
+                            <div class="form-group" style="margin-bottom: -10px;">
+                                <div class="col-sm-8" style="margin-left: 35px;">
                                     <input type="text" id="video-link" class="form-control" placeholder="Link to Video URL" aria-describedby="basic-addon11" data-id="none">
                                 </div>
                                 
-                                <div class="col-xs-4">
+                                <div class="col-sm-3 pull-right" >
                                     <button type="button" class="btn btn-default" id="videoRecordBtn">
                                         <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "select") %></span>
                                     </button>
@@ -275,68 +457,96 @@ var localeJSON = <%=localeJSON%>;
 
                         <div class="form-group">
 
-                            <div class="row" id="videoThumbnail" style="display:none;">
-                                <label for="video-record-Thumbnail" class="col-xs-8 control-label">Thumbnail</label>
+                            <div class="" id="videoThumbnail" style="display:none;">
+                                <!-- <label for="video-record-Thumbnail" class="col-xs-8 control-label">Thumbnail</label> -->
                             </div>
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <input type="text" id="image-url" class="form-control" data-id="none"/>
-                                </div>
-                                <div class="col-xs-4">
-                                    <a class="btn btn-default" id="browseBtn" onclick="$('#uploadImageToS3Btn').click()"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "browse") %></a>
-                                    <input type="file" id="uploadImageToS3Btn" class="hidden">
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group">
-                            
-                            <div class="row" id="image-link-holder">
-                                <div class="col-xs-11">
+                          
+                              <div class="col-sm-3 control-label">Image</div>
+                                
+                                <div class="col-sm-9">
                                     <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
-                                        <input type="text" id="image-link" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-to-web-link") %>' aria-describedby="basic-addon11" data-id="none">
-                                    </div>
-                                    <br>
-                                </div>
-                            </div>
+                                      <input type="text" id="image-url" class="form-control" data-id="none"/>
+                                      <span class="input-group-btn">
+                                        <a id="browseBtn" class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                         <input type="file" id="uploadImageToS3Btn" class="hidden">
+                                      </span>
+                                    </div><!-- /input-group -->
+                                  </div>
+
+                        </div>
+
+                        <div class="form-group" id="image-link-holder">
                             
-                            <div class="row">
-                                <div class="col-xs-11">
-                                    <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
-                                    <br>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div id="image-width-height" style="display:none">
-                                <div class="col-xs-1">
-                                    W:
-                                </div>
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-w" class="form-control" name="director" />
-                                </div>
-
-                                <div class="col-xs-1">
-                                    H:
-                                </div>
-
-                                <div class="col-xs-3">
-                                    <input type="text" id="image-h"class="form-control" name="writer" />
-                                </div>
-                                </div>
-                                <div class="col-xs-4" style="float: right">
-
-                                    <a class="btn btn-primary" href="#" id="change-image"></i>&nbsp;<%=LanguageUtil.getLocaleJSONValue(localeJSON, "Apply") %></a>
+                            <div >
+                             <div class="col-sm-3 control-label">Link</div>
+                                
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        
+                                            <span class="input-group-addon" id="basic-addon11"><i class="fa fa-paperclip"></i></span>
+                                            <input type="text" id="image-link" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "link-to-web-link") %>' aria-describedby="basic-addon11" data-id="none">
+                                        
+                                    </div><!-- /input-group -->
                                 </div>
 
                             </div>
                         </div>
-                    </div>
+                         
+                        <div class="form-group"> 
 
-                    <div id="social-links">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "social") %></h4>
+                            <div class="col-sm-3 control-label">Alt Text</div>
+                                
+                                <div class="col-sm-9">
+                                    
+                                    <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
+                                                                     
+                                </div>
+
+                           
+                        </div>
+
+
+
+<div id="image-width-height">
+
+<!-- start of image width -->
+    <div class="form-group">
+
+        <div class="col-sm-3 control-label">Width</div>
+
+            <div class="col-sm-9" >
+                <div class="input-group"> 
+                    <input type="number" class="form-control" placeholder='width' id="image-w" name="ptop" >
+                    <div class="input-group-addon color-preview">px</div> 
+                </div>
+                
+            </div>
+
+    </div> <!-- end of image width -->
+
+
+    <!-- start of image height -->
+     <div class="form-group">
+       
+            <div class="col-sm-3 control-label">Height</div>
+            
+            <div class="col-sm-9" >
+                <div class="input-group"> 
+                    <input type="number" class="form-control" placeholder='Height' id="image-h" name="image-h" >
+                    <div class="input-group-addon color-preview">px</div> 
+                </div>
+                
+            </div>
+        
+    </div> <!-- end of image height -->
+
+</div>
+
+                        
+                    </div> <!-- end of image properties -->
+
+        <!-- start of social links -->
+        <div id="social-links" style="margin-top:-10px;">
                         <ul class="list-group" id="social-list">
                             <li>
                                 <div class="input-group">
@@ -381,34 +591,11 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
                             </li>
                         </ul>
-                    </div>
-
-                    <!-- <div id="user-poll">
-                        <h4 class="text text-info">User Poll</h4>
-                        <ul class="list-group" id="poll-list">
-                            <li class="hide" >
-                                <div class="input-group">
-                                <input type="text" class="form-control" name="poll_value" placeholder="poll" style="width:45%">
-                                <input type="text" class="form-control" name="poll_tag" placeholder="Related Tag" style="width:55%">
-                                <span class="input-group-addon delbutton"><a>x</a></span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div>
-                                <div>
-                                    <button class="btn pull-right" id="add-poll">Add More</button>
-                                </div>
-                                <br><br><br>
-                                <div>
-                                <input type="text" class="form-control" name="poll_url" placeholder="Redirect URL">
-                                </div>
-                        </div>
-                        <br>
-                    </div> -->
+                    </div> <!-- end of social links -->
 
 
-                    <div id="buttons" style="max-width: 400px">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "buttons") %></h4>
+        <!-- start of buttons -->
+        <div id="buttons" style="max-width: 400px;margin-top:5px;margin-left: -5px;">
                         <div class="form-group">
                             <select class="form-control">
                                 <option value="center"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-center") %></option>
@@ -416,8 +603,8 @@ var localeJSON = <%=localeJSON%>;
                                 <option value="right"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-align-right") %></option>
                             </select>
                         </div>
-                        <ul id="buttonslist" class="list-group">
-                            <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px">
+                        <ul id="buttonslist" class="list-group" style="list-style: none;">
+                            <li class="hide" style="padding:10px; border:1px solid #DADFE1; border-radius: 4px;margin-bottom:10px;">
                                 <span class="orderbutton"><i class="fa fa-bars"></i></span>
                                 <span class="pull-right trashbutton"><i class="fa fa-trash"></i></span>
 
@@ -429,9 +616,9 @@ var localeJSON = <%=localeJSON%>;
                                     <input type="text" class="form-control"  placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-link-to-btn") %>' aria-describedby="basic-addon1" name="btn_link"/>
                                 </div>
                                 <div class="input-group" style="margin-top:10px">
-                                    <label for="buttonStyle"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
+                                    <label for="buttonStyle" style="margin-top: 5px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
                                     <div   class="color-circle buttonStyle" data-original-title="" title="">
-                                        <i class="fa fa-font"></i>
+                                        <i class="fa fa-font" style="line-height: 26px;"></i>
                                     </div>
                                     <div class="stylebox hide" style="width:400px">
                                         <!--
@@ -565,13 +752,15 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                         <a class="btn btn-default form-control" href="#" id="add-button"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "add-one-more-btn") %></a>
                     </div>
 
-                </div>
+                </div>  <!-- end of buttons -->
 
+
+
+                <!-- start of buttons text -->
                 <div id="buttonstxt" style="max-width: 400px">
-                    <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "buttons") %></h4>
-                    <ul id="buttonstxtlist" class="list-group">
+                    <ul id="buttonstxtlist" class="list-group" style="margin-left:-5px;list-style: none;">
                         <li class="hide"
-                            style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px">
+                            style="padding: 10px; border: 1px solid #DADFE1; border-radius: 4px; margin-bottom: 10px;">
                             <span class="pull-right trashbutton"><i
                                 class="fa fa-trash"></i></span>
 
@@ -586,10 +775,10 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                                     aria-describedby="basic-addon1" name="btn_link" />
                             </div>
                             <div class="input-group" style="margin-top: 10px">
-                                <label for="buttonStyleTxt"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
+                                <label for="buttonStyleTxt" style="margin-top: 5px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "btn-style") %></label>
                                 <div class="color-circle buttonStyleTxt" data-original-title=""
                                     title="">
-                                    <i class="fa fa-font"></i>
+                                    <i class="fa fa-font" style="line-height:26px;"></i>
                                 </div>
                                 <div class="styleboxtxt hide" style="width: 400px">
                                     <!--
@@ -619,7 +808,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                                     </div>
 
                                     <div class="input-group fontcolor" style="margin-bottom: 5px">
-                                        <span class="input-group-addon" style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "bg-color") %></span> <span class="input-group-addon pickerTxt"
+                                        <span class="input-group-addon" style="width: 50px;"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "font-color") %></span> <span class="input-group-addon pickerTxt"
                                             data-color="font"></span>
 
                                         <script type="text/javascript">
@@ -720,79 +909,144 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                         </li>
                     </ul>
 
-                </div>
+                </div> <!-- end of button text -->
 
-                <div id="common-settings">
+   
+   <div class="form-group" style="padding-top:6px;">
+        <div class="col-xs-4 pull-right" style="text-align:right;padding: 0;">
 
-                    <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "style") %></h4>
-                    <form id="background" class="form-inline">
-                        <div class="form-group">
-                            <label for="bgcolor"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "background") %></label>
-                            <div class="color-circle" id="bgcolor"></div>
-                            <script type="text/javascript">
-                                    $('#bgcolor').colpick({
-                                        layout: 'hex',
-                                        onBeforeShow: function () {
-                                            $(this).colpickSetColor(rgb2hex($('#bgcolor').css('backgroundColor')).replace("#",""));
-                                        },
-                                        onChange: function (hsb, hex, rgb, el, bySetColor) {
-                                            if (!bySetColor)
-                                                $(el).css('background-color', '#' + hex);
-                                        },
-                                        onSubmit: function (hsb, hex, rgb, el) {
-                                            $(el).css('background-color', '#' + hex);
-
-                                            $('#' + $('#path').val()).css('background-color', '#' + hex);
-                                            $(el).colpickHide();
-                                        }
-
-                                    }).keyup(function () {
-                                        $(this).colpickSetColor(this.value);
-                                    });
-                                </script>
-                        </div>
-                    </form>
-
-                    <form id="padding-setting" class="form-inline">
-                        <h4 class="text text-info"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "padding") %></h4>
-                        <center>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td><input type="text" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' value="15px" id="ptop" name="ptop"
-                                            style="width: 60px; margin-right: 5px"></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "left") %>' value="15px" id="pleft" name="mtop"
-                                            style="width: 60px; margin-right: 5px"></td>
-                                        <td></td>
-                                        <td><input type="text" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "right") %>' value="15px" id="pright" name="mbottom"
-                                            style="width: 60px; margin-right: 5px"></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><input type="text" class="form-control"
-                                            placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "bottom") %>' value="15px" id="pbottom" name="pbottom"
-                                            style="width: 60px; margin-right: 5px"></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </center>
-                    </form>
-                </div>
-
-                <div class="text text-right" style="margin-top: 5px">
-                    <a href="#" id="saveElement" class="btn btn-primary"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "done") %></a>
-                </div>
-            </div>
-            <!-- END SETTINGS -->
+        <a class="btn btn-primary settings-panel-close" href="#" id="settings-panel-close"></i>Save & Close</a>
+            
         </div>
+        
+    </div>
+
+
+
+
+    </div> <!-- end of tiny-editor -->
+
+
+    <!-- start of block-customize -->
+    <div role="tabpanel" class="tab-pane" id="block-customize" style="margin-top: 10px;">
+
+
+<div id="common-settings">
+
+<div class="form-horizontal">
+<!-- start of padding top -->
+    <div class="form-group">
+            <div class="col-sm-5 control-label">Padding Top</div>
+        <div class="col-sm-7" id="padding-setting">
+      
+        <div class="input-group"> 
+            <input type="number" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' id="ptop" name="ptop" >
+            <div class="input-group-addon color-preview">px</div> 
+        </div>
+            
+        </div>
+    </div> <!-- end of padding top -->
+
+
+    <!-- start of padding bottom -->
+     <div class="form-group">
+                        <div class="col-sm-5 control-label">Padding Bottom</div>
+        <div class="col-sm-7" id="padding-setting">
+      
+        <div class="input-group"> 
+            <input type="number" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "top") %>' id="pbottom" name="pbottom" >
+            <div class="input-group-addon color-preview">px</div> 
+        </div>
+            
+        </div>
+    </div> <!-- end of padding bottom -->
+
+
+    <!-- start of block background color -->
+    <div class="form-group">
+                        <div class="col-sm-5 control-label">Background Color</div>
+        <div class="col-sm-7" id="bgcolor">
+      
+            <div class="input-group"> 
+                <div class="input-group-addon color-preview"></div> 
+                <div class="form-control hex-col-val"> </div>
+            </div>
+            
+        </div>
+
+        <script type="text/javascript">
+                    $('#bgcolor').colpick({
+                    layout: 'hex',
+                    // colorScheme: 'dark',
+                    onBeforeShow: function () {
+                    $(this).colpickSetColor(rgb2hex($(this).find('.color-preview').css('background-color').replace("#","")));
+                    },
+                    onChange: function (hsb, hex, rgb, el, bySetColor) {
+                            if (!bySetColor){
+                                $(el).parent().find(".color-preview").css('background-color', '#' + hex);
+                                $(el).parent().find(".hex-col-val").text('#' + hex);
+                                $('#' + $('#path').val()).css('background-color', '#' + hex);
+                                $('#' + $('#path').val()).attr('data-color',true);
+                            }
+                    },
+                    onSubmit: function (hsb, hex, rgb, el) {
+                        $('#' + $('#path').val()).css('background-color', '#' + hex);
+                        $('#' + $('#path').val()).attr('data-color',true);
+                        $(el).colpickHide();
+                    }
+                    }).keyup(function () {
+                    $(this).colpickSetColor(this.value);
+                    });
+        </script>
+        
+    </div> <!-- end of block background color -->
+
+    <div class="form-group" style="padding-top:6px;">
+        <div class="col-xs-4 pull-right" style="margin-right: 8px;">
+
+        <a class="btn btn-primary settings-panel-close" href="#" id="settings-panel-close"></i>Save & Close</a>
+            
+        </div>
+        
+    </div>
+
+
+</div>
+                
+            
+            </div> <!-- end of settings  -->
+
+    </div> <!-- end of block-customize -->
+
+
+</div> <!-- end of tab-content -->                  
+
+                    <!-- <div id="user-poll">
+                        <h4 class="text text-info">User Poll</h4>
+                        <ul class="list-group" id="poll-list">
+                            <li class="hide" >
+                                <div class="input-group">
+                                <input type="text" class="form-control" name="poll_value" placeholder="poll" style="width:45%">
+                                <input type="text" class="form-control" name="poll_tag" placeholder="Related Tag" style="width:55%">
+                                <span class="input-group-addon delbutton"><a>x</a></span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div>
+                                <div>
+                                    <button class="btn pull-right" id="add-poll">Add More</button>
+                                </div>
+                                <br><br><br>
+                                <div>
+                                <input type="text" class="form-control" name="poll_url" placeholder="Redirect URL">
+                                </div>
+                        </div>
+                        <br>
+                    </div> -->        
+
+
+</div>
+    </div>
 
         <div id="download-layout"></div>
     </div>
@@ -804,7 +1058,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
     <div class="modal fade" id="previewModal" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="min-width: 120px">
+            <div class="modal-content" style="min-width: 120px;">
                 <div class="modal-header hidden">
                     <input id="httphref" type="text" name="href" value="http://"
                         class="form-control" />

@@ -30,6 +30,7 @@ var WidgetsRouter = Backbone.Router
                 "Zendesk/:id" : "Zendesk",
                 "Uservoice" : "Uservoice",
                 "Uservoice/:id" : "Uservoice",
+
                 // Calling widgets
                 "Sip" : "Sip",
                 "Sip/:id" : "Sip",
@@ -44,8 +45,10 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
-                "Android" : "Android",
-                "Android/:id" : "Android",
+                "android" : "Android",
+                "android/:id" : "Android",
+                "knowlarity" : "Knowlarity",
+                "knowlarity/:id" : "Knowlarity",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
@@ -60,6 +63,7 @@ var WidgetsRouter = Backbone.Router
                 "QuickBooks/:id" : "QuickBooks",
                 "PayPal" : "PayPal",
                 "PayPal/:id" : "PayPal",
+
                 // Ecommerce widgets
                 "Shopify" : "Shopify",
                 "Shopify/:id" : "Shopify",
@@ -112,6 +116,7 @@ var WidgetsRouter = Backbone.Router
                                 });
                             }, 1000);*/
                             $('#settings-widgets-tab-content').find('#call div:nth-child(6)').css({"display":"none"});
+                            $('#settings-widgets-tab-content').find('#call div:nth-child(7)').css({"display":"none"});
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
@@ -396,6 +401,10 @@ var WidgetsRouter = Backbone.Router
                 if(id){
                     adjust_form();
                 }
+            },
+
+            Knowlarity : function(id){
+                addConfigurableWidget(id, "Knowlarity", "knowlarity-login");
             },
             
             /**

@@ -62,6 +62,24 @@
 					</span>
 			    </div>
 			</div>
+
+            {{#if id}}      
+               <div id="office-folders" class="control-group form-group m-t-sm">        
+                    <div class="controls">      
+                        <a href="#" class="office-folders-settings-click text-info" oid={{id}} name = "office">
+                            <i class='icon-plus-sign' id="icon_id" /></i> {{agile_lng_translate 'prefs-email' 'email-folders'}}
+                        </a>      
+                        <span class="office-folders-select" style="display: none">           
+                            <br>        
+                            <label class="control-label m-t-sm">{{agile_lng_translate 'prefs-email' 'select-maximum-3-folders'}}</label>        
+                            <select name="folders" multiple id="office-folders-multi-select" class = "multi-select form-control" limit = "3" style="margin-bottom: 5px; overflow: auto">        
+                            </select>       
+                            <span class="office-folders-settings-status"></span>        
+                        </span>     
+                   </div>       
+                </div>      
+            {{/if}}
+
             <div class="form-group form-actions"> 
 				<a href="#email" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
                 <button type="submit" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}} </button>

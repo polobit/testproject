@@ -10,6 +10,8 @@ var callJar;
 var notifications_sound;
 var messagefromcallback;
 var outboundmessage;
+var KnowlarityWidgetPrefs;
+var knowlaritySource;
 
 function androidSetup(){
 	head.js(LIB_PATH + 'widgets/android.js', function(){
@@ -17,14 +19,31 @@ function androidSetup(){
 	});
 }
 
-var notifications_sound = true;
-$(function(){
+function knowlaritySetup(){
+	var requestURL = "core/api/widgets/knowlarity/getPrefs";
+	$.ajax({
+		url : requestURL,
+		type : "GET",	
+		success : function(result) {
+			if(result && result.length > 0){
+				console.log(result);
+				KnowlarityWidgetPrefs = JSON.parse(result);				
+				head.js('widgets/knowlarity.js', function(){ 
+					if(!knowlaritySource){
+						knowlarityEventsFinder(KnowlarityWidgetPrefs);
+					}					
+				});								
+			}
+		}
+	});
+}
 
+$(function(){
 	default_call_option = { "callOption" : [] };
 	callOptionDiv = "" ;
 	globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 	globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel"};
+	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity"};
 	dialled = {"using" : "default"};
 	CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 	callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
@@ -35,6 +54,7 @@ $(function(){
 
 	//	initToPubNub();
 	globalCallWidgetSet();
+	knowlaritySetup();
 	androidSetup();
 });
 

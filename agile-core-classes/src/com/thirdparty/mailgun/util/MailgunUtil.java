@@ -5,8 +5,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.sun.jersey.api.client.Client;
@@ -171,6 +173,8 @@ public class MailgunUtil {
 			return null;
 		// Mailgun mail json
 		JSONObject mailgunJSON = new JSONObject();
+		
+		boolean emailCategory = EmailGatewayUtil.isEmailCategoryTransactional(emailSender);
 
 		// add mail data from MailDeferredTask to json
 		for (MailDeferredTask mailDeferredTask : task) {
@@ -185,7 +189,7 @@ public class MailgunUtil {
 					mailDeferredTask.text = StringUtils.replace(
 							mailDeferredTask.text, EmailUtil
 									.getPoweredByAgileLink("campaign",
-											"Powered by"), "Sent using Agile");
+											"Powered by",  emailCategory), "Sent using Agile");
 					mailDeferredTask.text = EmailUtil.appendAgileToText(
 							mailDeferredTask.text, "Sent using",
 							emailSender.isEmailWhiteLabelEnabled());
@@ -196,10 +200,10 @@ public class MailgunUtil {
 				if (!StringUtils.isBlank(mailDeferredTask.html)
 						&& !StringUtils.contains(mailDeferredTask.html,
 								EmailUtil.getPoweredByAgileLink("campaign",
-										"Powered by")))
+										"Powered by",  emailCategory)))
 					mailDeferredTask.html = EmailUtil.appendAgileToHTML(
 							mailDeferredTask.html, "campaign", "Powered by",
-							emailSender.isEmailWhiteLabelEnabled());
+							emailSender.isEmailWhiteLabelEnabled(),  emailCategory);
 
 			}
 

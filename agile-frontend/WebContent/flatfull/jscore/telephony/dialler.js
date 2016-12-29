@@ -181,54 +181,52 @@ $(function()
     	}
 	});
 	
-	$('#agilecrm-container #direct-dialler-div').on('click', '.dial-number', function(e)
-			{
-			  	e.preventDefault();
-			  	var to = $("#dail_phone_number").val();
-			  	var from ;
-			  	var widgetName;
-			  	if(default_call_option.callOption.length>2){
-			  		widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
-			  	}else if(default_call_option.callOption.length == 2){
-			  		var index = containsOption(default_call_option.callOption, "name", "CallScript");
-			  		if(index == -1){
-			  			widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
-			  		}else{
-			  			widgetName = $(".dialler-widget-li").parent().find("a.actives").attr("value");
-			  		}
-			  		
-			  	}else if(default_call_option.callOption.length == 1){
-			  		if(_agile_get_prefs("dial-default-widget")){
-			  			widgetName = _agile_get_prefs("dial-default-widget");
-			  		}else{
-			  			widgetName = widgetCallName[default_call_option.callOption[0].name];
-			  		}
-			  		
-			  	}
-			  	
-			  	if(!widgetName || widgetName== "CallScript"){
-			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
-			  		$(".dialler-modal-body").html("Please select a widget from the dropdown to dial.");
-			  		$("#diallerInfoModal").modal("show");
-			  		return;
-			  	}
-			  	if (to.length < 1){
-			  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
-			  		$(".dialler-modal-body").html("Please enter a number to dial.");
-			  		$("#diallerInfoModal").modal("show");
-			  		return;
-			  	}
-			  
-			  	$("#dialler-phone-number-form").submit();
-			  if(checkForActiveCall()){
-				  alert("Already on call.");
-					return;
-				}
-			  		
-			  accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+encodeURIComponent(to), function(responseJson){
-				  callToNumber(to,from,widgetName,responseJson,"dialler");
-			  });
-			});
+	$('#agilecrm-container #direct-dialler-div').on('click', '.dial-number', function(e){
+	  	e.preventDefault();
+	  	var to = $("#dail_phone_number").val();
+	  	var from;
+	  	var widgetName;
+	  	if(default_call_option.callOption.length>2){
+	  		widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
+	  	}else if(default_call_option.callOption.length == 2){
+	  		var index = containsOption(default_call_option.callOption, "name", "CallScript");
+	  		if(index == -1){
+	  			widgetName = $(".dialler-widget-li").parent().find("a.selected-widget").attr("value");
+	  		}else{
+	  			widgetName = $(".dialler-widget-li").parent().find("a.actives").attr("value");
+	  		}	  		
+	  	}else if(default_call_option.callOption.length == 1){
+	  		if(_agile_get_prefs("dial-default-widget")){
+	  			widgetName = _agile_get_prefs("dial-default-widget");
+	  		}else{
+	  			widgetName = widgetCallName[default_call_option.callOption[0].name];
+	  		}
+	  		
+	  	}
+	  	
+	  	if(!widgetName || widgetName== "CallScript"){
+	  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
+	  		$(".dialler-modal-body").html("Please select a widget from the dropdown to dial.");
+	  		$("#diallerInfoModal").modal("show");
+	  		return;
+	  	}
+	  	if (to.length < 1){
+	  		$("#diallerInfoModal").html(getTemplate("diallerInfoModal"));
+	  		$(".dialler-modal-body").html("Please enter a number to dial.");
+	  		$("#diallerInfoModal").modal("show");
+	  		return;
+	  	}
+	  
+	  	$("#dialler-phone-number-form").submit();
+	  	if(checkForActiveCall()){
+		  alert("Already on call.");
+			return;
+		}
+	  		
+		accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+to, function(responseJson){
+			callToNumber(to,from,widgetName,responseJson,"dialler");
+		});
+	});
 	
 	$('body').on('click', '#dialler_info_ok', function(e)
 			{
@@ -363,7 +361,7 @@ function appendToText(name,value){
 //widget - Twilio,Sip,Bria,Skype
 //to - number to call
 function callToNumber(to,from,widgetName,contact,dialler){
-	
+	console.log("widgetName : **** "+ widgetName);
 	dialled.using = dialler; //Needed to know if dialled from dialler or contact-detail or from campaign
 	
 	if(dialled.using == "dialler"){
@@ -382,8 +380,11 @@ function callToNumber(to,from,widgetName,contact,dialler){
 		}else if(widgetName == "Android"){
 			dialFromMobileAPP(to, from, contact);
 		}else if(widgetName == "Ozonetel"){
-			dialFromOzonetel(to,from,contact)
-		}	
+			dialFromOzonetel(to,from,contact);
+		}else if(widgetName == "Knowlarity"){
+			dialFromKnowlarity(to,from,contact);
+		}
+
 	}catch(e){
 		console.log("error occured in calltonumber function " + e);
 		 $("#direct-dialler-div").show();
@@ -397,6 +398,15 @@ function dialFromMobileAPP(to, from, contact){
 		return;
 	}
 	appDialer(to, contact);
+}
+
+function dialFromKnowlarity(to, from, contact){
+	if (checkForActiveCall()){
+		alert("Already on call.");
+		return;
+	}	
+
+	knowlarityDailer(KnowlarityWidgetPrefs, to, contact);
 }
 
 function dialFromTwilio(to,from,contact){
@@ -416,20 +426,19 @@ function dialFromTwilio(to,from,contact){
 		TWILIO_CONTACT = contact;
 	}
 	
-		TWILIO_CALLTYPE = "Outgoing";
-		TWILIO_DIRECTION = "outbound-dial";
-		TWILIO_IS_VOICEMAIL = false;
-		
-		
+	TWILIO_CALLTYPE = "Outgoing";
+	TWILIO_DIRECTION = "outbound-dial";
+	TWILIO_IS_VOICEMAIL = false;
+	
+	
 
-		if(CALL_CAMPAIGN.start )
-		  {
-			if(CALL_CAMPAIGN.state == "PAUSE"){
-				alert("Already on call");
-				return;
-			}
-			CALL_CAMPAIGN.state = "PAUSE" ;
-		  }
+	if(CALL_CAMPAIGN.start){
+		if(CALL_CAMPAIGN.state == "PAUSE"){
+			alert("Already on call");
+			return;
+		}
+		CALL_CAMPAIGN.state = "PAUSE" ;
+	}
 	twiliocall(to, name, null, contact);
 }
 function dialFromOzonetel(to,from,contact){
@@ -596,6 +605,8 @@ function getIcon(widgetName){
 		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
 	}else if(widgetName == "Android"){
 		icon = "<img src='/img/plugins/android-sm-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Android' >Android";
+	}else if(widgetName == "Knowrality"){
+		icon = "<img src='/img/plugins/knowlarity-md-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Knowrality' >Knowrality";
 	}else if(widgetName == "Ozonetel"){
 		icon = "<img src='/widgets/ozonetel_fullsize.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Sip' >SIP";
 	}

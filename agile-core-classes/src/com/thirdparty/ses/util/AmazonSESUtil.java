@@ -9,8 +9,10 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
+import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -55,6 +57,7 @@ public class AmazonSESUtil
 	public static void sendSESMails(List<MailDeferredTask>tasks, EmailSender emailSender) throws Exception
 	{
 		EmailGateway emailGateway = emailSender.emailGateway;
+		 boolean emailCategory = EmailGatewayUtil.isEmailCategoryTransactional(emailSender);
 		
 		if(emailGateway == null)
 			throw new IllegalArgumentException("EmailGateway cannot be null");
@@ -70,7 +73,7 @@ public class AmazonSESUtil
 				{
 					// Appends Agile label
 					mailDeferredTask.text = StringUtils.replace(mailDeferredTask.text,
-							EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+							EmailUtil.getPoweredByAgileLink("campaign", "Powered by",  emailCategory), "Sent using Agile");
 					mailDeferredTask.text = EmailUtil.appendAgileToText(mailDeferredTask.text, "Sent using",
 							emailSender.isEmailWhiteLabelEnabled());
 				}
@@ -79,9 +82,9 @@ public class AmazonSESUtil
 				// html
 				if (!StringUtils.isBlank(mailDeferredTask.html)
 						&& !StringUtils.contains(mailDeferredTask.html,
-								EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+								EmailUtil.getPoweredByAgileLink("campaign", "Powered by", emailCategory)))
 					mailDeferredTask.html = EmailUtil.appendAgileToHTML(mailDeferredTask.html, "campaign",
-							"Powered by", emailSender.isEmailWhiteLabelEnabled());
+							"Powered by", emailSender.isEmailWhiteLabelEnabled(),  emailCategory);
 			
 				long start = System.currentTimeMillis();
 				ses.sendRawEmail(mailDeferredTask.fromEmail, mailDeferredTask.fromName, mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject, mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.campaignId, mailDeferredTask.domain);
