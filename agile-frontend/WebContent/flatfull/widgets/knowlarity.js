@@ -445,7 +445,8 @@ function startKnowlarityWidget(contact_id){
 	KNOWLARITY_Plugin_Id = knowlarity_widget.id;	
 	Email = agile_crm_get_contact_property('email');
 	
-	loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
+	//loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
+	$('#Knowlarity-container').remove();
 	
 	$(".contact-make-call-div").off("click", ".Knowlarity_call");
 	$(".contact-make-call-div").on("click", ".Knowlarity_call", function(e){
