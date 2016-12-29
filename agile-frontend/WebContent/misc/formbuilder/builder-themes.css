@@ -68,7 +68,7 @@ border-radius: 20px;
 
 .theme1 legend{
 border-bottom: 3px solid #f6f6f6!important;
-text-align: center!important;
+text-align: center;
 font-size: 18px;
 font-weight: 600;
 margin-bottom: 10px;
@@ -244,6 +244,7 @@ font-size: 18px;
 font-weight: 600;
 border-bottom: none;
 padding: 14px;
+padding-right: 32px;
 border-top-left-radius: 5px;
 border-top-right-radius: 5px;
 box-sizing: border-box;
@@ -395,6 +396,7 @@ font-size: 18px;
 font-weight: 600;
 border-bottom: none;
 padding: 14px;
+padding-right: 32px;
 border-top-left-radius: 5px;
 border-top-right-radius: 5px;
 box-sizing: border-box;
@@ -547,6 +549,7 @@ font-size: 18px;
 font-weight: 600;
 border-bottom: none;
 padding: 14px;
+padding-right: 32px;
 border-top-left-radius: 5px;
 border-top-right-radius: 5px;
 box-sizing: border-box;
@@ -680,4 +683,7 @@ select:not([multiple]){
 }
 #target.theme2 legend::after,#target.theme3 legend::after,#target.theme4 legend::after {
     top: 86px;
+}
+.field_req{
+  color:red;
 }

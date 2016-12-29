@@ -1,3 +1,9 @@
+<%@page import="com.agilecrm.customtheme.util.CustomThemesUtil"%>
+<%@page import="com.agilecrm.customthemes.CustomTheme"%>
+<%@page import="java.util.List"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONObject"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONArray"%>
+<%@page import="com.google.appengine.repackaged.com.google.gson.Gson"%>
 <%
 String formId = request.getParameter("form");
 String template = request.getParameter("template");
@@ -14,7 +20,11 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/custom.css?v=3-4" rel="stylesheet">      
       <link href="misc/formbuilder/builder-themes.css?v=5" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css?t=1" rel="stylesheet">
-     
+      <link href="misc/formbuilder/formthemes.css?t=2" rel="stylesheet">
+      <script src="misc/formbuilder/formthemes/jscolor.js"></script>
+      <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
+      <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
+      
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -33,12 +43,18 @@ String template = request.getParameter("template");
            }
          .tooltip.in{opacity:1 !important;}
       </style>
-	<script>
-		var formNumber = <%=formId%>;
+  <script>
+    var formNumber = <%=formId%>;
    <% if(template != null) { %>
    var formTemplate = '<%=template%>';
    <% } %>
-	</script>
+   var customthemes=null;
+      <%
+        List<CustomTheme> custThmList=CustomThemesUtil.fetchAllCustomThemes();
+        System.out.println("hi..........."+custThmList);
+        %>
+   customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
+  </script>
 
    </head>
    <body>
@@ -48,6 +64,18 @@ String template = request.getParameter("template");
          </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
         <div style="float: right;"> 
+             <select class="themesSelectEle navbar-brand">
+                  <option id="chooseTheme">Choose Theme</option>
+                  <optgroup id="defaultThmEle"  label="Default Themes">
+                  <option id="theme1" value="theme1">Theme1</option>
+                  <option id="theme2" value="theme2">Theme2</option>
+                  <option id="theme3" value="theme3">Theme3</option>
+                  <option id="theme4" value="theme4">Theme4</option>
+                  </optgroup>
+                  <optgroup id="custThmEle" label="Custom Themes">
+                  <option id="addNewTheme">+ Add new</option>
+                  </optgroup>
+             </select>
              <a id="form_preview" class="btn btn-primary navbar-brand" target="_blank" disabled>
                <span>Preview</span> 
             </a>          
@@ -70,10 +98,15 @@ String template = request.getParameter("template");
                <div class="clearfix">
                   <!-- <h2 id="form-label">Your Form</h2> -->
                   <!-- <input id="form-save" type="button" class="btn btn-info" value="Save Form"> -->
-                  <hr style="margin-top: 30px;">
+                 
+                 
+                <%@ include file="/misc/formbuilder/custom-theme-builder.html" %>     
+                
+                <hr style="margin-top: 30px;">
                   <div id="build">
                      <form id="target" class="form-horizontal">
                      </form>
+                     <style id="agileCustTheme" type="text/css"></style>
                   </div>
                </div>
             </div>
@@ -101,7 +134,7 @@ String template = request.getParameter("template");
          <div class="modal fade in" id="formNextActionModal" data-keyboard="false" data-backdrop="static"></div>
       </div>
       <!-- /container back -->
-      <script data-main="misc/formbuilder/main-built-6.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      
       <script type="text/javascript">
       if(formNumber){
          var a = document.getElementById('form_preview');
@@ -112,6 +145,13 @@ String template = request.getParameter("template");
          a.href = window.location.origin;
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
+         window.onbeforeunload = function(event) {
+               var closeText = "Do you want to Close?";
+               event.returnValue = closeText;
+               return closeText;
+         }
       </script>
+      <script data-main="misc/formbuilder/main.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      
    </body>
 </html>

@@ -1,0 +1,537 @@
+            <div class="modal fade" id="customThemeModal" role="dialog">
+                      <div class="modal-dialog" style="width: 1032px;height: 365px;left:0px;">
+    
+                         <!-- Modal content-->
+                        <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" onclick="closeAddTheme()">&times;</button>
+                        <div class="modal-title">
+                        <form class="form-inline"><div><label style="margin-right: 25px;
+                        ">Theme Name<span class="field_req">*</span></label><input type="text" class="form-control" name="themeName" id="themeName"  maxlength="20" style="width: 21%;"><span id="errorSpan" style="margin-left:8px;color:#d9534f;"></span></div></form>
+
+                      </div>
+                        </div>
+                        
+                        <div class="modal-body" style="height: 400px;">
+                        
+    <!--ThemeBuilder Div-->
+    <div class ="col-sm-6 outerSelectTheme" >
+      <!--Select Div Start-->
+      <div class="selectDiv">
+        <label>Select</label>
+          
+            <div class="">
+              <select class="form-control">
+                  <option value="alignment">Alignment</option>
+                  <option value="border">Border</option>
+                  <option value="font">Font</option>
+                  <!--<option value="background">Background</option> --> 
+                  <option value="color">Color</option>
+               </select>
+              </div>
+      </div>
+      <!--Select Div End-->
+      
+      <!--Alignment Div Start-->
+      <div class="outerAlignmentTheme">
+        <!--Align Form Elements Start-->
+        <div class="innerAlignmentTheme innerAlignmentFormEle">
+          <label>Form Elements</label>
+          <div class="">
+            <select class="form-control">
+                <option value="formtitle">Form Title</option>
+            </select>
+            </div>
+        </div>
+        <!--Align Form Elements Start-->
+        <!--Align Start-->
+        <div class="innerAlignmentTheme innerAlignmentAlignStart">
+          <span style="font-weight: bold;">Align</span>
+          <div class="">
+            <select class="form-control">
+                  <option value="center">Center</option>
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                  
+              </select>
+            </div>
+        </div>
+        <!--Align End-->
+      </div>
+      <!--Alignment Div End-->
+      <!--Border Div Start -->
+        <div class="outerBorderTheme">
+          <!-- Border Form Elements Start-->
+          <div class="innerBorderTheme innerBorderThemeFormEle ">
+            <label>Form Elements</label>
+            <div>
+              <select class="form-control">
+                <option>Form</option>
+              </select>
+            </div>
+          </div>
+          <!-- Border Form Elements End-->
+          <!-- Border Width Start-->
+          <div class="innerBorderTheme innerBorderWidthTheme">
+            <label>Width</label>
+            <div>
+              <select class="form-control">
+                <option>None</option>
+                <option>Thin</option>
+                <option>Medium</option>
+                <option>Thick</option>
+              </select>
+            </div>
+          </div>
+          <!-- Border Width End-->
+          <!-- Border Style Start-->
+          <div class="innerBorderTheme innerBorderStyleTheme">
+            <label>Border Style:</label>
+            <div class="ulDiv"> 
+              <ul>
+                <li class="selected"><p class="solidBorder" name="solid"></p></li>
+                <li><p class="dottedBorder" name="dotted"></p></li>
+                <li><p class="dashedBorder" name="dashed"></p></li>
+                <li><p class="doubledBorder" name="doubled"></p></li>
+              </ul>
+            </div>
+          </div>
+          <!-- Border Style End-->
+         </div>
+      <!--Border Div  End-->
+
+      <!--Font Div Start-->
+      <div class="outerFontTheme">
+         <!--Font Form Elements Start -->
+        <div class="innerFontTheme innerFontEleTheme">
+          <label>Form Elements</label>
+          <div>
+              <select class="form-control">
+                <option>Title</option>
+                <option>Field Label</option>
+                <option>Button Text</option>
+              </select>
+            </div>
+        </div>
+        <!--Font Form Elements End -->
+        <!--Font Type Start -->
+        <div class="innerFontTheme innerFontFamilyTheme">
+          <label>Font</label>
+          <div>
+              <select class="form-control">
+                <option value="Arial,Arial,Helvetica,sans-serif">Arial</option>
+                <option value="Arial Black,Arial Black,Gadget,sans-serif">Arial Black</option>
+                <option value="Courier New,Courier New,Courier,monospace">Courier New</option>
+                <option value="Georgia,Georgia,serif">Georgia</option>
+                <option value="Impact,Charcoal,sans-serif">Impact</option>
+                <option value="Lucida Console,Monaco,monospace">Lucida Console</option>
+                <option value="Lucida Sans Unicode,Lucida Grande,sans-serif">Lucida Sans Unicode</option>
+                <option value="Palatino Linotype,Book Antiqua,Palatino,serif">Palatino Linoty</option>
+                <option value="Tahoma,Geneva,sans-serif">Tahoma</option>
+                <option value="Times New Roman,Times,serif">Times New Roman</option>
+                <option value="Trebuchet MS,Helvetica,sans-serif">Trebuchet MS</option>
+                <option value="Verdana,Geneva,sans-serif">Verdana</option>
+                <option value="Gill Sans,Geneva,sans-serif">Gill Sans</option>
+
+              </select>
+            </div>
+        </div>
+        <!--Font Type End -->
+        <div class="row">
+        <!--Font Style Start -->
+        <div class="innerFontTheme innerFontStyleDiv col-md-4">
+          <label>Style</label>
+          <div class="innerFontSizeUlDiv">
+            <select class="form-control" style="padding-left:11px;">
+              <option value="normal">Normal</option>
+              <option value="italic">Italic</option>
+            </select>
+          </div>
+
+        </div>
+        <!--Font Style End-->
+        <!--Font Weight Start -->
+        <div class="innerFontTheme innerFontWeightDiv col-md-4">
+          <label>Weight</label>
+          <div class="innerFontSizeUlDiv">
+            <select class="form-control" style="padding-left:11px;">
+              <option value="normal">Normal</option>
+              <option value="bold">Bold</option>
+            </select>
+          </div>
+        </div>
+        <!--Font Weight End -->
+        <!--Font Size Start -->
+        <div class="innerFontTheme innerFontSizeDiv col-md-4">
+          <label>Size</label>
+          <div class="innerFontSizeUlDiv">
+            <select class="form-control" style="padding-left:11px;">
+              <option>8</option>
+              <option>10</option>
+              <option>12</option>
+              <option>14</option>
+              <option>18</option>
+              <option>24</option>
+              <option>28</option>
+              <option>34</option>
+              <option>54</option>
+            </select>
+          </div>
+        </div>
+        <!--Font Size End -->
+        </div>
+      </div>
+      <!--Font Div End-->
+      <!--Color ThemeComponent Start -->
+      <div class="outerColorThemeEle">
+        <div class="innerColorThemeEle">
+           <label>Form Elements</label>
+          <div>
+            <select class="form-control">
+                <option value="formBorder">Form Border</option>
+                <option value="formBackground">Form Background</option>
+                <option value="title">Title</option>
+                <option value="fieldLabel">Field Label</option>
+                <option value="buttonText">Button Text</option>
+                <option value="buttonBackground">Button Background</option>
+            </select>
+          </div>
+        </div>
+        <div class="innerColorThemeEle">
+          <div class="colorTheme">
+            <label>Choose Color</label>
+             <input class="jscolor innerColorTheme form-control" style="color: rgb(0, 0, 0);" size="11" value="000000
+             ">
+          </div>
+        </div>
+      </div>
+      <!--Color ThemeComponent End -->
+    </div>
+    <!--ThemeBuilder Div-->                  
+    <div class="col-sm-6 createCustomFormContent" style="margin:0 auto;width:450px;margin-top:20px;margin-left: 10%;">
+    </div>
+        </div>
+              <div class="modal-footer">
+              
+                <button type="button" class="btn btn-sm btn-default" onclick="closeAddTheme()" data-dismiss="modal" >Close</button>
+                <button type="button" class="btn btn-sm btn-primary save" style="background-color: #7266ba;border-color: #7266ba;" onclick="saveCustTheme()">Save</button>
+              </div>
+             </div>
+      
+                     </div>
+                  </div>
+
+                <!-- Apply or delete theme popup--> 
+                <div class="modal fade" id="customThemeAppyDelModal" role="dialog">
+                    <div class="modal-dialog" style="left: 0;position: static;margin-top: 107px;">
+                      
+                        <div class="modal-content">
+                           <div class="modal-header">
+                             <button type="button" id="closetheme" class="close" data-dismiss="modal" onclick="closeApplyTheme(this)">&times;</button>
+                             <div class="modal-title">Confirmation</div>
+                           </div>
+                           <div id="applyThemeBody" class="modal-body">
+                           
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" id="deltheme" class="btn btn-sm btn-danger" onclick="closeApplyTheme(this)" data-dismiss="modal">Delete</button>
+                              <button type="button" id="applytheme" class="btn btn-sm" onclick="closeApplyTheme(this)" data-dismiss="modal">Apply</button>
+                           </div>
+                        </div>
+                     </div>
+                  </div> 
+
+                  <!-- Script Content-->
+
+<script>
+                  var formtheme="default";
+                  var chooseThemeFuncHitCount=0;
+                  var formClasses=null;
+                  var themesListAsArr=["default"];
+                  var currApplThm=null;
+                  var defaultThemes = ["theme1","theme2","theme3","theme4"];
+                  
+                  
+                  function chooseThemeFunc(){
+                    
+                    if(currApplThm==null){
+                      currApplThm="Choose Theme";
+                    }
+                   chooseThemeFuncHitCount++;
+                    if(chooseThemeFuncHitCount==1){
+                      
+
+                    /*Edit Form CustTheme Class Fetching*/
+                    if(customthemes!=null){
+                     console.log("No of Custom Themes::"+customthemes.length);
+                      for(i=0;i<customthemes.length;i++){
+                        var custId=customthemes[i].id;
+                        var custName=customthemes[i].name;
+                        themesListAsArr.push(custName);
+                        var custCss=customthemes[i].themeCss;
+                        var custIdName=custName+":"+custId;
+                        var inputTheme='<option id="form'+custId+'">'+custName+'</option>';
+                        $(inputTheme).insertBefore("#addNewTheme");
+                         if(formClasses!=null){
+                          var formClassesList=formClasses.split(" ");
+                              if(formClassesList.indexOf("form"+custId)>-1){
+                                    $("#form"+custId).attr("selected","true");
+                            }
+                         }
+                        }
+                      }
+                    }
+                  }
+                  
+                  function selectedThemeFunc(identifier){
+                    var themeId=$(".themesSelectEle option:selected").attr("id");
+                    var themeVal=$(".themesSelectEle option:selected").val();
+                    console.log("Selected Theme Value:"+themeVal);
+                    if(themeVal=="Choose Theme"){
+                      formtheme="Choose Theme";
+                      currApplThm="Choose Theme";
+                    }
+                    else{
+                      formtheme=themeVal;
+                    }
+                    if(formtheme != null){
+                        $.each( customthemes, function( index, value ) {
+                            $(document.getElementById("target")).removeClass("form"+value.id);
+                            $(document.getElementById("agileCustTheme")).empty();
+                        });
+                        $.each(defaultThemes,function(index,value){
+                           $(document.getElementById("target")).removeClass(value);
+                           $(document.getElementById("agileCustTheme")).empty();
+                        });
+
+                        if(formtheme != "Choose Theme"){
+                           $.each(defaultThemes,function(index,value){
+                                 if(value==formtheme){
+                                    currApplThm=value;
+                                    $(document.getElementById("target")).addClass(value);
+                                    return;
+                                 }
+                           });
+                            $.each( customthemes, function( index, value ) {
+                                 if(value.name==formtheme){
+                                     currApplThm=value.name;
+                                     $(document.getElementById("target")).addClass("form"+value.id);
+                                     $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                                     return;
+                                 }
+                            }); 
+                        }
+                     }
+                  
+                  }
+                  
+                  function saveCustTheme(){
+                    var thmExist=validThemeNameFunc();
+                    var custTheme="";
+                    var themeName=$("#themeName").val();
+                    
+                    if(themeName!=null && (themeName.length>0)){
+                      if(thmExist!=undefined && !thmExist){
+                        $.ajax({
+                          type : 'POST',
+                          url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/saveThemeOnlyWithName',
+                          contentType : 'application/json',
+                          data : themeName,
+                          success:function(data){
+                            console.log("SAVED CUSTOM DATA ID COMING!!!"+data.id);
+                            if(data!=null && data!=""){
+                              themeclass = "form"+data.id;
+                              for(i=0;i<themeArray.length;i++){
+                                for(j=0;j<themeArray[i].form_element.length;j++){
+                                  var ele=themeArray[i].form_element[j].ele;
+                                  var elecss=themeArray[i].form_element[j].css;
+                                  custTheme=custTheme+"."+themeclass+"\t"+elecss;
+                                 }
+                              }
+                              var customTheme = {};
+                              customTheme.id = data.id;
+                              customTheme.name=themeName;
+                              customTheme.themecss=custTheme;
+                              $.ajax({
+                                type : 'POST',
+                                url : window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/updateTheme',
+                                contentType : 'application/json',
+                                data : JSON.stringify(customTheme),
+                                success: function(data){
+                                    
+                                    if(data!=undefined && data!=""){
+                                    customthemes.push(data);
+                                    themesListAsArr.push(data.name);
+                                    var inputTheme='<option id="form'+data.id+'">'+data.name+'</option>';
+                                    
+                                    $(inputTheme).insertBefore("#addNewTheme");
+                                    $(".themesSelectEle").val(data.name);
+                                    $("#applyThemeBody").html("Are you sure you want to Apply or Delete <strong>"+$(".themesSelectEle").val()+"</strong> theme?");
+                                    $("#header").css("z-index","0");
+                                    $(".popover").css("z-index","50");
+                                    $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+
+                                   }
+                                  },
+                                  error: function(){
+                                    alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
+                                  }
+                              });
+                          }
+                          },
+                        });
+
+                          $(".createCustomFormContent").empty();
+                          $('#customThemeModal').modal('hide');
+                          $("#errorSpan").text("");
+                          $("#themeName").val("");
+                          
+                        }
+                        
+                      }
+                      
+                    }
+                  function validThemeNameFunc(){
+                    var themeName=$("#themeName").val();
+                    var themeNamePattern=/^[a-z][a-zA-Z0-9]+/;
+                    var isThemeNameExist=false;
+                    if(themeName==null || themeName.length<=0){
+                      $("#errorSpan").text("This field is required.");
+                    }
+                    else{
+                          $.each(defaultThemes,function(index,value){
+                              if(value.toUpperCase() === themeName.toUpperCase()){
+                                 isThemeNameExist=true;
+                                 $("#errorSpan").text("Same kind of name already exists.");
+                                 return;
+                              }
+                          });
+                          if(isThemeNameExist == false){
+                              $.each( themesListAsArr, function( index, value ) {
+                                 if(value.toUpperCase() === themeName.toUpperCase()){
+                                   isThemeNameExist=true;
+                                   $("#errorSpan").text("Same kind of name already exists.");
+                                   return;
+                                 }
+                              });
+                          } 
+                          
+                          if(!isThemeNameExist){
+                            $("#errorSpan").text("");
+                          }
+                    }
+                    
+                     return isThemeNameExist;
+                  }
+
+                function deleteTheme(themeName){
+                  var deleteThemeVal = themeName;
+                  var deleteThemeId = $(".themesSelectEle option:selected").attr("id");
+                  $.ajax({
+                                type : 'GET',
+                                url :  window.location.protocol + '//' + window.location.host + '/' + 'core/api/themes/deleteTheme?themeName='+deleteThemeVal,
+                                success: function(data){
+                                  console.log("DELETED THEME?"+data);
+                                  
+                                   $.each( themesListAsArr, function( index, value ){
+                                      if(value==deleteThemeVal)
+                                      themesListAsArr.splice(index,1);
+                                    });
+
+                                    $.each( customthemes, function( index, value ) {
+                                       if(deleteThemeId.includes(this.id)){
+                                            customthemes.splice(index,1);
+                                            if($(document.getElementById("target")).hasClass(deleteThemeId)){
+                                            $(document.getElementById("target")).removeClass(deleteThemeId);
+                                            $(document.getElementById("agileCustTheme")).empty();
+                                            } 
+                                        }  
+                                    });
+                                    if(currApplThm==themeName){
+                                      currApplThm="Choose Theme";
+                                      selectedThemeFunc();
+                                    }
+                                    $(".themesSelectEle option:selected").remove();
+                                    $(".themesSelectEle").val(currApplThm);
+                                },
+                                error: function(err){
+                                  alert("Theme is not getting deleted AJAX ERROR is::"+JSON.stringify(err, null, 2));
+                                }
+                      });
+                  }
+
+                  function createCustTheme(){
+
+                    if($("#render")!=undefined && $("#render")!=null){
+                          var pContent=document.getElementById("render").value;
+                          $(".createCustomFormContent").html(pContent);
+                          $.each(defaultThemes,function(index,value){
+                              var classesList =  $(".createCustomFormContent .form-view").attr("class")
+                              if(value!="form-view" &&classesList.indexOf(value)>-1){
+                                 $(".createCustomFormContent .form-view").removeClass(value);
+                              }
+                          });
+                     }
+                    defaultFormEleFun();
+                    custThemePopUpCode();
+
+                  }
+
+                  function closeAddTheme(){
+                     $(".createCustomFormContent").empty();
+                     $("#themeName").val("");
+                     $("#errorSpan").text("");
+                     $(".themesSelectEle").val(currApplThm);
+                     $(".createCustomFormContent").empty();
+                     $("#header").css("z-index","2001");
+                     $(".popover").css("z-index","2000");
+                  }
+
+                  $(".themesSelectEle").change(function(identifier){
+                        chooseThemeFunc();
+                        var themeId=$(".themesSelectEle option:selected").attr("id");
+                        
+                        if(themeId == "addNewTheme"){
+                          
+                          createCustTheme();
+                          $("#header").css("z-index","0");
+                          $(".popover").css("z-index","50");
+                          $('#customThemeModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+                        }
+                        else if(themeId=="chooseTheme" || themeId == "theme1" || themeId == "theme2" || themeId == "theme3" || themeId == "theme4"){
+                          selectedThemeFunc(identifier);
+                        }
+                        else{
+                          $("#header").css("z-index","0");
+                          $(".popover").css("z-index","50");
+                          $("#applyThemeBody").html("Are you sure you want to Apply or Delete <strong>"+$(".themesSelectEle").val()+"</strong> theme?");
+                          $('#customThemeAppyDelModal').removeData('bs.modal').modal({backdrop: 'static', keyboard: false});
+                          }
+                  });
+                  $("#themeName").keypress(function(event){
+                     if (event.which == '13') {
+                        event.preventDefault();
+                     }
+                  });
+                  function closeApplyTheme(identifier){
+
+                    var selectedVal = identifier.id;
+                    if(selectedVal == "applytheme"){
+                      selectedThemeFunc(identifier);
+                      $("#header").css("z-index","2001");
+                      $(".popover").css("z-index","2000");
+                    }
+                    else if(selectedVal == "deltheme"){
+                      var currThm=$(".themesSelectEle").val();
+                      deleteTheme(currThm);
+                      $("#header").css("z-index","2001");
+                      $(".popover").css("z-index","2000");
+                    }
+                    else if(selectedVal == "closetheme"){
+                      $(".themesSelectEle").val(currApplThm);
+                      $("#header").css("z-index","2001");
+                      $(".popover").css("z-index","2000");
+                    }
+                  }
+                  
+      </script>
