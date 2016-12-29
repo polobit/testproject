@@ -544,7 +544,7 @@ function nodeLevelValidation(nodeName, callbackFunction){
   	if(nodeName == 'Replied?'){
 
 	    window.parent.showModalConfirmation("Alert",
-            "Please Configure the setings.",
+            "Please verify the following:</br>1. Make sure email forwarding setup with AgileCRM is done correctly.</br>2. From or ReplyTo should be the email to which forwarding setup is done.</br>3. Sending email must be HTML only.",
             null,null,null                      
             ,"Close", ""); 
 
