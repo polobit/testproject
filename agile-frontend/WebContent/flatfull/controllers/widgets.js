@@ -30,6 +30,7 @@ var WidgetsRouter = Backbone.Router
                 "Zendesk/:id" : "Zendesk",
                 "Uservoice" : "Uservoice",
                 "Uservoice/:id" : "Uservoice",
+
                 // Calling widgets
                 "Sip" : "Sip",
                 "Sip/:id" : "Sip",
@@ -44,6 +45,9 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
+                "Knowlarity" : "Knowlarity",
+                "Knowlarity/:id" : "Knowlarity",
+
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
                 "FreshBooks/:id" : "FreshBooks",
@@ -57,6 +61,7 @@ var WidgetsRouter = Backbone.Router
                 "QuickBooks/:id" : "QuickBooks",
                 "PayPal" : "PayPal",
                 "PayPal/:id" : "PayPal",
+
                 // Ecommerce widgets
                 "Shopify" : "Shopify",
                 "Shopify/:id" : "Shopify",
@@ -386,6 +391,10 @@ var WidgetsRouter = Backbone.Router
                 if(id){
                     adjust_form();
                 }
+            },
+
+            Knowlarity : function(id){
+                addConfigurableWidget(id, "Knowlarity", "knowlarity-login");
             },
             
             /**
