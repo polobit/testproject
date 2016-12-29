@@ -1,16 +1,16 @@
 {"elements": {
     "{{agile_lng_translate 'landingpage-builder' 'header'}}":[
-    	{"url":"elements/header11.html","height":70, "thumbnail":"elements/images/thumbs/header10.png"},
-    	{"url":"elements/header5.html","height":70, "thumbnail":"elements/images/thumbs/header5.png"},
-        {"url":"elements/newheader1.html","height":70, "thumbnail":"elements/images/thumbs/header5.png"}
+    	{"url":"elements/header11.html","height":70, "thumbnail":"elements/images/thumbs/new/header11.png"},
+    	{"url":"elements/header5.html","height":70, "thumbnail":"elements/images/thumbs/new/header5.png"},
+        {"url":"elements/newheader1.html","height":70, "thumbnail":"elements/images/thumbs/new/newheader1.png"}
     	
     ],
     "{{agile_lng_translate 'landingpage-builder' 'content'}}":[
-        {"url":"elements/header1.html","height":481, "thumbnail":"elements/images/thumbs/header1.png"},
-        {"url":"elements/header2.html","height":498, "thumbnail":"elements/images/thumbs/header2.png"},
-        {"url":"elements/header3.html","height":500, "thumbnail":"elements/images/thumbs/header3.png"},
-        {"url":"elements/header4.html","height":500, "thumbnail":"elements/images/thumbs/header4.png"},
-    	{"url":"elements/content_section12.html","height":376, "thumbnail":"elements/images/thumbs/content_section12.png"},
+        {"url":"elements/header1.html","height":481, "thumbnail":"elements/images/thumbs/new/header1.png"},
+        {"url":"elements/header2.html","height":498, "thumbnail":"elements/images/thumbs/new/header2.png"},
+        {"url":"elements/header3.html","height":500, "thumbnail":"elements/images/thumbs/new/header3.png"},
+        {"url":"elements/header4.html","height":500, "thumbnail":"elements/images/thumbs/new/header4.png"},
+    	{"url":"elements/content_section12.html","height":376, "thumbnail":"elements/images/thumbs/new/content_section12.png"},
     	{"url":"elements/content_section3.html","height":774, "thumbnail":"elements/images/thumbs/content_section3.png"},
     	{"url":"elements/content_section4.html","height":331, "thumbnail":"elements/images/thumbs/content_section4.png"},
     	{"url":"elements/content_section5.html","height":846, "thumbnail":"elements/images/thumbs/content_section5.png"},
@@ -24,11 +24,11 @@
         {"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/content_section1.png"},
         {"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/content_section2.png"},
         {"url":"elements/content_section9.html","height":500, "thumbnail":"elements/images/thumbs/content_section9.png"},
-        {"url":"elements/layout1.html","height":500, "thumbnail":"elements/images/thumbs/layout1.png"},
-        {"url":"elements/layout2.html","height":500, "thumbnail":"elements/images/thumbs/layout2.png"},
-        {"url":"elements/layout3.html","height":500, "thumbnail":"elements/images/thumbs/layout3.png"},
-        {"url":"elements/layout4.html","height":500, "thumbnail":"elements/images/thumbs/layout4.png"},
-        {"url":"elements/layout5.html","height":500, "thumbnail":"elements/images/thumbs/layout5.png"}
+        {"url":"elements/layout1.html","height":500, "thumbnail":"elements/images/thumbs/new/layout1.png"},
+        {"url":"elements/layout2.html","height":500, "thumbnail":"elements/images/thumbs/new/layout2.png"},
+        {"url":"elements/layout3.html","height":500, "thumbnail":"elements/images/thumbs/new/layout3.png"},
+        {"url":"elements/layout4.html","height":500, "thumbnail":"elements/images/thumbs/new/layout4.png"},
+        {"url":"elements/layout5.html","height":500, "thumbnail":"elements/images/thumbs/new/layout5.png"}
     ],
     "{{agile_lng_translate 'landingpage-builder' 'form'}}":[
         {"url":"elements/agileform1.html","height":700, "thumbnail":"elements/images/thumbs/agileform1.png"},
@@ -38,9 +38,9 @@
         {"url":"elements/agileform5.html","height":700, "thumbnail":"elements/images/thumbs/agileform5.png"}
     ],
     "{{agile_lng_translate 'landingpage-builder' 'contents-slider'}}":[
-        {"url":"elements/header7.html","height":400, "thumbnail":"elements/images/thumbs/header7.png"},
-        {"url":"elements/header6.html","height":400, "thumbnail":"elements/images/thumbs/header6.png"},
-        {"url":"elements/header9.html","height":400, "thumbnail":"elements/images/thumbs/header9.png"}        
+        {"url":"elements/header7.html","height":400, "thumbnail":"elements/images/thumbs/new/header7.png"},
+        {"url":"elements/header6.html","height":400, "thumbnail":"elements/images/thumbs/new/header6.png"},
+        {"url":"elements/header9.html","height":400, "thumbnail":"elements/images/thumbs/new/header9.png"}        
     ],    
     "{{agile_lng_translate 'landingpage-builder' 'divider'}}":[
     	{"url":"elements/divider1.html","height":163, "thumbnail":"elements/images/thumbs/divider1.png"},
