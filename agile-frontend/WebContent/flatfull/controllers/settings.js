@@ -426,9 +426,20 @@ var SettingsRouter = Backbone.Router
 							itemView3.model.set("password", "");
 						}, saveCallback : function()
 						{
+							var model = itemView3.model;
+							var json = model.toJSON();
+							if (typeof json.isUpdated !== 'undefined' && json.hasOwnProperty('isUpdated') && json.isUpdated)
+								App_Settings.navigate("email", { trigger : true });
+							else
+							{
+								itemView3.render(true);
+								var el = itemView3.el;
+								var model = itemView3.model;
+								load_office_folders(el, model);
+							}
 							// $("#office-prefs-form").find("#office-password").val("");
-							App_Settings.navigate("email", { trigger : true });
-							return;
+							// App_Settings.navigate("email", { trigger : true });
+							// return;
 						} });
 					// Appends Office
 					$('#prefs-tabs-content').html(itemView3.render().el);
@@ -458,10 +469,14 @@ var SettingsRouter = Backbone.Router
 					var office_model = App_Settings.officeListView.collection.get(id);
 
 					// Gets Office Prefs
-					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs",
+					var itemView3 = new Settings_Modal_Events({ url : '/core/api/office/', model : office_model, template : "settings-office-prefs", change : false,
 						postRenderCallback : function(el)
 						{
+							var model = itemView3.model;
+							var id = model.id;
 							itemView3.model.set("password", "");
+							load_office_properties(model, el);
+
 						}, saveCallback : function()
 						{
 							// $("#office-prefs-form").find("#office-password").val("");

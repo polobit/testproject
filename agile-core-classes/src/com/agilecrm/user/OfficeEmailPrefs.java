@@ -23,6 +23,7 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.email.wrappers.EmailWrapper;
+import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.OfficeEmailPrefsUtil;
 import com.agilecrm.util.EncryptDecryptUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -95,6 +96,12 @@ public class OfficeEmailPrefs
     private Key<AgileUser> agileUser;
     
     /**
+     * List of folders to fetch mails
+     */
+    @NotSaved(IfDefault.class)
+    public List<String> folders = null;
+    
+    /**
      * Sharing this object with list of users
      */
     @JsonIgnore
@@ -164,6 +171,17 @@ public class OfficeEmailPrefs
     }
     
     /**
+     * Returns list of selected mail server folders,we fetches mails from these
+     * folders only if list is not empty.
+     * 
+     * @return
+     */
+    public List<String> getFoldersList()
+    {
+	return folders;
+    }
+    
+    /**
      * Returns list of users, to which current user IMAP settings are sharing
      * 
      * @return
@@ -192,6 +210,11 @@ public class OfficeEmailPrefs
 	try
 	{
 	    OfficeEmailPrefsUtil.checkOfficePrefs(this);
+	    
+	    //If user doesn't mention folders, we uses default folders to fetch mails
+	    if (folders == null || folders.size() == 0)
+		folders = OfficeEmailPrefsUtil.getDefaultOfficeFolders(this);
+	    
 	    //Sharing current prefs with specified users
 	    if (shared_with_users_ids != null)
 	    {
