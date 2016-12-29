@@ -916,6 +916,8 @@ var portlet_graph_utility = {
 	callsByPersonPieGraph :function(selector,categoryList,valueList){
 
 	setupCharts(function(){
+		if(selector == "calls-chart-user")
+			buttons.pop();
 		var emptyFlag = true;
 		$.each(valueList,function(index,value){
 			if(value>0)

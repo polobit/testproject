@@ -23,6 +23,12 @@ function setupCharts(callback)
 			    onclick: triggerReportDetails
 			});
 		}
+		else if(!(buttons[buttons.length-1].text=="View Data")){
+			buttons.push({
+			    text: "{{agile_lng_translate 'highcharts' 'view-data'}}",
+			    onclick: triggerReportDetails
+			});
+		}
 		// Checks if callback is available, if available calls the callback
 		if (callback && typeof (callback) === "function")
 		{
@@ -1214,7 +1220,7 @@ function showDealAreaSpline(url, selector, name, yaxis_name, show_loading,freque
 	// callback
 	setupCharts(function()
 	{
-
+         
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
 		fetchReportData(url, function(data)
@@ -1962,7 +1968,6 @@ function pieforReports(url, selector, name,show_loading, is_lost_analysis)
 	var frequency = $( "#frequency:visible").val();
 	setupCharts(function()
 	{
-
 		fetchReportData(
 						url,
 						function(data)
@@ -2359,7 +2364,8 @@ function showFunnelForConversion(selector, name, show_loading,v)
 	setupCharts(function()
 	{
 
-			
+		if(selector == "Default")
+		buttons.pop();	
 			var funnel_data = [];
 			
 
