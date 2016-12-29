@@ -1,5 +1,7 @@
 package com.agilecrm.core.api.widgets;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -13,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Call;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
@@ -29,14 +32,13 @@ public class KnowlarityAPI {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String makeACall() throws Exception {
-		String result = "";
 		Widget widget = WidgetUtil.getWidget("Knowlarity");
 		if (widget != null) {
 			JSONObject object = new JSONObject(widget.prefs);
 			object.put("app_code", KnowlarityUtil.APP_ACCESS_KEY);
-			result = object.toString();
+			return object.toString();
 		}
-		return result;
+		return null;
 	}
 
 	@Path("getLogs/{customer_number}")
@@ -65,25 +67,28 @@ public class KnowlarityAPI {
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivity(@FormParam("direction") String direction,@FormParam("phone") String phone,
-			@FormParam("status") String status,@FormParam("duration") String duration,@QueryParam("note_id") Long note_id) {		
+			@FormParam("status") String status,@FormParam("duration") String duration, @FormParam("uuid") String uuid, @QueryParam("note_id") Long note_id) {		
 	    
 	    	if (!(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.searchContactByPhoneNumber(phone);
 
-	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
-	    		{
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial")){
 	    		    ActivityUtil.createLogForCalls("Knowlarity", phone, Call.OUTBOUND, status.toLowerCase(), duration,note_id);
 
 	    		    // Trigger for outbound
 	    		    CallTriggerUtil.executeTriggerForCall(contact, "Knowlarity", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed") || direction.equalsIgnoreCase("inbound"))
-	    		{
-	    		    ActivityUtil.createLogForCalls("Knowlarity", phone, Call.INBOUND, status.toLowerCase(), duration,note_id);
-
-	    		    // Trigger for inbound
-	    		    CallTriggerUtil.executeTriggerForCall(contact,  "Knowlarity", Call.INBOUND, status.toLowerCase(), duration);
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("Missed") || direction.equalsIgnoreCase("inbound")){
+	    			if(uuid != null){
+		    			List<Activity> activityList = ActivityUtil.getActivityBasedOnUuid(uuid);
+		    			if(activityList.size() == 0){
+		    				ActivityUtil.createCallsLog("Knowlarity", phone, Call.INBOUND, status.toLowerCase(), duration,note_id, uuid);
+	
+		    		    	//Trigger for inbound
+		    		    	CallTriggerUtil.executeTriggerForCall(contact,  "Knowlarity", Call.INBOUND, status.toLowerCase(), duration);
+		    			}
+	    			}
 	    		}
 	    	}
 		return "";
@@ -101,27 +106,28 @@ public class KnowlarityAPI {
 	@Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public String saveCallActivityById(@FormParam("id") Long id,@FormParam("direction") String direction,@FormParam("phone") String phone,
-			@FormParam("status") String status,@FormParam("duration") String duration,@QueryParam("note_id") Long note_id) {		
+			@FormParam("status") String status,@FormParam("duration") String duration,@FormParam("uuid")String uuid, @QueryParam("note_id") Long note_id) {		
 	    
 	    	if (null != id && !(StringUtils.isBlank(phone))){
 	    		Contact contact = ContactUtil.getContact(id);
 	    		if(null == contact){
 	    			return "";
 	    		}
-	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial"))
-	    		{
-	    		    ActivityUtil.createLogForCalls("Knowlarity", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact,note_id);
-
-	    		    // Trigger for outbound
-	    		    CallTriggerUtil.executeTriggerForCall(contact, "Knowlarity", Call.OUTBOUND, status.toLowerCase(), duration);
+	    		if (direction.equalsIgnoreCase("Outgoing") || direction.equalsIgnoreCase("outbound-dial")){		    			
+	    				ActivityUtil.createLogForCalls("Knowlarity", phone, Call.OUTBOUND, status.toLowerCase(), duration, contact,note_id);	    		   
+	    		    	//Trigger for outbound
+	    		    	CallTriggerUtil.executeTriggerForCall(contact, "Knowlarity", Call.OUTBOUND, status.toLowerCase(), duration);
 	    		}
 
-	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound"))
-	    		{
-	    			ActivityUtil.createLogForCalls("Knowlarity", phone, Call.INBOUND, status.toLowerCase(), duration, contact,note_id);
-
-	    		    // Trigger for inbound
-	    			 CallTriggerUtil.executeTriggerForCall(contact,  "Knowlarity", Call.INBOUND, status.toLowerCase(), duration);
+	    		if (direction.equalsIgnoreCase("Incoming") || direction.equalsIgnoreCase("inbound")){
+	    			if(uuid != null){
+	    				List<Activity> activityList = ActivityUtil.getActivityBasedOnUuid(uuid);
+	    				if(activityList.size() == 0){
+	    					ActivityUtil.createCallsLogWithUuid("Knowlarity", phone, Call.INBOUND, status.toLowerCase(), duration, contact,note_id, uuid);
+	    					//Trigger for inbound
+	    					CallTriggerUtil.executeTriggerForCall(contact,  "Knowlarity", Call.INBOUND, status.toLowerCase(), duration);
+	    				}
+	    			}
 	    		}
 	    	}
 		return "";

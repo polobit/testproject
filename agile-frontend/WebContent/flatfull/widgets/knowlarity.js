@@ -101,6 +101,7 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 	var knowlarityNumber = event.knowlarity_number;
 	var customerNumber = event.caller_id;
 	var state = event.business_call_type;
+	var uuid = event.uuid;
 	var callDuration = 0;
 
 	console.log("*************");
@@ -180,9 +181,9 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 	    		jsonObj['phoneNumber'] = customerNumber;
 
 	    		if(!disableMergeContact){
-	    			return showContactMergeOption(jsonObj);	    		
-	    		}else{
-	    			closeCallNoty(true);
+	    			return showContactMergeOption(jsonObj);   		
+	    		}else{	    			
+	    			return closeCallNoty(true);
 	    		}
 	    	}
 
@@ -210,9 +211,10 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 	    			"phone": customerNumber, 
 	    			"callType": "inbound", 
 	    			"status": state, 
-	    			"duration" : callDuration
+	    			"duration" : callDuration,
+	    			"uuid" : uuid
 	    		};
-				autosaveNoteByUser(note, call, "/core/api/widgets/Knowlarity/");
+				autosaveNoteByUser(note, call, "/core/api/widgets/knowlarity");
 	    	}
 	    });
 	}else {
@@ -245,7 +247,8 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 					"phone": customerNumber, 
 					"callType": "outbound-dial", 
 					"status": state, 
-					"duration" : callDuration
+					"duration" : callDuration,
+					"uuid" : uuid
 				};
 
 				console.log("Note ***** ");
@@ -285,24 +288,24 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 		console.log("Event **** ");
 		console.log(event);
 		console.log("_____________");
+
+		var callDirection = event.call_direction;
+		var eventType = event.event_type;
+		var type = event.type;
+		var callType = event.Call_Type;
+		var agentNumber = event.agent_number;		
+		var knowlarityNumber = event.knowlarity_number;
+		var customerNumber = event.caller;
 		
 		var currentKnowlarityNumber = KnowlarityWidgetPrefs.agentNumber;
 		var agentPhysicalNumber = event.agent_number;		
 		var destinationNumber = event.destination;
 		
-		// console.log("destinationNumber : "+ destinationNumber);
-		// console.log("currentKnowlarityNumber : "+ currentKnowlarityNumber);
-		// console.log("agentPhysicalNumber : "+agentPhysicalNumber);
+		console.log("destinationNumber : "+ destinationNumber);
+		console.log("currentKnowlarityNumber : "+ currentKnowlarityNumber);
+		console.log("agentPhysicalNumber : "+agentPhysicalNumber);
 
-		if((agentPhysicalNumber && currentKnowlarityNumber == agentPhysicalNumber) || (destinationNumber && currentKnowlarityNumber == destinationNumber)){
-			var callDirection = event.call_direction;
-			var eventType = event.event_type;
-			var type = event.type;
-			var callType = event.Call_Type;
-			var agentNumber = event.agent_number;		
-			var knowlarityNumber = event.knowlarity_number;
-			var customerNumber = event.caller;					
-
+		if((agentPhysicalNumber && currentKnowlarityNumber == agentPhysicalNumber) || (destinationNumber && currentKnowlarityNumber == destinationNumber)){							
 			if(callDirection){
 				if(callDirection == "Outbound"){
 					if(eventType){				
@@ -347,8 +350,7 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
 						}else if(eventType == "HANGUP"){
-							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";	
-							saveCallNoteKnolarity(event, true);											
+							closeCallNoty(true);
 						}
 					}	
 				}
@@ -362,10 +364,10 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 				}else if(callType == "Incoming"){
 					KNOWLARITY_PREVIOUS_EVENT = undefined;
 					closeCallNoty(true);
-					saveCallNoteKnolarity(event);
+					saveCallNoteKnolarity(event, true);
 				}
 			}
-		}		
+		}				
 	}	
 }
 
