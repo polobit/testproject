@@ -56,7 +56,7 @@ public class SegmentationQueryGenerator
 	String segmentationQuery = "";
 	try
 	{
-	    segmentationQuery = "select email,stats_time from page_visits where domain = '" + domain
+	    segmentationQuery = "select email,MAX(stats_time) as stats_time from page_visits where domain = '" + domain
 		    + "' and email!='' and email!='null' and stats_time between '" + startTime + "' and  '" + endTime
 		    + "' ";
 	    String groupByEmail = " group by email ";
