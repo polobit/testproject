@@ -312,15 +312,13 @@ function url_visited_select_callback(ele, target_id) {
 	// if 'contains' selected, make type attribute 'text'
 	if (curValue === 'contains') {
 		// replacing type attribute from url to text
-		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj)
-				.focus();
+		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj);
 	}
 
 	// if 'exact_match' selected, make type attribute 'url'
 	if (curValue === 'exact_match') {
 		// replacing type attribute to url.
-		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj)
-				.focus();
+		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj);
 	}
 
 	tempObj.remove();
