@@ -821,7 +821,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <!-- <li class="line dk m-t-none m-b-none" style="height: 1px;"></li> -->
   <!-- Service menu -->
   <%
-    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK) || !domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE)){
+    if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
   %>   
    <li class="appaside dropdownnavbar <%if(domainUser.role == ROLE.SERVICE){ %> agile-menuactive <% } %>" id="agile-service-menu-navigation-container" data-service-name='SERVICE' data-dashboard='dashboard'>
       <a class="auto">      
@@ -857,7 +857,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
 
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE)){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE) && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
     %>
     <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside" href="#knowledgebase">
