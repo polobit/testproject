@@ -520,7 +520,7 @@ function showNodeConnectPopup(nodeId){
 
 // Node Level validation, based on Nodename validation happens
 function nodeLevelValidation(nodeName, callbackFunction){
-	var validation_nodes = ['URL Visited?'];
+	var validation_nodes = ['URL Visited?','Replied?'];
 
 	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
 		return callbackFunction(true);
@@ -540,13 +540,25 @@ function nodeLevelValidation(nodeName, callbackFunction){
 		});
 	}
 
+	// Replied Node alert message while saving
+  	if(nodeName == 'Replied?'){
+
+	    window.parent.showModalConfirmation("Alert",
+            "Please Configure the setings.",
+            null,null,null                      
+            ,"Close", ""); 
+
+	    callbackFunction(true);
+	    return;
+  	}
+
 }	
-//Validate the Tracking code is there or not in website
- function get_dynamic_data(url, callback)
-  {
-	  window.parent.accessUrlUsingAjax(url, 
-	              		function(data){               			
-	              			if(callback && typeof (callback) == "function")
-	              				callback(data);
-	              		});     	
- }
+// Ajax call
+function get_dynamic_data(url, callback)
+{
+  window.parent.accessUrlUsingAjax(url, 
+              		function(data){               			
+              			if(callback && typeof (callback) == "function")
+              				callback(data);
+              		});     	
+}
