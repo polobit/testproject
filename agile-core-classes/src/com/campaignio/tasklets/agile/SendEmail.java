@@ -794,10 +794,11 @@ public class SendEmail extends TaskletAdapter
 	{
 	    String domain = NamespaceManager.get();
 	    StringBuffer buffer = new StringBuffer();
-	    buffer.append("https://" + domain + ".agilecrm.com/onlinelink");
+	    buffer.append("https://list-manage.agle2.me/onlinelink");
 	    buffer.append("/" + campaignJSON.get("id").toString());
 	    buffer.append("/" + subscriberJSON.get("id").toString());
 	    buffer.append("/" + nodeJSON.get("id").toString());
+	    buffer.append("?ns=" + URLEncoder.encode(domain, "UTF-8"));
 	    url = buffer.toString();
 	}
 	catch (Exception e)
