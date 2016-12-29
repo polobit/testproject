@@ -245,8 +245,8 @@ var localeJSON = <%=localeJSON%>;
             <option>16px</option>
             <option>18px</option>
             <option>20px</option>
-            <option>22px</option>
             <option>21px</option>
+            <option>22px</option>
             <option>24px</option>
             <option>25px</option>
             <option>26px</option>
