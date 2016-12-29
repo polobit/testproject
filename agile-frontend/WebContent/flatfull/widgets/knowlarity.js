@@ -349,6 +349,8 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 							KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
+						}else if(KNOWLARITY_PREVIOUS_EVENT == "BRIDGE" && eventType == "HANGUP"){
+							saveCallNoteKnolarity(event);
 						}else if(eventType == "HANGUP"){
 							closeCallNoty(true);
 						}
@@ -457,7 +459,8 @@ function startKnowlarityWidget(contact_id){
 	KNOWLARITY_Plugin_Id = knowlarity_widget.id;	
 	Email = agile_crm_get_contact_property('email');
 	
-	loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
+	//loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
+	$('#Knowlarity-container').remove();
 	
 	$(".contact-make-call-div").off("click", ".Knowlarity_call");
 	$(".contact-make-call-div").on("click", ".Knowlarity_call", function(e){
