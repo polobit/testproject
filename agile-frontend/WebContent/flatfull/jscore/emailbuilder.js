@@ -358,7 +358,7 @@ function onEmailBuilderLoad() {
     $("#loadingImgHolder").hide();
     $("#emailBuilderTopOptionsHolder").show();
     $("#attachmentsHolderElement").show();
-    $("#emailBuilderFrame").prop("height",680);
+    $("#emailBuilderFrame").prop("height",800);
 }
 
 function setAttachmentInTemplateEdit(attachmentId) {
@@ -551,6 +551,8 @@ var emailVideoRecord = {
         if(videoThumbS3URL)
             document.getElementById('emailBuilderFrame').contentWindow.$("#image-url").val(videoThumbS3URL);
         $("#videoRecordModal").modal("hide");
+        document.getElementById('emailBuilderFrame').contentWindow.$("#video-link").val(videoURL).trigger('change');
+        document.getElementById("emailBuilderFrame").contentWindow.$("#image-url").trigger('change');
     }
 
 };
