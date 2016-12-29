@@ -43,8 +43,8 @@ public class EmailLinksConversion
 //  private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.me";
 //  private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.me";
     
-    private static final String LINK_TRACK_URL = "http://list-manage.agle2.me/click";
-    private static final String BETA_LINK_TRACK_URL = "http://list-manage.agle2.me/click";
+    private static final String LINK_TRACK_URL = "https://list-manage.agle2.me/click";
+    private static final String BETA_LINK_TRACK_URL = "https://list-manage.agle2.me/click";
     
     private static String trackingURL = LINK_TRACK_URL;
     

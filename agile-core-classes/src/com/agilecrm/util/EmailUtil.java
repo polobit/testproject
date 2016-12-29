@@ -44,13 +44,13 @@ public class EmailUtil
      * Beta open email track url
      */
     //public static final String BETA_OPEN_TRACKING_URL = "http://open-beta.agle.me";
-     public static final String BETA_OPEN_TRACKING_URL = "http://list-manage.agle2.me/open";
+     public static final String BETA_OPEN_TRACKING_URL = "https://list-manage.agle2.me/open";
     
     /**
      * Live open email track url
      */
     //public static final String LIVE_OPEN_TRACKING_URL = "http://open.agle.me";
-     public static final String LIVE_OPEN_TRACKING_URL = "http://list-manage.agle2.me/open";
+     public static final String LIVE_OPEN_TRACKING_URL = "https://list-manage.agle2.me/open";
 
     /**
      * Parses html body of an email using jsoup.
