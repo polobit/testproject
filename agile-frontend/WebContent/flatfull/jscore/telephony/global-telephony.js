@@ -22,7 +22,7 @@ function knowlaritySetup(){
 			if(result && result.length > 0){
 				console.log(result);
 				KnowlarityWidgetPrefs = JSON.parse(result);				
-				head.js(LIB_PATH + 'widgets/knowlarity.js', function(){ 
+				head.js('widgets/knowlarity.js', function(){ 
 					if(!knowlaritySource){
 						knowlarityEventsFinder(KnowlarityWidgetPrefs);
 					}					
