@@ -465,13 +465,20 @@
                     if($("#render")!=undefined && $("#render")!=null){
                           var pContent=document.getElementById("render").value;
                           $(".createCustomFormContent").html(pContent);
-                          $.each(defaultThemes,function(index,value){
+                          /*$.each(defaultThemes,function(index,value){
                               var classesList =  $(".createCustomFormContent .form-view").attr("class")
                               if(value!="form-view" &&classesList.indexOf(value)>-1){
                                  $(".createCustomFormContent .form-view").removeClass(value);
                               }
+                          });*/
+                          var classesList =  $(".createCustomFormContent .form-view").attr("class").split(" ");
+                          $.each(classesList,function(index,value){
+                            if(value != "form-view"){
+                                $(".createCustomFormContent .form-view").removeClass(value);
+                            }
                           });
-                     }
+                    }
+
                     defaultFormEleFun();
                     custThemePopUpCode();
 
