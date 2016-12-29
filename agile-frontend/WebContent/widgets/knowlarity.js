@@ -88,10 +88,10 @@ function getKnowlarityLogs(offSet){
 }
 
 
-function saveCallNoteKnolarity(event, disableMergeContact){
+function saveCallNoteKnolarity(event){
 
-	//console.log("Event data : **** ");
-	//console.log(event);
+	console.log("Event data : **** ");
+	console.log(event);
 
 	var callDirection = event.call_direction;
 	var eventType = event.event_type;
@@ -101,13 +101,9 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 	var knowlarityNumber = event.knowlarity_number;
 	var customerNumber = event.caller_id;
 	var state = event.business_call_type;
-	var uuid = event.uuid;
 	var callDuration = 0;
 
-	console.log("*************");
-	console.log("event type : "+eventType);
-	console.log("type : "+type);
-	console.log("CallDirection : "+callDirection);
+	console.log("callDirection : in knowlarity_load "+callDirection);
 
 	if(event.call_duration){
 		callDuration = event.call_duration;
@@ -123,14 +119,6 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 		}
 	}
 
-	if(!callType){
-		if(callDirection == "Inbound"){
-			callType = "Incoming";
-		}else if(callDirection == "Outbound"){
-			callType = "Outgoing";
-		}
-	}
-
 	var noteSub = callType + " Call - " + state;
 	var cntId;
 
@@ -138,7 +126,7 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 		cntId = globalCall.contactedContact.id; // agilecrm DB ID
 	}
 
-	var call = {
+	var call = { 
 		"direction" : callType,
 		"phone" : customerNumber,
 		"status" : state, 
@@ -158,7 +146,7 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 
 	console.log(callType +" : "+ state);
 
-	if(callType == "Incoming"){
+	if(callType == "Incoming"){	
 
 	    accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(responseJson){
 	    	if(!responseJson){
@@ -180,11 +168,7 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 	    		var jsonObj = {};
 	    		jsonObj['phoneNumber'] = customerNumber;
 
-	    		if(!disableMergeContact){
-	    			return showContactMergeOption(jsonObj);   		
-	    		}else{	    			
-	    			return closeCallNoty(true);
-	    		}
+	    		return showContactMergeOption(jsonObj);	    		
 	    	}
 
 	    	contact = responseJson;
@@ -211,10 +195,9 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 	    			"phone": customerNumber, 
 	    			"callType": "inbound", 
 	    			"status": state, 
-	    			"duration" : callDuration,
-	    			"uuid" : uuid
+	    			"duration" : callDuration
 	    		};
-				autosaveNoteByUser(note, call, "/core/api/widgets/knowlarity");
+				autosaveNoteByUser(note, call, "/core/api/widgets/Knowlarity/");
 	    	}
 	    });
 	}else {
@@ -247,8 +230,7 @@ function saveCallNoteKnolarity(event, disableMergeContact){
 					"phone": customerNumber, 
 					"callType": "outbound-dial", 
 					"status": state, 
-					"duration" : callDuration,
-					"uuid" : uuid
+					"duration" : callDuration
 				};
 
 				console.log("Note ***** ");
@@ -288,14 +270,6 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 		console.log("Event **** ");
 		console.log(event);
 		console.log("_____________");
-
-		var callDirection = event.call_direction;
-		var eventType = event.event_type;
-		var type = event.type;
-		var callType = event.Call_Type;
-		var agentNumber = event.agent_number;		
-		var knowlarityNumber = event.knowlarity_number;
-		var customerNumber = event.caller;
 		
 		var currentKnowlarityNumber = KnowlarityWidgetPrefs.agentNumber;
 		var agentPhysicalNumber = event.agent_number;		
@@ -305,7 +279,20 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 		console.log("currentKnowlarityNumber : "+ currentKnowlarityNumber);
 		console.log("agentPhysicalNumber : "+agentPhysicalNumber);
 
-		if((agentPhysicalNumber && currentKnowlarityNumber == agentPhysicalNumber) || (destinationNumber && currentKnowlarityNumber == destinationNumber)){							
+		if((agentPhysicalNumber && currentKnowlarityNumber == agentPhysicalNumber) || (destinationNumber && currentKnowlarityNumber == destinationNumber)){
+			var callDirection = event.call_direction;
+			var eventType = event.event_type;
+			var type = event.type;
+			var callType = event.Call_Type;
+			var agentNumber = event.agent_number;		
+			var knowlarityNumber = event.knowlarity_number;
+			var customerNumber = event.caller;
+			
+			console.log("*************");
+			console.log("Event type : "+eventType);
+			console.log("Type : "+type);
+			console.log("callDirection : "+callDirection);			
+
 			if(callDirection){
 				if(callDirection == "Outbound"){
 					if(eventType){				
@@ -349,10 +336,9 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 							KNOWLARITY_PREVIOUS_EVENT = "BRIDGE";					
 							var btns = [{"id":"", "class":"btn btn-default btn-sm noty_knowlarity_cancel", "title": _agile_get_translated_val('widgets', 'Knowlarity-cancel') }];		
 							showDraggableNoty("Knowlarity", globalCall.contactedContact, "connected", globalCall.callNumber, btns);	
-						}else if(KNOWLARITY_PREVIOUS_EVENT == "BRIDGE" && eventType == "HANGUP"){
-							saveCallNoteKnolarity(event);
 						}else if(eventType == "HANGUP"){
-							closeCallNoty(true);
+							KNOWLARITY_PREVIOUS_EVENT = "HANGUP";	
+							closeCallNoty(true);											
 						}
 					}	
 				}
@@ -366,10 +352,10 @@ function changeCallNotyBasedOnStatus(event, KnowlarityWidgetPrefs){
 				}else if(callType == "Incoming"){
 					KNOWLARITY_PREVIOUS_EVENT = undefined;
 					closeCallNoty(true);
-					saveCallNoteKnolarity(event, true);
+					saveCallNoteKnolarity(event);
 				}
 			}
-		}				
+		}		
 	}	
 }
 
@@ -459,8 +445,7 @@ function startKnowlarityWidget(contact_id){
 	KNOWLARITY_Plugin_Id = knowlarity_widget.id;	
 	Email = agile_crm_get_contact_property('email');
 	
-	//loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
-	$('#Knowlarity-container').remove();
+	loadKnowlarityLogs(KnowlarityWidgetPrefs, "+919052500344", contactDetailsObj);
 	
 	$(".contact-make-call-div").off("click", ".Knowlarity_call");
 	$(".contact-make-call-div").on("click", ".Knowlarity_call", function(e){
