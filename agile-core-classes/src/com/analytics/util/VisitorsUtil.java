@@ -22,6 +22,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.visitors.VisitorSegmentationQueryGenerator;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -69,14 +70,14 @@ public class VisitorsUtil
     {
 	try
 	{
-	    String statsServerUrl = "https://2-0-live-dot-agilecrm-web-stats.appspot.com/visitors";
+	    String statsServerUrl = "https://agilecrm-web-stats.appspot.com/visitors";
 	    Map<String, String> params = new LinkedHashMap<String, String>();
 	    params.put("filter_json", filterJSON);
 	    params.put("cursor", cursor);
 	    params.put("page_size", pageSize);
 	    params.put("start_time", startTime);
 	    params.put("end_time", endTime);
-	    params.put("domain", "our");
+	    params.put("domain", NamespaceManager.get());
 	    params.put("psd", AnalyticsUtil.STATS_SEREVR_HTTP_REQUEST_PWD);
 	    
 	    StringBuilder postData = new StringBuilder();
