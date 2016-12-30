@@ -133,9 +133,11 @@ public class VisitorFilterAPI
 	    String endTimeString = DateUtil.getMySQLNowDateFormat(endTime, timeZone);
 	    VisitorFilter filter = VisitorFilter.getSegmentFilter(Long.parseLong(id));
 	    System.out.println(filter.segmentConditions);
-	    List<String> contactEmails = AnalyticsUtil.getEmails(filter.segmentConditions.toString(), startTimeString,
+	    /*
+	    List<String> contactEmails = VisitorsUtil.getEmails(filter.segmentConditions.toString(), startTimeString,
 		    endTimeString, countString, cursorString);
 	    contacts = VisitorsUtil.getContactsFromDataStore(contactEmails);
+	    */
 	   
 	}
 	
