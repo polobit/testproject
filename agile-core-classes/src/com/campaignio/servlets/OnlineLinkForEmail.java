@@ -52,6 +52,9 @@ public class OnlineLinkForEmail extends HttpServlet
 	URL url = new URL(request.getRequestURL().toString());
 	String host = url.getHost();
 	String path = url.getPath();
+	
+	String oldNamespace = NamespaceManager.get();
+	
 	try
 	{
 	    while (path.endsWith("/"))
@@ -127,6 +130,10 @@ public class OnlineLinkForEmail extends HttpServlet
 	catch (Exception e)
 	{
 	    System.out.println("Exception occured while reading content of email node" + e.getMessage());
+	}
+	finally
+	{
+		NamespaceManager.set(oldNamespace);
 	}
     }
 
