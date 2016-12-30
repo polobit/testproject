@@ -13,8 +13,8 @@
 
 <div class="col-md-2">
   <div class="form-group">
-    <b>{{agile_lng_translate 'emailbuilder' 'name-of-template'}}</b> <span class="field_req">*</span><br>
-    <input type="text" class="form-control required" name="nameoftemplate" id="nameoftemplate" placeholder="{{agile_lng_translate 'emailbuilder' 'name-of-template'}}">
+    <b>{{agile_lng_translate 'emailbuilder' 'name-your-template'}}</b> <span class="field_req">*</span><br>
+    <input type="text" class="form-control required" name="nameoftemplate" id="nameoftemplate" placeholder="{{agile_lng_translate 'emailbuilder' 'name-your-template'}}">
 
     <a href="#" class="videoRecordHiddenBtn" class="hidden" style="display:none;">record</a>
     <a href="#" class="videoRecordHiddenBtnNew" class="hidden" style="display:none;">record Video</a>
@@ -23,7 +23,7 @@
 
 <div class="col-md-2">
   <div class="form-group">
-    <b>{{agile_lng_translate 'emailbuilder' 'subject'}}</b> <span class="field_req">*</span><br>
+    <b>{{agile_lng_translate 'prefs-email-templates' 'enter-subject'}}</b> <span class="field_req">*</span><br>
     <input type="text" class="form-control required" name="subject" id="subject" placeholder="{{agile_lng_translate 'prefs-email-templates' 'enter-subject'}}">
     <input type="hidden" class="form-control" id="templateid" value="{{#if_equals action "edit"}}{{templateId}}{{/if_equals}}">
   </div>
