@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.mortbay.util.URIUtil;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.ContactEmail;
@@ -80,7 +78,8 @@ public class RedirectServlet extends HttpServlet
 	String domain = null;
 
 	// When requested from shorten url, get domain from URLShortener
-	if (StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
+	if (EmailLinksConversion.isTrackURLDomain(host) ||
+			StringUtils.equals(NamespaceUtil.getNamespaceFromURL(host), "click"))
 	{
 		// Get namespace from request parameter
 		if(StringUtils.isNotBlank(namespace))

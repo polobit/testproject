@@ -42,12 +42,14 @@ public class EmailUtil
     /**
      * Beta open email track url
      */
-    public static final String BETA_OPEN_TRACKING_URL = "http://open-beta.agle.me";
+    //public static final String BETA_OPEN_TRACKING_URL = "http://open-beta.agle.me";
+     public static final String BETA_OPEN_TRACKING_URL = "http://list-manage-beta.agle2.me/open";
     
     /**
      * Live open email track url
      */
-    public static final String LIVE_OPEN_TRACKING_URL = "http://open.agle.me";
+	//public static final String LIVE_OPEN_TRACKING_URL = "http://open.agle.me";
+	public static final String LIVE_OPEN_TRACKING_URL = "https://list-manage.agle2.me/open";
     
     /**
      * Live powered by url agilecrm.com
@@ -68,8 +70,6 @@ public class EmailUtil
      * Live powered by url agle1.me
      */
     public static final String POWERED_BY_URL_AGLE2_ME = "http://www.agle2.me?utm_source=powered-by";
-    
-    
     
     /**
      * Parses html body of an email using jsoup.
