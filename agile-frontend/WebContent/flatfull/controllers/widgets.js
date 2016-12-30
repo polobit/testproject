@@ -19,7 +19,9 @@ var WidgetsRouter = Backbone.Router
                 "FullContact" :"FullContact",
                 "FullContact/:id" :"FullContact",
                 "Klout" : "Klout",
-                "Klout/:id" : "Klout",      
+                "Klout/:id" : "Klout",
+                "Linkedin" : "Linkedin",
+                "Linkedin/:id" : "Linkedin",      
 
                 // Support widgets
                 "ClickDesk" : "ClickDesk",
@@ -258,6 +260,20 @@ var WidgetsRouter = Backbone.Router
             Klout : function(id){
                addConfigurableWidget(id, "Klout", "klout-login");
             },
+            Linkedin : function(id){
+               if (!id) {
+                    addOAuthWidget(
+                            "Linkedin",
+                            "linkedin-login",
+                            ('/scribe?service=twitter&linkType=widget&isForAll=' + isForAll
+                                    + '&return_url='
+                                    + encodeURIComponent(window.location.href)));
+                } else {
+                    addWidgetProfile(id, "Linkedin", "twitter-revoke-access",
+                            "core/api/widgets/social/profile/"+id);
+                }
+            },
+            
 
             /**
              * Manages Facebook widget
