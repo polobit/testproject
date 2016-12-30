@@ -320,6 +320,10 @@
                 $('[name="fixed-header"]').val("yes");
                 $('[name="fixed-header"]').trigger("change");
             }
+            if($('.video__button').css("display")!=="none"){
+                $('[name="show-video-icon"]').val("yes");
+                $('[name="show-video-icon"]').trigger("change");
+            }
 
             return false;
 
@@ -478,6 +482,13 @@
                             $(styleeditor.activeElement.element).addClass("agile-" + nameAttrOfEl);
                         } else {
                             $(styleeditor.activeElement.element).removeClass("agile-" + nameAttrOfEl);
+                        }
+                    }
+                    if(nameAttrOfEl === "show-video-icon"){
+                        if($(this).val() === "yes") {
+                            $(styleeditor.activeElement.element).parent().find('.video__button').show();
+                        } else {
+                            $(styleeditor.activeElement.element).parent().find('.video__button').hide();
                         }
                     }
 
@@ -1011,7 +1022,7 @@
 
             $('a#video_Link').parent().show();
             $('a#video_Link').click();
-            $('a#default-tab1').css("display","none");
+            //$('a#default-tab1').css("display","none");
 
             if($("#err-youtube-msg").css("display")!=="none"){
                 styleeditor.hideErrorMsg('youtubeID');

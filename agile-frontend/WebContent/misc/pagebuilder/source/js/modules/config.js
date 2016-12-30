@@ -19,7 +19,7 @@
         '.footer a': ['color'],
         '.social a': ['color'],
         '.bg.bg1, .bg.bg2, .header10, .header11, .search-box1': ['background-image', 'background-color'],
-        '.frameCover': [],
+        '.videoWrapper .frameCover': ['show-video-icon'],
         '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family', 'dynamic-text'],
         'a.btn, button.btn': ['border-radius', 'font-size', 'background-color','dynamic-button']
         
@@ -35,6 +35,7 @@
         'img : dynamic-image': ['no', 'yes'],
         '.editContent : dynamic-text': ['no', 'yes'],
         'nav : fixed-header' : ['no', 'yes'],
+        ".videoWrapper .frameCover : show-video-icon": ["yes", "no"],
         'h1, h2, h3, h4, h5, p : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h2 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h3 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
