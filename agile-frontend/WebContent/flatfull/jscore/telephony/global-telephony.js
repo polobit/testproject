@@ -14,7 +14,7 @@ var KnowlarityWidgetPrefs;
 var knowlaritySource;
 
 function androidSetup(){
-	head.js(LIB_PATH + 'widgets/android.js', function(){
+	head.js('widgets/android.js', function(){
 		console.log("App Calling js file loaded");
 	});
 }
