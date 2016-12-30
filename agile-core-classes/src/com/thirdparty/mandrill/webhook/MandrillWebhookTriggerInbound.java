@@ -364,9 +364,9 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 				
 				if (StringUtils.equals(applicationId, "agilecrmbeta"))
 				{
-					if(mailHtmlContent.contains("list-manage.agle2.me"))
+					if(mailHtmlContent.contains("list-manage-beta.agle2.me"))
 					{	
-						pattern = Pattern.compile("src=[\"']https:\\/\\/list-manage\\.agle2\\.me[^\"']*");
+						pattern = Pattern.compile("src=[\"']http:\\/\\/list-manage-beta\\.agle2\\.me[^\"']*");
 						newOpenLink = 1; // to get namespace param
 					}
 					else if(mailHtmlContent.contains("http://open-beta.agle.me"))

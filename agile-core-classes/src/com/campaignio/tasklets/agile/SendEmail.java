@@ -235,7 +235,7 @@ public class SendEmail extends TaskletAdapter
     //private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
     
     private static final String UNSUBSCRIBE_LINK = "https://list-manage.agle2.me/unsubscribe";
-    private static final String UNSUBSCRIBE_SANDBOX_LINK = "https://list-manage.agle2.me/unsubscribe";
+    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://list-manage-beta.agle2.me/unsubscribe";
     
 
     /*
@@ -793,8 +793,14 @@ public class SendEmail extends TaskletAdapter
 	try
 	{
 	    String domain = NamespaceManager.get();
+	    
+	    String onlineLink = "https://list-manage.agle2.me/onlinelink";
+	    
+	    if(!VersioningUtil.isProductionAPP())
+	    	onlineLink = "http://list-manage-beta.agle2.me/onlinelink";
+	    
 	    StringBuffer buffer = new StringBuffer();
-	    buffer.append("https://list-manage.agle2.me/onlinelink");
+	    buffer.append(onlineLink);
 	    buffer.append("/" + campaignJSON.get("id").toString());
 	    buffer.append("/" + subscriberJSON.get("id").toString());
 	    buffer.append("/" + nodeJSON.get("id").toString());
