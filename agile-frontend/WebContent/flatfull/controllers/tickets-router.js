@@ -1228,7 +1228,7 @@
 							    	  ui.helper.width(ui.helper.width());
 							      },
 							      sort: function(event, ui){
-							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top-150)+"px");
 							      },
 							      forceHelperSize:true,
 							      placeholder:'<tr><td></td></tr>',
@@ -1319,7 +1319,7 @@
 							    	  ui.helper.width(ui.helper.width());
 							      },
 							      sort: function(event, ui){
-							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top-150)+"px");
 							      },
 							      forceHelperSize:true,
 							      placeholder:'<tr><td></td></tr>',
@@ -1404,7 +1404,7 @@
 							    	  ui.helper.width(ui.helper.width());
 							      },
 							      sort: function(event, ui){
-							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top-150)+"px");
 							      },
 							      forceHelperSize:true,
 							      placeholder:'<tr><td></td></tr>',
@@ -1718,7 +1718,7 @@
 							window : "back",
 				    });
 
-				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
+				$('#helpcenter-content').html(addCatogeryView.render().el);    
 			});
 		});
 		make_menu_item_active("ticketknowledgebasemenu");
@@ -1747,7 +1747,7 @@
  				window : "back",
 		    });
 
-				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
+				$('#helpcenter-content').html(editCatogeryView.render().el);    
 			});
 		});
 		make_menu_item_active("ticketknowledgebasemenu");
