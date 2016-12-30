@@ -25,4 +25,8 @@
       <url>*/ticket-module/backend/*</url>
       <module>agile-ticket-module</module>
   </dispatch>
+  <dispatch>
+  	  <url>list-manage.agle2.me/*</url>
+  	  <module>36-0.default</module>
+  </dispatch>
 </dispatch-entries>
