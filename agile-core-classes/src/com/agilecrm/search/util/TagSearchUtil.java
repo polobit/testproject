@@ -3,6 +3,7 @@ package com.agilecrm.search.util;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -141,12 +142,10 @@ public class TagSearchUtil
 	// Sets calendar with start time.
 	Calendar startCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	startCalendar.setTimeInMillis(Long.parseLong(startTime));
-	long startTimeMilli = startCalendar.getTimeInMillis();
-
+	
 	// Sets calendar with end time.
 	Calendar endCalendar = Calendar.getInstance(TimeZone.getTimeZone(timezone));
 	endCalendar.setTimeInMillis(Long.parseLong(endTime));
-	long endTimeMilli = endCalendar.getTimeInMillis();
 	
 	String current_timezone = DateUtil.getCurrentUserTimezoneOffset();
 	long timezoneOffsetInMilliSecs = 0L;
@@ -154,6 +153,18 @@ public class TagSearchUtil
 	{
 		timezoneOffsetInMilliSecs = Long.valueOf(current_timezone)*60*1000;
 	}
+	
+	boolean isDST = TimeZone.getTimeZone(timezone).inDaylightTime(new Date(Long.parseLong(startTime)));
+	if(isDST)
+	{
+		int sec = TimeZone.getTimeZone(timezone).getDSTSavings() / 1000;
+		startCalendar.add(Calendar.SECOND, -sec);
+		endCalendar.add(Calendar.SECOND, -sec);
+		timezoneOffsetInMilliSecs += (sec * 1000);
+	}
+	
+	long startTimeMilli = startCalendar.getTimeInMillis();
+	long endTimeMilli = endCalendar.getTimeInMillis();
 
 	if (endTimeMilli < startTimeMilli)
 	    return null;
