@@ -187,7 +187,7 @@
 				<artifactId>gcloud-maven-plugin</artifactId>
 				<version>${gcloud.plugin.version}</version>
 				<configuration>
-					<gcloud_directory>/home/mantra/google-cloud-sdk</gcloud_directory>
+					<gcloud_directory>/home/mantra/ramesh/softwares/google-cloud-sdk</gcloud_directory>
 					<!-- <verbosity>debug</verbosity> -->
 					<!-- <version>specific_version</version> -->
 					<!-- <set_default>false</set_default> -->

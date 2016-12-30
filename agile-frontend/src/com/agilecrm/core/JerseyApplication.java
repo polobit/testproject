@@ -186,6 +186,9 @@ public class JerseyApplication extends Application
 
 	//CustomTheme
 	s.add(com.agilecrm.core.api.customthemes.CustomThemesAPI.class);
+	
+	//Visitors
+	s.add(com.agilecrm.core.api.analytics.VisitorsAPI.class);
 
 	return s;
     }

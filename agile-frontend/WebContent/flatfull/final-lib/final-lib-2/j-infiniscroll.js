@@ -111,19 +111,6 @@
           data: $.extend(buildQueryParams(lastModel), self.options.extraParams)
         });
       };
-      
-      //used for scanning DB one more time to get results.
-      //mostly useful for programmatic triggering.
-       self.fetchAgain = function(e) {
-      	 self.onFetch();
-      	 self.disableFetch();
-      	 self.collection.fetch({
-      		 success: self.fetchSuccess,
-      		 error: self.fetchError,
-      		 add: self.options.add,
-      		 data: $.extend(buildQueryParams4FetchAgain(), self.options.extraParams)
-      	 });
-       };
 
 
     function buildQueryParams(model) {
@@ -137,22 +124,6 @@
       }
 
       return params;
-    }
-    
-    /**
-     * Following function using only for
-     * visitors functionlity 
-     */
-    function buildQueryParams4FetchAgain() {
-        var params = { };
-        //params[self.options.param] = typeof(model[self.options.untilAttr]) === "function" ? model[self.options.untilAttr]() : model.get(self.options.untilAttr);
-        params[self.options.param] = '0';
-        params[self.options.pageSizeParam] = self.options.pageSize;
-
-        if (self.options.includePage) {
-          params["page"] = page + 1;
-        }
-        return params;
     }
 
     initialize();

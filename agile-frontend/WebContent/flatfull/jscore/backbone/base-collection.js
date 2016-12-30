@@ -452,7 +452,40 @@ var Base_Collection_View = Backbone.View
           // this.collection.url = this.collection.url + "?page_size="
           // + this.page_size;
         }
+        
+        /*
+        following option allows us to send POST request
+        but doesn't add infiniscroll to the collection
+        */
+        if(this.options.escape_infini)
+        {
+        	// Store in a variable for us to access in the custom fetch
+            // as this is different
+            var page_size = this.options.page_size;
+            //var global_sort_key = this.options.global_sort_key;
+            var request_method = this.options.request_method;
+            var post_data = this.options.post_data;
 
+            // Set the URL
+            this.collection.fetch = function(options)
+            {
+              // startFunctionTimer("fetch time");
+              options || (options = {})
+              options.data || (options.data = {});
+              options.data['page_size'] = page_size;
+//            if(global_sort_key && global_sort_key != null)
+//              options.data['global_sort_key'] = global_sort_key;
+              if(request_method && request_method != null) {
+                options.type = request_method;
+                if(request_method.toLowerCase()=='post' && post_data && post_data != null) {
+                  $.each(post_data, function(key, value) {
+                    options.data[key] = value;
+                  });
+                }
+              }
+              return Backbone.Collection.prototype.fetch.call(this, options);
+            };
+        }
       },
 
       tempEvent: function(){
