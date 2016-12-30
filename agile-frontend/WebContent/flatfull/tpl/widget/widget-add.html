@@ -165,6 +165,9 @@
 		               	 {{else}}
 		               	 {{#if_equals name "Ozonetel"}}
 		               	  <a></a>
+		               	  {{else}}
+		               	 	{{#if_equals name "Linkedin"}}
+		               	  <a></a>
 		                {{else}}
 		                	{{#isAdmin}}
                            		<a class="btn btn-sm btn-default acl_widget" widget-data="{{stringifyObject this}}">
@@ -172,6 +175,7 @@
   				   		   		</a>
   				   		    {{/isAdmin}}
   				   		   {{/if_equals}}
+  				   		    {{/if_equals}}
   				   		     {{/if_equals}}
                 {{/if_equals}}
                   {{/if_equals}}

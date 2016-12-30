@@ -261,17 +261,7 @@ var WidgetsRouter = Backbone.Router
                addConfigurableWidget(id, "Klout", "klout-login");
             },
             Linkedin : function(id){
-               if (!id) {
-                    addOAuthWidget(
-                            "Linkedin",
-                            "linkedin-login",
-                            ('/scribe?service=twitter&linkType=widget&isForAll=' + isForAll
-                                    + '&return_url='
-                                    + encodeURIComponent(window.location.href)));
-                } else {
-                    addWidgetProfile(id, "Linkedin", "twitter-revoke-access",
-                            "core/api/widgets/social/profile/"+id);
-                }
+                addConfigurableWidget(id, "Linkedin", "linkedin-login");
             },
             
 

@@ -305,7 +305,7 @@
 </script>
 
 <script id="linkedin-modified-search-template" type="text/html">
-	<div display:inline;  line-height:12px;word-wrap: break-word;">
+	<div style="display:inline;  line-height:12px;word-wrap: break-word;">
 		<form class="widget_content" style="border-bottom:none;" id="linkedin-search_form" name="linkedin-search_form" method="post">
 	    	<fieldset>
 				<p><label>{{agile_lng_translate 'widgets' 'enter-search-details'}}</label></p>
@@ -323,9 +323,15 @@
 <script id="linkedin-login-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
 	{{agile_lng_translate 'widjets' 'build-professional-relationship-with-contacts'}}
-	<p style='margin: 10px 0px 5px 0px;' >
-		<a class='btn btn-sm btn-default' href="{{url}}" style='text-decoration: none;'> {{agile_lng_translate 'widjets' 'link-your-linkedin'}}</a>
-	</p>
+	<div class="m-t-md  m-b-xs text-center">
+		{{#if id}}			
+			<a class="btn btn-sm btn-danger deleteWidget" widget-name="Linkedin" widget-displayname="Linkedin">Delete</a>
+		{{else}}
+			<form  id="linkedin_login_form" name="linkedin_login_form" method="post">
+				 <a class='save-agile-widget btn btn-primary btn-sm text-l-none'>Enable</a>
+		    </form>								
+		{{/if}}
+	</div>
 </div>
 </script>
 
