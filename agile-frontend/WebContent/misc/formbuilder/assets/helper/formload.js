@@ -74,6 +74,9 @@ define([
 				} else {
 					if(fields) {
 						//Adding on top
+						if(isCopyForm){
+							saveform[0].fields.name.value = "Copy Of "+ saveform[0].fields.name.value;
+					    }
 						if(!saveform[0].fields.agileconfirmationmsg){
 							var agileconfirmationmsg = {};
 							agileconfirmationmsg.label = "Confirmation Message";
