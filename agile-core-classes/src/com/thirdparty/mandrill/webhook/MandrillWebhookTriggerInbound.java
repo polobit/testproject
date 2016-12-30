@@ -364,7 +364,12 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 				
 				if (StringUtils.equals(applicationId, "agilecrmbeta"))
 				{
-					if(mailHtmlContent.contains("http://open-beta.agle.me"))
+					if(mailHtmlContent.contains("list-manage-beta.agle2.me"))
+					{	
+						pattern = Pattern.compile("src=[\"']http:\\/\\/list-manage-beta\\.agle2\\.me[^\"']*");
+						newOpenLink = 1; // to get namespace param
+					}
+					else if(mailHtmlContent.contains("http://open-beta.agle.me"))
 					{
 						pattern = Pattern.compile("src=[\"']http:\\/\\/open-beta\\.agle\\.me[^\"']*");
 						newOpenLink = 1;
@@ -375,6 +380,11 @@ public class MandrillWebhookTriggerInbound extends HttpServlet
 						pattern = Pattern.compile("src=[\"']https:\\/\\/" + agileDomain + "[^\"']*");
 					}
 					
+				}
+				else if(mailHtmlContent.contains("list-manage.agle2.me"))
+				{
+					pattern = Pattern.compile("src=[\"']https:\\/\\/list-manage\\.agle2\\.me[^\"']*");
+					newOpenLink = 1;
 				}
 				else if(mailHtmlContent.contains("http://open.agle.me"))
 				{

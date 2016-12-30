@@ -11,11 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.campaignio.tasklets.agile.SendEmail;
-import com.campaignio.tasklets.sms.SendMessage;
-import com.campaignio.urlshortener.URLShortener.ShortenURLType;
-import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 
 public class EmailLinksConversion
@@ -25,6 +21,7 @@ public class EmailLinksConversion
      */
     public static final String HTTP_URL_REGEX = "\\b(https|http|HTTP|HTTPS)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;(){}\"\']*[-a-zA-Z0-9+&@#/%=~_|]";
 
+    public static final String[] trackURLDomains = {"agle2.me", "agle1.me", "agle.me"};
     /**
      * Extensions to avoid url shortening
      * 
@@ -40,12 +37,14 @@ public class EmailLinksConversion
     public static String AGILE_EMAIL_PUSH = "1";
     public static String AGILE_EMAIL_PUSH_EMAIL_ONLY = "2";
     
-//    private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.cc";
-//    private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.cc";
+//  private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.cc";
+//  private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.cc";
     
-    private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.me";
-    private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.me";
+//  private static final String LINK_TRACK_URL = "http://ag-clicks.agle1.me";
+//  private static final String BETA_LINK_TRACK_URL = "http://ag-clicks-beta.agle1.me";
     
+    private static final String LINK_TRACK_URL = "https://list-manage.agle2.me/click";
+    private static final String BETA_LINK_TRACK_URL = "http://list-manage-beta.agle2.me/click";
     
     private static String trackingURL = LINK_TRACK_URL;
     
@@ -288,5 +287,19 @@ public class EmailLinksConversion
 	}
 
 	return input;
+    }
+    
+    public static boolean isTrackURLDomain(String host)
+    {
+    	if(host == null)
+    		return false;
+    	
+    	for(String domain : trackURLDomains)
+    	{
+    		if(StringUtils.containsIgnoreCase(host, domain))
+    			return true;
+    	}
+    	
+    	return false;
     }
 }

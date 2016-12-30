@@ -20,6 +20,7 @@ import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -83,13 +84,11 @@ public class EmailOpenServlet extends HttpServlet
 	// Fetches domain name from url. E.g. From admin.agilecrm.com, returns
 	// admin
 	URL url = new URL(request.getRequestURL().toString());
+	String host = url.getHost().toString();
 	String namespace = NamespaceUtil.getNamespaceFromURL(url);
 	
-	if (StringUtils.isEmpty(namespace))
-	    return;
-    
 	//If domain name is trackopen then fetch domain name from query param
-	if(namespace.equals("trackopen"))
+	if(EmailLinksConversion.isTrackURLDomain(host) || namespace.equals("trackopen"))
 		namespace = request.getParameter("ns");
 	
 	System.out.println("Redirect servlet domain name from url : " + namespace);
@@ -102,6 +101,11 @@ public class EmailOpenServlet extends HttpServlet
 		  return;
 	  }
 	
+	if (StringUtils.isEmpty(namespace))
+	{
+		System.out.println("Namespace is empty.");
+		return;
+	}
 	
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set(namespace);
