@@ -45,10 +45,10 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
-                "android" : "Android",
-                "android/:id" : "Android",
-                "knowlarity" : "Knowlarity",
-                "knowlarity/:id" : "Knowlarity",
+                "Android" : "Android",
+                "Android/:id" : "Android",
+                "Knowlarity" : "Knowlarity",
+                "Knowlarity/:id" : "Knowlarity",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
