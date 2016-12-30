@@ -320,7 +320,7 @@
                 $('[name="fixed-header"]').val("yes");
                 $('[name="fixed-header"]').trigger("change");
             }
-            if($('.video__button').css("display")!=="none"){
+            if($currentClickedEl.parent().find('.video__button').css("display")!=="none"){
                 $('[name="show-video-icon"]').val("yes");
                 $('[name="show-video-icon"]').trigger("change");
             }
