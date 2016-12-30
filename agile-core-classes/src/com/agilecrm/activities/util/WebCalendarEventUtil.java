@@ -994,28 +994,37 @@ System.out.println(listOfLists.size());
 	{
 		System.out.println("In getSlotDetails Start");
 		List<String> slots = new ArrayList<String>();
-		meeting_types =	meeting_types.replace("{","").replace("}","");
-		String []meetingArray = meeting_types.split(",");
-		JSONObject slot = new JSONObject();
-		String time = null;
-		String title = null;
-		try{
-		  for(int i =0; i<meetingArray.length; i++){
-			 time = meetingArray[i].split(":")[0].replace("\"","").split("mins")[0];
-			 title = meetingArray[i].split(":")[1].replace("\"","");
-			 slot.put("time",time);
-			 slot.put("title",title);
-			 slots.add(slot.toString());
-			
-		   }
-		}catch(Exception e){
-			System.out.println("Exception in json parser"+ e.getMessage());
+
+		DomainUser dm = null;
+		if (id != null) {
+			dm = DomainUserUtil.getDomainUser(id);
+		} else {
+			dm = new DomainUser();
+			dm.meeting_durations = meeting_types;
 		}
-		
+
+		try {
+			JSONObject js = new JSONObject(dm.meeting_durations);
+			System.out.println("dm.meeting_durations :" + dm.meeting_durations);
+			JSONArray meetingArray = js.names();
+			JSONObject slot = new JSONObject();
+			for (int i = 0; i < meetingArray.length(); i++) {
+				String key = meetingArray.getString(i);
+				String time = key.split("mins")[0];
+				slot.put("time", time);
+				String title = js.getString(key);
+				if (title != null && title.length() > 0) {
+					slot.put("title", js.getString(key));
+					slots.add(slot.toString());
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		System.out.println("slots :" + slots);
 		System.out.println("In getSlotDetails End");
-		return slots;
-
+		return slots;		
+		
 	}
 
 	/**
