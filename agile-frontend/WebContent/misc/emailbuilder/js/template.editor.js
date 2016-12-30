@@ -816,13 +816,16 @@ $(document).ready(function () {
          var id= $('#image-url').data('id');
          $('#'+id).attr('src', $('#image-url').val());
 
-         if(parseInt($('#'+id).css("max-width")) < parseInt($('#image-w').val())) 
+         if(parseInt($('#'+id).attr("data-maxwidth")) < parseInt($('#image-w').val())) 
          {          
             alert("Image width must be less than or equal to "+$('#'+id).css("max-width"));
             $('#image-w').val(parseInt($('#'+id).css("max-width")));
         }
          else
+         {
             $('#'+id).attr('width', $('#image-w').val());
+            $('#'+id).css('max-width', parseInt($('#image-w').val()));
+        }
 
          $('#'+id).attr('height', $('#image-h').val());
          $('#'+id).attr('alt', $('#image-alt-text').val());
