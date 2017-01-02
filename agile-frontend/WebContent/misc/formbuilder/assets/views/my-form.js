@@ -67,6 +67,7 @@ define([
       this.collection.remove(snippetModel);
       saveform.splice(index, 1);
       PubSub.trigger("newTempPostRender", mouseEvent);
+      isFormChange = true;
     }
 
     , handleTempMove: function(mouseEvent){
@@ -79,6 +80,7 @@ define([
       } else {
         $(".target").removeClass("target");
       }
+      isFormChange = true;
     }
 
     , handleTempDrop: function(mouseEvent, model, index){
@@ -93,6 +95,7 @@ define([
       } else {
         $(".target").removeClass("target");
       }
+      isFormChange = true;
     }
   })
 });

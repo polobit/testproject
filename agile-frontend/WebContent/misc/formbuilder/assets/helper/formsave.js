@@ -118,6 +118,7 @@ define([
 					}
 					$(".popover").remove();
 				}
+				isFormChange = false;
 			},
 			error: function(){
 				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
