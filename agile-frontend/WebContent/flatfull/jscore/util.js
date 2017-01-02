@@ -761,7 +761,7 @@ function endFunctionTimer(name){
 }
 
 function loadServiceLibrary(callback){
-	if(!tight_acl.checkPermission("HELPDESK")){
+	if(!(tight_acl.checkPermission("HELPDESK")) && window.location.hash.indexOf("knowledgebase") == -1){
 		tight_acl.init_permissions();
 		hideTransitionBar();
 		return;

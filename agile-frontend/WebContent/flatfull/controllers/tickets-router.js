@@ -72,54 +72,71 @@
 
 	ticketFeedback: function(){
 		
-		initReportLibs(function(){
-
-			loadServiceLibrary(function(){
+		if(CURRENT_DOMAIN_USER.newMenuScopes.indexOf("FEEDBACK") != -1 || CURRENT_DOMAIN_USER.newMenuScopes.indexOf("HELPDESK") != -1){
 			
+			initReportLibs(function(){
+				
+				loadServiceLibrary(function(){
+				
 
-				if(!$('#ticket-feedback').length){	
+					if(!$('#ticket-feedback').length){	
+										
+						getTemplate("ticket-feedback-header", {}, undefined, function(template_ui){
+				 		
+				 		if(!template_ui)
+				 			return;
+				 		
+				 		var el = $('#content').html($(template_ui));
+				 		
+				 		$("#feedback").off();
+						$("#feedback").on('change',function(){
+							App_Ticket_Module.renderfeedbackmodel(el);
+						});
+
+						$("#group_names").off();
+						$("#group_names").on('change',function(){
+							App_Ticket_Module.renderfeedbackmodel(el);
+						});
+				 		//initializing date range picket
+						initDateRange(App_Ticket_Module.renderfeedbackmodel);
+							
+				fillSelect('group_names', '/core/api/tickets/groups', '', function(collection){
+				 	 			getTemplate("ticket-feedback-group", collection.toJSON(), undefined, function(template_ui){						
+
+									if(!template_ui)
+										return;
+
+					                $('#group_names', el).html($(template_ui));
+					       
+					  
+										
 									
-					getTemplate("ticket-feedback-header", {}, undefined, function(template_ui){
-			 		
-			 		if(!template_ui)
-			 			return;
-			 		
-			 		var el = $('#content').html($(template_ui));
-			 		
-			 		$("#feedback").off();
-					$("#feedback").on('change',function(){
-						App_Ticket_Module.renderfeedbackmodel(el);
-					});
-
-					$("#group_names").off();
-					$("#group_names").on('change',function(){
-						App_Ticket_Module.renderfeedbackmodel(el);
-					});
-			 		//initializing date range picket
-					initDateRange(App_Ticket_Module.renderfeedbackmodel);
+				               	} );		
 						
-			fillSelect('group_names', '/core/api/tickets/groups', '', function(collection){
-			 	 			getTemplate("ticket-feedback-group", collection.toJSON(), undefined, function(template_ui){						
+						},'', true);
 
-								if(!template_ui)
-									return;
+							App_Ticket_Module.renderfeedbackmodel(el);
+				 		});
+							
+					}				
+				});		
+				return;
+			});
+		}
 
-				                $('#group_names', el).html($(template_ui));
-				       
-				  
-									
-								
-			               	} );		
-					
-					},'', true);
+		getTemplate("ticket-feedback-noaccess", {}, undefined, function(template_ui){
 
-						App_Ticket_Module.renderfeedbackmodel(el);
-			 		});
-						
-				}				
-			});		
-		});
-	make_menu_item_active("feedbackactivitiesmenu");
+			if(!template_ui)
+				return;
+
+			$('#content').html($(template_ui));
+			
+	 	}, '#content');
+		return;
+
+		
+	
+		make_menu_item_active("feedbackactivitiesmenu");
 	},	 	
 
 	renderfeedbacktemplate :function(start_time,end_time,feedback,group,assignee){
@@ -1783,23 +1800,37 @@
 
 	loadHelpcenterHeader : function(callback){
 
+		
 		if($('#helpcenter-content').length){
 			if(callback)
 				callback();
 			return;
 		}
 		
-		getTemplate("ticket-helpcenter-header", {}, undefined, function(template_ui){
+		if(CURRENT_DOMAIN_USER.newMenuScopes.indexOf("KNOWLEDGEBASE") != -1){
+			getTemplate("ticket-helpcenter-header", {}, undefined, function(template_ui){
 
-			if(!template_ui)
-				return;
+				if(!template_ui)
+					return;
 
-			$('#content').html($(template_ui));
-			
-			if(callback)
-				callback();
+				$('#content').html($(template_ui));
+				
+				if(callback)
+					callback();
 
-	 	}, '#content');
-		
-	}
+		 	}, '#content');
+			return;
+		}
+
+		getTemplate("ticket-helpcenter-noaccess", {}, undefined, function(template_ui){
+
+				if(!template_ui)
+					return;
+
+				$('#content').html($(template_ui));
+				
+		 	}, '#content');
+			return;
+	}	
+	
 });

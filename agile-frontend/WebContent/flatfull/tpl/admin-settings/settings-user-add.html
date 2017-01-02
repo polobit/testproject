@@ -925,7 +925,7 @@
                         <div class=""   style="padding-top:35px">
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input type="checkbox" id="helpdeskaccess" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'report-view' 'help-desk'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_helpdesk_text'}}
                                         </small></div>
@@ -933,7 +933,7 @@
                                 </label>
 
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="FEEDBACK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="FEEDBACK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}} {{#is_helpdesk_acl_enabled}}disabled="disabled"{{/is_helpdesk_acl_enabled}}><i></i> 
                                     {{agile_lng_translate 'tickets' 'acl_feedback'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_feedback_text'}}
                                         </small></div>
@@ -951,14 +951,14 @@
 
                         {{else}} 
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input id="helpdeskaccess" type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'report-view' 'help-desk'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_helpdesk_text'}}
                                         </small></div>
                                 </label>
 
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="FEEDBACK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input type="checkbox" name="scopes-temp" class="required" value="FEEDBACK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}} {{#is_helpdesk_acl_enabled}}disabled="disabled"{{/is_helpdesk_acl_enabled}}><i></i> 
                                     {{agile_lng_translate 'tickets' 'acl_feedback'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_feedback_text'}}
                                         </small></div>

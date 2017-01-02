@@ -35,6 +35,15 @@ Handlebars.registerHelper('get_feedback', function(feedback_rating,value,options
 	
 });
 
+Handlebars.registerHelper('is_helpdesk_acl_enabled',function(options){
+	
+	if(CURRENT_DOMAIN_USER.newMenuScopes.indexOf("HELPDESK") != -1){
+
+		return options.inverse(this);
+	}
+
+});
+
 Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
 	var currentEpoch = new Date().getTime();
 

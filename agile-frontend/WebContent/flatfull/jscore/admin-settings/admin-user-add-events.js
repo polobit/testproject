@@ -101,6 +101,19 @@ function bindAdminChangeAction(el, data)
 			}
 		}
 	});
+
+	$('#helpdeskaccess', el).off('change');
+	$(el).on('change', '#helpdeskaccess', function(e){
+			if(!$(this).is(':checked')){
+				$('input[value="FEEDBACK"]', el).attr("disabled", "disabled");
+			}
+			else{
+				
+					$('input[value="FEEDBACK"]', el).removeAttr("disabled");
+				
+			}
+		
+	});
 	
 }
 
