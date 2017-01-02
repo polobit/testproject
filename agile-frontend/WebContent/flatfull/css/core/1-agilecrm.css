@@ -4956,6 +4956,7 @@ ul#recent-menu-model-list li:nth-child(even)
     margin-right: 5px;
 }
 
+
 .form-margin
 {
   margin-left: -85px !important; 
@@ -5228,4 +5229,54 @@ span.rolecontainer::first-letter {
 .modal.fullview .modal-body {
   max-height: calc(100vh - 180px);
   overflow-y: auto;
+}
+
+.searchbycharacterdiv{
+  padding: 0px 138px;
+}
+
+.searchbycharacterexpanded{
+  padding: 0px 90px;
+}
+.tag-div{
+  float: none !important;
+}
+
+
+.tag-alpha{
+    /*float: left;*/
+   /* border-right: 1px solid #dadada;
+    border-left: 1px solid #fff;*/
+    font-size: 14px;
+   /* padding-left: 9px;
+    padding-right: 9px;*/
+   
+    line-height:25px;
+   /*  margin-top: 10px;*/
+     background-color: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 2px;
+    margin-right: 3px;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #6a7772;
+}
+
+.hightlight-select-anchor{
+    color: #f4f3f9 !important;
+    background-color: #7266ba !important;
+}
+.tagelement-center{
+  margin:0px auto;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  padding-right: 100px;
+  display: table;
+}
+.searchbychar:hover{
+    color: #f4f3f9 !important;
+    background-color: #7266ba !important;
 }
