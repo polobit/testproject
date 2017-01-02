@@ -2201,7 +2201,7 @@ public class ActivityUtil
 			{
 				int index = changed_field.indexOf("_@_@_");
 				try {
-					ticketNoteID = Long.parseLong(changed_field.substring(index + 1));
+					ticketNoteID = Long.parseLong(changed_field.substring(index + 5));
 					changed_field = changed_field.substring(0, index);
 				} catch(Exception e) {
 					System.out.println(ExceptionUtils.getFullStackTrace(e));
