@@ -8239,3 +8239,15 @@ Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
 		html=html.substring(0, html.length - 1)
 	return html;
 });
+
+/*
+ * Helper function to know whether last contacted filter relative condtions enable or not
+ */
+Handlebars.registerHelper('is_enable_lcf_rel_cond', function(options)
+{
+	if(is_enable_lcf_rel_cond())
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});

@@ -140,6 +140,12 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 				doc.addField(Field.newBuilder().setName("last_contacted").setDate(updatedDate));
 
 				doc.addField(Field.newBuilder().setName("last_contacted_epoch").setNumber(contact.last_contacted));
+				
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(contact.last_contacted * 1000);
+				doc.addField(Field.newBuilder().setName("last_contacted_time__dd__").setNumber(cal.get(Calendar.DATE)));
+				doc.addField(Field.newBuilder().setName("last_contacted_time__mm__").setNumber(cal.get(Calendar.MONTH)+ 1));
+				doc.addField(Field.newBuilder().setName("last_contacted_time__yy__").setNumber(cal.get(Calendar.YEAR)));
 			}
 			
 			// Describes last contacted time document if updated time is not 0.

@@ -186,7 +186,11 @@
 													<option value="DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-defined'}}
 													</option>
 													<option value="NOT_DEFINED" class="email phone company title address city state zip country custom_label custom_sfsadf org_custom_label org_custom_sfsadf">{{agile_lng_translate 'contacts-view' 'is-not-defined'}}
-													</option>												
+													</option>
+													{{#is_enable_lcf_rel_cond}}
+														<option value="ON_AFTER" class="last_contacted">{{agile_lng_translate 'contacts-view' 'on-after'}}</option>
+														<option value="ON_BEFORE" class="last_contacted">{{agile_lng_translate 'contacts-view' 'on-before'}}</option>
+													{{/is_enable_lcf_rel_cond}}		
 												</select>
 											</div>
 										</td>
@@ -815,4 +819,12 @@
 </div>
 </div>
 </div>
+</script>
+
+<script id="relative-filters-template" type="text/html">
+<optgroup class="last_contacted" label="{{agile_lng_translate 'common-words' 'relative-cap'}}">
+	<option value="BY_MONTH_ONLY">{{agile_lng_translate "contacts-view" "on"}}</option>
+	<option value="IS_AFTER_IN_DAYS">{{agile_lng_translate "contacts-view" "on-after"}}</option>
+	<option value="IS_BEFORE_IN_DAYS">{{agile_lng_translate "contacts-view" "on-before"}}</option>
+</optgroup>
 </script>
