@@ -231,10 +231,10 @@ header .slick:hover .slide {
 
 .styleEditor {
 	position: fixed;
-	left: -300px;
+	left: -302px;
 	top: 0px;
 	height: 100%;
-	width: 300px;
+	width: 302px;
 	background: #f9f9f9;
 	z-index: 1000;
 	box-shadow: 6px 0px 1px rgba(0,0,0,0.1);

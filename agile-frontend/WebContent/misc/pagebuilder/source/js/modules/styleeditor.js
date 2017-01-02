@@ -1401,10 +1401,10 @@
         */
         toggleSidePanel: function(val) {
 
-            if( val === 'open' && $('#styleEditor').css('left') === '-300px' ) {
+            if( val === 'open' && $('#styleEditor').css('left') === '-302px' ) {
                 $('#styleEditor').animate({'left': '0px'}, 250);
             } else if( val === 'close' && $('#styleEditor').css('left') === '0px' ) {
-                $('#styleEditor').animate({'left': '-300px'}, 250);
+                $('#styleEditor').animate({'left': '-302px'}, 250);
             }
 
         },
