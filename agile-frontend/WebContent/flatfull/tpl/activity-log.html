@@ -1581,11 +1581,15 @@ Added {{custom3}} {{agile_lng_translate 'contacts-view' 'contact-to-campaign'}}<
 		{{#if_equals "TICKET_REQUESTER_REPLIED" activity_type}}
 			{{#if related_contact_ids}}
 				{{#stringToJSON this "related_contact_ids"}}
-					{{#toLinkTrigger this}}  
-						<a href="#contact/{{this.contactid}}">
-							{{this.contactname}}
-						</a>   
-					{{/toLinkTrigger}}
+					{{#if this.contactid}}
+						{{#toLinkTrigger this}}  
+							<a href="#contact/{{this.contactid}}">
+								{{this.contactname}}
+							</a>   
+						{{/toLinkTrigger}}
+					{{else}} 
+						{{this.contactname}}
+					{{/if}}
 				{{/stringToJSON}}
 			{{/if}} {{agile_lng_translate 'contacts-view' 'replied-to'}} <a href="#ticket/{{entity_id}}">{{agile_lng_translate 'activities' 'ticket'}}#{{entity_id}}</a><br/>
 			{{#if this.entityObject}}
