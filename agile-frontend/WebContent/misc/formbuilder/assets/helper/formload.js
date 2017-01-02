@@ -88,6 +88,12 @@ define([
 						if(saveform[0].fields.agiledomain){
 								saveform[0].fields.agiledomain.label="";
 						}
+						if(saveform[0].fields.agiletransparentbackground){
+								saveform[0].fields.agiletransparentbackground.value[1].label = "yes with white text";
+								if(!saveform[0].fields.agiletransparentbackground.value[2]){
+									saveform[0].fields.agiletransparentbackground.value[2] = {value : " agile-form-blck-transparent", selected : false, label: "yes with black text"};
+								}
+						}
 						//Adding on top
 						for ( var j = 0; j < saveform.length; j++){
 

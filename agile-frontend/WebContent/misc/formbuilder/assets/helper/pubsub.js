@@ -78,7 +78,7 @@ var addAgileApi = function(json, api, callback)
 	var agiletransparentbackground = {};
 	agiletransparentbackground.label = "Transparent Background <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='If set to yes, the background of your website will be applied' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 	agiletransparentbackground.type = "select";
-	agiletransparentbackground.value = [{value : "", selected : true, label : "no"}, {value : " agile-form-transparent", selected : false, label: "yes"}];
+	agiletransparentbackground.value = [{value : "", selected : true, label : "no"}, {value : " agile-form-transparent", selected : false, label: "yes with white text"}, {value : " agile-form-blck-transparent", selected : false, label: "yes with black text"}];
 
 	var agiletheme = {};
 	agiletheme.label = "";
