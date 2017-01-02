@@ -70,7 +70,7 @@
 
     $(document).keyup(function(e) {
         if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
-            $("#styleEditor").css("left","-300px");           
+            $("#styleEditor").css("left","-302px");           
     });
     $('.agile-tooltip').tooltip({
         container: 'body'

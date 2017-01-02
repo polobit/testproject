@@ -48,7 +48,7 @@
                 //hide lhs popup when click on ESC
                 $(block.frameDocument).keyup(function(e) {
                     if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
-                        $("#styleEditor").css("left","-300px");           
+                        $("#styleEditor").css("left","-302px");           
                 });
                 styleeditor.setupCanvasElements(block);
             });
@@ -946,7 +946,7 @@
             $('a#link_Link').parent().show();
             $('#linkText').parent().show();
             //check target attribute
-            if($(el).attr('target')==="_blank")
+            if(($(el).attr('target') || $(el).parent().attr('target')) ==="_blank")
                 $("#newtab-option").prop("checked", "checked");
             else
                 $("#newtab-option").prop("checked", "");
