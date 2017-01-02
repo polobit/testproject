@@ -19,5 +19,6 @@ function showLinkedinMatchingProfilesBasedOnName(){
 function onLoadHandler(){
 	var ifrm = document.getElementById("linkedin-iframe");
     ifrmDc = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;       
-    ifrmDc.document.getElementById("search-box").val(name);
+	var target = ifrmDc.document.getElementById("search-box");
+	target.innerHTML = name;
 }
