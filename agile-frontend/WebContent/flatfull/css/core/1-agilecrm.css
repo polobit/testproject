@@ -4938,6 +4938,10 @@ ul#recent-menu-model-list li:nth-child(even)
 .searchbycharacterdiv{
   padding: 0px 138px;
 }
+
+.searchbycharacterexpanded{
+  padding: 0px 90px;
+}
 .tag-div{
   float: none !important;
 }
@@ -4947,7 +4951,7 @@ ul#recent-menu-model-list li:nth-child(even)
     /*float: left;*/
    /* border-right: 1px solid #dadada;
     border-left: 1px solid #fff;*/
-    font-size: 15px;
+    font-size: 14px;
    /* padding-left: 9px;
     padding-right: 9px;*/
    

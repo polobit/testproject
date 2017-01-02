@@ -17,11 +17,15 @@ $('#app-aside-folded').on('click', function(e) {
 		console.log("folded");
 		$("#app-aside-folded i").removeClass("fa-dedent");
 		$("#app-aside-folded i").addClass("fa-indent");
+		$("#searchbycharacter").removeClass("searchbycharacterexpanded").addClass("searchbycharacterdiv");
+		
 		// $(".app-aside-folded:not(.app-aside-dock) .navi > ul > li#documentsmenu > a span").text("Docs");
 	}
 	else {
 		$("#app-aside-folded i").removeClass("fa-indent");
 		$("#app-aside-folded i").addClass("fa-dedent");
+		$("#searchbycharacter").removeClass("searchbycharacterdiv").addClass("searchbycharacterexpanded");
+		
 		// $(".navi > ul > li#documentsmenu > a span").text("Documents");
 	}
 	
