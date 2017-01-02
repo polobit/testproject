@@ -20,8 +20,8 @@ body {
 	color: #333 !important;
 	font: 13px/19px "Varela", Arial, Helvetica, sans-serif !important;
 	letter-spacing: 0;
-/*	width: 302px;
-	margin: 0px auto;*/
+	max-width: 302px;
+	margin: 0px auto;
 }
 
 #popup-header {
@@ -206,70 +206,6 @@ margin-bottom: 5px!important;
 				<div id="agile-copyright">Powered by <a href="https://www.agilecrm.com" target="_blank">AGILE
 					CRM</a></div>
 			</div>
-	
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
-	<script type="text/javascript">
-	var email = window.parent.agile_read_cookie('agile-email');
-	if (email)
-	    document.getElementsByName('email')[0].value = email;
-	jQuery.validator.setDefaults({ debug: true });
-	$('#popup-form').validate({
-	    rules: {
-	        email: {
-	            required: true,
-	            email: true
-	        }
-	    },
-	    errorPlacement: function (error, element) {
-	        document.getElementsByClassName('popup-text')[0].style.borderColor = '#dd0000'
-	    },
-	    submitHandler: function () {
-	        return false
-	    },
-	    success: function () {
-	        document.getElementsByClassName('popup-text')[0].style.borderColor = '#00dd00';
-	        return false
-	    },
-	    error: function () {
-	        return false
-	    }
-	});
-	var iframe_div = window.parent.document.body.getElementsByClassName('simple-modal-body')[0];
-	var iframe_doc = iframe_div.getElementsByTagName('iframe')[0].contentWindow.document || iframe_div.getElementsByTagName('iframe')[0].contentDocument;
-	iframe_doc.getElementById('popup-header').onclick = function (e) {
-	    e.preventDefault();
-	    iframe_doc.getElementById('closed').style.display = 'none';
-	    iframe_doc.getElementById('opened').style.display = 'block';
-	    iframe_doc.getElementsByClassName('popup-button2')[0].onclick = function () {
-	        if ($('#popup-form').valid()) {
-	            var email = iframe_doc.getElementsByName('email')[0].value;
-	            window.parent._agile.set_email(email);
-	            var contact = {};
-	            contact.email = email;
-	            window.parent._agile.create_contact(contact);
-	            iframe_doc.getElementById('popup-title').innerHTML = 'Thank you for signingup!';
-	            iframe_doc.getElementById('popup-content').innerHTML = '<p>Please check your email and click the link provided to confirm you subscription.</p>';
-	            iframe_doc.getElementById('popup-close').onclick = function (e) {
-	                e.preventDefault();
-	                iframe_doc.getElementById('opened').style.display = 'none';
-	                window.parent.document.getElementById('simple-modal').style.display = 'none'
-	            };
-	            return false
-	        } else
-	            return false
-	    }
-	};
-	iframe_doc.getElementById('popup-close').onclick = function (e) {
-	    e.preventDefault();
-	    iframe_doc.getElementById('opened').style.display = 'none';
-	    iframe_doc.getElementById('closed').style.display = 'block'
-	}
-	</script>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 .mainThemeDependentCss() {
+
    .tabs .tab-container .nav-tabs li.active a{
       color: @basic-color;
       border-bottom: 3px solid @basic-color;
@@ -25,13 +26,11 @@
     .list-group-item.select{
       color: @basic-color;
       background-color: @basic-bg-color;
-      border-left: 3px solid @basic-color;
     }
 
      #reports-tab-container .report-selected a{
       color: @basic-color;
       background-color: @basic-bg-color;
-      border-left: 3px solid @basic-color;
     }
     #reports-tab-container .maintab a:hover {
       border: 0px;
@@ -83,6 +82,12 @@
     }
     input[type="checkbox"]:hover:after, input[type="checkbox"]:active:after, input[type="checkbox"]:focus:after{
       border-color : @checkbox-color;
+    }
+
+    input[disabled][type="checkbox"]:checked:after, .i-checks input[disabled]:after, .i-checks input[disabled]:focus, .i-checks input[disabled]:hover {
+      background-color: #dee5e7!important;
+      border-color: #ececec!important;
+      color: #fff!important;
     }
 
     input[type="radio"]:hover:after, input[type="radio"]:active:after, input[type="radio"]:focus:after{

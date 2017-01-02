@@ -590,7 +590,7 @@ $("#activityModal").on("click", "#eventDescriptionLink", function(e){
     				var $target = $(e.target);
     				$(this).data("bs.popover").tip().addClass($target.data("custom-popover-class"));
     			});
-    if(CURRENT_USER_PREFS.theme == "15")
+    			
     	initRolehandlers();
 
     /*$('#searchText').on('focus', function () {

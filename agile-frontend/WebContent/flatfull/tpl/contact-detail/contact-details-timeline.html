@@ -267,6 +267,7 @@
             </div>
         {{/if_entity}}
 
+
         {{#if_entity "task"}}
             <div class="timestamp">{{created_time}}</div>
             <!-- <div class="title"><div class="text-base"><span><a class="no-line"><i class="icon-tasks"></i></a></span> Task Added</div></div> -->
@@ -366,6 +367,24 @@
         {{/if_entity}}
 
          {{#if_entity "CONTACT"}}
+            {{#if_equals "SMS_SENT" activity_type}}
+            {{#if custom3}}
+            <div class="timestamp">{{time}}</div>
+            <div class="text-md text-cap pull-left">    
+                <div class="contact-job-title text-base custom-color">
+                <img src="{{#if_equals "TWILIO" label}}/widgets/sms-small-logo.png {{else}}/widgets/plivosms-small-logo.png {{/if_equals}}" style="width: 15px; height: 15px; margin-right: 3px; position: relative; top: 2px;  float:left;" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{label}} SMS">
+                    <i class="icon-envelope-alt text-muted p-r-xs"></i>{{custom3}}
+                </div>
+            </div>
+            <div class="pull-right" style="font-size:11px;margin-top: 3px;"><i class="fa fa-clock-o m-r-xs"></i>{{epochToHumanDate "hh:MM tt" time}}</div><div class="clearfix"></div>
+            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="body">
+            <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;"><b>{{agile_lng_translate 'contact-details' 'from'}} : </b> {{custom4}}</div></span>
+            <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;"><b>{{agile_lng_translate 'contact-details' 'to'}} :</b> {{custom1}}</div></span>
+                <span class="text-xs"><div class="bg-transparent b-n p-n"  style="white-space:pre-wrap;"><b>Message : </b>{{custom2}}</div></span>
+              </div>
+            {{/if}}
+        {{/if_equals}}
 			{{#if_equals "CALL" activity_type}}
             {{#if_equals "incoming" custom2}}
          <div class="timestamp">{{time}}</div>

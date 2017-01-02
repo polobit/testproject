@@ -69,6 +69,9 @@ var ActivitylogRouter = Backbone.Router.extend({
                          case "dashboard" :
                              activities_list = "service-activity-list-header"
                              break;
+                        case "Dashboard" :
+                             activities_list = "service-activity-list-header"
+                             break;
                      }
                      getTemplate(activities_list, {}, undefined, function(template) {
  

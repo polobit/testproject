@@ -826,6 +826,8 @@ show and hide the input for editing the contact name and saving that
     		    	// Replaces old owner details with changed one
     				$('#contact-owner').text(new_owner_name);
     				$('#contact-owner').attr('data', new_owner_id);
+              var changed_owner=model.toJSON().owner;
+             $('.contact-owner-pic img').attr('src',changed_owner.pic);
     				
     				// Showing updated owner
     				show_owner(); 
@@ -1628,10 +1630,10 @@ updateScoreValue :function(){
 		}
 
 		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck){
-      showAlertModal("number_validation", undefined, function(){
+      showAlertModal("{{agile_lng_translate 'validation-msgs' 'number'}}", undefined, function(){
         scoreboxval=prvs;
         setleadScoreStyles(scoreboxval);
-      });
+      }, undefined, "{{agile_lng_translate 'web-rules' 'add-score'}}");
       return;
 		}
 		else{
@@ -1663,10 +1665,10 @@ updateScoreValue :function(){
 				});							
 		}
 		if (isNaN(scoreboxval)|| scoreboxval!=decimalcheck||(scoreboxval<0)){
-      showAlertModal("number_validation", undefined, function(){
+      showAlertModal("{{agile_lng_translate 'validation-msgs' 'number'}}", undefined, function(){
         scoreboxval=prvs;
         setleadCScoreStyles(scoreboxval);
-      });
+      }, undefined, "{{agile_lng_translate 'web-rules' 'add-score'}}");
       return;
 		}
 		else{

@@ -22,6 +22,8 @@ define([
 						if(agilethemeObjValArr[i].selected){
 						     themeClassName=agilethemeObjValArr[i].value;
 						     $("#target").addClass(themeClassName);
+						     currApplThm = $.trim(themeClassName);
+						     $(".themesSelectEle").val(currApplThm);
 						     break;
 						}
 					}
@@ -86,8 +88,11 @@ define([
 				}
 					$('#form-label').text('Edit Form');
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
-		}
+					$("#loader").fadeOut('fast');
+					$("#header").css("display","block");
+					$(".container").css("display","block");
 				}
+			}
 				
 			}
 		});

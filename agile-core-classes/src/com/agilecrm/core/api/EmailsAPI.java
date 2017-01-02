@@ -377,14 +377,14 @@ public class EmailsAPI
 	    EmailSender emailSender = EmailSender.getEmailSender();
 
 	    // Appends Agile label
-	    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"),
+	    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by", true),
 		    "Sent using Agile");
 	    textEmail = EmailUtil.appendAgileToText(textEmail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
 	    // If no powered by merge field, append Agile label to html
-	    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+	    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by", true)))
 		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
-			emailSender.isEmailWhiteLabelEnabled());
+			emailSender.isEmailWhiteLabelEnabled(),  true);
 
 	    emailSender.sendEmail(fromEmail, fromName, fromEmail, null, null, subject, replyToEmail, htmlEmail,
 		    textEmail, null, null, null);
@@ -631,14 +631,14 @@ public class EmailsAPI
 		 EmailSender emailSender = EmailSender.getEmailSender();
 
 		    // Appends Agile label
-		    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"),
+		    textEmail = StringUtils.replace(textEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by",  true),
 			    "Sent using Agile");
 		    textEmail = EmailUtil.appendAgileToText(textEmail, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
 		    // If no powered by merge field, append Agile label to html
-		    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+		    if (!StringUtils.contains(htmlEmail, EmailUtil.getPoweredByAgileLink("campaign", "Powered by",  true)))
 		    		htmlEmail = EmailUtil.appendAgileToHTML(htmlEmail, "campaign", "Powered by",
-				emailSender.isEmailWhiteLabelEnabled());
+				emailSender.isEmailWhiteLabelEnabled(),  true);
 		 
     	String  data =domainName;												data +="\n";
     			data +="Mime-Version: 1.0";										data +="\n";
@@ -686,7 +686,13 @@ public class EmailsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getSendgridWhitelabelDomain(@QueryParam("emailDomain") String emailDomain) throws Exception
     {
-	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	
+    	if(!SendGridUtil.isEmailDomainValid(emailDomain)){
+    		
+    		return "{\"Error\" : \"Email domain is not valid\"}";
+    	}
+    	
+    EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 	
 	String domain = NamespaceManager.get();
 	

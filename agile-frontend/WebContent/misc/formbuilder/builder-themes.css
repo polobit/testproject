@@ -8,7 +8,7 @@ border-top-left-radius: 20px!important;
 border-bottom-left-radius: 20px!important;
 height: 43px;
 }
-.theme1 .agile-field>input[type=text],.theme1 .agile-field>input[type=email],.theme1 .agile-field>input[type=password],.theme1 .agile-field>input[type=url],.theme1 .agile-group select:not([multiple]) {
+.theme1 .agile-field>input[type=text],.theme1 .agile-field>input[type=email],.theme1 .agile-field>input[type=password],.theme1 .agile-group select:not([multiple]),.theme1 textarea{
 border: 1px solid #cfdadd;
 -webkit-border-radius: 50px;
 -moz-border-radius: 50px;
@@ -23,6 +23,9 @@ padding: 10px 20px !important;
 display: block;
 font-family:sans-serif;
 box-sizing: border-box;
+}
+.theme1 .agile-input-group input{
+  padding: 10px 20px !important;
 }
 .theme1 .agile-field{
 width:100%;
@@ -65,7 +68,7 @@ border-radius: 20px;
 
 .theme1 legend{
 border-bottom: 3px solid #f6f6f6!important;
-text-align: center!important;
+text-align: center;
 font-size: 18px;
 font-weight: 600;
 margin-bottom: 10px;
@@ -241,6 +244,7 @@ font-size: 18px;
 font-weight: 600;
 border-bottom: none;
 padding: 14px;
+padding-right: 32px;
 border-top-left-radius: 5px;
 border-top-right-radius: 5px;
 box-sizing: border-box;
@@ -392,6 +396,7 @@ font-size: 18px;
 font-weight: 600;
 border-bottom: none;
 padding: 14px;
+padding-right: 32px;
 border-top-left-radius: 5px;
 border-top-right-radius: 5px;
 box-sizing: border-box;
@@ -410,7 +415,7 @@ margin-left: 35px;
 margin-bottom: 25px;
 }
 .theme3{
-background-color: #d9ede2;
+background-color: #d9ede2!important;
 font-family:sans-serif;
 color: #333;
 font-size: 14px;
@@ -544,6 +549,7 @@ font-size: 18px;
 font-weight: 600;
 border-bottom: none;
 padding: 14px;
+padding-right: 32px;
 border-top-left-radius: 5px;
 border-top-right-radius: 5px;
 box-sizing: border-box;
@@ -623,5 +629,61 @@ select:not([multiple]){
  -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url(" http://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
+  background: url("https://agilecrm.s3.amazonaws.com/forms/select-down-arrow.png") no-repeat 98% 49% #fff!important;
+}
+#agile-tweet-redirect:hover,#agile-tweet-redirect:focus{
+  color:#141719!important;
+}
+#agile-fb-redirect:hover,#agile-fb-redirect:hover{
+  color:#141719!important;
+}
+#agile-google-redirect:hover,#agile-google-redirect:focus{
+  color:#141719!important;
+}
+#formsave-close{
+  background-color: #7266ba;
+  border-color: #7266ba;
+}
+#formsave-close:hover,#formsave-close:focus,#formsave-close:active{
+  color: #fff!important;
+  background-color: #6254b2;
+  border-color: #5a4daa;
+}
+#success-msg{
+  display: none;
+  color: green;
+}
+.container,#header{
+  display:none;
+}
+.container{
+  margin-top: 3%;
+}
+#loader{
+    max-width: 1000px;
+    margin: auto;
+    left: -3%;
+    right: -73%;
+    top: 39%;
+    position: fixed;
+}
+#target legend::after {
+  content: "\00a0";
+  right: 43px;
+  font-size: 15px;
+  background-image: url("https://agilecrm.s3.amazonaws.com/forms/settings-16.png");
+  height: 16px;
+  width: 16px;
+  position: absolute; 
+  top: 76px;
+}
+#target.theme1 legend::after {
+    top: 88px;
+    right: 55px;
+}
+#target.theme2 legend::after,#target.theme3 legend::after,#target.theme4 legend::after {
+    top: 86px;
+}
+.field_req{
+  color:red;
 }

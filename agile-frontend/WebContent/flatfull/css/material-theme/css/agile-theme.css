@@ -176,7 +176,7 @@ form select.form-control{
   border-bottom: 3px solid transparent;
   padding: 20px 5px 17px 5px !important;
   color: #78909c;
-  font-size: 14px;
+  font-size: 13px;
 }
 .tabs .tab-container .nav-tabs>li:hover>a, .tabs .tab-container .nav-tabs>li:focus>a, .tabs .tab-container .nav-tabs>li.active>a{
   background-color: inherit;
@@ -793,8 +793,8 @@ header .bg-white a, header button.show-search-dropdown {
   margin-top: -7px!important;
 }
 #widgets-model-list h4,#widgets-model-list .h4,#widgets-model-list h5,#widgets-model-list .h5,#widgets-model-list h6,#widgets-model-list .h6
-{
-
+{ 
+    margin-bottom: -5px!important;
 }
 .contact-right-widgetsview i
 {
@@ -1109,7 +1109,7 @@ input.mini-time.ui-timepicker-input{
 }
 
 
-.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; border-left: 3px solid rgb(17, 160, 248) !important;}
+.list-group-item.select{color: #11a0f8; background-color: #e7f6ff !important; /*border-left: 3px solid rgb(17, 160, 248) !important;*/}
 .list-group.no-border .list-group-item{border-width: 0px;}
 .list-group-item{border-left: 3px solid transparent !important;}
 a.list-group-item:hover, a.list-group-item:focus{color: #11a0f8; background-color: #f5fbff !important;}
@@ -1195,7 +1195,7 @@ table.agile-table thead tr th .i-checks i, #bulk-action-btns .i-checks i {
 #reports-tab-container .report-selected a{
   color: #11a0f8;
   background-color: #e7f6ff !important;
-  border-left: 3px solid rgb(17, 160, 248) !important;
+  /*border-left: 3px solid rgb(17, 160, 248) !important;*/
 }
 #reports-tab-container .maintab ul li a{
   border: 0px !important;
@@ -2091,8 +2091,7 @@ ul#recent-menu-model-list li:nth-child(even){
     border-radius: 4px;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
   }
-
-.workflow-sortby,.tickets-toolbar .new-theme-sort
+.tickets-toolbar .new-theme-sort
 {
   margin-top:-15px;
 }
@@ -2497,8 +2496,8 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 
 .agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4
 {
-      margin-top: 10px;
-      margin-bottom:10px;
+      margin-top: 5px!important;
+      margin-bottom:10px !important;
 }
 .agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs
 {
@@ -2581,7 +2580,7 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 }
 #send-reply-container #send-reply .arrow.bottom.arrow-light:after
 {
- border-top-color: rgb(207, 236, 254)!important;
+ border-top-color: rgb(231, 246, 255)!important;
 }
 .lpPreviewView label
 {
@@ -3140,7 +3139,7 @@ padding-top: 14px;
       color: #263238!important;
       background-color: #f4f8f9 !important;
 }
-.documentsheading .workflow-sortby,.workflow-heading .workflow-sortby
+.documentsheading .workflow-sortby
 {
   margin-top:-7px !important
 }
@@ -3171,3 +3170,115 @@ div.show-caret:hover>a.caret-btn
 #reports-tab-container .sub-nav-tab#subTab1 .m-r-sm.icon-clock {
   margin-top: 3px;
 }
+
+.agile-theme-15  ul.new-theme-ul{
+  width: 169px !important;
+}
+.grid-icon-header {
+  display: none;
+}
+.grid-v1 {
+  display: none;
+}
+.grid-v2 {
+  display: block;
+}
+.agile-theme-15 #admin-settings-users .panel-heading>div:first-child
+{
+  display:block;
+  font-size: 20px;
+  color:#11A0F8;
+}
+
+#custom-fields-accordion .collapse.in{
+      box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+#custom-fields-accordion .panel-title>a{
+      font-size: 13px !important;
+      color:#78909c!important;
+}
+ .tickets-main .wrapper.bg-light button{
+  font-weight: normal !important;
+}
+.portlet_header h4, .portlet_header .h4 {
+    margin-bottom: 0px!important;
+}
+/*Service Module Changes Start*/
+
+#ticket-last-notes{
+  border: 0;
+}
+.public-notes-container .show-original-div>button:first-child{
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+.ticket-send-reply>button:nth-child(2){
+  border-radius: 4px !important;
+}
+.tkts-status-changed{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+.tkts-status-changed span.arrow.left{
+  border-right-color: transparent !important;
+}
+#tkts-status-changed-text{
+  font-size: 13px;
+}
+#send-reply-container span.arrow.bottom.arrow-light{
+  border-top-color: transparent !important; 
+}
+/*.ticket-subject, .ticket-id{
+  font-weight: 600px !important;
+  font-size: 14px !important;
+}*/
+form#new-ticket ul.chosen-choices{
+  height: 40px !important;
+  padding-left: 12px !important;
+  padding-top: 0px !important;
+}
+
+/*Service Module Changes End*/
+.workflow-heading .workflow-sortby
+{
+  margin-top: -15px!important;
+}
+#Landingpages-top-view .workflow-heading .workflow-sortby
+{
+  margin-top:0px!important;
+}
+
+.agile-theme-15 .tagheading
+{
+  margin-left:20px;
+  display:block !important;
+}
+.agile-theme-15 .taskhead.taskdivider
+{
+  visibility:hidden;
+}
+#taskheading
+{
+  font-weight:normal!important;
+  color:#78909c!important;
+
+}
+.milestone-main .milstone-title
+{
+  color:#78909c!important;
+}
+
+.ticket-subject-md {
+  width: 50%;
+}
+
+ .agile-theme-15  ul.new-theme-ul{
+width: 169px !important;
+}
+#tickets-inner{
+  border-bottom: 1px solid #dee5e7 !important;
+}
+.agile-theme-15 #triggersmenu i.icon-magic-wand {
+    color: #78909c !important;
+    font-weight: bold;
+}
+

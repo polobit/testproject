@@ -1758,6 +1758,78 @@ public class ActivityUtil
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @author Purushotham
+	 * @created 28-Nov-2014
+	 * 
+	 */
+	public static void createCallsLogWithUuid(String serviceType, String toOrFromNumber, String callType, String callStatus,
+			String callDuration, Contact contact,Long note_id, String uuid)
+	{
+
+		// Search contact
+		if (toOrFromNumber != null)
+		{
+			String twilioStatus = getEnumValueOfTwilioStatus(callStatus);
+			if (twilioStatus != null)
+			{
+
+				System.out.println("contact: " + contact);
+				if (contact != null)
+				{
+					String calledToName = "";
+					ContactField firstname = contact.getContactFieldByName("first_name");
+					ContactField lastname = contact.getContactFieldByName("last_name");
+
+					if (firstname != null)
+						calledToName += firstname.value;
+
+					if (lastname != null)
+					{
+						calledToName += " ";
+						calledToName += lastname.value;
+					}
+
+					Activity activity = new Activity();
+					activity.activity_type = ActivityType.CALL;
+					activity.custom1 = serviceType;
+					activity.custom2 = callType;
+					activity.custom3 = twilioStatus;
+					activity.custom4 = callDuration;
+					activity.label = calledToName;
+					activity.entity_type = EntityType.CONTACT;
+					if(uuid != null){
+						activity.uuid = uuid;
+					}
+					if(note_id!=null)
+						activity.note_id_call=note_id.toString();
+					activity.entity_id = contact.id;
+					activity.save();
+				}
+				else
+				{
+					Activity activity = new Activity();
+					activity.activity_type = ActivityType.CALL;
+					activity.custom1 = serviceType;
+					activity.custom2 = callType;
+					activity.custom3 = twilioStatus;
+					activity.custom4 = callDuration;
+					activity.label = toOrFromNumber;
+					activity.entity_type = null;
+					if(uuid != null){
+						activity.uuid = uuid;
+					}
+					if(note_id!=null)
+						activity.note_id_call=note_id.toString();
+					activity.entity_id = null;
+					activity.save();
+				}
+			}
+		}
+
+	}
 
 	/**
 	 * Fetch list of activities based on the given filters sorted on the time of
@@ -1945,9 +2017,9 @@ public class ActivityUtil
 			searchMap.put("entity_type in",items);
 		}
 
-		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT"))
+		if (!entitytype.equalsIgnoreCase("ALL") && !entitytype.equalsIgnoreCase("CALL") && !entitytype.equalsIgnoreCase("EMAIL_SENT") && !entitytype.equalsIgnoreCase("SMS_SENT"))
 			searchMap.put("entity_type", entitytype);
-		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT"))
+		if (entitytype.equalsIgnoreCase("CALL") || entitytype.equalsIgnoreCase("EMAIL_SENT") || entitytype.equalsIgnoreCase("SMS_SENT"))
 			searchMap.put("activity_type", entitytype);
 		if (entityId != null)
 			searchMap.put("entity_id =", entityId);
@@ -2429,7 +2501,110 @@ public class ActivityUtil
 		
 		System.out.println("Activity saving done and the pointer is returning");
 	}
+	
+	/**
+	 * creates log for each call activity i.e twillio or sip
+	 * 
+	 * @param serviceType
+	 *            {out going or incoming}
+	 * @param toOrFromNumber
+	 * @param callType
+	 *            {tw}
+	 * @param callStatus
+	 * @param callDuration
+	 */
+	public static void createCallsLog(String serviceType, String toOrFromNumber, String callType, String callStatus,
+			String callDuration,Long note_id,String uuid)
+	{
+		
+		// Search contact
+		System.out.println("in createLogForCalls==activityutil== while saving call activities and toOrFromNumber is " + toOrFromNumber );
+		if (toOrFromNumber != null)
+		{
+			System.out.println("started process to save activities inside if condition....");
+			Contact contact;
+			try
+			{
+				contact = QueryDocumentUtil.getContactsByPhoneNumber(toOrFromNumber);
+			}
+			catch (Exception e)
+			{
+				contact = ContactUtil.searchContactByPhoneNumber(toOrFromNumber);
+			}
+			System.out.println("contact: " + contact);
+			if (contact != null)
+			{
+				String calledToName = "";
+				List<ContactField> properties = contact.properties;
+				for (ContactField f : properties)
+				{
+					System.out.println("\t" + f.name + " - " + f.value);
+					if (f.name.equals(contact.FIRST_NAME))
+					{
+						calledToName = f.value;
+						continue;
+					}
+					if (f.name.equals(contact.LAST_NAME))
+					{
+						calledToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						calledToName = f.value;
+						continue;
+					}
+				}
 
+				Activity activity = new Activity();
+				activity.activity_type = ActivityType.CALL;
+				activity.custom1 = serviceType;
+				activity.custom2 = callType;
+				activity.custom3 = callStatus;
+				activity.custom4 = callDuration;
+				activity.label = calledToName;
+				activity.entity_type = EntityType.CONTACT;
+				activity.entity_id = contact.id;
+				if(uuid != null){
+					activity.uuid = uuid;
+				}
+				if(note_id!=null)
+					activity.note_id_call=note_id.toString();
+				activity.save();
+				System.out.println("after saving activities for avaible contact -- " + activity);
+			}
+			else
+			{
+				Activity activity = new Activity();
+				activity.activity_type = ActivityType.CALL;
+				activity.custom1 = serviceType;
+				activity.custom2 = callType;
+				activity.custom3 = callStatus;
+				activity.custom4 = callDuration;
+				activity.label = toOrFromNumber;
+				activity.entity_type = null;
+				activity.entity_id = null;
+				if(uuid != null){
+					activity.uuid = uuid;
+				}				
+				if(note_id!=null)
+					activity.note_id_call=note_id.toString();
+				activity.save();
+				System.out.println("after saving activities for null contact -- " + activity);
+			}
+		}
+		
+		System.out.println("Activity saving done and the pointer is returning");
+	}
+	
+	public static List<Activity> getActivityBasedOnUuid(String uuid){
+		// TODO Auto-generated method stub
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		if (uuid != null){
+			searchMap.put("uuid", uuid);
+		}
+		return dao.listByProperty(searchMap);
+	}
+	
 	private static List<Activity> getActivityBasedOnNoteId(String note_id)
 	{
 		// TODO Auto-generated method stub
@@ -2631,6 +2806,64 @@ public class ActivityUtil
 			activity.custom4 = (String) domainuser.getInfo("Ip_Address");
 			activity.save();
 		}
+	}
+	
+public static void createLogForSMS(String toNumber, String fromNumber, String message, String smsStatus, String gatewayName, String contactId)
+	{
+
+		// Search contact
+		if (toNumber != null)
+		{
+			Contact contact;
+			try
+			{
+				contact = QueryDocumentUtil.getContactsByPhoneNumber(toNumber);
+			}
+			catch (Exception e)
+			{
+				contact = ContactUtil.searchContactByPhoneNumber(toNumber);
+			}
+			if(contact == null)
+				contact = ContactUtil.getContact(Long.parseLong(contactId));
+			
+			System.out.println("SMS Log contact: " + contact);
+			if (contact != null)
+			{
+				String smsToName = "";
+				List<ContactField> properties = contact.properties;
+				for (ContactField f : properties)
+				{
+					System.out.println("\t" + f.name + " - " + f.value);
+					if (f.name.equals(contact.FIRST_NAME))
+					{
+						smsToName += f.value;
+						continue;
+					}
+					if (f.name.equals(contact.LAST_NAME))
+					{
+						smsToName += " " + f.value;
+						continue;
+					}
+					if(f.name.equals(contact.NAME)){
+						smsToName = f.value;
+						continue;
+					}
+				}
+
+				Activity activity = new Activity();
+				activity.activity_type = ActivityType.SMS_SENT;
+				activity.custom1 = toNumber;
+				activity.custom2 = message;
+				activity.custom3 = smsStatus;
+				activity.custom4 = fromNumber;
+				activity.label = gatewayName;
+				activity.note_id_call =smsToName ;
+				activity.entity_type = EntityType.CONTACT;
+				activity.entity_id = contact.id;
+				activity.save();
+			}
+		}
+
 	}
 }
 

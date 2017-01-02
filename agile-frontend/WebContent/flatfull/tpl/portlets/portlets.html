@@ -474,6 +474,7 @@
 			{{/each}}
 		</li>
 		{{/if}}
+
 		{{#if tasks}}
 		<li class="pull-left">
 		<div class="panel-heading visible-xs b-b b-light" style="background:white;">
@@ -734,6 +735,7 @@
      <div class="column_position" style="display:none">{{column_position}}</div>
      <div class="row_position" style="display:none">{{row_position}}</div>	
 </script>
+
 <script id="portlets-tasksandevents-agenda-model-template" type="text/html">
 		<div class="portlet_header portlet_edit_icons panel-heading">
 			<h4 class="h4 text-ellipsis">
@@ -1860,7 +1862,10 @@ Created Task {{#if this.entityObject}}<a href="#task/{{this.entity_id}}">{{safe_
 {{/if_equals}}
 
 {{#if_equals "DEAL_EXPORT" activity_type}}
- {{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} Deals <br/>	
+{{agile_lng_translate 'contacts-view' 'exported'}} {{custom1}} {{agile_lng_translate 'contact-details' 'deals'}} <br/>	
+<small class="activities_second_line m-t-none text-sm">
+{{#if custom2}}<span><a target="blank" style="color:#337ab7;text-decoration:underline;" href="{{custom2}}">{{agile_lng_translate 'contacts-view' 'download-csv-file'}}</a>. {{agile_lng_translate 'contacts-export' 'this-link-is-valid'}}</span>{{/if}} 
+</small> 
 {{/if_equals}}
 
 {{#if_equals "DEAL_TAG_CHANGE" activity_type}}
@@ -2645,6 +2650,21 @@ Created a new Company {{#if this.entityObject}}<a href="#contact/{{entity_id}}" 
 </small></div>
 {{/if_equals}}
 {{/unless}}
+{{/if_equals}}
+
+{{#if_equals "SMS_SENT" activity_type}}
+{{#if custom3}}
+{{#if_equals "SMS Sent" custom3}} SMS sent to{{else}} SMS failed to {{/if_equals}} {{#if this.entityObject}}<a href="#contact/{{entity_id}}" data="{{entity_id}}" class="popover_contact"  >{{note_id_call}}</a>{{else}}'{{note_id_call}}'{{/if}} <br/>
+<small class="activities_second_line p-t-xs m-t-none text-sm text-ellipsis"> 
+ {{#if_equals "SMS Sent" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}} Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+{{else}}
+ {{#if_equals "SMS Failed" custom3}}
+ <i class="icon-envelope-alt"></i>{{#unless this.entityObject}} {{/unless}}Message - <a href="" class="sms-details" data="{{id}}">{{custom2}}<a> 
+{{/if_equals}}
+{{/if_equals}}
+</small>
+{{/if}}
 {{/if_equals}}
 
 <!-- starting of campaign status-->

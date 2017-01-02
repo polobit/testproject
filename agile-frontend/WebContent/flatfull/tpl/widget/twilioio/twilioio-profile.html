@@ -104,13 +104,18 @@
                       <input type="text" id="twilio_twimlet_url" class="input-medium widget_input_box form-control"  title="Twimlet Url" value="" name="twilio_twimlet_url" placeholder="{{agile_lng_translate 'widgets' 'twimlet-url'}}">
                       </input>
                     </div> 
-			    </div>                         
+			    </div> 
+			    
               <span id="error-number-not-selected" class="help-inline text-danger" style="display:none;">{{agile_lng_translate 'widgets' 'please-select-twilio-number'}}</span>
               <span id="note-number-not-available" class="help-inline text-danger" style="display:none;"></span>
           <span id="twilio_recording" >
         <div class="checkbox">
         <label class="i-checks i-checks-sm">
         <input type="checkbox" id="twilio_record" name="twilio_record" title="{{agile_lng_translate 'widgets' 'record-calls'}}"></input><i></i> {{agile_lng_translate 'widgets' 'record-calls'}}
+        </label>
+	 &nbsp;
+        <label class="i-checks i-checks-sm">
+        <input type="checkbox" id="twilio_sms" name="twilio_sms" title="Enable SMS"></input><i></i> Enable SMS
         </label>
         </div>
         </span>    

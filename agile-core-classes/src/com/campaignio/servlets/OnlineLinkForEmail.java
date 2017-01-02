@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -49,7 +50,11 @@ public class OnlineLinkForEmail extends HttpServlet
 	// Fetches domain name from url. E.g. From admin.agilecrm.com, returns
 	// admin
 	URL url = new URL(request.getRequestURL().toString());
+	String host = url.getHost();
 	String path = url.getPath();
+	
+	String oldNamespace = NamespaceManager.get();
+	
 	try
 	{
 	    while (path.endsWith("/"))
@@ -67,6 +72,16 @@ public class OnlineLinkForEmail extends HttpServlet
 		String campaignIdString = tokens[1];
 		String subscriberIdString = tokens[2];
 		String nodeId = tokens[3];
+		
+		if(EmailLinksConversion.isTrackURLDomain(host))
+		{
+			String namespace = request.getParameter("ns");
+			
+			if(StringUtils.isNotBlank(namespace))
+				NamespaceManager.set(namespace);
+			
+		}
+		
 		if (StringUtils.isNotBlank(campaignIdString) && StringUtils.isNotBlank(subscriberIdString)
 		        && StringUtils.isNotBlank(nodeId))
 		{
@@ -115,6 +130,10 @@ public class OnlineLinkForEmail extends HttpServlet
 	catch (Exception e)
 	{
 	    System.out.println("Exception occured while reading content of email node" + e.getMessage());
+	}
+	finally
+	{
+		NamespaceManager.set(oldNamespace);
 	}
     }
 

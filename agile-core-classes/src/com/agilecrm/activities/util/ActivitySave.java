@@ -44,7 +44,8 @@ import com.agilecrm.contact.DocumentNote;
 public class ActivitySave
 {
 
-    /**
+    private static final String String = null;
+	/**
      * method used to create DEAL_ADD activity
      * 
      * @param opportunity
@@ -1419,4 +1420,5 @@ public class ActivitySave
     	        bulk_action_subject, EntityType.TASK);
 
         }
+  
 }

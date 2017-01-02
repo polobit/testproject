@@ -1,9 +1,14 @@
 package com.agilecrm.user.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.email.util.ContactImapUtil;
 import com.agilecrm.contact.email.util.ContactOfficeUtil;
 import com.agilecrm.core.api.prefs.OfficePrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -99,7 +104,7 @@ public class OfficeEmailPrefsUtil
      */
     public static void checkOfficePrefs(OfficeEmailPrefs prefs) throws Exception
     {
-	String url = ContactOfficeUtil.getOfficeURLForPrefs(prefs, "info@agilecrm.com", "0", "1");
+	String url = ContactOfficeUtil.getOfficeURLForPrefs(prefs, "info@agilecrm.com", "0", "1", "mails");
 
 	// Access URL
 	String jsonResult = HTTPUtil.accessURL(url);
@@ -112,5 +117,25 @@ public class OfficeEmailPrefsUtil
 	    throw new Exception("Error saving: " + emails.getString("errormssg"));
 
     }
+
+	public static List<String> getDefaultOfficeFolders(OfficeEmailPrefs officeEmailPrefs) throws JSONException 
+	{
+		List<String> defaultFolders = new ArrayList<String>();
+		String officeURL = ContactOfficeUtil.getOfficeURLForFetchingDefaultFolders(officeEmailPrefs);
+		if (StringUtils.isNotBlank(officeURL))
+		{
+		    // Gets default office 365 server folders
+		    JSONArray defaultFoldersArray = ContactOfficeUtil.getOfficeFoldersFromServer(officeURL);
+		    if (defaultFoldersArray != null && defaultFoldersArray.length() > 0)
+		    {
+			for (int i = 0; i < defaultFoldersArray.length(); i++)
+			{
+			    String folder = defaultFoldersArray.getString(i);
+			    defaultFolders.add(folder);
+			}
+		    }
+		}
+		return defaultFolders;
+	}
 
 }

@@ -116,3 +116,74 @@
         </form>
 </div>
 </script>
+//sms noty template
+<script type="text/html" id="sms-noty-template">
+<div class="sms-draggable-noty" id= "sms-noty" style="z-index: 10000;position: relative;">
+<div>
+	<div class="text-xs" style="padding: 0px;">
+
+		<div class="col-lg-12  drag-pop-div" style="padding:0px;width: 350px;background: white;"> 
+
+			<div class="panel panel-default" style="border-bottom: none;margin-bottom: 0px;">
+
+				<div class="panel-heading noty-heading" style="background:#D6E6F4;height: 85px;">
+
+					<div class="col-lg-12" style="padding: 0px;margin: 0px;height: 0px;top:7px;left: 15px;">
+						<div class="col-lg-10"></div>
+						<div class="col-lg-2 move-icon none"><i class="icon-move"></i></div>
+					</div>	
+
+					<div class="col-lg-12" style="padding-left : 0px">
+						<div class="col-lg-2" style="padding-left : 0px">
+							<span class="img-inital r r-2x call_img thumb-sm">
+								{{#if properties}}
+									<img class='w-full img-circle' src="{{gravatarurl properties 80}}" />
+								{{else}}
+									<img class='w-full img-circle' src="https://test55-dot-sandbox-dot-agilecrmbeta.appspot.com/flatfull/images/user-default.jpg" />
+								{{/if}}
+							</span>
+						</div>
+						<div class="col-lg-10" style="padding-left: 0px;padding-right: 0px;">
+							<div class="col-lg-12" style="padding-right: 0px;">
+								<span class="text-base" id="noty_text_msg">
+									{{text-msg}}
+								</span> <span id="notyCallDetails" callId="{{callId}}" number="{{phone}}"> {{phone}} </span>
+							</div>
+								{{#if properties}}
+							<div class="col-lg-12"><a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{ getPropertyValue properties "last_name"}} </a></div>
+								{{/if}}
+						</div>
+					</div>
+					
+					<div class="clearfix"></div>
+
+				</div>
+					<div id="panel-body1" style=" height: 160px; border: 1px solid #d6e6f4;">
+						<div class="col-lg-12" id="sms-noty-l1" class = "call-voicemail" style = "margin-top: 5px;">
+						</div>
+
+						<div class="sms_noty_description">
+						<label style="margin-left:2px"><b>Message:<span style="color:red;">*</span></b></label>
+						<textarea id="sms-noty-notes" placeholder="Enter messgae text" rows="4" cols="50" style="width: 345px;border: 1px solid #d6e6f4;" maxlength="160" onkeyup="countChar(this);" 
+                         ></textarea>
+						</div>
+						<div class="col-lg-12" id="call-noty-l2" style="padding-right: 0px">
+
+						<span class="sms-message-count font-bold" style="margin-right:6px ; margin-left: -12px; margin-left:-13px;"></span>
+						<span class="sms-message hidden" style="margin-right:5px"></span>
+							<a id="send-sms " class="btn-sm btn-primary" href="javascript:void(0);" onclick="sendPersonalSMS(this,{{id}});" style="float: right;  margin-right: 5px;">Send SMS</a>
+							<a id="" class="btn-sm btn-default" href="javascript:void(0);" onclick="closeCallNoty(true);" style="float: right;margin-right: 5px;width: 76px;text-align: center;background-color: #d6d6d6;">Cancel</a>
+						</div>
+					</div>					
+
+					</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+</div>
+</script>

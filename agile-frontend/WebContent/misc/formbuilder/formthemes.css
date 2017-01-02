@@ -1,0 +1,124 @@
+.innerBackgroundTheme,.innerFontTheme,.innerBorderTheme,.innerAlignmentTheme,.selectDiv,.innerColorThemeEle{
+	margin-top: 20px;
+}
+.outerSelectTheme{
+	display: inline;
+	width: 250px;
+}
+.outerBackgroundTheme,.outerFontTheme,.outerBorderTheme,.outerAlignmentTheme,.outerFontTheme,.outerColorThemeEle{
+	display:none;
+	margin: 25px;
+}
+.ulDiv ul{
+	list-style-type: none;
+	margin-left: -34px;
+	margin-top: 4px;
+}
+.ulDiv li{
+	margin:5px;
+}
+.ulDiv{
+	overflow-y: scroll;
+	border: 1px solid #ccc;
+	height: 61px;
+}
+.selectSpan{
+	padding-left:34px
+}
+.solidBorder{
+	border:1px solid #444444;
+	height: 8px;
+}
+.dottedBorder{
+	border:1px dotted #444444;
+	height: 8px;	
+}
+.dashedBorder{
+	border:1px dashed #444444;
+	height: 8px;
+}
+.doubledBorder{
+	border:1px doubled #444444;
+	height: 8px;
+}
+.outerArrow{
+	    margin-left: -12px;
+}
+.innerBackgroundImageTheme{
+	overflow:none;
+	margin-left: 10px;
+
+}
+.bgImgLit li{
+	float:left;
+	margin: 3px 4px;
+}
+.bgImgLit{
+	overflow: hidden;
+	height: 160px;
+	width: 160px;
+}
+.innerFontUlDiv{
+	height: 75px;
+    overflow-y: hidden;
+ }
+.innerFontSizeUlDiv{
+    width: 80px;
+    height: 75px;
+}
+.fontThemeArrow{
+	margin-right: 25px;
+}
+.selected{
+background-color:#3E8AD8;	
+}
+.outerSelectTheme{
+	display: inline;
+}
+.dropdown-content{
+	display:none;
+	padding-left: 10px;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px; 
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	border: 1px solid #9E9E9E;
+	border-bottom: 1px solid #9E9E9E;
+	margin-left: 75px;
+	margin-top: 35px;
+}
+.themeDiv{
+	padding: 5px;
+	display: flex;
+}
+.themeEle:hover{
+	background-color:#9E9E9E;
+	text-decoration:none;
+}
+.themeEleDelete:hover{
+	text-decoration:none;
+}
+#form-preview:hover{
+	background-color: #e6e6e6!important;
+}
+.createCustomFormContent{
+	overflow-y: scroll;
+    height: 350px;
+}
+.createCustomFormContent .theme1 .i-checks input:checked+i:before {
+    width: 11px;
+    height: 11px;
+}
+.createCustomFormContent .agile-group button {
+    pointer-events: none;
+}
+#applytheme {
+    color: #fff!important;
+    background-color: #7266ba;
+    border-color: #7266ba;
+}
+#applytheme:hover, #applytheme:focus, #applytheme:active {
+    color: #fff!important;
+    background-color: #6254b2;
+    border-color: #5a4daa;
+}

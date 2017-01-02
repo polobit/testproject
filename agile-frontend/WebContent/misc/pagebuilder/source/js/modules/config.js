@@ -12,7 +12,7 @@
         'header.wrapper' : ['background-color'],
         '.dividerel' : ['background-color'],
         'nav a': ['color', 'font-weight', 'text-transform', 'dynamic-button'],
-        'img': ['border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
+        'img': ['width','height','border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
         'hr.dashed': ['border-color', 'border-width'],
         '.divider > span': ['color', 'font-size'],
         'hr.shadowDown': ['margin-top', 'margin-bottom'],

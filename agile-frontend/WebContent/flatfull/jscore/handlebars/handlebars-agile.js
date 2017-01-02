@@ -124,6 +124,10 @@ function getTemplateUrls(templateName)
 	{
 	template_relative_urls.push("sip.js");
 	}
+	else if (templateName.indexOf("ozonetel") == 0)
+	{
+	template_relative_urls.push("ozonetel.js");
+	}
 	else if (templateName.indexOf("twitter") == 0)
 	{
 		template_relative_urls.push("twitter.js");
@@ -135,6 +139,10 @@ function getTemplateUrls(templateName)
 	else if (templateName.indexOf("paypal") == 0)
 	{
 		template_relative_urls.push("paypal.js");
+	}
+	else if (templateName.indexOf("knowlarity") == 0)
+	{
+		template_relative_urls.push("knowlarity.js");
 	}
 	else if (templateName.indexOf("xero") == 0)
 	{

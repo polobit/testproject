@@ -166,6 +166,8 @@ function initializeTaskDetailListeners(){
 
 			$('#task-owner').text(new_owner_name);
 			$('#task-owner').attr('data', new_owner_id);
+			var changed_owner=model.toJSON().taskOwner;
+            $('.contact-owner-pic img').attr('src',changed_owner.pic);
 
 			// Showing updated owner
 			show_task_owner();

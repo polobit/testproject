@@ -40,11 +40,13 @@ cat flatfull/tpl/widget/quickbooks/*.html > tpl/min/flatfull/quickbooks.js
 cat flatfull/tpl/widget/shopify/*.html > tpl/min/flatfull/shopify.js
 cat flatfull/tpl/widget/freshbooks/*.html > tpl/min/flatfull/freshbooks.js
 cat flatfull/tpl/widget/klout/*.html > tpl/min/flatfull/klout.js
+cat flatfull/tpl/widget/knowlarity/*.html > tpl/min/flatfull/knowlarity.js
 cat flatfull/tpl/widget/rapleaf/*.html > tpl/min/flatfull/rapleaf.js
 cat flatfull/tpl/widget/sip/*.html > tpl/min/flatfull/sip.js
 cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
 cat flatfull/tpl/widget/twilio/*.html > tpl/min/flatfull/twilio.js
 cat flatfull/tpl/widget/twilioio/*.html > tpl/min/flatfull/twilioio.js
+cat flatfull/tpl/widget/ozonetel/*.html > tpl/min/flatfull/ozonetel.js
 cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js
 cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
 cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
@@ -81,6 +83,7 @@ cat flatfull/tpl/widget/skype/*.html > tpl/min/flatfull/skype.js
 cat flatfull/tpl/widget/stripe/*.html > tpl/min/flatfull/stripe.js
 cat flatfull/tpl/widget/twilio/*.html > tpl/min/flatfull/twilio.js
 cat flatfull/tpl/widget/twilioio/*.html > tpl/min/flatfull/twilioio.js
+cat flatfull/tpl/widget/ozonetel/*.html > tpl/min/flatfull/ozonetel.js
 cat flatfull/tpl/widget/twitter/*.html > tpl/min/flatfull/twitter.js
 cat flatfull/tpl/widget/uservoice/*.html > tpl/min/flatfull/uservoice.js
 cat flatfull/tpl/widget/xero/*.html > tpl/min/flatfull/xero.js

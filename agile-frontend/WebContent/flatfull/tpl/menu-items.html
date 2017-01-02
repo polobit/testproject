@@ -164,9 +164,9 @@
     </li>
     <li id="triggersmenu">
       <a  href="#triggers">
-        <i class="icon icon-magic-wand"></i>
-        <i class="material-icons  hidden-icon" style="display: none">merge_type</i>
-         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">merge_type</i>
+        <i class="icon icon-magic-wand" style="display:block !important"></i>
+        <i class="material-icons  hidden-icon" style="display: none">play_for_work</i>
+         <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Triggers">play_for_work</i>
         <span>{{agile_lng_translate 'campaigns' 'triggers'}}</span>
       </a>
     </li>
@@ -175,8 +175,8 @@
 	<li id="email-templates-menu">
     <a href="#email-templates">
       <i class="icon-envelope-letter"></i>
-      <i class="material-icons hidden-icon" style="display: none">art_track</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">art_track</i>
+      <i class="material-icons hidden-icon" style="display: none">email</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Email Templates">email</i>
       <span>{{agile_lng_translate 'preferences' 'email-templates'}}</span>
     </a>
   </li>
@@ -238,8 +238,8 @@
     <li id="segmentationmenu">
       <a  href="#visitors">
          <i class="icon-eye"></i>
-          <i class="material-icons hidden-icon" style="display: none">person_pin_circle</i>
-          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">person_pin_circle</i>
+          <i class="material-icons hidden-icon" style="display: none">visibility</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Visitors">visibility</i>
         <span>Visitors</span>  
       </a>
     </li>
@@ -326,6 +326,30 @@
 
     {{#isAdmin}}
     {{#isRestrictedMenuScope "HELPDESK"}}  {{else}}
+    <li id="ticketknowledgebasemenu">
+    <a href="#knowledgebase">
+      <i class="fa fa-search"></i>
+       <i class="material-icons hidden-icon" style="display: none">local_library</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Knowledge Base">local_library</i>
+      <span>{{agile_lng_translate 'other' 'knowledge-base'}}</span>
+    </a>
+    </li>
+    {{/isRestrictedMenuScope}}
+    {{/isAdmin}}
+
+    {{#isRestrictedMenuScope "HELPDESK"}} {{else}}
+    <li id="feedbackactivitiesmenu">
+      <a  href="#ticket-feedback">
+        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+         <i class="material-icons hidden-icon" style="display: none">thumb_up</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Feedback">thumb_up</i>
+        <span>Feedback</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+   {{#isAdmin}}
+    {{#isRestrictedMenuScope "HELPDESK"}}  {{else}}     
     <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -358,28 +382,8 @@
       <span>{{agile_lng_translate 'contacts-view' 'views'}}</span>
     </a>
   </li>
-  <li id="ticketknowledgebasemenu">
-    <a href="#knowledgebase">
-      <i class="fa fa-search"></i>
-       <i class="material-icons hidden-icon" style="display: none">local_library</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Knowledge Base">local_library</i>
-      <span>{{agile_lng_translate 'other' 'knowledge-base'}}</span>
-    </a>
-  </li>
   {{/isRestrictedMenuScope}}
   {{/isAdmin}}
-
-  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
-    <li id="feedbackactivitiesmenu">
-      <a  href="#ticket-feedback">
-        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-         <i class="material-icons hidden-icon" style="display: none">thumb_up</i>
-          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Feedback">thumb_up</i>
-        <span>Feedback</span>
-      </a>
-    </li>
-   {{/isRestrictedMenuScope}}
-
 
    {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">

@@ -231,9 +231,12 @@ public class SendEmail extends TaskletAdapter
     /**
      * Unsubscribe link that is shortened
      */
-    private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
+    //private static final String UNSUBSCRIBE_LINK = "http://ag-email.unscr.me/";
+    //private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
     
-    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://ag-beta.unscr.me/";
+    private static final String UNSUBSCRIBE_LINK = "https://list-manage.agle2.me/unsubscribe";
+    private static final String UNSUBSCRIBE_SANDBOX_LINK = "http://list-manage-beta.agle2.me/unsubscribe";
+    
 
     /*
      * (non-Javadoc)
@@ -759,7 +762,8 @@ public class SendEmail extends TaskletAdapter
 	// Send Email using email gateway
 	   String queueName = AgileQueues.NORMAL_EMAIL_PULL_QUEUE;
 	   
-	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName()))
+	   if(Globals.BULK_BACKENDS.equals(ModuleUtil.getCurrentModuleName())
+			   || Globals.BULK_ACTION_BACKENDS_URL.equals(ModuleUtil.getCurrentModuleName()))
 		   queueName = AgileQueues.BULK_EMAIL_PULL_QUEUE;
 	   else if(Globals.NORMAL_BACKENDS.equals(ModuleUtil.getCurrentModuleName()) && isTimeOut != null && isTimeOut)
 		   queueName = AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE;
@@ -789,11 +793,18 @@ public class SendEmail extends TaskletAdapter
 	try
 	{
 	    String domain = NamespaceManager.get();
+	    
+	    String onlineLink = "https://list-manage.agle2.me/onlinelink";
+	    
+	    if(!VersioningUtil.isProductionAPP())
+	    	onlineLink = "http://list-manage-beta.agle2.me/onlinelink";
+	    
 	    StringBuffer buffer = new StringBuffer();
-	    buffer.append("https://" + domain + ".agilecrm.com/onlinelink");
+	    buffer.append(onlineLink);
 	    buffer.append("/" + campaignJSON.get("id").toString());
 	    buffer.append("/" + subscriberJSON.get("id").toString());
 	    buffer.append("/" + nodeJSON.get("id").toString());
+	    buffer.append("?ns=" + URLEncoder.encode(domain, "UTF-8"));
 	    url = buffer.toString();
 	}
 	catch (Exception e)

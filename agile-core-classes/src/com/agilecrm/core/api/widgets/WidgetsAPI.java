@@ -24,6 +24,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.BrainTreeUtil;
+import com.agilecrm.social.KnowlarityUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.HTTPUtil;
@@ -109,13 +110,16 @@ public class WidgetsAPI {
 				}
 			}
 
-			WidgetsAPI.checkValidDetails(widget);
+			JSONObject jsonObject = WidgetsAPI.checkValidDetails(widget);
+
 			AgileUser agileUser = AgileUser.getCurrentAgileUser();
 			if (agileUser != null) {
 				Key<AgileUser> currentUser = new Key<AgileUser>(
 						AgileUser.class, agileUser.id);
 				widget.setOwner(currentUser);
-
+				if (jsonObject != null) {
+					widget.prefs = jsonObject.toString();
+				}
 				widget.save();
 				return widget;
 			}
@@ -364,6 +368,11 @@ public class WidgetsAPI {
 		// ArrayList<String> callOptionName = new ArrayList<>();
 
 		widgets.addAll(WidgetUtil.getWidget(WidgetType.CALL));
+	    
+		//Adding sms widgets if Plivo or twilio is there
+		/*Widget widget = SMSGatewayUtil.getSMSGatewayWidgetForSMS();
+		if(widget !=null)
+			widgets.add(widget);*/
 		/*
 		 * if(!widgets.isEmpty()){ for(Widget widget : widgets){
 		 * callOptionName.add(widget.name); }
@@ -537,7 +546,8 @@ public class WidgetsAPI {
 		return result;
 	}
 
-	public static void checkValidDetails(Widget widget) throws Exception {
+	public static JSONObject checkValidDetails(Widget widget) throws Exception {
+		JSONObject result = null;
 		if (widget.name.equals("Braintree")) {
 			JSONObject prefsObj = new JSONObject(widget.prefs);
 			String merchantId = prefsObj.getString("merchant_id");
@@ -546,14 +556,20 @@ public class WidgetsAPI {
 			BrainTreeUtil bUtil = new BrainTreeUtil(merchantId, publicKey,
 					privateKey);
 			JSONArray resultObj = bUtil.getTransactions("test@agilecrm.com");
-		}
-		if (widget.name.equals("Uservoice")) {
+		} else if (widget.name.equals("Uservoice")) {
 			String prefs = widget.prefs;
 			JSONObject prefsObj = new JSONObject(prefs);
 			String API_KEY = prefsObj.getString("uv_api_key");
 			String API_SECRET = prefsObj.getString("uv_secert_key");
 			String domain = prefsObj.getString("uv_domain_name");
 			UservoiceAPI uv = new UservoiceAPI(domain, API_KEY, API_SECRET);
-		}
+		} 
+//		else if (widget.name.equals("Knowlarity")) {
+//			String prefs = widget.prefs;
+//			KnowlarityUtil knowlarity = new KnowlarityUtil(prefs);
+//			result = knowlarity.checkAgentIsValid();
+//		  knowlarity.checkAgentIsValid();
+//		}
+		return result;
 	}
 }

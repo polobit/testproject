@@ -3,6 +3,11 @@ package com.agilecrm.widgets.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.social.TwilioUtil;
+import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 
@@ -23,7 +28,7 @@ public class DefaultWidgets {
 	 */
 	public static List<Widget> getAvailableDefaultWidgets() {
 		List<Widget> widgets = new ArrayList<Widget>();
-		
+
 		/**
 		 * Call widgets Order
 		 */
@@ -61,6 +66,19 @@ public class DefaultWidgets {
 			"Make and receive calls with your customers using SIP account.",
 			"/widgets/sip.js", "/widgets/sip-logo-small.png",
 			"/widgets/sip-logo-small.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+			"Ozonetel",
+			"Ozonetel",
+			"Make and receive calls, and send and receive text messages with your customers using Twilio account.",
+			"/widgets/ozonetel.js", "/widgets/ozonetel.png",
+			"/widgets/ozonetel_fullsize.png", null, WidgetType.CALL));
+		widgets.add(new Widget(
+			 "Knowlarity",
+			 "Knowlarity",
+			 "Know your customers Klout score, a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.",
+			 "/widgets/knowlarity.js", "widgets/knowlarity-lg-logo.png",
+			 "widgets/knowlarity-md-logo.png", null, WidgetType.CALL));
+	
 		/**
 		 * Social widgets Order
 		 */
@@ -190,7 +208,6 @@ public class DefaultWidgets {
 		 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
 		 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
 		 */
-		
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
@@ -214,7 +231,7 @@ public class DefaultWidgets {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
 				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript",
-						"Bria", "Skype" }).contains(widgetName)) {
+						"Bria", "Skype", "Ozonetel"}).contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })
 				.contains(widgetName)) {
@@ -232,11 +249,28 @@ public class DefaultWidgets {
 	 */
 	public static Widget checkAndFixWidgetType(Widget widget) {
 		System.out.println("In default widget type check " + widget);
-		if (widget.widget_type == null) {
-			WidgetType widgetType = getWidgetType(widget.name);
-			if (widgetType != null) {
-				widget.widget_type = widgetType;
+		try{
+			if (widget.widget_type == null) {
+				WidgetType widgetType = getWidgetType(widget.name);
+				if (widgetType != null) {
+					widget.widget_type = widgetType;
+				}
 			}
+			if(StringUtils.equals(widget.name,"TwilioIO") && StringUtils.equals(widget.getProperty("twilio_twimlet_url"),"None")){
+				String numberSid = "None";
+				String twil_num_sid = widget.getProperty("twilio_number_sid");
+				if(StringUtils.isNotBlank(twil_num_sid)){
+					numberSid = widget.getProperty("twilio_number_sid");
+				}
+				Long domainuserid = AgileUser.getCurrentAgileUser().domain_user_id;
+				String appsid = TwilioUtil.createAppSidTwilioIO(widget.getProperty("twilio_acc_sid"), widget.getProperty("twilio_auth_token"), numberSid, widget.getProperty("twilio_record"), "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
+				System.out.println("appsid == "+appsid);
+				widget.addProperty("twilio_app_sid", appsid);
+				widget.addProperty("twilio_twimlet_url", "http://twimlets.com/voicemail?Email="+DomainUserUtil.getDomainUser(domainuserid).email);
+				widget.save(widget);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return widget;
 	}

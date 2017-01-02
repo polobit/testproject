@@ -2,6 +2,8 @@ package com.analytics.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -12,18 +14,26 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.db.util.GoogleSQLUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.visitors.VisitorSegmentationQueryGenerator;
 import com.analytics.VisitorFilter;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>AnalyticsUtil</code> is the utility class for Analytics. It merges page
@@ -33,9 +43,7 @@ import com.googlecode.objectify.ObjectifyService;
 public class AnalyticsUtil
 {
     public static final String STATS_SEREVR_HTTP_REQUEST_PWD = "blAster432";
-   public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
-    
-    private static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
+    public static final String STATS_SERVER_URL = "https://agilecrm-web-stats.appspot.com";
     
     public static String getEmails(Set<String> emails)
     {
@@ -244,156 +252,11 @@ public class AnalyticsUtil
 	    return null;
     }
     
-    public static List<String> getEmails(String filterJSON, String startTime, String endTime, String pageSize,
-	    String cursor)
-    {
-	try
-	{
-	    String statsServerUrl = "https://agilecrm-web-stats.appspot.com/visitors";
-	    Map<String, String> params = new LinkedHashMap<String, String>();
-	    params.put("filter_json", filterJSON);
-	    params.put("cursor", cursor);
-	    params.put("page_size", pageSize);
-	    params.put("start_time", startTime);
-	    params.put("end_time", endTime);
-	    params.put("domain", NamespaceManager.get());
-	    params.put("psd", STATS_SEREVR_HTTP_REQUEST_PWD);
-	    
-	    StringBuilder postData = new StringBuilder();
-	    for (Map.Entry<String, String> param : params.entrySet())
-	    {
-		if (postData.length() != 0)
-		    postData.append('&');
-		postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-		postData.append('=');
-		postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-	    }
-	    String postDataBytes = postData.toString();
-	    
-	    String mergedStats = HTTPUtil.accessURLUsingPost(statsServerUrl, postDataBytes);
-	    JSONArray contactEmailsJsonArray = new JSONArray(mergedStats);
-	    List<String> emails = new ArrayList<String>();
-	    for (int i = 0; i < contactEmailsJsonArray.length() - 1; i++)
-	    {
-		JSONObject contactEmail = contactEmailsJsonArray.getJSONObject(i);
-		emails.add(contactEmail.get("email").toString());
-	    }
-	    try
-	    {
-		JSONObject emailCountObject = contactEmailsJsonArray.getJSONObject(contactEmailsJsonArray.length() - 1);
-		String emailCountString = emailCountObject.get("total_rows_count").toString();
-		emails.add(emailCountString);
-	    }
-	    catch (Exception e)
-	    {
-		System.out.println("exception occured while fetching segmented email count " + e.getMessage());
-	    }
-	    return emails;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println(e.getMessage());
-	    return null;
-	}
-    }
     
-    @SuppressWarnings("unchecked")
-    public static JSONArray getContacts(List<String> contactEmails, int cursor, int count)
-    {
-	List<Contact> contacts = null;
-	JSONArray contactsArray = new JSONArray();
-	int totalEmailCount = 0;
-	if (contactEmails != null && contactEmails.size() > 0)
-	{
-	    try
-	    {
-		try
-		{
-		    String emailCountString = contactEmails.get(contactEmails.size() - 1);
-		    totalEmailCount = Integer.parseInt(emailCountString);
-		    contactEmails.remove(contactEmails.size() - 1);
-		}
-		catch (Exception e)
-		{
-		    System.out.println("Exception occured while converting segmentation email count string to int "
-			    + e.getMessage());
-		}
-		Objectify ofy = ObjectifyService.begin();
-		for (int i = 0; i < contactEmails.size(); i++)
-		{
-			/**
-		     * converting searching email-id into the lowercase and 
-		     * then it should not be blank
-		     * */
-		    	
-			if(StringUtils.isNotBlank(contactEmails.get(i)))
-			{
-			    com.googlecode.objectify.Query<Contact> query = ofy.query(Contact.class);
-			    Map<String, Object> searchMap = new HashMap<String, Object>();
-			    searchMap.put("type", Contact.Type.PERSON);
-			    searchMap.put("properties.name", "email");
-			    searchMap.put("properties.value", contactEmails.get(i).toLowerCase());
-			    for (String propName : searchMap.keySet())
-				query.filter(propName, searchMap.get(propName));
-			    System.out.println(query.toString());
-			    Contact contact = dao.fetch(query);
-			    if (contact != null)
-			    {
-				ObjectMapper mapper = new ObjectMapper();
-				String contactString = mapper.writeValueAsString(contact);
-				JSONObject contactJSON = new JSONObject(contactString);
-				contactsArray.put(contactJSON);
-			    }
-			    else
-			    {
-				JSONObject contactJSON = buildDummyContact(contactEmails.get(i));
-				contactsArray.put(contactJSON);
-			    }
-			}
-		}
-		JSONObject contactJSON = contactsArray.getJSONObject(contactsArray.length() - 1);
-		contactJSON.put("count", totalEmailCount);
-		cursor = cursor + count;
-		if (totalEmailCount > count)
-		{
-		    contactJSON.put("cursor", cursor);
-		}
-	    }
-	    catch (Exception e)
-	    {
-		System.out.println("Exception occured while fetching segmented contacts " + e.getMessage());
-	    }
-	    
-	}
-	// for (String propName : .keySet())
-	// {
-	// q.filter(propName, map.get(propName));
-	// }
-	// contacts =
-	// ofy.query(Contact.class).filter("type",Contact.Type.PERSON).filter("properties.name","email").filter("properties.value IN",contactEmails).list();
-	return contactsArray;
-    }
     
-    private static JSONObject buildDummyContact(String email)
-    {
-	JSONObject contact = new JSONObject();
-	JSONArray properties = new JSONArray();
-	JSONObject emailProperty = new JSONObject();
-	try
-	{
-	    emailProperty.put("type", "SYSTEM");
-	    emailProperty.put("name", "email");
-	    emailProperty.put("value", email);
-	    properties.put(emailProperty);
-	    contact.put("properties", properties);
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception occured while building dummy contact " + e.getMessage());
-	}
-	return contact;
-    }
+    
+    
+   
     
     public static int getIntegerValue(String value, int defaultValue)
     {
@@ -457,5 +320,77 @@ public class AnalyticsUtil
         	url = hostUrl + "&action=REFURL_COUNT&start_time="+startDate+"&end_time="+endDate;
         	return url;
         }
+     
+     public static int getTotalEmailCount(String emailCountString)
+     {
+ 	try
+ 	{
+ 	    int totalEmailCount = Integer.parseInt(emailCountString);
+ 	    return totalEmailCount;
+ 	}
+ 	catch (Exception e)
+ 	{
+ 	    System.out.println("Exception occured while converting segmentation email count string to int "
+ 		    + e.getMessage());
+ 	    return 0;
+ 	}
+     }
+     
+    
+     
+     public static JSONArray parseResultSet(ResultSet rs) throws Exception
+     {
+ 	// JSONArray for each record
+ 	JSONArray agentDetailsArray = new JSONArray();
+ 	
+ 	// get the resultset metadata object to get the column names
+ 	ResultSetMetaData resultMetadata = rs.getMetaData();
+ 	
+ 	// get the column count in the resultset object
+ 	int numColumns = resultMetadata.getColumnCount();
+ 	
+ 	// variable for get the name of the column
+ 	String columnName = null;
+ 	
+ 	try
+ 	{
+ 	    // iterate the ResultSet object
+ 	    while (rs.next())
+ 	    {
+ 		try
+ 		{
+ 		    // create JSONObject for each record
+ 		    JSONObject eachAgentJSON = new JSONObject();
+ 		    
+ 		    // Get the column names and put
+ 		    // eachAgent record in agentJSONArray
+ 		    for (int i = 1; i < numColumns + 1; i++)
+ 		    {
+ 			// Get the column names
+ 			columnName = resultMetadata.getColumnName(i);
+ 			
+ 			// put column name and value in json array
+ 			eachAgentJSON.put(columnName, "" + rs.getString(columnName));
+ 		    }
+ 		    
+ 		    // place result data in agentDetailsArray
+ 		    agentDetailsArray.put(eachAgentJSON);
+ 		}
+ 		catch (Exception e)
+ 		{
+ 		    System.out.println("Exception while iterating result set " + e.getMessage());
+ 		}
+ 	    }
+ 	}
+ 	catch (Exception e)
+ 	{
+ 	    e.printStackTrace();
+ 	    System.out.println("Exception while mapping result set" + e);
+ 	    return agentDetailsArray;
+ 	}
+ 	return agentDetailsArray;
+     }
+     
+     
     
 }

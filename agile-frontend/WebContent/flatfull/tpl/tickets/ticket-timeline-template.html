@@ -105,7 +105,7 @@
 		        		<img class="r-5x" src="{{#if domainUser.pic}}{{domainUser.pic}}{{else}}flatfull/images/flatfull/user-default.jpg{{/if}}" data-toggle="tooltip" data-placement="top" data-original-title="{{domainUser.name}}"/>
 			        	
 			        </a>  
-			        <div class="m-l-lg panel b-a {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}bg-lightyellow{{/if_equals}} ">
+			        <div class="m-l-lg panel b-a tkts-status-changed {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}bg-lightyellow{{/if_equals}} ">
 			          <div class="panel-heading pos-rlt b-b b-light ">
 			            <span class="arrow left {{#if_equals activity_type 'TICKET_PRIVATE_NOTES_ADD'}}arrow-lightyellow{{/if_equals}} "></span>
 
@@ -115,7 +115,7 @@
 			              		{{epochToHumanDate "ddd mmm dd yyyy HH:MM" time}}
 			              	</time>
 			            </span>
-			            <a href="javascript:;">
+			            <a href="javascript:;" id="tkts-status-changed-text">
 
 			               {{#if_equals activity_type 'TICKET_ASSIGNED'}}
 						        {{agile_lng_translate 'tickets' 'ticket-assigned-to'}} <span>{{custom2}}</span>

@@ -78,7 +78,7 @@
 </div>
 {{/is_mobile}}
 
-<div class="contact-owner-position m-t-xs">
+<div class="contact-owner-position m-t-xs m-b-sm">
 <div class="change-owner-succes"></div>
   <div title="Owner" class="contact-owner-view">
       	<div class="contact-owner" id="change-owner-element">
@@ -86,9 +86,9 @@
         	<small class="text-xs text-muted">{{agile_lng_translate 'contact-details' 'owner'}}</small>
 </div>
 			{{#if taskOwner}}
-        	<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
+        	 <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{taskOwner.pic}}" /></span> 
 			{{else}}
-			<!-- <span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> -->
+			 <span class="contact-owner-pic" style="display:block;"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span> 
             <span class="task-owner-add text-sm"><a style="cursor:pointer;"> {{agile_lng_translate 'contact-details'  'assign-owner'}}</a></span>
  			{{/if}}
         	<a href="#" id="task-owner" data={{taskOwner.id}} class="task-owner-name contact-owner-name">{{taskOwner.name}}</a>
@@ -650,7 +650,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<a href="#" class="btn btn-sm btn-primary" id="task_note_update"> {{agile_lng_translate 'modals' 'save'}}</a> <span
+		<a href="#" class="btn btn-sm btn-primary" id="task_note_update"> {{agile_lng_translate 'contact-edit' 'update'}}</a> <span
 			class="save-status"></span>
 	</div>
 </div>

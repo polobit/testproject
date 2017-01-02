@@ -34,12 +34,10 @@
       <div class="visitors-div">
          <div class="dta-contatiner table-responsive b-n">
             <div class="panel panel-default m-b-none b-n no-radius" style="overflow-x:hidden;">
-               {{#unless this.length}}
-               <div class="m-l-sm" id="slate">
+               <div class="m-l-sm" id="slate" style="display:none">
                </div>
-               {{/unless}}
                {{#if this.length}}
-               <table id="visitors-table" class="table b-n no-radius  noCheckbox onlySorting panel agile-table " style="table-layout:auto">
+               <table id="visitors-table" class="table b-n no-radius  noCheckbox onlySorting panel agile-table " style="table-layout:auto; display:none">
                   <div class="filter-criteria">
                   </div>
                   <tbody id="segmentation-custom-view-model-list" route="contact/">
@@ -70,7 +68,7 @@
             <h3 class="inline-block m-n text-black font-thin">{{agile_lng_translate 'menu' 'menu-visitors'}}
                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:" data-content=" {{agile_lng_translate 'visitors' 'data-content-desc'}}" id="element" data-trigger="hover"">
                </span>
-               <span id="visitors-count">{{contacts_count}}</span>               
+               <span id="visitors-count" data-t="0">{{contacts_count}}</span>               
                <a id="segmentation-left-filters-toggle" class="m-l-xs text-lg" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{agile_lng_translate 'contacts-view' 'filters'}}">
                      <i id="icon-filter" class="fa fa-bars icon-white"></i>
                </a>
@@ -94,12 +92,12 @@
    <div class="visitors-div">
       <div class="dta-contatiner table-responsive m-r-sm ">
          <div class="panel panel-default" style="overflow-x:auto; border-left:none;">
-            {{#unless this.length}}
-            <div class="m-l-sm" id="slate">
+           
+            <div class="m-l-sm" id="slate" style="display:none">
             </div>
-            {{/unless}}
+           
             {{#if this.length}}
-            <table id="visitors-table" class="table table-striped  noCheckbox onlySorting panel agile-table"   style="table-layout:auto">
+            <table id="visitors-table" class="table table-striped  noCheckbox onlySorting panel agile-table"   style="table-layout:auto; display:none">
                <div class="filter-criteria">
                </div>
                <thead>
@@ -118,7 +116,14 @@
             {{/if}}
          </div>
       </div>
+	  <div id="message-id" class="alert bg-white" style="padding:9px; text-align: center;">
+      <div id="scanned_upto" style="display: inline-block;">Scanned upto 2016-12-26 10:49:25</div>
+      <a href="#" class="load_more btn btn-default btn-sm m-l-sm m-r-sm bg-light" id="load_more" style="display: inline;" >Load more</a>
+      <div class="btn btn-default btn-sm m-l-sm m-r-sm bg-light" id="load_more_loading"style="display:none;" >  <span class="yt-spinner">
+               <img src="img/icn_loading_animated.gif" style="max-width:100%; height: auto;">Loading...</span>
+      </div>
    </div>
+</div>
 </div>
 <!-- Newly Added -->
 {{/is_mobile}}
@@ -140,12 +145,12 @@
 <script id="segmentation-custom-view-table-collection-template" type="text/html">
   <div class="dta-contatiner table-responsive m-r-sm contacts-inner-div">
    <div class="panel panel-default {{#is_mobile}} m-b-none {{/is_mobile}}" style="{{#is_mobile}} overflow-x:hidden; {{else}} overflow-x:auto; {{/is_mobile}} border-left:none;">
-      {{#unless this.length}}
-      <div class="m-l-sm" id="slate">
+      
+      <div class="m-l-sm" id="slate" style="display:none">
       </div>
-      {{/unless}}
+      
       {{#if this.length}}
-      <table id="visitors-table" class="table table-striped noCheckbox onlySorting panel agile-table"  style="table-layout:auto">
+      <table id="visitors-table" class="table table-striped noCheckbox onlySorting panel agile-table"  style="table-layout:auto; display:none">
          <div class="filter-criteria">
          </div>
          <thead>
@@ -164,11 +169,19 @@
       </table>
       {{/if}}
    </div>
+   <div id="message-id" class="alert bg-white" style="padding:9px; text-align: center;">
+      <div id="scanned_upto" style="display: inline-block;">Scanned upto 2016-12-26 10:49:25</div>
+      <a href="#" class="load_more btn btn-default btn-sm m-l-sm m-r-sm bg-light" id="load_more" style="display: inline;" >Load more</a>
+      <div class="btn btn-default btn-sm m-l-sm m-r-sm bg-light" id="load_more_loading"style="display: none;" >  <span class="yt-spinner">
+               <img src="img/icn_loading_animated.gif" style="max-width:100%; height: auto;">Loading...</span>
+      </div>
+   </div>
 </div>
 </script>
 
 
 <script id="segmentation-custom-view-model-template" type="text/html"> 
+{{#unless is_info_model}}
 {{#is_mobile}}
 
 <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
@@ -244,11 +257,12 @@
 </td>
 
 {{/is_mobile}}
-  
+{{/unless}} 
 </script>
 
 
-<script id="segmentation-custom-view-table-model-template" type="text/html">    
+<script id="segmentation-custom-view-table-model-template" type="text/html">  
+{{#unless is_info_model}}  
   <td style="display: none;{{#if id}}{{else}} cursor:default;{{/if}}"></td>
 <td class="data icon-append-mobile {{#is_mobile}} p-r-none {{/is_mobile}}" data="{{id}}" {{#is_mobile}} style="padding:10px 15px !important;" {{/is_mobile}} style="{{#if id}}{{else}} cursor:default;{{/if}}">
 <div class="table-resp" {{#is_mobile}} style="width:calc(100vw - 60px);" {{else}} style="width:20em;" {{/is_mobile}}>
@@ -295,9 +309,10 @@
    </ul>
    {{/if}}
 </td>  
-  
+{{/unless}} 
 </script>
 
+<!-- 
 <script id="segment-filter-list-collection-template" type="text/html">
 <div class="btn-group"  id="filters-tour-step">
    <button class="btn btn-default btn-sm btn-lg-imp "><i class="icon-filter" id="segment-filter" style="margin-right:3px"></i></button>
@@ -316,3 +331,4 @@
 <div class="clearfix"></div>
 </span>
 </script>
+ -->

@@ -491,7 +491,7 @@ public class SendGridSubUser extends SendGridLib
 	public static class SendGridStats
 	{
 		long startTime=0;
-		String duration="daily";
+		String duration="day";
 		
 	    public void setStartTime(long startTime)
 	    {

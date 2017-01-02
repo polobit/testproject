@@ -10,10 +10,9 @@ define([
 			type: 'GET',
 			dataType: 'json',
 			success: function(data){
-				
 				saveform = JSON.parse(data.formJson);
 				
-				var agilethemeObj=saveform[0].fields.agiletheme;
+				/*var agilethemeObj=saveform[0].fields.agiletheme;
 				var themeClassName="";
 				if(agilethemeObj!=undefined || agilethemeObj!=null){
 					var agilethemeObjValArr=agilethemeObj.value;
@@ -24,9 +23,41 @@ define([
 						     break;
 						}
 					}
+				}*/
+				
+				 var custThmDiv = document.createElement("div");
+				 custThmDiv.setAttribute("id","formContent");
+				 $("body").append(custThmDiv);
+				 $("#formContent").html(data.formHtml);
+				 formClasses=$("#formContent .form-view").attr("class");
+				 $("#formContent").remove();
+				 var hasTemplateTheme =false;
+				 var themeExist = false;
+				 $.each(defaultThemes,function(index,value){
+				 	if(formClasses.indexOf(value)>-1){
+				 		currApplThm=value;
+				 		$(document.getElementById("target")).addClass(value);
+                        $(".themesSelectEle").val(currApplThm);
+                        hasTemplateTheme = true;
+                        themeExist = true;
+				 		return;
+				 	}
+				 });
+				 if(hasTemplateTheme ==false){
+				 $.each(customthemes,function(index,value){
+                       	if(formClasses.indexOf("form"+value.id)>-1){
+                      		currApplThm=value.name;
+                      		$(document.getElementById("target")).addClass("form"+value.id);
+                            $(document.getElementById("agileCustTheme")).text(value.themeCss);
+                      		$(".themesSelectEle").val(currApplThm);
+                      		themeExist = true;
+                      		return;
+                        }
+                     });
+				} 
+				if(themeExist == false){
+					$(".themesSelectEle").val("Choose Theme");
 				}
-				
-				
 				//Loads form view in form.jsp page
 				if($('#agileFormHolder').length != 0) {
 					$('#form-label').text('Edit Form');
@@ -34,9 +65,8 @@ define([
 					var formHtml = $("#render").val();
 			    	  if(formHtml != '') {
 			    		  $('#agileFormHolder').html(formHtml);
-			    		  // $('#agileFormHolder style').remove();
-
-			    		  if(typeof data.formHtml == "undefined" || data.formHtml == "") {
+			    		 
+							if(typeof data.formHtml == "undefined" || data.formHtml == "") {
 			    		  	data.formHtml = formHtml;
 			    		  	try{window.parent.updateAgileFormDB(data);}catch(err){}
 			    		  }
@@ -152,9 +182,12 @@ define([
 					new MyFormView({ title : "Original", collection : new MyFormSnippetsCollection(saveform) });				
 		}
 				}
-				
+				$("#loader").fadeOut('fast');
+				$("#header").css("display","block");
+				$(".container").css("display","block");
 			}
 		});
+
 	}}
 
 	function saveFormOrdering(i,orderedSaveform,saveform){

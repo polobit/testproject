@@ -35,9 +35,10 @@ public class BulkActionNotifications
 	TASKS_CSV_IMPORT("%s tasks imported"),
 			
 	/**
-	 * Import Deals Bulk action notification
+	 * Import/Export Deals Bulk action notification
 	 */
-	DEALS_CSV_IMPORT("%s deals imported"),
+	DEALS_CSV_IMPORT("%s deals imported"),EXPORT_DEALS_CSV(
+			"Deals export operation is complete. Email is sent to you with the CSV file."),
 
 	/**
 	 * Campaign bulk action

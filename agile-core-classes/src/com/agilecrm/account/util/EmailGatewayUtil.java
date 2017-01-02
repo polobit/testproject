@@ -22,6 +22,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.EmailGateway.EMAIL_API;
 import com.agilecrm.contact.email.EmailSender;
@@ -47,12 +48,18 @@ import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.mailgun.MailgunNew;
 import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
+import com.thirdparty.sendgrid.deferred.SendGridSubAccountDeferred;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser;
+import com.thirdparty.sendgrid.subusers.SendGridSubUser.SendGridStats;
 import com.thirdparty.ses.util.AmazonSESUtil;
 
 /**
@@ -729,4 +736,52 @@ public class EmailGatewayUtil
     		return false;
     	return true;
     }
+    
+    public static void checkSubUserExists(String domain)
+    {
+    	try {
+			if(StringUtils.isBlank(domain))
+				domain = NamespaceManager.get();
+			
+			if(StringUtils.isBlank(domain))
+				return;
+			
+			// If gateway exists return
+			if(isEmailGatewayExist())
+				return;
+			
+			Queue queue = QueueFactory.getQueue(AgileQueues.ACCOUNT_STATS_UPDATE_QUEUE);
+			SendGridSubAccountDeferred task = new SendGridSubAccountDeferred(domain);
+			task.setCheckSubUserExists(true);
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
+    	catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    /**
+     * This method will return true and false based on email category
+     * @param emailSender
+     * @return
+     * 		- boolean
+     */
+    public static boolean isEmailCategoryTransactional(EmailSender emailSender) 
+    {
+    	final int MAX_LIMIT = 15;
+    	
+    	if(emailSender == null)
+    		return true;
+    	if(StringUtils.equalsIgnoreCase(emailSender.getQueueName(), AgileQueues.BULK_EMAIL_PULL_QUEUE))
+			return false;
+		
+		if(StringUtils.equalsIgnoreCase(emailSender.getQueueName(), AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE) && emailSender.getEmailsToSend() > MAX_LIMIT)
+			return false;
+		
+		if(StringUtils.equalsIgnoreCase(emailSender.getQueueName(), AgileQueues.AMAZON_SES_EMAIL_PULL_QUEUE) && emailSender.getEmailsToSend() > MAX_LIMIT)
+			return false;
+    	
+		return true;
+	}
+    
 }

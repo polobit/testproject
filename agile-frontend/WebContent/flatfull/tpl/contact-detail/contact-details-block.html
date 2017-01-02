@@ -350,11 +350,11 @@
 			<div class="contact-owner text-xs" id="change-owner-element">
 
 			{{#if owner}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+			<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+			<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
 			{{/if}}
-			<a id="contact-owner" class="custom-color text-xs" data={{owner.id}}>{{owner.name}}</a>
+			<a id="contact-owner" class="custom-color text-xs v-middle" data={{owner.id}}>{{owner.name}}</a>
 
 			{{#canEditContact owner.id}}
 			<div class="dropdown" id="change-owner-ul"  style="display: none">
@@ -1068,15 +1068,15 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
     <div class="panel-body">
 	<small class="text-muted text-base">{{agile_lng_translate 'contact-details' 'owner'}}</small>
 	<div class="change-owner-succes"></div>
-     <div title="Owner">
+     <div title="Owner" class="m-t-xs">
       	<div class="contact-owner text-xs" id="change-owner-element">
         	
 			{{#if owner}}
-        	<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span>
+        	<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{owner.pic}}" /></span>
 			{{else}}
-			<span class="contact-owner-pic"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
+			<span class="contact-owner-pic" style="display:block"><img class="user-img"  alt="" src="{{defaultGravatarurl 40}}" /></span><span class="contact-owner-add"><a class="c-p">{{agile_lng_translate 'contact-details' 'assign-owner'}}</a></span>
  			{{/if}}
-        	<a id="contact-owner" class="custom-color text-xs" data={{owner.id}}>{{owner.name}}</a>
+        	<a id="contact-owner" class="custom-color text-xs v-middle" data={{owner.id}}>{{owner.name}}</a>
         
         	{{#canEditContact owner.id}}
         	<div class="dropdown change-owner" id="change-owner-ul"  style="display: none">

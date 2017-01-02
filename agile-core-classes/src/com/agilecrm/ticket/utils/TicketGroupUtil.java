@@ -2,15 +2,19 @@ package com.agilecrm.ticket.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.agilecrm.Globals;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.PartialDAO;
 import com.agilecrm.projectedpojos.TicketGroupsPartial;
+import com.agilecrm.services.ServiceLocator;
 import com.agilecrm.ticket.entitys.TicketGroups;
 import com.agilecrm.ticket.entitys.TicketStats;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.service.DomainUserService;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
 import com.campaignio.urlshortener.util.Base62;
@@ -78,6 +82,71 @@ public class TicketGroupUtil
 		}
 
 		return inclDomainUsers(ticketGroups);
+	}
+
+	/**
+	 * GetAllGroups method fetches all Ticket Groups from specified namespace.
+	 * If user have no groups then default group will be created and it will be
+	 * returned.
+	 * 
+	 * @return List of Ticket Groups
+	 */
+	public static List<TicketGroups> getAllGroupsForCurrentUserIncludingDomainUsers()
+	{
+		List<TicketGroups> ticketGroups = getAllGroupsForCurrentUser();
+
+		return inclDomainUsers(ticketGroups);
+	}
+	
+	/**
+	 * Fetch all groups visible to the current user
+	 * 
+	 * @return
+	 */
+	public static List<TicketGroups> getAllGroupsForCurrentUser()
+	{
+		DomainUserService service = (DomainUserService) ServiceLocator.lookupService(DomainUserService.ServiceID);
+		DomainUser user = service.getCurrentDomainUser();
+		
+		Key<DomainUser> key = new Key<>(DomainUser.class, user.id);
+		
+		if( user.is_admin )	return TicketGroups.ticketGroupsDao.fetchAll();
+		
+		return TicketGroups.ticketGroupsDao.listByProperty("agents_key_list", key);
+	}
+	
+	/**
+	 * Fetch common assignees for current user
+	 * 
+	 * @return
+	 */
+	public static List<DomainUserPartial> getCommonAssigneesForCurrentUser()
+	{
+		List<DomainUserPartial> list = DomainUserUtil.getPartialDomainUsers(NamespaceManager.get());
+		DomainUserService service = (DomainUserService) ServiceLocator.lookupService(DomainUserService.ServiceID);
+		DomainUser user = service.getCurrentDomainUser();
+		
+		if( user.is_admin )	return list;
+
+		List<TicketGroups> groups = getAllGroupsForCurrentUser();
+		Set<Long> commonAgentIds = new HashSet<>();
+		
+		for( TicketGroups group : groups )
+		{
+			commonAgentIds.addAll(group.agents_keys);
+		}
+		
+		// Going in reverse order makes remove work more efficiently
+		for( int index = list.size() - 1; index >= 0; index--  )
+		{
+			DomainUserPartial puser = list.get(index);
+			
+			if( user.id.equals(puser.id) )	continue;
+			
+			if( !(commonAgentIds.contains(puser.id)) )	list.remove(index);
+		}
+		
+		return list;
 	}
 
 	public TicketGroups createGroup(String groupName, List<Long> domainUserIDs) throws Exception

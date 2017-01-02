@@ -295,35 +295,36 @@ function saveCallNoteBria(call){
  */
 function autosaveNoteByUser(note,call,url){
 	$.post( "/core/api/widgets/twilio/autosavenote", {
-		subject: note.subject,
-		message: note.message,
-		contactid: note.contactid,
-		phone: note.phone,
-		callType: note.callType,
-		status: note.status,
-		duration: note.duration},
-		function(data){
+			subject: note.subject,
+			message: note.message,
+			contactid: note.contactid,
+			phone: note.phone,
+			callType: note.callType,
+			status: note.status,
+			duration: note.duration			
+		},function(data){
 			if(call.direction == "Outgoing" || call.direction == "outgoing"){
-		var callerObjectId = call.contactId;
-		if(!callerObjectId){
-			return;
-		}
-		$.post(url+"/savecallactivityById?note_id="+data.id,{
-			id:callerObjectId,
-			direction: call.direction, 
-			phone: call.phone, 
-			status : call.status,
-			duration : call.duration 
-			});
-		
-	}else{
-		$.post( url+"/savecallactivity?note_id="+data.id,{
-			direction: call.direction, 
-			phone: call.phone, 
-			status : call.status,
-			duration : call.duration
-			});
-	}
+				var callerObjectId = call.contactId;
+				if(!callerObjectId){
+					return;
+				}
+				$.post(url+"/savecallactivityById?note_id="+data.id,{
+					id:callerObjectId,
+					direction: call.direction, 
+					phone: call.phone, 
+					status : call.status,
+					duration : call.duration,
+					uuid: note.uuid
+				});					
+			}else{
+				$.post( url+"/savecallactivity?note_id="+data.id,{
+					direction: call.direction, 
+					phone: call.phone, 
+					status : call.status,
+					duration : call.duration,
+					uuid: note.uuid
+				});
+			}
 		});
 }
 

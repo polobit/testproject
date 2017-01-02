@@ -30,6 +30,7 @@ import com.agilecrm.bulkaction.deferred.CampaignSubscriberDeferredTask;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.filter.DealFilterIdsFetcher;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -517,6 +518,8 @@ public class DealsBulkActionsAPI
 
 	    dealsExporter.finalize();
 	    dealsExporter.sendEmail(user.email);
+	    dealsExporter.addToActivity(ActivityType.DEAL_EXPORT, EntityType.DEAL);
+	    BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_DEALS_CSV);
 	}
 	catch (JSONException e)
 	{
@@ -724,5 +727,61 @@ public class DealsBulkActionsAPI
 	    je.printStackTrace();
 	}
     }
+    @Path("/exportSelected/{current_user_id}")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void exportSelectedOpportunitiesBackend(@PathParam("current_user_id") Long currentUserId,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @FormParam("filter") String filters,@FormParam("ids") String ids)
+	{
+    	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
 
+    	if (user == null)
+    	    return;
+    	// Set the session manager to get the user preferences and the other
+    	// details required.
+    	if (SessionManager.get() != null)
+    	{
+    	    SessionManager.get().setDomainId(currentUserId);
+    	}
+    	else
+    	{
+    	    SessionManager.set(new UserInfo(null, user.email, user.name));
+    	    SessionManager.get().setDomainId(user.id);
+    	}
+		try
+		{
+			OpportunityUtil opportunityUtil = new OpportunityUtil();
+		    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+		    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
+		    System.out.println("total deals -----" + deals.size());
+		    Exporter<Opportunity> dealsExporter = ExportBuilder.buildDealsExporter();
+
+		    List<Opportunity> subList = new ArrayList<Opportunity>();
+		    for(Opportunity deal : deals){
+		    	
+		    	subList.add(deal);
+		    	if (subList.size() >= 100)
+				{
+		    		dealsExporter.writeEntitesToCSV(subList);
+		    		subList.clear();
+				}
+		    }
+		    if (!subList.isEmpty())
+		    {
+		    	dealsExporter.writeEntitesToCSV(subList);
+		    }
+		    dealsExporter.finalize();
+		    dealsExporter.sendEmail(user.email);
+		    dealsExporter.addToActivity(ActivityType.DEAL_EXPORT, EntityType.DEAL);
+		    BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_DEALS_CSV);
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception in export deal in backend code. - " + e.getMessage());
+		    e.printStackTrace();
+		}
+    }
 }
