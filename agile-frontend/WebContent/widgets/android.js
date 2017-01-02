@@ -17,7 +17,12 @@ function saveCallNoteAndroid(message){
 
 	var callDirection = message.direction;
 	var state = message.state;
-	var customerNumber = message.contact_number;
+	var customerNumber = message.contact_number;	
+
+	if(customerNumber && customerNumber.indexOf(" ") == 0){		
+		customerNumber = customerNumber.replace(" ","+");
+	}
+
 	var callDuration = message.duration;
 	var agentNumber = message.phone_no;	
 	
@@ -39,14 +44,6 @@ function saveCallNoteAndroid(message){
 		cntId = globalCall.contactedContact.id; // agilecrm DB ID
 	}
 
-	var call = {
-		"direction" : callDuration,
-		"phone" : customerNumber,
-		"status" : state, 
-		"duration" : callDuration, 
-		"contactId" : cntId
-	};
-
 	var data = {};
 	data.url = "/core/api/widgets/android/";
 	data.subject = noteSub;
@@ -58,7 +55,6 @@ function saveCallNoteAndroid(message){
 	data.widget = "Android";
 
 	if(callDirection == "Outgoing") {
-		console.log("Outgoing *** ");
 		if(cntId){
 			console.log("cntId *** "+ state);
 			if(state == "answered"){
@@ -70,7 +66,7 @@ function saveCallNoteAndroid(message){
 					}
 
 					contact_name = getContactName(json);
-					
+
 					data.callType = "outbound-dial";
 					data.status = "answered";					
 					data.contId = cntId;
@@ -78,6 +74,15 @@ function saveCallNoteAndroid(message){
 					showDynamicCallLogs(data);
 				});
 			}else{
+
+				var call = {
+					"direction" : callDuration,
+					"phone" : customerNumber,
+					"status" : state, 
+					"duration" : callDuration, 
+					"contactId" : cntId
+				};
+
 				var note = {
 					"subject" : noteSub, 
 					"message" : "", 
@@ -90,7 +95,7 @@ function saveCallNoteAndroid(message){
 
 				console.log("Note ***** ");
 				console.log(note);
-				autosaveNoteByUser(note, call, "/core/api/widgets/android");
+				autosaveNoteByUser(note,call,"/core/api/widgets/android");
 			}
 		}else{
 			resetCallLogVariables();
@@ -104,7 +109,7 @@ function saveCallNoteAndroid(message){
     		}
 
 			CallLogVariables.subject = noteSub;
-    		CallLogVariables.callWidget = "Knowlarity";
+    		CallLogVariables.callWidget = "Android";
     		CallLogVariables.callType = "outbound-dial";
     		CallLogVariables.phone = customerNumber;
     		CallLogVariables.duration = callDuration;;
