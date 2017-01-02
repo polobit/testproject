@@ -90,7 +90,7 @@ String template = request.getParameter("template");
             <ul id="copyform-ul" class="dropdown-menu pull-right">
                 <li>
                     <a id="copy-formbuilder">
-                        <i class="fa fa-clipboard" style="width: 20px;"></i>Copy
+                        <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy
                     </a>
                 </li>
             </ul>
