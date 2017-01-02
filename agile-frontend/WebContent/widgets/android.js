@@ -171,7 +171,7 @@ function appDialer(to, contact){
 	 		url : requestURL,
 	 		type : "GET",	 		
 	 		success : function(result) {
-	 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title":"{{agile_lng_translate 'other' 'cancel'}}"}];						
+	 			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_android_cancel", "title": _agile_get_translated_val('widgets', 'Android-cancel')}];						
 				showDraggableNoty("Knowlarity", globalCall.contactedContact, "connecting", globalCall.callNumber, btns);
 				setTimeout(function(){ 
 					if(!isAndNotificationCame){
