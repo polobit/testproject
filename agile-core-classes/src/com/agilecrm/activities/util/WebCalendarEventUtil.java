@@ -86,12 +86,13 @@ public class WebCalendarEventUtil
 		{
 			business_hours = prefs.business_hours;
 		}
-		if (StringUtils.isEmpty(business_hours))
-			business_hours = domain_user.business_hours;
-		if (StringUtils.isEmpty(domainUser_timezone))
-		{
-			domainUser_timezone = domain_user.timezone;
+		if(domain_user!=null){
+		  if (StringUtils.isEmpty(business_hours))
+			  business_hours = domain_user.business_hours;
+		  if (StringUtils.isEmpty(domainUser_timezone))
+			  domainUser_timezone = domain_user.timezone;
 		}
+	
 		List<List<Long>> listOfLists = new ArrayList<List<Long>>();
 
 		// Get all permutations possible based on selected slottime(duration) in
