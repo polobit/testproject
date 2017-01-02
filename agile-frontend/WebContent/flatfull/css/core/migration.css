@@ -2000,6 +2000,35 @@ display: block!important;
 .goal-form-control{ width: 150px;}
 .goal-datepicker{ width: auto;}
 
+.searchbycharacterdiv
+{
+  padding: 0px !important;
+  margin-bottom: 10px;
+}
+.mobile-tagkeys{
+      margin-top: 3px;
+      margin-left:4px !important;
+}
+.mobile-tagKey{
+   margin-top: 3px;
+}
+.mobile-tagkeyj{
+  margin-top:3px;
+  margin-left:0px !important;
+}
+.mobile-tagKeyS{
+  margin-top:3px;
+  margin-left: 0px !important;
+}
+
+.tagelement-center{
+  margin:0px auto;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  display: block;
+}
 .workflow-heading{ text-align: center; width: 100%; }
 .workflow-sortby{ float: none!important; }
 
