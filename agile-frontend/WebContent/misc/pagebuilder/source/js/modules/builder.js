@@ -783,7 +783,7 @@
                 
                 newBlock.frameID = page.blocks[x].frames_id;
                 if ( page.blocks[x].frames_global === '1' ) newBlock.global = true;
-                newBlock.createParentLI(page.blocks[x].frames_height);
+                newBlock.createParentLI(page.blocks[x].frameHeight);
                 newBlock.createFrame(page.blocks[x]);
                 newBlock.createFrameCover();
                 newBlock.insertBlockIntoDom(this.parentUL);
@@ -1001,7 +1001,7 @@
             
             this.parentLI = document.createElement('LI');
             this.parentLI.setAttribute('class', 'element');
-            //this.parentLI.setAttribute('style', 'height: '+height+'px');
+            this.parentLI.setAttribute('style', 'height: '+height+'px');
             
         };
         
@@ -1015,6 +1015,8 @@
             this.frame.setAttribute('scrolling', 0);
             this.frame.setAttribute('src', frame.src);
             this.frame.setAttribute('data-originalurl', frame.frames_original_url);
+            if(this.parentLI.style.height!==null)
+                this.frame.style.height=this.parentLI.style.height;
             this.originalUrl = frame.frames_original_url;
             //this.frame.setAttribute('data-height', frame.frames_height);
             //this.frameHeight = frame.frames_height;
