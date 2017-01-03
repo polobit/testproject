@@ -1,0 +1,19 @@
+<script id="android-login-template" type="text/html">	
+	<div>
+		App Calling makes you to contact your customer through Outbound and Inbound calls.
+		<div class="m-t-md  m-b-xs text-center">
+			{{#if id}}			
+				<a class="btn btn-sm btn-danger deleteWidget" widget-name="Android" widget-displayname="Android">Delete</a>
+				<a href="#add-widget" class="btn btn-default btn-sm">Cancel</a>
+			{{else}}
+				<form id="android_login_form" name="android_login_form" method="post">
+			    	<fieldset>			
+						<input type="text" id="isActive" class="input-medium widget_input_box form-control hide" value="true" name="isActive">
+						</input>						
+					 </fieldset>
+					 <a class='save-agile-widget btn btn-primary btn-sm text-l-none'>Enable</a>
+			    </form>								
+			{{/if}}
+		</div>
+	</div>
+</script>

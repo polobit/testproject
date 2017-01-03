@@ -349,6 +349,8 @@ public class ScribeServlet extends HttpServlet {
 		req.getSession().setAttribute("oauth.request_token", token);
 
 		String returnURL = req.getParameter("return_url");
+		System.out.println("Scribe URL : "+url);
+		System.out.println("Scribe return URL : "+returnURL);
 		if (returnURL != null)
 			req.getSession().setAttribute("return_url", returnURL);
 		// Redirect URL
