@@ -275,18 +275,18 @@ public class StatsSQL
 	    
 	    stmt1 = conn.createStatement();
 	    
-	    rs1 = stmt1.executeQuery("select found_rows()");
-	    
-	    if (rs1 != null && segments.length() > 0)
-	    {
-		while (rs1.next())
-		{
-		    int count = rs1.getInt(1);
-		    JSONObject finalObject = new JSONObject();
-		    finalObject.put("total_rows_count", "" + count);
-		    segments.put(finalObject);
-		}
-	    }
+//	    rs1 = stmt1.executeQuery("select found_rows()");
+//	    
+//	    if (rs1 != null && segments.length() > 0)
+//	    {
+//		while (rs1.next())
+//		{
+//		    int count = rs1.getInt(1);
+//		    JSONObject finalObject = new JSONObject();
+//		    finalObject.put("total_rows_count", "" + count);
+//		    segments.put(finalObject);
+//		}
+//	    }
 	}
 	catch (Exception e)
 	{

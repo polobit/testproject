@@ -453,33 +453,55 @@
          </div>
        </div>    
        <!--Tag Filter-->
-       <div class="wrapper bg-light hidden-sm hidden-xs p-b-xs p-t-xs">
-   <div class="panel panel-default m-b-none">
+       <div class="wrapper bg-light p-b-xs p-t-xs">
+   	  <div class="panel panel-default m-b-none">
       <div class="panel-body">
          <div class="control-group lhs-row-filter p-n" style="border-bottom:1px solid #dee5e7;position:relative;border-bottom-width:0px;margin-bottom:0px">
             <a id="lhs-filters-header" class="c-p text-l-none text-l-none-hover txt-lg-label">
-            Tag
+            {{agile_lng_translate 'contacts-view' 'tags'}}
             <i class="fa inline pos-abs pos-r-0 fa-plus-square-o"></i></a>
             <div class="controls m-t-xs hide" id="tags_div" style="position: relative;">
                <div id="tags-lhs-filter-table" class="ignore-collection">
-                  <div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
-                     <input type="hidden" name="LHS" value="tags">
+                  <div class="hide master-tags-add-div pos-rlt m-t-xs">
+                     <input class="form-control" type="hidden" name="LHS" value="tags">
                      <select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
-                        <option value="EQUALS" class="tags">is</option>
-                        <option value="NOTEQUALS" class="tags">isn't</option>
+                        <option value="EQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                        <option value="NOTEQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
                      </select>
                      <div class="EQUALS NOTEQUALS condition_container m-t-xs">
                         <span id="RHS">
-                        <input type="text" placeholder="Enter Tag" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;">
+                        <input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'value'}}" prev-val="" class="required form-control filters-tags-typeahead text-xs" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-0" id="temp-0" style="height:30px;
+                           ">
+                        </span>
+                     </div>
+                     <div class="m-t-xs">
+                        <a class="pull-right trash-css" style="font-size:16px;"><i class="filter-tags-multiple-remove-lhs icon-trash text-l-none-hover c-p" id="removeBtn"></i></a>
+                        <div class="clearfix"></div>
+                     </div>
+                     <div class="clearfix"></div>
+                  </div>
+                  <div class="lhs-contact-filter-row pos-rlt m-t-xs " style="min-height: 90px;" >
+                     <input type="hidden" name="LHS" value="tags">
+                     <select id="tags-filter" class="form-control" name="CONDITION" style="height:30px;font-size:12px;">
+                        <option value="EQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is'}}</option>
+                        <option value="NOTEQUALS" class="tags">{{agile_lng_translate 'contacts-view' 'is-not'}}</option>
+                     </select>
+                     <div class="EQUALS NOTEQUALS condition_container m-t-xs">
+                        <span id="RHS">
+                        <input type="text" placeholder="{{agile_lng_translate 'contacts-view' 'Enter Tag'}}" prev-val="" class="required text-xs form-control filters-tags-typeahead" onchange="setTimeout(function(ele){bindChangeEvent(ele)}, 500, this);" name="temp-1" id="temp-1" style="height:30px;" autocomplete="off">
                         </span>
                      </div>
                      <div class="m-t-xs"><a class="hide pull-right clear-filter-condition-lhs"><i class="icon-trash text-l-none-hover c-p text-muted text-sm" id="removeBtn"></i></a></div>
                      <div class="clearfix"></div>
                   </div>
                </div>
+               <div class="m-t-xs">
+                  <a href="#" class="filter-multiple-add-lhs m-t-xs ext-l-none pull-right text-muted pos-rlt add_hide" style="position: absolute;bottom: 0px;font-size: 12px;margin-right: 16px;color: #98a6ad;font-weight: normal !important;" data-name="tags" id="addBtn"><i class="icon-plus"></i> {{agile_lng_translate 'contacts-view' 'add'}}</a>
+               </div>
             </div>
          </div>
-       </div>   
+      </div>
+   </div>   
             <div class="bg-light {{#is_mobile}}p-b-xs{{/is_mobile}}">
                <span class="pull-left ">  
                <a id="clear-lhs-segmentation-filters" href="#" class="c-p txt-small link-color" style="color: #337ab7">{{agile_lng_translate 'contacts-view' 'clear'}}</a>

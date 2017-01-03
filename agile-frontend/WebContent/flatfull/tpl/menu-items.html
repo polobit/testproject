@@ -326,6 +326,30 @@
 
     {{#isAdmin}}
     {{#isRestrictedMenuScope "HELPDESK"}}  {{else}}
+    <li id="ticketknowledgebasemenu">
+    <a href="#knowledgebase">
+      <i class="fa fa-search"></i>
+       <i class="material-icons hidden-icon" style="display: none">local_library</i>
+        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Knowledge Base">local_library</i>
+      <span>{{agile_lng_translate 'other' 'knowledge-base'}}</span>
+    </a>
+    </li>
+    {{/isRestrictedMenuScope}}
+    {{/isAdmin}}
+
+    {{#isRestrictedMenuScope "HELPDESK"}} {{else}}
+    <li id="feedbackactivitiesmenu">
+      <a  href="#ticket-feedback">
+        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
+         <i class="material-icons hidden-icon" style="display: none">thumb_up</i>
+          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Feedback">thumb_up</i>
+        <span>Feedback</span>
+      </a>
+    </li>
+   {{/isRestrictedMenuScope}}
+
+   {{#isAdmin}}
+    {{#isRestrictedMenuScope "HELPDESK"}}  {{else}}     
     <li id="ticketgroupsmenu">
     <a href="#ticket-groups">
       <i class="icon icon-users"></i>
@@ -353,33 +377,13 @@
   <li id="ticketviewsmenu">
     <a href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <i class="material-icons hidden-icon" style="display: none">filter_b_and_w</i>
-      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Views">filter_b_and_w</i>
+      <i class="material-icons hidden-icon" style="display: none">layers</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Views">layers</i>
       <span>{{agile_lng_translate 'contacts-view' 'views'}}</span>
-    </a>
-  </li>
-  <li id="ticketknowledgebasemenu">
-    <a href="#knowledgebase">
-      <i class="fa fa-search"></i>
-       <i class="material-icons hidden-icon" style="display: none">local_library</i>
-        <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Knowledge Base">local_library</i>
-      <span>{{agile_lng_translate 'other' 'knowledge-base'}}</span>
     </a>
   </li>
   {{/isRestrictedMenuScope}}
   {{/isAdmin}}
-
-  {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
-    <li id="feedbackactivitiesmenu">
-      <a  href="#ticket-feedback">
-        <i class="m-r-sm fa fa-thumbs-up v-middle"></i>
-         <i class="material-icons hidden-icon" style="display: none">thumb_up</i>
-          <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Feedback">thumb_up</i>
-        <span>Feedback</span>
-      </a>
-    </li>
-   {{/isRestrictedMenuScope}}
-
 
    {{#isRestrictedMenuScope "ACTIVITY"}} {{else}}
     <li id="activitiesmenu">

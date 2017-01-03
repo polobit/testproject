@@ -33,28 +33,32 @@ define([
 				 $("#formContent").remove();
 				 var hasTemplateTheme =false;
 				 var themeExist = false;
-				 $.each(defaultThemes,function(index,value){
-				 	if(formClasses.indexOf(value)>-1){
-				 		currApplThm=value;
-				 		$(document.getElementById("target")).addClass(value);
-                        $(".themesSelectEle").val(currApplThm);
-                        hasTemplateTheme = true;
-                        themeExist = true;
-				 		return;
-				 	}
-				 });
-				 if(hasTemplateTheme ==false){
-				 $.each(customthemes,function(index,value){
-                       	if(formClasses.indexOf("form"+value.id)>-1){
-                      		currApplThm=value.name;
-                      		$(document.getElementById("target")).addClass("form"+value.id);
-                            $(document.getElementById("agileCustTheme")).text(value.themeCss);
-                      		$(".themesSelectEle").val(currApplThm);
-                      		themeExist = true;
-                      		return;
-                        }
-                     });
-				} 
+
+				if(formClasses){
+				 	$.each(defaultThemes,function(index,value){
+				 		if(formClasses.indexOf(value)>-1){
+					 		currApplThm=value;
+					 		$(document.getElementById("target")).addClass(value);
+	                        $(".themesSelectEle").val(currApplThm);
+	                        hasTemplateTheme = true;
+	                        themeExist = true;
+					 		return;
+				 	    }
+				    });
+					 if(hasTemplateTheme ==false){
+					    $.each(customthemes,function(index,value){
+	                       	if(formClasses.indexOf("form"+value.id)>-1){
+	                      		currApplThm=value.name;
+	                      		$(document.getElementById("target")).addClass("form"+value.id);
+	                            $(document.getElementById("agileCustTheme")).text(value.themeCss);
+	                      		$(".themesSelectEle").val(currApplThm);
+	                      		themeExist = true;
+	                      		return;
+	                        }
+	                    });
+					} 	
+				}
+				 
 				if(themeExist == false){
 					$(".themesSelectEle").val("Choose Theme");
 				}
@@ -74,6 +78,9 @@ define([
 				} else {
 					if(fields) {
 						//Adding on top
+						if(isCopyForm){
+							saveform[0].fields.name.value = "Copy Of "+ saveform[0].fields.name.value;
+					    }
 						if(!saveform[0].fields.agileconfirmationmsg){
 							var agileconfirmationmsg = {};
 							agileconfirmationmsg.label = "Confirmation Message";

@@ -111,6 +111,8 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.widgets.BriaWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.SkypeWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.KloutWidgetsAPI.class);
+	s.add(com.agilecrm.core.api.widgets.AndroidAPI.class);
+	
 	// Email Unsubscription
 	s.add(com.agilecrm.core.api.campaigns.UnsubscribeEmailAPI.class);
 	s.add(com.agilecrm.core.api.landingpages.LandingPagesAPI.class);
@@ -186,6 +188,9 @@ public class JerseyApplication extends Application
 
 	//CustomTheme
 	s.add(com.agilecrm.core.api.customthemes.CustomThemesAPI.class);
+	
+	//Visitors
+	s.add(com.agilecrm.core.api.analytics.VisitorsAPI.class);
 
 	return s;
     }

@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.analytics.VisitorFilter;
 import com.analytics.util.AnalyticsUtil;
+import com.analytics.util.VisitorsUtil;
 import com.campaignio.reports.DateUtil;
 
 /**
@@ -132,9 +133,11 @@ public class VisitorFilterAPI
 	    String endTimeString = DateUtil.getMySQLNowDateFormat(endTime, timeZone);
 	    VisitorFilter filter = VisitorFilter.getSegmentFilter(Long.parseLong(id));
 	    System.out.println(filter.segmentConditions);
-	    List<String> contactEmails = AnalyticsUtil.getEmails(filter.segmentConditions.toString(), startTimeString,
+	    /*
+	    List<String> contactEmails = VisitorsUtil.getEmails(filter.segmentConditions.toString(), startTimeString,
 		    endTimeString, countString, cursorString);
-	    contacts = AnalyticsUtil.getContactsFromDataStore(contactEmails);
+	    contacts = VisitorsUtil.getContactsFromDataStore(contactEmails);
+	    */
 	   
 	}
 	

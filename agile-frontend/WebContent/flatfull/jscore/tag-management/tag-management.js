@@ -137,7 +137,11 @@ var TAG_MODEL_VIEW = Backbone.View
 																"top", 5000);
 
 													renameTags(newTag, oldTag);
-													App_Admin_Settings.tagManagement();
+													//App_Admin_Settings.tagManagement();
+													if(App_Admin_Settings.tagsview1 && App_Admin_Settings.tagsview1.collection)
+													{
+														App_Admin_Settings.tagsview1.collection.sort();
+													}
 												}
 											});
 
@@ -208,7 +212,17 @@ var TAG_MODEL_VIEW = Backbone.View
 													'information',
 													getTemplate("js-deleting-tags", {tag : _that.model.get('tag')}),
 													"top", 5000);
-											App_Admin_Settings.tagManagement();
+											//App_Admin_Settings.tagManagement();
+											if(App_Admin_Settings.tagsview1 && App_Admin_Settings.tagsview1.collection)
+											{
+												App_Admin_Settings.tagsview1.collection.remove(_that.model);
+												var key = _that.model.get('tag').charAt(0).toUpperCase();
+												var $element = $('div[tag-alphabet="' + encodeURI(key) + '"] ul', $("#admin-prefs-tabs-content"));
+												if($element && $element.find("li").length == 0)
+												{
+													$element.parent().parent().parent().remove();
+												}
+											}
 										}
 									});
 						});
@@ -247,10 +261,10 @@ function append_tag_management(base_model) {
 		tagName : 'li',
 	});
 
-	console.log(itemView);
+	//console.log(itemView);
 
 	var key = base_model.get('tag').charAt(0).toUpperCase();
-	console.log($('div[tag-alphabet="' + encodeURI(key) + '"]', this.el))
+	//console.log($('div[tag-alphabet="' + encodeURI(key) + '"]', this.el))
 
 	var el = itemView.render().el;
 	$(el).addClass('tag bg-white').css("margin-top","10px");
@@ -261,7 +275,7 @@ function append_tag_management(base_model) {
 	}
 
 	var element = $('div[tag-alphabet="' + encodeURI(key) + '"] ul', this.el);
-	console.log(element.length);
+	//console.log(element.length);
 	var alphabets_array = [];
 	var tag_el_pos = -1;
 	var tag_el = "<div class='row b-b p-b-md'><div class='col-md-1 tag-alphabet' style='font-size:16px;padding-top:20px;'>" + key + "</div><div class='col-md-10'><div tag-alphabet=\"" + encodeURI(key) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div></div>";

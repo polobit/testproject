@@ -19,7 +19,7 @@ String template = request.getParameter("template");
       <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
       <link href="misc/formbuilder/custom.css?v=3-5" rel="stylesheet">  
       <link href="misc/formbuilder/builder-themes.css?v=6" rel="stylesheet">
-      <link href="misc/formbuilder/formbuilder-topmenu.css?t=2" rel="stylesheet">
+      <link href="misc/formbuilder/formbuilder-topmenu.css?t=3" rel="stylesheet">
       <link href="misc/formbuilder/formthemes.css?t=1" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
       <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
@@ -54,6 +54,7 @@ String template = request.getParameter("template");
         System.out.println("hi..........."+custThmList);
         %>
    customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
+   var isCopyForm = window.location.href.includes("&copy=1");
   </script>
 
    </head>
@@ -63,7 +64,7 @@ String template = request.getParameter("template");
            <i class="fa fa-cloud"></i> 
          </a>
          <span class="navbar-brand" style="font-weight: bold;">Form Builder</span>
-        <div style="float: right;"> 
+        <div style="float: right;" id="top-right-items"> 
              <select class="themesSelectEle navbar-brand">
                   <option id="chooseTheme">Choose Theme</option>
                   <optgroup id="defaultThmEle"  label="Default Themes">
@@ -85,6 +86,14 @@ String template = request.getParameter("template");
             <a id="form-save" class="btn navbar-brand  navbar-color">
                <span>Save</span>
             </a>
+            <a id="form-copy-dropdown" class="btn btn-primary navbar-brand  navbar-color" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></a>
+            <ul id="copyform-ul" class="dropdown-menu pull-right">
+                <li>
+                    <a id="copy-formbuilder">
+                        <i class="fa fa-clipboard" style="width: 20px;"></i>Create a Copy
+                    </a>
+                </li>
+            </ul>
          </div>
       </header>
       <div id="loader">
@@ -136,10 +145,12 @@ String template = request.getParameter("template");
       <!-- /container back -->
       
       <script type="text/javascript">
-      if(formNumber){
+      if(formNumber && !isCopyForm){
          var a = document.getElementById('form_preview');
          a.removeAttribute("disabled");
          a.href = window.location.origin+"/forms/"+formNumber;
+         $("#form-copy-dropdown").css("display","block");
+         $("#copy-formbuilder").attr("href",window.location.origin+"/formbuilder?form="+formNumber+"&copy=1");
       }  
          var a = document.getElementById('agile-logo');
          a.href = window.location.origin;
@@ -151,7 +162,7 @@ String template = request.getParameter("template");
                return closeText;
          }
       </script>
-      <script data-main="misc/formbuilder/main-built-7.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-8.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       
    </body>
 </html>

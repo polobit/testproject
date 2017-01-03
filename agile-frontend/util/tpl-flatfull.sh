@@ -55,6 +55,7 @@ cat flatfull/tpl/widget/googleplus/*.html > tpl/min/flatfull/googleplus.js
 cat flatfull/tpl/widget/paypal/*.html > tpl/min/flatfull/paypal.js
 cat flatfull/tpl/widget/braintree/*.html > tpl/min/flatfull/braintree.js
 cat flatfull/tpl/widget/facebook/*.html > tpl/min/flatfull/facebook.js
+cat flatfull/tpl/widget/android/*.html > tpl/min/flatfull/android.js
 
 cat ../WebContent/helpcenter/helpcenter-tpl/*.html  > ../WebContent/tpl/min/flatfull/helpcenter-tpl.js
 cat flatfull/tpl/generic-timeline/*.html  > tpl/min/flatfull/generic-timeline.js
