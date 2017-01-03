@@ -507,6 +507,7 @@
                         }
                         else if(themeId=="chooseTheme" || themeId == "theme1" || themeId == "theme2" || themeId == "theme3" || themeId == "theme4"){
                           selectedThemeFunc(identifier);
+                          isFormChange = true;
                         }
                         else{
                           $("#header").css("z-index","0");
@@ -527,6 +528,7 @@
                       selectedThemeFunc(identifier);
                       $("#header").css("z-index","2001");
                       $(".popover").css("z-index","2000");
+                      isFormChange = true;
                     }
                     else if(selectedVal == "deltheme"){
                       var currThm=$(".themesSelectEle").val();

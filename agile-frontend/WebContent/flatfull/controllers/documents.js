@@ -693,6 +693,11 @@ function initializeDocumentsListeners()
 		if(fileName.lastIndexOf("\\") > 0)
 	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
 
+	    if(fileName)
+	    {
+	    	fileName = fileName.replace(/ +/g, '+');
+	    }
+
 		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+fileName;
 		var fileSizeKB = Math.round(file.size / 1024);
 

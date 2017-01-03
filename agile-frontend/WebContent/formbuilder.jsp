@@ -55,6 +55,10 @@ String template = request.getParameter("template");
         %>
    customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
    var isCopyForm = window.location.href.includes("&copy=1");
+   var isFormChange = false;
+   if(isCopyForm || formTemplate){
+      isFormChange = true;
+   }
   </script>
 
    </head>
@@ -157,12 +161,14 @@ String template = request.getParameter("template");
          var a = document.getElementById('form_back');
          a.href = window.location.origin+"/#forms";
          window.onbeforeunload = function(event) {
+            if(isFormChange){
                var closeText = "Do you want to Close?";
                event.returnValue = closeText;
                return closeText;
+            }
          }
       </script>
-      <script data-main="misc/formbuilder/main-built-8.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-9.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       
    </body>
 </html>

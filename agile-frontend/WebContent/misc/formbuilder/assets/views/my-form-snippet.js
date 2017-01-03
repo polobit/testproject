@@ -99,6 +99,7 @@ define([
               break;
           }
         });
+        isFormChange = true;
         boundContext.model.trigger("change");
         $(".popover").remove();
       }

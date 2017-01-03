@@ -21,7 +21,8 @@ public class EmailLinksConversion
      */
     public static final String HTTP_URL_REGEX = "\\b(https|http|HTTP|HTTPS)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;(){}\"\']*[-a-zA-Z0-9+&@#/%=~_|]";
 
-    public static final String[] trackURLDomains = {"agle2.me", "agle1.me", "agle.me"};
+    public static final String[] trackURLDomains = {"agle.me", "agle1.me", "agle2.me", "agle1.cc"};
+
     /**
      * Extensions to avoid url shortening
      * 
