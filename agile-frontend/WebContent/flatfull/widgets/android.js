@@ -54,29 +54,43 @@ function saveCallNoteAndroid(message){
 	data.contact_name = "";
 	data.widget = "Android";
 
-	if(callDirection == "Outgoing") {
-		if(cntId){
-			console.log("cntId *** "+ state);
+	accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+customerNumber, function(resp){
+		var json = resp;		
+		if(!json) {			
+			resetCallLogVariables();
+
+    		if(state == "answered") {    			
+    			data.callType = "outbound-dial";
+    			data.status = "answered";    			
+    			data.contId = null;
+    			data.contact_name = "";    			
+    			CallLogVariables.dynamicData = data;
+    		}
+
+			CallLogVariables.subject = noteSub;
+			CallLogVariables.callWidget = "Android";
+			CallLogVariables.callType = "outbound-dial";
+			CallLogVariables.phone = customerNumber;
+			CallLogVariables.duration = callDuration;;
+			CallLogVariables.status = state;
+
+			var jsonObj = {};
+    		jsonObj['phoneNumber'] = customerNumber;
+    		return showContactMergeOption(jsonObj);			
+		}else{
+			cntId = json.id;
+			console.log("cntId *** "+ cntId);
 			if(state == "answered"){
 				twilioIOSaveContactedTime(cntId);
-				accessUrlUsingAjax("core/api/contacts/"+cntId, function(resp){
-					var json = resp;
-					if(json == null) {
-						return;
-					}
-
-					contact_name = getContactName(json);
-
-					data.callType = "outbound-dial";
-					data.status = "answered";					
-					data.contId = cntId;
-					data.contact_name = contact_name;					
-					showDynamicCallLogs(data);
-				});
+				contact_name = getContactName(json);
+				data.callType = "outbound-dial";
+				data.status = "answered";					
+				data.contId = cntId;
+				data.contact_name = contact_name;					
+				return showDynamicCallLogs(data);						
 			}else{
-
 				var call = {
-					"direction" : callDuration,
+					"direction" : callDirection,
 					"phone" : customerNumber,
 					"status" : state, 
 					"duration" : callDuration, 
@@ -97,32 +111,9 @@ function saveCallNoteAndroid(message){
 				console.log(note);
 				autosaveNoteByUser(note,call,"/core/api/widgets/android");
 			}
-		}else{
-			resetCallLogVariables();
-    		
-    		if(state == "answered") {    			
-    			data.callType = "outbound-dial";
-    			data.status = "answered";    			
-    			data.contId = null;
-    			data.contact_name = "";    			
-    			CallLogVariables.dynamicData = data;
-    		}
-
-			CallLogVariables.subject = noteSub;
-    		CallLogVariables.callWidget = "Android";
-    		CallLogVariables.callType = "outbound-dial";
-    		CallLogVariables.phone = customerNumber;
-    		CallLogVariables.duration = callDuration;;
-    		CallLogVariables.status = state;
-
-    		var jsonObj = {};
-    		jsonObj['phoneNumber'] = customerNumber;
-    		return showContactMergeOption(jsonObj);
 		}
-	}	
+	});
 }
-
-
 
 function androidCallNoty(message){
 	if(message){
@@ -201,6 +192,7 @@ function startAndroidWidget(contact_id){
 	ANDROID_Plugin_Id = android_widget.id;	
 	
 	$('#Android').html("No Logs");
+	$('#Android-container').remove();
 
 	$(".contact-make-call-div").off("click", ".Android_call");
  	$(".contact-make-call-div").on("click", ".Android_call", function(e){
