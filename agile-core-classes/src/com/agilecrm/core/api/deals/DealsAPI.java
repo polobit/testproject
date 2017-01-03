@@ -611,7 +611,7 @@ public class DealsAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteOpportunities(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    public void deleteOpportunities(@FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
 	    throws JSONException
     {
 	try
@@ -624,7 +624,7 @@ public class DealsAPI
 
 	    String uri = "/core/api/opportunity/backend/delete/" + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, report_filter);
 	}
 	catch (Exception je)
 	{
@@ -970,7 +970,7 @@ public class DealsAPI
     @Path("/bulk/archive")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void archiveDeals(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    public void archiveDeals(@FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	try
 	{
@@ -990,7 +990,7 @@ public class DealsAPI
 
 	    String uri = "/core/api/opportunity/backend/archive/" + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, report_filter);
 	}
 	catch (Exception je)
 	{
@@ -1004,7 +1004,7 @@ public class DealsAPI
     @Path("/bulk/restore")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void restoreDeals(@FormParam("ids") String ids, @FormParam("filter") String filters)
+    public void restoreDeals(@FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	try
 	{
@@ -1023,7 +1023,7 @@ public class DealsAPI
     }
 	    String uri = "/core/api/opportunity/backend/restore/" + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids,report_filter);
 	}
 	catch (Exception je)
 	{
@@ -1038,7 +1038,7 @@ public class DealsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void changeOwnerForDeals(@PathParam("owner_id") Long ownerId, @FormParam("ids") String ids,
-	    @FormParam("filter") String filters)
+	    @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	try
 	{
@@ -1058,7 +1058,7 @@ public class DealsAPI
 	    String uri = "/core/api/opportunity/backend/change-owner/" + ownerId + "/"
 		    + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids,report_filter);
 	}
 	catch (Exception je)
 	{
@@ -1073,7 +1073,7 @@ public class DealsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void changeMilestoneForDeals(@FormParam("ids") String ids, @FormParam("filter") String filters,
-	    @FormParam("form") String form)
+	    @FormParam("form") String form, @FormParam("report_filter") String report_filter)
     {
 	try
 	{
@@ -1092,7 +1092,7 @@ public class DealsAPI
 
 	    String uri = "/core/api/opportunity/backend/change-milestone/" + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids,report_filter, form);
 	}
 	catch (Exception je)
 	{
@@ -1107,7 +1107,7 @@ public class DealsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagToDealRelatedContacts(@FormParam("ids") String ids, @FormParam("filter") String filters,
-	    @FormParam("form") String form)
+	    @FormParam("form") String form, @FormParam("report_filter") String report_filter)
     {
 	try
 	{
@@ -1126,7 +1126,7 @@ public class DealsAPI
 
 	    String uri = "/core/api/opportunity/backend/contacts/add-tag/" + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, form);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids,report_filter, form);
 	}
 	catch (Exception je)
 	{
@@ -1141,7 +1141,7 @@ public class DealsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addDealRelatedContactsToCampaigns(@PathParam("workflow_id") Long workflowId,
-	    @FormParam("ids") String ids, @FormParam("filter") String filters)
+	    @FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	try
 	{
@@ -1160,7 +1160,7 @@ public class DealsAPI
 	    String uri = "/core/api/opportunity/backend/contacts/add-campaign/" + workflowId + "/"
 		    + SessionManager.get().getDomainId();
 
-	    OpportunityUtil.postDataToDealBackend(uri, filters, ids);
+	    OpportunityUtil.postDataToDealBackend(uri, filters, ids, report_filter);
 	}
 	catch (Exception je)
 	{

@@ -14,6 +14,7 @@ var deal_bulk_actions = {
 		if(!SELECT_ALL_DEALS)
 			input.ids = JSON.stringify(deal_bulk_actions.getDealsBulkIds());
 		input.filter = _agile_get_prefs('deal-filter-name');
+		input.report_filter = _agile_get_prefs('report_filter');
 		if(form_id){
 			input.form = JSON.stringify(serializeForm(form_id));
 		}

@@ -76,7 +76,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void archiveDeals(@PathParam("current_user_id") Long currentUserId, @FormParam("ids") String ids,
-	    @FormParam("filter") String filters)
+	    @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	// Set the session manager to get the user preferences and the other
 	// details required.
@@ -94,8 +94,12 @@ public class DealsBulkActionsAPI
 	try
 	{
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
-	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
-	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+        List<Opportunity> all_deals = null;		
+		if(report_filter != null)
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+		else
+		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
@@ -139,7 +143,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void restoreDeals(@PathParam("current_user_id") Long currentUserId, @FormParam("ids") String ids,
-	    @FormParam("filter") String filters)
+	    @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	// Set the session manager to get the user preferences and the other
 	// details required.
@@ -157,8 +161,12 @@ public class DealsBulkActionsAPI
 	try
 	{
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
-	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
-	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+        List<Opportunity> all_deals = null;		
+		if(report_filter != null)
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);		
+		else
+		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
@@ -204,7 +212,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void changeOwnerForDeals(@PathParam("current_user_id") Long currentUserId,
-	    @PathParam("owner_id") Long ownerId, @FormParam("ids") String ids, @FormParam("filter") String filters)
+	    @PathParam("owner_id") Long ownerId, @FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 
 	// Set the session manager to get the user preferences and the other
@@ -223,7 +231,11 @@ public class DealsBulkActionsAPI
 	try
 	{
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
-		List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		List<Opportunity> all_deals = null;	
+		if(report_filter != null)
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);		
+		else
+		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
@@ -288,7 +300,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void changMilestoneForDeals(@PathParam("current_user_id") Long currentUserId, @FormParam("ids") String ids,
-	    @FormParam("filter") String filters, @FormParam("form") String form)
+	    @FormParam("filter") String filters, @FormParam("form") String form, @FormParam("report_filter") String report_filter)
     {
 	String milestone_name = null;
 	String pipeline_name = null;
@@ -312,8 +324,12 @@ public class DealsBulkActionsAPI
 	    System.out.println("------------" + formJSON.toString());
 
 	    OpportunityUtil opportunityUtil = new OpportunityUtil();
-	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
-	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+	    List<Opportunity> all_deals = null;		
+		if(report_filter != null)
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+		else
+		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction();
 	    System.out.println("total deals -----" + deals.size());
 
@@ -389,7 +405,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void deleteDeals(@PathParam("current_user_id") Long currentUserId, @FormParam("ids") String ids,
-	    @FormParam("filter") String filters)
+	    @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 	// Set the session manager to get the user preferences and the other
 	// details required.
@@ -407,8 +423,12 @@ public class DealsBulkActionsAPI
 	try
 	{
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
-	    List<Opportunity> all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
-	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
+		List<Opportunity> all_deals = null;		
+		if(report_filter != null)
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+		else
+		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
 	    List<Opportunity> deals = dealFilterIdsFetcher.getDealsAfterResriction(true);
 	    System.out.println("total deals -----" + deals.size());
 	    JSONArray dealIdsArray = new JSONArray();
@@ -533,7 +553,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addTagToDealRelatedContacts(@PathParam("current_user_id") Long currentUserId,
-	    @FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("form") String form)
+	    @FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("form") String form, @FormParam("report_filter") String report_filter)
     {
 	// Set the session manager to get the user preferences and the other
 	// details required.
@@ -575,8 +595,12 @@ public class DealsBulkActionsAPI
 		return;
 	    
 	    OpportunityUtil opportunityUtil = new OpportunityUtil();
-	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
-	    System.out.println("total deals -----" + deals.size());
+	    List<Opportunity> deals = null;		
+		if(report_filter != null)
+			deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+		else
+		    deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contactKeys = new HashSet<Key<Contact>>();
 	    for (Opportunity deal : deals)
 	    {
@@ -612,7 +636,7 @@ public class DealsBulkActionsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void addDealRelatedContactToCampaigns(@PathParam("current_user_id") Long currentUserId,
-	    @PathParam("workflow_id") Long workflowId, @FormParam("ids") String ids, @FormParam("filter") String filters)
+	    @PathParam("workflow_id") Long workflowId, @FormParam("ids") String ids, @FormParam("filter") String filters, @FormParam("report_filter") String report_filter)
     {
 
 	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
@@ -634,8 +658,12 @@ public class DealsBulkActionsAPI
 		return;
 	    
 	    OpportunityUtil opportunityUtil = new OpportunityUtil();
-	    List<Opportunity> deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
-	    System.out.println("total deals -----" + deals.size());
+	    List<Opportunity> deals = null;		
+		if(report_filter != null)
+			deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+		else
+		   deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
+		System.out.println("total deals -----" + deals.size());
 	    Set<Key<Contact>> contacts = new HashSet<Key<Contact>>();
 
 	    for (Opportunity deal : deals)

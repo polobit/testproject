@@ -45,6 +45,7 @@ import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -508,18 +509,28 @@ public class OpportunityUtil
 		    .header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
 
 	    if (data.length > 2 && !StringUtils.isEmpty(data[2]))
-		taskOptions.param("form", data[2]);
+		taskOptions.param("report_filter", data[2]);
+	    if (data.length > 3 && !StringUtils.isEmpty(data[3]))
+			taskOptions.param("form", data[3]);
 
 	    queue.addAsync(taskOptions);
 	    return;
 	}
+	if(data.length>0 && !StringUtils.isEmpty(data[2])){
+		taskOptions = TaskOptions.Builder.withUrl(uri).param("report_filter", data[2])
+			    .header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
+		    if (data.length >3 && !StringUtils.isEmpty(data[3]))
+			taskOptions.param("form", data[3]);
+		    queue.addAsync(taskOptions);
+		    return;	
+	}
 
-	if (data.length > 0)
+    if (data.length > 0)
 	{
 	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
 		    .header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
-	    if (data.length > 2 && !StringUtils.isEmpty(data[2]))
-		taskOptions.param("form", data[2]);
+	    if (data.length > 2 && !StringUtils.isEmpty(data[3]))
+		taskOptions.param("form", data[3]);
 	    queue.addAsync(taskOptions);
 	    return;
 	}
@@ -1873,8 +1884,76 @@ public class OpportunityUtil
 	    je.printStackTrace();
 	}
 	return deals;
+  }
 
-    }
+    /**
+     * Get deals based on filter comming from client side
+     * @param report_filters
+     *           report deals filters.
+     * @return list of deals.
+     */
+    public List<Opportunity> getOpportunitiesForReportBulkActions(int count, String report_filter)
+    {
+	List<Opportunity> deals = new ArrayList<Opportunity>();
+	try
+	{
+	    String cursor = null;
+	    QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
+	    Set<Key<Opportunity>> dealsSet = new HashSet<Key<Opportunity>>();
+	    
+	    List<ScoredDocument> scoredDocuments = null;
+	    DealFilter deal_filter =  DealFilterUtil.getFilterFromJSONString(report_filter);
+	    
+	        DealFilterUtil.getFilterFromJSONString(report_filter);
+	    	
+	    	DealFilterUtil.setTrackAndMilestoneFilters(deal_filter, null, null);
+	    	 // Sets ACL condition
+		    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), deal_filter.rules, null);
+		    
+		    // Fetches 200 deals for every iteration
+		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, count, cursor, null);
+	    	 
+	    System.out.println("Start----- Deals fetching in bulk actions with textsearch");
+	    int iterationCount = 0;
+	    while(scoredDocuments != null && scoredDocuments.size() > 0)
+	    {
+	    	System.out.println("scoredDocuments size-------"+scoredDocuments.size());
+	    	System.out.println("Iteration Count----"+iterationCount++);
+			for (ScoredDocument doc : scoredDocuments)
+			{
+			    try
+			    {
+			    dealsSet.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(doc.getId())));
+			    }
+			    catch (Exception e)
+			    {
+				e.printStackTrace();
+			    }
+			}
+
+			ScoredDocument doc = scoredDocuments.get(scoredDocuments.size() - 1);
+		    cursor = doc.getCursor().toWebSafeString();
+		    
+		    System.out.println("Cursor in deals bulk actions-------"+cursor);
+		    
+		    deals.addAll(Opportunity.dao.fetchAllByKeys(new ArrayList<Key<Opportunity>>(dealsSet)));
+		    
+		    dealsSet.clear();
+		    
+		    System.out.println("Deals size in bulk actions-----"+deals.size());
+		    System.out.println("Start Doc ID----"+scoredDocuments.get(0).getId());
+		    System.out.println("End Doc ID----"+doc.getId());
+		    
+		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, count, cursor, null);
+	    }
+	    System.out.println("End----- Deals fetching in bulk actions with textsearch");
+	}
+	catch (Exception je)
+	{
+	    je.printStackTrace();
+	}
+	return deals;
+}
 
     /**
      * Update deals in the search document. Maximum deals size in list should be
