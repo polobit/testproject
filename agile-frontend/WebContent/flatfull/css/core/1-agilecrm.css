@@ -5280,5 +5280,6 @@ span.rolecontainer::first-letter {
 .newtheme-cloud{
   display: inline-block !important;
   vertical-align: middle;
+  margin-top: -5px;
 }
 .app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
