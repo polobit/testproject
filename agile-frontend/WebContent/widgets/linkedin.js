@@ -14,7 +14,9 @@ function showLinkedinMatchingProfilesBasedOnName(){
 	if (agile_crm_get_contact_property("last_name"))
 		name = name + " " + agile_crm_get_contact_property("last_name");
 
-	$("#Linkedin").html("<iframe id='linkedin-iframe' src='//touch.www.linkedin.com/#search' height='350px' width='250px' onload='onLoadHandler();'><p>Your browser does not support iframes.</p></iframe>");
+	var evt = document.createEvent('Event');
+	evt.initEvent('myCustomEvent', true, false);
+	document.dispatchEvent(evt);
 }
 function onLoadHandler(){
 	var ifrm = document.getElementById("linkedin-iframe");
