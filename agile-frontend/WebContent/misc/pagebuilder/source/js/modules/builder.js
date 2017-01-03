@@ -1159,8 +1159,8 @@
             
             if ( Object.keys(this.frameDocument).length !== 0 ) {
 
-                var pageContainer = this.frameDocument.body;
-                var height = pageContainer.offsetHeight;
+                var pageContainer =$(this.frameDocument.body).find('.page');
+                var height = pageContainer[0].offsetHeight;
 
                 this.frame.style.height = height+"px";
                 this.parentLI.style.height = height+"px";

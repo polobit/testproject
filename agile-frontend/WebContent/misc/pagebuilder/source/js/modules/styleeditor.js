@@ -465,11 +465,13 @@
                     if(styleeditor.activeElement.element.tagName ==='NAV'){
                         if(nameAttrOfEl === 'color')
                             $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
-                         if(nameAttrOfEl=== 'fixed-header'){
-                            if($(this).val() === "yes") {
+                         if(nameAttrOfEl=== 'fixed-header'){                            
+                            if($(this).val() === "yes") { 
+                                $(styleeditor.activeElement.element).parent().find('.duplicate-nav').css('height','76px');                               
                                 $(styleeditor.activeElement.element).addClass("navbar-fixed-top");
                                 $(styleeditor.activeElement.element).removeClass("navbar-static-top");
                             } else {                                
+                                $(styleeditor.activeElement.element).parent().find('.duplicate-nav').css('height','0px');
                                 $(styleeditor.activeElement.element).addClass("navbar-static-top");
                                 $(styleeditor.activeElement.element).removeClass("navbar-fixed-top");
                             }
