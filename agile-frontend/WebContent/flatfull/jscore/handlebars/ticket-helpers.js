@@ -42,6 +42,8 @@ Handlebars.registerHelper('is_helpdesk_acl_enabled',function(options){
 		return options.inverse(this);
 	}
 
+	return options.fn(this);
+
 });
 
 Handlebars.registerHelper('calculate_due_date', function(due_date, options) {
