@@ -1848,7 +1848,22 @@ var Tickets = {
 	        	$('.ticket_change_slatime', el).timepicker('setTime', new Date(due_date).format('HH:MM'));
 	        });
     	});	
-    }
+    },
+	checkAdminPrivilege : function() {
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+			
+			return false;
+		}
+		
+		return true;
+	 }
+
 };
 
 // fdue_dateu;nction tickets_typeahead(data){
