@@ -78,7 +78,13 @@ public class DefaultWidgets {
 			 "Know your customers Klout score, a measure of customers influence on social networks. Klout score is fetched based on Twitter profile.",
 			 "/widgets/knowlarity.js", "widgets/knowlarity-lg-logo.png",
 			 "widgets/knowlarity-md-logo.png", null, WidgetType.CALL));
-	
+		widgets.add(new Widget(
+			 "Android",
+			 "Android",
+			 "Now you make Outbound calls and get Inbound calls from App",
+			 "/widgets/android.js", "widgets/android-lg-logo.png",
+			 "widgets/android-sm-logo.png", null, WidgetType.CALL));
+
 		/**
 		 * Social widgets Order
 		 */

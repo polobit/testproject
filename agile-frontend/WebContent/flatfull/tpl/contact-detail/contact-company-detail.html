@@ -449,9 +449,9 @@
 									{{getCompanyImage "80" "display:inline;"}} /> 
 								</a>*/ -->
 								<a href="#" class="tooltip_info" style='text-decoration: none; margin-right: 25px'>
-										<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:46px" type="submit"
+										<img class='b-2x r-2x upload_pic imgholder submit' style="width:46px;height:46px;margin-left: 24px;" type="submit"
 										{{getCompanyImage "80" "display:inline;"}} /></a>
-										<div style="width: 32px; top: 30px; left: 58px; position:absolute;font-size: 11px;" class="toggle-contact-image">
+										<div style="width: 32px; top: 30px; left: 69px; position:absolute;font-size: 11px;" class="toggle-contact-image">
 											<div style='float:left;{{#property_is_exists "image" properties}}{{else}}margin-left:10px;{{/property_is_exists}}' class="contact-edit-option"><a name="Delete" class='tooltip_info  edit-pic' data-placement="bottom" data-toggle="tooltip" title="{{agile_lng_translate 'portlets' 'change'}}"><i class='glyphicon glyphicon-edit'></i></a>
 											</div>
 											{{#property_is_exists "image" properties}}
@@ -506,7 +506,7 @@
 
 								<div id="company-Input"><input type="text" class="hidden col-sm-11 m-l-xs pull-left inlineditor" id="company-inline-input"style="height:26px;"value='{{getPropertyValue properties "name"}}'></input>
 
-								<div class="text-ellipsis" id="company-name-text" style="padding-right: 22px">{{getPropertyValue properties "name"}}</div></div>
+								<div class="text-ellipsis" id="company-name-text" style="padding-right: 0px">{{getPropertyValue properties "name"}}</div></div>
 
 								<div class="clearfix"></div>
 								{{#if_propertyName "url"}}

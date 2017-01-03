@@ -1042,8 +1042,8 @@ if(currentUserPrefs.menuPosition.equals("top")){
   <li id="ticketviewsmenu">
     <a class="agile-menu-dropdown-aside1" href="#ticket-views">
       <i class="icon icon-directions"></i>
-      <i class="material-icons hidden-icon" style="display: none">filter_b_and_w</i>
-      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Views">filter_b_and_w</i>
+      <i class="material-icons hidden-icon" style="display: none">layers</i>
+      <i class="material-icons show-icon-folded" style="display: none" data-icon-toggle="tooltip" title="Views">layers</i>
       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "views") %></span>
     </a>
   </li>

@@ -172,6 +172,10 @@ function getTemplateUrls(templateName)
  	{
  		template_relative_urls.push("klout.js");
  	}
+ 	else if (templateName.indexOf("android") == 0)
+ 	{
+ 		template_relative_urls.push("android.js");
+ 	}
 
 	if (templateName.indexOf("chargify") == 0)
 	{
