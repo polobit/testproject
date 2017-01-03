@@ -186,13 +186,13 @@ function agile_toggle_chat_option_on_status(){
     	if(status == "online"){
     		
     		$(".chat-with-us").removeClass("hide");
-	    	//$(".support,.product-updates,.affiliate-link").addClass("col-md-4").removeClass("col-md-3");
-	    	$(".support,.product-updates,.affiliate-link").removeClass("col-md-4").addClass("col-md-3");
+	    	//$(".support,.product-updates,.agile-affiliate-link").addClass("col-md-4").removeClass("col-md-3");
+	    	$(".support,.product-updates,.agile-affiliate-link").removeClass("col-md-4").addClass("col-md-3");
     		
     	}
 	    else {
 	    	$(".chat-with-us").addClass("hide");
-	    	$(".support,.product-updates,.affiliate-link").addClass("col-md-4").removeClass("col-md-3");
+	    	$(".support,.product-updates,.agile-affiliate-link").addClass("col-md-4").removeClass("col-md-3");
 	    }	
 
     });

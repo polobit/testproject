@@ -19,7 +19,7 @@ var WidgetsRouter = Backbone.Router
                 "FullContact" :"FullContact",
                 "FullContact/:id" :"FullContact",
                 "Klout" : "Klout",
-                "Klout/:id" : "Klout",      
+                "Klout/:id" : "Klout",    
 
                 // Support widgets
                 "ClickDesk" : "ClickDesk",
@@ -45,8 +45,10 @@ var WidgetsRouter = Backbone.Router
                 "callscript/editrules/:id" : "CallScriptEdit",
                 "callscript" : "CallScript",
                 "callscript/:id" : "CallScript",
-                "knowlarity" : "Knowlarity",
-                "knowlarity/:id" : "Knowlarity",
+                "Android" : "Android",
+                "Android/:id" : "Android",
+                "Knowlarity" : "Knowlarity",
+                "Knowlarity/:id" : "Knowlarity",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
@@ -115,6 +117,7 @@ var WidgetsRouter = Backbone.Router
                             }, 1000);*/
                             $('#settings-widgets-tab-content').find('#call div:nth-child(6)').css({"display":"none"});
                             $('#settings-widgets-tab-content').find('#call div:nth-child(7)').css({"display":"none"});
+                            $('#settings-widgets-tab-content').find('#call div:nth-child(8)').css({"display":"none"});
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
@@ -381,6 +384,13 @@ var WidgetsRouter = Backbone.Router
              */
             Braintree : function(id) {
                addConfigurableWidget(id, "Braintree", "braintree-login");
+            },
+
+            /**
+             *
+             */
+            Android : function(id){
+                addConfigurableWidget(id, "Android", "android-login");
             },
 
             /**

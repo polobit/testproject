@@ -165,7 +165,10 @@ public class Office365CalendarUtil {
 		// Returns imap emails, usually in form of {emails:[]}, if not build
 		// result like that.
 		String jsonResult = HTTPUtil.accessURL(url);
-		JSONArray jsonArray = new JSONArray(jsonResult);
+		
+		JSONArray jsonArray = null;
+		if(jsonResult != null)
+			jsonArray = new JSONArray(jsonResult);
 
 		System.out.println(jsonArray.toString());
 

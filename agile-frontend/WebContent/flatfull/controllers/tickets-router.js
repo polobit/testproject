@@ -538,6 +538,8 @@
 	 ticketGroups : function() {
 
 	 	loadServiceLibrary(function(){
+			
+			if( !(Tickets.checkAdminPrivilege()) )	return;
 
 		 	//Rendering root template
 		 	App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({groups: true}, function(callback){
@@ -592,7 +594,8 @@
 	 addTicketGroup: function(){
 
 	 	loadServiceLibrary(function(){
-
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+			
 		 	//Rendering root template
 		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
@@ -630,7 +633,9 @@
 	 editTicketGroup: function(id){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				//Redirecting to groups collection if collection not exists
@@ -697,7 +702,9 @@
 	 ticketLabels: function(){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 		 	App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({labels: true}, function(callback){
 
 		 		//Creating base collection for fetching labels collection
@@ -729,7 +736,9 @@
 	 addTicketLabel: function(){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				var addTicketLabelView = new Base_Model_View({
@@ -762,7 +771,9 @@
 	 editTicketLabel: function(id){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				if(!Ticket_Labels.labelsCollection || !Ticket_Labels.labelsCollection.collection){
@@ -795,7 +806,9 @@
 	 ticketFilters : function() {
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 		 	App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({filters: true}, function(callback){
 
 		 		App_Ticket_Module.ticketFiltersCollection = new Base_Collection_View({
@@ -826,7 +839,9 @@
 	 addTicketFilter: function(){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				var addTicketFilterView = new Ticket_Base_Model({
@@ -857,7 +872,9 @@
 	 editTicketFilter: function(id){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				if(!App_Ticket_Module.ticketFiltersCollection || !App_Ticket_Module.ticketFiltersCollection.collection){
@@ -898,7 +915,9 @@
 	 cannedResponses : function() {
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 		 	App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({canned_responses: true}, function(callback){
 
 		 		Ticket_Labels.fetchCollection(function(){
@@ -931,7 +950,9 @@
 	 addCannedResponse: function(){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				var addCannedResponseView = new Base_Model_View({
@@ -961,7 +982,9 @@
 	 editCannedResponse: function(id){
 
 	 	loadServiceLibrary(function(){
-		 	//Rendering root template
+			if( !(Tickets.checkAdminPrivilege()) )	return;
+
+			//Rendering root template
 			App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
 
 				if(!App_Ticket_Module.cannedResponseCollection || !App_Ticket_Module.cannedResponseCollection.collection){
@@ -1797,5 +1820,5 @@
 
 	 		}, '#admin-prefs-tabs-content');
 	 	}, '#content');
-	},
+	}
 });

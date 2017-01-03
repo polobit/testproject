@@ -55,9 +55,17 @@ define([
 		form.formHtml = $("#render").val();
 		$("#formContent").remove();
 		if(formNumber){
-			form.id = formNumber;
+			//form.id = formNumber;
+			//window link contains copy text then treat it as new form else old form
+			if(!isCopyForm){
+				form.id = formNumber;
+			}
+			else{
+				formNumber = null;
+			}
 		}
 		$("#form-save").text("Saving...");
+		$("#top-right-items").attr("class","open");
 		$.ajax({
 			type : 'POST',
 			url : url,
@@ -71,7 +79,11 @@ define([
 					target.removeAttr("disabled");
 					$("#form_preview").removeAttr("disabled");
 					if(!formNumber){
-						formNumber=data.id;
+						//If no form Number
+						formNumber = data.id;
+						isCopyForm = false;
+						$("#form-copy-dropdown").css("display","block");
+						$("#copy-formbuilder").attr("href",window.location.origin+"/formbuilder?form="+formNumber+"&copy=1");
 						if(window.history)
 							window.history.replaceState(null,null,window.location.origin+"/formbuilder?form="+formNumber);
 					}
@@ -101,12 +113,12 @@ define([
 
 						var $formNextActionModal = $("#formNextActionModal");
 						$("#header").css("z-index","0");
-						//$(".popover").css("z-index","50");
 						$formNextActionModal.html(next_action_popup).modal("show");
 						$('#success-msg').fadeIn('slow').delay(2000).fadeOut('slow');
 					}
 					$(".popover").remove();
 				}
+				isFormChange = false;
 			},
 			error: function(){
 				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");
@@ -124,6 +136,5 @@ define([
  }
   var nextActionCloseClick = function(){
  	$("#header").css("z-index","2001");
- 	//$(".popover").css("z-index","2000");
  }
 

@@ -197,7 +197,7 @@ function saveCallNoteKnolarity(event){
 	    			"status": state, 
 	    			"duration" : callDuration
 	    		};
-				autosaveNoteByUser(note, call, "/core/api/widgets/Knowlarity/");
+				autosaveNoteByUser(note, call, "/core/api/widgets/knowlarity");
 	    	}
 	    });
 	}else {

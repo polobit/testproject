@@ -377,10 +377,12 @@ function callToNumber(to,from,widgetName,contact,dialler){
 			dialFromSip(to,from,contact)
 		}else if(widgetName == "Skype"){
 			dialFromSkype(to,from,contact)
-		}else if(widgetName == "Knowlarity"){
-			dialFromKnowlarity(to,from,contact)
+		}else if(widgetName == "Android"){
+			dialFromMobileAPP(to, from, contact);
 		}else if(widgetName == "Ozonetel"){
-			dialFromOzonetel(to,from,contact)
+			dialFromOzonetel(to,from,contact);
+		}else if(widgetName == "Knowlarity"){
+			dialFromKnowlarity(to,from,contact);
 		}
 
 	}catch(e){
@@ -388,6 +390,14 @@ function callToNumber(to,from,widgetName,contact,dialler){
 		 $("#direct-dialler-div").show();
 		 dialled.using = "default";
 	}	 
+}
+
+function dialFromMobileAPP(to, from, contact){
+	if (checkForActiveCall()){
+		alert("Already on call.");
+		return;
+	}
+	appDialer(to, contact);
 }
 
 function dialFromKnowlarity(to, from, contact){
@@ -593,6 +603,8 @@ function getIcon(widgetName){
 		icon = "<img src='/img/plugins/bria-call.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Bria' >Bria";
 	}else if(widgetName == "Skype"){
 		icon = "<img src='/img/plugins/skype-call.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Skype' >Skype";
+	}else if(widgetName == "Android"){
+		icon = "<img src='/img/plugins/android-sm-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Android' >Android";
 	}else if(widgetName == "Knowrality"){
 		icon = "<img src='/img/plugins/knowlarity-md-logo.png' style='width: 24px; height: 24px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='Knowrality' >Knowrality";
 	}else if(widgetName == "Ozonetel"){

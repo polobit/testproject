@@ -1,17 +1,23 @@
-var default_call_option = { "callOption" : [] };
-var callOptionDiv = "" ;
-var globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
-var globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-var widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity"};
-var dialled = {"using" : "default"};
-var CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
-var callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
-var callJar = {"running" : false};
+var default_call_option;
+var callOptionDiv;
+var globalCall;
+var globalCallForActivity; 
+var widgetCallName;
+var dialled;
+var CallLogVariables;
+var callConference;
+var callJar;
+var notifications_sound;
+var messagefromcallback;
+var outboundmessage;
 var KnowlarityWidgetPrefs;
 var knowlaritySource;
-var notifications_sound = true;
-var messagefromcallback = false;
-var outboundmessage = true;
+
+function androidSetup(){
+	head.js('widgets/android.js', function(){
+		console.log("App Calling js file loaded");
+	});
+}
 
 function knowlaritySetup(){
 	var requestURL = "core/api/widgets/knowlarity/getPrefs";
@@ -32,11 +38,24 @@ function knowlaritySetup(){
 	});
 }
 
-$(function()
-{
-	//initToPubNub();
+$(function(){
+	default_call_option = { "callOption" : [] };
+	callOptionDiv = "" ;
+	globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
+	globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
+	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity"};
+	dialled = {"using" : "default"};
+	CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
+	callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
+	callJar = {"running" : false};
+	notifications_sound = true;
+	messagefromcallback = false;
+	outboundmessage = true;
+
+	//	initToPubNub();
 	globalCallWidgetSet();
 	knowlaritySetup();
+	androidSetup();
 });
 
 function getContactImage(number, type, callback)
@@ -606,8 +625,10 @@ function handleCallRequest(message)
 		}
 		showSkypeCallNoty(message);
 		return;
-	
-		}else if((message || {}).callType == "Ozonetel"){
+
+	}else if ((message || {}).callType == "Android"){
+			androidCallNoty(message);	
+	}else if((message || {}).callType == "Ozonetel"){
 			if(message.message_from != "callback"){
 					messagefromcallback = true;	
 					if(message.direction == "Incoming"){
