@@ -2000,7 +2000,7 @@ display: block!important;
 .goal-form-control{ width: 150px;}
 .goal-datepicker{ width: auto;}
 
-.searchbycharacterdiv
+.searchbycharacterdiv,.searchbycharacterexpanded
 {
   padding: 0px !important;
   margin-bottom: 10px;
