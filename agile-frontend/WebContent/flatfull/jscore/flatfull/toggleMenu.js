@@ -802,7 +802,7 @@ $('body').on('click','.searchbychar',function(event){
     if($(target).offset() != undefined){
     	$(this).addClass("hightlight-select-anchor");
 	    $('html, body').animate({
-	        scrollTop: $(target).offset().top - ($('body').find('#navbar').height() + $("#aside").height())
+	        scrollTop: $(target).offset().top - ($('body').find('#navbar').height())
 	    }, "fast");
     /*$("body,#content").animate({ scrollTop: $(target).offset().top }, "fast");
     $(target).focus();*/
