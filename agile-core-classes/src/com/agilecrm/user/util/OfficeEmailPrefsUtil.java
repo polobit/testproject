@@ -104,7 +104,7 @@ public class OfficeEmailPrefsUtil
      */
     public static void checkOfficePrefs(OfficeEmailPrefs prefs) throws Exception
     {
-	String url = ContactOfficeUtil.getOfficeURLForPrefs(prefs, "info@agilecrm.com", "0", "1", "mails");
+	String url = ContactOfficeUtil.getOfficeURLForPrefs(prefs, "info@agilecrm.com", "0", "1", "default_folders");
 
 	// Access URL
 	String jsonResult = HTTPUtil.accessURL(url);
