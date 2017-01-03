@@ -3276,3 +3276,7 @@ width: 169px !important;
     font-weight: bold;
 }
 
+.dashboard-select .dropdown-menu .grid2-sub-nav span{font-size: 11px; padding-right: 1px; padding-top: 5px; color: #78909c;}
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover{color: #11a0f8;}
+.dashboard-select .dropdown-menu li a{display: block;}
+.dashboard-select .dropdown-menu{width: 275px;}

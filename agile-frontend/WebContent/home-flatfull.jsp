@@ -440,17 +440,39 @@ function isIE() {
               <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'>
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+                      <span class="grid2-sub-nav">
+                    <span>Contacts,</span>
+                    <span>Companies,</span>
+                    <span>Deals,</span>
+                    <span>Tasks</span>
+                  </span>
                   </a>
               </li>
               <li>
               <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+
+                      <span class="grid2-sub-nav">
+                    <span>Campaigns,</span>
+                    <span>Triggers,</span>
+                    <span>Forms,</span>
+                    <span>Web Rules</span>
+                  </span>
+
                   </a>
               </li><li>
               <a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'>
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+
+                      <span class="grid2-sub-nav">
+                    <span>Knowledge base,</span>
+                    <span>Feedback,</span>
+                    <span>Views,</span>
+                    <span>Labels</span>
+                  </span>
+
                   </a>
               </li>
           </ul>
