@@ -1892,11 +1892,35 @@ public class OpportunityUtil
      *           report deals filters.
      * @return list of deals.
      */
-    public List<Opportunity> getOpportunitiesForReportBulkActions(int count, String report_filter)
+    public List<Opportunity> getOpportunitiesForReportBulkActions(String ids, int count, String report_filter)
     {
 	List<Opportunity> deals = new ArrayList<Opportunity>();
 	try
 	{
+		JSONArray idsArray = null;
+	    if (StringUtils.isNotEmpty(ids))
+	    {
+		idsArray = new JSONArray(ids);
+		System.out.println("------------" + idsArray.length());
+	    }
+
+	    if (idsArray != null && idsArray.length() > 0)
+	    {
+		List<Key<Opportunity>> dealIds = new ArrayList<Key<Opportunity>>();
+		for (int i = 0; i < idsArray.length(); i++)
+		{
+		    dealIds.add(new Key<Opportunity>(Opportunity.class, Long.parseLong(idsArray.getString(i))));
+		    if (dealIds.size() >= count)
+		    {
+			deals.addAll(Opportunity.dao.fetchAllByKeys(dealIds));
+			dealIds.clear();
+		    }
+		}
+		if (!dealIds.isEmpty())
+		    deals.addAll(Opportunity.dao.fetchAllByKeys(dealIds));
+	    }
+	    else{
+		
 	    String cursor = null;
 	    QueryDocument<Opportunity> queryInstace = new QueryDocument<Opportunity>(new OpportunityDocument().getIndex(), Opportunity.class);
 	    Set<Key<Opportunity>> dealsSet = new HashSet<Key<Opportunity>>();
@@ -1947,6 +1971,7 @@ public class OpportunityUtil
 		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, count, cursor, null);
 	    }
 	    System.out.println("End----- Deals fetching in bulk actions with textsearch");
+	    }
 	}
 	catch (Exception je)
 	{

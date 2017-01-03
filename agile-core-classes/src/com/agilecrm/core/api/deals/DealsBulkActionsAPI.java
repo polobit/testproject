@@ -96,7 +96,7 @@ public class DealsBulkActionsAPI
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
         List<Opportunity> all_deals = null;		
 		if(report_filter != null)
-			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);			
 		else
 		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
@@ -163,7 +163,7 @@ public class DealsBulkActionsAPI
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
         List<Opportunity> all_deals = null;		
 		if(report_filter != null)
-			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);		
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);		
 		else
 		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
@@ -233,7 +233,7 @@ public class DealsBulkActionsAPI
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
 		List<Opportunity> all_deals = null;	
 		if(report_filter != null)
-			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);		
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);		
 		else
 		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 	    DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
@@ -326,7 +326,7 @@ public class DealsBulkActionsAPI
 	    OpportunityUtil opportunityUtil = new OpportunityUtil();
 	    List<Opportunity> all_deals = null;		
 		if(report_filter != null)
-			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);			
 		else
 		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
@@ -425,7 +425,7 @@ public class DealsBulkActionsAPI
 		OpportunityUtil opportunityUtil = new OpportunityUtil();
 		List<Opportunity> all_deals = null;		
 		if(report_filter != null)
-			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+			all_deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);			
 		else
 		    all_deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 		DealFilterIdsFetcher dealFilterIdsFetcher = new DealFilterIdsFetcher(all_deals, currentUserId);
@@ -597,7 +597,7 @@ public class DealsBulkActionsAPI
 	    OpportunityUtil opportunityUtil = new OpportunityUtil();
 	    List<Opportunity> deals = null;		
 		if(report_filter != null)
-			deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+			deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);			
 		else
 		    deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 		System.out.println("total deals -----" + deals.size());
@@ -660,7 +660,7 @@ public class DealsBulkActionsAPI
 	    OpportunityUtil opportunityUtil = new OpportunityUtil();
 	    List<Opportunity> deals = null;		
 		if(report_filter != null)
-			deals = opportunityUtil.getOpportunitiesForReportBulkActions(100, report_filter);			
+			deals = opportunityUtil.getOpportunitiesForReportBulkActions(ids, 100, report_filter);			
 		else
 		   deals = opportunityUtil.getOpportunitiesForBulkActions(ids, filters, 100);
 		System.out.println("total deals -----" + deals.size());
