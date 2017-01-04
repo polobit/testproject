@@ -69,7 +69,7 @@ class CheckNewThemeCount implements DeferredTask{
 							info += user.email+"("+user.domain+")"+System.lineSeparator();							
 					}
 					else
-						return;
+						continue;
 				}
 			
 			}
