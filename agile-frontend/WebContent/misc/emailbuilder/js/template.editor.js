@@ -172,6 +172,7 @@ function handleObjects() {
 
                         $('#video-link').val("");
                         $('#image-link').val("");
+                        $("#select_alignment").find('.image-align-picker').val(img.parent('td').attr('align'));
                         if(img.parent('a').length) {
                             $('#image-link').val(addhttp(img.parent('a').attr('href')));
                         }
@@ -181,7 +182,7 @@ function handleObjects() {
                         $("#imageHeaderId").html("Image");
                         $('#image-link-holder').show();
                         $('#settings').show();
-                        //$("#select_alignment").show();
+                        $("#select_alignment").show();
 
                         break;
                     case 'video-record':
@@ -818,7 +819,7 @@ $(document).ready(function () {
 
          if(parseInt($('#'+id).attr("data-maxwidth")) < parseInt($('#image-w').val())) 
          {          
-            alert("Image width must be less than or equal to "+$('#'+id).css("max-width"));
+            alert("Image width must be less than or equal to "+$('#'+id).attr("data-maxwidth"));
             $('#image-w').val(parseInt($('#'+id).css("max-width")));
         }
          else
@@ -846,37 +847,13 @@ $(document).ready(function () {
                 $('#'+id).wrap("<a target='_blank' class='imgLink' href='"+absolute_href+"'>");
             }
          }
-       /*adding new select-box for the image adjustment /alignment
-        *and creating an dropdown list with the default value center
-        * and whenever user will select any of the three align option 
-        *and click on apply button then it will adjust the image on the basis of the option 
-        */
-       /*
-         var select_alignment=document.getElementById("image-alt-text");
-        if(document.getElementById("select_alignment")==null){
-         var array = ["Center","Right","Left"];
-         var selectList = document.createElement("select");
-         selectList.id = "select_alignment";
-
-         for (var i = 0; i < array.length; i++) 
-         {
-               var option = document.createElement("option");
-               option.value = array[i];
-               option.text = array[i];
-               selectList.appendChild(option);
-        } 
-         var spaceAlignment = document.createElement("br");
-
-            $("#imageproperties div")[9].appendChild(selectList);
-            $("#imageproperties div")[9].appendChild(spaceAlignment);
-            $("#select_alignment").addClass("form-control");
-      
-      }
        
-        //for the alignment left/right/center
-        var align = $("#select_alignment").val();
-            $("#"+id).attr("align",align);*/
          
+    });
+
+    $(document).on('change', '.image-align-picker', function(e){
+        var id = $('#image-url').data('id');
+        $('#'+id).parent('td').attr('align', e.target.value);
     });
 
     $(document).on('change', 'input.social-input', function(e){
@@ -1631,13 +1608,14 @@ function initializeEditor() {
         force_p_newlines: true,
         forced_root_block: '',
         selector: "#html5editor",
-        plugins: "autolink lists link charmap code paste textcolor colorpicker paste",
+        plugins: "autolink lists link charmap code paste textcolor colorpicker paste lineheight",
         paste_as_text: true,
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
         relative_urls : false,
         convert_urls : false,
-        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields | lineheightselect",
         fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+        lineheight_formats: "8px 9px 10px 11px 12px 14px 16px 18px 20px 22px 24px 26px 36px",
         height: "200px",
         statusbar: false,
         setup: function (editor) {

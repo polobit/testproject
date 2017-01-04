@@ -475,6 +475,25 @@ var localeJSON = <%=localeJSON%>;
 
                         </div>
 
+
+
+                        <div class="form-group" id="select_alignment">
+                            
+                            <div >
+                             <div class="col-sm-3 control-label">Alignment</div>
+                                
+                                <div class="col-sm-9">
+                                    <select class="form-control image-align-picker">
+                                        <option>left</option>
+                                        <option>center</option>
+                                        <option>right</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+
                         <div class="form-group" id="image-link-holder">
                             
                             <div >
