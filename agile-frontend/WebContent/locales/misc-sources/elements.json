@@ -39,7 +39,7 @@
     ],
     "{{agile_lng_translate 'landingpage-builder' 'contents-slider'}}":[
         {"url":"elements/header7.html","height":400, "thumbnail":"elements/images/thumbs/new/header7.png"},
-        {"url":"elements/header6.html","height":400, "thumbnail":"elements/images/thumbs/new/header6.png"},
+        {"url":"elements/header6.html","height":390, "thumbnail":"elements/images/thumbs/new/header6.png"},
         {"url":"elements/header9.html","height":400, "thumbnail":"elements/images/thumbs/new/header9.png"}        
     ],    
     "{{agile_lng_translate 'landingpage-builder' 'divider'}}":[
