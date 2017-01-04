@@ -68,7 +68,10 @@
                     <div class="controls">      
                         <a href="#" class="office-folders-settings-click text-info" oid={{id}} name = "office">
                             <i class='icon-plus-sign' id="icon_id" /></i> {{agile_lng_translate 'prefs-email' 'email-folders'}}
-                        </a>      
+                        </a> 
+                        <span class = "office-folders-settings-txt" style = "vertical-align:text-top;margin-left:-3px">         
+                            <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top; cursor: pointer;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'prefs-email' 'office365-folders-selection-content'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'prefs-email' 'office365-folders-selection'}}">
+                        </span>     
                         <span class="office-folders-select" style="display: none">           
                             <br>        
                             <label class="control-label m-t-sm">{{agile_lng_translate 'prefs-email' 'select-maximum-3-folders'}}</label>        

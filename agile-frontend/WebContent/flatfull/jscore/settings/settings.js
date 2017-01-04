@@ -27,6 +27,12 @@ function load_office_folders(el, model) {
 	var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
 	fillSelect('office-folders-multi-select', 'core/api/office/folders/' + id,
 		 'folders', function fillNew() {
+		if($("#office-folders-multi-select option:selected").size() > 0){
+	 		$("#office-folders-multi-select option:first").after('<option>{{agile_lng_translate "portlets" "all"}}</option>');
+	 	}else{
+	 		$("#office-folders-multi-select option:first").after('<option selected="selected">{{agile_lng_translate "portlets" "all"}}</option>');
+	 	}
+
 		$("#office-folders-multi-select .default-select", el).remove();
 
 	}, optionsTemplate2, false, el2);
@@ -221,6 +227,12 @@ function load_office_properties(model, el) {
 	var optionsTemplate2 = "<option {{selected}}>{{name}}</option>";
 	fillSelect('office-folders-multi-select', 'core/api/office/folders/' + id,
 		 'folders', function fillNew() {
+	 	if($("#office-folders-multi-select option:selected").size() > 0){
+	 		$("#office-folders-multi-select option:first").after('<option>{{agile_lng_translate "portlets" "all"}}</option>');
+	 	}else{
+	 		$("#office-folders-multi-select option:first").after('<option selected="selected">{{agile_lng_translate "portlets" "all"}}</option>');
+	 	}
+
 		$("#office-folders-multi-select .default-select", el).remove();
 
 	}, optionsTemplate2, false, el2);
@@ -408,6 +420,34 @@ var Settings_Modal_Events = Base_Model_View.extend({
 
 	},
 
+	onChangeOfficeFolder : function(e){
+		e.preventDefault();
+		var target_el = $(e.currentTarget);
+		var selectedVal = $(target_el).val();
+        if(selectedVal == null || (selectedVal.length == 1 && selectedVal.indexOf("All") > -1)) {
+        	$("#office-folders-multi-select option:first").attr("selected","selected");
+        	var folderOption = $("#office-folders-multi-select option");
+			for (var j = 0; j < folderOption.length; j++) {
+				if(folderOption[j].text != "All"){
+					$(folderOption[j]).removeAttr("selected");
+				}
+			}
+        }else{
+        	$("#office-folders-multi-select option:first").removeAttr("selected");
+        	for (var i = 0; i < selectedVal.length; i++) {
+        		var folderName = selectedVal[i];
+        		if(folderName != "All"){
+        			var folderOption = $("#office-folders-multi-select option");
+        			for (var j = 0; j < folderOption.length; j++) {
+        				if(folderOption[j].text == folderName){
+        					$(folderOption[j]).attr("selected","selected");
+        				}
+        			}
+        		}
+        	}
+        }
+	},
+
 
 	events: {
 		'click .gmail-share-settings-select': 'onGmailShareOptionsSelect',
@@ -419,6 +459,7 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		'click .office-share-settings-select': 'onOfficeShareOptionsSelect',	
 		'click .office-share-settings-cancel': 'onOfficeShareOptionsCancel',
 		'click .office-folders-settings-click': 'onOfficeFoldersOptionsSelect',	
+		'change select#office-folders-multi-select': 'onChangeOfficeFolder',
 	},
 
 });
