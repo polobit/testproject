@@ -516,7 +516,7 @@ public class OpportunityUtil
 	    queue.addAsync(taskOptions);
 	    return;
 	}
-	if(data.length>0 && !StringUtils.isEmpty(data[2])){
+	if(data.length>2 && !StringUtils.isEmpty(data[2])){
 		taskOptions = TaskOptions.Builder.withUrl(uri).param("report_filter", data[2])
 			    .header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
 		    if (data.length >3 && !StringUtils.isEmpty(data[3]))
@@ -529,7 +529,7 @@ public class OpportunityUtil
 	{
 	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0])
 		    .header("Content-Type", "application/x-www-form-urlencoded").method(Method.POST);
-	    if (data.length > 2 && !StringUtils.isEmpty(data[3]))
+	    if (data.length >3 && !StringUtils.isEmpty(data[3]))
 		taskOptions.param("form", data[3]);
 	    queue.addAsync(taskOptions);
 	    return;
@@ -1935,7 +1935,7 @@ public class OpportunityUtil
 		    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Opportunity.toString(), deal_filter.rules, null);
 		    
 		    // Fetches 200 deals for every iteration
-		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, count, cursor, null);
+		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, 200, cursor, null);
 	    	 
 	    System.out.println("Start----- Deals fetching in bulk actions with textsearch");
 	    int iterationCount = 0;
@@ -1968,7 +1968,7 @@ public class OpportunityUtil
 		    System.out.println("Start Doc ID----"+scoredDocuments.get(0).getId());
 		    System.out.println("End Doc ID----"+doc.getId());
 		    
-		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, count, cursor, null);
+		    scoredDocuments = queryInstace.advancedSearchOnlyIds(deal_filter, 200, cursor, null);
 	    }
 	    System.out.println("End----- Deals fetching in bulk actions with textsearch");
 	    }
