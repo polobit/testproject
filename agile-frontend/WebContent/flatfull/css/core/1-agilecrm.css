@@ -5157,9 +5157,7 @@ span.rolecontainer::first-letter {
  display:block!important;
  }
 
-.grid-v2 {
-  display: none;
-}
+
 .grid-v1 {
   display: block;
 }
@@ -5275,7 +5273,6 @@ span.rolecontainer::first-letter {
     color: #f4f3f9 !important;
     background-color: #7266ba !important;
 }
-
 .navbar-brand i.fa-cloud{
   display: none;
 }
@@ -5285,7 +5282,6 @@ span.rolecontainer::first-letter {
   margin-top: -5px;
 }
 .app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
-
 #new_tag{
   width: 180px !important;
 }
@@ -5307,4 +5303,155 @@ span.rolecontainer::first-letter {
 .recent-view-background-color[icon="icon-money"]{
   display: inherit !important;
   padding: 0px !important; 
+}
+.dashboard-select.small {
+    display: inline-block;
+    font-size: 100%;
+}
+.dashboard-select.grid-v2 {
+    position: fixed !important;
+    left: 50%;
+    top: 16px;
+    z-index: 1029;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 12px !important;
+    background-color: #fff !important;
+    color: #5840eb !important;
+    border-radius:4px;
+}
+
+.grid-v2 .dropdown-toggle {
+    color: #5840eb !important;
+    background: #f4f8f9;
+    border-radius: 4px;
+}
+.dashboard-select.small .dropdown-toggle {
+       display: inline-block;
+    padding: 0;
+    margin-bottom: -5px;
+}
+.dashboard-select .dropdown-toggle {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 10px 0;
+    overflow: hidden;
+}
+.dashboard-select .nav-grid {
+    padding: 6px 15px!important;
+    padding-bottom: 0px!important;
+}
+#rolecontainer {
+    font-size: 16px;
+    margin-left: 8px;
+    text-transform: lowercase;
+    display: inline-block;
+    padding-top: -19px!important;
+    vertical-align: top;
+}
+.dashboard-select.small .dropdown-toggle .dash-name {
+    display: none;
+}
+.material-icons
+{
+  float:none;
+}
+div#need_help_header a:hover {
+    background: #f4f8f9;
+    border-radius: 4px;
+}
+.dashboard-select.small .dropdown-menu {
+    margin-left: -47px !important;
+    margin-top: 1px;
+}
+.dashboard-select.small .dropdown-menu {
+    box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07);
+    margin-left: -104px;
+    left: auto;
+}
+.dashboard-select .dropdown-menu {
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.07);
+    width: 241px;
+    left: -1px;
+    padding: 0;
+}
+.open>.dropdown-menu {
+    display: block;
+}
+.dashboard-select .dropdown-menu li a {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 16px 0;
+    color: inherit;
+}
+.dropdown-menu > li > a {
+    padding: 8px 20px;
+    line-height: 1;
+    text-transform: none;
+}
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.menu-service-select[data-service-name='SALES'] .material-icons {
+    color: #5840eb !important;
+}
+.dashboard-select .dropdown-menu li a i {
+    font-size: 22px;
+}
+.dashboard-select .dropdown-menu li a i {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 56px;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0;
+}
+.dropdown-menu > li > a i {
+    /* display: inline-block; */
+    vertical-align: middle;
+    padding-right: 10px;
+    /* min-width: 26px; */
+    color: #90a4ae;
+    font-style: normal;
+    margin-top: 1px;
+}
+.dashboard-select .dropdown-menu li a span {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 16px;
+    color: #263238;
+}
+.menu-service-select[data-service-name='MARKETING'] .material-icons {
+    color: #11a0f8 !important;
+}
+.menu-service-select[data-service-name='SERVICE'] .material-icons {
+    color: #66cd2e !important;
+}
+.agile-theme-SERVICE .grid-v2 .dropdown-toggle {
+    color: #66cd2e !important;
+}
+.agile-theme-MARKETING .grid-v2 .dropdown-toggle {
+    color: #11a0f8 !important;
 }
