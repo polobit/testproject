@@ -1087,11 +1087,26 @@
 
 					var $template_ui = $(template_ui);
 
+					fillSelect('group_names', '/core/api/tickets/groups', '', function(collection){
+			 	 		getTemplate("ticket-report-group", collection.toJSON(), undefined, function(template_ui){						
+
+							if(!template_ui)
+								return;
+
+				        $('#group_names', $template_ui).html($(template_ui));
+				       								
+			        } );		
+					
+					},'', true);
+
 					$('.reports-Container').html($template_ui);	
 
 					//initializing date range picket
 					initDateRange(callback);
 
+					$('#group_names').off('change');
+					$('#group_names').on('change',function(){callback()});
+				
 					callback();
 
 				}, ".reports-Container");

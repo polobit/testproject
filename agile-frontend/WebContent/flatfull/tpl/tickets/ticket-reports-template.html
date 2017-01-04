@@ -3,7 +3,7 @@
     <div class="wrapper bg-light lter padder-sm padder-v p-r-sm agile-sub-header b-b">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-            <div class="col-md-4 col-sm-6" style="padding-left:0px;padding-bottom:8px">
+            <div class="col-md-2 col-sm-4" style="padding-left:0px;padding-bottom:8px">
                     <h3 class="font-thin h3">{{agile_lng_translate 'report-view' 'tickets'}}</h3>
                 </div>
                 <div class="clearfix"></div> 
@@ -24,6 +24,10 @@
                         <option value="monthly">{{agile_lng_translate 'report-add' 'monthly'}}</option>
                     </select>
                 </div>
+                <div class="pull-right" style="padding:0px 2px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 145px;float: right;">
+                    </select>
+                </div>    
             </div>
         </div>
     </div>
@@ -56,6 +60,10 @@
                 <div class="col-md-4 col-sm-6" style="padding-left:0px;">
                     <h3 class="font-thin h3">{{agile_lng_translate 'tickets' 'hourly-tickets'}}
                     </h3>
+                </div>
+                 <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 160px;float: right;margin-left: 20px;">
+                    </select>
                 </div>
             </div>
         </div>
@@ -90,6 +98,10 @@
                     <h3 class="font-thin h3">{{agile_lng_translate 'tickets' 'weekly-tickets'}}
                     </h3>
                 </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 160px;float: right;margin-left: 20px;">
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -120,6 +132,10 @@
                     <select name="report_type" id="report_type" class="required form-control select-new-theme-nopanel{{#is_mobile}} {{else}} text-ellipsis w-150 {{/is_mobile}}">
                         <option value="priority" selected>{{agile_lng_translate 'tasks' 'priority'}}</option>
                         <option value="status">{{agile_lng_translate 'portlets' 'status'}}</option>
+                    </select>
+                </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 145px;float: right;">
                     </select>
                 </div>
             </div>
@@ -154,6 +170,10 @@
                         <option value="status" selected>{{agile_lng_translate 'portlets' 'status'}}</option>
                     </select>
                 </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 160px;float: right;margin-left: 20px;">
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -181,7 +201,11 @@
                     <i class="icon-calendar icon-large text-xs"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
-                            </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 160px;float: right;margin-left: 20px;">
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="wrapper-sm">    
@@ -206,6 +230,10 @@
                 <div id="reportrange" class="pull-right" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0), inset 0 -0 0 rgba(0, 0, 0, .1); border:1px solid #cfdadd;height:34px;padding:5px">
                     <i class="icon-calendar icon-large text-xs"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
+                </div>
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 160px;float: right;margin-left: 20px;">
+                    </select>
                 </div>
             </div>
         </div>
@@ -234,7 +262,10 @@
                     <i class="icon-calendar icon-large"></i>
                     <span id="range">{{date-range "today" "-6"}}</span>
                 </div>
-               
+                <div class="pull-right" style="padding:0px 8px 10px">
+                    <select name="group_names" class="form-control" id="group_names" style="width: 160px;float: right;margin-left: 20px;">
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -246,4 +277,23 @@
         </div>
         <hr>
     </div>
-</div></script>
+</div>
+</script>
+
+<script id="ticket-report-group-template" type="text/html">
+ <option value="0">{{agile_lng_translate 'tickets' 'feedback-allgroups'}}</option>
+{{#each this}}
+    <option value="{{id}}" group_id="{{id}}">{{group_name}}</option>
+{{/each}}
+<option role='separator' disabled>------------------------------------------------------</option>
+{{#each this}}
+  <optgroup data-group-id="{{id}}" data-group-email="{{group_email}}" label="{{group_name}}">
+    {{#group_users}}
+      <option data-assignee-id="{{id}}" value="{{../id}}">
+        {{name}}
+      </option>
+    {{/group_users}}
+  </optgroup>
+{{/each}}
+</script>
+
