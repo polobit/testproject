@@ -933,14 +933,6 @@
                                 </label>
 
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="FEEDBACK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}} {{#is_helpdesk_acl_enabled}}disabled="disabled"{{/is_helpdesk_acl_enabled}}><i></i> 
-                                    {{agile_lng_translate 'tickets' 'acl_feedback'}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_feedback_text'}}
-                                        </small></div>
-                                        
-                                </label>
-
-                                <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="KNOWLEDGEBASE" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'tickets' 'acl_knowledgebase'}}<br/>
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_knowledgebase_text'}}
@@ -956,13 +948,7 @@
                                         <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_helpdesk_text'}}
                                         </small></div>
                                 </label>
-
-                                <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="FEEDBACK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}} {{#is_helpdesk_acl_enabled}}disabled="disabled"{{/is_helpdesk_acl_enabled}}><i></i> 
-                                    {{agile_lng_translate 'tickets' 'acl_feedback'}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_feedback_text'}}
-                                        </small></div>
-                                </label>
+                                
                                 <label class="i-checks i-checks-sm checkbox">
                                     <input type="checkbox" name="scopes-temp" class="required" value="KNOWLEDGEBASE" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'tickets' 'acl_knowledgebase'}}<br/>

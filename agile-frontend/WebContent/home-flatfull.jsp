@@ -870,7 +870,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     %>
 
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.FEEDBACK) && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK) ){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK) ){
     %>
     <li id="feedbackactivitiesmenu">
     <a class="agile-menu-dropdown-aside" href="#ticket-feedback">
