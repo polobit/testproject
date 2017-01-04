@@ -441,7 +441,7 @@ function isIE() {
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
                       <span class="grid2-sub-nav">
-                    <span>Contacts,</span>
+                    <span class="grid-selector" navigation="#contacts">Contacts,</span>
                     <span>Companies,</span>
                     <span>Deals,</span>
                     <span>Tasks</span>
@@ -1264,6 +1264,16 @@ if( (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navig
 } else {
   document.write('<div class="butterbar animation-active" style="z-index:99;"><span class="bar"></span></div>');
 }
+
+$(".grid-selector").click(function(e){
+  alert("hi");
+  var navi = (this).attr("navigation");
+  alert(navi);
+  Backbone.history.navigate(navi, {
+                trigger: true
+            });
+
+});
 </script>
 <div id="content" class="app-content-body">
 <!-- <img class="init-loading" style="padding-right: 5px"
