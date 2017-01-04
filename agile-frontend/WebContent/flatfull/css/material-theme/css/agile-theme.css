@@ -3280,3 +3280,14 @@ width: 169px !important;
 .dashboard-select .dropdown-menu .grid2-sub-nav span:hover{color: #11a0f8;}
 .dashboard-select .dropdown-menu li a{display: block;}
 .dashboard-select .dropdown-menu{width: 275px;}
+
+.recent-view-background-color{
+   height: 35px;
+    width: 35px;
+    background-color: #f0f0f0 !important;
+    border-radius: 50%;
+    line-height: 33px;
+}
+.rectview-deal-icon{
+  margin-left :7px;
+}
