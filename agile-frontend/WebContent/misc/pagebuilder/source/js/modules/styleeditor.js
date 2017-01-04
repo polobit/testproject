@@ -48,7 +48,7 @@
                 //hide lhs popup when click on ESC
                 $(block.frameDocument).keyup(function(e) {
                     if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
-                        $("#styleEditor").css("left","-302px");           
+                        $("#styleEditor").css("left","-305px");           
                 });
                 styleeditor.setupCanvasElements(block);
             });
@@ -1403,10 +1403,10 @@
         */
         toggleSidePanel: function(val) {
 
-            if( val === 'open' && $('#styleEditor').css('left') === '-302px' ) {
+            if( val === 'open' && $('#styleEditor').css('left') === '-305px' ) {
                 $('#styleEditor').animate({'left': '0px'}, 250);
             } else if( val === 'close' && $('#styleEditor').css('left') === '0px' ) {
-                $('#styleEditor').animate({'left': '-302px'}, 250);
+                $('#styleEditor').animate({'left': '-305px'}, 250);
             }
 
         },
