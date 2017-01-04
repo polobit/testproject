@@ -120,9 +120,14 @@ var contact_details_documentandtasks_actions = {
 			    $('.colorPicker-picker', e).css("background-color", colorcode); 
 			    // Disable color input field
 			    $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
-				
-
-				$("#opportunityModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+				if(ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE"))
+			    {	
+			    	$("#opportunityForm").find('input[name=currency_conversion_value]').css('width','48%');
+				    $("#opportunityForm").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
+				    var currencyType = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+				    $("#opportunityForm").find("#currencies-list").removeClass('hidden');
+				    $("#opportunityForm").find("#currency-conversion-symbols").val(currencyType);
+				}
 
 				add_custom_fields_to_form({}, function(data)
 				{

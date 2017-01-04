@@ -1153,7 +1153,7 @@ function populate_deal_products(el, value,form_id){
 					if(iTotal.toFixed)
 						iTotal=iTotal.toFixed(2)
 					if($("input[name='currency_conversion_value']",$(me._form_id)).length){
-						if ((ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE") && ($("select[id='currency-conversion-symbols']").val(),$(me._form_id)))
+						if (ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE") && ($("select[id='currency-conversion-symbols']").val(),$(me._form_id)))
     					{
     						var accountCurrency = ACCOUNT_PREFS.currency.substring(0, 3);
 							var dealCurrency = $("select[id='currency-conversion-symbols']").val().substring(0, 3);

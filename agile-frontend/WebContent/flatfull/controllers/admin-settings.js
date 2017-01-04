@@ -161,6 +161,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			postRenderCallback : function()
 			{
 				ACCOUNT_DELETE_REASON_JSON = undefined;
+				if(ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
+					$('#account-pref').find('#accountPrefs').find('#multi-currency-deals').removeClass('hidden');
 				
 			},saveCallback : function(){
 				location.reload(true);

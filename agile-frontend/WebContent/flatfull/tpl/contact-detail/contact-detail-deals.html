@@ -54,13 +54,20 @@
 		<div class="contact-desc-dynamic">
         
 		<div><span class="m-r-xs hide">Value : </span>
-			{{#if currency_conversion_value}}
-    			{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
-    		{{else}}
-      			{{#if expected_value}}
-        			{{currencySymbol}}{{numberWithCommas expected_value}}
-      			{{/if}}
-      		{{/if}}  
+			{{#if_equals currency_conversion_value "0"}}
+				<span>{{currencyType currency_type}}{{currency_conversion_value}}</span>
+			{{else}}
+				{{#if currency_conversion_value}}
+					<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+				{{else}}
+					{{#if_equals expected_value "0"}}
+						<span>{{currencySymbol}}{{expected_value}}</span>
+			    	{{/if_equals}}
+			    	{{#if expected_value}}
+						<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+			   		{{/if}}
+				{{/if}}
+			{{/if_equals}}  
       	<span class="m-l-sm text-muted">{{milestone}} ({{probability}} %)</span>
 		</div>
          {{#if description}}

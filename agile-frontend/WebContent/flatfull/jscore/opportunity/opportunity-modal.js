@@ -471,11 +471,11 @@ function updateDeal(ele, editFromMilestoneView)
 	}
 	
     $("#opportunityUpdateModal").modal('show');
-    if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
+    if(ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE"))
     {
     	$("#opportunityUpdateModal").find('input[name=currency_conversion_value]').css('width','48%');
     	$("#opportunityUpdateModal").find("#currencies-list").removeClass('hidden');
-	    $("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+	    $("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
 	    if(value.currency_type){
 	    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(value.currency_type);
 	    }
@@ -633,10 +633,10 @@ function show_deal()
 	// Disable color input field
     $('.colorPicker-palette').find('input').attr('disabled', 'disabled');
 
-    if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
+    if(ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE"))
     {	
     	$("#opportunityForm").find('input[name=currency_conversion_value]').css('width','48%');
-	    $("#opportunityForm").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+	    $("#opportunityForm").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
 	    var currencyType = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	    $("#opportunityForm").find("#currencies-list").removeClass('hidden');
 	    $("#opportunityForm").find("#currency-conversion-symbols").val(currencyType);

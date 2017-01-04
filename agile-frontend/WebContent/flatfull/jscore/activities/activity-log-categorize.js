@@ -265,7 +265,7 @@ function updatedeals(ele)
 
 	$("#opportunityUpdateModal").modal('show');
 
-	$("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-symbols-list", {}));
+	$("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
     if(value.currency_type){
     	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(value.currency_type);
     }

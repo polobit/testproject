@@ -944,10 +944,11 @@ public class Opportunity extends Cursor implements Serializable
     		currency_conversion_value = expected_value ;
     		isCurrencyUpdateRequired = false;
     	}
-    	else
-    		if(expected_value == null && currency_conversion_value == null){
-    			isCurrencyUpdateRequired = false;
-    		}
+    	else if(expected_value == null && currency_conversion_value == null){
+			isCurrencyUpdateRequired = false;
+		}
+    	else if(expected_value == null && currency_conversion_value !=null)
+			isCurrencyUpdateRequired = true ;	
     	// Sets the currency conversion value
     	if(isCurrencyUpdateRequired){
 	    	String userpref_currency_type = null;
