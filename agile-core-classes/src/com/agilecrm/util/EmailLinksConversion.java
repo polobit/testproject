@@ -22,7 +22,10 @@ public class EmailLinksConversion
     public static final String HTTP_URL_REGEX = "\\b(https|http|HTTP|HTTPS)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;(){}\"\']*[-a-zA-Z0-9+&@#/%=~_|]";
 
     public static final String[] trackURLDomains = {"agle.me", "agle1.me", "agle2.me", "agle1.cc"};
-
+    
+    // Domains having these words won't get tracked
+    public static final String[] blockedURLDomains = {"paypal", "apple"};
+    
     /**
      * Extensions to avoid url shortening
      * 
@@ -72,6 +75,9 @@ public class EmailLinksConversion
     private static boolean isSpecialLink(String str)
     {
 
+    if(isBlockedDomain(str))
+    	return false;
+    
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https"))
 	        && !str.toLowerCase().contains("unsubscribe")
 	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign", true))
@@ -298,6 +304,20 @@ public class EmailLinksConversion
     	for(String domain : trackURLDomains)
     	{
     		if(StringUtils.containsIgnoreCase(host, domain))
+    			return true;
+    	}
+    	
+    	return false;
+    }
+    
+    private static boolean isBlockedDomain(String url)
+    {
+    	if(StringUtils.isBlank(url) || !StringUtils.startsWithIgnoreCase(url, "http"))
+    		return true;
+    	
+    	for(String domain: blockedURLDomains)
+    	{
+    		if(StringUtils.containsIgnoreCase(url, domain))
     			return true;
     	}
     	
