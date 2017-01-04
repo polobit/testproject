@@ -342,6 +342,17 @@
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
 	
+	
+	<servlet>
+		<servlet-name>ThemeCount</servlet-name>
+		<servlet-class>com.agilecrm.NewThemeCountServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ThemeCount</servlet-name>
+		<url-pattern>/theme-count</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>CampaignReports</servlet-name>
 		<servlet-class>com.agilecrm.reports.CampaignReportServlet</servlet-class>
