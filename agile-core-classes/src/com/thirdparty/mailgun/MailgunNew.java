@@ -131,7 +131,7 @@ public class MailgunNew {
 			String mailgunDomainName, String fromEmail, String fromName,
 			String to, String cc, String bcc, String subject, String replyTo,
 			String html, String text, String metadata, List<Long> documentIds,
-			List<BlobKey> blobKeys, String... attachments) {
+			String[] mailAttach, String... attachments) {
 		// Return null if Mailgun API key or domain name is null/empty
 		if (StringUtils.isBlank(mailgunApikey)
 				|| StringUtils.isBlank(mailgunDomainName)) {
@@ -146,10 +146,11 @@ public class MailgunNew {
 				sendDocumentAsMailAttachment(fromEmail, fromName, to, cc, bcc,
 						subject, replyTo, html, text, metadata,
 						documentIds.get(0), mailgunApikey, mailgunDomainName);
-			} else if (blobKeys != null && blobKeys.size() > 0) {
-				sendBlobAsMailAttachment(fromEmail, fromName, to, cc, bcc,
-						subject, replyTo, html, text, metadata,
-						blobKeys.get(0), mailgunApikey, mailgunDomainName);
+			} else if(mailAttach != null && mailAttach.length > 0 
+					&& StringUtils.isNotBlank(mailAttach[0])) {
+				sendUploadedMailAttachment(fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
+						text, metadata, mailAttach[0], mailAttach[1], mailgunApikey,
+						mailgunDomainName);
 			} else {
 				FormDataMultiPart mailgunMessage = getMailgunMessage(fromEmail,
 						fromName, to, cc, bcc, subject, replyTo, html, text,
@@ -198,10 +199,9 @@ public class MailgunNew {
 	public static String sendMail(String fromEmail, String fromName, String to,
 			String cc, String bcc, String subject, String replyTo, String html,
 			String text, String metadata, List<Long> documentIds,
-			List<BlobKey> blobKeys, String... attachments) {
+			String[] mailAttach, String... attachments) {
 		return sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject,
-				replyTo, html, text, metadata, documentIds, blobKeys,
-				attachments);
+				replyTo, html, text, metadata, documentIds, mailAttach, attachments);
 	}
 
 	/**
@@ -348,7 +348,7 @@ public class MailgunNew {
 	 * @param apiKey
 	 * @param domainName
 	 */
-	private static void sendBlobAsMailAttachment(String fromEmail,
+	/*private static void sendBlobAsMailAttachment(String fromEmail,
 			String fromName, String to, String cc, String bcc, String subject,
 			String replyTo, String html, String text, String metadata,
 			BlobKey blobKey, String apiKey, String domainName) {
@@ -362,7 +362,7 @@ public class MailgunNew {
 		Queue queue = QueueFactory.getQueue(AgileQueues.EMAIL_ATTACHEMNT_QUEUE);
 		queue.add(TaskOptions.Builder.withPayload(task));
 		System.out.println("Mailgun email attachment task added to queue ");
-	}
+	}*/
 
 	/**
 	 * This method is used for send a mail with Document type attachment via
@@ -405,6 +405,23 @@ public class MailgunNew {
 
 		System.out.println(" Mailgun email attachment task added to queue");
 
+	}
+	
+	/**
+	 * Send mail using attachment from S3 URL
+	 */
+	private static void sendUploadedMailAttachment(String fromEmail, String fromName, String to,
+			String cc, String bcc, String subject, String replyTo, String html, String text,
+			String metadata, String fileName, String Url, String apiKey, String domainName) {
+		
+		IFileInputStream documentStream = new DocumentFileInputStream(fileName, Url);
+
+		MailgunSendDeferredTask task = new MailgunSendDeferredTask(apiKey, domainName, fromEmail,
+				fromName, to, cc, bcc, subject, replyTo, html, text, metadata, documentStream);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue(AgileQueues.EMAIL_ATTACHEMNT_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(task));
+		System.out.println("Mailgun email attachment task added to queue ");
 	}
 
 }

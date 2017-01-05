@@ -180,6 +180,7 @@ public class ContactEmailWrapper extends Cursor
     private String edoc_key;
     private String document_key;
     private String blob_key;
+    private String email_attach;
     private String attachment_name;
     private String attachment_url;
     private String signature;
@@ -240,6 +241,14 @@ public class ContactEmailWrapper extends Cursor
 	public void setBlob_key(String blob_key)
 	{
 		this.blob_key = blob_key;
+	}
+	
+	public String getEmail_attach() {
+		return email_attach;
+	}
+
+	public void setEmail_attach(String email_attach) {
+		this.email_attach = email_attach;
 	}
 
 	public String getAttachment_name()

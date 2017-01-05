@@ -47,7 +47,6 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
@@ -58,8 +57,6 @@ import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.deferred.SendGridSubAccountDeferred;
-import com.thirdparty.sendgrid.subusers.SendGridSubUser;
-import com.thirdparty.sendgrid.subusers.SendGridSubUser.SendGridStats;
 import com.thirdparty.ses.util.AmazonSESUtil;
 
 /**
@@ -410,10 +407,10 @@ public class EmailGatewayUtil
      * @param attachments
      *            - attachment files like contacts export csv file
      */
-	public static void sendEmail(EmailGateway emailGateway, String domain, String fromEmail,
+    public static void sendEmail(EmailGateway emailGateway, String domain, String fromEmail,
 			String fromName, String to, String cc, String bcc, String subject, String replyTo,
 			String html, String text, String mandrillMetadata, List<Long> documentIds,
-			List<BlobKey> blobKeys, String... attachments) {
+			String[] mailAttach, String... attachments) {
 		try
 		{
 			to = ContactEmailUtil.normalizeEmailIds(to);
@@ -421,77 +418,50 @@ public class EmailGatewayUtil
 	    	
 	    	cc = ContactEmailUtil.normalizeEmailIds(cc);
 	    	bcc = ContactEmailUtil.normalizeEmailIds(bcc);
-	    	try {
-				AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	
-				//As of now Oauth and SMTP doesn't support attachments
-				if((documentIds != null && documentIds.size() == 0) 
-						&& (blobKeys != null && blobKeys.size() == 0)
-						&& (attachments != null && attachments.length == 0)) {
-	
-					//Fetch the email options from user's gmail oauth preferences 
-					GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
-					if(gmailPrefs != null) {
-						System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
-						GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
-								html, text, documentIds, blobKeys, attachments);
-						return;
-					}
-	
-					//Fetch the email options from user's SMTP preferences 
-					SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
-					if(smtpPrefs != null) {
-						System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
-						GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
-								html, text, documentIds, blobKeys, attachments);
-						return;
-					}
-				} 
-			} catch(Exception ex) {
-				System.err.println("Exception occured while getting smtp prefs...");
-				System.out.println(ExceptionUtils.getFullStackTrace(ex));
-			}
+	    	
+	    	/** Sending Mail using SMTP. */
+	    	if(smtpOutboundSendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+					documentIds, mailAttach, attachments)) return;
 	
 	    	//Fetch the preferred emailgateway from account preferences
-	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
-	    			emailGateway.email_api : EMAIL_API.SEND_GRID;
+	    	EMAIL_API emailAPI = (emailGateway != null) ? emailGateway.email_api : SEND_GRID;
 			
 			String apiUser = (emailGateway != null) ? emailGateway.api_user : null;
 			String apiKey = (emailGateway != null) ? emailGateway.api_key : null;
 			
 		    /* If no gateway setup or Amazon SES gateway having attachments or documents, 
 			sends email through Agile's default (Sendgrid) */
-			if(SEND_GRID.equals(preferredGateway) ) {
+			if(SEND_GRID.equals(emailAPI) ) {
 	
 				SendGrid.sendMail(apiUser, apiKey, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
-		    			html, text, null, documentIds, blobKeys, attachments);
+		    			html, text, null, documentIds, mailAttach, attachments);
 		    }
-		    else if(MANDRILL.equals(preferredGateway)) {
+		    else if(MANDRILL.equals(emailAPI)) {
 		    	
 		    	Mandrill.sendMail(apiKey, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
-		    			html, text, mandrillMetadata, documentIds, blobKeys, attachments);
+		    			html, text, mandrillMetadata, documentIds, mailAttach, attachments);
 		    }
-		    else if(SES.equals(preferredGateway)) {
+		    else if(SES.equals(emailAPI)) {
 
 				if ((documentIds != null && documentIds.size() != 0) 
-	    				|| (blobKeys != null && blobKeys.size() != 0)
+	    				|| (mailAttach != null && mailAttach.length > 0 && StringUtils.isNotBlank(mailAttach[0])) 
 	    				|| (attachments != null && attachments.length != 0)) {
 
 					SendGrid.sendMail(null, null, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
-			    			html, text, null, documentIds, blobKeys, attachments);
+			    			html, text, null, documentIds, mailAttach, attachments);
 			    	return;
 	    		}
-		    	MailDeferredTask mailDeferredTask = new MailDeferredTask(preferredGateway.toString(), 
+		    	MailDeferredTask mailDeferredTask = new MailDeferredTask(emailAPI.toString(), 
 		    			apiUser, apiKey, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
 		    			html, text, null, null, null);
 	
 		    	// Add to pull queue with from email as Tag
 		    	PullQueueUtil.addToPullQueue(AMAZON_SES_EMAIL_PULL_QUEUE, mailDeferredTask, fromEmail + "_personal");
 		    }
-		    else if(MAILGUN.equals(preferredGateway)) {
+		    else if(MAILGUN.equals(emailAPI)) {
 		    	
 		    	MailgunNew.sendMail(apiKey, apiUser, fromEmail, fromName, to, cc, bcc, subject, replyTo, 
-		    			html, text, mandrillMetadata, documentIds, blobKeys, attachments);
+		    			html, text, mandrillMetadata, documentIds, mailAttach, attachments);
 		    }
 		}
 		catch (Exception e)
@@ -502,6 +472,46 @@ public class EmailGatewayUtil
 		    e.printStackTrace();
 		}
     }
+
+	/** 
+	 * Sending mails using configured Outbound SMTP or Oauth. 
+	 */
+	private static boolean smtpOutboundSendMail(String fromEmail, String fromName, String to,
+			String cc, String bcc, String subject, String replyTo, String html, String text,
+			List<Long> documentIds, String[] mailAttach, String... attachments) {
+		
+		try {
+			AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+			if(agileUser != null) {
+				
+				//Fetch the email options from user's Gmail oauth preferences 
+				GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
+				if(gmailPrefs != null) {
+					System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
+					
+					GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
+							html, text, documentIds, mailAttach, attachments);
+					return true;
+				}
+
+				//Fetch the email options from user's SMTP preferences 
+				SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
+				if(smtpPrefs != null) {
+					System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
+					
+					GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
+							html, text, documentIds, mailAttach, attachments);
+					return true;
+				}
+			}
+		} 
+		catch(Exception ex) {
+			System.err.println("Exception occured while getting smtp prefs...");
+			System.out.println(ExceptionUtils.getFullStackTrace(ex));
+		}
+		return false;
+	}
 
     /**
      * Sends email after fetching EmailGateway
@@ -521,12 +531,12 @@ public class EmailGatewayUtil
      */
     public static void sendEmail(String domain, String fromEmail, String fromName, String to, String cc, String bcc,
 	    String subject, String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
-	    List<BlobKey> blobKeys, String... attachments)
+	    String[] mailAttach, String... attachments)
     {
 	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		mandrillMetadata, documentIds, blobKeys, attachments);
+		mandrillMetadata, documentIds, mailAttach, attachments);
     }
 
     /**

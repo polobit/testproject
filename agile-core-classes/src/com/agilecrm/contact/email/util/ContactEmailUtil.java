@@ -50,7 +50,6 @@ import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.google.appengine.api.blobstore.BlobKey;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
@@ -187,18 +186,19 @@ public class ContactEmailUtil
 	    bcc = normalizeEmailIds(bcc);
 
 	    List<Long> documentIds = new ArrayList<Long>();
-	    List<BlobKey> blobKeys = new ArrayList<BlobKey>();
+	    String[] emailAttach = new String[2];
 	    
-	    if (StringUtils.isNotBlank(contactEmailWrapper.getDocument_key()) && StringUtils.isBlank(contactEmailWrapper.getedoc_key()))
-	    {
-		Long documentId = Long.parseLong(contactEmailWrapper.getDocument_key());
-		documentIds.add(documentId);
-	    }
-	    else if (StringUtils.isNotBlank(contactEmailWrapper.getBlob_key()))
-	    {
-		BlobKey blobKey = new BlobKey(contactEmailWrapper.getBlob_key());
-		blobKeys.add(blobKey);
-	    }
+		if(StringUtils.isNotBlank(contactEmailWrapper.getDocument_key())
+				&& StringUtils.isBlank(contactEmailWrapper.getedoc_key())) {
+			// for mail attachments from the Documents section.
+			Long documentId = Long.parseLong(contactEmailWrapper.getDocument_key());
+			documentIds.add(documentId);
+		} 
+		else if(StringUtils.isNotBlank(contactEmailWrapper.getEmail_attach())) {
+			// for new documents uploaded as mail attachments.
+			emailAttach[0] = contactEmailWrapper.getAttachment_name();
+			emailAttach[1] = contactEmailWrapper.getAttachment_url();
+		}
 
 		String body = contactEmailWrapper.getMessage(), emailBody = body;
 		
@@ -228,11 +228,13 @@ public class ContactEmailUtil
 			System.out.println("Start -- in saveContactEmailAndSend if toEmailSet size is 1-----");
 			// Get contactId for link tracking
 			for(String email: toEmailSet){
-				contact = ContactUtil.searchContactByTypeAndEmail(EmailUtil.getEmail(email), contactEmailWrapper.getContact_type());
+				contact = ContactUtil.searchContactByTypeAndEmail(EmailUtil.getEmail(email), 
+						contactEmailWrapper.getContact_type());
 			}				
 			
 			if (contact != null)
-				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
+				body = EmailLinksConversion.convertLinksUsingJSOUP(body, contact.id.toString(), 
+						null, contactEmailWrapper.getTrackerId(), contactEmailWrapper.getPush_param().toString());
 			System.out.println("End -- in saveContactEmailAndSend if toEmailSet size is 1-----");
 		}
 
@@ -241,7 +243,9 @@ public class ContactEmailUtil
 		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
-		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to, cc, bcc, contactEmailWrapper.getSubject(), null, body, MandrillUtil.getText(body, null), documentIds, blobKeys);
+		EmailUtil.sendMail(contactEmailWrapper.getFrom(), contactEmailWrapper.getFrom_name(), to,
+				cc, bcc, contactEmailWrapper.getSubject(), null, body,
+				MandrillUtil.getText(body, null), documentIds, emailAttach);
 		System.out.println("After send email");
 				
 		// it is for calculating total contact emails
