@@ -324,7 +324,7 @@
       </a>
     </li>
 
-    {{#isAdmin}}
+    
     {{#isRestrictedMenuScope "KNOWLEDGEBASE"}}  {{else}}
     <li id="ticketknowledgebasemenu">
     <a href="#knowledgebase">
@@ -335,8 +335,7 @@
     </a>
     </li>
     {{/isRestrictedMenuScope}}
-    {{/isAdmin}}
-
+    
     {{#isRestrictedMenuScope "HELPDESK"}} {{else}}
     <li id="feedbackactivitiesmenu">
       <a  href="#ticket-feedback">
