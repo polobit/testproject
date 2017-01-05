@@ -3675,8 +3675,11 @@ $(function()
 
 						// default when we can't find image uploaded or url to
 						// fetch from
+						var default_additional_style = "";
+						if(CURRENT_USER_PREFS.theme == "15")
+							default_additional_style = "border:1px solid #ddd !important;";
 
-						var default_return = "src='"+updateImageS3Path('img/com-default-img.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + "'";
+						var default_return = "src='"+updateImageS3Path('img/com-default-img.png')+"' style='width:" + full_size + "px; height=" + full_size + "px;" + additional_style + default_additional_style + "'";
 
 
 						// when the image from uploaded one or favicon can't be

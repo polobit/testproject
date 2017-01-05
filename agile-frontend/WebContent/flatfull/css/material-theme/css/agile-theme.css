@@ -3283,6 +3283,8 @@ width: 169px !important;
 }
 .agile-theme-15 .tag-alpha{font-size: 13px;}
 
+  /*Tinymce Editor New Theme CSS End*/
+  
 .agile-theme-15 .mce-panel{
   border-width: 0 !important;
   border-top-left-radius: 5px;
@@ -3312,3 +3314,9 @@ i.mce-ico, i.mce-caret, span.mce-txt{
 .agile-theme-15 .mce-floatpanel.mce-popover.mce-bottom>.mce-arrow{
   border-bottom-color: transparent;
 }
+
+  /*Tinymce Editor New Theme CSS End*/
+
+/*.agile-theme-15 .company-details-mobile-view .upload_pic.imgholder{
+  border: 2px solid #f5f5f5 !important;
+}*/
