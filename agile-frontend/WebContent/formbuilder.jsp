@@ -56,7 +56,7 @@ String template = request.getParameter("template");
    customthemes=<%=net.sf.json.JSONSerializer.toJSON(custThmList) %>
    var isCopyForm = window.location.href.includes("&copy=1");
    var isFormChange = false;
-   if(isCopyForm || formTemplate){
+   if(isCopyForm || typeof formTemplate != "undefined"){
       isFormChange = true;
    }
   </script>
