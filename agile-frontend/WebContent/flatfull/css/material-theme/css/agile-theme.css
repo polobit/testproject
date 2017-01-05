@@ -3283,7 +3283,6 @@ width: 169px !important;
 }
 
 .agile-theme-15 .tag-alpha{font-size: 13px;}
-
 #starter_plan .btn-default:hover,#starter_plan .btn-default:focus,#regular_plan .btn-default:hover,#regular_plan .btn-default:focus,#pro_plan .btn-default:hover,#pro_plan .btn-default:focus{
     color: #11a0f8 !important;
     background-color: rgba(17, 160, 248, 0.2) !important;
@@ -3305,3 +3304,4 @@ width: 169px !important;
 #deal-tracks-accordion .accordion-group.overflow-hidden, #category-tracks-accordion .accordion-group.overflow-hidden{overflow: inherit;}
 #deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
 #admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
+.send-email-edtior .panel{border: 1px solid #f4f8f9 !important;}
