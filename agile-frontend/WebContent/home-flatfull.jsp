@@ -71,7 +71,7 @@ UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 String menuPosition = currentUserPrefs.menuPosition;
 if(currentUserPrefs.theme.equalsIgnoreCase("15")) {
        currentUserPrefs.menuPosition = "leftcol";
-}	
+} 
 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
@@ -217,7 +217,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
 <%
-	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
+  boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
     if(!isDisabledNewThemeStyles){
 %>
 <link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
@@ -511,7 +511,7 @@ function isIE() {
 
                 </ul>
                 </div>
-                	</div>">
+                  </div>">
                    <a href="#" class='grid-icon-header pull-left block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i>
                       <span id="rolecontainer" class="rolecontainer grid-v1-rolecontainer"><%out.print(domainUser.role);%>
                       </span> 
@@ -985,7 +985,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
   <%
-  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE)){
   %>   
   <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
