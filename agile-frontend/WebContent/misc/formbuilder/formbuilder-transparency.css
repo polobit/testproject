@@ -1,6 +1,8 @@
 .agile-form-transparent{
 background-color:transparent!important;
-/*color: #fff!important*/
+}
+.agile-form-transparent legend{
+color: #fff!important;
 }
 .agile-form-transparent .agile-group-addon,.agile-form-transparent input,.agile-form-transparent select,.agile-form-transparent textarea{
  background-color: rgba(255, 255, 255, 0.07)!important;
@@ -130,7 +132,7 @@ height:39px!important;
   border-left-color: transparent!important;
   border-right-color: transparent!important;
   border-top-color: transparent!important;
-  border-bottom-color:1px solid rgba(238, 238, 238, 0.27)!important;
+  border-bottom-color:#969696!important;
   background-color: transparent!important;
   color: #333!important;
 }
@@ -139,7 +141,7 @@ height:39px!important;
   border-left-color: transparent!important;
   border-right-color: transparent!important;
   border-top-color: transparent!important;
-  border-bottom-color: 1px solid #999!important;
+  border-bottom-color:#999!important;
 }
 .agile-form-blck-transparent .agile-input-group input[type=text]:last-child {
     border-left: 0 none!important;
