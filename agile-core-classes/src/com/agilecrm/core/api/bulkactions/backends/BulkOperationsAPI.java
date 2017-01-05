@@ -332,7 +332,7 @@ public class BulkOperationsAPI
 		    	SendGrid.sendMail("campaigns@agilecrm.com",
 				    "Campaign Observer",
 				    "naresh@agilecrm.com",
-				    "prashannjeet@agilecrm.com, rahul@agilecrm.com, raja@agilecrm.com",
+				    "prashannjeet@agilecrm.com, rahul@agilecrm.com, ramesh@agilecrm.com",
 				    null,
 				    "Campaign Initiated in " + NamespaceManager.get() + " for " + count,
 				    null,
