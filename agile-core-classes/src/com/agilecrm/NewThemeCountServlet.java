@@ -63,13 +63,16 @@ class CheckNewThemeCount implements DeferredTask{
 				for(DomainUser user : users){
 					UserPrefs prefs = UserPrefsUtil.getUserPrefs(AgileUser.getCurrentAgileUserFromDomainUser(user.id));
 					System.out.println("prefs = "+prefs);
-					if(prefs.theme.equals("15")){
-							count++;
-							System.out.println("count = "+count);
-							info += user.email+"("+user.domain+")"+System.lineSeparator();							
-					}
-					else
-						continue;
+					if(prefs != null){
+						if(prefs.theme.equals("15")){
+								count++;
+								System.out.println("count = "+count);
+								info += user.email+"("+user.domain+")"+System.lineSeparator();							
+						}
+						else
+							continue;
+					
+						}
 				}
 			
 			}
