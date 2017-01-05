@@ -5994,3 +5994,13 @@ widgets.android-content,Make Outbound calls through your own mobile using Agile 
 widgets.android-displayName,Android,,,,,,,,,,,,,
 widgets.android-name,Android,,,,,,,,,,,,,
 widgets.android-cancel,Cancel,,,,,,,,,,,,,
+tickets.sort_Requester,Requester,,
+tickets.acl_feedback,Feedback,,
+tickets.acl_knowledgebase,Knowledge Base,,
+tickets.acl_knowledgebase_text,Enable access to Knowledge Base,,
+tickets.acl_feedback_text,Enable access to Feedback Dashboard,,
+tickets.acl_helpdesk_text,Enable access to Tickets and Help Desk,,
+tickets.knowledgebase_categorylist,Categories List,, 
+tickets.knowledgebase_sectionlist,Sections List,,
+tickets.knowledgebase_articlelist,Articles List,,
+

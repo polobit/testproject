@@ -924,21 +924,39 @@
                         <div class=""   style="padding-top:35px">
                             {{#if id}}
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input type="checkbox" id="helpdeskaccess" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="HELPDESK" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'report-view' 'help-desk'}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'answer-customer-queries'}}
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_helpdesk_text'}}
                                         </small></div>
-                                        <div style="margin-left:6px;visibility: hidden;"><small> {{agile_lng_translate 'admin-settings-users' 'import-from-csv-file'}}</small></div>
+                                        
                                 </label>
+
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required pos-rlt m-t-sm" style="margin-right:-115px;"value="KNOWLEDGEBASE" {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'tickets' 'acl_knowledgebase'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_knowledgebase_text'}}
+                                        </small></div>
+                                        
+                                </label>
+
+
                         {{else}} 
                                 <label class="i-checks i-checks-sm checkbox">
-                                    <input type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    <input id="helpdeskaccess" type="checkbox" name="scopes-temp" class="required" value="HELPDESK" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
                                     {{agile_lng_translate 'report-view' 'help-desk'}}<br/>
-                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'admin-settings-users' 'answer-customer-queries'}}
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_helpdesk_text'}}
                                         </small></div>
-                                        <div style="margin-left:6px;visibility: hidden;"><small> {{agile_lng_translate 'admin-settings-users' 'import-from-csv-file'}}</small></div>
                                 </label>
+                                
+                                <label class="i-checks i-checks-sm checkbox">
+                                    <input type="checkbox" name="scopes-temp" class="required" value="KNOWLEDGEBASE" checked {{#is_acl_allowed id}}disabled="disabled"{{/is_acl_allowed}}><i></i> 
+                                    {{agile_lng_translate 'tickets' 'acl_knowledgebase'}}<br/>
+                                        <div style="margin-left:6px;"><small> {{agile_lng_translate 'tickets' 'acl_knowledgebase_text'}}
+                                        </small></div>
+                                </label>                                
                         {{/if}}
+
+
                         </div>
                     </div>
                 </div>  

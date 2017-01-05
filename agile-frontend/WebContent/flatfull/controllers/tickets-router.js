@@ -72,8 +72,9 @@
 
 	ticketFeedback: function(){
 		
+			
 		initReportLibs(function(){
-
+			
 			loadServiceLibrary(function(){
 			
 
@@ -118,8 +119,10 @@
 						
 				}				
 			});		
+			return;
 		});
-	make_menu_item_active("feedbackactivitiesmenu");
+		
+		make_menu_item_active("feedbackactivitiesmenu");
 	},	 	
 
 	renderfeedbacktemplate :function(start_time,end_time,feedback,group,assignee){
@@ -1234,7 +1237,7 @@
 		
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+			App_Ticket_Module.loadHelpcenterHeader(function(callback){
 				//Initializing base collection with groups URL
 			App_Ticket_Module.categoriesCollection = new Base_Collection_View({
 				url : '/core/api/knowledgebase/categorie',
@@ -1266,7 +1269,7 @@
 							    	  ui.helper.width(ui.helper.width());
 							      },
 							      sort: function(event, ui){
-							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top-150)+"px");
 							      },
 							      forceHelperSize:true,
 							      placeholder:'<tr><td></td></tr>',
@@ -1308,7 +1311,7 @@
             },2000);
 
 			//Rendering template
-			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.categoriesCollection.el);
+			$('#helpcenter-content').html(App_Ticket_Module.categoriesCollection.el);
 
 		 	make_menu_item_active("ticketknowledgebasemenu");
 			$('#content').find('#AdminPrefsTab .select').removeClass('select');
@@ -1322,7 +1325,7 @@
 	sections: function(categorie_id){
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+			App_Ticket_Module.loadHelpcenterHeader(function(callback){
 				//Initializing base collection with groups URL
 			App_Ticket_Module.sectionsCollection = new Base_Collection_View({
 				
@@ -1357,7 +1360,7 @@
 							    	  ui.helper.width(ui.helper.width());
 							      },
 							      sort: function(event, ui){
-							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top-150)+"px");
 							      },
 							      forceHelperSize:true,
 							      placeholder:'<tr><td></td></tr>',
@@ -1394,7 +1397,7 @@
 			App_Ticket_Module.sectionsCollection.collection.fetch();
 
 			//Rendering template
-			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.sectionsCollection.el);
+			$('#helpcenter-content').html(App_Ticket_Module.sectionsCollection.el);
 
 		 	});
 		});
@@ -1407,7 +1410,7 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-			App_Ticket_Module.loadAdminsettingsHelpdeskTemplate({knowledgebase: true},function(callback){
+			App_Ticket_Module.loadHelpcenterHeader(function(callback){
 				//Initializing base collection with groups URL
 			App_Ticket_Module.articlesCollection = new Base_Collection_View({
 
@@ -1442,7 +1445,7 @@
 							    	  ui.helper.width(ui.helper.width());
 							      },
 							      sort: function(event, ui){
-							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top)+"px");
+							    	  ui.helper.css("top",(ui.helper.offset().top+ui.item.offset().top-150)+"px");
 							      },
 							      forceHelperSize:true,
 							      placeholder:'<tr><td></td></tr>',
@@ -1481,21 +1484,19 @@
 			App_Ticket_Module.articlesCollection.collection.fetch();
 
 			//Rendering template
-			$('.ticket-settings', $('#admin-prefs-tabs-content')).html(App_Ticket_Module.articlesCollection.el);
+			$("#helpcenter-content").html(App_Ticket_Module.articlesCollection.el);
 
 		 	});
 		});
 	
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addArticle : function(section_id){
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
 
 		 		var addArticleView = new Base_Model_View({
 	 				isNew : true, 
@@ -1552,7 +1553,7 @@
 			        
 			    });
 
-	 			$('#admin-prefs-tabs-content').html(addArticleView.render().el);
+	 			$('#helpcenter-content').html(addArticleView.render().el);
 
 		 		if(callback)
 		 			callback();
@@ -1560,15 +1561,13 @@
 		});
 		
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	editArticle : function(section_id,name){
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
 
 		 		var editarticleView = new Base_Model_View({
  				isNew : false, 
@@ -1600,15 +1599,13 @@
 
 		        }
 		    });    
-	 			$('#admin-prefs-tabs-content').html(editarticleView.render().el);
+	 			$('#helpcenter-content').html(editarticleView.render().el);
 
 		 		if(callback)
 		 			callback();
 		 	});
 		});
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 
 	},
 
@@ -1616,7 +1613,7 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
   
 				var articleView = new Base_Model_View({
 					
@@ -1629,21 +1626,19 @@
 					}
 				});
 
-				$('#admin-prefs-tabs-content').html(articleView.render().el);
+				$('#helpcenter-content').html(articleView.render().el);
 
 							
 			});	
 		});	
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	addSection : function(category_id){
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
   
 				var addsectionView = new Base_Model_View({
 
@@ -1672,13 +1667,11 @@
 			        }
 				});
 
-				$('#admin-prefs-tabs-content').html(addsectionView.render().el);			
+				$('#helpcenter-content').html(addsectionView.render().el);			
 			});	
 		});	
 		
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1687,7 +1680,7 @@
     	var name = $("#"+section_id).data("id");
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
   
 				var editSectionView = new Base_Model_View({
 					isNew : false,
@@ -1709,12 +1702,10 @@
 			        }
 			    });
 
-				$('#admin-prefs-tabs-content').html(editSectionView.render().el);			
+				$('#helpcenter-content').html(editSectionView.render().el);			
 			});	
 		});	
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	}, 
 
 	addLandingpage : function(){
@@ -1722,7 +1713,7 @@
 
 			loadServiceLibrary(function(){	
 			 	//Rendering root template
-			 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+			 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
 	  
 					var addLandingpageView = new Base_Model_View({
 						isNew : false,
@@ -1748,12 +1739,10 @@
 					   
 				    });
 
-					$('#admin-prefs-tabs-content').html(addLandingpageView.render().el);			
+					$('#helpcenter-content').html(addLandingpageView.render().el);			
 				});	
 			});
-				make_menu_item_active("ticketknowledgebasemenu");
-				$('#content').find('#AdminPrefsTab .select').removeClass('select');
-				$('#content').find('.helpdesk-tab').addClass('select');	
+				make_menu_item_active("ticketknowledgebasemenu");	
 		}, 
 
 
@@ -1761,7 +1750,7 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
   
 				var addCatogeryView = new Base_Model_View({
 							isNew : true, 
@@ -1770,12 +1759,10 @@
 							window : "back",
 				    });
 
-				$('#admin-prefs-tabs-content').html(addCatogeryView.render().el);    
+				$('#helpcenter-content').html(addCatogeryView.render().el);    
 			});
 		});
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 
@@ -1787,7 +1774,7 @@
 
 		loadServiceLibrary(function(){
 		 	//Rendering root template
-		 	App_Ticket_Module.loadAdminsettingsTemplate(function(callback){
+		 	App_Ticket_Module.loadHelpcenterHeader(function(callback){
   
 			var categorieModel = App_Ticket_Module.categoriesCollection.collection.get(category_id);
 
@@ -1801,12 +1788,10 @@
  				window : "back",
 		    });
 
-				$('#admin-prefs-tabs-content').html(editCatogeryView.render().el);    
+				$('#helpcenter-content').html(editCatogeryView.render().el);    
 			});
 		});
 		make_menu_item_active("ticketknowledgebasemenu");
-		$('#content').find('#AdminPrefsTab .select').removeClass('select');
-		$('#content').find('.helpdesk-tab').addClass('select');
 	},
 
 	loadAdminsettingsHelpdeskTemplate: function(json, callback){
@@ -1835,5 +1820,41 @@
 
 	 		}, '#admin-prefs-tabs-content');
 	 	}, '#content');
-	}
+	},
+
+	loadHelpcenterHeader : function(callback){
+
+		
+		if($('#helpcenter-content').length){
+			if(callback)
+				callback();
+			return;
+		}
+		
+		if(CURRENT_DOMAIN_USER.newMenuScopes.indexOf("KNOWLEDGEBASE") != -1){
+			getTemplate("ticket-helpcenter-header", {}, undefined, function(template_ui){
+
+				if(!template_ui)
+					return;
+
+				$('#content').html($(template_ui));
+				
+				if(callback)
+					callback();
+
+		 	}, '#content');
+			return;
+		}
+
+		getTemplate("ticket-helpcenter-noaccess", {}, undefined, function(template_ui){
+
+				if(!template_ui)
+					return;
+
+				$('#content').html($(template_ui));
+				
+		 	}, '#content');
+			return;
+	}	
+	
 });
