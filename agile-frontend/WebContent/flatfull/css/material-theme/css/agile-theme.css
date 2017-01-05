@@ -3282,3 +3282,33 @@ width: 169px !important;
     font-weight: bold;
 }
 .agile-theme-15 .tag-alpha{font-size: 13px;}
+
+.agile-theme-15 .mce-panel{
+  border-width: 0 !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.agile-theme-15 .mce-toolbar-grp{
+  padding: 8px 8px 12px 8px !important;
+}
+.agile-theme-15 .mce-toolbar-grp{
+  background-color: #f4f8f9 !important;
+}
+.agile-theme-15 .mce-btn{
+  background-color: #f4f8f9 !important;;
+}
+.agile-theme-15 .mce-container.mce-toolbar.mce-stack-layout-item.mce-first{
+  margin-bottom: 8px;
+}
+.agile-theme-15 .mce-tinymce.mce-container.mce-panel{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}
+i.mce-ico, i.mce-caret, span.mce-txt{
+  opacity: 0.4 !important;
+}
+.agile-theme-15 span.mce-txt{
+  font-weight: 600;
+}
+.agile-theme-15 .mce-floatpanel.mce-popover.mce-bottom>.mce-arrow{
+  border-bottom-color: transparent;
+}
