@@ -204,13 +204,13 @@ public class TicketReportsUtil
 		
 		if(assignee != 0){
 		
-			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ") AND (assignee_id = "+ assignee+")";
+			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ") AND (assignee_id = "+ assignee+") AND (group_id = "+group+")";
 
 		}
 		
 		if(assignee == 0 && group != 0){
 			
-			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ")";
+			queryString = "(" + fieldToReturn + " >=" + startTime + " AND " + fieldToReturn + " <= " + endTime + ") AND (group_id = "+group+")";
 
 		}
 		if (Status.CLOSED.toString().equalsIgnoreCase(status))
