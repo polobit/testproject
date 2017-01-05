@@ -28,9 +28,9 @@ function load_office_folders(el, model) {
 	fillSelect('office-folders-multi-select', 'core/api/office/folders/' + id,
 		 'folders', function fillNew() {
 		if($("#office-folders-multi-select option:selected").size() > 0){
-	 		$("#office-folders-multi-select option:first").after('<option>{{agile_lng_translate "portlets" "all"}}</option>');
+	 		$("#office-folders-multi-select option:first").after('<option>{{agile_lng_translate "contact-details" "all-mail"}}</option>');
 	 	}else{
-	 		$("#office-folders-multi-select option:first").after('<option selected="selected">{{agile_lng_translate "portlets" "all"}}</option>');
+	 		$("#office-folders-multi-select option:first").after('<option selected="selected">{{agile_lng_translate "contact-details" "all-mail"}}</option>');
 	 	}
 
 		$("#office-folders-multi-select .default-select", el).remove();
@@ -228,9 +228,9 @@ function load_office_properties(model, el) {
 	fillSelect('office-folders-multi-select', 'core/api/office/folders/' + id,
 		 'folders', function fillNew() {
 	 	if($("#office-folders-multi-select option:selected").size() > 0){
-	 		$("#office-folders-multi-select option:first").after('<option>{{agile_lng_translate "portlets" "all"}}</option>');
+	 		$("#office-folders-multi-select option:first").after('<option>{{agile_lng_translate "contact-details" "all-mail"}}</option>');
 	 	}else{
-	 		$("#office-folders-multi-select option:first").after('<option selected="selected">{{agile_lng_translate "portlets" "all"}}</option>');
+	 		$("#office-folders-multi-select option:first").after('<option selected="selected">{{agile_lng_translate "contact-details" "all-mail"}}</option>');
 	 	}
 
 		$("#office-folders-multi-select .default-select", el).remove();
@@ -424,11 +424,11 @@ var Settings_Modal_Events = Base_Model_View.extend({
 		e.preventDefault();
 		var target_el = $(e.currentTarget);
 		var selectedVal = $(target_el).val();
-        if(selectedVal == null || (selectedVal.length == 1 && selectedVal.indexOf("All") > -1)) {
+        if(selectedVal == null || (selectedVal.length == 1 && selectedVal.indexOf("All Mail") > -1)) {
         	$("#office-folders-multi-select option:first").attr("selected","selected");
         	var folderOption = $("#office-folders-multi-select option");
 			for (var j = 0; j < folderOption.length; j++) {
-				if(folderOption[j].text != "All"){
+				if(folderOption[j].text != "All Mail"){
 					$(folderOption[j]).removeAttr("selected");
 				}
 			}
@@ -436,7 +436,7 @@ var Settings_Modal_Events = Base_Model_View.extend({
         	$("#office-folders-multi-select option:first").removeAttr("selected");
         	for (var i = 0; i < selectedVal.length; i++) {
         		var folderName = selectedVal[i];
-        		if(folderName != "All"){
+        		if(folderName != "All Mail"){
         			var folderOption = $("#office-folders-multi-select option");
         			for (var j = 0; j < folderOption.length; j++) {
         				if(folderOption[j].text == folderName){

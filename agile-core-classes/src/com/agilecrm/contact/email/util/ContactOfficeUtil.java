@@ -109,7 +109,7 @@ public class ContactOfficeUtil
 	    foldersString = buffer.toString();
 	    
 	    if(foldersString != null && 
-	    		(foldersString.equalsIgnoreCase("{\"default_folders\":[\"AllItems\"]}") || foldersString.equalsIgnoreCase("All"))){
+	    		(foldersString.equalsIgnoreCase("{\"default_folders\":[\"AllItems\"]}") || foldersString.equalsIgnoreCase("All Mail"))){
 	    	foldersString = "";
 	    }
 	}
