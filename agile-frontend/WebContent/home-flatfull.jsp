@@ -857,7 +857,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
   </li>
 
     <%
-      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.KNOWLEDGEBASE)){
+      if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SERVICE_KNOWLEDGEBASE)){
     %>
     <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside" href="#knowledgebase">
