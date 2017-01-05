@@ -1831,7 +1831,7 @@
 			return;
 		}
 		
-		if(CURRENT_DOMAIN_USER.newMenuScopes.indexOf("KNOWLEDGEBASE") != -1){
+		if(CURRENT_DOMAIN_USER.newMenuScopes.indexOf("SERVICE_KNOWLEDGEBASE") != -1){
 			getTemplate("ticket-helpcenter-header", {}, undefined, function(template_ui){
 
 				if(!template_ui)
