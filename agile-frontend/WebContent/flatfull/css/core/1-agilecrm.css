@@ -5273,3 +5273,13 @@ span.rolecontainer::first-letter {
     color: #f4f3f9 !important;
     background-color: #7266ba !important;
 }
+
+.navbar-brand i.fa-cloud{
+  display: none;
+}
+.newtheme-cloud{
+  display: inline-block !important;
+  vertical-align: middle;
+  margin-top: -5px;
+}
+.app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}

@@ -3193,7 +3193,7 @@ div.show-caret:hover>a.caret-btn
 #custom-fields-accordion .collapse.in{
       box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
 }
-#custom-fields-accordion .panel-title>a{
+#custom-fields-accordion .panel-title>a, #analytics-accordion .panel-title>a,#api-analytics-accordion .panel-title>a,#-deal-track .panel-title{
       font-size: 13px !important;
       color:#78909c!important;
 }
@@ -3281,4 +3281,16 @@ width: 169px !important;
     color: #78909c !important;
     font-weight: bold;
 }
+
 .agile-theme-15 .tag-alpha{font-size: 13px;}
+
+
+/*#starter_plan .btn-default,#regular_plan .btn-default,#pro_plan .btn-default{
+  background-color: #11a0f8 !important;
+  color: #fff!important;
+}*/
+
+#starter_plan .btn-default:hover,#starter_plan .btn-default:focus,#regular_plan .btn-default:hover,#regular_plan .btn-default:focus,#pro_plan .btn-default:hover,#pro_plan .btn-default:focus{
+    color: #11a0f8 !important;
+    background-color: rgba(17, 160, 248, 0.2) !important;
+  }
