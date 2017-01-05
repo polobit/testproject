@@ -53,6 +53,8 @@ public class ContactCSVExport
     public static final String EMAIL_WORK = "Email(Work)";
     public static final String EMAIL_PRIMARY = "Email(Primary)";
     public static final String EMAIL_ALTERNATE = "Email(Alternate)";
+    public static final String EMAIL_PERSONAL = "Email(Personal)";
+
 
     public static final String WEBSITE_DEFAULT = "Website(default)";
     public static final String WEBSITE = "Website";
@@ -134,8 +136,8 @@ public class ContactCSVExport
 		if (StringUtils.isBlank(field.subtype))
 			setFieldAtIndex(EMAIL_DEFAULT, field.value, str, indexMap);
 
-		if ("home".equals(field.subtype))
-			setFieldAtIndex(EMAIL_HOME, field.value, str, indexMap);
+		if ("home".equals(field.subtype) || "personal".equalsIgnoreCase(field.subtype))
+			setFieldAtIndex(EMAIL_PERSONAL, field.value, str, indexMap);
 
 		if ("work".equals(field.subtype))
 			setFieldAtIndex(EMAIL_WORK, field.value, str, indexMap);
