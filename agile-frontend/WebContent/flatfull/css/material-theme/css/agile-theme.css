@@ -3282,3 +3282,19 @@ width: 169px !important;
     font-weight: bold;
 }
 .agile-theme-15 .tag-alpha{font-size: 13px;}
+.notifications-header{border-radius: 10px;}
+.notifications-header .text-head-black{color: #78909c; font-size: 13px; margin-top: 10px;}
+.notifications-header .panel-heading{border-radius: 4px 4px 0 0;}
+#notification-switch label.i-switch{margin-top: 10px;}
+
+#analytics-accordion .panel .accordion-toggle, #api-analytics-accordion .panel .accordion-toggle,
+#deal-tracks-accordion .panel .accordion-toggle, #category-tracks-accordion .panel .panel-title{
+  font-size: 13px !important;
+  color: #78909c !important;
+}
+#telephony-callstatus-accordion, #deal-tracks-accordion .panel-body, #category-tracks-accordion #task-category{
+  box-shadow: 0 6px 15px 0px rgba(0, 0, 0, 0.07) !important;
+}
+#deal-tracks-accordion .accordion-group.overflow-hidden, #category-tracks-accordion .accordion-group.overflow-hidden{overflow: inherit;}
+#deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
+#admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
