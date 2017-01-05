@@ -1311,7 +1311,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 
 <div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
 										<div class="text-ellipsis text-xs">
-											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{#if_equals subtype "home"}}personal{{else}}{{subtype}}{{/if_equals}}</span> {{/if}}
 										</div>
 
 <div class="clearfix"></div>
