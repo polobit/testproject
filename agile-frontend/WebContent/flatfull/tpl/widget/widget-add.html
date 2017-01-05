@@ -287,10 +287,14 @@
 											{{else}}
 											{{#if_equals name "Android"}}
 												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+											{{else}}
+											{{#if_equals name "VMdrops"}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'manage'}}</a>
 											{{else}}																			
 											<div class="btn-group">
   												<a class="btn btn-sm btn-default add-widget" href="#callscript" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>		
 											</div>
+												{{/if_equals}}
 												{{/if_equals}}
 												{{/if_equals}}
 											{{/if_equals}}
@@ -322,10 +326,14 @@
 											{{else}}
 												{{#if_equals name "Android"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+											{{else}}
+											{{#if_equals name "VMdrops"}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'manage'}}</a>
 											{{else}}											
 												<div class="btn-group">
   													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
   												</div>
+												{{/if_equals}}
 												{{/if_equals}}
 												{{/if_equals}}
 											{{/if_equals}}
@@ -357,10 +365,14 @@
 									{{else}}
 												{{#if_equals name "Android"}}
 													<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
+									{{else}}
+											{{#if_equals name "VMdrops"}}
+												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'manage'}}</a>
 									{{else}}	
 											<div class="btn-group">										
   												<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'add'}}</a>
 											</div>
+												{{/if_equals}}
 												{{/if_equals}}
 											{{/if_equals}}
 										{{/if_equals}}
@@ -418,11 +430,15 @@
 						{{else}}
 							{{#if_equals name "Skype"}}
 								<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
+						{{else}}
+								{{#if_equals name "VMdrops"}}
+									<a class="btn btn-sm btn-default add-widget" href="#{{name}}" widget-name="{{name}}">{{agile_lng_translate 'other' 'manage'}}</a>
 								{{else}}	
 									
 								<div class="btn-group">										
   									<a class="btn btn-sm btn-default _upgrade" id="{{#is_blank name}}{{getRandomNumber}}{{else}}{{this}}{{/is_blank}}-upgrade">{{agile_lng_translate 'other' 'add'}}</a>
 								</div>
+								{{/if_equals}}
 								{{/if_equals}}
 								{{/if_equals}}
 								{{/if_equals}}
