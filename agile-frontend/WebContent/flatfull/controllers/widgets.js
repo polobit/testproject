@@ -120,6 +120,7 @@ var WidgetsRouter = Backbone.Router
                             $('#settings-widgets-tab-content').find('#call div:nth-child(6)').css({"display":"none"});
                             $('#settings-widgets-tab-content').find('#call div:nth-child(7)').css({"display":"none"});
                             $('#settings-widgets-tab-content').find('#call div:nth-child(8)').css({"display":"none"});
+                            $('#settings-widgets-tab-content').find('#call div:nth-child(9)').css({"display":"none"});
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
