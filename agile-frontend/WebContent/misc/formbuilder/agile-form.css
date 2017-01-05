@@ -646,6 +646,9 @@ height:39px!important;
   border-top-color: transparent!important;
   border-bottom-color: 1px solid #fff!important;
 }
+.agile-form-transparent .agile-group .agile-field select {
+    background-color: transparent!important;
+}
 /* new transparency css end*/
 /* new transparency with black text css start */
 .agile-form-blck-transparent{
@@ -724,5 +727,8 @@ height:39px!important;
 }
 .agile-form-blck-transparent .agile-input-group input[type=text]:last-child {
     border-left: 0 none!important;
+}
+.agile-form-blck-transparent .agile-group .agile-field select {
+    background-color: transparent!important;
 }
 /* new transparency with black text css end */
