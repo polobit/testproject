@@ -33,6 +33,10 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
+      var transparency_val = FormSettings.getSetting("agiletransparentbackground");
+      $("#target").removeClass("agile-form-transparent");
+      $("#target").removeClass("agile-form-blck-transparent");
+      $("#target").addClass(transparency_val);
       $("#render").val(that.renderForm({preload : FormSettings.getSetting("agilepreloadfields"),
     captcha : FormSettings.getSetting("agileformcaptcha"),
     agileformtransbg : FormSettings.getSetting("agiletransparentbackground"),
