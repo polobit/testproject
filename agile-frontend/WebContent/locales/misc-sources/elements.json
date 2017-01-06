@@ -24,7 +24,6 @@
     	{"url":"elements/content_section3.html","height":774, "thumbnail":"elements/images/thumbs/content_section3.png"},
     	{"url":"elements/content_section4.html","height":331, "thumbnail":"elements/images/thumbs/content_section4.png"},
     	{"url":"elements/content_section5.html","height":846, "thumbnail":"elements/images/thumbs/content_section5.png"},
-    	{"url":"elements/content_section6.html","height":344, "thumbnail":"elements/images/thumbs/content_section6.png"},
     	{"url":"elements/content_section7.html","height":344, "thumbnail":"elements/images/thumbs/content_section7.png"},
     	{"url":"elements/content_section8.html","height":725, "thumbnail":"elements/images/thumbs/content_section8.png"},    	
     	{"url":"elements/content_section10.html","height":376, "thumbnail":"elements/images/thumbs/content_section10.png"},
@@ -64,7 +63,7 @@
     "{{agile_lng_translate 'landingpage-builder' 'pricing-table'}}":[
     	{"url":"elements/pricing_table1.html","height":628, "thumbnail":"elements/images/thumbs/pricing_table1.png"},
     	{"url":"elements/pricing_table2.html","height":750, "thumbnail":"elements/images/thumbs/pricing_table2.png"},
-    	{"url":"elements/pricing_table3.html","height":721, "thumbnail":"elements/images/thumbs/pricing_table3.png"}
+    	{"url":"elements/pricing_table3.html","height":770, "thumbnail":"elements/images/thumbs/pricing_table3.png"}
     ],    
     "{{agile_lng_translate 'other' 'knowledge-base'}}":[
         {"url":"elements/knowledge-base.html","height":294, "thumbnail":"elements/images/thumbs/knowledge-base.png"}
