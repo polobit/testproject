@@ -1,7 +1,7 @@
 .agile-form-transparent{
 background-color:transparent!important;
 }
-.agile-form-transparent legend{
+.agile-form-transparent legend,.agile-form-transparent .agile-group button{
 color: #fff!important;
 }
 .agile-form-transparent .agile-group-addon,.agile-form-transparent input,.agile-form-transparent select,.agile-form-transparent textarea{
@@ -74,7 +74,9 @@ height:39px!important;
 /* new transparency with black text css start */
 .agile-form-blck-transparent{
 background-color:transparent!important;
-/*color: #333!important*/
+}
+.agile-form-blck-transparent legend,.agile-form-blck-transparent .agile-group button{
+color: #333!important;
 }
 .agile-form-blck-transparent .agile-group-addon,.agile-form-blck-transparent input,.agile-form-blck-transparent select,.agile-form-blck-transparent textarea{
  background-color: rgba(255, 255, 255, 0.07)!important;
