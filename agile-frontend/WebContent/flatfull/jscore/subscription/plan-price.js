@@ -577,6 +577,8 @@ function initializeSubscriptionListeners()
 							if(months == 24)
 							plan_json.date = plan_json.date + 31557600;
 						}
+						if(plan_json.plan_id == USER_BILLING_PREFS.plan.plan_id)
+							plan_json.cost = 0;
 						Backbone.history.navigate("purchase-plan", { trigger : true });
 							
 					},
