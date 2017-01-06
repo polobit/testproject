@@ -75,14 +75,22 @@ $(function(){
 		var callsid = globalconnection.parameters.CallSid;
 		var form = Verfied_Number;
 		var to = $(this).attr("data-src");
-
+		$("#draggable_noty div:first-child").css({"z-index":"1000"});
 		var contactToCall  = agile_crm_get_contact();
 		if (checkForActiveCall()){
 			var jsonParam = {};
 			jsonParam['number'] = to;
 			jsonParam['contact'] = contactToCall;
-			confirmConferenceCallToDial(jsonParam);
-			return;
+			$("#draggable_noty div:first-child").css({"z-index":"1000"});			
+			if(callConference.totalMember == 2){
+				$("#globalModal").html(getTemplate("callInfoModalAlert"));
+				$(".call-modal-body","#globalModal").html('{{agile_lng_translate "twill" "max-participants"}}');
+				$("#globalModal").modal('show');
+				return;
+			}else{
+				confirmConferenceCallToDial(jsonParam);
+				return;
+			}
 		}
 	});
 	/*$('body').off('click', '.noty_twilio_phone');
@@ -478,7 +486,7 @@ $(function(){
 	{
 		e.preventDefault();
 		var paramJson = $(this).data("param");
-		
+		$("#draggable_noty div:first-child").css({"z-index":"10000"});
 		try{
 			if(paramJson.attribute == "conference-confirm"){
 				var number = paramJson.number;
