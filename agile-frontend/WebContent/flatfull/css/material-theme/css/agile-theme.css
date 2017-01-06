@@ -3283,7 +3283,7 @@ width: 169px !important;
 }
 .agile-theme-15 .tag-alpha{font-size: 13px;}
 
-  /*Tinymce Editor New Theme CSS End*/
+  /*Tinymce Editor New Theme CSS Start*/
   
 .agile-theme-15 .mce-panel{
   border-width: 0 !important;
@@ -3291,7 +3291,7 @@ width: 169px !important;
   border-top-right-radius: 5px;
 }
 .agile-theme-15 .mce-toolbar-grp{
-  padding: 8px 8px 12px 8px !important;
+  padding: 9px 8px 12px 8px !important;
 }
 .agile-theme-15 .mce-toolbar-grp{
   background-color: #f4f8f9 !important;
@@ -3314,9 +3314,18 @@ i.mce-ico, i.mce-caret, span.mce-txt{
 .agile-theme-15 .mce-floatpanel.mce-popover.mce-bottom>.mce-arrow{
   border-bottom-color: transparent;
 }
+.agile-theme-15 .mce-btn-small i{
+  line-height: inherit;
+}
+.agile-theme-15 .mce-colorbutton.mce-btn-small .mce-preview{
+  margin-left: -15px !important;
+}
+.agile-theme-15 .mce-colorbutton .mce-preview{
+  opacity: 0.4 !important;
+}
+.agile-theme-15 .mce-btn:focus, .mce-btn:hover{
+  background-color: rgb(227, 236, 239) !important;
+  border-color: rgb(227, 236, 239) !important;
+}
 
   /*Tinymce Editor New Theme CSS End*/
-
-/*.agile-theme-15 .company-details-mobile-view .upload_pic.imgholder{
-  border: 2px solid #f5f5f5 !important;
-}*/
