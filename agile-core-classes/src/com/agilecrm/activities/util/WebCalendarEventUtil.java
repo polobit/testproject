@@ -1002,7 +1002,7 @@ System.out.println(listOfLists.size());
 			dm = new DomainUser();
 			dm.meeting_durations = meeting_types;
 		}
-
+        Set<Integer> allKeys = new TreeSet<Integer>();
 		try {
 			JSONObject js = new JSONObject(dm.meeting_durations);
 			System.out.println("dm.meeting_durations :" + dm.meeting_durations);
@@ -1010,13 +1010,23 @@ System.out.println(listOfLists.size());
 			JSONObject slot = new JSONObject();
 			for (int i = 0; i < meetingArray.length(); i++) {
 				String key = meetingArray.getString(i);
-				String time = key.split("mins")[0];
-				slot.put("time", time);
+				Integer time = Integer.parseInt(key.split("mins")[0]);
+				allKeys.add(time);
+				/*slot.put("time", time);
 				String title = js.getString(key);
 				if (title != null && title.length() > 0) {
 					slot.put("title", js.getString(key));
 					slots.add(slot.toString());
-				}
+				}*/
+			}
+			Iterator itr = allKeys.iterator();
+			while(itr.hasNext()){
+				String time = itr.next().toString();
+				String key = time+"mins";
+				String title = js.getString(key);
+				slot.put("time", time);
+				slot.put("title", title);
+				slots.add(slot.toString());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
