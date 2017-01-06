@@ -3291,3 +3291,10 @@ width: 169px !important;
 .rectview-deal-icon{
   margin-left :7px;
 }
+.recent-view-comany-style{
+  margin-left: 5px;
+  border-radius: 0% !important;  
+}
+#recent-menu-model-list .recent-view-comany-style.img-inital{
+  height: 25px !important;
+}
