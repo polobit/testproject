@@ -1968,6 +1968,8 @@ function pieforReports(url, selector, name,show_loading, is_lost_analysis)
 	var frequency = $( "#frequency:visible").val();
 	setupCharts(function()
 	{
+		if(selector == "lossreasonpie-chart-users")
+			buttons.pop();
 		fetchReportData(
 						url,
 						function(data)
