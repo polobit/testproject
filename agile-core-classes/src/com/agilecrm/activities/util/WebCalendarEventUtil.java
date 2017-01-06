@@ -1012,23 +1012,18 @@ System.out.println(listOfLists.size());
 				String key = meetingArray.getString(i);
 				Integer time = Integer.parseInt(key.split("mins")[0]);
 				allKeys.add(time);
-				/*slot.put("time", time);
-				String title = js.getString(key);
-				if (title != null && title.length() > 0) {
-					slot.put("title", js.getString(key));
-					slots.add(slot.toString());
-				}*/
+				
 			}
-			Iterator itr = allKeys.iterator();
-			while(itr.hasNext()){
-				String time = itr.next().toString();
-				String key = time+"mins";
-				String title = js.getString(key);
+			for(Integer key : allKeys){
+				String time = key.toString();
+				String newKey = time+"mins";
+				String title = js.getString(newKey);
 				slot.put("time", time);
 				slot.put("title", title);
 				slots.add(slot.toString());
 			}
 		} catch (JSONException e) {
+			System.out.println("Exception raised in getting the slots details: "+ e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println("slots :" + slots);
