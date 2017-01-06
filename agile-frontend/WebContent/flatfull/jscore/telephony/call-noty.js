@@ -388,8 +388,10 @@ function showAsteriskCallNoty(message){
 		if(!globalCall.lastReceived){
 		}else{
 			if(globalCall.lastReceived == message.state){
-				console.log("duplicate message recived");
-				return;
+				if(globalCall.callId == callId){
+					console.log("duplicate message recived");
+					return;
+				}
 			}
 		}
 		globalCall.lastReceived =  message.state;
