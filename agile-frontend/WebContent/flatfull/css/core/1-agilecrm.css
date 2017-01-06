@@ -5283,3 +5283,7 @@ span.rolecontainer::first-letter {
   margin-top: -5px;
 }
 .app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
+
+#new_tag{
+  width: 180px !important;
+}

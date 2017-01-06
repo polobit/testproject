@@ -3305,3 +3305,6 @@ width: 169px !important;
 #deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
 #admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
 .send-email-edtior .panel{border: 1px solid #f4f8f9 !important;}
+#new_tag{
+  width: 180px !important;
+}
