@@ -204,7 +204,7 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 
 											$.each(data.toJSON(), function(index, jsonObj){
 												var $innerEl = $(template_ui).find("div#"+jsonObj.id);
-												$(el).find("td[contact_id="+contact.id+"]").find("div#custom_"+jsonObj.id).html($innerEl);
+												$(el).find("td[company_id="+contact.id+"]").find("div#custom_"+jsonObj.id).html($innerEl);
 											});
 
 											//$(el).find("td[company_id="+contact.id+"]").html($(template_ui).html());
