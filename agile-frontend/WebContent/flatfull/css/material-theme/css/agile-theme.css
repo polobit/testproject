@@ -3308,3 +3308,7 @@ width: 169px !important;
 #new_tag{
   width: 180px !important;
 }
+
+#shop{border: 1px solid #ccc !important;}
+#import_shopify{margin-top: 15px !important;}
+#calendar-office365-prefs label{margin-bottom: 5px !important;}
