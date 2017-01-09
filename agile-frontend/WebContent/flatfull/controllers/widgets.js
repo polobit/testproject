@@ -510,6 +510,7 @@ function renderWidgetView(templateName, url, model, renderEle){
     }
     $(renderEle).html(output);
     if(model && model.name == "VMdrops"){
+        $("#widget-settings-tab-pane .img-responsive").css({"width":"47px"});
         $('#prefs-tabs-content #widget-settings-tab-pane').find('.row div:nth-child(1)').removeClass("col-md-4").addClass("col-md-12");
         $('#widget-settings-tab-pane .panel').css({"padding-left":"0px","padding-right":"0px"});
     }
