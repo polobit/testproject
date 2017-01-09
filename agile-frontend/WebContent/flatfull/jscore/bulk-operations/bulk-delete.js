@@ -670,6 +670,12 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					$('#timeline').isotope('remove', $removeItem);
 				});
 			}	
+			if(App_VoiceMailRouter.VoiceMailCollectionView){	
+				$.each(id_array, function(index, id_val){
+					App_VoiceMailRouter.VoiceMailCollectionView.collection.remove(id_val);
+				});			
+				App_VoiceMailRouter.VoiceMailCollectionView.render(true);
+			}
 			
 		}
 	});
