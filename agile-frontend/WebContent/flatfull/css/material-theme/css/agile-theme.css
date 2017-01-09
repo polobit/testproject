@@ -3309,6 +3309,9 @@ width: 169px !important;
   width: 180px !important;
 }
 
-#shop{border: 1px solid #ccc !important;}
-#import_shopify{margin-top: 15px !important;}
+#shop,#freshbooks_url{border: 1px solid #ccc !important;}
+#data-sync-settings-tab-content #import_shopify.btn-primary{margin-top: 15px !important;}
 #calendar-office365-prefs label{margin-bottom: 5px !important;}
+
+#office365 .panel{height: auto !important;}
+#office365 .panel-body .line-clamp-4{min-height: 125px !important;}
