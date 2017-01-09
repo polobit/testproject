@@ -93,7 +93,7 @@
 					]
 		}, 
     {
-        "label": "Click <a id='jsonio_test' style='color: #19a9d5;!important ;text-decoration: none;'>here</a> to test.",
+        "label": "Click <a id='jsonio_test' style='color: #19a9d5;!important ;text-decoration: none; cursor:pointer;'>here</a> to test.",
         "category": "Test",
         "fieldType": "label",
         "type": "label" 

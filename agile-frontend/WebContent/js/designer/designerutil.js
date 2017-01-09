@@ -979,6 +979,19 @@ function jsonioTest(button){
     var request_method =  jsonValues[2].value;
     var request_params =  JSON.stringify(jsonValues[3].rest_key_grid);
     var request_headers =  JSON.stringify(jsonValues[4].rest_headers_grid);
+    // Checking if url is empty
+    if(!request_url || request_url == "" || request_url == undefined){
+    	$("#nodeui").find("#errorsdiv").html('<p> <strong>Rest_url</strong> - Please complete this mandatory field.</p>').addClass('ui-state-highlight');
+    	$('#container0 input').addClass('ui-state-error');
+		$('#Settings-li a').click();
+    	return;
+    }else{
+    	if($("#nodeui").find("#errorsdiv").length == 1){
+    		$("#nodeui").find("#errorsdiv").removeClass('ui-state-highlight')
+    		$('#container0 input').removeClass('ui-state-error');
+    		$("#nodeui").find("#errorsdiv").html('');
+    	}
+    }
     //Replace merge fieeld with empty if there
     request_params = findMergeField(request_params);
 
