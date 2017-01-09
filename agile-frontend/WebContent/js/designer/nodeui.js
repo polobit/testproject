@@ -541,15 +541,16 @@ function nodeLevelValidation(nodeName, callbackFunction){
 	}
 
 	// Replied Node alert message while saving
-  	if(nodeName == 'Replied?'){
-
-	    window.parent.showModalConfirmation("Alert",
-            "Please verify the following:</br>1. Make sure email forwarding setup with AgileCRM is done correctly.</br>2. From or ReplyTo should be the email to which forwarding setup is done.</br>3. Sending email must be HTML only.",
+  	if(nodeName == 'Replied?'){ 
+  		getInboundMail(function(inbound_email){
+  			window.parent.showModalConfirmation("Things to check",
+            "1. Agile CRM to recognize your emails, please setup <span style='user-select:all;' title='Click to copy' onclick='document.execCommand(&#39;copy&#39;)'><a style='border-bottom: 1px dashed'>" +inbound_email+ "</a></span> as forwarding email at your email server.</br>2. Reply To email address should be the one for which you have done the forwarding setup.</br>3. Email content should be in HTML.",
             null,null,null                      
             ,"Close", ""); 
 
-	    callbackFunction(true);
-	    return;
+		    callbackFunction(true);
+		    return;
+  		});	    
   	}
 
 }	
@@ -561,4 +562,11 @@ function get_dynamic_data(url, callback)
               			if(callback && typeof (callback) == "function")
               				callback(data);
               		});     	
+}
+// Get InboundMail
+function getInboundMail(callback){
+	window.parent.setGlobalAPIKey(function(){
+		var inbound_email = window.location.hostname.split('.')[0] + "-" + window.parent._AGILE_API_KEY + "@agle.cc";
+		callback(inbound_email);
+	});
 }
