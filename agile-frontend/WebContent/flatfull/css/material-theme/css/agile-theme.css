@@ -1955,7 +1955,7 @@ table.agile-table>tbody>tr>td{
 }*/
 
 /* star of filters*/
-#contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
+#contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td,#filter-settings .chained-table tr td{
     padding-right: 5px !important; 
     padding-bottom: 5px !important; 
 }
@@ -3305,6 +3305,58 @@ width: 169px !important;
 #deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
 #admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
 .send-email-edtior .panel{border: 1px solid #f4f8f9 !important;}
-#new_tag{
+.agile-theme-15 #new_tag{
   width: 180px !important;
+}
+
+#shop,#freshbooks_url{border: 1px solid #ccc !important;}
+#data-sync-settings-tab-content #import_shopify.btn-primary{margin-top: 15px !important;}
+#calendar-office365-prefs label{margin-bottom: 5px !important;}
+
+#office365 .panel{height: auto !important;}
+#office365 .panel-body .line-clamp-4{min-height: 125px !important;}
+
+.agile-theme-15 #filter-settings .chained-table .EQUALS{
+  width: 92% !important;
+}
+.agile-theme-15 #filter-settings .chained-table{
+  margin-left: -6px;
+}
+.agile-theme-15 #filter-settings .chained-table .callscript-multiple-remove{
+  margin-top: 12px;
+}
+.agile-theme-15 #fullcontact_login_form .checkbox input[type="checkbox"]{
+  margin-left: -17px !important;
+}
+.agile-theme-15 #support_plan_alert_info{
+  width: 390px !important;
+}
+
+.agile-theme-15 #widget_shopify.btn-primary {
+  margin: 10px 0px 0px 0px !important;
+}
+
+#recent-menu-model-list .recent-view-comany-style.img-inital{
+  height: 25px !important;
+  margin-left: 5px;
+}
+.recent-view-line-height
+{
+      margin-top: 5px;
+}
+
+.recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/com-default-img.png"]{
+  border-radius: 0% !important;
+}
+
+.recent-view-background-color{
+   height: 35px;
+    width: 35px;
+    background-color: #f0f0f0 !important;
+    border-radius: 50%;
+    line-height: 33px;
+}
+
+.rectview-deal-icon{
+  margin-left :7px;
 }
