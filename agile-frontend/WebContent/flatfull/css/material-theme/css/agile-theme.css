@@ -3331,6 +3331,19 @@ width: 169px !important;
 .agile-theme-15 #support_plan_alert_info{
   width: 390px !important;
 }
+
 .agile-theme-15 #widget_shopify.btn-primary {
   margin: 10px 0px 0px 0px !important;
+}
+
+#recent-menu-model-list .recent-view-comany-style.img-inital{
+  height: 25px !important;
+}
+.recent-view-line-height
+{
+      margin-top: 5px;
+}
+
+.recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/com-default-img.png"]{
+  border-radius: 0% !important;
 }
