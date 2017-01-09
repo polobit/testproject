@@ -120,6 +120,18 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 								if(!template_ui)
 									  return;
 								$(el).append($(template_ui).attr("contact_id", contact.id));
+								try
+								{ 
+									var pos = $(el).parents("table").find("th[data-name='"+property.name+"'").index();
+									$.each(contactIdsJSON, function(index, val){
+										$(el).find("td").eq(pos).find("div").append("<div id='custom_"+val+"'></div>");
+									});
+								}
+								catch(err)
+								{
+									console.log(err.message);
+								}
+								
 							}, null);
 							App_Contacts.referenceContactsCollection.collection.fetch({
 								success : function(data){
@@ -128,19 +140,27 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 										getTemplate('contacts-custom-view-custom-contact', data.toJSON(), undefined, function(template_ui){
 											if(!template_ui)
 												  return;
-											$(el).find("td[contact_id="+contact.id+"]").html($(template_ui).html());
-											var ellipsis_required = false;
-											$(el).find("td[contact_id="+contact.id+"]").find(".contact-type-image").each(function(index, val){
-												if(index > 3)
+
+											$.each(data.toJSON(), function(index, jsonObj){
+												var $innerEl = $(template_ui).find("div#"+jsonObj.id);
+												$(el).find("td[contact_id="+contact.id+"]").find("div#custom_"+jsonObj.id).html($innerEl);
+											});
+
+											//$(el).find("td[contact_id="+contact.id+"]").html($(template_ui).html());
+											$(el).find("td[contact_id="+contact.id+"]").each(function(){
+												var ellipsis_required = false;
+												$(this).find(".contact-type-image").each(function(index, val){
+													if(index > 3)
+													{
+														ellipsis_required = true;
+														$(this).remove();
+													}
+												});
+												if(ellipsis_required && $(this).find("div:first").find(".custom-ellipsis").length == 0)
 												{
-													ellipsis_required = true;
-													$(this).remove();
+													$(this).find("div:first").append("<div class='m-t custom-ellipsis' style='font-size:20px;'>...</div>");
 												}
 											});
-											if(ellipsis_required)
-											{
-												$(el).find("td[contact_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
-											}
 										}, null);
 									}
 									hideTransitionBar();
@@ -164,6 +184,17 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 								if(!template_ui)
 									  return;
 								$(el).append($(template_ui).attr("company_id", contact.id));
+								try
+								{ 
+									var pos = $(el).parents("table").find("th[data-name='"+property.name+"'").index();
+									$.each(contactIdsJSON, function(index, val){
+										$(el).find("td").eq(pos).find("div").append("<div id='custom_"+val+"'></div>");
+									});
+								}
+								catch(err)
+								{
+									console.log(err.message);
+								}
 							}, null);
 							App_Contacts.referenceContactsCollection.collection.fetch({
 								success : function(data){
@@ -172,19 +203,27 @@ function contactTableView(base_model,customDatefields,view,customContactfields,c
 										getTemplate('contacts-custom-view-custom-company', data.toJSON(), undefined, function(template_ui){
 											if(!template_ui)
 												  return;
-											$(el).find("td[company_id="+contact.id+"]").html($(template_ui).html());
-											var ellipsis_required = false;
-											$(el).find("td[company_id="+contact.id+"]").find(".company-type-image").each(function(index, val){
-												if(index > 3)
+
+											$.each(data.toJSON(), function(index, jsonObj){
+												var $innerEl = $(template_ui).find("div#"+jsonObj.id);
+												$(el).find("td[company_id="+contact.id+"]").find("div#custom_"+jsonObj.id).html($innerEl);
+											});
+
+											//$(el).find("td[company_id="+contact.id+"]").html($(template_ui).html());
+											$(el).find("td[company_id="+contact.id+"]").each(function(){
+												var ellipsis_required = false;
+												$(this).find(".company-type-image").each(function(index, val){
+													if(index > 3)
+													{
+														ellipsis_required = true;
+														$(this).remove();
+													}
+												});
+												if(ellipsis_required && $(this).find("div:first").find(".custom-ellipsis").length == 0)
 												{
-													ellipsis_required = true;
-													$(this).remove();
+													$(this).find("div:first").append("<div class='m-t custom-ellipsis' style='font-size:20px;'>...</div>");
 												}
 											});
-											if(ellipsis_required)
-											{
-												$(el).find("td[company_id="+contact.id+"]").find("div:first").append("<div class='m-t' style='font-size:20px;'>...</div>");
-											}
 										}, null);
 									}
 									hideTransitionBar();
