@@ -192,7 +192,7 @@
       {{#each this}}
         {{#if this.twillioNumber}}
           <li>
-            <a href="#" data-src="{{twillioNumber}}" data-name="{{username}}" class="twiliousers">
+            <a href="#" data-src="{{twillioNumber}}" data-name="{{username}}" class="twiliousers" style="float: left;width:100%;">
               <div class="pull-left m-r-xs">
               <img class="img-inital r r-2x" data-name="" src="{{pic}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
             </div>
@@ -211,7 +211,7 @@
         {{#each this}}
           <li>
           {{#if this.domainusernumber}}
-            <a href="#" data-src="{{domainusernumber}}" data-name="{{username}}" class="twiliousers">
+            <a href="#" data-src="{{domainusernumber}}" data-name="{{username}}" class="twiliousers" style="float: left;width:100%;">
                <div class="pull-left m-r-xs">
                 <img class="img-inital r r-2x" data-name="" src="{{pic}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
               </div>
@@ -234,18 +234,47 @@
 <script id="twilioio-users-conference-template" type="text/html">
   <div class="btn-group" role="group" aria-label="">
     <div class="btn-group" role="group">
-      <div type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="box-shadow: none;">
-        <span class="caret"></span>
+      <div type="button" class="fa fa-group dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="box-shadow: none;">
+        <span class="caret" style="margin-top: -5px;"></span>
       </div>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu portlet_body panel-body p-n b-n" style="max-height: 225px;overflow-y: scroll;">
       {{#each this}}
-        <li>
-        {{#if this.domainusernumber}}
-          <a href="#" data-src="{{domainusernumber}}" class="twiliousersconf">{{username}}({{domainusernumber}})</a>
-        {{else}}
-          <a href="#" data-src="{{twillioNumber}}" class="twiliousersconf">{{username}}({{twillioNumber}})</a>
-        {{/if}}
-        </li>
+        {{#if this.twillioNumber}}
+          <li>
+            <a href="#" data-src="{{twillioNumber}}" data-name="{{username}}" class="twiliousersconf" style="float: left;width:100%;">
+              <div class="pull-left m-r-xs">
+              <img class="img-inital r r-2x" data-name="" src="{{pic}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
+            </div>
+            <div class="pull-left agile-thumb recent-top">
+              <div class="text-cap block recent-view-line-height"> <div class="text-ellipsis">
+              {{username}}</div>
+                <div class="text-lowercase">
+                  <small>{{twillioNumber}}</small>
+                </div>
+              </div>
+            </div>
+            </a>
+          </li>
+          {{/if}}
+        {{/each}}
+        {{#each this}}
+          <li>
+          {{#if this.domainusernumber}}
+            <a href="#" data-src="{{domainusernumber}}" data-name="{{username}}" class="twiliousersconf" style="float: left;width:100%;">
+               <div class="pull-left m-r-xs">
+                <img class="img-inital r r-2x" data-name="" src="{{pic}}" width="30px" height="30px" style="display:inline; width:30px; height:30px; " />
+              </div>
+              <div class="pull-left agile-thumb recent-top">
+                <div class="text-cap block recent-view-line-height"> <div class="text-ellipsis">
+                {{username}}</div>
+                  <div class="text-lowercase">
+                    <small>{{domainusernumber}}</small>
+                  </div>
+                </div>
+              </div>
+            </a>
+          {{/if}}
+          </li>
         {{/each}}
       </ul>
     </div>

@@ -248,6 +248,8 @@ if(message.state == "connected"){
 			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""});
 			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voice_mail","popover-date":"Voicemail","title":""});
 			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out ","popover-date":"Transfer call","title":""});
+			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf  fa fa-group ","popover-date":"Call conference","title":""});
+			
 		}
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","popover-date":"Mute","title":""});
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","popover-date":"Unmute","title":""});
@@ -432,6 +434,7 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json, call
 		if(widgetName == "Twilioio"){
 			//makeDraggableVoicemail();
 			makeDraggableTransfer();
+			//makeDraggableConference();
 			if(TWILIO_DIRECTION != "inbound" &&  TWILIO_DIRECTION != "incoming"){
 				makeDraggableVoicemail();
 			}
@@ -580,14 +583,18 @@ function makeDraggableTransfer(widgetName){
 	accessUrlUsingAjax("/core/api/widgets/twilio/getTwilioUsers", function(resp){
 			//$('#call-noty-l1').html($(getTemplate("twilioio-users",resp)));
 			$('#draggable_noty .noty_twilio_phone').removeClass("icon-call-out");
+			$('#draggable_noty .noty_twilio_conf').removeClass("fa").removeClass("fa-group");
 			$('#draggable_noty .noty_twilio_phone').html($(getTemplate("twilioio-users",resp)));
+			$('#draggable_noty .noty_twilio_conf').html($(getTemplate("twilioio-users-conference",resp)));
 			
 	});
 	
 }
 function makeDraggableConference(widgetName){
 	accessUrlUsingAjax("/core/api/widgets/twilio/getTwilioUsers", function(resp){
-			$('#call-noty-l1').html($(getTemplate("twilioio-users-conference",resp)));
+		   $('#draggable_noty .noty_twilio_conf').removeClass("icon-call-out");
+		   $('#draggable_noty .noty_twilio_conf').html($(getTemplate("twilioio-users-conference",resp)));
+			//$('#call-noty-l1').html($(getTemplate("twilioio-users-conference",resp)));
 	});
 	
 }
