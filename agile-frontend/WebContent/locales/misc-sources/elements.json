@@ -6,10 +6,10 @@
     	
     ],
     "{{agile_lng_translate 'landingpage-builder' 'layout'}}":[
-        {"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/content_section1.png"},
-        {"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/content_section2.png"},
+        {"url":"elements/content_section1.html","height":481, "thumbnail":"elements/images/thumbs/new/content_section1.png"},
+        {"url":"elements/content_section2.html","height":520, "thumbnail":"elements/images/thumbs/new/content_section2.png"},
         {"url":"elements/content_section12.html","height":376, "thumbnail":"elements/images/thumbs/new/content_section12.png"},
-        {"url":"elements/content_section9.html","height":500, "thumbnail":"elements/images/thumbs/content_section9.png"},
+        {"url":"elements/content_section9.html","height":500, "thumbnail":"elements/images/thumbs/new/content_section9.png"},
         {"url":"elements/layout1.html","height":500, "thumbnail":"elements/images/thumbs/new/layout1.png"},
         {"url":"elements/layout2.html","height":500, "thumbnail":"elements/images/thumbs/new/layout2.png"},
         {"url":"elements/layout3.html","height":500, "thumbnail":"elements/images/thumbs/new/layout3.png"},
@@ -30,11 +30,11 @@
     	{"url":"elements/content_section11.html","height":376, "thumbnail":"elements/images/thumbs/content_section11.png"}
     ],    
     "{{agile_lng_translate 'campaigns' 'form'}}":[
-        {"url":"elements/agileform1.html","height":700, "thumbnail":"elements/images/thumbs/agileform1.png"},
-        {"url":"elements/agileform2.html","height":700, "thumbnail":"elements/images/thumbs/agileform2.png"},
-        {"url":"elements/agileform3.html","height":700, "thumbnail":"elements/images/thumbs/agileform3.png"},     
-        {"url":"elements/agileform4.html","height":700, "thumbnail":"elements/images/thumbs/agileform4.png"},
-        {"url":"elements/agileform5.html","height":700, "thumbnail":"elements/images/thumbs/agileform5.png"}
+        {"url":"elements/agileform1.html","height":700, "thumbnail":"elements/images/thumbs/new/agileform1.png"},
+        {"url":"elements/agileform2.html","height":700, "thumbnail":"elements/images/thumbs/new/agileform2.png"},
+        {"url":"elements/agileform3.html","height":700, "thumbnail":"elements/images/thumbs/new/agileform3.png"},     
+        {"url":"elements/agileform4.html","height":700, "thumbnail":"elements/images/thumbs/new/agileform4.png"},
+        {"url":"elements/agileform5.html","height":700, "thumbnail":"elements/images/thumbs/new/agileform5.png"}
     ],
     "{{agile_lng_translate 'landingpage-builder' 'contents-slider'}}":[
         {"url":"elements/header7.html","height":400, "thumbnail":"elements/images/thumbs/new/header7.png"},
