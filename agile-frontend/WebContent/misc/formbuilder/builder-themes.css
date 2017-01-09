@@ -13,7 +13,7 @@ border: 1px solid #cfdadd;
 -webkit-border-radius: 50px;
 -moz-border-radius: 50px;
 border-radius: 50px;
-color: #333!important;
+color: #333;
 font-weight: 100;
 font-size: 14px!important;
 line-height: 20px!important;
@@ -343,7 +343,7 @@ background-color: #23b7e5;
     -moz-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);}
 .theme2 fieldset{margin: 0; padding: 0;}
 .theme2 input[type=text], .theme2 input[type=email],.theme2 input[type=password],.theme2 input[type=url],.theme2 select, .theme2 textarea{
-    background-color: #fff; box-shadow: inherit; border:3px solid #f3f3f3!important;
+    background-color: #fff; box-shadow: inherit; border:3px solid #f3f3f3;
 }
 .theme2 input[type=email]:focus,.theme2 input[type=url]:focus,.theme2 input[type=password]:focus,.theme2 input[type=text]:focus,.theme2 textarea:focus,.theme2 select:focus{border:3px solid #66afe9}
 .theme3 input[type=text],.theme3 input[type=email],.theme3 input[type=password],.theme3 input[type=url],.theme3 select {
@@ -608,7 +608,7 @@ border-bottom-right-radius: 0px;
     -moz-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);}
 .theme4 fieldset{margin: 0; padding: 0;}
 .theme4 input[type=text],.theme4 input[type=password], .theme4 input[type=email],.theme4 input[type=url],.theme4 select{
-    background-color: #fff!important; box-shadow: inherit!important; border:0px!important; border-bottom:1px solid #eee!important;
+    background-color: #fff; box-shadow: inherit!important; border:0px; border-bottom:1px solid #eee;
     border-radius: 0px!important;
 }
 .theme4 input[type=email]:focus,.theme4 input[type=url]:focus,.theme4 input[type=password]:focus,.theme4 input[type=text]:focus,.theme4 select:focus{border-bottom:1px solid #66afe9 !important;}
