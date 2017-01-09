@@ -72,6 +72,8 @@ function hideSettings() {
     if (!settings.hasClass('hide')) {
         settings.addClass('hide');
         $('#block-drag').show();
+        if($("#"+id).closest(".main").data('type') == "imgcaption")
+            $('#image-caption-settings').show();
     }
 }
 
@@ -117,7 +119,7 @@ function handleObjects() {
                     $('#pbottom').val(parseInt(self.find('td:first').css('padding-bottom')));
                     $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
                     $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
-
+                    $('#image-caption-position').val(self.find('.image-caption-column-text').attr('data-align'));
                 
                 hideAllSettings();
                 $('#common-settings').show();
@@ -374,23 +376,54 @@ function handleObjects() {
                             $('input.social-check[name=pinterest]').prop('checked', false);
                         }
 
-
-                        /*$('input.social-input[name="facebook"]').val(addhttp(self.find('a.facebook').attr('href')));
-
-                        $('input.social-input[name="twitter"]').val(addhttp(self.find('a.twitter').attr('href')));
-
-                        $('input.social-input[name="linkedin"]').val(addhttp(self.find('a.linkedin').attr('href')));
-
-                        $('input.social-input[name="youtube"]').val(addhttp(self.find('a.youtube').attr('href')));
-
-                        $('input.social-input[name="instagram"]').val(addhttp(self.find('a.instagram').attr('href')));
-
-                        $('input.social-input[name="pinterest"]').val(addhttp(self.find('a.pinterest').attr('href')));*/
-
                         hideAllSettings();
                         $('#settings').show();
                         $('#social-links').show();
 
+
+                        break;
+
+
+                    case 'imgcaption':
+
+                         $('.selected-item').removeClass('selected-item').css('outline', 'none');
+                        //    $('#'+$('#path').val()).unbind('click');
+                        $('#bgcolor').find(".color-preview").css('backgroundColor', $('#' + $('#path').val()).css('backgroundColor'));
+                        $('#bgcolor').find(".hex-col-val").text(rgb2hex($('#' + $('#path').val()).css('backgroundColor')));
+                        var img = self.find('tbody tr td table tbody tr td img');
+                        // devi mettere un each perchè ci sono piu di un immagine.
+
+
+                        var imageid = img.attr('id');
+
+                        if (typeof imageid === typeof undefined || imageid === false) {
+                            img.attr('id', guid());
+                            imageid = img.attr('id');
+                        }
+                        $('#imageid').val(imageid);
+
+                        $('#imageid').val(imageid);
+                        $('#image-url').val(img.attr('src'));
+                        $('#image-url').data('id', imageid );
+
+                        $('#image-w').val(parseFloat(0 + img.attr("width")));
+                        $('#image-h').val(parseFloat(0 + img.attr("height")));
+                        $('#image-alt-text').val(img.attr('alt'));
+
+                        $('#video-link').val("");
+                        $('#image-link').val("");
+                        if(img.parent('a').length) {
+                            $('#image-link').val(addhttp(img.parent('a').attr('href')));
+                        }
+
+                        $('#image-caption-position').val(self.find('.image-caption-column-text').attr('data-align'));
+
+                        hideAllSettings();
+                        $('#imageproperties').show();
+                        $("#imageHeaderId").html("Image");
+                        $('#image-link-holder').show();
+                        $('#settings').show();
+                        $('#image-caption-settings').show();
 
                         break;
 
@@ -585,6 +618,8 @@ function storeValues(obj, fontcolor, text, fontsize, fontfamily, background) {
     hideAllSettings();
     $('#editor').show();
     $('#settings').show();
+    if(obj.data('type') == 'imgcaption') 
+        $('#image-caption-settings').show();
 
     obj.data('fontcolor', fontcolor);
     obj.data('text', text);
@@ -678,7 +713,8 @@ function getIndex(itm, list) {
 
 function hideAllSettings(exceptThisElement) {
 
-    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder', '#image-link-holder', '#videoThumbnail', '#block-drag', '#settings'];
+    var settingsHolderSelectors = ['#editor','#buttons','#buttonstxt','#imageproperties','#social-links', '#user-poll', '#select_alignment', '#video-record-btn-holder',
+                                    '#image-link-holder', '#videoThumbnail', '#block-drag', '#settings', '#image-caption-settings'];
 
     if(typeof exceptThisElement != "undefined") {
         var index = settingsHolderSelectors.indexOf(exceptThisElement);
@@ -824,6 +860,25 @@ $(document).ready(function () {
         }
          else
          {
+            if($("#"+id).closest(".main").data('type') == "imgcaption")
+            {
+                var width = parseInt($("#"+id).closest(".main").find('.image-caption-column img').attr('width'));
+                var textWidth = parseInt($("#"+id).closest(".main").find('.image-caption-column-text').attr('width'));
+                width = width - parseInt($('#image-w').val());
+
+                var textAlign = $("#"+id).closest(".main").find('.image-caption-column-text').attr('align'); 
+
+                if(textAlign == "left" || textAlign == "right")
+                {
+                    if(width <= 240) 
+                    {
+                        $("#"+id).closest(".main").find('.image-caption-column').attr('width', width);
+                        $("#"+id).closest(".main").find('.image-caption-column-text').attr('width', textWidth + width);
+                    }
+                }
+               
+            }
+
             $('#'+id).attr('width', $('#image-w').val());
             $('#'+id).css('max-width', parseInt($('#image-w').val()));
         }
@@ -852,8 +907,47 @@ $(document).ready(function () {
     });
 
     $(document).on('change', '.image-align-picker', function(e){
-        var id = $('#image-url').data('id');
+        var id = $('#path').val();
         $('#'+id).parent('td').attr('align', e.target.value);
+    });
+
+    var width ;
+    $(document).on('change', '#image-caption-position', function(e){
+        var id = $('#path').val();
+        var textWidth = parseInt($('#'+id).closest('table').find(".image-caption-column-text").attr('width'));
+        if($('#'+id).closest('table').find(".image-caption-column-text").attr('width') != '100%')
+            width = textWidth;
+
+        if(e.target.value == "left"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "right");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({'align': 'left', 'data-align': 'left', 'width': width});
+        }
+        else if(e.target.value == "right"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "left");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({'align': 'right',  'data-align': 'right', 'width': width});
+        }
+        else if(e.target.value == "top"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "center");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({"align": "center", 'data-align': 'top', "width": "100%"});
+            var image = $('#'+id).closest('table').find(".image-caption-column");
+            $('#'+id).closest('table').find(".image-caption-column").remove();
+            $('#'+id).closest('table').find(".image-caption-column-text").after(image);
+        }
+        else if(e.target.value == "bottom"){
+            $('#'+id).closest('table').find(".image-caption-column").attr("align", "center");
+            $('#'+id).closest('table').find(".image-caption-column-text").attr({"align": "center", 'data-align': 'bottom', "width": "100%"});
+            var text = $('#'+id).closest('table').find(".image-caption-column-text");
+            $('#'+id).closest('table').find(".image-caption-column-text").remove();
+            $('#'+id).closest('table').find(".image-caption-column").after(text);
+        }
+    });
+
+    $(document).on('change', '#bg-image-url', function(e){
+        console.log("coming to background image link");
+        var id = $('#path').val();
+        $('#'+id).closest('table').css({ 'background-image' : 'url('+$('#bg-image-url').val()+')',
+                                         'background-repeat': 'repeat'
+                                     });
     });
 
     $(document).on('change', 'input.social-input', function(e){
@@ -1360,6 +1454,13 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     
     });
 
+    $("#uploadBgImageToS3ThroughBtn").change(function(){
+
+        var fileInput = document.getElementById('uploadBgImageToS3ThroughBtn');
+        uploadBgImageToS3ThroughBtn(fileInput.files[0]);
+    
+    });
+
     $('#settings').on('click', '.confirm', function(e){
         e.preventDefault();
     });
@@ -1393,6 +1494,8 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
         $("#imageHeaderId").html("Image");
         $('#image-link-holder').show();
         $('#settings').show();
+        if(img.closest('.main').data('type') == 'imgcaption') 
+            $('#image-caption-settings').show();
 
     });
 
@@ -1677,6 +1780,47 @@ function uploadImageToS3ThroughBtn(file) {
         });
     }
 }
+
+
+function uploadBgImageToS3ThroughBtn(file) {
+    if(typeof file != "undefined") {
+        $("#bg-image-browseBtn").prop("disabled",true);
+        $("#bg-image-browseBtn").text(localeJSON['uploading'] + "...");
+
+        var uploadedFileName = file.name;
+        var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+        formData = new FormData();
+        formData.append('key',  "editor/email/"+window.parent.CURRENT_DOMAIN_USER.domain+"/"+filename);
+        formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+        formData.append('acl', 'public-read');
+        formData.append('content-type', 'image/png');
+        formData.append('policy', 'CnsKICAiZXhwaXJhdGlvbiI6ICIyMDI1LTAxLTAxVDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJidWNrZXQiOiAiYWdpbGVjcm0iIH0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJlZGl0b3IvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiaW1hZ2UvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9zdGF0dXMiLCAiMjAxIl0sCiAgXQp9');
+        formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
+        formData.append('success_action_status', '201');
+        formData.append('file', file);
+
+        $.ajax({
+            data: formData,
+            dataType: 'xml',
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: "https://agilecrm.s3.amazonaws.com/",
+            success: function(data) {
+              // getting the url of the file from amazon and insert it into the editor
+              var url = $(data).find('Location').text();
+              $('#bg-image-url').val(decodeURIComponent(url));
+              $('#bg-image-url').trigger('change');
+              $("#bg-image-browseBtn").prop("disabled",false);
+              $("#bg-image-browseBtn").text(localeJSON['browse']);
+            }
+        });
+    }
+}
+
 
 function isValidTag(tag, showAlert) {
     

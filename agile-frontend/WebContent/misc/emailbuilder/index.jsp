@@ -169,6 +169,8 @@ var localeJSON = <%=localeJSON%>;
                                 <!-- SOCIAL LINKS -->
                                 <%@ include file="blocks/social-links.html" %>
 
+                                <%@ include file="blocks/image-caption.html" %>
+
                             </li>
                         </ul>
                     </div>
@@ -467,7 +469,7 @@ var localeJSON = <%=localeJSON%>;
                                     <div class="input-group">
                                       <input type="text" id="image-url" class="form-control" data-id="none"/>
                                       <span class="input-group-btn">
-                                        <a id="browseBtn" class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                        <a id="browseBtn" class="btn btn-default browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
                                          <input type="file" id="uploadImageToS3Btn" class="hidden">
                                       </span>
                                     </div><!-- /input-group -->
@@ -953,6 +955,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 <div id="common-settings">
 
 <div class="form-horizontal">
+
 <!-- start of padding top -->
     <div class="form-group">
             <div class="col-sm-5 control-label">Padding Top</div>
@@ -1019,6 +1022,40 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
         </script>
         
     </div> <!-- end of block background color -->
+
+
+    <!-- start of background image -->
+    <div class="form-group">
+        <div class="col-sm-5 control-label">Background Image</div>
+        <div class="col-sm-7">
+            <div class="input-group">
+            <input type="text" id="bg-image-url" class="form-control" data-id="none">
+                <span class="input-group-btn">
+                <a id="bg-image-browseBtn" class="btn btn-default browseBtn" onclick="$('#uploadBgImageToS3ThroughBtn').click()">Browse</a>
+                <input type="file" id="uploadBgImageToS3ThroughBtn" class="hidden">
+                </span>
+            </div>
+        </div>
+    </div> <!-- end of background image -->
+
+
+    <!-- start of image caption settings -->
+    <div id="image-caption-settings">
+    <hr>
+        <div class="form-group">
+            <div class="col-sm-5 control-label">Caption Position</div>
+                <div class="col-sm-7" >
+                    <select class="form-control" id="image-caption-position">
+                    <option>left</option>
+                    <option>right</option>
+                    <option>top</option>
+                    <option>bottom</option>
+                    </select>
+                </div>
+        </div>
+    </div> <!-- end of image caption settings -->
+
+
 
     <div class="form-group" style="padding-top:6px;">
         <div class="col-xs-4 pull-right" style="margin-right: 8px;">
