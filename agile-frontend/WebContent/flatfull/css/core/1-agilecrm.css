@@ -5000,7 +5000,9 @@ border-top: 0px !important;
   opacity: 0.6
 }
 .recent-view-background-color{
-  height:30px;width:30px;background-color:gainsboro;border-radius: 3px;line-height: 27px;
+  height:30px;width:30px;/*background-color:gainsboro;*/
+  background-color: #f0f0f0 !important;
+  border-radius: 3px;line-height: 27px;
 }
 .recent-view-comany-style{
   margin-left:3px; vertical-align: middle;display: inline-block;height: 25px;width: 25px !important;
