@@ -54,6 +54,9 @@ cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flat
 
 #email builder files
 mkdir ../WebContent/misc/emailbuilder/build
+if [ -e ../WebContent/misc/emailbuilder/build/emailbuilder.min.js ]; then
+    rm ../WebContent/misc/emailbuilder/build/emailbuilder.min.js
+fi
 cat ../WebContent/misc/emailbuilder/js/*.js >> ../WebContent/misc/emailbuilder/build/emailbuilder.min.js
 java -jar yuicompressor-2.4.7.jar ../WebContent/misc/emailbuilder/build/emailbuilder.min.js --type js -o  ../WebContent/misc/emailbuilder/build/emailbuilder.min.js
 
