@@ -908,7 +908,7 @@ $(document).ready(function () {
 
     $(document).on('change', '.image-align-picker', function(e){
         var id = $('#path').val();
-        $('#'+id).parent('td').attr('align', e.target.value);
+        $('#'+id).find('.image').attr('align', e.target.value);
     });
 
     var width ;
