@@ -537,7 +537,7 @@ function show_chained_fields(el, data, forceShow)
 			$('select:not([name="'+field_name+'"])', self).remove();
 		}
 
-		if(LHS.find("option:selected").val() == "last_contacted" && $("#contact_type", $("#filterContactForm")).val() == "PERSON" && is_enable_lcf_rel_cond())
+		if(LHS.find("option:selected").val() == "last_contacted" && $("#contact_type", $(el).closest("form")).val() == "PERSON" && is_enable_lcf_rel_cond())
 		{
 			var relative_el = getTemplate("relative-filters", {});
 			var $condition_block = LHS.closest('td').siblings('td.codition-block');
