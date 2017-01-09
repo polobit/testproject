@@ -948,7 +948,12 @@ public class Opportunity extends Cursor implements Serializable
 			isCurrencyUpdateRequired = false;
 		}
     	else if(expected_value == null && currency_conversion_value !=null)
-			isCurrencyUpdateRequired = true ;	
+			if(currency_type == null){	
+				expected_value = currency_conversion_value;
+				isCurrencyUpdateRequired = false ;
+			}
+			else
+				isCurrencyUpdateRequired = true;
     	// Sets the currency conversion value
     	if(isCurrencyUpdateRequired){
 	    	String userpref_currency_type = null;
@@ -1153,31 +1158,12 @@ public class Opportunity extends Cursor implements Serializable
     }
     
     @PostLoad
-    public void postLoad(){
+    public void postLoad(){    	
     	try {
-    		UserPrefs userPrefs  = null ;
-    	      userPrefs = UserPrefsUtil.getCurrentUserPrefs();
-    	      String userpref_currency_type = null;
-    	      
-    	      if (userPrefs !=null && userPrefs.currency !=null)
-    	      {
-    	    	  userpref_currency_type = userPrefs.currency ;
-    	      }
-    	       
-    	      if(userpref_currency_type == null)
-    	           userpref_currency_type =  "USD-$" ;
-    	      if(currency_type == null || currency_type.isEmpty() )
-    	               currency_type = userpref_currency_type ; 
-    	      
-    	      String  deal_currency_type = currency_type;
-    	         	      
-    	      if(userpref_currency_type.equalsIgnoreCase(deal_currency_type))
-    	         { 
-    	            currency_conversion_value =  expected_value;
-    	         }
-    	      
+    		if(currency_conversion_value == null && expected_value != null)
+    		   currency_conversion_value =  expected_value;   	      
     	  } catch (Exception e) {
-    	   e.printStackTrace();
+    		  e.printStackTrace();
     	  }
     }
 
