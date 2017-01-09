@@ -49,11 +49,11 @@ public class ContactCSVExport
     
 
     public static final String EMAIL_DEFAULT = "Email(default)";
+    public static final String EMAIL_PERSONAL = "Email(Personal)";
     public static final String EMAIL_HOME = "Email(Home)";
     public static final String EMAIL_WORK = "Email(Work)";
     public static final String EMAIL_PRIMARY = "Email(Primary)";
     public static final String EMAIL_ALTERNATE = "Email(Alternate)";
-    public static final String EMAIL_PERSONAL = "Email(Personal)";
 
 
     public static final String WEBSITE_DEFAULT = "Website(default)";
