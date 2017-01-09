@@ -8237,3 +8237,26 @@ Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
 		html=html.substring(0, html.length - 1)
 	return html;
 });
+Handlebars.registerHelper('splitMeetingTime', function(time, type){
+		if(time){
+ 			var data = time.split('mins')[0];
+ 			if(type == "H"){
+ 				data = data / 60;
+ 			}else{
+ 				data = data % 60;
+ 			}	
+ 			
+ 			data = parseInt(data);
+ 
+ 			if(data == undefined || data < 0){
+ 				data = 0;
+ 			}
+ 			var formatedText = ''+data;
+ 			if(formatedText.length == 1){
+ 				data = '0'+data;
+ 			}		
+ 		return data;
+ 		}else{
+ 		return 00;
+ 		}
+ });

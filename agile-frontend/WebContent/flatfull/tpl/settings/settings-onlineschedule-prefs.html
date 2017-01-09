@@ -153,7 +153,7 @@
 
 
 			</div>
-			<div class="tab-pane" id="meeting-types-tab">
+<div class="tab-pane" id="meeting-types-tab">
 
 				<div class="col" id="schedule-preferences">
 					<div class="hbox h-auto">
@@ -184,72 +184,83 @@
 								</form>
 								<form class="form-horizontal">
 									<fieldset>
-
-										{{#stringToJSON this "meeting_durations"}}
-										<div class="control-group form-group">
-											<label class="control-label col-sm-3" for="cname">{{agile_lng_translate 'prefs-online-calendar' 'types'}}
+										<div class="control-group form-group">									
+											<label class="control-label col-sm-3" for="cname">
+												{{agile_lng_translate 'prefs-online-calendar' 'types'}}
+												<span>
+													<a id="add-meeting-row">
+														<i class="icon-plus m-l-xs"></i>
+													</a>
+												</span>
 											</label>
-
-											<div class="controls col-sm-9">
-												<div class="row m-b-sm">
-
-													<div class="col-sm-8">
-														<input type="text" class="form-control inline-block"
-															id="15mins" name="15mins"
-															placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
-															value="{{15mins}}">
-													</div>
-													<div class="col-sm-4 text-right">
-														<div>
-															<div class="m-t-xs">
-																<span>{{agile_lng_translate 'prefs-online-calendar' 'slot'}} </span> <span
-																	class="text-sm online-meeting-padding online-padding m-l-none">{{agile_lng_translate 'prefs-online-calendar' '15-mins'}}</span>
+											<div id="meeting_durations" class="controls col-sm-9">
+												{{#stringToJSON this "meeting_durations"}}						
+													{{#each this}}	
+														<div class="meeting-row row m-b-sm" id="{{@key}}">
+															<div class="col-sm-7">
+																<input type="text" class="form-control inline-block input_meeting_text"
+																	placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
+																	value="{{this}}">
 															</div>
-														</div>
-													</div>
-												</div>
-												<div class="row m-b-sm">
-
-													<div class="col-sm-8">
-														<input type="text" class="form-control inline-block"
-															id="30mins" name="30mins"
-															placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
-															value="{{30mins}}">
-													</div>
-													<div class="col-sm-4 text-right">
-														<div>
-															<div class="m-t-xs">
-																<span>{{agile_lng_translate 'prefs-online-calendar' 'slot'}}</span> <span
-																	class="text-sm online-meeting-padding online-padding m-l-none">{{agile_lng_translate 'prefs-online-calendar' '30-mins'}}</span>
+															<div class="col-sm-5 text-right">	
+																<div class="col-md-1 p-n m-t-xs">
+																	<span>H</span>
+																</div>
+																<div class="col-md-3 p-n m-l-xs">
+																	<div class="dropdown-parent text-center">
+																		<span class="form-control input-sm p-xs input_meeting_time_hours meetingTimePicker c-p">{{#splitMeetingTime @key "H"}}{{/splitMeetingTime}}</span>
+																	  	<div class="hide select_meeting_time_hours dropdown-content">
+																	    	<a>00</a>
+																   			<a>01</a>
+																   			<a>02</a>
+																   			<a>03</a>
+																   			<a>04</a>
+																   			<a>05</a>
+																   			<a>06</a>
+																   			<a>07</a>
+																   			<a>08</a>
+																   			<a>09</a>
+																   			<a>10</a>
+																   			<a>11</a>
+																   			<a>12</a>
+																   			<a>13</a>
+																   			<a>14</a>
+																   			<a>15</a>
+																   			<a>16</a>
+																   			<a>17</a>
+																   			<a>18</a>
+																   			<a>19</a>
+																   			<a>20</a>
+																   			<a>21</a>
+																   			<a>22</a>
+																   			<a>23</a>
+																	  	</div>
+																	</div>				
+																</div>
+																<div class="col-md-1 m-t-xs">
+																	<span>M</span>
+																</div>					
+																<div class="col-md-3 p-n text-center dropdown-parent">
+																	<span class="form-control input-sm p-xs meetingTimePicker input_meeting_time_mins c-p">{{#splitMeetingTime @key "M"}}{{/splitMeetingTime}}</span>
+																  	<div class="hide select_meeting_time_mins dropdown-content">
+																    	<a>00</a>
+															   			<a>15</a>
+															   			<a>30</a>
+															   			<a>45</a>				   		
+																  	</div>						
+																</div>
+																<div class="col-md-2 m-t-xs p-none">
+																	<a class="remove-meeting-row">
+	    																<i class="icon-close"></i>
+	  																</a>
+																</div>										
 															</div>
-														</div>
-													</div>
-												</div>
-												<!-- -->
-												<div class="row m-b-sm">
-
-													<div class="col-sm-8">
-														<input type="text" class="form-control inline-block"
-															id="60mins" name="60mins"
-															placeholder="{{agile_lng_translate 'prefs-online-calendar' 'add-multiple-meeting-names-comma-separated'}}"
-															value="{{60mins}}">
-													</div>
-													<div class="col-sm-4 text-right">
-														<div>
-															<div class="m-t-xs">
-																<span>{{agile_lng_translate 'prefs-online-calendar' 'slot'}} </span><span
-																	class="text-sm online-meeting-padding online-padding m-l-none">{{agile_lng_translate 'prefs-online-calendar' '60-mins'}}</span>
-															</div>
-														</div>
-													</div>
-												</div>
+														</div>		    								
+													{{/each}} 								
+												{{/stringToJSON}}
 
 											</div>
-
-											{{/stringToJSON}}
-
-											<div id="meeting_duration_message" class="text-danger"
-												style="display: none;">{{agile_lng_translate 'prefs-online-calendar' 'please-enable-at-least-one-option'}}</div>
+											<span class="m-l-sm hide" id="cancel_error_message" style="position: relative;margin-left:27%"></span>																				
 										</div>
 										<div class="line line-lg b-b"></div>
 										<div class="control-group form-group">
@@ -257,15 +268,12 @@
 												<button type="submit"
 													class="btnSerialize btn-sm btn btn-primary no-outline"
 													id="btnSerialize">{{agile_lng_translate 'portlets' 'save'}}</button>
-												<span class="m-l-sm text-danger" id="error_message"></span>
+												<span class="m-l-sm" id="error_message"></span>
 											</div>
 										</div>
 									</fieldset>
 								</form>
-
-
 							</div>
-						
 					</div>
 				</div>
 			</div>
@@ -275,17 +283,9 @@
 						
 							<div class="panel-body">
 
-
-
-
-
-
-
 								<form class="form-horizontal" id="bufferTimeForm"
 									name="bufferTimeForm">
 									<fieldset>
-
-
 
 											<!-- calendar advanced block-->
 

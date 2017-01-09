@@ -461,7 +461,7 @@ public class WebCalendarEventUtil
 
 		// Number of slots possible within 24Hrs with selected slot
 		// time(duration)
-		int itr = (60 / slotTime) * 24;
+		int itr = (60 * 24)/slotTime;
 		
 		// 3400 sec per hour. 86400 per day.
 		
@@ -492,7 +492,7 @@ public class WebCalendarEventUtil
 			// Add slot in list of slots
 			listOfLists.add(slots);
 		}
-
+System.out.println(listOfLists.size());
 		return listOfLists;
 	}
 	
@@ -993,51 +993,44 @@ public class WebCalendarEventUtil
 	 */
 	public static List<String> getSlotDetails(Long id, String meeting_types)
 	{
-		JSONObject slot = new JSONObject();
-		/* JSONArray slots = new JSONArray(); */
-
+		System.out.println("In getSlotDetails Start");
 		List<String> slots = new ArrayList<String>();
 
 		DomainUser dm = null;
-		if (id != null)
-		{
+		if (id != null) {
 			dm = DomainUserUtil.getDomainUser(id);
-		}
-		else
-		{
+		} else {
 			dm = new DomainUser();
 			dm.meeting_durations = meeting_types;
 		}
-
-		try
-		{
+        Set<Integer> allKeys = new TreeSet<Integer>();
+		try {
 			JSONObject js = new JSONObject(dm.meeting_durations);
-			if (StringUtils.isNotEmpty(js.getString("15mins")))
-			{
-				slot.put("time", 15);
-				slot.put("title", js.get("15mins"));
+			System.out.println("dm.meeting_durations :" + dm.meeting_durations);
+			JSONArray meetingArray = js.names();
+			JSONObject slot = new JSONObject();
+			for (int i = 0; i < meetingArray.length(); i++) {
+				String key = meetingArray.getString(i);
+				Integer time = Integer.parseInt(key.split("mins")[0]);
+				allKeys.add(time);
+				
+			}
+			for(Integer key : allKeys){
+				String time = key.toString();
+				String newKey = time+"mins";
+				String title = js.getString(newKey);
+				slot.put("time", time);
+				slot.put("title", title);
 				slots.add(slot.toString());
 			}
-			if (StringUtils.isNotEmpty(js.getString("30mins")))
-			{
-				slot.put("time", 30);
-				slot.put("title", js.get("30mins"));
-				slots.add(slot.toString());
-			}
-			if (StringUtils.isNotEmpty(js.getString("60mins")))
-			{
-				slot.put("time", 60);
-				slot.put("title", js.get("60mins"));
-				slots.add(slot.toString());
-			}
-
-		}
-		catch (JSONException e)
-		{
+		} catch (JSONException e) {
+			System.out.println("Exception raised in getting the slots details: "+ e.getMessage());
 			e.printStackTrace();
 		}
-		return slots;
-
+		System.out.println("slots :" + slots);
+		System.out.println("In getSlotDetails End");
+		return slots;		
+		
 	}
 
 	/**
