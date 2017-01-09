@@ -1955,7 +1955,7 @@ table.agile-table>tbody>tr>td{
 }*/
 
 /* star of filters*/
-#contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td {
+#contacts-filter-wrapper .chained-table tr td, #companies-filter-wrapper .chained-table tr td,#opportunities-filter-wrapper .chained-table tr td,#filter-settings .chained-table tr td{
     padding-right: 5px !important; 
     padding-bottom: 5px !important; 
 }
@@ -3305,7 +3305,7 @@ width: 169px !important;
 #deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
 #admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
 .send-email-edtior .panel{border: 1px solid #f4f8f9 !important;}
-#new_tag{
+.agile-theme-15 #new_tag{
   width: 180px !important;
 }
 
@@ -3315,3 +3315,22 @@ width: 169px !important;
 
 #office365 .panel{height: auto !important;}
 #office365 .panel-body .line-clamp-4{min-height: 125px !important;}
+
+.agile-theme-15 #filter-settings .chained-table .EQUALS{
+  width: 92% !important;
+}
+.agile-theme-15 #filter-settings .chained-table{
+  margin-left: -6px;
+}
+.agile-theme-15 #filter-settings .chained-table .callscript-multiple-remove{
+  margin-top: 12px;
+}
+.agile-theme-15 #fullcontact_login_form .checkbox input[type="checkbox"]{
+  margin-left: -17px !important;
+}
+.agile-theme-15 #support_plan_alert_info{
+  width: 390px !important;
+}
+.agile-theme-15 #widget_shopify.btn-primary {
+  margin: 10px 0px 0px 0px !important;
+}
