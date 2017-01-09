@@ -947,7 +947,7 @@ public class Opportunity extends Cursor implements Serializable
     	else if(expected_value == null && currency_conversion_value == null){
 			isCurrencyUpdateRequired = false;
 		}
-    	else if(expected_value == null && currency_conversion_value !=null)
+    	else if(currency_conversion_value !=null)
 			if(currency_type == null){	
 				expected_value = currency_conversion_value;
 				isCurrencyUpdateRequired = false ;
