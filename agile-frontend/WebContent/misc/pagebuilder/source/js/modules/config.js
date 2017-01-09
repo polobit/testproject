@@ -36,7 +36,7 @@
         'img : dynamic-image': ['no', 'yes'],
         '.editContent : dynamic-text': ['no', 'yes'],
         'nav : fixed-header' : ['no', 'yes'],
-        ".videoWrapper .frameCover : show-video-icon": ["no","yes"],
+        '.videoWrapper .frameCover : show-video-icon': ['no','yes'],
         'h1, h2, h3, h4, h5, p : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h2 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h3 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
