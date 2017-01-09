@@ -957,13 +957,22 @@ public class Opportunity extends Cursor implements Serializable
 			listOfRates = new JSONObject(cuRates.currencyRates);
 			try 
 			{
-				UserPrefs userPrefs = UserPrefsUtil.getCurrentUserPrefs();
-				if (userPrefs != null)
-					userpref_currency_type = userPrefs.currency;
-				if (userpref_currency_type == null)
+				UserPrefs userPrefs = null;
+				try {
+					DomainUser domuser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+					AgileUser au = AgileUser.getCurrentAgileUserFromDomainUser(domuser.id);
+					userPrefs = UserPrefsUtil.getUserPrefs(au);
+					if (userPrefs != null)
+						userpref_currency_type = userPrefs.currency;
+					if (userpref_currency_type == null)
+						userpref_currency_type = "USD";
+					else
+						userpref_currency_type = userpref_currency_type.substring(0, 3).toUpperCase();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 					userpref_currency_type = "USD";
-				else
-					userpref_currency_type = userpref_currency_type.substring(0, 3).toUpperCase();
+				}
 				String deal_currency_type = null;
 				if(currency_type != null)
 					deal_currency_type = currency_type.substring(0, 3);
