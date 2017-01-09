@@ -5283,3 +5283,33 @@ span.rolecontainer::first-letter {
   margin-top: -5px;
 }
 .app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
+#api_track_webrules_code .linenums ,#api_track_code .linenums
+{
+  margin: 0 0 0 0px;
+  
+}
+#api_track_webrules_code ol.linenums li
+{
+  padding-left:10px;
+}
+#api_track_webrules_code.prettyprint.linenums,#api_track_code.prettyprint.linenums
+{
+  font-size: 14px!important;
+}
+#api_track_webrules_code .pln:first-child
+{
+   margin-left: -4%;
+}
+#api_track_code .pln:first-child
+{
+  margin-left: -8%;
+}
+.grp-clipboard-track-code,.grp-clipboard-webrule-code
+{
+  margin-bottom: 10px;
+  float: right;
+}  
+#api_track_code , #api_track_webrules_code
+{
+  width: 100%;
+}

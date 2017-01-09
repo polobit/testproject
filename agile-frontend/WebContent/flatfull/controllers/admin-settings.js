@@ -769,6 +769,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 					prettify_api_add_events();
 					// initializeRegenerateKeysListeners();
+					loadZeroclipboard2(function()
+	 						{	
+	 							initZeroClipboard2($('.grp-clipboard-track-code'), $('.clipboard-track-code-text'));
+	 							initZeroClipboard2($('.grp-clipboard-webrule-code'), $('.clipboard-webrule-text'));
+	 						});
+					
 
 				} });
 			});
