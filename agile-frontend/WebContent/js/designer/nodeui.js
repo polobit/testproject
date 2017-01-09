@@ -520,7 +520,7 @@ function showNodeConnectPopup(nodeId){
 
 // Node Level validation, based on Nodename validation happens
 function nodeLevelValidation(nodeName, callbackFunction){
-	var validation_nodes = ['URL Visited?'];
+	var validation_nodes = ['URL Visited?','Replied?'];
 
 	if(!nodeName || validation_nodes.indexOf(nodeName) == -1)
 		return callbackFunction(true);
@@ -540,13 +540,33 @@ function nodeLevelValidation(nodeName, callbackFunction){
 		});
 	}
 
+	// Replied Node alert message while saving
+  	if(nodeName == 'Replied?'){ 
+  		getInboundMail(function(inbound_email){
+  			window.parent.showModalConfirmation("Things to check",
+            "1. Agile CRM to recognize your emails, please setup <span style='user-select:all;' title='Click to copy' onclick='document.execCommand(&#39;copy&#39;)'><a style='border-bottom: 1px dashed'>" +inbound_email+ "</a></span> as forwarding email at your email server.</br>2. Reply To email address should be the one for which you have done the forwarding setup.</br>3. Email content should be in HTML.",
+            null,null,null                      
+            ,"Close", ""); 
+
+		    callbackFunction(true);
+		    return;
+  		});	    
+  	}
+
 }	
-//Validate the Tracking code is there or not in website
- function get_dynamic_data(url, callback)
-  {
-	  window.parent.accessUrlUsingAjax(url, 
-	              		function(data){               			
-	              			if(callback && typeof (callback) == "function")
-	              				callback(data);
-	              		});     	
- }
+// Ajax call
+function get_dynamic_data(url, callback)
+{
+  window.parent.accessUrlUsingAjax(url, 
+              		function(data){               			
+              			if(callback && typeof (callback) == "function")
+              				callback(data);
+              		});     	
+}
+// Get InboundMail
+function getInboundMail(callback){
+	window.parent.setGlobalAPIKey(function(){
+		var inbound_email = window.location.hostname.split('.')[0] + "-" + window.parent._AGILE_API_KEY + "@agle.cc";
+		callback(inbound_email);
+	});
+}
