@@ -1530,6 +1530,7 @@ function is_enable_lcf_rel_cond()
 	var relativeCondDomains = {
 		"alekhya" : true,
 		"sivaraj" : true,
+		"steelehill" : true,
 		"" : true
 	}
 
