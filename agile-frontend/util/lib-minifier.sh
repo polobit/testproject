@@ -39,6 +39,7 @@ rm ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css
 cat ../WebContent/flatfull/css/min/lib-all-new.css ../WebContent/flatfull/css/min/core-all-new.css ../WebContent/flatfull/css/min/misc-all-new.css > ../WebContent/flatfull/css/min/css-all-min.css
 
 #emailbuilder files
+mkdir ../WebContent/misc/emailbuilder/build
 cat ../WebContent/misc/emailbuilder/css/*.css >> ../WebContent/misc/emailbuilder/build/emailbuilder.min.css
 java -jar yuicompressor-2.4.7.jar ../WebContent/misc/emailbuilder/build/emailbuilder.min.css --type css -o  ../WebContent/misc/emailbuilder/build/emailbuilder.min.css
 

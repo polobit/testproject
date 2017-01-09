@@ -53,6 +53,7 @@ cat ../WebContent/helpcenter/controllers/app.js >> ../WebContent/jscore/min/flat
 #End of Helpcenter
 
 #email builder files
+mkdir ../WebContent/misc/emailbuilder/build
 cat ../WebContent/misc/emailbuilder/js/*.js >> ../WebContent/misc/emailbuilder/build/emailbuilder.min.js
 java -jar yuicompressor-2.4.7.jar ../WebContent/misc/emailbuilder/build/emailbuilder.min.js --type js -o  ../WebContent/misc/emailbuilder/build/emailbuilder.min.js
 
