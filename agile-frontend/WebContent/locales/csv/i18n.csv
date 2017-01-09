@@ -6003,4 +6003,8 @@ tickets.acl_helpdesk_text,Enable access to Tickets and Help Desk,,
 tickets.knowledgebase_categorylist,Categories List,, 
 tickets.knowledgebase_sectionlist,Sections List,,
 tickets.knowledgebase_articlelist,Articles List,,
+calendar.meeting-duplicate-hours,Meetings with same duration are not allowed.
+calendar.meeting-duration-limit,We only support meeting duration upto a day (1440 Mins).
+calendar.meeting-proper-duration,Minutes should be greater zero and only integers.
+calendar.meeting-fields-empty,Meeting types should not be empty.
 
