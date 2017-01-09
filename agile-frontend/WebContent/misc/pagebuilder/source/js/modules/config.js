@@ -21,7 +21,7 @@
         '.bg.bg1, .bg.bg2, .header10, .header11, .search-box1': ['background-image', 'background-color'],
         '.videoWrapper .frameCover': ['show-video-icon'],
         '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family', 'dynamic-text'],
-        'a.btn, button.btn': ['border-radius', 'font-size', 'background-color','dynamic-button'],
+        'a.btn, button.btn': ['color','border-radius', 'font-size', 'background-color','dynamic-button'],
         '.backgrnd' : ['background-image','background-color','padding-top','padding-bottom']
         
     };
