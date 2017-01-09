@@ -1110,7 +1110,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
                       out.println("<li style='margin-top: 7px;'><div class='btn-group'><a href='#users-add' class='btn btn-default btn-sm ''><i class='icon-plus-sign'></i> Add User</a>");
                       out.println("<button class='btn btn-default btn-sm dropdown-toggl' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
                       out.println("</div></li>");
-                       out.println("<li><div class='m-t-xs'><span  class=' dropdown-toggle' data-toggle='dropdown' ><a style='background: transparent;border: 0px;'>");
+                       out.println("<li class='pull-right'><div class='m-t-xs'><span  class=' dropdown-toggle' data-toggle='dropdown' ><a style='background: transparent;border: 0px;'>");
                     if (!StringUtils.isEmpty(currentUserPrefs.pic))
                         out.println("<img height='35' width='35' src='"+ domainUser.pic+ "' alt='...' class='pos-rlt pos-t-xs'></img>");
                     else
