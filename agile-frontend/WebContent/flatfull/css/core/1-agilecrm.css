@@ -3596,7 +3596,7 @@ text-align:left;
   margin-bottom: 6px;
 }
 #send-cancellation #cancel_subscription_modal{
-  width: 70%;
+  width: 80%;
   margin: 0px auto;
 
 }
@@ -3626,6 +3626,11 @@ text-align:left;
 #account_pause a:hover{
   background-color: #f76c51;
   border-color: #f76c51;
+  color: white !important;
+}
+#downgrade_to_free_plan a:hover{
+  background-color: #c76050;
+  border-color: #c76050;
   color: white !important;
 }
 

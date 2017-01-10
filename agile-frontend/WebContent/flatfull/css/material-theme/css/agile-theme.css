@@ -2494,12 +2494,12 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
       vertical-align: middle;
 }
 
-.agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4
+.agile-theme-15 #account_cancel_chat h4 ,#account_cancel_support h4, #downgrade_to_free_plan h4, #account_pause h4
 {
       margin-top: 5px!important;
       margin-bottom:10px !important;
 }
-.agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs
+.agile-theme-15 #account_cancel_chat .text-xs ,#account_cancel_support .text-xs, #downgrade_to_free_plan .text-xs, #account_pause .text-xs
 {
   font-size: 11px;
 }
@@ -3305,3 +3305,9 @@ width: 169px !important;
 #deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
 #admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
 .send-email-edtior .panel{border: 1px solid #f4f8f9 !important;}
+#new_tag{
+  width: 180px !important;
+}
+#send-cancellation #cancel_subscription_modal{
+  width: 80%;
+}
