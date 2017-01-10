@@ -353,15 +353,13 @@ var Base_Collection_View = Backbone.View
           /*
            * If page size is not defined then sets page size to 20.
            */
-          this.page_size = this.options.page_size;
+          this.page_size = "25";
           var plan_name = USER_BILLING_PREFS.plan.plan_type;
           var plan_fragments = plan_name.split("_");
           var db_plan_name = plan_fragments[0].toLowerCase();
-          if(db_plan_name == "enterprise"){
+          if(db_plan_name == "enterprise" || db_plan_name == "pro"){
                 this.page_size = CURRENT_USER_PREFS.page_size;
           }
-          else
-              this.page_size = "25";
           /*if(this.page_size != CURRENT_USER_PREFS.page_size){
             this.page_size = CURRENT_USER_PREFS.page_size;
           }*/

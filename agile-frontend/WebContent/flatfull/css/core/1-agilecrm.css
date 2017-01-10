@@ -5303,3 +5303,8 @@ span.rolecontainer::first-letter {
     text-decoration: none;
     display: block;
 }
+.recent-view-background-color,
+.recent-view-background-color[icon="icon-money"]{
+  display: inherit !important;
+  padding: 0px !important; 
+}
