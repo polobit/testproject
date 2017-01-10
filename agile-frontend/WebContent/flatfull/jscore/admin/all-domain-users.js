@@ -167,7 +167,7 @@ function initializeAdminpanelListner(el){
 				$("#partialrefund").button('reset');
 				return;
 			}
-			
+			var refunded_amount = amount;
 			amount = 100*amount;
 			amount = parseInt(amount.toPrecision(12));	
 			$.ajax({
@@ -175,7 +175,7 @@ function initializeAdminpanelListner(el){
 				type : 'GET',
 				success : function(data)
 				{	
-					var subject = "Amount refunded $"+amount +".(From: "+CURRENT_DOMAIN_USER.email +")";
+					var subject = "Amount Refunded $"+refunded_amount +" . (From: "+CURRENT_DOMAIN_USER.email +")";
 					add_note_to_owner(email ,note , subject);
 					alert("successfully applied for refund");
 					location.reload(true);
