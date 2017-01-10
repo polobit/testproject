@@ -6,6 +6,11 @@
                 "label": "Form Name",
                 "type": "input",
                 "value": "Form Name"
+            },
+            "description": {
+                "label": "Form Description",
+                "type": "input",
+                "value": "Form Description"
             }
         }
     }

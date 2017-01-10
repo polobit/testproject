@@ -111,6 +111,14 @@ define([
 										$("#target").addClass(element.vlaue);
 									}
 							});
+						if(typeof saveform[0].fields.description == "undefined"){
+							var description = {
+								"label": "Form Description",
+                				"type": "input",
+                				"value": "Form Description"
+                			};
+							saveform[0].fields.description = description;
+						}
 						//Adding on top
 						for ( var j = 0; j < saveform.length; j++){
 
@@ -219,6 +227,7 @@ define([
 			orderedSaveform[0].title = saveform[0].title;
 			orderedSaveform[0].fields = {};
 			orderedSaveform[0].fields["name"] = saveform[0].fields["name"]; 
+			orderedSaveform[0].fields["description"] = saveform[0].fields["description"]; 
 			orderedSaveform[0].fields["agileredirecturl"] = saveform[0].fields["agileredirecturl"];
 			orderedSaveform[0].fields["agileconfirmationmsg"] = saveform[0].fields["agileconfirmationmsg"];
 			orderedSaveform[0].fields["agilepreloadfields"] = saveform[0].fields["agilepreloadfields"];
