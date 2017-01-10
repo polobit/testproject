@@ -127,7 +127,7 @@ function saveVoiceMail(form_id, modal_id, saveBtn, json)
 		var url = $('#' + form_id).find('#upload_url').val();
 		if(url == "")
 		{
-			$('#' + form_id).find('#error').html('<div class="alert alert-danger">{{agile_lng_translate "calls" "voicemail-uploaded"}}</div>');
+			$('#' + form_id).find('#error').html('<div class="alert alert-danger">{{agile_lng_translate "calls" "voicemail-upload"}}</div>');
 			enable_save_button($(saveBtn));
 			return;
 		}
