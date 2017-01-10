@@ -8294,3 +8294,15 @@ Handlebars.registerHelper('splitMeetingTime', function(time, type){
  		return 00;
  		}
  });
+
+/*
+ * Helper function to know whether last contacted filter relative condtions enable or not
+ */
+Handlebars.registerHelper('is_enable_lcf_rel_cond', function(options)
+{
+	if(is_enable_lcf_rel_cond())
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});

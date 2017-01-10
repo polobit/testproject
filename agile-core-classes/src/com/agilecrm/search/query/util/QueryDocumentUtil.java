@@ -1034,7 +1034,7 @@ public class QueryDocumentUtil {
 			String timezoneOffset = AccountPrefsUtil.getTimeZoneInOffset(timeZone);
 			
 			if(!StringUtils.equalsIgnoreCase(timezoneOffset, "+00:00") 
-					&& StringUtils.startsWith(timezoneOffset, "+"))
+					&& StringUtils.startsWith(timezoneOffset, "+") && !StringUtils.equalsIgnoreCase(lhs, "last_contacted"))
 			{
 				if(condition.equals(RuleCondition.IS_AFTER_IN_DAYS))
 					value = value - 1; // If timezone is ahead of GMT, decrease by one day
