@@ -3364,6 +3364,16 @@ width: 169px !important;
     display: inherit !important;
 }
 
+.recent-view-background-color[src="//doxhze3l6s7v9.cloudfront.net/app/static/img/com-default-img.png"],
+.recent-view-background-color[icon="icon-money"]{
+   height: 35px !important;
+    width: 35px !important;
+    background-color: #f0f0f0 !important;
+    border-radius: 50%;
+    line-height: 33px;
+    display: inherit !important;
+}
+
 /*.recent-view-background-color{
    height: 35px;
     width: 35px;
