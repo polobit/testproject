@@ -3311,7 +3311,7 @@ width: 169px !important;
 
 #shop,#freshbooks_url{border: 1px solid #ccc !important;}
 #data-sync-settings-tab-content #import_shopify.btn-primary{margin-top: 15px !important;}
-#calendar-office365-prefs label{margin-bottom: 5px !important;}
+#calendar-office365-prefs label,#google-contacts-import-form label,#stripe-prefs-form label,#freshbooks-form label{margin-bottom: 5px !important;}
 
 #office365 .panel{height: auto !important;}
 #office365 .panel-body .line-clamp-4{min-height: 125px !important;}
@@ -3347,6 +3347,10 @@ width: 169px !important;
 }
 
 .recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/app/static/img/com-default-img.png"]{
+  border-radius: 0% !important;
+}
+
+.recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/com-default-img.png"]{
   border-radius: 0% !important;
 }
 
