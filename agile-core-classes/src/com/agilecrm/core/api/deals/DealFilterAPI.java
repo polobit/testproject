@@ -202,15 +202,16 @@ public class DealFilterAPI {
 	
     }
     
-    @GET
+    @POST
     @Path("/filter/report-filter/{filterJson}")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @SuppressWarnings("unchecked")
-    public List<Opportunity> filterDeals(@PathParam("filterJson") String filterJson,
-    		@QueryParam("page_size") String count, @QueryParam("cursor") String cursor,
+    public List<Opportunity> filterDeals(@PathParam("filterJson") String filterJson, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor,
     		@QueryParam("order_by") String sortKey)
     {
 	DealFilter deal_filter = DealFilterUtil.getFilterFromJSONString(filterJson);
+	if(count == null)
+		count = 25+"";
 	
 	DealFilterUtil.setTrackAndMilestoneFilters(deal_filter, null, null);
 	DealFilterUtil.lostDeals(deal_filter);

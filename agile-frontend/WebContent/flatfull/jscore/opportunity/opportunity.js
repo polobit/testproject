@@ -1310,8 +1310,44 @@ function fetchDealsList(data){
     
     if(reportFilter)
     {
-    	url = 'core/api/deal/filters/filter/report-filter/'+reportFilter+'?order_by='+getDealSortFilter();
+    	
+    	url = 'core/api/deal/filters/filter/report-filter/'+reportFilter+'?order_by='+getDealSortFilter()+'&page_size='+getMaximumPageSize();
+    	App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,request_method : 'POST',
+        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false,cursor : true, 
+        postRenderCallback : function(el)
+        {
+
+        	$("#deals-new-milestone-view", $("#opportunity-listners")).hide();
+        	$('#deals-tracks',$("#opportunity-listners")).hide();
+        	$("#deals-new-list-view", $("#opportunity-listners")).show();
+        	if (pipeline_id == 1)
+            {
+                pipeline_id = 0;
+            }
+            appendCustomfields(el, false);
+            // Showing time ago plugin for close date
+            includeTimeAgo(el);
+            initializeDealListners(el);
+            contactListener();
+            getRelatedContactImages(App_Deals.opportunityCollectionView.collection);
+
+            setTimeout(function(){
+                $('#delete-checked',el).attr("id","deal-delete-checked");
+            },500);
+        }, appendItemCallback : function(el)
+        {
+            appendCustomfields(el, true);
+
+            // To show timeago for models appended by infini scroll
+            includeTimeAgo(el);
+            getRelatedContactImages(App_Deals.opportunityCollectionView.collection);
+
+        } });
+
+    App_Deals.opportunityCollectionView.collection.fetch();
+    $('.new-collection-deal-list', $("#opportunity-listners")).html(App_Deals.opportunityCollectionView.render().el);
     }
+    else{
     if(dealTag)
     {
     	url = 'core/api/deal/filters/query/list/tags/'+dealTag+'?order_by='+getDealSortFilter();
@@ -1352,6 +1388,7 @@ function fetchDealsList(data){
 
     App_Deals.opportunityCollectionView.collection.fetch();
     $('.new-collection-deal-list', $("#opportunity-listners")).html(App_Deals.opportunityCollectionView.render().el);
+  }
 }
 
 function setupMilestoneViewWidth(){
