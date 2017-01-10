@@ -477,25 +477,7 @@ var localeJSON = <%=localeJSON%>;
 
                         </div>
 
-
-
-                        <div class="form-group" id="select_alignment">
-                            
-                            <div >
-                             <div class="col-sm-3 control-label">Alignment</div>
-                                
-                                <div class="col-sm-9">
-                                    <select class="form-control image-align-picker">
-                                        <option>left</option>
-                                        <option>center</option>
-                                        <option>right</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-
-
+                        <!-- start of image link -->
                         <div class="form-group" id="image-link-holder">
                             
                             <div >
@@ -511,20 +493,19 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
 
                             </div>
-                        </div>
+                        </div> <!-- end of image link -->
                          
+                        
+                        <!-- start of alt text -->
                         <div class="form-group"> 
-
                             <div class="col-sm-3 control-label">Alt Text</div>
                                 
                                 <div class="col-sm-9">
                                     
                                     <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
                                                                      
-                                </div>
-
-                           
-                        </div>
+                                </div>    
+                        </div> <!-- end of alt text -->
 
 
 
@@ -562,6 +543,23 @@ var localeJSON = <%=localeJSON%>;
     </div> <!-- end of image height -->
 
 </div>
+
+        <!-- start of image alignment -->        
+                    <div class="form-group" id="select_alignment">
+                            
+                            <div >
+                             <div class="col-sm-3 control-label">Alignment</div>
+                                
+                                <div class="col-sm-9">
+                                    <select class="form-control image-align-picker">
+                                        <option>left</option>
+                                        <option>center</option>
+                                        <option>right</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div> <!-- end of image alignment -->
 
                         
                     </div> <!-- end of image properties -->

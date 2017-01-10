@@ -907,6 +907,13 @@ $(document).ready(function () {
     $(document).on('change', '.image-align-picker', function(e){
         var id = $('#path').val();
         $('#'+id).find('.image').attr('align', e.target.value);
+        var width = parseInt($('#'+id).find('.image img').attr('width'));
+        if(e.target.value == 'left' && width <= 520)
+            $('#'+id).find('.image').css('padding-left', '50px');
+        if(e.target.value == 'right' && width <= 520)
+            $('#'+id).find('.image').css('padding-right', '50px');
+        if(e.target.value == 'center')
+            $('#'+id).find('.image').css({'padding-right': '0px', 'padding-left': '0px'});
     });
 
     var width ;
