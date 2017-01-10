@@ -24,3 +24,14 @@ p.text-light {
 	border-bottom: 1px solid #d3d9dd;
 	padding: 80px 0px;
 }
+ @media (max-width: 500px) and (min-width: 300px){
+            .videoWrapper{
+                margin-top:10px;
+            }
+}
+@media (max-width: 500px) and (min-width: 300px){
+    #agileform_div{
+        margin-top:10px;
+        }
+}
+   

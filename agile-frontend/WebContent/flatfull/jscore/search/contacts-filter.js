@@ -536,6 +536,17 @@ function show_chained_fields(el, data, forceShow)
 			$($('select[name="'+field_name+'"]', self)[0]).show();
 			$('select:not([name="'+field_name+'"])', self).remove();
 		}
+
+		if(LHS.find("option:selected").val() == "last_contacted" && $("#contact_type", $(el).closest("form")).val() == "PERSON" && is_enable_lcf_rel_cond())
+		{
+			var relative_el = getTemplate("relative-filters", {});
+			var $condition_block = LHS.closest('td').siblings('td.codition-block');
+			if($condition_block.find("optgroup").find("option").length == 0)
+			{
+				$condition_block.find("optgroup").remove();
+				$condition_block.find("select").append(relative_el);
+			}
+		}
 		
 	});
 	condition.chained(LHS, function(chained_el, self) {
@@ -633,6 +644,14 @@ function show_chained_fields(el, data, forceShow)
 			$condition_block.find('optgroup[label="Relative"]').remove(); // Removes optgroup
 			// $condition_block.find('optgroup[label="Days"]').remove();
 
+		}
+
+		//Append relative conditions for last contacted
+		if ($(this).find('option:selected').val() == "last_contacted" && $("#contact_type", $("#filterContactForm")).val() == "PERSON" && is_enable_lcf_rel_cond())
+		{
+			var relative_el = getTemplate("relative-filters", {});
+			var $condition_block = $(this).closest('td').siblings('td.codition-block');
+			$condition_block.find("select").append(relative_el);
 		}
 
 	});

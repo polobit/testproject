@@ -280,7 +280,7 @@ function isValidForm(form) {
 
 	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
 		var labelJson = [];
-		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags,first_name,last_name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
+		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags,first_name,last_name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value,last_contacted' ;
 		var array = labelJson.contact.split(',');
 		for(var i=0 ; i < array.length ; i++){
 			if(value.toLowerCase() == array[i])

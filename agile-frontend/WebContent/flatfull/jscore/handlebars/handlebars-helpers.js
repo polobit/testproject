@@ -1203,6 +1203,7 @@ $(function()
 		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
   		{
+  			var is_custom_field = false;
   			if (element == "basic_info" || element == "image")
   			{	
 					if(_agile_get_prefs("contactTabelView"))
@@ -1233,6 +1234,7 @@ $(function()
 		{
   			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
+  			is_custom_field = true;
   		}
   		else 
   		{
@@ -1247,7 +1249,14 @@ $(function()
 	 	}
 	 	
 	 	element = getTableLanguageConvertHeader(element);
-	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	if(is_custom_field)
+	 	{
+	 		el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 	}
+	 	else
+	 	{
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 	}	
 	  
 	 });
 		return new Handlebars.SafeString(el);
@@ -6525,7 +6534,7 @@ $(function()
 		var el = "" ,cls = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
   		{
-
+  			var is_custom_field = false;
   			if (element == "basic_info" || element == "image" || element == "url" || element == "name")
   			{
 					
@@ -6565,6 +6574,7 @@ $(function()
 		{
   			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
+  			is_custom_field = true;
   		}
   		else 
   		{
@@ -6572,7 +6582,14 @@ $(function()
 			cls = "";
 	 	}
 	 	element = getTableLanguageConvertHeader(element);
-	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	if(is_custom_field)
+	 	{
+	 		el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 	}
+	 	else
+	 	{
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 	}	
 	  
   		});
 		return new Handlebars.SafeString(el);
@@ -7583,6 +7600,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		var el = "", cls = ""; 
 		$.each(App_Companies.contactCompanyViewModel[item], function(index, element)
   		{
+  			var is_custom_field = false;
   			if (element == "basic_info" || element == "image")
   			{
 					
@@ -7616,6 +7634,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		{
   			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
+  			is_custom_field = true;
   		}
   		else 
   		{
@@ -7629,7 +7648,14 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	 	}
 	 	
 	 			element = getTableLanguageConvertHeader(element);
-	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 		if(is_custom_field)
+	 		{
+	 			el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 		}
+	 		else
+	 		{
+	 			el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 		}	
 	  
 	 });
 		return new Handlebars.SafeString(el);
@@ -7670,7 +7696,7 @@ Handlebars.registerHelper('leadTableHeadings', function(item)
 	{
 		if (element == "basic_info" || element == "image")
 		{
-			
+			var is_custom_field = false;
 			if(_agile_get_prefs("leadTabelView"))
 			{
 				// if the compact view is present the remove th basic info heading and add the empty heading for the image
@@ -7699,13 +7725,21 @@ Handlebars.registerHelper('leadTableHeadings', function(item)
 		{
 				element = element.split("_")[1];
 				cls = "text-muted";
+				is_custom_field = true;
 			}
 			else 
 			{
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
- 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	if(is_custom_field)
+	 	{
+	 		el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 	}
+	 	else
+	 	{
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 	}	
  	});
 	return new Handlebars.SafeString(el);
 });
@@ -8260,3 +8294,15 @@ Handlebars.registerHelper('splitMeetingTime', function(time, type){
  		return 00;
  		}
  });
+
+/*
+ * Helper function to know whether last contacted filter relative condtions enable or not
+ */
+Handlebars.registerHelper('is_enable_lcf_rel_cond', function(options)
+{
+	if(is_enable_lcf_rel_cond())
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});

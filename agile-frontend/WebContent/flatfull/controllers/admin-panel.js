@@ -95,7 +95,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 	// function will be called from getDomainDetails Navigation
 	// todisplay get subscription object for particular domain
-	get_customerobject_for_domain_from_adminpanel : function(el, domainname)
+	get_customerobject_for_domain_from_adminpanel : function(el, domainname ,owner_email)
 	{
 		var that = this;
 
@@ -115,7 +115,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 				}
 
 				else
-					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id, domainname);
+					that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id, domainname , owner_email);
 
 			}, $(el).find('#planinfo'));
 
@@ -138,11 +138,12 @@ var AdminPanelRouter = Backbone.Router.extend({
 	},
 
 	// gets collection of charges of aa paricular customer based on
-	get_collection_of_charges_for_customer_from_adminpanel : function(el, customerid, domainname)
+	get_collection_of_charges_for_customer_from_adminpanel : function(el, customerid, domainname ,owner_email)
 	{
 		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",postRenderCallback : function(el)
 		{
-			$("tabel",el).attr("domain",domainname);
+			$("table",el).attr("domain",domainname);
+			$("table",el).attr("email",owner_email);
 		},
 		individual_tag_name : 'tr', sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
@@ -156,6 +157,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 		 $('#content').html("<div id='admin-panel-listners'>&nbsp;</div>");
 		var self = this;
 		var domainname;
+		var owner_email;
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/admin_panel/getParticularDomainUsers?d=' + id, templateKey : "all-domain",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
@@ -164,8 +166,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 				var mod_collection = self.usersListViewCollection.collection.models;
 
 				domainname = mod_collection[0].get('domain');
-				email = mod_collection[0].get('email');
-				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
+				for(var i=0 ; i<mod_collection.length ; i++)
+				{
+					if(mod_collection[i].attributes.is_account_owner)
+						owner_email = mod_collection[i].attributes.email;
+				}
+				
+				self.get_customerobject_for_domain_from_adminpanel(el, domainname , owner_email);
 				$('#account').html("<img src='" + updateImageS3Path("img/21-0.gif")+ "'>");
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
 				self.get_subscription_from_db(el, domainname);

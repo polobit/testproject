@@ -160,5 +160,20 @@ public class AddOnUtil {
 		if(addOn != null && addOn.id != null)
 			addOn.delete();
 	}
+	
+	/**
+	 * Get acl addon users list and check if domainUserId exists in that list or not
+	 * @param domainUserId
+	 * @return
+	 */
+	public static boolean aclAddOnExist(Long domainUserId){
+		if(domainUserId == null)
+			return false;
+		AddOn addon = getAddOn();
+		Set<Long> idList = addon.getAclUsers();
+		if(idList != null && idList.contains(domainUserId))
+			return true;
+		return false;
+	}
 
 }
