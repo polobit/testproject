@@ -981,27 +981,13 @@ function jsonioTest(button){
     var request_headers =  JSON.stringify(jsonValues[4].rest_headers_grid);
 
     // validating url
-    var isValid = $('input[name="rest_url"]').validator();
-
-    if(!isValid.data("validator").checkValidity())
-    {
-    	var errorMessage = "Please enter a valid URL.";
-    	if(!request_url || request_url == "")
-    		errorMessage = "Please complete this mandatory field.";
-    	
-    	$("#nodeui").find("#errorsdiv").html('<p> <strong>Rest_url</strong> - '+errorMessage+'</p>').addClass('ui-state-highlight');
-    	$('#container0 input').addClass('ui-state-error');
+    var urlValidator = $('input[name="rest_url"]').validator({effect : 'wall',container: '#errorsdiv'});  
+    if(!urlValidator.data("validator").checkValidity()){
     	// redirect to settings tab
 		$('#Settings-li a').click();
     	return;
-    }else{
-    	if($("#nodeui").find("#errorsdiv").length == 1){
-    		$("#nodeui").find("#errorsdiv").removeClass('ui-state-highlight')
-    		$('#container0 input').removeClass('ui-state-error');
-    		$("#nodeui").find("#errorsdiv").html('');
-    	}
     }
-    
+       
     //Replace merge fieeld with empty if there
     request_params = findMergeField(request_params);
 
