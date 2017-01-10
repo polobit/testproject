@@ -76,7 +76,12 @@ $(function(){
 		var form = Verfied_Number;
 		var to = $(this).attr("data-src");
 		$("#draggable_noty div:first-child").css({"z-index":"1000"});
-		var contactToCall  = agile_crm_get_contact();
+		var contactToCall = "";
+		if(App_Contacts.contactDetailView){
+			contactToCall  = agile_crm_get_contact();
+		}else{
+			contactToCall = TWILIO_CONTACT;
+		}
 		if (checkForActiveCall()){
 			var jsonParam = {};
 			jsonParam['number'] = to;

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +25,10 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.JSONUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -136,6 +139,9 @@ public class ShopifyWebhookTrigger extends HttpServlet
 			contact.save();
 		    }
 
+		    // Add Deal to Contact for orders/created event
+		    performDealOperations(contact, shopifyEvent, shopifyJson);
+		    
 		    Note note = getCustomerNote(shopifyEvent, shopifyJson, contact);
 		    if (note != null)
 		    {
@@ -433,5 +439,58 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	    validTags.add(tag);
 	}
 	return validTags.toArray(new String[validTags.size()]);
+    }
+    
+    /**
+     * List all line items (name/price)
+     * @param shopifyJson
+     * @return
+     */
+    public JSONArray getCustomerPurchasedProductJSON(JSONObject shopifyJson)
+    {
+    JSONArray productsArray = new JSONArray();
+	try
+	{
+	    JSONArray itemsArray = shopifyJson.getJSONArray("line_items");
+	    for (int i = 0; i < itemsArray.length(); i++) {
+			JSONObject itemJSON = itemsArray.getJSONObject(i);
+			JSONObject item = new JSONObject().put("name", itemJSON.getString("name")).put("price", itemJSON.getString("price"));
+			productsArray.put(item);
+		}
+	}
+	catch (Exception e)
+	{
+	    return productsArray;
+	}
+	return productsArray;
+    }
+    
+    /**
+     * Performs Deal operations
+     * 
+     * @param contact
+     * @param shopifyEvent
+     * @param shopifyJson
+     */
+    public void performDealOperations(Contact contact, String shopifyEvent, JSONObject shopifyJson) {
+    	if(contact == null || shopifyEvent == null || shopifyJson == null)
+    		return;
+    	
+    	// Add deal to create event
+    	if(StringUtils.endsWithIgnoreCase(shopifyEvent, "orders/create")) {
+    		try {
+    			JSONArray productsArray = getCustomerPurchasedProductJSON(shopifyJson);
+        		for (int i = 0; i < productsArray.length(); i++) {
+        			JSONObject itemJSON =  productsArray.getJSONObject(i);
+        			Opportunity deal = new Opportunity();
+            		deal.name = JSONUtil.getJSONValue(itemJSON, "name");
+            		deal.expected_value = Double.parseDouble(JSONUtil.getJSONValue(itemJSON, "price"));
+            		deal.milestone = "Won";
+            		deal.addContactIds(contact.id + "");
+            		deal.save();
+    			}
+			} catch (Exception e) {
+			}
+    	}
     }
 }
