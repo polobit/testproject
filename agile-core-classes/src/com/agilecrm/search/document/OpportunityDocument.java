@@ -292,11 +292,11 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		
 		doc.setId(opportunity.id.toString()).build();
 		try{
-			if(opportunity.getCurrency_type() != null && opportunity.getCurrency_type() != ""){
-				doc.addField(Field.newBuilder().setName("currency_type").setText(opportunity.getCurrency_type()));
+			if(opportunity.currency_type != null && opportunity.currency_type != ""){
+				doc.addField(Field.newBuilder().setName("currency_type").setText(opportunity.currency_type));
 			}
-			if(opportunity.getCurrency_conversion_value() != null && opportunity.getCurrency_conversion_value() > 0 ){
-				doc.addField(Field.newBuilder().setName("currency_value").setText(opportunity.getCurrency_conversion_value().toString()));
+			if(opportunity.currency_conversion_value != null && opportunity.currency_conversion_value > 0 ){
+				doc.addField(Field.newBuilder().setName("currency_value").setText(opportunity.currency_conversion_value.toString()));
 			}
 		}catch(Exception e){
 			System.out.println("exception in currency conversion"+e.getMessage());

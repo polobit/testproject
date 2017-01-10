@@ -313,23 +313,7 @@ public class Opportunity extends Cursor implements Serializable
   // Type of the currency used for the particular deal
     public String currency_type = null;
 	
-	 public Double getCurrency_conversion_value() {
-		return currency_conversion_value;
-	}
-
-	public void setCurrency_conversion_value(Double currency_conversion_value) {
-		this.currency_conversion_value = currency_conversion_value;
-	}
-
-	public String getCurrency_type() {
-			return currency_type;
-		}
-
-		public void setCurrency_type(String currency_type) {
-			this.currency_type = currency_type;
-		}
-
-    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+	public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
     
     /**
      * Set of tags. Not saved in it, it is used to map tags from client

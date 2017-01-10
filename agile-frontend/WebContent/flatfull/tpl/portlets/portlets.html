@@ -153,7 +153,19 @@
 			<div class="w-full pull-left text-ellipsis text-cap custom-link">{{name}}</div> <!-- <span class="label" style="max-width: 10%;">{{milestone}}</span> -->
 		</div>
 		<div class="pull-right text-right font-bold m-b-xs text-ellipsis" style="width: 30%; white-space: nowrap;">
-			<span>{{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if_equals}}</span>
+			<span>{{#if_equals currency_conversion_value "0"}}
+					{{currencyType currency_type}}{{currency_conversion_value}}
+				{{else}}
+					{{#if currency_conversion_value}}
+						{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
+					{{else}}
+						{{#if_equals expected_value "0"}}
+							{{currencySymbol}}{{numberWithCommas expected_value}}
+						{{else}}
+							{{currencySymbol}}{{expected_value}}
+						{{/if_equals}}
+					{{/if}}
+				{{/if_equals}}</span>
 		</div>
 		<!-- <div class="clearfix"></div> -->
 	</div>
