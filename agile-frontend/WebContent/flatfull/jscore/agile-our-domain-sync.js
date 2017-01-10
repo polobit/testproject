@@ -671,7 +671,7 @@ function add_note_to_owner(email,description,subject)
 		if (callback && typeof callback == "function")
 			callback(data);
 
-	}, cus_email);
+	}, email);
 
 }
 function add_password_change_info_as_note_to_owner(cus_email, callback)
