@@ -32,6 +32,7 @@ public class LanguageUtil {
 		{
 			put("en", "English");
 			put("es", "Español");
+			put("ru", "Россия");
 		}
 	};
 	public static JSONObject getLocaleJSON(UserPrefs prefs, ServletContext application, String serviceName) {

@@ -9,7 +9,7 @@
 ##Localization language support
 
 ## declare an array variable (Ex : ("en" "sp" "fn"))
-declare -a agile_languages=("en" "es" "it")
+declare -a agile_languages=("en" "es" "it" "ru")
 
 ## now loop through the above array
 for i in "${agile_languages[@]}"
