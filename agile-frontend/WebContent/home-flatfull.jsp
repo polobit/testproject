@@ -592,7 +592,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
  
   }
       
- if ( "admin".equals(domainUser.domain))
+ if ("admin".equals(domainUser.domain))
   {
     out.print("hide adminPanel");
   }
@@ -1110,7 +1110,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
                       out.println("<li style='margin-top: 7px;'><div class='btn-group'><a href='#users-add' class='btn btn-default btn-sm ''><i class='icon-plus-sign'></i> Add User</a>");
                       out.println("<button class='btn btn-default btn-sm dropdown-toggl' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
                       out.println("</div></li>");
-                       out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                       out.println("<li class='pull-right'><div class='m-t-xs'><span  class=' dropdown-toggle' data-toggle='dropdown' ><a style='background: transparent;border: 0px;'>");
+                    if (!StringUtils.isEmpty(currentUserPrefs.pic))
+                        out.println("<img height='35' width='35' src='"+ domainUser.pic+ "' alt='...' class='pos-rlt pos-t-xs'></img>");
+                    else
+                      out.println("<img height='35' width='35'  src='img/gravatar.png'  alt='...'></img>");
+                      out.println("</a></span><ul class='dropdown-menu m-t-sm' style='right: 0;left: auto;'><li><a href='#user-prefs' class='b-b p-r-none'><div class='pull-left text-ellipsis w-auto hidden-sm hidden-md' style='max-width:210px;clear: both;''><span class='hidden-sm hidden-md text-head-black'>"+SafeHtmlUtil.sanitize(domainUser.name)+"</span></div><span class='text-sm text-ellipsis block' style='clear: both;''> <b>"+user.getEmail()+"</b></span></a></li>");
+                      out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li></ul></div></li>");
                     }
                   
                   } else {

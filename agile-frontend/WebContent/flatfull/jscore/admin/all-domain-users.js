@@ -150,6 +150,8 @@ function initializeAdminpanelListner(el){
 			var amount = $("#amount").val();
 			var totalamount = $(".totamount").val();
 			var chargeid=$("#hchargeid").val();
+			var note = $("#refundamountnote").val();
+			var email = $("#sort-table").attr("email");
 			var domain = window.location.hash.split("#getDomainUserDetails/")[1];
 			if(parseFloat(amount) <= 0)
 			{
@@ -173,6 +175,8 @@ function initializeAdminpanelListner(el){
 				type : 'GET',
 				success : function(data)
 				{	
+					var subject = "Amount refunded $"+amount +".(From: "+CURRENT_DOMAIN_USER.email +")";
+					add_note_to_owner(email ,note , subject);
 					alert("successfully applied for refund");
 					location.reload(true);
 				},
