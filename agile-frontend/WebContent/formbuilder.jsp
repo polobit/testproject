@@ -169,7 +169,7 @@ String template = request.getParameter("template");
             }
          }
       </script>
-      <script data-main="misc/formbuilder/main-built-11.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-10.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       
    </body>
 </html>
