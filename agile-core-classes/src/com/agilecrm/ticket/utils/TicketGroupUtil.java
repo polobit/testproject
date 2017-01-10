@@ -244,4 +244,14 @@ public class TicketGroupUtil
 		return VersioningUtil.isProductionAPP() ? Globals.INBOUND_EMAIL_SUFFIX_MAIN
 				: Globals.INBOUND_EMAIL_SUFFIX_SANDBOX;
 	}
+	
+	/**
+	 * Fetch the reply-to inbound suffix for incoming ticket emails
+	 * 
+	 * @return
+	 */
+	public static String getReplyToInboundSuffix()
+	{
+		return VersioningUtil.isProductionAPP() ? Globals.REPLY_TO_INBOUND_EMAIL_SUFFIX_MAIN : getInboundSuffix();
+	}
 }

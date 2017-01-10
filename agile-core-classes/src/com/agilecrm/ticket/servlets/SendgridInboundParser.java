@@ -53,6 +53,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
@@ -529,6 +530,9 @@ public class SendgridInboundParser extends HttpServlet
 		 */
 		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
 
+		if( !(toAddress.contains(inboundSuffix)) && VersioningUtil.isProductionAPP() )	
+			inboundSuffix = TicketGroupUtil.getReplyToInboundSuffix();	
+		
 		//String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
 		/*
 		 * Domain name might have _ in it. So, we need to consider the case
