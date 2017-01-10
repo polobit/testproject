@@ -72,8 +72,6 @@ function hideSettings() {
     if (!settings.hasClass('hide')) {
         settings.addClass('hide');
         $('#block-drag').show();
-        if($("#"+id).closest(".main").data('type') == "imgcaption")
-            $('#image-caption-settings').show();
     }
 }
 
