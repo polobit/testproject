@@ -15,19 +15,19 @@
       <div class="clearfix"></div>
       <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
       <div class="body">
-      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'deal-created-for'}} {{custom1}}({{#if_equals entityObject.currency_conversion_value "0"}}
-          {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
-        {{else}}
-          {{#if entityObject.currency_conversion_value}}
-            {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'deal-created-for'}} {{custom1}} ({{#if_equals entityObject.currency_conversion_value "0"}}
+            {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
           {{else}}
-            {{#if_equals entityObject.expected_value "0"}}
-              {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+            {{#if entityObject.currency_conversion_value}}
+              {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
             {{else}}
-              {{currencySymbol}}{{entityObject.expected_value}}
-            {{/if_equals}}
-          {{/if}}
-        {{/if_equals}}, {{entityObject.probability}}%). </div></span>
+              {{#if_equals entityObject.expected_value "0"}}
+                {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+              {{else}}
+                {{currencySymbol}}{{entityObject.expected_value}}
+              {{/if_equals}}
+            {{/if}}
+          {{/if_equals}}, {{entityObject.probability}}%). </div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -63,7 +63,19 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'hurry'}} {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-won-deal-worth'}}{{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}}.</div></span>
+      <span class="text-xs"><div>{{agile_lng_translate 'Deal-detail' 'hurry'}} {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-won-deal-worth'}}{{#if_equals entityObject.currency_conversion_value "0"}}
+            {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+          {{else}}
+            {{#if entityObject.currency_conversion_value}}
+              {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+            {{else}}
+              {{#if_equals entityObject.expected_value "0"}}
+                {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+              {{else}}
+                {{currencySymbol}}{{entityObject.expected_value}}
+              {{/if_equals}}
+            {{/if}}
+          {{/if_equals}}.</div></span>
     </div>
   </div>
 {{/if_equals}}
@@ -81,7 +93,19 @@
     <div class="clearfix"></div>
     <div class="date" title='{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}'>{{epochToTaskDate time}}</div>
     <div class="body">
-      <span class="text-xs"><div>Alas. {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-lost-the-deal-worth'}}{{#if_equals entityObject.expected_value "0"}}{{currencySymbol}}{{entityObject.expected_value}}{{else}}{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}{{/if_equals}}.</div></span>
+      <span class="text-xs"><div>Alas. {{entityObject.owner.name}} {{agile_lng_translate 'Deal-detail' 'has-lost-the-deal-worth'}}{{#if_equals entityObject.currency_conversion_value "0"}}
+            {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+          {{else}}
+            {{#if entityObject.currency_conversion_value}}
+              {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+            {{else}}
+              {{#if_equals entityObject.expected_value "0"}}
+                {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+              {{else}}
+                {{currencySymbol}}{{entityObject.expected_value}}
+              {{/if_equals}}
+            {{/if}}
+          {{/if_equals}}</div></span>
     </div>
   </div>
 {{/if_equals}}

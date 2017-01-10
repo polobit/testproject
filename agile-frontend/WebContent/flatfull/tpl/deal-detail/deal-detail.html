@@ -292,18 +292,18 @@
 <span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" title="{{#if name}}{{name}}{{/if}}">
 {{#if name}}{{name}}{{/if}}</span></div>
 {{#if_equals currency_conversion_value "0"}}
-      <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{currency_conversion_value}}</div>
+  <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{currency_conversion_value}}</div>
 {{else}}
-    {{#if currency_conversion_value}}
-        <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</div>
-    {{else}}
-        {{#if_equals expected_value "0"}}
+  {{#if currency_conversion_value}} 
+    <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</div>
+  {{else}}    
+    {{#if_equals expected_value "0"}}
       <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
     {{/if_equals}}
     {{#if expected_value}}
       <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
     {{/if}}
-    {{/if}}
+  {{/if}}
 {{/if_equals}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
