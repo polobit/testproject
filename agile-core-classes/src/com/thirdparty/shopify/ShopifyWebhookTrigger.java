@@ -26,6 +26,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.JSONUtil;
@@ -454,8 +455,23 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	    JSONArray itemsArray = shopifyJson.getJSONArray("line_items");
 	    for (int i = 0; i < itemsArray.length(); i++) {
 			JSONObject itemJSON = itemsArray.getJSONObject(i);
-			JSONObject item = new JSONObject().put("name", itemJSON.getString("name")).put("price", itemJSON.getString("price"));
-			productsArray.put(item);
+			
+			String name = itemJSON.getString("name");
+			Double totlaPrice = Double.parseDouble(itemJSON.getString("price"));
+			int quantity = 1;
+			
+			if(itemJSON.has("quantity")) {
+				quantity = itemJSON.getInt("quantity");
+			}
+			
+			// Each item price
+			Double eachItemPrice = (totlaPrice / quantity);
+			
+			for (int j = 0; j < quantity; j++) {
+				JSONObject item = new JSONObject().put("name", name);
+				item.put("price", eachItemPrice);
+				productsArray.put(item);
+			}
 		}
 	}
 	catch (Exception e)
@@ -479,14 +495,24 @@ public class ShopifyWebhookTrigger extends HttpServlet
     	// Add deal to create event
     	if(StringUtils.endsWithIgnoreCase(shopifyEvent, "orders/create")) {
     		try {
+    			Long pipeLineId = MilestoneUtil.getMilestones().id;
+    			
     			JSONArray productsArray = getCustomerPurchasedProductJSON(shopifyJson);
         		for (int i = 0; i < productsArray.length(); i++) {
         			JSONObject itemJSON =  productsArray.getJSONObject(i);
         			Opportunity deal = new Opportunity();
             		deal.name = JSONUtil.getJSONValue(itemJSON, "name");
             		deal.expected_value = Double.parseDouble(JSONUtil.getJSONValue(itemJSON, "price"));
+            		
+            		// Add milestone and track
+            		deal.pipeline_id = pipeLineId;
             		deal.milestone = "Won";
+            		
+            		// Add contact related to this deal
             		deal.addContactIds(contact.id + "");
+            		
+            		// Add name as tag
+            		deal.addTags(new String[]{deal.name.replace("\"", " ").replace("'", " ")});
             		deal.save();
     			}
 			} catch (Exception e) {
