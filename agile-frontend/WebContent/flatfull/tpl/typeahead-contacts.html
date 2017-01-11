@@ -48,7 +48,19 @@
 	</div>
 	<div class="agile-thumb text-ellipsis" >
 		<div class="text-ellipsis"> {{name}}</div>
-<div class="text-ellipsis" ><small>{{currencySymbol}}{{numberWithCommas expected_value}}</small>
+<div class="text-ellipsis" ><small>{{#if_equals currency_conversion_value "0"}}
+									  {{currencyType currency_type}}{{currency_conversion_value}}
+									{{else}}
+									  {{#if currency_conversion_value}}
+									    {{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
+									  {{else}}
+									    {{#if_equals expected_value "0"}}
+									      {{currencySymbol}}{{expected_value}}
+									    {{else}}
+									      {{currencySymbol}}{{numberWithCommas expected_value}}
+									    {{/if_equals}}
+									  {{/if}}
+									{{/if_equals}}</small>
 <small>({{probability}}%)</small> </div>
 <div class="text-ellipsis"><small>{{description}}</small></div>
 	</div>
