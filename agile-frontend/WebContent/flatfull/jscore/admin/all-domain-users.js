@@ -175,7 +175,8 @@ function initializeAdminpanelListner(el){
 				type : 'GET',
 				success : function(data)
 				{	
-					var subject = "Amount Refunded $"+refunded_amount +" . (From: "+CURRENT_DOMAIN_USER.email +")";
+					var subject = "Amount refunded $"+refunded_amount;
+					note = note + " (From: "+CURRENT_DOMAIN_USER.email +")";
 					add_note_to_owner(email ,note , subject);
 					alert("successfully applied for refund");
 					location.reload(true);
