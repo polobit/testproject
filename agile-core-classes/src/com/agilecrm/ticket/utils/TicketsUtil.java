@@ -13,6 +13,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
@@ -1057,7 +1058,7 @@ public class TicketsUtil
 	{
 		String replyTo = null;
 		String[] group_email = groupEmail.split("@");
-		if( group_email.length == 2 )	replyTo = group_email[0] + "-" + ticketID + "@" + group_email[1];
+		if( group_email.length == 2 )	replyTo = group_email[0] + "-" + ticketID + Globals.REPLY_TO_INBOUND_EMAIL_SUFFIX_MAIN;
 		
 		return replyTo;
 	}
