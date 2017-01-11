@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -141,7 +142,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 		    }
 
 		    // Add Deal to Contact for orders/created event
-		    performDealOperations(contact, shopifyEvent, shopifyJson);
+		    performDealOperations(contact, shopifyEvent, shopifyJson, owner);
 		    
 		    Note note = getCustomerNote(shopifyEvent, shopifyJson, contact);
 		    if (note != null)
@@ -488,7 +489,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
      * @param shopifyEvent
      * @param shopifyJson
      */
-    public void performDealOperations(Contact contact, String shopifyEvent, JSONObject shopifyJson) {
+    public void performDealOperations(Contact contact, String shopifyEvent, JSONObject shopifyJson, Key<DomainUser> owner) {
     	if(contact == null || shopifyEvent == null || shopifyJson == null)
     		return;
     	
@@ -513,9 +514,13 @@ public class ShopifyWebhookTrigger extends HttpServlet
             		
             		// Add name as tag
             		deal.addTags(new String[]{deal.name.replace("\"", " ").replace("'", " ")});
+            		
+            		// Set Owner
+            		deal.setOpportunityOwner(owner);
             		deal.save();
     			}
 			} catch (Exception e) {
+				System.out.println(ExceptionUtils.getFullStackTrace(e));
 			}
     	}
     }
