@@ -55,6 +55,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
@@ -341,6 +342,12 @@ public class SendgridInboundParser extends HttpServlet
 				}
 			}
 		}
+		
+		if( isNewTicket && toAddressArray.length == 3 && StringUtils.isNotBlank(toAddressArray[2]) )
+		{
+			ticketID = toAddressArray[2];
+			isNewTicket = false;
+		}
 
 		if (isNewTicket)
 		{
@@ -553,19 +560,32 @@ public class SendgridInboundParser extends HttpServlet
 		 */
 		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
 
+		if( !(toAddress.contains(inboundSuffix)) && VersioningUtil.isProductionAPP() )	
+			inboundSuffix = TicketGroupUtil.getReplyToInboundSuffix();	
+		
 		//String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
 		/*
 		 * Domain name might have _ in it. So, we need to consider the case
 		 * where there is _ in the domain name
 		 */
-		String[] toAddressArray = new String[2];
+		String[] toAddressArray = new String[3];
 		String temp = toAddress.replace(inboundSuffix, "");
-		int index = temp.lastIndexOf('_');
+		int underscoreIndex = temp.lastIndexOf('_');
 		
-		if( index != -1 )
+		if( underscoreIndex != -1 )
 		{
-			toAddressArray[0] = temp.substring(0, index);
-			toAddressArray[1] = temp.substring(index + 1);
+			int hyphenIndex = temp.indexOf("-", underscoreIndex);
+			
+			toAddressArray[0] = temp.substring(0, underscoreIndex);
+			
+			if( hyphenIndex == -1 )
+			{
+				toAddressArray[1] = temp.substring(underscoreIndex + 1);
+				toAddressArray[2] = "";
+			} else {
+				toAddressArray[1] = temp.substring(underscoreIndex + 1, hyphenIndex);
+				toAddressArray[2] = temp.substring(hyphenIndex + 1);
+			}
 			System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
 		} else {
 			// No _ found in the toAddress. Check for + as delimiter
