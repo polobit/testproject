@@ -8,9 +8,9 @@
                 "value": "Form Name"
             },
             "description": {
-                "label": "Form Description",
+                "label": "Description",
                 "type": "input",
-                "value": "Form Description"
+                "value": "This is my form. Please fill it out."
             }
         }
     }

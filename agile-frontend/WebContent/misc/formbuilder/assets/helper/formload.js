@@ -113,9 +113,9 @@ define([
 							});
 						if(typeof saveform[0].fields.description == "undefined"){
 							var description = {
-								"label": "Form Description",
+								"label": "Description",
                 				"type": "input",
-                				"value": "Form Description"
+                				"value": "This is my form. Please fill it out."
                 			};
 							saveform[0].fields.description = description;
 						}
