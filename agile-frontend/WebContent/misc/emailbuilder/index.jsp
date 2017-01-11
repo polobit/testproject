@@ -1023,7 +1023,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 
 
     <!-- start of background image -->
-    <div class="form-group">
+    <!-- <div class="form-group">
         <div class="col-sm-5 control-label">Background Image</div>
         <div class="col-sm-7">
             <div class="input-group">
@@ -1034,7 +1034,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
                 </span>
             </div>
         </div>
-    </div> <!-- end of background image -->
+    </div> --> <!-- end of background image -->
 
 
     <!-- start of image caption settings -->
