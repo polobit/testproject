@@ -1,0 +1,230 @@
+#newtemp1.logo {
+    margin-bottom: 100px;
+}
+#newtemp1.intro {
+    padding: 0px 10px 0px 0px;
+}
+#newtemp1 {
+    background-color: #8cddcd;
+}
+#newtemp1 .intro {
+    padding: 0px 10px 0px 0px;
+}
+#newtemp1 p {
+    line-height: 1.72222;
+    color: #444;
+    font-size: 14px;
+}
+#newtemp1 h1,
+#newtemp1 h2,
+#newtemp1 h3,
+#newtemp1 h4 {
+    font-weight: 300;
+    margin-top: 20px;
+    line-height: 1.1;
+}
+.btn-1 {
+    background-color: #16a085;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+}
+#img-div {
+    margin-top: 70px;
+}
+.item-icon {
+    border-radius: 50%;
+    border: 2px solid #555;
+    width: 50px;
+    height: 50px;
+    padding-top: 12px;
+    margin: 0 auto;
+}
+figure.items{
+    text-align: center;
+    padding: 10px 0px;
+}
+figure {
+    margin: 0;
+}
+.iphone-1 {
+    margin-top: 15px;
+}
+#newtemp3    {
+    background-color: #8cddcd;
+    color: #444;
+    padding-top: 100px;
+    padding-bottom: 0px;
+}
+#newtemp3 .lead {
+    line-height: 1.4;
+    font-weight: 300;
+    font-size: 21px;
+    margin-bottom: 50px;
+    margin-top: 15px;
+}
+#newtemp3 h1,
+#newtemp3 h2,
+#newtemp3 h3,
+#newtemp3 h4 {
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 1.1;
+}
+#newtemp3  .btn-4{
+    background-color: #34495e;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+}
+#newtemp3 .btn-wide{
+    padding: 15px 100px;
+}
+@media (max-width: 360px) and (min-width: 320px){
+ #newtemp3 .btn-wide{
+    padding: 15px 50px;
+    }
+}
+@media (max-width: 980px) and (min-width: 768px){
+    #newtemp3 .lead {
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+}
+@media (max-width: 980px) and (min-width: 768px){
+    #newtemp2 .iphone-1 {
+        margin-top: 175px;
+    }
+}
+#newtemp4 .fa ,#newtemp7 .fa{
+    color: #249292;
+}
+.half-gutter {
+    padding-left: 7.5px;
+    padding-right: 7.5px;
+}
+.single-service.animate_fade_in {
+    padding-bottom: 20px;
+}
+#newtemp4 p{
+    color: #6e6e6e;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+}
+.section-head{
+    margin-bottom:40px;
+}
+.single-testimonial img ,.client_image img {
+    border-radius: 50%;
+}
+.single-testimonial div.blockquote:after {
+    position: absolute;
+    bottom: -18px;
+    left: 45px;
+    content: "";
+    border-top: 19px solid #fff;
+    border-right: 22px solid transparent;
+}
+.single-testimonial div.blockquote{
+    background: #fff;
+    color: #807e7e;
+    padding: 15px 20px;
+    margin-bottom: 35px;
+    position: relative;
+    font-weight: 300;
+    border: none;
+}
+#newtemp5 {
+    background: #f4f4f4;
+}
+#newtemp5 .half-gutter p{
+    margin: 0;
+    font-size: 18px;
+    font-weight: 400;
+}
+#newtemp5 .half-gutter span{
+    margin: 0;
+    color: #807e7e;
+    font-size: 14px;
+    font-weight: 400;
+}
+.quote .content {
+    background: url("http://localhost:8888/flatfull/images/flatfull/quote_top.png") no-repeat left top, url("http://localhost:8888/flatfull/images/flatfull/quote_bottom.png") no-repeat right bottom;
+    color: #fff;
+    margin: 0;
+    padding: 0 15px;
+    width: 100%;
+    font-style: italic;
+    font-size: 16px;
+}
+.quote {
+    background: #2D3E58;
+    padding: 30px 20px;
+    margin-top: 30px;
+    position: relative;
+    float: left;
+}
+.quote.green{
+    background: #17C4BB;
+}
+.blue-arrow{
+    position: absolute;
+    bottom: -20px;
+    left: 30px;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 20px solid #2d3e58;
+}
+.green-arrow {
+    position: absolute;
+    bottom: -20px;
+    left: 30px;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 20px solid #17c4bb;
+}
+.client_area .client_data {
+    float: left;
+    color: #8e8e8e;
+    margin: -5px 0 0 15px !important;
+   font-size: 14px;
+   width:60%;
+   text-align: left;
+}
+.client_area .client_name {
+    color: #666;
+    float: left;
+    font-size: 18px;
+    margin: 20px 0 0 15px;
+}
+#newtemp6{
+    background: #f6f6f6;
+    text-align: center;
+}
+.client_image{
+    float: left;
+    margin: 10px 0 0 5px;
+}
+.client_area{
+    margin: 25px 0 0;
+    float: left;
+}
+#newtemp7{
+    background: #fff;
+    text-align: center;
+}
+#newtemp1 .fa{
+    margin-right: 5px;
+}
+.padding-top-50{
+    padding-top: 50px;
+}
+@media (max-width: 500px) and (min-width: 300px){
+    .single-testimonial{
+        margin: 10px 0 10px;
+    }
+}

@@ -72,6 +72,15 @@
     	{"url":"elements/footer1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
     	{"url":"elements/footer2.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
     	{"url":"elements/footer3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
+    ],
+    "New Template":[
+        {"url":"elements/newtemp1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
+        {"url":"elements/newtemp2.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
+        {"url":"elements/newtemp3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"},
+        {"url":"elements/newtemp4.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
+        {"url":"elements/newtemp5.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
+        {"url":"elements/newtemp6.html","height":230, "thumbnail":"elements/images/thumbs/footer3.png"},
+        {"url":"elements/newtemp7.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
     ]
     }
 }
