@@ -5288,21 +5288,9 @@ span.rolecontainer::first-letter {
   margin: 0 0 0 0px;
   
 }
-#api_track_webrules_code ol.linenums li
-{
-  padding-left:10px;
-}
 #api_track_webrules_code.prettyprint.linenums,#api_track_code.prettyprint.linenums
 {
   font-size: 14px!important;
-}
-#api_track_webrules_code .pln:first-child
-{
-   margin-left: -4%;
-}
-#api_track_code .pln:first-child
-{
-  margin-left: -8%;
 }
 .grp-clipboard-track-code,.grp-clipboard-webrule-code
 {

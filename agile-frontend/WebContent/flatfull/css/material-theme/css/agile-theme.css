@@ -3305,3 +3305,11 @@ width: 169px !important;
 #deal-tracks-accordion .control-group, #deal-tracks-accordion .panel{background-color: inherit;}
 #admin-settings-users-model-list .img-inital{width: 34px !important; height: 34px !important;}
 .send-email-edtior .panel{border: 1px solid #f4f8f9 !important;}
+.agile-theme-15 #api_track_webrules_code ol.linenums .tag,.agile-theme-15 #api_track_code ol.linenums .tag {
+    color: #1e347b!important;
+    margin: 0px !important;
+    line-height: 16px; 
+    font-size: 14px!important;
+    padding: 0px !important;
+    background-color: #fff!important;
+}

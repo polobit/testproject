@@ -1,54 +1,42 @@
 <script id="agile-api-script-track-code-template" type="text/html">
       <a onclick="function(e){e.stopPropagation();}" class="btn btn-xs btn-xs-imp btn-primary  grp-clipboard-track-code" data-original-title="{{agile_lng_translate 'tickets' 'copy-to-clipboard'}}" data-toggle="tooltip" data-placement="top"  data-copied-text="Copied to clipboard">{{agile_lng_translate 'referrals' 'copy'}}
       </a>
-      <pre  id="api_track_code" class=" prettyprint linenums clipboard-track-code-text" data-clipboard-text="&lt;script id='_agile_min_js' async type='text/javascript' src='{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}'&gt; 
-                &lt;/script&gt;
-                &lt;script type='text/javascript' &gt;
-                var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){_agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-                 _agile.track_page_view();};
-                &lt;/script&gt;">
-                &lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; 
-                &lt;/script&gt;
-                &lt;script type="text/javascript" &gt;
-                var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){_agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-                 _agile.track_page_view();};
-                &lt;/script&gt;
-      </pre>
 
+<pre  id="api_track_code" class=" prettyprint linenums clipboard-track-code-text data-clipboard-text-api">
+&lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; &lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){_agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+_agile.track_page_view();};
+&lt;/script&gt;
+</pre>
 </script>
 
 <script id="agile-api-script-track-webrule-code-template" type="text/html">
       <a onclick="function(e){e.stopPropagation();}" class="btn btn-xs btn-xs-imp btn-primary  grp-clipboard-webrule-code" data-original-title="{{agile_lng_translate 'tickets' 'copy-to-clipboard'}}" data-toggle="tooltip" data-placement="top"  data-copied-text="Copied to clipboard">{{agile_lng_translate 'referrals' 'copy'}}
       </a>
-    	<pre  id="api_track_webrules_code" class="prettyprint linenums clipboard-webrule-text" data-clipboard-text="&lt;script id='_agile_min_js' async type='text/javascript' src='{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}'&gt; 
-        &lt;/script&gt;
-        &lt;script type='text/javascript' &gt;
-        var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
-         _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-         _agile.track_page_view();
-         _agile_execute_web_rules();};
-        &lt;/script&gt;">
-          &lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; 
-          &lt;/script&gt;
-          &lt;script type="text/javascript" &gt;
-          var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
-           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-           _agile.track_page_view();
-           _agile_execute_web_rules();};
-          &lt;/script&gt;
-  </pre>
+<pre  id="api_track_webrules_code" class="prettyprint linenums clipboard-webrule-text data-clipboard-text-api ">
+&lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt; &lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
+_agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+_agile.track_page_view();
+_agile_execute_web_rules();};
+&lt;/script&gt;
+</pre>
 </script>
 
 <script id="agile-api-script-track-webrule-whitelist-code-template" type="text/html">
-	<pre class="prettyprint linenums data-clipboard-text" id="api_track_webrules_code">
-        &lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
-        &lt;/script&gt;
-        &lt;script type="text/javascript" &gt;
-        var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
-           _agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
-           _agile_set_whitelist('{{getBase64ActualDomain}}');
-           _agile.track_page_view();
-           _agile_execute_web_rules();};
-        &lt;/script&gt;
+<a onclick="function(e){e.stopPropagation();}" class="btn btn-xs btn-xs-imp btn-primary  grp-clipboard-webrule-whitelist-code" data-original-title="{{agile_lng_translate 'tickets' 'copy-to-clipboard'}}" data-toggle="tooltip" data-placement="top"  data-copied-text="Copied to clipboard">{{agile_lng_translate 'referrals' 'copy'}}
+</a>
+<pre class="prettyprint linenums clipboard-webrule-whitelist-text data-clipboard-text-api" id="api_track_webrules_code">
+&lt;script id="_agile_min_js" async type="text/javascript" src="{{#can_api_js_serve_from_cloud}}https://d1gwclp1pmzk26.cloudfront.net/agile/agile-cloud.js{{else}}https://{{get_current_domain}}.agilecrm.com/stats/min/agile-min.js{{/can_api_js_serve_from_cloud}}"&gt;
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+var Agile_API = Agile_API || {}; Agile_API.on_after_load = function(){
+_agile.set_account('{{js_api_key}}', '{{get_current_domain}}');
+_agile_set_whitelist('{{getBase64ActualDomain}}');
+_agile.track_page_view();
+_agile_execute_web_rules();};
+&lt;/script&gt;
   </pre>
 </script>

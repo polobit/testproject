@@ -773,6 +773,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 						{	
 	 							initZeroClipboard2($('.grp-clipboard-track-code'), $('.clipboard-track-code-text'));
 	 							initZeroClipboard2($('.grp-clipboard-webrule-code'), $('.clipboard-webrule-text'));
+	 							initZeroClipboard2($('.grp-clipboard-webrule-whitelist-code'), $('.clipboard-webrule-whitelist-text'));
 	 						});
 					
 
