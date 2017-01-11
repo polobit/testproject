@@ -203,10 +203,10 @@ public class DealFilterAPI {
     }
     
     @POST
-    @Path("/filter/report-filter/{filterJson}")
+    @Path("/filter/report-filter")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @SuppressWarnings("unchecked")
-    public List<Opportunity> filterDeals(@PathParam("filterJson") String filterJson, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor,
+    public List<Opportunity> filterDeals(@FormParam("filterJson") String filterJson, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor,
     		@QueryParam("order_by") String sortKey)
     {
 	DealFilter deal_filter = DealFilterUtil.getFilterFromJSONString(filterJson);
