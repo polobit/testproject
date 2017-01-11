@@ -3629,8 +3629,8 @@ text-align:left;
   color: white !important;
 }
 #downgrade_to_free_plan a:hover{
-  background-color: #c76050;
-  border-color: #c76050;
+  background-color: #f05050;
+  border-color: #f05050;
   color: white !important;
 }
 
@@ -5288,3 +5288,11 @@ span.rolecontainer::first-letter {
   margin-top: -5px;
 }
 .app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
+#free-downgrade-restrictions{
+  z-index: 1;
+  background-color: #fff;
+  padding: 7px 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
