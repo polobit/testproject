@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -517,6 +518,9 @@ public class ShopifyWebhookTrigger extends HttpServlet
             		
             		// Set Owner
             		deal.setOpportunityOwner(owner);
+            		
+            		// Set Close Date
+            		deal.close_date = System.currentTimeMillis() / 1000;
             		deal.save();
     			}
 			} catch (Exception e) {
