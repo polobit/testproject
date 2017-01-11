@@ -79,9 +79,18 @@ public class TicketEmailUser extends TaskletAdapter
 
 				// Ticket body
 				String emailBody = getStringValue(nodeJSON, subscriberJSON, data, BODY);
+				
+				String replyTo = null;
+				
+				if( ticketJSON.has("group") )
+				{
+					JSONObject group = ticketJSON.getJSONObject("group");
+					if( group.has("group_email") )	
+						replyTo = TicketsUtil.getTicketReplyToEmailAddress(group.getString("group_email"), ticketJSON.getString("id"));
+				}
 
 				// Change Group and Assignee
-				TicketsUtil.sendEmailToUser(emailUserId, subject, emailBody, from_name, from_address);
+				TicketsUtil.sendEmailToUser(emailUserId, subject, emailBody, from_name, from_address, replyTo);
 
 				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 						"Ticket(#" + ticketJSON.getString("id") + ") email sent to user - " + emailUserId,

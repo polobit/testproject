@@ -41,6 +41,7 @@ import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>TicketUtil</code> is a utility class to provide CRUD operations on
@@ -889,9 +890,10 @@ public class TicketsUtil
 	 * @param groupId
 	 * @param subject
 	 * @param body
+	 * @param reply_to
 	 * @throws JSONException
 	 */
-	public static void sendEmailToUser(String email, String subject, String body, String from_name, String from_address) throws Exception
+	public static void sendEmailToUser(String email, String subject, String body, String from_name, String from_address, String reply_to) throws Exception
 	{
 		if (StringUtils.isBlank(email) || StringUtils.isBlank(subject) || StringUtils.isBlank(body))
 			throw new Exception("Required parameters missing");
@@ -910,9 +912,22 @@ public class TicketsUtil
 		// Get user language
 		String language = LanguageUtil.getUserLanguageFromEmail(email);
 		
-		SendMail.sendMail(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name, language);
+		SendMail.sendMailWithReplyToAddress(email, subject, SendMail.TICKET_SEND_EMAIL_TO_USER, data, from_address, from_name, language, reply_to);
 		
 		System.out.println("Sent email to: " + email);
+	}
+
+	/**
+	 * Send email to given email
+	 * 
+	 * @param groupId
+	 * @param subject
+	 * @param body
+	 * @throws JSONException
+	 */
+	public static void sendEmailToUser(String email, String subject, String body, String from_name, String from_address) throws Exception
+	{
+		sendEmailToUser(email, subject, body, from_name, from_address, null);
 	}
 
 	/**
@@ -1017,5 +1032,33 @@ public class TicketsUtil
 		{
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}
+	}
+	
+	public static Tickets getTicketByEmailMessageID(String messageID)
+	{
+		if( StringUtils.isBlank(messageID) )	return null;
+		
+		System.out.println("Searching Ticket with Reference: " + messageID);
+		
+		Query<Tickets> q = Tickets.ticketsDao.ofy().query(Tickets.class);
+		
+		q.filter("references", messageID);
+		
+		return Tickets.ticketsDao.fetch(q);
+	}
+
+	/**
+	 * 
+	 * @param groupEmail
+	 * @param ticketID
+	 * @return
+	 */
+	public static String getTicketReplyToEmailAddress(String groupEmail, String ticketID)
+	{
+		String replyTo = null;
+		String[] group_email = groupEmail.split("@");
+		if( group_email.length == 2 )	replyTo = group_email[0] + "-" + ticketID + "@" + group_email[1];
+		
+		return replyTo;
 	}
 }

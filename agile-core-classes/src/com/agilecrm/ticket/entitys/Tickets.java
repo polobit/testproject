@@ -351,6 +351,9 @@ public class Tickets extends Cursor implements Serializable
 	 */
 	@NotSaved
 	public TicketNotesPartial last_ticket_notes = null;
+	
+	@NotSaved(IfDefault.class)
+	public List<String> references = null;
 
 	/**
 	 * Default constructor
@@ -398,6 +401,33 @@ public class Tickets extends Cursor implements Serializable
 			List<String> cc_emails, String plain_text, Status status, Type type, Priority priority, Source source,
 			CreatedBy createdBy, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList)
 	{
+		this(group_id, assignee_id, requester_name, requester_email, subject, cc_emails, plain_text, status, type, priority, source
+				, createdBy, attachments, ipAddress, labelsKeysList, null);
+	}
+
+	/**
+	 * 
+	 * @param group_id
+	 * @param assignee_id
+	 * @param requester_name
+	 * @param requester_email
+	 * @param subject
+	 * @param cc_emails
+	 * @param plain_text
+	 * @param status
+	 * @param type
+	 * @param priority
+	 * @param source
+	 * @param attachments
+	 * @param ipAddress
+	 * @param tags
+	 * @param references
+	 * @return
+	 */
+	public Tickets(Long group_id, Long assignee_id, String requester_name, String requester_email, String subject,
+			List<String> cc_emails, String plain_text, Status status, Type type, Priority priority, Source source,
+			CreatedBy createdBy, Boolean attachments, String ipAddress, List<Key<TicketLabels>> labelsKeysList, List<String> references)
+	{
 		try
 		{
 			this.group_id = new Key<TicketGroups>(TicketGroups.class, group_id);
@@ -433,6 +463,8 @@ public class Tickets extends Cursor implements Serializable
 			this.created_time = epochTime;
 			this.last_updated_time = epochTime;
 			this.last_customer_replied_time = epochTime;
+			
+			if( references != null )	this.references = references;
 			
 			if(status == Status.CLOSED)
 				this.closed_time = epochTime;
@@ -719,6 +751,20 @@ public class Tickets extends Cursor implements Serializable
 				labels.add(key.getId());
 			}
 		}
+		
+		if( references == null )	references = new ArrayList<>();
+	}
+	
+	/**
+	 * Add a reference
+	 * 
+	 * @param reference
+	 */
+	public void addReference(String reference)
+	{
+		if( this.references == null )	this.references = new ArrayList<>();
+		
+		this.references.add(reference);
 	}
 
 	/**

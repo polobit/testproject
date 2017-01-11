@@ -471,7 +471,7 @@ public class SendGridLib {
         public Email setReplyTo(String replyto) {
         	
         	// Make From as Reply To email if it is empty
-        	if(replyto != null && !replyto.isEmpty())
+        	if( StringUtils.isEmpty(replyto) )
         		replyto = from;
         	
             this.replyto = replyto;

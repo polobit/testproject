@@ -1,18 +1,14 @@
 package com.agilecrm.util.email;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
-import com.thirdparty.sendgrid.lib.SendGridLib;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -222,97 +218,124 @@ public class SendMail
      *            From email.
      * @param fromName
      *            From name.
+     * @param replyTo
+     * 			  reply-to email address.
      * @param args
      *            - Variable args to send email attachment
      */
     @SuppressWarnings("unused")
+    public static void sendMailWithReplyToAddress(String to, String subject, String template, Object object, String from,
+	    String fromName, String language, String replyTo, String... args)
+    {
+    	try
+    	{
+    	    System.out.println("Sending email " + template + " " + object);
+    
+    	    // Serialize, Use ObjectMapper
+    	    String objectJson = null;
+    	    String emailString = null;
+    
+    	    try
+    	    {
+    		ObjectMapper mapper = new ObjectMapper();
+    		objectJson = mapper.writeValueAsString(object);
+    		System.out.println(objectJson);
+    	    }
+    	    catch (Exception e)
+    	    {
+    		e.printStackTrace();
+    		return;
+    	    }
+    
+    	    // Add email properties
+    	    JSONObject email = new JSONObject();
+    	    email.put("email_to", to);
+    	    email.put("email_subject", subject);
+    	    email.put("email_from", from);
+    	    email.put("email_from_name", fromName);
+    
+    	    JSONObject[] jsonObjectArray;
+    
+    	    // If object to mail template is array then data of array can be
+    	    // accessed with "class name" key in template
+    	    if (object instanceof Object[])
+    	    {
+    		JSONObject content = new JSONObject();
+    		for (Object eachObject : (Object[]) object)
+    		{
+    		    String className = eachObject.getClass().getSimpleName();
+    		    content.put(className, new JSONObject(new ObjectMapper().writeValueAsString(eachObject)));
+    		}
+    
+    		jsonObjectArray = new JSONObject[] { email, content };
+    	    }
+    	    else
+    	    {
+    		jsonObjectArray = new JSONObject[] { email, new JSONObject(objectJson) };
+    	    }
+    
+    	    // Merge JSONObjects as a single JSONObject in order to get all
+    	    // values in a single object
+    	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
+    
+    	    System.out.println("mergedJson in sendemail" + mergedJSON);
+    
+    	    // Read template - HTML
+    	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON, language);
+    
+    	    // Read template - Body
+    	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON, language);
+    
+    	    // If both are null, nothing to be sent
+    	    if (emailHTML == null && emailBody == null)
+    	    {
+    		System.err.println("Email could not be sent as no matching templates were found " + template);
+    		return;
+    	    }
+    	    
+    	    // Setting empty namespace to send without any subaccount
+    	    String oldNamespace = NamespaceManager.get();
+    	    NamespaceManager.set("");
+    
+    	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, replyTo, emailHTML, emailBody, null, args);
+    
+    	    // Send Email
+    	    // Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
+    	    // 	null, args);
+    
+    	    NamespaceManager.set(oldNamespace);
+    	}
+    	catch (Exception e)
+    	{
+    	    e.printStackTrace();
+    	    System.out.println(ExceptionUtils.getFullStackTrace(e));
+    	    System.err.println("Exception occured in SendMail..." + e.getMessage());
+    	}
+    }
+    
+    /**
+     * Sends email by replacing template with Object values. Uses SendGridEmail
+     * to send email.
+     * 
+     * @param to
+     *            Recipient email id.
+     * @param subject
+     *            Email Subject-template subject.
+     * @param template
+     *            Name of template.
+     * @param object
+     *            Respective object with the template.
+     * @param from
+     *            From email.
+     * @param fromName
+     *            From name.
+     * @param args
+     *            - Variable args to send email attachment
+     */
     public static void sendMail(String to, String subject, String template, Object object, String from,
 	    String fromName, String language, String... args)
     {
-	try
-	{
-	    System.out.println("Sending email " + template + " " + object);
-
-	    // Serialize, Use ObjectMapper
-	    String objectJson = null;
-	    String emailString = null;
-
-	    try
-	    {
-		ObjectMapper mapper = new ObjectMapper();
-		objectJson = mapper.writeValueAsString(object);
-		System.out.println(objectJson);
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		return;
-	    }
-
-	    // Add email properties
-	    JSONObject email = new JSONObject();
-	    email.put("email_to", to);
-	    email.put("email_subject", subject);
-	    email.put("email_from", from);
-	    email.put("email_from_name", fromName);
-
-	    JSONObject[] jsonObjectArray;
-
-	    // If object to mail template is array then data of array can be
-	    // accessed with "class name" key in template
-	    if (object instanceof Object[])
-	    {
-		JSONObject content = new JSONObject();
-		for (Object eachObject : (Object[]) object)
-		{
-		    String className = eachObject.getClass().getSimpleName();
-		    content.put(className, new JSONObject(new ObjectMapper().writeValueAsString(eachObject)));
-		}
-
-		jsonObjectArray = new JSONObject[] { email, content };
-	    }
-	    else
-	    {
-		jsonObjectArray = new JSONObject[] { email, new JSONObject(objectJson) };
-	    }
-
-	    // Merge JSONObjects as a single JSONObject in order to get all
-	    // values in a single object
-	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
-
-	    System.out.println("mergedJson in sendemail" + mergedJSON);
-
-	    // Read template - HTML
-	    String emailHTML = MustacheUtil.templatize(template + TEMPLATE_HTML_EXT, mergedJSON, language);
-
-	    // Read template - Body
-	    String emailBody = MustacheUtil.templatize(template + TEMPLATE_BODY_EXT, mergedJSON, language);
-
-	    // If both are null, nothing to be sent
-	    if (emailHTML == null && emailBody == null)
-	    {
-		System.err.println("Email could not be sent as no matching templates were found " + template);
-		return;
-	    }
-
-	    // Setting empty namespace to send without any subaccount
-	    String oldNamespace = NamespaceManager.get();
-	    NamespaceManager.set("");
-
-	    SendGrid.sendMail(null, null, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
-
-	    // Send Email
-	    // Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, null,
-	    // 	null, args);
-
-	    NamespaceManager.set(oldNamespace);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println(ExceptionUtils.getFullStackTrace(e));
-	    System.err.println("Exception occured in SendMail..." + e.getMessage());
-	}
+    	sendMailWithReplyToAddress(to, subject, template, object, from, fromName, language, from, args);
     }
 
     /**

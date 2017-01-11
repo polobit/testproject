@@ -7,7 +7,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,6 +55,7 @@ import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.ticket.utils.TicketStatsUtil;
 import com.agilecrm.ticket.utils.TicketsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.workflows.triggers.util.TicketTriggerUtil;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.agile.repackaged.appengine.tools.cloudstorage.GcsOutputChannel;
@@ -317,23 +320,57 @@ public class SendgridInboundParser extends HttpServlet
 
 		// boolean isNewTicket = isNewTicket(toAddressArray);
 		String ticketID = extractTicketIDFromHtml(htmlText);
-
+		HashMap<String, String> headers = getHeaders(json);
+		
 		boolean isNewTicket = StringUtils.isBlank(ticketID) ? true : false;
+		String subject = json.getString("subject");
+		
+		if( isNewTicket && subject.toLowerCase().startsWith("re:") )
+		{
+			if( headers.containsKey("In-Reply-To") )
+			{
+				String originalMessageID = headers.get("In-Reply-To");
+				String ref = headers.get("Message-ID");
+				
+				ticket = TicketsUtil.getTicketByEmailMessageID(originalMessageID);
+				
+				if( ticket != null )
+				{
+					isNewTicket = false;
+					ticketID = ticket.id.toString();
+					if( StringUtils.isNotBlank(ref) )	ticket.addReference(ref);
+				}
+			}
+		}
+		
+		if( isNewTicket && toAddressArray.length == 3 && StringUtils.isNotBlank(toAddressArray[2]) )
+		{
+			ticketID = toAddressArray[2];
+			isNewTicket = false;
+		}
 
 		if (isNewTicket)
 		{
+			ArrayList<String> references = null;
+			
+			if( headers.containsKey("Message-ID") )	
+			{
+				references = new ArrayList<>();
+				references.add(headers.get("Message-ID"));
+			}
+
 			// Creating new Ticket in Ticket table
 			ticket = new Tickets(ticketGroup.id, null, nameEmail[0], nameEmail[1], json.getString("subject"), ccEmails,
 					plainText, Status.NEW, Type.PROBLEM, Priority.LOW, Source.EMAIL, CreatedBy.CUSTOMER,
-					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>());
-
+					attachmentExists, json.getString("sender_ip"), new ArrayList<Key<TicketLabels>>(), references);
+			
 			TicketBulkActionsBackendsRest.publishNotification("New ticket #" + ticket.id + " received");
 		}
 		else
 		{
 			try
 			{
-				ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
+				if( ticket == null )	ticket = TicketsUtil.getTicketByID(Long.parseLong(ticketID));
 			}
 			catch (Exception e)
 			{
@@ -523,19 +560,32 @@ public class SendgridInboundParser extends HttpServlet
 		 */
 		String inboundSuffix = TicketGroupUtil.getInboundSuffix();
 
+		if( !(toAddress.contains(inboundSuffix)) && VersioningUtil.isProductionAPP() )	
+			inboundSuffix = TicketGroupUtil.getReplyToInboundSuffix();	
+		
 		//String[] toAddressArray = toAddress.replace(inboundSuffix, "").split("\\_");
 		/*
 		 * Domain name might have _ in it. So, we need to consider the case
 		 * where there is _ in the domain name
 		 */
-		String[] toAddressArray = new String[2];
+		String[] toAddressArray = new String[3];
 		String temp = toAddress.replace(inboundSuffix, "");
-		int index = temp.lastIndexOf('_');
+		int underscoreIndex = temp.lastIndexOf('_');
 		
-		if( index != -1 )
+		if( underscoreIndex != -1 )
 		{
-			toAddressArray[0] = temp.substring(0, index);
-			toAddressArray[1] = temp.substring(index + 1);
+			int hyphenIndex = temp.indexOf("-", underscoreIndex);
+			
+			toAddressArray[0] = temp.substring(0, underscoreIndex);
+			
+			if( hyphenIndex == -1 )
+			{
+				toAddressArray[1] = temp.substring(underscoreIndex + 1);
+				toAddressArray[2] = "";
+			} else {
+				toAddressArray[1] = temp.substring(underscoreIndex + 1, hyphenIndex);
+				toAddressArray[2] = temp.substring(hyphenIndex + 1);
+			}
 			System.out.println("toAddressArray: " + Arrays.toString(toAddressArray));
 		} else {
 			// No _ found in the toAddress. Check for + as delimiter
@@ -707,5 +757,45 @@ public class SendgridInboundParser extends HttpServlet
 		System.out.println("Added saved document....");
 
 		return service;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param json
+	 * @return
+	 */
+	private HashMap<String, String> getHeaders(JSONObject json)
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		
+		try {
+			String headerStr = json.getString("headers");
+			
+			if( StringUtils.isBlank(headerStr) )	return map;
+			
+			StringTokenizer headers = new StringTokenizer(headerStr, "\n");
+			String header;
+			int index;
+			
+			while( headers.hasMoreTokens() )
+			{
+				header = headers.nextToken().trim();
+				
+				index = header.indexOf(":");
+				
+				if( index == -1 )	continue;
+				
+				map.put(header.substring(0, index).trim(), header.substring(index+1).trim());
+			}
+			
+		} catch (JSONException e) {
+			System.out.println(ExceptionUtils.getFullStackTrace(e));
+		}
+		
+		System.out.println("Header map: " + new JSONObject(map).toString());
+		
+		return map;
 	}
 }

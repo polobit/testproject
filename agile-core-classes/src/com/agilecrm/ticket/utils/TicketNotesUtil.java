@@ -11,9 +11,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.jboss.resteasy.util.Encode;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,9 +23,7 @@ import com.agilecrm.account.util.AccountPrefsUtil;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.account.util.EmailTemplatesUtil;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.TicketNotesPartial;
 import com.agilecrm.subscription.Subscription;
@@ -266,10 +262,16 @@ public class TicketNotesUtil
 		// System.out.println(html);
 
 		String fromAddress = group.group_email;
-
+		String replyTo = null;
+		
 		fromAddress = StringUtils.isNotBlank(group.send_as) ? group.send_as : fromAddress;
+		
+		if( ticket != null )
+		{
+			replyTo = TicketsUtil.getTicketReplyToEmailAddress(group.group_email, ticket.id.toString());
+		}
 
-		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails, html);
+		sendEmail(ticket.requester_email, ticket.subject, agentName, fromAddress, ticket.cc_emails, html, replyTo);
 	}
 
 	public static String prepareHTML(TicketGroups group, JSONObject dataJSON)
@@ -300,6 +302,89 @@ public class TicketNotesUtil
 	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
 			List<String> ccEmails, String emailHTML) throws Exception
 	{
+		sendEmail(toAddress, subject, fromName, fromEmail, ccEmails, emailHTML, null);
+		
+//		String oldNamespace = NamespaceManager.get();
+//
+//		try
+//		{
+//			// Read template - HTML
+//			// String emailHTML = MustacheUtil.templatize(template +
+//			// SendMail.TEMPLATE_HTML_EXT, dataJSON);
+//
+//			// JSONObject mailJSON = Mandrill.setMandrillAPIKey(null,
+//			// NamespaceManager.get(), null);
+//
+//			String ccEmailString = "";
+//			for (String ccEmail : ccEmails)
+//				ccEmailString += ccEmail + ",";
+//
+//			// All email params are inserted into Message json
+//			// JSONObject messageJSON = Mandrill.getMessageJSON("", fromEmail,
+//			// fromName, toAddress, ccEmailString, "", "",
+//			// subject, emailHTML, emailBody, "", "");
+//			//
+//			// mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
+//			//
+//			// System.out.println("mailJSON: " + mailJSON);
+//			long start_time = System.currentTimeMillis();
+//
+//			NamespaceManager.set("");
+//
+//			EmailGatewayUtil.sendEmail(null, NamespaceManager.get(), fromEmail, fromName, toAddress, ccEmailString, "",
+//					subject, "", emailHTML, "", "", null, null);
+//
+//			// response =
+//			// HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+//			// + Mandrill.MANDRILL_API_MESSAGE_CALL,
+//			// mailJSON.toString());
+//
+//			long process_time = System.currentTimeMillis() - start_time;
+//
+//			System.out.println("Process time for sending mandrill " + process_time + "ms");
+//
+//			NamespaceManager.set(oldNamespace);
+//		}
+//		catch (Exception e)
+//		{
+//			System.out.println(ExceptionUtils.getFullStackTrace(e));
+//		}
+//		finally
+//		{
+//			NamespaceManager.set(oldNamespace);
+//		}
+	}
+
+	public static void sendEmail(String toAddress, String subject, String fromName, String fromEmail,
+			List<String> ccEmails, String emailHTML, String replyTo) throws Exception
+	{
+		HashMap<String, Object> options = new HashMap<>();
+		
+		options.put("toAddress", toAddress);
+		options.put("subject", subject);
+		options.put("fromName", fromName);
+		options.put("fromEmail", fromEmail);
+		options.put("ccEmails", ccEmails);
+		options.put("emailHTML", emailHTML);
+		
+		if( StringUtils.isNotBlank(replyTo) )	options.put("replyTo", replyTo);
+		
+		sendEmail(options);
+	}
+
+	public static void sendEmail(HashMap<String, Object> options) throws Exception
+	{
+		if( options == null )	return;
+		
+		String toAddress = (String) options.get("toAddress");
+		String subject = (String) options.get("subject");
+		String fromName = (String) options.get("fromName");
+		String fromEmail = (String) options.get("fromEmail");
+		List<String> ccEmails = (List<String>) options.get("ccEmails");
+		String emailHTML = (String) options.get("emailHTML");
+		String replyTo = (options.containsKey("replyTo")) ? (String) options.get("replyTo") : "";
+		
+		
 		String oldNamespace = NamespaceManager.get();
 
 		try
@@ -328,7 +413,7 @@ public class TicketNotesUtil
 			NamespaceManager.set("");
 
 			EmailGatewayUtil.sendEmail(null, NamespaceManager.get(), fromEmail, fromName, toAddress, ccEmailString, "",
-					subject, "", emailHTML, "", "", null, null);
+					subject, replyTo, emailHTML, "", "", null, null);
 
 			// response =
 			// HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
