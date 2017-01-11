@@ -807,11 +807,11 @@ public class ActivityUtil
 
 				}
 
-			if (compareDoubleValues(oldobj.expected_value, obj.expected_value) != 0)
+			if (compareDoubleValues(oldobj.currency_conversion_value, obj.currency_conversion_value) != 0)
 			{
 				Object[] mapvalue = new Object[3];
-				mapvalue[0] = obj.expected_value;
-				mapvalue[1] = oldobj.expected_value;
+				mapvalue[0] = obj.currency_conversion_value;
+				mapvalue[1] = oldobj.currency_conversion_value;
 				mapvalue[2] = "expected_value";
 				dealmap.put("expected_value", mapvalue);
 			}

@@ -6,7 +6,21 @@
             <a class="text-cap">{{name}}</a>
         </div>
         <div class="text-ellipsis deals-name" style="font-size:13px; margin-top:-2px;">
-            {{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}
+            {{#if_equals currency_conversion_value "0"}}
+                {{currencyType currency_type}}{{currency_conversion_value}}
+            {{else}}
+                {{#if currency_conversion_value}}
+                    {{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}
+                {{else}}
+                    {{#if_equals expected_value "0"}}
+                        {{currencySymbol}}{{numberWithCommas expected_value}}
+                    {{else}}
+                        {{#if expected_value}}
+                            {{currencySymbol}}{{expected_value}}
+                        {{else}}-{{/if}}
+                    {{/if_equals}}
+                {{/if}}
+            {{/if_equals}}
             <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
         </div>
         <!-- <div class="text-ellipsis">
