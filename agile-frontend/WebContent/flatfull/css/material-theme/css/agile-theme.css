@@ -3293,6 +3293,7 @@ width: 169px !important;
 .notifications-header .panel-heading{border-radius: 4px 4px 0 0;}
 #notification-switch label.i-switch{margin-top: 10px;}
 
+
 #analytics-accordion .panel .accordion-toggle, #api-analytics-accordion .panel .accordion-toggle,
 #deal-tracks-accordion .panel .accordion-toggle, #category-tracks-accordion .panel .panel-title{
   font-size: 13px !important;
@@ -3335,6 +3336,7 @@ width: 169px !important;
 .agile-theme-15 #widget_shopify.btn-primary {
   margin: 10px 0px 0px 0px !important;
 }
+
 
 #recent-menu-model-list .recent-view-comany-style.img-inital{
   height: 25px !important;
