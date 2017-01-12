@@ -1,7 +1,6 @@
 $(function(){
 	showLinkedinMatchingProfilesBasedOnName();
 });
-
 /**
  * Fetches matching profiles from LinkedIn based on current contact
  * first name and last name
@@ -18,9 +17,10 @@ function showLinkedinMatchingProfilesBasedOnName(){
 	evt.initEvent('myCustomEvent', true, false);
 	document.dispatchEvent(evt);
 }
-function onLoadHandler(){
-	var ifrm = document.getElementById("linkedin-iframe");
-    ifrmDc = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;       
-	var target = ifrmDc.document.getElementById("search-box");
-	target.innerHTML = name;
+function loadframe(){
+	console.log("load frmae valueee");
+	var node = document.getElementById('contact_name');
+	var contactname = node.textContent;
+	var iframeWin = document.getElementById("linkedin-iframe").contentWindow;
+	iframeWin.postMessage(contactname, "https://touch.www.linkedin.com/#search");
 }
