@@ -34,7 +34,7 @@
 </div>
 </div>
 <div class="wrapper-md dash_tabview agile-p-t-xs">
-    <div class="tabs" id="webrules-tabs-content">
+    <div class="tabs" id="email-templates-tabs-content">
     <div class="tab-container m-b-none">
     <ul class="nav nav-tabs ">
        {{#is_mobile}}
@@ -46,6 +46,7 @@
            <li class="p-none ">
            <a  href="#celebrations" class="b-l-none" data-toggle="tab" ><i class="icon icon-playlist"></i></a></li>
            <li class="p-none ">
+           <a  href="#newtemplates" class="b-l-none" data-toggle="tab" ><i class="icon icon-playlist"></i></a></li>
        {{else}}
            <li class="p-none active">
            <a  href="#newsletters" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Newsletters'}}</a></li>
@@ -54,6 +55,7 @@
            <li class="p-none ">
            <a  href="#celebrations" class="b-l-none" data-toggle="tab" >{{agile_lng_translate 'email-builder' 'Celebrations'}}</a></li>
            <li class="p-none ">
+           <a  href="#newtemplates" class="b-l-none" data-toggle="tab" >New Templates</a></li>
        {{/is_mobile}}
     </ul>
  </div>
@@ -124,6 +126,26 @@
      </div>
     </div>
 
+    <div class="tab-pane fade " id="newtemplates">
+    <div class="row">
+            {{#each new_templates}}
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="panel wrapper text-center border-color">
+                    <!-- Thumbnail and Title -->
+                    <div>
+                       <div class="p-b-sm p-l-none p-r-none">
+                        <a href="#emailbuilder-add/{{id}}"><img style="width:98%;" src="misc/emailbuilder/templates/{{id}}/thumbnail.png"/></a>
+                       </div>
+                    </div>
+                    <!-- Add button -->
+                    <div>
+                        <a class="btn btn-sm btn-default" href="#emailbuilder-add/{{id}}">{{agile_lng_translate 'campaigns' 'go'}}</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}} 
+     </div>
+    </div>
 
 
 

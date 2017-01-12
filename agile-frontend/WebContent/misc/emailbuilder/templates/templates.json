@@ -61,6 +61,24 @@
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
                 }
+            ],
+            "new_templates" :[
+
+                {
+                    "id": "layout11",
+                    "displayname": "sample layout 11",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "layout12",
+                    "displayname": "sample layout 12",
+                    "description": "this is sample text"
+                },
+                {
+                    "id": "layout13",
+                    "displayname": "sample layout 13",
+                    "description": "this is sample text"
+                }
             ]
         }
     ]
