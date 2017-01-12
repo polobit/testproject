@@ -192,6 +192,9 @@ public class JerseyApplication extends Application
 	//Visitors
 	s.add(com.agilecrm.core.api.analytics.VisitorsAPI.class);
 
+	//JSONIO
+	s.add(com.agilecrm.core.api.JsonIOAPI.class);
+
 	return s;
     }
 }
