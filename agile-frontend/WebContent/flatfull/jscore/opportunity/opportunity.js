@@ -1313,9 +1313,9 @@ function fetchDealsList(data){
     	var input = {};
     	input.filterJson=reportFilter;
     	
-    	url = 'core/api/deal/filters/filter/report-filter'+'?order_by='+getDealSortFilter()+'&page_size='+getMaximumPageSize();
+    	url = 'core/api/deal/filters/filter/report-filter'+'?order_by='+getDealSortFilter();
     	App_Deals.opportunityCollectionView = new Deals_Milestone_Events_Collection_View({ url : '' + url,request_method : 'POST',post_data : input,
-        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false,cursor : true, 
+        templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false,cursor : true, page_size : getMaximumPageSize(),
         postRenderCallback : function(el)
         {
 
