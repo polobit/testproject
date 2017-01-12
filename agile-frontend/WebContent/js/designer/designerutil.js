@@ -960,3 +960,72 @@ function insertSelectedOption1(ele ,target_id)
 
 		}	
 	}
+
+// JSONIO Node test
+$("#jsonio_test").die().live("click", function(e){
+    jsonioTest("#jsonio_test");
+
+});
+
+// Testing for JSONIO Node url and data. At the time of saving JSONIO Node we can test with url,params & headers.
+function jsonioTest(button){
+    // Getting the Node data in json format
+    var jsonValues = serializeNodeForm();
+    // Getting all required data for make request
+    var nodeName =  jsonValues[0];
+    var request_url = jsonValues[1].value;
+    var request_method =  jsonValues[2].value;
+    var request_params =  JSON.stringify(jsonValues[3].rest_key_grid);
+    var request_headers =  JSON.stringify(jsonValues[4].rest_headers_grid);
+
+    // validating url
+    var urlValidator = $('input[name="rest_url"]').validator({effect : 'wall',container: '#errorsdiv'});  
+    if(!urlValidator.data("validator").checkValidity()){
+    	// redirect to settings tab
+		$('#Settings-li a').click();
+    	return;
+    }
+       
+    //Replace merge fieeld with empty if there
+    request_params = findMergeField(request_params);
+
+    // Prepare request data
+    var requestData = {url : request_url, method : request_method, params : request_params, headers : request_headers};
+    var url = 'core/api/jsonio';    
+
+    access_url_using_ajax(url,requestData,function(data){
+        window.parent.showModalConfirmation("Server Response",
+            data,
+            null,null,null                      
+            ,"Close", "");       
+    });
+}
+// Send the request through ajax and get the response data
+function access_url_using_ajax(url,requestData,callback){
+    $.ajax({
+          url: url,
+          type: "POST",
+          //async : false,
+          data:  requestData,  
+          success: function (response) {
+            if(callback && typeof (callback) == "function")
+                callback(response);
+            
+            },
+          error: function(Error){
+            console.log(Error);
+          }
+    });
+}
+// Find merge field from given Json Array, if merge field is there then we put as empty
+function findMergeField(request_params){
+	var request_params_array = JSON.parse(request_params);
+    $.each(request_params_array,function(index,data){
+        var regex = /^\{{/ ;
+        var result = regex.test(data["rest_value"]);
+        if(result){
+        	data["rest_value"] = "";
+        }
+    });
+    return JSON.stringify(request_params_array);
+}
