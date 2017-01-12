@@ -65,9 +65,10 @@ import com.thirdparty.sendgrid.SendGrid;
  */
 public class GMail {
 
+	private static final String SMTP_URL ="http://104.155.153.221:8080/agile-smtp/smtpMailSender";		//GCloud
 	//private static final String SMTP_URL ="http://localhost:8081/agile-smtp/smtpMailSender";
 	//private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp-beta/smtpMailSender";
-	private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp/smtpMailSender";
+	//private static final String SMTP_URL ="http://54.234.153.217:80/agile-smtp/smtpMailSender";
 
     private static String applicationName = "gmail_oauth2";
 	
@@ -452,14 +453,13 @@ public class GMail {
 		
 			url.append("user_name=" + URLEncoder.encode(userMailId, "UTF-8")); 
 			url.append("&password=" + URLEncoder.encode(password, "UTF-8"));
-			//url.append("&from_name=" + ((fromName != null) ? URLEncoder.encode(fromName, "UTF-8"):null));
+			url.append("&from_name=" + ((fromName != null) ? URLEncoder.encode(fromName, "UTF-8"):null));
 			url.append("&host=" + URLEncoder.encode(host, "UTF-8"));
 			url.append("&ssl=" + ssl);
 			
 			url.append("&to=" + URLEncoder.encode(to, "UTF-8"));
 			url.append("&cc=" + ((cc != null) ? URLEncoder.encode(cc, "UTF-8"):null));
 			url.append("&bcc=" + ((bcc != null) ? URLEncoder.encode(bcc, "UTF-8"):null));
-			url.append("&from_name=" + ((fromName != null) ? URLEncoder.encode(escapeJava(fromName), "UTF-8"):null));
 
 			url.append("&subject=" + ((subject != null) ? URLEncoder.encode(escapeJava(subject), "UTF-8"):null));
 			url.append("&html=" + ((html != null) ? URLEncoder.encode(escapeJava(html), "UTF-8"):null));

@@ -25,9 +25,10 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class SMTPPrefsUtil {
 	
+	private static final String SMTP_URL ="http://104.155.153.221:8080/agile-smtp/smtpMailSender";		//GCloud
 	//private static final String SMTP_URL = "http://localhost:8081/agile-smtp/smtpMailSender";
 	//private static final String SMTP_URL = "http://54.234.153.217:80/agile-smtp-beta/smtpMailSender";
-	private static final String SMTP_URL = "http://54.234.153.217:80/agile-smtp/smtpMailSender";
+	//private static final String SMTP_URL = "http://54.234.153.217:80/agile-smtp/smtpMailSender";
 	
 	/**
 	 * SMTPPrefs Dao
