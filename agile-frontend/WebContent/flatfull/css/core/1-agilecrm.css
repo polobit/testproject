@@ -5325,3 +5325,7 @@ span.rolecontainer::first-letter {
 {
   width: 100%;
 }
+.contact-desc-dynamic pre 
+{
+  word-break: keep-all;
+}
