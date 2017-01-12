@@ -63,34 +63,37 @@ public class AdminLoginServlet extends HttpServlet {
 			response.getWriter().print("User not exists");
 			return;
 		}
-		if("admin".equals(NamespaceManager.get())){
-			NamespaceManager.set(user.domain);
-			HttpSession session = request.getSession();
-			session.setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, new UserInfo(user));
-	
-			processBeforeDomainRedirect(request);
-			
-			String url = "";
-			if (VersioningUtil.isDevelopmentEnv())
-				url = "localhost:8888";
-			else
-				url = VersioningUtil.getURL(user.domain, request);
-	
-			url = url + "?sp=true";
-			response.sendRedirect(url);
-		}
+
+		NamespaceManager.set(user.domain);
+		System.out.println("domain = "+NamespaceManager.get());
+		
+		HttpSession session = request.getSession();
+		session.setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, new UserInfo(user));
+
+		processBeforeDomainRedirect(request);
+
+		String url = "";
+		if (VersioningUtil.isDevelopmentEnv())
+			url = "localhost:8888";
+		else
+			url = VersioningUtil.getURL(user.domain, request);
+
+		url = url + "?sp=true";
+		response.sendRedirect(url);
 
 	}
-	
+
 	void processBeforeDomainRedirect(HttpServletRequest request) throws ServletException {
 		SessionManager.set(request);
-		
+
 		Long domainuserId = SessionManager.get().getDomainId();
+		System.out.println("domainuserID "+domainuserId);
 		AgileUser agileUser = AgileUser.getCurrentAgileUserFromDomainUser(domainuserId);
-		if(agileUser == null)
+		System.out.println("agileuser ="+agileUser);
+		if (agileUser == null)
 			// Create new Agile User
 			new AgileUser(domainuserId).save();
-		
+
 	}
 
 }
