@@ -3308,3 +3308,13 @@ width: 169px !important;
 #new_tag{
   width: 180px !important;
 }
+#send-reply .btn{
+  font-size: 12px;
+  font-weight: normal;
+}
+.toggle-favorite:hover {
+    color: #11a0f8 !important;
+}
+.toggle-favorite.text-light{
+  color: #11a0f8 !important;
+}
