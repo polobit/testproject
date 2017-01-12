@@ -22,6 +22,7 @@
       onFetch: function(){ },
       target: $(window),
       param: "until",
+      prefill: true,
       extraParams: {},
       pageSizeParam: "page_size",
       untilAttr: "id",

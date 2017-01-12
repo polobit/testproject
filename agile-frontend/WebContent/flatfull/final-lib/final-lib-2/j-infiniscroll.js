@@ -25,6 +25,7 @@
       pageSizeParam: "page_size",
       untilAttr: "id",
       pageSize: pageSize,
+      prefill: true,
       scrollOffset: 100,
       add: true,
       addAll:true,
