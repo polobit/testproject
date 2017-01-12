@@ -78,6 +78,18 @@ public class GmailSendPrefs {
     public String email = null;
 
 	public String oauth_code;
+	
+	 /**
+     * User can send bulk email
+     */
+    @NotSaved(IfDefault.class)
+    public boolean bulk_email = false;
+    
+    /**
+     * Max per day limit of gmail
+     */
+    @NotSaved(IfDefault.class)
+    public long max_email_limit = 200L;
     
 	@Parent
 	@JsonIgnore

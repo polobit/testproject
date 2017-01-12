@@ -29,8 +29,10 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
+
 				<div class="text-center">
 			   		<a href="#" class="btn btn-sm btn-danger" id="gmailsend-prefs-delete" oid={{id}}>{{agile_lng_translate 'web-rules' 'disable'}}</a>
+			   		<a class="btn btn-sm btn-default" href="#gmail-setting/{{id}}">{{agile_lng_translate 'preferences' 'settings'}}</a>
 				</div>
 			</div>
 		{{else}} 
@@ -65,4 +67,65 @@
 
 <script id="settings-gmail-send-collection-template" type="text/html">
 	<div id="settings-gmail-send-model-list"></div>
+</script>
+
+
+<script id="settings-outbound-gmail-send-template" type="text/html">
+{{#if id}}
+	<div class="row">
+		<div class="col-md-4 col-sm-6 col-xs-12 ">
+			<div class="panel panel-default">
+				<div class="panel-heading font-bold"><h4 class="h4">{{agile_lng_translate 'prefs-email' 'gmail'}}</h4></div>
+				    <div class="panel-body">
+				    <form id="gmail-send-setting-form">
+			        <fieldset>
+           			 <div>
+						{{#if picture}} 
+		 				 <i class="media-grid thumb thumb-wrapper"> 
+							{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
+							<img  src="{{emailGravatarurl 75 email}}"  /> 
+						 	{{else}} 
+								<img  src="{{picture}}" /> 
+						{{/if_equals}}
+						 </i>
+						{{else}} 
+							<i class="media-grid"> <img class="thumbnail m-b-none thumb" src="{{emailGravatarurl 50 email}}" /> </i>
+						{{/if}}
+						
+			   				<span >{{name}}</span>
+                			<span >{{email}}</span>
+                			<br>
+					   </div>
+					   
+        				<div class="control-group form-group">
+			                <label class="control-label">Per day email limit 
+			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"="" data-content=" Set your per day email limit which is provided by your SMTP email Provider" id="element" data-trigger="hover" "="" data-original-title="" title="">
+			               </span>
+			               </label>
+			                   <div class="controls">
+			                     <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" value="200"/>
+			                   </div>
+			              </div>
+			              <div class="control-group form-group">
+			            	<div class="checkbox">
+			                <label class="i-checks i-checks-sm">
+			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send campaign emails
+			                </label>
+			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email aso send through SMPT up to max limit" id="element" data-trigger="hover" "="" data-original-title="" title="">
+	               			</span>
+			         	   </div>
+        				</div>
+					            
+					    <div class="form-actions text-center"> 
+							<a href="#email" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>
+					        <a href="#" class="save btn btn-sm btn-primary">{{agile_lng_translate 'portlets' 'save'}} </a>
+					    </div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{/if}}
+
 </script>

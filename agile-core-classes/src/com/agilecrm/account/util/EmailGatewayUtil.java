@@ -39,6 +39,8 @@ import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil.PrefsType;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
@@ -431,20 +433,36 @@ public class EmailGatewayUtil
 	
 					//Fetch the email options from user's gmail oauth preferences 
 					GmailSendPrefs gmailPrefs = GmailSendPrefsUtil.getPrefs(agileUser, fromEmail);
-					if(gmailPrefs != null) {
-						System.out.println("+++gmailSendPrefs.email:" + gmailPrefs.email);
-						GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
-								html, text, documentIds, blobKeys, attachments);
-						return;
+					int emailCount = StringUtils.countMatches(to + cc + bcc , "@");
+					
+					if(gmailPrefs != null) 
+					  {
+						long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, domain, PrefsType.GMAIL);
+						if(emailMaxLimitCount > emailCount)
+						{
+							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, domain, emailCount, PrefsType.GMAIL);
+							
+							System.out.println("GmailPrefs email address : "  + gmailPrefs.email + "   Email Limit : " + emailMaxLimitCount);
+							GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
+									html, text, documentIds, blobKeys, attachments);
+							return;
+						}
 					}
 	
 					//Fetch the email options from user's SMTP preferences 
 					SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
 					if(smtpPrefs != null) {
-						System.out.println("+++smtpPrefs.email:" + smtpPrefs.user_name);
-						GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
+						
+						long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, domain, PrefsType.SMTP);
+						if(emailMaxLimitCount > emailCount)
+						{
+							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, domain, emailCount, PrefsType.SMTP);
+							
+							System.out.println("SMTPPrefs email address : "  + gmailPrefs.email + "   Email Limit : " + emailMaxLimitCount);
+							GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
 								html, text, documentIds, blobKeys, attachments);
 						return;
+					   }
 					}
 				} 
 			} catch(Exception ex) {
@@ -688,6 +706,11 @@ public class EmailGatewayUtil
 	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
 	    			emailGateway.email_api : EMAIL_API.SEND_GRID;
 	    	
+	    	if(SMTPBulkEmailUtil.canSMTPSendEmail(mailDeferredTask))
+	    	{
+	    		tasks = SMTPBulkEmailUtil.sendSMTPBulkEmails(tasks, emailSender);
+	    	}
+	    	
 	    	if(preferredGateway == SEND_GRID)
 			    SendGridUtil.sendSendGridMails(tasks, emailSender);
 
@@ -702,7 +725,7 @@ public class EmailGatewayUtil
 	
 			addEmailLogs(tasks);
 	
-			emailSender.setCount(tasks.size());
+			emailSender.setCount(emailSender.getEmailsToSend());
 			emailSender.updateStats();
 
 

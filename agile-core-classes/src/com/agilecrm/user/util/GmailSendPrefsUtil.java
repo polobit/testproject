@@ -2,9 +2,15 @@ package com.agilecrm.user.util;
 
 import java.util.List;
 
+import com.agilecrm.account.VerifiedEmails;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.GmailSendPrefs;
+import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -103,6 +109,87 @@ public class GmailSendPrefsUtil {
 				gmailSendPrefs.delete();
 		}
 		gmailPrefs.save();
+		
+		//Add email address as a verified email address
+		VerifiedEmailsUtil.addVerifiedEmail(gmailPrefs.email, VerifiedEmails.Verified.YES);
 	}
 
+	/**
+	 * Returns GmailSendPrefs object related to email address
+	 * 
+	 * @param Email
+	 *            - String
+	 *            
+	 * @return GmailSendPrefs.
+	 */
+	public static GmailSendPrefs getPrefs(String fromEmail) {
+		try
+		{
+			return dao.getByProperty("email", fromEmail);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * This method will set max limit of Gmail preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @param domain
+	 * 				-  String
+	 * @return max email count
+	 * 				- long
+	 */
+	private static long setGmailSendPrefsMaxLimit(String fromEmail, String domain)
+	{
+		GmailSendPrefs gmailSendPrefs = getPrefs(fromEmail);
+		
+		if(gmailSendPrefs != null){
+			CacheUtil.setCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , gmailSendPrefs.max_email_limit, SMTPBulkEmailUtil.SMTP_EMAIL_LIMIT_TIME);
+			return gmailSendPrefs.max_email_limit;
+		}
+		return 0;
+	}
+	
+	/**
+	 * This method will set max limit of Gmail preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @param domain
+	 * 				-  String
+	 * @return max email count
+	 * 				- long
+	 * 
+	 */
+	public static long getGmailSendPrefsEmailsLimit(String fromEmail, String domain)
+	{
+		Object maxEmailLimit = CacheUtil.getCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail));
+		if(maxEmailLimit == null)
+			return setGmailSendPrefsMaxLimit(fromEmail, domain);
+		
+		return (long)maxEmailLimit;
+	}
+	
+	/**
+	 * This method will decrease email limit of Gmail preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @param domain
+	 * 				-  String
+	 * @return max email count
+	 * 				- long
+	 * 
+	 */
+	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, String domain, long count)
+	{
+		long maxEmailLimit =(long) CacheUtil.getCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY  + EmailUtil.getEmail(fromEmail));
+		
+		CacheUtil.setCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , maxEmailLimit - count);
+		
+			}
 }

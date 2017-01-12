@@ -41,6 +41,15 @@
                     <input name="password" id="smtp-password" type="password" class="required form-control" placeholder="{{agile_lng_translate 'prefs-settings' 'password'}}" autocapitalize="off" />
                 </div>
             </div>
+             <div class="control-group form-group">
+                <label class="control-label">Per day email limit 
+                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"="" data-content=" Set your per day email limit which is provided by your SMTP email Provider" id="element" data-trigger="hover" "="" data-original-title="" title="">
+               </span>
+               </label>
+                     <div class="controls">
+                        <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" value="200"/>
+                     </div>
+              </div>
             
                 <div class="control-group form-group" id="useSSLCheckboxHolder">
                     <div class="controls">
@@ -53,33 +62,42 @@
                     </div>
                 </div>
 
+         <div class="control-group form-group">
+            <div class="checkbox">
+                <label class="i-checks i-checks-sm">
+                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>Send campaign emails 
+                </label>
+                 <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email aso send through SMPT up to max limit" id="element" data-trigger="hover" "="" data-original-title="" title="">
+               </span>
+            </div>
+        </div>
+
             <div class="alert danger info-block alert-warning text-black">
                 <b>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</b><br>
                 {{agile_lng_translate 'prefs-email' 'smtp-note1'}} <br>
                 {{agile_lng_translate 'prefs-email' 'smtp-note2'}} <br>
-                {{agile_lng_translate 'prefs-email' 'smtp-note3'}} <br>
             </div>
-
-           <!--  <div class="control-group form-group m-t-sm" >
+<!----
+            <div class="control-group form-group m-t-sm" >
                 <div class="controls">
-                    <a href="#" class="smtp-share-settings-select text-info" oid={{id}}><i class='icon-plus-sign'/></i> {{agile_lng_translate 'prefs-email' 'sharing-settings'}}</a>
-                    <span class ="smtp-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
+                    <a href="#" class="smtp-campaign-share-settings-select text-info" oid={{id}}><i class='icon-plus-sign'/></i> {{agile_lng_translate 'prefs-email' 'sharing-settings'}}</a>
+                    <span class ="smtp-campaign-share-settings-txt" style="vertical-align:text-top;margin-left:-3px">         
                      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'prefs-email' 'gmail-settings-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'prefs-email' 'email-account-sharing'}}">
                     </span>
-                    <span class="smtp-share-select" style="display:none;">
-                    <a href="#" class="smtp-share-settings-cancel" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> {{agile_lng_translate 'prefs-email' 'sharing-settings'}}</a>
+                    <span class="smtp-campaign-share-select" style="display:none;">
+                    <a href="#" class="smtp-campaign-share-settings-cancel" style="margin-bottom:20px"><i class='icon-minus-sign'/></i> {{agile_lng_translate 'prefs-email' 'sharing-settings'}}</a>
                     <span style="vertical-align:text-top;margin-left:-3px">         
                      <img border="0" src="{{getS3ImagePath '/img/help.png'}}" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="{{agile_lng_translate 'prefs-email' 'gmail-settings-tooltip'}}" id="element-title" data-trigger="hover" data-original-title="{{agile_lng_translate 'prefs-email' 'email-account-sharing'}}">
                     </span>
                     <br>
                     <label class="control-label" style="margin-top:10px">{{agile_lng_translate 'prefs-email' 'select-users-to-share-with'}}</label>
-                    <select name="shared_with_users_ids" multiple id="smtp-share-user-select" class = "multi-select form-control" style="margin-bottom: 5px; overflow: auto">
+                    <select name="shared_campaign_with_smtp" multiple id="smtp-campaign-share-campaign-select" class = "multi-select form-control" style="margin-bottom: 5px; overflow: auto">
                     </select>
-                    <span class="smtp-share-status"></span>
+                    <span class="smtp-campaign-share-status"></span>
                     </span>
                 </div>
-            </div> -->
-
+            </div> 
+---->
             
             <div class="form-group form-actions"> 
                 <a href="#email" class="btn btn-default btn-sm">{{agile_lng_translate 'other' 'cancel'}}</a>

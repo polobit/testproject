@@ -16,6 +16,8 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.account.VerifiedEmails;
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
@@ -68,6 +70,10 @@ public class SMTPAPI {
 			prefs.setAgileUser(new Key<AgileUser>(AgileUser.class,
 					AgileUser.getCurrentAgileUser().id));
 			prefs.save();
+			
+			//Add email address as a verified email address
+			VerifiedEmailsUtil.addVerifiedEmail(prefs.user_name, VerifiedEmails.Verified.YES);
+			
 			return prefs;
 		/*} else
 			return null;*/
