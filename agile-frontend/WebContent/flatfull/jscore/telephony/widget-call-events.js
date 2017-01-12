@@ -57,7 +57,7 @@ $(function()
 					//asterisk_widget.prefs = eval("(" + asterisk_widget.prefs + ")");
 				}	
 		
-				
+					
 				var manager_details = {};
 				manager_details["id"] = prefs.manager_id;
 				manager_details["password"] = prefs.manager_password;
@@ -459,10 +459,10 @@ function sendActionToClient(action, manager, asterisk, long_details){
 			return;
 		}else if(client == "Asterisk"){
 			closeCallNoty(true);
-			$('#callInfoModal').html(getTemplate("callInfoModal"));
-			$('#callInfoModal').modal('show');
-			$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
-			$('#downloadCallJar_widget').attr("widget-name","Asterisk");
+			//$('#callInfoModal').html(getTemplate("callInfoModal"));
+			//$('#callInfoModal').modal('show');
+			//$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+			//$('#downloadCallJar_widget').attr("widget-name","Asterisk");
 			return;
 		}
 	};

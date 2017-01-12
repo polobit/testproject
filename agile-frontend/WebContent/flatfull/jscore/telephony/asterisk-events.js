@@ -51,6 +51,7 @@ function _getMessageAsterisk(message, callback){
 	var number = message.number;
 	var callId = message.callId;
 	var displayName = message.displayName;
+	var direction = message.direction;
 	var message="";
 
 	try{
@@ -72,10 +73,18 @@ function _getMessageAsterisk(message, callback){
 			globalCallForActivity.justCalledId = callId;
 				
 	}else if(state == "connected"){
+		
+		if(!globalCall.callDirection){
+			globalCall.callDirection = direction;
+
+		}
+
 		if(!globalCall.callDirection){
 			globalCall.callDirection = "Outgoing";
 
-		} 
+		}
+		if(globalCall.callDirection=="incoming")
+			globalCall.callDirection="Incoming" 
 			globalCall.callStatus = "Connected";
 			globalCall.callId = callId;
 			globalCall.callNumber = number;
