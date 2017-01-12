@@ -314,19 +314,14 @@
 						{{agile_lng_translate 'contacts-view' 'deal-deleted-later'}}
 					{{/unless}}
 					{{agile_lng_translate 'campaigns' 'deal'}}  
-					({{#if_equals entityObject.currency_conversion_value "0"}}
-						{{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+					({{#if custom5}}
+						{{splitNumberandSymbol custom5}}
 					{{else}}
-						{{#if entityObject.currency_conversion_value}}
-							{{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+						{{#if_equals entityObject.expected_value "0"}}
+							{{currencySymbol}}{{entityObject.expected_value}}
 						{{else}}
-							{{#if_equals entityObject.expected_value "0"}}
-								{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
-							{{else}}
-								{{currencySymbol}}{{entityObject.expected_value}}
-							{{/if_equals}}
-						{{/if}}
-					{{/if_equals}} - {{custom3}}%) 
+							{{currencySymbol}}{{numberWithCommasForActivities custom2}}{{/if_equals}}
+					{{/if}} - {{custom3}}%) 
 					{{agile_lng_translate 'contacts-view' 'added'}}
 					{{#if entityObject}}
 						{{agile_lng_translate 'contacts-view' 'to-track'}} 
@@ -349,17 +344,17 @@
 					{{agile_lng_translate 'campaigns' 'deal'}}  
 					{{#if this.entityObject}} 
 						({{#if_equals entityObject.currency_conversion_value "0"}}
-							{{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
+						  {{currencyType entityObject.currency_type}}{{entityObject.currency_conversion_value}}
 						{{else}}
-							{{#if entityObject.currency_conversion_value}}
-								{{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
-							{{else}}
-								{{#if_equals entityObject.expected_value "0"}}
-									{{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
-								{{else}}
-									{{currencySymbol}}{{entityObject.expected_value}}
-								{{/if_equals}}
-							{{/if}}
+						  {{#if entityObject.currency_conversion_value}}
+						    {{currencyType entityObject.currency_type}}{{numberWithCommas entityObject.currency_conversion_value}}
+						  {{else}}
+						    {{#if_equals entityObject.expected_value "0"}}
+						      {{currencySymbol}}{{entityObject.expected_value}}
+						    {{else}}
+						      {{currencySymbol}}{{numberWithCommas entityObject.expected_value}}
+						    {{/if_equals}}
+						  {{/if}}
 						{{/if_equals}} - {{entityObject.probability}}%) 
 						{{agile_lng_translate 'contacts-view' 'added-to-track'}}  
 							' {{entityObject.milestone}}'.

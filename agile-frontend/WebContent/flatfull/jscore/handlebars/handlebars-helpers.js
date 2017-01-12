@@ -8224,4 +8224,13 @@ Handlebars.registerHelper('isUserNotInIphone', function(options)
 	}
 	return options.inverse(this);
 });
-
+//for currency symbol and value in deal activities
+Handlebars.registerHelper('splitNumberandSymbol', function(value)
+{
+	if(!value)
+		return
+	var symbol = value.split(/_(.+)/)[1];
+	var number = value.split(/_(.+)/)[0];	
+	symbol += number.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '');
+	return symbol;
+});
