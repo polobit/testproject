@@ -5285,7 +5285,6 @@ span.rolecontainer::first-letter {
   margin-top: -5px;
 }
 .app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
-
 #new_tag{
   width: 180px !important;
 }
@@ -5307,4 +5306,22 @@ span.rolecontainer::first-letter {
 .recent-view-background-color[icon="icon-money"]{
   display: inherit !important;
   padding: 0px !important; 
+}
+#api_track_webrules_code .linenums ,#api_track_code .linenums
+{
+  margin: 0 0 0 0px;
+  
+}
+#api_track_webrules_code.prettyprint.linenums,#api_track_code.prettyprint.linenums
+{
+  font-size: 14px!important;
+}
+.grp-clipboard-track-code,.grp-clipboard-webrule-code
+{
+  margin-bottom: 10px;
+  float: right;
+}  
+#api_track_code , #api_track_webrules_code
+{
+  width: 100%;
 }
