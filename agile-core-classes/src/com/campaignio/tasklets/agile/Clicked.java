@@ -147,7 +147,11 @@ public class Clicked extends TaskletAdapter
 			JSONObject customData) throws Exception
 	{
 		data = JSONUtil.mergeJSONs(new JSONObject[] { data, customData });
-
+		
+		// Reset email_click to not affect next Clicked node in workflow.
+		if (data.has(SendEmail.EMAIL_CLICK) && data.getBoolean(SendEmail.EMAIL_CLICK))
+			data.remove(SendEmail.EMAIL_CLICK);
+		
 		// Execute Next One in Loop (Yes)
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
 	}
