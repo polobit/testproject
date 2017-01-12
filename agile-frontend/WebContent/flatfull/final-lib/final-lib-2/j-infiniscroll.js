@@ -65,6 +65,7 @@
         self.disableFetch();
       }
       self.options.success(collection, response);
+      self.prefillSucess(collection, response);
     };
 
     self.fetchError = function(collection, response) {
@@ -98,6 +99,16 @@
       }
       prevScrollY = scrollY;
     };
+
+
+    self.prefillSucess = function(collection, response){
+      var windownHeight = $target.scrollTop() + $target.height();
+      if($(window).height() > $("#content").height()){
+        self.enableFetch();
+        self.watchScroll();
+      }
+    };
+
     //used for fetching next set of records.
     //mostly useful for programmatic triggering.
     self.fetchNext = function(e) {
