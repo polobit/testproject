@@ -1679,16 +1679,18 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 }
 
 // Send DTMF signal to twilio active connection from dialpad.
-function twilioSendDTMF(digit)
+function twilioSendDTMF(digit,aphabets)
 {
 	console.log("twilioSendDTMF: " + digit);
+	console.log("twilioSendDTMF: " + aphabets);
+
 
 	// session for call is active and number is available.
 	if (Twilio.Device.status() == "busy" && digit)
 	{
 		// send dtmf on twilio
 		// if (connection)
-		globalconnection.sendDigits(digit);
+		globalconnection.sendDigits(digit,aphabets);
 	}
 }
 
