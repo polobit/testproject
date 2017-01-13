@@ -153,7 +153,7 @@ figure {
     font-weight: 400;
 }
 .quote .content {
-    background: url("http://localhost:8888/flatfull/images/flatfull/quote_top.png") no-repeat left top, url("http://localhost:8888/flatfull/images/flatfull/quote_bottom.png") no-repeat right bottom;
+    background: url("https://agilecrm.s3.amazonaws.com/pagebuilder/static/elements/images/block-images/quote_top.png") no-repeat left top, url("https://agilecrm.s3.amazonaws.com/pagebuilder/static/elements/images/block-images/quote_bottom.png") no-repeat right bottom;
     color: #fff;
     margin: 0;
     padding: 0 15px;
@@ -188,18 +188,15 @@ figure {
     border-top: 20px solid #17c4bb;
 }
 .client_area .client_data {
-    float: left;
     color: #8e8e8e;
-    margin: -5px 0 0 15px !important;
-   font-size: 14px;
-   width:60%;
-   text-align: left;
+    font-size: 14px;
+    text-align: left;
 }
 .client_area .client_name {
     color: #666;
     float: left;
     font-size: 18px;
-    margin: 20px 0 0 15px;
+    margin: 20px 0 0 0;
 }
 #newtemp6{
     background: #f6f6f6;
@@ -207,7 +204,7 @@ figure {
 }
 .client_image{
     float: left;
-    margin: 10px 0 0 5px;
+    margin: 10px 0 0 -10px;
 }
 .client_area{
     margin: 25px 0 0;
