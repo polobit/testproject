@@ -711,19 +711,22 @@ public class EmailGatewayUtil
 	    		tasks = SMTPBulkEmailUtil.sendSMTPBulkEmails(tasks, emailSender);
 	    	}
 	    	
-	    	if(preferredGateway == SEND_GRID)
-			    SendGridUtil.sendSendGridMails(tasks, emailSender);
-
-	    	else if(preferredGateway == MANDRILL)
-	    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
-		
-	    	else if(preferredGateway == SES)
-				AmazonSESUtil.sendSESMails(tasks, emailSender);
-	    	
-			else if(preferredGateway == MAILGUN)
-				 MailgunUtil.sendMailgunMails(tasks, emailSender);
+	    	if(tasks.size() > 0)
+	    	{
+		    	if(preferredGateway == SEND_GRID)
+				    SendGridUtil.sendSendGridMails(tasks, emailSender);
 	
-			addEmailLogs(tasks);
+		    	else if(preferredGateway == MANDRILL)
+		    		MandrillUtil.splitMandrillTasks(tasks, emailSender);
+			
+		    	else if(preferredGateway == SES)
+					AmazonSESUtil.sendSESMails(tasks, emailSender);
+		    	
+				else if(preferredGateway == MAILGUN)
+					 MailgunUtil.sendMailgunMails(tasks, emailSender);
+		
+				addEmailLogs(tasks);
+	    	}
 	
 			emailSender.setCount(emailSender.getEmailsToSend());
 			emailSender.updateStats();

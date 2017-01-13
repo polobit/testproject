@@ -1,8 +1,10 @@
 package com.campaignio.wrapper;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.cursor.Cursor;
+import com.agilecrm.util.SMTPBulkEmailUtil;
 
 public class CampaignLogWrapper extends Cursor
 
@@ -57,6 +59,11 @@ public class CampaignLogWrapper extends Cursor
      * Message
      */
     private String message;
+    
+    /**
+     * email sent via SMTP, Gmail, Gateway
+     */
+    public String sent_via;
 
     /**
      * Log epoch time(log_time converted) is sent along with other fields. Epoch
@@ -75,9 +82,17 @@ public class CampaignLogWrapper extends Cursor
 		return this.message;
 	}
 
-	public void setMessage(String message) {
-		this.message = StringEscapeUtils.unescapeJava(message).replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
+	public void setMessage(String message) {	
+
+		message = StringEscapeUtils.unescapeJava(message).replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
 			        "<script>-->");
+		
+		this.sent_via = SMTPBulkEmailUtil.getEmailSentVia(message); 
+		
+		if(StringUtils.isNotBlank(sent_via))
+			this.message = SMTPBulkEmailUtil.getEmailLogMessage(message);
+		else
+			this.message = message;
 	}
 
 }

@@ -5,11 +5,15 @@ import java.util.List;
 import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.scribe.api.GoogleApi;
+import com.agilecrm.thirdparty.gmail.GMail;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
@@ -187,9 +191,39 @@ public class GmailSendPrefsUtil {
 	 */
 	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, String domain, long count)
 	{
-		long maxEmailLimit =(long) CacheUtil.getCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY  + EmailUtil.getEmail(fromEmail));
+		SMTPBulkEmailUtil.updateCacheLimit(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) ,count);
 		
-		CacheUtil.setCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , maxEmailLimit - count);
-		
+	}
+	
+	
+	public static Credential getGoogleAuthCredential(GmailSendPrefs gmailSendPrefs){
+		try{
+			//Get Gmail authentication credential object
+			Credential gcredential = new GoogleCredential
+				.Builder()
+				.setTransport(GMail.HTTP_TRANSPORT)
+				.setJsonFactory(GMail.JSON_FACTORY)
+				.setClientSecrets(GoogleApi.SMTP_OAUTH_CLIENT_ID, GoogleApi.SMTP_OAUTH_CLIENT_SECRET)
+				.build()
+				.setAccessToken(gmailSendPrefs.token)
+				.setRefreshToken(gmailSendPrefs.refresh_token);
+			
+			// Chech if gmail auth token is expired then create new one
+			if(gmailSendPrefs.expires_at == null || gmailSendPrefs.expires_at < System.currentTimeMillis()) {
+				gcredential.refreshToken();
+				gmailSendPrefs.refresh_token = gcredential.getRefreshToken();
+				gmailSendPrefs.token = gcredential.getAccessToken();
+				gmailSendPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
+				
+				//Update gmail prefs
+				gmailSendPrefs.save();
 			}
+			return gcredential;
+	     }
+		catch(Exception e){
+			e.printStackTrace();
+			System.out.println("Exception occured while getting google Credential : " +e.getMessage());
+			return null;
+		}
+    }
 }

@@ -301,11 +301,9 @@ public class SMTPPrefsUtil {
 	 */
 	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, String domain, long count)
 	{
-		long maxEmailLimit =(long) CacheUtil.getCache(domain + SMTPBulkEmailUtil.SMTP_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail));
+		SMTPBulkEmailUtil.updateCacheLimit(domain + SMTPBulkEmailUtil.SMTP_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , count);
 		
-		CacheUtil.setCache(domain + SMTPBulkEmailUtil.SMTP_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , maxEmailLimit - count);
-		
-			}
+     }
 	
 	/**
 	 * Separately configure SMTP Properties for SSL enabled/SSL disabled (TLS)

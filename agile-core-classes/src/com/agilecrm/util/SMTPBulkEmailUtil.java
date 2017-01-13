@@ -1,5 +1,6 @@
 package com.agilecrm.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.Address;
@@ -12,14 +13,15 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
-import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.thirdparty.gmail.GMail;
 import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.sun.mail.smtp.SMTPTransport;
 
 /**
@@ -63,6 +65,16 @@ public class SMTPBulkEmailUtil {
 	  * Memcache per day Email limit expire time in millisecond
 	  */
 	 public static final int SMTP_EMAIL_LIMIT_TIME = 60*60*1000;
+	 
+	 /**
+	  * SMTP email sent log type
+	  */
+	 private static final String SMTP_EMAIL_SENT_LOG = "_SMTP_";
+	 
+	 /**
+	  * GMAIL email sent log type
+	  */
+	 private static final String GMAIL_EMAIL_SENT_LOG = "_GMAIL_";
 	 
 	
 	/**
@@ -160,7 +172,7 @@ public class SMTPBulkEmailUtil {
 	 */
 	private static List<MailDeferredTask> sendSMTPPrefsBulkEmail(List<MailDeferredTask> tasks, SMTPPrefs smtpSendPrefs, long emailLimits, EmailSender emailSender) {
 
-		List<MailDeferredTask> completedTasks = null;
+		List<MailDeferredTask> completedTasks = new ArrayList<MailDeferredTask>();
 		try{
 			  SMTPTransport smtpTransport = SMTPPrefsUtil.buildSMTPTransportObject(smtpSendPrefs);
 			  
@@ -184,14 +196,15 @@ public class SMTPBulkEmailUtil {
 					decreaseSMTPEmailsLimit(mailDeferredTask.fromEmail, mailDeferredTask.domain, count, PrefsType.SMTP);
 					
 					emailLimits = emailLimits - count;
+					System.out.println("SMTP email count for domain : " + mailDeferredTask.domain + "  : " + emailLimits);
 					//add email sent log
 					completedTasks.add(addBulkSMTPEmailLogMessage(mailDeferredTask, PrefsType.SMTP));
-					
-					//Removing the task from List
-					tasks.remove(mailDeferredTask);
 				}
-				
 			 }
+			//Remove completed task
+			 if(completedTasks.size() > 0)
+				for(MailDeferredTask mailDeferredTask: completedTasks)
+					tasks.remove(mailDeferredTask);
 		}
 		catch(Exception e){
 			System.out.println("Exception Occured while sending bulk email through SMTPPrefs : " + smtpSendPrefs.user_name + e.getMessage());
@@ -219,27 +232,13 @@ public class SMTPBulkEmailUtil {
 	 */
 	private static List<MailDeferredTask> sendGmailPrefsBulkEmail(List<MailDeferredTask> tasks, GmailSendPrefs gmailSendPrefs, long emailLimits, EmailSender emailSender) {
 		 
-		  List<MailDeferredTask> completedTasks = null;
+		  List<MailDeferredTask> completedTasks = new ArrayList<MailDeferredTask>();
 		  
 		try{
-			//Get Gmail authentication credential object
-			Credential gcredential = new GoogleCredential
-				.Builder()
-				.setTransport(GMail.HTTP_TRANSPORT)
-				.setJsonFactory(GMail.JSON_FACTORY)
-				.setClientSecrets(GoogleApi.SMTP_OAUTH_CLIENT_ID, GoogleApi.SMTP_OAUTH_CLIENT_SECRET)
-				.build()
-				.setAccessToken(gmailSendPrefs.token)
-				.setRefreshToken(gmailSendPrefs.refresh_token);
-			
-			// Chech if gmail auth token is expired then create new one
-			if(gmailSendPrefs.expires_at == null || gmailSendPrefs.expires_at < System.currentTimeMillis()) {
-				gcredential.refreshToken();
-				gmailSendPrefs.refresh_token = gcredential.getRefreshToken();
-				gmailSendPrefs.token = gcredential.getAccessToken();
-				gmailSendPrefs.expires_at = gcredential.getExpirationTimeMilliseconds();
-				GmailSendPrefsUtil.save(gmailSendPrefs);	
-			}
+			  Credential gcredential = GmailSendPrefsUtil.getGoogleAuthCredential(gmailSendPrefs);
+			  if(gcredential == null)
+				  return tasks;
+			  
 			  boolean emailCategory = EmailGatewayUtil.isEmailCategoryTransactional(emailSender);
 			 
 			  for(MailDeferredTask mailDeferredTask:tasks){
@@ -259,14 +258,16 @@ public class SMTPBulkEmailUtil {
 					decreaseSMTPEmailsLimit(mailDeferredTask.fromEmail, mailDeferredTask.domain, count, PrefsType.GMAIL);
 					
 					emailLimits = emailLimits - count;
+					System.out.println("GMAIL email count for domain : " + mailDeferredTask.domain + "  : " + emailLimits);
 					//add email sent log
-					completedTasks.add(addBulkSMTPEmailLogMessage(mailDeferredTask, PrefsType.SMTP));
-					//Removing the task from List
-					tasks.remove(mailDeferredTask);
+					completedTasks.add(addBulkSMTPEmailLogMessage(mailDeferredTask, PrefsType.GMAIL));
+					
 				}
-				
 			  }
-			
+			//Remove completed task
+				if(completedTasks.size() > 0)
+				  for(MailDeferredTask mailDeferredTask: completedTasks)
+					tasks.remove(mailDeferredTask);
 		}
 		catch(Exception e){
 			System.out.println("Exception Occured while sending bulk email through GmailPrefs : " + gmailSendPrefs.email + e.getMessage());
@@ -377,11 +378,57 @@ public class SMTPBulkEmailUtil {
 	private static MailDeferredTask addBulkSMTPEmailLogMessage(	MailDeferredTask mailDeferredTask, PrefsType type) {
 	     
 		if(type.equals(PrefsType.GMAIL))
-	    	  mailDeferredTask.to += " <br/> Sent Via : Gmail";
-		
-		mailDeferredTask.to += " <br/> Sent Via : SMTP";
+	    	  mailDeferredTask.to += GMAIL_EMAIL_SENT_LOG;
+		else
+			mailDeferredTask.to += SMTP_EMAIL_SENT_LOG;
 		
 		return mailDeferredTask;
 	}
+	
+	/**
+	 * This method will update the Memcache count
+	 * 
+	 * @param key
+	 * 
+	 * @param value
+	 */
+	public static void updateCacheLimit(String key, long value){
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
 
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		syncCache.increment(key, -value);
+
+		NamespaceManager.set(oldNamespace);
+	}
+	
+	/**
+	 * This method will return sent vai for campaign log
+	 * @param message
+	 * @return
+	 */
+	 public static String getEmailSentVia(String message){
+	    	if(message.contains(SMTP_EMAIL_SENT_LOG))
+	    		return "SMTP";
+	    	
+	    	if(message.contains(GMAIL_EMAIL_SENT_LOG))
+	    	   return "Gmail";
+	    	
+	    	return "";
+	    }
+	 
+	 /**
+		 * This method will return message of the campaign log
+		 * after subtracting sent via log
+		 * 
+		 * @param message
+		 * @returnmessage
+		 */
+		 public static String getEmailLogMessage(String message){
+		    	message = StringUtils.remove(message, SMTP_EMAIL_SENT_LOG);
+		    	
+		    	message = StringUtils.remove(message, GMAIL_EMAIL_SENT_LOG);
+		    	
+		    	return message;
+		    }
 }

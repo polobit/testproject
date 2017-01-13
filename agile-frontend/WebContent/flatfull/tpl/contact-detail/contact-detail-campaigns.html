@@ -115,7 +115,9 @@
 		{{/if}}
 	</div>
 <div class="pull-left rightThumbView pos-rlt">
-	<div class="m-t-none text-cap text-md custom-color w-half pull-left">{{titleFromEnums log_type}}</div>
+	<div class="m-t-none text-cap text-md custom-color w-half pull-left">{{titleFromEnums log_type}} 
+  <span class="log-created-time text-muted" style="font-size: 12px;margin-left: 3px;text-transform: none;">
+    via {{sent_via}}</span></div>
 	  <div class="edit-hover w-half pull-right text-ellipsis text-right">
 		<span>{{agile_lng_translate 'contact-details' 'campaign'}} - </span>
          {{#hasMenuScope 'CAMPAIGN'}}
