@@ -270,8 +270,10 @@ public class SubscriptionUtil
 	    return;
 
 	subscription.plan = null;
-	if(SubscriptionUtil.downgradeFreePlanRestrictions().size() > 0)
+	if(SubscriptionUtil.downgradeFreePlanRestrictions().size() > 0){
+		System.out.println("changing sttaus to SUBSCRIPTION_DELETED::: due to PLanrestrictions");
 		subscription.status = BillingStatus.SUBSCRIPTION_DELETED;
+	}
 	subscription.save();
     }
 
