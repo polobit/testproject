@@ -248,7 +248,16 @@ function isValidForm(form) {
 		
 	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-a-valid-date'}}");
 
-    
+	jQuery.validator.addMethod("variableFormat", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
+		return /(^(({{)*\w+(}})*[=]({{)*\w+(}})*)$)|^((({{)*\w+(}})*=({{)*\w+(}})*)([|]({{)*\w+(}})*=({{)*\w+(}})*)*)$/.test(value);
+	},_agile_get_translated_val("validation-msgs",'Pls-enter-proper-format'));
+
+
 	jQuery.validator.addMethod("field_length", function(value, element){
 		if(value=="")
 			return true;

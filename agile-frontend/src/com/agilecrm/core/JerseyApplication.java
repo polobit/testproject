@@ -109,6 +109,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.OfficeCalendar365API.class);
 	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
 	s.add(com.agilecrm.core.api.widgets.BriaWidgetAPI.class);
+	s.add(com.agilecrm.core.api.widgets.CallWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.SkypeWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.KloutWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.AndroidAPI.class);

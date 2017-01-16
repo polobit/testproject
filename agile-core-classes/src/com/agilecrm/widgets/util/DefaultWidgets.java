@@ -90,7 +90,12 @@ public class DefaultWidgets {
 			 "Import and manage voicemail drops easily",
 			 "/widgets/voice-mail.js", "widgets/voicemail.png",
 			 "widgets/voicemail.png", null, WidgetType.CALL));
-
+		widgets.add(new Widget(
+				"Asterisk",
+				"Asterisk",
+				"Make and receive calls with your customers using Asterisk account.",
+				"/widgets/asterisk.js", "/img/plugins/asterisk-call.png",
+				"/img/plugins/asterisk-call.png", null, WidgetType.CALL));
 		/**
 		 * Social widgets Order
 		 */
@@ -243,7 +248,7 @@ public class DefaultWidgets {
 			return WidgetType.SUPPORT;
 		} else if (Arrays.asList(
 				new String[] { "Twilio", "Sip", "TwilioIO", "CallScript",
-						"Bria", "Skype", "Ozonetel","VMdrops"}).contains(widgetName)) {
+						"Bria", "Skype", "Ozonetel","VMdrops", "Asterisk"}).contains(widgetName)) {
 			return WidgetType.CALL;
 		} else if (Arrays.asList(new String[] { "FreshBooks", "Stripe" })
 				.contains(widgetName)) {

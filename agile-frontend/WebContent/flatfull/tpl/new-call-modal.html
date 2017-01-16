@@ -1,8 +1,12 @@
+
+<!-- use with $("#globalModal") modal to show the script -->
 <script type="text/html" id="callInfoModalAlert-template">
+
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
+
         <h3 class="modal-title">&nbsp;Alert</h3>
     </div>
     <div class="modal-body">
@@ -17,12 +21,14 @@
     </div>
 </script>
 
-
+<!-- use with $("#globalModal") modal to show the script -->
 <script type="text/html" id="callInfoModalConfirm-template">
+
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">&times;</button>
+
         <h3 class="modal-title">&nbsp;<span class="confirm-title">{{agile_lng_translate 'others' 'confirm'}}</span></h3>
     </div>
     <div class="modal-body">
@@ -39,5 +45,68 @@
     </div>
     </div>
 	<div id="modal-data-value" class="modal-data-value"></div>
+
+    </div>
+</script>
+
+
+
+<!--use callInfoModal modal to popuate the script-->
+<script type="text/html" id="callInfoModal-template">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title" id="callModal_title">&nbsp;</h3>
+    </div>
+    <div class="modal-body">
+       <div class="text-base p-b-lg" id="callModal_body1">
+
+
+      {{agile_lng_translate 'widgets' 'sorry-we-coud-not-establish-a-connection'}}<br>
+        {{agile_lng_translate 'widgets' 'it-sees-that-you-are-not-running-the-execuitable-file'}}       
+        
+       </div>
+       
+       <div class="text-xs" id="callModal_body3">
+      {{agile_lng_translate 'widgets' 'run-as-admin-in-windows'}}
+
+          
+        
+       </div>
+       <div class="text-xs" id="callModal_body2">
+      {{agile_lng_translate 'widgets' 'if-you-donoto-have-the-execuitable-to-make-a-call'}}
+
+          <a href="#" class="text-info" target="_blank" widget-name="" id="downloadCallJar_widget">{{agile_lng_translate 'contact-details' 'here'}}</a>.
+        
+       </div>
+       
+    </div>
+    <div class="modal-footer" >
+        <a href="#" class="btn btn-sm btn-default" id="callModal_info_ok">{{agile_lng_translate 'widgets' 'okay'}}</a>
+    </div>
+    </div>
+    </div>
+
+</script>
+
+<!--use with callInfoModal modal to populate the script -->
+<script type="text/html" id="callStatusModal-template">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title" id="callStatusModal_title">&nbsp;</h3>
+    </div>
+    <div class="modal-body">
+       <div class="text-base p-b-lg" id="callStatusModal_body1">
+       {{agile_lng_translate 'campaigns' 'already-on-call'}}
+       </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-sm btn-default" id="callModal_status_ok">{{agile_lng_translate 'widgets' 'okay'}}</a>
+    </div>
+    </div>
     </div>
 </script>
