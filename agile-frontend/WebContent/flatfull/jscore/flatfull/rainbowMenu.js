@@ -231,7 +231,7 @@ $("#mobile-menu-settings").on("click",function(){
 function handleNewThemeSettings() {
 	var newThemeURL = "flatfull/css/material-theme/min/agile-theme-15.css?_=" + _AGILE_VERSION;
 	$("html").removeClass (function (index, css) {
-    	return (css.match (/(^|\s)agile-theme-\S+/g) || []).join(' ');
+    	return (css.match (/(^|\s)agile-theme-15\S+/g) || []).join(' ');
 	});
 
 	// Show top menu option

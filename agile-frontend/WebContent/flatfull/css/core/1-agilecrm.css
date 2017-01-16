@@ -5311,11 +5311,10 @@ span.rolecontainer::first-letter {
 .dashboard-select.grid-v2 {
     position: fixed !important;
     left: 50%;
-    top: 16px;
-    z-index: 1029;
+     z-index: 1029;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
-    top: 12px !important;
+    top: 8px !important;
     background-color: #fff !important;
     color: #5840eb !important;
     border-radius:4px;

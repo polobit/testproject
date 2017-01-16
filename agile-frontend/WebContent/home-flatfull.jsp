@@ -76,7 +76,7 @@ if(currentUserPrefs.theme.equalsIgnoreCase("15")) {
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
 
-<html class="<%=HomeUtil.getNewThemeClasses(request, domainUser, currentUserPrefs)%>">
+<html class="<%=HomeUtil.getNewThemeClasses(request, domainUser, currentUserPrefs) + " agile-theme-" + domainUser.role.toString()%>">
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
