@@ -409,7 +409,10 @@ var Base_Collection_View = Backbone.View
               element="section";
             if(that.options.custom_scrollable_element)
               element=that.options.custom_scrollable_element;
-            $(element, that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
+            if($(window).height() > $("#content").height())
+              $(element, that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR_BIG_SCREENS + '</div>');
+            else
+              $(element, that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
           } });
 
           /*
@@ -503,14 +506,13 @@ var Base_Collection_View = Backbone.View
         var fetchCount = this.collectionFetchCount;
         if(fetchCount) 
           return;
-
         this.collectionFetchCount = 1;      
         var target =  this.options.scroll_target ? this.options.scroll_target: $(window);
         var minHeight = $(window).height();
         //var windownHeight = $target.scrollTop() + $target.height();
         if($(target).height() > $("#content").height()){   
-          //this.$el.trigger('transition:complete');
-          $("#content").css("min-height",minHeight);
+          this.$el.trigger('transition:complete');
+          //$("#content").css("min-height",minHeight);
         }
       },
 
@@ -784,9 +786,9 @@ var Base_Collection_View = Backbone.View
           // endFunctionTimer("postRenderCallback");
 
         // printCurrentDateMillis("render end");
-          
-         /* this.prefillSucess();*/
-        var target =  this.options.scroll_target ? this.options.scroll_target: $(window);
+        if(this.infiniScroll && ($(window).height() > $("#content").height()) && !this.options.scroll_target)
+          this.prefillSucess();
+       /* var target =  this.options.scroll_target ? this.options.scroll_target: $(window);
         if(this.collection.length > 0){
           if(!this.collection.last().get("cursor") || this.collection.first().get("count") == this.collection.models.length){
               $("#content").css("min-height","0px");
@@ -797,7 +799,7 @@ var Base_Collection_View = Backbone.View
               $("#content").css("min-height",minHeight);
             }
           }
-        }
+        }*/
         return this;
       }, });
 /**
