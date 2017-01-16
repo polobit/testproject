@@ -483,6 +483,7 @@ public class TwilioWidgetsAPI
 	public Note autoSaveNote(@FormParam("subject") String subject, @FormParam("message") String message,
 			@FormParam("contactid") String contactid,@FormParam("phone") String phone,@FormParam("callType") String callType,@FormParam("status") String status, @FormParam("duration") String duration)
 	{
+		System.out.println("Twilio notes calling auto save function called");
 		Long contactId = Long.parseLong(contactid);
 		Note note = new Note(subject, message);
 		note.addRelatedContacts(contactId.toString());
@@ -492,6 +493,8 @@ public class TwilioWidgetsAPI
 			note.status = status.toLowerCase();
 			note.duration = Long.parseLong(duration);
 		}
+		System.out.println("Twilio notes issues done");
+		System.out.println(note.toString());
 		note.save();
 		return note;
 	}
