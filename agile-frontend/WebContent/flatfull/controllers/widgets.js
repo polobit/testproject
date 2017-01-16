@@ -282,7 +282,8 @@ var WidgetsRouter = Backbone.Router
             Xero : function(id) {
                 if (!id) {
                     // For live use.
-                    var URL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins";
+                   //var URL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins";
+                     var URL = "http://integrations.agilecrm.com/ClickdeskPlugins";
                     // For local use.
                     //var URL = "http://localhost:8585/clickdesk-plugins";
 
