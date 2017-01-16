@@ -74,13 +74,20 @@
     	{"url":"elements/footer3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
     ],
     "New Template":[
-        {"url":"elements/newtemp1.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
-        {"url":"elements/newtemp2.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
-        {"url":"elements/newtemp3.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"},
-        {"url":"elements/newtemp4.html","height":294, "thumbnail":"elements/images/thumbs/footer1.png"},
-        {"url":"elements/newtemp5.html","height":107, "thumbnail":"elements/images/thumbs/footer2.png"},
-        {"url":"elements/newtemp6.html","height":230, "thumbnail":"elements/images/thumbs/footer3.png"},
-        {"url":"elements/newtemp7.html","height":260, "thumbnail":"elements/images/thumbs/footer3.png"}
+        {"url":"elements/newtemp1.html","height":294, "thumbnail":"elements/images/thumbs/new/newtemp1.png"},
+        {"url":"elements/newtemp2.html","height":107, "thumbnail":"elements/images/thumbs/new/newtemp2.png"},
+        {"url":"elements/newtemp3.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp3.png"},
+        {"url":"elements/newtemp4.html","height":294, "thumbnail":"elements/images/thumbs/new/newtemp4.png"},
+        {"url":"elements/newtemp5.html","height":107, "thumbnail":"elements/images/thumbs/new/newtemp5.png"},
+        {"url":"elements/newtemp6.html","height":230, "thumbnail":"elements/images/thumbs/new/newtemp6.png"},
+        {"url":"elements/newtemp7.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp7.png"},
+        {"url":"elements/newtemp8.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp8.png"},
+        {"url":"elements/newtemp9.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp9.png"},
+        {"url":"elements/newtemp10.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp10.png"},
+        {"url":"elements/newtemp11.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp11.png"},
+        {"url":"elements/newtemp12.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp12.png"},
+        {"url":"elements/newtemp13.html","height":260, "thumbnail":"elements/images/thumbs/new/newtemp13.png"}
+
     ]
     }
 }
