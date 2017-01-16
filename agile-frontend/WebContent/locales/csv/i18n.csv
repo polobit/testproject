@@ -5984,3 +5984,5 @@ deal-view.deals-archive-warn-msg,Archived deals will not be visible and can be v
 deal-view.delete-n-selected-deals,Delete {{selected_count}} Selected Deals?,,,,,,,,,,,,,
 contacts-view.merge-records,Merge Records,,,,,,,,,,,,,
 contacts-view.merge-records-desc,Selected data will be merged into a master record. Do you want to proceed?,,,,,,,,,,,,,
+widgets.login-to-linkedin,Login to,,,,,,,,,,,,,
+widgets.linkedin-info-login,to show search results and profiles in your linkedin widget,,,,,,,,,,,,,

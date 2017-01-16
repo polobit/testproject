@@ -324,14 +324,18 @@
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
 	{{agile_lng_translate 'widjets' 'build-professional-relationship-with-contacts'}}
 	<div class="m-t-md  m-b-xs text-center">
-		{{#if id}}			
+		{{#if id}}	
 			<a class="btn btn-sm btn-danger deleteWidget" widget-name="Linkedin" widget-displayname="Linkedin">Delete</a>
+			<a href="#add-widget" class="btn btn-default btn-sm ml_5">{{agile_lng_translate 'other' 'cancel'}}</a>
 		{{else}}
 			<form  id="linkedin_login_form" name="linkedin_login_form" method="post">
 				 <a class='save-agile-widget btn btn-primary btn-sm text-l-none'>Enable</a>
 		    </form>								
 		{{/if}}
 	</div>
+	{{#if id}}	
+		<span style="font-size: 10px;margin-top: 5px;padding:0px" class="col-md-12">{{agile_lng_translate 'widgets' 'login-to-linkedin'}} <a href="https://www.linkedin.com/" class="text-info font-bold" target="_blank">{{agile_lng_translate 'contact-edit' 'linkedin'}}</a> {{agile_lng_translate 'widgets' 'linkedin-info-login'}}</span>	
+	{{/if}}
 </div>
 </script>
 
