@@ -10,7 +10,20 @@
   </div>
 
   <div class="text-ellipsis deals-name" style="font-size:13px; margin-top:-2px;">
-  {{#if_equals expected_value "0"}}{{currencySymbol}}{{expected_value}}{{/if_equals}}{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{/if}}
+{{#if_equals currency_conversion_value "0"}}
+      <span>{{currencyType currency_type}}{{currency_conversion_value}}</span>
+    {{else}}
+      {{#if currency_conversion_value}}
+          <span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+      {{else}}
+        {{#if_equals expected_value "0"}}
+            <span>{{currencySymbol}}{{expected_value}}</span>
+          {{/if_equals}}
+          {{#if expected_value}}
+          <span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+         {{/if}}
+      {{/if}}
+    {{/if_equals}}
 <span class="p-l-sm">{{milestone}} ({{probability}}%)</span>
   </div>
 
@@ -31,7 +44,21 @@
     <a class="text-cap">{{name}}</a>
   </div>
 </td>
-<td value="{{expected_value}}"><div class="text-ellipsis" style="width:7em">{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
+<td value="{{expected_value}}"><div class="text-ellipsis" style="width:7em">
+    {{#if_equals currency_conversion_value "0"}}
+      <span>{{currencyType currency_type}}{{currency_conversion_value}}</span>
+    {{else}}
+      {{#if currency_conversion_value}}
+          <span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+      {{else}}
+        {{#if_equals expected_value "0"}}
+            <span>{{currencySymbol}}{{expected_value}}</span>
+          {{/if_equals}}
+          {{#if expected_value}}
+          <span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+         {{/if}}
+      {{/if}}
+    {{/if_equals}}</div></td>
 <td><div class="text-ellipsis" style="width:10em">{{milestone}} ({{probability}}%) </div></td>
 <td>
 <div  style="width:10em">
@@ -50,7 +77,6 @@
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </div>
 </td>
-
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>
 <div class="text-ellipsis" style="width:5em">

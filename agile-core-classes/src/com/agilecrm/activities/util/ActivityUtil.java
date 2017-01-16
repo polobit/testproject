@@ -384,6 +384,15 @@ public class ActivityUtil
 		activity.activity_type = activity_type;
 		activity.entity_type = EntityType.DEAL;
 		activity.entity_id = deal.id;
+		try {
+			if(activity_type.equals(ActivityType.DEAL_ADD)){
+				if(deal.currency_type != null && deal.currency_conversion_value != null)
+					activity.custom5 =  deal.currency_conversion_value.toString() +"_"+ deal.currency_type.split("-")[1];				
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		/*
 		 * // save the new milestone, if user changed the milestone. if
@@ -807,11 +816,11 @@ public class ActivityUtil
 
 				}
 
-			if (compareDoubleValues(oldobj.expected_value, obj.expected_value) != 0)
+			if (compareDoubleValues(oldobj.currency_conversion_value, obj.currency_conversion_value) != 0)
 			{
 				Object[] mapvalue = new Object[3];
-				mapvalue[0] = obj.expected_value;
-				mapvalue[1] = oldobj.expected_value;
+				mapvalue[0] = obj.currency_conversion_value;
+				mapvalue[1] = oldobj.currency_conversion_value;
 				mapvalue[2] = "expected_value";
 				dealmap.put("expected_value", mapvalue);
 			}
