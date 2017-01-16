@@ -285,6 +285,10 @@ function getTemplateUrls(templateName)
 		template_relative_urls.push("leads-detail.js");
 	}
 	
+	if (templateName.indexOf("asterisk") == 0)
+	{	
+		template_relative_urls.push("asterisk.js");
+	}
 	return template_relative_urls;
 }
 
