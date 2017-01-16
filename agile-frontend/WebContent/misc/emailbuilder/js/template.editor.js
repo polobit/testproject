@@ -916,20 +916,32 @@ $(document).ready(function () {
             $('#'+id).find('.image').css({'padding-right': '0px', 'padding-left': '0px'});
     });
 
-    var width ;
+    
     $(document).on('change', '#image-caption-position', function(e){
         var id = $('#path').val();
+        var width;
         var textWidth = parseInt($('#'+id).closest('table').find(".image-caption-column-text").attr('width'));
+        var imageWidth = parseInt($("#"+id).closest(".main").find('.image-caption-column img').attr('width'));
+
         if($('#'+id).closest('table').find(".image-caption-column-text").attr('width') != '100%')
             width = textWidth;
+        else
+            width = 505 - imageWidth;
+        
 
         if(e.target.value == "left"){
             $('#'+id).closest('table').find(".image-caption-column").attr("align", "right");
             $('#'+id).closest('table').find(".image-caption-column-text").attr({'align': 'left', 'data-align': 'left', 'width': width});
+            var image = $('#'+id).closest('table').find(".image-caption-column");
+            $('#'+id).closest('table').find(".image-caption-column").remove();
+            $('#'+id).closest('table').find(".image-caption-column-text").after(image);
         }
         else if(e.target.value == "right"){
             $('#'+id).closest('table').find(".image-caption-column").attr("align", "left");
             $('#'+id).closest('table').find(".image-caption-column-text").attr({'align': 'right',  'data-align': 'right', 'width': width});
+            var text = $('#'+id).closest('table').find(".image-caption-column-text");
+            $('#'+id).closest('table').find(".image-caption-column-text").remove();
+            $('#'+id).closest('table').find(".image-caption-column").after(text);
         }
         else if(e.target.value == "top"){
             $('#'+id).closest('table').find(".image-caption-column").attr("align", "center");
