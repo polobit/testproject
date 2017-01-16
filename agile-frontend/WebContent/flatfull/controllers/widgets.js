@@ -283,7 +283,7 @@ var WidgetsRouter = Backbone.Router
                 if (!id) {
                     // For live use.
                    //var URL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins";
-                     var URL = "http://integrations.agilecrm.com/ClickdeskPlugins";
+                     var URL = "http://integrations.agilecrm.com/agilewidgets";
                     // For local use.
                     //var URL = "http://localhost:8585/clickdesk-plugins";
 
