@@ -1679,7 +1679,7 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 }
 
 // Send DTMF signal to twilio active connection from dialpad.
-function twilioSendDTMF(digit,aphabets)
+function twilioSendDTMF(digit)
 {
 	console.log("twilioSendDTMF: " + digit);
 	console.log("twilioSendDTMF: " + aphabets);
@@ -1690,7 +1690,7 @@ function twilioSendDTMF(digit,aphabets)
 	{
 		// send dtmf on twilio
 		// if (connection)
-		globalconnection.sendDigits(digit,aphabets);
+		globalconnection.sendDigits(digit);
 	}
 }
 
