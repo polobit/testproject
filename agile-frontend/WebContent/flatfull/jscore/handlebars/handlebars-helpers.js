@@ -1126,6 +1126,8 @@ $(function()
 		var value = (currency_type ? currency_type : CURRENT_USER_PREFS.currency);
 		value = (value ? value : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
 		return symbol;
 	});
 	Handlebars.registerHelper('currencySymbol', function()
