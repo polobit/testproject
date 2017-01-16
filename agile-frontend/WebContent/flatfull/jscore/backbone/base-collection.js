@@ -258,6 +258,7 @@ var Base_Collection_View = Backbone.View
       events : {
         "click .temp_collection_event" : "tempEvent",
         "click .searchFetchNext" : "fetchNextCollectionModels",
+        'transition:complete': 'fetchNextCollectionModels'
       },
 
       /**
@@ -275,7 +276,7 @@ var Base_Collection_View = Backbone.View
             showTransitionBar();
 
         // Binds functions to view
-        _.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI', 'removeItemOnEvent');
+        _.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'appendItemsOnAddEvent', 'buildCollectionUI', 'removeItemOnEvent','prefillSucess');
 
         if (this.options.data)
         {
@@ -436,6 +437,15 @@ var Base_Collection_View = Backbone.View
             options || (options = {})
             options.data || (options.data = {});
             options.data['page_size'] = page_size;
+
+            /*options.success = function(arg){
+              console.log(arg);
+              if(arg.length < 25){
+                $("#content").css("min-height","0px");
+              }
+              console.log("aa");
+            }*/
+
             if(global_sort_key && global_sort_key != null)
               options.data['global_sort_key'] = global_sort_key;
             if(request_method && request_method != null) {
@@ -446,6 +456,7 @@ var Base_Collection_View = Backbone.View
                 });
               }
             }
+
             return Backbone.Collection.prototype.fetch.call(this, options);
           };
 
@@ -488,11 +499,28 @@ var Base_Collection_View = Backbone.View
         }
       },
 
+      prefillSucess : function(){
+        var fetchCount = this.collectionFetchCount;
+        if(fetchCount) 
+          return;
+
+        this.collectionFetchCount = 1;      
+        var target =  this.options.scroll_target ? this.options.scroll_target: $(window);
+        var minHeight = $(window).height();
+        //var windownHeight = $target.scrollTop() + $target.height();
+        if($(target).height() > $("#content").height()){   
+          //this.$el.trigger('transition:complete');
+          $("#content").css("min-height",minHeight);
+        }
+      },
+
       tempEvent: function(){
         console.log("tempEvent");
       },
       fetchNextCollectionModels : function(e){
-        e.preventDefault();
+        if(e)
+          e.preventDefault();
+
         this.infiniScroll.fetchNext();
       },
       removeItemOnEvent : function(){
@@ -756,7 +784,20 @@ var Base_Collection_View = Backbone.View
           // endFunctionTimer("postRenderCallback");
 
         // printCurrentDateMillis("render end");
-
+          
+         /* this.prefillSucess();*/
+        var target =  this.options.scroll_target ? this.options.scroll_target: $(window);
+        if(this.collection.length > 0){
+          if(!this.collection.last().get("cursor") || this.collection.first().get("count") == this.collection.models.length){
+              $("#content").css("min-height","0px");
+          }else{
+            if($(target).height() > $("#content").height()){   
+              //this.$el.trigger('transition:complete');
+              var minHeight = $(window).height();
+              $("#content").css("min-height",minHeight);
+            }
+          }
+        }
         return this;
       }, });
 /**
