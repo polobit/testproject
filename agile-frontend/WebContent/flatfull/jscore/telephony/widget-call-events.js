@@ -7,6 +7,8 @@
  //callStatus :Ideal, Incoming,Missed,  Connecting,Connected,  Ended,Failed
 
 $(function()
+{
+	
 
 
 	$('#content').on('click', '.Asterisk_call', function(e)
@@ -55,7 +57,7 @@ $(function()
 					//asterisk_widget.prefs = eval("(" + asterisk_widget.prefs + ")");
 				}	
 		
-					
+				
 				var manager_details = {};
 				manager_details["id"] = prefs.manager_id;
 				manager_details["password"] = prefs.manager_password;
@@ -95,7 +97,8 @@ $(function()
 		globalCall.callDirection = "Outgoing";
 		sendActionToClient(action,manager_details,asterisk_details,asterisk_details_long);
 
-	});	
+	});
+
 	$('body').on('click', '.contact-make-bria-call, .Bria_call', function(e)
 	{
 	  	e.preventDefault();
@@ -107,9 +110,7 @@ $(function()
 		}
 		var action ={};
 	  	action['command'] = "startCall";
-	  	var callNumber = $(this).closest(".contact-make-call").attr("phone");
-	  	generateNumberAndExtension(callNumber, action);
-	  	//action['number'] = $(this).closest(".contact-make-call").attr("phone");
+	  	action['number'] = $(this).closest(".contact-make-call").attr("phone");
 	  	action['callId'] = "";
 
 	  	
@@ -136,9 +137,7 @@ $(function()
 			  	e.stopPropagation();
 				var action ={};
 			  	action['command'] = "startCall";
-			  	var callNumber = $(this).closest(".contact-make-call-div").children().first().attr("phone");
-			  	generateNumberAndExtension(callNumber, action);
-			  	//action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
+			  	action['number'] = $(this).closest(".contact-make-call-div").children().first().attr("phone");
 			  	action['callId'] = "";
 			  	
 				if(checkForActiveCall()){
@@ -166,6 +165,9 @@ $(function()
 				}
 			});
 	
+
+
+
 	
 // }
 
@@ -185,7 +187,7 @@ $(function()
 	
 	
 //answer the callT
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_answer, .noty_skype_answer, .noty_asterisk_answer', function(e)
 		{
 			e.preventDefault();
 			var json = {"command" : "answerCall"};
@@ -209,7 +211,7 @@ $(function()
 
 
 //hang up the call	
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_hangup, .noty_skype_hangup', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_hangup, .noty_skype_hangup, .noty_asterisk_hangup', function(e)
 		{
 		
 		e.preventDefault();
@@ -229,7 +231,7 @@ $(function()
 
 
 //cancel the outgoing call	
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_cancel, .noty_skype_cancel', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_cancel, .noty_skype_cancel, .noty_asterisk_cancel', function(e)
 	{
 		
 		e.preventDefault();
@@ -249,7 +251,7 @@ $(function()
 
 	
 //show dialpad	 ---note implemented
-	$('body #wrap #agilecrm-container').on('click', '.noty_bria_dialpad, .noty_skype_dialpad', function(e)
+	$('body #wrap #agilecrm-container').on('click', '.noty_bria_dialpad, .noty_skype_dialpad, .noty_asterisk_dialpad', function(e)
 	{
 	e.preventDefault();
 	e.stopPropagation();
@@ -404,7 +406,7 @@ function sendDTMF(digit)
 // This function sends the command to local jar running in client side to make the call
 //{paramerters} -- command to execute, number to call and call id of the ingoing call if any
 
-function sendActionToClient(action){
+function sendActionToClient(action, manager, asterisk, long_details){
 	
 	var domain = CURRENT_DOMAIN_USER['domain'];
 	var id = CURRENT_DOMAIN_USER['id'];
@@ -412,11 +414,6 @@ function sendActionToClient(action){
 	var number = action.number;
 	var callid = action.callId;
 	var client = globalCall.calledFrom;
-	var extension = "";
-	
-	if(action['extension']){
-		extension = action['extension'];
-	}
 	
 	if(command == "startCall"){
 		var btns = [];
@@ -462,14 +459,13 @@ function sendActionToClient(action){
 			return;
 		}else if(client == "Asterisk"){
 			closeCallNoty(true);
-			//$('#callInfoModal').html(getTemplate("callInfoModal"));
-			//$('#callInfoModal').modal('show');
-			//$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
-			//$('#downloadCallJar_widget').attr("widget-name","Asterisk");
+		//	$('#callInfoModal').html(getTemplate("callInfoModal"));
+		//	$('#callInfoModal').modal('show');
+		//	$('#callModal_title').html("{{agile_lng_translate 'widgets' 'asterisk'}}");
+		//	$('#downloadCallJar_widget').attr("widget-name","Asterisk");
 			return;
 		}
 	};
-
 	if(client == "Asterisk"){
 		if(command == "startCall"){
 			image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk;mName="+manager.id+";mPass="+manager.password+";ip=" +manager.hostname+";channel="+asterisk.channel+";context="+asterisk.context+";exten="+asterisk.extension+";callerId="+asterisk.callerId+";timeout="+asterisk.timeout+";priority="+asterisk.priority+";variables="+long_details.variables+"?";	
@@ -477,26 +473,17 @@ function sendActionToClient(action){
 			image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type=Asterisk?";	
 		}
 	return;	
-	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+";extension="+extension+"?";
-}
-
-
-function generateNumberAndExtension(number, json){
-	var num = "";
-	var ext = "";
-	
-	if(number && number.indexOf(";") != -1){
-		ext = number.split(";")[1];
-		num = number.split(";")[0];
-	}else{
-		num = number;
 	}
 
-	json['number'] = num;
-	json['extension'] = ext;
-	return;
+	image.src = "http://localhost:33333/"+ new Date().getTime() +"?command="+command+";number="+number+";callid="+callid+";domain="+domain+";userid="+id+";type="+client+"?";
 }
 
+
+
+
+/*
+ * This will save the note for the call
+ */
 function autosaveNoteTelephony(note,call){
 	$.post( "/core/api/widgets/twilio/autosavenote", {
 		subject: note.subject,
@@ -521,6 +508,11 @@ function autosaveNoteTelephony(note,call){
 		});
 }
 
+
+
+/*
+ * This will show the note to the user after the call is completed sucessfully
+ */
 function saveCallNoteTelephony(call){
 	
 	if(!globalCallForActivity.callDirection || !globalCallForActivity.callStatus  || !globalCallForActivity.callNumber){
