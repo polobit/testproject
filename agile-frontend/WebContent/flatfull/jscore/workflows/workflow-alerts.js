@@ -201,7 +201,7 @@ function verify_from_email(json)
 
 			     // Hide form elements
 			     $(".verification-msg").hide();
-			     
+			     $('#verify-email-form #emial-domain-observer').empty();
 			     $('#verify-email-form').find('div.row div').hide();
 			     $('#verify-email-form').find('input').val(json.email);
 			     $(".email-verification-fields").hide();
@@ -217,7 +217,7 @@ function verify_from_email(json)
 				{ 
 					// Hide form elements
 					$(".verification-msg").hide();
-			    
+			    	$('#verify-email-form #emial-domain-observer').empty();
 					$('#verify-email-form').find('div.row div').hide();
 					$('#verify-email-form').find('div.row input').val(json.email);
 			     	 $(".email-verification-fields").hide()
