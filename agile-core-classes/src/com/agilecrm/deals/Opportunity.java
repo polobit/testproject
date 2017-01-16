@@ -1,14 +1,20 @@
 package com.agilecrm.deals;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -17,6 +23,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.activities.Category;
 import com.agilecrm.activities.util.ActivitySave;
@@ -27,6 +35,8 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
@@ -41,6 +51,7 @@ import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -287,9 +298,22 @@ public class Opportunity extends Cursor implements Serializable
 
 	/**
      * ObjectifyDao of Opportunity.
+     * @throws JSONException 
+     * @throws IOException 
+     * @throws MalformedURLException 
      */
-  
-    public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
+    @NotSaved
+    public boolean isCurrencyUpdateRequired = true ;
+    
+   //Value of the currency converted at the time of deal created
+    public Double currency_conversion_value = null;
+    
+    
+    
+  // Type of the currency used for the particular deal
+    public String currency_type = null;
+	
+	public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
     
     /**
      * Set of tags. Not saved in it, it is used to map tags from client
@@ -314,11 +338,15 @@ public class Opportunity extends Cursor implements Serializable
     /**
      * Default Constructor.
      */
+    
+    
     public Opportunity()
     {
     }
 
-    /**
+    
+
+	/**
      * Constructs a new {@link Opportunity}.
      * 
      * @param name
@@ -335,11 +363,14 @@ public class Opportunity extends Cursor implements Serializable
      *            - Track.
      * @param ownerId
      *            - Owner id.
+	 * @throws IOException 
+	 * @throws JSONException 
      */
     public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
-	    String track, String ownerId)
+	    String track, String ownerId) throws IOException, JSONException
     {
-	this.name = name;
+
+    this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
 	this.milestone = milestone;
@@ -363,8 +394,9 @@ public class Opportunity extends Cursor implements Serializable
     }
 
     public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
-	    int probability, String track, String ownerId)
+	    int probability, String track, String ownerId) throws IOException, JSONException
     {
+  
 	this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
@@ -373,8 +405,23 @@ public class Opportunity extends Cursor implements Serializable
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
-
     }
+    
+    public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
+    	    int probability, String track, String ownerId, String currency_type, double currency_conversion_value) throws IOException, JSONException
+        {
+      
+    	this.name = name;
+    	this.description = description;
+    	this.expected_value = expectedValue;
+    	this.pipeline_id = pipelineId;
+    	this.milestone = milestone;
+    	this.probability = probability;
+    	this.track = track;
+    	this.owner_id = ownerId;
+    	this.currency_type = currency_type;
+    	this.currency_conversion_value =  currency_conversion_value ;
+        }
 
     /**
      * Gets contacts related with deals.
@@ -592,6 +639,13 @@ public class Opportunity extends Cursor implements Serializable
 	}
 	else if (oldOpportunity == null && this.milestone.equalsIgnoreCase(wonMilestone))
 	    this.won_date = System.currentTimeMillis() / 1000;
+	if(oldOpportunity != null){
+		if (oldOpportunity.currency_type != null && oldOpportunity.currency_conversion_value != null){
+			int retVal = Double.compare(oldOpportunity.currency_conversion_value, this.currency_conversion_value);
+			if(retVal ==0 && (this.currency_type == null || this.currency_type.equals(oldOpportunity.currency_type)))
+				isCurrencyUpdateRequired = false;
+		}				
+	}
 	dao.put(this);
 
 	// Executes trigger
@@ -864,10 +918,71 @@ public class Opportunity extends Cursor implements Serializable
     /**
      * Sets created time, owner key and agile user. PrePersist is called each
      * time before object gets saved.
+     * @throws IOException 
+     * @throws JSONException 
      */
     @PrePersist
-    private void PrePersist()
+    private void PrePersist() throws IOException, JSONException
     {
+    	if(expected_value != null && currency_conversion_value == null){
+    		currency_conversion_value = expected_value ;
+    		isCurrencyUpdateRequired = false;
+    	}
+    	else if(expected_value == null && currency_conversion_value == null){
+			isCurrencyUpdateRequired = false;
+		}
+    	else if(currency_conversion_value !=null)
+			if(currency_type == null){	
+				expected_value = currency_conversion_value;
+				isCurrencyUpdateRequired = false ;
+			}
+			else
+				isCurrencyUpdateRequired = true;
+    	// Sets the currency conversion value
+    	if(isCurrencyUpdateRequired){
+	    	String userpref_currency_type = null;
+	    	JSONObject listOfRates = null;   	
+			CurrencyConversionRates cuRates = OpportunityUtil.getCurrencyConversionRates();
+			listOfRates = new JSONObject(cuRates.currencyRates);
+			try 
+			{
+				UserPrefs userPrefs = null;
+				try {
+					DomainUser domuser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
+					AgileUser au = AgileUser.getCurrentAgileUserFromDomainUser(domuser.id);
+					userPrefs = UserPrefsUtil.getUserPrefs(au);
+					if (userPrefs != null)
+						userpref_currency_type = userPrefs.currency;
+					if (userpref_currency_type == null)
+						userpref_currency_type = "USD";
+					else
+						userpref_currency_type = userpref_currency_type.substring(0, 3).toUpperCase();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					userpref_currency_type = "USD";
+				}
+				String deal_currency_type = null;
+				if(currency_type != null)
+					deal_currency_type = currency_type.substring(0, 3);
+				if (deal_currency_type == null)
+					deal_currency_type = userpref_currency_type;
+				double pre_conversion_value_numerator = listOfRates.getDouble(deal_currency_type);
+				double pre_conversion_value_denominator = listOfRates.getDouble(userpref_currency_type);
+	
+				if (userpref_currency_type.equalsIgnoreCase(deal_currency_type)) {
+					
+					expected_value = currency_conversion_value;
+				} else {
+	
+					expected_value = (pre_conversion_value_denominator / pre_conversion_value_numerator)
+							* currency_conversion_value;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
 
 	if (colorName == null)
 	    colorName = Color.WHITE;
@@ -1024,6 +1139,16 @@ public class Opportunity extends Cursor implements Serializable
 		}
 	}
 	
+    }
+    
+    @PostLoad
+    public void postLoad(){    	
+    	try {
+    		if(currency_conversion_value == null && expected_value != null)
+    		   currency_conversion_value =  expected_value;   	      
+    	  } catch (Exception e) {
+    		  e.printStackTrace();
+    	  }
     }
 
     @XmlElement(name = "note_ids")

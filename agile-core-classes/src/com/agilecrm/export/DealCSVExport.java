@@ -88,13 +88,15 @@ public class DealCSVExport
 	    }
 	    str[indexMap.get(MILESTONE)] = deal.milestone;
 	    str[indexMap.get(PROBABILITY)] = deal.probability + "%";
-	    String currency = UserPrefsUtil.getCurrentUserPrefs().currency;
+	    String currency = deal.currency_type ;
+	    currency = (StringUtils.isNotBlank(currency) && currency != null) ? currency : UserPrefsUtil.getCurrentUserPrefs().currency;
 	    if (StringUtils.isNotBlank(currency))
 		currency = currency.split("-")[1];
 	    else
 		currency = "$";
+	    Double cuvalue = deal.currency_conversion_value != null ? deal.currency_conversion_value :deal.expected_value ;
 	    str[indexMap.get(EXPECTED_VALUE)] = currency + " "
-		    + (deal.expected_value != null ? deal.expected_value : 0);
+		    + (cuvalue != null ? cuvalue : 0);
 
 	    str[indexMap.get(OWNER)] = deal.getOwner().email;
 	    if (deal.close_date != null)

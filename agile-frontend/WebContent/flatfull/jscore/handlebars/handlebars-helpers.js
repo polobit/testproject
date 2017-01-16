@@ -8309,3 +8309,12 @@ Handlebars.registerHelper('is_enable_lcf_rel_cond', function(options)
 	}
 	return options.inverse(this);
 });
+Handlebars.registerHelper('splitNumberandSymbol', function(value)
+{
+	if(!value)
+		return
+	var symbol = value.split(/_(.+)/)[1];
+	var number = value.split(/_(.+)/)[0];	
+	symbol += number.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '').replace('.0', '');
+	return symbol;
+});

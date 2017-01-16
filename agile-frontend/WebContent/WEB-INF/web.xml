@@ -1344,6 +1344,14 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>DealCurrencyConverter</servlet-name>
+		<servlet-class>com.agilecrm.DealCurrencyConverter</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DealCurrencyConverter</servlet-name>
+		<url-pattern>/backend/cron/deal-currency-converter</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>_ah_sessioncleanup</servlet-name>
 		<servlet-class>com.google.apphosting.utils.servlet.SessionCleanupServlet</servlet-class>
 	</servlet>
