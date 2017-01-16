@@ -170,7 +170,7 @@ function send_verify_email(el)
 						}
 						*/
 						$('#verify-email-form #emial-domain-observer').empty();
-						$('#verify-email-form #emial-domain-observer').append('<span for="email" generated="true"><p>It looks like you are using a new domain at Agile. You need to Authorize Agile to send emails on your behalf. This is a required step to ensure that your emails are not going to the junk or spam mailbox.Please configure <a href="#verify-domain/'+emailDomain+'" target="_blank" style="color: #19a9d5;!important">DKIM and SPF</a> to proceed.</p></span>');
+						$('#verify-email-form #emial-domain-observer').append('<span for="email" generated="true"><p>It looks like you are using a new domain at Agile. You need to authorize Agile to send emails on your behalf. This is a required step to ensure that your emails are not going to the junk or spam mailbox.Please configure <a href="#verify-domain/'+emailDomain+'" target="_blank" style="color: #19a9d5;!important">DKIM and SPF</a> to proceed.</p></span>');
 						$('#verify-email-send').attr('disabled', false).text('Send verification Email');
 
 						return;
