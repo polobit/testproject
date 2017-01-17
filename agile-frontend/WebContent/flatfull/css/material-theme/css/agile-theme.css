@@ -3532,3 +3532,10 @@ width: 169px !important;
 {
       background-color: #F4F8F9;
 }
+h4#plan_name {
+margin: 0px !important;
+}
+.ticket-timeline-container .bg-lightyellow
+{
+  margin-top:5px!important;
+}
