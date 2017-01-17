@@ -3654,3 +3654,10 @@ color: #78909c!important;
  #new-ticket .cc-emails li.tag-li{
   display: block !important;
  }
+
+ #new-ticket  .icon-plus-sign{
+  margin-top: 3px !important; 
+ }
+ #new-ticket .control-label{
+  margin-bottom: 5px;
+ }
