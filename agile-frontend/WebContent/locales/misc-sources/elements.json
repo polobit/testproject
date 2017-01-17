@@ -80,6 +80,9 @@
     	{"url":"elements/team2.html","height":810, "thumbnail":"elements/images/thumbs/team2.png"},
         {"url":"elements/team3.html","height":752, "thumbnail":"elements/images/thumbs/team3.png"}
     ],
+    "{{agile_lng_translate 'landingpage-builder' 'faqs'}}":[
+        {"url":"elements/newtemp14.html","height":400, "thumbnail":"elements/images/thumbs/new/newtemp14.png"}       
+    ], 
     "{{agile_lng_translate 'landingpage-builder' 'pricing-table'}}":[
     	{"url":"elements/pricing_table1.html","height":628, "thumbnail":"elements/images/thumbs/pricing_table1.png"},
     	{"url":"elements/pricing_table2.html","height":750, "thumbnail":"elements/images/thumbs/pricing_table2.png"},
