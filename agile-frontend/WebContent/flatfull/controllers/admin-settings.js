@@ -75,6 +75,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"api-analytics" : "apiAnalyticsCode","api-analytics/:id" : "apiAnalyticsCode",
 
+	/*DKIM & SPF*/
+	"verify-domain" : "verifyDomain","verify-domain/:id" : "verifyDomain",
+
 
 	},
 
@@ -1859,8 +1862,68 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$(".active").removeClass("active");
 			
 		}, "#telephony-listner");
-	}
+	},
 
+	/**
+	 * Creates a Model to validate DKIM & SPF settings for email domain.
+	 */
+	verifyDomain : function(id){
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			getTemplate('others-not-allowed', {}, undefined, function(template_ui){
+				if(!template_ui)
+					  return;
+				$('#content').html($(template_ui));	
+			}, "#content");
+
+			return;
+		}
+		getTemplate("admin-settings", {}, undefined, function(template_ui){
+			if(!template_ui)
+				  return;
+			$('#content').html($(template_ui));	
+
+			head.js(LIB_PATH + 'lib/prettify-min.js', function()
+			{
+				var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-verify-domain-model", postRenderCallback : function(el)
+				{					
+					$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
+					$('#content').find('#AdminPrefsTab .select').removeClass('select');
+					$('#content').find('.verify-domain-tab').addClass('select');
+					// prettyPrint();
+					if (id)
+					{
+						$(el).find('input').val(id);
+						setTimeout(function(){ $(el).find('#get_whitelabel_key').trigger('click') }, 500);
+					}
+
+					try
+					{
+						if (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE")
+							$("#tracking-webrules, .tracking-webrules-tab").hide();
+						else
+							$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+					}
+					catch (e)
+					{
+						$("#tracking-webrules-whitelist, .tracking-webrules-whitelist-tab").hide();
+					}
+
+					prettify_api_add_events();
+					// initializeRegenerateKeysListeners();
+					loadZeroclipboard2(function()
+	 						{	
+	 							initZeroClipboard2($('.grp-clipboard-track-code'), $('.clipboard-track-code-text'));
+	 							initZeroClipboard2($('.grp-clipboard-webrule-code'), $('.clipboard-webrule-text'));
+	 							initZeroClipboard2($('.grp-clipboard-webrule-whitelist-code'), $('.clipboard-webrule-whitelist-text'));
+	 						});					
+
+				} });
+			});
+
+		}, "#content");
+	}
 });
 
 
@@ -1975,3 +2038,4 @@ function showSSO(){
 		SHOW_SSO_FORM = true;
 	});
 }
+

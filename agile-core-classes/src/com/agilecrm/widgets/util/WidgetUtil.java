@@ -598,9 +598,10 @@ public class WidgetUtil {
 	}
 	
 	/**
-	 * get the total widgets count
+	 * Check widgets limit
 	 * exclude INTEGRATION and CUSTOM widget_type
-	 * and check limits
+	 * 
+	 * if any user having more widgets than limit returns 'count' other wise returns '0'
 	 * @return
 	 */
 	public static int checkForDowngrade(int limit, List<AgileUser> users){
