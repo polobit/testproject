@@ -3423,7 +3423,7 @@ width: 169px !important;
   padding: 6px 12px !important;
   margin-top:3px !important;
 }
-.agile-theme-15 .add-me-to-cc{
+.agile-theme-15 .add-me-to-cc,.remove-date,.assign-to-me{
   font-size: 10px;
   margin-top: 2px;
 }
@@ -3538,4 +3538,17 @@ margin: 0px !important;
 .ticket-timeline-container .bg-lightyellow
 {
   margin-top:5px!important;
+}
+
+.choose-due-date:hover{
+     color: #11a0f8 !important;
+ }
+/* li.support-help-icon > a{
+  margin-top: 3px !important;
+}*/
+.tickets-main #tickets-inner{  padding-top:10px;}
+
+.tag-new-theme:hover{
+background-color: #f4f8f9!important;
+color: #78909c!important;
 }
