@@ -81,7 +81,7 @@
                   </div>
                 </div>
 
-                <div class="row m-n p-t-sm">
+                <div class="row m-n p-t-sm ticket-email-newtheme">
                   <div class="col-md-12 p-n m-b-xxs">{{agile_lng_translate 'tickets' 'CCs'}}
                     <a class="add-me-to-cc link-color pull-right text-xs" href="javascript:void(0);" style="{{#containsScope requester_email cc_emails}} display:none {{/containsScope}}">{{agile_lng_translate 'tickets' 'cc-me'}}</a>
                   </div>
@@ -122,15 +122,15 @@
                       <div class="col-xs-3 col-sm-3 col-md-3 p-n">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="tomorrow">{{agile_lng_translate 'tasks' 'Tomorrow'}}</a>
                       </div>
-                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center"> | </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center" {{#isNewTheme}}style="visibility:hidden;margin-left:1px;"{{/isNewTheme}}> | </div>
                       <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_two_days">+2</a>
                       </div>
-                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center"> | </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center" {{#isNewTheme}}style="visibility:hidden;margin-left:-3px;"{{/isNewTheme}}> | </div>
                       <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_three_days">+3</a>
                       </div>
-                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center"> | </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center" {{#isNewTheme}}style="visibility:hidden;margin-left:-3px;"{{/isNewTheme}}> | </div>
                       <div class="col-xs-1 col-sm-1 col-md-1 p-n text-center">
                         <a href="javascript:void(0);" class="c-p text-info link-color choose-due-date txt-small" data-value="next_five_days">+5</a>
                     </div>
@@ -161,7 +161,7 @@
 
                   <div class="col-md-6 p-l-n">
                     <div class="p-n m-b-xxs">{{agile_lng_translate 'contacts-view' 'type'}}</div>
-                    <select id="type" name="type" class="form-control text-xs ticket_type select-new-theme" style="height: 28px;padding: 3px 6px;">
+                    <select id="type" name="type" class="form-control text-xs ticket_type ticket_type_newtheme select-new-theme" style="height: 28px;padding: 3px 6px;">
                       <option value="QUESTION" {{#if_equals type "QUESTION"}}selected{{/if_equals}}>
                         {{agile_lng_translate 'tickets' 'question'}}
                       </option>
@@ -253,7 +253,7 @@
           </div>
 
         <div class="clearfix m-b-lg m-md">
-            <a class="pull-left {{#is_mobile}}thumb-small{{else}}thumb-sm{{/is_mobile}}"><img src="{{current_logged_in_user.ownerPic}}" class="r-5x" alt="User Image"></a>
+            <a class="pull-left {{#is_mobile}}thumb-small{{else}}thumb-sm{{/is_mobile}}"><img src="{{current_logged_in_user.ownerPic}}" class="r-5x {{#isNewTheme}}img-inital{{/isNewTheme}}" alt="User Image"></a>
             <div class="{{#is_mobile}}m-l-xl{{else}}m-l-xxl{{/is_mobile}} bg-white">
                <div id="send-reply-container">
                </div>
