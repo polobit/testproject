@@ -205,7 +205,8 @@ $(function(){
 			success:function(data){
 				var json = JSON.parse(data);
 				if(json && _.size(json) > 0){
-					json.plan = USER_BILLING_PREFS.plan.plan_type.toLowerCase();
+					var plan = USER_BILLING_PREFS.plan.plan_type.toLowerCase().split("_")[0];
+					json.plan = plan.charAt(0).toUpperCase() + plan.slice(1);
 					getTemplate("free-downgrade-restrictions", json, undefined, function(template_ui){
 						if(!template_ui)
 							  return;
