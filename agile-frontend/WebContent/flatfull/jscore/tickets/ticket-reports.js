@@ -2,8 +2,20 @@ var Ticket_Reports = {
 
 	tickets: function(){
 
-		var range = $('#range').html().split("-");
-    
+		var group = 0; 
+		var assignee = 0; 
+
+			if($('#group_names').find('option:selected').val()){
+
+	    	group = $('#group_names').find('option:selected').val();
+
+	    }
+
+    	if($('#group_names').find('option:selected').data('assignee-id')){
+    		
+    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+    	}
+		var range = $('#range').html().split("-");    
 	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 	    var d = new Date();
 	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
@@ -17,6 +29,8 @@ var Ticket_Reports = {
 	    // Returns milliseconds from end date.
 	    //var end_time = Date.parse(end_value).valueOf();
 	    //Get the GMT end time
+	    	
+
 	    var status = $('#status').find('option:selected').val();
 	    var end_time = getUTCMidNightEpochFromDate(new Date(end_value));
 
@@ -31,24 +45,40 @@ var Ticket_Reports = {
 		{	
 			frequency = $(this).find('option:selected').val();
 			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-					+ end_time + '&frequency=' + frequency+ '&status=' + status,'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false);
+					+ end_time + '&frequency=' + frequency+ '&status=' + status+'&group=' + group+'&assignee=' + assignee,'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false);
 		});
 
+		$('#status').off('change');
 		$('#status').change(function()
 		{	
 			status = $(this).find('option:selected').val();
 			showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-					+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
+					+ end_time + '&frequency=' + frequency + '&status=' + status+'&group=' + group+'&assignee=' + assignee, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
 		});
 
 		showBar('/core/api/tickets/reports/daily?start_time=' + start_time + '&end_time=' 
-				+ end_time + '&frequency=' + frequency + '&status=' + status, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
+				+ end_time + '&frequency=' + frequency + '&status=' + status+'&group=' + group+'&assignee=' + assignee, 'tickets-chart', '', '{{agile_lng_translate "tickets" "count"}}', false, ((status == 'NEW') ? ['#f0ad4e'] : ['#5cb85c']));
+		
+
 	},
 
-	priorityReports: function(){
+	priorityReports: function(group,assignee){
 
 		var range = $('#range').html().split("-");
-    
+    	var group = 0; 
+		var assignee = 0; 
+
+			if($('#group_names').find('option:selected').val()){
+
+	    	group = $('#group_names').find('option:selected').val();
+
+	    }
+
+    	if($('#group_names').find('option:selected').data('assignee-id')){
+    		
+    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+    	}
+
 	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 	    var d = new Date();
 	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
@@ -75,11 +105,11 @@ var Ticket_Reports = {
 		{	
 			report_type = $(this).find('option:selected').val();
 
-			var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
+			var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee,
 			    report_title = '{{agile_lng_translate "tickets" "priority-report"}}';
 
 			if(report_type == 'status'){
-				url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
+				url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee;
 			    report_title = '{{agile_lng_translate "tickets" "status-report"}}';
 			}
 
@@ -89,10 +119,10 @@ var Ticket_Reports = {
 
 		//report_type = $(this).find('option:selected').val();
 
-		var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time,
+		var url = '/core/api/tickets/reports/priority?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee,
 		    report_title = '{{agile_lng_translate "tickets" "priority-report"}}';
 		if(report_type == 'status'){
-			url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time;
+			url = '/core/api/tickets/reports/status?start_time=' + start_time + '&end_time=' + end_time + '&group=' + group+'&assignee=' + assignee;
 		    report_title = '{{agile_lng_translate "tickets" "status-report"}}';
 		}
 
@@ -103,6 +133,20 @@ var Ticket_Reports = {
 
 	feedbackReports: function(){
 		var range = $('#range').html().split("-");
+
+		var group = 0; 
+		var assignee = 0; 
+
+			if($('#group_names').find('option:selected').val()){
+
+	    	group = $('#group_names').find('option:selected').val();
+
+	    }
+
+    	if($('#group_names').find('option:selected').data('assignee-id')){
+    		
+    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+    	}
     
 	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 	    var d = new Date();
@@ -121,7 +165,7 @@ var Ticket_Reports = {
 	    end_time += (((23*60*60)+(59*60)+59)*1000);
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 		
-		Ticket_Reports.pieforfeedbackReport('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time,
+		Ticket_Reports.pieforfeedbackReport('/core/api/tickets/reports/feedback?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee,
 			'feedback', '', true);
 		
 	},
@@ -191,6 +235,20 @@ var Ticket_Reports = {
 	
 	avgFirstRespTime: function(){
 
+		var group = 0; 
+		var assignee = 0; 
+
+		if($('#group_names').find('option:selected').val()){
+
+    		group = $('#group_names').find('option:selected').val();
+
+  		 }
+
+		if($('#group_names').find('option:selected').data('assignee-id')){
+		
+			assignee = $('#group_names').find('option:selected').data('assignee-id');
+		}
+
 		var range = $('#range').html().split("-");
     
 	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
@@ -212,7 +270,7 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		Ticket_Reports.pieforReports('/core/api/tickets/reports/first-response-time?start_time=' + start_time + '&end_time=' + end_time,
+		Ticket_Reports.pieforReports('/core/api/tickets/reports/first-response-time?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee,
 			'avg-first-resp-time-chart', '', true);
 
 		// pie('/core/api/tickets/reports/status-report?start_time=' + start_time + '&end_time=' + end_time,
@@ -223,6 +281,20 @@ var Ticket_Reports = {
 
 		var range = $('#range').html().split("-");
     
+	    var group = 0; 
+		var assignee = 0; 
+
+		if($('#group_names').find('option:selected').val()){
+
+	    	group = $('#group_names').find('option:selected').val();
+
+	    }
+
+    	if($('#group_names').find('option:selected').data('assignee-id')){
+    		
+    		assignee = $('#group_names').find('option:selected').data('assignee-id');
+    	}
+
 	    var start_time = getUTCMidNightEpochFromDate(new Date(range[0]));
 	    var d = new Date();
 	    start_time=start_time+(d.getTimezoneOffset()*60*1000);
@@ -242,7 +314,7 @@ var Ticket_Reports = {
 	    end_time=end_time+(d.getTimezoneOffset()*60*1000);
 	    end_time=end_time/1000;
 		
-		Ticket_Reports.pieforReports('/core/api/tickets/reports/sla?start_time=' + start_time + '&end_time=' + end_time,
+		Ticket_Reports.pieforReports('/core/api/tickets/reports/sla?start_time=' + start_time + '&end_time=' + end_time+'&group=' + group+'&assignee=' + assignee,
 			'sla-report-chart', '', true);
 
 		// pie('/core/api/tickets/reports/sla-report?start_time=' + start_time + '&end_time=' + end_time,

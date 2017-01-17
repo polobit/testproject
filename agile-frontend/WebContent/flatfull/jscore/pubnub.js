@@ -41,7 +41,7 @@ function subscribeClientChannel(callback)
 	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : false, message : function(message, env, channel)
 	{
 		try{
-		//console.log(message);
+
 			try{
 				if(typeof message == "string"){
 					message = JSON.parse(message);

@@ -71,7 +71,7 @@ UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
 String menuPosition = currentUserPrefs.menuPosition;
 if(currentUserPrefs.theme.equalsIgnoreCase("15")) {
        currentUserPrefs.menuPosition = "leftcol";
-}	
+} 
 
 AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
 %>
@@ -217,7 +217,7 @@ content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 <link rel="stylesheet" type="text/css" href="flatfull/css/min/css-all-min.css?_=<%=_AGILE_VERSION%>"></link>
 
 <%
-	boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
+  boolean isDisabledNewThemeStyles = HomeUtil.isDisabeld(request, currentUserPrefs);
     if(!isDisabledNewThemeStyles){
 %>
 <link href="flatfull/css/material-theme/min/agile-theme-15.css?_=<%=_AGILE_VERSION%>" <%if(isDisabledNewThemeStyles)out.println("disabled=disabled"); %> rel="stylesheet" data-agile-theme="15" />
@@ -511,7 +511,7 @@ function isIE() {
 
                 </ul>
                 </div>
-                	</div>">
+                  </div>">
                    <a href="#" class='grid-icon-header pull-left block wrapper' onclick="return false;"><i class="glyphicon glyphicon-th"></i>
                       <span id="rolecontainer" class="rolecontainer grid-v1-rolecontainer"><%out.print(domainUser.role);%>
                       </span> 
@@ -592,7 +592,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
  
   }
       
- if ( "admin".equals(domainUser.domain))
+ if ("admin".equals(domainUser.domain))
   {
     out.print("hide adminPanel");
   }
@@ -985,7 +985,7 @@ if(currentUserPrefs.menuPosition.equals("top")){
     </a>
   </li>
   <%
-  if(domainUser.is_admin && !domainUser.restricted_menu_scopes.contains(NavbarConstants.HELPDESK)){
+  if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.SERVICE_KNOWLEDGEBASE)){
   %>   
   <li id="ticketknowledgebasemenu">
     <a  class="agile-menu-dropdown-aside1" href="#knowledgebase">
@@ -1110,7 +1110,13 @@ if(currentUserPrefs.menuPosition.equals("top")){
                       out.println("<li style='margin-top: 7px;'><div class='btn-group'><a href='#users-add' class='btn btn-default btn-sm ''><i class='icon-plus-sign'></i> Add User</a>");
                       out.println("<button class='btn btn-default btn-sm dropdown-toggl' data-toggle='dropdown' style='background: transparent;border: 0px;'><span class='caret'></span></button><ul class='dropdown-menu pull-right' role='menu'><li><a href='#users'>All Users</a></li></ul>");
                       out.println("</div></li>");
-                       out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                       out.println("<li class='pull-right'><div class='m-t-xs'><span  class=' dropdown-toggle' data-toggle='dropdown' ><a style='background: transparent;border: 0px;'>");
+                    if (!StringUtils.isEmpty(currentUserPrefs.pic))
+                        out.println("<img height='35' width='35' style='border-radius: 50%;margin-left: 20px;' src='"+ domainUser.pic+ "' alt='...' class='pos-rlt pos-t-xs'></img>");
+                    else
+                      out.println("<img height='35' width='35' style='border-radius: 50%;margin-left: 20px;'  src='img/gravatar.png'  alt='...'></img>");
+                      out.println("</a></span><ul class='dropdown-menu m-t-sm' style='right: 0;left: auto;'><li><a href='#user-prefs' class='b-b p-r-none'><div class='pull-left text-ellipsis w-auto hidden-sm hidden-md' style='max-width:210px;clear: both;''><span class='hidden-sm hidden-md text-head-black'>"+SafeHtmlUtil.sanitize(domainUser.name)+"</span></div><span class='text-sm text-ellipsis block' style='clear: both;''> <b>"+user.getEmail()+"</b></span></a></li>");
+                      out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li></ul></div></li>");
                     }
                   
                   } else {

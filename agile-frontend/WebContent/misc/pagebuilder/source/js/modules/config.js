@@ -6,11 +6,11 @@
     module.exports.editableItems = {
         'div#agileform_div' : [],
         'span.fa': ['color', 'font-size'],
-        '.bg.bg1,.item': ['background-color'],
-        'nav': ['background-color','color'],
+        '.bg.bg1,.item': ['background-color','padding-top','padding-bottom'],
+        'nav': ['background-color','color','fixed-header'],
         '.pricing2 > .top' : ['background-color'],
-        'header.wrapper' : ['background-color'],
-        '.dividerel' : ['background-color'],
+        'header.wrapper' : ['background-color','padding-top','padding-bottom'],
+        '.dividerel,.thumbnail' : ['background-color','padding-top','padding-bottom'],
         'nav a': ['color', 'font-weight', 'text-transform', 'dynamic-button'],
         'img': ['width','height','border-top-left-radius', 'border-top-right-radius', 'border-bottom-left-radius', 'border-bottom-right-radius', 'border-color', 'border-style', 'border-width', 'dynamic-image'],
         'hr.dashed': ['border-color', 'border-width'],
@@ -19,9 +19,10 @@
         '.footer a': ['color'],
         '.social a': ['color'],
         '.bg.bg1, .bg.bg2, .header10, .header11, .search-box1': ['background-image', 'background-color'],
-        '.frameCover': [],
+        '.videoWrapper .frameCover': ['show-video-icon'],
         '.editContent': ['content', 'color', 'font-size', 'background-color', 'font-family', 'dynamic-text'],
-        'a.btn, button.btn': ['border-radius', 'font-size', 'background-color','dynamic-button']
+        'a.btn, button.btn': ['color','border-radius', 'font-size', 'background-color','dynamic-button'],
+        '.backgrnd' : ['background-image','background-color','padding-top','padding-bottom']
         
     };
     
@@ -34,6 +35,8 @@
         'img : border-width': ['1px', '2px', '3px', '4px'],
         'img : dynamic-image': ['no', 'yes'],
         '.editContent : dynamic-text': ['no', 'yes'],
+        'nav : fixed-header' : ['no', 'yes'],
+        '.videoWrapper .frameCover : show-video-icon': ['no','yes'],
         'h1, h2, h3, h4, h5, p : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h2 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],
         'h3 : font-family': ['default', 'Lato', 'Helvetica', 'Arial', 'Times New Roman'],

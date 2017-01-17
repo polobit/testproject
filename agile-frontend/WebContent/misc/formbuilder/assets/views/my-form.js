@@ -33,6 +33,10 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
+      var transparency_val = FormSettings.getSetting("agiletransparentbackground");
+      $("#target").removeClass("agile-form-transparent");
+      $("#target").removeClass("agile-form-blck-transparent");
+      $("#target").addClass(transparency_val);
       $("#render").val(that.renderForm({preload : FormSettings.getSetting("agilepreloadfields"),
     captcha : FormSettings.getSetting("agileformcaptcha"),
     agileformtransbg : FormSettings.getSetting("agiletransparentbackground"),
@@ -67,6 +71,7 @@ define([
       this.collection.remove(snippetModel);
       saveform.splice(index, 1);
       PubSub.trigger("newTempPostRender", mouseEvent);
+      isFormChange = true;
     }
 
     , handleTempMove: function(mouseEvent){
@@ -79,6 +84,7 @@ define([
       } else {
         $(".target").removeClass("target");
       }
+      isFormChange = true;
     }
 
     , handleTempDrop: function(mouseEvent, model, index){
@@ -93,6 +99,7 @@ define([
       } else {
         $(".target").removeClass("target");
       }
+      isFormChange = true;
     }
   })
 });

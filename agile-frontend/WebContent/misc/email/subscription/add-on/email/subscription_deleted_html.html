@@ -1,41 +1,38 @@
-<body>
-<div>
-  <div style="max-width:650px;background-color:#8A6086;font-family:Arial,sans-serif;padding:5px">
-    
-    <div style="min-height:36px;font-size:14px;font-weight:bold;padding-bottom:4px">
-      <table style="display:inline;width:100%">
-         <tbody>
-	       <tr>
-	       <td valign="middle" height="32px" style="padding:0; color:white">
-            	{{email_subject}}
-             </td>
-           </tr>
-         </tbody>
-       </table>
-    </div>
-   
-   <div style="font-size:13px;background-color:#fff;padding:10px 7px 7px 7px">
-     <br>
-     {{#each data.previousAttributes}}
-    	{{agile_lng_translate 'welcome-email' 'dear'}} {{user_name}},
-     {{/each}}
-     <br>
-     <br>
-     {{agile_lng_translate 'subscription-email' 'email-subscription-with-domain'}} "{{domain}}" {{agile_lng_translate 'subscription-email' 'deleted-due-to-payment-fail'}}.
-     <br>
-     <br>
-     {{agile_lng_translate 'subscription-email' 'you-can-subscribe'}} <a href='https://{{data.previousAttributes.domain}}.agilecrm.com/subscribe'>{{agile_lng_translate 'widgets' 'here'}}</a>
-     <br>
-    <br>
-
-   <span style="color:#898989">AgileCRM: {{agile_lng_translate 'verify-email' 'built-for-smbs'}}</span>
-   <div style="text-align:right">
-   	<a href="https://www.agilecrm.com" target="_blank">
-   		<img style="border:0;margin-top:10px" src="https://ssl.gstatic.com/docs/documents/share/images/services/google_logo-1.png" alt="Logo for Google Drive">
-   	</a>
-   </div>
-  </div>
- </div>
-</div>
-</body>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AgileCRM</title>
+  </head>
+  <body>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#edf1f2;padding:6% 10%">
+      <tr>
+        <td align="center">
+          <table border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#FFFFFF" style="border:1px solid #ccc;border-radius:2px">
+            <tr>
+              <td style="font-size: 0; line-height: 0; padding: 0 10px; border-bottom:1px solid #ccc" height="70" align="center" class="responsive-image">
+                <img width="150" alt="AgileCRM" src="https://doxhze3l6s7v9.cloudfront.net/img/agile-crm-logo-1.png">
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 15px 25px 25px 25px;">
+                <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">{{agile_lng_translate 'welcome-email' 'dear'}} <span style="text-transform: capitalize;">{{user_name}}</span>,</div>
+				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">Your account subscription with domain "{{domain}}" is deleted due to payment failure.</div>
+				   <div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">You can re-subscribe <a href='https://{{data.previousAttributes.domain}}.agilecrm.com/subscribe'>here</a>.</div>
+				<div style="font-size:14px;font-family:sans-serif;padding-bottom:10px">
+					{{agile_lng_translate 'welcome-email' 'support-assistance'}} <font color="blue">
+					<a href="mailto:support@agilecrm.com" target="_blank">support@agilecrm.com</a></font>
+				</div>
+				<div style="font-weight: bold; font-size: 12px;">
+						{{agile_lng_translate 'welcome-email' 'crew-at-agile'}}  <br />
+					  </div>
+					  <div><a target="_blank" href="https://www.agilecrm.com" style="color:blue">https://www.agilecrm.com</a></div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -54,14 +54,14 @@
 										</button>
 										<ul class="dropdown-menu pull-right text-sm" role="menu">
                                    			
-                                   			<!--<li role="menuitem"><a href='#contact-edit'>
+                                   			<li role="menuitem"><a href='#contact-edit'>
                                      		<div class="pull-left"><i class="fa fa-edit"></i> Edit</div> 
                                      		{{#if_keyboard_shortcuts_enabled}}
                                      			<div class='shortcuts pull-right'>Shift + E</div>
                                      		{{/if_keyboard_shortcuts_enabled}}
                                      		<div class="clearfix"></div>
                                      		</a></li>
-											<li class="divider"></li>-->
+											<li class="divider"></li>
 
 											<li>
 												<a href='#' class="contact-add-note">
@@ -795,14 +795,14 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 								<span class="caret m-l-none" style="margin-top:-11px;"></span>
 								</button>
 								<ul class="dropdown-menu pull-right text-sm" role="menu">
-                                   <!--<li><a href='#contact-edit'>
+                                   <li><a href='#contact-edit'>
                                      <div class="pull-left"><i class="fa fa-edit"></i> Edit</div> {{#if_keyboard_shortcuts_enabled}}
                                      <div class='shortcuts pull-right'>Shift + E</div>
                                      {{/if_keyboard_shortcuts_enabled}}
                                      <div class="clearfix"></div>
                                      </a></li>
 
-<li class="divider"></li>-->
+									<li class="divider"></li>
 								
 									<li><a href='#' class="contact-add-note">
 									<i class="icon-note"></i> {{agile_lng_translate 'contact-details' 'add-note'}}</a></li>
@@ -1311,7 +1311,7 @@ class="icon-plus"></i> <span >{{agile_lng_translate 'contact-details' 'add'}}</s
 
 <div class="pull-left contact-email-icon m-r-xs hide"><i class="icon icon-envelope text-sm v-middle"></i></div>
 										<div class="text-ellipsis text-xs">
-											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{subtype}}</span> {{/if}}
+											<a href='#send-email/{{value}}'>{{value}}</a> {{#if subtype}} <span class="label bg-light  text-tiny">{{#if_equals subtype "home"}}personal{{else}}{{subtype}}{{/if_equals}}</span> {{/if}}
 										</div>
 
 <div class="clearfix"></div>

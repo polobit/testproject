@@ -33,9 +33,12 @@
            <label class="control-label col-sm-3">{{agile_lng_translate 'contacts-view' 'value'}}<span class="field_req">*</span></label> 
            <div class="controls col-sm-5 value_box"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class=" hidden" id="currencies-list">
+                <select  id="currency-conversion-symbols" class="required form-control" name="currency_type">                         
+                </select> <!-- <div class="ccw_selector_bg"></div><div class="ccw_selector_arrows"></div> --> </div>
              <div class="p-n"> 
-              <input type="text" name="expected_value" class="required  number_with_trim form-control" min="0" max="2147483647"
-                placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"   style="font-size:13px"/> 
+              <input type="text" name="currency_conversion_value" class="required  number_with_trim form-control" min="0" max="2147483647"
+                placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"  style="float:right;" /> 
              </div> 
             </div> 
            </div> 
@@ -74,7 +77,7 @@
                                  {{agile_lng_translate 'documents' 'no-products-deals'}}  <a href="#" data-dismiss="modal" class="navigate-products text-info">{{agile_lng_translate 'contact-details' 'here'}}</a>
                      </div>
             </div>   
-          <div class="control-group form-group"> 
+          <div class="control-group form-group">
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
            <div class="controls col-sm-7"> 
               <div class="input-group probability-form" style="width:100%"> 
@@ -83,6 +86,7 @@
               </div> 
            </div> 
           </div>
+          
           <div class="control-group form-group">
             <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'milestone'}}
             <span
@@ -177,6 +181,14 @@
                 class="input col-md-12 form-control textarea" placeholder="{{agile_lng_translate 'tasks' 'add-comment'}}"></textarea>
             </div>
           </div>
+          <div class="row">
+          <div class="col-md-12">
+            <div class="control-group form-group">
+              <div id="forNoteForm" class="controls"></div>
+              <ul style="display:none;" id="notes" name="notes" class="notes"></ul>
+            </div>
+          </div>
+        </div>
           
       </fieldset>
     </form>

@@ -91,12 +91,18 @@
 					 		"valueName":"text/plain"
 					 	}	 
 					]
-		},
-        {
-            "label": "Integrate your workflow with your web infrastructure using JSON IO. You can retrive or post information with a JSON Http call to a given URL and defined URL parameters. <br/><br/>The returned JSON will be merged and this can be used in the rest of the workflow. <br/><br/>You can find more documentation with an example <a href='https://github.com/agilecrm/agile-crm-json-io-node' target='_blank'>here</a>",
-            "category": "Help",
-            "fieldType": "label",
-            "type": "label" 
-        } 
+		}, 
+    {
+        "label": "Click <a id='jsonio_test' style='color: #19a9d5;!important ;text-decoration: none; cursor:pointer;'>here</a> to test.",
+        "category": "Test",
+        "fieldType": "label",
+        "type": "label" 
+    },
+    {
+        "label": "Integrate your workflow with your web infrastructure using JSON IO. You can retrive or post information with a JSON Http call to a given URL and defined URL parameters. <br/><br/>The returned JSON will be merged and this can be used in the rest of the workflow. <br/><br/>You can find more documentation with an example <a href='https://github.com/agilecrm/agile-crm-json-io-node' target='_blank'>here</a>",
+        "category": "Help",
+        "fieldType": "label",
+        "type": "label" 
+    } 
     ]
 }

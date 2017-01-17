@@ -26,6 +26,7 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.analytics.servlets.AnalyticsServlet;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.CampaignLogsSQLUtil;
+import com.campaignio.servlets.util.SpamTracker;
 import com.campaignio.servlets.util.TrackClickUtil;
 import com.campaignio.urlshortener.URLShortener;
 import com.campaignio.urlshortener.URLShortener.ShortenURLType;
@@ -129,7 +130,14 @@ public class RedirectServlet extends HttpServlet
 
 	    // Remove spaces, \n and \r
 	    String normalisedLongURL = TrackClickUtil.normaliseLongURL(originalURL);
-
+	    
+	    // If given url is identified as Spam, return
+	    if(SpamTracker.isSpamDomain(normalisedLongURL))
+	    {
+	    	resp.getWriter().println("Invalid URL");
+	    	return;
+	    }
+	    
 	    // When personal email is sent to contact that doesn't exist
 	    if (StringUtils.isBlank(subscriberId))
 	    {

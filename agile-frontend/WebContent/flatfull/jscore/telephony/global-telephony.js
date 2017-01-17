@@ -43,7 +43,7 @@ $(function(){
 	callOptionDiv = "" ;
 	globalCall = { "callDirection" : null, "callStatus" : "Ideal", "callId" : null, "callNumber" : null, "timeObject" : null, "lastReceived":null, "lastSent":null , "calledFrom":null, "contactedId":null, "contactedContact" : null};
 	globalCallForActivity = { "callDirection" : null, "callId" : null, "callNumber" : null, "callStatus" : null, "duration" : 0, "requestedLogs" : false, "justCalledId" : null, "justSavedCalledIDForNote" : null, "justSavedCalledIDForActivity" : null,"contactedId":null, "answeredByTab" : false}; 
-	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity"};
+	widgetCallName = { "Sip" : "Sip", "TwilioIO" : "Twilio", "Bria" : "Bria", "Skype" : "Skype", "CallScript" : "CallScript", "Android" : "Android", "SMS-Gateway" :"SMS", "Ozonetel":"Ozonetel", "Knowlarity" : "Knowlarity", "Asterisk" : "Asterisk"};
 	dialled = {"using" : "default"};
 	CallLogVariables = {"callActivitySaved" : false, "id" : null, "callType" : null, "subject":null, "status" : null, "callWidget" : null, "duration" : null, "phone" : null, "url" : null,"description":null , "dynamicData" : null, "processed" : false};
 	callConference = {"started" : false, "name" : "MyRoom1234", "lastContactedId" : null, "hideNoty" : true, "totalMember" : 0, "addnote" : true, "conferenceDuration" : 0 , "phoneNumber" : null};
@@ -180,7 +180,9 @@ function globalCallWidgetSet()
 													callOptionDiv = callOptionDiv
 													.concat("<img class ='" + "SMS-Gateway_sms" + " c-p active' src='/widgets/sms-small-logo.png' style='width: 20px; height: 20px; margin-right: 5px;' data-toggle='tooltip' data-placement='top' title='' data-original-title='" +"SMS"+ "'>");
 												}
-
+												if(name == "Asterisk"){
+													asterisk_widget = widget;
+												}
 											}
 										});
 
@@ -210,7 +212,7 @@ function globalCallWidgetSet()
 							if(!alreadySetPrefs){
 								if(widgetCallName[obj.name] == "Twilio"){
 									nameToStore = "Twilio";
-								}else if(nameToStore != "Twilio" && obj.name != "CallScript"){
+								}else if(nameToStore != "Twilio" && obj.name != "CallScript" && obj.name != "Asterisk"){
 									nameToStore = widgetCallName[obj.name];
 								}
 							}
@@ -391,7 +393,7 @@ function sendTestCommand()
 						sendTestCommand();
 						return;
 					}
-					sendTestCommandToClient();
+					
 				}, 5000);
 		
 	
@@ -475,7 +477,98 @@ function resetCallLogVariables(){
 function handleCallRequest(message)
 {
 	// Display message in stream.
-	if ((message || {}).callType == "Bria")
+	if ((message || {}).callType == "Asterisk")
+	{
+		var index = containsOption(default_call_option.callOption, "name", "Asterisk");
+		if( index == -1){
+			//sendCommandToClient("notConfigured","Asterisk");
+			return;
+		}
+
+
+		// start from here
+		if (message.state == "lastCallDetail")
+		{
+
+			if(globalCall.lastReceived == "lastCallDetail") {
+				return;
+			}
+
+			if(message.callid != globalCallForActivity.callid){
+				return;
+			}
+			
+
+			if(globalCall.lastReceived){
+				if(globalCall.lastReceived != "ended") {
+					if(globalCall.callStatus && globalCall.callStatus == "Connected"){
+						globalCall.callStatus = "Answered"; //change form completed
+					}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
+						globalCall.callStatus = "Missed";
+					}
+						replicateglobalCallVariable();
+						resetglobalCallVariables();	
+						globalCall.lastReceived = "lastCallDetail";
+				}
+				
+			}
+
+			if(message.duration == 0){
+				globalCallForActivity.callStatus = "Failed";
+			}
+
+			closeCallNoty(true);
+
+			if(globalCall.callStatus == "Missed" || globalCallForActivity.callStatus =="Missed"){
+				message.duration = 0;
+			}
+
+			globalCallForActivity.duration = message.duration;
+			
+			globalCallForActivity.duration = message.duration;
+			console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
+					var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
+				"status" : globalCallForActivity.callStatus, "duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
+			
+			console.log("last called : " + call);
+			saveCallNoteTelephony(call);
+
+			//saveCallNoteTelephony();
+			//saveCallActivityTelephony(call);
+			return;
+		}
+		else if (message.state == "error")
+		{
+			closeCallNoty(true);
+			resetglobalCallVariables();
+			resetglobalCallForActivityVariables();
+			console.log("error message received...");
+			return;
+		}
+		else if (message.state == "error-message")
+		{
+			closeCallNoty(true);
+			showCallNotyMessage(message.message);
+			return;
+		}
+		else if (message.state == "logs")
+		{
+			//handleLogsForAsterisk(message);
+			return;
+		}
+		else if (message.state == "closed")
+		{
+				closeCallNoty(true);
+				showCallNotyMessage("Asterisk is not running");
+				resetglobalCallVariables();
+				resetglobalCallForActivityVariables();
+			return;
+		}
+		showAsteriskCallNoty(message);
+		return;
+	
+		}
+	else if ((message || {}).callType == "Bria")
 	{
 		var index = containsOption(default_call_option.callOption, "name", "Bria");
 		if( index == -1){
@@ -684,6 +777,13 @@ $('body').on('click', '#downloadCallJar', function(e)
 	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/widgetCall.jar';
 });
 
+$('body').on('click', '#downloadCallJar_widget', function(e)
+{
+	e.preventDefault();
+	var widget_name = $(this).attr("widget-name");
+	var version = '1.0';
+	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/'+widget_name+'-'+version+'.jar';
+});
 function checkForActiveCall()
 {
 	var flag = false;
@@ -933,3 +1033,4 @@ function sendTestCommandToClient(callback){
 
 
 }
+

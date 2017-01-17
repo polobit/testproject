@@ -147,12 +147,42 @@ public class JSONNode extends TaskletAdapter
 			JSONObject nodeJSON, String url, String methodType, String paramsJSONArrayString,
 			String headersJSONArrayString) throws JSONException, Exception
 	{
+		// This is indicate that we are calling the method for Campaign
+		Boolean isCampaignCall = true;
+		executeRequestJSON(campaignJSON, subscriberJSON, data, nodeJSON, url, methodType, paramsJSONArrayString,
+				headersJSONArrayString,isCampaignCall);
+	}
+	
+	/**
+	 * This method will execute with JSONIO Node data and give response based on server response
+	 * isCampaignCall indicates that it is calling from Campaign or other.
+	 * if isCampaignCall is true then it is calling from Campaign. 
+	 * 
+	 * @param campaignJSON
+	 * @param subscriberJSON
+	 * @param data
+	 * @param nodeJSON
+	 * @param url
+	 * @param methodType
+	 * @param paramsJSONArrayString
+	 * @param headersJSONArrayString
+	 * @param isCampaignCall
+	 * @return response of the request
+	 * @throws JSONException
+	 * @throws Exception
+	 */
+	public static String executeRequestJSON(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data,
+			JSONObject nodeJSON, String url, String methodType, String paramsJSONArrayString,
+			String headersJSONArrayString, Boolean isCampaignCall) throws JSONException, Exception
+	{
 		JSONArray paramsJSONArray = new JSONArray(paramsJSONArrayString);
 		
 		JSONArray headersJSONArray = new JSONArray();
+
+	    String logMessage = "";
 		
 		try{
-		 headersJSONArray = new JSONArray(headersJSONArrayString);
+			headersJSONArray = new JSONArray(headersJSONArrayString);
 		}catch(Exception e){
 			//To make compatible with old json io nodes
 			headersJSONArray = new JSONArray();
@@ -165,18 +195,19 @@ public class JSONNode extends TaskletAdapter
 		    // Iterate through json array having key-value pairs
 		    for (int i = 0; i < paramsJSONArray.length(); i++)
 		    {
-			JSONObject paramJSON = paramsJSONArray.getJSONObject(i);
-
-			String key = paramJSON.getString("rest_key");
-			String value = paramJSON.getString("rest_value");
-
-			value = replaceTokens(value, subscriberJSON, data);
-
-			// Construct data
-			if (i == 0)
-			    httpParams += URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(StringEscapeUtils.unescapeJava(value), "UTF-8");
-			else
-			    httpParams += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(StringEscapeUtils.unescapeJava(value), "UTF-8");
+				JSONObject paramJSON = paramsJSONArray.getJSONObject(i);
+	
+				String key = paramJSON.getString("rest_key");
+				String value = paramJSON.getString("rest_value");
+				
+				if(isCampaignCall)
+					value = replaceTokens(value, subscriberJSON, data);
+	
+				// Construct data
+				if (i == 0)
+				    httpParams += URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(StringEscapeUtils.unescapeJava(value), "UTF-8");
+				else
+				    httpParams += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(StringEscapeUtils.unescapeJava(value), "UTF-8");
 		    }
 
 		    System.out.println(httpParams);
@@ -187,32 +218,30 @@ public class JSONNode extends TaskletAdapter
 		    
 		    for (int i = 0; i < headersJSONArray.length(); i++)
 		    {
-			JSONObject headerJSON = headersJSONArray.getJSONObject(i);
-
-			String key = headerJSON.getString("rest_header_key");
-			String value = headerJSON.getString("rest_header_value");
-
-			// Construct headers
-			hashmapKeyValues.put(key, value);
+				JSONObject headerJSON = headersJSONArray.getJSONObject(i);
+	
+				String key = headerJSON.getString("rest_header_key");
+				String value = headerJSON.getString("rest_header_value");
+	
+				// Construct headers
+				hashmapKeyValues.put(key, value);
 		    }
-
-		    String logMessage = "";
 		    
 		    if (methodType.equalsIgnoreCase(METHOD_TYPE_GET))
 		    {
-			if (url.contains("?"))
-			    url = url + "&" + httpParams;
-			else
-			    url = url + "?" + httpParams;
-
-			output = accessURLWithHeaders(url,hashmapKeyValues);
-			logMessage = "GET: " + url + "<br>Status: SUCCESS";
+				if (url.contains("?"))
+				    url = url + "&" + httpParams;
+				else
+				    url = url + "?" + httpParams;
+	
+				output = accessURLWithHeaders(url,hashmapKeyValues);
+				logMessage = "GET: " + url + "<br>Status: SUCCESS";
 
 		    }
 		    else
 		    {
-			output = accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);			
-			logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
+				output = accessURLWithHeaderUsingPost(url, httpParams,hashmapKeyValues);			
+				logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
 		    }
 		    
 		    String finalOutput = "";
@@ -233,36 +262,45 @@ public class JSONNode extends TaskletAdapter
 
 		    JSONObject returnJSON = new JSONObject(finalOutput);
 
-		    // Iterate through all keys and add to data
-		    Iterator it = returnJSON.keys();
-		    while (it.hasNext())
-		    {
-			String key = (String) it.next();
-			data.put(key, returnJSON.get(key));
+		    if(isCampaignCall){
+		    	// Iterate through all keys and add to data
+			    Iterator it = returnJSON.keys();
+			    while (it.hasNext())
+			    {
+					String key = (String) it.next();
+					data.put(key, returnJSON.get(key));
+			    }
+
+			    System.out.println(returnJSON + " " + data);
+
+			    // Creates log for JSONNode for method Post type
+			    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), logMessage, LogType.JSONIO.toString());
+
+			    // Execute Next One in Loop
+			    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_SUCCESS);
 		    }
-
-		    System.out.println(returnJSON + " " + data);
-
-		    // Creates log for JSONNode for method Post type
-		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), logMessage, LogType.JSONIO.toString());
-
-		    // Execute Next One in Loop
-		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_SUCCESS);
+		    
+		    return logMessage;
 
 		}
 		catch (Exception e)
 		{
-		    e.printStackTrace();
-		    data.put("error", e.getMessage());
+		    e.printStackTrace();		    		    
+		    if(isCampaignCall){
+		    	data.put("error", e.getMessage());
+		    	
+		    	// Creates log for JSONNode for error
+			    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Error Occurred " + e.getMessage(),
+				    LogType.JSONIO.toString());
 
-		    // Creates log for JSONNode for error
-		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Error Occurred " + e.getMessage(),
-			    LogType.JSONIO.toString());
-
-		    // Execute Next One in Loop
-		    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_FAILURE);
+			    // Execute Next One in Loop
+			    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_FAILURE);
+		    }		    
+		    logMessage = "Error Occurred " + e.getMessage();
 		}
+		return logMessage;
 	}
+
 	
 	 /**
     * Connects to the remote object to write (post) the given data and reads

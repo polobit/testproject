@@ -130,6 +130,10 @@ cron:
   url: /ticket-module/backend/ticket_stats
   schedule: every day 03:00
 
+- description: Currency convertion rates
+  url: /backend/cron/deal-currency-converter
+  schedule: every 1 hours
+
 - description: Expired Sessions Cleanup
   url: /_ah/sessioncleanup?clear
   schedule: every 1 mins

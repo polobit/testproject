@@ -16,10 +16,10 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.deferred.EmailsAddedDeferredTask;
 import com.agilecrm.subscription.limits.PlanLimits;
-import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -27,6 +27,11 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 
 @XmlRootElement
 public class BillingRestrictionUtil {
@@ -334,10 +339,15 @@ public class BillingRestrictionUtil {
 	 * @param oldPlan
 	 * @param newPlan
 	 * @return
+	 * @throws APIException 
+	 * @throws CardException 
+	 * @throws APIConnectionException 
+	 * @throws InvalidRequestException 
+	 * @throws AuthenticationException 
 	 */
-	public static boolean isLowerPlan(Plan oldPlan, Plan newPlan) {
+	public static boolean isLowerPlan(Plan oldPlan, Plan newPlan) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
 		// Gets respective plan classes
-		PlanClasses oldPlanClass = PlanClasses.valueOf(oldPlan.getPlanName());
+		/*PlanClasses oldPlanClass = PlanClasses.valueOf(oldPlan.getPlanName());
 		PlanClasses newPlanClass = PlanClasses.valueOf(newPlan.getPlanName());
 
 		if (oldPlanClass != null && newPlanClass != null) {
@@ -350,7 +360,16 @@ public class BillingRestrictionUtil {
 					&& oldPlan.quantity > newPlan.quantity)
 				return true;
 		}
-		return false;
+		return false;*/
+		if(PlanType.FREE.equals(oldPlan.plan_type))
+			return true;
+		com.stripe.model.Plan newStripePlan = com.stripe.model.Plan.retrieve(newPlan.plan_id);
+		com.stripe.model.Plan oldStripePlan;
+		oldStripePlan = com.stripe.model.Plan.retrieve(oldPlan.plan_id);
+		if ((newStripePlan.getAmount() * newPlan.quantity) > (oldStripePlan.getAmount() * oldPlan.quantity))
+			return false;
+		return true;
+		
 	}
 
 	/**

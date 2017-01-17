@@ -291,6 +291,16 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 		doc.addField(Field.newBuilder().setName("field_labels").setText(StringUtils.join(fieldLabelsSet, " ")));
 		
 		doc.setId(opportunity.id.toString()).build();
+		try{
+			if(opportunity.currency_type != null && opportunity.currency_type != ""){
+				doc.addField(Field.newBuilder().setName("currency_type").setText(opportunity.currency_type));
+			}
+			if(opportunity.currency_conversion_value != null && opportunity.currency_conversion_value > 0 ){
+				doc.addField(Field.newBuilder().setName("currency_value").setText(opportunity.currency_conversion_value.toString()));
+			}
+		}catch(Exception e){
+			System.out.println("exception in currency conversion"+e.getMessage());
+		}
 		
     	}
     	catch(Exception e)

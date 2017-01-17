@@ -1,5 +1,7 @@
 package com.agilecrm.subscription;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -7,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.RegistrationGlobals;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
@@ -23,6 +26,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.widgets.util.ExceptionUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.stripe.exception.StripeException;
@@ -266,7 +270,10 @@ public class SubscriptionUtil
 	    return;
 
 	subscription.plan = null;
-	subscription.status = BillingStatus.SUBSCRIPTION_DELETED;
+	if(SubscriptionUtil.downgradeFreePlanRestrictions().size() > 0){
+		System.out.println("changing sttaus to SUBSCRIPTION_DELETED::: due to PLanrestrictions");
+		subscription.status = BillingStatus.SUBSCRIPTION_DELETED;
+	}
 	subscription.save();
     }
 
@@ -387,5 +394,9 @@ public class SubscriptionUtil
     	if(subscription.plan != null && !PlanType.FREE.equals(subscription.plan.plan_type) && subscription.plan.getPlanInterval() != null && (subscription.plan.getPlanInterval().toLowerCase().equals("yearly") || subscription.plan.getPlanInterval().toLowerCase().equals("biennial")))
     		return true;
     	return false;
+    }
+    
+    public static Map<String, Map<String, Object>> downgradeFreePlanRestrictions(){
+    	 return BillingRestrictionUtil.getInstanceTemporary(new Plan("FREE", Globals.TRIAL_USERS_COUNT)).getRestrictions();
     }
 }

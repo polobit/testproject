@@ -53,11 +53,19 @@ public class MobileNotificationUtil {
 	static void sendMessageToAndriod(String regId, String data) {
 		try {
 			Sender sender = new Sender(serverAPIKey);
-			Message message = new Message.Builder().timeToLive(125).delayWhileIdle(false).addData(MESSAGE_KEY, data)
+			if(data.indexOf("callToBeta") != -1){
+			    Message message = new Message.Builder().timeToLive(15).delayWhileIdle(false).addData(MESSAGE_KEY, data)
 					.build();
 
-			System.out.println("regId: " + regId);
-			System.out.println(sender.send(message, regId, 1));
+			    System.out.println("regIdAndroid: " + regId);
+			    System.out.println(sender.send(message, regId, 1));
+			}else{
+			    Message message = new Message.Builder().timeToLive(125).delayWhileIdle(false).addData(MESSAGE_KEY, data)
+					.build();
+
+			    System.out.println("regId: " + regId);
+			    System.out.println(sender.send(message, regId, 1));
+			}
 		} catch (Exception e) {
 			System.out.println(ExceptionUtils.getFullStackTrace(e));
 		}

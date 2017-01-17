@@ -68,7 +68,12 @@ function initZeroClipboard2($id, $source){
     });
  
     clip.on("copy", function(e) {
-        clip.setText($source.attr("data-clipboard-text"));
+    	var txt = "";
+    	if($source.attr("data-clipboard-text"))
+    		txt = $source.attr("data-clipboard-text");
+    	else
+    		txt = $source.text()
+        clip.setText(txt);
     });
  
     clip.on("aftercopy", function(e) {
@@ -112,3 +117,21 @@ function loadZeroclipboard2(callback){
 			callback();
 	});
 }
+
+/* jquey select text */
+jQuery.fn.selectText = function(){
+    var doc = document;
+    var element = this[0];
+    console.log(this, element);
+    if (doc.body.createTextRange) {
+        var range = document.body.createTextRange();
+        range.moveToElementText(element);
+        range.select();
+    } else if (window.getSelection) {
+        var selection = window.getSelection();        
+        var range = document.createRange();
+        range.selectNodeContents(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+};

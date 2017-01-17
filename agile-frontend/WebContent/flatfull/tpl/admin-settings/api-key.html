@@ -117,7 +117,7 @@
                                         <li class="tracking-webrules-tab active"><a data-toggle="tab" href="#tracking-webrules">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-enabled'}}</a></li>
                                         <li class="tracking-webrules-whitelist-tab active"><a data-toggle="tab" href="#tracking-webrules-whitelist">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-with-web-rules-whitelist-enabled'}}</a></li>
                                          <!-- tab name field-->
-                                        <li class="verification-website-tab"><a data-toggle="tab" href="#verification-website">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-verification'}}</a></li>
+                                        <li class="verification-website-tab"><a data-toggle="tab" href="#verification-website">{{agile_lng_translate 'admin-settings-api-analytics' 'tracking-code-verification'}} <span class="label label-sm bg-danger">{{agile_lng_translate 'deal-view' 'beta'}}</span></a></li>
                                  </ul>
                                  <div class="tab-content p-t-sm">
                                     <!--  Tracking code templete -->
@@ -249,15 +249,16 @@
                   </div>
                   <!-- end of Blocked IPs template -->
                   <!-- Sendgrid white labled verification-->
+                  <!--
                    <div class="panel panel-default">
                      <div id="">
                         <div class="panel-heading" role="tab" id="">
                            <div class="panel-title">
-                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}<!-- <span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">{{agile_lng_translate 'deal-view' 'beta'}}</span> --></a>
+                              <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseTwo" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}} <span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">{{agile_lng_translate 'deal-view' 'beta'}}</span> </a>
                            </div>
                         </div>
                         <div class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo" id="admin-settings-sendgrid-dkim" aria-expanded="true"> 
-                         <p style="margin:10px 8px 0px 15px; text-align:justify">We encourage you to setup DKIM (DomainKeys Identified Mail) & SPF (Sender Policy Framework) in your DNS settings in order to improve your email deliverability rates and verify ownership of your sending email domain.</p>
+                         <p style="margin:10px 8px 0px 15px !important; text-align:justify">We encourage you to setup DKIM (DomainKeys Identified Mail) & SPF (Sender Policy Framework) in your DNS settings in order to improve your email deliverability rates and verify ownership of your sending email domain.</p>
                         <div class="row">
                       <div class="col-md-12 col-xs-12" id="sendgrid-dkim-restriction-template"></div>
                        <div class="col-md-12 col-xs-12" id="sendgrid-dkim-accordian-template"> <br> 
@@ -276,6 +277,7 @@
                    </div>   
                 </div>  
                   </div></div></div>
+                 -->
                   <!-- End of sendgrid-whitelabel -->
                </div>
             </div>
@@ -293,13 +295,69 @@
              <h4 class="m-t-md">{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters'}}</h4>
                <p>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-IP'}} {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-as-eg'}}: <b>192.168.1.1</b> {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-range'}} <b>"*"</b> {{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-as'}} <b>192.168.1.* | 192.168.*.* | 192.*.*.*</b></p>
                <p>{{agile_lng_translate 'admin-settings-api-analytics' 'ip-filters-help-2'}} <b>*.*.*.*</b></p>
-
+              <!--
                <h4 class="m-t-md">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}</h4>
                <p>To get DKIM & SPF settings eg: <br>If from email address is <b>test@example.com</b> then your email domain is <b>example.com</b> Please enter your email domain <b>example.com</b> and click on <b>Get Settings</b>.</p>
                <p> Copy obtained records and paste it in your DNS records. Once done click on <b>Verify</b>.</p>
+              --> 
          </div>
       </div>
  </div>
      
 
+</script>
+
+<script id="admin-settings-verify-domain-model-template" type="text/html">
+  <div class="col">
+    <div class="hbox h-auto m-b-lg">
+      <div class="tab-content">
+        <div id="analytics-accordion">
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <!-- Sendgrid white labled verification-->
+            <div class="panel panel-default">
+              <div id="">
+                <div class="panel-heading" role="tab" id="">
+                  <div class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" aria-controls="collapseOne" aria-expanded="true" data-parent="#accordion" href="#admin-settings-sendgrid-dkim"id="sendgrid-dkim_accordian">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}<!-- <span class="label label-sm bg-danger m-l-xs" style="position: relative;top: -2px;">{{agile_lng_translate 'deal-view' 'beta'}}</span> -->
+                    </a>
+                  </div>
+                </div>
+                <div class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" id="admin-settings-sendgrid-dkim" aria-expanded="true"> 
+                  <p style="margin:10px 8px 0px 15px !important; text-align:justify">We encourage you to setup DKIM (DomainKeys Identified Mail) & SPF (Sender Policy Framework) in your DNS settings in order to improve your email deliverability rates.</p>
+                  <div class="row">
+                    <div class="col-md-12 col-xs-12" id="sendgrid-dkim-restriction-template">   
+                    </div>
+                    <div class="col-md-12 col-xs-12" id="sendgrid-dkim-accordian-template"> <br> 
+                      <div class="control-group form-group">
+                        <label class="control-label col-sm-2 col-xs-12" style="margin-top: 2px;">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-sending-domain'}}<span class="field_req">*</span>
+                        </label> 
+                        <div class="controls col-sm-5 col-xs-12 {{#is_mobile}} m-b-sm {{/is_mobile}}">
+                        <input name="whitelabel-domain" id="whitelabel-domain" class="input-medium required form-control" type="domain" value="" placeholder="{{agile_lng_translate 'Admin-settings-api-analytics' 'email-sending-domain'}}" style="height: 31px;" title=" {{agile_lng_translate 'Admin-settings-api-analytics' 'example-for-email-sending-domain'}}">
+                          <span id="empty_domain_message" class="text-danger hide text-sm">{{agile_lng_translate 'Admin-settings-api-analytics' 'please-enter-valid-domain-name'}}</span>
+                        </div>
+                        <div class="{{#is_mobile}} text-center {{/is_mobile}}">
+                          <a href="#analytics-code" class="btn btn-sm btn-primary" id="get_whitelabel_key">{{agile_lng_translate 'Admin-settings-api-analytics' 'get-settings'}}</a>
+                        </div>
+                      </div>
+                      <div id="sendgrid-whitelabel-key-template" style="padding:2px;"></div>
+                    </div>   
+                  </div>  
+                </div>
+              </div>
+            </div>
+            <!-- Sendgrid white labled verification-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col w-md">
+    <div class="data-block">
+      <div class="p-l p-r">
+        <h4 class="m-t-md">{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}</h4>
+        <p>To get DKIM & SPF settings eg: <br>If from email address is <b>test@example.com</b> then your email domain is <b>example.com</b> Please enter your email domain <b>example.com</b> and click on <b>Get Settings</b>.</p>
+        <p> Copy obtained records and paste it in your DNS records. Once done click on <b>Verify</b>.</p>
+      </div>
+    </div>
+  </div> 
 </script>

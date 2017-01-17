@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.document;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,11 +55,31 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Document> getAllDocuments(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count ,@QueryParam("global_sort_key") String fieldName )
     {
-	if (count != null)
-	{
-	    return DocumentUtil.getDocuments((Integer.parseInt(count)), cursor, fieldName);
-	}
-	return DocumentUtil.getDocuments();
+        List<Document> documents = null;
+    	if (count != null)
+    	{
+    		documents = DocumentUtil.getDocuments((Integer.parseInt(count)), cursor, fieldName);
+    	}else {
+    		documents = DocumentUtil.getDocuments();
+    	}
+    	
+    	for(Document d : documents){
+    		if(d.url != null && d.url.contains("?id=uploadDocumentForm"))
+    			urlEncode(d);
+    	}
+    	
+    	return documents;
+        }
+    // encoding url, encode file name with space or special character in file name.
+    
+    private void urlEncode(Document d){
+    	try{
+    	String s = d.url;
+    	String st = s.substring(0,s.lastIndexOf("/")+1) ;
+    	String en = s.substring(s.lastIndexOf(".")) ;
+    	String filename = s.replace(st, "").replace(en, "");
+    	d.url = st+URLEncoder.encode(filename, "UTF-8")+en;
+    	} catch(Exception e){}
     }
 
     /**

@@ -143,6 +143,12 @@ function save_widget_prefs(pluginName, prefs, callback) {
 				if (pluginName == "Skype"){
 					globalCallWidgetSet();
 				}
+				if (pluginName == "Asterisk"){
+					globalCallWidgetSet();
+				}
+				if (pluginName == "CallScript") {
+					globalCallWidgetSet();
+				}
 
 			}else{
 				msgType = "error";

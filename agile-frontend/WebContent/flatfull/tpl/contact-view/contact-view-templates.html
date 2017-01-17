@@ -47,7 +47,7 @@
 	<td class="data taxt-center p-b-none" data="{{id}}" >
 	<div class="overflow-hidden thumb-sm agile-theme-image" style="width:2em;" >
 	{{#if_equals type "COMPANY"}}
-	<img class="img-inital r r-2x pull-left agile-theme-company-image-size" style="width:20px;height:20px;"{{getCompanyImage "40"}}/></img>
+	<img class="img-inital r r-2x pull-left agile-theme-company-image-size" {{getCompanyImage "40" "width:20px;height:20px;"}}/></img>
 	{{else}}
   				<img class="img-inital overflow-hidden thumb-sm r r-2x agile-theme-image-size" style= "height:20px;width:20px;" 
             data-name="{{dataNameAvatar properties 40 1}}" src="{{gravatarurl properties 40 1}}" />
@@ -71,7 +71,7 @@
         
 			{{#if_contact_type "COMPANY"}}
 
-        		<img class="r r-2x" style="height:35px!important; width:35px!important;" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;"}}/>
+        		<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "40" "display:inline;height:35px!important; width:35px!important;"}}/>
 
         	{{/if_contact_type}}
     	</div>
@@ -287,7 +287,7 @@
 
 <script id ="contacts-custom-view-custom-contact-template" type="text/html">
 	<td class='data contact-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp "  style="width:12em;" >
+		<div class="table-resp "  style="width:15em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
 					<img class="img-inital r-2x" title="{{contact_name_necessary this}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -299,7 +299,7 @@
 
 <script id ="contacts-custom-view-custom-company-template" type="text/html">
 	<td class='data company-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp "  style="width:12em;" >
+		<div class="table-resp "  style="width:15em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
 					<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "24" "display:inline;"}}/>

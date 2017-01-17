@@ -315,8 +315,8 @@ function initializeTagManagementListeners(){
 
 $('#admin-prefs-tabs-content').on('click', '#add-new-tag', function(e){
 	e.preventDefault();
-
 	toggleAddTag(true);
+	$("#disable_new_tags").addClass("hide");
 });
 
 $('#admin-prefs-tabs-content').on('keydown', '#new_tag', function(event){
@@ -336,16 +336,19 @@ function blur_out_input_field(element) {
 
 	if (value == "") {
 		toggleAddTag(false);
+		$("#disable_new_tags").removeClass("hide");
 		return;
 	}
 	
 	saveTag(element);
+	
 }
 
 function toggleAddTag(show) {
 	if (show) {
 		$("#add-new-tag").hide();
 		$("#new_tag_field_block").show();
+		$("#disable_new_tags").addClass("hide");
 		$("#add_new_tag").removeAttr('disabled');
 		$("#new_tag").focus();
 		console.log($("#add_new_tag").attr('disabled'));
@@ -368,6 +371,7 @@ $('body').on('click', '#add_new_tag', function(e){
 	var newTag = $().val();
 
 	blur_out_input_field("#new_tag");
+	
 });
 
 function saveTag(field) {

@@ -28,7 +28,6 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.EmailPrefs;
 import com.campaignio.tasklets.util.MergeFieldsUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.utils.SystemProperty;
 import com.thirdparty.sendgrid.SendGrid;
 
@@ -164,7 +163,7 @@ public class EmailUtil
      * @return response of the remote object
      */
     public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, List<Long> documentIds, List<BlobKey> blobKeys) throws Exception
+	    String replyTo, String html, String text, List<Long> documentIds, String[] mailAttach) throws Exception
     {
 	try
 	{
@@ -175,7 +174,7 @@ public class EmailUtil
 	    text = appendAgileToText(text, "Sent using", emailSender.isEmailWhiteLabelEnabled());
 
 	    emailSender.sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null, documentIds,
-		    blobKeys);
+	    		mailAttach);
 	}
 	catch (Exception e)
 	{
@@ -366,7 +365,7 @@ public class EmailUtil
      *            - text body
      */
     public static void sendEmailUsingAPI(String fromEmail, String fromName, String to, String cc, String bcc,
-	    String subject, String replyTo, String html, String text, List<Long> documentIds, List<BlobKey> blobKeys)
+	    String subject, String replyTo, String html, String text, List<Long> documentIds, String[] mailAttach)
     {
 
 	String domain = NamespaceManager.get();
@@ -380,7 +379,7 @@ public class EmailUtil
 
 	// Send email
 	EmailGatewayUtil.sendEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null,
-	        documentIds, blobKeys);
+	        documentIds, mailAttach);
     }
 
     /**

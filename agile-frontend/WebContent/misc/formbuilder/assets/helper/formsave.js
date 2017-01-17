@@ -22,7 +22,7 @@ define([
 			 $("#formContent").html($("#render").val());
 			 var renderformArr = $("#formContent .form-view").attr("class").split(" ");
 			 $.each(renderformArr,function(index,value){
-			 	if(value != "form-view"){
+			 	if(value != "form-view" && value != "agile-form-transparent" && value != "agile-form-blck-transparent"){
 			 		$("#formContent .form-view").removeClass(value);
 			 	}
 			 });
@@ -46,6 +46,7 @@ define([
 						var style='<style id="custTheme'+value.id+'" type="text/css">'+value.themeCss+'</style>';
 						$("#formContent .form-view").addClass("form"+value.id);
 						$("#formContent").append(style);
+						return;
 					}
 			    });
 			} 
@@ -118,6 +119,7 @@ define([
 					}
 					$(".popover").remove();
 				}
+				isFormChange = false;
 			},
 			error: function(){
 				alert("Form with this name is already saved, or this is an invalid form name. Please change form name and try again.");

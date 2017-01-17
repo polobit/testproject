@@ -48,7 +48,7 @@
                 //hide lhs popup when click on ESC
                 $(block.frameDocument).keyup(function(e) {
                     if (e.keyCode === 27 && $("#styleEditor").css("left")=== "0px") 
-                        $("#styleEditor").css("left","-300px");           
+                        $("#styleEditor").css("left","-305px");           
                 });
                 styleeditor.setupCanvasElements(block);
             });
@@ -316,6 +316,17 @@
                 $('[name="dynamic-image"]').val("yes");
                 $('[name="dynamic-image"]').trigger("change");
             }
+            if($currentClickedEl.hasClass("navbar-fixed-top")){
+                $('[name="fixed-header"]').val("yes");
+                $('[name="fixed-header"]').trigger("change");
+            }
+            if($currentClickedEl.parent().find('.video__button').css("display") !== "none"){
+                $('[name="show-video-icon"]').val("yes");
+                $('[name="show-video-icon"]').trigger("change");
+            } else {
+                $('[name="show-video-icon"]').val("no");
+                $('[name="show-video-icon"]').trigger("change");
+            }
 
             return false;
 
@@ -448,20 +459,41 @@
                 if( $(this).attr('name') !== undefined ) {
 
                     $(styleeditor.activeElement.element).css( $(this).attr('name'),  $(this).val());
-                    if($(this).attr("name") === 'font-size'){
+                    var nameAttrOfEl = $(this).attr("name");
+                    if(nameAttrOfEl === 'font-size'){
                         var nodeName=styleeditor.activeElement.element.nodeName;
                         if(nodeName==='DIV' || nodeName==='BLOCKQUOTE')
                             $(styleeditor.activeElement.element).children().css($(this).attr("name"),$(this).val());
                     }
-                    if($(this).attr("name") === 'color' && styleeditor.activeElement.element.tagName ==='NAV'){
-                        $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
+                    if(styleeditor.activeElement.element.tagName ==='NAV'){
+                        if(nameAttrOfEl === 'color')
+                            $(styleeditor.activeElement.element).find('[data-selector="nav a"]').css( $(this).attr('name'),  $(this).val());
+                         if(nameAttrOfEl=== 'fixed-header'){                            
+                            if($(this).val() === "yes") { 
+                                $(styleeditor.activeElement.element).parent().find('.duplicate-nav').css('height','76px');                               
+                                $(styleeditor.activeElement.element).addClass("navbar-fixed-top");
+                                $(styleeditor.activeElement.element).removeClass("navbar-static-top");
+                            } else {                                
+                                $(styleeditor.activeElement.element).parent().find('.duplicate-nav').css('height','0px');
+                                $(styleeditor.activeElement.element).addClass("navbar-static-top");
+                                $(styleeditor.activeElement.element).removeClass("navbar-fixed-top");
+                            }
+                        }   
+                    
                     }
-                    var nameAttrOfEl = $(this).attr("name");
+                    
                     if( nameAttrOfEl === "dynamic-text" || nameAttrOfEl === "dynamic-button" || nameAttrOfEl === "dynamic-image") {
                         if($(this).val() === "yes") {
                             $(styleeditor.activeElement.element).addClass("agile-" + nameAttrOfEl);
                         } else {
                             $(styleeditor.activeElement.element).removeClass("agile-" + nameAttrOfEl);
+                        }
+                    }
+                    if(nameAttrOfEl === "show-video-icon"){
+                        if($(this).val() === "yes") {
+                            $(styleeditor.activeElement.element).parent().find('.video__button').show();
+                        } else {
+                            $(styleeditor.activeElement.element).parent().find('.video__button').hide();
                         }
                     }
 
@@ -919,7 +951,7 @@
             $('a#link_Link').parent().show();
             $('#linkText').parent().show();
             //check target attribute
-            if($(el).attr('target')==="_blank")
+            if(($(el).attr('target') || $(el).parent().attr('target')) ==="_blank")
                 $("#newtab-option").prop("checked", "checked");
             else
                 $("#newtab-option").prop("checked", "");
@@ -995,7 +1027,7 @@
 
             $('a#video_Link').parent().show();
             $('a#video_Link').click();
-            $('a#default-tab1').css("display","none");
+            //$('a#default-tab1').css("display","none");
 
             if($("#err-youtube-msg").css("display")!=="none"){
                 styleeditor.hideErrorMsg('youtubeID');
@@ -1374,10 +1406,10 @@
         */
         toggleSidePanel: function(val) {
 
-            if( val === 'open' && $('#styleEditor').css('left') === '-300px' ) {
+            if( val === 'open' && $('#styleEditor').css('left') === '-305px' ) {
                 $('#styleEditor').animate({'left': '0px'}, 250);
             } else if( val === 'close' && $('#styleEditor').css('left') === '0px' ) {
-                $('#styleEditor').animate({'left': '-300px'}, 250);
+                $('#styleEditor').animate({'left': '-305px'}, 250);
             }
 
         },

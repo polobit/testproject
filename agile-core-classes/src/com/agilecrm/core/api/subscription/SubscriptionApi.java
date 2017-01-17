@@ -1,6 +1,5 @@
 package com.agilecrm.core.api.subscription;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +19,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.json.JSONException;
 
-import net.sf.json.JSONObject;
-
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.Subscription.BillingStatus;
 import com.agilecrm.subscription.Subscription.BlockedEmailType;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
@@ -46,7 +44,6 @@ import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.DateUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.widgets.util.ExceptionUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
@@ -601,5 +598,19 @@ public class SubscriptionApi {
 				    .build());
 		}
 	}
-
+	
+	@GET
+	@Path("/downgradeRestrictions")
+	public String downgradeFreePlanRestrictions(){
+		try{
+			Map<String, Map<String, Object>> restrictions = SubscriptionUtil.downgradeFreePlanRestrictions();
+			if(restrictions.size() == 0)
+				cancelSubscription();
+			return new Gson().toJson(restrictions);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+				    .build());
+		}
+	}
 }

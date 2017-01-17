@@ -20,7 +20,7 @@
 	 	{{/if_equals}}
 	</div>
 
-	<div class="m-l-xl">
+	<div class="m-l-xl{{#isNewTheme}} p-l-sm{{/isNewTheme}}">
 
 		{{#if_equals created_by "REQUESTER"}}
 		  	<div class="btn-group dropdown show-original-div">
@@ -88,8 +88,8 @@
 {{else}}
 
 <div class="p-t-xxs p-b-xxs">
-	<span class="pull-left thumb-sm">
-		<img src="{{domain_user.pic}}" class="r-5x" alt="{{domain_user.name}}">
+	<span class="pull-left {{#isNewTheme}}thumb-small{{else}}thumb-sm{{/isNewTheme}}">
+		<img src="{{domain_user.pic}}" class="r-5x {{#isNewTheme}}img-rounded{{/isNewTheme}}" alt="{{domain_user.name}}">
 	</span>
 	<div class="m-l-xl p-l-sm">
 	   <span>

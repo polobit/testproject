@@ -46,3 +46,8 @@ a.over:hover .overlay {
 	  opacity:1;
 	  transition-delay:0s;
 }
+@media (max-width: 500px) and (min-width: 300px){
+            .img-responsive{
+                padding:10px;
+            }
+}

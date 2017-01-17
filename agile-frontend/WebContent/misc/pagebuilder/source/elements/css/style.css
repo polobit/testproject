@@ -218,3 +218,6 @@ header .navbar-white a {
 .img-responsive {
 	display: inline;
 }
+.btn {
+	margin: 5px 0;
+}

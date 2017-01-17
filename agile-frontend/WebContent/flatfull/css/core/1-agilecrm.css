@@ -3018,9 +3018,65 @@ width: 915px;
  word-wrap:break- all;
  white-space:normal!important;
  } 
-
+ //for new deal model and deal update model 
+#milestone_val{width: 50%;float: left;}
+#milestone_val input{border-radius:0px 2px 2px 0px;width: 58%;float:right;}
+#currencies-list{width: 50%; float: left;border-radius: 2px 0px 0px 2px;border-right: 0px;font-weight: bold;}
+.ccw_unit_selector, .ccw_selector_bg {
+    background-color: whiteSmoke;
+    background-image: -webkit-linear-gradient(top,whiteSmoke,#f1f1f1);
+    height: 30px;
+}
+.input-group-addon:last-child {
+    border-left: 0;
+    padding-left: 2px;
+    width: 24px;
+}
+.ccw_selector_bg {
+    bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 1px;
+    width: 14px;
+    height: 32px;
+}
+.ccw_selector_arrows {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAALCAYAAACzkJeoAAAAOklEQVQYV2P4//8/AwxHRkb+B2I4H13iP7ICbBJwBbgkwBhuLDaMXxLZddgk8duJTQKnP7E6CFkChAFpxL/ydoaj+QAAAABJRU5ErkJggg==) no-repeat center center;
+    bottom: -2px;
+    height: 33px;
+    pointer-events: none;
+    position: absolute;
+    right: 1px;
+    width: 14px;
+}
+.ccw_unit_selector_cnt{
+	border-bottom: 1px solid gainsboro;
+    -webkit-border-radius: 2px 0px 0px 2px;
+    overflow: inherit;
+    position: relative;
+  width: 113px;
+    height: 34px;
+}
+.ccw_unit_selector {
+    -webkit-appearance: button;
+    border: none;
+    font-size: 13px;
+    list-style: none;
+    margin: 0;
+    outline: none;
+    overflow: hidden;
+    padding-left: 5px;
+    text-align: left;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 100%;
+  height:100%;
+}
+input.deal-pro{
+border-radius: 2px 0px 0px 2px;
+}
  .thumb-m {
-   display: inline-block;
+  display: inline-block;
   width: 80px;
 }
 
@@ -3121,8 +3177,6 @@ table.hide-head-checkbox th label.i-checks {
 
 .display-none{
   display: none;
-}
-
 }
 .fullscreen{
   width: 100%;
@@ -3596,7 +3650,7 @@ text-align:left;
   margin-bottom: 6px;
 }
 #send-cancellation #cancel_subscription_modal{
-  width: 70%;
+  width: 80%;
   margin: 0px auto;
 
 }
@@ -3626,6 +3680,11 @@ text-align:left;
 #account_pause a:hover{
   background-color: #f76c51;
   border-color: #f76c51;
+  color: white !important;
+}
+#downgrade_to_free_plan a:hover{
+  background-color: #f05050;
+  border-color: #f05050;
   color: white !important;
 }
 
@@ -5001,7 +5060,9 @@ border-top: 0px !important;
   opacity: 0.6
 }
 .recent-view-background-color{
-  height:30px;width:30px;background-color:gainsboro;border-radius: 3px;line-height: 27px;
+  height:30px;width:30px;/*background-color:gainsboro;*/
+  background-color: #f0f0f0 !important;
+  border-radius: 3px;line-height: 27px;
 }
 .recent-view-comany-style{
   margin-left:3px; vertical-align: middle;display: inline-block;height: 25px;width: 25px !important;
@@ -5147,13 +5208,6 @@ span.rolecontainer {
 span.rolecontainer::first-letter {
     text-transform: capitalize;
 }
-#agile-menu-navigation-container.navi ul.nav li a {
-  padding-left: 45px;
-}
-.app-aside-folded #agile-menu-navigation-container.navi ul.nav li a, .app-aside-dock #agile-menu-navigation-container.navi ul.nav li a {
-  padding-left: 0px; 
-}
-
 .agile-service-theme.theme-15 .i-checks input[disabled]:after, .agile-service-theme.theme-15 .i-checks input[disabled]:focus, .agile-service-theme.theme-15 .i-checks input[disabled]:hover {
     background-color: #dee5e7;
     border-color: #ececec;
@@ -5279,4 +5333,67 @@ span.rolecontainer::first-letter {
 .searchbychar:hover{
     color: #f4f3f9 !important;
     background-color: #7266ba !important;
+}
+
+.navbar-brand i.fa-cloud{
+  display: none;
+}
+.newtheme-cloud{
+  display: inline-block !important;
+  vertical-align: middle;
+  margin-top: -5px;
+}
+.app-aside-folded .navbar-brand .newtheme-cloud{display: none !important;}
+#new_tag{
+  width: 180px !important;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 50px;
+    max-height: 100px;
+    overflow: auto;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 9;
+}
+.dropdown-content a {
+    text-decoration: none;
+    display: block;
+}
+.recent-view-background-color,
+.recent-view-background-color[icon="icon-money"]{
+  display: inherit !important;
+  padding: 0px !important; 
+}
+#api_track_webrules_code .linenums ,#api_track_code .linenums
+{
+  margin: 0 0 0 0px;
+  
+}
+#api_track_webrules_code.prettyprint.linenums,#api_track_code.prettyprint.linenums
+{
+  font-size: 14px!important;
+}
+.grp-clipboard-track-code,.grp-clipboard-webrule-code
+{
+  margin-bottom: 10px;
+  float: right;
+}  
+#api_track_code , #api_track_webrules_code
+{
+  width: 100%;
+}
+.contact-desc-dynamic pre 
+{
+  word-break: keep-all;
+}
+#free-downgrade-restrictions{
+  z-index: 1;
+  background-color: #fff;
+  padding: 7px 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 150px;
 }

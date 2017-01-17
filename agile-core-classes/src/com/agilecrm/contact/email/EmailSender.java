@@ -22,7 +22,6 @@ import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.EmailBillingRestriction;
 import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.blobstore.BlobKey;
 
 public class EmailSender
 {
@@ -198,7 +197,7 @@ public class EmailSender
 
     public void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text, String mandrillMetadata, List<Long> documentIds,
-	    List<BlobKey> blobKeys, String... attachments) throws Exception
+	    String[] mailAttach, String... attachments) throws Exception
     {
 
 	String domain = NamespaceManager.get();
@@ -210,7 +209,7 @@ public class EmailSender
 	    if (canSend())
 	    {
 		EmailGatewayUtil.sendEmail(emailGateway, domain, fromEmail, fromName, to, cc, bcc, subject, replyTo,
-		        html, text, mandrillMetadata, documentIds, blobKeys, attachments);
+		        html, text, mandrillMetadata, documentIds, mailAttach, attachments);
 
 		// Sets Billing restriction limit and account email stats
 		    
