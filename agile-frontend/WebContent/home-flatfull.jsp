@@ -441,11 +441,16 @@ function isIE() {
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
                       <span class="grid2-sub-nav">
-                    <span class="grid-selector" navigation="#contacts">Contacts,</span>
-                    <span class="grid-selector" navigation="#companies">Companies,</span>
-                    <span class="grid-selector" navigation="#deals">Deals,</span>
-                    <span class="grid-selector" navigation="#tasks">Tasks</span>
-                  </span>
+                        <span class="grid-selector" navigation="#contacts">Contacts,</span>
+                        <span class="grid-selector" navigation="#companies">Companies,</span>
+                        <span class="grid-selector" navigation="#deals">Deals,</span>
+                        <span class="grid-selector" navigation="#tasks">Tasks</span>
+                      </span>
+                      <span class="grid2-sub-nav">
+                        <span class="grid-selector" navigation="#documents">Documents,</span>
+                        <span class="grid-selector" navigation="#calendar">Calendar,</span>
+                        <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar</span>
+                      </span>
                   </a>
               </li>
               <li>
@@ -453,11 +458,16 @@ function isIE() {
                 <i class="material-icons purple-color">view_module</i>
                       <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
 
-                      <span class="grid2-sub-nav">
+                  <span class="grid2-sub-nav">
                     <span class="grid-selector" navigation="#workflows">Campaigns,</span>
                     <span class="grid-selector" navigation="#triggers">Triggers,</span>
                     <span class="grid-selector" navigation="#forms">Forms,</span>
-                    <span class="grid-selector" navigation="#web-rules">Web Rules</span>
+                    <span class="grid-selector" navigation="#web-rules">Push Notifications</span>
+                  </span>
+                  <span class="grid2-sub-nav">
+                        <span class="grid-selector" navigation="#email-templates">Email Templates,</span>
+                        <span class="grid-selector" navigation="#landing-pages">Landing Pages,</span>
+                        <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar</span>
                   </span>
 
                   </a>
