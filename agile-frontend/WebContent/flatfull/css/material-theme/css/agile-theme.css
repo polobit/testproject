@@ -3543,6 +3543,7 @@ margin: 0px !important;
 .choose-due-date:hover{
      color: #11a0f8 !important;
  }
- li.support-help-icon > a{
+/* li.support-help-icon > a{
   margin-top: 3px !important;
-}
+}*/
+.tickets-main #tickets-inner{  padding-top:10px;}
