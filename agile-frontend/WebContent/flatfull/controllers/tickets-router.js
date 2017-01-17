@@ -1279,7 +1279,11 @@
 							      tolerance: "intersect",
 							      
 						    });
-						
+							$(".select-landing-page-button",$('#ticket-categorie-table')).on('click',function(e)
+							{
+								window.location.href = $(this).attr("href");
+
+							});
 							$('#ticket-helpcenter-categories-model-list',$('#ticket-categorie-table')).on("sortstop",function(event, ui){
 								
 								var sourceIds = [];

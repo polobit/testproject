@@ -30,11 +30,11 @@
       <div class="col-md-12 p-n m-t-xs">
         <input type="text" name="due-date-input" class="form-control input-sm due-date-input" placeholder="{{agile_lng_translate 'tickets' 'choose-date'}}">
       </div>
-      <div class="col-md-12 p-n m-t-xs-imp ">
+      <div class="col-md-12 p-n {{#isNewTheme}}m-t-sm{{else}}m-t-xs-imp {{/isNewTheme}}">
         <div class="col-md-2 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="overdue">{{agile_lng_translate 'tasks' 'Overdue'}}</a>
         </div>
-        <div class="col-md-1 p-n text-center m-l-xs"> | </div>
+        <div class="col-md-1 p-n text-center m-l-xs" {{#isNewTheme}}style="visibility:hidden;margin-left:10px;"{{/isNewTheme}}> | </div>
         <div class="col-md-3 p-n">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="tomorrow">{{agile_lng_translate 'tasks' 'Tomorrow'}}</a>
         </div>
@@ -42,11 +42,11 @@
         <div class="col-md-1 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_two_days">+2</a>
         </div>-->
-        <div class="col-md-1 p-n text-center"> | </div>
+        <div class="col-md-1 p-n text-center" {{#isNewTheme}}style="visibility:hidden"{{/isNewTheme}}> | </div>
         <div class="col-md-1 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_three_days">+3</a>
         </div>
-        <div class="col-md-1 p-n text-center"> | </div>
+        <div class="col-md-1 p-n text-center" {{#isNewTheme}}style="visibility:hidden;margin-left:-4px;"{{/isNewTheme}}> | </div>
         <div class="col-md-1 p-n text-center">
           <a href="javascript:void(0);" class="c-p choose-due-date txt-small link-color" data-value="next_five_days">+5</a>
         </div>
