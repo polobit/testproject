@@ -24,3 +24,7 @@ function loadframe(){
 	var iframeWin = document.getElementById("linkedin-iframe").contentWindow;
 	iframeWin.postMessage(contactname, "https://touch.www.linkedin.com/#search");
 }
+function loadframeWithoutHeaders(){
+	var iframeWin = document.getElementById("linkedin-iframe").contentWindow;
+	iframeWin.postMessage("loadwithoutheaders", "https://touch.www.linkedin.com/#search");
+}
