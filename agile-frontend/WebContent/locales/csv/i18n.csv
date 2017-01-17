@@ -6049,3 +6049,6 @@ widgets.skype-tooltip,Download executable and run it in your system to establish
 widgets.asterisk-tooltip,Download executable and run it in your system to establish a connection between your Asterisk server and Agile CRM. Please note that your server should already be running before running this executable file.,Descarga el archivo ejecutable y córrelo desde tu sistema para establecer una conexión entre tu cliente Bria y tu Agile CRM. Por favor toma en cuenta que deberás estar previamente loggeado con el cliente Bria seleccionado antes de correr este archivo ejecutable,,,,,,,,,,,,,
 contact-edit.asterisk,Asterisk,,,,,,,,,,,,
 widgets.run-as-admin-in-windows,*In Windows-Run jar in Administrator mode,,,,,,,,,,,,
+help.free-plan,Free Plan,
+help.free-plan-desc,Choose our free plan to continue with Agile. Check the plan limits before proceeding.,
+help.downgrade,Downgrade,

@@ -3650,7 +3650,7 @@ text-align:left;
   margin-bottom: 6px;
 }
 #send-cancellation #cancel_subscription_modal{
-  width: 70%;
+  width: 80%;
   margin: 0px auto;
 
 }
@@ -3680,6 +3680,11 @@ text-align:left;
 #account_pause a:hover{
   background-color: #f76c51;
   border-color: #f76c51;
+  color: white !important;
+}
+#downgrade_to_free_plan a:hover{
+  background-color: #f05050;
+  border-color: #f05050;
   color: white !important;
 }
 
@@ -5382,4 +5387,13 @@ span.rolecontainer::first-letter {
 .contact-desc-dynamic pre 
 {
   word-break: keep-all;
+}
+#free-downgrade-restrictions{
+  z-index: 1;
+  background-color: #fff;
+  padding: 7px 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 150px;
 }

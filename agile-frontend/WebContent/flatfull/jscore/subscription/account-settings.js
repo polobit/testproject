@@ -195,6 +195,41 @@ $(function(){
 		});
 	});
 
+	$("#send-cancellation #downgrade_to_free_plan_btn").off("click");
+	$('#send-cancellation').on('click', '#downgrade_to_free_plan_btn', function(e) {
+		$(this).attr("disabled", "disabled");
+		var that = $(this);
+		$.ajax({
+			url:'core/api/subscription/downgradeRestrictions',
+			type:'GET',
+			success:function(data){
+				var json = JSON.parse(data);
+				if(json && _.size(json) > 0){
+					json.plan = USER_BILLING_PREFS.plan.plan_type.toLowerCase();
+					getTemplate("free-downgrade-restrictions", json, undefined, function(template_ui){
+						if(!template_ui)
+							  return;
+						$("#free-downgrade-restrictions").html($(template_ui)).removeClass("hide");
+						$(".free-downgrade-tooltip").tooltip();
+						/*$(that).attr("title", "Plan Restrictions");
+						$(that).attr("data-content", template_ui);
+						$(that).popover({html : true}).popover("show");
+						$(that).removeAttr("disabled");*/
+					}, null);
+				}else{
+					$(that).closest(".modal").modal("hide");
+					showNotyPopUp("information", "Your plan has been updated successfully.",5000);
+					setTimeout(function(){
+						window.location.reload(true);
+					}, 3000);
+					
+				}
+			},error: function(response){
+				$(that).removeAttr("disabled");
+			}
+		});
+	});
+
 });
 	
 
