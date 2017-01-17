@@ -2643,10 +2643,12 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
   box-shadow: none !important;
 }
 #ticket_change_sla{
-  width: 67% !important;
+  width: 66% !important;
+  margin-top:3px;
 }
 .ticket_change_slatime,{
-  width: 33% !important;
+  width: 34% !important;
+  margin-top:3px;
 }
 
 .tab-container#integrations-tab, #integrationstats .tab-container{
@@ -2730,13 +2732,14 @@ div#ticket-lhs-groups-model-list .i-checks input[type="checkbox"]{
 
 .ticket_change_slatime
 {
-  width: 33% !important;
+  width: 34% !important;
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
   border-left: 1px solid #cfdadd !important;
+  margin-top: 3px;
 }
 .sla-due-date .col-sm-12{
-  margin-top: 3px !important;
+  margin-top: 10px !important;
 }
 #active-campaign{
   margin-top: 2px !important;
@@ -3407,9 +3410,74 @@ width: 169px !important;
 .toggle-favorite.text-light{
   color: #11a0f8 !important;
 }
+
 #new_tag{
   width: 180px !important;
 }
 #send-cancellation #cancel_subscription_modal{
   width: 80%;
 }
+
+.ticket_type_newtheme,.ticket_status,.ticket_priority, #ticket-assignee{
+  height: 40px !important;
+  padding: 6px 12px !important;
+  margin-top:3px !important;
+}
+.agile-theme-15 .add-me-to-cc{
+  font-size: 10px;
+  margin-top: 2px;
+}
+#ticket-contact-details img,#ticket-notes-model-list img,.public-notes-container img{
+      border-radius: 50%!important;
+      /*height: 42px!important;
+     width: 42px!important;*/
+}
+.ticket-timeline-container .arrow-light{
+  border-color: white;
+}
+ #ticket-notes-model-list .public-notes-container .thumb-small,#ticket-notes-model-list .thumb-small{
+  margin-top: 5px !important;
+ }
+ #ticket-notes-model-list .b-a-lightyellow,.ticket-timeline-container .bg-lightyellow{
+  border : 1px solid white;
+  background-color : rgba(17, 160, 248, 0.02) !important;
+ }
+ .ticket-timeline-container .activity img,.ticket-timeline-container .comment img{
+  border-radius: 50% !important;
+ }
+ .img-rounded{
+  border-radius:50% !important;
+ }
+ .public-notes-container .m-l-xl{
+  padding-left: 10px;
+ }
+ #TwilioIO #contact_number{
+    color: #263238;
+    background-color: #f4f8f9;
+    background-image: inherit;
+    border: inherit;
+    border-radius: 4px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAFCAMAAABhCnz1AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAOVBMVEUAAACQpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK6QpK4AAAC2Bow0AAAAEXRSTlMABBEIP/xbd6Vs/psDZO2RAdB8gx8AAAABYktHRACIBR1IAAAACXBIWXMAAAsSAAALEgHS3X78AAAALklEQVQI12NgZAIDZgZsgEUQDFjZsMqygyU5GLFKMnByCQpy8zDgALx8/AJYJQBxVwFxjZWV0AAAAABJRU5ErkJggg==')
+ 
+ }
+ .agile-theme-15 .arrow.left.arrow-lightyellow:after
+ {
+  border-right-color : #fafdff !important;
+ }
+ .bootstrap-timepicker-widget table td input{
+  width: 55px !important;
+ }
+ .ticket-email-newtheme{
+  padding-top: 12px !important;
+ }
+ .choose-due-date{
+  margin: 3px 2px !important;
+  line-height: 16px;
+  font-size: 12px!important;
+  height: auto;
+  vertical-align: middle;
+  padding: 2px 6px !important;
+  background-color: #f4f8f9!important;
+  color: #78909c!important;
+  border-radius: 3px;
+ }
