@@ -3258,6 +3258,7 @@ form#new-ticket ul.chosen-choices{
 .agile-theme-15 .taskhead.taskdivider
 {
   visibility:hidden;
+
 }
 #taskheading
 {
@@ -3410,7 +3411,6 @@ width: 169px !important;
 .toggle-favorite.text-light{
   color: #11a0f8 !important;
 }
-
 #new_tag{
   width: 180px !important;
 }
@@ -3481,3 +3481,54 @@ width: 169px !important;
   color: #78909c!important;
   border-radius: 3px;
  }
+
+#ticket-contact-details .label.dk.ccemail {
+    margin-top: 5px;
+    padding: 5px;
+    line-height: 1.2em;
+}
+#widgets-model-list h4.widget_header_name
+{
+  font-size:16px!important;
+}
+.tickets-main #widgets-model-list .widget_header_name img
+{
+  margin-top:-5px;
+}
+#helpcenter-content .panel .panel-heading
+{
+  font-size: 13px!important;
+  color:#78909c!important;
+}
+#notes-collection-container #ticket-notes-model-list .border-highlight-light
+{
+  padding-top:10px;
+  padding-bottom:10px;
+  margin-top:5px!important;
+  margin-bottom:20px!important;
+}
+#helpcenter-content .panel-heading .panelbuttons
+{
+  margin-top:-6px!important;
+}
+#helpcenter-content #userForm #template_id
+{
+  padding: 6px 20px!important;
+      height: 40px!important;
+}
+#ticket-notes-model-list .border-highlight-light
+{
+  border-bottom:1px solid #ddd;
+}
+#ticket-categorie-table th:hover:last-child:after
+{
+  display:none!important;
+}
+#helpcenter-content .panel.panel-default.theme-panel
+{
+  background-color:#F4F8F9!important;
+}
+#helpcenter-content .theme-panel .panel-footer
+{
+      background-color: #F4F8F9;
+}
