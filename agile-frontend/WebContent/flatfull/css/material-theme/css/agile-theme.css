@@ -3651,7 +3651,7 @@ color: #78909c!important;
     margin-right: 5px;
     margin-top: 12px;
  }
- #new-ticket .link-color{
+ #new-ticket .link-color,.ticket-modal-header .link-color{
   color : #11a0f8 !important
  }
  #new-ticket .add-ticket-contact{
@@ -3679,10 +3679,22 @@ color: #78909c!important;
   border-bottom: 0px solid white;
  }
  .ticket-modal-heading{
-  padding: 23px 0px 0px 0px;
+  padding: 15px 0px 0px 23px;
  }
 
  .modal-footer.ticket-modal-footer{
   border-top: 0px solid white;
-  padding:30px 0px 20px 0px;
+  padding:15px 40px 40px 0px;
+  background-color: white;
  }
+ #new-ticket .control-group.form-group{
+      padding: 0px 30px 0px 30px !important;
+ }
+
+.ticket-modal-heading i.icon-plus-sign:before{
+  font-size: 24px;
+}
+
+.modal-content .modal-header .ticket-modal-heading h3{
+  font-size: 20px !important;
+}
