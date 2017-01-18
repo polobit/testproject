@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -52,7 +52,7 @@ import com.sun.mail.util.PropUtil;
 
 /**
  * This class represents an Internet email address using the syntax
- * of <a href="http://www.ietf.org/rfc/rfc822.txt">RFC822</a>.
+ * of <a href="http://www.ietf.org/rfc/rfc822.txt" target="_top">RFC822</a>.
  * Typical address syntax is of the form "user@host.domain" or
  * "Personal Name &lt;user@host.domain&gt;".
  *
@@ -84,6 +84,10 @@ public class InternetAddress extends Address implements Cloneable {
     private static final boolean ignoreBogusGroupName =
 	PropUtil.getBooleanSystemProperty(
 			    "mail.mime.address.ignorebogusgroupname", true);
+
+    private static final boolean useCanonicalHostName =
+	PropUtil.getBooleanSystemProperty(
+			    "mail.mime.address.usecanonicalhostname", true);
 
     /**
      * Default constructor.
@@ -151,6 +155,8 @@ public class InternetAddress extends Address implements Cloneable {
      *
      * @param address	the address in RFC822 format
      * @param personal	the personal name
+     * @exception	UnsupportedEncodingException if the personal name
+     *			can't be encoded in the given charset
      */
     public InternetAddress(String address, String personal)
 				throws UnsupportedEncodingException {
@@ -164,6 +170,8 @@ public class InternetAddress extends Address implements Cloneable {
      * @param address	the address in RFC822 format
      * @param personal	the personal name
      * @param charset	the MIME charset for the name
+     * @exception	UnsupportedEncodingException if the personal name
+     *			can't be encoded in the given charset
      */
     public InternetAddress(String address, String personal, String charset)
 				throws UnsupportedEncodingException {
@@ -284,17 +292,18 @@ public class InternetAddress extends Address implements Cloneable {
      * @return		possibly encoded address string
      */
     public String toString() {
+	String a = address == null ? "" : address;
 	if (encodedPersonal == null && personal != null)
 	    try {
 		encodedPersonal = MimeUtility.encodeWord(personal);
 	    } catch (UnsupportedEncodingException ex) { }
 	
 	if (encodedPersonal != null)
-	    return quotePhrase(encodedPersonal) + " <" + address + ">";
+	    return quotePhrase(encodedPersonal) + " <" + a + ">";
 	else if (isGroup() || isSimple())
-	    return address;
+	    return a;
 	else
-	    return "<" + address + ">";
+	    return "<" + a + ">";
     }
 
     /**
@@ -417,7 +426,7 @@ public class InternetAddress extends Address implements Cloneable {
      * hence is mail-safe. <p>
      *
      * @param addresses	array of InternetAddress objects
-     * @exception 	ClassCastException, if any address object in the 
+     * @exception 	ClassCastException if any address object in the 
      *			given array is not an InternetAddress object. Note
      *			that this is a RuntimeException.
      * @return		comma separated string of addresses
@@ -441,7 +450,7 @@ public class InternetAddress extends Address implements Cloneable {
      * @param used	number of character positions already used, in
      *			the field into which the address string is to
      *			be inserted.
-     * @exception 	ClassCastException, if any address object in the 
+     * @exception 	ClassCastException if any address object in the 
      *			given array is not an InternetAddress object. Note
      *			that this is a RuntimeException.
      * @return		comma separated string of addresses
@@ -450,7 +459,7 @@ public class InternetAddress extends Address implements Cloneable {
 	if (addresses == null || addresses.length == 0)
 	    return null;
 
-	StringBuffer sb = new StringBuffer();
+	StringBuilder sb = new StringBuilder();
 
 	for (int i = 0; i < addresses.length; i++) {
 	    if (i != 0) { // need to append comma
@@ -458,9 +467,14 @@ public class InternetAddress extends Address implements Cloneable {
 		used += 2;
 	    }
 
-	    String s = addresses[i].toString();
+	    // prefer not to split a single address across lines so used=0 below
+	    String s = MimeUtility.fold(0, addresses[i].toString());
 	    int len = lengthOfFirstSegment(s); // length till CRLF
 	    if (used + len > 76) { // overflows ...
+		// smash trailing space from ", " above
+		int curlen = sb.length();
+		if (curlen > 0 && sb.charAt(curlen - 1) == ' ')
+		    sb.setLength(curlen - 1);
 		sb.append("\r\n\t"); // .. start new continuation line
 		used = 8; // account for the starting <tab> char
 	    }
@@ -471,7 +485,8 @@ public class InternetAddress extends Address implements Cloneable {
 	return sb.toString();
     }
 
-    /* Return the length of the first segment within this string.
+    /*
+     * Return the length of the first segment within this string.
      * If no segments exist, the length of the whole line is returned.
      */
     private static int lengthOfFirstSegment(String s) {
@@ -562,7 +577,14 @@ public class InternetAddress extends Address implements Cloneable {
 	String host = null;
 	InetAddress me = InetAddress.getLocalHost();
 	if (me != null) {
-	    host = me.getHostName();
+	    // try canonical host name first
+	    if (useCanonicalHostName)
+		host = me.getCanonicalHostName();
+	    if (host == null)
+		host = me.getHostName();
+	    // if we can't get our name, use local address literal
+	    if (host == null)
+		host = me.getHostAddress();
 	    if (host != null && host.length() > 0 && isInetAddressLiteral(host))
 		host = '[' + host + ']';
 	}
@@ -655,7 +677,7 @@ public class InternetAddress extends Address implements Cloneable {
      */
     public static InternetAddress[] parseHeader(String addresslist,
 				boolean strict) throws AddressException {
-	return parse(addresslist, strict, true);
+	return parse(MimeUtility.unfold(addresslist), strict, true);
     }
 
     /*
@@ -666,6 +688,7 @@ public class InternetAddress extends Address implements Cloneable {
      *
      * XXX - Deal with encoded Headers too.
      */
+    @SuppressWarnings("fallthrough")
     private static InternetAddress[] parse(String s, boolean strict,
 				    boolean parseHdr) throws AddressException {
 	int start, end, index, nesting;
@@ -676,7 +699,7 @@ public class InternetAddress extends Address implements Cloneable {
 	boolean route_addr = false;	// address came from route-addr term
 	boolean rfc822 = false;		// looks like an RFC822 address
 	char c;
-	List v = new ArrayList();
+	List<InternetAddress> v = new ArrayList<InternetAddress>();
 	InternetAddress ma;
 
 	for (start = end = -1, index = 0; index < length; index++) {
@@ -746,7 +769,7 @@ public class InternetAddress extends Address implements Cloneable {
 			break;	// nope, nothing there
 		    }
 		    if (!in_group) {
-			// got a token, add this to our InternetAddress vector
+			// got a token, add this to our InternetAddress list
 			if (end == -1)	// should never happen
 			    end = index;
 			String addr = s.substring(start, end).trim();
@@ -818,9 +841,11 @@ public class InternetAddress extends Address implements Cloneable {
 		}
 
 		if (!in_group) {
-		    start_personal = start;
-		    if (start_personal >= 0)
+		    if (start >= 0) {
+			// seen some characters?  use them as the personal name
+			start_personal = start;
 			end_personal = rindex;
+		    }
 		    start = rindex + 1;
 		}
 		route_addr = true;
@@ -935,7 +960,7 @@ public class InternetAddress extends Address implements Cloneable {
 		    route_addr = false;
 		    break;
 		}
-		// got a token, add this to our InternetAddress vector
+		// got a token, add this to our InternetAddress list
 		if (end == -1)
 		    end = index;
 
@@ -1058,7 +1083,7 @@ public class InternetAddress extends Address implements Cloneable {
 
 	if (start >= 0) {
 	    /*
-	     * The last token, add this to our InternetAddress vector.
+	     * The last token, add this to our InternetAddress list.
 	     * Note that this block of code should be identical to the
 	     * block above for "case ','".
 	     */
@@ -1144,6 +1169,8 @@ public class InternetAddress extends Address implements Cloneable {
 				throws AddressException {
 	int i, start = 0;
 
+	if (addr == null)
+	    throw new AddressException("Address is null");
 	int len = addr.length();
 	if (len == 0)
 	    throw new AddressException("Empty address", addr);
@@ -1201,6 +1228,22 @@ public class InternetAddress extends Address implements Cloneable {
 		    inquote = true;
 		}
 		continue;
+	    } else if (c == '\r') {
+		// peek ahead, next char must be LF
+		if (i + 1 < len && addr.charAt(i + 1) != '\n')
+		    throw new AddressException(
+			"Quoted local address contains CR without LF", addr);
+	    } else if (c == '\n') {
+		/*
+		 * CRLF followed by whitespace is allowed in a quoted string.
+		 * We allowed naked LF, but ensure LF is always followed by
+		 * whitespace to prevent spoofing the end of the header.
+		 */
+		if (i + 1 < len && addr.charAt(i + 1) != ' ' &&
+				    addr.charAt(i + 1) != '\t')
+		    throw new AddressException(
+		     "Quoted local address contains newline without whitespace",
+			addr);
 	    }
 	    if (inquote)
 		continue;
@@ -1245,32 +1288,45 @@ public class InternetAddress extends Address implements Cloneable {
 
 	if (addr.charAt(start) == '.')
 	    throw new AddressException("Domain starts with dot", addr);
+	boolean inliteral = false;
 	for (i = start; i < len; i++) {
 	    c = addr.charAt(i);
-	    if (c == '[')
-		return;		// domain literal, don't validate
-	    if (c <= 040 || c >= 0177)
+	    if (c == '[') {
+		if (i != start)
+		    throw new AddressException(
+				"Domain literal not at start of domain", addr);
+		inliteral = true;	// domain literal, don't validate
+	    } else if (c == ']') {
+		if (i != len - 1)
+		    throw new AddressException(
+			    "Domain literal end not at end of domain", addr);
+		inliteral = false;
+	    } else if (c <= 040 || c >= 0177) {
 		throw new AddressException(
 				"Domain contains control or whitespace", addr);
-	    // RFC 2822 rule
-	    //if (specialsNoDot.indexOf(c) >= 0)
-	    /*
-	     * RFC 1034 rule is more strict
-	     * the full rule is:
-	     * 
-	     * <domain> ::= <subdomain> | " "
-	     * <subdomain> ::= <label> | <subdomain> "." <label>
-	     * <label> ::= <letter> [ [ <ldh-str> ] <let-dig> ]
-	     * <ldh-str> ::= <let-dig-hyp> | <let-dig-hyp> <ldh-str>
-	     * <let-dig-hyp> ::= <let-dig> | "-"
-	     * <let-dig> ::= <letter> | <digit>
-	     */
-	    if (!(Character.isLetterOrDigit(c) || c == '-' || c == '.'))
-		throw new AddressException(
-				"Domain contains illegal character", addr);
-	    if (c == '.' && lastc == '.')
-		throw new AddressException(
-				"Domain contains dot-dot", addr);
+	    } else {
+		// RFC 2822 rule
+		//if (specialsNoDot.indexOf(c) >= 0)
+		/*
+		 * RFC 1034 rule is more strict
+		 * the full rule is:
+		 * 
+		 * <domain> ::= <subdomain> | " "
+		 * <subdomain> ::= <label> | <subdomain> "." <label>
+		 * <label> ::= <letter> [ [ <ldh-str> ] <let-dig> ]
+		 * <ldh-str> ::= <let-dig-hyp> | <let-dig-hyp> <ldh-str>
+		 * <let-dig-hyp> ::= <let-dig> | "-"
+		 * <let-dig> ::= <letter> | <digit>
+		 */
+		if (!inliteral) {
+		    if (!(Character.isLetterOrDigit(c) || c == '-' || c == '.'))
+			throw new AddressException(
+				    "Domain contains illegal character", addr);
+		    if (c == '.' && lastc == '.')
+			throw new AddressException(
+					"Domain contains dot-dot", addr);
+		}
+	    }
 	    lastc = c;
 	}
 	if (lastc == '.')
@@ -1307,12 +1363,15 @@ public class InternetAddress extends Address implements Cloneable {
      * the group list is parsed using strict RFC 822 rules or not.
      * The parsing is done using the <code>parseHeader</code> method.
      *
+     * @param	strict	use strict RFC 822 rules?
      * @return		array of InternetAddress objects, or null
      * @exception	AddressException if the group list can't be parsed
      * @since		JavaMail 1.3
      */
     public InternetAddress[] getGroup(boolean strict) throws AddressException {
 	String addr = getAddress();
+	if (addr == null)
+	    return null;
 	// groups are of the form "name:addr,addr,...;"
 	if (!addr.endsWith(";"))
 	    return null;

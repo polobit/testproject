@@ -86,9 +86,9 @@ public class OAuth2Authenticator
 	props.put("mail.imap.auth.plain.disable", "true");
 	props.put("mail.imaps.sasl.mechanisms", "XOAUTH2");
 	props.put("mail.imaps.sasl.mechanisms.oauth2.oauthToken", oauthToken);
-	// System.out.println("the token:"+oauthToken);
+	System.out.println("the token:"+oauthToken);
 	Session session = Session.getInstance(props);
-	session.setDebug(debug);
+	//session.setDebug(debug);
 
 	final URLName unusedUrlName = null;
 	IMAPSSLStore store = new IMAPSSLStore(session, unusedUrlName);
@@ -127,7 +127,7 @@ public class OAuth2Authenticator
 	props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
 	props.put("mail.imaps.sasl.mechanisms.oauth2.oauthToken", oauthToken);
 	Session session = Session.getInstance(props);
-	session.setDebug(debug);
+	//session.setDebug(debug);
 
 	final URLName unusedUrlName = null;
 	SMTPTransport transport = new SMTPTransport(session, unusedUrlName);

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -144,8 +144,11 @@ public class SharedFileInputStream extends BufferedInputStream
 	}
 
 	protected void finalize() throws Throwable {
-	    super.finalize();
-	    in.close();
+	    try {
+		in.close();
+	    } finally {
+		super.finalize();
+	    }
 	}
     }
 
@@ -164,6 +167,7 @@ public class SharedFileInputStream extends BufferedInputStream
      * for the file.
      *
      * @param   file   the file
+     * @exception IOException for errors opening the file
      */
     public SharedFileInputStream(File file) throws IOException {
 	this(file, defaultBufferSize);
@@ -174,6 +178,7 @@ public class SharedFileInputStream extends BufferedInputStream
      * for the named file
      *
      * @param   file   the file
+     * @exception IOException for errors opening the file
      */
     public SharedFileInputStream(String file) throws IOException {
 	this(file, defaultBufferSize);
@@ -185,7 +190,8 @@ public class SharedFileInputStream extends BufferedInputStream
      *
      * @param   file	the file
      * @param   size   the buffer size.
-     * @exception IllegalArgumentException if size <= 0.
+     * @exception IOException for errors opening the file
+     * @exception IllegalArgumentException if size &le; 0.
      */
     public SharedFileInputStream(File file, int size) throws IOException {
 	super(null);	// XXX - will it NPE?
@@ -200,7 +206,8 @@ public class SharedFileInputStream extends BufferedInputStream
      *
      * @param   file	the file
      * @param   size   the buffer size.
-     * @exception IllegalArgumentException if size <= 0.
+     * @exception IOException for errors opening the file
+     * @exception IllegalArgumentException if size &le; 0.
      */
     public SharedFileInputStream(String file, int size) throws IOException {
 	super(null);	// XXX - will it NPE?
@@ -265,14 +272,16 @@ public class SharedFileInputStream extends BufferedInputStream
 		buf = nbuf;
 	    }
         count = pos;
-	in.seek(bufpos + pos);
 	// limit to datalen
 	int len = buf.length - pos;
 	if (bufpos - start + pos + len > datalen)
 	    len = (int)(datalen - (bufpos - start + pos));
-	int n = in.read(buf, pos, len);
-        if (n > 0)
-            count = n + pos;
+	synchronized (in) {
+	    in.seek(bufpos + pos);
+	    int n = in.read(buf, pos, len);
+	    if (n > 0)
+		count = n + pos;
+	}
     }
 
     /**
@@ -484,7 +493,8 @@ public class SharedFileInputStream extends BufferedInputStream
      * @return  the current position
      */
     public long getPosition() {
-//System.out.println("getPosition: start " + start + " pos " + pos + " bufpos " + bufpos + " = " + (bufpos + pos - start));
+//System.out.println("getPosition: start " + start + " pos " + pos 
+//	+ " bufpos " + bufpos + " = " + (bufpos + pos - start));
 	if (in == null)
 	    throw new RuntimeException("Stream closed");
 	return bufpos + pos - start;
@@ -510,7 +520,7 @@ public class SharedFileInputStream extends BufferedInputStream
 	if (end == -1)
 	    end = datalen;
 	return new SharedFileInputStream(sf,
-			this.start + (int)start, (int)(end - start), bufsize);
+			this.start + start, end - start, bufsize);
     }
 
     // for testing...

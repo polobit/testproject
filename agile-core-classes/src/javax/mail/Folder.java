@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,10 +40,12 @@
 
 package javax.mail;
 
-import java.io.*;
 import java.lang.*;
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.List;
 import java.util.Vector;
-import java.util.StringTokenizer;
+import java.util.concurrent.Executor;
 import javax.mail.search.SearchTerm;
 import javax.mail.event.*;
 
@@ -129,6 +131,11 @@ public abstract class Folder {
      */
     protected int mode = -1;
 
+    /*
+     * The queue of events to be delivered.
+     */
+    private final EventQueue q;
+
     /**
      * Constructor that takes a Store object.
      *
@@ -136,6 +143,21 @@ public abstract class Folder {
      */
     protected Folder(Store store) {
 	this.store = store;
+
+	// create or choose the appropriate event queue
+	Session session = store.getSession();
+	String scope =
+	    session.getProperties().getProperty("mail.event.scope", "folder");
+	Executor executor =
+		(Executor)session.getProperties().get("mail.event.executor");
+	if (scope.equalsIgnoreCase("application"))
+	    q = EventQueue.getApplicationEventQueue(executor);
+	else if (scope.equalsIgnoreCase("session"))
+	    q = session.getEventQueue();
+	else if (scope.equalsIgnoreCase("store"))
+	    q = store.getEventQueue();
+	else // if (scope.equalsIgnoreCase("folder"))
+	    q = new EventQueue(executor);
     }
 
     /**
@@ -164,6 +186,7 @@ public abstract class Folder {
      * does <em>not</em> include the password used to access the store.
      *
      * @return	the URLName representing this folder
+     * @exception	MessagingException for failures
      * @see	URLName
      * @since	JavaMail 1.1
      */
@@ -206,6 +229,7 @@ public abstract class Folder {
     /**
      * Returns the Store that owns this Folder object.
      * This method can be invoked on a closed Folder.
+     *
      * @return 		the Store
      */
     public Store getStore() {
@@ -221,6 +245,7 @@ public abstract class Folder {
      * returns a new distinct Folder object.
      *
      * @return		Parent folder
+     * @exception	MessagingException for failures
      */
     public abstract Folder getParent() throws MessagingException;
 
@@ -269,7 +294,7 @@ public abstract class Folder {
      * @see 		#listSubscribed
      * @exception 	FolderNotFoundException if this folder does 
      *			not exist.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
     public abstract Folder[] list(String pattern) throws MessagingException;
 
@@ -302,7 +327,7 @@ public abstract class Folder {
      * @see 		#list
      * @exception 	FolderNotFoundException if this folder does
      *			not exist.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
     public Folder[] listSubscribed(String pattern) throws MessagingException {
 	return list(pattern);
@@ -319,7 +344,7 @@ public abstract class Folder {
      * @see		#list
      * @exception 	FolderNotFoundException if this folder does
      *			not exist.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
 
     public Folder[] list() throws MessagingException {
@@ -338,7 +363,7 @@ public abstract class Folder {
      * @see		#listSubscribed
      * @exception 	FolderNotFoundException if this folder does
      *			not exist.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
     public Folder[] listSubscribed() throws MessagingException {
 	return listSubscribed("%");
@@ -389,7 +414,7 @@ public abstract class Folder {
      * @param  type	The type of this folder. 
      *
      * @return		true if the creation succeeds, else false.
-     * @exception 	MessagingException  
+     * @exception 	MessagingException for failures
      * @see 		#HOLDS_FOLDERS
      * @see		#HOLDS_MESSAGES
      * @see		javax.mail.event.FolderEvent
@@ -423,7 +448,7 @@ public abstract class Folder {
      *			not exist.
      * @exception 	MethodNotSupportedException if this store
      *			does not support subscription
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
     public void setSubscribed(boolean subscribe) 
 			throws MessagingException {
@@ -451,7 +476,7 @@ public abstract class Folder {
      * @return		true if the Store has new Messages
      * @exception	FolderNotFoundException if this folder does
      *			not exist.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
     public abstract boolean hasNewMessages() throws MessagingException;
 
@@ -473,7 +498,7 @@ public abstract class Folder {
      *
      * @param name 	name of the Folder
      * @return		Folder object
-     * @exception 	MessagingException
+     * @exception 	MessagingException for failures
      */
     public abstract Folder getFolder(String name)
 				throws MessagingException;
@@ -485,7 +510,7 @@ public abstract class Folder {
      * The <code>recurse</code> flag controls whether the deletion affects
      * subfolders or not. If true, all subfolders are deleted, then this
      * folder itself is deleted. If false, the behaviour is dependent on
-     * the folder type and is elaborated below: <p>
+     * the folder type and is elaborated below:
      *
      * <ul>
      * <li>
@@ -493,7 +518,7 @@ public abstract class Folder {
      * <br>
      * All messages within the folder are removed. The folder 
      * itself is then removed. An appropriate FolderEvent is generated by 
-     * the Store and this folder. <p>
+     * the Store and this folder.
      *
      * <li>
      * The folder can contain only subfolders: (type == HOLDS_FOLDERS).
@@ -502,7 +527,7 @@ public abstract class Folder {
      * subfolders at all), it is removed. An appropriate FolderEvent is 
      * generated by the Store and this folder.<br>
      * If this folder contains any subfolders, the delete fails 
-     * and returns false. <p>
+     * and returns false.
      *
      * <li>
      * The folder can contain subfolders as well as messages: <br>
@@ -513,7 +538,7 @@ public abstract class Folder {
      * generated by the Store and this folder. <p>
      *
      * If the folder contains subfolders there are 3 possible
-     * choices an implementation is free to do: <p>
+     * choices an implementation is free to do:
      * 
      *  <ol>
      *   <li> The operation fails, irrespective of whether this folder
@@ -538,12 +563,13 @@ public abstract class Folder {
      * </ol>
      * </ul>
      *
+     * @param	recurse	also delete subfolders?
      * @return		true if the Folder is deleted successfully
      * @exception	FolderNotFoundException if this folder does 
      *			not exist
      * @exception	IllegalStateException if this folder is not in 
      *			the closed state.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see		javax.mail.event.FolderEvent
      */
     public abstract boolean delete(boolean recurse) 
@@ -563,7 +589,7 @@ public abstract class Folder {
      *			not exist
      * @exception	IllegalStateException if this folder is not in 
      *			the closed state.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see		javax.mail.event.FolderEvent
      */
     public abstract boolean renameTo(Folder f) throws MessagingException;
@@ -597,7 +623,7 @@ public abstract class Folder {
      *			not exist.
      * @exception	IllegalStateException if this folder is not in 
      *			the closed state.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see 		#READ_ONLY
      * @see 		#READ_WRITE
      * @see 		#getType()
@@ -615,7 +641,7 @@ public abstract class Folder {
      *
      * @param expunge	expunges all deleted messages if this flag is true
      * @exception	IllegalStateException if this folder is not opened
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see 		javax.mail.event.ConnectionEvent
      */
     public abstract void close(boolean expunge) throws MessagingException;
@@ -676,7 +702,7 @@ public abstract class Folder {
      *			invoked on a closed folder.
      * @exception	FolderNotFoundException if this folder does 
      *			not exist.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      */
     public abstract int getMessageCount() throws MessagingException;
 
@@ -705,7 +731,7 @@ public abstract class Folder {
      *			invoked on a closed folder.
      * @exception	FolderNotFoundException if this folder does 
      *			not exist.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      */
     public synchronized int getNewMessageCount() 
 			throws MessagingException {
@@ -751,7 +777,7 @@ public abstract class Folder {
      *			invoked on a closed folder.
      * @exception	FolderNotFoundException if this folder does 
      *			not exist.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      */
     public synchronized int getUnreadMessageCount() 
 			throws MessagingException {
@@ -797,7 +823,7 @@ public abstract class Folder {
      *			invoked on a closed folder.
      * @exception	FolderNotFoundException if this folder does 
      *			not exist.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @since		JavaMail 1.3
      */
     public synchronized int getDeletedMessageCount() throws MessagingException {
@@ -848,7 +874,7 @@ public abstract class Folder {
      * @exception	IllegalStateException if this folder is not opened
      * @exception	IndexOutOfBoundsException if the message number
      *			is out of range.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */
     public abstract Message getMessage(int msgnum)
 				throws MessagingException;
@@ -875,7 +901,7 @@ public abstract class Folder {
      * @exception	IllegalStateException if this folder is not opened.
      * @exception	IndexOutOfBoundsException if the start or end
      *			message numbers are out of range.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */ 
     public synchronized Message[] getMessages(int start, int end) 
 			throws MessagingException {
@@ -905,7 +931,7 @@ public abstract class Folder {
      * @exception	IllegalStateException if this folder is not opened.
      * @exception	IndexOutOfBoundsException if any message number
      *			in the given array is out of range.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */ 
     public synchronized Message[] getMessages(int[] msgnums)
 			throws MessagingException {
@@ -936,7 +962,7 @@ public abstract class Folder {
      * @exception	FolderNotFoundException if this folder does 
      *			not exist.
      * @exception	IllegalStateException if this folder is not opened.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      */ 
     public synchronized Message[] getMessages() throws MessagingException {
 	if (!isOpen())	// otherwise getMessageCount might return -1
@@ -978,7 +1004,7 @@ public abstract class Folder {
      *
      * An example is a client filling its header-view window with
      * the Subject, From and X-mailer headers for all messages in the 
-     * folder.<p>
+     * folder.
      * <blockquote><pre>
      *
      *  Message[] msgs = folder.getMessages();
@@ -988,7 +1014,7 @@ public abstract class Folder {
      *  fp.add("X-mailer");
      *  folder.fetch(msgs, fp);
      *  
-     *  for (int i = 0; i < folder.getMessageCount(); i++) {
+     *  for (int i = 0; i &lt; folder.getMessageCount(); i++) {
      *      display(msg[i].getFrom());
      *      display(msg[i].getSubject());
      *      display(msg[i].getHeader("X-mailer"));
@@ -1003,7 +1029,7 @@ public abstract class Folder {
      * @param msgs	fetch items for these messages
      * @param fp	the FetchProfile
      * @exception	IllegalStateException if this folder is not opened
-     * @exception	MessagingException.
+     * @exception	MessagingException for other failures
      */
     public void fetch(Message[] msgs, FetchProfile fp)
 			throws MessagingException {
@@ -1033,7 +1059,7 @@ public abstract class Folder {
      * @param value	set the flags to this boolean value
      * @exception	IllegalStateException if this folder is not opened
      *			or if it has been opened READ_ONLY.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      * @see		Message#setFlags
      * @see		javax.mail.event.MessageChangedEvent
      */
@@ -1076,7 +1102,7 @@ public abstract class Folder {
      *			or if it has been opened READ_ONLY.
      * @exception	IndexOutOfBoundsException if the start or end
      *			message numbers are out of range.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      * @see		Message#setFlags
      * @see		javax.mail.event.MessageChangedEvent
      */
@@ -1118,7 +1144,7 @@ public abstract class Folder {
      *			or if it has been opened READ_ONLY.
      * @exception	IndexOutOfBoundsException if any message number
      *			in the given array is out of range.
-     * @exception 	MessagingException
+     * @exception 	MessagingException for other failures
      * @see		Message#setFlags
      * @see		javax.mail.event.MessageChangedEvent
      */
@@ -1159,7 +1185,7 @@ public abstract class Folder {
      * @exception	FolderNotFoundException if the destination
      *			folder does not exist.
      * @exception	IllegalStateException if this folder is not opened.
-     * @exception	MessagingException
+     * @exception	MessagingException for other failures
      * @see		#appendMessages
      */
     public void copyMessages(Message[] msgs, Folder folder)
@@ -1200,7 +1226,7 @@ public abstract class Folder {
      * @exception	FolderNotFoundException if this folder does not
      *			exist
      * @exception	IllegalStateException if this folder is not opened.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see		Message#isExpunged
      * @see		javax.mail.event.MessageCountEvent
      */
@@ -1224,7 +1250,7 @@ public abstract class Folder {
      * @exception	FolderNotFoundException if this folder does 
      *			not exist.
      * @exception	IllegalStateException if this folder is not opened.
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see		javax.mail.search.SearchTerm
      */
     public Message[] search(SearchTerm term) throws MessagingException {
@@ -1257,24 +1283,22 @@ public abstract class Folder {
      * @exception       javax.mail.search.SearchException if the search 
      *			term is too complex for the implementation to handle.
      * @exception	IllegalStateException if this folder is not opened
-     * @exception       MessagingException
+     * @exception       MessagingException for other failures
      * @see		javax.mail.search.SearchTerm
      */
     public Message[] search(SearchTerm term, Message[] msgs)
 				throws MessagingException {
-	Vector matchedMsgs = new Vector();
+	List<Message> matchedMsgs = new ArrayList<Message>();
 
 	// Run thru the given messages
-	for (int i = 0; i < msgs.length; i++) {
+	for (Message msg : msgs) {
 	    try {
-		if (msgs[i].match(term)) // matched
-		    matchedMsgs.addElement(msgs[i]); // add it
+		if (msg.match(term)) // matched
+		    matchedMsgs.add(msg); // add it
 	    } catch(MessageRemovedException mrex) { }
 	}
 
-	Message[] m = new Message[matchedMsgs.size()];
-	matchedMsgs.copyInto(m);
-	return m;
+	return matchedMsgs.toArray(new Message[matchedMsgs.size()]);
     }
 
     /*
@@ -1299,7 +1323,7 @@ public abstract class Folder {
      */
 
     // Vector of connection listeners.
-    private volatile Vector connectionListeners = null;
+    private volatile Vector<ConnectionListener> connectionListeners = null;
 
     /**
      * Add a listener for Connection events on this Folder. <p>
@@ -1313,7 +1337,7 @@ public abstract class Folder {
     public synchronized void
     addConnectionListener(ConnectionListener l) { 
    	if (connectionListeners == null) 
-	    connectionListeners = new Vector();
+	    connectionListeners = new Vector<ConnectionListener>();
 	connectionListeners.addElement(l);
     }
 
@@ -1362,11 +1386,11 @@ public abstract class Folder {
 	 * self destruct.
 	 */
 	if (type == ConnectionEvent.CLOSED)
-	    terminateQueue();
+	    q.terminateQueue();
     }
 
     // Vector of folder listeners
-    private volatile Vector folderListeners = null;
+    private volatile Vector<FolderListener> folderListeners = null;
 
     /**
      * Add a listener for Folder events on this Folder. <p>
@@ -1379,7 +1403,7 @@ public abstract class Folder {
      */
     public synchronized void addFolderListener(FolderListener l) { 
    	if (folderListeners == null)
-	    folderListeners = new Vector();
+	    folderListeners = new Vector<FolderListener>();
 	folderListeners.addElement(l);
     }
 
@@ -1447,7 +1471,7 @@ public abstract class Folder {
     }
 
     // Vector of MessageCount listeners
-    private volatile Vector messageCountListeners = null;
+    private volatile Vector<MessageCountListener> messageCountListeners = null;
 
     /**
      * Add a listener for MessageCount events on this Folder. <p>
@@ -1460,7 +1484,7 @@ public abstract class Folder {
      */
     public synchronized void addMessageCountListener(MessageCountListener l) { 
    	if (messageCountListeners == null)
-	    messageCountListeners = new Vector();
+	    messageCountListeners = new Vector<MessageCountListener>();
 	messageCountListeners.addElement(l);
     }
 
@@ -1490,6 +1514,8 @@ public abstract class Folder {
      * events from the queue and dispatches them to the registered
      * MessageCountListeners. Note that the event dispatching occurs
      * in a separate thread, thus avoiding potential deadlock problems.
+     *
+     * @param	msgs	the messages that were added
      */
     protected void notifyMessageAddedListeners(Message[] msgs) { 
    	if (messageCountListeners == null)
@@ -1515,6 +1541,9 @@ public abstract class Folder {
      * events from the queue and dispatches them to the registered
      * MessageCountListeners. Note that the event dispatching occurs
      * in a separate thread, thus avoiding potential deadlock problems.
+     *
+     * @param	removed	was the message removed by this client?
+     * @param	msgs	the messages that were removed
      */
     protected void notifyMessageRemovedListeners(boolean removed, 
 						 Message[] msgs) { 
@@ -1530,7 +1559,8 @@ public abstract class Folder {
     }
 
     // Vector of MessageChanged listeners.
-    private volatile Vector messageChangedListeners = null;
+    private volatile Vector<MessageChangedListener> messageChangedListeners
+	    = null;
 
     /**
      * Add a listener for MessageChanged events on this Folder. <p>
@@ -1544,7 +1574,7 @@ public abstract class Folder {
     public synchronized void
 			addMessageChangedListener(MessageChangedListener l) { 
    	if (messageChangedListeners == null)
-	    messageChangedListeners = new Vector();
+	    messageChangedListeners = new Vector<MessageChangedListener>();
 	messageChangedListeners.addElement(l);
     }
 
@@ -1572,6 +1602,9 @@ public abstract class Folder {
      * events from the queue and dispatches them to registered
      * MessageChangedListeners. Note that the event dispatching occurs
      * in a separate thread, thus avoiding potential deadlock problems.
+     *
+     * @param	type	the MessageChangedEvent type
+     * @param	msg	the message that changed
      */
     protected void notifyMessageChangedListeners(int type, Message msg) {
 	if (messageChangedListeners == null)
@@ -1582,28 +1615,11 @@ public abstract class Folder {
     }
 
     /*
-     * The queue of events to be delivered.
-     */
-    private EventQueue q;
-
-    /*
-     * A lock for creating the EventQueue object.  Only one thread should
-     * create an EventQueue for this folder.  We can't synchronize on the
-     * folder's lock because that would violate the locking hierarchy in
-     * some cases.  For details, see the IMAP provider.
-     */
-    private Object qLock = new Object();
-
-    /*
      * Add the event and vector of listeners to the queue to be delivered.
      */
-    private void queueEvent(MailEvent event, Vector vector) {
-	// synchronize creation of the event queue
-	synchronized (qLock) {
-	    if (q == null)
-		q = new EventQueue();
-	}
-
+    @SuppressWarnings("unchecked")
+    private void queueEvent(MailEvent event,
+	    Vector<? extends EventListener> vector) {
 	/*
          * Copy the vector in order to freeze the state of the set
          * of EventListeners the event should be delivered to prior
@@ -1612,38 +1628,16 @@ public abstract class Folder {
          * of this event will not take effect until after the event is
          * delivered.
          */
-	Vector v = (Vector)vector.clone();
+	Vector<? extends EventListener> v = (Vector)vector.clone();
 	q.enqueue(event, v);
     }
 
-    static class TerminatorEvent extends MailEvent {
-	private static final long serialVersionUID = 3765761925441296565L;
-
-	TerminatorEvent() {
-	    super(new Object());
-	}
-
-	public void dispatch(Object listener) {
-	    // Kill the event dispatching thread.
-	    Thread.currentThread().interrupt();
-	}
-    }
-
-    // Dispatch the terminator
-    private void terminateQueue() {
-	synchronized (qLock) {
-	    if (q != null) {
-		Vector dummyListeners = new Vector();
-		dummyListeners.setSize(1); // need atleast one listener
-		q.enqueue(new TerminatorEvent(), dummyListeners);
-		q = null;
-	    }
-	}
-    }
-
     protected void finalize() throws Throwable {
-	super.finalize();
-	terminateQueue();
+	try {
+	    q.terminateQueue();
+	} finally {
+	    super.finalize();
+	}
     }
 
     /**
