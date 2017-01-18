@@ -1682,8 +1682,6 @@ function twiliocall(phoneNumber, toName,conferenceName, contact)
 function twilioSendDTMF(digit)
 {
 	console.log("twilioSendDTMF: " + digit);
-	console.log("twilioSendDTMF: " + aphabets);
-
 
 	// session for call is active and number is available.
 	if (Twilio.Device.status() == "busy" && digit)
