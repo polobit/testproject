@@ -15,7 +15,7 @@ LOADING_HTML_IMAGES = [
  */
 var LOADING_ON_CURSOR = '<img class="loading" style="padding-left:10px;padding-right:5px" src= "'+updateImageS3Path("img/ajax-loader-cursor.gif")+'"></img>';
 
-var LOADING_ON_CURSOR_BIG_SCREENS = '<img class="loading" style="padding-left:10px;padding-right:5px;height:40px;" src= "/flatfull/img/agile-loader.gif"></img>';
+var LOADING_ON_CURSOR_BIG_SCREENS = '<img class="loading" style="padding-left:10px;padding-right:5px;height:40px;" src= "https://doxhze3l6s7v9.cloudfront.net/beta/static/img/agile-loader.gif"></img>';
 
 /**
  * Default image shown for contacts if image is not available
