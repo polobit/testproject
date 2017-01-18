@@ -1,10 +1,12 @@
 <script id="ticket-new-modal-template" type="text/html">
 <div class="modal-dialog">
-  <div class="modal-content">
+  <div class="modal-content ticket-modal-content">
     <div class="modal-header ticket-modal-header">
       <button class="close" data-dismiss="modal">&times;</button>
       <div class="ticket-modal-heading">
-      <i class="icon-plus-sign pull-left m-r-xs link-color" style="margin-top: 1px;"></i><h3 class="modal-title"><i class="icon icon-envelop"></i> {{agile_lng_translate 'tickets' 'create-ticket'}}</h3>
+      {{#isNewTheme}}
+      <i class="icon-plus-sign pull-left m-r-xs link-color" style="margin-top: 1px;"></i>{{else}}{{/isNewTheme}}
+      <h3 class="modal-title"><i class="icon icon-envelop"></i> {{agile_lng_translate 'tickets' 'create-ticket'}}</h3>
       </div>
     </div>
     <div id="modal-body">
@@ -50,7 +52,7 @@
             </div>
             <div class="control-group form-group new-contact-row display-none m-b-sm">
               <div class="row">
-                  <div class="control-group col-md-6">
+                  <div class="control-group col-md-12">
                       <label class="control-label">{{agile_lng_translate 'menu' 'email'}} 
                       <span class="field_req">*</span></label>
                       <span class="controls">
@@ -157,7 +159,11 @@
       </div>
       <div class="modal-footer ticket-modal-footer">
           <span class="form-action-error pull-left" style="color: red;"></span>
+          {{#isNewTheme}}
+          <a href="javascript:void(0);" data-dismiss="modal" class="ticket-modal-cancel">Cancel</a> 
+          {{else}}
           <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-sm btn-default">{{agile_lng_translate 'report-add' 'close'}}</a> 
+          {{/isNewTheme}}
           <a id="create-ticket" href="javascript:void(0);" class="btn btn-sm btn-primary save" data-loading-text="Create">{{agile_lng_translate 'tickets' 'create'}}</a>
           <span class="save-status"></span>
       </div>
