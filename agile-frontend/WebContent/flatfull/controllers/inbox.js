@@ -128,7 +128,7 @@ function syncContacts(){
 	});
 	var syncedcontactitem = new syncedContactItem();
 }
-function renderToMailList(url,offset_val,page_size_val){
+function renderToMailList(url,offset_val,page_size_val, folder_id){
 	var fetchurl= '';
 	fetchurl = url;
 
@@ -158,13 +158,20 @@ function renderToMailList(url,offset_val,page_size_val){
 			$("#operation-menu").hide();
 			$("#mark-dropdown").hide();
 	        var that = this;
+	        if(_agile_get_prefs("inbox_data_"+folder_id) && offset_val && offset_val == 1)
+	        {
+	        	that.render(JSON.parse(_agile_get_prefs("inbox_data_"+folder_id)));
+				renderToMailView(JSON.parse(_agile_get_prefs("inbox_data_"+folder_id)));
+				inboxFlagListners();
+	        }
 	        // we are starting a new load of results so set isLoading to true
 	        this.isLoading = true;
 	        // fetch is Backbone.js native function for calling and parsing the collection url
 	        this.mailCollectionInstance.fetch({
 				success: function(data,response,xhr) {
-					that.render(data);
-					renderToMailView(data);
+					that.render(data.toJSON());
+					renderToMailView(data.toJSON());
+					_agile_set_prefs("inbox_data_"+folder_id, JSON.stringify(data.toJSON()));
 					if(data.toJSON().indexOf("errormssg") < 0 && data.toJSON().indexOf("error")){
 						globalMailCollectionInstance.add(data.toJSON());
 					}
@@ -182,14 +189,14 @@ function renderToMailList(url,offset_val,page_size_val){
 	    },
 		render:function(data){
 			var html ="";
-			getTemplate("mail", data.toJSON(), undefined, function(template_ui) {
+			getTemplate("mail", data, undefined, function(template_ui) {
 				if( !template_ui )	return;
 
 				html = template_ui;
 			}, '#mails-list');
 	        if(this.mailCollectionInstance.offset == 1){
 	        	if(data.length == 0){
-	        		getTemplate("no-mail", data.toJSON(), undefined, function(template_ui) {
+	        		getTemplate("no-mail", data, undefined, function(template_ui) {
 						if( !template_ui )	return;
 
 						html = template_ui;
@@ -233,7 +240,7 @@ function renderToMailView(data){
 		},
 		render:function(){
 			var html= "";
-			getTemplate("mail-view", data.toJSON(), undefined, function(template_ui) {
+			getTemplate("mail-view", data, undefined, function(template_ui) {
 				if( !template_ui )	return;
 
 				html = template_ui;

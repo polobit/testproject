@@ -352,7 +352,7 @@ function initializeInboxListeners(){
 			if(!$(this).hasClass( "pending" ) ) {
 	   			$(this).addClass("pending");
 	   			$('.folder-link').bind('click', false);
-				renderToMailList(url,1,10);
+				renderToMailList(url,1,10,$(e.currentTarget).attr("id"));
 			}
 		}else{
 			displayNoEmailTemplate();
@@ -373,7 +373,7 @@ function initializeInboxListeners(){
 		if(!$(this).hasClass( "pending" ) ) {
    			$(this).addClass("pending");
    			$('.folder-link').bind('click', false);
-			renderToMailList(url,1,10);
+			renderToMailList(url,1,10,$(e.currentTarget).attr("id"));
 		}
 		$(".ng-scope").removeClass("active");
 		$(this).parent("li").addClass("active");
@@ -392,7 +392,7 @@ function initializeInboxListeners(){
 			if(!$(this).hasClass( "pending" ) ) {
 	   			$(this).addClass("pending");
 	   			$('.folder-link').bind('click', false);
-				renderToMailList(url,1,10);
+				renderToMailList(url,1,10,$(e.currentTarget).attr("id"));
 			}
 		}else{
 			displayNoEmailTemplate();
@@ -414,7 +414,7 @@ function initializeInboxListeners(){
 		if(!$(this).hasClass( "pending" )) {
    			$(this).addClass("pending");
    			$('.folder-link').bind('click', false);
-			renderToMailList(url,1,10);
+			renderToMailList(url,1,10,$(e.currentTarget).attr("id"));
 		}
 		//else
 			//displayNoEmailTemplate();
@@ -1121,4 +1121,3 @@ function deSelectCheckBoxes(classname){
 		$("#mark-dropdown").hide();
 	}
 }
-

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,6 +43,7 @@ package javax.mail;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.Executor;
 import javax.mail.event.*;
 
 /**
@@ -68,7 +69,7 @@ public abstract class Service {
     /**
      * The <code>URLName</code> of this service.
      */
-    protected URLName	url = null;
+    protected volatile URLName	url = null;
 
     /**
      * Debug flag for this service.  Set from the session's debug
@@ -85,7 +86,13 @@ public abstract class Service {
      * (Sychronizing on the Service object itself can cause
      * deadlocks when notifying listeners.)
      */
-    private final Vector connectionListeners = new Vector();
+    private final Vector<ConnectionListener> connectionListeners
+	    = new Vector<ConnectionListener>();
+
+    /**
+     * The queue of events to be delivered.
+     */
+    private final EventQueue q;
 
     /**
      * Constructor.
@@ -147,6 +154,19 @@ public abstract class Service {
 	}
 
 	url = new URLName(protocol, host, port, file, user, password);
+
+	// create or choose the appropriate event queue
+	String scope =
+	    session.getProperties().getProperty("mail.event.scope", "folder");
+	Executor executor =
+		(Executor)session.getProperties().get("mail.event.executor");
+	if (scope.equalsIgnoreCase("application"))
+	    q = EventQueue.getApplicationEventQueue(executor);
+	else if (scope.equalsIgnoreCase("session"))
+	    q = session.getEventQueue();
+	else // if (scope.equalsIgnoreCase("store") ||
+	     //     scope.equalsIgnoreCase("folder"))
+	    q = new EventQueue(executor);
     }
 
     /**
@@ -242,7 +262,8 @@ public abstract class Service {
      * @see #connect(java.lang.String, java.lang.String, java.lang.String)
      * @since           JavaMail 1.4
      */
-    public void connect(String user, String password) throws MessagingException {
+    public void connect(String user, String password)
+	    throws MessagingException {
         connect(null, user, password);
     }
 
@@ -503,7 +524,8 @@ public abstract class Service {
      * @return	the URLName representing this service
      * @see	URLName
      */
-    public synchronized URLName getURLName() {
+    public URLName getURLName() {
+	URLName url = this.url;	// snapshot
 	if (url != null && (url.getPassword() != null || url.getFile() != null))
 	    return new URLName(url.getProtocol(), url.getHost(),
 			url.getPort(), null /* no file */,
@@ -527,9 +549,10 @@ public abstract class Service {
      * The implementation in the Service class simply sets the
      * <code>url</code> field.
      *
+     * @param	url	the URLName
      * @see URLName
      */
-    protected synchronized void setURLName(URLName url) {
+    protected void setURLName(URLName url) {
 	this.url = url;
     }
 
@@ -568,6 +591,8 @@ public abstract class Service {
      * events from the queue and dispatches them to the registered
      * ConnectionListeners. Note that the event dispatching occurs
      * in a separate thread, thus avoiding potential deadlock problems.
+     *
+     * @param	type	the ConnectionEvent type
      */
     protected void notifyConnectionListeners(int type) {
 	/*
@@ -591,7 +616,7 @@ public abstract class Service {
          * self destruct.
          */
         if (type == ConnectionEvent.CLOSED)
-            terminateQueue();
+            q.terminateQueue();
     }
 
     /**
@@ -606,29 +631,14 @@ public abstract class Service {
 	    return super.toString();
     }
 
-    /*
-     * The queue of events to be delivered.
-     */
-    private EventQueue q;
-
-    /*
-     * A lock for creating the EventQueue object.  Only one thread should
-     * create an EventQueue for this service.  We can't synchronize on the
-     * service's lock because that might violate the locking hierarchy in
-     * some cases.
-     */
-    private Object qLock = new Object();
-
     /**
      * Add the event and vector of listeners to the queue to be delivered.
+     *
+     * @param	event	the event
+     * @param	vector	the vector of listeners
      */
+    @SuppressWarnings("rawtypes")
     protected void queueEvent(MailEvent event, Vector vector) {
-	// synchronize creation of the event queue
-	synchronized (qLock) {
-	    if (q == null)
-		q = new EventQueue();
-	}
-
 	/*
          * Copy the vector in order to freeze the state of the set
          * of EventListeners the event should be delivered to prior
@@ -637,40 +647,33 @@ public abstract class Service {
          * of this event will not take effect until after the event is
          * delivered.
          */
-	Vector v = (Vector)vector.clone();
+	@SuppressWarnings("unchecked")
+	Vector<? extends EventListener> v = (Vector)vector.clone();
 	q.enqueue(event, v);
-    }
-
-    static class TerminatorEvent extends MailEvent {
-	private static final long serialVersionUID = 5542172141759168416L;
-
-	TerminatorEvent() {
-	    super(new Object());
-	}
-
-	public void dispatch(Object listener) {
-	    // Kill the event dispatching thread.
-	    Thread.currentThread().interrupt();
-	}
-    }
-
-    // Dispatch the terminator
-    private void terminateQueue() {
-	synchronized (qLock) {
-	    if (q != null) {
-		Vector dummyListeners = new Vector();
-		dummyListeners.setSize(1); // need atleast one listener
-		q.enqueue(new TerminatorEvent(), dummyListeners);
-		q = null;
-	    }
-	}
     }
 
     /**
      * Stop the event dispatcher thread so the queue can be garbage collected.
      */
     protected void finalize() throws Throwable {
-	super.finalize();
-	terminateQueue();
+	try {
+	    q.terminateQueue();
+	} finally {
+	    super.finalize();
+	}
+    }
+
+    /**
+     * Package private method to allow Folder to get the Session for a Store.
+     */
+    Session getSession() {
+	return session;
+    }
+
+    /**
+     * Package private method to allow Folder to get the EventQueue for a Store.
+     */
+    EventQueue getEventQueue() {
+	return q;
     }
 }

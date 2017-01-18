@@ -143,7 +143,7 @@ public class IMAPServlet extends HttpServlet
 	props.setProperty("mail.imap.connectionpooltimeout", "300000");
 
 	Session session = Session.getInstance(props, null);
-	// session.setDebug(true);
+	//session.setDebug(true);
 
 	store = (IMAPStore) session.getStore("imap");
 
@@ -225,7 +225,7 @@ public class IMAPServlet extends HttpServlet
 		if (msg == null || msg.getSentDate() == null)
 		    iterator.remove();
 	    }
-	    Collections.sort(allItems, new SentDateComparator());
+	    //Collections.sort(allItems, new SentDateComparator());
 	    searchResults = IMAPUtil.getMessages(allItems, count, offset);
 	}
 	catch (Exception e)

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,8 @@
 
 package javax.mail.internet;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Locale;
 import javax.mail.*;
@@ -80,7 +81,9 @@ public class NewsAddress extends Address {
      * @param host	the host
      */
     public NewsAddress(String newsgroup, String host) {
-	this.newsgroup = newsgroup;
+	// XXX - this method should throw an exception so we can report
+	// illegal addresses, but for now just remove whitespace
+	this.newsgroup = newsgroup.replaceAll("\\s+", "");
 	this.host = host;
     }
 
@@ -145,7 +148,8 @@ public class NewsAddress extends Address {
 	    return false;
 
 	NewsAddress s = (NewsAddress)a;
-	return newsgroup.equals(s.newsgroup) &&
+	return ((newsgroup == null && s.newsgroup == null) ||
+	     (newsgroup != null && newsgroup.equals(s.newsgroup))) &&
 	    ((host == null && s.host == null) ||
 	     (host != null && s.host != null && host.equalsIgnoreCase(s.host)));
     }
@@ -169,7 +173,7 @@ public class NewsAddress extends Address {
      * hence is mail-safe.
      *
      * @param addresses	array of NewsAddress objects
-     * @exception   	ClassCastException, if any address object in the
+     * @exception   	ClassCastException if any address object in the
      *              	given array is not a NewsAddress objects. Note
      *              	that this is a RuntimeException.
      * @return	    	comma separated address strings
@@ -180,14 +184,24 @@ public class NewsAddress extends Address {
 
 	StringBuffer s = 
 		new StringBuffer(((NewsAddress)addresses[0]).toString());
-	for (int i = 1; i < addresses.length; i++)
-	    s.append(",").append(((NewsAddress)addresses[i]).toString());
+	int used = s.length();
+	for (int i = 1; i < addresses.length; i++) {
+	    s.append(",");
+	    used++;
+	    String ng = ((NewsAddress)addresses[i]).toString();
+	    if (used + ng.length() > 76) {
+		s.append("\r\n\t");
+		used = 8;
+	    }
+	    s.append(ng);
+	    used += ng.length();
+	}
 	
 	return s.toString();
     }
 
     /**
-     * Parse the given comma separated sequence of newsgroup into
+     * Parse the given comma separated sequence of newsgroups into
      * NewsAddress objects.
      *
      * @param newsgroups	comma separated newsgroup string
@@ -198,15 +212,11 @@ public class NewsAddress extends Address {
 				throws AddressException {
 	// XXX - verify format of newsgroup name?
 	StringTokenizer st = new StringTokenizer(newsgroups, ",");
-	Vector nglist = new Vector();
+	List<NewsAddress> nglist = new ArrayList<NewsAddress>();
 	while (st.hasMoreTokens()) {
 	    String ng = st.nextToken();
-	    nglist.addElement(new NewsAddress(ng));
+	    nglist.add(new NewsAddress(ng));
 	}
-	int size = nglist.size();
-	NewsAddress[] na = new NewsAddress[size];
-	if (size > 0)
-	    nglist.copyInto(na);
-	return na;
+	return nglist.toArray(new NewsAddress[nglist.size()]);
     }
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -63,7 +63,7 @@ import java.util.Vector;
  * does not allow easy, efficient fetching of such profiles. <p>
  *
  * Sample code that illustrates the use of a FetchProfile is given
- * below:  <p>
+ * below:
  * <blockquote>
  * <pre>
  *
@@ -83,8 +83,8 @@ import java.util.Vector;
 
 public class FetchProfile {
 
-    private Vector specials; // specials
-    private Vector headers; // vector of header names
+    private Vector<Item> specials; // specials
+    private Vector<String> headers; // vector of header names
 
     /**
      * This inner class is the base class of all items that
@@ -146,6 +146,8 @@ public class FetchProfile {
 
 	/**
 	 * Constructor for an item.  The name is used only for debugging.
+	 *
+	 * @param	name	the item name
 	 */
 	protected Item(String name) {
 	    this.name = name;
@@ -178,7 +180,7 @@ public class FetchProfile {
      */
     public void add(Item item) { 
 	if (specials == null)
-	    specials = new Vector();
+	    specials = new Vector<Item>();
 	specials.addElement(item);
     }
 
@@ -190,19 +192,25 @@ public class FetchProfile {
      */
     public void add(String headerName) { 
    	if (headers == null)
-	    headers = new Vector();
+	    headers = new Vector<String>();
 	headers.addElement(headerName);
     }
 
     /**
-     * Returns true if the fetch profile contains given special item.
+     * Returns true if the fetch profile contains the given special item.
+     *
+     * @param	item	the Item to test
+     * @return true if the fetch profile contains the given special item
      */
     public boolean contains(Item item) { 
    	return specials != null && specials.contains(item);
     }
 
     /**
-     * Returns true if the fetch profile contains given header name.
+     * Returns true if the fetch profile contains the given header name.
+     *
+     * @param	headerName	the header to test
+     * @return	true if the fetch profile contains the given header name
      */
     public boolean contains(String headerName) { 
    	return headers != null && headers.contains(headerName);

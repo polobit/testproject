@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -82,6 +82,8 @@ public final class FlagTerm extends SearchTerm {
 
     /**
      * Return the Flags to test.
+     *
+     * @return	the flags
      */
     public Flags getFlags() {
 	return (Flags)flags.clone();
@@ -89,6 +91,8 @@ public final class FlagTerm extends SearchTerm {
 
     /**
      * Return true if testing whether the flags are set.
+     *
+     * @return	true if testing whether the flags are set
      */
     public boolean getTestSet() {
 	return set;
@@ -135,7 +139,9 @@ public final class FlagTerm extends SearchTerm {
 
 	    return true;
 
-	} catch (Exception e) {
+	} catch (MessagingException e) {
+	    return false;
+	} catch (RuntimeException e) {
 	    return false;
 	}
     }
