@@ -3645,6 +3645,19 @@ color: #78909c!important;
     background-color: #f4f8f9!important;
     color: #f4f8f9!important;
  }
+ #new-ticket .tag-li i.fa-envelope {
+    background-color: #f4f8f9!important;
+    color: #78909c !important;
+    margin-right: 5px;
+    margin-top: 12px;
+ }
+ #new-ticket .link-color{
+  color : #11a0f8 !important
+ }
+ #new-ticket .add-ticket-contact{
+  margin-left: -5px;
+ }
+
  h4#plan_name {
   margin: 0px !important;
  }
@@ -3660,4 +3673,11 @@ color: #78909c!important;
  }
  #new-ticket .control-label{
   margin-bottom: 5px;
+ }
+
+ .modal-header.ticket-modal-header{
+  border-bottom: 0px solid whtie;
+ }
+ .ticket-modal-heading{
+  padding: 23px 0px 0px 0px;
  }
