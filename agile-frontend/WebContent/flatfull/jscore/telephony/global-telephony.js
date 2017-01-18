@@ -54,8 +54,10 @@ $(function(){
 
 	//	initToPubNub();
 	globalCallWidgetSet();
-	knowlaritySetup();
-	androidSetup();
+	if(!agile_is_mobile_browser()){
+		knowlaritySetup();
+		androidSetup();
+	}
 });
 
 function getContactImage(number, type, callback)
@@ -477,106 +479,96 @@ function resetCallLogVariables(){
 function handleCallRequest(message)
 {
 	// Display message in stream.
-	if ((message || {}).callType == "Asterisk")
-	{
-		var index = containsOption(default_call_option.callOption, "name", "Asterisk");
-		if( index == -1){
-			//sendCommandToClient("notConfigured","Asterisk");
-			return;
-		}
-
-
-		// start from here
-		if (message.state == "lastCallDetail")
-		{
-
-			if(globalCall.lastReceived == "lastCallDetail") {
+	if ((message || {}).callType == "Asterisk"){
+			var index = containsOption(default_call_option.callOption, "name", "Asterisk");
+			if( index == -1){
+				//sendCommandToClient("notConfigured","Asterisk");
 				return;
 			}
 
-			if(message.callid != globalCallForActivity.callid){
-				return;
-			}
-			
+			// start from here
+			if (message.state == "lastCallDetail"){
 
-			if(globalCall.lastReceived){
-				if(globalCall.lastReceived != "ended") {
-					if(globalCall.callStatus && globalCall.callStatus == "Connected"){
-						globalCall.callStatus = "Answered"; //change form completed
-					}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
-						globalCall.callStatus = "Missed";
-					}
+				if(globalCall.lastReceived == "lastCallDetail") {
+					return;
+				}
+
+				if(message.callid != globalCallForActivity.callid){
+					return;
+				}
+				
+				if(globalCall.lastReceived){
+					if(globalCall.lastReceived != "ended") {
+						if(globalCall.callStatus && globalCall.callStatus == "Connected"){
+							globalCall.callStatus = "Answered"; //change form completed
+						}else if(globalCall.callStatus && globalCall.callStatus == "Ringing"){
+							globalCall.callStatus = "Missed";
+						}
+
 						replicateglobalCallVariable();
 						resetglobalCallVariables();	
 						globalCall.lastReceived = "lastCallDetail";
+					}
 				}
-				
-			}
 
-			if(message.duration == 0){
-				globalCallForActivity.callStatus = "Failed";
-			}
+				if(message.duration == 0){
+					globalCallForActivity.callStatus = "Failed";
+				}
 
-			closeCallNoty(true);
-
-			if(globalCall.callStatus == "Missed" || globalCallForActivity.callStatus =="Missed"){
-				message.duration = 0;
-			}
-
-			globalCallForActivity.duration = message.duration;
-			
-			globalCallForActivity.duration = message.duration;
-			console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
-					var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
-				"status" : globalCallForActivity.callStatus, "duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
-			
-			console.log("last called : " + call);
-			saveCallNoteTelephony(call);
-
-			//saveCallNoteTelephony();
-			//saveCallActivityTelephony(call);
-			return;
-		}
-		else if (message.state == "error")
-		{
-			closeCallNoty(true);
-			resetglobalCallVariables();
-			resetglobalCallForActivityVariables();
-			console.log("error message received...");
-			return;
-		}
-		else if (message.state == "error-message")
-		{
-			closeCallNoty(true);
-			showCallNotyMessage(message.message);
-			return;
-		}
-		else if (message.state == "logs")
-		{
-			//handleLogsForAsterisk(message);
-			return;
-		}
-		else if (message.state == "closed")
-		{
 				closeCallNoty(true);
-				showCallNotyMessage("Asterisk is not running");
+
+				if(globalCall.callStatus == "Missed" || globalCallForActivity.callStatus =="Missed"){
+					message.duration = 0;
+				}
+
+				globalCallForActivity.duration = message.duration;
+				
+				globalCallForActivity.duration = message.duration;
+				console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
+				var call = { 
+					"direction" : globalCallForActivity.callDirection, 
+					"phone" : globalCallForActivity.callNumber,
+					"status" : globalCallForActivity.callStatus, 
+					"duration" : message.duration,
+					"contactId" : globalCallForActivity.contactedId 
+				};
+				
+				console.log("last called : " + call);
+				saveCallNoteTelephony(call);
+
+				//saveCallNoteTelephony();
+				//saveCallActivityTelephony(call);
+				return;
+			}else if (message.state == "error"){
+				closeCallNoty(true);
 				resetglobalCallVariables();
 				resetglobalCallForActivityVariables();
+				console.log("error message received...");
+				return;
+			}else if (message.state == "error-message"){
+				closeCallNoty(true);
+				showCallNotyMessage(message.message);
+				return;
+			}else if (message.state == "logs"){
+				//handleLogsForAsterisk(message);
+				return;
+			}else if (message.state == "closed"){
+					closeCallNoty(true);
+					showCallNotyMessage("Asterisk is not running");
+					resetglobalCallVariables();
+					resetglobalCallForActivityVariables();
+				return;
+			}
+			showAsteriskCallNoty(message);
 			return;
-		}
-		showAsteriskCallNoty(message);
-		return;
 	
-		}
-	else if ((message || {}).callType == "Bria")
-	{
+	}else if ((message || {}).callType == "Bria"){
 		var index = containsOption(default_call_option.callOption, "name", "Bria");
 		if( index == -1){
 			sendCommandToClient("notConfigured","Bria");
 			return;
 		}
-		if (message.state == "lastCallDetail")
-		{
+		if (message.state == "lastCallDetail"){
 			if(message.direction == "Incoming" || message.direction == "inbound"){
 				if(!globalCallForActivity.answeredByTab){
 					return;
@@ -588,39 +580,29 @@ function handleCallRequest(message)
 			var num = globalCallForActivity.callNumber;
 			saveCallNoteBria(call);
 			//saveCallActivityBria(call);
-			try
-			{
+			try{
 				var phone = $("#bria_contact_number").val();
-				if (!phone || phone == "")
-				{
+				if (!phone || phone == ""){
 					phone = agile_crm_get_contact_properties_list("phone")[0].value;
 				}
-				if (phone == num)
-				{
+				if (phone == num){
 					getLogsForBria(num);
 				}
-			}
-			catch (e)
-			{
+			}catch (e){
+
 			}
 			
 			return;
-		}
-		else if (message.state == "error")
-		{
+		}else if (message.state == "error"){
 			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 			
 			return;
-		}
-		else if (message.state == "logs")
-		{
+		}else if (message.state == "logs"){
 			handleLogsForBria(message);
 			return;
-		}
-		else if (message.state == "closed")
-		{
+		}else if (message.state == "closed"){
 			if(globalCall.calledFrom == "Bria"){
 				showCallNotyMessage("Bria is not running");
 				closeCallNoty(true);
@@ -631,24 +613,21 @@ function handleCallRequest(message)
 			var message ={};
 			message["data"] = "";
 			handleLogsForBria(message);		
-			
-			
+				
 			showCallNotyMessage("Bria is not running");
 			return;
 		}
 		showBriaCallNoty(message);
 		return;
-	}
-	else if ((message || {}).callType == "Skype")
-	{
+	}else if ((message || {}).callType == "Skype"){
 		var index = containsOption(default_call_option.callOption, "name", "Skype");
-		if( index == -1){
+		if(index == -1){
 			sendCommandToClient("notConfigured","Skype");
 			return;
 		}
+
 		// start from here
-		if (message.state == "lastCallDetail")
-		{
+		if (message.state == "lastCallDetail"){
 			if(message.direction == "Incoming" || message.direction == "inbound"){
 				if(!globalCallForActivity.answeredByTab){
 					return;
@@ -657,51 +636,44 @@ function handleCallRequest(message)
 			
 			globalCallForActivity.duration = message.duration;
 			console.log("message.direction : " + message.direction + "-----" + globalCallForActivity.callDirection);
-			var call = { "direction" : globalCallForActivity.callDirection, "phone" : globalCallForActivity.callNumber,
-				"status" : globalCallForActivity.callStatus, "duration" : message.duration, "contactId" : globalCallForActivity.contactedId };
+			var call = { 
+				"direction" : globalCallForActivity.callDirection, 
+				"phone" : globalCallForActivity.callNumber,
+				"status" : globalCallForActivity.callStatus, 
+				"duration" : message.duration, 
+				"contactId" : globalCallForActivity.contactedId 
+			};
 			var num = globalCallForActivity.callNumber;
 			console.log("last called : " + call);
 			saveCallNoteSkype(call);
 			//saveCallActivitySkype(call);
-			try
-			{
+			try{
 				
 				//var contact = agile_crm_get_contact();
 
 				var phone = $("#skype_contact_number").val();
-				if (!phone || phone == "")
-				{
+				if (!phone || phone == ""){
 					phone = agile_crm_get_contact_properties_list("phone")[0].value;
 					//phone = getPhoneWithSkypeInArray(contact.properties)[0];
 				}
-				if (phone == num)
-				{
+				if (phone == num){
 					getLogsForSkype(num);
 				}
-			}
-			catch (e)
-			{
+			}catch (e){
+
 			}
 			globalCallForActivity.requestedLogs = false;
-			
 			return;
-		}
-		else if (message.state == "error")
-		{
+		}else if (message.state == "error"){
 			closeCallNoty(true);
 			resetglobalCallVariables();
 			resetglobalCallForActivityVariables();
 
-			
 			return;
-		}
-		else if (message.state == "logs")
-		{
+		}else if (message.state == "logs"){
 			handleLogsForSkype(message);
 			return;
-		}
-		else if (message.state == "closed")
-		{
+		}else if (message.state == "closed"){
 			
 			if(globalCall.calledFrom == "Skype"){
 				closeCallNoty(true);
@@ -720,72 +692,72 @@ function handleCallRequest(message)
 		return;
 
 	}else if ((message || {}).callType == "Android"){
-			androidCallNoty(message);	
+			if(!agile_is_mobile_browser()){
+				androidCallNoty(message);	
+			}
 	}else if((message || {}).callType == "Ozonetel"){
-			if(message.message_from != "callback"){
-					messagefromcallback = true;	
-					if(message.direction == "Incoming"){
-						outboundmessage = false;
-					}else{
-						outboundmessage = true;
-					}
-			}else{
-				if(messagefromcallback && outboundmessage){
-					messagefromcallback = false;
-					outboundmessage = true;
-				}else{
-					messagefromcallback = true;
+		if(message.message_from != "callback"){
+				messagefromcallback = true;	
+				if(message.direction == "Incoming"){
 					outboundmessage = false;
-				}
-			}			
-			if(messagefromcallback == true){				
-				var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
-				if( index == -1){
-					sendCommandToClient("notConfigured","Ozonetel");
-					return;
-				}
-				try{
-					var phone = $("#ozonetel_contact_number").val();
-					if (!phone || phone == ""){
-						phone = agile_crm_get_contact_properties_list("phone")[0].value;
-					}
-					if (phone == num){
-						getLogsForOzonetel(num);
-						//handleLogsForOzonetel(message);
-					}
-				}catch (e){
-
-				}
-				if(message.number){
-					globalCall.callNumber = message.number;
 				}else{
-					globalCall.callNumber = message.contact_number;
+					outboundmessage = true;
 				}
-				showOzonetelCallNoty(message);
-				if(message.state && message.state != "ringing"){
-					saveCallNoteOzonetel(message);
-					globalCall.callStatus = "Ideal";
+		}else{
+			if(messagefromcallback && outboundmessage){
+				messagefromcallback = false;
+				outboundmessage = true;
+			}else{
+				messagefromcallback = true;
+				outboundmessage = false;
+			}
+		}			
+		if(messagefromcallback == true){				
+			var index = containsOption(default_call_option.callOption, "name", "Ozonetel");
+			if( index == -1){
+				sendCommandToClient("notConfigured","Ozonetel");
+				return;
+			}
+			try{
+				var phone = $("#ozonetel_contact_number").val();
+				if (!phone || phone == ""){
+					phone = agile_crm_get_contact_properties_list("phone")[0].value;
 				}
+				if (phone == num){
+					getLogsForOzonetel(num);
+					//handleLogsForOzonetel(message);
+				}
+			}catch (e){
+
+			}
+
+			if(message.number){
+				globalCall.callNumber = message.number;
+			}else{
+				globalCall.callNumber = message.contact_number;
+			}
+			showOzonetelCallNoty(message);
+			if(message.state && message.state != "ringing"){
+				saveCallNoteOzonetel(message);
+				globalCall.callStatus = "Ideal";
 			}
 		}
+	}
 }
 
 // this is to download the jar file....
-$('body').on('click', '#downloadCallJar', function(e)
-{
+$('body').on('click', '#downloadCallJar', function(e){
 	e.preventDefault();
 	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/widgetCall.jar';
 });
 
-$('body').on('click', '#downloadCallJar_widget', function(e)
-{
+$('body').on('click', '#downloadCallJar_widget', function(e){
 	e.preventDefault();
 	var widget_name = $(this).attr("widget-name");
 	var version = '1.0';
 	window.location.href = 'https://s3.amazonaws.com/agilecrm/website/'+widget_name+'-'+version+'.jar';
 });
-function checkForActiveCall()
-{
+function checkForActiveCall(){
 	var flag = false;
 	try
 	{

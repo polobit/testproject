@@ -235,89 +235,80 @@ function ShowWidgetCallNoty(message){
 	var displayName = message.displayName;
 	var widgetype = (message.callType).toLowerCase();
 
-	
-
-	
 	console.log("calling call noty");
-	
-if(message.state == "connected"){
-	
-	var btns = [];
-	if(widgetype !=  "skype"  && widgetype !=  "asterisk"){
+		
+	if(message.state == "connected"){
+		
+		var btns = [];
+		if(widgetype !=  "skype"  && widgetype !=  "asterisk"){
+			if(widgetype ==  "TwilioIO"){
+				//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""});
+				//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voice_mail","popover-date":"Voicemail","title":""});
+				btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out ","popover-date":"Transfer call","title":""});
+				btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf  fa fa-group ","popover-date":"Call conference","title":""});
+			}
+
+			btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","popover-date":"Mute","title":""});
+			btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","popover-date":"Unmute","title":""});
+		}
+
+		btns.push({"id":"", "class":"btn btn-sm btn-default noty_"+widgetype+"_dialpad icon-th","popover-date":"Dialpad","title":""});
+
 		if(widgetype ==  "TwilioIO"){
-			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""});
-			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voice_mail","popover-date":"Voicemail","title":""});
-			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out ","popover-date":"Transfer call","title":""});
-			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf  fa fa-group ","popover-date":"Call conference","title":""});
-			
-		}
-		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","popover-date":"Mute","title":""});
-		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","popover-date":"Unmute","title":""});
-	}
-	btns.push({"id":"", "class":"btn btn-sm btn-default noty_"+widgetype+"_dialpad icon-th","popover-date":"Dialpad","title":""});
-	if(widgetype ==  "TwilioIO"){
-		btns.push({"id":"", "class":"btn btn-sm btn-danger fa fa-headphones cam-call-icon noty_twilio_hangup","popover-date":"Hangup","title":""});
-	}else{
-		if(widgetype !=  "asterisk")
-			btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
-	}
-	var json = {"callId": callId};
-	showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
-	
-}else if(message.state == "ringing"){
-	searchForContactImg(number, function(currentContact){
-		if(!currentContact){
-			globalCall.contactedContact = {};
-			globalCall.contactedId = "";
+			btns.push({"id":"", "class":"btn btn-sm btn-danger fa fa-headphones cam-call-icon noty_twilio_hangup","popover-date":"Hangup","title":""});
 		}else{
-			globalCall.contactedContact = currentContact;
-			globalCall.contactedId = currentContact.id;
+			if(widgetype !=  "asterisk")
+				btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
 		}
-		var btns;
-		if(widgetype !=  "ozonetel" && widgetype !=  "asterisk"){
-			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
-		}else{
-			$("#draggable_noty #call-noty-notes").val("");
-			var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
-		}
+
 		var json = {"callId": callId};
-		showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
-	});
-}else if(message.state == "missed"){
-	var btns = [];
-	showDraggableNoty(widgetype, globalCall.contactedContact , "missedCall", globalCall.callNumber, btns);
-	
-}else if(message.state == "connecting"){
-	
-	var btns= [];
-	if(widgetype !=  "asterisk")
-		 btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
-	var json = {"callId": callId};
-	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", globalCall.callNumber, btns, json);
-	
-}else if(message.state == "failed"){
-	
-	var btns = [];
-	showDraggableNoty(widgetype, globalCall.contactedContact , "failed", globalCall.callNumber, btns);
-	
-}else if(message.state == "busy"){
-	
-	var btns = [];
-	showDraggableNoty(widgetype, globalCall.contactedContact , "busy", globalCall.callNumber, btns);
-	
-}else if(message.state == "noanswer" || message.state == "not_answered"){
-	var btns = [];
-	showDraggableNoty(widgetype, globalCall.contactedContact , "Not Answered", globalCall.callNumber, btns);
-	
-}else if(message.state == "answered"){
-	var btns = [];
-	showDraggableNoty(widgetype, globalCall.contactedContact , "answered", globalCall.callNumber, btns);
-	
-}else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
-	closeCallNoty(true);
-}
-	
-	
+		showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
+		
+	}else if(message.state == "ringing"){
+		searchForContactImg(number, function(currentContact){
+			if(!currentContact){
+				globalCall.contactedContact = {};
+				globalCall.contactedId = "";
+			}else{
+				globalCall.contactedContact = currentContact;
+				globalCall.contactedId = currentContact.id;
+			}
+
+			var btns;
+			if(widgetype !=  "ozonetel" && widgetype !=  "asterisk"){
+				btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
+			}else{
+				$("#draggable_noty #call-noty-notes").val("");
+				var btns = [{"id":"", "class":"btn btn-default btn-sm noty_ozonetel_cancel","title":"{{agile_lng_translate 'other' 'cancel'}}"}];
+			}
+
+			var json = {"callId": callId};
+			showDraggableNoty(widgetype, globalCall.contactedContact, "incoming", globalCall.callNumber, btns,json);
+		});
+	}else if(message.state == "missed"){
+		var btns = [];
+		showDraggableNoty(widgetype, globalCall.contactedContact , "missedCall", globalCall.callNumber, btns);
+	}else if(message.state == "connecting"){		
+		var btns= [];
+		if(widgetype !=  "asterisk")
+			 btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
+		var json = {"callId": callId};
+		showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", globalCall.callNumber, btns, json);
+	}else if(message.state == "failed"){
+		var btns = [];
+		showDraggableNoty(widgetype, globalCall.contactedContact , "failed", globalCall.callNumber, btns);
+	}else if(message.state == "busy"){
+		var btns = [];
+		showDraggableNoty(widgetype, globalCall.contactedContact , "busy", globalCall.callNumber, btns);
+	}else if(message.state == "noanswer" || message.state == "not_answered"){
+		var btns = [];
+		showDraggableNoty(widgetype, globalCall.contactedContact , "Not Answered", globalCall.callNumber, btns);
+	}else if(message.state == "answered"){
+		var btns = [];
+		showDraggableNoty(widgetype, globalCall.contactedContact , "answered", globalCall.callNumber, btns);
+	}else if(message.state == "ended" ||message.state == "refused" || message.state == "missed"){
+		closeCallNoty(true);
+	}
 }
 
 
