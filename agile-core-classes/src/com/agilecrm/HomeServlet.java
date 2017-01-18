@@ -198,7 +198,7 @@ public class HomeServlet extends HttpServlet
 	    // saves current time as logged in
 	    // time for Domain user
 	    setLastLoggedInTime(domainUser);
-
+	    Defaults.createTemplateForExistingUser(domainUser);
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 	}
 	catch (Exception e)

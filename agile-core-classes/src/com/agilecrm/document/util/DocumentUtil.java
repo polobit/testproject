@@ -1,5 +1,6 @@
 package com.agilecrm.document.util;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 import com.agilecrm.activities.Event;
@@ -196,5 +197,19 @@ public class DocumentUtil
 		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
+    }
+    
+    // encoding url, encode file name with space or special character in file name.
+    
+    public static void urlEncode(Document d){
+    	if(d.url != null && d.url.contains("?id=uploadDocument") && d.url.contains("+")){
+    	try{
+		    	String s = d.url;
+		    	String st = s.substring(0,s.lastIndexOf("/")+1) ;
+		    	String en = s.substring(s.lastIndexOf(".")) ;
+		    	String filename = s.replace(st, "").replace(en, "");
+		    	d.url = st+URLEncoder.encode(filename, "UTF-8")+en;
+		    	} catch(Exception e){}
+    	}
     }
 }

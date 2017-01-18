@@ -1,6 +1,7 @@
 package com.agilecrm.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.DocumentTemplates;
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
@@ -339,5 +341,25 @@ public class Defaults
 				e.printStackTrace();
 			}
 		}
+    }
+    
+    private static void saveDocumentTemplate(){
+    	//System.out.println("------------------------------------------------Creating Default Template...");
+    	DocumentTemplates dt1 = new DocumentTemplates("Business Proposal", "Use our pre built proposal template to customise and send business proposals to prospective clients", FileStreamUtil.readResource("proposal_template.txt"));
+    	dt1.save();
+    	
+    	DocumentTemplates dt2 = new DocumentTemplates("Sample Quote", "Use our sample quote template to quickly personalise and send quotations to prospective clients", FileStreamUtil.readResource("quotation_template.txt"));
+    	dt2.save();    	
+    }
+    
+    public static void createTemplateForExistingUser(DomainUser domainUser){
+    	Calendar c = Calendar.getInstance();
+    	c.set(2016,1,18,17,00,00);
+    	
+    	Long timeNow = c.getTimeInMillis()/1000;
+    	Long l =  Long.parseLong(((String)domainUser.getInfo(DomainUser.LOGGED_IN_TIME)).trim());
+    	if(l<timeNow){
+    		saveDocumentTemplate();
+    	}
     }
 }

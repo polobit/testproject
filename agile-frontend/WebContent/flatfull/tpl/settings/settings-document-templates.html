@@ -1,13 +1,7 @@
 <script id="settings-document-templates-collection-template" type="text/html">
 
 <div class="panel panel-default">
- <div class="panel-heading {{#is_mobile}}b-n{{/is_mobile}}">
-    <div class="pull-left  m-t-xs add-btn-mobile">{{agile_lng_translate 'document' 'document-templates'}}</div>
-    <div class="pull-right add-btn-mobile add-doc-template-btns">
-       <a href="#documents" class="btn btn-sm btn-default m-r-sm-imp btn-addon" id=""><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'deal-view' 'documents'}}</a> <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp btn-addon" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-new-template'}}</a>
-    </div>
-    <div class="clearfix"></div>
- </div>
+ 
 {{#unless this.length}}
     <div id="slate">
         <div class="alert bg-white ">
@@ -46,13 +40,17 @@
     <div class="row">
         <div class="col-md-12 col-sm-12">
                     <div class=" table-responsive" style="overflow:hidden;"> 
-                    <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes" url="core/api/document/templates/bulk?action_type=DELETE">
+                    <div class="panel-heading {{#is_mobile}}b-n{{/is_mobile}}">
+                       <div class="pull-left  m-t-xs add-btn-mobile">{{agile_lng_translate 'document' 'document-templates'}}</div>
+                       <div class="clearfix"></div>
+                    </div>
+                    <table class="table table-striped agile-table panel table-layout-mob-view showCheckboxes no-sorting" url="core/api/document/templates/bulk?action_type=DELETE">
                         <thead>
                             <tr>
                                 <th class="hide">Id</th>                    
-                                <th style="width:25%" class="header">{{agile_lng_translate 'deal-view' 'name'}}</th>
-                                <th style="width:25%" class="header">{{agile_lng_translate 'misc-keys' 'description'}}</th>
-                                <th style="width:25%" class="header">&nbsp;</th>
+                                <th style="width:25%" >{{agile_lng_translate 'deal-view' 'name'}}</th>
+                                <th style="width:25%" >{{agile_lng_translate 'misc-keys' 'description'}}</th>
+                                <th style="width:25%" >{{agile_lng_translate 'document' 'created'}}</th>
                                 <!-- <th style="width:20%" class="header">&nbsp;</th> -->
                             </tr>
                          </thead>
@@ -94,19 +92,19 @@
 
     <td class='data hide' data='{{id}}'></td>
     <td>
-		<div class="table-resp">
-    		{{name}}
-    	</div>
+        <div class="table-resp">
+            {{name}}
+        </div>
     </td>
     <td>
-    	<div class="table-resp">
-    		{{description}}
-    	</div>
+        <div class="table-resp">
+            {{description}}
+        </div>
     </td>   
     <td class="text-muted" style="color: #b2b0b1;">
        {{#if created_time}}
           <div class="text-muted table-resp text-xs"> <i class="fa fa-clock-o m-r-xs"></i>
-    	       Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{documentTemplateOwner.name}}
+               Created <time class="created_time time-ago" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy" created_time}}</time> by {{documentTemplateOwner.name}}
           </div>
        {{/if}}
     </td>

@@ -1,14 +1,14 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-update-modal-template">
-    <div class="wrapper-md lter bg-light b-b agile-page-header">
+    <div class="wrapper-md lter bg-light b-b">
         <div class="row">
-          <div class="col-md-12">&nbsp;{{agile_lng_translate 'documents' 'edit-document'}}</div>
+          <div class="col-md-12">&nbsp;{{docheader network_type}}</div>
         </div> 
      </div>
      <div class="wrapper-md">
       <div class="row">
         <form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post" class="form-horizontal">
-          <div class="col-md-9">
+          <div class="col-md-9" style="width: 70% !important;">
             <div class="panel wrapper p-b-md">
               <div class="formsection chainedSelect">
              <fieldset>
@@ -27,6 +27,7 @@
                            </span>
                         </div>
               </div>
+              <div id="hide-content">
               <div class="control-group form-group">
                        <label class="control-label  col-sm-3">{{agile_lng_translate 'report-add' 'title'}}
                        <span
@@ -41,6 +42,7 @@
                  <span class="field_req related-contacts-required">*</span></label></label>
                  <div class="controls col-sm-9" id="contactTypeAhead">
                     <div>
+
                       <input type="text" id="document_relates_to_contacts" name="related_contacts"
                           placeholder="{{agile_lng_translate 'cases' 'contact-name'}}" class="typeahead typeahead_contacts form-control"
                           data-provide="typeahead" data-mode="multiple" />
@@ -49,7 +51,7 @@
                        </div>
                       <div class="clearfix"></div>
                        <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'documents' 'please-relate-the-document-to-contact'}}</span>  
-                       <span class="contacts_noemail_error" style="color:#d9534f;display:none;">Contact does not have Email.</span>  
+                        <span class="contacts_noemail_error" style="color:#d9534f;display:none;">Contact does not have Email.</span>  
                     </div>
                  </div>
               </div>
@@ -66,7 +68,7 @@
                        </div>
                     </div>
                  </div>
-            </div>
+            </div> 
             <div class="control-group form-group attachment">
                        <label class="control-label col-sm-3">{{agile_lng_translate 'documents' 'choose-document'}}<span
                           class="field_req">*</span></label>
@@ -79,7 +81,7 @@
                                 <div class="link text-center thumbnail m-b-none "><i class="icon-ok pull-right" style="display:none;"></i><br/>
                                    <a href="#" id="S3"><i class="icon-desktop icon-2x" title="{{agile_lng_translate 'campaigns' 'custom'}}"></i><br/><span>{{agile_lng_translate 'documents' 'my-computer'}}</span></a>
                                 </div>
-                             </div>
+                             </div> 
                              <div class="col-md-4 col-sm-6 col-xs-6" style="width:50%">
                                 <div class="link text-center thumbnail m-b-none"><i class="icon-ok pull-right" style="display:none;"></i><br/>
                                    <a href="#" id="GOOGLE"><i class="icon-google-plus icon-2x" title="{{agile_lng_translate 'prefs-data-sync' 'google'}}"></i><br/><span>{{agile_lng_translate 'documents' 'google-drive'}}
@@ -90,7 +92,9 @@
                           <div id="uploaded-doc" class="hide"></div>
                        </div>
                     </div>
+                    </div>
                 <div class="senddoc hide">
+                <div id="template-content" style="min-height:100px; margin-bottom: 20px;"></div>
                          <div class="control-group form-group hide">
                                 <label class="control-label col-sm-3"><b>{{agile_lng_translate 'documents' 'select-template'}}</b><span
                                    class="field_req">*</span></label>
@@ -102,7 +106,7 @@
                                    </span>
                                 </div>
                              </div>
-                             <div class="control-group form-group">
+                             <div class="control-group form-group hide">
                                <label class="control-label col-sm-3"><b>{{agile_lng_translate 'documents' 'document-content'}}</b></label>
                                 <div class="controls col-sm-9">
                                     <div id="loading-editor" ></div>
@@ -113,15 +117,19 @@
               <div id="error"></div>
               <div class="form-actions">      
                        <div class="col-sm-offset-3 col-sm-9 doc-form-actions">    
-                          <a href="#" class="btn btn-default btn-default-imp btn-lg-imp btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
+                          <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
                           <div class="btn-group ">
-                                        <a href="#documents/attachment" id="document_update_validate" class="btn-primary btn-primary-imp btn-lg-imp btn btn-default btn-sm  m-t-xs" > {{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+                               <a href="#documents/attachment" id="document_update_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" > {{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
+
+                               <a id='send_mail_button' href="#"  class="btn-primary btn btn-default btn-sm  m-t-xs email-send-doc">{{agile_lng_translate 'documents' 'document-sendemail'}}</a>
+                               <!--
+                                        <a href="#documents/attachment" id="document_update_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" > {{agile_lng_translate 'prefs-settings' 'save-changes'}}</a>
                                         <a class="btn btn-default btn-sm email-send-doc-group hide dropdown-toggle m-t-xs " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right " style="margin-top:-3px;">
-                                            <li style="padding:0px 0px;border:0px;"><a href="#"  class="email-send-doc hide">{{agile_lng_translate 'documents' 'document-sendemail'}}</a></li>
+                                            <li style="padding:0px 0px;border:0px;"><a href="#"  class="email-send-doc">{{agile_lng_translate 'documents' 'document-sendemail'}}</a></li>
                                            
-                                        </ul>
+                                        </ul> -->
                                         <div class="clearfix"></div>
                           </div>
                           <span class="save-status"></span>
@@ -138,7 +146,7 @@
                 </div>
                 <div class="padder b-t  text-center">
                          <div class="m-t-sm"><div class="row">
-                              <textarea style="border:1px solid #74B9EF;border-radius:6px;height:150px;max-width:100%;max-height:100%;padding:5px;" class="inputtext " cols="20" rows="6" id="comments" name="notes" placeholder="{{agile_lng_translate 'products' 'add-comments'}}"></textarea>
+                              <textarea style="border:1px solid #74B9EF;border-radius:6px;height:100px;max-width:100%;max-height:100%;padding:5px;" class="inputtext " cols="31" rows="6" id="comments" name="notes" placeholder="{{agile_lng_translate 'products' 'add-comments'}}"></textarea>
                               <text id="contact_id" name="subject" type="hidden" ></text>
                               <text id="subject" name="subject" type="hidden" ></text>
                           </div>

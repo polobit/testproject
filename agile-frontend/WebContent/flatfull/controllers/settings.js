@@ -25,6 +25,8 @@ var SettingsRouter = Backbone.Router
 			/* Email (Gmail / IMAP) */
 			"email" : "email",
 
+			"document-templates" : "documentTemplates", "document-template-add" : "documentTemplateAdd", "document-template/:id" : "documentTemplateEdit",
+
 			/* IMAP add prefs */
 			"imap" : "imapAdd",
 
@@ -58,7 +60,6 @@ var SettingsRouter = Backbone.Router
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", 
 			"email-template/:id" : "emailTemplateEdit",
 
-			"document-templates" : "documentTemplates", "document-template-add" : "documentTemplateAdd", "document-template/:id" : "documentTemplateEdit",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
@@ -108,9 +109,13 @@ var SettingsRouter = Backbone.Router
 						/* $('#prefs-tabs-content').html(getRandomLoadingImg()); */
 
 						$.getJSON("/core/api/user-prefs", function(data){
-
+							
 							var prefsData = new BaseModel(data);
 							that.userPrefsProfile(prefsData);
+							if(data.adminApplySign==true){
+                                $('#loading-editor').parent().css("pointer-events","none");
+                                $('#adminsign_msg').show();
+                            }
 							$('#prefs-tabs-content a[href="#settings-user-prefs"]').on('click', function(e) {
 								e.preventDefault();
 								that.userPrefsProfile(prefsData);
@@ -150,7 +155,7 @@ var SettingsRouter = Backbone.Router
 			changePassword : function()
 			{
 
-				getTemplate("settings", {}, undefined, function(template_ui){
+				getTemplate("documents-template-list", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
@@ -287,11 +292,12 @@ var SettingsRouter = Backbone.Router
 					getTemplate('settings-email-prefs', {}, undefined, function(template_ui1){
 							if(!template_ui1)
 								  return;
+
 							$('#prefs-tabs-content').html($(template_ui1));	
 							that.imapListView = {};
 							that.officeListView = {};
 							that.gmailListView = {};
-							
+
 							that.gmailSendListView = {};
 							that.smtpListView = {};
 
@@ -321,7 +327,7 @@ var SettingsRouter = Backbone.Router
 						else
 							HAS_EMAIL_ACCOUNT_LIMIT_REACHED = false;
 
-						
+
 						var limit = data.emailAccountsLimit;
 
 						load_gmail_widgets(limit);
@@ -493,7 +499,6 @@ var SettingsRouter = Backbone.Router
 				}, "#content");
 			},
 
-
 			/**
 			 * smtp Add settings
 			 */
@@ -551,7 +556,7 @@ var SettingsRouter = Backbone.Router
 							$("#server_host").val(smtp_model.server_url);
 
 							if(el.find("div [id = server_host]").val() == "smtp.live.com" 
-									|| el.find("div [id = server_host]").val() == "smtp.office365.com"){
+									|| el.find("div [id = server_host]").val() == "smtp.office365.com") {
 								el.find("div [id = useSSLCheckboxHolder]").hide();
 							} else {
 								el.find("div [id = useSSLCheckboxHolder]").show();
@@ -832,17 +837,16 @@ var SettingsRouter = Backbone.Router
 									window.location.href  = window.location.origin+"/#emailbuilder-templates";
 								}
 							}
-
+								
 							agileTimeAgoWithLngConversion($("time.campaign-created-time", el));
 							make_menu_item_active("email-templates-menu");
 							Refresh_Email_Template = undefined;
 						},
 						appendItemCallback : function(el)
-			            {
-				               $("time.campaign-created-time", el).timeago();
+				        {
+					      $("time.campaign-created-time", el).timeago();
 
-			             }
-
+				        }
 					});
 
 					that.emailTemplatesListView.collection.fetch();
@@ -879,6 +883,9 @@ var SettingsRouter = Backbone.Router
 					} });
 
 					$('#prefs-tabs-content').html(view.render().el);
+					$("#prefs-tabs-content").addClass("col-md-9");
+					var discript = $("#prefs-tabs-content").find(".col-md-3");
+					$("#prefs-tabs-content").after(discript);
 
 					// set up TinyMCE Editor
 					setupTinyMCEEditor('textarea#email-template-html', false, undefined, function()
@@ -938,6 +945,9 @@ var SettingsRouter = Backbone.Router
 						} });
 
 					$('#prefs-tabs-content').html(view.render().el);
+					$("#prefs-tabs-content").addClass("col-md-9");
+					var discript = $("#prefs-tabs-content").find(".col-md-3");
+					$("#prefs-tabs-content").after(discript);
 
 					/** TinyMCE * */
 
@@ -982,13 +992,15 @@ var SettingsRouter = Backbone.Router
 				
 
 				var that = this;
-				getTemplate("settings", {}, undefined, function(template_ui){
+				getTemplate("settings-template-list", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
 
-					that.documentTemplatesListView = new Base_Collection_View({ url : '/core/api/document/templates', 
+					that.documentTemplatesListView = new Document_Collection_Events({ url : '/core/api/document/templates', 
 					templateKey : "settings-document-templates",
+					sort_collection : false,
+					global_sort_key : "created_time",
 					individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
 						console.log("loaded document template : ", el);
@@ -1016,7 +1028,7 @@ var SettingsRouter = Backbone.Router
 			{
 
 				var that = this;
-				getTemplate("settings", {}, undefined, function(template_ui){
+				getTemplate("settings-template-new", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
@@ -1039,6 +1051,9 @@ var SettingsRouter = Backbone.Router
 							$("#userForm").append('<input id="id" name="id" type="hidden" value="' + data.id + '" />')	
 						}
 						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+						//document.location.href="#document-templates";
+						Backbone.history.navigate("document-templates", { trigger : true });
+
 					},
 					postRenderCallback : function(el)
 					{
@@ -1079,7 +1094,7 @@ var SettingsRouter = Backbone.Router
 				}
 				var that = this;
 				that.currentTemplate = that.documentTemplatesListView.collection.get(id);
-				getTemplate("settings", {}, undefined, function(template_ui){
+				getTemplate("settings-template-new", {}, undefined, function(template_ui){
 					if(!template_ui)
 						  return;
 					$('#content').html($(template_ui));	
@@ -1105,6 +1120,9 @@ var SettingsRouter = Backbone.Router
 					},
 					saveCallback:function(data){
 						showNotyPopUp("information", "Document template saved successfully", "top", 1000);	
+						//document.location.href="#document-templates";
+						Backbone.history.navigate("document-templates", { trigger : true });
+
 					},
 					postRenderCallback : function(el)
 					{
@@ -1287,7 +1305,7 @@ var SettingsRouter = Backbone.Router
 									weekdays : $.fn.datepicker.dates['en'].daysShortExactFromMon,
 									postInit : function()
 									{
-										$('.operationTimeFrom, .operationTimeTill').timepicker({ 'timeFormat' : 'H:i', 'step' : 30 });
+										$('.operationTimeFrom, .operationTimeTill').timepicker({ 'timeFormat' : 'H:i', 'step' : 15 });
 									}, });
 
 									$(".mini-time").keydown(false).addClass("form-control");
@@ -1354,26 +1372,19 @@ var SettingsRouter = Backbone.Router
 							dataType : "json",
 							success : function(data)
 							{
+								
 								getTemplate('theme-layout-form', {}, undefined, function(template_ui){
 									if(!template_ui)
 										  return;
 									$('#prefs-tabs-content').html($(template_ui));	
 									initializeThemeSettingsListeners();
-
-									// Check position for new theme and hide top menu option for new one
-									if(CURRENT_USER_PREFS.theme == "15") {
-										$("#menuPosition option[value='top']").hide();
-										$("#menuPosition option[value='left']").hide();
-									}
-										
-
 									$("#menuPosition").val(CURRENT_USER_PREFS.menuPosition);
 									$("#page_size").val(CURRENT_USER_PREFS.page_size);
 									$("#layout").val(CURRENT_USER_PREFS.layout);
 									if (CURRENT_USER_PREFS.animations == true)
 										$("#animations").attr('checked', true);
 									$('.magicMenu  input:radio[name="theme"]').filter('[value=' + CURRENT_USER_PREFS.theme + ']').attr('checked', true);
-									if (data.page_size != CURRENT_USER_PREFS.page_size || data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
+									if (data.menuPosition != CURRENT_USER_PREFS.menuPosition || data.layout != CURRENT_USER_PREFS.layout || data.theme != CURRENT_USER_PREFS.theme || data.animations != CURRENT_USER_PREFS.animations)
 										$(".theme-save-status").css("display", "inline");
 									hideTransitionBar();
 									$('#PrefsTab .select').removeClass('select');
@@ -1440,14 +1451,11 @@ var SettingsRouter = Backbone.Router
 			userPrefsAdvanced : function(data)
 			{
 				var prefs_advanced_view = new Base_Model_View({ url : 'core/api/user-prefs', model : data, template : 'settings-advanced', change : false, reload : true, 
-
 					postRenderCallback : function(el, data){
-						$('[data-toggle="tooltip"]',el).tooltip();
 					},saveCallback : function(response){
 						console.log(response);
 						// Save language cookie
 						createCookie("user_lang", response.language, 360);
-
 					}
 				});
 				$("#settings-user-prefs-tab-content").html(prefs_advanced_view.render(true).el);
@@ -1475,11 +1483,3 @@ function getCurrentDomain(options){
 	}
 	return " ";
 }
-
-/*function loadLiveChat(){
-	$("#prefs-dropdown-options").on('click','#clickdesk_live_chat',function(e){
-		e.preventDefault();
-		$(this).closest(".dropdown").removeClass("open");
-		CLICKDESK_LIVECHAT.show();
-	});
-}*/
