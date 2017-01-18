@@ -1,7 +1,7 @@
 <script id="typeahead-contacts-model-template" type="text/html">
 <div class="custom-color wrapper-sm overflow-hidden">
 	{{#if_equals type "COMPANY"}}
-	<div class="thumb-xs agile-img "  >
+	<div class="{{#isNewTheme}}thumb-sm{{else}}thumb-xs{{/isNewTheme}} agile-img "  >
 		<img class="img-inital r r-2x" style="height:34px;width:34px;" {{getCompanyImage "35"}} /></img>
 	</div>
 	<div class="agile-thumb text-ellipsis" style="margin-top: -3px;">
@@ -14,7 +14,7 @@
 	</div>
 	{{/if_equals}}
 		{{#if_equals type "PERSON"}}
-	<div class="thumb-xs agile-img ">
+	<div class="{{#isNewTheme}}thumb-sm{{else}}thumb-xs{{/isNewTheme}} agile-img ">
 		<img class="img-inital r r-2x"  style="height:34px;width:34px;" src="{{gravatarurl properties 40}}" /></img>
 	</div>
 	<div class="agile-thumb text-ellipsis" style="margin-top: -3px;">

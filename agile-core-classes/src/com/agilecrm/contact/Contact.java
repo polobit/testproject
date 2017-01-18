@@ -633,7 +633,7 @@ public class Contact extends Cursor
 	    CompanyUtil.checkAndUpdateCompanyName(oldContact, this);
 	}
 	
-	if(!(("importing").equals(sSource)))
+	if(!(("importing").equals(sSource)) && this.type == Type.PERSON)
 	{
 		// Execute trigger for contacts
 		ContactTriggerUtil.executeTriggerToContact(oldContact, this);

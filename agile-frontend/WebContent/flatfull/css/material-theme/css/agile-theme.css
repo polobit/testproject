@@ -3547,3 +3547,8 @@ margin: 0px !important;
   margin-top: 3px !important;
 }*/
 .tickets-main #tickets-inner{  padding-top:10px;}
+
+.tag-new-theme:hover{
+background-color: #f4f8f9!important;
+color: #78909c!important;
+}
