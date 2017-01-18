@@ -204,7 +204,7 @@ function verify_from_email(json)
 			     $(".email-verification-fields").hide();
 
 			     if(json.isEmailDomainValid && json.isEmailDomainValid == true){
-			     	$("#workflow-verify-email").find('.modal-header .modal-title').text("<p>{{agile_lng_translate 'email' 'email-verified'}}</p>");
+			     	$("#workflow-verify-email").find('.modal-header .modal-title').text("{{agile_lng_translate 'email' 'email-verified'}}");
 			     	$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l' style='float: left;margin-right: 10px;margin-top: 1px;'>&#39;"+json.email+"&#39; {{agile_lng_translate 'email' 'is-now-verified-successfully'}}.</p>");
 			     }			     	
 			     else{
