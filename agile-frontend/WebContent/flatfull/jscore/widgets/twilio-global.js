@@ -850,7 +850,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
 
-		$("#twilio_number").addClass("required");
+		//$("#twilio_number").addClass("required");
 	}
 	// verified # is available but no twilio #
 	else if (twilioNumbers.length == 0 && verifiedNumbers.length != 0)
@@ -995,7 +995,7 @@ function addTwilioNumbersInUI(result)
 
 function addVerifiedCallerIdInUI(result,result1)
 {
-	var phoneNumberHtml = '<option value="" default selected style="display:none;">Select a verifed number</option>';
+	var phoneNumberHtml = '<option value="" default selected style="display:none;">Select a Outbound Number</option>';
 	var optionHtml = "";
 	var numArry = [];
 	var finalnumArry = [];
