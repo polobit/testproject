@@ -203,10 +203,13 @@ function verify_from_email(json)
 			     $('#verify-email-form').find('input').val(json.email);
 			     $(".email-verification-fields").hide();
 
-			     if(json.isEmailDomainValid && json.isEmailDomainValid == true)
-			     	$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l' style='float: left;margin-right: 10px;margin-top: 1px;'>&#39;"+json.email+"&#39; {{agile_lng_translate 'email' 'is-now-verified'}}.</p>");
-			     else
+			     if(json.isEmailDomainValid && json.isEmailDomainValid == true){
+			     	$("#workflow-verify-email").find('.modal-header .modal-title').text("<p>{{agile_lng_translate 'email' 'email-verified'}}</p>");
+			     	$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l' style='float: left;margin-right: 10px;margin-top: 1px;'>&#39;"+json.email+"&#39; {{agile_lng_translate 'email' 'is-now-verified-successfully'}}.</p>");
+			     }			     	
+			     else{
 			     	$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l'>{{agile_lng_translate 'emails' 'verification-sent'}} &#39;"+json.email+"&#39;. {{agile_lng_translate 'emails' 'verification-process'}}</p>");
+			     }
 			     
 				 $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 			},
