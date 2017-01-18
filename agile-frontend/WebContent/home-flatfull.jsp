@@ -438,58 +438,61 @@ function isIE() {
           <ul class="dropdown-menu grid-dropdown-menu">
             <li>
               <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'>
-                <i class="material-icons purple-color">view_module</i>
-                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
-                      <span class="grid2-sub-nav">
+                <div><i class="material-icons purple-color">view_module</i></div>
+                     <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
+                      <span class="grid2-sub-nav  block">
                         <span class="grid-selector" navigation="#contacts">Contacts,</span>
                         <span class="grid-selector" navigation="#companies">Companies,</span>
                         <span class="grid-selector" navigation="#deals">Deals,</span>
                         <span class="grid-selector" navigation="#tasks">Tasks</span>
                       </span>
-                      <span class="grid2-sub-nav">
+                      <span class="grid2-sub-nav word-break-all white-space-normal">
                         <span class="grid-selector" navigation="#documents">Documents,</span>
                         <span class="grid-selector" navigation="#calendar">Calendar,</span>
                         <span class="grid-selector" navigation="#scheduler-prefs">Online Calendar</span>
                       </span>
+                    </div>
                   </a>
               </li>
               <li>
               <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
-                <i class="material-icons purple-color">view_module</i>
-                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
+                <div><i class="material-icons purple-color">view_module</i></div>
+                  <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
 
-                  <span class="grid2-sub-nav">
+                  <span class="grid2-sub-nav first-span block">
                     <span class="grid-selector" navigation="#workflows">Campaigns,</span>
                     <span class="grid-selector" navigation="#triggers">Triggers,</span>
                     <span class="grid-selector" navigation="#forms">Forms,</span>
                     <span class="grid-selector" navigation="#web-rules">Web Rules</span>
                   </span>
-                  <span class="grid2-sub-nav">
-                        <span class="grid-selector" navigation="#email-templates">Email Templates,</span>
+                  <span class="grid2-sub-nav  word-break-all grid-span-two white-space-normal inline-block">
+                        <span class="grid-selector pull-left" navigation="#email-templates">Email Templates,</span>
                         <span class="grid-selector" navigation="#landing-pages">Landing Pages,</span>
-                        <span class="grid-selector" navigation="#push-notification">Push Notifications,</span>
-                        <span class="grid-selector" navigation="#social">Social</span>
+                        <span class="grid-selector pull-left" navigation="#push-notification">Push Notifications,</span>
+                        <span class="grid-selector pull-left" navigation="#social">Social,</span>
+                        <span class="grid-selector pull-left" navigation="#visitors">Visitors</span>
                   </span>
-
+                  </div>
                   </a>
               </li><li>
               <a href='#' class='menu-service-select' data-service-name='SERVICE' data-dashboard='dashboard'>
-                <i class="material-icons purple-color">view_module</i>
-                      <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
+                <div><i class="material-icons purple-color">view_module</i></div>
+                      <div><span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "service") %></span>
 
                   <span class="grid2-sub-nav">
                    <span class="grid-selector" navigation="#tickets">Help Desk,</span>
                     <span class="grid-selector" navigation="#knowledgebase">Knowledge base,</span>
                     <span class="grid-selector" navigation="#ticket-feedback">Feedback,</span>
-                    <span class="grid-selector" navigation="#ticket-views">Views</span>
+                   
                     
                   </span>
                   <span class="grid2-sub-nav">
-                        <span class="grid-selector" navigation="#ticket-labels">Labels</span>
+                         <span class="grid-selector" navigation="#ticket-views">Views,</span>
+                        <span class="grid-selector" navigation="#ticket-labels">Labels,</span>
                         <span class="grid-selector" navigation="#ticket-groups">Groups,</span>
                         <span class="grid-selector" navigation="#canned-responses">Canned Responses</span>
                   </span>
-
+                  </div>
                   </a>
               </li>
           </ul>

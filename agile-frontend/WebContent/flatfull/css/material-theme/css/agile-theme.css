@@ -2877,7 +2877,9 @@ div#need_help_header a:hover {
   background-color: #fff !important;
 }
 .dashboard-select .dropdown-menu li a i{
-  font-size: 32px;
+  font-size: 22px;
+  margin-top: -2px;
+  margin-bottom: 14px;
 }
 
 .agile-theme-15 #TrackingTab.nav>li>a {
@@ -3305,4 +3307,11 @@ width: 169px !important;
 
 .recent-view-background-color img[src="//doxhze3l6s7v9.cloudfront.net/beta/static/img/com-default-img.png"]{
   border-radius: 0% !important;
+}
+/*.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.first-span{
+  display: block !important;
+}*/
+
+.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.grid-span-two{
+  display: inline-block; !important;
 }
