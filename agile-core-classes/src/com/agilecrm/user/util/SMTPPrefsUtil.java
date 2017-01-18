@@ -189,7 +189,7 @@ public class SMTPPrefsUtil {
 		 return true;
 	 }
 	 catch(Exception e){
-		 System.out.println("Exception occured while sending bulk email via Gmail auth : " + e.getMessage());
+		 System.out.println("Exception occured while sending bulk email via SMTP : " + e.getMessage());
 		 return false;
 	 }
 	   return false;
@@ -204,7 +204,7 @@ public class SMTPPrefsUtil {
 	 */
 	public static SMTPTransport buildSMTPTransportObject(SMTPPrefs smtpPrefs){
 		
-		String host = smtpPrefs.server_host;
+		String host = smtpPrefs.server_url;
 		boolean ssl = smtpPrefs.is_secure;
 		
 	  try{	
