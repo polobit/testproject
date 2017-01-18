@@ -907,6 +907,7 @@ public class QueryDocumentUtil {
 		String orQuery = null;
 		
 		List<String> dealsrules = new ArrayList<String>();
+		String dealsrules_extra = null;
 		
 		if (filter.or_rules != null && !filter.or_rules.isEmpty())
 		{
@@ -926,6 +927,35 @@ public class QueryDocumentUtil {
 					}
 					dealsrules.add(constructQuery(newfilter.rules, "AND"));
 					i--;
+					continue;
+				}
+				if(filter.or_rules.get(i).LHS.equalsIgnoreCase("loss_reason_time"))
+				{
+					SearchFilter newfilter = new DealFilter();
+					SearchRule newRule=new SearchRule();
+					newRule.LHS = "milestone_changed_time";
+					newRule.CONDITION = filter.or_rules.get(i).CONDITION;
+					newRule.RHS = filter.or_rules.get(i).RHS;
+					newRule.RHS_NEW=filter.or_rules.get(i).RHS_NEW;
+					newfilter.rules.add(newRule);
+					
+					newRule=new SearchRule();
+					newRule.LHS = "created_time";
+					newRule.CONDITION = filter.or_rules.get(i).CONDITION;
+					newRule.RHS = filter.or_rules.get(i).RHS;
+					newRule.RHS_NEW=filter.or_rules.get(i).RHS_NEW;
+					newfilter.rules.add(newRule);
+					//newfilter.rules.add(filter.or_rules.get(i));
+					filter.or_rules.remove(i);
+					/*if(filter.or_rules.size()>0)
+					{
+					if(filter.or_rules.get(i).LHS.equalsIgnoreCase("created_time")){
+					newfilter.rules.add(filter.or_rules.get(i));
+					filter.or_rules.remove(i);
+					}
+					}*/
+					dealsrules_extra=constructQuery(newfilter.rules, "OR");
+					i--;
 				}
 			}
 			if(dealsrules!=null && dealsrules.size()>0)
@@ -942,6 +972,9 @@ public class QueryDocumentUtil {
 			}
 			else
 				orQuery=constructQuery(filter.or_rules, "OR");
+		}
+		if (StringUtils.isNotEmpty(dealsrules_extra)) {
+			andQuery="(" + andQuery + ") AND (" + dealsrules_extra + ")";
 		}
 		if (StringUtils.isNotEmpty(orQuery)) {
 			query = "(" + andQuery + ") AND (" + orQuery + ")";

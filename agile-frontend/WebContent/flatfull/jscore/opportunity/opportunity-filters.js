@@ -29,7 +29,14 @@ function setNewDealFilters(data){
 	}
 
 	var cookie_filter_id = _agile_get_prefs("deal-filter-name");
+	var report_filter_id = _agile_get_prefs("report_filter_name");
 	
+	if(report_filter_id){
+		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
+		$('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+report_filter_id.replace(/[, ]+/g,"")+'</span><a class="close remove_deal_filter">×</a></div>');
+		return;
+	}
+
 	if(cookie_filter_id && cookie_filter_id != 'my-deals' && data.get(cookie_filter_id) && data.get(cookie_filter_id).get('name')){
 		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
 		$('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+data.get(cookie_filter_id).get("name")+'</span><a class="close remove_deal_filter">×</a></div>');
