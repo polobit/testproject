@@ -654,9 +654,9 @@ function register_focus_on_tinymce(selector)
 }
 
 function get_tinymce_supported_language(){
-	var supported_language = "en_US";
-	if(_LANGUAGE == "es")
-		supported_language = "es";
+	var supported_language = _LANGUAGE;
+	if(_LANGUAGE == "en" || !_LANGUAGE)
+		supported_language = "en_US";
 
 	return supported_language;
 }
