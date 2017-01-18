@@ -23,7 +23,7 @@
 
 {{#if_equals entity_type "company_entity"}}
     	<div class="pull-left m-r-xs">
-        <div class="recent-view-background-color">
+        <div class="recent-view-background-color" {{getCompanyImage "30" "display:inline;"}}>
         <img class="img-inital r r-2x  recent-view-comany-style" style="width: 25px !important" {{getCompanyImage "30" "display:inline;"}} />
         </div>
     	</div>
@@ -75,7 +75,7 @@
 {{#if_equals entity_type "deal"}}
 	<div class="pull-left">
 		<!-- <i class="icon-money icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
-        <div class="recent-view-background-color">
+        <div class="recent-view-background-color" icon="icon-money">
 		<i class="icon-money img-inital r r-2x m-l-xs rectview-deal-icon" id="minus" ></i>
         </div>
 	</div>

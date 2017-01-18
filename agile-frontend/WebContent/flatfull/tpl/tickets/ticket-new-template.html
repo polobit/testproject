@@ -2,7 +2,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <button class="close" data-dismiss="modal">x</button>
+      <button class="close" data-dismiss="modal">&times;</button>
       <h3 class="modal-title"><i class="icon icon-envelop"></i> {{agile_lng_translate 'tickets' 'create-ticket'}}</h3>
     </div>
     <div id="modal-body">
@@ -75,7 +75,7 @@
                       <span class="controls">
                         <div class="cc-emails-st">
                           <ul class="cc-emails m-n p-n ccemailul" name="cc_emails">
-                              <li class="tag m-r-xs m-b-xs inline-block">
+                              <li class="tag m-r-xs m-b-xs inline-block tag-new-theme">
                                 <input type="text" placeholder="{{agile_lng_translate 'tickets' 'search-contacts'}}" id="cc_email_field" class="cc_emails_st" autocomplete="off">
                               </li>
                           </ul>
@@ -223,7 +223,8 @@
     {{#group_users}}
       <option data-assignee-id="{{id}}" value="{{../id}}" {{#if ../is_default}}
         {{#is_current_logged_in_user id}}selected{{/is_current_logged_in_user}}{{/if}}>
-        {{name}}
+        <img src="{{get_contact_image 24}}" class="r-5x" alt="..." 
+          onerror="image_error(this);" _data-name="{{getInitials name}}">{{name}}
       </option>
     {{/group_users}}
   </optgroup>

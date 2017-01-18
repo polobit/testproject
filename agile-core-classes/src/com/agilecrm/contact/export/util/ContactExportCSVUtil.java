@@ -59,7 +59,7 @@ public class ContactExportCSVUtil
     {
 	// CSV Header will get initialized in the same order
 	String[] headers = { ContactCSVExport.FIRST_NAME, ContactCSVExport.LAST_NAME, ContactCSVExport.TITLE,
-		ContactCSVExport.COMPANY, ContactCSVExport.EMAIL_DEFAULT, ContactCSVExport.EMAIL_HOME,
+		ContactCSVExport.COMPANY, ContactCSVExport.EMAIL_DEFAULT, ContactCSVExport.EMAIL_PERSONAL,
 		ContactCSVExport.EMAIL_WORK, ContactCSVExport.PHONE_DEFAULT, ContactCSVExport.PHONE_WORK,
 		ContactCSVExport.PHONE_HOME, ContactCSVExport.PHONE_MOBILE, ContactCSVExport.PHONE_MAIN,
 		ContactCSVExport.PHONE_HOME_FAX, ContactCSVExport.PHONE_WORK_FAX, ContactCSVExport.PHONE_OTHER,

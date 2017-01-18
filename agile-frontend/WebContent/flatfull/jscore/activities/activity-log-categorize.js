@@ -283,6 +283,15 @@ function updatedeals(ele)
 
 	$("#opportunityUpdateModal").modal('show');
 
+	$("#opportunityUpdateModal").find("#currency-conversion-symbols").html(getTemplate("currency-conversion-symbols-list", {}));
+    if(value.currency_type){
+    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(value.currency_type);
+    }
+    else{
+    	var currency_value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
+    	$("#opportunityUpdateModal").find("#currency-conversion-symbols").val(currency_value);
+    }
+
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
 

@@ -49,6 +49,8 @@ var WidgetsRouter = Backbone.Router
                 "Android/:id" : "Android",
                 "Knowlarity" : "Knowlarity",
                 "Knowlarity/:id" : "Knowlarity",
+                "VMdrops" : "VMdrops",
+                "VMdrops/:id" : "VMdrops",
 
                 // Billing widgets
                 "FreshBooks" : "FreshBooks",
@@ -71,9 +73,8 @@ var WidgetsRouter = Backbone.Router
                 "Custom-widget" : "Custom",
                 "Custom-widget/:id" : "Custom",
 				"Bria" : "Bria", "Bria/:id" : "Bria",
-				"Skype" : "Skype", "Skype/:id" : "Skype"
-
-                	
+				"Skype" : "Skype", "Skype/:id" : "Skype",
+				"Asterisk" : "Asterisk", "Asterisk/:id" : "Asterisk"
             },
 
             /**
@@ -118,6 +119,7 @@ var WidgetsRouter = Backbone.Router
                             $('#settings-widgets-tab-content').find('#call div:nth-child(6)').css({"display":"none"});
                             $('#settings-widgets-tab-content').find('#call div:nth-child(7)').css({"display":"none"});
                             $('#settings-widgets-tab-content').find('#call div:nth-child(8)').css({"display":"none"});
+                         //   $('#settings-widgets-tab-content').find('#call div:nth-child(10)').css({"display":"none"});
                             $('[data-toggle="tooltip"]').tooltip();
                         }
                     });
@@ -163,6 +165,12 @@ var WidgetsRouter = Backbone.Router
             Ozonetel : function(id) {
                 addConfigurableWidget(id, "Ozonetel", 'ozonetel-login');
             },
+            /**
+             * Manages TwilioIo widget
+             */
+            VMdrops : function(id) {
+                addConfigurableWidget(id, "VMdrops", 'voice-mail-drops-collection');
+            },
 
             Custom : function(id){                
                 addConfigurableWidget(id, "Custom", 'custom-widget-edit');                
@@ -181,6 +189,14 @@ var WidgetsRouter = Backbone.Router
 			 Skype : function(id) {
 			 	addConfigurableWidget(id, "Skype", 'skype-login');
 			 },
+			 
+			 /**
+				 * Manages Skype widget
+				 */
+			 Asterisk : function(id) {
+				 	addConfigurableWidget(id, "Asterisk", 'asterisk-login');
+			},
+				 
 			 
             /**
              * Manages Rapleaf widget
@@ -484,7 +500,28 @@ function renderWidgetView(templateName, url, model, renderEle){
         }
     });
     var output = widgetModel.render().el;
+    if(model && model.name == "VMdrops"){
+        var that = this;
+        App_VoiceMailRouter.VoiceMailCollectionView = new Base_Collection_View({ url : 'core/api/voicemails', templateKey : "voice-mail-drops", cursor : true, page_size : getMaximumPageSize(),
+            individual_tag_name : 'tr', postRenderCallback : function(el)
+            {
+                includeTimeAgo(el);
+            },
+            appendItemCallback : function(el)
+            { 
+                includeTimeAgo(el);
+            } });
+        
+        App_VoiceMailRouter.VoiceMailCollectionView.collection.fetch();
+        console.log(App_VoiceMailRouter.VoiceMailCollectionView);
+        output = App_VoiceMailRouter.VoiceMailCollectionView.render().el;
+    }
     $(renderEle).html(output);
+    if(model && model.name == "VMdrops"){
+        $("#widget-settings-tab-pane .img-responsive").css({"width":"47px"});
+        $('#prefs-tabs-content #widget-settings-tab-pane').find('.row div:nth-child(1)').removeClass("col-md-4").addClass("col-md-12");
+        $('#widget-settings-tab-pane .panel').css({"padding-left":"0px","padding-right":"0px"});
+    }
     $("#twilioio_login_form .question-tag" ).popover({
       template: '<div class="popover col-md-12"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
     });

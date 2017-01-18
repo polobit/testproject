@@ -350,8 +350,8 @@ public class BillingRestriction implements Serializable
 		resrtictions.put("widgets", limits);
 	}
 	int nodesLimit = planDetails.getCampaignNodesLimit();
-	int maxNodesCount = WorkflowUtil.getMaxWorkflowNodes();
-	if(nodesLimit < --maxNodesCount){
+	int maxNodesCount = WorkflowUtil.checkNodesLimit(nodesLimit);
+	if(maxNodesCount > 0){
 		limits = new HashMap<String, Object>();
 		limits.put("limit", nodesLimit);
 		limits.put("count", maxNodesCount);

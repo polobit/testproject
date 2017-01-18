@@ -285,6 +285,10 @@ function getTemplateUrls(templateName)
 		template_relative_urls.push("leads-detail.js");
 	}
 	
+	if (templateName.indexOf("asterisk") == 0)
+	{	
+		template_relative_urls.push("asterisk.js");
+	}
 	return template_relative_urls;
 }
 
@@ -1527,4 +1531,24 @@ function isDuplicateContactProperty(properties,key)
 
 			return false;
 		}
-	}	
+	}
+
+/*
+ * To know whether last contacted filter relative condtions enable or not.
+ * It's specific to particular domains.
+ */
+function is_enable_lcf_rel_cond()
+{
+	var relativeCondDomains = {
+		"alekhya" : true,
+		"sivaraj" : true,
+		"steelehill" : true,
+		"" : true
+	}
+
+	if(relativeCondDomains[CURRENT_DOMAIN_USER.domain])
+	{
+		return true;
+	}
+	return false;
+}	

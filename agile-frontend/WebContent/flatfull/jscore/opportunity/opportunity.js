@@ -780,6 +780,10 @@ function populate_deal_products(el, value,form_id){
 						{
 							me.calculateGrandTotal(e);
 						});
+						$(me._form_id).on("change","#currency-conversion-symbols", function(e)
+						{
+							me.calculateGrandTotal(e);
+						});
 						$(me._form_id).on("keypress",".dealproducts_qty_input",
 								function(e)
 								{
@@ -1148,8 +1152,28 @@ function populate_deal_products(el, value,form_id){
 
 					if(iTotal.toFixed)
 						iTotal=iTotal.toFixed(2)
-					if($("input[name='currency_conversion_value']",$(me._form_id)).length)
-						$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
+					if($("input[name='currency_conversion_value']",$(me._form_id)).length){
+						if (ACCOUNT_PREFS.multi_currency && (ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "PRO" || ACCOUNT_PREFS.plan.plan_type.split("_")[0] == "ENTERPRISE") && ($("select[id='currency-conversion-symbols']",$(me._form_id)).val(),$(me._form_id)))
+    					{
+    						var accountCurrency = ACCOUNT_PREFS.currency.substring(0, 3);
+							var dealCurrency = $("select[id='currency-conversion-symbols']",$(me._form_id)).val().substring(0, 3);
+							var finalTotal ;
+							if(accountCurrency == dealCurrency)
+								finalTotal = iTotal ;
+							else{
+	    						if(!currencyRatesResponse)
+	    							currencyRatesResponse = $.ajax({type : "GET",cache : false,async : false,url : "core/api/opportunity/newDeal/currencyRates",contentType : "application/json",}).responseJSON; 
+								var listJson = $.parseJSON(currencyRatesResponse.currencyRates);
+								var numer = listJson[accountCurrency];
+								var denom = listJson[dealCurrency];
+								finalTotal = (iTotal * denom) / numer ;
+								finalTotal = finalTotal.toFixed(2);
+							}
+							$("input[name='currency_conversion_value']",$(me._form_id)).val(finalTotal);
+						}
+						else
+							$("input[name='currency_conversion_value']",$(me._form_id)).val(iTotal);
+					}
 					else
 						{
 							if(selected>0)

@@ -389,10 +389,10 @@ public class SendGrid
 	return attachmentData[0];
     }
     
-    public static String sendMail(String apiUser, String apiKey, String fromEmail, String fromName, String to,
-    	    String cc, String bcc, String subject, String replyTo, String html, String text, String SMTPHeaderJSON, List<Long> documentIds, List<BlobKey> blobKeys,
-    	    String... attachmentData) throws Exception
-    {
+	public static String sendMail(String apiUser, String apiKey, String fromEmail, String fromName,
+			String to, String cc, String bcc, String subject, String replyTo, String html,
+			String text, String SMTPHeaderJSON, List<Long> documentIds, String[] mailAttach,
+			String... attachmentData) throws Exception {
     	if(apiUser == null && apiKey == null)
     	{
     		String domain = NamespaceManager.get();
@@ -453,9 +453,9 @@ public class SendGrid
     		sendDocumentAsMailAttachment(apiUser, apiKey, email, documentIds.get(0));
     		return "Added to Document Queue.";
     	}
-	    else if (blobKeys != null && blobKeys.size() > 0)
-	    {
-	    	sendBlobAsMailAttachment(apiUser, apiKey, email, blobKeys.get(0));
+    	else if(mailAttach != null && mailAttach.length > 0 && StringUtils.isNotBlank(mailAttach[0])) 
+        {
+	    	sendUploadedMailAttachment(apiUser, apiKey, email, mailAttach[0], mailAttach[1]);
 	    	return "Added to Blob Queue";
 	    }
 	    else if (attachmentData != null && attachmentData.length > 0)
@@ -538,7 +538,7 @@ public class SendGrid
      * @param mailJSONString
      * @param messageJSONString
      */
-    private static void sendBlobAsMailAttachment(String username, String password, Email email, BlobKey blobKey)
+   /* private static void sendBlobAsMailAttachment(String username, String password, Email email, BlobKey blobKey)
     {
 		// Task for sending mail and blob as mail attachment
 		IFileInputStream blobStream = new BlobFileInputStream(blobKey);
@@ -557,5 +557,26 @@ public class SendGrid
 			e.printStackTrace();
 		}
 	
+    }*/
+    
+    /**
+     * To send mail using mail attachment from S3 URL.
+     */
+    private static void sendUploadedMailAttachment(String username, String password, Email email, 
+    		String fileName, String Url) {
+		IFileInputStream documentStream = new DocumentFileInputStream(fileName, Url);
+		
+		try {
+			SendGridAttachmentDeferredTask task = new SendGridAttachmentDeferredTask(username, 
+					password, email, documentStream);
+
+			Queue queue = QueueFactory.getQueue("email-attachment-queue");
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
     }
+    
+    
   }

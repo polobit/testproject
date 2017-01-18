@@ -208,3 +208,8 @@ span.pIcon {
 	font-size: 34px;
 	color: #2980B9;
 }
+@media (max-width: 500px) and (min-width: 300px){
+            .pricing1 ,.pricing2 , .margin-top{
+                margin-top:10px;
+            }
+}

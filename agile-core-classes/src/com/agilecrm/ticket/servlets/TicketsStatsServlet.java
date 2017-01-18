@@ -68,7 +68,7 @@ public class TicketsStatsServlet extends HttpServlet
 
 				emailSender.sendEmail("ticketstats@agilecrm.com", "Agile CRM", toEmail, "service@agilecrm.com", "",
 						"Ticket stats report for " + current_date, null, emailHTML, "", null, new ArrayList<Long>(),
-						new ArrayList<BlobKey>());
+						null);
 
 				System.out.println("Sent email report");
 			}

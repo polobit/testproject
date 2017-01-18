@@ -248,7 +248,16 @@ function isValidForm(form) {
 		
 	},"{{agile_lng_translate 'validation-msgs' 'Pls-enter-a-valid-date'}}");
 
-    
+	jQuery.validator.addMethod("variableFormat", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
+		return /(^(({{)*\w+(}})*[=]({{)*\w+(}})*)$)|^((({{)*\w+(}})*=({{)*\w+(}})*)([|]({{)*\w+(}})*=({{)*\w+(}})*)*)$/.test(value);
+	},_agile_get_translated_val("validation-msgs",'Pls-enter-proper-format'));
+
+
 	jQuery.validator.addMethod("field_length", function(value, element){
 		if(value=="")
 			return true;
@@ -280,7 +289,7 @@ function isValidForm(form) {
 
 	jQuery.validator.addMethod("duplicateWithSystemName", function(value, element){
 		var labelJson = [];
-		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags,first_name,last_name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value' ;
+		labelJson.contact = 'fname,lname,email,company,title,name,url,website,address,phone,skypephone,image,city,state,zip,country,tags,first_name,last_name,probability,description,pipeline_milestone,close_date,deal_source_id,color1,relates_to,tags,expected_value,last_contacted' ;
 		var array = labelJson.contact.split(',');
 		for(var i=0 ; i < array.length ; i++){
 			if(value.toLowerCase() == array[i])

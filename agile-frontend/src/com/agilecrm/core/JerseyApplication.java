@@ -109,6 +109,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.OfficeCalendar365API.class);
 	s.add(com.agilecrm.core.api.calendar.CategoriesAPI.class);
 	s.add(com.agilecrm.core.api.widgets.BriaWidgetAPI.class);
+	s.add(com.agilecrm.core.api.widgets.CallWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.SkypeWidgetAPI.class);
 	s.add(com.agilecrm.core.api.widgets.KloutWidgetsAPI.class);
 	s.add(com.agilecrm.core.api.widgets.AndroidAPI.class);
@@ -191,6 +192,9 @@ public class JerseyApplication extends Application
 	
 	//Visitors
 	s.add(com.agilecrm.core.api.analytics.VisitorsAPI.class);
+
+	//JSONIO
+	s.add(com.agilecrm.core.api.JsonIOAPI.class);
 
 	return s;
     }

@@ -39,12 +39,14 @@
 
 {{else}}
 
-    <div class="col {{#isNewTheme}} col-sm-9 {{/isNewTheme}} panel wrapper p-b-xs no-panel-border" id="section-tab">
-        <div class="hbox h-auto">
-            <div class="pull-right">
-                <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
-                    <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
-                </a>
+    <div class="col-md-9 row">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{agile_lng_translate 'tickets' 'knowledgebase_sectionlist'}}
+                <div class="pull-right" style="margin-top:-4px;">
+                    <a href="#knowledgebase/add-section{{#helpcenter_url}}{{/helpcenter_url}}" class="btn btn-sm btn-default btn-addon">
+                        <span><i class="icon-plus-sign"></i></span>  {{agile_lng_translate 'tickets' 'add-section'}}
+                    </a>
+                </div>
             </div>
             <div class="table-responsive b-n inline-block m-b-none">
             <table class="table table-striped showCheckboxes m-b-none agile-table panel table-layout-mob-view show-delete-modal" url="core/api/knowledgebase/section/bulk" data-bulk-delete-title="{{agile_lng_translate 'contact-details' 'delete'}}"
@@ -64,7 +66,7 @@
     </div>
 {{/is_mobile}}
 
-    <div class="col w-md  wrapper pos-rlt track-milestone-text p-t-none" >
+    <div class="col-md-3" >
             <h4 class="m-t-none h4 m-b-sm">
               {{agile_lng_translate 'tickets' 'how-to-configure-knowledge-base'}}
             </h4>

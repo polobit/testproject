@@ -317,7 +317,6 @@ $('#admin-prefs-tabs-content').on('click', '#add-new-tag', function(e){
 	e.preventDefault();
 	toggleAddTag(true);
 	$("#disable_new_tags").addClass("hide");
-	$("#new_tag_field_block").css("margin-top","-70px");
 });
 
 $('#admin-prefs-tabs-content').on('keydown', '#new_tag', function(event){

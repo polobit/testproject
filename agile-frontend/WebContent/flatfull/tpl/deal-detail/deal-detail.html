@@ -14,12 +14,20 @@
   <div class="panel panel-default m-b">
     <div class="panel-body text-center">
 <div class="h3 font-thin custom-color text-ellipsis" style="width: calc(100% - 14px);">{{#if name}}{{name}}{{/if}}</div>
-{{#if_equals expected_value "0"}}
-<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
+{{#if_equals currency_conversion_value "0"}}
+  <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{currency_conversion_value}}</div>
+{{else}}
+  {{#if currency_conversion_value}} 
+    <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</div>
+  {{else}}    
+    {{#if_equals expected_value "0"}}
+      <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
+    {{/if_equals}}
+    {{#if expected_value}}
+      <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+    {{/if}}
+  {{/if}}
 {{/if_equals}}
-{{#if expected_value}}
-<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
-{{/if}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
@@ -70,8 +78,8 @@
                 <span class="caret m-l-none" style="margin-top:-11px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right deals-edit text-sm">
-        <!--<li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>    
-                                    <li class="divider"></li>-->
+                  <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>    
+                  <li class="divider"></li>
                   <li><a href='#'  id="dealshow-note" class="deal-note">
                   <i class="icon-note" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'add-note'}}</a></li>
                                     <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="fa fa-file-archive-o" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'archive'}}</a></li>
@@ -295,12 +303,20 @@
 <div class="inline-block w-full "><input type="text" class="col-md-10 hidden xedit " value="{{name}}"id="inline-input"></input>
 <span class="h3 font-thin custom-color text-ellipsis m-b-xs block" id="deals-inline" title="{{#if name}}{{name}}{{/if}}">
 {{#if name}}{{name}}{{/if}}</span></div>
-{{#if_equals expected_value "0"}}
-<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
+{{#if_equals currency_conversion_value "0"}}
+  <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{currency_conversion_value}}</div>
+{{else}}
+  {{#if currency_conversion_value}} 
+    <div class="m-b-sm text-base" style="font-size: 16px">{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</div>
+  {{else}}    
+    {{#if_equals expected_value "0"}}
+      <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{expected_value}}</div>
+    {{/if_equals}}
+    {{#if expected_value}}
+      <div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
+    {{/if}}
+  {{/if}}
 {{/if_equals}}
-{{#if expected_value}}
-<div class="m-b-sm text-base" style="font-size: 16px">{{currencySymbol}}{{numberWithCommas expected_value}}</div>
-{{/if}}
 <div class=" text-muted deal-track text-xs">
 {{#if this.archived}}&nbsp;&nbsp;<span  class="deal-task-type bg-light dk  btn-sm-imp btn btn-xs  m-l-xs" >{{agile_lng_translate 'deal-view' 'archived'}}</span>{{else}}
   
@@ -362,8 +378,8 @@
                 <span class="caret m-l-none" style="margin-top:-11px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right deals-edit text-sm">
-       <!--<li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>
-                                    <li class="divider"></li>-->
+                  <li><a href="#" class="deal-detail-edit-deal" id="deal_details"><i class="fa fa-edit" style="margin-right:2px;"></i> Edit</a></li>
+                  <li class="divider"></li>
                   <li><a href='#'  id="dealshow-note" class="deal-note"><i
                       class="icon-note" style="margin-right:2px;"></i> {{agile_lng_translate 'contact-details' 'add-note'}}</a></li>
                                     <li><a href='#'  id="dealdetail-archive" class="deal-detail-archive"><i class="fa fa-file-archive-o" style="margin-right:2px;"></i> {{agile_lng_translate 'deal-view' 'archive'}}</a></li>

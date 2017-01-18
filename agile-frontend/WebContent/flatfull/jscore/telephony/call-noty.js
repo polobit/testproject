@@ -243,11 +243,13 @@ function ShowWidgetCallNoty(message){
 if(message.state == "connected"){
 	
 	var btns = [];
-	if(widgetype !=  "skype"){
+	if(widgetype !=  "skype"  && widgetype !=  "asterisk"){
 		if(widgetype ==  "TwilioIO"){
 			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf fa fa-group","popover-date":"Add conference","title":""});
 			//btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_voice_mail","popover-date":"Voicemail","title":""});
 			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_phone  icon-call-out ","popover-date":"Transfer call","title":""});
+			btns.push({"id":"", "class":"btn btn-sm btn-default p-xs noty_twilio_conf  fa fa-group ","popover-date":"Call conference","title":""});
+			
 		}
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_mute icon-microphone","popover-date":"Mute","title":""});
 		btns.push({"id":"", "class":"btn btn-sm btn-default p-8 noty_"+widgetype+"_unmute icon-microphone-off none","popover-date":"Unmute","title":""});
@@ -256,7 +258,8 @@ if(message.state == "connected"){
 	if(widgetype ==  "TwilioIO"){
 		btns.push({"id":"", "class":"btn btn-sm btn-danger fa fa-headphones cam-call-icon noty_twilio_hangup","popover-date":"Hangup","title":""});
 	}else{
-		btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
+		if(widgetype !=  "asterisk")
+			btns.push({"id":"", "class":"btn btn-sm btn-danger noty_"+widgetype+"_hangup","title":'{{agile_lng_translate "calls" "hangup"}}'});
 	}
 	var json = {"callId": callId};
 	showDraggableNoty(widgetype, globalCall.contactedContact, "connected", globalCall.callNumber, btns,json);
@@ -271,7 +274,7 @@ if(message.state == "connected"){
 			globalCall.contactedId = currentContact.id;
 		}
 		var btns;
-		if(widgetype !=  "ozonetel"){
+		if(widgetype !=  "ozonetel" && widgetype !=  "asterisk"){
 			btns = [{"id":"", "class":"btn btn-primary noty_"+widgetype+"_answer","title":"Answer"},{"id":"","class":"btn btn-danger noty_"+widgetype+"_ignore","title":'{{agile_lng_translate "contacts-view" "ignore"}}'}];
 		}else{
 			$("#draggable_noty #call-noty-notes").val("");
@@ -286,7 +289,9 @@ if(message.state == "connected"){
 	
 }else if(message.state == "connecting"){
 	
-	var btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
+	var btns= [];
+	if(widgetype !=  "asterisk")
+		 btns = [{"id":"", "class":"btn btn-default btn-sm noty_"+widgetype+"_cancel","title":'{{agile_lng_translate "contacts-view" "cancel"}}'}];
 	var json = {"callId": callId};
 	showDraggableNoty(widgetype, globalCall.contactedContact , "outgoing", globalCall.callNumber, btns, json);
 	
@@ -393,6 +398,56 @@ function showSkypeCallNoty(message){
 		
 }
 
+function showAsteriskCallNoty(message){
+
+	var state = message.state;
+	var number = message.number;
+	var callId = message.callId;
+	var displayName = message.displayName;
+	
+		if(!globalCall.lastReceived){
+		}else{
+			if(globalCall.lastReceived == message.state){
+				if(globalCall.callId == callId){
+					console.log("duplicate message recived");
+					return;
+				}
+			}
+		}
+		globalCall.lastReceived =  message.state;
+
+		if(message.state == "ringing"){
+				if(checkForActiveCall()){
+					sendCommandToClient("busy","Bria");
+					return;
+				}
+		}else if(!globalCall.contactedContact){
+			 accessUrlUsingAjax("core/api/contacts/search/phonenumber/"+number, function(responseJson){
+	    		if(!responseJson){
+	    			globalCall.contactedContact = {};
+	    			globalCall.contactedId = "";
+	    		}else{
+	    			globalCall.contactedContact = responseJson;
+	    			globalCall.contactedId = responseJson.id;
+	    		}
+	    		
+	    		_getMessageAsterisk(message);
+				ShowWidgetCallNoty(message);
+					return;
+
+			});	
+				console.log("contact or id not found to make popup..");
+				return;
+		
+		}
+
+		_getMessageAsterisk(message);
+		ShowWidgetCallNoty(message);
+		return;
+
+
+}
+
 function showCallNotyMessage(message,type,position,timeout){
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
 			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
@@ -432,11 +487,12 @@ function showDraggableNoty(widgetName, contact, status, number, btns, json, call
 		if(widgetName == "Twilioio"){
 			//makeDraggableVoicemail();
 			makeDraggableTransfer();
+			//makeDraggableConference();
 			if(TWILIO_DIRECTION != "inbound" &&  TWILIO_DIRECTION != "incoming"){
 				makeDraggableVoicemail();
 			}
 			makeDraggableDialpad("twilioio-dialpad",{},$('.noty_buttons'));
-		}else if(widgetName == "bria" || widgetName == "skype"){
+		}else if(widgetName == "bria" || widgetName == "skype"  || widgetName == "asterisk"){
 			makeDraggableDialpad("bria-widgetdialpad",{},$('.noty_buttons'));
 		}
 		if(containsOption(default_call_option.callOption, "name", "CallScript") != -1 && !jQuery.isEmptyObject(contact)){
@@ -580,16 +636,19 @@ function makeDraggableTransfer(widgetName){
 	accessUrlUsingAjax("/core/api/widgets/twilio/getTwilioUsers", function(resp){
 			//$('#call-noty-l1').html($(getTemplate("twilioio-users",resp)));
 			$('#draggable_noty .noty_twilio_phone').removeClass("icon-call-out");
+			$('#draggable_noty .noty_twilio_conf').removeClass("fa").removeClass("fa-group");
 			$('#draggable_noty .noty_twilio_phone').html($(getTemplate("twilioio-users",resp)));
+			$('#draggable_noty .noty_twilio_conf').html($(getTemplate("twilioio-users-conference",resp)));
 			
 	});
 	
 }
 function makeDraggableConference(widgetName){
 	accessUrlUsingAjax("/core/api/widgets/twilio/getTwilioUsers", function(resp){
-			$('#call-noty-l1').html($(getTemplate("twilioio-users-conference",resp)));
+		   $('#draggable_noty .noty_twilio_conf').removeClass("icon-call-out");
+		   $('#draggable_noty .noty_twilio_conf').html($(getTemplate("twilioio-users-conference",resp)));
+			//$('#call-noty-l1').html($(getTemplate("twilioio-users-conference",resp)));
 	});
 	
 }
-
 

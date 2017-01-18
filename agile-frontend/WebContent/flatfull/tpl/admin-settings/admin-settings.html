@@ -44,7 +44,9 @@
 			<a href="#categories" class="categories-tab list-group-item">{{agile_lng_translate 'deal-view' 'tasks'}}</a>
 			<a href="#telephony" class="telephony-tab list-group-item">{{agile_lng_translate 'widgets' 'telephony'}}</a>
 			{{#isAdmin}}
+			{{#isHelpdeskenabled}}
 			<a href="#ticket-groups" class="helpdesk-tab list-group-item">{{agile_lng_translate 'menu' 'service'}}</a>
+			{{/isHelpdeskenabled}}
 			{{/isAdmin}}
 			<a href="#integrations" class="integrations-tab list-group-item">{{agile_lng_translate 'admin-settings' 'integrations'}}</a>
 			<a href="#api-analytics" class="api-analytics-code-tab list-group-item">Analytics</a>
@@ -52,6 +54,7 @@
 			<a href="#integrations-stats" class="stats-tab list-group-item">{{agile_lng_translate 'admin-settings' 'stats'}}</a>
 
 			<a href="#analytics-code" class="analytics-code-tab list-group-item">API</a>
+			<a href="#verify-domain" class="verify-domain-tab list-group-item">Email Settings</a>
 				
 
 		<!-- <a href="#menu-settings" class="menu-settings-tab list-group-item">Menu Settings</a> -->

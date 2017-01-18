@@ -38,6 +38,10 @@
    background: url("https://doxhze3l6s7v9.cloudfront.net/img/menu-service-icons-sprite.png") no-repeat;
    background-position: 98% 0px;
 }
+.agile-theme-15 li.help-icon > a:hover,.agile-theme-15 li.help-icon > a:focus{
+color: #78909c !important;
+}
+
 </style>
 
 <header id="header" class="app-header navbar" role="menu">
@@ -407,7 +411,13 @@
                   	out.println("<li><a href='#activities'>Logs</a></li>");
                   	}
                   	out.println("</ul><ul class='nav navbar-nav pull-right' style='float:right!important;'><li class='nav-bar-search'> <form id='domainSearchForm' class=' navbar-search'  style='margin: 5px;'> <input id='domainSearchText' class='form-control pull-left' type='text' style='line-height: 17px;width:85%;'  data-provide='typeahead'    placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox pull-left m-xs p-t-xs' /><div class='clearfix'></div></form></li>");
-                  	out.println("<li style='float:right;'><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li>");
+                  	 out.println("<li class='pull-right'><div class='m-t-xs'><span class=' dropdown-toggle' data-toggle='dropdown' ><a style='background: transparent;border: 0px;'>");
+                    if (!StringUtils.isEmpty(currentUserPrefs.pic))
+                        out.println("<img height='35' width='35' style='border-radius: 50%;margin-left: 20px;' src='"+ domainUser.pic+ "' alt='...' class='pos-rlt pos-t-xs'></img>");
+                    else
+                      out.println("<img height='35' width='35' style='border-radius: 50%;margin-left: 20px;' src='img/gravatar.png'  alt='...'></img>");
+                      out.println("</a></span><ul class='dropdown-menu m-t-sm' style='right: 0;left: auto;'><li><a href='#user-prefs' class='b-b p-r-none'><div class='pull-left text-ellipsis w-auto hidden-sm hidden-md' style='max-width:210px;clear: both;''><span class='hidden-sm hidden-md text-head-black'>"+SafeHtmlUtil.sanitize(domainUser.name)+"</span></div><span class='text-sm text-ellipsis block' style='clear: both;''> <b>"+user.getEmail()+"</b></span></a></li>");
+                      out.println("<li><a href="+logoutURL+"><i class='icon-off'></i>Logout</a></li></ul></div></li>");
                     if(domainUser.adminPanelAccessScopes !=null && domainUser.adminPanelAccessScopes.contains(AdminPanelAccessScopes.ADD_USER))
                   	{
                   		out.println("<li style='margin-top: 15px;'><div class='btn-group'><a href='#users-add' class=''><i class='icon-plus-sign'></i> Add User</a>");
@@ -565,6 +575,8 @@
 
                                                         </li> -->
 
+                             <!--  <li class="support-help-icon" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Help"><a href="https://www.agilecrm.com/support" target="_blank"><i class='fa fa-question-circle text-md'></i></a></li> -->
+                             
 						     <li id="recent-menu" class="dropdown" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="<%=LanguageUtil.getLocaleJSONValue(localeJSON, "recent") %>"><a
 								class="dropdown-toggle" data-toggle="dropdown" href="" onclick="Agile_GA_Event_Tracker.track_event('Activity Option in Nav Bar')"> <i class='icon-clock'></i>
 								<i class='material-icons' style="display: none;">history</i>

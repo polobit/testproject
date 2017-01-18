@@ -1,5 +1,3 @@
-<%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
-<%@page import="com.google.appengine.api.blobstore.BlobstoreService" %>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="org.json.JSONObject"%>
@@ -16,14 +14,8 @@
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
-<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
-<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
-<%@page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-%>
 
 <%
 
@@ -121,60 +113,113 @@ $(function()
 			isValid();
 	    }
 	  });
+
+	$("#mail-upl").click(function(e) {
+		e.preventDefault();
+		if(isValid()) {
+			var fileInput = document.getElementById('fileextension');
+    		uploadAttachmentToS3(fileInput.files[0]);
+		}
+	});
 }); 
 
 function isValid(){
-	    $("#form").validate({
-	        rules: {
-	        		  attachmentfile:{required:true,accept:""}
-	               },
-	        submitHandler:function(form)
-                  {  
-                  	// Concating file extension to key
-		    	    var fileName = $("input:file").val();
-	        		var extension;
-		    	    
-		    	    if(fileName.lastIndexOf(".") > 0)
-		    	    	extension = fileName.substring(fileName.lastIndexOf(".")+1);
-		    	    
-		    	    if(fileName.lastIndexOf("\\") > 0)
-		    	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
-		    	    
-		    	    var key = $("#key").val();
-		    	    key = key + "/" + fileName;
-		    	    $("#key").val(key);
-		    	    
-		    	    // Form submission
-      	            form.submit();
-                  }
-	   		});
-	    return $("#form").valid();
+    $("#form").validate({
+        rules: {
+        		  attachmentfile:{required:true,accept:""}
+               },
+        submitHandler:function(form)
+              {  
+              	// Concating file extension to key
+	    	    var fileName = $("input:file").val();
+        		var extension;
+	    	    
+	    	    if(fileName.lastIndexOf(".") > 0)
+	    	    	extension = fileName.substring(fileName.lastIndexOf(".")+1);
+	    	    
+	    	    if(fileName.lastIndexOf("\\") > 0)
+	    	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+	    	    
+	    	    var key = $("#key").val();
+	    	    key = key + "/" + fileName;
+	    	    $("#key").val(key);
+	    	    
+	    	    // Form submission
+  	            form.submit();
+              }
+   		});
+    return $("#form").valid();
 }
+
+function uploadAttachmentToS3(file) {
+    if(typeof file != "undefined") {
+        $("#mail-upl").prop("disabled",true);
+        $("#mail-upl").val("Uploading ...");
+
+        var uploadedFileName = file.name;
+        var filename = uploadedFileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        filename = filename + "_" + new Date().getTime() + "." + uploadedFileName.split('.').pop();
+
+		var d = (new Date()).toString().replace(/\S+\s(\S+)\s(\d+)\s(\d+)\s.*/,'$3-$1-$2');
+
+        formData = new FormData();
+        formData.append('key',  "editor/email-attachments/" + d + "/" + filename);
+        formData.append('AWSAccessKeyId', 'AKIAIBK7MQYG5BPFHSRQ');
+        formData.append('acl', 'public-read');
+        formData.append('content-type', 'image/*');
+        formData.append('policy', 'CnsKICAiZXhwaXJhdGlvbiI6ICIyMDI1LTAxLTAxVDEyOjAwOjAwLjAwMFoiLAogICJjb25kaXRpb25zIjogWwogICAgeyJidWNrZXQiOiAiYWdpbGVjcm0iIH0sCiAgICB7ImFjbCI6ICJwdWJsaWMtcmVhZCIgfSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJGtleSIsICJlZGl0b3IvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRDb250ZW50LVR5cGUiLCAiaW1hZ2UvIl0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRzdWNjZXNzX2FjdGlvbl9zdGF0dXMiLCAiMjAxIl0sCiAgXQp9');
+        formData.append('signature', '59pSO5qgWElDA/pNt+mCxxzYC4g=');
+        formData.append('success_action_status', '201');
+        formData.append('file', file);
+
+        $.ajax({
+            data: formData,
+            dataType: 'xml',
+            type: "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            url: "https://agilecrm.s3.amazonaws.com/",
+            success: function(data) {
+              // getting the url of the file from amazon and insert it into the editor
+              $("#mail-upl").prop("disabled",false);
+              $("#mail-upl").val("Upload");
+
+              var url = decodeURIComponent($(data).find('Location').text());
+              console.log(url);
+              opener.getFileUrl(url, uploadedFileName);
+              window.close();
+            }
+        });
+    }
+}
+
 </script>
-<style>
-	label.error {
-		color:red;
-	}
-</style>
+	<style>
+		label.error {
+			color:red;
+		}
+	</style>
 
 </head>
 
 
 <body class='wrapper-md'>
-<div class="row">
-<div class="col-md-3 col-sm-6 col-xs-12">
-<div class="panel panel-default upload-panel" style="height:215px;">
-<div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-attachment") %></div>
-<div class="panel-body">
-<form id="form" action="<%= blobstoreService.createUploadUrl("/uploadattachment") %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();">  
-<p><input name="attachmentfile" id='fileextension' type="file" /></p>
-<br/>
-<input id="mail-upl" name="upload" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary' type="submit"/> 
-</form> 
-</div>
-</div>
-</div>
-</div>
-</div>
+	<div class="row">
+	<div class="col-md-3 col-sm-6 col-xs-12">
+	<div class="panel panel-default upload-panel" style="height:215px;">
+	<div class="panel-heading"><%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload-attachment") %></div>
+	<div class="panel-body">
+		<form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data"> 
+			<input type="hidden" name="success_action_redirect" value="<%=request.getRequestURL()%>?id=<%=request.getParameter("id")%>" /> 
+			<p><input name="attachmentfile" id='fileextension' type="file" /></p>
+			<br/>
+			<input name="upload" id="mail-upl" value='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "upload") %>' class='submit btn btn-primary m-r-xs' type="button"/> 
+		</form> 
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
 </body>
 </html>

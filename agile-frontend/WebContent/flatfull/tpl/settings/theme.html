@@ -16,7 +16,7 @@
                             </select>
                         </div>
                     </div>
-
+                     {{#checkPlan "enterprise"}}
                     <div class="control-group form-group hidden-xs">
                         <label class="control-label col-sm-4">{{agile_lng_translate 'theme' 'maximum-pagesize'}} 
                         </label> 
@@ -34,6 +34,7 @@
                             <div class="col-sm-offset-4 col-sm-8 p-l ">{{agile_lng_translate 'theme' 'showconverstionperpage'}}</div>
                     </div>
                     </div>
+                    {{/checkPlan}}
 
 
           <!--      <div class="control-group form-group">

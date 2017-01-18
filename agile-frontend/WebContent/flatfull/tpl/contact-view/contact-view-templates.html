@@ -287,7 +287,7 @@
 
 <script id ="contacts-custom-view-custom-contact-template" type="text/html">
 	<td class='data contact-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp "  style="width:12em;" >
+		<div class="table-resp "  style="width:15em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm contact-type-image">
 					<img class="img-inital r-2x" title="{{contact_name_necessary this}}" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}"/>
@@ -299,7 +299,7 @@
 
 <script id ="contacts-custom-view-custom-company-template" type="text/html">
 	<td class='data company-type-custom-field-td' data='{{id}}'>
-		<div class="table-resp "  style="width:12em;" >
+		<div class="table-resp "  style="width:15em;" >
        		{{#each this}}
 				<div id="{{id}}" class="thumb-sm agile-img m-r-sm company-type-image">
 					<img class="r r-2x" title="{{getSystemPropertyValue properties 'name'}}" {{getCompanyImage "24" "display:inline;"}}/>

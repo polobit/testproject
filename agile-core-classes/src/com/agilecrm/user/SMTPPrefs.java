@@ -1,7 +1,6 @@
 package com.agilecrm.user;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -33,9 +32,11 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author Manohar
  * 
  */
+@SuppressWarnings("serial")
 @XmlRootElement
 @Cached
-public class SMTPPrefs {
+public class SMTPPrefs implements Serializable {
+	
 	@Id
 	public Long id;
 

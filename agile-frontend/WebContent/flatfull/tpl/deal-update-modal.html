@@ -36,12 +36,14 @@
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'value'}}<span class="field_req">*</span></label> 
            <div class="controls col-sm-5 value_box"> 
             <div class="form-group row" style="margin-left:0;margin-right:0"> 
+             <div class="hidden" id="currencies-list">
+               <select id="currency-conversion-symbols" class="required form-control" name="currency_type">                        
+                       </select><!-- <div class="ccw_selector_bg"></div><div class="ccw_selector_arrows"></div> --> </div>
              <div class="p-n"> 
-              <input type="text" name="expected_value" class="required  number_with_trim form-control" min="0" max="2147483647"
-                placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}"   style="font-size:13px"/> 
+              <input type="text" name="currency_conversion_value" class="required number_with_trim form-control" min="0" max="2147483647" placeholder="{{agile_lng_translate 'portlets' 'deal-value'}}" style="float:right;"/> 
              </div> 
             </div> 
-           </div> 
+           </div>
            <div class="toggleHead col-sm-3 text-left" id="showtoggle_show" style="display:none;margin-top: 5px;"><i class="icon-plus-sign control-label " style="cursor:pointer;color: #23b7e5;"> <span style="cursor:pointer;"> {{agile_lng_translate 'documents' 'deal-products'}}</span></i></div>
         <div class="advances hide  p-r p-l" id="showproducts">
            <div class="row">
@@ -79,7 +81,7 @@
               <div class="control-group form-group"> 
            <label class="control-label col-sm-3">{{agile_lng_translate 'deal-view' 'probability'}} <span class="field_req">*</span></label> 
            <div class="controls col-sm-7">
-              <div class="input-group probability-form"> 
+              <div class="input-group probability-form" style="width:100%"> 
                 <input type="text" value="20" class="form-control digits deal-pro required positive_number" id="probability" name="probability" placeholder="{{agile_lng_translate 'deal-view' 'probability'}} " max="100"> 
                 <span class="input-group-addon no-border" id="basic-addon2" style="/* background: #fff; */">%</span> 
               </div>

@@ -647,17 +647,31 @@ function add_delete_user_info_as_note_to_owner(cus_email, callback)
 	}, cus_email);
 
 }
-function add_refunded_info_as_note_to_owner(cus_email, amount, callback)
+function add_refunded_info_as_note_to_owner(email,domainname,description, amount, callback)
 {
 	var note = {};
-	note.subject = "Amount Refunded ";
-	note.description = "Amount $"+amount+" refunded by "+CURRENT_DOMAIN_USER.email;
+	note.subject = "Amount refunded to the domain"+domainname;
+	note.description = "Amount $"+amount+" refunded by "+CURRENT_DOMAIN_USER.email + "Description :"+ description ;
 	_agile.add_note(note, function(data)
 		{
 		if (callback && typeof callback == "function")
 			callback(data);
 
-	}, cus_email);
+	}, email);
+
+}
+
+function add_note_to_owner(email,description,subject)
+{
+	var note = {};
+	note.subject = subject ; 
+	note.description = description;
+	_agile.add_note(note, function(data)
+		{
+		if (callback && typeof callback == "function")
+			callback(data);
+
+	}, email);
 
 }
 function add_password_change_info_as_note_to_owner(cus_email, callback)

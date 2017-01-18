@@ -214,6 +214,11 @@ public class Activity extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String custom4 = null;
+    /**
+     * stores deal currency value for deal entity
+     */
+    @NotSaved(IfDefault.class)
+    public String custom5 = null;
 
     /**
      * stores related contact ids for each activity

@@ -1,5 +1,6 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.persistence.Id;
@@ -27,9 +28,11 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author ravitheja
  * 
  */
+@SuppressWarnings("serial")
 @XmlRootElement
 @Cached
-public class GmailSendPrefs {
+public class GmailSendPrefs implements Serializable {
+	
 	@Id
 	public Long id;
 

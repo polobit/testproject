@@ -72,6 +72,13 @@ public class CallTriggerUtil
 		    if (callType.equalsIgnoreCase("Outgoing"))
 			type = Trigger.Type.OUTBOUND_CALL;
 			
+	    }else if(serviceType.equalsIgnoreCase("Asterisk")){
+			System.out.println("Service type is not twilio..." + serviceType);
+
+			type = Trigger.Type.INBOUND_CALL;
+		    if (callType.equalsIgnoreCase("Outgoing"))
+			type = Trigger.Type.OUTBOUND_CALL;
+			
 	    }else{
 			return;
 	    }

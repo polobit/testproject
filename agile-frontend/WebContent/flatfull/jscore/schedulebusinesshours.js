@@ -5,6 +5,63 @@ var businessHoursManager;
 function initializeOnlineCalendarListners(el){
 	
 	 $("#online-cal-listners").off();
+	 $("#online-cal-listners .meetingTimePicker").off("click");
+	 $("#online-cal-listners").on("click",".meetingTimePicker", function(e){
+	 	e.preventDefault();	 	
+	 	$(this).next().removeClass('hide');
+	 });
+
+
+	 $("#online-cal-listners .dropdown-parent").off("click");
+	 $("#online-cal-listners").on("mouseleave",".dropdown-parent", function(e){
+	 	e.preventDefault();	 	
+	 	$('.dropdown-content').addClass('hide');
+	 });
+
+	 $("#online-cal-listners .dropdown-content").off("click");
+	 $("#online-cal-listners").on("mouseleave",".dropdown-content", function(e){
+	 	e.preventDefault();	 	
+	 	$(this).addClass('hide');
+	 });
+
+	 $("#online-cal-listners .dropdown-content a").off("click");
+	 $("#online-cal-listners").on("click",".dropdown-content a", function(e){
+	 	e.preventDefault();
+	 	var elementValue = $(this).text();
+	 	$(this).parent().prev().text(elementValue);
+	 	$(this).parent().addClass('hide');
+	 });
+
+	 $("#online-cal-listners .input_meeting_time_mins").off("click");
+	 $("#online-cal-listners").on("click",".input_meeting_time_mins", function(e){
+	 	e.preventDefault();
+	 	
+	 });
+
+	 $("#online-cal-listners #add-meeting-row").off("click");
+	 $("#online-cal-listners").on("click","#add-meeting-row", function(e){
+	 	e.preventDefault();
+	 	var parent = $('#meeting_durations');	 	
+	 	var cloneElement = parent.children().first().clone();
+ 		cloneElement.removeAttr('id');
+ 		cloneElement.find('.input_meeting_time_hours').text("00");
+ 		cloneElement.find('.input_meeting_time_mins').text("00");
+ 		cloneElement.find('.input_meeting_text').removeAttr('value');
+	 	parent.append(cloneElement);
+	 });
+
+	 $("#online-cal-listners .remove-meeting-row").off("click");
+	 $("#online-cal-listners").on("click",".remove-meeting-row", function(e){
+	 	e.preventDefault();	 	
+	 	if($('#meeting_durations').children().length > 1){
+	 		$(this).closest('.meeting-row').remove();	 	
+	 	}else{
+	 		$("#cancel_error_message").removeClass('hide').removeClass('text-success').addClass('text-danger').html("{{agile_lng_translate 'calendar' 'keep-one-meeting'}}");					
+					setTimeout(function(){
+						$("#cancel_error_message").addClass('hide').empty();							
+					}, 5000);
+	 	}	 
+	 });
 	 
 	 $("#online-cal-listners #btnSerialize").off("click");
 	 $("#online-cal-listners").on("click","#btnSerialize", function(e){
@@ -12,32 +69,96 @@ function initializeOnlineCalendarListners(el){
 
 			var saveBtn = $(this);
 			disable_save_button($(saveBtn));
-			if (!$.trim($("#15mins").val()) && !$.trim($("#30mins").val()) && !$.trim($("#60mins").val()))
-			{
+
+			var meetinTypesArray = $('#meeting_durations').children();
+			var totalEventsLength = meetinTypesArray.length;
+			var meetingTypes = {};
+
+			var hasError = false;
+			var errorMessage = "";
+			var meetingTimes = [];
+
+			for(var i=0; i < totalEventsLength; i++){
+				var meetingHours = $(meetinTypesArray[i]).find('.input_meeting_time_hours').text();
+				var meetingMins = $(meetinTypesArray[i]).find('.input_meeting_time_mins').text();
+				var meetingText = $(meetinTypesArray[i]).find('.input_meeting_text').val();
+				var meetingTime = parseInt(meetingHours * 60);
+				meetingTime += parseInt(meetingMins);
+
+				var meetingID;
+	
+				if(meetingTime && meetingTime > 0 && ((meetingTime % 1) == 0)){
+					if(meetingTime <= 1440){
+						if($.inArray(meetingTime, meetingTimes) == -1){
+							meetingTimes.push(meetingTime);			
+							meetingID = meetingTime+"mins";
+						}else{
+							hasError = true;
+							errorMessage = "{{agile_lng_translate 'calendar' 'meeting-duplicate-hours'}}";
+						}
+					}else{
+						hasError = true;
+						errorMessage = "{{agile_lng_translate 'calendar' 'meeting-duration-limit'}}";
+					}					
+				}else{
+					hasError = true;
+					errorMessage = "{{agile_lng_translate 'calendar' 'meeting-proper-duration'}}";
+				}
+			
+				if(!hasError && (!meetingText || !meetingID)){
+					hasError = true;
+					errorMessage = "{{agile_lng_translate 'calendar' 'meeting-fields-empty'}}";
+				}
+
+				if (hasError){					
+					enable_save_button($(saveBtn));
+					$(saveBtn).next().removeClass('text-success').addClass('text-danger').html(errorMessage);					
+					setTimeout(function(){
+						$(saveBtn).next().empty();							
+					}, 5000);
+					return;
+				}
+
+				meetingTypes[meetingID] = meetingText;
+			}
+			
+			var businessHoursArray = businessHoursManager.serialize();
+			var hasErrorInBSObject = false;
+
+			$.each(businessHoursArray, function(index, value){				
+				var bshrObj = value;
+				var isActive = bshrObj["isActive"];
+				if(isActive == true){
+					var startTime = bshrObj["timeFrom"];
+					var endTime = bshrObj["timeTill"];
+					var startArray = startTime.split(":");
+					var endArray = endTime.split(":");
+					var startingHours = startArray[0];
+					var startingMins = startArray[1];
+					var nightHours = endArray[0];
+					var nightmins = endArray[1];
+					if(nightHours <= startingHours){
+						hasErrorInBSObject = true;
+						return false;
+					}
+				}				
+			});
+
+			if(hasErrorInBSObject == true){
 				enable_save_button($(saveBtn));
-				$('#meeting_duration_message').fadeIn('slow');
-				setTimeout(function()
-				{
-					$('#meeting_duration_message').fadeOut('slow');
+				$(saveBtn).next().removeClass('text-success').addClass('text-danger').html("{{agile_lng_translate 'calendar' 'proper-bussiness-hours'}}");					
+				setTimeout(function(){
+					$(saveBtn).next().empty();							
 				}, 5000);
 				return;
 			}
 
-			if ($("#15mins").val().charCodeAt(0) == ' ' && $("#30mins").val().charCodeAt(0) == ' ' && $("#60mins").val().charCodeAt(0) == ' ')
-			{
-				enable_save_button($(saveBtn));
-				$('#meeting_duration_message').fadeIn('slow');
-				setTimeout(function()
-				{
-					$('#meeting_duration_message').fadeOut('slow');
-				}, 5000);
-				return;
-			}
+			
 			var data = $('#scheduleurl').text();
 			var scheduling_id = data.substr(data.lastIndexOf("/") + 1);
 			var url = data.substr(0, data.lastIndexOf("/") + 1);
 			var json = serializeForm("scheduleform");
-			var meeting_durations = formToJSON();
+			var meeting_durations = JSON.stringify(meetingTypes);
 			console.log(meeting_durations);
 
 			var business_hours = JSON.stringify(businessHoursManager.serialize());
@@ -279,5 +400,5 @@ function getHtmlContent(callback)
 
 function formToJSON()
 {
-	return JSON.stringify({ "15mins" : $('#15mins').val().trim(), "30mins" : $('#30mins').val().trim(), "60mins" : $('#60mins').val().trim() });
+	return JSON.stringify({ "15mins" : $('#15mins').val().trim(), "45mins" : $('#45mins').val().trim(), "60mins" : $('#60mins').val().trim() });
 }

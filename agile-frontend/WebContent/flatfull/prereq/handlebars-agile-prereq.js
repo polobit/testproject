@@ -28,7 +28,14 @@ var Handlebars_Compiled_Templates = {};
 function getTemplate(templateName, context, download, callback, loading_place_holder)
 {
 	var is_async = callback && typeof (callback) == "function";
-
+	if(templateName == "admin-settings" && !CURRENT_DOMAIN_USER.is_admin){
+		templateName = "others-not-allowed";
+		callback = function(template_ui){
+						if(!template_ui)
+							  return;
+						$('#content').html($(template_ui));
+					}
+	}
 	// Check if it is (compiled template) present in templates
 	if (Handlebars_Compiled_Templates[templateName])
 	{

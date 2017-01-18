@@ -211,10 +211,10 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(String apiKey, boolean async, String fromEmail, String fromName, String to,
-	    String cc, String bcc, String subject, String replyTo, String html, String text, String metadata,
-	    List<Long> documentIds, List<BlobKey> blobKeys, String... attachments)
-    {
+	public static String sendMail(String apiKey, boolean async, String fromEmail, String fromName,
+			String to, String cc, String bcc, String subject, String replyTo, String html,
+			String text, String metadata, List<Long> documentIds, String[] mailAttach,
+			String... attachments) {
 
 	try
 	{
@@ -243,9 +243,9 @@ public class Mandrill
 	    MandrillSubAccounts.checkSubAccountExists(subaccount, mailJSON.getString(MANDRILL_API_KEY));
 	    
 	    if (documentIds != null && documentIds.size() > 0)
-		sendDocumentAsMailAttachment(documentIds.get(0), mailJSONString, messageJSONString);
-	    else if (blobKeys != null && blobKeys.size() > 0)
-		sendBlobAsMailAttachment(blobKeys.get(0), mailJSONString, messageJSONString);
+	    	sendDocumentAsMailAttachment(documentIds.get(0), mailJSONString, messageJSONString);
+	    else if(mailAttach != null && mailAttach.length > 0 && StringUtils.isNotBlank(mailAttach[0])) 
+	    	sendUploadedMailAttachment(mailAttach[0], mailAttach[1], mailJSONString, messageJSONString);
 	    else
 	    {
 		JSONArray attachmentsJSON = getAttachmentsJSON(attachments);
@@ -305,10 +305,10 @@ public class Mandrill
 
     public static String sendMail(boolean async, String fromEmail, String fromName, String to, String cc, String bcc,
 	    String subject, String replyTo, String html, String text, String metadata, List<Long> documentIds,
-	    List<BlobKey> blobKeys, String... attachments)
+	    String[] mailAttach, String... attachments)
     {
 	return sendMail(null, async, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
-		documentIds, blobKeys, attachments);
+		documentIds, mailAttach, attachments);
     }
 
     /**
@@ -646,7 +646,7 @@ public class Mandrill
      * @param mailJSONString
      * @param messageJSONString
      */
-    private static void sendBlobAsMailAttachment(BlobKey blobKey, String mailJSONString, String messageJSONString)
+   /* private static void sendBlobAsMailAttachment(BlobKey blobKey, String mailJSONString, String messageJSONString)
     {
 	// Task for sending mail and blob as mail attachment
 	IFileInputStream blobStream = new BlobFileInputStream(blobKey);
@@ -655,5 +655,21 @@ public class Mandrill
 	Queue queue = QueueFactory.getQueue("email-attachment-queue");
 	queue.add(TaskOptions.Builder.withPayload(task));
 	System.out.println("email attachment task added to queue");
-    }
+    }*/
+    
+    /**
+     * To send mail using mail attachment from S3 URL.
+     */
+	private static void sendUploadedMailAttachment(String fileName, String Url,
+			String mailJSONString, String messageJSONString) {
+	
+		IFileInputStream documentStream = new DocumentFileInputStream(fileName, Url);
+		MandrillSendDeferredTask task = new MandrillSendDeferredTask(mailJSONString,
+				messageJSONString, documentStream);
+		// Add to queue
+		Queue queue = QueueFactory.getQueue("email-attachment-queue");
+		queue.add(TaskOptions.Builder.withPayload(task));
+		System.out.println("email attachment task added to queue");
+	}
+	
 }

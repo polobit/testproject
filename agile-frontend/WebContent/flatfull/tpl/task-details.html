@@ -167,7 +167,20 @@
   		<div style="width:60%" class="text-ellipsis pull-left">
 			<a href="#deal/{{id}}" class="activate-link thumb l-h-sm text-cap text-ellipsis" style="width: 100%;">{{name}}</a>
 		</div>
-  		<div style="width:40%" class="pull-left text-ellipsis">({{currencySymbol}}{{numberWithCommas expected_value}}, {{probability}}%)</div>
+  		<div style="width:40%" class="pull-left text-ellipsis">({{#if_equals currency_conversion_value "0"}}
+			<span>{{currencyType currency_type}}{{currency_conversion_value}}</span>
+		{{else}}
+			{{#if currency_conversion_value}}
+					<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+			{{else}}
+				{{#if_equals expected_value "0"}}
+						<span>{{currencySymbol}}{{expected_value}}</span>
+			    {{/if_equals}}
+			    {{#if expected_value}}
+					<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+			   {{/if}}
+			{{/if}}
+		{{/if_equals}})</div>
 	</div>
 {{/each}}
 <div class="clearfix"></div>
@@ -591,7 +604,20 @@
   {{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </div>
 </td> -->
-<td value="{{expected_value}}"><div class="text-ellipsis" >{{#if expected_value}}{{currencySymbol}}{{numberWithCommas expected_value}}{{else}}-{{/if}}</div></td>
+<td value="{{expected_value}}"><div class="text-ellipsis" >{{#if_equals currency_conversion_value "0"}}
+			<span>{{currencyType currency_type}}{{currency_conversion_value}}</span>
+		{{else}}
+			{{#if currency_conversion_value}}
+					<span>{{currencyType currency_type}}{{numberWithCommas currency_conversion_value}}</span>
+			{{else}}
+				{{#if_equals expected_value "0"}}
+						<span>{{currencySymbol}}{{expected_value}}</span>
+			    {{/if_equals}}
+			    {{#if expected_value}}
+					<span>{{currencySymbol}}{{numberWithCommas expected_value}}</span>
+			   {{/if}}
+			{{/if}}
+		{{/if_equals}}</div></td>
 <td><div class="table-resp">{{milestone}} ({{probability}}%) </div></td>
 <td class="text-muted"><div class="text-ellipsis" style="width:10em">{{#if close_date}}<i class="fa fa-clock-o m-r-xs"></i><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>{{/if}}</div></td>
 <td>

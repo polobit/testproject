@@ -208,35 +208,37 @@ body {
 	        return false
 	    }
 	});
-	var iframe_div = window.parent.document.body.getElementsByClassName('simple-modal-body')[0];
-	var iframe_doc = iframe_div.getElementsByTagName('iframe')[0].contentWindow.document || iframe_div.getElementsByTagName('iframe')[0].contentDocument;
-	iframe_doc.getElementById('popup-header').onclick = function (e) {
-	    e.preventDefault();
-	    iframe_doc.getElementById('closed').style.display = 'none';
-	    iframe_doc.getElementById('opened').style.display = 'block';
-	    iframe_doc.getElementsByClassName('popup-button')[0].onclick = function () {
-	        if ($('#popup-form').valid()) {
-	            var email = iframe_doc.getElementsByName('email')[0].value;
-	            window.parent._agile.set_email(email);
-	            var contact = {};
-	            contact.email = email;
-	            window.parent._agile.create_contact(contact);
-	            iframe_doc.getElementById('popup-title').innerHTML = 'Thank you for signingup!';
-	            iframe_doc.getElementById('popup-content').innerHTML = '<p>Please check your email and click the link provided to confirm you subscription.</p>';
-	            iframe_doc.getElementById('popup-close').onclick = function (e) {
-	                e.preventDefault();
-	                iframe_doc.getElementById('opened').style.display = 'none';
-	                window.parent.document.getElementById('simple-modal').style.display = 'none'
-	            };
-	            return false
-	        } else
-	            return false
-	    }
-	};
-	iframe_doc.getElementById('popup-close').onclick = function (e) {
-	    e.preventDefault();
-	    iframe_doc.getElementById('opened').style.display = 'none';
-	    iframe_doc.getElementById('closed').style.display = 'block'
+	var iframe_div = window.frameElement ? window.frameElement.parentNode.parentNode  : null;
+	if(iframe_div != null) {
+		var iframe_doc = iframe_div.getElementsByTagName('iframe')[0].contentWindow.document || iframe_div.getElementsByTagName('iframe')[0].contentDocument;
+		iframe_doc.getElementById('popup-header').onclick = function (e) {
+		    e.preventDefault();
+		    iframe_doc.getElementById('closed').style.display = 'none';
+		    iframe_doc.getElementById('opened').style.display = 'block';
+		    iframe_doc.getElementsByClassName('popup-button')[0].onclick = function () {
+		        if ($('#popup-form').valid()) {
+		            var email = iframe_doc.getElementsByName('email')[0].value;
+		            window.parent._agile.set_email(email);
+		            var contact = {};
+		            contact.email = email;
+		            window.parent._agile.create_contact(contact);
+		            iframe_doc.getElementById('popup-title').innerHTML = 'Thank you for signingup!';
+		            iframe_doc.getElementById('popup-content').innerHTML = '<p>Please check your email and click the link provided to confirm you subscription.</p>';
+		            iframe_doc.getElementById('popup-close').onclick = function (e) {
+		                e.preventDefault();
+		                iframe_doc.getElementById('opened').style.display = 'none';
+		                window.parent.document.getElementById('simple-modal').style.display = 'none'
+		            };
+		            return false
+		        } else
+		            return false
+		    }
+		};
+		iframe_doc.getElementById('popup-close').onclick = function (e) {
+		    e.preventDefault();
+		    iframe_doc.getElementById('opened').style.display = 'none';
+		    iframe_doc.getElementById('closed').style.display = 'block'
+		}
 	}
 	</script>
 

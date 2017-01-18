@@ -1121,10 +1121,20 @@ $(function()
 	/**
 	 * Returns currency symbol based on the currency value (deals)
 	 */
+	Handlebars.registerHelper('currencyType', function(currency_type)
+	{
+		var value = (currency_type ? currency_type : CURRENT_USER_PREFS.currency);
+		value = (value ? value : "USD-$");
+		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+		if(symbol=='Rs')
+			symbol='Rs.';
+		return symbol;
+	});
 	Handlebars.registerHelper('currencySymbol', function()
 	{
 		var value = ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 		var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
+	    return symbol;
 		if(symbol=='Rs')
 			symbol='Rs.';
 		return symbol;
@@ -1203,6 +1213,7 @@ $(function()
 		var el = "", cls = ""; 
 		$.each(App_Contacts.contactViewModel[item], function(index, element)
   		{
+  			var is_custom_field = false;
   			if (element == "basic_info" || element == "image")
   			{	
 					if(_agile_get_prefs("contactTabelView"))
@@ -1233,6 +1244,7 @@ $(function()
 		{
   			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
+  			is_custom_field = true;
   		}
   		else 
   		{
@@ -1247,7 +1259,14 @@ $(function()
 	 	}
 	 	
 	 	element = getTableLanguageConvertHeader(element);
-	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	if(is_custom_field)
+	 	{
+	 		el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 	}
+	 	else
+	 	{
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 	}	
 	  
 	 });
 		return new Handlebars.SafeString(el);
@@ -6528,7 +6547,7 @@ $(function()
 		var el = "" ,cls = "";
 		$.each(App_Companies.companyViewModel[item], function(index, element)
   		{
-
+  			var is_custom_field = false;
   			if (element == "basic_info" || element == "image" || element == "url" || element == "name")
   			{
 					
@@ -6568,6 +6587,7 @@ $(function()
 		{
   			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
+  			is_custom_field = true;
   		}
   		else 
   		{
@@ -6575,7 +6595,14 @@ $(function()
 			cls = "";
 	 	}
 	 	element = getTableLanguageConvertHeader(element);
-	 	el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	if(is_custom_field)
+	 	{
+	 		el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 	}
+	 	else
+	 	{
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 	}	
 	  
   		});
 		return new Handlebars.SafeString(el);
@@ -7586,6 +7613,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		var el = "", cls = ""; 
 		$.each(App_Companies.contactCompanyViewModel[item], function(index, element)
   		{
+  			var is_custom_field = false;
   			if (element == "basic_info" || element == "image")
   			{
 					
@@ -7619,6 +7647,7 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 		{
   			element = element.replace("CUSTOM_","").trim();
   			cls = "text-muted";
+  			is_custom_field = true;
   		}
   		else 
   		{
@@ -7632,7 +7661,14 @@ Handlebars.registerHelper('if_asc_sork_key', function(value, options)
 	 	}
 	 	
 	 			element = getTableLanguageConvertHeader(element);
-	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 		if(is_custom_field)
+	 		{
+	 			el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 		}
+	 		else
+	 		{
+	 			el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 		}	
 	  
 	 });
 		return new Handlebars.SafeString(el);
@@ -7673,7 +7709,7 @@ Handlebars.registerHelper('leadTableHeadings', function(item)
 	{
 		if (element == "basic_info" || element == "image")
 		{
-			
+			var is_custom_field = false;
 			if(_agile_get_prefs("leadTabelView"))
 			{
 				// if the compact view is present the remove th basic info heading and add the empty heading for the image
@@ -7702,13 +7738,21 @@ Handlebars.registerHelper('leadTableHeadings', function(item)
 		{
 				element = element.split("_")[1];
 				cls = "text-muted";
+				is_custom_field = true;
 			}
 			else 
 			{
 			element = element.replace("_", " ");
 			cls = "";
 	 	}
- 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');	
+	 	if(is_custom_field)
+	 	{
+	 		el = el.concat('<th class="'+ cls +'" data-name="'+element+'">' + ucfirst(element) + '</th>');
+	 	}
+	 	else
+	 	{
+	 		el = el.concat('<th class="'+ cls +'">' + ucfirst(element) + '</th>');
+	 	}	
  	});
 	return new Handlebars.SafeString(el);
 });
@@ -8239,4 +8283,48 @@ Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
 	if(html.endsWith(','))
 		html=html.substring(0, html.length - 1)
 	return html;
+});
+Handlebars.registerHelper('splitMeetingTime', function(time, type){
+		if(time){
+ 			var data = time.split('mins')[0];
+ 			if(type == "H"){
+ 				data = data / 60;
+ 			}else{
+ 				data = data % 60;
+ 			}	
+ 			
+ 			data = parseInt(data);
+ 
+ 			if(data == undefined || data < 0){
+ 				data = 0;
+ 			}
+ 			var formatedText = ''+data;
+ 			if(formatedText.length == 1){
+ 				data = '0'+data;
+ 			}		
+ 		return data;
+ 		}else{
+ 		return 00;
+ 		}
+ });
+
+/*
+ * Helper function to know whether last contacted filter relative condtions enable or not
+ */
+Handlebars.registerHelper('is_enable_lcf_rel_cond', function(options)
+{
+	if(is_enable_lcf_rel_cond())
+	{
+		return options.fn(this);
+	}
+	return options.inverse(this);
+});
+Handlebars.registerHelper('splitNumberandSymbol', function(value)
+{
+	if(!value)
+		return
+	var symbol = value.split(/_(.+)/)[1];
+	var number = value.split(/_(.+)/)[0];	
+	symbol += number.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",").replace('.00', '').replace('.0', '');
+	return symbol;
 });

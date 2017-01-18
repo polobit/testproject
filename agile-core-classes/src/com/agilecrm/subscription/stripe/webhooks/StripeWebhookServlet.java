@@ -232,7 +232,8 @@ public class StripeWebhookServlet extends HttpServlet
 				subscription.delete();
 
 				// Set flag to SUBSCRIPTION_DELETED
-				setSubscriptionFlag(Subscription.BillingStatus.SUBSCRIPTION_DELETED);
+				if(SubscriptionUtil.downgradeFreePlanRestrictions().size() > 0)
+					setSubscriptionFlag(Subscription.BillingStatus.SUBSCRIPTION_DELETED);
 			}
 
 			/**

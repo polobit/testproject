@@ -66,6 +66,19 @@
 				{
 					newwindow.focus();
 				}
+
+				window.getFileUrl = function(url, docName){
+					console.log("url -> " +url+" docname: "+docName);
+				
+					$('#emailForm').find('#eattachment').css('display','block');
+			    	$('#emailForm').find('#attachment_id').find("#attachment_fname").text(docName);
+					$('#emailForm').find(".attachment-document-select").css('display','none');
+
+					$('#emailForm').find('#eattachment_key').attr('name',"email_attach");
+					$('#emailForm').find('#eattachment_key').attr('value',"mail_attachment");
+			    	$("#emailForm").find("#agile_attachment_name").attr("value", docName);
+	                $("#emailForm").find("#agile_attachment_url").attr("value", url)
+		    	}
 		    }
 		    else if(document_id != undefined && document_id != null)
 		    {

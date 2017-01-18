@@ -75,6 +75,11 @@ public class SendGridUtil
 	
 	public static final String IP_POOL = "ip_pool";
 	
+	/**
+	 * Sendgrid whitelabled sub domain key
+	 */
+	private static final String SENDGRID_WHITELABEL_SUBDOMAIN = "agle";
+	
      // 
      private static final String[] blockedBodyStringList = new String[] { "pp-secure-review", "unknown device","unknown source","appleid.billing-update.net"
     	 ,"https://appleid.apple.com/ca","Apple ID"};
@@ -580,7 +585,7 @@ public class SendGridUtil
 		JSONObject data=new JSONObject();
 		try {
 				data.put(SENDGRID_DOMAIN, emailDomain);
-				data.put(SENDGRID_SUBDOMAIN, "email");
+				data.put(SENDGRID_SUBDOMAIN, SENDGRID_WHITELABEL_SUBDOMAIN);
 				data.put(SENDGRID_USERNAME, subuserName);
 				data.put(SENDGRID_AUTOMATIC_SECURITY,false);
 					try
