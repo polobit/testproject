@@ -8,8 +8,11 @@ function _agile_get_translated_val(module_name, key){
 		
 	if(!_Agile_Resources_Json[module_name])
 	    return "";
-
-	return _Agile_Resources_Json[module_name][key].replace("&#39;","'");
+	var value = _Agile_Resources_Json[module_name][key];
+	if(!value)
+	 return;
+	value =  value.replace(/&#39;/gi,"'")
+	return value;
 }
 
 $(function(){
