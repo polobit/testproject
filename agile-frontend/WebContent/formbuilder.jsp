@@ -17,8 +17,8 @@ String template = request.getParameter("template");
       
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
       <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
-      <link href="misc/formbuilder/custom.css?v=3-5" rel="stylesheet">  
-      <link href="misc/formbuilder/builder-themes.css?v=7" rel="stylesheet">
+      <link href="misc/formbuilder/custom.css?v=3-6" rel="stylesheet">  
+      <link href="misc/formbuilder/builder-themes.css?v=8" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css?t=4" rel="stylesheet">
       <link href="misc/formbuilder/formthemes.css?t=1" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-transparency.css" rel="stylesheet">
@@ -169,7 +169,7 @@ String template = request.getParameter("template");
             }
          }
       </script>
-      <script data-main="misc/formbuilder/main-built-10.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-11.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       
    </body>
 </html>
