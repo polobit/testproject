@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -569,7 +570,7 @@ public class EmailsAPI
     @Path("verify-from-email")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void sendVerificationEmail(@FormParam("email") String email)
+    public void sendVerificationEmail(@FormParam("email") String email,@FormParam("isEmailDomainValid") @DefaultValue("false") Boolean isEmailDomainValid)
     {
     	
     	VerifiedEmails verifiedEmails = VerifiedEmailsUtil.getVerifiedEmailsByEmail(email);
@@ -588,10 +589,15 @@ public class EmailsAPI
     	if(verifiedEmails == null)
     		verifiedEmails = new VerifiedEmails(email, String.valueOf(System.currentTimeMillis()));
     	
+    	// If isEmailDomainValid is true then verify email here itself
+    	if(isEmailDomainValid)
+    		verifiedEmails.verified = Verified.YES;
+    	
     	verifiedEmails.save();
     	
     	// Send Verification email
-    	verifiedEmails.sendEmail();
+    	if(!isEmailDomainValid)
+    		verifiedEmails.sendEmail();
     	
     	// If email exists already and not verified yet, send email again and throw exception
     	if(exists)
