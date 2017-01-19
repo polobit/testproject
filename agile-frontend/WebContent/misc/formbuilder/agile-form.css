@@ -738,3 +738,12 @@ height:39px!important;
     background-color: transparent!important;
 }
 /* new transparency with black text css end */
+.agile-stylebutton{
+   background-color: #23b7e5;
+    border-color: #23b7e5;
+    border-radius: 20px;
+    height: 44px;
+    padding: 0px 25px;
+    color: white;
+    border-style: solid;
+}
