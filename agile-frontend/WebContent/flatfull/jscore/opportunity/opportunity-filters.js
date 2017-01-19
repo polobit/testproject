@@ -33,7 +33,8 @@ function setNewDealFilters(data){
 	
 	if(report_filter_id){
 		$('#opportunity-listners').find('.remove_deal_filter').parent().remove();
-		$('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+report_filter_id.replace(/[, ]+/g,"")+'</span><a class="close remove_deal_filter">×</a></div>');
+		$('#opportunity-listners').find('h3').after('<div class="inline-block tag btn-xs btn-primary m-l-xs"><span class="inline-block m-r-xs v-middle pull-left">'+report_filter_id.replace(/[, ]+/g,"")+'</span><a class="close remove_deal_filter" style="position: relative;
+    top: -3px;">×</a></div>');
 		return;
 	}
 
