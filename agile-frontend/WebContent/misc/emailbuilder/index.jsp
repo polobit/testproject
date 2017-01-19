@@ -22,11 +22,13 @@ JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "emai
 
         <!-- styles -->
 
-        <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
+        <!--  <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
         <link href="css/responsive-table.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
+        <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>  -->
+
+        <link href="build/emailbuilder.min.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
 
 <script>
 var AGILE_EB_ROOT = window.location.origin + "/";
@@ -53,8 +55,10 @@ var localeJSON = <%=localeJSON%>;
 
         <!--<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
         <script src="/js/designer/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
+        <!--<script type="text/javascript" src="js/colpick.js"></script>
+        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>-->
+
+        <script type="text/javascript" src="build/emailbuilder.min.js?v=<%=_AGILE_VERSION%>"></script>
 
 <style>
 .mce-btn button {
@@ -552,9 +556,9 @@ var localeJSON = <%=localeJSON%>;
                                 
                                 <div class="col-sm-9">
                                     <select class="form-control image-align-picker">
-                                        <option>left</option>
-                                        <option>center</option>
-                                        <option>right</option>
+                                        <option value="left">Left</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
                                     </select>
                                 </div>
 
@@ -1044,10 +1048,10 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
             <div class="col-sm-5 control-label">Caption Position</div>
                 <div class="col-sm-7" >
                     <select class="form-control" id="image-caption-position">
-                    <option>left</option>
-                    <option>right</option>
-                    <option>top</option>
-                    <option>bottom</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
                     </select>
                 </div>
         </div>
