@@ -3709,3 +3709,9 @@ color: #78909c!important;
 .ticket-modal-content{
   border-radius: 5px;
 }
+
+.btn-mlg-imp{
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 13px !important;
+}
