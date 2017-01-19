@@ -873,8 +873,6 @@ $(document).ready(function () {
                 var width = imageWidth - parseInt($('#image-w').val());
 
                 var textAlign = $("#"+id).closest(".main").find('.image-caption-column-text').attr('align'); 
-                $('#'+id).attr('width', $('#image-w').val());
-                $('#'+id).css('max-width', parseInt($('#image-w').val()));
 
                 if(textAlign == "left" || textAlign == "right")
                 {
@@ -885,6 +883,9 @@ $(document).ready(function () {
                 }
                
             }
+
+            $('#'+id).attr('width', $('#image-w').val());
+            $('#'+id).css('max-width', parseInt($('#image-w').val()));
 
         }
 
