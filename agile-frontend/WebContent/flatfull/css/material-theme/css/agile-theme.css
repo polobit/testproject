@@ -3780,3 +3780,13 @@ th.category-buttons-left.header:after
   float:left;
   margin-top:-3px !important;
 }
+.btn-sm-imp
+{
+    height: 35px!important;
+    line-height: 1.9!important;
+    padding: 5px 15px 5px 15px;
+}
+#enable_tracking
+{
+      padding-top: 11px;
+}
