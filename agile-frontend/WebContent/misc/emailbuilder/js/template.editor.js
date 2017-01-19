@@ -374,6 +374,13 @@ function handleObjects() {
                             $('input.social-check[name=pinterest]').prop('checked', false);
                         }
 
+                        $('input.social-input[name="facebook"]').val(addhttp(self.find('a.facebook').attr('href')));
+                        $('input.social-input[name="twitter"]').val(addhttp(self.find('a.twitter').attr('href')));
+                        $('input.social-input[name="linkedin"]').val(addhttp(self.find('a.linkedin').attr('href')));
+                        $('input.social-input[name="youtube"]').val(addhttp(self.find('a.youtube').attr('href')));
+                        $('input.social-input[name="instagram"]').val(addhttp(self.find('a.instagram').attr('href')));
+                        $('input.social-input[name="pinterest"]').val(addhttp(self.find('a.pinterest').attr('href')));
+
                         hideAllSettings();
                         $('#settings').show();
                         $('#social-links').show();
@@ -449,6 +456,7 @@ function handleObjects() {
 }
 
 function addhttp(linkUrl) {
+    if(linkUrl.length == 0) return;
     return /^[A-Za-z][A-Za-z0-9+-.]*\:[\/\/]?/.test(linkUrl) ? linkUrl : 'http://' + linkUrl;
 }
 
