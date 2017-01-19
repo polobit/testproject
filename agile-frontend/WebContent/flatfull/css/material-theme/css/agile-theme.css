@@ -3287,6 +3287,63 @@ width: 169px !important;
 }
 
 .agile-theme-15 .tag-alpha{font-size: 13px;}
+
+
+  /*Tinymce Editor New Theme CSS Start*/
+  
+.agile-theme-15 .mce-panel{
+  border-width: 0 !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.agile-theme-15 .mce-toolbar-grp{
+  padding: 15px 8px 12px 10px !important;
+}
+.agile-theme-15 .mce-toolbar-grp{
+  background-color: #f4f8f9 !important;
+}
+.agile-theme-15 .mce-btn{
+  background-color: #f4f8f9 !important;;
+}
+.agile-theme-15 .mce-container.mce-toolbar.mce-stack-layout-item.mce-first{
+  margin-bottom: 8px;
+}
+/*.agile-theme-15 .mce-tinymce.mce-container.mce-panel{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}*/
+i.mce-ico, i.mce-caret, span.mce-txt{
+  opacity: 0.4 !important;
+}
+.agile-theme-15 span.mce-txt{
+  font-weight: 600;
+}
+.agile-theme-15 .mce-floatpanel.mce-popover.mce-bottom>.mce-arrow{
+  border-bottom-color: transparent;
+}
+.agile-theme-15 .mce-btn-small i{
+  line-height: inherit;
+}
+.agile-theme-15 .mce-colorbutton.mce-btn-small .mce-preview{
+  margin-left: -15px !important;
+}
+.agile-theme-15 .mce-colorbutton .mce-preview{
+  opacity: 0.4 !important;
+}
+.agile-theme-15 .mce-btn:focus, .mce-btn:hover{
+  background-color: rgb(227, 236, 239) !important;
+  border-color: rgb(227, 236, 239) !important;
+}
+.agile-theme-15 .mce-tinymce iframe{
+  background-color: #f4f8f9 !important;
+  border-radius: 5px !important;
+}
+.agile-theme-15 .mce-edit-area label{
+  color: rgba(136, 136, 136, 0.39) !important;
+  left: 10px !important;
+} 
+
+  /*Tinymce Editor New Theme CSS End*/
+
 #starter_plan .btn-default:hover,#starter_plan .btn-default:focus,#regular_plan .btn-default:hover,#regular_plan .btn-default:focus,#pro_plan .btn-default:hover,#pro_plan .btn-default:focus{
     color: #11a0f8 !important;
     background-color: rgba(17, 160, 248, 0.2) !important;
@@ -3563,3 +3620,4 @@ color: #78909c!important;
 .toggle-favorite.text-light{
   color: #11a0f8 !important;
 }
+
