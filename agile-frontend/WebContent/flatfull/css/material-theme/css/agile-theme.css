@@ -3341,9 +3341,16 @@ i.mce-ico, i.mce-caret, span.mce-txt{
   color: rgba(136, 136, 136, 0.39) !important;
   left: 10px !important;
 }*/ 
-.agile-theme-15 .mce-menu-item span.mce-text{
+.agile-theme-15 .mce-menu-item span.mce-txt{
   background-color: inherit !important;
 }
+.agile-theme-15 .mce-abs-layout .mce-widget.mce-primary.mce-abs-layout-item.mce-first.mce-btn-has-text.mce-btn{
+  background-color: #2d8ac7 !important;
+}
+.agile-theme-15 .mce-abs-layout .mce-widget.mce-primary.mce-abs-layout-item.mce-first.mce-btn-has-text.mce-btn span.mce-txt{
+  opacity: .85 !important;
+}
+
 
   /*Tinymce Editor New Theme CSS End*/
 
