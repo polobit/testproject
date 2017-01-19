@@ -3341,6 +3341,9 @@ i.mce-ico, i.mce-caret, span.mce-txt{
   color: rgba(136, 136, 136, 0.39) !important;
   left: 10px !important;
 }*/ 
+.agile-theme-15 .mce-menu-item span.mce-text{
+  background-color: inherit !important;
+}
 
   /*Tinymce Editor New Theme CSS End*/
 
@@ -3710,6 +3713,7 @@ color: #78909c!important;
   border-radius: 5px;
 }
 
+
 .btn-mlg-imp{
   height: 30px !important;
   line-height: 30px !important;
@@ -3724,3 +3728,35 @@ color: #78909c!important;
   padding:5px 15px 5px 15px!important;
   font-size:13px!important;
 }
+.reports-Container #group_names
+{
+  padding-bottom:0px;
+  padding-left:20px;
+  padding-right:48px;
+  padding-top:0px;
+}
+
+ #new-ticket  .chosen-choices  .search-choice{
+    border: none;
+    box-shadow: none;
+    background-color: #d2e4e8 !important;
+    /* box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05); */
+    border-radius: 3px !important;
+ }
+
+ #new-ticket .chosen-container-multi .chosen-choices .search-choice{
+  padding: 3px 25px 3px 5px !important;
+ }
+ #new-ticket .chosen-choices  .search-choice span{
+  padding-left: 4px !important;
+ }
+ #new-ticket .chosen-container-multi .chosen-choices .search-choice .search-choice-close{
+  right: 8px !important;
+ }
+ #new-ticket  div.chosen-container>ul.chosen-choices>li{
+      margin: 10px 3px !important;
+ }
+ #new-ticket  div.chosen-container>ul.chosen-choices>li.search-field{
+  margin-top: 7px !important;
+ }
+
