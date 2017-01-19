@@ -5388,6 +5388,7 @@ span.rolecontainer::first-letter {
 {
   word-break: keep-all;
 }
+
 #free-downgrade-restrictions{
   z-index: 1;
   background-color: #fff;
@@ -5396,4 +5397,8 @@ span.rolecontainer::first-letter {
   left: 0;
   width: 100%;
   min-height: 150px;
+}
+
+#new-ticket i.icon-plus-sign{
+  margin-top: 7px;
 }

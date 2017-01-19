@@ -792,8 +792,9 @@ var Base_Collection_View = Backbone.View
           // endFunctionTimer("postRenderCallback");
 
         // printCurrentDateMillis("render end");
-        if(this.infiniScroll && ($(window).height() > $("#content").height()) && !this.options.scroll_target)
-          this.prefillSucess();
+        if(this.infiniScroll && this.collection.length !=0 && (this.collection.last().get("cursor") || this.collection.first().get("count") != this.collection.models.length) && $(window).height() > $("#content").height() && !this.options.scroll_target)
+            this.prefillSucess();
+        
        /* var target =  this.options.scroll_target ? this.options.scroll_target: $(window);
         if(this.collection.length > 0){
           if(!this.collection.last().get("cursor") || this.collection.first().get("count") == this.collection.models.length){

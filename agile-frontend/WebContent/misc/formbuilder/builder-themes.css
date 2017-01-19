@@ -687,3 +687,12 @@ select:not([multiple]){
 .field_req{
   color:red;
 }
+.agile-stylebutton{
+   background-color: #23b7e5;
+    border-color: #23b7e5;
+    border-radius: 20px;
+    height: 44px;
+    padding: 0px 25px;
+    color: white;
+    border-style: solid;
+}

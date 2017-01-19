@@ -3481,6 +3481,7 @@ i.mce-ico, i.mce-caret, span.mce-txt{
   padding: 6px 12px !important;
   margin-top:3px !important;
 }
+
 .agile-theme-15 .add-me-to-cc,.remove-date,.assign-to-me{
   font-size: 10px;
   margin-top: 2px;
@@ -3539,6 +3540,7 @@ i.mce-ico, i.mce-caret, span.mce-txt{
   color: #78909c!important;
   border-radius: 3px;
  }
+
 
 #ticket-contact-details .label.dk.ccemail {
     margin-top: 5px;
@@ -3621,3 +3623,95 @@ color: #78909c!important;
   color: #11a0f8 !important;
 }
 
+
+ .choose-due-date:hover{
+     color: #11a0f8 !important;
+ }
+
+ /*#new-ticket .cc-emails-st .tag{
+    margin: 0px !important;
+     line-height: 16px; 
+    font-size: 13px!important;
+    height: auto;
+    vertical-align: middle;
+    padding: 0px !important;
+ }*/
+ #new-ticket .cc-emails-st{
+  padding: 0px;
+  margin-top: -3px;
+ }
+
+  #new-ticket .cc-emails-st .tag:hover{
+    background-color: #f4f8f9!important;
+    color: #f4f8f9!important;
+ }
+ #new-ticket .tag-li i.fa-envelope {
+    background-color: #f4f8f9!important;
+    color: #78909c !important;
+    margin-right: 5px;
+    margin-top: 12px;
+ }
+ #new-ticket .link-color,.ticket-modal-header .link-color{
+  color : #11a0f8 !important
+ }
+ #new-ticket .add-ticket-contact{
+  margin-left: -5px;
+ }
+
+ h4#plan_name {
+  margin: 0px !important;
+ }
+ #new-ticket #cc_email_field{
+  height: 37px !important;
+ }
+ #new-ticket .cc-emails li.tag-li{
+  display: block !important;
+ }
+
+ #new-ticket  .icon-plus-sign{
+  margin-top: 3px !important; 
+ }
+ #new-ticket .control-label{
+  margin-bottom: 5px;
+ }
+
+ .modal-header.ticket-modal-header{
+  border-bottom: 0px solid rgba(255, 255, 255, 0.025);
+ }
+ .ticket-modal-heading{
+  padding: 15px 0px 0px 23px;
+ }
+
+ .modal-footer.ticket-modal-footer{
+  border-top: 0px solid rgba(255, 255, 255, 0.025);
+  padding:15px 40px 40px 0px;
+  background-color: rgba(255, 255, 255, 0.025);
+ }
+ #new-ticket .control-group.form-group{
+      padding: 0px 30px 0px 30px !important;
+ }
+
+.ticket-modal-heading i.icon-plus-sign:before{
+  font-size: 24px;
+}
+
+.modal-content .modal-header .ticket-modal-heading h3{
+  font-size: 20px !important;
+}
+
+.ticket-modal-cancel{
+  padding: 0px 35px 0px 0px;
+}
+#create-ticket{
+  padding: 0em 3em;
+  font-size: 13px !important;
+}
+.ticket-modal-content{
+  border-radius: 5px;
+}
+
+.btn-mlg-imp{
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 13px !important;
+}
