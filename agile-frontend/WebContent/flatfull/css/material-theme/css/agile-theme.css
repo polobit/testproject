@@ -3414,6 +3414,7 @@ width: 169px !important;
 #new_tag{
   width: 180px !important;
 }
+
 #send-cancellation #cancel_subscription_modal{
   width: 80%;
 }
@@ -3551,4 +3552,14 @@ margin: 0px !important;
 .tag-new-theme:hover{
 background-color: #f4f8f9!important;
 color: #78909c!important;
+}
+#send-reply .btn{
+  font-size: 12px;
+  font-weight: normal;
+}
+.toggle-favorite:hover {
+    color: #11a0f8 !important;
+}
+.toggle-favorite.text-light{
+  color: #11a0f8 !important;
 }
