@@ -440,8 +440,12 @@ function isIE() {
               <a href='#' class='menu-service-select' data-service-name='SALES' data-dashboard='SalesDashboard'>
                 <div><i class="material-icons purple-color">view_module</i></div>
                      <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "sales") %></span>
-                      <span class="grid2-sub-nav  block">
+                      <span class="grid2-sub-nav block sub-nav-ele">
+                       <%
+                            if(!domainUser.restricted_menu_scopes.contains(NavbarConstants.CONTACT)){
+                      %>  
                         <span class="grid-selector" navigation="#contacts">Contacts,</span>
+                        <%}%>
                         <span class="grid-selector" navigation="#companies">Companies,</span>
                         <span class="grid-selector" navigation="#deals">Deals,</span>
                         <span class="grid-selector" navigation="#tasks">Tasks</span>
@@ -456,7 +460,7 @@ function isIE() {
               </li>
               <li>
               <a href='#' class='menu-service-select' data-service-name='MARKETING' data-dashboard='MarketingDashboard'>
-                <div><i class="material-icons purple-color">view_module</i></div>
+                <div><i class="material-icons purple-color markeing-i">view_module</i></div>
                   <div> <span><%=LanguageUtil.getLocaleJSONValue(localeJSON, "menu-marketing") %></span>
 
                   <span class="grid2-sub-nav first-span block">

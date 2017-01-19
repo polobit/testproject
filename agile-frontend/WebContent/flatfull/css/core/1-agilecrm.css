@@ -5550,3 +5550,69 @@ div#need_help_header a:hover {
 .agile-theme-MARKETING .grid-v2 .dropdown-toggle {
     color: #11a0f8 !important;
 }
+
+#api_track_webrules_code .linenums ,#api_track_code .linenums
+{
+  margin: 0 0 0 0px;
+  
+}
+#api_track_webrules_code.prettyprint.linenums,#api_track_code.prettyprint.linenums
+{
+  font-size: 14px!important;
+}
+.grp-clipboard-track-code,.grp-clipboard-webrule-code
+{
+  margin-bottom: 10px;
+  float: right;
+}  
+#api_track_code , #api_track_webrules_code
+{
+  width: 100%;
+}
+
+.support-help-icon i.fa-question-circle{
+  font-size:17px !important;
+  opacity: 0.78;
+}
+
+.dashboard-select .dropdown-menu .grid2-sub-nav span{
+  font-size: 11px;
+    padding-right: 1px;
+    padding-top: 5px;
+    color: #78909c;
+}
+.dropdown-menu>li>a{
+  line-height: 1 !important;
+}
+.dashboard-select .dropdown-menu li a i {
+    font-size: 22px;
+    margin-top: -5px;
+    margin-bottom: 25px;
+}
+.dashboard-select .dropdown-menu li a i.markeing-i{
+  margin-top: -19px;
+}
+.dashboard-select .dropdown-menu li a i{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 56px;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0;
+}
+.dashboard-select .grid-dropdown-menu.dropdown-menu li a span.grid-span-two {
+    display: inline-block !important;
+}
+.grid-service-span{
+  display: block !important;
+}
+.dashboard-select .dropdown-menu {
+    width: 275px;
+}
+.dashboard-select .dropdown-menu .grid2-sub-nav span:hover {
+    color: #337ab7;
+}
