@@ -83,5 +83,22 @@ public class VerifiedEmailsUtil
 		}
 	}
 	
+	/**
+	 * This method will delete verified email address
+	 * 
+	 * @param user_name
+	 */
+	public static void deleteVerifiedEmail(String email){
+		
+		try{
+			  VerifiedEmails verifiedEmails = getVerifiedEmailsByEmail(email);
+			
+			if(verifiedEmails !=null)
+				dao.delete(verifiedEmails);
+		}
+		catch(Exception e){
+			System.out.println("Exception ocurred while deleting verifiy email address : " + e.getMessage());
+		}
+	}
 }
 

@@ -17,11 +17,10 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import com.agilecrm.account.VerifiedEmails;
-import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
 import com.googlecode.objectify.Key;
 
 /**
@@ -54,6 +53,14 @@ public class GmailSendAPI {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<GmailSendPrefs> getGmailSendPrefs() {
 		List<GmailSendPrefs> prefsList = GmailSendPrefsUtil.getPrefsList(AgileUser.getCurrentAgileUser());
+		
+		//Append email sent Count to Gmail Prefs
+		if(prefsList !=null){
+			Object count = SMTPBulkEmailUtil.getCache(prefsList.get(0).email + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY);
+			if(count != null)
+				prefsList.get(0).email_sent_count =  (long)count;
+		}
+		
 		return prefsList;
 	}
 
@@ -86,8 +93,9 @@ public class GmailSendAPI {
 				Long id = Long.parseLong(sid);
 				if(id != null) {
 					GmailSendPrefs prefs = GmailSendPrefsUtil.getPrefs(id, agileUserKey);
-					if(prefs != null)
+					if(prefs != null){
 						prefs.delete();
+					}
 				}
 			}
 		} catch(Exception e) {

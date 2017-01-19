@@ -9,12 +9,10 @@ import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.thirdparty.gmail.GMail;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.GmailSendPrefs;
-import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.SMTPBulkEmailUtil;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -138,6 +136,36 @@ public class GmailSendPrefsUtil {
 	}
 	
 	/**
+	 * This method will set bulk email sending is true or false in memcache
+	 * @param fromEmail
+	 * @return boolean
+	 */
+	public static boolean setGmailSendPrefsIsBulk(String fromEmail, boolean isBulk)
+	{
+			SMTPBulkEmailUtil.setCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_BULK_MEMCACHE_KEY , isBulk);
+			return isBulk;
+	}
+	
+	/**
+	 * This method will fetch bulk email sending is true or false from Memcache
+	 * @param fromEmail
+	 * @return boolean
+	 */
+	public static boolean getGmailSendPrefsIsBulk(String fromEmail)
+	{
+		Object isBulk = SMTPBulkEmailUtil.getCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_BULK_MEMCACHE_KEY);
+		if(isBulk == null){
+			GmailSendPrefs gmailSendPrefs = getPrefs(fromEmail);
+			
+			if(gmailSendPrefs != null)
+			    return setGmailSendPrefsIsBulk(fromEmail ,gmailSendPrefs.bulk_email);
+		   else
+			   return setGmailSendPrefsIsBulk(fromEmail , false);
+		}
+		return (boolean)isBulk;
+	}
+	
+	/**
 	 * This method will set max limit of Gmail preference in Memcache
 	 * 
 	 * @param fromEmail
@@ -147,15 +175,15 @@ public class GmailSendPrefsUtil {
 	 * @return max email count
 	 * 				- long
 	 */
-	private static long setGmailSendPrefsMaxLimit(String fromEmail, String domain)
+	public static long setGmailSendPrefsMaxLimit(String fromEmail)
 	{
 		GmailSendPrefs gmailSendPrefs = getPrefs(fromEmail);
 		
 		if(gmailSendPrefs != null){
-			CacheUtil.setCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , gmailSendPrefs.max_email_limit, SMTPBulkEmailUtil.SMTP_EMAIL_LIMIT_TIME);
+			SMTPBulkEmailUtil.setCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY , gmailSendPrefs.max_email_limit, SMTPBulkEmailUtil.SMTP_EMAIL_LIMIT_TIME);
 			return gmailSendPrefs.max_email_limit;
 		}
-		return 0;
+	 return 0;
 	}
 	
 	/**
@@ -169,11 +197,11 @@ public class GmailSendPrefsUtil {
 	 * 				- long
 	 * 
 	 */
-	public static long getGmailSendPrefsEmailsLimit(String fromEmail, String domain)
+	public static long getGmailSendPrefsEmailsLimit(String fromEmail)
 	{
-		Object maxEmailLimit = CacheUtil.getCache(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail));
+		Object maxEmailLimit = SMTPBulkEmailUtil.getCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY);
 		if(maxEmailLimit == null)
-			return setGmailSendPrefsMaxLimit(fromEmail, domain);
+			return setGmailSendPrefsMaxLimit(fromEmail);
 		
 		return (long)maxEmailLimit;
 	}
@@ -189,9 +217,9 @@ public class GmailSendPrefsUtil {
 	 * 				- long
 	 * 
 	 */
-	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, String domain, long count)
+	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, long count)
 	{
-		SMTPBulkEmailUtil.updateCacheLimit(domain + SMTPBulkEmailUtil.GMAIL_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) ,count);
+		SMTPBulkEmailUtil.updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY, count);
 		
 	}
 	

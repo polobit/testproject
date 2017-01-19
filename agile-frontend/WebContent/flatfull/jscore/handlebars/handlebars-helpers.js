@@ -8239,3 +8239,46 @@ Handlebars.registerHelper('contact_separated_comma', function(contacts,options)
 		html=html.substring(0, html.length - 1)
 	return html;
 });
+
+
+/**
+	 * Returns remaining email count for smtp and gmail with progress bar
+	 * 
+	 */
+	Handlebars.registerHelper('get_remaining_email_count', function(maxEmailLimit, emailRemain)
+	{
+		var type = "bg-light dk text-tiny";
+		var badge="";
+		var emailSent = maxEmailLimit -emailRemain;
+
+		var value = parseInt((emailRemain * 100) / maxEmailLimit);
+
+		if (value > 1 && value < 40)
+		{
+			type = "label-danger text-tiny";
+			emailStats = "{{agile_lng_translate 'reputation' 'Poor'}}";
+			badge="progress-bar-danger";
+		}
+		else if (value >= 40 && value < 75)
+		{
+			type = "label-warning text-tiny";
+			emailStats = "{{agile_lng_translate 'reputation' 'Ok'}}";
+			badge="progress-bar-warning";
+		}
+		else if (value >= 75 && value < 90)
+		{
+			type = "label-primary text-tiny";
+			emailStats = "{{agile_lng_translate 'reputation' 'Good'}}";
+			badge="progress-bar-info";
+		}
+		else if (value >= 90)
+		{
+			type = "label-success text-tiny";
+			emailStats = "{{agile_lng_translate 'reputation' 'Excellent'}}";
+			badge="progress-bar-success"
+		}
+		var data = {'type':type, 'maxEmailLimit':maxEmailLimit, 'emailSent':emailSent, 'value':value,'badge':badge};
+		var html = getTemplate("email-remaining-progress", data);
+		return html;
+
+	});

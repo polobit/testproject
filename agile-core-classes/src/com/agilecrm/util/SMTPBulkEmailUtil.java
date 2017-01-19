@@ -19,7 +19,7 @@ import com.agilecrm.user.SMTPPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.sun.mail.smtp.SMTPTransport;
@@ -42,14 +42,24 @@ public class SMTPBulkEmailUtil {
 	}
 	 
 	 /**
-	  * Memcache key for Gmail preference 
+	  * Memcache key for Gmail preference count
 	  */
-	 public static String GMAIL_PREFS_MEMCACHE_KEY = "_gmail_prefs_";
+	 public static String GPREFS_COUNT_MEMCACHE_KEY = "_g_c";
 	 
 	 /**
-	  * Memcache key for SMTP preference 
+	  * Memcache key for SMTP preference count
 	  */
-	 public static String SMTP_PREFS_MEMCACHE_KEY = "_smtp_prefs_";
+	 public static String SPREFS_COUNT_MEMCACHE_KEY = "_s_c";
+	 
+	 /**
+	  * Memcache key for Gmail preference bulk email
+	  */
+	 public static String GPREFS_BULK_MEMCACHE_KEY = "_g";
+	 
+	 /**
+	  * Memcache key for SMTP preference bulk email
+	  */
+	 public static String SPREFS_BULK_MEMCACHE_KEY = "_s";
 	 
 	 /**
 	  * SMTP Domain header name 
@@ -75,7 +85,6 @@ public class SMTPBulkEmailUtil {
 	  * GMAIL email sent log type
 	  */
 	 private static final String GMAIL_EMAIL_SENT_LOG = "_GMAIL_";
-	 
 	
 	/**
 	 * This method will return max limit of GmailPrefs or SMTPPrefs from  Memcache
@@ -88,13 +97,20 @@ public class SMTPBulkEmailUtil {
 	 * 				- long
 	 * 
 	 */
-	public static long getSMTPEmailsLimit(String fromEmail, String domain, PrefsType prefsType)
+	public static long getSMTPEmailsLimit(String fromEmail, PrefsType prefsType)
 	{
-		if(prefsType.equals(PrefsType.GMAIL))
-			return GmailSendPrefsUtil.getGmailSendPrefsEmailsLimit(fromEmail, domain);
-		
-		if(prefsType.equals(PrefsType.SMTP))
-			return SMTPPrefsUtil.getSMTPPrefsEmailsLimit(fromEmail, domain);
+	try
+		 {
+			if(prefsType.equals(PrefsType.GMAIL))
+				return GmailSendPrefsUtil.getGmailSendPrefsEmailsLimit(fromEmail);
+			
+			if(prefsType.equals(PrefsType.SMTP))
+				return SMTPPrefsUtil.getSMTPPrefsEmailsLimit(fromEmail);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+			 return 0;
+		 }
 		return 0;
 	}
 	
@@ -109,13 +125,13 @@ public class SMTPBulkEmailUtil {
 	 * 				- long
 	 * 
 	 */
-	public static void decreaseSMTPEmailsLimit(String fromEmail, String domain, long count, PrefsType prefsType)
+	public static void decreaseSMTPEmailsLimit(String fromEmail, long count, PrefsType prefsType)
 	{
 
 		if(prefsType.equals(PrefsType.GMAIL))
-			GmailSendPrefsUtil.decreaseGmailSendPrefsEmailsLimit(fromEmail, domain, count);
+			GmailSendPrefsUtil.decreaseGmailSendPrefsEmailsLimit(fromEmail, count);
 		else
-			SMTPPrefsUtil.decreaseGmailSendPrefsEmailsLimit(fromEmail, domain, count);
+			SMTPPrefsUtil.decreaseGmailSendPrefsEmailsLimit(fromEmail, count);
 		
 	}
 	
@@ -127,31 +143,37 @@ public class SMTPBulkEmailUtil {
 	 * @param emailSender
 	 */
 	public static List<MailDeferredTask> sendSMTPBulkEmails(List<MailDeferredTask> tasks, EmailSender emailSender){
-		
-		MailDeferredTask mailDeferredTask = tasks.get(0);
-		String fromEmail = mailDeferredTask.fromEmail;
-		String domain = mailDeferredTask.domain;
-		
-		System.out.println("sendSMTPBulkEmails is calling : domain " + domain + "   Email : " + fromEmail);
-		
-		//Send email through GmailPrefs
-		GmailSendPrefs gmailSendPrefs= GmailSendPrefsUtil.getPrefs(fromEmail);
-		
-		if(gmailSendPrefs != null)
+		try
 		{
-			long emailLimits = getSMTPEmailsLimit(fromEmail, domain, PrefsType.GMAIL);	
-			if(emailLimits>0)
-				return sendGmailPrefsBulkEmail(tasks, gmailSendPrefs, emailLimits, emailSender);
-		}	
-		else
-		{
-			SMTPPrefs smtpSendPrefs= SMTPPrefsUtil.getPrefs(fromEmail);
-			if(smtpSendPrefs != null)
+			MailDeferredTask mailDeferredTask = tasks.get(0);
+			String fromEmail = mailDeferredTask.fromEmail;
+			String domain = mailDeferredTask.domain;
+			
+			System.out.println("sendSMTPBulkEmails is calling : domain " + domain + "   Email : " + fromEmail);
+			
+			//Send email through GmailPrefs
+			GmailSendPrefs gmailSendPrefs= GmailSendPrefsUtil.getPrefs(fromEmail);
+			
+			if(gmailSendPrefs != null)
 			{
-				long emailLimits = getSMTPEmailsLimit(fromEmail, domain, PrefsType.SMTP);
+				long emailLimits = getSMTPEmailsLimit(fromEmail, PrefsType.GMAIL);	
 				if(emailLimits>0)
-					return sendSMTPPrefsBulkEmail(tasks, smtpSendPrefs, emailLimits, emailSender);
+					return sendGmailPrefsBulkEmail(tasks, gmailSendPrefs, emailLimits, emailSender);
 			}	
+			else
+			{
+				SMTPPrefs smtpSendPrefs= SMTPPrefsUtil.getPrefs(fromEmail);
+				if(smtpSendPrefs != null)
+				{
+					long emailLimits = getSMTPEmailsLimit(fromEmail, PrefsType.SMTP);
+					if(emailLimits>0)
+						return sendSMTPPrefsBulkEmail(tasks, smtpSendPrefs, emailLimits, emailSender);
+				}	
+			}
+	   }
+		catch(Exception e){
+			System.out.println("Exception occured while calling SMTPBulk email method : " + e.getMessage());	
+			return tasks;
 		}
 	 return tasks;
 	}
@@ -193,13 +215,15 @@ public class SMTPBulkEmailUtil {
 				if(sentStatus){
 					//Decreasing the count of email 
 					int count = StringUtils.countMatches(mailDeferredTask.to + mailDeferredTask.cc + mailDeferredTask.bcc, "@");
-					decreaseSMTPEmailsLimit(mailDeferredTask.fromEmail, mailDeferredTask.domain, count, PrefsType.SMTP);
+					decreaseSMTPEmailsLimit(mailDeferredTask.fromEmail, count, PrefsType.SMTP);
 					
 					emailLimits = emailLimits - count;
 					System.out.println("SMTP email count for domain : " + mailDeferredTask.domain + "  : " + emailLimits);
 					//add email sent log
 					completedTasks.add(addBulkSMTPEmailLogMessage(mailDeferredTask, PrefsType.SMTP));
 				}
+				else
+					break;
 			 }
 			//Remove completed task
 			 if(completedTasks.size() > 0)
@@ -255,7 +279,7 @@ public class SMTPBulkEmailUtil {
 				if(sentStatus){
 					//Decreasing the count of email 
 					int count = StringUtils.countMatches(mailDeferredTask.to + mailDeferredTask.cc + mailDeferredTask.bcc, "@");
-					decreaseSMTPEmailsLimit(mailDeferredTask.fromEmail, mailDeferredTask.domain, count, PrefsType.GMAIL);
+					decreaseSMTPEmailsLimit(mailDeferredTask.fromEmail, count, PrefsType.GMAIL);
 					
 					emailLimits = emailLimits - count;
 					System.out.println("GMAIL email count for domain : " + mailDeferredTask.domain + "  : " + emailLimits);
@@ -288,21 +312,24 @@ public class SMTPBulkEmailUtil {
 	 * 				-EmailSender
 	 * @return boolean
 	 */
-	public static boolean canSMTPSendEmail(MailDeferredTask task){
+	public static boolean canSMTPSendEmail(String fromEmail){
 	
- 	 try{		
-			//Check Gmail Preference is exist or not for this email sender
-			GmailSendPrefs gmailSendPrefs= GmailSendPrefsUtil.getPrefs(task.fromEmail);
-			if(gmailSendPrefs !=null)
-				if(gmailSendPrefs.bulk_email)
-					return true;
+	boolean isBulk = false;	
+ 	 try
+ 	 {  		
+ 		 //Check Gmail Preference is exist or not for this email sender
+ 		 isBulk = GmailSendPrefsUtil.getGmailSendPrefsIsBulk(fromEmail);
+ 		 
+		 if(isBulk && GmailSendPrefsUtil.getGmailSendPrefsEmailsLimit(fromEmail) > 0)
+			 return isBulk;
 			
-			//Check Gmail Preference is exist or not for this email sender
-			 SMTPPrefs smtpPrefs= SMTPPrefsUtil.getPrefs(task.fromEmail);
-			 if(smtpPrefs !=null)
-				 return smtpPrefs.bulk_email;
+		  //Check SMTP Preference is exist or not for this email sender
+		  isBulk = SMTPPrefsUtil.getSMTPPrefsIsBulk(fromEmail);
+		 
+		  if(isBulk && SMTPPrefsUtil.getSMTPPrefsEmailsLimit(fromEmail) > 0)
+				 return isBulk;
 			
-			return false;
+		 return false;
  	   }
  	 catch(Exception e){
  		 System.out.println("Exception occured while checking SMTP Preference is exist or not : " + e.getMessage());
@@ -384,24 +411,7 @@ public class SMTPBulkEmailUtil {
 		
 		return mailDeferredTask;
 	}
-	
-	/**
-	 * This method will update the Memcache count
-	 * 
-	 * @param key
-	 * 
-	 * @param value
-	 */
-	public static void updateCacheLimit(String key, long value){
-		String oldNamespace = NamespaceManager.get();
-		NamespaceManager.set("");
-
-		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-		syncCache.increment(key, -value);
-
-		NamespaceManager.set(oldNamespace);
-	}
-	
+		
 	/**
 	 * This method will return sent vai for campaign log
 	 * @param message
@@ -424,11 +434,64 @@ public class SMTPBulkEmailUtil {
 		 * @param message
 		 * @returnmessage
 		 */
-		 public static String getEmailLogMessage(String message){
+	public static String getEmailLogMessage(String message){
 		    	message = StringUtils.remove(message, SMTP_EMAIL_SENT_LOG);
 		    	
 		    	message = StringUtils.remove(message, GMAIL_EMAIL_SENT_LOG);
 		    	
 		    	return message;
-		    }
+	 }
+	
+	/**
+	 * This method will set memcache based on Domain level
+	 * 
+	 * @param key
+	 * @param value
+	 * @param timeInMilliSeconds
+	 */
+	public static void setCache(String key, Object value, int timeInMilliSeconds)
+	{
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		syncCache.put(key, value, Expiration.byDeltaMillis(timeInMilliSeconds));
+	}
+	
+	/**
+	 * This method will set memcache based on Domain level
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public static void setCache(String key, Object value)
+	{
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		syncCache.put(key, value);
+	}
+
+	/**
+	 * This method will fetch the Memcache 
+	 * 
+	 * @param key
+	 */
+	public static Object getCache(String key) {
+		
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		Object value = syncCache.get(key);
+		
+		return value;
+	}
+	
+
+	/**
+	 * This method will update the Memcache count
+	 * 
+	 * @param key
+	 * 
+	 * @param value
+	 */
+	public static void updateCacheLimit(String key, long value){
+
+		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+		syncCache.increment(key, -value);
+	}
+
 }

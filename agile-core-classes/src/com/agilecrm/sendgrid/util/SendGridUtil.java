@@ -406,6 +406,9 @@ public class SendGridUtil
 		
 		if(StringUtils.equals(queueName, AgileQueues.TIME_OUT_EMAIL_PULL_QUEUE) && emailsCount > MAX_LIMIT)
 			return AgileGlobalProperties.SendGridIpPools.BULK;
+		
+		if(StringUtils.equals(queueName, AgileQueues.SMTP_BULK_EMAIL_PULL_QUEUE) && emailsCount > MAX_LIMIT)
+			return AgileGlobalProperties.SendGridIpPools.BULK;
 			
 		return AgileGlobalProperties.SendGridIpPools.TRANSACTIONAL;
 	}

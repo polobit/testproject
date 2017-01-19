@@ -27,7 +27,9 @@
                 			<span class="block">{{email}}</span>
                 		</div> 
 						<div class="clearfix"></div>
-					</div>
+						<br>
+						<div id="remaining_gmail_emails">Emails Remaining{{{get_remaining_email_count max_email_limit  email_sent_count}}}</div>
+					</div> 
 				</div>
 
 				<div class="text-center">
@@ -92,14 +94,14 @@
 							<i class="media-grid"> <img class="thumbnail m-b-none thumb" src="{{emailGravatarurl 50 email}}" /> </i>
 						{{/if}}
 						
-			   				<span >{{name}}</span>
-                			<span >{{email}}</span>
+			   				<span class="block m-t-sm">{{name}}</span>
+                			<span class="block">{{email}}</span>
                 			<br>
 					   </div>
 					   
         				<div class="control-group form-group">
-			                <label class="control-label">Per day email limit 
-			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"="" data-content=" Set your per day email limit which is provided by your SMTP email Provider" id="element" data-trigger="hover" "="" data-original-title="" title="">
+			                <label class="control-label">Per day limit 
+			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"="" data-content=" Max Number of emails to be sent from Agile. This limit depends on your Gmail account." id="element" data-trigger="hover" "="" data-original-title="" title="">
 			               </span>
 			               </label>
 			                   <div class="controls">
@@ -111,7 +113,7 @@
 			                <label class="i-checks i-checks-sm">
 			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send campaign emails
 			                </label>
-			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email aso send through SMPT up to max limit" id="element" data-trigger="hover" "="" data-original-title="" title="">
+			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email aso send through Gmail up to max limit if from email address is same." id="element" data-trigger="hover" "="" data-original-title="" title="">
 	               			</span>
 			         	   </div>
         				</div>
@@ -128,4 +130,13 @@
 </div>
 {{/if}}
 
+</script>
+
+
+<script id="email-remaining-progress-template" type="text/html" >
+	<span style="padding-bottom:3px !important" class="text-muted pull-right">{{maxEmailLimit}}/{{emailSent}}</span>
+	<div class="progress" style="width:270px;height:7px !important;margin-bottom:15px !important" title="{{value}}%">
+        <div class="progress-bar {{badge}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{value}}%;">
+        </div>
+    </div>
 </script>

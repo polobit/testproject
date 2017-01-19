@@ -60,8 +60,6 @@ import com.thirdparty.mailgun.util.MailgunUtil;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.sendgrid.SendGrid;
 import com.thirdparty.sendgrid.deferred.SendGridSubAccountDeferred;
-import com.thirdparty.sendgrid.subusers.SendGridSubUser;
-import com.thirdparty.sendgrid.subusers.SendGridSubUser.SendGridStats;
 import com.thirdparty.ses.util.AmazonSESUtil;
 
 /**
@@ -437,10 +435,10 @@ public class EmailGatewayUtil
 					
 					if(gmailPrefs != null) 
 					  {
-						long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, domain, PrefsType.GMAIL);
+						long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, PrefsType.GMAIL);
 						if(emailMaxLimitCount > emailCount)
 						{
-							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, domain, emailCount, PrefsType.GMAIL);
+							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, emailCount, PrefsType.GMAIL);
 							
 							System.out.println("GmailPrefs email address : "  + gmailPrefs.email + "   Email Limit : " + emailMaxLimitCount);
 							GMail.sendMail(gmailPrefs, to, cc, bcc, subject, replyTo, fromName,
@@ -453,10 +451,10 @@ public class EmailGatewayUtil
 					SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(agileUser, fromEmail);
 					if(smtpPrefs != null) {
 						
-						long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, domain, PrefsType.SMTP);
+						long emailMaxLimitCount = SMTPBulkEmailUtil.getSMTPEmailsLimit(fromEmail, PrefsType.SMTP);
 						if(emailMaxLimitCount > emailCount)
 						{
-							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, domain, emailCount, PrefsType.SMTP);
+							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, emailCount, PrefsType.SMTP);
 							
 							System.out.println("SMTPPrefs email address : "  + gmailPrefs.email + "   Email Limit : " + emailMaxLimitCount);
 							GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
@@ -690,7 +688,6 @@ public class EmailGatewayUtil
 
 	try
 	{
-
 	    // Set namespace
 	    NamespaceManager.set(domain);
 
@@ -706,7 +703,7 @@ public class EmailGatewayUtil
 	    	EMAIL_API preferredGateway = (emailGateway != null) ? 
 	    			emailGateway.email_api : EMAIL_API.SEND_GRID;
 	    	
-	    	if(SMTPBulkEmailUtil.canSMTPSendEmail(mailDeferredTask))
+	    	if(StringUtils.equalsIgnoreCase(queueName, AgileQueues.SMTP_BULK_EMAIL_PULL_QUEUE))
 	    	{
 	    		tasks = SMTPBulkEmailUtil.sendSMTPBulkEmails(tasks, emailSender);
 	    	}

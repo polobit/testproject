@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.codec.DecoderException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.agilecrm.util.EncryptDecryptUtil;
@@ -65,6 +66,12 @@ public class SMTPPrefs {
      */
     @NotSaved(IfDefault.class)
     public long max_email_limit = 200L;
+    
+    /**
+     * Email sent we will append while showing from Memcache
+     */
+    @NotSaved
+    public long email_sent_count = 0;
 
 	@Parent
 	@JsonIgnore
@@ -170,6 +177,9 @@ public class SMTPPrefs {
 					.build());
 		}
 		dao.put(this);
+		
+		//Put SMTP bulk email send status to Memcache
+		SMTPPrefsUtil.setSMTPSendPrefsIsBulk(this.user_name, this.bulk_email);
 	}
 
 	/**
@@ -177,6 +187,12 @@ public class SMTPPrefs {
 	 */
 	public void delete() {
 		dao.delete(this);
+		
+		//Put SMTP bulk email send status  as a false to Memcache
+		SMTPPrefsUtil.setSMTPSendPrefsIsBulk(this.user_name, false);
+		
+		//While deleting SMTP prefs delete verified email address
+		VerifiedEmailsUtil.deleteVerifiedEmail(this.user_name);
 	}
 
 	/**

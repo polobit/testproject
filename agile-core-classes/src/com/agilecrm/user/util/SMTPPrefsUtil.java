@@ -17,7 +17,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.thirdparty.gmail.GMail;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SMTPPrefs;
-import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.SMTPBulkEmailUtil;
@@ -248,24 +247,33 @@ public class SMTPPrefsUtil {
 	}
 	
 	/**
-	 * This method will set max limit of SMTP preference in Memcache
-	 * 
+	 * This method will set bulk email sending is true or false in memcache
 	 * @param fromEmail
-	 * 				- String
-	 * @param domain
-	 * 				-  String
-	 * @return max email count
-	 * 				- long
+	 * @return boolean
 	 */
-	private static long setSMTPPrefsMaxLimit(String fromEmail, String domain)
+	public static boolean setSMTPSendPrefsIsBulk(String fromEmail, boolean isBulk)
 	{
-		SMTPPrefs smtpPrefs = getPrefs(fromEmail);
-		
-		if(smtpPrefs != null){
-			CacheUtil.setCache(domain + SMTPBulkEmailUtil.SMTP_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , smtpPrefs.max_email_limit, SMTPBulkEmailUtil.SMTP_EMAIL_LIMIT_TIME);
-			return smtpPrefs.max_email_limit;
+			SMTPBulkEmailUtil.setCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_BULK_MEMCACHE_KEY , isBulk);
+			return isBulk;
+	}
+	
+	/**
+	 * This method will fetch bulk email sending is true or false from Memcache
+	 * @param fromEmail
+	 * @return boolean
+	 */
+	public static boolean getSMTPPrefsIsBulk(String fromEmail)
+	{
+		Object isBulk = SMTPBulkEmailUtil.getCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_BULK_MEMCACHE_KEY);
+		if(isBulk == null){
+			SMTPPrefs smtpPrefs = getPrefs(fromEmail);
+			
+			if(smtpPrefs != null)
+			    return setSMTPSendPrefsIsBulk(fromEmail ,smtpPrefs.bulk_email);
+		   else
+			   return setSMTPSendPrefsIsBulk(fromEmail , false);
 		}
-		return 0;
+		return (boolean)isBulk;
 	}
 	
 	/**
@@ -277,13 +285,32 @@ public class SMTPPrefsUtil {
 	 * 				-  String
 	 * @return max email count
 	 * 				- long
+	 */
+	public static long setSMTPPrefsMaxLimit(String fromEmail)
+	{
+		SMTPPrefs smtpPrefs = getPrefs(fromEmail);
+		
+		if(smtpPrefs != null){
+			SMTPBulkEmailUtil.setCache(EmailUtil.getEmail(fromEmail) +SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY  , smtpPrefs.max_email_limit, SMTPBulkEmailUtil.SMTP_EMAIL_LIMIT_TIME);
+			return smtpPrefs.max_email_limit;
+		}
+		return 0;
+	}
+	
+	/**
+	 * This method will set max limit of SMTP preference in Memcache
+	 * 
+	 * @param fromEmail
+	 * 				- String
+	 * @return max email count
+	 * 				- long
 	 * 
 	 */
-	public static long getSMTPPrefsEmailsLimit(String fromEmail, String domain)
+	public static long getSMTPPrefsEmailsLimit(String fromEmail)
 	{
-		Object maxEmailLimit = CacheUtil.getCache(domain + SMTPBulkEmailUtil.SMTP_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail));
+		Object maxEmailLimit = SMTPBulkEmailUtil.getCache(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY);
 		if(maxEmailLimit == null)
-			return setSMTPPrefsMaxLimit(fromEmail, domain);
+			return setSMTPPrefsMaxLimit(fromEmail);
 		
 		return (long)maxEmailLimit;
 	}
@@ -299,9 +326,9 @@ public class SMTPPrefsUtil {
 	 * 				- long
 	 * 
 	 */
-	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, String domain, long count)
+	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, long count)
 	{
-		SMTPBulkEmailUtil.updateCacheLimit(domain + SMTPBulkEmailUtil.SMTP_PREFS_MEMCACHE_KEY + EmailUtil.getEmail(fromEmail) , count);
+		SMTPBulkEmailUtil.updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY , count);
 		
      }
 	
