@@ -3344,6 +3344,13 @@ i.mce-ico, i.mce-caret, span.mce-txt{
 .agile-theme-15 .mce-menu-item span.mce-text{
   background-color: inherit !important;
 }
+.agile-theme-15 .mce-abs-layout .mce-widget.mce-primary.mce-abs-layout-item.mce-first.mce-btn-has-text.mce-btn{
+  background-color: #2d8ac7 !important;
+}
+.agile-theme-15 .mce-abs-layout .mce-widget.mce-primary.mce-abs-layout-item.mce-first.mce-btn-has-text.mce-btn span.mce-txt{
+  opacity: .85 !important;
+}
+
 
   /*Tinymce Editor New Theme CSS End*/
 
