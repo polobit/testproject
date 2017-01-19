@@ -72,7 +72,6 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 
 				tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
 				    menubar : false,
-				    plugins: 'placeholder',
 				    body_class: mceClassName,
 					toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 					toolbar2 : toolbar_2, valid_elements : "*[*]",
