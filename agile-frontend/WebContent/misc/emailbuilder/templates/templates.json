@@ -88,6 +88,11 @@
                     "id": "layout15",
                     "displayname": "sample layout 15",
                     "description": "this is sample text"
+                },
+                {
+                    "id": "layout16",
+                    "displayname": "sample layout 16",
+                    "description": "this is sample text"
                 }
             ]
         }
