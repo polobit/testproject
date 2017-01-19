@@ -32,7 +32,10 @@ public class LanguageUtil {
 		{
 			put("en", "English");
 			put("es", "Español");
+			put("it", "Italiano");
 			put("ru", "Россия");
+			put("fr", "Français");
+			
 		}
 	};
 	public static JSONObject getLocaleJSON(UserPrefs prefs, ServletContext application, String serviceName) {
