@@ -66,9 +66,13 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback,me
 				// Show textarea and remove loading img
 				$(selector).css('display', '');
 				$('#loading-editor').html("");
-				
+				var mceClassName = "";
+				if($("html").hasClass("agile-theme-15"))
+					mceClassName = "agile-theme-15";
+
 				tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
 				    menubar : false,
+				    body_class: mceClassName,
 					toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 					toolbar2 : toolbar_2, valid_elements : "*[*]",
 					toolbar_items_size: 'small',

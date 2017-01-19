@@ -25,6 +25,7 @@
       pageSizeParam: "page_size",
       untilAttr: "id",
       pageSize: pageSize,
+      prefill: true,
       scrollOffset: 100,
       add: true,
       addAll:true,
@@ -97,6 +98,16 @@
       }
       prevScrollY = scrollY;
     };
+
+
+    /*self.prefillSucess = function(collection, response){
+      var windownHeight = $target.scrollTop() + $target.height();
+      if($(window).height() > $("#content").height()){
+        self.enableFetch();
+        self.watchScroll();
+      }
+    };*/
+
     //used for fetching next set of records.
     //mostly useful for programmatic triggering.
     self.fetchNext = function(e) {
