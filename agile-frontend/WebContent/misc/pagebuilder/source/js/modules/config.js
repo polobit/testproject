@@ -8,7 +8,7 @@
         'span.fa': ['color', 'font-size'],
         '.bg.bg1,.item': ['background-color','padding-top','padding-bottom'],
         'nav': ['background-color','color','fixed-header'],
-        '.arrow-div' : ['border-top-color'],
+        '.arrow-color' : ['border-top-color'],
         '.pricing2 > .top ,.quote' : ['background-color'],
         'header.wrapper' : ['background-color','padding-top','padding-bottom'],
         '.dividerel,.thumbnail' : ['background-color','padding-top','padding-bottom'],
