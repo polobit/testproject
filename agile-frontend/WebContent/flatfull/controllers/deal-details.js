@@ -119,20 +119,19 @@ function showRelatedContactsImages(id){
 
 function dealNameEdit(el)
 {
-	var json = App_Deal_Details.dealDetailView.model.toJSON();
-	json.name = el ;
-	var dealModel = new BaseModel();
-	dealModel.url = '/core/api/opportunity';
-	dealModel.save(json,{ success : function(model)
-	{
-	$("#deals-inline").text(el);
-	$("#inline-input").addClass("hidden");
-	$("#deals-inline").removeClass("hidden");
-	$("#inline-input").removeClass("error-inputfield");
-	App_Deal_Details.dealDetailView.model = dealModel;
-	}
-
-
+	var id = App_Deal_Details.dealDetailView.model.id ;
+	var url = "core/api/opportunity/changeName/" + id+"?name="+el;
+	$.ajax({
+		url : url ,
+		type: "PUT" ,
+		success : function(model)
+		{
+			$("#deals-inline").text(el);
+			$("#inline-input").addClass("hidden");
+			$("#deals-inline").removeClass("hidden");
+			$("#inline-input").removeClass("error-inputfield");
+			App_Deal_Details.dealDetailView.model.set(model, {silent : true});
+		}
 	});
 
 
