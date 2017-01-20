@@ -117,7 +117,7 @@ define([
 						//Adding on top
 						for ( var j = 0; j < saveform.length; j++){
 
-							if(saveform[i]["title"]=="Search Input"){
+							if(saveform[j]["title"]=="Search Input"){
 								saveform.splice(j,1);
 								j--;
 								continue;
