@@ -999,7 +999,7 @@ var SettingsRouter = Backbone.Router
 
 					that.documentTemplatesListView = new Document_Collection_Events({ url : '/core/api/document/templates', 
 					templateKey : "settings-document-templates",
-					sort_collection : false,
+					sort_collection : true,
 					global_sort_key : "created_time",
 					individual_tag_name : 'tr', postRenderCallback : function(el)
 					{
