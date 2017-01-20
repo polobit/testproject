@@ -81,9 +81,9 @@
 				    <div class="panel-body">
 				    <form id="gmail-send-setting-form">
 			        <fieldset>
-           			 <div>
+           			 <div style="min-height:50px">
 						{{#if picture}} 
-		 				 <i class="media-grid thumb thumb-wrapper"> 
+		 				 <i class="media-grid thumb thumb-wrapper pull-left"> 
 							{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
 							<img  src="{{emailGravatarurl 75 email}}"  /> 
 						 	{{else}} 
@@ -93,11 +93,12 @@
 						{{else}} 
 							<i class="media-grid"> <img class="thumbnail m-b-none thumb" src="{{emailGravatarurl 50 email}}" /> </i>
 						{{/if}}
-						
+						   <div class="m-l-xs pull-left">
 			   				<span class="block m-t-sm">{{name}}</span>
                 			<span class="block">{{email}}</span>
                 			<br>
-					   </div>
+                			</div>
+					 </div>
 					   
         				<div class="control-group form-group">
 			                <label class="control-label">Per day limit 
@@ -105,13 +106,13 @@
 			               </span>
 			               </label>
 			                   <div class="controls">
-			                     <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" value="200"/>
+			                     <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" min=0 value="200"/>
 			                   </div>
 			              </div>
 			              <div class="control-group form-group">
 			            	<div class="checkbox">
 			                <label class="i-checks i-checks-sm">
-			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Send campaign emails
+			                    <input type="checkbox" id="gmail-bulk-email-checked" name="bulk_email" title="Send bulk email" {{#if_equals bulk_email true}}checked{{/if_equals}}><i></i>Gmail Campaign emails
 			                </label>
 			                <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email aso send through Gmail up to max limit if from email address is same." id="element" data-trigger="hover" "="" data-original-title="" title="">
 	               			</span>
@@ -127,6 +128,15 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-md-4 col-sm-6 col-xs-12 "></div>
+	<div class="col-md-4 col-sm-6 col-xs-12 ">
+         <div style="margin-top:0px; text-align : justify;">
+               <h4>{{agile_lng_translate 'Admin-settings-api-analytics' 'email-dkim-settings'}}</h4>
+               <p>To get DKIM & SPF settings eg: <br>If from email address is <b>test@example.com</b> then your email domain is <b>example.com</b> Please enter your email domain <b>example.com</b> and click on <b>Get Settings</b>.</p>
+               <p> Copy obtained records and paste it in your DNS records. Once done click on <b>Verify</b>.</p>
+         </div>
+      </div>
+      </div>
 </div>
 {{/if}}
 
@@ -134,9 +144,9 @@
 
 
 <script id="email-remaining-progress-template" type="text/html" >
-	<span style="padding-bottom:3px !important" class="text-muted pull-right">{{maxEmailLimit}}/{{emailSent}}</span>
-	<div class="progress" style="width:270px;height:7px !important;margin-bottom:15px !important" title="{{value}}%">
-        <div class="progress-bar {{badge}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{value}}%;">
+	<span style="padding-bottom:3px !important" class="text-muted pull-right">{{emailRemain}}/{{maxEmailLimit}}</span>
+	<div class="progress" style="overflow:visible; height:7px !important;margin-bottom:15px !important" title="{{value}}%">
+        <div class="progress-bar {{badge}}" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{value}}%; max-width:100%">
         </div>
     </div>
 </script>

@@ -491,7 +491,30 @@ public class SMTPBulkEmailUtil {
 	public static void updateCacheLimit(String key, long value){
 
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-		syncCache.increment(key, -value);
+		syncCache.increment(key, value);
+	}
+	
+	/**
+	 * This method will update email limit of SMTP and Gmail inn Memcache
+	 * 
+	 * @param fromEmail
+	 * @param value
+	 * @param prefsType
+	 */
+	public static void updateSMTPEmailLimit(String fromEmail, long value, PrefsType prefsType){
+		try
+		 {
+			System.out.println("SMTP memcache limit updated for email : " + fromEmail + "with value : " + value);
+			
+			if(prefsType.equals(PrefsType.GMAIL))
+				updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY, value);
+			
+			else if(prefsType.equals(PrefsType.SMTP))
+				updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY, value);
+		 }
+		 catch(Exception e){
+			 e.printStackTrace();
+		 }
 	}
 
 }

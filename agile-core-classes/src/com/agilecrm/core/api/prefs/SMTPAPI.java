@@ -19,9 +19,12 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.account.VerifiedEmails;
 import com.agilecrm.account.util.VerifiedEmailsUtil;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.SMTPPrefs;
+import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.user.util.SMTPPrefsUtil;
 import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil.PrefsType;
 import com.googlecode.objectify.Key;
 
 /**
@@ -50,6 +53,8 @@ public class SMTPAPI {
 					Object count = SMTPBulkEmailUtil.getCache(prefs.user_name + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY);
 					if(count != null)
 						prefs.email_sent_count =  (long)count;
+					else
+						prefs.email_sent_count =  prefs.max_email_limit;
 			}
 		}
 		return prefsList;
@@ -91,7 +96,16 @@ public class SMTPAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public SMTPPrefs updateSMTPPrefs(SMTPPrefs prefs) {
 		prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
+		
+		//fetch increase or decrease count
+		long value = prefs.max_email_limit;
+		SMTPPrefs smtpPrefs = SMTPPrefsUtil.getPrefs(prefs.user_name);
+				
+				 if(smtpPrefs != null)
+					value = value - smtpPrefs.max_email_limit;
 		prefs.save();
+		
+		SMTPBulkEmailUtil.updateSMTPEmailLimit(prefs.user_name, value, PrefsType.SMTP);
 		return prefs;
 	}
 

@@ -21,6 +21,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.GmailSendPrefs;
 import com.agilecrm.user.util.GmailSendPrefsUtil;
 import com.agilecrm.util.SMTPBulkEmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil.PrefsType;
 import com.googlecode.objectify.Key;
 
 /**
@@ -55,10 +56,12 @@ public class GmailSendAPI {
 		List<GmailSendPrefs> prefsList = GmailSendPrefsUtil.getPrefsList(AgileUser.getCurrentAgileUser());
 		
 		//Append email sent Count to Gmail Prefs
-		if(prefsList !=null){
+		if(prefsList.size() > 0){
 			Object count = SMTPBulkEmailUtil.getCache(prefsList.get(0).email + SMTPBulkEmailUtil.GPREFS_COUNT_MEMCACHE_KEY);
 			if(count != null)
 				prefsList.get(0).email_sent_count =  (long)count;
+			else
+				prefsList.get(0).email_sent_count = prefsList.get(0).max_email_limit;
 		}
 		
 		return prefsList;
@@ -76,7 +79,17 @@ public class GmailSendAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public GmailSendPrefs updateGmailSendPrefs(GmailSendPrefs prefs) {
 		prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
-		prefs.save();		
+		
+		//fetch increase or decrease count
+		long value = prefs.max_email_limit;
+		GmailSendPrefs gmailSendPrefs = GmailSendPrefsUtil.getPrefs(prefs.email);
+		
+		 if(gmailSendPrefs != null)
+			value = value - gmailSendPrefs.max_email_limit;
+		 
+		prefs.save();	
+		
+		SMTPBulkEmailUtil.updateSMTPEmailLimit(prefs.email, value, PrefsType.GMAIL);
 		return prefs;
 	}
 
@@ -114,9 +127,12 @@ public class GmailSendAPI {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public void settingGmailSendPrefs(@PathParam("id") String sid, String gmailSetting) {
 		try {
-			System.out.println("Gmail auth json for ulk email setting : " + gmailSetting);
+			System.out.println("Gmail auth json for Bulk email setting : " + gmailSetting);
 			
 			JSONObject gmailSettingJSON = new JSONObject(gmailSetting);
+			//fetch increase or decrease count
+			long maxEmailLimit = gmailSettingJSON.getLong(MAX_EMAIL_LIMIT);
+			
 			AgileUser user = AgileUser.getCurrentAgileUser();
 			Key<AgileUser> agileUserKey = new Key<AgileUser>(AgileUser.class, user.id);
 			if(StringUtils.isNotBlank(sid)) {
@@ -124,9 +140,15 @@ public class GmailSendAPI {
 				if(id != null) {
 					GmailSendPrefs prefs = GmailSendPrefsUtil.getPrefs(id, agileUserKey);
 					if(prefs != null){
-						prefs.bulk_email=gmailSettingJSON.getBoolean(BULK_EMAIL);
-						prefs.max_email_limit=gmailSettingJSON.getLong(MAX_EMAIL_LIMIT);
+						prefs.bulk_email = gmailSettingJSON.getBoolean(BULK_EMAIL);
+						
+						maxEmailLimit = maxEmailLimit - prefs.max_email_limit;
+						
+						prefs.max_email_limit =  gmailSettingJSON.getLong(MAX_EMAIL_LIMIT);
 					    prefs.save();	
+					    
+					    //update the limit in memcache
+					    SMTPBulkEmailUtil.updateSMTPEmailLimit(prefs.email, maxEmailLimit, PrefsType.GMAIL);
 					}
 				}
 			}

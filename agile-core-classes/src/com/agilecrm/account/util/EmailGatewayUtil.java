@@ -456,7 +456,7 @@ public class EmailGatewayUtil
 						{
 							SMTPBulkEmailUtil.decreaseSMTPEmailsLimit(fromEmail, emailCount, PrefsType.SMTP);
 							
-							System.out.println("SMTPPrefs email address : "  + gmailPrefs.email + "   Email Limit : " + emailMaxLimitCount);
+							System.out.println("SMTPPrefs email address : "  + smtpPrefs.user_name + "   Email Limit : " + emailMaxLimitCount);
 							GMail.sendMail(smtpPrefs, to, cc, bcc, subject, replyTo, fromName,
 								html, text, documentIds, blobKeys, attachments);
 						return;

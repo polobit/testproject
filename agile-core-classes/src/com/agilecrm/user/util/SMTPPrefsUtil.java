@@ -328,7 +328,7 @@ public class SMTPPrefsUtil {
 	 */
 	public static void decreaseGmailSendPrefsEmailsLimit(String fromEmail, long count)
 	{
-		SMTPBulkEmailUtil.updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY , count);
+		SMTPBulkEmailUtil.updateCacheLimit(EmailUtil.getEmail(fromEmail) + SMTPBulkEmailUtil.SPREFS_COUNT_MEMCACHE_KEY , -count);
 		
      }
 	

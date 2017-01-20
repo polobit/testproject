@@ -47,7 +47,7 @@
                </span>
                </label>
                      <div class="controls">
-                        <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" value="200"/>
+                        <input name="max_email_limit" type="number" class="required form-control" placeholder="Email max limit" min=0 value="200"/>
                      </div>
               </div>
             
@@ -65,7 +65,7 @@
          <div class="control-group form-group">
             <div class="checkbox">
                 <label class="i-checks i-checks-sm">
-                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>Send campaign emails 
+                    <input type="checkbox" id="smtp-bulk-email-checked" name="bulk_email" title="Send bulk email"><i></i>SMTP campaign emails 
                 </label>
                  <span style=" color: grey;"> <img border="0" src="//doxhze3l6s7v9.cloudfront.net/beta/static//img/help.png" style="height: 8px;vertical-align: top; position: relative;left: -5px;" rel="popover" data-placement="right" data-title:"" data-content=" Your campaign and bulk email also send through SMPT up to max limit if from email address is same." id="element" data-trigger="hover" "="" data-original-title="" title="">
                </span>
@@ -108,5 +108,14 @@
 </div>
 </div>
 </div>
+<div class="col-md-4 col-sm-6 col-xs-12 "></div>
+    <div class="col-md-4 col-sm-6 col-xs-12 ">
+         <div style="margin-top:0px; text-align : justify;">
+               <h4>{{agile_lng_translate 'admin-settings-integrations' 'note'}}</h4>
+               <p>{{agile_lng_translate 'prefs-email' 'smtp-note1'}} <br>
+                {{agile_lng_translate 'prefs-email' 'smtp-note2'}} <br></p>
+               <p> Copy obtained records and paste it in your DNS records. On
+         </div>
+      </div>
 </div>
 </script>
