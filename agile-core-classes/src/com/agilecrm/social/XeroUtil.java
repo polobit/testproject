@@ -19,7 +19,8 @@ public class XeroUtil
 
 	public String callbackUrl = "%s/XeroServlet?data=";	
 	// Live url setup. 
-	private String xeroPluginurl = "http://integrations.clickdesk.com:8080/ClickdeskPlugins/core/agile/xero";
+	private String xeroPluginurl = "http://integrations.agilecrm.com/agilewidgets/core/agile/xero";
+	//private String xeroPluginurl = "http://integrations.clickdesk.com:8080/ClickdeskPlugins/core/agile/xero";
 	// Local url setup.
 	//private String xeroPluginurl = "http://localhost:8585/clickdesk-plugins/core/agile/xero";
 
