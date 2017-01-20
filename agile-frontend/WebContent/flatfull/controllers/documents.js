@@ -905,7 +905,7 @@ function initializeDocumentsListeners()
 	    var d = new Date();
         var n = d.getTime();
 
-		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+n;
+		var key = "panel/uploaded-logo/"+CURRENT_DOMAIN_USER.domain+"/"+n+"/"+fileName.replace(/ +/g, '+');
 		var fileSizeKB = Math.round(file.size / 1024);
 
 		fd.append("key", key);
