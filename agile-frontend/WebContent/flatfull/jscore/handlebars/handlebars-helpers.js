@@ -1082,7 +1082,7 @@ $(function()
 	Handlebars.registerHelper('docheader', function(type)
 	{
 		if (type == 'NONE')
-			return '{{agile_lng_translate "documents" "preview-edocument"}';		
+			return '{{agile_lng_translate "documents" "preview-edocument"}}';		
 		else
 			return '{{agile_lng_translate "documents" "edit-document"}}';
 	});
@@ -1091,7 +1091,7 @@ $(function()
 	{
 
 		if (type == 'NONE')
-			return '{{agile_lng_translate "documents" "newedocument"}';		
+			return '{{agile_lng_translate "documents" "newedocument"}}';		
 		else
 			return '{{agile_lng_translate "modals" "new-document"}}';
 	});
