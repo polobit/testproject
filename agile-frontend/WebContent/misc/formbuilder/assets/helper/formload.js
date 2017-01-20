@@ -98,8 +98,10 @@ define([
 						if(saveform[0].fields.agiletransparentbackground){
 								saveform[0].fields.agiletransparentbackground.label = "Transparency <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='If set to yes, the background of your website will be applied along with selected text color' data-placement='right' style='text-decoration: none;'><sup style='font-size: 9px;'>?</sup></a>";
 								saveform[0].fields.agiletransparentbackground.value[1].label = "yes with text color: white";
+								saveform[0].fields.agiletransparentbackground.value[1].value = "agile-form-blck-transparent";
+								
 								if(!saveform[0].fields.agiletransparentbackground.value[2]){
-									saveform[0].fields.agiletransparentbackground.value[2] = {value : " agile-form-blck-transparent", selected : false, label: "yes with text color: black"};
+									saveform[0].fields.agiletransparentbackground.value[2] = {value : "agile-form-blck-transparent", selected : false, label: "yes with text color: black"};
 								}
 								else{
 									saveform[0].fields.agiletransparentbackground.value[2].label = "yes with text color: black";
@@ -115,6 +117,11 @@ define([
 						//Adding on top
 						for ( var j = 0; j < saveform.length; j++){
 
+							if(saveform[i]["title"]=="Search Input"){
+								saveform.splice(j,1);
+								j--;
+								continue;
+							}
 							if(saveform[j].title=="Text Area"){
 								if(saveform[j].fields.placeholder==undefined){
 									var placeholder={
