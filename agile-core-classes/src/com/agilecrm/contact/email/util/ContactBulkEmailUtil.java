@@ -15,6 +15,7 @@ import com.agilecrm.contact.email.EmailSender;
 import com.agilecrm.email.wrappers.ContactEmailWrapper.PushParams;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.SMTPBulkEmailUtil;
 import com.agilecrm.util.email.MustacheUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -122,8 +123,16 @@ public class ContactBulkEmailUtil
 						if(emailSender!=null && emailSender.emailGateway!=null && emailSender.emailGateway.email_api!=null){
 							emailGatewayName = emailSender.emailGateway.email_api.name();
 						}
-						emailSender.addToQueue(len >= 200 ? AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE
-								: AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE, emailGatewayName, null, null, domain, fromEmail,
+						
+						//Check if SMTP and Gmail then add in a diffrent queue
+						String queueName = AgileQueues.NORMAL_PERSONAL_EMAIL_PULL_QUEUE;
+						
+						if(SMTPBulkEmailUtil.canSMTPSendEmail(fromEmail))
+							queueName = AgileQueues.SMTP_BULK_EMAIL_PULL_QUEUE;
+						if(len >= 200)
+							queueName = AgileQueues.BULK_PERSONAL_EMAIL_PULL_QUEUE;
+						
+						emailSender.addToQueue(queueName, emailGatewayName, null, null, domain, fromEmail,
 								fromName, email, null, null, replacedSubject, fromEmail, replacedBody, null, null,
 								null, null);
 						
