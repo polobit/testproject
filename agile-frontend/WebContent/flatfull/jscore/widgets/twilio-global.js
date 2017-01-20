@@ -17,6 +17,7 @@ TWILIO_IS_VOICEMAIL = false;
 var TWILIO_CONTACT ;
 var calltransfer = false;
 var transfer_number;
+var Twilio_From_Numbers = [];
 function initializeTwilioGlobalListeners(){
 	
 }

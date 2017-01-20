@@ -2,10 +2,22 @@
 {{#if_equals to.length "1"}}<div id="contact_number"></div>
 {{else}}
 	<div class="wrapper-sm">
+        <div class="control-group form-group" style="">
+        <div class="controls" id="contactTypeAhead">
+        <label>Outbound Number</label>
+         <select name="from_numbers" id="twilio_from_numbers" class="form-control required">
+        <option value="" style="display:none;">Select a verifed number</option>
+        {{#each from}}
+                 <option value="{{this}}">{{this}} </option>
+          {{/each}}
+        </select>
+    </div> 
+  </div>
 			{{#if_equals to.length "1"}}<div><!-- <input type="hidden" id="contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}} --></div>
 			{{else}}
 			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs" id="contentLeftLabel">To :</h4></div> -->
 			<div class="pull-left" style="width: 100%;" >
+       <label>Inbound Number</label>
 				<select name="number" id="contact_number" class="required form-control" style="width: 100%;">
 					{{#each to}}
 						<option value="{{value}}">{{value}} 

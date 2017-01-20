@@ -741,14 +741,55 @@ public class TwilioWidgetsAPI
 		}	
 	}
 	/**
-	 * Get all active twilio Users
-	 * @return
+	 * Get Twilio from number based on widget id 
+	 * 
+	 * 
+	 * @return twilio number
+	 * @throws Exception
 	 */
-	@Path("getTwilioUsers")
+	@Path("from/numbers/{widget-id}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getTwiliioUsers()throws Exception{	
-		JSONArray result = TwilioUtil.getTwillioUsersAndNumbers();
-		return result.toString();
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getTwilioFromNumbers(@PathParam("widget-id") Long widgetId)
+	{
+		try{
+		 System.out.println("Twilio from number fetching based on widget id : " + widgetId);
+		  // Retrieve widget based on its id
+		   Widget widget = WidgetUtil.getWidget(widgetId);
+		   if (widget != null){
+			   return TwilioUtil.getTwilioFromNumbers(widget).toString();
+		   }
+     // return null;
 	}
+	catch(Exception e){
+		System.out.println("Exception Occured While fetching the From Number :" +e.getMessage());
+	}
+		return null;		
+	}
+	/**
+	 * Set Twilio from number based on widget id 
+	 * 
+	 * 
+	 * @return twilio number
+	 * @throws Exception
+	 */
+	@Path("update/from/numbers/{widget-id}/{fromNumber}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public void updateTwilioFromNumber(@PathParam("widget-id") Long widgetId,@PathParam("fromNumber") String fromNumber)
+	{
+		try{
+		  // Retrieve widget based on its id
+		   Widget widget = WidgetUtil.getWidget(widgetId);
+		   if (widget != null)
+			   TwilioUtil.updateTwilioFromNumber(widget, fromNumber);
+			   
+		 System.out.println("Twilio from number update based on widget id : " + fromNumber);
+	
+	}catch(Exception e){
+		System.out.println("Exception occured while updation the from number :"+e.getMessage());
+		
+	}
+	}		
 }
+	
