@@ -354,7 +354,7 @@ public class Defaults
     
     public static void createTemplateForExistingUser(DomainUser domainUser){
     	Calendar c = Calendar.getInstance();
-    	c.set(2016,1,18,17,00,00);
+    	c.set(2017,1,20,15,00,00);
     	
     	Long timeNow = c.getTimeInMillis()/1000;
     	Long l =  Long.parseLong(((String)domainUser.getInfo(DomainUser.LOGGED_IN_TIME)).trim());
