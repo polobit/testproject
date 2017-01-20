@@ -308,10 +308,10 @@ fieldset {
 	display: none;
 }
 
-#target .agile-stylebutton:hover{
-	  background-color: #19a9d5!important;
-	  border-color: #189ec8!important;
-	}
+.agile-stylebutton:hover{
+	  background-color: #19a9d5;
+	  border-color: #189ec8;
+}
 #target .popover form{
 	font-family:sans-serif!important;
 }

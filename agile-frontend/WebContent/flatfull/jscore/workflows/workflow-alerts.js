@@ -122,7 +122,7 @@ function send_verify_email(el)
 		if(!isValidForm('#verify-email-form'))
 			return;
 
-		$(this).attr('disabled', 'disabled').text(_agile_get_translated_val('other','sending'));
+		$(this).attr('disabled', 'disabled').text("{{agile_lng_translate 'other' 'verifying'}}");
 
 		var json = serializeForm("verify-email-form");
 		
@@ -170,13 +170,16 @@ function send_verify_email(el)
 						}
 						*/
 						$('#verify-email-form #emial-domain-observer').empty();
-						$('#verify-email-form #emial-domain-observer').append('<span for="email" generated="true"><p>It looks like you are using a new domain at Agile. You need to authorise Agile to send emails on your behalf. This is a required step to ensure that your emails are not going to the junk or spam mailbox.Please configure <a href="#verify-domain/'+emailDomain+'" target="_blank" style="color: #19a9d5;!important">DKIM and SPF</a> to proceed.</p></span>');
-						$('#verify-email-send').attr('disabled', false).text('Send verification Email');
+						$('#verify-email-form #emial-domain-observer').append('<span for="email" generated="true"><p>You need to authorise Agile to send emails on your behalf. Please configure <a href="#verify-domain/'+emailDomain+'" target="_blank" style="color: #19a9d5;!important">Domain Keys</a> to proceed.</p></span>');
+						$('#verify-email-send').attr('disabled', false).text("{{agile_lng_translate 'email' 'verify-email-text'}}");
 
 						return;
 					}
 					else
 					{
+						// add 1 key isEmailDomainValid for verify From email directly without sending verification email. 
+						// if isEmailDomainValid is true then no need to send verification email
+						json.isEmailDomainValid = true;
 						verify_from_email(json);
 					}
 				});	
@@ -196,7 +199,6 @@ function verify_from_email(json)
 			type: 'POST',
 			data: json,
 			success: function(data){
-				
 				$('#verify-email-send').removeAttr('disabled');
 
 			     // Hide form elements
@@ -205,9 +207,16 @@ function verify_from_email(json)
 			     $('#verify-email-form').find('div.row div').hide();
 			     $('#verify-email-form').find('input').val(json.email);
 			     $(".email-verification-fields").hide();
-			     $('#verify-email-form').find('div span#alert-msg').html("<p class='m-l'>{{agile_lng_translate 'emails' 'verification-sent'}} &#39;"+json.email+"&#39;. {{agile_lng_translate 'emails' 'verification-process'}}</p>");
-			     $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 
+			     if(json.isEmailDomainValid && json.isEmailDomainValid == true){
+			     	$("#workflow-verify-email").find('.modal-header .modal-title').text("{{agile_lng_translate 'email' 'email-verified'}}");
+			     	$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l' style='float: left;margin-right: 10px;margin-top: 1px;'>&#39;"+json.email+"&#39; {{agile_lng_translate 'email' 'is-now-verified-successfully'}}.</p>");
+			     }			     	
+			     else{
+			     	$('#verify-email-form').find('div span#alert-msg').html("<p class='m-l'>{{agile_lng_translate 'emails' 'verification-sent'}} &#39;"+json.email+"&#39;. {{agile_lng_translate 'emails' 'verification-process'}}</p>");
+			     }
+			     
+				 $('#verify-email-send').removeAttr('href').removeAttr('id').off('click').attr('data-dismiss', 'modal').text('{{agile_lng_translate "deal-view" "done"}}');
 			},
 			error: function(response)
 			{

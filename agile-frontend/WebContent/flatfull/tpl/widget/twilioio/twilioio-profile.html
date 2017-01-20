@@ -2,10 +2,22 @@
 {{#if_equals to.length "1"}}<div id="contact_number"></div>
 {{else}}
 	<div class="wrapper-sm">
+        <div class="control-group form-group" style="">
+        <div class="controls" id="contactTypeAhead">
+        <label>Outbound Number</label>
+         <select name="from_numbers" id="twilio_from_numbers" class="form-control required">
+        <option value="" style="display:none;">Select a verifed number</option>
+        {{#each from}}
+                 <option value="{{this}}">{{this}} </option>
+          {{/each}}
+        </select>
+    </div> 
+  </div>
 			{{#if_equals to.length "1"}}<div><!-- <input type="hidden" id="contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}} --></div>
 			{{else}}
 			<!--<div class="pull-left" valign="middle"><h4 class="h4 m-t-xs" id="contentLeftLabel">To :</h4></div> -->
 			<div class="pull-left" style="width: 100%;" >
+       <label>User Numbers</label>
 				<select name="number" id="contact_number" class="required form-control" style="width: 100%;">
 					{{#each to}}
 						<option value="{{value}}">{{value}} 
@@ -77,7 +89,7 @@
         			      </span>
                     </label>
 				    <div class="controls" id="contactTypeAhead">
-			          <select name="twilio_number" id="twilio_number" class="form-control" required>	</select>
+			          <select name="twilio_number" id="twilio_number" class="form-control">	</select>
   			        </div> 
 			    </div>     
 
@@ -142,20 +154,20 @@
 <div id="dialpad_in_twilio" class="dialpad_btns" style="border: none;position: relative;left:calc(60%);z-index:1;padding-bottom: 10px;"> 
   <div  class"campaign_dialpad_bg" style="border-left: 1px solid #EEEEEE;" >
      <div class="campaign_dialpad_row">
-       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="twilioSendDTMF('1');"></div>
-       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2" class="button2" id="button2" onclick="twilioSendDTMF('2');"></div>
-       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3" class="button3" id="button3" onclick="twilioSendDTMF('3');"></div>
- 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4" class="button4" id="button4" onclick="twilioSendDTMF('4');"></div>   
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="1" class="button1" id="button1" onclick="twilioSendDTMF('1');" style="font-size: 9px;"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="2 ABC" class="button2" id="button2" onclick="twilioSendDTMF('2');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
+       <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="3 DEF" class="button3" id="button3" onclick="twilioSendDTMF('3');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
+ 	   <div class="campaign_dialpad_cell" style="border-top: 1px solid #EEE;"><input type="button" value="4 GHI" class="button4" id="button4" onclick="twilioSendDTMF('4');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>   
  	 </div>
      <div class="campaign_dialpad_row">
-       <div class="campaign_dialpad_cell"><input type="button" value="5" class="button5" id="button5" onclick="twilioSendDTMF('5');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="6" class="button6" id="button6" onclick="twilioSendDTMF('6');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="7" class="button7" id="button7" onclick="twilioSendDTMF('7');"></div>
-       <div class="campaign_dialpad_cell"><input type="button" value="8" class="button8" id="button8" onclick="twilioSendDTMF('8');"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="5 JKL" class="button5" id="button5" onclick="twilioSendDTMF('5');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="6 MNO" class="button6" id="button6" onclick="twilioSendDTMF('6');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="7 PQRS" class="button7" id="button7" onclick="twilioSendDTMF('7');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
+       <div class="campaign_dialpad_cell"><input type="button" value="8 TUV" class="button8" id="button8" onclick="twilioSendDTMF('8');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
 	 </div>
      <div class="campaign_dialpad_row">
-       <div class="campaign_dialpad_cell" ><input type="button" value="9" class="button9" id="button9" onclick="twilioSendDTMF('9');"></div>
-	   <div class="campaign_dialpad_cell"><input type="button" value="0" class="button0" id="button0" onclick="twilioSendDTMF('0');"></div>    
+       <div class="campaign_dialpad_cell" ><input type="button" value="9 WXYZ" class="button9" id="button9" onclick="twilioSendDTMF('9');" style="padding:7px;padding-left: 0px;font-size: 9px;"></div>
+	   <div class="campaign_dialpad_cell"><input type="button" value="0 +" class="button0" id="button0" onclick="twilioSendDTMF('0');"style="padding:7px;padding-left: 0px;font-size: 12px;"></div>    
 	   <div class="campaign_dialpad_cell"><input type="button" value="*" class="buttonstar" id="buttonstar" style="width:94%;" onclick="twilioSendDTMF('*');"></div>
        <div class="campaign_dialpad_cell"><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="twilioSendDTMF('#');"></div> 	
 	 </div>

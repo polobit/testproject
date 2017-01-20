@@ -20,8 +20,10 @@
       success: function(){ },
       error: function(){ },
       onFetch: function(){ },
+      prefillSucess : function(){ },
       target: $(window),
       param: "until",
+      prefill: true,
       extraParams: {},
       pageSizeParam: "page_size",
       untilAttr: "id",
@@ -64,7 +66,9 @@
         self.disableFetch();
       }
       self.options.success(collection, response);
+      
     };
+
 
     self.fetchError = function(collection, response) {
       self.enableFetch();
@@ -96,6 +100,9 @@
       }
       prevScrollY = scrollY;
     };
+
+  
+    
     //used for fetching next set of records.
     //mostly useful for programmatic triggering.
     self.fetchNext = function(e) {

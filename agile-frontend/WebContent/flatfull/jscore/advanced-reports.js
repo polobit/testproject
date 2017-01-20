@@ -21,6 +21,7 @@ function initFunnelCharts(callback)
 
 	// Init the callback for daterange
 	initDateRange(callback);
+
 	
 	// Init the callback when the frequency selector changes too
 	if ($('#frequency').length > 0)
@@ -262,7 +263,7 @@ function showDealsGrowthReport()
     end_time += (((23*60*60)+(59*60)+59)*1000);
     end_time=end_time+(d.getTimezoneOffset()*60*1000);
     end_time=end_time/1000;
-
+    reportDetails("IncomingDeals",start_time,end_time,"created_time");
     if ($('#owner').length > 0)
 	{
     var owner_id=0;
@@ -321,7 +322,7 @@ function showWonDealsReport()
     end_time += (((23*60*60)+(59*60)+59)*1000);
     end_time=end_time+(d.getTimezoneOffset()*60*1000);
     end_time=end_time/1000;
-
+    reportDetails("wonDeals",start_time,end_time,"won_time");
     if ($('#owner').length > 0)
 	{
     var owner_id=0;
@@ -417,7 +418,7 @@ function showsalesReportGraphs()
 	start_time=start_time+(d.getTimezoneOffset()*60*1000);
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
-
+	reportDetails("SalesForeCast",start_time/1000,end_time/1000,"closed_time");
 
 	if ($('#owner').length > 0)
 	{
@@ -506,7 +507,7 @@ function showLossReasonGraphs()
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
-
+	reportDetails("LossReason",start_time/1000,end_time/1000,"loss_reason_time");
 	if ($('#owner').length > 0)
 	{
 		// Get owner
@@ -666,7 +667,7 @@ var options='';
 	 end_time += (((23*60*60)+(59*60)+59)*1000);
 	end_time=end_time+(d.getTimezoneOffset()*60*1000);
 
-
+	reportDetails("RevenueBySource",start_time/1000,end_time/1000,"won_time");
 	if ($('#owner').length > 0)
 	{
 		// Get owner
@@ -969,3 +970,148 @@ function showComparisonReportGraph()
 	
 }
 
+function reportDetails(filter_name,start_time,end_time,date_type)
+{
+	var filter={};
+	var name_Deal=filter_name;
+	var el=$(".reports-Container");
+	var reportDealJsonArray=[];
+	var reportDealJsonArray_or = [];
+	$('#reports-listerners-container').off('click','.filter-reports');
+	$('#reports-listerners-container').on('click','.filter-reports',function(e)
+	{
+		e.preventDefault();
+			var json_object_1={};
+			json_object_1["LHS"] = "archived";
+			json_object_1["CONDITION"] = "EQUALS";
+			json_object_1["RHS"] = "false"
+			json_object_1["RHS_NEW"] = "";
+			reportDealJsonArray.push(json_object_1);
+		 if ($('#owner',el).length > 0){
+		 	var owner="All Owners";
+		if($('#owner',el).val()!="")
+			{
+				owner=$('#owner option:selected',el).html();
+				var json_object_1={};
+				json_object_1["LHS"] = "owner_id";
+				json_object_1["CONDITION"] = "EQUALS";
+				json_object_1["RHS"] = $('#owner',el).val();
+				json_object_1["RHS_NEW"] = "";
+				reportDealJsonArray.push(json_object_1);
+		}
+		filter_name=filter_name+'_'+owner;
+		}
+		var url='/core/api/milestone/pipelines';
+		 if ($('#track',el).length > 0)
+		{
+		var pipeline_id=$("#track",el).val();
+		if(pipeline_id != "" &&  pipeline_id != "All Tracks")
+		{
+			url='/core/api/milestone/'+pipeline_id;
+		}
+	 }
+		var tracks = new Base_Collection_View({url : url});
+					won_milestone="Won";
+					tracks.collection.fetch({
+					success: function(data){
+
+		 if ($('#track',el).length > 0)
+		{
+			// Get track
+			var track = "All Tracks";
+			if($("#track",el).val() != "" &&  $("#track",el).val() != "All Tracks")
+				{
+					track=$("#track option:selected",el).html();
+				}
+			filter_name+='_'+track;
+
+		}
+		if ($('#source',el).length > 0)
+		{
+			// Get source
+			var source = "All Sources";
+			if($("#source",el).val() != "" &&  $("#source",el).val() != "All Sources")
+			{
+				source=$("#source option:selected",el).html();
+				var json_object_1={};
+
+				if($("#source",el).val()=="1")
+				{
+				json_object_1["LHS"] = "deal_source";
+				json_object_1["CONDITION"] = "NOT_DEFINED";
+				//json_object_1["RHS"] = $("#source",el).val();
+				//json_object_1["RHS_NEW"] = "";
+
+				}
+				else{
+				json_object_1["LHS"] = "deal_source";
+				json_object_1["CONDITION"] = "EQUALS";
+				json_object_1["RHS"] = $("#source",el).val();
+				json_object_1["RHS_NEW"] = "";
+				}
+				reportDealJsonArray.push(json_object_1);
+			}
+			filter_name+='_'+source;
+		}
+			
+				var json_object_1={};
+				json_object_1["LHS"] = date_type;
+				json_object_1["CONDITION"] = "BETWEEN";
+				json_object_1["RHS"] = start_time*1000;
+				json_object_1["RHS_NEW"] = end_time*1000;
+				reportDealJsonArray.push(json_object_1);
+			if(name_Deal=='RevenueBySource' || name_Deal=='wonDeals')
+			{
+				var won_milestone="Won";
+				var jsonModel = data.toJSON();
+				$.each(jsonModel,function(index,mile){
+					//var internal_and=[];
+				if(mile.won_milestone)
+				won_milestone=mile.won_milestone;
+				//var json_object_milestone={};
+				var json_object_pipeline={};
+				json_object_pipeline["LHS"] = "track_milestone";
+				json_object_pipeline["CONDITION"] = "EQUALS";
+				json_object_pipeline["RHS"] = mile.id+'_'+won_milestone;
+				json_object_pipeline["RHS_NEW"] ="";
+
+				 reportDealJsonArray_or.push(json_object_pipeline);
+				});
+						
+			}
+			if(name_Deal=='LossReason')
+			{
+				var lost_milestone="Lost";
+				var jsonModel = data.toJSON();
+				$.each(jsonModel,function(index,mile){
+					//var internal_and=[];
+				if(mile.lost_milestone)
+				lost_milestone=mile.lost_milestone;
+				var json_object_pipeline={};
+				json_object_pipeline["LHS"] = "track_milestone";
+				json_object_pipeline["CONDITION"] = "EQUALS";
+				json_object_pipeline["RHS"] = mile.id+'_'+lost_milestone;
+				json_object_pipeline["RHS_NEW"] ="";
+				 reportDealJsonArray_or.push(json_object_pipeline);
+				});
+			
+			}
+			filter["rules"] = reportDealJsonArray;
+			if(reportDealJsonArray_or.length>0)
+				filter["or_rules"] = reportDealJsonArray_or;
+			var start_date=en.dateFormatter({raw: 'dd MMM,yyyy'})(new Date(start_time*1000));
+			var end_date=en.dateFormatter({raw: 'dd MMM,yyyy'})(new Date(end_time*1000));
+			filter_name+='_'+start_date+'_'+end_date;
+			//filter["type"] = "opportunity";
+			if (filter != null && (filter.rules.length > 0 || filter.or_rules.length > 0))
+			{
+				_agile_set_prefs('report_filter', JSON.stringify(filter));
+				_agile_set_prefs('report_filter_name', filter_name);
+				//_agile_set_prefs('company_filter', "Companies");
+			}
+			Backbone.history.navigate("deals", { trigger : true });
+	}
+});
+	});
+
+}

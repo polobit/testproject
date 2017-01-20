@@ -3258,6 +3258,7 @@ form#new-ticket ul.chosen-choices{
 .agile-theme-15 .taskhead.taskdivider
 {
   visibility:hidden;
+
 }
 #taskheading
 {
@@ -3286,6 +3287,73 @@ width: 169px !important;
 }
 
 .agile-theme-15 .tag-alpha{font-size: 13px;}
+
+
+  /*Tinymce Editor New Theme CSS Start*/
+  
+.agile-theme-15 .mce-panel{
+  border-width: 0 !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.agile-theme-15 .mce-toolbar-grp{
+  padding: 15px 8px 12px 10px !important;
+}
+.agile-theme-15 .mce-toolbar-grp{
+  background-color: #f4f8f9 !important;
+}
+.agile-theme-15 .mce-btn{
+  background-color: #f4f8f9 !important;;
+}
+.agile-theme-15 .mce-container.mce-toolbar.mce-stack-layout-item.mce-first{
+  margin-bottom: 8px;
+}
+/*.agile-theme-15 .mce-tinymce.mce-container.mce-panel{
+  box-shadow: 0 10px 30px 0px rgba(0, 0, 0, 0.07) !important;
+}*/
+i.mce-ico, i.mce-caret, span.mce-txt{
+  opacity: 0.4 !important;
+}
+.agile-theme-15 span.mce-txt{
+  font-weight: 600;
+}
+.agile-theme-15 .mce-floatpanel.mce-popover.mce-bottom>.mce-arrow{
+  border-bottom-color: transparent;
+}
+.agile-theme-15 .mce-btn-small i{
+  line-height: inherit;
+}
+.agile-theme-15 .mce-colorbutton.mce-btn-small .mce-preview{
+  margin-left: -15px !important;
+}
+.agile-theme-15 .mce-colorbutton .mce-preview{
+  opacity: 0.4 !important;
+}
+.agile-theme-15 .mce-btn:focus, .mce-btn:hover{
+  background-color: rgb(227, 236, 239) !important;
+  border-color: rgb(227, 236, 239) !important;
+}
+.agile-theme-15 .mce-tinymce iframe{
+  background-color: #f4f8f9 !important;
+  border-radius: 5px !important;
+}
+/*.agile-theme-15 .mce-edit-area label{
+  color: rgba(136, 136, 136, 0.39) !important;
+  left: 10px !important;
+}*/ 
+.agile-theme-15 .mce-menu-item span.mce-text{
+  background-color: inherit !important;
+}
+.agile-theme-15 .mce-abs-layout .mce-widget.mce-primary.mce-abs-layout-item.mce-first.mce-btn-has-text.mce-btn{
+  background-color: #2d8ac7 !important;
+}
+.agile-theme-15 .mce-abs-layout .mce-widget.mce-primary.mce-abs-layout-item.mce-first.mce-btn-has-text.mce-btn span.mce-txt{
+  opacity: .85 !important;
+}
+
+
+  /*Tinymce Editor New Theme CSS End*/
+
 #starter_plan .btn-default:hover,#starter_plan .btn-default:focus,#regular_plan .btn-default:hover,#regular_plan .btn-default:focus,#pro_plan .btn-default:hover,#pro_plan .btn-default:focus{
     color: #11a0f8 !important;
     background-color: rgba(17, 160, 248, 0.2) !important;
@@ -3395,7 +3463,7 @@ width: 169px !important;
     color: #1e347b!important;
     margin: 0px !important;
     line-height: 16px; 
-    font-size: 14px!important;
+    font-size: 13!important;
     padding: 0px !important;
     background-color: #fff!important;
 }
@@ -3410,10 +3478,10 @@ width: 169px !important;
 .toggle-favorite.text-light{
   color: #11a0f8 !important;
 }
-
 #new_tag{
   width: 180px !important;
 }
+
 #send-cancellation #cancel_subscription_modal{
   width: 80%;
 }
@@ -3423,7 +3491,8 @@ width: 169px !important;
   padding: 6px 12px !important;
   margin-top:3px !important;
 }
-.agile-theme-15 .add-me-to-cc{
+
+.agile-theme-15 .add-me-to-cc,.remove-date,.assign-to-me{
   font-size: 10px;
   margin-top: 2px;
 }
@@ -3481,3 +3550,220 @@ width: 169px !important;
   color: #78909c!important;
   border-radius: 3px;
  }
+
+
+#ticket-contact-details .label.dk.ccemail {
+    margin-top: 5px;
+    padding: 5px;
+    line-height: 1.2em;
+}
+#widgets-model-list h4.widget_header_name
+{
+  font-size:16px!important;
+}
+.tickets-main #widgets-model-list .widget_header_name img
+{
+  margin-top:-5px;
+}
+#helpcenter-content .panel .panel-heading
+{
+  font-size: 13px!important;
+  color:#78909c!important;
+}
+#notes-collection-container #ticket-notes-model-list .border-highlight-light
+{
+  padding-top:10px;
+  padding-bottom:10px;
+  margin-top:5px!important;
+  margin-bottom:20px!important;
+}
+#helpcenter-content .panel-heading .panelbuttons
+{
+  margin-top:-6px!important;
+}
+#helpcenter-content #userForm #template_id
+{
+  padding: 6px 20px!important;
+      height: 40px!important;
+}
+#ticket-notes-model-list .border-highlight-light
+{
+  border-bottom:1px solid #ddd;
+}
+#ticket-categorie-table th:hover:last-child:after
+{
+  display:none!important;
+}
+#helpcenter-content .panel.panel-default.theme-panel
+{
+  background-color:#F4F8F9!important;
+}
+#helpcenter-content .theme-panel .panel-footer
+{
+      background-color: #F4F8F9;
+}
+h4#plan_name {
+margin: 0px !important;
+}
+.ticket-timeline-container .bg-lightyellow
+{
+  margin-top:5px!important;
+}
+
+.choose-due-date:hover{
+     color: #11a0f8 !important;
+ }
+/* li.support-help-icon > a{
+  margin-top: 3px !important;
+}*/
+.tickets-main #tickets-inner{  padding-top:10px;}
+
+.tag-new-theme:hover{
+background-color: #f4f8f9!important;
+color: #78909c!important;
+}
+#send-reply .btn{
+  font-size: 12px;
+  font-weight: normal;
+}
+.toggle-favorite:hover {
+    color: #11a0f8 !important;
+}
+.toggle-favorite.text-light{
+  color: #11a0f8 !important;
+}
+
+
+ .choose-due-date:hover{
+     color: #11a0f8 !important;
+ }
+
+ /*#new-ticket .cc-emails-st .tag{
+    margin: 0px !important;
+     line-height: 16px; 
+    font-size: 13px!important;
+    height: auto;
+    vertical-align: middle;
+    padding: 0px !important;
+ }*/
+ #new-ticket .cc-emails-st{
+  padding: 0px;
+  margin-top: -3px;
+ }
+
+  #new-ticket .cc-emails-st .tag:hover{
+    background-color: #f4f8f9!important;
+    color: #f4f8f9!important;
+ }
+ #new-ticket .tag-li i.fa-envelope {
+    background-color: #f4f8f9!important;
+    color: #78909c !important;
+    margin-right: 5px;
+    margin-top: 12px;
+ }
+ #new-ticket .link-color,.ticket-modal-header .link-color{
+  color : #11a0f8 !important
+ }
+ #new-ticket .add-ticket-contact{
+  margin-left: -5px;
+ }
+
+ h4#plan_name {
+  margin: 0px !important;
+ }
+ #new-ticket #cc_email_field{
+  height: 37px !important;
+ }
+ #new-ticket .cc-emails li.tag-li{
+  display: block !important;
+ }
+
+ #new-ticket  .icon-plus-sign{
+  margin-top: 3px !important; 
+ }
+ #new-ticket .control-label{
+  margin-bottom: 5px;
+ }
+
+ .modal-header.ticket-modal-header{
+  border-bottom: 0px solid rgba(255, 255, 255, 0.025);
+ }
+ .ticket-modal-heading{
+  padding: 15px 0px 0px 23px;
+ }
+
+ .modal-footer.ticket-modal-footer{
+  border-top: 0px solid rgba(255, 255, 255, 0.025);
+  padding:15px 40px 40px 0px;
+  background-color: rgba(255, 255, 255, 0.025);
+ }
+ #new-ticket .control-group.form-group{
+      padding: 0px 30px 0px 30px !important;
+ }
+
+.ticket-modal-heading i.icon-plus-sign:before{
+  font-size: 24px;
+}
+
+.modal-content .modal-header .ticket-modal-heading h3{
+  font-size: 20px !important;
+}
+
+.ticket-modal-cancel{
+  padding: 0px 35px 0px 0px;
+}
+#create-ticket{
+  padding: 0em 3em;
+  font-size: 13px !important;
+}
+.ticket-modal-content{
+  border-radius: 5px;
+}
+
+
+.btn-mlg-imp{
+  height: 30px !important;
+  line-height: 30px !important;
+  font-size: 13px !important;
+}
+#api_track_webrules_code.prettyprint.linenums, #api_track_code.prettyprint.linenums
+{
+  font-size:13px!important;
+}
+.grp-clipboard-webrule-whitelist-code,.grp-clipboard-track-code,.grp-clipboard-webrule-code
+{
+  padding:5px 15px 5px 15px!important;
+  font-size:13px!important;
+}
+.reports-Container #group_names
+{
+  padding-bottom:0px;
+  padding-left:20px;
+  padding-right:48px;
+  padding-top:0px;
+}
+
+ #new-ticket  .chosen-choices  .search-choice{
+    border: none;
+    box-shadow: none;
+    background-color: #d2e4e8 !important;
+    /* box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05); */
+    border-radius: 3px !important;
+ }
+
+ #new-ticket .chosen-container-multi .chosen-choices .search-choice{
+  padding: 3px 25px 3px 5px !important;
+ }
+ #new-ticket .chosen-choices  .search-choice span{
+  padding-left: 4px !important;
+ }
+ #new-ticket .chosen-container-multi .chosen-choices .search-choice .search-choice-close{
+  right: 8px !important;
+ }
+ #new-ticket  div.chosen-container>ul.chosen-choices>li{
+      margin: 10px 3px !important;
+ }
+ #new-ticket  div.chosen-container>ul.chosen-choices>li.search-field{
+  margin-top: 7px !important;
+ }
+

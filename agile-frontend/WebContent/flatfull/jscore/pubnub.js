@@ -36,55 +36,51 @@ function initToPubNub(callback)
 /**
  * Subscribe client channel.
  */
-function subscribeClientChannel(callback)
-{
-	Pubnub.subscribe({ channel : CURRENT_DOMAIN_USER.id + "_Channel", restore : false, message : function(message, env, channel)
-	{
-		try{
-
+function subscribeClientChannel(callback){
+	Pubnub.subscribe({
+		channel : CURRENT_DOMAIN_USER.id + "_Channel", 
+		restore : false, 
+		message : function(message, env, channel){
 			try{
-				if(typeof message == "string"){
-					message = JSON.parse(message);
+				try{
+					if(typeof message == "string"){
+						message = JSON.parse(message);
+					}
+				}catch(e){
+					return;
 				}
-			}catch(e){
-				return;
-			}
-			//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
-			if((message || {}).type  == "call"){
-				handleCallRequest(message);
-			}else{
-				// Display message in stream.
-				handleMessage(message);	
-			}
-		}catch (e) {
-		}
+				//alert((message || {}).type +"===="+ (message || {}).state +"======="+ (message || {}).duration +"======="+ (message || {}).contact_number+"======="+ (message || {}).phone_no);
+				if((message || {}).type  == "call"){
+					handleCallRequest(message);
+				}else{
+					// Display message in stream.
+					handleMessage(message);	
+				}
+			}catch (e) {
 
-	}, // RECEIVED A MESSAGE.
-	presence : function(message, env, channel)
-	{
-		console.log(message);
-	}, // OTHER USERS JOIN/LEFT CHANNEL.
-	connect : function()
-	{
-		console.log("Agile crm Connected");
-		Pubnub.is_connected_call = true;
+			}
+		},presence : function(message, env, channel){
+			// RECEIVED A MESSAGE.
+			console.log(message);
+		},connect : function(){
+			// OTHER USERS JOIN/LEFT CHANNEL.
+			console.log("Agile crm Connected");
+			Pubnub.is_connected_call = true;
+			
+			if(callback)
+				callback();
 		
-		if(callback)
-			callback();
-	
-	}, // CONNECTION ESTABLISHED.
-	disconnect : function(channel)
-	{
-		console.log(channel + " Disconnected");
-	}, // LOST CONNECTION (OFFLINE).
-	reconnect : function(channel)
-	{
-		console.log(channel + " Reconnected")
-	}, // CONNECTION BACK ONLINE!
-	error : function(channel)
-	{
-		console.log(channel + " Network Error")
-	}, });
+		},disconnect : function(channel){
+			// CONNECTION ESTABLISHED.
+			console.log(channel + " Disconnected");
+		},reconnect : function(channel){
+			// LOST CONNECTION (OFFLINE).
+			console.log(channel + " Reconnected")
+		},error : function(channel){
+			// CONNECTION BACK ONLINE!
+			console.log(channel + " Network Error");
+		},
+	});
 }
 
 /**

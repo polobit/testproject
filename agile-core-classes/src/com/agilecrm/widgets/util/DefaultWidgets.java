@@ -81,7 +81,7 @@ public class DefaultWidgets {
 		widgets.add(new Widget(
 			 "Android",
 			 "Android",
-			 "Now you make Outbound calls and get Inbound calls from App",
+			 "Make Outbound calls through your own mobile using Agile CRM mobile app.",
 			 "/widgets/android.js", "widgets/android-lg-logo.png",
 			 "widgets/android-sm-logo.png", null, WidgetType.CALL));
 		widgets.add(new Widget(

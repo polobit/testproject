@@ -190,9 +190,9 @@ public class Note extends Cursor
     /**
      * Saves a note in the database
      */
-    public void save()
-    {
-	dao.put(this);
+    public void save(){
+    	System.out.println("note save");
+    	dao.put(this);
     }
 
     /**

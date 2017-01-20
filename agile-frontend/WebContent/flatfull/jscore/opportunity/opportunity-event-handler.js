@@ -438,6 +438,9 @@ var Deals_Filter_Change_Events_Collection_View = Base_Collection_View.extend({
     filterChange : function(e){
         e.preventDefault();
         var filter_id = $(e.currentTarget).attr("id");
+        _agile_delete_prefs('report_filter');
+        _agile_delete_prefs('report_filter_name');
+        delete App_Deals.deal_filters.collection.reportFilter;
         if(filter_id == _agile_get_prefs("deal-filter-name")){
             return;
         }

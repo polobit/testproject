@@ -104,13 +104,14 @@ define([
 								else{
 									saveform[0].fields.agiletransparentbackground.value[2].label = "yes with text color: black";
 								}
-						}
-						transparentBgVal = saveform[0].fields.agiletransparentbackground.value;
-							$.each(transparentBgVal, function(index,element){
+								transparentBgVal = saveform[0].fields.agiletransparentbackground.value;
+							        $.each(transparentBgVal, function(index,element){
    									if(element.selected){
 										$("#target").addClass(element.vlaue);
 									}
-							});
+							       });
+						}
+						
 						//Adding on top
 						for ( var j = 0; j < saveform.length; j++){
 
