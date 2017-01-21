@@ -8,9 +8,9 @@
                 "value": "Form Name"
             },
             "description": {
-                "label": "Description",
+                "label": "Description <a class='info-msg-icon-link' href='#' data-toggle='tooltip' data-original-title='Give an introduction to your form.' data-placement='right' style='text-decoration: none;''><sup style='font-size: 9px;''>?</sup></a>",
                 "type": "input",
-                "value": "This is my form. Please fill it out."
+                "value": ""
             }
         }
     }
