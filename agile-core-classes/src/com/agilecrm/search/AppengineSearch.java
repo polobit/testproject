@@ -219,6 +219,37 @@ public class AppengineSearch<T>
     {
 	return query.advancedSearch(filter, count, cursor, orderBy);
     }
+    
+    /**
+     * Get search results based on conditions given in the filter.
+     * 
+     * @param filter
+     * @param count
+     * @param cursor
+     * @param orderBy
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    public Collection getAdvacnedSearchResultsForFilter(SearchFilter filter, Integer count, String cursor,
+	    String orderBy, boolean isNumberFoundAccuracyRequired)
+    {
+	return query.advancedSearch(filter, count, cursor, orderBy, isNumberFoundAccuracyRequired);
+    }
+    
+    /**
+     * Get search results based on conditions given in the filter.
+     * 
+     * @param filter
+     * @param count
+     * @param cursor
+     * @param orderBy
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    public int getAdvacnedSearchResultsCountForFilter(SearchFilter filter)
+    {
+	return query.advancedSearchCount(filter);
+    }
 
     /**
      * Similar to advanced search method. It takes count and cursor, used to

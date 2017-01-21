@@ -122,4 +122,12 @@ public interface QueryInterface
 
 	Collection<?> processSearchResults(String keyword, Integer count, String cursor, String type);
 
+	Collection<?> advancedSearch(SearchFilter filter, Integer count,
+			String cursor, String orderBy, boolean isNumberFoundAccuracyRequired);
+
+	Collection<?> simpleSearchWithType(String keyword, Integer count,
+			String cursor, String type, boolean isQuickSearch);
+
+	int advancedSearchCount(SearchFilter filter);
+
 }

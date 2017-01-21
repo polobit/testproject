@@ -29,6 +29,7 @@ import com.google.appengine.api.search.Query;
 import com.google.appengine.api.search.QueryOptions;
 import com.google.appengine.api.search.QueryOptions.Builder;
 import com.google.appengine.api.search.ScoredDocument;
+import com.google.appengine.api.search.SearchException;
 import com.google.appengine.api.search.SortExpression;
 import com.google.appengine.api.search.SortExpression.SortDirection;
 import com.google.appengine.api.search.SortOptions;
@@ -106,114 +107,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type){
-    	keyword = SearchUtil.normalizeString(keyword);
-		String typeFields = "";
-		String typeField = null;
-		if(type != null){
-			String[] typeStrings = type.split(",");
-			for (int i = 0; i < typeStrings.length; i++) {
-				if(StringUtils.isBlank(typeStrings[i]))
-					continue;
-				
-				typeField  = typeStrings[i].toUpperCase();
-				typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
-			}
-		}
-		
-		Collection<T> entities =  null ;
-		try
-		{
-			Long time = System.currentTimeMillis();
-			entities = processQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
-			System.out.println("Time to process query and get entities -------- "+(System.currentTimeMillis() - time)+" milli seconds");
-		}
-		catch(Exception e){
-			throw new SearchQueryException("Search input is not supported. Please try again.");
-		}
-		try{
-			Long time = System.currentTimeMillis();
-			if(typeField != null && entities != null){
-				String localKeyword = keyword.toLowerCase();			
-				
-				ArrayList<Object> mainList = new ArrayList<Object>();
-				ArrayList<Object> secondarList = new ArrayList<Object>();
-				
-				Iterator<T> itr = entities.iterator();		 	
-			    //iterate through the ArrayList values using Iterator's hasNext and next methods
-			    while(itr.hasNext()){
-			    	Object object = itr.next();
-			    	if(object instanceof Contact){
-			    		Contact contact = (Contact) object;
-			    		com.agilecrm.contact.Contact.Type contactType = contact.type;
-			    		if(contactType.equals(com.agilecrm.contact.Contact.Type.PERSON) || contactType.equals(com.agilecrm.contact.Contact.Type.LEAD)){
-				    		ContactField firstNameField = contact.getContactField(Contact.FIRST_NAME);
-				    		ContactField lastNameField = contact.getContactField(Contact.LAST_NAME);
-				    		String firstName = null;
-				    		String lastName = null;		
-				    		
-				    		if(firstNameField != null){
-				    			firstName = firstNameField.value.toLowerCase();
-				    		}
-				    		if(lastNameField != null){
-				    			lastName = lastNameField.value.toLowerCase();
-				    		}
-				    		
-					    	if(firstName != null && firstName.indexOf(localKeyword) >= 0){
-					    		mainList.add(contact);
-					    	}else if(lastName != null && lastName.indexOf(localKeyword) >= 0){
-					    		mainList.add(contact);
-					    	}else {
-					    		secondarList.add(contact);
-					    	}
-					    }else if(contactType.equals(com.agilecrm.contact.Contact.Type.COMPANY)){
-				    		ContactField nameField = contact.getContactField(Contact.NAME);
-				    		if(nameField != null){
-					    		String name = nameField.value.toLowerCase();
-						    	if(name != null && name.indexOf(localKeyword) >= 0){
-						    		mainList.add(contact);
-						    	}else {
-						    		secondarList.add(contact);
-						    	}
-				    		}
-					    }
-				    }else if(object instanceof Opportunity){
-				    	Opportunity deal = (Opportunity) object;
-				    	String name = deal.name;
-			    		if(name != null){
-				    		name = name.toLowerCase();
-					    	if(name != null && name.indexOf(localKeyword) >= 0){
-					    		mainList.add(deal);
-					    	}else {
-					    		secondarList.add(deal);
-					    	}
-			    		}				    	
-				    }else if(object instanceof com.agilecrm.document.Document){
-				    	com.agilecrm.document.Document document  = (com.agilecrm.document.Document) object;
-				    	String name = document.name;
-			    		if(name != null){
-				    		name = name.toLowerCase();
-					    	if(name != null && name.indexOf(localKeyword) >= 0){
-					    		mainList.add(document);
-					    	}else {
-					    		secondarList.add(document);
-					    	}
-			    		}
-				    }else {
-				    	secondarList.add(object);
-				    }
-			    }
-			    
-			    mainList.addAll(secondarList);			   
-			    entities = (Collection<T>) mainList;
-			    
-			    System.out.println("Time to manipulate search results -------- "+(System.currentTimeMillis() - time)+" milli seconds");
-			}
-		}catch (Exception e){
-			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
-		}
-		
-		return entities;		
-	//return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
+    	return getSimpleSearchResultsWithType(keyword, count, cursor, type, true);
     }
 
     /**
@@ -308,6 +202,45 @@ public class QueryDocument<T> implements QueryInterface
 	// return query results
 	return processQuery(query, count, cursor, orderBy);
     }
+    
+    /**
+     * Advanced search used with cursor, used to show filter results.
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    public Collection<T> advancedSearch(SearchFilter filter, Integer count, String cursor, String orderBy, 
+    		boolean isNumberFoundAccuracyRequired)
+    {
+	String query = QueryDocumentUtil.constructFilterQuery(filter);
+	System.out.println("query build is : " + query);
+
+	if (StringUtils.isEmpty(query))
+	    return new ArrayList<T>();
+
+	// return query results
+	return processQuery(query, count, cursor, orderBy, isNumberFoundAccuracyRequired);
+    }
+    
+    /**
+     * Advanced search used with cursor, used to show filter results.
+     */
+    @Override
+    @SuppressWarnings("rawtypes")
+    public int advancedSearchCount(SearchFilter filter)
+    {
+	String queryString = QueryDocumentUtil.constructFilterQuery(filter);
+	System.out.println("query build is : " + queryString);
+
+	if (StringUtils.isEmpty(queryString))
+	    return 0;
+
+	// return query results count
+	QueryOptions options = QueryOptions.newBuilder().setNumberFoundAccuracy(10000).build();
+
+	Query query = Query.newBuilder().setOptions(options).build(queryString);
+
+	return (int) index.search(query).getNumberFound();
+    }
 
     /**
      * Advanced search used with cursor, used to show filter results.
@@ -373,7 +306,7 @@ public class QueryDocument<T> implements QueryInterface
 
 	// Builds options based on the query string, page size (limit) and sets
 	// cursor.
-	QueryOptions options = buildOptions(query, page, cursor);
+	QueryOptions options = buildOptions(query, page, cursor, true);
 
 	// Calls process the query with the options built. It returns results in
 	// a map with available entities count and document ids limited to count
@@ -390,7 +323,7 @@ public class QueryDocument<T> implements QueryInterface
     {
 	// Builds options based on the query string, page size (limit) and sets
 	// cursor.
-	QueryOptions options = buildOptions(query, page, cursor);
+	QueryOptions options = buildOptions(query, page, cursor, true);
 
 	Map<String, Object> results = processQueryWithOptions(options, query);
 
@@ -417,117 +350,7 @@ public class QueryDocument<T> implements QueryInterface
 
     public Collection<T> processQuery(String query, Integer page, String cursor, String orderBy)
     {
-	// If page size is not specified, returns results with out any limit
-	// (Returns are entities )
-	if (page == null && orderBy == null)
-	    return processQuery(query);
-
-	// Builds options based on the query string, page size (limit) and sets
-	// cursor.
-	QueryOptions options = buildOptions(query, page, cursor);
-
-	if (StringUtils.isNotBlank(orderBy))
-	{
-	    SortOptions sortOptions = null;
-	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
-
-	    if (orderBy.startsWith("-"))
-	    {
-		orderBy = orderBy.substring(1);
-		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.DESCENDING);
-	    }
-	    else
-	    {
-		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.ASCENDING);
-	    }
-	    sortExpressionBuilder.setExpression(orderBy);
-
-	    if (ContactFilterUtil.isCustomField(orderBy))
-	    {
-		String[] fragments = orderBy.split("_AGILE_CUSTOM_");
-
-		if (fragments.length > 1)
-		{
-		    String type = fragments[1];
-		    com.agilecrm.contact.CustomFieldDef.Type field_type = null;
-		    try
-		    {
-			field_type = com.agilecrm.contact.CustomFieldDef.Type.valueOf(type);
-		    }
-		    catch (Exception e)
-		    {
-
-		    }
-		    orderBy = fragments[0];
-		    if (field_type == null)
-		    {
-			sortExpressionBuilder.setDefaultValueNumeric(0.0);
-		    }
-		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXT
-			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.LIST
-			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXTAREA)
-		    {
-			sortExpressionBuilder.setDefaultValue("");
-		    }
-		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.DATE
-			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.NUMBER)
-		    {
-			sortExpressionBuilder.setDefaultValueNumeric(0.0);
-		    }
-
-		    sortExpressionBuilder.setExpression(orderBy);
-		}
-	    }
-	    else if (orderBy.contains("time") || orderBy.contains("last_contacted"))
-	    {
-		sortExpressionBuilder.setExpression(orderBy + "_epoch").setDefaultValueNumeric(0.0);
-	    }
-	    else if (orderBy.contains("name"))
-	    {
-		sortExpressionBuilder.setDefaultValue("");
-	    }
-	    else
-	    {
-		sortExpressionBuilder.setDefaultValueNumeric(0.0);
-	    }
-	    sortOptions = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build()).build();
-	    options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
-	}
-
-	// Calls process the query with the options built. It returns results in
-	// a map with available entities count and document ids limited to count
-	// sent
-
-	Map<String, Object> results = processQueryWithOptions(options, query);
-
-	Collection<ScoredDocument> resultSetDocuments = (Collection<ScoredDocument>) results.get("fetchedDocuments");
-	Collection<T> entites = getDatastoreEntities(results, page, cursor);
-	entities.addAll(entites);
-
-	if (isBackendOperations && resultSetDocuments != null && entities.size() < resultSetDocuments.size()
-		&& requests < 10)
-	{
-	    System.out.println("iterating again");
-
-	    List<ScoredDocument> tempDocuments = new ArrayList<ScoredDocument>(resultSetDocuments);
-	    String newCursor = tempDocuments.get(tempDocuments.size() - 1).getCursor().toWebSafeString();
-	    if (StringUtils.equals(cursor, newCursor) || newCursor == null)
-		return entities;
-
-	    page = resultSetDocuments.size() - entities.size();
-	    System.out.println("remaianing items = " + page + " cursor" + newCursor + "requests" + requests);
-	    requests++;
-	    cursor = newCursor;
-	    processQuery(query, page, newCursor, orderBy);
-	}
-	if (entities.size() > 0)
-	    return entities;
-
-	return entites;
-
-	// Fetches entities from datastore based on the document ids returned.
-	// The type of the it entities are fetched dynamically, based on the
-	// class template
+    	return processTextsearchQuery(query, page, cursor, orderBy, true, false);
     }
 
     /**
@@ -540,7 +363,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param cursor
      * @return
      */
-    private QueryOptions buildOptions(String query, Integer page, String cursor)
+    private QueryOptions buildOptions(String query, Integer page, String cursor, boolean isNumberFoundAccuracyRequired)
     {
 
 	QueryOptions options;
@@ -551,22 +374,36 @@ public class QueryDocument<T> implements QueryInterface
 	 */
 	if (page != null)
 	{
+		Builder optionsBuilder = null;
 	    /*
 	     * Set query options only to get id of document (enough to get get
 	     * respective contacts). Number found accuracy should be set to get
 	     * accurate total number of available documents.
 	     */
 	    if (cursor == null)
-
-		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
-			.setCursor(Cursor.newBuilder().setPerResult(true).build()).setNumberFoundAccuracy(10000)
-			.build();
+	    {
+	    	optionsBuilder = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
+	    			.setCursor(Cursor.newBuilder().setPerResult(true).build());
+	    }
 	    else
-		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
-			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000)
-			.build();
-
-	    return options;
+	    {
+	    	optionsBuilder = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
+	    			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor));
+	    }
+	    
+	    if(optionsBuilder != null)
+	    {
+	    	if(isNumberFoundAccuracyRequired)
+	    	{
+	    		optionsBuilder.setNumberFoundAccuracy(10000);
+	    	}
+	    	else
+	    	{
+	    		optionsBuilder.setNumberFoundAccuracy(page);
+	    	}
+	    	options = optionsBuilder.build();
+	    	return options;
+	    }
 	}
 
 	// If index is null return without querying
@@ -709,42 +546,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     private Map<String, Object> processQueryWithOptions(QueryOptions options, String query)
     {
-	// Build query on query options
-	Query query_string = Query.newBuilder().setOptions(options).build(query);
-
-	// If index is null return without querying
-	if (index == null)
-	{
-	    System.out.println("index is null in query processing");
-	    return null;
-	}
-
-	System.out.println("query string : " + query_string);
-	// Fetches documents based on query options
-	Long time = System.currentTimeMillis();
-	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
-	System.out.println("Query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
-
-	// Results fetched and total number of available contacts are set in map
-	Map<String, Object> documents = new HashMap<String, Object>();
-
-	// If cursor is not set, considering it is first set of results, total
-	// number of availabe contacts is set
-	if (options.getCursor().toWebSafeString() == null)
-	{
-	    // If search results size is less than limit set, the returned doc
-	    // ids are considered as total local available documents.
-	    if ((options.getLimit() > searchResults.size() || options.getLimit() == 10))
-		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
-	    else
-		documents.put("availableDocuments", index.search(query_string).getNumberFound());
-	}
-
-	documents.put("fetchedDocuments", searchResults);
-	
-	System.out.println("Returning docs after query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
-	// Gets sorted documents
-	return documents;
+    	return processTextsearchQueryWithOptions(options, query, true);
     }
 
     /**
@@ -787,7 +589,7 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<ScoredDocument> getDocuments(String query, Integer page, String cursor)
     {
 
-	QueryOptions options = buildOptions(query, page, cursor);
+	QueryOptions options = buildOptions(query, page, cursor, true);
 
 	return (Collection<ScoredDocument>) processQueryWithOptions(options, query).get("fetchedDocuments");
     }
@@ -826,7 +628,10 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    Object entity = entities.get(0);
 	    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) entity;
-	    agileCursor.count = availableResults.intValue();
+	    if(availableResults != null)
+	    {
+	    	agileCursor.count = availableResults.intValue();
+	    }
 	}
 	System.out.println("Time to get only datastore entities ---------- "+(System.currentTimeMillis() - time)+" milli seconds");
 	return entities;
@@ -1330,5 +1135,343 @@ public class QueryDocument<T> implements QueryInterface
 		
 		return contact;
 		
+    }
+    
+    
+    public Collection<T> processQuery(String query, Integer page, String cursor, String orderBy, 
+    		boolean isNumberFoundAccuracyRequired)
+    {
+    	return processTextsearchQuery(query, page, cursor, orderBy, isNumberFoundAccuracyRequired, true);
+    }
+    
+    public Collection<T> processTextsearchQuery(String query, Integer page, String cursor, String orderBy, 
+    		boolean isNumberFoundAccuracyRequired, boolean isSortOptionsLimitRequired)
+    {
+    	// If page size is not specified, returns results with out any limit
+    	// (Returns are entities )
+    	if (page == null && orderBy == null)
+    	    return processQuery(query);
+
+    	// Builds options based on the query string, page size (limit) and sets
+    	// cursor.
+    	QueryOptions options = buildOptions(query, page, cursor, isNumberFoundAccuracyRequired);
+    	
+    	SortOptions sortOptions = null;
+    	if (StringUtils.isNotBlank(orderBy))
+    	{
+    	    SortExpression.Builder sortExpressionBuilder = SortExpression.newBuilder();
+
+    	    if (orderBy.startsWith("-"))
+    	    {
+    		orderBy = orderBy.substring(1);
+    		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.DESCENDING);
+    	    }
+    	    else
+    	    {
+    		sortExpressionBuilder = sortExpressionBuilder.setDirection(SortDirection.ASCENDING);
+    	    }
+    	    sortExpressionBuilder.setExpression(orderBy);
+
+    	    if (ContactFilterUtil.isCustomField(orderBy))
+    	    {
+    		String[] fragments = orderBy.split("_AGILE_CUSTOM_");
+
+    		if (fragments.length > 1)
+    		{
+    		    String type = fragments[1];
+    		    com.agilecrm.contact.CustomFieldDef.Type field_type = null;
+    		    try
+    		    {
+    			field_type = com.agilecrm.contact.CustomFieldDef.Type.valueOf(type);
+    		    }
+    		    catch (Exception e)
+    		    {
+
+    		    }
+    		    orderBy = fragments[0];
+    		    if (field_type == null)
+    		    {
+    			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+    		    }
+    		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXT
+    			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.LIST
+    			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.TEXTAREA)
+    		    {
+    			sortExpressionBuilder.setDefaultValue("");
+    		    }
+    		    else if (field_type == com.agilecrm.contact.CustomFieldDef.Type.DATE
+    			    || field_type == com.agilecrm.contact.CustomFieldDef.Type.NUMBER)
+    		    {
+    			sortExpressionBuilder.setDefaultValueNumeric(0.0);
+    		    }
+
+    		    sortExpressionBuilder.setExpression(orderBy);
+    		}
+    	    }
+    	    else if (orderBy.contains("time") || orderBy.contains("last_contacted"))
+    	    {
+    		sortExpressionBuilder.setExpression(orderBy + "_epoch").setDefaultValueNumeric(0.0);
+    	    }
+    	    else if (orderBy.contains("name"))
+    	    {
+    		sortExpressionBuilder.setDefaultValue("");
+    	    }
+    	    else
+    	    {
+    		sortExpressionBuilder.setDefaultValueNumeric(0.0);
+    	    }
+    	    SortOptions.Builder sortOptionsBuilder = SortOptions.newBuilder().addSortExpression(sortExpressionBuilder.build());
+    	    if(isSortOptionsLimitRequired)
+    	    {
+    	    	sortOptionsBuilder.setLimit(page);
+    	    }
+    	    sortOptions = sortOptionsBuilder.build();
+    	    options = QueryOptions.newBuilder(options).setSortOptions(sortOptions).build();
+    	}
+
+    	// Calls process the query with the options built. It returns results in
+    	// a map with available entities count and document ids limited to count
+    	// sent
+    	Map<String, Object> results = processTextsearchQueryWithOptions(options, query, isNumberFoundAccuracyRequired);
+
+    	Collection<ScoredDocument> resultSetDocuments = (Collection<ScoredDocument>) results.get("fetchedDocuments");
+    	
+    	Collection<T> entites = getDatastoreEntities(results, page, cursor);
+    	entities.addAll(entites);
+
+    	if (isBackendOperations && resultSetDocuments != null && entities.size() < resultSetDocuments.size()
+    		&& requests < 10)
+    	{
+    	    System.out.println("iterating again");
+
+    	    List<ScoredDocument> tempDocuments = new ArrayList<ScoredDocument>(resultSetDocuments);
+    	    String newCursor = tempDocuments.get(tempDocuments.size() - 1).getCursor().toWebSafeString();
+    	    if (StringUtils.equals(cursor, newCursor) || newCursor == null)
+    		return entities;
+
+    	    page = resultSetDocuments.size() - entities.size();
+    	    System.out.println("remaianing items = " + page + " cursor" + newCursor + "requests" + requests);
+    	    requests++;
+    	    cursor = newCursor;
+    	    processQuery(query, page, newCursor, orderBy);
+    	}
+    	if (entities.size() > 0)
+    	    return entities;
+
+    	return entites;
+    }
+    
+    /**
+     * Builds query options and process queries based on the options builds with
+     * cursor and limit.
+     * 
+     * @param query
+     * @param page
+     * @param cursor
+     * @return
+     */
+    public Collection<T> processQuickSearchQuery(String query, Integer page, String cursor)
+    {
+	// If page size is not specified, returns results with out any limit
+	// (Returns are entities )
+	if (page == null)
+	    return processQuery(query);
+
+	// Builds options based on the query string, page size (limit) and sets
+	// cursor.
+	QueryOptions options = buildOptions(query, page, cursor, false);
+
+	// Calls process the query with the options built. It returns results in
+	// a map with available entities count and document ids limited to count
+	// sent
+	Map<String, Object> results = processQueryWithOptions(options, query);
+
+	// Fetches entities from datastore based on the document ids returned.
+	// The type of the it entities are fetched dynamically, based on the
+	// class template
+	return getDatastoreEntities(results, page, cursor);
+    }
+    
+    /**
+     * Simple search based on key words with type as extra parameter, which is
+     * used to fetch a particular set of either Contact or list of companies.
+     * 
+     * @param keyword
+     * @param count
+     * @param cursor
+     * @param type
+     * @return
+     */
+    @Override
+    public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type, boolean isNumberFoundAccuracyRequired){
+    	return getSimpleSearchResultsWithType(keyword, count, cursor, type, isNumberFoundAccuracyRequired);
+    }
+    
+    public Collection<T> getSimpleSearchResultsWithType(String keyword, Integer count, String cursor, String type, boolean isNumberFoundAccuracyRequired)
+    {
+    	keyword = SearchUtil.normalizeString(keyword);
+		String typeFields = "";
+		String typeField = null;
+		if(type != null){
+			String[] typeStrings = type.split(",");
+			for (int i = 0; i < typeStrings.length; i++) {
+				if(StringUtils.isBlank(typeStrings[i]))
+					continue;
+				
+				typeField  = typeStrings[i].toUpperCase();
+				typeFields += (i == 0 ? "" : " OR ") + "type : " + typeField;
+			}
+		}
+		
+		Collection<T> entities =  null ;
+		try
+		{
+			Long time = System.currentTimeMillis();
+			entities = processQuickSearchQuery("search_tokens:" + keyword + " AND " + typeFields, count, cursor);
+			System.out.println("Time to process query and get entities -------- "+(System.currentTimeMillis() - time)+" milli seconds");
+		}
+		catch(Exception e){
+			throw new SearchQueryException("Search input is not supported. Please try again.");
+		}
+		try{
+			Long time = System.currentTimeMillis();
+			if(typeField != null && entities != null){
+				String localKeyword = keyword.toLowerCase();			
+				
+				ArrayList<Object> mainList = new ArrayList<Object>();
+				ArrayList<Object> secondarList = new ArrayList<Object>();
+				
+				Iterator<T> itr = entities.iterator();		 	
+			    //iterate through the ArrayList values using Iterator's hasNext and next methods
+			    while(itr.hasNext()){
+			    	Object object = itr.next();
+			    	if(object instanceof Contact){
+			    		Contact contact = (Contact) object;
+			    		com.agilecrm.contact.Contact.Type contactType = contact.type;
+			    		if(contactType.equals(com.agilecrm.contact.Contact.Type.PERSON) || contactType.equals(com.agilecrm.contact.Contact.Type.LEAD)){
+				    		ContactField firstNameField = contact.getContactField(Contact.FIRST_NAME);
+				    		ContactField lastNameField = contact.getContactField(Contact.LAST_NAME);
+				    		String firstName = null;
+				    		String lastName = null;		
+				    		
+				    		if(firstNameField != null){
+				    			firstName = firstNameField.value.toLowerCase();
+				    		}
+				    		if(lastNameField != null){
+				    			lastName = lastNameField.value.toLowerCase();
+				    		}
+				    		
+					    	if(firstName != null && firstName.indexOf(localKeyword) >= 0){
+					    		mainList.add(contact);
+					    	}else if(lastName != null && lastName.indexOf(localKeyword) >= 0){
+					    		mainList.add(contact);
+					    	}else {
+					    		secondarList.add(contact);
+					    	}
+					    }else if(contactType.equals(com.agilecrm.contact.Contact.Type.COMPANY)){
+				    		ContactField nameField = contact.getContactField(Contact.NAME);
+				    		if(nameField != null){
+					    		String name = nameField.value.toLowerCase();
+						    	if(name != null && name.indexOf(localKeyword) >= 0){
+						    		mainList.add(contact);
+						    	}else {
+						    		secondarList.add(contact);
+						    	}
+				    		}
+					    }
+				    }else if(object instanceof Opportunity){
+				    	Opportunity deal = (Opportunity) object;
+				    	String name = deal.name;
+			    		if(name != null){
+				    		name = name.toLowerCase();
+					    	if(name != null && name.indexOf(localKeyword) >= 0){
+					    		mainList.add(deal);
+					    	}else {
+					    		secondarList.add(deal);
+					    	}
+			    		}				    	
+				    }else if(object instanceof com.agilecrm.document.Document){
+				    	com.agilecrm.document.Document document  = (com.agilecrm.document.Document) object;
+				    	String name = document.name;
+			    		if(name != null){
+				    		name = name.toLowerCase();
+					    	if(name != null && name.indexOf(localKeyword) >= 0){
+					    		mainList.add(document);
+					    	}else {
+					    		secondarList.add(document);
+					    	}
+			    		}
+				    }else {
+				    	secondarList.add(object);
+				    }
+			    }
+			    
+			    mainList.addAll(secondarList);			   
+			    entities = (Collection<T>) mainList;
+			    
+			    System.out.println("Time to manipulate search results -------- "+(System.currentTimeMillis() - time)+" milli seconds");
+			}
+		}catch (Exception e){
+			System.out.println("Exception occured while sorting search results : "+e.getMessage());			
+		}
+		
+		return entities;
+    }
+    
+    /**
+     * Processes the query string further with the query options build.
+     * 
+     * @param options
+     * @param query
+     * @return
+     */
+    private Map<String, Object> processTextsearchQueryWithOptions(QueryOptions options, String query, boolean isNumberFoundAccuracyRequired)
+    {
+	// Build query on query options
+	Query query_string = Query.newBuilder().setOptions(options).build(query);
+
+	// If index is null return without querying
+	if (index == null)
+	{
+	    System.out.println("index is null in query processing");
+	    return null;
+	}
+
+	System.out.println("query string : " + query_string);
+	// Fetches documents based on query options
+	Long time = System.currentTimeMillis();
+	Collection<ScoredDocument> searchResults = null;
+	try 
+	{
+		searchResults = index.search(query_string).getResults();
+	} 
+	catch (SearchException e) 
+	{
+		System.out.println("Exception occured while getting search results. Reason for exception:"+e.getMessage());
+		//Added retry logic
+		searchResults = index.search(query_string).getResults();
+	}
+	System.out.println("Query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
+
+	// Results fetched and total number of available contacts are set in map
+	Map<String, Object> documents = new HashMap<String, Object>();
+
+	// If cursor is not set, considering it is first set of results, total
+	// number of availabe contacts is set
+	if (options.getCursor().toWebSafeString() == null)
+	{
+	    // If search results size is less than limit set, the returned doc
+	    // ids are considered as total local available documents.
+	    if ((options.getLimit() > searchResults.size() || options.getLimit() == 10))
+		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
+	    else if(isNumberFoundAccuracyRequired)
+		documents.put("availableDocuments", index.search(query_string).getNumberFound());
+	}
+
+	documents.put("fetchedDocuments", searchResults);
+	
+	System.out.println("Returning docs after query processed time is ----- "+(System.currentTimeMillis() - time)+" milli seconds");
+	// Gets sorted documents
+	return documents;
     }
 }

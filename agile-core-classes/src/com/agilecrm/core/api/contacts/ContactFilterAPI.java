@@ -2,6 +2,7 @@ package com.agilecrm.core.api.contacts;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,9 +129,9 @@ public class ContactFilterAPI
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
-	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey);
+	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey, false);
 
-	return ContactFilterUtil.getContacts(id, null, null, sortKey);
+	return ContactFilterUtil.getContacts(id, null, null, sortKey, false);
     }
     
     /**
@@ -182,9 +183,9 @@ public class ContactFilterAPI
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
-	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey);
+	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor, sortKey, true);
 
-	return ContactFilterUtil.getContacts(id, null, null, sortKey);
+	return ContactFilterUtil.getContacts(id, null, null, sortKey, true);
     }
 
     /**
@@ -224,6 +225,42 @@ public class ContactFilterAPI
 	// Sets ACL condition
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
 		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
-	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey));
+	return new ArrayList<Contact>(contact_filter.queryContacts(Integer.parseInt(count), cursor, sortKey, false));
+    }
+    
+    @POST
+    @Path("/filter/dynamic-filter/filter-count")
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Map<String, Integer> filterContactsCount(@FormParam("filterJson") String filterJson)
+    {
+	ContactFilter contact_filter = ContactFilterUtil.getFilterFromJSONString(filterJson);
+
+	// Sets ACL condition
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Contact.toString(), contact_filter.rules, null);
+	HashMap<String, Integer> countMap = new HashMap<String, Integer>();
+	countMap.put("count", contact_filter.filteredQueryContactsCount());
+	return countMap;
+    }
+    
+    /**
+     * Returns {@link Contact}s count based on the {@link SearchRule} in the
+     * {@link ContactFilter} which is fetched by its id. It checks the type of
+     * request, whether filter is on custom built criteria or default filters,
+     * based on which results are returned returned
+     * 
+     * @param id
+     *            {@link ContactFilter} id
+     * @return {@link Collection} list of contact
+     */
+    @Path("/query/list/{filter_id}/filter-count")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public HashMap<String, Integer> getQueryResultsCount(@PathParam("filter_id") String id)
+    {
+    HashMap<String, Integer> countMap = new HashMap<String, Integer>();
+    countMap.put("count", ContactFilterUtil.getContactsCount(id));
+    return countMap;
     }
 }
