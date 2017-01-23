@@ -13,6 +13,11 @@ $(function(){
 /**
 	 * shows description field in new event model
 	 */
+	 $("#activityModal").on('click','#sendInviteEmail', function(){
+	 	  var event=$(this);
+	
+	     _agile_set_prefs('send-invite-status',event.prop('checked'));
+    });
 	$("#updateActivityModal").on('click', '#add_event_desctiption', function(e)
 	{
 		e.preventDefault();
