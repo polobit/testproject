@@ -211,5 +211,18 @@ public class DocumentUtil
 		    	d.url = st+URLEncoder.encode(filename, "UTF-8")+en;
 		    	} catch(Exception e){}
     	}
+    	else if(d.url.contains("%25"))
+    		remove25(d.url);
+    	else if(d.extension.contains(" ") && d.url.contains("%2B"))
+    	{
+    		d.url = d.url.replace("%2B", "%20");
+    	}
+    }
+    
+    private static String remove25(String s){
+    	while(s.contains("%25")){
+    		remove25(s.replace("%25", "%"));
+    	}
+    	return s;
     }
 }
