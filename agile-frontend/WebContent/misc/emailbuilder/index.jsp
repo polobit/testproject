@@ -1,6 +1,7 @@
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.agilecrm.util.language.LanguageUtil"%>
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%
 String _AGILE_VERSION = SystemProperty.applicationVersion.get();
 String templateId = request.getParameter("tmpid");
@@ -9,7 +10,7 @@ String action = request.getParameter("action");
 //Locales JSON
 String _LANGUAGE = LanguageUtil.getLanguageKeyFromCookie(request);
 JSONObject localeJSON = LanguageUtil.getLocaleJSON(_LANGUAGE, application, "email-builder");
-
+System.out.println("language = " + localeJSON);
 %>
 <!DOCTYPE html>
 <html lang="<%=_LANGUAGE%>">
