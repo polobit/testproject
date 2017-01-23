@@ -849,4 +849,50 @@ public String getSendgridWhitelabelPermission() throws Exception
 	    return null;
 	}
     }
+    
+	/**
+	 * Sends Email to non-contact.
+	 * 
+	 * @param fromEmail
+	 *            - from email
+	 * @param fromName
+	 *            - from Name
+	 * @param to
+	 *            - to email
+	 * @param subject
+	 *            - subject
+	 * @param textEmail
+	 *            - textEmail
+	 * @param htmlEmail
+	 *            - htmlEmail
+	 * @param replyToEmail
+	 *            - replyToEmail
+	 */
+	@Path("send-email-new")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public String sendEmail(@FormParam("from_name") String fromName,
+			@FormParam("from_email") String fromEmail,
+			@FormParam("to_email") String toEmail,
+			@FormParam("subject") String subject,
+			@FormParam("text_email") String textEmail,
+			@FormParam("html_email") String htmlEmail,
+			@FormParam("replyto_email") String replyToEmail) {
+
+		try {
+			//getting email sender
+			EmailSender emailSender = EmailSender.getEmailSender();
+
+			emailSender.sendEmail(fromEmail, fromName, toEmail, null, null,
+					subject, replyToEmail, htmlEmail, textEmail, null, null,
+					null);
+
+		} catch (Exception e) {
+			System.err.println("Exception occured while sending test email..."
+					+ e.getMessage());
+			e.printStackTrace();
+		}
+
+		return fromEmail;
+	}
 }
