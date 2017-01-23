@@ -395,13 +395,13 @@ function sendTestCommand()
 						sendTestCommand();
 						return;
 					}
-					
+					sendTestCommandToClient();			
 				}, 5000);
 		
 	
 	}
 
-function sendCommandToClient(command,widget)
+/*function sendCommandToClient(command,widget)
 {
 			var command = command;
 			var number =  "";
@@ -413,7 +413,7 @@ function sendCommandToClient(command,widget)
 			}
 			
 			return;
-}
+}*/
 
 function replicateglobalCallVariable()
 {

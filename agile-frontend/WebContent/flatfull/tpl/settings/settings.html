@@ -1,6 +1,6 @@
  <script id="settings-template" type="text/html"> 
 <div class="">
-<div class="bg-light lter b-b wrapper-md agile-page-header">
+<div class="bg-light lter b-b wrapper-md">
 {{#is_mobile}}
 	<h3 class="m-b-xs font-thin h3 prefs-title">{{agile_lng_translate 'menu' 'preferences'}} <small></small></h3>
 <div id="add-new" class="text-center hide">
@@ -20,14 +20,14 @@
     <!-- <div class="app-content-full  h-full enable-full-height"> -->  
     <div>
 	<div class="hbox hbox-auto-xs hbox-auto-sm bg-light {{#is_mobile}} prefs-mobile-view {{/is_mobile}}">
-	<div class="col w b-r tabs-left-panel agile-pos-t-xs">
+	<div class="col w b-r">
    <div class="vbox {{#is_mobile}} text-center min-h-auto inline-block h-auto{{/is_mobile}}">
           <div class="row-row {{#is_mobile}} prefs-view {{/is_mobile}}">
 	<div id="PrefsTab" class="list-group list-group-lg no-radius no-border no-bg m-b-none {{#is_mobile}} bg-white w-full p-l {{/is_mobile}}">
 		{{#is_mobile}}
 
 			<a href="#user-prefs" class="user-prefs-tab   select"><i class="icon icon-wrench"></i></a>
-			<a href="#email" class="email-tab "><i class="icon icon-envelope"></i></a>
+			<a href="#email" class="email-tab "><i class="icon icon-envelope"></i></a>		
 			<a href="#add-widget" class="add-widget-prefs-tab"><i class="icon icon-settings"></i></a>
 			<a href="#sync" class="contact-sync-tab"><i class="icon icon-layers"></i></a>
 			<!-- <a href="#importcrm" class="contact-import-tab">Import From CRMs</a> -->
@@ -38,7 +38,7 @@
 		{{else}}
 			
 			<a href="#user-prefs" class="user-prefs-tab list-group-item  select">{{agile_lng_translate 'preferences' 'settings'}}</a>
-			<a href="#email" class="email-tab list-group-item ">{{agile_lng_translate 'other' 'email'}}</a>			
+			<a href="#email" class="email-tab list-group-item ">{{agile_lng_translate 'other' 'email'}}</a>
 			<a href="#add-widget" class="add-widget-prefs-tab list-group-item ">{{agile_lng_translate 'preferences' 'widgets'}}</a>
 			<a href="#sync" class="contact-sync-tab list-group-item ">{{agile_lng_translate 'preferences' 'data-sync'}}</a>
 			<!-- <a href="#importcrm" class="contact-import-tab list-group-item ">Import From CRMs</a> -->
@@ -53,7 +53,7 @@
 		</div>
 		</div>
 		</div>
-		<div class="tab-content wrapper-md agile-p-t-xs">
+		<div class="tab-content wrapper-md">
 			<div class="tabs" id="prefs-tabs-content"></div>
 		</div>
 		
@@ -61,4 +61,49 @@
 </div>
 </div>
 </div>
+</script>
+
+<script id="settings-template-list-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div id="documents-top-view">
+  <div>
+     <div class="wrapper-md lter bg-light b-b agile-page-header">
+       <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
+         <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'document' 'document-list-templates'}} <small></small></h3>
+       <div>
+     </div>
+   </div>
+   <div class="pull-right add-btn-mobile add-doc-template-btns">
+        <a href="#document-template-add" class="btn btn-sm btn-default btn-primary-imp" id="addDocumentTemplate"><span><i class='icon-plus-sign'/></span> {{agile_lng_translate 'document' 'document-add-document-template'}}</a>
+    </div>
+</div>	
+
+<div class="wrapper-md agile-p-t-xs">
+<div class="row">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+			<div class="tabs" id="prefs-tabs-content"></div>
+    </div>
+    </div>
+    </div>
+</script>
+
+<script id="settings-template-new-template" type="text/html">
+<div class="custom-animated custom-fadeInUp">
+<div id="documents-top-view">
+  <div>
+     <div class="wrapper-md lter bg-light b-b agile-page-header">
+       <div class="btn-group dropdown m-l-none documentsheading" style="float: none">
+         <h3 class="m-n font-thin h3 prefs-title">{{agile_lng_translate 'document' 'document-list-templates'}} <small></small></h3>
+       <div>
+     </div>
+   </div>
+</div>	
+
+<div class="wrapper-md agile-p-t-xs">
+<div class="row">
+<div id="documents_collection_container" class="col-md-9 col-sm-9" ></div>
+			<div class="tabs" id="prefs-tabs-content"></div>
+    </div>
+    </div>
+    </div>
 </script>

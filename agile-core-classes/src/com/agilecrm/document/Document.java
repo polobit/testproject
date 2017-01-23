@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,6 +19,7 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.DomainUserPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
@@ -29,6 +31,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -306,6 +309,15 @@ public class Document extends Cursor
         return this.related_contacts;
     }
     
+    @PostLoad
+    private void postLoad(){
+    	DocumentUtil.urlEncode(this);
+    }
+    @PrePersist
+    private void prePersist(){
+    	DocumentUtil.urlEncode(this);
+    }
+    
 
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
@@ -368,6 +380,18 @@ public class Document extends Cursor
     {
     dao.delete(this);
     new AppengineSearch<Document>(Document.class).delete(id.toString());
+    }
+    
+    // document get by id
+    
+    public static Document getById(Long id){
+    	try{
+    	return dao.get(id);
+    	} 
+    	catch(EntityNotFoundException e)
+    	{
+    		 return null;
+         }
     }
 
     /**

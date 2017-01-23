@@ -1390,4 +1390,55 @@ public class TwilioUtil
 		return result;
 		
 	}
+  /**
+   * 
+   * updating the from_number
+   ***/
+	public static void updateTwilioFromNumber(Widget widget, String fromNumber) {
+		try 
+		{
+			JSONObject widgetPrefs = new JSONObject(widget.prefs.toString());
+			widgetPrefs.put("twilio_from_number", fromNumber);
+			
+			widget.prefs = widgetPrefs.toString();
+			widget.save();
+			
+		} catch (JSONException e) {
+			System.out.println("Exception occured while updating from number : " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+
+	/**
+	 * 
+	 * 
+	 * @param widget
+	 * 
+	 * @return- JSONArray
+	 * 				-From number
+	 */
+	public static JSONArray getTwilioFromNumbers(Widget widget){
+		 JSONArray fromNumbers = new JSONArray();
+		try
+		{
+		  String account_sid = widget.getProperty("twilio_acc_sid");
+		  String auth_token = widget.getProperty("twilio_auth_token");
+		  
+		  TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, null);
+		 			
+		  // Calls TwilioUtil method to retrieve numbers
+		  JSONArray jsonArrayObject = (JSONArray) TwilioUtil.getIncomingNumberTwilioIO(client);
+		  
+		  for(int index=0; index < jsonArrayObject.length() ;index++)
+			   fromNumbers.put(jsonArrayObject.getJSONObject(index).getString("PhoneNumber"));
+		
+		  System.out.println("From numbers of twilio " + fromNumbers );
+		 }catch (Exception e)
+		 {
+			 System.out.println("Exception occured while fetching twilio from number : " + e.getMessage());
+				    return null;
+		  }
+		return fromNumbers;
+	}
 }

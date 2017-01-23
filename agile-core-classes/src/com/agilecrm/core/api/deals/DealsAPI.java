@@ -1730,4 +1730,36 @@ public class DealsAPI
     {
     	return OpportunityUtil.getCurrencyConversionRates();
     }
+    @Path("/changeName/{dealid}")
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON })
+    public Opportunity changeName(@PathParam("dealid") Long dealid,@QueryParam("name") String name)
+    {
+    	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
+    	Opportunity deal = OpportunityUtil.getOpportunity(dealid);
+    	String oldName = deal.name ;
+    	deal.name = name ;
+    	if (deal != null && deal.id != null && (deal.milestone == null || !StringUtils.isNotEmpty(deal.milestone)))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Deal not updated properly.").build());
+		}
+		try
+		{
+		    ActivityUtil.createDealActivity(ActivityType.DEAL_EDIT, deal, name, oldName, "name", null);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+    	try {
+    		UserAccessControlUtil.check(Opportunity.class.getSimpleName(), deal, CRUDOperation.CREATE, true);
+			Opportunity.dao.put(deal);
+			search.edit(deal);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return deal ;
+    }
 }

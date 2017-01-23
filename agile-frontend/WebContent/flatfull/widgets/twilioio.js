@@ -65,7 +65,13 @@ function startTwilioIOWidget(contact_id){	// Twilio io widget name as a global v
 	console.log("TwilioIOContactImg");
 	console.log(TwilioIOContactImg);
 
+	//showListOfContactNumbers();
+	Verfied_Number = twilioio_prefs.twilio_from_number;
+	console.log("Twilio From number" + Verfied_Number);
+	//Fetch from number and set in widget
+	getTwilioFromNumbers(function(){
 	showListOfContactNumbers();
+    });
 
     $("body").off("click", '#twilioio_more_call_logs');
 	$("body").on("click", '#twilioio_more_call_logs', function(e)
@@ -110,6 +116,7 @@ function showListOfContactNumbers()
 
 	var numbers = {};
 	numbers['to'] = TwilioIONumbers;
+	numbers['from'] = Twilio_From_Numbers;
 
 	// Get template and show details in Twilio widget
 	getTemplate('twilioio-profile', numbers, undefined, function(template_ui){
@@ -119,6 +126,18 @@ function showListOfContactNumbers()
 		var contact = agile_crm_get_contact();
 		// Retreive Twilio call logs and show it in Twilio widget panel
 		getTwilioIOLogs(TwilioIONumbers[0].value, null, contact);
+		$("#twilio_from_numbers").val(Verfied_Number);
+		$("body").on("change", '#twilio_from_numbers', function(e)
+		{
+			var num = $("#twilio_from_numbers").val();
+			if(num != Verfied_Number )
+			{
+				Verfied_Number = num;
+				updateTwilioFromNumbers(num);
+			}
+
+			console.log("New from number : " + num);
+		});
 
 		/*
 		 * On change of number in select box, we retrieve call logs for it and show
@@ -366,4 +385,46 @@ function twilioIOError(id, message)
     		return;
 		$('#' + id).html($(template_ui)); 
 	}, '#' + id);
+}
+/**
+ * Retrives from number array from twillio and set iin global varaible
+ * 
+ * @return to
+ *            {@link Twilio_From_Numbers} 
+ */
+function getTwilioFromNumbers(callback){
+
+	if(Twilio_From_Numbers.length==0)
+	{	
+		$.get("/core/api/widgets/twilio/from/numbers/" + TwilioIO_Plugin_Id , function(numbers)
+		{
+			console.log("Twilio From numbers : " + numbers);
+			if(numbers != undefined)
+				Twilio_From_Numbers = JSON.parse(numbers);
+
+			if (callback && typeof (callback) === "function")
+						callback();
+		});
+    }
+    else
+    {
+    	if (callback && typeof (callback) === "function")
+						callback();
+    }	
+}
+
+/**
+ * Retrives from number array from twillio and set iin global varaible
+ * 
+ * @return to
+ *            {@link Twilio_From_Numbers} 
+ */
+function updateTwilioFromNumbers(number){
+
+		$.get("/core/api/widgets/twilio/update/from/numbers/" + TwilioIO_Plugin_Id + "/" + number, function()
+		{
+			console.log("Twilio From numbers updated : " + number);
+			
+		});
+	
 }

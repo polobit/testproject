@@ -56,6 +56,7 @@ import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Invoice;
+import com.thirdparty.sendgrid.SendGrid;
 
 /**
  * <code>SubscriptionApi</code> class includes REST calls to interact with
@@ -604,8 +605,18 @@ public class SubscriptionApi {
 	public String downgradeFreePlanRestrictions(){
 		try{
 			Map<String, Map<String, Object>> restrictions = SubscriptionUtil.downgradeFreePlanRestrictions();
-			if(restrictions.size() == 0)
+			if(restrictions.size() == 0){
+				Subscription subscription = SubscriptionUtil.getSubscription();
+				DomainUser user = DomainUserUtil.getCurrentDomainUser();
+				try{
+					String mailSubject = "Downgraded to free plan";
+					String html = "Domain: "+user.domain+"<br>Username: "+user.email+"<br>Plan: "+subscription.plan.plan_type.toString();
+			    	SendGrid.sendMail(user.email, user.domain, "venkat@agilecrm.com,mogulla@invox.com", null, null, mailSubject, null, html, null);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 				cancelSubscription();
+			}
 			return new Gson().toJson(restrictions);
 		}catch(Exception e){
 			e.printStackTrace();

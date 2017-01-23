@@ -1073,8 +1073,27 @@ $(function()
 	{
 		if (type == 'GOOGLE')
 			return '{{agile_lng_translate "documents" "google-drive"}}';
-		if (type == 'S3')
-			return '{{agile_lng_translate "documents" "uploaded-doc"}}';
+		else if (type == 'S3')
+			return '{{agile_lng_translate "document" "local-drive"}}';
+		else
+			return '{{agile_lng_translate "document" "edocument"}}';
+	});
+
+	Handlebars.registerHelper('docheader', function(type)
+	{
+		if (type == 'NONE')
+			return '{{agile_lng_translate "documents" "preview-edocument"}}';		
+		else
+			return '{{agile_lng_translate "documents" "edit-document"}}';
+	});
+
+	Handlebars.registerHelper('newdocheader', function(type)
+	{
+
+		if (type == 'NONE')
+			return '{{agile_lng_translate "documents" "newedocument"}}';		
+		else
+			return '{{agile_lng_translate "modals" "new-document"}}';
 	});
 
 	/**

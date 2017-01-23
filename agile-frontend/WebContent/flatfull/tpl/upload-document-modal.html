@@ -1,14 +1,13 @@
 <!-- Add (Documents) Modal views -->
 <script type="text/html" id="upload-document-modal-template">
 
-    <div class="wrapper-md lter  bg-light b-b agile-page-header">
+     <div class="wrapper-md lter  bg-light b-b">
       <div class="row">
-          <div class="col-md-12 h3 font-thin m-n">&nbsp;{{agile_lng_translate 'modals' 'new-document'}}</div>
+          <div id="nowdoc" class="col-md-12 h3 font-thin m-n">&nbsp;{{newdocheader id}}</div>
       </div>
     </div>
-     
-     <div class="wrapper-md agile-p-t-xs">
-      <div class="row">  
+     <div class="wrapper-md">
+      <div class="row">
         <div class="col-md-9" {{#is_mobile}}{{else}}style="padding-right:0px;"{{/is_mobile}}>
           <div class="panel wrapper p-b-md">
             <form id="uploadDocumentForm" name="uploadDocumentForm" method="post" class="form-horizontal">
@@ -28,6 +27,7 @@
                           </select>
                         </span>
                      </div>
+
                   </div>
                     <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
                           <label class="control-label  col-sm-3">{{agile_lng_translate 'report-add' 'title'}}<span
@@ -51,7 +51,7 @@
                       </div>
                        <div class="clearfix"></div>
                       <span class="contacts_relatedto_error" style="color:#d9534f;display:none;">{{agile_lng_translate 'documents' 'please-relate-the-document-to-contact'}}</span>  
-                      <span class="contacts_noemail_error" style="color:#d9534f;display:none;">Contact does not have Email.</span>   
+                       <span class="contacts_noemail_error" style="color:#d9534f;display:none;">Contact does not have Email.</span> 
                       </div>
                   </div>
                   <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
@@ -93,7 +93,7 @@
                     </div>
                   <div class="senddoc hide">
                         <div class="control-group form-group {{#is_mobile}}{{else}}form-margin{{/is_mobile}}">
-                                   <label class="control-label col-sm-3"><b>Content </b></label>
+                                   <label class="control-label col-sm-3">Content</label>
                                     <div class="controls col-sm-9">
                                         <div id="loading-editor" ></div>
                                          <textarea class="col-md-6 required" style="display: none;height:50vh;" name="text" id="signdoc-template-html" placeholder="Document template html"></textarea>
@@ -102,13 +102,13 @@
                   </div>
                   <div id="error"></div>
                   <div class="form-actions">      
-                           <div class="col-sm-offset-3 col-sm-9">    
-                              <a href="#" class="btn btn-default btn-default-imp btn-lg-imp btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
-                              <a  class="c-p m-t-xs m-r-xs btn btn-sm hide btn-primary-imp btn-lg-imp btn-success text-white generate-send-doc">{{agile_lng_translate 'document' 'document-generate'}}</a>
+                           <div class="col-sm-offset-3 col-sm-9 doc-form-actions">    
+                              <a href="#" class="btn btn-default btn-sm cancel-document m-t-xs m-r-xs">{{agile_lng_translate 'other' 'cancel'}}</a> 
+                              <a  class="c-p m-t-xs m-r-xs btn btn-sm hide btn-success text-white generate-send-doc">{{agile_lng_translate 'document' 'document-generate'}}</a>
                               
                               <div class="btn-group ">
-                                        <a href="#documents/attachment" id="document_validate" class="btn-primary btn btn-default btn-primary-imp btn-lg-imp btn-sm  m-t-xs" class1="btn btn-default btn-sm"> {{agile_lng_translate 'modals' 'save'}}</a>
-                                        <a class="btn btn-default btn-sm btn-primary-imp btn-lg-imp email-send-doc-group hide dropdown-toggle m-t-xs " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
+                                        <a href="#documents/attachment" id="document_validate" class="btn-primary btn btn-default btn-sm  m-t-xs" class1="btn btn-default btn-sm"> {{agile_lng_translate 'modals' 'save'}}</a>
+                                        <a class="btn btn-default btn-sm email-send-doc-group hide dropdown-toggle m-t-xs " data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></a>
 
                                         <ul class="dropdown-menu pull-right" style="margin-top:-3px;">
                                             <li style="padding:0px 0px;border:0px;"><a href="#"  class="email-send-doc hide">{{agile_lng_translate 'documents' 'document-sendemail'}}</a></li>
@@ -117,9 +117,9 @@
                                         <div class="clearfix"></div>
                               </div>
                            </div>
-                  </div>  
+            </div>  
 
-              </fieldset>
+          </fieldset>
 
             </form>
           </div>
