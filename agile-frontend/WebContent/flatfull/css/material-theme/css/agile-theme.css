@@ -3773,4 +3773,10 @@ text-align: right;
 }
 th.category-buttons-left.header:after
 {
- display:none;}
+ display:none;
+}
+.select-landing-page-button.btn-addon i 
+{
+  float:left;
+  margin-top:-3px !important;
+}
