@@ -3766,4 +3766,11 @@ color: #78909c!important;
  #new-ticket  div.chosen-container>ul.chosen-choices>li.search-field{
   margin-top: 7px !important;
  }
-
+.category-buttons-left
+{
+padding: 10px 0px !important;
+text-align: right;
+}
+th.category-buttons-left.header:after
+{
+ display:none;}
