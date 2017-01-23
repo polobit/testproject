@@ -19,7 +19,7 @@
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
                 },
-				{
+                {
                     "id": "layout7",
                     "displayname": "sample layout 2",
                     "description": "this is sample text"
@@ -59,39 +59,6 @@
                 {
                     "id": "layout6",
                     "displayname": "sample layout 2",
-                    "description": "this is sample text"
-                }
-            ],
-            "new_templates" :[
-
-                {
-                    "id": "layout11",
-                    "displayname": "sample layout 11",
-                    "description": "this is sample text"
-                },
-                {
-                    "id": "layout12",
-                    "displayname": "sample layout 12",
-                    "description": "this is sample text"
-                },
-                {
-                    "id": "layout13",
-                    "displayname": "sample layout 13",
-                    "description": "this is sample text"
-                },
-                {
-                    "id": "layout14",
-                    "displayname": "sample layout 14",
-                    "description": "this is sample text"
-                },
-                {
-                    "id": "layout15",
-                    "displayname": "sample layout 15",
-                    "description": "this is sample text"
-                },
-                {
-                    "id": "layout16",
-                    "displayname": "sample layout 16",
                     "description": "this is sample text"
                 }
             ]

@@ -1738,9 +1738,8 @@ function initializeEditor() {
        // paste_word_valid_elements: "h1,h2,h3,b,strong,i,em",
         relative_urls : false,
         convert_urls : false,
-        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields | lineheightselect",
+        toolbar: "bold italic underline | alignleft aligncenter alignright | forecolor backcolor | bullist numlist | link | styleselect | fontsizeselect | fontselect | lineheightselect| merge_fields ",
         fontsize_formats: "8px 10px 12px 14px 16px 18px 24px 36px",
-        lineheight_formats: "8px 9px 10px 11px 12px 14px 16px 18px 20px 22px 24px 26px 36px",
         height: "200px",
         statusbar: false,
         setup: function (editor) {
