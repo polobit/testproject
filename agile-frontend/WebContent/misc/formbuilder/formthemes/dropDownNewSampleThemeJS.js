@@ -90,30 +90,42 @@
 				var themeEle="Alignment";
 				var alignFormEle=$(".innerAlignmentFormEle select option:selected").text();
 				var alignTypeEle=$(".innerAlignmentAlignStart select").val();
-				if(alignFormEle=="Form Title"){
+				eleExist =false;
+				if(alignFormEle=="Title"){
 					
-					$(".createCustomFormContent legend").css("text-align",alignTypeEle);
 					for(i=0;i<alignmentCss.form_element.length;i++){
 						if(alignmentCss.form_element[i].ele=="Form Title/legend"){
+							alignTypeEle = alignmentCss.form_element[i].css.substring(alignmentCss.form_element[i].css.lastIndexOf('align:')+6,alignmentCss.form_element[i].css.lastIndexOf(';}'));
 							alignmentCss.form_element.splice(i,1);
+							eleExist = true;
 							break;
 						}
 					}
-
+					if(eleExist == false){
+						alignTypeEle = "center";
+					}
+					$(".innerAlignmentAlignStart select").val(alignTypeEle);
+					$(".createCustomFormContent legend").css("text-align",alignTypeEle);
 					var css="legend{text-align:"+alignTypeEle+";}";
 
 					var eleThemeCss=new EleThemeCss("Form Title/legend",css);
 					alignmentCss.form_element.push(eleThemeCss);
 				}
-				else if(alignFormEle=="Form Description"){
-					$(".createCustomFormContent .agile-form-description").css("text-align",alignTypeEle);
+				else if(alignFormEle=="Description"){
 					for(i=0;i<alignmentCss.form_element.length;i++){
 						if(alignmentCss.form_element[i].ele=="Form Description/description"){
+							alignTypeEle = alignmentCss.form_element[i].css.substring(alignmentCss.form_element[i].css.lastIndexOf('align:')+6,alignmentCss.form_element[i].css.lastIndexOf(';}'));
 							alignmentCss.form_element.splice(i,1);
+							eleExist = true;
 							break;
 						}
 					}
-
+					if(eleExist == false){
+						alignTypeEle = "center";
+					}
+					$(".innerAlignmentAlignStart select").val(alignTypeEle);
+					$(".createCustomFormContent .agile-form-description").css("text-align",alignTypeEle);
+					
 					var css=".agile-form-description{text-align:"+alignTypeEle+";}";
 
 					var eleThemeCss=new EleThemeCss("Form Description/description",css);
@@ -151,7 +163,7 @@
 				var themeEle="Alignment";
 				var alignFormEle=$(".innerAlignmentFormEle select option:selected").text();
 				var alignTypeEle=$(".innerAlignmentAlignStart select").val();
-				if(alignFormEle=="Form Title"){
+				if(alignFormEle=="Title"){
 					
    					$(".createCustomFormContent legend").css("text-align",alignTypeEle);
 
@@ -162,13 +174,14 @@
 						}
 					}
 
-					var css="legend{text-align:"+alignTypeEle+"}";
+					var css="legend{text-align:"+alignTypeEle+";}";
 
 					var eleThemeCss=new EleThemeCss("Form Title/legend",css);
-					alignmentCss.form_element[0]=eleThemeCss;
+					//alignmentCss.form_element[0]=eleThemeCss;
+					alignmentCss.form_element.push(eleThemeCss);
 					
 				}
-				if(alignFormEle=="Form Description"){
+				if(alignFormEle=="Description"){
 					
    					$(".createCustomFormContent .agile-form-description").css("text-align",alignTypeEle);
 
@@ -179,10 +192,10 @@
 						}
 					}
 
-					var css=".agile-form-description{text-align:"+alignTypeEle+"}";
+					var css=".agile-form-description{text-align:"+alignTypeEle+";}";
 
 					var eleThemeCss=new EleThemeCss("Form Description/description",css);
-					alignmentCss.form_element[0]=eleThemeCss;
+					alignmentCss.form_element.push(eleThemeCss);
 					
 				}
 				else if(alignFormEle=="Submit Button"){
@@ -1165,7 +1178,7 @@ function defaultFormEleFun(){
 	$(".outerColorThemeEle").css("display","none");
 
 
-	$(".innerAlignmentFormEle select").val("Form Title");
+	$(".innerAlignmentFormEle select").val("Title");
 	$(".innerAlignmentAlignStart select").val("Center");
 	$(".innerBorderThemeFormEle select").val("Form");
 	$(".innerBorderWidthTheme select").val("None");
