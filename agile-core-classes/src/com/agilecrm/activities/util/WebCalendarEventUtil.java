@@ -43,6 +43,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.IcalendarUtil;
 import com.agilecrm.util.VersioningUtil;
+import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
 import com.thirdparty.office365.calendar.util.Office365CalendarUtil;
 
@@ -1019,9 +1020,11 @@ System.out.println(listOfLists.size());
 				String time = key.toString();
 				String newKey = time+"mins";
 				String title = js.getString(newKey);
+				if(title != null && !StringUtil.isEmpty(title)){
 				slot.put("time", time);
 				slot.put("title", title);
 				slots.add(slot.toString());
+				}
 			}
 		} catch (JSONException e) {
 			System.out.println("Exception raised in getting the slots details: "+ e.getMessage());
