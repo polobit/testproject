@@ -33,6 +33,8 @@ import com.agilecrm.projectedpojos.ContactPartial;
 import com.agilecrm.projectedpojos.OpportunityPartial;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.ticket.entitys.TicketNotes;
+import com.agilecrm.ticket.utils.TicketNotesUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.VersioningUtil;
@@ -2199,6 +2201,22 @@ public class ActivityUtil
 	{
 		try
 		{
+			Long ticketNoteID = null;
+			
+			// Fix for passing the TicketNotes ID.
+			// Check TicketNotes.save() method
+			if( ticket_activity_type.equals(ActivityType.TICKET_REQUESTER_REPLIED) 
+					&& changed_field.contains("_@_@_") )
+			{
+				int index = changed_field.indexOf("_@_@_");
+				try {
+					ticketNoteID = Long.parseLong(changed_field.substring(index + 5));
+					changed_field = changed_field.substring(0, index);
+				} catch(Exception e) {
+					System.out.println(ExceptionUtils.getFullStackTrace(e));
+				}
+			}
+			
 			Contact contact = ContactUtil.getContact(contact_id);
 
 			System.out.println("Namespace:" + NamespaceManager.get());
@@ -2227,8 +2245,16 @@ public class ActivityUtil
 			}
 
 			JSONObject obj = new JSONObject();
-			obj.put("contactid", contact.id);
-			obj.put("contactname", calledToName);
+			
+			if( ticketNoteID != null )
+			{
+				TicketNotes note = TicketNotesUtil.getTicketNotesByID(ticketNoteID);
+				if( note != null )
+					obj.put("contactname", note.requester_name);
+			} else {
+				obj.put("contactid", contact.id);
+				obj.put("contactname", calledToName);
+			}
 
 			activity.related_contact_ids = new JSONArray().put(obj).toString();
 
