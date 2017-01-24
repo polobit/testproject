@@ -3867,7 +3867,8 @@ th.category-buttons-left.header:after
 {
 margin-top:0px;
 }
-.ticket-new-theme-article-btn
+.ticket-new-theme-article-btn ,.add-section-new-theme
+
 {
   text-transform:none!important;
 }
