@@ -3877,3 +3877,9 @@ margin-top:0px;
  {
   line-height: 16px !important;
 }
+.btn-mlg-sm-imp
+{
+    height: 35px !important;
+    line-height: 35px !important;
+    font-size: 13px !important;
+}
