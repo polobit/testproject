@@ -200,7 +200,7 @@ public class HomeServlet extends HttpServlet
 	    // time for Domain user
 	    setLastLoggedInTime(domainUser);
 	    Defaults.createTemplateForExistingUser(domainUser);
-	    DocumentTemplatesUtil.findDuplicate("Sample Quote","Business Proposal");
+	   // DocumentTemplatesUtil.findDuplicate("Sample Quote","Business Proposal");
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 	}
 	catch (Exception e)
