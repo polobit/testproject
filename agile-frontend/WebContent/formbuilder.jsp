@@ -17,14 +17,14 @@ String template = request.getParameter("template");
       
       <link href="misc/formbuilder/bootstrap.min.css" rel="stylesheet">
       <link href="misc/formbuilder/font-awesome.min.css" rel="stylesheet">
-      <link href="misc/formbuilder/custom.css?v=3-6" rel="stylesheet">  
-      <link href="misc/formbuilder/builder-themes.css?v=8" rel="stylesheet">
+      <link href="misc/formbuilder/custom.css?v=3-7" rel="stylesheet">  
+      <link href="misc/formbuilder/builder-themes.css?v=9" rel="stylesheet">
       <link href="misc/formbuilder/formbuilder-topmenu.css?t=4" rel="stylesheet">
       <link href="misc/formbuilder/formthemes.css?t=1" rel="stylesheet">
-      <link href="misc/formbuilder/formbuilder-transparency.css" rel="stylesheet">
+      <link href="misc/formbuilder/formbuilder-transparency.css?t=1" rel="stylesheet">
       <script src="misc/formbuilder/formthemes/jscolor.js"></script>
       <script src="misc/formbuilder/formthemes/jquery-min.js"></script>
-      <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js"></script>
+      <script src="misc/formbuilder/formthemes/dropDownNewSampleThemeJS.js?t=1"></script>
       
       <!--[if lt IE 9]>
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -169,7 +169,7 @@ String template = request.getParameter("template");
             }
          }
       </script>
-      <script data-main="misc/formbuilder/main-built-12.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
+      <script data-main="misc/formbuilder/main-built-13.js" src="misc/formbuilder/assets/lib/require.js?v=3" ></script>
       
    </body>
 </html>
