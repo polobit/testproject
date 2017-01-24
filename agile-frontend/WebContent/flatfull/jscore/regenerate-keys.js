@@ -355,7 +355,7 @@ function sendDkimSettingsEmail(json){
       type : 'POST',
       data : json,
       success : function(data){  
-        $('#send_dkim_settings').before("<span class='clearfix' id='confirmation-text'style='top: -49px; display: inline-block;text-align: center;float: left;width: 60%; color: green;font-style: italic;'>Domain settings sent to '"+json.to_email+"'.</span>");
+        $('#send_dkim_settings').before("<span class='clearfix' id='confirmation-text'style='top: -49px; display: inline-block;text-align: center;float: left;width: 60%; color: green;font-style: italic;'>Domain key settings sent to '"+json.to_email+"'.</span>");
         $("#confirmation-text").fadeOut(5000,function(){
         $('#confirmation-text').remove();
         });
