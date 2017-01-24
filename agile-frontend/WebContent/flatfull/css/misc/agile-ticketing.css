@@ -613,3 +613,9 @@ form#new-ticket ul.chosen-choices {
 .textareaclass{
   overflow-y:auto !important;
 }
+.text-ellipses-new-open-tickets{
+     white-space: nowrap; 
+     max-width: 15em; 
+     overflow: hidden;
+     text-overflow: ellipsis; 
+}
