@@ -1555,7 +1555,7 @@ $('div.buttonStyleTxt').on('shown.bs.popover', function () {
     $('#custom-val').on('click', function(){
         
         //font styles of template
-        $('#customize').find('.font-family-picker').val($('#tosave').find('.textFix:first').css('font-family').replace(/, /g, ','));
+        $('#customize').find('.font-family-picker:selected').val($('#tosave').find('.textFix:first').css('font-family'));
         $('#customize').find('.font-size-picker').val($('#tosave').find('.textFix:first').css('font-size'));
         $('#customize').find('.line-height-picker').val($('#tosave').find('.textFix:first').css('line-height'));
 
