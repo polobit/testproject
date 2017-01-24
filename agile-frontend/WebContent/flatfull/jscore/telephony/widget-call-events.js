@@ -429,6 +429,7 @@ function sendActionToClient(action, manager, asterisk, long_details){
 		window.focus();
 	};
 	image.onerror= function(png) {
+		return;
 		console.log("client failure");
 		window.focus();
 		if(command != "getLogs"){
