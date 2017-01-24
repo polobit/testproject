@@ -3775,11 +3775,6 @@ th.category-buttons-left.header:after
 {
  display:none;
 }
-.select-landing-page-button.btn-addon i ,.ticket-new-theme-article-add-btn i
-{
-  float:left !important;
-  margin-top:-3px !important;
-}
 .btn-sm-imp
 {
     height: 35px!important;
@@ -3817,11 +3812,6 @@ text-align: right;
 th.category-buttons-left.header:after
 {
  display:none;
-}
-.select-landing-page-button.btn-addon i ,.ticket-new-theme-article-add-btn i
-{
-  float:left !important;
-  margin-top:-3px !important;
 }
 .btn-sm-imp
 {
@@ -3878,4 +3868,12 @@ margin-top:0px;
 }
 .ticket-new-theme-article i:before{
      margin-right: 0px!important;
+}
+.add-section-new-theme.btn-addon.btn-sm i,.select-landing-page-button.btn-addon.btn-sm i
+{
+  line-height:26px !important;
+}
+.ticket-new-theme-article-btn .ticket-new-theme-article-add-btn i
+ {
+  line-height: 16px !important;
 }

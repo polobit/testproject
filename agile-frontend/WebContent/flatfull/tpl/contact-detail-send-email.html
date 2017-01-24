@@ -148,6 +148,15 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
+                <div class="control-group form-group" id="eattachment" style="display:none">
+                    <div class="controls col-sm-10 col-sm-offset-2">
+                        <div id="attachment_id" name="blob_key" style="display: inline-block"">
+                        <i class="fa fa-paperclip m-r-xs text-info"></i>
+                        <a id="attachment_fname" class="text-ellipsis text-info"></a>   
+                        </div> 
+                        <a href="#" class="add-attachment-cancel text-danger"><i class="fa fa-times"></i></a>       
+                    </div>
+                </div>
                 <div class="control-group form-group m-b-sm">
                     <div class="col-sm-offset-2 col-sm-8">
                         <div class="checkbox  pull-left" id="enable_tracking">
@@ -166,22 +175,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="control-group form-group" id="eattachment" style="display:none">
-                    <div class="controls col-sm-10 col-sm-offset-2">
-                        <div id="attachment_id" name="blob_key" style="display: inline-block"">
-                        <i class="fa fa-paperclip m-r-xs text-info"></i>
-                        <a id="attachment_fname" class="text-ellipsis text-info"></a>   
-                        </div> 
-                        <a href="#" class="add-attachment-cancel text-danger"><i class="fa fa-times"></i></a>       
-                    </div>
-                </div>
+                
 
                 <input name="signature" type="hidden" value="{{#getCurrentUserPrefs}}{{signature}}{{/getCurrentUserPrefs}}"/>
                 <div class="line ling-lg b-b"></div>
-                <div class="form-actions pull-right {{#isNewTheme}}col-md-offset-7 col-md-5 m-r-md{{else}}col-md-offset-8 col-md-4 m-r-n-lg{{/isNewTheme}}">
+                <div class="form-actions  {{#isNewTheme}}col-md-offset-2 col-md-8 p-r-none{{else}}col-md-offset-8 col-md-4 m-r-n-lg pull-right{{/isNewTheme}}">
+                <div class="{{#isNewTheme}}pull-right{{/isNewTheme}}">
                     <a href="#contacts" class="btn btn-sm  btn-default btn-default-imp  m-t-lg-imp {{#isNewTheme}} m-r-sm {{/isNewTheme}}" id="send-email-close">{{agile_lng_translate 'other' 'cancel'}}</a>
                     <a href="#"  id="sendEmail" class="btn btn-sm btn-primary m-t-lg-imp  ">{{agile_lng_translate 'tasks' 'Send'}}</a>
                     &nbsp;&nbsp;<span id="msg"></span>  
+                </div>
                 </div>
             </fieldset>
         </form>

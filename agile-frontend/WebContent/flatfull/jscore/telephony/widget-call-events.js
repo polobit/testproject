@@ -663,3 +663,19 @@ function saveCallNoteTelephony(call){
 	}
 	}
 }
+
+function generateNumberAndExtension(number, json){
+	 var num = "";
+	 var ext = "";
+	 
+	 if(number && number.indexOf(";") != -1){
+	  ext = number.split(";")[1];
+	  num = number.split(";")[0];
+	 }else{
+	  num = number;
+	 }
+
+	 json['number'] = num;
+	 json['extension'] = ext;
+	 return;
+}
