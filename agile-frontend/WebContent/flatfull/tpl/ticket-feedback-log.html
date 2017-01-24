@@ -82,12 +82,12 @@
 <script id="ticket-feedback-log-model-template" type="text/html">
 <td style="vertical-align:middle">
 	
-    <div class="avatar text-capitalize agile-img m-r-sm " style="width:196px;
+    <div class="avatar text-capitalize agile-img m-r-sm " data-toggle="tooltip" data-container="body" data-placement="bottom" title="{{first_name}} {{last_name}}" style="width:196px;
     overflow: hidden; border-radius: 0px;
     text-overflow: ellipsis;word-break:break-word">
                 
         {{#if contact_id}}
-                <a href="#contact/{{contact_id}}" data="{{contact_id}}" ><img class="user-img" style="height:34px;width: 34px;border-radius: 0px !important;" src="{{img_url}}" target="_blank"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="#contact/{{contact_id}}"  data="{{contact_id}}" ><img class="user-img" style="height:34px;width: 34px;border-radius: 0px !important;" src="{{img_url}}" target="_blank"/>&nbsp;&nbsp;&nbsp;&nbsp;
         {{else}}
                 <a href="#contact/{{contact_id}}"  data="{{contact_id}}"><img class="user-img" target="_blank"  style="height:34px;width: 34px; border-radius: 0px !important;" src="{{defaultGravatarurl 20}}"/>&nbsp;&nbsp;&nbsp;&nbsp;
         {{/if}} 
