@@ -13,7 +13,7 @@
                     <fieldset class="wrapper p-b-xs">
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="group_name">{{agile_lng_translate 'deal-view' 'name'}}<span class="field_req">*</span></label> 
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="controls">
                                     <input type="text" name="group_name" id="group_name" value="{{group_name}}" class="required form-control tickets_group_name" placeholder="{{agile_lng_translate 'tickets' 'group'}}" minlength="4" maxlength="30">
                                 </div>
@@ -22,7 +22,7 @@
                         {{#if group_email}}
                             <div class="control-group form-group">
                                 <label class="control-label col-sm-3">{{agile_lng_translate 'tickets' 'forwarding-email'}}</label>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <div class="well bg-transparent newtheme-well m-b-none p-sm text-ellipsis" style="width:90%;">
                                         <span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
                                         <a onclick="function(e){e.stopPropagation();}" id="grp-{{id}}" class="btn btn-xs btn-xs-imp btn-primary grp-btn-cpy-email" data-original-title="{{agile_lng_translate 'tickets' 'copy-to-clipboard'}}" data-toggle="tooltip" data-placement="top" data-copied-text="{{agile_lng_translate 'misc-keys' 'clip-email-copied'}}">
@@ -43,7 +43,7 @@
                         </div>
                         <div class="control-group form-group">
                             <label class="control-label col-md-3" for="send_as">{{agile_lng_translate 'tickets' 'send-as'}}</label> 
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="controls">
                                     <input type="text" name="send_as" id="send_as" value="{{send_as}}" class="form-control tickets_email" placeholder="{{agile_lng_translate 'menu' 'email'}}" minlength="4"/>
                                 </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="control-group form-group" style="margin-bottom: 5px;">
                             <label class="control-label col-md-3" for="send_as">{{agile_lng_translate 'tickets' 'email-template'}}</label> 
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <div class="controls">
                                     <select id="template_id" name="template_id" class="form-control">
                                     </select>
