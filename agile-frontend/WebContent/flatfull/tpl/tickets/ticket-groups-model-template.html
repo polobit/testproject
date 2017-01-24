@@ -43,7 +43,10 @@
 	</td>
   	<div class="clearfix"></div>
     <td>
-    	<span id="source-{{id}}" data-clipboard-text="{{group_email}}">{{group_email}}</span>
+    	<!-- <span id="source-{{id}}" data-clipboard-text="{{group_email}}"> -->
+     	<span id="source-{{id}}" data-clipboard-text="{{group_email}}" style="float:left">
+    	<div style="white-space: nowrap;max-width: 15em;overflow: hidden;text-overflow: ellipsis;">
+    	{{group_email}}</div></span>
    		<a id="grp-{{id}}" class="m-xs a-frwd-email" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-copied-text="{{agile_lng_translate 'misc-keys' 'clip-email-copied'}}">
      			<i class="icon-copy copy_email_clipboard_icon" ></i>
      	</a>

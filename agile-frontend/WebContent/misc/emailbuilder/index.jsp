@@ -23,11 +23,13 @@ System.out.println("language = " + localeJSON);
 
         <!-- styles -->
 
-        <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
+        <!--  <link href="css/template.editor.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
         <link href="css/responsive-table.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
+        <link href="css/colpick.css" rel="stylesheet"  type="text/css"/>  -->
+
+        <link href="build/emailbuilder.min.css?v=<%=_AGILE_VERSION%>" rel="stylesheet"/>
 
 <script>
 var AGILE_EB_ROOT = window.location.origin + "/";
@@ -54,8 +56,10 @@ var localeJSON = <%=localeJSON%>;
 
         <!--<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
         <script src="/js/designer/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript" src="js/colpick.js"></script>
-        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>
+        <!--<script type="text/javascript" src="js/colpick.js"></script>
+        <script type="text/javascript" src="js/template.editor.js?v=<%=_AGILE_VERSION%>"></script>-->
+
+        <script type="text/javascript" src="build/emailbuilder.min.js?v=<%=_AGILE_VERSION%>"></script>
 
 <style>
 .mce-btn button {
@@ -169,6 +173,8 @@ var localeJSON = <%=localeJSON%>;
 
                                 <!-- SOCIAL LINKS -->
                                 <%@ include file="blocks/social-links.html" %>
+
+                                <%@ include file="blocks/image-caption.html" %>
 
                             </li>
                         </ul>
@@ -468,7 +474,7 @@ var localeJSON = <%=localeJSON%>;
                                     <div class="input-group">
                                       <input type="text" id="image-url" class="form-control" data-id="none"/>
                                       <span class="input-group-btn">
-                                        <a id="browseBtn" class="btn btn-default" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
+                                        <a id="browseBtn" class="btn btn-default browseBtn" onclick="$('#uploadImageToS3Btn').click()">Browse</a>
                                          <input type="file" id="uploadImageToS3Btn" class="hidden">
                                       </span>
                                     </div><!-- /input-group -->
@@ -476,6 +482,7 @@ var localeJSON = <%=localeJSON%>;
 
                         </div>
 
+                        <!-- start of image link -->
                         <div class="form-group" id="image-link-holder">
                             
                             <div >
@@ -491,20 +498,19 @@ var localeJSON = <%=localeJSON%>;
                                 </div>
 
                             </div>
-                        </div>
+                        </div> <!-- end of image link -->
                          
+                        
+                        <!-- start of alt text -->
                         <div class="form-group"> 
-
                             <div class="col-sm-3 control-label">Alt Text</div>
                                 
                                 <div class="col-sm-9">
                                     
                                     <input type="text" id="image-alt-text" class="form-control" placeholder='<%=LanguageUtil.getLocaleJSONValue(localeJSON, "alternate-text") %>' data-id="none">
                                                                      
-                                </div>
-
-                           
-                        </div>
+                                </div>    
+                        </div> <!-- end of alt text -->
 
 
 
@@ -542,6 +548,23 @@ var localeJSON = <%=localeJSON%>;
     </div> <!-- end of image height -->
 
 </div>
+
+        <!-- start of image alignment -->        
+                    <div class="form-group" id="select_alignment">
+                            
+                            <div >
+                             <div class="col-sm-3 control-label">Alignment</div>
+                                
+                                <div class="col-sm-9">
+                                    <select class="form-control image-align-picker">
+                                        <option value="left">Left</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div> <!-- end of image alignment -->
 
                         
                     </div> <!-- end of image properties -->
@@ -935,6 +958,7 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
 <div id="common-settings">
 
 <div class="form-horizontal">
+
 <!-- start of padding top -->
     <div class="form-group">
             <div class="col-sm-5 control-label">Padding Top</div>
@@ -1001,6 +1025,40 @@ var length = $($('#' + $('#path').val()).find('table tbody tr td:eq(' + indexBnt
         </script>
         
     </div> <!-- end of block background color -->
+
+
+    <!-- start of background image -->
+    <!-- <div class="form-group">
+        <div class="col-sm-5 control-label">Background Image</div>
+        <div class="col-sm-7">
+            <div class="input-group">
+            <input type="text" id="bg-image-url" class="form-control" data-id="none">
+                <span class="input-group-btn">
+                <a id="bg-image-browseBtn" class="btn btn-default browseBtn" onclick="$('#uploadBgImageToS3ThroughBtn').click()">Browse</a>
+                <input type="file" id="uploadBgImageToS3ThroughBtn" class="hidden">
+                </span>
+            </div>
+        </div>
+    </div> --> <!-- end of background image -->
+
+
+    <!-- start of image caption settings -->
+    <div id="image-caption-settings">
+    <hr>
+        <div class="form-group">
+            <div class="col-sm-5 control-label">Caption Position</div>
+                <div class="col-sm-7" >
+                    <select class="form-control" id="image-caption-position">
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    </select>
+                </div>
+        </div>
+    </div> <!-- end of image caption settings -->
+
+
 
     <div class="form-group" style="padding-top:6px;">
         <div class="col-xs-4 pull-right" style="margin-right: 8px;">

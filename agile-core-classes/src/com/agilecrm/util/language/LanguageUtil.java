@@ -2,6 +2,7 @@ package com.agilecrm.util.language;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -28,12 +29,12 @@ public class LanguageUtil {
 	// Root folder path
 	public static final String NON_APPLICATION_ROOT_PATH = "locales/locales/";
 	
-	public static final HashMap<String, String> SUPPORTED_LANGUAGES = new HashMap<String, String>() {
+	public static final LinkedHashMap<String, String> SUPPORTED_LANGUAGES = new LinkedHashMap<String, String>() {
 		{
 			put("en", "English");
 			put("es", "Español");
 			put("it", "Italiano");
-			put("ru", "Россия");
+			put("ru", "русский");
 			put("fr", "Français");
 			
 		}

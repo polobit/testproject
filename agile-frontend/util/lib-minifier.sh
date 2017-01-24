@@ -38,6 +38,14 @@ rm ../WebContent/flatfull/css/material-theme/css/dynamic-colors.css
 ## Combil all CSS for fast load
 cat ../WebContent/flatfull/css/min/lib-all-new.css ../WebContent/flatfull/css/min/core-all-new.css ../WebContent/flatfull/css/min/misc-all-new.css > ../WebContent/flatfull/css/min/css-all-min.css
 
+#emailbuilder files
+mkdir ../WebContent/misc/emailbuilder/build
+if [ -e ../WebContent/misc/emailbuilder/build/emailbuilder.min.css ]; then
+    rm ../WebContent/misc/emailbuilder/build/emailbuilder.min.css
+fi
+cat ../WebContent/misc/emailbuilder/css/*.css >> ../WebContent/misc/emailbuilder/build/emailbuilder.min.css
+java -jar yuicompressor-2.4.7.jar ../WebContent/misc/emailbuilder/build/emailbuilder.min.css --type css -o  ../WebContent/misc/emailbuilder/build/emailbuilder.min.css
+
 
 java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/lib-all.css --type css -o  ../WebContent/flatfull/css/min/lib-all.css --charset utf-8
 java -jar yuicompressor-2.4.7.jar ../WebContent/flatfull/css/min/lib-all-new.css --type css -o  ../WebContent/flatfull/css/min/lib-all-new.css --charset utf-8

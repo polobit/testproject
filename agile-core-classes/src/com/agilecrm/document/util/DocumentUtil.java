@@ -212,7 +212,7 @@ public class DocumentUtil
 		    	} catch(Exception e){}
     	}
     	else if(d.url.contains("%25"))
-    		remove25(d.url);
+    		d.url = remove25(d.url);
     	else if(d.extension.contains(" ") && d.url.contains("%2B"))
     	{
     		d.url = d.url.replace("%2B", "%20");
@@ -221,7 +221,7 @@ public class DocumentUtil
     
     private static String remove25(String s){
     	while(s.contains("%25")){
-    		remove25(s.replace("%25", "%"));
+    		s = remove25(s.replace("%25", "%"));
     	}
     	return s;
     }

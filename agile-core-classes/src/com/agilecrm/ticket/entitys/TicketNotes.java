@@ -307,7 +307,7 @@ public class TicketNotes
 		    }
 		    // Logging notes activity
 			ActivityUtil.createTicketActivity(activityType, ticket.contactID, ticket.id, plain_text, htmlText,
-					"html_text", false);
+					"html_text_@_@_" + this.id, false);
 		}
 		catch (Exception e)
 		{
