@@ -253,9 +253,9 @@
   
    <queue>
     <name>campaign-subscribe-subtask-queue</name>
-    <rate>10/s</rate>
-    <bucket-size>40</bucket-size>
-    <max-concurrent-requests>40</max-concurrent-requests>
+    <rate>100/s</rate>
+    <bucket-size>100</bucket-size>
+    <max-concurrent-requests>100</max-concurrent-requests>
     <retry-parameters>
     <task-retry-limit>5</task-retry-limit>
   </retry-parameters>
