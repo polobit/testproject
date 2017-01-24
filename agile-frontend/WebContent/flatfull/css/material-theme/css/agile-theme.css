@@ -3766,6 +3766,48 @@ color: #78909c!important;
  #new-ticket  div.chosen-container>ul.chosen-choices>li.search-field{
   margin-top: 7px !important;
  }
+.category-buttons-left
+{
+padding: 10px 0px !important;
+text-align: right;
+}
+th.category-buttons-left.header:after
+{
+ display:none;
+}
+.select-landing-page-button.btn-addon i ,.ticket-new-theme-article-add-btn i
+{
+  float:left !important;
+  margin-top:-3px !important;
+}
+.btn-sm-imp
+{
+    height: 35px!important;
+    line-height: 1.9!important;
+    padding: 5px 15px 5px 15px;
+}
+#enable_tracking
+{
+      padding-top: 12px;
+}
+#enable_tracking input{
+  margin-top:0px;
+}
+.m-t-lg-imp
+{
+    height: 35px!important;
+    padding: 0px 3em;
+    line-height: 35px!important;
+    font-size: 13px!important;
+}
+.newthemepanel
+{
+  background-color: #F4F8F9;
+}
+.new-theme-table-heading.header:after
+{
+  display:none;
+}
 
 .category-buttons-left
 {
@@ -3810,7 +3852,6 @@ th.category-buttons-left.header:after
   display:none;
 }
 .new-theme-table-heading.header,.ticket-new-theme-article.header
-
 {
   padding-right:0px;
 }
